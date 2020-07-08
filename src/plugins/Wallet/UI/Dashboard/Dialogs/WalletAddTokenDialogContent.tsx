@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
-import Autocomplete, { AutocompleteRenderGroupParams } from '@material-ui/lab/Autocomplete'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import { useTheme, makeStyles } from '@material-ui/core/styles'
@@ -133,24 +132,6 @@ const ListboxComponent = React.forwardRef<HTMLDivElement>(function ListboxCompon
 //#endregion
 
 //#region predefined token selector
-const useAutoCompleteStyles = makeStyles({
-    listbox: {
-        '& ul': {
-            padding: 0,
-            margin: 0,
-        },
-    },
-})
-
-const getNameOfToken = (x: typeof mainnet[0]) => (x.name + ` (${x.symbol})`).replace(/^ +/g, '')
-
-const renderGroup = (params: AutocompleteRenderGroupParams) => [
-    <ListSubheader key={params.key} component="div">
-        {params.group}
-    </ListSubheader>,
-    params.children,
-]
-
 export interface ERC20PredefinedTokenSelectorProps extends EthereumNetworkSelectorProps {
     token?: ERC20Token | null
     excludeTokens?: string[]
@@ -163,31 +144,12 @@ export function ERC20PredefinedTokenSelector({
     excludeTokens = [],
     ...props
 }: ERC20PredefinedTokenSelectorProps) {
-    const autoCompleteClasses = useAutoCompleteStyles()
-    const tokens = props.network === EthereumNetwork.Rinkeby ? rinkeby : mainnet
+    const [address, setAddress] = useState('')
 
     return (
         <EthereumNetworkSelector {...props}>
-            <Autocomplete
-                disableListWrap
-                classes={autoCompleteClasses}
-                ListboxComponent={ListboxComponent as React.ComponentType<React.HTMLAttributes<HTMLElement>>}
-                renderGroup={renderGroup}
-                options={tokens.filter((token) => !excludeTokens.includes(token.address))}
-                getOptionLabel={(option: typeof mainnet[0]) => option.name + ` (${option.symbol})`}
-                groupBy={(option: typeof mainnet[0]) => getNameOfToken(option)[0]}
-                renderInput={(params) => (
-                    <TextField {...params} variant="outlined" label="Predefined ERC20 Tokens" fullWidth />
-                )}
-                renderOption={(option: typeof mainnet[0]) => (
-                    <Typography key={option.address} noWrap>
-                        {getNameOfToken(option)}
-                    </Typography>
-                )}
-                value={token}
-                onChange={(_: React.ChangeEvent<{}>, token: typeof mainnet[0] | null) => onTokenChange?.(token)}
-            />
-            {token ? <ERC20TokenPreviewCard token={token}></ERC20TokenPreviewCard> : null}
+            <TextField label="Search ERC20 Tokens" value={address} onChange={(e) => setAddress(e.target.value)} />
+            {token ? <ERC20TokenPreviewCard token={token} /> : null}
         </EthereumNetworkSelector>
     )
 }
@@ -223,27 +185,23 @@ export function ERC20CustomizedTokenSelector({ token, onTokenChange, ...props }:
         // from web3.js. We can remove fields exclude address if we find a stable way
         // for fetching ERC20 token settings
         <EthereumNetworkSelector {...props}>
-            <>
-                <TextField
-                    required
-                    error={!isValidAddress && !!address}
-                    label="Contract Address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}></TextField>
-                <TextField
-                    required
-                    label="Decimal"
-                    value={decimals === 0 ? '' : decimals}
-                    type="number"
-                    inputProps={{ min: 0 }}
-                    onChange={(e) => setDecimal(parseInt(e.target.value))}></TextField>
-                <TextField required label="Name" value={name} onChange={(e) => setName(e.target.value)}></TextField>
-                <TextField
-                    required
-                    label="Symbol"
-                    value={symbol}
-                    onChange={(e) => setSymbol(e.target.value)}></TextField>
-            </>
+            <TextField
+                required
+                error={!isValidAddress && !!address}
+                label="Contract Address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+            />
+            <TextField
+                required
+                label="Decimal"
+                value={decimals === 0 ? '' : decimals}
+                type="number"
+                inputProps={{ min: 0 }}
+                onChange={(e) => setDecimal(parseInt(e.target.value))}
+            />
+            <TextField required label="Name" value={name} onChange={(e) => setName(e.target.value)} />
+            <TextField required label="Symbol" value={symbol} onChange={(e) => setSymbol(e.target.value)} />
         </EthereumNetworkSelector>
     )
 }
