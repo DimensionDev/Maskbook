@@ -45,3 +45,18 @@ declare module 'typeson' {
         parseAsync<T>(...args: Parameters<JSON['parse']>): Promise<T>
     }
 }
+
+declare module 'eth-contract-metadata' {
+    export interface TokenMetadata {
+        decimals: number
+        erc20: boolean
+        logo: string
+        name: string
+        symbol: string
+        address: string
+    }
+    const metadata: {
+        [address: string]: TokenMetadata
+    }
+    export default metadata
+}
