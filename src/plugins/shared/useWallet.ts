@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { EthereumTokenType } from '../Wallet/database/types'
 import Services from '../../extension/service'
 import { PluginMessageCenter } from '../PluginMessages'
@@ -9,38 +9,34 @@ import useSWR from 'swr'
 import type { WalletDetails, ERC20TokenDetails } from '../../extension/background-script/PluginService'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 
-const getWallets = () => Services.Plugin.getWallets()
-const getManagedWallet = Services.Plugin.getManagedWallet
 export function useWallet() {
     const swr = useSWR('query', {
-        fetcher: getWallets,
+        fetcher: async () => {
+            const result = await Services.Plugin.getWallets()
+
+            console.log('DEBUG: fetcher is called')
+            console.log(result)
+            return result
+        },
     })
-    const { revalidate, data } = swr
+    const { revalidate } = swr
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     useEffect(() => currentEthereumNetworkSettings.addListener(revalidate), [revalidate])
-    return {
-        ...swr,
-        wallets: data?.wallets,
-        tokens: data?.tokens,
-        requestConnectWallet: useCallback(() => {
-            Services.Welcome.openOptionsPage('/wallets?error=nowallet')
-        }, []),
-    }
+
+    console.log('DEBUG: revalidated use wallet')
+    console.log(swr.data)
+    return swr
 }
 export function useManagedWalletDetail(address: string | undefined) {
-    const swr = useSWR(address ?? null, { fetcher: getManagedWallet })
+    const swr = useSWR(address ?? null, { fetcher: Services.Plugin.getManagedWallet })
     const { revalidate } = swr
+
+    console.log('DEBUG: revalidated use managed wallet')
+    console.log(swr.data)
+
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     return swr
 }
-export type SelectedTokenType =
-    | {
-          type: 'eth'
-      }
-    | {
-          type: 'erc20'
-          address: string
-      }
 export function useSelectWallet(
     wallets: WalletDetails[] | undefined,
     tokens: ERC20TokenDetails[] | undefined,

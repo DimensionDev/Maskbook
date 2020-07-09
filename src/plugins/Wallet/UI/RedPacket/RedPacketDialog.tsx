@@ -116,7 +116,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     ]
     const isSendButtonDisabled = isDisabled.some((x) => x)
 
-    const createRedPacket = () => {
+    const onCreate = () => {
         const power = selectedTokenType === EthereumTokenType.ETH ? 18 : selectedToken!.decimals
         props.onCreateNewPacket({
             duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
@@ -206,7 +206,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                     variant="contained"
                     startIcon={props.loading ? <CircularProgress size={24} /> : null}
                     disabled={loading || isSendButtonDisabled}
-                    onClick={createRedPacket}>
+                    onClick={onCreate}>
                     {isSendButtonDisabled
                         ? 'Not valid'
                         : `Send ${+send_total.toFixed(3) === +send_total.toFixed(9) ? '' : '~'}${+send_total.toFixed(
@@ -317,14 +317,16 @@ const useStyles = makeStyles({
 })
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
-    const { wallets, tokens, requestConnectWallet } = useWallet()
+    const { data: walletData } = useWallet()
+    const { wallets, tokens } = walletData ?? {}
     const [availableRedPackets, setAvailableRedPackets] = useState<RedPacketRecord[]>([])
     const [justCreatedRedPacket, setJustCreatedRedPacket] = useState<RedPacketRecord | undefined>(undefined)
 
     const [status, setStatus] = useState<'succeed' | 'failed' | 'undetermined' | 'initial'>('initial')
     const loading = status === 'undetermined'
     const [createError, setCreateError] = useState<Error | null>(null)
-    const createRedPacket = async (opt: CreateRedPacketInit) => {
+    const onConnect = () => Services.Welcome.openOptionsPage('/wallets?error=nowallet')
+    const onCreate = async (opt: CreateRedPacketInit) => {
         try {
             setStatus('undetermined')
             const { id } = await Services.Plugin.invokePlugin('maskbook.red_packet', 'createRedPacket', opt)
@@ -338,7 +340,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             setStatus('failed')
         }
     }
-    const insertRedPacket = (payload?: RedPacketJSONPayload | null) => {
+    const onSelect = (payload?: RedPacketJSONPayload | null) => {
         const ref = getActivatedUI().typedMessageMetadata
         const next = new Map(ref.value.entries())
         payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey)
@@ -379,8 +381,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         senderName={useCurrentIdentity()?.linkedPersona?.nickname}
                         wallets={wallets}
                         tokens={tokens}
-                        onCreateNewPacket={createRedPacket}
-                        requestConnectWallet={requestConnectWallet}
+                        onCreateNewPacket={onCreate}
+                        requestConnectWallet={onConnect}
                     />
                 ),
                 p: 0,
@@ -388,11 +390,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             {
                 label: 'Select Existing',
                 children: (
-                    <ExistingPacketUI
-                        {...props}
-                        redPackets={availableRedPackets}
-                        onSelectExistingPacket={insertRedPacket}
-                    />
+                    <ExistingPacketUI {...props} redPackets={availableRedPackets} onSelectExistingPacket={onSelect} />
                 ),
                 p: 0,
             },

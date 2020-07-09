@@ -52,7 +52,8 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
 
 function Gitcoin(props: { url: string }) {
     const [open, setOpen] = useState(false)
-    const { wallets, tokens, requestConnectWallet } = useWallet()
+    const { data: walletData } = useWallet()
+    const { wallets, tokens } = walletData ?? {}
     const url = props.url
     const { revalidate, data, isValidating } = useSWR(url, {
         fetcher(url: string) {
@@ -75,6 +76,7 @@ function Gitcoin(props: { url: string }) {
     const loading = status === 'undetermined'
     const [donateError, setDonateError] = useState<Error | null>(null)
     const [donatePayload, setDonatePayload] = useState<DonatePayload | null>(null)
+    const onConnect = () => Services.Welcome.openOptionsPage('/wallets?error=nowallet')
     const onDonate = async (payload: DonatePayload) => {
         const { amount, address, token, tokenType } = payload
         if (!donationAddress) return
@@ -102,7 +104,7 @@ function Gitcoin(props: { url: string }) {
     return (
         <>
             <PreviewCard
-                onRequestGrant={() => (wallets?.length === 0 ? requestConnectWallet() : setOpen(true))}
+                onRequestGrant={() => (wallets?.length === 0 ? onConnect() : setOpen(true))}
                 requestPermission={() => {}}
                 hasPermission={true}
                 loading={isValidating}
@@ -119,7 +121,7 @@ function Gitcoin(props: { url: string }) {
                 <DonateDialog
                     loading={loading}
                     address={donationAddress}
-                    requestConnectWallet={requestConnectWallet}
+                    requestConnectWallet={onConnect}
                     wallets={wallets}
                     tokens={tokens}
                     open={!!(open && donationAddress?.length)}

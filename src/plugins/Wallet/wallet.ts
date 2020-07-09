@@ -261,9 +261,16 @@ export async function walletAddERC20Token(
         }
         await t.objectStore('ERC20Token').add(rec)
     }
-    wallet.erc20_token_balance.set(token.address, new BigNumber(0))
-    wallet.updatedAt = new Date()
+    if (!wallet.erc20_token_balance.has(token.address)) {
+        wallet.erc20_token_balance.set(token.address, new BigNumber(0))
+        wallet.updatedAt = new Date()
+    }
     await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
+
+    console.log(`DEBUG: add token`)
+    console.log(`DEBUG: address: ${token.address}`)
+    console.log(WalletRecordIntoDB(wallet))
+
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
@@ -272,9 +279,16 @@ export async function walletRemoveERC20Token(walletAddress: string, tokenAddress
     const wallet = await getWalletByAddress(t, walletAddress)
     const erc20 = await t.objectStore('ERC20Token').get(tokenAddress)
     if (!erc20) return
-    wallet.erc20_token_balance.delete(tokenAddress)
-    wallet.updatedAt = new Date()
+    if (wallet.erc20_token_balance.has(tokenAddress)) {
+        wallet.erc20_token_balance.delete(tokenAddress)
+        wallet.updatedAt = new Date()
+    }
     await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
+
+    console.log(`DEBUG: remove token`)
+    console.log(`DEBUG: address: ${tokenAddress}`)
+    console.log(WalletRecordIntoDB(wallet))
+
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 

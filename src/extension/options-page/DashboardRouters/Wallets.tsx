@@ -257,7 +257,8 @@ export default function DashboardWalletsRouter() {
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
     const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)
 
-    const { wallets, tokens } = useWallet()
+    const { data: walletData } = useWallet()
+    const { wallets, tokens } = walletData ?? {}
     const [current, setCurrent] = useState('')
     const currentWallet = wallets?.find((wallet) => wallet.walletAddress === current)
 

@@ -92,17 +92,22 @@ export function WalletItem(props: WalletItemProps) {
     const classes = useStyles()
     const { wallet, selected, onClick, tokens } = props
     const [, copyToClipboard] = useCopyToClipboard()
-    const { data: managedWallet } = useManagedWalletDetail(wallet?.walletAddress)
+    // const { data: managedWallet } = useManagedWalletDetail(wallet?.walletAddress)
     const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
     const isExotic = wallet.type === 'exotic'
     const provider = wallet.type === 'exotic' ? wallet.provider : ''
+
+    console.log('DEBUG: wallet item')
+    console.log(tokens)
+    // console.log(managedWallet)
+
     return (
         <ButtonBase
             component="section"
             onClick={onClick}
             className={classNames(classes.container, {
                 [classes.selected]: selected,
-                [classes.default]: managedWallet?._wallet_is_default,
+                [classes.default]: false,
             })}>
             <Typography className={classes.title} variant="h5">
                 {wallet.walletName}
@@ -137,14 +142,15 @@ export function WalletItem(props: WalletItemProps) {
                 {t('copy')}
             </ActionButton>
             <Box py={1} display="flex" flexWrap="wrap">
-                <TokenIcon classes={{ coin: classes.coin }} address={ETH_ADDRESS} name="ETH"></TokenIcon>
+                <TokenIcon classes={{ coin: classes.coin }} address={ETH_ADDRESS} name="ETH" />
                 {tokens &&
                     tokens.map((token) => (
                         <TokenIcon
                             classes={{ coin: classes.coin }}
                             key={token.address}
                             address={token.address}
-                            name={token.name?.substr(0, 1).toLocaleUpperCase()}></TokenIcon>
+                            name={token.name?.substr(0, 1).toLocaleUpperCase()}
+                        />
                     ))}
             </Box>
         </ButtonBase>

@@ -84,8 +84,8 @@ export function TokenListItem(props: TokenListItemProps) {
                     </IconButton>
                 ) : null}
                 {menu}
+                {hideToken}
             </ListItemSecondaryAction>
-            {hideToken}
         </ListItem>
     )
 }
