@@ -94,11 +94,6 @@ export function WalletItem(props: WalletItemProps) {
     const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
     const isExotic = wallet.type === 'exotic'
     const provider = wallet.type === 'exotic' ? wallet.provider : ''
-
-    console.log('DEBUG: wallet item')
-    console.log(tokens)
-    console.log(wallet)
-
     return (
         <ButtonBase
             component="section"

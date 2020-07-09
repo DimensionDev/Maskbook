@@ -1,5 +1,9 @@
 import { EthereumNetwork } from '../../database/types'
 import { currentEthereumNetworkSettings } from '../../../../settings/settings'
+import contractMap from 'eth-contract-metadata'
+import mainnet from '../../erc20/mainnet.json'
+import rinkeby from '../../erc20/rinkeby.json'
+import type { ERC20Token } from '../../token'
 
 const settings = {
     gitcoinMaintainerAddress: {
@@ -22,27 +26,48 @@ const settings = {
         [EthereumNetwork.Rinkeby]: '0x575f906db24154977c7361c2319e2b25e897e3b6',
         [EthereumNetwork.Ropsten]: '0x26760783c12181efa3c435aee4ae686c53bdddbb',
     },
-    middlewareAddress: {
-        [EthereumNetwork.Mainnet]: 'wss://mainnet.infura.io/ws/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
-        [EthereumNetwork.Rinkeby]: 'wss://rinkeby.infura.io/ws/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
-        [EthereumNetwork.Ropsten]: 'wss://ropsten.infura.io/ws/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
+    balanceCheckerContractAddress: {
+        [EthereumNetwork.Mainnet]: '0xb1f8e55c7f64d203c1400b9d8555d050f94adf39',
+        [EthereumNetwork.Rinkeby]: '0xe3AE8Ae4160680C7Ac0FB0A79F519d7D7eAe06aB',
+        [EthereumNetwork.Ropsten]: '0xb1f8e55c7f64d203c1400b9d8555d050f94adf39',
     },
-} as {
-    gitcoinMaintainerAddress: Record<EthereumNetwork, string>
-    splitterContractAddress: Record<EthereumNetwork, string>
-    bulkCheckoutContractAddress: Record<EthereumNetwork, string>
-    happyRedPacketContractAddress: Record<EthereumNetwork, string>
-    middlewareAddress: Record<EthereumNetwork, string>
+    middlewareAddress: {
+        [EthereumNetwork.Mainnet]: 'wss://mainnet.infura.io/ws/v3/154b82e9c0e048c3872309241045cf1f',
+        [EthereumNetwork.Rinkeby]: 'wss://rinkeby.infura.io/ws/v3/154b82e9c0e048c3872309241045cf1f',
+        [EthereumNetwork.Ropsten]: 'wss://ropsten.infura.io/ws/v3/154b82e9c0e048c3872309241045cf1f',
+    },
 }
 
-export function getNetworkSettings() {
-    const networkType = currentEthereumNetworkSettings.value
+export function getNetworkSettings(network: EthereumNetwork = currentEthereumNetworkSettings.value) {
     return {
-        networkType,
-        gitcoinMaintainerAddress: settings.gitcoinMaintainerAddress[networkType],
-        splitterContractAddress: settings.splitterContractAddress[networkType],
-        bulkCheckoutContractAddress: settings.bulkCheckoutContractAddress[networkType],
-        happyRedPacketContractAddress: settings.happyRedPacketContractAddress[networkType],
-        middlewareAddress: settings.middlewareAddress[networkType],
+        networkType: network,
+        gitcoinMaintainerAddress: settings.gitcoinMaintainerAddress[network],
+        splitterContractAddress: settings.splitterContractAddress[network],
+        bulkCheckoutContractAddress: settings.bulkCheckoutContractAddress[network],
+        happyRedPacketContractAddress: settings.happyRedPacketContractAddress[network],
+        balanceCheckerContractAddress: settings.balanceCheckerContractAddress[network],
+        middlewareAddress: settings.middlewareAddress[network],
     }
+}
+
+const ERC20Tokens = {
+    [EthereumNetwork.Mainnet]: [
+        ...Object.entries(contractMap)
+            .filter(([_, token]) => token.erc20)
+            .map(([address, token]) => ({
+                address,
+                decimals: token.decimals,
+                name: token.name,
+                symbol: token.symbol,
+            }))
+            .filter(Boolean),
+        ...mainnet.built_in_tokens.filter((token) => !contractMap[token.address]),
+        ...mainnet.predefined_tokens.filter((token) => !contractMap[token.address]),
+    ],
+    [EthereumNetwork.Rinkeby]: [...rinkeby.built_in_tokens, ...rinkeby.predefined_tokens],
+    [EthereumNetwork.Ropsten]: [],
+}
+
+export function getNetworkERC20Tokens(network: EthereumNetwork = currentEthereumNetworkSettings.value) {
+    return ERC20Tokens[network] as ERC20Token[]
 }

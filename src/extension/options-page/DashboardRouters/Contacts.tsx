@@ -78,9 +78,13 @@ export default function DashboardContactsRouter() {
 }
 function ContactList({ isReachingEnd, loadMore, pages, items, newDataPending }: ReturnType<typeof useSWRProfiles>) {
     const ref = useRef<FixedSizeList | null>(null)
+
+    console.log(`DEBUG: pages`)
+    console.log(pages)
+
     return (
         <>
-            <div style={{ display: 'none' }}>{pages}</div>
+            <div>{pages}</div>
             <AutoResize>
                 {(size) => (
                     <FixedSizeList

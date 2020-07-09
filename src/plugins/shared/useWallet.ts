@@ -13,22 +13,14 @@ export function useWallet() {
     const swr = useSWR('query', {
         fetcher: Services.Plugin.getWallets,
     })
-    const { revalidate, error } = swr
+    const { revalidate } = swr
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     useEffect(() => currentEthereumNetworkSettings.addListener(revalidate), [revalidate])
-
-    console.log('DEBUG: revalidated use wallet')
-    console.log(swr.data)
-    console.log(error)
     return swr
 }
 export function useManagedWalletDetail(address: string) {
     const swr = useSWR(address, { fetcher: Services.Plugin.getManagedWallet })
     const { revalidate } = swr
-
-    console.log('DEBUG: revalidated use managed wallet')
-    console.log(swr.data)
-
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     return swr
 }
@@ -43,11 +35,6 @@ export function useSelectWallet(
     const [selectedTokenAddress, setSelectedTokenAddress] = useState(ETH_ADDRESS)
     const [selectedTokenType, setSelectedTokenType] = useState<EthereumTokenType>(EthereumTokenType.ETH)
     const selectedWallet = wallets?.find((x) => x.address === selectedWalletAddress)
-
-    console.log(`DEBUG: use select wallet`)
-    console.log(tokens)
-    console.log(wallets)
-    console.log(selectedWallet)
 
     const availableTokens = (selectedWallet?.erc20_token_balance
         ? Array.from(selectedWallet.erc20_token_balance.entries())

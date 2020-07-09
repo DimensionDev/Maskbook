@@ -158,6 +158,8 @@
     "general": "General",
     "go_to": "Go to",
     "history": "History",
+    "history_inbound": "Inbound",
+    "history_outbound": "Outbound",
     "home": "Home",
     "immersive_setup_optional": "[Optional]",
     "immersive_setup_find_username_title": "Find your username",

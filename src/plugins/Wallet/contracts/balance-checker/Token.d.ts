@@ -13,10 +13,12 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class Context extends Contract {
+export class Token extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): Context
-    methods: {}
+    clone(): Token
+    methods: {
+        balanceOf(arg0: string): TransactionObject<string>
+    }
     events: {
         allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
     }

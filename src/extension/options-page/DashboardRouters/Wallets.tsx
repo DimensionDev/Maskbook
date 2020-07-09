@@ -263,15 +263,15 @@ export default function DashboardWalletsRouter() {
     const currentWallet = wallets?.find((wallet) => wallet.address === current)
 
     const network = useValueRef(currentEthereumNetworkSettings)
-
-    console.log(`DEBUE: tokens`)
-    console.log(tokens)
-    console.log(wallets)
-
     const getTokensForWallet = (wallet?: WalletDetails) => {
         if (!wallet) return []
         return (tokens ?? [])
-            .filter((token) => token.network === network && wallet.erc20_token_balance.has(token.address))
+            .filter(
+                (token) =>
+                    token.network === network &&
+                    wallet.erc20_token_balance.has(token.address) &&
+                    !wallet.erc20_token_blacklist.has(token.address),
+            )
             .sort((token, otherToken) => {
                 if (isDAI(token.address)) return -1
                 if (isDAI(otherToken.address)) return 1
@@ -281,7 +281,8 @@ export default function DashboardWalletsRouter() {
 
     // tracking wallet balance
     useEffect(() => {
-        Services.Plugin.invokePlugin('maskbook.wallet', 'trackWalletBalances', current)
+        Services.Plugin.invokePlugin('maskbook.wallet', 'watchWalletBalances', current)
+        Services.Plugin.invokePlugin('maskbook.wallet', 'updateWalletBalances', [current])
     }, [current])
 
     // auto select first wallet

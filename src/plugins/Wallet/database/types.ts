@@ -191,6 +191,8 @@ export interface WalletRecordProperties {
     /** Wallet ethereum balance */
     eth_balance?: BigNumber
     erc20_token_balance: Map</** address of the erc20 token */ string, BigNumber | undefined>
+    erc20_token_whitelist: Set<string>
+    erc20_token_blacklist: Set<string>
     _wallet_is_default?: boolean
     /**
      * undefined means "managed"

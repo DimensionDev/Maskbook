@@ -1,21 +1,25 @@
 import * as jwt from 'jsonwebtoken'
 import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
+import { EthereumAddress } from 'wallet.ts'
 import { web3 } from './web3'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
 import HappyRedPacketABI from './contracts/happy-red-packet/HappyRedPacket.json'
 import ERC20ABI from './contracts/splitter/ERC20.json'
 import BulkCheckoutABI from './contracts/bulk-checkout/BulkCheckout.json'
+import BalanceCheckerABI from './contracts/balance-checker/BalanceChecker.json'
 import type { Erc20 as ERC20 } from './contracts/splitter/ERC20'
 import type { BulkCheckout } from './contracts/bulk-checkout/BulkCheckout'
 import type { HappyRedPacket } from './contracts/happy-red-packet/HappyRedPacket'
+import type { BalanceChecker } from './contracts/balance-checker/BalanceChecker'
 import type { CheckRedPacketAvailabilityResult, CreateRedPacketResult, DonateResult } from './types'
 import { EthereumTokenType, EthereumNetwork, RedPacketJSONPayload } from './database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 import { sendTx } from './tx'
-import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
-import { GITCOIN_ETH_ADDRESS, isUSDT } from './token'
+import { getNetworkSettings, getNetworkERC20Tokens } from './UI/Developer/EthereumNetworkSettings'
+import { GITCOIN_ETH_ADDRESS, isUSDT, ETH_ADDRESS, ERC20Token } from './token'
 import { createRedPacketTransaction } from './createRedPacketTransaction'
+import { onWalletBalancesUpdated, BalanceMetadata } from './wallet'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
@@ -27,6 +31,10 @@ function createERC20Contract(address: string) {
 
 function createBulkCheckoutContract(address: string) {
     return (new web3.eth.Contract(BulkCheckoutABI as AbiItem[], address) as unknown) as BulkCheckout
+}
+
+function createBalanceCheckerContract(address: string) {
+    return (new web3.eth.Contract(BalanceCheckerABI as AbiItem[], address) as unknown) as BalanceChecker
 }
 
 export const redPacketAPI = {
@@ -565,6 +573,76 @@ export const gitcoinAPI = {
         })
     },
 }
+
+export const balanceCheckerAPI = (() => {
+    let idle = true
+
+    // TODO:
+    // polling the balance of those accounts in the background and update it silently
+    const watchedAccounts = new Set<string>()
+
+    async function getBalances(accounts: string[], tokens: string[]) {
+        let balances: string[] = []
+        if (!idle) return balances
+        if (!accounts.length || !tokens.length) return balances
+        try {
+            idle = false
+            balances = await createBalanceCheckerContract(getNetworkSettings().balanceCheckerContractAddress)
+                .methods.balances(accounts, tokens)
+                .call()
+        } catch (e) {
+            console.log(e)
+            balances = []
+        } finally {
+            idle = true
+        }
+        return balances
+    }
+    async function updateBalances(accounts: string[] = Array.from(watchedAccounts)) {
+        const validAccounts = accounts.filter(EthereumAddress.isValid)
+        if (!validAccounts.length) return
+        const tokens = [
+            {
+                address: ETH_ADDRESS,
+                decimals: 18,
+                name: 'Ether',
+                symbol: 'ETH',
+            },
+            ...getNetworkERC20Tokens(),
+        ]
+        const balances = await getBalances(
+            validAccounts,
+            tokens.map((x) => x.address),
+        )
+        const metadata: BalanceMetadata = balances.reduce((accumulate, balance, index) => {
+            const accountAddress = validAccounts[Math.floor(index / tokens.length)]
+            accumulate[accountAddress] = accumulate[accountAddress] ?? []
+            const token = tokens[index % tokens.length]
+            if (token)
+                accumulate[accountAddress].push({
+                    ...token,
+                    network: getNetworkSettings().networkType,
+                    balance: new BigNumber(balance),
+                })
+            return accumulate
+        }, {} as BalanceMetadata)
+        onWalletBalancesUpdated(metadata)
+    }
+
+    return {
+        dataSource: 'real' as const,
+        getBalances,
+        updateBalances,
+        watchAccounts(accounts: string[]) {
+            accounts.forEach((address) => {
+                if (EthereumAddress.isValid(address)) watchedAccounts.add(address)
+            })
+        },
+        unwatchAccounts(accounts: string[]) {
+            accounts.forEach((address) => watchedAccounts.delete(address))
+        },
+    }
+})()
 
 type TxHashID = { transactionHash: string }
 type RedPacketID = { redPacketID: string }
