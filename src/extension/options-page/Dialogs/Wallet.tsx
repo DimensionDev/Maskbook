@@ -6,6 +6,7 @@ import {
     Hexagon as HexagonIcon,
     Clock as ClockIcon,
     Info as InfoIcon,
+    Trash2 as TrashIcon,
 } from 'react-feather'
 import {
     Button,
@@ -25,7 +26,7 @@ import { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import Services from '../../service'
-import type { EthereumNetwork, RedPacketRecord } from '../../../plugins/Wallet/database/types'
+import type { RedPacketRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import {
     ERC20PredefinedTokenSelector,
     ERC20CustomizedTokenSelector,
@@ -40,7 +41,7 @@ import { useHistory } from 'react-router-dom'
 import { DashboardRoute } from '../Route'
 import { sleep } from '../../../utils/utils'
 import { currentEthereumNetworkSettings } from '../../../settings/settings'
-import type { WalletDetails } from '../../background-script/PluginService'
+import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
 import { useManagedWalletDetail } from '../../../plugins/shared/useWallet'
 
 //#region wallet import dialog
@@ -136,7 +137,8 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                         disabled={!(state[0] === 0 && name && mnemonic) && !(state[0] === 1 && name && privKey)}>
                         {t('import')}
                     </DebounceButton>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }
@@ -238,7 +240,8 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                         disabled={!name || !confirmed}>
                         {t('create')}
                     </DebounceButton>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }
@@ -306,7 +309,8 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
                     <DebounceButton disabled={!token} variant="contained" color="primary" onClick={onSubmit}>
                         {t('import')}
                     </DebounceButton>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }
@@ -393,7 +397,8 @@ export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletPro
                 icon={<ClockIcon />}
                 iconColor="#FB5858"
                 primary="History"
-                content={<AbstractTab {...tabProps}></AbstractTab>}></DashboardDialogWrapper>
+                content={<AbstractTab {...tabProps}></AbstractTab>}
+            />
         </DashboardDialogCore>
     )
 }
@@ -443,7 +448,8 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
                             <ShowcaseBox title={t('private_key')}>{privateKeyInHex}</ShowcaseBox>
                         </section>
                     </>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }
@@ -480,11 +486,12 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                         <DebounceButton variant="contained" color="primary" onClick={renameWallet}>
                             {t('ok')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
+                        <DebounceButton variant="outlined" color="default" onClick={props.onClose}>
                             {t('cancel')}
                         </DebounceButton>
                     </SpacedButtonGroup>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }
@@ -516,11 +523,57 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
                             data-testid="confirm_button">
                             {t('confirm')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
+                        <DebounceButton variant="outlined" color="default" onClick={props.onClose}>
                             {t('cancel')}
                         </DebounceButton>
                     </SpacedButtonGroup>
-                }></DashboardDialogWrapper>
+                }
+            />
+        </DashboardDialogCore>
+    )
+}
+//#endregion
+
+//#region hide wallet token
+export function DashboardWalletHideTokenConfirmDialog(
+    props: WrappedDialogProps<WalletProps & { token: ERC20TokenDetails }>,
+) {
+    const { t } = useI18N()
+    const { wallet, token } = props.ComponentProps!
+    const onConfirm = useSnackbarCallback(
+        () =>
+            Services.Plugin.invokePlugin(
+                'maskbook.wallet',
+                'walletRemoveERC20Token',
+                wallet.walletAddress,
+                token.address,
+            ),
+        [wallet.walletAddress],
+        props.onClose,
+    )
+    return (
+        <DashboardDialogCore {...props}>
+            <DashboardDialogWrapper
+                size="small"
+                icon={<TrashIcon />}
+                iconColor="#F4637D"
+                primary={t('hide_token')}
+                secondary={t('hide_token_hint', { token: token.name })}
+                footer={
+                    <SpacedButtonGroup>
+                        <DebounceButton
+                            variant="contained"
+                            color="danger"
+                            onClick={onConfirm}
+                            data-testid="confirm_button">
+                            {t('confirm')}
+                        </DebounceButton>
+                        <DebounceButton variant="outlined" color="default" onClick={props.onClose}>
+                            {t('cancel')}
+                        </DebounceButton>
+                    </SpacedButtonGroup>
+                }
+            />
         </DashboardDialogCore>
     )
 }
@@ -567,7 +620,8 @@ export function DashboardWalletErrorDialog(props: WrappedDialogProps<object>) {
                     <Button variant="contained" color="primary" onClick={onClose}>
                         {t('ok')}
                     </Button>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }
