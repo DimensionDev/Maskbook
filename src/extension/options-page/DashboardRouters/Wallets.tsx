@@ -20,6 +20,7 @@ import {
     DashboardWalletDeleteConfirmDialog,
     DashboardWalletRenameDialog,
     DashboardWalletErrorDialog,
+    DashboardWalletRedPacketDetailDialog,
 } from '../Dialogs/Wallet'
 import DashboardMenu from '../DashboardComponents/DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -34,6 +35,7 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { currentEthereumNetworkSettings } from '../../../settings/settings'
 import { useWallet } from '../../../plugins/shared/useWallet'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
+import type { RedPacketRecord } from '../../../plugins/Wallet/database/types'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -114,6 +116,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
+    const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const setAsDefault = useSnackbarCallback(
         () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet!.address),
@@ -198,7 +201,16 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
             {wallet.type === 'managed' ? (
                 <div className={classes.footer}>
                     <Button
-                        onClick={() => openWalletHistory({ wallet: wallet })}
+                        onClick={() =>
+                            openWalletHistory({
+                                wallet: wallet,
+                                onClickRedPacketRecord: (record: RedPacketRecord) => {
+                                    openWalletRedPacket({
+                                        redPacket: record,
+                                    })
+                                },
+                            })
+                        }
                         startIcon={<HistoryIcon />}
                         variant="text"
                         color="primary">
@@ -211,6 +223,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
             {walletBackup}
             {walletDelete}
             {walletRename}
+            {walletRedPacket}
         </div>
     )
 })
@@ -252,10 +265,12 @@ export default function DashboardWalletsRouter() {
     const classes = useStyles()
     const { t } = useI18N()
     const { error } = useQueryParams(['error'])
+    const { rpid } = useQueryParams(['rpid'])
 
     const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
     const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)
+    const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const { data: walletData } = useWallet()
     const { wallets, tokens } = walletData ?? {}
@@ -296,6 +311,16 @@ export default function DashboardWalletsRouter() {
     useEffect(() => {
         if (error) openWalletError()
     }, [error, openWalletError])
+
+    // show red packet detail
+    useEffect(() => {
+        if (!rpid) return
+        Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, rpid).then((redPacket) =>
+            openWalletRedPacketDetail({
+                redPacket,
+            }),
+        )
+    }, [rpid, openWalletRedPacketDetail])
 
     return (
         <DashboardRouterContainer
@@ -347,6 +372,7 @@ export default function DashboardWalletsRouter() {
             {walletImport}
             {walletCreate}
             {walletError}
+            {walletRedPacketDetail}
         </DashboardRouterContainer>
     )
 }

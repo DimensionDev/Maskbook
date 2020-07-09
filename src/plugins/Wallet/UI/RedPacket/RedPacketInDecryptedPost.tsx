@@ -104,7 +104,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
                 setLoading(false)
             }
         } else {
-            Services.Welcome.openOptionsPage(`/wallets/redpacket?id=${rpid}`)
+            Services.Welcome.openOptionsPage(`/wallets?rpid=${rpid}`)
         }
     }
     return (
