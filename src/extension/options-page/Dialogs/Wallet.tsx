@@ -275,11 +275,11 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: 'Well-know token',
+                label: t('add_token_well_known'),
                 children: <ERC20PredefinedTokenSelector excludeTokens={addedTokens} onTokenChange={setToken} />,
             },
             {
-                label: 'Add your own',
+                label: t('add_token_your_own'),
                 children: <ERC20CustomizedTokenSelector excludeTokens={addedTokens} onTokenChange={setToken} />,
             },
         ],
@@ -350,7 +350,7 @@ export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletPro
         return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
     }, [tabState])
 
-    const Record = (record: RedPacketRecord) => (
+    const RedPacketRecord = (record: RedPacketRecord) => (
         <WalletLine
             key={record.id}
             line1={record.send_message}
@@ -376,7 +376,7 @@ export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletPro
                 label: t('history_inbound'),
                 children: (
                     <List className={classes.list} disablePadding>
-                        {inboundRecords.map(Record)}
+                        {inboundRecords.map(RedPacketRecord)}
                     </List>
                 ),
                 p: 0,
@@ -385,7 +385,7 @@ export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletPro
                 label: t('history_outbound'),
                 children: (
                     <List className={classes.list} disablePadding>
-                        {outboundRecords.map(Record)}
+                        {outboundRecords.map(RedPacketRecord)}
                     </List>
                 ),
                 display: 'flex',

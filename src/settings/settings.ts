@@ -49,7 +49,7 @@ export const currentEthereumNetworkSettings = createGlobalSettings<EthereumNetwo
     'eth network',
     EthereumNetwork.Mainnet,
     {
-        primary: () => 'Choose ETH network',
+        primary: () => i18n.t('settings_choose_eth_network'),
         secondary: () =>
             `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Ropsten}`,
     },
