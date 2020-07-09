@@ -18,11 +18,12 @@ import {
     Box,
     FormControlLabel,
     Checkbox,
+    Chip,
 } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { DebounceButton } from '../DashboardComponents/ActionButton'
+import ActionButton, { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import Services from '../../service'
@@ -44,6 +45,7 @@ import { currentEthereumNetworkSettings } from '../../../settings/settings'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
 import { useManagedWalletDetail } from '../../../plugins/shared/useWallet'
 import { difference } from 'lodash-es'
+import { RedPacket } from '../../../plugins/Wallet/UI/Dashboard/Components/RedPacket'
 
 //#region wallet import dialog
 export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
@@ -320,95 +322,6 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
 }
 //#endregion
 
-//#region wallet history dialog
-const useHistoryDialogStyles = makeStyles((theme) =>
-    createStyles({
-        list: {
-            width: '100%',
-            overflow: 'auto',
-        },
-    }),
-)
-
-export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletProps>) {
-    const { t } = useI18N()
-    const classes = useHistoryDialogStyles()
-    const state = useState(0)
-    const [tabState] = state
-
-    const { wallet } = props.ComponentProps!
-
-    const [redPacketRecords, setRedPacketRecords] = useState<RedPacketRecord[]>([])
-    const inboundRecords = redPacketRecords.filter((record) => record.claim_address === wallet.address)
-    const outboundRecords = redPacketRecords.filter((record) => record.sender_address === wallet.address)
-
-    useEffect(() => {
-        const updateHandler = () =>
-            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets', undefined).then(setRedPacketRecords)
-
-        updateHandler()
-        return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
-    }, [tabState])
-
-    const RedPacketRecord = (record: RedPacketRecord) => (
-        <WalletLine
-            key={record.id}
-            line1={record.send_message}
-            line2={`${record.block_creation_time?.toLocaleString()} from ${record.sender_name}`}
-            onClick={() => alert('clicked')}
-            invert
-            action={
-                <Typography variant="h6">
-                    {(tabState === 0 && record.claim_amount) || (tabState === 1 && record.send_total)
-                        ? formatBalance(
-                              tabState === 0 ? record.claim_amount! : record.send_total,
-                              record.raw_payload?.token?.decimals ?? 18,
-                          )
-                        : '0'}{' '}
-                    {record.raw_payload?.token?.name || 'ETH'}
-                </Typography>
-            }
-        />
-    )
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            {
-                label: t('history_inbound'),
-                children: (
-                    <List className={classes.list} disablePadding>
-                        {inboundRecords.map(RedPacketRecord)}
-                    </List>
-                ),
-                p: 0,
-            },
-            {
-                label: t('history_outbound'),
-                children: (
-                    <List className={classes.list} disablePadding>
-                        {outboundRecords.map(RedPacketRecord)}
-                    </List>
-                ),
-                display: 'flex',
-                p: 0,
-            },
-        ],
-        state,
-        height: 350,
-    }
-
-    return (
-        <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper
-                icon={<ClockIcon />}
-                iconColor="#FB5858"
-                primary={t('history')}
-                content={<AbstractTab {...tabProps}></AbstractTab>}
-            />
-        </DashboardDialogCore>
-    )
-}
-//#endregion
-
 //#region wallet backup dialog
 const useBackupDialogStyles = makeStyles((theme) =>
     createStyles({
@@ -623,4 +536,194 @@ export function DashboardWalletErrorDialog(props: WrappedDialogProps<object>) {
         </DashboardDialogCore>
     )
 }
+//#endregion
+
+//#region wallet history dialog
+const useHistoryDialogStyles = makeStyles((theme) =>
+    createStyles({
+        list: {
+            width: '100%',
+            overflow: 'auto',
+        },
+    }),
+)
+
+export function DashboardWalletHistoryDialog(
+    props: WrappedDialogProps<WalletProps & { onClickRedPacketRecord: (redPacket: RedPacketRecord) => void }>,
+) {
+    const { t } = useI18N()
+    const classes = useHistoryDialogStyles()
+    const state = useState(0)
+    const [tabState] = state
+
+    const { wallet, onClickRedPacketRecord } = props.ComponentProps!
+
+    const [redPacketRecords, setRedPacketRecords] = useState<RedPacketRecord[]>([])
+    const inboundRecords = redPacketRecords.filter((record) => record.claim_address === wallet.address)
+    const outboundRecords = redPacketRecords.filter((record) => record.sender_address === wallet.address)
+
+    useEffect(() => {
+        const updateHandler = () =>
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets', undefined).then(setRedPacketRecords)
+        updateHandler()
+        return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
+    }, [tabState])
+
+    const RedPacketRecord = (record: RedPacketRecord) => (
+        <WalletLine
+            key={record.id}
+            line1={record.send_message}
+            line2={`${record.block_creation_time?.toLocaleString()} from ${record.sender_name}`}
+            onClick={() => {
+                props.onClose()
+                onClickRedPacketRecord(record)
+            }}
+            invert
+            action={
+                <Typography variant="h6">
+                    {(tabState === 0 && record.claim_amount) || (tabState === 1 && record.send_total)
+                        ? formatBalance(
+                              tabState === 0 ? record.claim_amount! : record.send_total,
+                              record.raw_payload?.token?.decimals ?? 18,
+                          )
+                        : '0'}{' '}
+                    {record.raw_payload?.token?.name || 'ETH'}
+                </Typography>
+            }
+        />
+    )
+    const tabProps: AbstractTabProps = {
+        tabs: [
+            {
+                label: t('history_inbound'),
+                children: (
+                    <List className={classes.list} disablePadding>
+                        {inboundRecords.map(RedPacketRecord)}
+                    </List>
+                ),
+                p: 0,
+            },
+            {
+                label: t('history_outbound'),
+                children: (
+                    <List className={classes.list} disablePadding>
+                        {outboundRecords.map(RedPacketRecord)}
+                    </List>
+                ),
+                display: 'flex',
+                p: 0,
+            },
+        ],
+        state,
+        height: 350,
+    }
+
+    return (
+        <DashboardDialogCore {...props}>
+            <DashboardDialogWrapper
+                icon={<ClockIcon />}
+                iconColor="#FB5858"
+                primary={t('history')}
+                content={<AbstractTab {...tabProps}></AbstractTab>}
+            />
+        </DashboardDialogCore>
+    )
+}
+//#endregion
+
+//#region red packet detail dialog
+const useRedPacketDetailStyles = makeStyles((theme) =>
+    createStyles({
+        openBy: {
+            margin: theme.spacing(2, 0, 0.5),
+        },
+        link: {
+            display: 'block',
+            width: '100%',
+            wordBreak: 'break-all',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+        },
+    }),
+)
+
+interface RedPacketProps {
+    redPacket: RedPacketRecord
+}
+
+export function DashboardWalletRedPacketDetailDialog(props: WrappedDialogProps<RedPacketProps>) {
+    const { t } = useI18N()
+    const { redPacket } = props.ComponentProps!
+
+    const classes = useRedPacketDetailStyles()
+    const sayThanks = () => {
+        if (!redPacket._found_in_url_!.includes('twitter.com/')) {
+            window.open(redPacket._found_in_url_, '_blank', 'noopener noreferrer')
+        } else {
+            const user = redPacket._found_in_url_!.match(/(?!\/)[\d\w]+(?=\/status)/)
+            const userText = user ? ` from @${user}` : ''
+            const text = [
+                `I just received a Red Packet${userText}. Follow @realMaskbook (maskbook.com) to get your first Twitter #RedPacket.`,
+                `#maskbook ${redPacket._found_in_url_}`,
+            ].join('\n')
+            window.open(
+                `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+                '_blank',
+                'noopener noreferrer',
+            )
+        }
+    }
+
+    return (
+        <DashboardDialogCore {...props}>
+            <DashboardDialogWrapper
+                primary="Red Packet Detail"
+                content={
+                    <>
+                        <RedPacket redPacket={redPacket} />
+                        {redPacket._found_in_url_ && (
+                            <ActionButton
+                                onClick={sayThanks}
+                                style={{ display: 'block', margin: 'auto', width: 200 }}
+                                variant="contained"
+                                color="primary">
+                                Say Thanks
+                            </ActionButton>
+                        )}
+                        {redPacket._found_in_url_ && (
+                            <WalletLine
+                                onClick={() => window.open(redPacket._found_in_url_, '_blank', 'noopener noreferrer')}
+                                line1="Source"
+                                line2={
+                                    <Typography className={classes.link} color="primary">
+                                        {redPacket._found_in_url_ || 'Unknown'}
+                                    </Typography>
+                                }
+                            />
+                        )}
+                        <WalletLine
+                            line1="From"
+                            line2={
+                                <>
+                                    {redPacket.sender_name}{' '}
+                                    {redPacket.create_transaction_hash && (
+                                        <Chip label="Me" variant="outlined" color="secondary" size="small" />
+                                    )}
+                                </>
+                            }
+                        />
+                        <WalletLine line1="Message" line2={redPacket.send_message} />
+                        <Box p={1} display="flex" justifyContent="center">
+                            <Typography variant="caption" color="textSecondary">
+                                Created at {redPacket.block_creation_time?.toLocaleString()}
+                            </Typography>
+                        </Box>
+                    </>
+                }
+            />
+        </DashboardDialogCore>
+    )
+}
+
 //#endregion

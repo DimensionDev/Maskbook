@@ -49,10 +49,13 @@ export function TokenListItem(props: TokenListItemProps) {
     const classes = useStyles()
     const { balance, wallet, token } = props
 
-    const [hideToken, , openHideToken] = useModal(DashboardWalletHideTokenConfirmDialog)
+    const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const menus = useMemo(
-        () => [<MenuItem onClick={() => openHideToken({ wallet, token })}>{t('hide')}</MenuItem>].filter((x) => x),
-        [openHideToken, wallet],
+        () =>
+            [<MenuItem onClick={() => openHideTokenConfirmDialog({ wallet, token })}>{t('hide')}</MenuItem>].filter(
+                (x) => x,
+            ),
+        [openHideTokenConfirmDialog, wallet],
     )
     const [menu, , openMenu] = useModal(DashboardMenu, { menus })
 
@@ -84,7 +87,7 @@ export function TokenListItem(props: TokenListItemProps) {
                     </IconButton>
                 ) : null}
                 {menu}
-                {hideToken}
+                {hideTokenConfirmDialog}
             </ListItemSecondaryAction>
         </ListItem>
     )
