@@ -1,82 +1,12 @@
-import React, { useCallback, useState, useEffect, CSSProperties } from 'react'
+import React, { useState, useEffect, CSSProperties } from 'react'
 import Fuse from 'fuse.js'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import { FixedSizeList } from 'react-window'
 import contractMap, { TokenMetadata } from 'eth-contract-metadata'
-import {
-    Switch,
-    List,
-    ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
-    Box,
-    Typography,
-    Avatar,
-    ListItemIcon,
-} from '@material-ui/core'
+import { ListItem, ListItemText, Box, Typography, Avatar, ListItemIcon } from '@material-ui/core'
 import type { ERC20Token } from '../../../token'
-import { EthereumNetwork } from '../../../database/types'
 import Wallet from 'wallet.ts'
-
-//#region predefined tokens
-import mainnet from '../../../erc20/mainnet.json'
-import rinkeby from '../../../erc20/rinkeby.json'
-
-const sort = (x: ERC20Token, y: ERC20Token): 1 | -1 => {
-    return [x.name, y.name].sort()[0] === x.name ? -1 : 1
-}
-mainnet.sort(sort)
-rinkeby.sort(sort)
-//#endregion
-
-//#region token selector
-const useListItemStyles = makeStyles((theme) => ({
-    root: { padding: 0 },
-    listItemSecondaryAction: {
-        right: 0,
-    },
-}))
-
-interface EthereumNetworkSelectorProps {
-    network?: EthereumNetwork
-    onNetworkChange: (network: EthereumNetwork) => void
-    children?: React.ReactNode
-}
-
-function EthereumNetworkSelector({
-    network = EthereumNetwork.Mainnet,
-    onNetworkChange,
-    children,
-}: EthereumNetworkSelectorProps) {
-    const listItemClasses = useListItemStyles()
-
-    const onChange = useCallback(() => {
-        if (network !== EthereumNetwork.Rinkeby) onNetworkChange(EthereumNetwork.Rinkeby)
-    }, [network, onNetworkChange])
-
-    return (
-        <Box textAlign="left">
-            {process.env.NODE_ENV !== 'development' ? (
-                <List disablePadding>
-                    <ListItem classes={{ root: listItemClasses.root }} onClick={onChange}>
-                        <ListItemText primary="Use Rinkeby Network"></ListItemText>
-                        <ListItemSecondaryAction classes={{ root: listItemClasses.listItemSecondaryAction }}>
-                            <Switch
-                                onClick={onChange}
-                                checked={network === EthereumNetwork.Rinkeby}
-                                color="primary"
-                                edge="end"
-                            />
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                </List>
-            ) : null}
-            {children}
-        </Box>
-    )
-}
-//#endregion
 
 //#region token
 const useTokenInListStyles = makeStyles((theme) =>
@@ -173,16 +103,12 @@ const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
     }),
 )
 
-export interface ERC20PredefinedTokenSelectorProps extends EthereumNetworkSelectorProps {
+export interface ERC20PredefinedTokenSelectorProps {
     excludeTokens?: string[]
     onTokenChange?: (next: ERC20Token | null) => void
 }
 
-export function ERC20PredefinedTokenSelector({
-    onTokenChange,
-    excludeTokens = [],
-    ...props
-}: ERC20PredefinedTokenSelectorProps) {
+export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = [] }: ERC20PredefinedTokenSelectorProps) {
     const classes = useERC20PredefinedTokenSelectorStyles()
     const [address, setAddress] = useState('')
     const [query, setQuery] = useState('')
@@ -199,7 +125,7 @@ export function ERC20PredefinedTokenSelector({
     }, [query])
 
     return (
-        <EthereumNetworkSelector {...props}>
+        <Box textAlign="left">
             <TextField
                 className={classes.search}
                 label="Search ERC20 Tokens"
@@ -232,13 +158,13 @@ export function ERC20PredefinedTokenSelector({
                 itemCount={tokens.length}>
                 {TokenInList}
             </FixedSizeList>
-        </EthereumNetworkSelector>
+        </Box>
     )
 }
 //#endregion
 
 //#region ERC20 customized token selector
-export interface ERC20CustomizedTokenSelectorProps extends EthereumNetworkSelectorProps {
+export interface ERC20CustomizedTokenSelectorProps {
     onTokenChange?: (next: ERC20Token | null) => void
     excludeTokens?: string[]
 }
@@ -261,7 +187,7 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
         else onTokenChange?.(null)
     }, [address, decimals, isValidAddress, name, symbol, onTokenChange])
     return (
-        <EthereumNetworkSelector {...props}>
+        <Box textAlign="left">
             <TextField
                 required
                 error={!isValidAddress && !!address}
@@ -279,7 +205,7 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
             />
             <TextField required label="Name" value={name} onChange={(e) => setName(e.target.value)} />
             <TextField required label="Symbol" value={symbol} onChange={(e) => setSymbol(e.target.value)} />
-        </EthereumNetworkSelector>
+        </Box>
     )
 }
 //#endregion

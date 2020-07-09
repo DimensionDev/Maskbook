@@ -11,6 +11,7 @@ import type {
     ERC20TokenDetails,
     getManagedWalletDetail,
 } from '../../extension/background-script/PluginService'
+import { useValueRef } from '../../utils/hooks/useValueRef'
 
 const getWallets = () => Services.Plugin.getWallets()
 const getManagedWallets = (...args: Parameters<typeof getManagedWalletDetail>) =>
@@ -50,14 +51,23 @@ export function useSelectWallet(
     tokens: ERC20TokenDetails[] | undefined,
     requestConnectWallet: () => void,
 ) {
+    const network = useValueRef(currentEthereumNetworkSettings)
     const [selectedWalletAddress, setSelectedWalletAddress] = useState<undefined | string>(undefined)
 
     const [selectedTokenAddress, setSelectedTokenAddress] = useState(ETH_ADDRESS)
     const [selectedTokenType, setSelectedTokenType] = useState<EthereumTokenType>(EthereumTokenType.ETH)
     const selectedWallet = wallets?.find((x) => x.walletAddress === selectedWalletAddress)
 
-    const availableTokens = Array.from(Object.entries(selectedWallet?.erc20tokensBalanceMap || {}) || [])
-        .filter(([address]) => tokens?.find((x) => x.address === address))
+    console.log(`DEBUG: use select wallet`)
+    console.log(tokens)
+    console.log(wallets)
+    console.log(selectedWallet)
+
+    const availableTokens = (selectedWallet?.erc20tokensBalanceMap
+        ? Array.from(selectedWallet?.erc20tokensBalanceMap.entries())
+        : []
+    )
+        .filter(([address]) => tokens?.find((x) => x.address === address && x.network === network))
         .map(([address, amount]) => ({ amount, ...tokens?.find((x) => x.address === address)! }))
     const selectedToken =
         selectedTokenType === EthereumTokenType.ETH

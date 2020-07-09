@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     FormControl,
     InputLabel,
@@ -11,6 +11,7 @@ import {
 import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 import type { useSelectWallet } from './useWallet'
 import type { WalletDetails } from '../../extension/background-script/PluginService'
+import Services from '../../extension/service'
 interface WalletSelectProps {
     useSelectWalletHooks: ReturnType<typeof useSelectWallet>
     wallets: WalletDetails[] | undefined
@@ -19,16 +20,22 @@ interface WalletSelectProps {
     FormControlProps?: FormControlProps
     DialogProps?: Partial<DialogProps>
 }
-export function WalletSelect({ useSelectWalletHooks, wallets, ...p }: WalletSelectProps) {
+export function WalletSelect({ useSelectWalletHooks, wallets, ...props }: WalletSelectProps) {
     const { selectedWalletAddress, setSelectedWalletAddress } = useSelectWalletHooks
-    const { SelectProps, className, FormControlProps } = p
+    const { SelectProps, className, FormControlProps } = props
+
+    // tracking wallet balance
+    useEffect(() => {
+        if (!selectedWalletAddress) return
+        Services.Plugin.invokePlugin('maskbook.wallet', 'trackWalletBalances', selectedWalletAddress)
+    }, [selectedWalletAddress])
     return (
         <FormControl variant="filled" {...FormControlProps} className={className}>
             <InputLabel>Wallet</InputLabel>
             <Select
                 {...SelectProps}
                 onChange={(e) => setSelectedWalletAddress(e.target.value as string)}
-                MenuProps={{ container: p.DialogProps?.container ?? PortalShadowRoot }}
+                MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}
                 disabled={!wallets}
                 value={selectedWalletAddress || ''}>
                 {!wallets

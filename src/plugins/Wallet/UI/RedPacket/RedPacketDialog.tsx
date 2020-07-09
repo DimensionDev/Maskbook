@@ -83,7 +83,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const [shares, setShares] = useState(5)
     const [, sharesRef] = useCapturedInput((x) => setShares(parseInt(x)))
 
-    const currentEtherenumNetwork = useValueRef(currentEthereumNetworkSettings)
+    const network = useValueRef(currentEthereumNetworkSettings)
 
     const useSelectWalletResult = useSelectWallet(wallets, tokens, requestConnectWallet)
     const {
@@ -121,7 +121,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
         props.onCreateNewPacket({
             duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
             is_random: Boolean(is_random),
-            network: currentEtherenumNetwork,
+            network,
             send_message,
             send_total: new BigNumber(send_total).multipliedBy(new BigNumber(10).pow(power)),
             sender_address: selectedWalletAddress!,
