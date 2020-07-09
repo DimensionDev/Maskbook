@@ -267,6 +267,17 @@ export async function walletAddERC20Token(
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
+export async function walletRemoveERC20Token(walletAddress: string, tokenAddress: string) {
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
+    const wallet = await getWalletByAddress(t, walletAddress)
+    const erc20 = await t.objectStore('ERC20Token').get(tokenAddress)
+    if (!erc20) return
+    wallet.erc20_token_balance.delete(tokenAddress)
+    wallet.updatedAt = new Date()
+    await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
+    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+}
+
 let tracker
 
 export function trackWalletBalances(address: string) {

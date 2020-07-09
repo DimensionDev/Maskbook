@@ -34,7 +34,6 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { currentEthereumNetworkSettings } from '../../../settings/settings'
 import { useWallet } from '../../../plugins/shared/useWallet'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
-import type { ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -177,6 +176,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                 <List className={classes.tokenList} disablePadding>
                     <TokenListItem
                         balance={wallet.ethBalance ?? new BigNumber(0)}
+                        wallet={wallet}
                         token={{
                             address: ETH_ADDRESS,
                             name: 'Ether',
@@ -187,9 +187,10 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                     />
                     {tokens?.map((token) => (
                         <TokenListItem
-                            balance={wallet.erc20tokensBalanceMap.get(token.address) ?? new BigNumber(0)}
-                            token={token}
                             key={token.address}
+                            balance={wallet.erc20tokensBalanceMap.get(token.address) ?? new BigNumber(0)}
+                            wallet={wallet}
+                            token={token}
                         />
                     ))}
                 </List>

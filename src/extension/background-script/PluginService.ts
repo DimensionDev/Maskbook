@@ -44,7 +44,7 @@ export async function getWallets(): Promise<{ wallets: WalletDetails[]; tokens: 
         }))
     return { wallets, tokens }
 }
-export async function getManagedWalletDetail(address: string) {
+export async function getManagedWallet(address: string) {
     const { wallets } = await Wallet.getManagedWallets()
     const wallet = wallets.find((x) => x.address === address)
     return wallet
