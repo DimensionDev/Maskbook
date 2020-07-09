@@ -96,7 +96,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     const [, amountInputRef] = useCapturedInput((x) => setAmount(parseFloat(x)))
     const amountMaxBigint = selectedWallet
         ? selectedTokenType === EthereumTokenType.ETH
-            ? selectedWallet.ethBalance
+            ? selectedWallet.eth_balance
             : selectedToken?.amount
         : undefined
     const amountMaxNumber = BigNumber.isBigNumber(amountMaxBigint)

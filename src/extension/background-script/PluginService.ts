@@ -2,7 +2,7 @@ import * as RedPacket from '../../plugins/Wallet/red-packet-fsm'
 import * as Wallet from '../../plugins/Wallet/wallet'
 import * as Gitcoin from '../../plugins/Gitcoin/Services'
 import type BigNumber from 'bignumber.js'
-import type { ERC20TokenRecord } from '../../plugins/Wallet/database/types'
+import type { ERC20TokenRecord, ManagedWalletRecord, ExoticWalletRecord } from '../../plugins/Wallet/database/types'
 
 const Plugins = {
     'maskbook.red_packet': RedPacket,
@@ -19,14 +19,7 @@ export async function invokePlugin<K extends keyof Plugins, M extends keyof Plug
     return Plugins[key][method](...args)
 }
 
-export type WalletDetails = {
-    walletAddress: string
-    /** undefined means "syncing..." */
-    ethBalance: BigNumber | undefined
-    /** key: address of erc20 token; value: undefined means "syncing..." */
-    erc20tokensBalanceMap: Map<string, BigNumber | undefined>
-    walletName?: string
-} & ({ type: 'managed' } | { type: 'exotic'; provider: 'metamask' })
+export type WalletDetails = ManagedWalletRecord | ExoticWalletRecord
 export type ERC20TokenDetails = Pick<ERC20TokenRecord, 'address' | 'decimals' | 'name' | 'network' | 'symbol'>
 export async function getWallets(): Promise<{ wallets: WalletDetails[]; tokens: ERC20TokenDetails[] }> {
     // TODO: support Metamask
@@ -34,14 +27,13 @@ export async function getWallets(): Promise<{ wallets: WalletDetails[]; tokens: 
     const wallets = managedList
         .sort((x) => (x._wallet_is_default ? 1 : 0))
         .map<WalletDetails>((x) => ({
-            walletAddress: x.address,
-            erc20tokensBalanceMap: x.erc20_token_balance,
-            ethBalance: x.eth_balance,
-            walletName: x.name ?? undefined,
+            ...x,
             type: x.type || 'managed',
-            // @ts-expect-error
-            provider: x.provider,
         }))
+
+    console.log(`DEBUG: getManagedWallet`)
+    console.log(wallets.map((wallet) => wallet?.erc20_token_balance.keys()))
+
     return { wallets, tokens }
 }
 export async function getManagedWallet(address: string) {

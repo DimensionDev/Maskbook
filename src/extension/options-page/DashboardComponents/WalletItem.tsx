@@ -9,7 +9,6 @@ import ActionButton from './ActionButton'
 import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
 import { TokenIcon } from './TokenIcon'
 import type { ERC20TokenDetails, WalletDetails } from '../../background-script/PluginService'
-import { useManagedWalletDetail } from '../../../plugins/shared/useWallet'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -92,14 +91,13 @@ export function WalletItem(props: WalletItemProps) {
     const classes = useStyles()
     const { wallet, selected, onClick, tokens } = props
     const [, copyToClipboard] = useCopyToClipboard()
-    // const { data: managedWallet } = useManagedWalletDetail(wallet?.walletAddress)
     const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
     const isExotic = wallet.type === 'exotic'
     const provider = wallet.type === 'exotic' ? wallet.provider : ''
 
     console.log('DEBUG: wallet item')
     console.log(tokens)
-    // console.log(managedWallet)
+    console.log(wallet)
 
     return (
         <ButtonBase
@@ -107,17 +105,17 @@ export function WalletItem(props: WalletItemProps) {
             onClick={onClick}
             className={classNames(classes.container, {
                 [classes.selected]: selected,
-                [classes.default]: false,
+                [classes.default]: wallet?._wallet_is_default,
             })}>
             <Typography className={classes.title} variant="h5">
-                {wallet.walletName}
+                {wallet.name}
             </Typography>
             <Box paddingY={2}>
                 <Typography className={classes.label} component="p" color="textSecondary" variant="overline">
                     {t('wallet_address')}
                 </Typography>
                 <Typography className={classes.address} component="code">
-                    {wallet.walletAddress}
+                    {wallet.address}
                 </Typography>
             </Box>
             {isExotic ? (
@@ -137,7 +135,7 @@ export function WalletItem(props: WalletItemProps) {
                 startIcon={<FileCopyOutlinedIcon />}
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                     e.stopPropagation()
-                    copyWalletAddress(wallet.walletAddress)
+                    copyWalletAddress(wallet.address)
                 }}>
                 {t('copy')}
             </ActionButton>

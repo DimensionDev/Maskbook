@@ -252,7 +252,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
 
-    const addedTokens = Array.from(wallet.erc20tokensBalanceMap.keys())
+    const addedTokens = Array.from(wallet.erc20_token_balance.keys())
     const network = useValueRef(currentEthereumNetworkSettings)
     const [token, setToken] = React.useState<ERC20Token | null>(null)
 
@@ -288,7 +288,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
             return Services.Plugin.invokePlugin(
                 'maskbook.wallet',
                 'walletAddERC20Token',
-                wallet.walletAddress,
+                wallet.address,
                 network,
                 token,
                 tabState === 1,
@@ -334,8 +334,8 @@ export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletPro
     const { wallet } = props.ComponentProps!
 
     const [redPacketRecords, setRedPacketRecords] = useState<RedPacketRecord[]>([])
-    const inboundRecords = redPacketRecords.filter((record) => record.claim_address === wallet.walletAddress)
-    const outboundRecords = redPacketRecords.filter((record) => record.sender_address === wallet.walletAddress)
+    const inboundRecords = redPacketRecords.filter((record) => record.claim_address === wallet.address)
+    const outboundRecords = redPacketRecords.filter((record) => record.sender_address === wallet.address)
 
     useEffect(() => {
         const updateHandler = () =>
@@ -417,7 +417,7 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
     const classes = useBackupDialogStyles()
-    const { data } = useManagedWalletDetail(wallet.walletAddress)
+    const { data } = useManagedWalletDetail(wallet.address)
     const { value: privateKeyInHex } = useAsync(async () => {
         if (!data) return
         const { privateKeyInHex } = await Services.Plugin.invokePlugin(
@@ -459,10 +459,10 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
 export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
-    const [name, setName] = useState(wallet.walletName ?? '')
+    const [name, setName] = useState(wallet.name ?? '')
     const renameWallet = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'renameWallet', wallet.walletAddress, name),
-        [wallet.walletAddress],
+        () => Services.Plugin.invokePlugin('maskbook.wallet', 'renameWallet', wallet.address, name),
+        [wallet.address],
         props.onClose,
     )
     return (
@@ -502,8 +502,8 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'removeWallet', wallet.walletAddress),
-        [wallet.walletAddress],
+        () => Services.Plugin.invokePlugin('maskbook.wallet', 'removeWallet', wallet.address),
+        [wallet.address],
         props.onClose,
     )
     return (
@@ -541,14 +541,8 @@ export function DashboardWalletHideTokenConfirmDialog(
     const { t } = useI18N()
     const { wallet, token } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
-        () =>
-            Services.Plugin.invokePlugin(
-                'maskbook.wallet',
-                'walletRemoveERC20Token',
-                wallet.walletAddress,
-                token.address,
-            ),
-        [wallet.walletAddress],
+        () => Services.Plugin.invokePlugin('maskbook.wallet', 'walletRemoveERC20Token', wallet.address, token.address),
+        [wallet.address],
         props.onClose,
     )
     return (

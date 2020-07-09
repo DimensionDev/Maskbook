@@ -98,7 +98,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
 
     const amountPreShareMaxBigint = selectedWallet
         ? selectedTokenType === EthereumTokenType.ETH
-            ? selectedWallet.ethBalance
+            ? selectedWallet.eth_balance
             : selectedToken?.amount
         : undefined
     const amountPreShareMaxNumber = BigNumber.isBigNumber(amountPreShareMaxBigint)

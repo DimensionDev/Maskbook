@@ -116,8 +116,8 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
 
     const setAsDefault = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet!.walletAddress),
-        [wallet?.walletAddress],
+        () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet!.address),
+        [wallet?.address],
     )
 
     const backupMenuItem =
@@ -175,7 +175,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                 </Box>
                 <List className={classes.tokenList} disablePadding>
                     <TokenListItem
-                        balance={wallet.ethBalance ?? new BigNumber(0)}
+                        balance={wallet.eth_balance ?? new BigNumber(0)}
                         wallet={wallet}
                         token={{
                             address: ETH_ADDRESS,
@@ -188,7 +188,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                     {tokens?.map((token) => (
                         <TokenListItem
                             key={token.address}
-                            balance={wallet.erc20tokensBalanceMap.get(token.address) ?? new BigNumber(0)}
+                            balance={wallet.erc20_token_balance.get(token.address) ?? new BigNumber(0)}
                             wallet={wallet}
                             token={token}
                         />
@@ -260,7 +260,7 @@ export default function DashboardWalletsRouter() {
     const { data: walletData } = useWallet()
     const { wallets, tokens } = walletData ?? {}
     const [current, setCurrent] = useState('')
-    const currentWallet = wallets?.find((wallet) => wallet.walletAddress === current)
+    const currentWallet = wallets?.find((wallet) => wallet.address === current)
 
     const network = useValueRef(currentEthereumNetworkSettings)
 
@@ -271,7 +271,7 @@ export default function DashboardWalletsRouter() {
     const getTokensForWallet = (wallet?: WalletDetails) => {
         if (!wallet) return []
         return (tokens ?? [])
-            .filter((token) => token.network === network && wallet.erc20tokensBalanceMap.has(token.address))
+            .filter((token) => token.network === network && wallet.erc20_token_balance.has(token.address))
             .sort((token, otherToken) => {
                 if (isDAI(token.address)) return -1
                 if (isDAI(otherToken.address)) return 1
@@ -287,7 +287,7 @@ export default function DashboardWalletsRouter() {
     // auto select first wallet
     useEffect(() => {
         if (current) return
-        const first = wallets?.[0]?.walletAddress
+        const first = wallets?.[0]?.address
         if (first) setCurrent(first)
     }, [current, wallets])
 
@@ -319,16 +319,16 @@ export default function DashboardWalletsRouter() {
                     <div className={classes.scroller}>
                         {wallets.map((wallet) => (
                             <WalletItem
-                                key={wallet.walletAddress}
+                                key={wallet.address}
                                 onClick={async () => {
                                     setCurrent('an_adsent_wallet_address')
                                     // for animation purpose
                                     await sleep(100)
-                                    setCurrent(wallet.walletAddress)
+                                    setCurrent(wallet.address)
                                 }}
                                 wallet={wallet}
                                 tokens={getTokensForWallet(wallet)}
-                                selected={wallet.walletAddress === current}
+                                selected={wallet.address === current}
                             />
                         ))}
                     </div>
