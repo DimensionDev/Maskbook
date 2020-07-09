@@ -10,6 +10,7 @@ import { getNetworkERC20Tokens } from '../../Developer/EthereumNetworkSettings'
 import { TokenIcon } from '../../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { currentEthereumNetworkSettings } from '../../../../../settings/settings'
 import { useValueRef } from '../../../../../utils/hooks/useValueRef'
+import { useI18N } from '../../../../../utils/i18n-next-ui'
 
 //#region token
 const useTokenInListStyles = makeStyles((theme) =>
@@ -90,6 +91,7 @@ export interface ERC20PredefinedTokenSelectorProps {
 }
 
 export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = [] }: ERC20PredefinedTokenSelectorProps) {
+    const { t } = useI18N()
     const network = useValueRef(currentEthereumNetworkSettings)
     const erc20Tokens = useMemo(getNetworkERC20Tokens, [network])
     const fuse = useMemo(
@@ -126,7 +128,7 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
         <Box textAlign="left">
             <TextField
                 className={classes.search}
-                label="Search ERC20 Tokens"
+                label={t('add_token_search_hint')}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
             />
@@ -168,6 +170,7 @@ export interface ERC20CustomizedTokenSelectorProps {
 }
 
 export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20CustomizedTokenSelectorProps) {
+    const { t } = useI18N()
     const [address, setAddress] = useState('')
     const [decimals, setDecimal] = useState(0)
     const [name, setName] = useState('')
@@ -189,20 +192,25 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
             <TextField
                 required
                 error={!isValidAddress && !!address}
-                label="Contract Address"
+                label={t('add_token_contract_address')}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
             />
             <TextField
                 required
-                label="Decimal"
+                label={t('add_token_decimals')}
                 value={decimals === 0 ? '' : decimals}
                 type="number"
                 inputProps={{ min: 0 }}
                 onChange={(e) => setDecimal(parseInt(e.target.value))}
             />
-            <TextField required label="Name" value={name} onChange={(e) => setName(e.target.value)} />
-            <TextField required label="Symbol" value={symbol} onChange={(e) => setSymbol(e.target.value)} />
+            <TextField required label={t('add_token_name')} value={name} onChange={(e) => setName(e.target.value)} />
+            <TextField
+                required
+                label={t('add_token_symbol')}
+                value={symbol}
+                onChange={(e) => setSymbol(e.target.value)}
+            />
         </Box>
     )
 }
