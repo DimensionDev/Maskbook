@@ -85,7 +85,8 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
             .catch((e) => Services.Welcome.openOptionsPage(`/wallets?error=${e.message}`))
             .finally(() => setLoading(false))
     }
-    const { wallets, requestConnectWallet } = useWallet()
+    const { data } = useWallet()
+    const { wallets } = data ?? {}
 
     const onClick = async (state: RedPacketStatus, rpid: RedPacketRecord['red_packet_id']) => {
         if (!rpid) return
@@ -94,7 +95,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
             try {
                 if (!wallets) throw new Error('Loading')
                 if (!wallets[0]) {
-                    requestConnectWallet()
+                    Services.Welcome.openOptionsPage('/wallets?error=nowallet')
                     throw new Error('Claim failed')
                 }
                 if (wallets.length > 1) setClaiming({ rpid, wallets })
