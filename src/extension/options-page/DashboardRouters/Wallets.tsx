@@ -34,6 +34,7 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { currentEthereumNetworkSettings } from '../../../settings/settings'
 import { useWallet } from '../../../plugins/shared/useWallet'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
+import type { ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -115,12 +116,6 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
 
-    // ?.filter((token) => wallet?.erc20tokensBalanceMap.has(token.address))
-    const addedTokens = tokens?.sort((token, otherToken) => {
-        if (isDAI(token.address)) return -1
-        if (isDAI(otherToken.address)) return 1
-        return token.name < otherToken.name ? -1 : 1
-    })
     const setAsDefault = useSnackbarCallback(
         () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet!.walletAddress),
         [wallet?.walletAddress],
@@ -190,7 +185,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                             decimals: 18,
                         }}
                     />
-                    {addedTokens?.map((token) => (
+                    {tokens?.map((token) => (
                         <TokenListItem
                             balance={wallet.erc20tokensBalanceMap.get(token.address) ?? new BigNumber(0)}
                             token={token}
@@ -265,6 +260,28 @@ export default function DashboardWalletsRouter() {
     const [current, setCurrent] = useState('')
     const currentWallet = wallets?.find((wallet) => wallet.walletAddress === current)
 
+    const network = useValueRef(currentEthereumNetworkSettings)
+
+    console.log(`DEBUE: tokens`)
+    console.log(tokens)
+    console.log(wallets)
+
+    const getTokensForWallet = (wallet?: WalletDetails) => {
+        if (!wallet) return []
+        return (tokens ?? [])
+            .filter((token) => token.network === network && wallet.erc20tokensBalanceMap.has(token.address))
+            .sort((token, otherToken) => {
+                if (isDAI(token.address)) return -1
+                if (isDAI(otherToken.address)) return 1
+                return token.name < otherToken.name ? -1 : 1
+            })
+    }
+
+    // tracking wallet balance
+    useEffect(() => {
+        Services.Plugin.invokePlugin('maskbook.wallet', 'trackWalletBalances', current)
+    }, [current])
+
     // auto select first wallet
     useEffect(() => {
         if (current) return
@@ -308,7 +325,7 @@ export default function DashboardWalletsRouter() {
                                     setCurrent(wallet.walletAddress)
                                 }}
                                 wallet={wallet}
-                                tokens={tokens?.filter((token) => token.address in wallet.erc20tokensBalanceMap)}
+                                tokens={getTokensForWallet(wallet)}
                                 selected={wallet.walletAddress === current}
                             />
                         ))}
@@ -317,7 +334,9 @@ export default function DashboardWalletsRouter() {
                 <div className={classes.content}>
                     <Fade in={Boolean(current)}>
                         <div className={classes.wrapper}>
-                            {currentWallet && <WalletContent wallet={currentWallet} tokens={tokens} />}
+                            {currentWallet && (
+                                <WalletContent wallet={currentWallet} tokens={getTokensForWallet(currentWallet)} />
+                            )}
                         </div>
                     </Fade>
                 </div>

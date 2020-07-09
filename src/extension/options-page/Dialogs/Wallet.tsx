@@ -250,9 +250,8 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
     const { wallet } = props.ComponentProps!
 
     const addedTokens = Array.from(wallet.erc20tokensBalanceMap.keys())
-    const currentNetwork = useValueRef(currentEthereumNetworkSettings)
+    const network = useValueRef(currentEthereumNetworkSettings)
     const [token, setToken] = React.useState<ERC20Token | null>(null)
-    const [network, setNetwork] = useState<EthereumNetwork>(currentNetwork)
 
     const [tabState, setTabState] = useState(0)
     const state = useMemo(
@@ -270,25 +269,11 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
         tabs: [
             {
                 label: 'Well-know token',
-                children: (
-                    <ERC20PredefinedTokenSelector
-                        excludeTokens={addedTokens}
-                        network={network}
-                        onTokenChange={setToken}
-                        onNetworkChange={setNetwork}
-                    />
-                ),
+                children: <ERC20PredefinedTokenSelector excludeTokens={addedTokens} onTokenChange={setToken} />,
             },
             {
                 label: 'Add your own',
-                children: (
-                    <ERC20CustomizedTokenSelector
-                        excludeTokens={addedTokens}
-                        network={network}
-                        onTokenChange={setToken}
-                        onNetworkChange={setNetwork}
-                    />
-                ),
+                children: <ERC20CustomizedTokenSelector excludeTokens={addedTokens} onTokenChange={setToken} />,
             },
         ],
         state,
