@@ -1,12 +1,15 @@
-import React, { useState, useEffect, CSSProperties } from 'react'
+import React, { useState, useEffect, CSSProperties, useMemo } from 'react'
 import Fuse from 'fuse.js'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import { FixedSizeList } from 'react-window'
-import contractMap, { TokenMetadata } from 'eth-contract-metadata'
 import { ListItem, ListItemText, Box, Typography, Avatar, ListItemIcon } from '@material-ui/core'
 import type { ERC20Token } from '../../../token'
 import Wallet from 'wallet.ts'
+import { getNetworkERC20Tokens } from '../../Developer/EthereumNetworkSettings'
+import { TokenIcon } from '../../../../../extension/options-page/DashboardComponents/TokenIcon'
+import { currentEthereumNetworkSettings } from '../../../../../settings/settings'
+import { useValueRef } from '../../../../../utils/hooks/useValueRef'
 
 //#region token
 const useTokenInListStyles = makeStyles((theme) =>
@@ -33,9 +36,7 @@ interface TokenInListProps {
     index: number
     style: CSSProperties
     data: {
-        tokens: (TokenMetadata & {
-            address: string
-        })[]
+        tokens: ERC20Token[]
         excludeTokens: string[]
         selected: string
         onSelect: (address: string) => void
@@ -43,7 +44,7 @@ interface TokenInListProps {
 }
 
 function TokenInList({ data, index, style }: TokenInListProps) {
-    const { address, name, symbol, logo } = data.tokens[index]
+    const { address, name, symbol } = data.tokens[index]
     const classes = useTokenInListStyles()
     return (
         <ListItem
@@ -53,10 +54,7 @@ function TokenInList({ data, index, style }: TokenInListProps) {
             selected={data.selected === address}
             onClick={() => data.onSelect(address)}>
             <ListItemIcon>
-                <Avatar
-                    className={classes.icon}
-                    src={`https://rawcdn.githack.com/MetaMask/eth-contract-metadata/ec5be3ac38685e4d365e7d076d122370ed2298f7/images/${logo}`}
-                />
+                <TokenIcon classes={{ coin: classes.icon }} address={address} name={name} />
             </ListItemIcon>
             <ListItemText classes={{ primary: classes.text }}>
                 <Typography className={classes.primary} color="textPrimary" component="span">
@@ -72,23 +70,6 @@ function TokenInList({ data, index, style }: TokenInListProps) {
 //#endregion
 
 //#region predefined token selector
-const erc20Tokens = Object.entries(contractMap)
-    .map(([address, token]) => ({
-        ...token,
-        address,
-    }))
-    .filter((token) => token.erc20)
-const fuse = new Fuse(erc20Tokens, {
-    shouldSort: true,
-    threshold: 0.45,
-    maxPatternLength: 32,
-    minMatchCharLength: 1,
-    keys: [
-        { name: 'name', weight: 0.5 },
-        { name: 'symbol', weight: 0.5 },
-    ],
-})
-
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
     createStyles({
         list: {
@@ -109,10 +90,27 @@ export interface ERC20PredefinedTokenSelectorProps {
 }
 
 export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = [] }: ERC20PredefinedTokenSelectorProps) {
+    const network = useValueRef(currentEthereumNetworkSettings)
+    const erc20Tokens = useMemo(getNetworkERC20Tokens, [network])
+    const fuse = useMemo(
+        () =>
+            new Fuse(erc20Tokens, {
+                shouldSort: true,
+                threshold: 0.45,
+                maxPatternLength: 32,
+                minMatchCharLength: 1,
+                keys: [
+                    { name: 'name', weight: 0.5 },
+                    { name: 'symbol', weight: 0.5 },
+                ],
+            }),
+        [network],
+    )
+
     const classes = useERC20PredefinedTokenSelectorStyles()
     const [address, setAddress] = useState('')
     const [query, setQuery] = useState('')
-    const [tokens, setTokens] = useState<typeof erc20Tokens[0][]>([])
+    const [tokens, setTokens] = useState<ERC20Token[]>([])
     useEffect(() => {
         setTokens(
             query

@@ -14,10 +14,10 @@ export function useSWRProfiles(query: string | undefined) {
     const { isLoadingMore, ...swr } = useSWRPages<string | null, Profile[], unknown>(
         queryKey,
         ({ offset, withSWR }) => {
-            const key: Parameters<typeof fetcher> = [query, offset ?? void 0]
+            const params: Parameters<typeof fetcher> = [query, offset ?? void 0]
             const _ = withSWR(
                 // eslint-disable-next-line react-hooks/rules-of-hooks
-                useSWR([...key], {
+                useSWR(params, {
                     suspense: true,
                     fetcher,
                 }),
@@ -56,6 +56,5 @@ export function useSWRProfiles(query: string | undefined) {
 
 async function fetcher(query: string | undefined, offset: string | undefined) {
     const id = offset ? ProfileIdentifier.fromString(offset, ProfileIdentifier).unwrap() : void 0
-    const data = await Services.Identity.queryProfilePaged({ after: id, query }, 20)
-    return data
+    return Services.Identity.queryProfilePaged({ after: id, query }, 20)
 }

@@ -27,8 +27,10 @@ export function WalletSelect({ useSelectWalletHooks, wallets, ...props }: Wallet
     // tracking wallet balance
     useEffect(() => {
         if (!selectedWalletAddress) return
-        Services.Plugin.invokePlugin('maskbook.wallet', 'trackWalletBalances', selectedWalletAddress)
+        Services.Plugin.invokePlugin('maskbook.wallet', 'watchWalletBalances', selectedWalletAddress)
+        Services.Plugin.invokePlugin('maskbook.wallet', 'updateWalletBalances', [selectedWalletAddress])
     }, [selectedWalletAddress])
+
     return (
         <FormControl variant="filled" {...FormControlProps} className={className}>
             <InputLabel>Wallet</InputLabel>

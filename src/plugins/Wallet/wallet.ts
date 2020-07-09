@@ -11,15 +11,15 @@ import {
 import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
-import { walletAPI, erc20API } from './api'
-import type { ERC20Token } from './token'
+import { walletAPI, erc20API, balanceCheckerAPI } from './api'
+import { ERC20Token, ETH_ADDRESS } from './token'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
+import { buf2hex, hex2buf, assert } from '../../utils/utils'
 
 //#region predefined tokens
 import mainnet from './erc20/mainnet.json'
 import rinkeby from './erc20/rinkeby.json'
-import { buf2hex, hex2buf, assert } from '../../utils/utils'
 
 const sort = (x: ERC20Token, y: ERC20Token): 1 | -1 => ([x.name, y.name].sort()[0] === x.name ? -1 : 1)
 mainnet.built_in_tokens.sort(sort)
@@ -35,6 +35,7 @@ export function getWalletProvider() {
     return {
         ...walletAPI,
         ...erc20API,
+        ...balanceCheckerAPI,
     }
 }
 
@@ -105,6 +106,8 @@ export async function createNewWallet(
         | 'eth_balance'
         | '_data_source_'
         | 'erc20_token_balance'
+        | 'erc20_token_whitelist'
+        | 'erc20_token_blacklist'
         | 'createdAt'
         | 'updatedAt'
     >,
@@ -136,23 +139,12 @@ export async function importNewWallet(
             ...mainnet.built_in_tokens.map(({ address }) => [address, new BigNumber(0)] as const),
             ...rinkeby.built_in_tokens.map(({ address }) => [address, new BigNumber(0)] as const),
         ]),
+        erc20_token_whitelist: new Set(),
+        erc20_token_blacklist: new Set(),
         _data_source_: getWalletProvider().dataSource,
         createdAt: new Date(),
         updatedAt: new Date(),
     }
-
-    console.log('DEBUG: create wallet')
-    console.log(record)
-    console.log([
-        ...mainnet.built_in_tokens.map(({ address }) => [address, new BigNumber(0)] as const),
-        ...rinkeby.built_in_tokens.map(({ address }) => [address, new BigNumber(0)] as const),
-    ])
-    console.log(
-        new Map([
-            ...mainnet.built_in_tokens.map(({ address }) => [address, new BigNumber(0)] as const),
-            ...rinkeby.built_in_tokens.map(({ address }) => [address, new BigNumber(0)] as const),
-        ]),
-    )
 
     /** Wallet recover from private key */
     if (rec._private_key_) record._private_key_ = rec._private_key_
@@ -265,58 +257,94 @@ export async function walletAddERC20Token(
         wallet.erc20_token_balance.set(token.address, new BigNumber(0))
         wallet.updatedAt = new Date()
     }
+    if (wallet.erc20_token_blacklist.has(token.address)) {
+        wallet.erc20_token_blacklist.delete(token.address)
+        wallet.updatedAt = new Date()
+    }
     await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
-
-    console.log(`DEBUG: add token`)
-    console.log(`DEBUG: address: ${token.address}`)
-    console.log(WalletRecordIntoDB(wallet))
-
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
-export async function walletRemoveERC20Token(walletAddress: string, tokenAddress: string) {
+export async function walletBlockERC20Token(walletAddress: string, tokenAddress: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
     const wallet = await getWalletByAddress(t, walletAddress)
     const erc20 = await t.objectStore('ERC20Token').get(tokenAddress)
     if (!erc20) return
-    if (wallet.erc20_token_balance.has(tokenAddress)) {
-        wallet.erc20_token_balance.delete(tokenAddress)
+    if (!wallet.erc20_token_blacklist.has(tokenAddress)) {
+        wallet.erc20_token_blacklist.add(tokenAddress)
         wallet.updatedAt = new Date()
     }
     await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
-
-    console.log(`DEBUG: remove token`)
-    console.log(`DEBUG: address: ${tokenAddress}`)
-    console.log(WalletRecordIntoDB(wallet))
-
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
-let tracker
-
-export function trackWalletBalances(address: string) {
-    console.log(`DEBUG: track wallet balances`)
-    console.log(`DEBUG: start tracking wallet: ${address}`)
+export function updateWalletBalances(accounts?: string[]) {
+    return getWalletProvider().updateBalances(accounts)
 }
 
-async function onWalletBalanceUpdated(address: string, newBalance: BigNumber) {
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
-    const wallet = await getWalletByAddress(t, address)
-    if (wallet.eth_balance?.isEqualTo(newBalance)) return
-    wallet.eth_balance = newBalance
-    wallet.updatedAt = new Date()
-    t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
-    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+export function watchWalletBalances(address: string) {
+    return getWalletProvider().watchAccounts([address])
 }
 
-async function onWalletERC20TokenBalanceUpdated(address: string, tokenAddress: string, newBalance: BigNumber) {
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
-    const wallet = await getWalletByAddress(t, address)
-    if (wallet.erc20_token_balance.get(tokenAddress)?.isEqualTo(newBalance)) return
-    wallet.erc20_token_balance.set(tokenAddress, newBalance)
-    wallet.updatedAt = new Date()
-    t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
-    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+export function unwatchWalletBalances(address: string) {
+    return getWalletProvider().unwatchAccounts([address])
+}
+
+export interface BalanceMetadata {
+    [key: string]: (ERC20Token & { balance: BigNumber; network: EthereumNetwork })[]
+}
+
+export async function onWalletBalancesUpdated(data: BalanceMetadata) {
+    let modified = false
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
+    const unaddedTokens: {
+        network: EthereumNetwork
+        token: ERC20Token
+    }[] = []
+    for (const [walletAddress, tokens] of Object.entries(data)) {
+        const wallet = await getWalletByAddress(t, walletAddress)
+        const lastModifiedt = wallet.updatedAt
+        for (const { network, balance, ...token } of tokens) {
+            if (token.address === ETH_ADDRESS && !wallet.eth_balance?.isEqualTo(balance)) {
+                wallet.eth_balance = balance
+                wallet.updatedAt = new Date()
+            }
+            if (token.address !== ETH_ADDRESS) {
+                if (!wallet.erc20_token_balance.has(token.address) && balance.isGreaterThan(0)) {
+                    unaddedTokens.push({
+                        token,
+                        network,
+                    })
+                    wallet.erc20_token_balance.set(token.address, balance)
+                    wallet.updatedAt = new Date()
+                } else if (
+                    wallet.erc20_token_balance.has(token.address) &&
+                    !wallet.erc20_token_balance.get(token.address)?.isEqualTo(balance)
+                ) {
+                    wallet.erc20_token_balance.set(token.address, balance)
+                    wallet.updatedAt = new Date()
+                }
+            }
+        }
+        if (lastModifiedt !== wallet.updatedAt) {
+            t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
+            modified = true
+        }
+    }
+    await Promise.all(
+        unaddedTokens.map(async ({ token, network }) => {
+            const erc20 = await t.objectStore('ERC20Token').get(token.address)
+            if (!erc20) {
+                modified = true
+                await t.objectStore('ERC20Token').add({
+                    ...token,
+                    network,
+                    is_user_defined: false,
+                })
+            }
+        }),
+    )
+    if (modified) PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
 async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
@@ -329,6 +357,8 @@ function WalletRecordOutDB(x: WalletRecordInDatabase): WalletRecord {
     const record = omit(x, ['eth_balance', 'erc20_token_balance']) as WalletRecord
     if (x.eth_balance) record.eth_balance = new BigNumber(String(x.eth_balance))
     record.erc20_token_balance = new Map()
+    record.erc20_token_whitelist = new Set(x.erc20_token_whitelist.values())
+    record.erc20_token_blacklist = new Set(x.erc20_token_blacklist.values())
     for (const [name, value] of x.erc20_token_balance.entries()) {
         let balance
         if (value) balance = new BigNumber(String(value))

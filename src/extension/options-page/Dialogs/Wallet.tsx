@@ -43,6 +43,7 @@ import { sleep } from '../../../utils/utils'
 import { currentEthereumNetworkSettings } from '../../../settings/settings'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
 import { useManagedWalletDetail } from '../../../plugins/shared/useWallet'
+import { difference } from 'lodash-es'
 
 //#region wallet import dialog
 export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
@@ -252,7 +253,10 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
 
-    const addedTokens = Array.from(wallet.erc20_token_balance.keys())
+    const addedTokens = difference(
+        Array.from(wallet.erc20_token_balance.keys()),
+        Array.from(wallet.erc20_token_blacklist.values()),
+    )
     const network = useValueRef(currentEthereumNetworkSettings)
     const [token, setToken] = React.useState<ERC20Token | null>(null)
 
@@ -327,6 +331,7 @@ const useHistoryDialogStyles = makeStyles((theme) =>
 )
 
 export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletProps>) {
+    const { t } = useI18N()
     const classes = useHistoryDialogStyles()
     const state = useState(0)
     const [tabState] = state
@@ -368,7 +373,7 @@ export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletPro
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: 'Inbound',
+                label: t('history_inbound'),
                 children: (
                     <List className={classes.list} disablePadding>
                         {inboundRecords.map(Record)}
@@ -377,7 +382,7 @@ export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletPro
                 p: 0,
             },
             {
-                label: 'Outbound',
+                label: t('history_outbound'),
                 children: (
                     <List className={classes.list} disablePadding>
                         {outboundRecords.map(Record)}
@@ -396,7 +401,7 @@ export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletPro
             <DashboardDialogWrapper
                 icon={<ClockIcon />}
                 iconColor="#FB5858"
-                primary="History"
+                primary={t('history')}
                 content={<AbstractTab {...tabProps}></AbstractTab>}
             />
         </DashboardDialogCore>
@@ -502,7 +507,10 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'removeWallet', wallet.address),
+        async () => {
+            await Services.Plugin.invokePlugin('maskbook.wallet', 'unwatchWalletBalances', wallet.address)
+            return Services.Plugin.invokePlugin('maskbook.wallet', 'removeWallet', wallet.address)
+        },
         [wallet.address],
         props.onClose,
     )
@@ -541,7 +549,7 @@ export function DashboardWalletHideTokenConfirmDialog(
     const { t } = useI18N()
     const { wallet, token } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'walletRemoveERC20Token', wallet.address, token.address),
+        () => Services.Plugin.invokePlugin('maskbook.wallet', 'walletBlockERC20Token', wallet.address, token.address),
         [wallet.address],
         props.onClose,
     )
@@ -555,11 +563,7 @@ export function DashboardWalletHideTokenConfirmDialog(
                 secondary={t('hide_token_hint', { token: token.name })}
                 footer={
                     <SpacedButtonGroup>
-                        <DebounceButton
-                            variant="contained"
-                            color="danger"
-                            onClick={onConfirm}
-                            data-testid="confirm_button">
+                        <DebounceButton variant="contained" color="danger" onClick={onConfirm}>
                             {t('confirm')}
                         </DebounceButton>
                         <DebounceButton variant="outlined" color="default" onClick={props.onClose}>

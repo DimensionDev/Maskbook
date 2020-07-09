@@ -49,11 +49,11 @@ declare module 'typeson' {
 declare module 'eth-contract-metadata' {
     export interface TokenMetadata {
         decimals: number
-        erc20: boolean
+        erc20?: boolean
+        erc721?: boolean
         logo: string
         name: string
         symbol: string
-        address: string
     }
     const metadata: {
         [address: string]: TokenMetadata
@@ -62,32 +62,34 @@ declare module 'eth-contract-metadata' {
 }
 
 declare module 'eth-token-tracker' {
-    import type { WebsocketProvider } from 'web3-core'
+    import type { provider } from 'web3-core'
 
     // https://github.com/MetaMask/eth-token-tracker/blob/master/lib/token.js
     export interface TrackerMetadata {
         address: string
         balance: string
         symbol: string
-        decimals: string
+        decimals: number
     }
 
     export interface TrackerOptions {
         userAddress: string
-        provider: WebsocketProvider
+        provider: provider
         pollingInterval?: number
         tokens: (Partial<TrackerMetadata> & { address: string })[]
     }
 
     export default class Tracker {
         constructor(options: TrackerOptions)
+        public userAddress: string
         public serialize(): TrackerMetadata[]
         public updateBalances(): Promise<void>
         public add(metadata: Partial<TrackerMetadata> & { address: string }): void
         public stop(): void
         public on(name: 'error', callback: (error: Error) => void): void
         public on(name: 'update', callback: (balances: TrackerMetadata[]) => void): void
-        public removeListener(name: 'error', callback: (error: Error) => void): void
-        public removeListener(name: 'update', callback: (balances: TrackerMetadata[]) => void): void
+        public off(name: 'error', callback: (error: Error) => void): void
+        public off(name: 'update', callback: (balances: TrackerMetadata[]) => void): void
+        public removeAllListeners(name: 'update' | 'error'): void
     }
 }

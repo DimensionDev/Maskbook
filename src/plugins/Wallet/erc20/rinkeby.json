@@ -5,16 +5,16 @@
             "symbol": "WEENUS",
             "name": "Weenus 💪",
             "address": "0xaFF4481D10270F50f203E0763e2597776068CBc5"
-        },
+        }
+    ],
+    "predefined_tokens": [
         {
             "decimals": 6,
             "symbol": "USDT",
             "name": "Tether USD 💪",
             "address": "0xf88Bf61674BA3eD8B55a15f820CA8C2228953d08",
             "comments": "https://etherscan.io/address/0xdac17f958d2ee523a2206206994597c13d831ec7#code"
-        }
-    ],
-    "predefined_tokens": [
+        },
         {
             "decimals": 18,
             "symbol": "XEENUS",

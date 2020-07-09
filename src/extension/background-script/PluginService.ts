@@ -30,19 +30,9 @@ export async function getWallets(): Promise<{ wallets: WalletDetails[]; tokens: 
             ...x,
             type: x.type || 'managed',
         }))
-
-    console.log(`DEBUG: getManagedWallet`)
-    console.log(wallets.map((wallet) => wallet?.erc20_token_balance.keys()))
-
     return { wallets, tokens }
 }
 export async function getManagedWallet(address: string) {
     const { wallets } = await Wallet.getManagedWallets()
-    const wallet = wallets.find((x) => x.address === address)
-
-    console.log(`DEBUG: getManagedWallet`)
-    console.log(`DEBUG: address: ${address}`)
-    console.log(wallet?.erc20_token_balance.keys())
-
-    return wallet
+    return wallets.find((x) => x.address === address)
 }
