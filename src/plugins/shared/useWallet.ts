@@ -1,34 +1,29 @@
 import { useState, useEffect } from 'react'
+import useSWR from 'swr'
 import { EthereumTokenType } from '../Wallet/database/types'
 import Services from '../../extension/service'
 import { PluginMessageCenter } from '../PluginMessages'
 import { formatBalance } from '../Wallet/formatter'
 import { ETH_ADDRESS } from '../Wallet/token'
 import { currentEthereumNetworkSettings } from '../../settings/settings'
-import useSWR from 'swr'
 import type { WalletDetails, ERC20TokenDetails } from '../../extension/background-script/PluginService'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 
 export function useWallet() {
     const swr = useSWR('query', {
-        fetcher: async () => {
-            const result = await Services.Plugin.getWallets()
-
-            console.log('DEBUG: fetcher is called')
-            console.log(result)
-            return result
-        },
+        fetcher: Services.Plugin.getWallets,
     })
-    const { revalidate } = swr
+    const { revalidate, error } = swr
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     useEffect(() => currentEthereumNetworkSettings.addListener(revalidate), [revalidate])
 
     console.log('DEBUG: revalidated use wallet')
     console.log(swr.data)
+    console.log(error)
     return swr
 }
-export function useManagedWalletDetail(address: string | undefined) {
-    const swr = useSWR(address ?? null, { fetcher: Services.Plugin.getManagedWallet })
+export function useManagedWalletDetail(address: string) {
+    const swr = useSWR(address, { fetcher: Services.Plugin.getManagedWallet })
     const { revalidate } = swr
 
     console.log('DEBUG: revalidated use managed wallet')
@@ -47,15 +42,15 @@ export function useSelectWallet(
 
     const [selectedTokenAddress, setSelectedTokenAddress] = useState(ETH_ADDRESS)
     const [selectedTokenType, setSelectedTokenType] = useState<EthereumTokenType>(EthereumTokenType.ETH)
-    const selectedWallet = wallets?.find((x) => x.walletAddress === selectedWalletAddress)
+    const selectedWallet = wallets?.find((x) => x.address === selectedWalletAddress)
 
     console.log(`DEBUG: use select wallet`)
     console.log(tokens)
     console.log(wallets)
     console.log(selectedWallet)
 
-    const availableTokens = (selectedWallet?.erc20tokensBalanceMap
-        ? Array.from(selectedWallet?.erc20tokensBalanceMap.entries())
+    const availableTokens = (selectedWallet?.erc20_token_balance
+        ? Array.from(selectedWallet.erc20_token_balance.entries())
         : []
     )
         .filter(([address]) => tokens?.find((x) => x.address === address && x.network === network))
@@ -69,12 +64,12 @@ export function useSelectWallet(
         if (selectedWalletAddress === undefined) {
             if (!wallets) return
             if (wallets?.length === 0) requestConnectWallet()
-            else setSelectedWalletAddress(wallets[0].walletAddress)
+            else setSelectedWalletAddress(wallets[0].address)
         }
     }, [requestConnectWallet, selectedWalletAddress, wallets])
 
     const ethBalance = selectedWallet
-        ? `${formatBalance(selectedWallet.ethBalance, 18) ?? '(Syncing...)'} ETH`
+        ? `${formatBalance(selectedWallet.eth_balance, 18) ?? '(Syncing...)'} ETH`
         : undefined
     const erc20Balance = selectedToken
         ? `${formatBalance(selectedToken.amount, selectedToken.decimals) ?? '(Syncing...)'} ${selectedToken.symbol}`

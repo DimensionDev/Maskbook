@@ -70,14 +70,14 @@ export default function DashboardContactsRouter() {
             {/* without flex: 1, the auto resize cannot resize to the max height it need. */}
             <section style={{ flex: 1 }}>
                 <Suspense fallback={contactLineFallback}>
-                    <ContactsList {...swr}></ContactsList>
+                    <ContactList {...swr}></ContactList>
                 </Suspense>
             </section>
         </DashboardRouterContainer>
     )
 }
-function ContactsList({ isReachingEnd, loadMore, pages, items, newDataPending }: ReturnType<typeof useSWRProfiles>) {
-    const ref = useRef<FixedSizeList>(null)
+function ContactList({ isReachingEnd, loadMore, pages, items, newDataPending }: ReturnType<typeof useSWRProfiles>) {
+    const ref = useRef<FixedSizeList | null>(null)
     return (
         <>
             <div style={{ display: 'none' }}>{pages}</div>
