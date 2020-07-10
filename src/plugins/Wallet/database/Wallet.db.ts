@@ -13,8 +13,6 @@ function path<T>(x: T) {
 export const createWalletDBAccess = createDBAccess(() => {
     return openDB<WalletDB>('maskbook-plugin-wallet', 4, {
         async upgrade(db, oldVersion, newVersion, tx) {
-            console.log('DEBUG: upgrade DB')
-            console.log(`DEBUG: ${newVersion}`)
             function v0_v1() {
                 // @ts-expect-error
                 db.createObjectStore('RedPacket', { keyPath: path<keyof RedPacketRecordInDatabase>('id') })
@@ -83,7 +81,6 @@ export const createWalletDBAccess = createDBAccess(() => {
              *  erc20_token_blacklist
              */
             async function v3_v4() {
-                console.log('DEBUG: upgrade db v3_v4')
                 const store = tx.objectStore('Wallet')
                 const old = await store.getAll()
                 await store.clear()

@@ -206,7 +206,7 @@
     "payload_incomplete": "不完整的 payload。請點擊「查看全文」。",
     "payload_not_found": "找不到 payload",
     "payload_throw_in_alpha41": "已經不再支援 Alpha41。請提醒對方安裝新版 Maskbook。",
-    "people_in_database": "人們都記錄在Maskbook資料庫中。",
+    "people_in_database": "聯繫人都記錄在 Maskbook 的資料庫中。",
     "person_or_group_in_chip": "{{name}} ({{count}} 人)",
     "person_or_group_in_list_0": "這個組是空的",
     "person_or_group_in_list_many": "{{people}} 等，共 {{count}} 人",

@@ -1,51 +1,62 @@
-import React, { useMemo, useState, Suspense, useRef, unstable_useTransition } from 'react'
+import React, { useMemo, useState, unstable_useTransition, useCallback } from 'react'
 import DashboardRouterContainer from './Container'
 import { TextField, IconButton, Typography } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import ClearIcon from '@material-ui/icons/Clear'
 import SearchIcon from '@material-ui/icons/Search'
-import { ContactLine, ContactLineSkeleton } from '../DashboardComponents/ContactLine'
+import AutoResize from 'react-virtualized-auto-sizer'
+import { ContactLine } from '../DashboardComponents/ContactLine'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { FixedSizeList } from 'react-window'
-import AutoResize from 'react-virtualized-auto-sizer'
-import { useSWRProfiles } from '../../../components/SuspenseDataSource/useSuspenseProfiles'
+import { useSWRInfinite } from 'swr'
+import Services from '../../service'
+import type { Profile } from '../../../database'
+import { last } from 'lodash-es'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         title: {
             margin: theme.spacing(3, 0),
+            color: theme.palette.text.secondary,
         },
         progress: {
             width: '1.5em',
             height: '1.5em',
             marginRight: '0.75em',
         },
+        list: {
+            flex: 1,
+        },
     }),
 )
 
-const contactLineFallback = (
-    <>
-        <ContactLineSkeleton />
-        <ContactLineSkeleton />
-        <ContactLineSkeleton />
-    </>
-)
+const fetcher = (key: number, size: number, search: string, offset?: Profile) =>
+    Services.Identity.queryProfilePaged(
+        {
+            // undefined will fetch the first page
+            query: search ? search : void 0,
+            after: offset?.identifier,
+        },
+        20,
+    )
+
 export default function DashboardContactsRouter() {
     const { t } = useI18N()
     const classes = useStyles()
-    const [searchUI, setSearchUI] = useState('')
+
     const [search, setSearch] = useState('')
-    const [startTransition] = unstable_useTransition({ timeoutMs: 5000 })
+    const [searchUI, setSearchUI] = useState('')
+    const [startSearchTransition, isSearchPending] = unstable_useTransition({ timeoutMs: 5000 })
     const actions = useMemo(
         () => [
             <TextField
-                placeholder="Search..."
+                placeholder="Search…"
                 variant="outlined"
                 size="small"
                 value={searchUI}
                 onChange={(e) => {
                     setSearchUI(e.target.value)
-                    startTransition(() => setSearch(e.target.value))
+                    startSearchTransition(() => setSearch(e.target.value))
                 }}
                 InputProps={{
                     endAdornment: (
@@ -56,57 +67,57 @@ export default function DashboardContactsRouter() {
                 }}
             />,
         ],
-        [search, searchUI, startTransition],
+        [search, searchUI, startSearchTransition],
+    )
+    const swr = useSWRInfinite<Profile[]>(
+        (size, previosuPageData) => [
+            search ? `profile:${search}:${size}` : `profile:${size}`,
+            size,
+            search || undefined, // undefined means fetch from start
+            last(previosuPageData),
+        ],
+        fetcher,
     )
 
-    const swr = useSWRProfiles(search === '' ? void 0 : search)
-    const isEmpty = !swr.newDataPending && swr.items.length === 0
+    const { data, size, setSize } = swr
+    const isEmpty = data?.[0]?.length === 0
+    const isReachingEnd = data && data[data.length - 1]?.length < 20
+    const items = data ? ([] as Profile[]).concat(...data) : []
+
+    const [startPageTransition, isPagePending] = unstable_useTransition({ timeoutMs: 1e5 })
+    const nextPage = useCallback(
+        () =>
+            startPageTransition(() => {
+                setSize?.(size ? size + 1 : 0)
+            }),
+        [size, setSize],
+    )
 
     return (
-        <DashboardRouterContainer title={t('contacts')} empty={isEmpty} actions={actions}>
-            <Typography className={classes.title} variant="body2" color="textSecondary">
+        <DashboardRouterContainer title={t('contacts')} empty={items.length === 0} actions={actions}>
+            <Typography className={classes.title} variant="body2">
                 {t('people_in_database')}
             </Typography>
-            {/* without flex: 1, the auto resize cannot resize to the max height it need. */}
-            <section style={{ flex: 1 }}>
-                <Suspense fallback={contactLineFallback}>
-                    <ContactList {...swr}></ContactList>
-                </Suspense>
+            <section className={classes.list}>
+                <AutoResize>
+                    {(sizeProps) => (
+                        <FixedSizeList
+                            overscanCount={5}
+                            onItemsRendered={(data) => {
+                                if (isEmpty || isReachingEnd) return
+                                if (isPagePending || isSearchPending) return
+                                if (data.visibleStopIndex === data.overscanStopIndex) nextPage()
+                            }}
+                            itemSize={64}
+                            itemCount={items.length}
+                            {...sizeProps}>
+                            {({ index, style }) =>
+                                items[index] ? <ContactLine style={style} key={index} contact={items[index]} /> : null
+                            }
+                        </FixedSizeList>
+                    )}
+                </AutoResize>
             </section>
         </DashboardRouterContainer>
-    )
-}
-function ContactList({ isReachingEnd, loadMore, pages, items, newDataPending }: ReturnType<typeof useSWRProfiles>) {
-    const ref = useRef<FixedSizeList | null>(null)
-
-    console.log(`DEBUG: pages`)
-    console.log(pages)
-
-    return (
-        <>
-            <div style={{ display: 'none' }}>{pages}</div>
-            <AutoResize>
-                {(size) => (
-                    <FixedSizeList
-                        ref={ref}
-                        overscanCount={5}
-                        onItemsRendered={(data) => {
-                            if (newDataPending || isReachingEnd) return
-                            if (!items[data.overscanStopIndex]) loadMore()
-                        }}
-                        itemSize={64}
-                        itemCount={items.length + (isReachingEnd ? 0 : 1)}
-                        {...size}>
-                        {({ index, style }) => {
-                            if (items[index])
-                                return <ContactLine style={style} key={index} contact={items[index]}></ContactLine>
-                            if (newDataPending && items.length === 0)
-                                return <ContactLineSkeleton style={style} key={index} />
-                            return null
-                        }}
-                    </FixedSizeList>
-                )}
-            </AutoResize>
-        </>
     )
 }

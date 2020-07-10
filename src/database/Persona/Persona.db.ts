@@ -1,5 +1,5 @@
 /// <reference path="../global.d.ts" />
-
+import Fuse from 'fuse.js'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { IdentifierMap } from '../IdentifierMap'
@@ -347,9 +347,20 @@ export async function queryProfilesDB(
     return result
 }
 
+const fuse = new Fuse([] as ProfileRecord[], {
+    shouldSort: true,
+    threshold: 0.45,
+    maxPatternLength: 32,
+    minMatchCharLength: 1,
+    keys: [
+        { name: 'nickname', weight: 0.8 },
+        { name: 'identifier.network', weight: 0.2 },
+    ],
+})
+
 export async function queryProfilesPagedDB(
     options: {
-        after: ProfileIdentifier | undefined
+        after?: ProfileIdentifier
         query?: string
     },
     count: number,
@@ -365,18 +376,13 @@ export async function queryProfilesPagedDB(
             continue
         }
         firstRecord = false
-        if (rec.key === breakPoint) {
-            // after this record
-            continue
-        }
+        // after this record
+        if (rec.key === breakPoint) continue
         if (count <= 0) break
         const outData = profileOutDB(rec.value)
-        const query = options.query?.toLowerCase()
-        if (typeof query === 'string') {
-            const network = rec.value.network.toLowerCase() === query
-            const nickname = outData.nickname?.toLowerCase().includes(query)
-            const id = outData.identifier.userId.toLowerCase().includes(query)
-            if (!network && !nickname && !id) continue
+        if (typeof options.query === 'string') {
+            fuse.setCollection([outData])
+            if (!fuse.search(options.query).length) continue
         }
         count -= 1
         data.push(outData)
