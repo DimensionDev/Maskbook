@@ -10,7 +10,11 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import ProfileBox from './ProfileBox'
 import type { ProfileIdentifier } from '../../../database/type'
 import { useModal, useSnackbarCallback } from '../Dialogs/Base'
-import { DashboardPersonaBackupDialog, DashboardPersonaDeleteConfirmDialog } from '../Dialogs/Persona'
+import {
+    DashboardPersonaRenameDialog,
+    DashboardPersonaBackupDialog,
+    DashboardPersonaDeleteConfirmDialog,
+} from '../Dialogs/Persona'
 import DashboardMenu from './DashboardMenu'
 
 interface Props {
@@ -56,23 +60,13 @@ export default function PersonaCard({ persona }: Props) {
     const classes = useStyles()
     const color = useColorStyles()
 
-    const [rename, setRename] = useState(false)
-    type Inputable = HTMLInputElement | HTMLTextAreaElement
-    const renameIdentity = useSnackbarCallback(
-        (event: React.FocusEvent<Inputable> | React.KeyboardEvent<Inputable>) => {
-            event.preventDefault()
-            return Services.Identity.renamePersona(persona.identifier, event.currentTarget.value)
-        },
-        [rename],
-        () => setRename(false),
-    )
-
     const [deletePersona, openDeletePersona] = useModal(DashboardPersonaDeleteConfirmDialog, { persona })
     const [backupPersona, openBackupPersona] = useModal(DashboardPersonaBackupDialog, { persona })
+    const [renamePersona, openRenamePersona] = useModal(DashboardPersonaRenameDialog, { persona })
 
     const menus = useMemo(
         () => [
-            <MenuItem onClick={() => setRename(true)}>{t('rename')}</MenuItem>,
+            <MenuItem onClick={openRenamePersona}>{t('rename')}</MenuItem>,
             <MenuItem onClick={openBackupPersona}>{t('backup')}</MenuItem>,
             <MenuItem onClick={openDeletePersona} className={color.error} data-testid="delete_button">
                 {t('delete')}
@@ -97,34 +91,24 @@ export default function PersonaCard({ persona }: Props) {
     return (
         <Card className={classes.card} elevation={2}>
             <Typography className={classes.header} variant="h5" component="h2">
-                {!rename ? (
-                    <>
-                        <span title={persona.nickname} className={classes.title} data-testid="persona_title">
-                            {persona.nickname}
-                        </span>
-                        <IconButton
-                            size="small"
-                            className={classes.menu}
-                            onClick={(e) => openMenu({ anchorEl: e.currentTarget })}
-                            data-testid="setting_icon">
-                            <MoreVertIcon />
-                        </IconButton>
-                        {menu}
-                    </>
-                ) : (
-                    <TextField
-                        style={{ width: '100%', maxWidth: '320px' }}
-                        inputProps={{ onKeyPress: (e) => e.key === 'Enter' && renameIdentity(e) }}
-                        autoFocus
-                        variant="outlined"
-                        label="Name"
-                        defaultValue={persona.nickname}
-                        onBlur={(e) => renameIdentity(e)}></TextField>
-                )}
+                <>
+                    <span title={persona.nickname} className={classes.title} data-testid="persona_title">
+                        {persona.nickname}
+                    </span>
+                    <IconButton
+                        size="small"
+                        className={classes.menu}
+                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}
+                        data-testid="setting_icon">
+                        <MoreVertIcon />
+                    </IconButton>
+                    {menu}
+                </>
             </Typography>
             <ProfileBox persona={persona} />
             {deletePersona}
             {backupPersona}
+            {renamePersona}
         </Card>
     )
 }

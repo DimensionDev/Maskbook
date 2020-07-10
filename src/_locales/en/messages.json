@@ -235,6 +235,8 @@
     "private_key": "Private key",
     "proceed": "Proceed",
     "public_key": "Public Key",
+    "persona_new_name": "Give persona a new name",
+    "persona_name": "Persona Name",
     "qr_code": "QR Code",
     "reload": "Reload",
     "reload_to_switch_shadow_root_rendering_mode": "Reload to switch Advanced Security Mode",
