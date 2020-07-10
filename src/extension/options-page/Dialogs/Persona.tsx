@@ -22,6 +22,7 @@ import { RestoreFromQRCodeImageBox } from '../DashboardComponents/RestoreFromQRC
 import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQRCodeCameraBox'
 import { SetupStep } from '../SetupStep'
 
+//#region persona create dialog
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
     const [name, setName] = useState('')
@@ -73,7 +74,9 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
         </DashboardDialogCore>
     )
 }
+//#endregion
 
+//#region persona import dialog
 export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
     const { enqueueSnackbar } = useSnackbar()
@@ -229,11 +232,55 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
         </DashboardDialogCore>
     )
 }
+//#endregion
 
 interface PersonaProps {
     persona: Persona
 }
 
+//#region persona rename dialog
+export function DashboardPersonaRenameDialog(props: WrappedDialogProps<PersonaProps>) {
+    const { t } = useI18N()
+    const { persona } = props.ComponentProps!
+    const [name, setName] = useState(persona.nickname ?? '')
+    const renamePersona = useSnackbarCallback(
+        () => Services.Identity.renamePersona(persona.identifier, name),
+        [persona.nickname],
+        props.onClose,
+    )
+    return (
+        <DashboardDialogCore {...props}>
+            <DashboardDialogWrapper
+                size="small"
+                primary={t('persona_new_name')}
+                content={
+                    <TextField
+                        required
+                        label={t('persona_name')}
+                        variant="outlined"
+                        value={name}
+                        autoFocus
+                        onChange={(e) => setName(e.target.value)}
+                        inputProps={{ onKeyPress: (e) => e.key === 'Enter' && renamePersona() }}
+                    />
+                }
+                footer={
+                    <SpacedButtonGroup>
+                        <DebounceButton variant="contained" color="primary" onClick={renamePersona}>
+                            {t('ok')}
+                        </DebounceButton>
+                        <DebounceButton variant="outlined" color="default" onClick={props.onClose}>
+                            {t('cancel')}
+                        </DebounceButton>
+                    </SpacedButtonGroup>
+                }
+            />
+        </DashboardDialogCore>
+    )
+}
+//#endregion
+
+//#region persona backup dialog
 export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaProps>) {
     const { t } = useI18N()
     const { persona } = props.ComponentProps!
@@ -297,7 +344,9 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
         </DashboardDialogCore>
     )
 }
+//#endregion
 
+//#region persona delete confirm dialog
 export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<PersonaProps>) {
     const { t } = useI18N()
     const { persona } = props.ComponentProps!
@@ -331,7 +380,9 @@ export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<Pe
         </DashboardDialogCore>
     )
 }
+//#endregion
 
+//#region persona unlink confirm dialog
 const LinkOffIcon = () => (
     <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -372,3 +423,4 @@ export function DashboardPersonaUnlinkConfirmDialog(props: WrappedDialogProps) {
         </DashboardDialogCore>
     )
 }
+//#endregion

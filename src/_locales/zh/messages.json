@@ -236,6 +236,8 @@
     "private_key": "私鑰",
     "proceed": "繼續",
     "public_key": "公鑰",
+    "persona_new_name": "給角色起個新名字",
+    "persona_name": "名字",
     "qr_code": "QR 碼",
     "reload": "重新載入",
     "reload_to_switch_shadow_root_rendering_mode": "重新載入以切換高級安全模式",
