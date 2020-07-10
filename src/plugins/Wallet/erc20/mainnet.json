@@ -10,6 +10,18 @@
     "predefined_tokens": [
         {
             "decimals": 18,
+            "symbol": "Suter",
+            "name": "Suterusu",
+            "address": "0xba8c0244fbdeb10f19f6738750daeedf7a5081eb"
+        },
+        {
+            "decimals": 18,
+            "symbol": "PHA",
+            "name": "Phala",
+            "address": "0x6c5bA91642F10282b576d91922Ae6448C9d52f4E"
+        },
+        {
+            "decimals": 18,
             "symbol": "OKB",
             "name": "OKB",
             "address": "0x75231f58b43240c9718dd58b4967c5114342a86c"
