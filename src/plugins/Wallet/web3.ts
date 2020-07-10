@@ -9,16 +9,10 @@ import { OnlyRunInContext } from '@holoflows/kit/es'
 
 OnlyRunInContext('background', 'web3')
 
-// fix throw sendAsync undefined error for eth-token-tracker
-// https://github.com/zmitton/eth-proof/issues/2#issuecomment-378240556
-Web3.providers.WebsocketProvider.prototype.sendAsync = Web3.providers.WebsocketProvider.prototype.send
-
 export const web3 = new Web3()
 export const pool = new Map<string, WebsocketProvider>()
 
 let provider: WebsocketProvider
-
-export const getProvider = () => web3.currentProvider
 
 export const resetProvider = () => {
     const url = getNetworkSettings().middlewareAddress
