@@ -79,6 +79,9 @@ export function TokenListItem(props: TokenListItemProps) {
                         </Typography>
                     </>
                 }
+                primaryTypographyProps={{
+                    color: 'textPrimary',
+                }}
             />
             <ListItemSecondaryAction className={classes.amount}>
                 {token.address !== ETH_ADDRESS ? (

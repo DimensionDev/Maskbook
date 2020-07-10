@@ -19292,9 +19292,10 @@ swarm-js@^0.1.40:
     tar "^4.0.2"
     xhr-request "^1.0.1"
 
-"swr@github:innocentiv/swr#reset-pages-build":
-  version "0.1.17"
-  resolved "https://codeload.github.com/innocentiv/swr/tar.gz/893ea968d33371a48803eb3f8bb818dd116e3764"
+swr@0.3.0-beta.10:
+  version "0.3.0-beta.10"
+  resolved "https://registry.yarnpkg.com/swr/-/swr-0.3.0-beta.10.tgz#c2d2810ea89f862fef328790949dd5e3ef55517b"
+  integrity sha512-SIWKDwu02zSQrxijB2jbu6aKkefOmxLinJ85AUlcdrMT366vQLRNZBDqH37jy8555Gt/b7t9Q8Q3XuPureb8Ig==
   dependencies:
     fast-deep-equal "2.0.1"
 
