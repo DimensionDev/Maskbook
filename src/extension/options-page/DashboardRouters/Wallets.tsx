@@ -312,7 +312,7 @@ export default function DashboardWalletsRouter() {
         if (error) openWalletError()
     }, [error, openWalletError])
 
-    // show red packet detail
+    // show red packet detail dialog
     useEffect(() => {
         if (!rpid) return
         Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, rpid).then((redPacket) =>

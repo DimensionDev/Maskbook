@@ -84,7 +84,7 @@ function ContactList({ isReachingEnd, loadMore, pages, items, newDataPending }: 
 
     return (
         <>
-            <div>{pages}</div>
+            <div style={{ display: 'none' }}>{pages}</div>
             <AutoResize>
                 {(size) => (
                     <FixedSizeList
