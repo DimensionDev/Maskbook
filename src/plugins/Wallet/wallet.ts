@@ -357,13 +357,14 @@ function WalletRecordOutDB(x: WalletRecordInDatabase): WalletRecord {
     const record = omit(x, ['eth_balance', 'erc20_token_balance']) as WalletRecord
     if (x.eth_balance) record.eth_balance = new BigNumber(String(x.eth_balance))
     record.erc20_token_balance = new Map()
-    record.erc20_token_whitelist = new Set(x.erc20_token_whitelist.values())
-    record.erc20_token_blacklist = new Set(x.erc20_token_blacklist.values())
     for (const [name, value] of x.erc20_token_balance.entries()) {
         let balance
         if (value) balance = new BigNumber(String(value))
         record.erc20_token_balance.set(name, balance)
     }
+    // Add the new DB fields in this way intended to avoid the risk of DB migration.
+    record.erc20_token_whitelist = x.erc20_token_whitelist ?? new Set()
+    record.erc20_token_blacklist = x.erc20_token_blacklist ?? new Set()
     return record
 }
 function WalletRecordIntoDB(x: WalletRecord): WalletRecordInDatabase {
