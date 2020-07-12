@@ -91,8 +91,8 @@ export interface RedPacketRecordInDatabase
     shares: string | bigint
 }
 export interface WalletRecordInDatabase extends Omit<WalletRecord, 'eth_balance' | 'erc20_token_balance'> {
-    eth_balance?: string | bigint
-    erc20_token_balance: Map<string, string | bigint | undefined>
+    eth_balance: string | bigint
+    erc20_token_balance: Map<string, string | bigint>
 }
 export interface ERC20TokenRecord {
     /** token address */
@@ -189,8 +189,8 @@ export interface WalletRecordProperties {
     /** User define wallet name. Default address.prefix(6) */
     name: string | null
     /** Wallet ethereum balance */
-    eth_balance?: BigNumber
-    erc20_token_balance: Map</** address of the erc20 token */ string, BigNumber | undefined>
+    eth_balance: BigNumber
+    erc20_token_balance: Map</** address of the erc20 token */ string, BigNumber>
     erc20_token_whitelist: Set<string>
     erc20_token_blacklist: Set<string>
     _wallet_is_default?: boolean

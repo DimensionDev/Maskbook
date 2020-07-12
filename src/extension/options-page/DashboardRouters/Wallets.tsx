@@ -178,7 +178,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                 </Box>
                 <List className={classes.tokenList} disablePadding>
                     <TokenListItem
-                        balance={wallet.eth_balance ?? new BigNumber(0)}
+                        balance={wallet.eth_balance}
                         wallet={wallet}
                         token={{
                             address: ETH_ADDRESS,
