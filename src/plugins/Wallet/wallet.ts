@@ -305,7 +305,7 @@ export async function onWalletBalancesUpdated(data: BalanceMetadata) {
         const wallet = await getWalletByAddress(t, walletAddress)
         const lastModifiedt = wallet.updatedAt
         for (const { network, balance, ...token } of tokens) {
-            if (token.address === ETH_ADDRESS && !wallet.eth_balance?.isEqualTo(balance)) {
+            if (token.address === ETH_ADDRESS && !wallet.eth_balance.isEqualTo(balance)) {
                 wallet.eth_balance = balance
                 wallet.updatedAt = new Date()
             }
@@ -353,25 +353,23 @@ async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], '
     return WalletRecordOutDB(record)
 }
 
-function WalletRecordOutDB(x: WalletRecordInDatabase): WalletRecord {
+function WalletRecordOutDB(x: WalletRecordInDatabase) {
     const record = omit(x, ['eth_balance', 'erc20_token_balance']) as WalletRecord
-    if (x.eth_balance) record.eth_balance = new BigNumber(String(x.eth_balance))
+    record.eth_balance = new BigNumber(String(x.eth_balance ?? 0))
     record.erc20_token_balance = new Map()
     for (const [name, value] of x.erc20_token_balance.entries()) {
-        let balance
-        if (value) balance = new BigNumber(String(value))
-        record.erc20_token_balance.set(name, balance)
+        record.erc20_token_balance.set(name, new BigNumber(String(value ?? 0)))
     }
     // Add the new DB fields in this way intended to avoid the risk of DB migration.
     record.erc20_token_whitelist = x.erc20_token_whitelist ?? new Set()
     record.erc20_token_blacklist = x.erc20_token_blacklist ?? new Set()
     return record
 }
-function WalletRecordIntoDB(x: WalletRecord): WalletRecordInDatabase {
-    const record = x as WalletRecordInDatabase
-    if (x.eth_balance) record.eth_balance = x.eth_balance.toString()
+function WalletRecordIntoDB(x: WalletRecord) {
+    const record = (x as any) as WalletRecordInDatabase
+    record.eth_balance = x.eth_balance.toString()
     for (const [name, value] of x.erc20_token_balance.entries()) {
-        record.erc20_token_balance.set(name, value?.toString())
+        record.erc20_token_balance.set(name, value.toString())
     }
     return record
 }

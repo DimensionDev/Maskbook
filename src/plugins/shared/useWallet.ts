@@ -55,11 +55,9 @@ export function useSelectWallet(
         }
     }, [requestConnectWallet, selectedWalletAddress, wallets])
 
-    const ethBalance = selectedWallet
-        ? `${formatBalance(selectedWallet.eth_balance, 18) ?? '(Syncing...)'} ETH`
-        : undefined
+    const ethBalance = selectedWallet ? `${formatBalance(selectedWallet.eth_balance, 18)} ETH` : undefined
     const erc20Balance = selectedToken
-        ? `${formatBalance(selectedToken.amount, selectedToken.decimals) ?? '(Syncing...)'} ${selectedToken.symbol}`
+        ? `${formatBalance(selectedToken.amount, selectedToken.decimals)} ${selectedToken.symbol}`
         : undefined
     return {
         ethBalance,
