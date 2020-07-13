@@ -8,7 +8,7 @@ import classNames from 'classnames'
 import { useDebounce, useAsyncFn } from 'react-use'
 import { useErrorStyles } from '../../../utils/theme'
 
-const circle = <CircularProgress size={18} />
+const circle = <CircularProgress color="inherit" size={18} />
 
 enum ThrottledButtonState {
     Normal = 1,
