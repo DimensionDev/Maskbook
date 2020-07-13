@@ -60,11 +60,11 @@ storiesOf('Plugin: Gitcoin', module)
                         },
                     ]}
                     address="fake"
-                    requestConnectWallet={action('onRequestNewWallet')}
-                    onClose={action('onClose')}
                     title={text('Title', 'Mask + Test Kit Mutual Aid Fund')}
                     description={text('Description', 'It is accepting contributions in any token.')}
-                    onDonate={action('onDonate')}></DonateDialog>
+                    onDonate={action('onDonate')}
+                    onClose={action('onClose')}
+                />
             </div>
         ),
         figmaLink('https://www.figma.com/file/6YeqA0eCTz67I1HVFXOd4X/Plugin%3A-Gitcoin'),
