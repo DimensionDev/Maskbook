@@ -17,6 +17,7 @@ interface Services {
     Plugin: typeof import('./background-script/PluginService')
     Helper: typeof import('./background-script/HelperService')
     Nonce: typeof import('./background-script/NonceService')
+    Provider: typeof import('./background-script/ProviderService')
 }
 const Services = {} as Services
 export default Services
@@ -39,6 +40,7 @@ if (!('Services' in globalThis)) {
     register(createProxyToService('PluginService'), 'Plugin', MockService.PluginService)
     register(createProxyToService('HelperService'), 'Helper', {})
     register(createProxyToService('NonceService'), 'Nonce', {})
+    register(createProxyToService('ProviderService'), 'Provider', {})
 }
 interface ServicesWithProgress {
     // Sorry you should add import at '../_background_loader.1.ts'
