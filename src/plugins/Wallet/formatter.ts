@@ -1,14 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 
-export function formatBalance(
-    balance: BigNumber | undefined,
-    decimals: number,
-    precision: number = webpackEnv.target === 'WKWebview' ? 6 : 10,
-) {
-    if (!BigNumber.isBigNumber(balance)) {
-        return
-    }
-
+export function formatBalance(balance: BigNumber, decimals: number, precision: number = 10) {
+    if (!BigNumber.isBigNumber(balance)) return
     const negative = balance.isNegative() // balance < 0n
     const base = new BigNumber(10).pow(decimals) // 10n ** decimals
 
