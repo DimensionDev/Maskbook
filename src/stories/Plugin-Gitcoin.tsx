@@ -6,6 +6,7 @@ import { DonateDialog } from '../plugins/Gitcoin/DonateDialog'
 import { figmaLink } from './utils'
 import { action } from '@storybook/addon-actions'
 import BigNumber from 'bignumber.js'
+import type { ManagedWalletRecord } from '../plugins/Wallet/database/types'
 
 storiesOf('Plugin: Gitcoin', module)
     .add(
@@ -44,11 +45,18 @@ storiesOf('Plugin: Gitcoin', module)
                     tokens={[]}
                     wallets={[
                         {
-                            walletAddress: '0x23333',
-                            erc20tokensBalanceMap: new Map(),
-                            walletName: 'Wallet Name',
-                            ethBalance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
                             type: 'managed',
+                            mnemonic: [],
+                            passphrase: '',
+                            address: '0x23333',
+                            name: 'Wallet Name',
+                            erc20_token_balance: new Map(),
+                            erc20_token_blacklist: new Set(),
+                            erc20_token_whitelist: new Set(),
+                            eth_balance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            _data_source_: 'mock',
                         },
                     ]}
                     address="fake"
