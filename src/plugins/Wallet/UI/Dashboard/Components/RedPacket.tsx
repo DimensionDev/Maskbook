@@ -154,7 +154,8 @@ export function RedPacketWithStateUI(props: {
             <div className={classNames(classes.header, { [classes.flex1]: status === 'incoming' })}>
                 {status === 'claimed' ? (
                     <Typography variant="h5" color="inherit">
-                        {formatBalance(redPacket?.claim_amount, info?.decimals ?? 0) ?? '?'} {info?.name ?? '(unknown)'}
+                        {redPacket?.claim_amount ? formatBalance(redPacket.claim_amount, info?.decimals ?? 0) : '?'}{' '}
+                        {info?.name ?? '(unknown)'}
                     </Typography>
                 ) : (
                     <Typography variant="body1" color="inherit">
@@ -174,7 +175,7 @@ export function RedPacketWithStateUI(props: {
                 <Typography variant="body2">
                     {status === 'incoming'
                         ? 'Ready to open'
-                        : `${formatBalance(redPacket?.send_total, info?.decimals ?? 0) ?? '?'} ${
+                        : `${redPacket?.send_total ? formatBalance(redPacket.send_total, info?.decimals ?? 0) : '?'} ${
                               info?.name ?? '(unknown)'
                           } / ${redPacket?.shares?.toString() ?? '?'} Shares`}
                 </Typography>
@@ -211,7 +212,7 @@ export function RedPacket(props: { redPacket?: RedPacketRecord }) {
 
     const formatted = {
         claim_amount: '',
-        send_total: formatBalance(redPacket?.send_total, info?.decimals ?? 0) ?? 'Unknown',
+        send_total: redPacket?.send_total ? formatBalance(redPacket.send_total, info?.decimals ?? 0) : 'Unknown',
         name: info.name ?? '(unknown)',
     }
 

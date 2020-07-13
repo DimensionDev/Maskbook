@@ -591,7 +591,6 @@ export const balanceCheckerAPI = (() => {
                 .methods.balances(accounts, tokens)
                 .call()
         } catch (e) {
-            console.log(e)
             balances = []
         } finally {
             idle = true

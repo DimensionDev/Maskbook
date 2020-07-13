@@ -16,7 +16,7 @@ do
 
     if [ ${contract_hosted[$i]} == true ]; then
         for f in ./contracts/$contract_name/*.sol
-        do         
+        do
             # compile contracts
             solc $f --abi --overwrite -o ./contracts/$contract_name/ --allow-paths $(pwd)/node_modules/
         done

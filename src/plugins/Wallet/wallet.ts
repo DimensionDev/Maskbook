@@ -334,14 +334,13 @@ export async function onWalletBalancesUpdated(data: BalanceMetadata) {
     await Promise.all(
         unaddedTokens.map(async ({ token, network }) => {
             const erc20 = await t.objectStore('ERC20Token').get(token.address)
-            if (!erc20) {
-                modified = true
-                await t.objectStore('ERC20Token').add({
-                    ...token,
-                    network,
-                    is_user_defined: false,
-                })
-            }
+            if (erc20) return
+            modified = true
+            await t.objectStore('ERC20Token').add({
+                ...token,
+                network,
+                is_user_defined: false,
+            })
         }),
     )
     if (modified) PluginMessageCenter.emit('maskbook.wallets.update', undefined)
