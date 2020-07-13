@@ -12,6 +12,7 @@ import * as SteganographyService from './extension/background-script/Steganograp
 import * as PluginService from './extension/background-script/PluginService'
 import * as HelperService from './extension/background-script/HelperService'
 import * as NonceService from './extension/background-script/NonceService'
+import * as ProviderService from './extension/background-script/ProviderService'
 import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
 
 Object.assign(globalThis, {
@@ -23,6 +24,7 @@ Object.assign(globalThis, {
     PluginService,
     HelperService,
     NonceService,
+    ProviderService,
 })
 
 Object.assign(globalThis, {

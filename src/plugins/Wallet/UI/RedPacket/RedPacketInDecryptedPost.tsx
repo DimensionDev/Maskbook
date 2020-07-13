@@ -94,8 +94,8 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
             setLoading(true)
             try {
                 if (!wallets) throw new Error('Loading')
-                if (!wallets[0]) {
-                    Services.Welcome.openOptionsPage('/wallets?error=nowallet')
+                if (wallets.length === 0) {
+                    Services.Provider.requestConnectWallet()
                     throw new Error('Claim failed')
                 }
                 if (wallets.length > 1) setClaiming({ rpid, wallets })

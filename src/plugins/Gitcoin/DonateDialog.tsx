@@ -81,7 +81,6 @@ interface DonateDialogUIProps
     open: boolean
     onDonate(opt: DonatePayload): Promise<void> | void
     onClose(): void
-    requestConnectWallet(): void
     wallets: WalletDetails[] | undefined
     tokens: ERC20TokenDetails[] | undefined
 }
@@ -89,7 +88,7 @@ interface DonateDialogUIProps
 function DonateDialogUI(props: DonateDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const useSelectWalletResult = useSelectWallet(props.wallets, props.tokens, props.requestConnectWallet)
+    const useSelectWalletResult = useSelectWallet(props.wallets, props.tokens)
     const { erc20Balance, ethBalance, selectedToken, selectedTokenType, selectedWallet } = useSelectWalletResult
 
     const [amount, setAmount] = useState(0.01)

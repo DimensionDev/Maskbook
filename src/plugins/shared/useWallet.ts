@@ -24,11 +24,7 @@ export function useManagedWalletDetail(address: string) {
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     return swr
 }
-export function useSelectWallet(
-    wallets: WalletDetails[] | undefined,
-    tokens: ERC20TokenDetails[] | undefined,
-    requestConnectWallet: () => void,
-) {
+export function useSelectWallet(wallets: WalletDetails[] | undefined, tokens: ERC20TokenDetails[] | undefined) {
     const network = useValueRef(currentEthereumNetworkSettings)
     const [selectedWalletAddress, setSelectedWalletAddress] = useState<undefined | string>(undefined)
 
@@ -50,10 +46,10 @@ export function useSelectWallet(
     useEffect(() => {
         if (selectedWalletAddress === undefined) {
             if (!wallets) return
-            if (wallets?.length === 0) requestConnectWallet()
+            if (wallets.length === 0) Services.Provider.requestConnectWallet()
             else setSelectedWalletAddress(wallets[0].address)
         }
-    }, [requestConnectWallet, selectedWalletAddress, wallets])
+    }, [selectedWalletAddress, wallets])
 
     const ethBalance = selectedWallet ? `${formatBalance(selectedWallet.eth_balance, 18)} ETH` : undefined
     const erc20Balance = selectedToken

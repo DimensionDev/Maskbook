@@ -193,11 +193,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     label: '💰 Red Packet',
                                     onClick: async () => {
                                         const { wallets } = await Services.Plugin.getWallets()
-                                        if (wallets.length) {
-                                            setRedPacketDialogOpen(true)
-                                        } else {
-                                            Services.Welcome.openOptionsPage('/wallets?error=nowallet')
-                                        }
+                                        if (wallets.length) setRedPacketDialogOpen(true)
+                                        else Services.Provider.requestConnectWallet()
                                     },
                                 }}
                             />

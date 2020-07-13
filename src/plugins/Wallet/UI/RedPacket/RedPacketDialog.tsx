@@ -66,12 +66,11 @@ interface NewPacketProps {
     wallets: WalletDetails[] | undefined
     tokens: ERC20TokenDetails[] | undefined
     onCreateNewPacket: (opt: CreateRedPacketInit) => void
-    requestConnectWallet: () => void
 }
 
 function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const classes = useStylesExtends(useNewPacketStyles(), props)
-    const { loading, wallets, tokens, requestConnectWallet } = props
+    const { loading, wallets, tokens } = props
     const [is_random, setIsRandom] = useState(0)
 
     const [send_message, setMsg] = useState('Best Wishes!')
@@ -85,7 +84,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
 
     const network = useValueRef(currentEthereumNetworkSettings)
 
-    const useSelectWalletResult = useSelectWallet(wallets, tokens, requestConnectWallet)
+    const useSelectWalletResult = useSelectWallet(wallets, tokens)
     const {
         erc20Balance,
         ethBalance,
@@ -325,7 +324,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [status, setStatus] = useState<'succeed' | 'failed' | 'undetermined' | 'initial'>('initial')
     const loading = status === 'undetermined'
     const [createError, setCreateError] = useState<Error | null>(null)
-    const onConnect = () => Services.Welcome.openOptionsPage('/wallets?error=nowallet')
     const onCreate = async (opt: CreateRedPacketInit) => {
         try {
             setStatus('undetermined')
@@ -382,7 +380,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         wallets={wallets}
                         tokens={tokens}
                         onCreateNewPacket={onCreate}
-                        requestConnectWallet={onConnect}
                     />
                 ),
                 p: 0,
