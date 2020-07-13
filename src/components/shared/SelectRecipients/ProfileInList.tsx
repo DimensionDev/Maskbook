@@ -1,10 +1,9 @@
-import * as React from 'react'
+import React, { ChangeEvent, useCallback } from 'react'
 import classNames from 'classnames'
 import { makeStyles, Theme, ListItem, ListItemText, Checkbox, ListItemAvatar } from '@material-ui/core'
 import { useStylesExtends } from '../../custom-ui-helper'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import type { Profile } from '../../../database'
-import { ChangeEvent, useCallback } from 'react'
 import { Avatar } from '../../../utils/components/Avatar'
 import type { CheckboxProps } from '@material-ui/core/Checkbox'
 import type { ListItemTypeMap } from '@material-ui/core/ListItem'
@@ -35,7 +34,6 @@ export function ProfileInList(props: ProfileInListProps) {
     const name = profile.nickname || profile.identifier.userId
     const secondary = profile.linkedPersona?.fingerprint ? profile.linkedPersona?.fingerprint.toLowerCase() : undefined
     const onClick = useCallback((ev) => props.onChange(ev, !props.checked), [props])
-
     return (
         <ListItem
             button
