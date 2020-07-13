@@ -4,17 +4,13 @@ import { TextField, makeStyles, createStyles } from '@material-ui/core'
 import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
 import Services from '../../service'
-import { DebounceButton } from '../DashboardComponents/ActionButton'
+import ActionButton, { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { UserMinus } from 'react-feather'
 
 interface ContactProps {
     contact: Profile
-}
-
-interface ContactDeleteProps extends ContactProps {
-    onDeleted(): void
 }
 
 const useStyles = makeStyles((theme) =>
@@ -26,7 +22,9 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export function DashboardContactDeleteConfirmDialog(props: WrappedDialogProps<ContactDeleteProps>) {
+export function DashboardContactDeleteConfirmDialog(
+    props: WrappedDialogProps<ContactProps & { onDeleted: () => void }>,
+) {
     const { contact, onDeleted } = props.ComponentProps!
     const { t } = useI18N()
 
@@ -35,7 +33,10 @@ export function DashboardContactDeleteConfirmDialog(props: WrappedDialogProps<Co
         // ! directly destroy parent dialog is NG so close self first
         () => Services.Identity.removeProfile(contact.identifier).then(props.onClose),
         [contact],
-        onDeleted,
+        () => {
+            props.onClose()
+            onDeleted()
+        },
     )
     return (
         <DashboardDialogCore {...props}>
@@ -44,13 +45,13 @@ export function DashboardContactDeleteConfirmDialog(props: WrappedDialogProps<Co
                 icon={<UserMinus />}
                 iconColor="#F4637D"
                 primary={t('delete_contact')}
-                secondary={t('delete_contact_confirmation')}
+                secondary={t('delete_contact_confirmation', { contact: contact.nickname })}
                 footer={
                     <SpacedButtonGroup>
                         <DebounceButton variant="contained" color="danger" onClick={onDelete}>
                             {t('ok')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
+                        <DebounceButton variant="outlined" color="default" onClick={props.onClose}>
                             {t('cancel')}
                         </DebounceButton>
                     </SpacedButtonGroup>
@@ -59,72 +60,64 @@ export function DashboardContactDeleteConfirmDialog(props: WrappedDialogProps<Co
     )
 }
 
-export function DashboardContactDialog(props: WrappedDialogProps<ContactProps>) {
-    const { contact } = props.ComponentProps!
+export function DashboardContactDialog(props: WrappedDialogProps<ContactProps & { onUpdated: () => void }>) {
     const { t } = useI18N()
-
+    const classes = useStyles()
+    const { contact, onUpdated } = props.ComponentProps!
     const [nickname, setNickname] = useState(contact.nickname)
     const [avatarURL, setAvatarURL] = useState(contact.avatar)
-
-    const classes = useStyles()
 
     // TODO: revalidate SWR after this change
     const onSubmit = useSnackbarCallback(
         () => Services.Identity.updateProfileInfo(contact.identifier, { nickname, avatarURL, forceUpdateAvatar: true }),
         [nickname, avatarURL],
-        props.onClose,
+        () => {
+            props.onClose()
+            onUpdated()
+        },
     )
-
-    const [deleteContact, openDeleteContact] = useModal(DashboardContactDeleteConfirmDialog, {
-        contact,
-        onDeleted: props.onClose,
-    })
-
     return (
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
                 icon={<Avatar className={classes.avatar} person={contact} />}
                 primary={contact.nickname || '<Unnamed>'}
                 content={
-                    <>
-                        <form>
-                            <TextField
-                                label={t('internal_id')}
-                                value={contact.identifier.toText()}
-                                variant="outlined"
-                                disabled
-                            />
-                            <TextField
-                                label={t('nickname')}
-                                value={nickname}
-                                onChange={(e) => setNickname(e.target.value)}
-                                variant="outlined"
-                            />
-                            <TextField
-                                label={t('new_avatar_url')}
-                                placeholder={t('new_avatar_url_placeholder')}
-                                value={avatarURL}
-                                onChange={(e) => setAvatarURL(e.target.value)}
-                                variant="outlined"
-                            />
-                            <TextField
-                                label={t('fingerprint')}
-                                defaultValue={contact.linkedPersona?.fingerprint}
-                                variant="outlined"
-                                disabled
-                            />
-                        </form>
-                        {deleteContact}
-                    </>
+                    <form>
+                        <TextField
+                            label={t('internal_id')}
+                            value={contact.identifier.toText()}
+                            variant="outlined"
+                            disabled
+                        />
+                        <TextField
+                            label={t('nickname')}
+                            value={nickname}
+                            onChange={(e) => setNickname(e.target.value)}
+                            variant="outlined"
+                        />
+                        <TextField
+                            label={t('new_avatar_url')}
+                            placeholder={t('new_avatar_url_placeholder')}
+                            value={avatarURL}
+                            onChange={(e) => setAvatarURL(e.target.value)}
+                            variant="outlined"
+                        />
+                        <TextField
+                            label={t('fingerprint')}
+                            defaultValue={contact.linkedPersona?.fingerprint}
+                            variant="outlined"
+                            disabled
+                        />
+                    </form>
                 }
                 footer={
                     <SpacedButtonGroup>
                         <DebounceButton variant="contained" color="primary" onClick={onSubmit}>
                             {t('save')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" color="danger" onClick={openDeleteContact}>
-                            {t('delete')}
-                        </DebounceButton>
+                        <ActionButton variant="outlined" color="default" onClick={props.onClose}>
+                            {t('cancel')}
+                        </ActionButton>
                     </SpacedButtonGroup>
                 }></DashboardDialogWrapper>
         </DashboardDialogCore>

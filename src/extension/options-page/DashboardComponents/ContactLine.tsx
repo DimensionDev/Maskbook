@@ -1,11 +1,23 @@
-import React from 'react'
-import { Typography, ButtonBase, ButtonBaseProps } from '@material-ui/core'
+import React, { useMemo } from 'react'
+import {
+    Typography,
+    ButtonBase,
+    ButtonBaseProps,
+    IconButton,
+    MenuItem,
+    ListItem,
+    ListItemTypeMap,
+} from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
 import { useModal } from '../Dialogs/Base'
-import { DashboardContactDialog } from '../Dialogs/Contact'
+import { DashboardContactDialog, DashboardContactDeleteConfirmDialog } from '../Dialogs/Contact'
 import { Skeleton } from '@material-ui/lab'
+import DashboardMenu from './DashboardMenu'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -13,7 +25,7 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             alignItems: 'center',
             width: '100%',
-            padding: theme.spacing(2, 0),
+            padding: theme.spacing(2),
             borderBottom: `1px solid ${theme.palette.divider}`,
         },
         avatar: {
@@ -38,28 +50,56 @@ const useStyles = makeStyles((theme) =>
             marginRight: 0,
             fontFamily: 'var(--monospace)',
         },
+        icon: {
+            marginLeft: theme.spacing(1),
+        },
     }),
 )
 
-interface ContactLineProps extends ButtonBaseProps {
+interface ContactLineProps extends Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>> {
     contact: Profile
+    onUpdated: () => void
+    onDeleted: () => void
 }
 
 export function ContactLine(props: ContactLineProps) {
+    const { t } = useI18N()
     const classes = useStyles()
-    const { contact, ...rest } = props
-    const [contactDialog, openContactDialog] = useModal(DashboardContactDialog, { contact })
+    const { contact, onUpdated, onDeleted, ...rest } = props
+    const [contactDialog, openContactDialog] = useModal(DashboardContactDialog, { contact, onUpdated })
+
+    const [deleteContactConfirmDialog, openDeleteContactConfirmDialog] = useModal(DashboardContactDeleteConfirmDialog, {
+        contact,
+        onDeleted,
+    })
+    const menus = useMemo(
+        () => [<MenuItem onClick={() => openDeleteContactConfirmDialog()}>{t('delete')}</MenuItem>].filter((x) => x),
+        [openDeleteContactConfirmDialog, contact],
+    )
+    const [menu, , openMenu] = useModal(DashboardMenu, { menus })
+
     return (
         <>
-            <ButtonBase onClick={() => openContactDialog()} className={classes.line} {...rest}>
+            <ListItem button selected={false} onClick={() => openContactDialog()} className={classes.line} {...rest}>
                 <Avatar className={classes.avatar} person={contact} />
                 <Typography className={classes.user}>{contact.nickname || contact.identifier.userId}</Typography>
                 <Typography className={classes.provider}>@{contact.identifier.network}</Typography>
                 <Typography component="code" color="textSecondary" className={classes.fingerprint}>
                     {contact.linkedPersona?.fingerprint}
                 </Typography>
-            </ButtonBase>
+                <IconButton
+                    className={classes.icon}
+                    size="small"
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        openMenu({ anchorEl: e.currentTarget })
+                    }}>
+                    <MoreHorizIcon />
+                </IconButton>
+            </ListItem>
+            {menu}
             {contactDialog}
+            {deleteContactConfirmDialog}
         </>
     )
 }

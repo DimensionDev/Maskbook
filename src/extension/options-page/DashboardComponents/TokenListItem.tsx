@@ -65,7 +65,8 @@ export function TokenListItem(props: TokenListItemProps) {
                 <TokenIcon
                     classes={{ coin: classes.coin }}
                     name={token.name?.substr(0, 1).toLocaleUpperCase()}
-                    address={token.address}></TokenIcon>
+                    address={token.address}
+                />
             </ListItemIcon>
             <ListItemText
                 primary={token.name}

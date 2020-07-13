@@ -148,7 +148,7 @@
     "default": "默認",
     "delete": "刪除",
     "delete_contact": "刪除聯絡人",
-    "delete_contact_confirmation": "您要刪除此聯絡人嗎？ 此操作無法還原。",
+    "delete_contact_confirmation": "您要刪除 {{contact}} 嗎？ 此操作無法還原。",
     "delete_persona": "刪除角色",
     "delete_wallet": "刪除錢包",
     "delete_wallet_hint": "你確定嗎？ 如果你沒有備份，你將失去這個錢包裏面所有的的錢。",
