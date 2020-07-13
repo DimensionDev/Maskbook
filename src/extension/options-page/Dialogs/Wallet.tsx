@@ -499,16 +499,16 @@ export function DashboardWalletErrorDialog(props: WrappedDialogProps<object>) {
     let message = ''
     switch (error) {
         case 'nowallet':
-            message = 'You have no wallet currently. Create or Import one before doing that.'
+            message = t('error_no_wallet')
             break
         case 'Returned error: gas required exceeds allowance (10000000) or always failing transaction':
-            message = 'This Red Packet is not claimable. It may have been claimed or refunded.'
+            message = t('error_gas_feed_exceeds')
             break
         case 'Returned error: insufficient funds for gas * price value':
-            message = 'Your allowance in this wallet is not sufficient to do that.'
+            message = t('error_insufficient_balance')
             break
         default:
-            message = 'Unknown Error.'
+            message = t('error_unknown')
             break
     }
 
@@ -525,7 +525,7 @@ export function DashboardWalletErrorDialog(props: WrappedDialogProps<object>) {
                 size="small"
                 icon={<InfoIcon />}
                 iconColor="#F4637D"
-                primary="Error"
+                primary={t('error_wallet')}
                 secondary={message}
                 footer={
                     <Button variant="contained" color="primary" onClick={onClose}>
