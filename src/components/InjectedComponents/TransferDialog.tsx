@@ -70,6 +70,7 @@ interface TransferDialogUIProps
         | 'button'
     > {
     loading: boolean
+    nickname?: string
     address: string
     open: boolean
     onTransfer(opt: TransferPayload): Promise<void> | void
@@ -141,7 +142,7 @@ function TransferDialogUI(props: TransferDialogUIProps) {
                             }}
                             variant="filled"
                             fullWidth
-                            defaultValue={props.address}
+                            defaultValue={props.nickname ? `(${props.nickname}) ${props.address}` : props.address}
                             type="string"
                             label="Recipient"
                             disabled

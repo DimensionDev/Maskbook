@@ -4,10 +4,14 @@ import { TransferDialogProps, TransferDialog, TransferPayload } from './Transfer
 import { useWallet } from '../../plugins/shared/useWallet'
 import { TransferSuccessDialog, TransferFailDialog } from './TransferDialogs'
 import type { ValueRef } from '@holoflows/kit/es'
-import type { ProfileIdentifier } from '../../database/type'
+import type { ProfileIdentifier, ECKeyIdentifier } from '../../database/type'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
+import { ec as EC } from 'elliptic'
+import { decompressSecp256k1Key, compressSecp256k1Point } from '../../utils/type-transform/SECP256k1-Compression'
+import { decodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
+import { EthereumAddress } from 'wallet.ts'
 
 export interface TransferDemoProps {
     recipientRef: ValueRef<ProfileIdentifier | null>
@@ -40,10 +44,14 @@ export function TransferDemo(props: TransferDemoProps) {
     const onClose = () => setStatus('initial')
 
     if (recipientState.loading) return null
-    if (!recipientState.value) return null
+    if (!recipientState.value?.linkedPersona?.identifier) return null
 
-    console.log(`DEBUG: recipient`)
-    console.log(recipientState)
+    // convert secp256k1 public key to eth address
+    const eckey = recipientState.value.linkedPersona.identifier as ECKeyIdentifier
+    const ec_jwk = decompressSecp256k1Key(eckey.compressedPoint, 'public')
+    const ec = new EC('secp256k1')
+    const key = ec.keyFromPublic(compressSecp256k1Point(ec_jwk.x!, ec_jwk.y!), 'array')
+    const address = EthereumAddress.from(key.getPublic().encode('array', false) as any).address
 
     return (
         <>
@@ -51,7 +59,8 @@ export function TransferDemo(props: TransferDemoProps) {
             {wallets?.length ? (
                 <TransferDialog
                     open={open}
-                    address={`(${recipientState.value.nickname}) ${'0xsss'}`}
+                    address={address}
+                    nickname={recipientState.value.nickname}
                     loading={loading}
                     onTransfer={onTransfer}
                     onClose={() => setOpen(false)}
