@@ -147,6 +147,7 @@
     "post_dialog__button": "Finish",
     "post_dialog__dismiss_aria": "Dismiss the compose dialog",
     "post_dialog__image_payload": "Image Payload",
+    "post_dialog__image_encrypt": "Image Encrypt",
     "post_dialog__more_options_title": "More Options",
     "post_dialog__placeholder": "Text goes here…",
     "post_dialog__select_recipients_only_myself": "Myself",
