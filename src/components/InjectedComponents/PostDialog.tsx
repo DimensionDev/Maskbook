@@ -21,7 +21,7 @@ import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
 import { useFriendsList, useGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
-import { currentImagePayloadStatus } from '../../settings/settings'
+import { currentImagePayloadStatus, currentImageEncryptStatus } from '../../settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
 import Services from '../../extension/service'
@@ -89,6 +89,7 @@ export interface PostDialogUIProps
     onlyMyself: boolean
     shareToEveryone: boolean
     imagePayload: boolean
+    imageEncrypt: boolean
     availableShareTarget: Array<Profile | Group>
     currentShareTarget: Array<Profile | Group>
     currentIdentity: Profile | null
@@ -98,6 +99,7 @@ export interface PostDialogUIProps
     onOnlyMyselfChanged: (checked: boolean) => void
     onShareToEveryoneChanged: (checked: boolean) => void
     onImagePayloadSwitchChanged: (checked: boolean) => void
+    onImageEncryptSwitchChanged: (checked: boolean) => void
     onFinishButtonClicked: () => void
     onCloseButtonClicked: () => void
     onSetSelected: SelectRecipientsUIProps['onSetSelected']
@@ -245,6 +247,14 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                             'data-testid': 'image_chip',
                                         }}
                                     />
+                                    <ClickableChip
+                                        checked={props.imageEncrypt}
+                                        ChipProps={{
+                                            label: t('post_dialog__image_encrypt'),
+                                            onClick: () => props.onImageEncryptSwitchChanged(!props.imageEncrypt),
+                                            'data-testid': 'TODOTODO', // ! TODO
+                                        }}
+                                    />
                                 </Box>
                             </>
                         ) : null}
@@ -319,6 +329,14 @@ export function PostDialog(props: PostDialogProps) {
             currentImagePayloadStatus[getActivatedUI().networkIdentifier].value = String(checked)
         }, []),
     )
+    const imageEncryptStatus = useValueRef(currentImageEncryptStatus[getActivatedUI().networkIdentifier])
+    const imageEncryptEnabled = imageEncryptStatus === 'true'
+    const onImageEncryptSwitchChanged = or(
+        props.onImageEncryptSwitchChanged,
+        useCallback((checked) => {
+            currentImageEncryptStatus[getActivatedUI().networkIdentifier].value = String(checked)
+        }, []),
+    )
     //#endregion
     //#region callbacks
     const onRequestPost = or(
@@ -372,8 +390,8 @@ export function PostDialog(props: PostDialogProps) {
                         shouldOpenPostDialog: false,
                     })
                 }
-                // This step write data on gun.
-                // there is nothing to write if it shared with public
+                // This step writes data on gun.
+                // there is nothing to write if it is shared with public
                 if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
             [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayloadEnabled, t, i18n.language],
@@ -441,6 +459,7 @@ export function PostDialog(props: PostDialogProps) {
             onlyMyself={onlyMyself}
             availableShareTarget={availableShareTarget}
             imagePayload={imagePayloadEnabled}
+            imageEncrypt={imageEncryptEnabled}
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
             postContent={postBoxContent}
@@ -454,6 +473,7 @@ export function PostDialog(props: PostDialogProps) {
             onShareToEveryoneChanged={onShareToEveryoneChanged}
             onOnlyMyselfChanged={onOnlyMyselfChanged}
             onImagePayloadSwitchChanged={onImagePayloadSwitchChanged}
+            onImageEncryptSwitchChanged={onImageEncryptSwitchChanged}
             onFinishButtonClicked={onFinishButtonClicked}
             onCloseButtonClicked={onCloseButtonClicked}
             {...props}
