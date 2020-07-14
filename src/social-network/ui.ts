@@ -117,7 +117,7 @@ export interface SocialNetworkUIInjections {
      *
      * This function should inject a transfer button at their bio if they are known by Maskbook
      */
-    injectTransferButton?: (() => void) | 'disabled'
+    injectTransferDemo?: (() => void) | 'disabled'
     /**
      * This function should inject the comment
      * @param current The current post
@@ -294,7 +294,7 @@ export function activateSocialNetworkUI(): void {
                     if (typeof mountKnownIdentity === 'function') mountKnownIdentity()
                 }
                 {
-                    const mountTransferButton = ui.injectTransferButton
+                    const mountTransferButton = ui.injectTransferDemo
                     if (typeof mountTransferButton === 'function') mountTransferButton()
                 }
                 ui.lastRecognizedIdentity.addListener((id) => {

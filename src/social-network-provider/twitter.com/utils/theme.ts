@@ -102,6 +102,7 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
             [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
                 '&': {
                     display: 'flex',
+                    flexDirection: 'column',
                     justifyContent: 'space-between',
                     maxWidth: 600,
                     margin: '0 auto',

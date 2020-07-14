@@ -24,7 +24,7 @@ import { injectKnownIdentityAtFacebook } from './UI/injectKnownIdentity'
 import { createTaskStartImmersiveSetupDefault } from '../../social-network/defaults/taskStartImmersiveSetupDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
 import { notifyPermissionUpdate } from '../../utils/permissions'
-import { injectTransferButtonAtFacebook } from './UI/injectTransferButton'
+import { injectTransferDemoAtFacebook } from './UI/injectTransferDemo'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
@@ -62,7 +62,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     injectPostComments: injectPostCommentsDefault(),
     injectOptionsPageLink: injectOptionsPageLinkAtFacebook,
     injectKnownIdentity: injectKnownIdentityAtFacebook,
-    injectTransferButton: injectTransferButtonAtFacebook,
+    injectTransferDemo: injectTransferDemoAtFacebook,
     injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
         encryptedComment,
         current,

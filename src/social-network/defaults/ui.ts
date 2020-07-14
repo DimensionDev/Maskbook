@@ -23,7 +23,7 @@ const defaultInjections = {
     injectCommentBox: 'disabled',
     injectPostComments: 'disabled',
     injectWelcomeBanner: 'disabled',
-    injectTransferButton: 'disabled',
+    injectTransferDemo: 'disabled',
 } as const
 
 export const defaultSocialNetworkUI = cloneDeep({
