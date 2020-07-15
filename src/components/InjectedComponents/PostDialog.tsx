@@ -32,7 +32,6 @@ import RedPacketDialog from '../../plugins/Wallet/UI/RedPacket/RedPacketDialog'
 import {
     makeTypedMessage,
     TypedMessage,
-    withMetadata,
     readTypedMessageMetadata,
     extractTextFromTypedMessage,
     withMetadataUntyped,
@@ -45,6 +44,7 @@ import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
 import { PluginUI } from '../../plugins/plugin'
+import Dropzone from '../shared/Dropzone'
 
 const defaultTheme = {}
 
@@ -106,6 +106,18 @@ export interface PostDialogUIProps
     DialogProps?: Partial<DialogProps>
     SelectRecipientsUIProps?: Partial<SelectRecipientsUIProps>
 }
+
+const readFileAsync: (file: File) => Promise<FileReader['result']> = (file: File) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+            resolve(reader.result)
+        }
+        reader.onerror = reject
+        reader.readAsArrayBuffer(file)
+    })
+}
+
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
@@ -118,6 +130,27 @@ export function PostDialogUI(props: PostDialogUIProps) {
         [props.open, props.postContent],
     )
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
+
+    const onImgChange = useCallback(
+        async (img: File) => {
+            // * not setting any images so that they are not stored by React
+            const imgBuffer = await readFileAsync(img)
+            console.debug('imgBuffer', imgBuffer)
+            if (!imgBuffer) {
+                console.debug('empty image, nothing to do')
+                return
+            }
+            // const [encrypted, token] = await Services.Crypto.encryptTo(
+            //     makeTypedMessage('some text to hide'),
+            //     [],
+            //     props.currentIdentity!.identifier,
+            //     true,
+            // )
+            // console.debug('encrypted', encrypted)
+            // console.debug('token', token)
+        },
+        [props.currentIdentity],
+    )
 
     if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
     const metadataBadge = [...PluginUI].flatMap((plugin) => {
@@ -245,6 +278,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                             label: t('post_dialog__image_payload'),
                                             onClick: () => props.onImagePayloadSwitchChanged(!props.imagePayload),
                                             'data-testid': 'image_chip',
+                                            disabled: props.imageEncrypt,
                                         }}
                                     />
                                     <ClickableChip
@@ -252,13 +286,16 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                         ChipProps={{
                                             label: t('post_dialog__image_encrypt'),
                                             onClick: () => props.onImageEncryptSwitchChanged(!props.imageEncrypt),
-                                            'data-testid': 'TODOTODO', // ! TODO
+                                            'data-testid': 'image_encrypt_chip',
+                                            disabled: props.imagePayload,
                                         }}
                                     />
                                 </Box>
+                                <Box>{props.imageEncrypt && <Dropzone onImgChange={onImgChange} />}</Box>
                             </>
                         ) : null}
                     </DialogContent>
+                    {/* TODO: not disabled when the image has been uploaded */}
                     <DialogActions className={classes.actions}>
                         <Button
                             className={classes.button}
