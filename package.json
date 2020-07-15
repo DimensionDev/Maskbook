@@ -1,6 +1,6 @@
 {
   "name": "maskbook",
-  "version": "1.12.0",
+  "version": "1.12.1",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -194,7 +194,7 @@
     "yargs": "^15.3.1"
   },
   "engines": {
-    "node": ">=13.2.0"
+    "node": ">=14.4.0"
   },
   "optionalDependencies": {
     "expect-puppeteer": "^4.4.0",
