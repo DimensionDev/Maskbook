@@ -15,7 +15,7 @@ import type { BalanceChecker } from './contracts/balance-checker/BalanceChecker'
 import type { CheckRedPacketAvailabilityResult, CreateRedPacketResult, DonateResult } from './types'
 import { EthereumTokenType, EthereumNetwork, RedPacketJSONPayload } from './database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
-import { sendTx } from './tx'
+import { sendTx, sendTxConfigForTxHash } from './tx'
 import { getNetworkSettings, getNetworkERC20Tokens } from './UI/Developer/EthereumNetworkSettings'
 import { GITCOIN_ETH_ADDRESS, isUSDT, ETH_ADDRESS, ERC20Token } from './token'
 import { createRedPacketTransaction } from './createRedPacketTransaction'
@@ -403,6 +403,14 @@ export const walletAPI = {
         const value = await web3.eth.getBalance(address)
         return new BigNumber(value)
     },
+
+    transfer(ownerAddress: string, recipientAddress: string, amount: BigNumber) {
+        return sendTxConfigForTxHash({
+            from: ownerAddress,
+            to: recipientAddress,
+            value: amount.toString(),
+        })
+    },
 }
 
 export const erc20API = {
@@ -480,7 +488,55 @@ export const erc20API = {
             },
         )
     },
+
+    async transfer(
+        ownerAddress: string,
+        recipientAddress: string,
+        erc20TokenAddress: string,
+        amount: BigNumber,
+        receipt = false,
+    ) {
+        const erc20Contract = createERC20Contract(erc20TokenAddress)
+
+        // check balance
+        const balance = await erc20Contract.methods.balanceOf(ownerAddress).call()
+        if (new BigNumber(balance).lt(amount)) throw new Error('You do not have enough tokens to complete donation.')
+
+        return new Promise<{ erc20_transfer_transaction_hash: string; erc20_transfer_value: BigNumber }>(
+            (resolve, reject) => {
+                let txHash = ''
+                sendTx(
+                    erc20Contract.methods.transfer(recipientAddress, amount.toString()),
+                    {
+                        from: ownerAddress,
+                    },
+                    {
+                        onTransactionHash(hash) {
+                            txHash = hash
+                        },
+                        onReceipt() {
+                            if (receipt) {
+                                resolve({
+                                    erc20_transfer_transaction_hash: txHash,
+                                    erc20_transfer_value: amount,
+                                })
+                            }
+                        },
+                        onConfirmation() {
+                            resolve({
+                                erc20_transfer_transaction_hash: txHash,
+                                erc20_transfer_value: amount,
+                            })
+                        },
+                        onTransactionError: reject,
+                        onEstimateError: reject,
+                    },
+                )
+            },
+        )
+    },
 }
+
 export const gitcoinAPI = {
     dataSource: 'real' as const,
 

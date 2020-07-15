@@ -145,7 +145,6 @@ function TransferDialogUI(props: TransferDialogUIProps) {
                             defaultValue={props.nickname ? `(${props.nickname}) ${props.address}` : props.address}
                             type="string"
                             label="Recipient"
-                            disabled
                         />
                         <WalletSelect
                             wallets={props.wallets}
