@@ -1,9 +1,11 @@
 import * as RedPacket from '../../plugins/Wallet/red-packet-fsm'
 import * as Wallet from '../../plugins/Wallet/wallet'
 import * as Gitcoin from '../../plugins/Gitcoin/Services'
+import * as Transfer from '../../plugins/Transfer/Services'
 import type { ERC20TokenRecord, ManagedWalletRecord, ExoticWalletRecord } from '../../plugins/Wallet/database/types'
 
 const Plugins = {
+    'maskbook.transfer': Transfer,
     'maskbook.red_packet': RedPacket,
     'maskbook.wallet': Wallet,
     'co.gitcoin': Gitcoin,

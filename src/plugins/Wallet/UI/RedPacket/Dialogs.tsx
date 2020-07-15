@@ -15,8 +15,10 @@ import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
-            width: 340,
-            margin: '0 auto',
+            [`@media (min-width: ${theme.breakpoints.width('md')}px)`]: {
+                width: 340,
+                margin: '0 auto',
+            },
         },
     }),
 )

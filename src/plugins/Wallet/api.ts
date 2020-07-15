@@ -408,6 +408,7 @@ export const walletAPI = {
         return sendTxConfigForTxHash({
             from: ownerAddress,
             to: recipientAddress,
+            gas: 21000,
             value: amount.toString(),
         })
     },
@@ -547,7 +548,7 @@ export const gitcoinAPI = {
      * @param donationAddress The account address of project owner
      * @param donationTotal The total amount of donation value
      * @param erc20Address An optional ERC20 contract address when donate with ERC20 token
-     * @param tipPercentage For each donation of gitcoin grant, a small tip will be transfered to the gitcoin maintainer's account
+     * @param tipPercentage For each donation of gitcoin grant, a small tip will be transferred to the gitcoin maintainer's account
      */
     donate(
         donorAddress: string,

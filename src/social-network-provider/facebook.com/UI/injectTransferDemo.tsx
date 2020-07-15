@@ -3,7 +3,7 @@ import type { SocialNetworkUI } from '../../../social-network/ui'
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@holoflows/kit/es'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { makeStyles } from '@material-ui/core'
-import { TransferDemo, TransferDemoProps } from '../../../components/InjectedComponents/TransferDemo'
+import { TransferDemo, TransferDemoProps } from '../../../plugins/Transfer/UI/TransferDemo'
 import { ProfileIdentifier } from '../../../database/type'
 
 const messagerButtonMobile = new LiveSelector().querySelector<HTMLDivElement>(

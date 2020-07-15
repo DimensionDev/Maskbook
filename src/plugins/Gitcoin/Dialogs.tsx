@@ -18,8 +18,10 @@ import type { ERC20TokenDetails } from '../../extension/background-script/Plugin
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
-            width: 340,
-            margin: '0 auto',
+            [`@media (min-width: ${theme.breakpoints.width('md')}px)`]: {
+                width: 340,
+                margin: '0 auto',
+            },
         },
     }),
 )

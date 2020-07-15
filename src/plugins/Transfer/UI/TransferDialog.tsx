@@ -1,11 +1,10 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import {
     makeStyles,
     IconButton,
     DialogTitle,
     Typography,
     Divider,
-    Link,
     DialogContent,
     DialogActions,
     Button,
@@ -14,23 +13,23 @@ import {
     Theme,
     TextField,
 } from '@material-ui/core'
-import { getActivatedUI } from '../../social-network/ui'
+import { getActivatedUI } from '../../../social-network/ui'
 import {
     useTwitterButton,
     useTwitterCloseButton,
     useTwitterDialog,
-} from '../../social-network-provider/twitter.com/utils/theme'
-import { useStylesExtends } from '../custom-ui-helper'
-import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
-import { useSelectWallet } from '../../plugins/shared/useWallet'
-import type { WalletDetails, ERC20TokenDetails } from '../../extension/background-script/PluginService'
-import { EthereumTokenType } from '../../plugins/Wallet/database/types'
+} from '../../../social-network-provider/twitter.com/utils/theme'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
+import { useSelectWallet } from '../../shared/useWallet'
+import type { WalletDetails, ERC20TokenDetails } from '../../../extension/background-script/PluginService'
+import { EthereumTokenType } from '../../Wallet/database/types'
 import BigNumber from 'bignumber.js'
-import { formatBalance } from '../../plugins/Wallet/formatter'
-import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
-import { DialogDismissIconUI } from './DialogDismissIcon'
-import { WalletSelect } from '../../plugins/shared/WalletSelect'
-import { TokenSelect } from '../../plugins/shared/TokenSelect'
+import { formatBalance } from '../../Wallet/formatter'
+import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
+import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
+import { WalletSelect } from '../../shared/WalletSelect'
+import { TokenSelect } from '../../shared/TokenSelect'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -51,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface TransferPayload {
     amount: number
     address: string
+    recipientAddress: string
     token: ERC20TokenDetails
     tokenType: EthereumTokenType
 }
@@ -102,6 +102,7 @@ function TransferDialogUI(props: TransferDialogUIProps) {
         amount <= 0,
         selectedWallet === undefined,
         amount > (amountMaxNumber || 0),
+        props.address.toLowerCase() === selectedWallet?.address.toLowerCase(),
     ]
     const isButtonDisabled = isDisabled.some((x) => x)
 
@@ -145,6 +146,7 @@ function TransferDialogUI(props: TransferDialogUIProps) {
                             defaultValue={props.nickname ? `(${props.nickname}) ${props.address}` : props.address}
                             type="string"
                             label="Recipient"
+                            disabled
                         />
                         <WalletSelect
                             wallets={props.wallets}
@@ -190,6 +192,7 @@ function TransferDialogUI(props: TransferDialogUIProps) {
                         onClick={() =>
                             props.onTransfer({
                                 amount,
+                                recipientAddress: props.address,
                                 address: useSelectWalletResult.selectedWalletAddress!,
                                 token: useSelectWalletResult.selectedToken!,
                                 tokenType: useSelectWalletResult.selectedTokenType,

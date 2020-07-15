@@ -216,6 +216,17 @@ export interface ManagedWalletRecord extends WalletRecordProperties {
 }
 //#endregion
 
+//#region transfer
+export interface TransferPayload {
+    owner_address: string
+    recipient_address: string
+    transfer_total: BigNumber
+    network: EthereumNetwork
+    token_type: EthereumTokenType
+    token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
+}
+//#endregion
+
 //#region gitcoin
 export interface GitcoinDonationPayload {
     donor_address: string
