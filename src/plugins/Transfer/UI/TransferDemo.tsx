@@ -32,9 +32,6 @@ export function TransferDemo(props: TransferDemoProps) {
     const [transferPayload, setTransferPayload] = useState<TransferPayload | null>(null)
 
     const onTransfer = async (payload: TransferPayload) => {
-        console.log('DEBUG: transfer')
-        console.log(payload)
-
         const { amount, address, recipientAddress, token, tokenType } = payload
         if (!recipientAddress) return
         const power = tokenType === EthereumTokenType.ETH ? 18 : token!.decimals
@@ -60,10 +57,6 @@ export function TransferDemo(props: TransferDemoProps) {
 
     const recipientState = useAsync(async () => {
         if (!recipient) return
-
-        console.log(`DEUBG: recipient`)
-        console.log(recipient)
-
         const profile = await Services.Identity.queryProfile(recipient)
         const profileText = profile.linkedPersona?.identifier.toText()
         if (!profileText) return
