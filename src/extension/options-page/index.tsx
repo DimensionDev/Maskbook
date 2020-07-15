@@ -115,6 +115,7 @@ function DashboardUI() {
     // jump to persona if needed
     const { loading } = useAsync(async () => {
         if (webpackEnv.target === 'E2E' && location.hash.includes('noredirect=true')) return
+        if (location.hash.includes(SetupStep.ConsentDataCollection)) return
         const personas = (await Services.Identity.queryMyPersonas()).filter((x) => !x.uninitialized)
         if (!personas.length) history.replace(`${DashboardRoute.Setup}/${SetupStep.CreatePersona}`)
         if (personas.length !== 1) return
