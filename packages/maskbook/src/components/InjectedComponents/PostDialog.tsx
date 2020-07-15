@@ -47,6 +47,7 @@ import { PluginStage } from '../../plugins/types'
 import { Election2020MetadataReader } from '../../plugins/Election2020/helpers'
 import { COTM_MetadataReader } from '../../plugins/COTM/helpers'
 import { Flags } from '../../utils/flags'
+import Dropzone from '../shared/Dropzone'
 
 const defaultTheme = {}
 
@@ -90,6 +91,17 @@ export interface PostDialogUIProps extends withClasses<never> {
     DialogProps?: Partial<DialogProps>
     SelectRecipientsUIProps?: Partial<SelectRecipientsUIProps>
 }
+
+const readFileAsync: (file: File) => Promise<FileReader['result']> = (file: File) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+            resolve(reader.result)
+        }
+        reader.onerror = reject
+        reader.readAsArrayBuffer(file)
+    })
+}
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
@@ -101,6 +113,26 @@ export function PostDialogUI(props: PostDialogUIProps) {
         if (isTypedMessageText(msg)) props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
         else throw new Error('Not impled yet')
     }
+    const onImgChange = useCallback(
+        async (img: File) => {
+            // * not setting any images so that they are not stored by React
+            const imgBuffer = await readFileAsync(img)
+            console.debug('imgBuffer', imgBuffer)
+            if (!imgBuffer) {
+                console.debug('empty image, nothing to do')
+                return
+            }
+            // const [encrypted, token] = await Services.Crypto.encryptTo(
+            //     makeTypedMessage('some text to hide'),
+            //     [],
+            //     props.currentIdentity!.identifier,
+            //     true,
+            // )
+            // console.debug('encrypted', encrypted)
+            // console.debug('token', token)
+        },
+        [props.currentIdentity],
+    )
 
     if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
     const metadataBadge = [...PluginUI].flatMap((plugin) =>
@@ -232,7 +264,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 checked={props.imageEncrypt}
                                 label={t('post_dialog__image_encrypt')}
                                 onClick={() => props.onImageEncryptSwitchChanged(!props.imageEncrypt)}
-                                data-testid="TODOTODO" // ! TODO
+                                data-testid="image_encrypt_chip"
+                                disabled={props.imagePayload}
                             />
                             {isDebug && (
                                 <Chip label="Post metadata inspector" onClick={() => setShowPostMetadata((e) => !e)} />
@@ -245,7 +278,9 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 />
                             )}
                         </Box>
+                        <Box>{props.imageEncrypt && <Dropzone onImgChange={onImgChange} />}</Box>
                     </DialogContent>
+                    {/* TODO: not disabled when the image has been uploaded */}
                     <DialogActions>
                         {isTypedMessageText(props.postContent) && props.maxLength ? (
                             <CharLimitIndicator value={props.postContent.content.length} max={props.maxLength} />
