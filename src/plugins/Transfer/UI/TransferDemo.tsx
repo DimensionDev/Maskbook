@@ -92,7 +92,10 @@ export function TransferDemo(props: TransferDemoProps) {
                     recipientAddress={recipientAddress}
                     loading={loading}
                     onTransfer={onTransfer}
-                    onScan={() => setSelectCameraDialogOpen(true)}
+                    onScan={() => {
+                        if (webpackEnv.target === 'WKWebview') setQRCodeVideoScannerDialogOpen(true)
+                        else setSelectCameraDialogOpen(true)
+                    }}
                     onClose={() => {
                         setOpen(false)
                         if (status === 'initial') setScannedAddress(undefined)
@@ -102,15 +105,17 @@ export function TransferDemo(props: TransferDemoProps) {
                     {...props.TransferDialogProps}
                 />
             ) : null}
-            <SelectCameraDialog
-                open={selectCameraDialogOpen}
-                onConfirm={(id: string) => {
-                    setDeviceId(id)
-                    setQRCodeVideoScannerDialogOpen(true)
-                }}
-                onClose={() => setSelectCameraDialogOpen(false)}
-            />
-            {deviceId ? (
+            {webpackEnv.target === 'WKWebview' ? null : (
+                <SelectCameraDialog
+                    open={selectCameraDialogOpen}
+                    onConfirm={(id: string) => {
+                        setDeviceId(id)
+                        setQRCodeVideoScannerDialogOpen(true)
+                    }}
+                    onClose={() => setSelectCameraDialogOpen(false)}
+                />
+            )}
+            {webpackEnv.target === 'WKWebview' || deviceId ? (
                 <QRCodeVideoScannerDialog
                     open={QRCodeVideoScannerDialogOpen}
                     deviceId={deviceId}

@@ -21,8 +21,8 @@ export function QRCodeVideoScanner({
     VideoProps,
 }: QRCodeVideoScannerProps) {
     const videoRef = useRef<HTMLVideoElement | null>(null)
-    useQRCodeVideoScan(videoRef, scanning, deviceId, onScan, onError)
 
+    useQRCodeVideoScan(videoRef, scanning, deviceId, onScan, onError)
     return hasWKWebkitRPCHandlers ? (
         <WKWebkitQRScanner onScan={onScan} onQuit={onQuit} />
     ) : (
