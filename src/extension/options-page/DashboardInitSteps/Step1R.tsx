@@ -95,7 +95,7 @@ export default function InitStep1R() {
                 if (!json) throw new Error('UpgradeBackupJSONFile failed')
                 setJson(json)
                 const permissions = await extraPermissions(json.grantedHostPermissions)
-                if (!permissions) {
+                if (permissions.length) {
                     const restoreParams = new URLSearchParams()
                     restoreParams.append('personas', String(json.personas?.length ?? ''))
                     restoreParams.append('profiles', String(json.profiles?.length ?? ''))
