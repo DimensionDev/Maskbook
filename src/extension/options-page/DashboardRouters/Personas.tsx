@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) =>
             marginLeft: -4,
             paddingLeft: 4,
 
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
             [theme.breakpoints.down('xs')]: {
                 margin: 0,
                 paddingLeft: 0,
