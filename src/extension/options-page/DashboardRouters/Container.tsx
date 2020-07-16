@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, createStyles, Typography, Divider, Fade } from '@material-ui/core'
+import { makeStyles, createStyles, Typography, Divider, Fade, useMediaQuery, Theme } from '@material-ui/core'
 import classNames from 'classnames'
 import { getUrl } from '../../../utils/utils'
 
@@ -15,6 +15,10 @@ interface DashboardRouterContainerProps {
      * add or remove the placeholder
      */
     empty?: boolean
+    /**
+     * add or remove the padding of scroller
+     */
+    compact?: boolean
 }
 
 const useStyles = makeStyles((theme) => {
@@ -49,6 +53,10 @@ const useStyles = makeStyles((theme) => {
                 display: 'none',
             },
         },
+        scrollerCompact: {
+            paddingLeft: '0 !important',
+            paddingRight: '0 !important',
+        },
         titleAction: {
             display: 'flex',
             flexDirection: 'row',
@@ -59,7 +67,7 @@ const useStyles = makeStyles((theme) => {
             [theme.breakpoints.down('xs')]: {
                 height: 'auto',
                 flexDirection: 'column',
-                padding: theme.spacing(2),
+                padding: theme.spacing(2, 0),
             },
         },
         title: {
@@ -68,8 +76,10 @@ const useStyles = makeStyles((theme) => {
             fontSize: 40,
             lineHeight: 1.2,
             [theme.breakpoints.down('xs')]: {
-                fontSize: 28,
-                marginBottom: theme.spacing(1),
+                fontSize: 20,
+                fontWeight: 500,
+                lineHeight: 1.2,
+                marginBottom: 0,
             },
         },
         content: {
@@ -77,15 +87,6 @@ const useStyles = makeStyles((theme) => {
             flexDirection: 'column',
             overflow: 'hidden',
             position: 'relative',
-        },
-        dividerPadded: {
-            padding: '0 24px 0 34px',
-            [theme.breakpoints.down('xs')]: {
-                padding: theme.spacing(0, 2),
-            },
-        },
-        divider: {
-            backgroundColor: theme.palette.divider,
         },
         contentPadded: {
             '& > *': {
@@ -104,6 +105,20 @@ const useStyles = makeStyles((theme) => {
                 },
             },
         },
+        divider: {
+            backgroundColor: theme.palette.divider,
+        },
+        dividerPadded: {
+            padding: '0 24px 0 34px',
+            [theme.breakpoints.down('xs')]: {
+                padding: theme.spacing(0, 2),
+            },
+        },
+        dividerCompact: {
+            [theme.breakpoints.down('xs')]: {
+                padding: '0 !important',
+            },
+        },
         buttons: {
             '& > *': {
                 margin: theme.spacing(0, 1),
@@ -113,11 +128,13 @@ const useStyles = makeStyles((theme) => {
 })
 
 export default function DashboardRouterContainer(props: DashboardRouterContainerProps) {
-    const { title, actions, children, padded, empty } = props
+    const { title, actions, children, padded, empty, compact = false } = props
     const isSetup = location.hash.includes('/setup')
     const classes = useStyles({
         isSetup,
     })
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
+
     return (
         <Fade in>
             <section className={classes.wrapper}>
@@ -131,13 +148,19 @@ export default function DashboardRouterContainer(props: DashboardRouterContainer
                                 {actions?.map((action, index) => React.cloneElement(action, { key: index }))}
                             </div>
                         </section>
-                        <div className={classNames({ [classes.dividerPadded]: padded !== false })}>
+                        <div
+                            className={classNames({
+                                [classes.dividerPadded]: padded !== false,
+                                [classes.dividerCompact]: compact !== false,
+                            })}>
                             <Divider className={classes.divider} />
                         </div>
                     </>
                 )}
                 <main className={classNames(classes.content, { [classes.contentPadded]: padded !== false })}>
-                    <div className={classes.scroller}>{children}</div>
+                    <div className={classNames(classes.scroller, { [classes.scrollerCompact]: compact !== false })}>
+                        {children}
+                    </div>
                     {empty ? <div className={classes.placeholder}></div> : null}
                 </main>
             </section>
