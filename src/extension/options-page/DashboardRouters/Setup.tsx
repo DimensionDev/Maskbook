@@ -1,4 +1,4 @@
-import React, { useState, useCallback, ChangeEvent } from 'react'
+import React, { useState, ChangeEvent } from 'react'
 import {
     Typography,
     Theme,
@@ -26,7 +26,7 @@ import { useAsync } from 'react-use'
 import { Identifier, ECKeyIdentifier } from '../../../database/type'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useMyPersonas, useMyUninitializedPersonas } from '../../../components/DataSource/independent'
-import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import { extraPermissions } from '../../../utils/permissions'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
@@ -421,6 +421,7 @@ export function RestoreDatabase() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
     const [file, setFile] = useState<File | null>(null)
+    const [json, setJSON] = useState<BackupJSONFileLatest | null>(null)
     const [backupValue, setBackupValue] = useState('')
     const [textValue, setTextValue] = useState('')
 
@@ -463,30 +464,30 @@ export function RestoreDatabase() {
         state,
         height: 176,
     }
+    const permissionState = useAsync(async () => {
+        const json = UpgradeBackupJSONFile(decompressBackupFile(state[0] === 0 ? backupValue : textValue))
+        setJSON(json)
+        if (!json) throw new Error('UpgradeBackupJSONFile failed')
+        return extraPermissions(json.grantedHostPermissions)
+    }, [backupValue, textValue])
 
-    const restoreDB = useCallback(
-        async (str: string) => {
-            try {
-                const json = UpgradeBackupJSONFile(decompressBackupFile(str))
-                if (!json) throw new Error('UpgradeBackupJSONFile failed')
-
-                // grant permissions before jump into confirmation page
-                const permissions = await extraPermissions(json.grantedHostPermissions)
-                if (permissions) {
-                    const granted = await browser.permissions.request({ origins: permissions ?? [] })
-                    if (!granted) return
-                }
-                const restoreParams = new URLSearchParams()
-                const restoreId = uuid()
-                restoreParams.append('uuid', restoreId)
-                await Services.Welcome.setUnconfirmedBackup(restoreId, json)
-                history.push(`${SetupStep.RestoreDatabaseConfirmation}?${restoreParams.toString()}`)
-            } catch (e) {
-                enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
+    const restoreDB = async () => {
+        try {
+            if (!json) return
+            const permissions = permissionState.value ?? []
+            if (permissions.length) {
+                const granted = await browser.permissions.request({ origins: permissions ?? [] })
+                if (!granted) return
             }
-        },
-        [enqueueSnackbar, history, t],
-    )
+            const restoreParams = new URLSearchParams()
+            const restoreId = uuid()
+            restoreParams.append('uuid', restoreId)
+            await Services.Welcome.setUnconfirmedBackup(restoreId, json)
+            history.push(`${SetupStep.RestoreDatabaseConfirmation}?${restoreParams.toString()}`)
+        } catch (e) {
+            enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
+        }
+    }
 
     return (
         <SetupForm
@@ -499,8 +500,13 @@ export function RestoreDatabase() {
                         className={classNames(classes.button, classes.restoreButton)}
                         color="primary"
                         variant="contained"
-                        disabled={!(state[0] === 0 && backupValue) && !(state[0] === 1 && textValue)}
-                        onClick={() => restoreDB(state[0] === 0 ? backupValue : textValue)}
+                        disabled={
+                            (!(state[0] === 0 && backupValue) && !(state[0] === 1 && textValue)) ||
+                            !json ||
+                            permissionState.loading ||
+                            !!permissionState.error
+                        }
+                        onClick={restoreDB}
                         data-testid="restore_button">
                         {t('set_up_button_restore')}
                     </ActionButton>
