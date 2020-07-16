@@ -39,12 +39,13 @@ export function RestoreFromQRCodeCameraBox(props: RestoreFromQRCodeCameraBoxProp
     const [qrCodeVideoScannerDialog, , openQRCodeVideoScannerDialog] = useModal(QRCodeVideoScannerDialog)
 
     const devices = useVideoDevices()
+    const filteredDevices = devices.filter((d) => !!d.deviceId)
     const [selectedDeviceId, setSelectedDeviceId] = useState('')
 
     // set default device id
     useEffect(() => {
-        if (!selectedDeviceId && devices[0]?.deviceId) setSelectedDeviceId(devices[0]?.deviceId)
-    }, [devices, selectedDeviceId])
+        if (!selectedDeviceId && filteredDevices[0]?.deviceId) setSelectedDeviceId(filteredDevices[0]?.deviceId)
+    }, [filteredDevices, selectedDeviceId])
 
     return (
         <Box className={classes.root} display="flex" justifyContent="space-between">
@@ -57,7 +58,7 @@ export function RestoreFromQRCodeCameraBox(props: RestoreFromQRCodeCameraBoxProp
                         classes: { paper: classes.menuPaper },
                     }}
                     onChange={(e) => setSelectedDeviceId(e.target.value as string)}>
-                    {devices.map(({ deviceId, label }) => (
+                    {filteredDevices.map(({ deviceId, label }) => (
                         <MenuItem key={deviceId} value={deviceId}>
                             {label}
                         </MenuItem>

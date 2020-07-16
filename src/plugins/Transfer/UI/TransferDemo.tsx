@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { TransferButton, TransferButtonProps } from '../../../components/InjectedComponents/TransferButton'
 import { TransferDialogProps, TransferDialog, TransferPayload } from './TransferDialog'
 import { useWallet } from '../../shared/useWallet'
-import { TransferSuccessDialog, TransferFailDialog } from './Dialogs'
+import { TransferSuccessDialog, TransferFailDialog, SelectCameraDialog, QRCodeVideoScannerDialog } from './Dialogs'
 import type { ValueRef } from '@holoflows/kit/es'
 import type { ProfileIdentifier } from '../../../database/type'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
@@ -26,7 +26,12 @@ export function TransferDemo(props: TransferDemoProps) {
     const { data } = useWallet()
     const { wallets, tokens } = data ?? {}
 
-    const [status, setStatus] = useState<'succeed' | 'failed' | 'undetermined' | 'initial'>('initial')
+    const [scannedAddress, setScannedAddress] = useState<string | undefined>(undefined)
+    const [deviceId, setDeviceId] = useState('')
+    const [selectCameraDialogOpen, setSelectCameraDialogOpen] = useState(false)
+    const [QRCodeVideoScannerDialogOpen, setQRCodeVideoScannerDialogOpen] = useState(false)
+
+    const [status, setStatus] = useState<'succeed' | 'failed' | 'malformed' | 'undetermined' | 'initial'>('initial')
     const loading = status === 'undetermined'
     const [transferError, setTransferError] = useState<Error | null>(null)
     const [transferPayload, setTransferPayload] = useState<TransferPayload | null>(null)
@@ -53,7 +58,10 @@ export function TransferDemo(props: TransferDemoProps) {
             setStatus('failed')
         }
     }
-    const onClose = () => setStatus('initial')
+    const onClose = () => {
+        setStatus('initial')
+        setScannedAddress(undefined)
+    }
 
     const recipientState = useAsync(async () => {
         if (!recipient) return
@@ -63,35 +71,66 @@ export function TransferDemo(props: TransferDemoProps) {
         return {
             address: await Services.Plugin.invokePlugin('maskbook.transfer', 'ethAddrFrom', profileText),
             persona: profile.linkedPersona,
+            profile,
         }
     }, [recipient?.toText()])
     if (recipientState.loading || !recipientState.value?.address || !recipientState.value?.persona) return null
+    const recipientNickname = scannedAddress ? undefined : recipientState.value.profile.nickname
+    const recipientAddress = scannedAddress ?? recipientState.value.address
     return (
         <>
             <TransferButton onClick={() => setOpen(true)} {...props.TransferButtonProps} />
             {wallets?.length ? (
                 <TransferDialog
                     open={open}
-                    address={recipientState.value.address}
-                    nickname={recipientState.value.persona.nickname}
+                    recipient={recipientNickname}
+                    recipientAddress={recipientAddress}
                     loading={loading}
                     onTransfer={onTransfer}
-                    onClose={() => setOpen(false)}
+                    onScan={() => setSelectCameraDialogOpen(true)}
+                    onClose={() => {
+                        setOpen(false)
+                        if (status === 'initial') setScannedAddress(undefined)
+                    }}
                     wallets={wallets}
                     tokens={tokens}
                     {...props.TransferDialogProps}
                 />
             ) : null}
+            <SelectCameraDialog
+                open={selectCameraDialogOpen}
+                onConfirm={(id: string) => {
+                    setDeviceId(id)
+                    setQRCodeVideoScannerDialogOpen(true)
+                }}
+                onClose={() => setSelectCameraDialogOpen(false)}
+            />
+            {deviceId ? (
+                <QRCodeVideoScannerDialog
+                    open={QRCodeVideoScannerDialogOpen}
+                    deviceId={deviceId}
+                    onScan={async (content) => {
+                        const address = await Services.Plugin.invokePlugin('maskbook.transfer', 'parseEthAddr', content)
+                        if (address) setScannedAddress(address)
+                        else {
+                            setTransferError(new Error(`${content} is not a valid ethereum address.`))
+                            setStatus('malformed')
+                        }
+                    }}
+                    onClose={() => setQRCodeVideoScannerDialogOpen(false)}
+                />
+            ) : null}
             <TransferSuccessDialog
                 open={status === 'succeed'}
-                recipient={recipientState.value.persona.nickname}
-                recipientAddress={recipientState.value.address}
+                recipient={recipientNickname}
+                recipientAddress={recipientAddress}
                 amount={transferPayload?.amount!}
                 token={transferPayload?.token!}
                 tokenType={transferPayload?.tokenType!}
                 onClose={onClose}></TransferSuccessDialog>
             <TransferFailDialog
-                open={status === 'failed'}
+                open={status === 'failed' || status === 'malformed'}
+                title={status === 'malformed' ? 'Invalid Address' : undefined}
                 message={transferError?.message}
                 onClose={onClose}></TransferFailDialog>
         </>

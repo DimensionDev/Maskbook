@@ -7,6 +7,7 @@ import {
     SelectProps,
     FormControlProps,
     DialogProps,
+    InputProps,
 } from '@material-ui/core'
 import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 import type { useSelectWallet } from './useWallet'
@@ -16,6 +17,7 @@ interface WalletSelectProps {
     useSelectWalletHooks: ReturnType<typeof useSelectWallet>
     wallets: WalletDetails[] | undefined
     className?: string
+    InputProps?: InputProps
     SelectProps?: SelectProps
     FormControlProps?: FormControlProps
     DialogProps?: Partial<DialogProps>
@@ -37,9 +39,9 @@ export function WalletSelect({ useSelectWalletHooks, wallets, ...props }: Wallet
             <Select
                 {...SelectProps}
                 onChange={(e) => setSelectedWalletAddress(e.target.value as string)}
-                MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}
                 disabled={!wallets}
-                value={selectedWalletAddress || ''}>
+                value={selectedWalletAddress || ''}
+                MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}>
                 {!wallets
                     ? null
                     : wallets.map((x) => (

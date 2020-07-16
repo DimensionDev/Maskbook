@@ -18,6 +18,7 @@ interface Services {
     Helper: typeof import('./background-script/HelperService')
     Nonce: typeof import('./background-script/NonceService')
     Provider: typeof import('./background-script/ProviderService')
+    QRCode: typeof import('./background-script/QRCodeService')
 }
 const Services = {} as Services
 export default Services
@@ -41,6 +42,7 @@ if (!('Services' in globalThis)) {
     register(createProxyToService('HelperService'), 'Helper', {})
     register(createProxyToService('NonceService'), 'Nonce', {})
     register(createProxyToService('ProviderService'), 'Provider', {})
+    register(createProxyToService('QRCodeService'), 'QRCode', {})
 }
 interface ServicesWithProgress {
     // Sorry you should add import at '../_background_loader.1.ts'

@@ -58,8 +58,6 @@ export function injectTransferDemoAtFacebook(this: SocialNetworkUI) {
         .useForeach(() => {
             const recipientRef = new ValueRef<ProfileIdentifier | null>(getCurrentIdentity())
             const update = () => {
-                console.log(`DEBUG: update`)
-                console.log(getCurrentIdentity())
                 recipientRef.value = getCurrentIdentity()
             }
             const unmount = renderInShadowRoot(<TransferDemoAtFacebook recipientRef={recipientRef} />, {

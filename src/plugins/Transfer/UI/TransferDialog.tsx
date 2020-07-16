@@ -12,7 +12,9 @@ import {
     createStyles,
     Theme,
     TextField,
+    InputAdornment,
 } from '@material-ui/core'
+import CropFreeIcon from '@material-ui/icons/CropFree'
 import { getActivatedUI } from '../../../social-network/ui'
 import {
     useTwitterButton,
@@ -70,10 +72,11 @@ interface TransferDialogUIProps
         | 'button'
     > {
     loading: boolean
-    nickname?: string
-    address: string
+    recipient?: string
+    recipientAddress: string
     open: boolean
     onTransfer(opt: TransferPayload): Promise<void> | void
+    onScan(): void
     onClose(): void
     wallets: WalletDetails[] | undefined
     tokens: ERC20TokenDetails[] | undefined
@@ -102,11 +105,11 @@ function TransferDialogUI(props: TransferDialogUIProps) {
         amount <= 0,
         selectedWallet === undefined,
         amount > (amountMaxNumber || 0),
-        props.address.toLowerCase() === selectedWallet?.address.toLowerCase(),
+        props.recipientAddress.toLowerCase() === selectedWallet?.address.toLowerCase(),
     ]
     const isButtonDisabled = isDisabled.some((x) => x)
 
-    if (!props.address) return null
+    if (!props.recipientAddress) return null
     return (
         <div className={classes.root}>
             <ShadowRootDialog
@@ -143,10 +146,27 @@ function TransferDialogUI(props: TransferDialogUIProps) {
                             }}
                             variant="filled"
                             fullWidth
-                            defaultValue={props.nickname ? `(${props.nickname}) ${props.address}` : props.address}
+                            value={
+                                props.recipient
+                                    ? `(${props.recipient}) ${props.recipientAddress}`
+                                    : props.recipientAddress
+                            }
                             type="string"
                             label="Recipient"
-                            disabled
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            size="small"
+                                            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                                e.stopPropagation()
+                                                props.onScan()
+                                            }}>
+                                            <CropFreeIcon />
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
                         <WalletSelect
                             wallets={props.wallets}
@@ -192,7 +212,7 @@ function TransferDialogUI(props: TransferDialogUIProps) {
                         onClick={() =>
                             props.onTransfer({
                                 amount,
-                                recipientAddress: props.address,
+                                recipientAddress: props.recipientAddress,
                                 address: useSelectWalletResult.selectedWalletAddress!,
                                 token: useSelectWalletResult.selectedToken!,
                                 tokenType: useSelectWalletResult.selectedTokenType,

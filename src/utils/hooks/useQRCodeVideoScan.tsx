@@ -78,6 +78,7 @@ export function useQRCodeVideoScan(
                 const [result] = await scanner.current.detect(video.current)
                 if (result) onResult?.(result.rawValue)
             } catch (e) {
+                console.error(e)
                 errorTimes.current += 1
             } finally {
                 lastScanning.current = false
