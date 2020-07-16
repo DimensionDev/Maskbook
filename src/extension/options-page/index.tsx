@@ -39,6 +39,7 @@ import { RequestPermissionPage } from '../../components/RequestPermission/Reques
 import { grey } from '@material-ui/core/colors'
 import { DashboardSnackbarProvider } from './DashboardComponents/DashboardSnackbar'
 import { SetupStep } from './SetupStep'
+import DashboardNavRouter from './DashboardRouters/Nav'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.type === 'dark'
@@ -120,14 +121,22 @@ function DashboardUI() {
         )
     }, [])
 
+    const drawer = <Drawer routers={routers} exitDashboard={null} />
+
     return (
         <DashboardBlurContextUI>
             <div className={classes.wrapper}>
                 <div className={classes.container}>
                     {loading ? null : (
                         <>
-                            {xsMatched ? null : <Drawer routers={routers} exitDashboard={null} />}
+                            {xsMatched ? null : drawer}
                             <Switch>
+                                {xsMatched ? (
+                                    <Route
+                                        path={DashboardRoute.Nav}
+                                        component={() => <DashboardNavRouter children={drawer} />}
+                                    />
+                                ) : null}
                                 <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
                                 <Route path={DashboardRoute.Wallets} component={DashboardWalletsRouter} />
                                 <Route path={DashboardRoute.Contacts} component={DashboardContactsRouter} />
@@ -135,12 +144,6 @@ function DashboardUI() {
                                 <Route path={DashboardRoute.Setup} component={DashboardSetupRouter} />
                                 {/* // TODO: this page should be boardless */}
                                 <Route path={DashboardRoute.RequestPermission} component={RequestPermissionPage} />
-                                <DialogRouter
-                                    path="/initialize"
-                                    component={DashboardInitializeDialog}
-                                    onExit={'/'}
-                                    fullscreen
-                                />
                                 <Redirect path="*" to={DashboardRoute.Personas} />
                             </Switch>
                         </>
