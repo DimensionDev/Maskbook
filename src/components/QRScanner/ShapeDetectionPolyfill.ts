@@ -4,6 +4,7 @@ import Services from '../../extension/service'
 
 class BarcodeDetectorPolyfill implements BarcodeDetector {
     public async detect(mediaSource: HTMLVideoElement) {
+        if (!mediaSource.videoWidth || !mediaSource.videoHeight) return []
         const canvas = document.createElement('canvas')
         const resizedWidth = Math.min(mediaSource.videoWidth, 500)
         const resizedHeight = Math.floor((resizedWidth * mediaSource.videoHeight) / mediaSource.videoWidth)

@@ -36,6 +36,11 @@ export function TransferDemo(props: TransferDemoProps) {
     const [transferError, setTransferError] = useState<Error | null>(null)
     const [transferPayload, setTransferPayload] = useState<TransferPayload | null>(null)
 
+    const onRequest = () => {
+        if (!wallets) return
+        if (wallets.length === 0) Services.Provider.requestConnectWallet()
+        else setOpen(true)
+    }
     const onTransfer = async (payload: TransferPayload) => {
         const { amount, address, recipientAddress, token, tokenType } = payload
         if (!recipientAddress) return
@@ -79,7 +84,7 @@ export function TransferDemo(props: TransferDemoProps) {
     const recipientAddress = scannedAddress ?? recipientState.value.address
     return (
         <>
-            <TransferButton onClick={() => setOpen(true)} {...props.TransferButtonProps} />
+            <TransferButton onClick={onRequest} {...props.TransferButtonProps} />
             {wallets?.length ? (
                 <TransferDialog
                     open={open}
