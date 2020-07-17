@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-import type { WebsocketProvider } from 'web3-core'
+import type { HttpProvider } from 'web3-core'
 import { PluginMessageCenter } from '../PluginMessages'
 import { sideEffect } from '../../utils/side-effects'
 import { currentEthereumNetworkSettings } from '../../settings/settings'
@@ -10,16 +10,16 @@ import { OnlyRunInContext } from '@holoflows/kit/es'
 OnlyRunInContext('background', 'web3')
 
 export const web3 = new Web3()
-export const pool = new Map<string, WebsocketProvider>()
+export const pool = new Map<string, HttpProvider>()
 
-let provider: WebsocketProvider
+let provider: HttpProvider
 
 export const resetProvider = () => {
     const url = getNetworkSettings().middlewareAddress
     provider = pool.has(url)
         ? pool.get(url)!
         : // more: https://github.com/ethereum/web3.js/blob/1.x/packages/web3-providers-ws/README.md
-          new Web3.providers.WebsocketProvider(url, {
+          new Web3.providers.HttpProvider(url, {
               timeout: 5000, // ms
               // @ts-ignore
               clientConfig: {
@@ -33,7 +33,7 @@ export const resetProvider = () => {
                   onTimeout: true,
               },
           })
-    if (pool.has(url)) provider.reset()
+    if (pool.has(url)) provider.disconnect()
     else pool.set(url, provider)
     web3.setProvider(provider)
 }
