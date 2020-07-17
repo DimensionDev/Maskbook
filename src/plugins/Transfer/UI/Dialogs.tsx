@@ -201,6 +201,10 @@ export function SelectCameraDialog(props: SelectCameraDialogProps) {
     const filteredDevices = devices.filter((d) => !!d.deviceId)
     const [selectedDeviceId, setSelectedDeviceId] = useState('')
 
+    console.log(`DEBUG: select camera dialog`)
+    console.log(permissionState)
+    console.log(devices)
+
     // set default device id
     useEffect(() => {
         if (permissionState !== 'granted') return
