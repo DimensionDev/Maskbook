@@ -13,7 +13,6 @@ import {
     ListItemIcon,
     SelectProps,
     createStyles,
-    IconButton,
 } from '@material-ui/core'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { useStylesExtends } from '../custom-ui-helper'
@@ -103,9 +102,7 @@ export function SettingsUIDummy(props: Omit<SettingsUIProps<null>, 'value'> & { 
             button
             action={
                 <ListItemSecondaryAction onClick={props.onClick}>
-                    <IconButton>
-                        <ArrowForwardIosIcon classes={{ root: classes.arrowIcon }} />
-                    </IconButton>
+                    <ArrowForwardIosIcon classes={{ root: classes.arrowIcon }} />
                 </ListItemSecondaryAction>
             }
         />

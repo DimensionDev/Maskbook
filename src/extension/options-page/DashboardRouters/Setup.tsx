@@ -130,11 +130,11 @@ function SetupForm(props: SetupFormProps) {
         <Fade in>
             <div className={classes.wrapper}>
                 <div className={classes.section}>
-                    <Typography className={classes.primary} variant="h5">
+                    <Typography className={classes.primary} variant="h5" color="textPrimary">
                         {props.primary}
                     </Typography>
                     {props.secondary ? (
-                        <Typography className={classes.secondary} variant="body1">
+                        <Typography className={classes.secondary} variant="body1" color="textPrimary">
                             {props.secondary}
                         </Typography>
                     ) : null}

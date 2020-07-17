@@ -5,6 +5,8 @@ import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/cor
 
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import AddIcon from '@material-ui/icons/Add'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
+import RestoreIcon from '@material-ui/icons/Restore'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import HistoryIcon from '@material-ui/icons/History'
 
@@ -36,6 +38,7 @@ import { currentEthereumNetworkSettings } from '../../../settings/settings'
 import { useWallet } from '../../../plugins/shared/useWallet'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
 import type { RedPacketRecord } from '../../../plugins/Wallet/database/types'
+import { useHistory } from 'react-router-dom'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -157,7 +160,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
             <ThemeProvider theme={walletTheme}>
                 <Box pt={3} pb={2} pl={3} pr={2} display="flex" alignItems="center">
                     <Typography className={classes.title} variant="h5">
-                        {t('details')}
+                        {webpackEnv.responsiveTarget === 'xs' ? wallet.name ?? wallet.address : t('details')}
                     </Typography>
                     <Button
                         className={classes.addButton}
@@ -245,6 +248,10 @@ const useStyles = makeStyles((theme) =>
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
+            [theme.breakpoints.down('xs')]: {
+                width: '100%',
+                borderRight: 'none',
+            },
         },
         content: {
             width: '100%',
@@ -252,6 +259,7 @@ const useStyles = makeStyles((theme) =>
             flex: '1 1 auto',
             display: 'flex',
             flexDirection: 'column',
+            [theme.breakpoints.down('xs')]: {},
         },
         wrapper: {
             display: 'flex',
@@ -264,8 +272,10 @@ const useStyles = makeStyles((theme) =>
 export default function DashboardWalletsRouter() {
     const classes = useStyles()
     const { t } = useI18N()
+    const history = useHistory()
     const { error } = useQueryParams(['error'])
     const { rpid } = useQueryParams(['rpid'])
+    const xsMatched = webpackEnv.responsiveTarget === 'xs'
 
     const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
@@ -303,6 +313,7 @@ export default function DashboardWalletsRouter() {
     // auto select first wallet
     useEffect(() => {
         if (current) return
+        if (webpackEnv.responsiveTarget === 'xs') return
         const first = wallets?.[0]?.address
         if (first) setCurrent(first)
     }, [current, wallets])
@@ -322,6 +333,12 @@ export default function DashboardWalletsRouter() {
         )
     }, [rpid, openWalletRedPacketDetail])
 
+    const walletContent = (
+        <div className={classes.wrapper}>
+            {currentWallet && <WalletContent wallet={currentWallet} tokens={getTokensForWallet(currentWallet)} />}
+        </div>
+    )
+
     return (
         <DashboardRouterContainer
             padded={false}
@@ -339,17 +356,40 @@ export default function DashboardWalletsRouter() {
                     data-testid="create_button">
                     {t('create_wallet')}
                 </Button>,
-            ]}>
+            ]}
+            leftIcons={[
+                <IconButton
+                    onClick={() => {
+                        if (current) setCurrent('')
+                        else history.goBack()
+                    }}>
+                    <ArrowBackIosIcon />
+                </IconButton>,
+            ]}
+            rightIcons={
+                current
+                    ? []
+                    : [
+                          <IconButton onClick={openWalletImport}>
+                              <RestoreIcon />
+                          </IconButton>,
+                          <IconButton onClick={openWalletCreate}>
+                              <AddIcon />
+                          </IconButton>,
+                      ]
+            }>
             <div className={classes.root}>
-                {wallets?.length ? (
+                {wallets?.length && !(xsMatched && current) ? (
                     <div className={classes.scroller}>
                         {wallets.map((wallet) => (
                             <WalletItem
                                 key={wallet.address}
                                 onClick={async () => {
-                                    setCurrent('an_adsent_wallet_address')
-                                    // for animation purpose
-                                    await sleep(100)
+                                    if (!xsMatched) {
+                                        setCurrent('an_adsent_wallet_address')
+                                        // for animation purpose
+                                        await sleep(100)
+                                    }
                                     setCurrent(wallet.address)
                                 }}
                                 wallet={wallet}
@@ -360,13 +400,7 @@ export default function DashboardWalletsRouter() {
                     </div>
                 ) : null}
                 <div className={classes.content}>
-                    <Fade in={Boolean(current)}>
-                        <div className={classes.wrapper}>
-                            {currentWallet && (
-                                <WalletContent wallet={currentWallet} tokens={getTokensForWallet(currentWallet)} />
-                            )}
-                        </div>
-                    </Fade>
+                    {xsMatched ? walletContent : <Fade in={Boolean(current)}>{walletContent}</Fade>}
                 </div>
             </div>
             {walletImport}

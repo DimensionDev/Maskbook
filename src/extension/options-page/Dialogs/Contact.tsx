@@ -7,7 +7,7 @@ import Services from '../../service'
 import ActionButton, { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { UserMinus } from 'react-feather'
+import { UserMinus, Search } from 'react-feather'
 
 interface ContactProps {
     contact: Profile
@@ -39,7 +39,7 @@ export function DashboardContactDeleteConfirmDialog(
         },
     )
     return (
-        <DashboardDialogCore {...props}>
+        <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 size="small"
                 icon={<UserMinus />}
@@ -117,6 +117,52 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactProps & 
                         </DebounceButton>
                         <ActionButton variant="outlined" color="default" onClick={props.onClose}>
                             {t('cancel')}
+                        </ActionButton>
+                    </SpacedButtonGroup>
+                }></DashboardDialogWrapper>
+        </DashboardDialogCore>
+    )
+}
+
+export function DashboardContactSearchDialog(props: WrappedDialogProps<{ onSearch: (text: string) => void }>) {
+    const { t } = useI18N()
+    const { onSearch } = props.ComponentProps!
+    const [text, setText] = useState('')
+
+    const searchText = () => {
+        if (!text) return
+        props.onClose()
+        onSearch(text)
+    }
+
+    return (
+        <DashboardDialogCore fullScreen={false} {...props}>
+            <DashboardDialogWrapper
+                size="small"
+                icon={<Search />}
+                iconColor="#5FDD97"
+                primary={t('search_contact')}
+                content={
+                    <form>
+                        <TextField
+                            autoFocus
+                            required
+                            label={t('keywords')}
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault()
+                                    searchText()
+                                }
+                            }}
+                        />
+                    </form>
+                }
+                footer={
+                    <SpacedButtonGroup>
+                        <ActionButton variant="contained" color="primary" disabled={!text} onClick={searchText}>
+                            {t('search')}
                         </ActionButton>
                     </SpacedButtonGroup>
                 }></DashboardDialogWrapper>

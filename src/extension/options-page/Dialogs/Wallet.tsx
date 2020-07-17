@@ -384,7 +384,7 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
         props.onClose,
     )
     return (
-        <DashboardDialogCore {...props}>
+        <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 size="small"
                 primary={t('wallet_new_name')}
@@ -428,7 +428,7 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
         props.onClose,
     )
     return (
-        <DashboardDialogCore {...props}>
+        <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 size="small"
                 icon={<CreditCardIcon />}
@@ -467,7 +467,7 @@ export function DashboardWalletHideTokenConfirmDialog(
         props.onClose,
     )
     return (
-        <DashboardDialogCore {...props}>
+        <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 size="small"
                 icon={<TrashIcon />}

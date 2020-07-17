@@ -1,20 +1,9 @@
 import React, { useState } from 'react'
 import classNames from 'classnames'
-import {
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    Typography,
-    Box,
-    Fade,
-    useMediaQuery,
-    Divider,
-} from '@material-ui/core'
+import { List, ListItem, ListItemIcon, ListItemText, Typography, Box, Fade, Divider } from '@material-ui/core'
 import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Link, useRouteMatch } from 'react-router-dom'
 import { useInterval } from 'react-use'
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
 import { useModal } from '../Dialogs/Base'
@@ -53,12 +42,13 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'visible',
         position: 'relative',
         [theme.breakpoints.down('xs')]: {
+            color: theme.palette.text.primary,
             width: '100%',
         },
     },
     drawerHeader: {
-        padding: theme.spacing(4, 2, 3, 4),
         color: 'white',
+        padding: theme.spacing(4, 2, 3, 4),
         backgroundColor: 'var(--drawerHeader)',
     },
     drawerBody: {
@@ -79,11 +69,17 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: 16,
         [theme.breakpoints.down('xs')]: {
             borderLeft: 'none',
-            padding: theme.spacing(4, 0),
+            padding: theme.spacing(3, 0),
+        },
+    },
+    drawerItemIcon: {
+        [theme.breakpoints.down('xs')]: {
+            color: theme.palette.type === 'light' ? theme.palette.primary.main : theme.palette.text.primary,
         },
     },
     drawerItemText: {
         margin: 0,
+        fontWeight: 500,
     },
     drawerItemTextPrimary: {
         [theme.breakpoints.down('xs')]: {
@@ -148,9 +144,9 @@ export default function Drawer(props: DrawerProps) {
     const classes = useStyles()
     const match = useRouteMatch('/:param/')
     const forSetupPurpose = match?.url.includes('/setup')
+    const xsMatched = webpackEnv.responsiveTarget === 'xs'
 
     const theme = useTheme()
-    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
 
     const { routers, exitDashboard } = props
     const [feedback, openFeedback] = useModal(DashboardFeedbackDialog)
@@ -185,7 +181,9 @@ export default function Drawer(props: DrawerProps) {
                                             component={Link}
                                             to={item[1]}
                                             button>
-                                            <ListItemIcon children={item[2]}></ListItemIcon>
+                                            <ListItemIcon
+                                                className={classes.drawerItemIcon}
+                                                children={item[2]}></ListItemIcon>
                                             <ListItemText
                                                 className={classes.drawerItemText}
                                                 primary={item[0]}
@@ -193,7 +191,7 @@ export default function Drawer(props: DrawerProps) {
                                             />
                                             {xsMatched ? (
                                                 <ListItemIcon>
-                                                    <ChevronRightIcon />
+                                                    <ChevronRightIcon color="action" />
                                                 </ListItemIcon>
                                             ) : null}
                                         </ListItem>
@@ -206,7 +204,10 @@ export default function Drawer(props: DrawerProps) {
                                     className={classNames(classes.drawerItem, classes.drawerFeedback)}
                                     button
                                     onClick={openFeedback}>
-                                    <ListItemIcon children={<SentimentSatisfiedOutlinedIcon fontSize="small" />} />
+                                    <ListItemIcon
+                                        className={classes.drawerItemIcon}
+                                        children={<SentimentSatisfiedOutlinedIcon fontSize="small" />}
+                                    />
                                     <ListItemText
                                         className={classes.drawerItemText}
                                         primary={t('feedback')}
@@ -214,7 +215,7 @@ export default function Drawer(props: DrawerProps) {
                                     />
                                     {xsMatched ? (
                                         <ListItemIcon>
-                                            <ChevronRightIcon />
+                                            <ChevronRightIcon color="action" />
                                         </ListItemIcon>
                                     ) : null}
                                 </ListItem>

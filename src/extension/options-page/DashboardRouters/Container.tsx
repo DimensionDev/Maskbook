@@ -1,11 +1,12 @@
 import React from 'react'
-import { makeStyles, createStyles, Typography, Divider, Fade, useMediaQuery, Theme } from '@material-ui/core'
+import { makeStyles, createStyles, Typography, Divider, Fade, IconButton } from '@material-ui/core'
 import classNames from 'classnames'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { getUrl } from '../../../utils/utils'
+import { useHistory } from 'react-router-dom'
 
 interface DashboardRouterContainerProps {
     title?: string
-    actions?: React.ReactElement[]
     children: React.ReactNode
     /**
      * add or remove the space between divider and left panel
@@ -19,6 +20,23 @@ interface DashboardRouterContainerProps {
      * add or remove the padding of scroller
      */
     compact?: boolean
+    /**
+     * (mobile only)
+     * icons on the left of title
+     */
+    leftIcons?: React.ReactElement[]
+
+    /**
+     * (mobile only)
+     * icons onthe right of title
+     */
+    rightIcons?: React.ReactElement[]
+
+    /**
+     * (pc only)
+     * buttons on the right of title
+     */
+    actions?: React.ReactElement[]
 }
 
 const useStyles = makeStyles((theme) => {
@@ -57,7 +75,7 @@ const useStyles = makeStyles((theme) => {
             paddingLeft: '0 !important',
             paddingRight: '0 !important',
         },
-        titleAction: {
+        title: {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -66,21 +84,33 @@ const useStyles = makeStyles((theme) => {
             padding: '40px 24px 40px 34px',
             [theme.breakpoints.down('xs')]: {
                 height: 'auto',
-                flexDirection: 'column',
-                padding: theme.spacing(2, 0),
+                padding: theme.spacing(2),
+                backgroundColor: theme.palette.type === 'light' ? theme.palette.primary.main : 'transparent',
             },
         },
-        title: {
+        titleContent: {
             color: theme.palette.text.primary,
             fontWeight: 500,
             fontSize: 40,
             lineHeight: 1.2,
             [theme.breakpoints.down('xs')]: {
+                color: theme.palette.type === 'light' ? theme.palette.common.white : theme.palette.text.primary,
+                left: 0,
+                right: 0,
+                pointerEvents: 'none',
+                position: 'absolute',
                 fontSize: 20,
                 fontWeight: 500,
                 lineHeight: 1.2,
+                textAlign: 'center',
                 marginBottom: 0,
             },
+        },
+        titleIcon: {
+            color: theme.palette.type === 'light' ? theme.palette.common.white : theme.palette.text.primary,
+        },
+        titlePlaceholder: {
+            flex: 1,
         },
         content: {
             display: 'flex',
@@ -107,6 +137,9 @@ const useStyles = makeStyles((theme) => {
         },
         divider: {
             backgroundColor: theme.palette.divider,
+            [theme.breakpoints.down('xs')]: {
+                dispaly: theme.palette.type === 'light' ? 'none' : 'unset',
+            },
         },
         dividerPadded: {
             padding: '0 24px 0 34px',
@@ -128,30 +161,60 @@ const useStyles = makeStyles((theme) => {
 })
 
 export default function DashboardRouterContainer(props: DashboardRouterContainerProps) {
-    const { title, actions, children, padded, empty, compact = false } = props
+    const { title, actions, children, padded, empty, compact = false, leftIcons = [], rightIcons = [] } = props
     const isSetup = location.hash.includes('/setup')
     const classes = useStyles({
         isSetup,
     })
-    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
+    const history = useHistory()
+    const xsMatched = webpackEnv.responsiveTarget === 'xs'
+
+    if (xsMatched && !leftIcons.length) {
+        leftIcons.push(
+            <IconButton onClick={() => history.goBack()}>
+                <ArrowBackIosIcon />
+            </IconButton>,
+        )
+    }
 
     return (
         <Fade in>
             <section className={classes.wrapper}>
                 {isSetup ? null : (
                     <>
-                        <section className={classes.titleAction}>
-                            <Typography className={classes.title} color="textPrimary" variant="h6">
+                        <section className={classes.title}>
+                            {xsMatched
+                                ? leftIcons?.map((icon, index) =>
+                                      React.cloneElement(icon, {
+                                          key: index,
+                                          size: 'small',
+                                          className: classes.titleIcon,
+                                      }),
+                                  )
+                                : null}
+                            <Typography className={classes.titleContent} color="textPrimary" variant="h6">
                                 {title}
                             </Typography>
-                            <div className={classes.buttons}>
-                                {actions?.map((action, index) => React.cloneElement(action, { key: index }))}
-                            </div>
+                            {xsMatched ? <div className={classes.titlePlaceholder}></div> : null}
+                            {xsMatched
+                                ? rightIcons?.map((icon, index) =>
+                                      React.cloneElement(icon, {
+                                          key: index,
+                                          size: 'small',
+                                          className: classes.titleIcon,
+                                      }),
+                                  )
+                                : null}
+                            {xsMatched ? null : (
+                                <div className={classes.buttons}>
+                                    {actions?.map((action, index) => React.cloneElement(action, { key: index }))}
+                                </div>
+                            )}
                         </section>
                         <div
                             className={classNames({
                                 [classes.dividerPadded]: padded !== false,
-                                [classes.dividerCompact]: compact !== false,
+                                [classes.dividerCompact]: xsMatched,
                             })}>
                             <Divider className={classes.divider} />
                         </div>

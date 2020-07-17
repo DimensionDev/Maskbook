@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react'
 import DashboardRouterContainer from './Container'
-import { Button, makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core'
+import { Button, makeStyles, createStyles, Theme, ThemeProvider, IconButton } from '@material-ui/core'
+import AddIcon from '@material-ui/icons/Add'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
+import RestoreIcon from '@material-ui/icons/Restore'
 import PersonaCard from '../DashboardComponents/PersonaCard'
 import { DashboardPersonaCreateDialog, DashboardImportPersonaDialog } from '../Dialogs/Persona'
 import { useModal } from '../Dialogs/Base'
@@ -78,7 +80,18 @@ export default function DashboardPersonasRouter() {
     )
 
     return (
-        <DashboardRouterContainer title={t('my_personas')} empty={!personas.length} actions={actions}>
+        <DashboardRouterContainer
+            title={t('my_personas')}
+            empty={!personas.length}
+            actions={actions}
+            rightIcons={[
+                <IconButton onClick={openImportPersona}>
+                    <RestoreIcon />
+                </IconButton>,
+                <IconButton onClick={openCreatePersona}>
+                    <AddIcon />
+                </IconButton>,
+            ]}>
             <ThemeProvider theme={personasTheme}>
                 <section className={classes.container}>
                     {personas

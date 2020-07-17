@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) =>
 
             [theme.breakpoints.down('xs')]: {
                 width: '100%',
-                boxShadow: 'none',
+                marginRight: 0,
             },
         },
         header: {
