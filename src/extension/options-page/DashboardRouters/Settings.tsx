@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) =>
             fontWeight: 'normal',
             lineHeight: '30px',
             marginBottom: theme.spacing(1.5),
+            [theme.breakpoints.down('xs')]: {
+                marginBottom: 0,
+            },
         },
         section: {
             padding: '26px 40px',
@@ -52,6 +55,12 @@ const useStyles = makeStyles((theme) =>
         },
         secondaryAction: {
             paddingRight: 90,
+        },
+        list: {
+            [theme.breakpoints.down('xs')]: {
+                marginLeft: theme.spacing(-2),
+                marginRight: theme.spacing(-2),
+            },
         },
         listItemRoot: {
             paddingTop: theme.spacing(1.5),
@@ -138,7 +147,7 @@ export default function DashboardSettingsRouter() {
                             {t('general')}
                         </Typography>
                         <Card elevation={0}>
-                            <List disablePadding>
+                            <List className={classes.list} disablePadding>
                                 <SettingsUIEnum
                                     classes={listStyle}
                                     secondary={langMapper(currentLang)}
@@ -172,7 +181,7 @@ export default function DashboardSettingsRouter() {
                             {t('advanced_options')}
                         </Typography>
                         <Card elevation={0}>
-                            <List disablePadding>
+                            <List className={classes.list} disablePadding>
                                 <SettingsUI
                                     classes={listStyle}
                                     icon={<TabIcon />}
@@ -199,7 +208,7 @@ export default function DashboardSettingsRouter() {
                             {t('database_management')}
                         </Typography>
                         <Card elevation={0}>
-                            <List disablePadding>
+                            <List className={classes.list} disablePadding>
                                 <SettingsUIDummy
                                     classes={listStyle}
                                     icon={<UnarchiveOutlinedIcon />}

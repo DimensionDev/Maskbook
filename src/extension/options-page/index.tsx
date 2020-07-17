@@ -31,8 +31,6 @@ import { DashboardRoute } from './Route'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 
-import DashboardInitializeDialog from './Initialize'
-import { DialogRouter } from './DashboardDialogs/DialogBase'
 import { useAsync } from 'react-use'
 import Services from '../service'
 import { RequestPermissionPage } from '../../components/RequestPermission/RequestPermission'
@@ -47,7 +45,11 @@ const useStyles = makeStyles((theme) => {
         wrapper: {
             '--monospace': 'SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace',
             '--drawerHeader': dark ? '#121212' : theme.palette.primary.main,
-            '--drawerBody': dark ? '#121212' : theme.palette.primary.main,
+            '--drawerBody': dark
+                ? '#121212'
+                : webpackEnv.responsiveTarget === 'xs'
+                ? 'transparent'
+                : theme.palette.primary.main,
 
             backgroundColor: dark ? grey[900] : grey[50],
             userSelect: 'none',
@@ -96,8 +98,7 @@ function DashboardUI() {
     const { t } = useI18N()
     const classes = useStyles()
     const history = useHistory<unknown>()
-
-    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
+    const xsMatched = webpackEnv.responsiveTarget === 'xs'
 
     const routers = ([
         [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
@@ -123,6 +124,7 @@ function DashboardUI() {
     }, [])
 
     const drawer = <Drawer routers={routers} exitDashboard={null} />
+    const nav = () => <DashboardNavRouter children={drawer} />
 
     return (
         <DashboardBlurContextUI>
@@ -132,12 +134,7 @@ function DashboardUI() {
                         <>
                             {xsMatched ? null : drawer}
                             <Switch>
-                                {xsMatched ? (
-                                    <Route
-                                        path={DashboardRoute.Nav}
-                                        component={() => <DashboardNavRouter children={drawer} />}
-                                    />
-                                ) : null}
+                                {xsMatched ? <Route path={DashboardRoute.Nav} component={nav} /> : null}
                                 <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
                                 <Route path={DashboardRoute.Wallets} component={DashboardWalletsRouter} />
                                 <Route path={DashboardRoute.Contacts} component={DashboardContactsRouter} />
@@ -145,7 +142,7 @@ function DashboardUI() {
                                 <Route path={DashboardRoute.Setup} component={DashboardSetupRouter} />
                                 {/* // TODO: this page should be boardless */}
                                 <Route path={DashboardRoute.RequestPermission} component={RequestPermissionPage} />
-                                <Redirect path="*" to={DashboardRoute.Personas} />
+                                <Redirect path="*" to={xsMatched ? DashboardRoute.Nav : DashboardRoute.Personas} />
                             </Switch>
                         </>
                     )}

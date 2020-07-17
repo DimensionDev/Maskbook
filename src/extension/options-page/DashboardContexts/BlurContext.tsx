@@ -36,10 +36,12 @@ export function DashboardBlurContextUI({ children }: DashboardBlurContextUIProps
     const location = useLocation()
     const ref = useRef<HTMLDivElement>(null!)
     const blur = useCallback(() => {
+        if (webpackEnv.responsiveTarget === 'xs') return
         blurRequest += 1
         ref.current.classList.add(classes.blur)
     }, [classes.blur])
     const unblur = useCallback(() => {
+        if (webpackEnv.responsiveTarget === 'xs') return
         blurRequest -= 1
         if (blurRequest <= 0) ref.current.classList.remove(classes.blur)
     }, [classes.blur])

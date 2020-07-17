@@ -54,7 +54,6 @@ export interface DashboardDialogCoreProps extends DialogProps {
 export function DashboardDialogCore(props: DashboardDialogCoreProps) {
     const { fullScreen, children, CloseIconProps, CloseButtonProps, ...dialogProps } = props
 
-    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
     const classes = useStyles()
     useBlurContext(dialogProps.open)
 
@@ -62,7 +61,7 @@ export function DashboardDialogCore(props: DashboardDialogCoreProps) {
         <Dialog
             className={classes.root}
             closeAfterTransition
-            fullScreen={fullScreen ?? xsMatched}
+            fullScreen={fullScreen ?? webpackEnv.responsiveTarget === 'xs'}
             TransitionComponent={Transition}
             hideBackdrop
             {...dialogProps}>
@@ -152,6 +151,7 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
             padding: (props) => (props.size === 'small' ? '40px 24px !important' : '40px 36px !important'),
             [theme.breakpoints.down('xs')]: {
                 width: '100% !important',
+                padding: (props) => '20px 18px !important',
             },
         },
         header: {
@@ -186,6 +186,10 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
         confineSecondary: {
             paddingLeft: (props) => (props.size === 'small' ? 24 : 46),
             paddingRight: (props) => (props.size === 'small' ? 24 : 46),
+            [theme.breakpoints.down('xs')]: {
+                paddingLeft: (props) => (props.size === 'small' ? 12 : 0),
+                paddingRight: (props) => (props.size === 'small' ? 12 : 0),
+            },
         },
     }),
 )

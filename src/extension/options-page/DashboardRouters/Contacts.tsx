@@ -12,12 +12,17 @@ import { useSWRInfinite } from 'swr'
 import Services from '../../service'
 import type { Profile } from '../../../database'
 import { last } from 'lodash-es'
+import { useModal } from '../Dialogs/Base'
+import { DashboardContactSearchDialog } from '../Dialogs/Contact'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         title: {
             margin: theme.spacing(3, 0),
             color: theme.palette.text.secondary,
+            [theme.breakpoints.down('xs')]: {
+                margin: theme.spacing(2, 0),
+            },
         },
         progress: {
             width: '1.5em',
@@ -26,6 +31,10 @@ const useStyles = makeStyles((theme) =>
         },
         list: {
             flex: 1,
+            [theme.breakpoints.down('xs')]: {
+                marginLeft: theme.spacing(-2),
+                marginRight: theme.spacing(-2),
+            },
         },
     }),
 )
@@ -47,6 +56,8 @@ export default function DashboardContactsRouter() {
     const [search, setSearch] = useState('')
     const [searchUI, setSearchUI] = useState('')
     const [startSearchTransition, isSearchPending] = unstable_useTransition({ timeoutMs: 5000 })
+    const [searchContactDialog, , openSearchContactDialog] = useModal(DashboardContactSearchDialog)
+
     const actions = useMemo(
         () => [
             <TextField
@@ -94,7 +105,15 @@ export default function DashboardContactsRouter() {
     )
 
     return (
-        <DashboardRouterContainer title={t('contacts')} empty={items.length === 0} actions={actions}>
+        <DashboardRouterContainer
+            title={t('contacts')}
+            empty={items.length === 0}
+            actions={actions}
+            rightIcons={[
+                <IconButton onClick={() => openSearchContactDialog({ onSearch: setSearch })}>
+                    <SearchIcon />
+                </IconButton>,
+            ]}>
             <Typography className={classes.title} variant="body2">
                 {t('people_in_database')}
             </Typography>
@@ -126,6 +145,7 @@ export default function DashboardContactsRouter() {
                     )}
                 </AutoResize>
             </section>
+            {searchContactDialog}
         </DashboardRouterContainer>
     )
 }
