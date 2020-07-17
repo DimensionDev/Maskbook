@@ -226,7 +226,6 @@ export async function claimRedPacket(
     const { claim_transaction_hash } = await getProvider()
         .claim(id, passwords, claimWithWallet, Web3Utils.sha3(claimWithWallet)!)
         .catch(async (e) => {
-            console.log(e.message)
             if ((e.message as string).includes('insufficient funds for gas')) {
                 const wallet = (await getManagedWallets()).wallets.find((x) => x.address === claimWithWallet)!
                 const { privateKey } = await recoverWallet(wallet.mnemonic, wallet.passphrase)
