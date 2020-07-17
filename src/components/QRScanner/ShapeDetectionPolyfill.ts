@@ -11,13 +11,16 @@ sideEffect.then(() => {
 
 class BarcodeDetectorPolyfill implements BarcodeDetector {
     public async detect(mediaSource: CanvasImageSource) {
+        const canvasImageWidth = (mediaSource as HTMLVideoElement).videoWidth
+        const canvasImageHeight = (mediaSource as HTMLVideoElement).videoHeight
+        if (!canvasImageWidth || !canvasImageHeight) return []
         const canvas = document.createElement('canvas')
-        ;[canvas.width, canvas.height] = [1920, 1080]
+        const resizedWidth = Math.min(canvasImageWidth, 500)
+        const resizedHeight = Math.floor((resizedWidth * canvasImageHeight) / canvasImageWidth)
+        ;[canvas.width, canvas.height] = [resizedWidth, resizedHeight]
         const ctx = canvas.getContext('2d')
-        if (isNull(ctx)) {
-            throw new Error('Canvas was not supported')
-        }
-        ctx.drawImage(mediaSource, 0, 0)
+        if (isNull(ctx)) throw new Error('Canvas was not supported')
+        ctx.drawImage(mediaSource, 0, 0, canvasImageWidth, canvasImageHeight, 0, 0, canvas.width, canvas.height)
         const d = ctx.getImageData(0, 0, canvas.width, canvas.height)
         return new Promise<DetectedBarcode[]>((resolve) => {
             worker.postMessage([d.data, canvas.width, canvas.height])
