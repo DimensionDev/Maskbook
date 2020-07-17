@@ -23,6 +23,7 @@ import {
     DashboardWalletRenameDialog,
     DashboardWalletErrorDialog,
     DashboardWalletRedPacketDetailDialog,
+    DashboardWalletShareDialog,
 } from '../Dialogs/Wallet'
 import DashboardMenu from '../DashboardComponents/DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -118,6 +119,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
 
     const network = useValueRef(currentEthereumNetworkSettings)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
+    const [walletShare, , openWalletShare] = useModal(DashboardWalletShareDialog)
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
@@ -150,6 +152,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
         () =>
             [
                 <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
+                <MenuItem onClick={() => openWalletShare({ wallet: wallet })}>{t('share')}</MenuItem>,
                 <MenuItem onClick={() => openWalletRename({ wallet: wallet })}>{t('rename')}</MenuItem>,
                 backupMenuItem,
                 deleteMenuItem,
@@ -227,6 +230,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                 </div>
             ) : null}
             {addToken}
+            {walletShare}
             {walletHistory}
             {walletBackup}
             {walletDelete}
