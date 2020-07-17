@@ -157,6 +157,9 @@ const useWalletCreateDialogStyle = makeStyles((theme) =>
         confirmation: {
             fontSize: 16,
             lineHeight: 1.75,
+            [theme.breakpoints.down('xs')]: {
+                fontSize: 14,
+            },
         },
         notification: {
             fontSize: 12,
@@ -166,6 +169,9 @@ const useWalletCreateDialogStyle = makeStyles((theme) =>
             color: 'black',
             padding: '8px 22px',
             margin: '24px -36px 0',
+            [theme.breakpoints.down('xs')]: {
+                margin: '24px -16px 0',
+            },
         },
         notificationIcon: {
             width: 16,
@@ -192,7 +198,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
     )
 
     return (
-        <DashboardDialogCore {...props}>
+        <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 icon={<CreditCardIcon />}
                 iconColor="#4EE0BC"
