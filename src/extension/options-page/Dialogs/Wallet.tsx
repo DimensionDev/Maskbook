@@ -285,6 +285,7 @@ export function DashboardWalletShareDialog(props: WrappedDialogProps<WalletProps
                 icon={<ShareIcon />}
                 iconColor="#4EE0BC"
                 primary={t('share_wallet')}
+                secondary={t('share_wallet_hint')}
                 content={
                     <>
                         <form>
