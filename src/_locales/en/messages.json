@@ -333,6 +333,8 @@
     "shared_choose_identity_subtitle": "Switch to another account",
     "shared_choose_identity_title": "Touch to switch your Maskbook account",
     "sharing": "Sharing",
+    "share_wallet": "Share Wallet",
+    "share_wallet_hint": "You can share your wallet by address or QR code.",
     "submit": "Submit",
     "synchronization": "Synchronization",
     "test": "Test",
