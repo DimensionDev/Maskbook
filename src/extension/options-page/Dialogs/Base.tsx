@@ -53,15 +53,17 @@ export interface DashboardDialogCoreProps extends DialogProps {
 
 export function DashboardDialogCore(props: DashboardDialogCoreProps) {
     const { fullScreen, children, CloseIconProps, CloseButtonProps, ...dialogProps } = props
-
     const classes = useStyles()
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
+        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+    })
     useBlurContext(dialogProps.open)
 
     return (
         <Dialog
             className={classes.root}
             closeAfterTransition
-            fullScreen={fullScreen ?? webpackEnv.responsiveTarget === 'xs'}
+            fullScreen={fullScreen ?? xsMatched}
             TransitionComponent={Transition}
             hideBackdrop
             {...dialogProps}>

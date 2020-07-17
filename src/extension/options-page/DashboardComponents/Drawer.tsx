@@ -1,6 +1,16 @@
 import React, { useState } from 'react'
 import classNames from 'classnames'
-import { List, ListItem, ListItemIcon, ListItemText, Typography, Box, Fade, Divider } from '@material-ui/core'
+import {
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Typography,
+    Box,
+    Fade,
+    Divider,
+    useMediaQuery,
+} from '@material-ui/core'
 import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Link, useRouteMatch } from 'react-router-dom'
 import { useInterval } from 'react-use'
@@ -142,11 +152,12 @@ interface DrawerProps {
 export default function Drawer(props: DrawerProps) {
     const { t } = useI18N()
     const classes = useStyles()
+    const theme = useTheme()
     const match = useRouteMatch('/:param/')
     const forSetupPurpose = match?.url.includes('/setup')
-    const xsMatched = webpackEnv.responsiveTarget === 'xs'
-
-    const theme = useTheme()
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
+        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+    })
 
     const { routers, exitDashboard } = props
     const [feedback, openFeedback] = useModal(DashboardFeedbackDialog)

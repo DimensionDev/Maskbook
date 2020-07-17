@@ -1,5 +1,14 @@
 import React from 'react'
-import { makeStyles, createStyles, Typography, Divider, Fade, IconButton } from '@material-ui/core'
+import {
+    makeStyles,
+    createStyles,
+    Typography,
+    Divider,
+    Fade,
+    IconButton,
+    useMediaQuery,
+    Theme,
+} from '@material-ui/core'
 import classNames from 'classnames'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { getUrl } from '../../../utils/utils'
@@ -138,7 +147,7 @@ const useStyles = makeStyles((theme) => {
         divider: {
             backgroundColor: theme.palette.divider,
             [theme.breakpoints.down('xs')]: {
-                display: theme.palette.type === 'light' ? 'none' : 'unset',
+                display: theme.palette.type === 'light' ? 'none' : 'block',
             },
         },
         dividerPadded: {
@@ -167,7 +176,9 @@ export default function DashboardRouterContainer(props: DashboardRouterContainer
         isSetup,
     })
     const history = useHistory()
-    const xsMatched = webpackEnv.responsiveTarget === 'xs'
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
+        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+    })
 
     if (xsMatched && !leftIcons.length) {
         leftIcons.push(

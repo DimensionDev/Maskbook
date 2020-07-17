@@ -7,6 +7,7 @@ import {
     MenuItem,
     ListItem,
     ListItemTypeMap,
+    useMediaQuery,
 } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
@@ -70,11 +71,15 @@ export function ContactLine(props: ContactLineProps) {
     const classes = useStyles()
     const { contact, onUpdated, onDeleted, ...rest } = props
     const [contactDialog, openContactDialog] = useModal(DashboardContactDialog, { contact, onUpdated })
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
+        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+    })
 
     const [deleteContactConfirmDialog, openDeleteContactConfirmDialog] = useModal(DashboardContactDeleteConfirmDialog, {
         contact,
         onDeleted,
     })
+
     const menus = useMemo(
         () => [<MenuItem onClick={() => openDeleteContactConfirmDialog()}>{t('delete')}</MenuItem>].filter((x) => x),
         [openDeleteContactConfirmDialog, contact],
@@ -87,7 +92,7 @@ export function ContactLine(props: ContactLineProps) {
                 <Avatar className={classes.avatar} person={contact} />
                 <Typography className={classes.user}>{contact.nickname || contact.identifier.userId}</Typography>
                 <Typography className={classes.provider}>@{contact.identifier.network}</Typography>
-                {webpackEnv.responsiveTarget === 'xs' ? null : (
+                {xsMatched ? null : (
                     <Typography component="code" color="textSecondary" className={classes.fingerprint}>
                         {contact.linkedPersona?.fingerprint}
                     </Typography>

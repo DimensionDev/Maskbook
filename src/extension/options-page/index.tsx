@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => {
             '--drawerHeader': dark ? '#121212' : theme.palette.primary.main,
             '--drawerBody': dark
                 ? '#121212'
-                : webpackEnv.responsiveTarget === 'xs'
+                : theme.breakpoints.down('xs')
                 ? 'transparent'
                 : theme.palette.primary.main,
 
@@ -98,7 +98,9 @@ function DashboardUI() {
     const { t } = useI18N()
     const classes = useStyles()
     const history = useHistory<unknown>()
-    const xsMatched = webpackEnv.responsiveTarget === 'xs'
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
+        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+    })
 
     const routers = ([
         [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],

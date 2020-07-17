@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import DashboardRouterContainer from './Container'
-import { Button, Typography, Box, IconButton, List, MenuItem, Fade } from '@material-ui/core'
+import { Button, Typography, Box, IconButton, List, MenuItem, Fade, useMediaQuery } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
 
 import AddCircleIcon from '@material-ui/icons/AddCircle'
@@ -112,7 +112,9 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     const classes = useWalletContentStyles()
     const { t } = useI18N()
     const color = useColorStyles()
-    const xsMatched = webpackEnv.responsiveTarget === 'xs'
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
+        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+    })
 
     const network = useValueRef(currentEthereumNetworkSettings)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
@@ -161,7 +163,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
             <ThemeProvider theme={walletTheme}>
                 <Box pt={3} pb={2} pl={3} pr={2} display="flex" alignItems="center">
                     <Typography className={classes.title} variant="h5">
-                        {webpackEnv.responsiveTarget === 'xs' ? wallet.name ?? wallet.address : t('details')}
+                        {xsMatched ? wallet.name ?? wallet.address : t('details')}
                     </Typography>
                     {xsMatched ? null : (
                         <Button
@@ -278,7 +280,9 @@ export default function DashboardWalletsRouter() {
     const history = useHistory()
     const { error } = useQueryParams(['error'])
     const { rpid } = useQueryParams(['rpid'])
-    const xsMatched = webpackEnv.responsiveTarget === 'xs'
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
+        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+    })
 
     const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
@@ -319,10 +323,10 @@ export default function DashboardWalletsRouter() {
     // auto select first wallet
     useEffect(() => {
         if (current) return
-        if (webpackEnv.responsiveTarget === 'xs') return
+        if (xsMatched) return
         const first = wallets?.[0]?.address
         if (first) setCurrent(first)
-    }, [current, wallets])
+    }, [xsMatched, current, wallets])
 
     // show error dialog
     useEffect(() => {

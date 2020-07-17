@@ -111,7 +111,9 @@ interface WalletItemProps {
 export function WalletItem(props: WalletItemProps) {
     const { t } = useI18N()
     const classes = useStyles()
-    const xsMatched = webpackEnv.responsiveTarget === 'xs'
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
+        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+    })
 
     const { wallet, selected, onClick, tokens } = props
     const [, copyToClipboard] = useCopyToClipboard()
