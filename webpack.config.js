@@ -264,7 +264,7 @@ module.exports = (argvEnv, argv) => {
         /** @type {'app' | 'browser' | 'facebookApp'} */
         let genericTarget = 'browser'
         /** @type {'xs' | 'sm' | 'md' | 'lg' | 'xl'} */
-        let responsiveTarget = 'lg'
+        let perferResponsiveTarget = 'lg'
         if (target.Chromium) buildTarget = 'Chromium'
         if (target.Firefox) buildTarget = 'Firefox'
         if (target.FirefoxDesktop) firefoxVariant = 'desktop'
@@ -278,7 +278,7 @@ module.exports = (argvEnv, argv) => {
             genericTarget = 'facebookApp'
         }
         if (target.WKWebview || target.FirefoxForAndroid) {
-            responsiveTarget = 'xs'
+            perferResponsiveTarget = 'xs'
         }
         if (target.E2E) buildTarget = 'E2E'
         config.plugins.push(
@@ -291,7 +291,7 @@ module.exports = (argvEnv, argv) => {
                 new webpack.DefinePlugin({
                     'webpackEnv.target': JSON.stringify(buildTarget),
                     'webpackEnv.genericTarget': JSON.stringify(genericTarget),
-                    'webpackEnv.responsiveTarget': JSON.stringify(responsiveTarget),
+                    'webpackEnv.perferResponsiveTarget': JSON.stringify(perferResponsiveTarget),
                     'process.env.STORYBOOK': 'false',
                 }),
             )
