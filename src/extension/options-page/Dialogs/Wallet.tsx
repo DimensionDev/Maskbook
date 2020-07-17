@@ -119,15 +119,16 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                     mnemonic: mnemonic.split(' '),
                     passphrase: '',
                 })
-            return Services.Plugin.invokePlugin(
-                'maskbook.wallet',
-                'recoverWalletFromPrivateKey',
-                privKey,
-            ).then(({ address }) =>
-                Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', { name, address }),
+            return Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', privKey).then(
+                ({ address }) =>
+                    Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                        name,
+                        address,
+                        _private_key_: privKey,
+                    }),
             )
         },
-        [name, mnemonic],
+        [state[0], name, mnemonic, privKey],
         props.onClose,
     )
 
