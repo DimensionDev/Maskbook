@@ -9,15 +9,23 @@ export interface QRCodeVideoScannerProps {
     onScan?: (value: string) => void
     onError?: () => void
     onQuit?: () => void
+    VideoProps?: React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>
 }
 
-export function QRCodeVideoScanner({ scanning, deviceId, onScan, onError, onQuit }: QRCodeVideoScannerProps) {
+export function QRCodeVideoScanner({
+    scanning,
+    deviceId,
+    onScan,
+    onError,
+    onQuit,
+    VideoProps,
+}: QRCodeVideoScannerProps) {
     const videoRef = useRef<HTMLVideoElement | null>(null)
-    useQRCodeVideoScan(videoRef, scanning, deviceId, onScan, onError)
 
+    useQRCodeVideoScan(videoRef, scanning, deviceId, onScan, onError)
     return hasWKWebkitRPCHandlers ? (
         <WKWebkitQRScanner onScan={onScan} onQuit={onQuit} />
     ) : (
-        <video style={{ minWidth: 404 }} ref={videoRef} aria-label="QR Code scanner" />
+        <video style={{ minWidth: 404 }} ref={videoRef} {...VideoProps} />
     )
 }

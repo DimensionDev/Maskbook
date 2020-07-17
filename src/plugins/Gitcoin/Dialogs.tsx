@@ -18,8 +18,13 @@ import type { ERC20TokenDetails } from '../../extension/background-script/Plugin
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
-            width: 340,
-            margin: '0 auto',
+            [`@media (min-width: ${theme.breakpoints.width('md')}px)`]: {
+                width: 340,
+                margin: '0 auto',
+            },
+        },
+        content: {
+            wordBreak: 'break-word',
         },
     }),
 )
@@ -66,10 +71,11 @@ export function DonateSuccessDialog(props: DonateSuccessDialogProps) {
                 container: classes.container,
             }}
             open={open}
+            fullScreen={false}
             onClose={onClose}>
             <DialogTitle>Donated Successfully</DialogTitle>
             <DialogContent>
-                <DialogContentText>{`You have donated "${title}" ${
+                <DialogContentText className={classes.content}>{`You have donated "${title}" ${
                     tokenType === EthereumTokenType.ETH ? 'ETH' : token?.symbol
                 } ${amount}.`}</DialogContentText>
             </DialogContent>
@@ -100,10 +106,11 @@ export function DonateFailDialog(props: DonateFailDialogProps) {
                 container: classes.container,
             }}
             open={open}
+            fullScreen={false}
             onClose={onClose}>
             <DialogTitle>Donated Failed</DialogTitle>
             <DialogContent>
-                <DialogContentText>{message}</DialogContentText>
+                <DialogContentText className={classes.content}>{message}</DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="primary">
