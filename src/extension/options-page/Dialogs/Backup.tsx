@@ -169,7 +169,7 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
         setJSON(json)
         if (!json) throw new Error('UpgradeBackupJSONFile failed')
         return extraPermissions(json.grantedHostPermissions)
-    }, [backupValue, textValue])
+    }, [state[0], backupValue, textValue])
     const restoreDB = async () => {
         try {
             if (!json) return
