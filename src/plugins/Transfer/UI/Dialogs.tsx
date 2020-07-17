@@ -68,7 +68,7 @@ export function TransferSuccessDialog(props: TransferSuccessDialogProps) {
             open={open}
             fullScreen={false}
             onClose={onClose}>
-            <DialogTitle>{title ?? 'Transfer Successfully'}</DialogTitle>
+            <DialogTitle>{title ?? 'Transferred Successfully'}</DialogTitle>
             <DialogContent>
                 <DialogContentText className={classes.content}>{`You have transferred to "${
                     recipient ?? recipientAddress
