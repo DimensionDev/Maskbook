@@ -112,6 +112,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     const classes = useWalletContentStyles()
     const { t } = useI18N()
     const color = useColorStyles()
+    const xsMatched = webpackEnv.responsiveTarget === 'xs'
 
     const network = useValueRef(currentEthereumNetworkSettings)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
@@ -162,14 +163,16 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                     <Typography className={classes.title} variant="h5">
                         {webpackEnv.responsiveTarget === 'xs' ? wallet.name ?? wallet.address : t('details')}
                     </Typography>
-                    <Button
-                        className={classes.addButton}
-                        variant="text"
-                        color="primary"
-                        onClick={() => openAddToken({ wallet })}
-                        startIcon={<AddIcon />}>
-                        {t('add_token')}
-                    </Button>
+                    {xsMatched ? null : (
+                        <Button
+                            className={classes.addButton}
+                            variant="text"
+                            color="primary"
+                            onClick={() => openAddToken({ wallet })}
+                            startIcon={<AddIcon />}>
+                            {t('add_token')}
+                        </Button>
+                    )}
                     <IconButton
                         className={classes.moreButton}
                         size="small"
@@ -201,12 +204,12 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                     ))}
                 </List>
             </ThemeProvider>
-            {wallet.type === 'managed' ? (
+            {wallet.type === 'managed' && !xsMatched ? (
                 <div className={classes.footer}>
                     <Button
                         onClick={() =>
                             openWalletHistory({
-                                wallet: wallet,
+                                wallet,
                                 onClickRedPacketRecord: (record: RedPacketRecord) => {
                                     openWalletRedPacket({
                                         redPacket: record,
@@ -280,7 +283,10 @@ export default function DashboardWalletsRouter() {
     const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
     const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)
+    const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
+    const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
+    const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const { data: walletData } = useWallet()
     const { wallets, tokens } = walletData ?? {}
@@ -366,18 +372,35 @@ export default function DashboardWalletsRouter() {
                     <ArrowBackIosIcon />
                 </IconButton>,
             ]}
-            rightIcons={
-                current
-                    ? []
-                    : [
-                          <IconButton onClick={openWalletImport}>
-                              <RestoreIcon />
-                          </IconButton>,
-                          <IconButton onClick={openWalletCreate}>
-                              <AddIcon />
-                          </IconButton>,
-                      ]
-            }>
+            rightIcons={[
+                <IconButton
+                    onClick={() => {
+                        if (currentWallet) {
+                            openWalletHistory({
+                                wallet: currentWallet,
+                                onClickRedPacketRecord: (record: RedPacketRecord) => {
+                                    openWalletRedPacket({
+                                        redPacket: record,
+                                    })
+                                },
+                            })
+                        } else {
+                            openWalletImport()
+                        }
+                    }}>
+                    <RestoreIcon />
+                </IconButton>,
+                <IconButton
+                    onClick={() => {
+                        if (currentWallet) {
+                            openAddToken({ wallet: currentWallet })
+                        } else {
+                            openWalletCreate()
+                        }
+                    }}>
+                    <AddIcon />
+                </IconButton>,
+            ]}>
             <div className={classes.root}>
                 {wallets?.length && !(xsMatched && current) ? (
                     <div className={classes.scroller}>
@@ -403,9 +426,12 @@ export default function DashboardWalletsRouter() {
                     {xsMatched ? walletContent : <Fade in={Boolean(current)}>{walletContent}</Fade>}
                 </div>
             </div>
+            {addToken}
+            {walletHistory}
             {walletImport}
             {walletCreate}
             {walletError}
+            {walletRedPacket}
             {walletRedPacketDetail}
         </DashboardRouterContainer>
     )

@@ -151,6 +151,7 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
             padding: (props) => (props.size === 'small' ? '40px 24px !important' : '40px 36px !important'),
             [theme.breakpoints.down('xs')]: {
                 width: '100% !important',
+                minWidth: 300,
                 padding: (props) => '20px 18px !important',
             },
         },

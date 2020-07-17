@@ -34,7 +34,6 @@ const useStyle = makeStyles((theme) =>
         },
         button: {
             maxWidth: '90%',
-            // paddingLeft: theme.spacing(3),
             position: 'relative',
             '& > span:first-child': {
                 display: 'inline-block',

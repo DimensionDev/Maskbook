@@ -138,7 +138,7 @@ const useStyles = makeStyles((theme) => {
         divider: {
             backgroundColor: theme.palette.divider,
             [theme.breakpoints.down('xs')]: {
-                dispaly: theme.palette.type === 'light' ? 'none' : 'unset',
+                display: theme.palette.type === 'light' ? 'none' : 'unset',
             },
         },
         dividerPadded: {
