@@ -6,7 +6,7 @@ declare const webpackEnv: {
     readonly target: 'Chromium' | 'Firefox' | 'WKWebview' | 'E2E' | undefined
     readonly firefoxVariant: 'android' | 'desktop' | 'GeckoView' | undefined
     readonly genericTarget: 'facebookApp' | 'browser'
-    readonly perferResponsiveTarget: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+    readonly perferResponsiveTarget: 'xs' | undefined
     readonly shadowRootMode: 'open' | 'closed'
 }
 

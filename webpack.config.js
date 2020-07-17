@@ -264,7 +264,7 @@ module.exports = (argvEnv, argv) => {
         /** @type {'app' | 'browser' | 'facebookApp'} */
         let genericTarget = 'browser'
         /** @type {'xs' | 'sm' | 'md' | 'lg' | 'xl'} */
-        let perferResponsiveTarget = 'lg'
+        let perferResponsiveTarget = undefined
         if (target.Chromium) buildTarget = 'Chromium'
         if (target.Firefox) buildTarget = 'Firefox'
         if (target.FirefoxDesktop) firefoxVariant = 'desktop'
