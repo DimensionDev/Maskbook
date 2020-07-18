@@ -17,11 +17,11 @@ jobs:
             image: differui/node-14.4.0-browsers:v1
 
             # more: https://github.community/t5/GitHub-Actions/How-to-run-action-as-a-non-root-user/m-p/45733/highlight/true#M6330
-            options: '--user 1000
+            options: "--user 1000
                 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
                 -v /home/ubuntu/.cache/alice_home:/tmp/alice_home
                 -v /home/ubuntu/.cache/bob_home:/tmp/bob_home
-                -v /home/ubuntu/.e2e/e2e-test:/tmp/e2e-test'
+                -v /home/ubuntu/.e2e/e2e-test:/tmp/e2e-test"
 
             # more: https://stackoverflow.com/a/60202672/1986338
             # volumes:
@@ -39,6 +39,10 @@ jobs:
 
             # @v2 requires too much configurations
             - uses: actions/checkout@v1
+
+            - uses: jgierer12/npm-auth-gpr@v1
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Install Dependencies
               run: |

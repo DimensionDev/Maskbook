@@ -1,5 +1,5 @@
 /* eslint-disable no-bitwise */
-import { imgType } from '@dimensiondev/stego-js/es/helper'
+import { imgType } from '@dimensiondev/stego-js/dist-cjs/helper'
 
 export function getDimension(buf: ArrayBuffer) {
     const fallback = {
