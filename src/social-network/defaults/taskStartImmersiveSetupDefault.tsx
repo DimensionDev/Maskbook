@@ -7,6 +7,7 @@ import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import type { SocialNetworkUI } from '../ui'
 import { SetupGuide, SetupGuideProps } from '../../components/InjectedComponents/ImmersiveGuide/SetupGuide'
+import { PreferShadowRootMode } from '../../utils/constants'
 
 function UI({
     post,
@@ -42,7 +43,7 @@ export function createTaskStartImmersiveSetupDefault(_: () => SocialNetworkUI, p
             {
                 shadow: () => {
                     if (!shadowRoot) {
-                        shadowRoot = dom.attachShadow({ mode: webpackEnv.shadowRootMode })
+                        shadowRoot = dom.attachShadow({ mode: PreferShadowRootMode })
                     }
                     return shadowRoot
                 },

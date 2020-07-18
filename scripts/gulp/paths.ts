@@ -56,10 +56,3 @@ function file(x: string) {
         ensure: (content = '') => !existsSync(file) && writeFileSync(file, content),
     }
 }
-function pattern(x: string) {
-    const pattern = join(__dirname, x)
-    return {
-        pattern,
-        relative: (x: string) => join(pattern, x),
-    }
-}

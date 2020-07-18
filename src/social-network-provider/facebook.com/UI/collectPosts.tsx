@@ -4,6 +4,7 @@ import type { SocialNetworkUI } from '../../../social-network/ui'
 import { PostInfo } from '../../../social-network/PostInfo'
 import { isMobileFacebook } from '../isMobile'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
+import { PreferShadowRootMode } from '../../../utils/constants'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container ' : '.userContent',
@@ -81,7 +82,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 onRemove: () => this.posts.delete(metadata),
             }
         })
-        .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: PreferShadowRootMode } })
         .startWatch({
             childList: true,
             subtree: true,

@@ -32,7 +32,6 @@ module.exports = {
         config.plugins.unshift(
             new webpack.DefinePlugin({
                 'process.env.STORYBOOK': 'true',
-                'webpackEnv.shadowRootMode': '"open"',
             }),
         )
         return config

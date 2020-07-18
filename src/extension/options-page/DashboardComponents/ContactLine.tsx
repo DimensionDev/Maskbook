@@ -19,6 +19,7 @@ import { Skeleton } from '@material-ui/lab'
 import DashboardMenu from './DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
+import { UseMediaQueryDefaultMatches } from '../../../utils/constants'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -74,7 +75,7 @@ export function ContactLine(props: ContactLineProps) {
     const { contact, onUpdated, onDeleted, ...rest } = props
     const [contactDialog, openContactDialog] = useModal(DashboardContactDialog, { contact, onUpdated })
     const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
-        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+        defaultMatches: UseMediaQueryDefaultMatches,
     })
 
     const [deleteContactConfirmDialog, openDeleteContactConfirmDialog] = useModal(DashboardContactDeleteConfirmDialog, {

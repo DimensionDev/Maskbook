@@ -13,6 +13,7 @@ import classNames from 'classnames'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { getUrl } from '../../../utils/utils'
 import { useHistory } from 'react-router-dom'
+import { UseMediaQueryDefaultMatches } from '../../../utils/constants'
 
 interface DashboardRouterContainerProps {
     title?: string
@@ -178,7 +179,7 @@ export default function DashboardRouterContainer(props: DashboardRouterContainer
     })
     const history = useHistory()
     const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
-        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+        defaultMatches: UseMediaQueryDefaultMatches,
     })
 
     if (xsMatched && !leftIcons.length) {

@@ -6,6 +6,7 @@ import { PostComment, PostCommentProps } from '../../components/InjectedComponen
 import { noop } from 'lodash-es'
 import { makeStyles } from '@material-ui/core'
 import { PostInfoContext, usePostInfoDetails } from '../../components/DataSource/usePostInfo'
+import { PreferShadowRootMode } from '../../utils/constants'
 
 interface injectPostCommentsDefaultConfig {
     needZip?(): void
@@ -56,7 +57,7 @@ export function injectPostCommentsDefault<T extends string>(
                     },
                 }
             })
-            .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
+            .setDOMProxyOption({ afterShadowRootInit: { mode: PreferShadowRootMode } })
             .startWatch({
                 childList: true,
                 subtree: true,

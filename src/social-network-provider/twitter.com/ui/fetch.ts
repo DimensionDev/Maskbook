@@ -15,6 +15,7 @@ import Services from '../../../extension/service'
 import { twitterUrl } from '../utils/url'
 import { untilElementAvailable } from '../../../utils/dom'
 import { injectMaskbookIconToPost } from './injectMaskbookIcon'
+import { PreferShadowRootMode } from '../../../utils/constants'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -133,7 +134,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 onNodeMutation: run,
             }
         })
-        .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: PreferShadowRootMode } })
         .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
             const isQuotedTweet = tweetNode?.getAttribute('role') === 'blockquote'

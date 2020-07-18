@@ -19,6 +19,7 @@ import type {
     EC_Private_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { HasSafariIndexedDBBug } from '../../utils/constants'
 /**
  * Database structure:
  *
@@ -193,8 +194,7 @@ export async function queryPersonasWithPrivateKey(
     t = t || createTransaction(await db(), 'readonly')('personas', 'profiles')
     const records: PersonaRecord[] = []
     records.push(
-        // ? WKWebview bug https://bugs.webkit.org/show_bug.cgi?id=177350
-        ...(webpackEnv.target === 'WKWebview'
+        ...(HasSafariIndexedDBBug
             ? (await t.objectStore('personas').getAll()).filter((obj) => obj.hasPrivateKey === 'yes')
             : await t.objectStore('personas').index('hasPrivateKey').getAll(IDBKeyRange.only('yes'))
         ).map(personaRecordOutDB),
@@ -333,7 +333,7 @@ export async function queryProfilesDB(
     if (typeof network === 'string') {
         // ? WKWebview bug https://bugs.webkit.org/show_bug.cgi?id=177350
         result.push(
-            ...(webpackEnv.target === 'WKWebview'
+            ...(HasSafariIndexedDBBug
                 ? (await t.objectStore('profiles').getAll()).filter((obj) => obj.network === network)
                 : await t.objectStore('profiles').index('network').getAll(IDBKeyRange.only(network))
             ).map(profileOutDB),

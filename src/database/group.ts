@@ -5,6 +5,7 @@ import { MessageCenter } from '../utils/messages'
 import { PrototypeLess, restorePrototypeArray } from '../utils/type'
 import { createDBAccess } from './helpers/openDB'
 import type { Ok } from 'ts-results'
+import { HasSafariIndexedDBBug } from '../utils/constants'
 
 //#region Schema
 interface GroupRecordBase {
@@ -137,6 +138,7 @@ export async function updateUserGroupDatabase(
     }
     await t.objectStore('groups').put(GroupRecordIntoDB(nextRecord))
 
+    // Don't emit event in test mode cause it will invoke auto share
     if (process.env.NODE_ENV !== 'test' && nonDuplicateNewMembers.length) {
         MessageCenter.emit('joinGroup', {
             group: group.identifier,
@@ -180,8 +182,7 @@ export async function queryUserGroupsDatabase(
         }
     } else {
         result.push(
-            // ? WKWebview bug https://bugs.webkit.org/show_bug.cgi?id=177350
-            ...(webpackEnv.target === 'WKWebview'
+            ...(HasSafariIndexedDBBug
                 ? (await t.objectStore('groups').getAll()).filter((obj) => obj.network === query.network)
                 : await t.objectStore('groups').index('network').getAll(IDBKeyRange.only(query.network))),
         )

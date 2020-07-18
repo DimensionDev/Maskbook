@@ -11,6 +11,7 @@ import Serialization from '../../utils/type-transform/Serialization'
 import { sideEffect } from '../../utils/side-effects'
 import { untilDocumentReady } from '../../utils/dom'
 import { sleep } from '../../utils/utils'
+import { HasNoBrowserTabUI } from '../../utils/constants'
 
 function getActivatedUI() {
     return import('../../social-network/ui').then((x) => x.getActivatedUI())
@@ -90,7 +91,7 @@ export function exclusiveTasks(...args: Parameters<typeof realTasks>) {
         memorable: false,
         autoClose: false,
     }
-    if (webpackEnv.genericTarget !== 'facebookApp') return tasks(uri, { ...updatedOptions, ...options }, ...others)
+    if (HasNoBrowserTabUI) return tasks(uri, { ...updatedOptions, ...options }, ...others)
     let _key: keyof typeof _tasks
     let _args: any[]
     async function p() {

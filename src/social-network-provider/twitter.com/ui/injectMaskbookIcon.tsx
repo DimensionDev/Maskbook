@@ -6,6 +6,7 @@ import { ProfileIdentifier } from '../../../database/type'
 import { MaskbookIcon } from '../../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
 import React from 'react'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
+import { PreferShadowRootMode } from '../../../utils/constants'
 
 function Icon(props: { size: number }) {
     return (
@@ -18,7 +19,7 @@ function Icon(props: { size: number }) {
             }}></MaskbookIcon>
     )
 }
-const opt = { afterShadowRootInit: { mode: webpackEnv.shadowRootMode } } as const
+const opt = { afterShadowRootInit: { mode: PreferShadowRootMode } } as const
 function _(main: () => LiveSelector<HTMLSpanElement, true>, size: number) {
     // TODO: for unknown reason the MutationObserverWatcher doesn't work well
     // To reproduce, open a profile and switch to another profile.

@@ -5,6 +5,7 @@ import type { SocialNetworkUI } from '../../../social-network/ui'
 import { PersonKnown, PersonKnownProps } from '../../../components/InjectedComponents/PersonKnown'
 import { ProfileIdentifier } from '../../../database/type'
 import { makeStyles } from '@material-ui/core'
+import { PreferShadowRootMode } from '../../../utils/constants'
 
 const othersBioLiveSelectorMobile = new LiveSelector().querySelector<HTMLDivElement>(
     '[data-sigil=timeline-cover]:not(:first-child)',
@@ -55,7 +56,7 @@ export function injectKnownIdentityAtFacebook(this: SocialNetworkUI) {
     const self = othersBioLiveSelectorMobile.clone().concat(othersBioLiveSelectorPC)
     const watcher = new MutationObserverWatcher(self)
         .setDOMProxyOption({
-            afterShadowRootInit: { mode: webpackEnv.shadowRootMode },
+            afterShadowRootInit: { mode: PreferShadowRootMode },
         })
         .useForeach((content) => {
             const bioRef = new ValueRef(content.innerText)

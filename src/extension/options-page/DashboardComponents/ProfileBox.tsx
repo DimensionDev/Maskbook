@@ -10,6 +10,7 @@ import stringify from 'json-stable-stringify'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardPersonaUnlinkConfirmDialog } from '../DashboardDialogs/Persona'
 import { sleep } from '../../../utils/utils'
+import { SupportFacebookOnly } from '../../../utils/constants'
 
 interface ProfileBoxProps {
     persona: Persona | null
@@ -21,7 +22,7 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
     const profiles = persona ? [...persona.linkedProfiles] : []
     const providers = [...definedSocialNetworkWorkers]
         .filter((i) => {
-            if (webpackEnv.genericTarget === 'facebookApp') {
+            if (SupportFacebookOnly) {
                 if (i.networkIdentifier !== 'facebook.com') return false
             }
             return true
@@ -42,8 +43,7 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
         if (!persona) return
         if (!(await getCurrentNetworkUI(provider.network).requestPermission())) return
 
-        // FIXME:
-        // setting storage race condition here
+        // TODO: setting storage race condition here
         currentImmersiveSetupStatus[provider.network].value = stringify({
             status: 'during',
             persona: persona.identifier.toText(),

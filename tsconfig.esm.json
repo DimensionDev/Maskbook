@@ -15,7 +15,6 @@
         "importHelpers": "/polyfills/ttsclib.js",
         "jsonImport": "inline",
         "folderImport": true,
-        "umdCheckCompact": true,
         "rules": {
           "/(.+)/": {
             "type": "umd",

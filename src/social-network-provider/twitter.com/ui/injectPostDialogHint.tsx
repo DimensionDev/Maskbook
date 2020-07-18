@@ -9,6 +9,7 @@ import { makeStyles, Theme } from '@material-ui/core'
 import { MessageCenter } from '../../../utils/messages'
 import { useTwitterButton, useTwitterBanner } from '../utils/theme'
 import { hasEditor, isCompose } from '../utils/postBox'
+import { PreferShadowRootMode } from '../../../utils/constants'
 
 export function injectPostDialogHintAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
@@ -26,7 +27,7 @@ export function injectPostDialogHintAtTwitter() {
 function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>) {
     const watcher = new MutationObserverWatcher(ls)
         .setDOMProxyOption({
-            afterShadowRootInit: { mode: webpackEnv.shadowRootMode },
+            afterShadowRootInit: { mode: PreferShadowRootMode },
         })
         .startWatch({
             childList: true,

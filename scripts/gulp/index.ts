@@ -1,6 +1,6 @@
 import { promisify } from 'util'
 import { parallel, series } from 'gulp'
-import { watchManifest, assets, manifest, watchAssets } from './assets'
+import { watchManifest, assets, manifest, watchAssets, environmentFile, watchEnvironmentFile } from './assets'
 import { dependenciesWatch, dependenciesBuild } from './dependencies'
 import { tscESModuleBuild, tscESModuleWatch, tscSystemBuild, tscSystemWatch } from './tsc'
 import { libs } from './libraries'
@@ -18,18 +18,17 @@ function parallelProcessWatch(done: any) {
 }
 named(
     'watch dependencies, esm, system, worker in 4 process',
-    parallelProcessWatch,
     'Move heavy build tasks into individual process',
+    parallelProcessWatch,
 )
 
-export const watch = series(
-    preclude,
-    //
-    parallel(watchManifest, watchAssets, parallelProcessWatch),
+export const watch = named(
+    'watch',
+    'Start the development build process',
+    series(env, parallel(watchManifest, watchEnvironmentFile, watchAssets, parallelProcessWatch)),
 )
-named('watch', watch, 'Start the development build process')
 
-export async function preclude() {
+export async function env() {
     output.temp.ensure()
     output.extension.ensure()
     output.esmBuild.ensure()
@@ -38,26 +37,21 @@ export async function preclude() {
     output.polyfills.ensure()
     return promisify(parallel(manifest, assets, libs))()
 }
-named(preclude.name!, preclude, 'Prepare the build process')
+named(env.name!, 'Prepare the build process', env)
 
-export const build = series(
-    clean,
-    preclude,
-    parallel(
-        //
-        workerBuild,
-        series(
-            tscESModuleBuild,
-            //
-            parallel(tscSystemBuild, dependenciesBuild),
-        ),
+export const build = named(
+    'build',
+    'Build the Maskbook in production mode',
+    series(
+        clean,
+        env,
+        parallel(environmentFile, workerBuild, series(tscESModuleBuild, parallel(tscSystemBuild, dependenciesBuild))),
     ),
 )
-named('build', build, 'Build the Maskbook in production mode')
 export function clean(cb: any) {
     require('rimraf')(output.extension.folder, cb)
 }
-named(clean.name!, clean, 'Clean previous extension build')
+named(clean.name!, 'Clean previous extension build', clean)
 
 // export default watch
 export * from './assets'

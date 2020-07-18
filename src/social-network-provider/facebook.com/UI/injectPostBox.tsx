@@ -4,6 +4,7 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { isMobileFacebook } from '../isMobile'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
+import { PreferShadowRootMode } from '../../../utils/constants'
 
 let composeBox: LiveSelector<Element>
 if (isMobileFacebook) {
@@ -16,7 +17,7 @@ if (isMobileFacebook) {
 }
 export function injectPostBoxFacebook() {
     const watcher = new MutationObserverWatcher(composeBox.clone().enableSingleMode())
-        .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: PreferShadowRootMode } })
         .startWatch({
             childList: true,
             subtree: true,

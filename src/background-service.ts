@@ -6,6 +6,7 @@ import './_background_loader.2'
 import './extension/service'
 import './provider.worker'
 if (process.env.NODE_ENV === 'development') import('./network/matrix/instance')
+if (process.env.NODE_ENV === 'development') import('./protocols/wallet-provider/metamask-provider')
 
 import * as PersonaDB from './database/Persona/Persona.db'
 import * as PersonaDBHelper from './database/Persona/helpers'
@@ -22,10 +23,7 @@ import * as post from './database/post'
 import { definedSocialNetworkWorkers } from './social-network/worker'
 import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
 import { exclusiveTasks } from './extension/content-script/tasks'
-
-if (process.env.NODE_ENV === 'development') {
-    import('./protocols/wallet-provider/metamask-provider')
-}
+import { HasNoBrowserTabUI, HasNativeWelcomeProcess, SupportNativeInjectedScriptDeclaration } from './utils/constants'
 
 if (GetContext() === 'background') {
     const injectedScript = getInjectedScript()
@@ -44,11 +42,12 @@ if (GetContext() === 'background') {
          *
          * A `iOS-injected-scripts` field is used to add extra scripts
          */
-        if (webpackEnv.target !== 'WKWebview')
+        if (!SupportNativeInjectedScriptDeclaration)
             browser.tabs
                 .executeScript(arg.tabId, {
                     runAt: 'document_start',
                     frameId: arg.frameId,
+                    // refresh it every time in the dev mode so it's easier to debug injected script
                     code: process.env.NODE_ENV === 'development' ? await getInjectedScript() : await injectedScript,
                 })
                 .catch(IgnoreError(arg))
@@ -73,7 +72,7 @@ if (GetContext() === 'background') {
     })
 
     browser.runtime.onInstalled.addListener((detail) => {
-        if (webpackEnv.genericTarget === 'facebookApp') return
+        if (HasNativeWelcomeProcess) return
         if (detail.reason === 'install') {
             browser.tabs.create({ url: getWelcomePageURL() })
         }
@@ -88,7 +87,7 @@ if (GetContext() === 'background') {
         }
     })
 
-    if (webpackEnv.genericTarget === 'facebookApp') {
+    if (HasNoBrowserTabUI) {
         exclusiveTasks('https://m.facebook.com/', { important: true })
     }
     exclusiveTasks(getWelcomePageURL(), { important: true })

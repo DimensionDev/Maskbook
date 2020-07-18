@@ -4,6 +4,7 @@ import { definedSocialNetworkUIs, activateSocialNetworkUI } from './social-netwo
 import './provider.ui'
 import { LiveSelector, Watcher, DOMProxy } from '@holoflows/kit/es'
 import { exclusiveTasks } from './extension/content-script/tasks'
+import { HasNoBrowserTabUI } from './utils/constants'
 
 if (typeof window === 'object') {
     LiveSelector.enhanceDebugger()
@@ -17,7 +18,7 @@ activateSocialNetworkUI()
 
 const close = globalThis.close
 globalThis.close = () => {
-    if (webpackEnv.genericTarget === 'facebookApp') {
+    if (HasNoBrowserTabUI) {
         exclusiveTasks('https://m.facebook.com/')
         return
     }

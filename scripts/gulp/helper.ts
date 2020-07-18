@@ -4,6 +4,7 @@ import type { Configuration } from 'webpack'
 import webpack = require('webpack')
 import type { TaskFunction } from 'gulp'
 import ts = require('typescript')
+import { getEnvironment } from './env'
 
 export function modifyFile(fn: (x: string) => string) {
     return through2.obj((file, _, cb) => {
@@ -26,8 +27,14 @@ export function getWebpackConfig(
     return {
         mode,
         entry,
+        plugins: [
+            new webpack.EnvironmentPlugin(getEnvironment(mode)),
+            new webpack.optimize.LimitChunkCountPlugin({
+                maxChunks: 1,
+            }),
+        ],
         devtool: isDev ? 'cheap-source-map' : false,
-        optimization: { splitChunks: false, minimize: false },
+        optimization: { splitChunks: false, minimize: false, runtimeChunk: false },
         output: {
             path: distPath,
             globalObject: 'globalThis',
@@ -58,7 +65,7 @@ export function getWebpackConfig(
         },
     }
 }
-export function buildWebpackTask(name: string, config: (mode: Configuration['mode']) => Configuration, desc?: string) {
+export function buildWebpackTask(name: string, desc: string, config: (mode: Configuration['mode']) => Configuration) {
     const build: TaskFunction = async () => {
         const f = webpack(config('production'))
         const p: webpack.Stats = await promisify(f.run.bind(f))()
@@ -76,7 +83,13 @@ export function buildWebpackTask(name: string, config: (mode: Configuration['mod
     watch.description = `${desc} (watch)`
     return { watch, build }
 }
-export function named(displayName: string, f: TaskFunction, desc = '') {
+export function createTask(name: string, desc: string, f: (mode: Configuration['mode']) => TaskFunction) {
+    return {
+        watch: named(`watch-${name}`, `${desc} (watch)`, f('development')),
+        build: named(name, `${desc} (build)`, f('production')),
+    }
+}
+export function named(displayName: string, desc: string, f: TaskFunction) {
     f.displayName = displayName
     f.description = desc
     return f

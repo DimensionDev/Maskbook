@@ -14,8 +14,7 @@ export function geckoview(manifest: typeof base) {
 }
 // Good. No need to modify if it is Chrome.
 export function chromium(manifest: typeof base) {}
-// WKWebview is our iOS App.
-export function WKWebview(manifest: typeof base) {
+export function safari(manifest: typeof base) {
     // @ts-ignore
     // iOS native will handle this for us
     manifest['iOS-injected-scripts'] = ['js/injected-script.js']

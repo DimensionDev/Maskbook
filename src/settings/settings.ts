@@ -2,6 +2,7 @@ import { createGlobalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { EthereumNetwork } from '../plugins/Wallet/database/types'
+import { NoShadowRootSupport } from '../utils/constants'
 
 /**
  * Does the debug mode on
@@ -22,18 +23,13 @@ export const disableOpenNewTabInBackgroundSettings = createGlobalSettings<boolea
     },
 )
 
-const disableShadowRoot = webpackEnv.target === 'WKWebview' || process.env.STORYBOOK
-export const renderInShadowRootSettings = createGlobalSettings<boolean>(
-    'render in shadow root',
-    /**
-     * ? In WKWebview, the web extension polyfill is not ready for it.
-     */
-    !disableShadowRoot,
-    {
-        primary: () => i18n.t('settings_advance_security'),
-        secondary: () => i18n.t('settings_advance_security_desc'),
-    },
-)
+/**
+ * ? In WKWebview, the web extension polyfill is not ready for it.
+ */
+export const renderInShadowRootSettings = createGlobalSettings<boolean>('render in shadow root', !NoShadowRootSupport, {
+    primary: () => i18n.t('settings_advance_security'),
+    secondary: () => i18n.t('settings_advance_security_desc'),
+})
 
 export enum Appearance {
     default = 'default',

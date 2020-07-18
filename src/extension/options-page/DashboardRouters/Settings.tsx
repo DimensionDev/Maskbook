@@ -30,6 +30,7 @@ import { merge, cloneDeep } from 'lodash-es'
 import { useModal } from '../DashboardDialogs/Base'
 import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
+import { NoShadowRootSupport, UseMediaQueryDefaultMatches } from '../../../utils/constants'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -165,8 +166,8 @@ export default function DashboardSettingsRouter() {
                                     icon={<PaletteIcon />}
                                     value={appearanceSettings}
                                 />
-                                {process.env.NODE_ENV === 'development' ||
-                                webpackEnv.perferResponsiveTarget === 'xs' ? (
+                                {/* TODO: should use media query! */}
+                                {process.env.NODE_ENV === 'development' || UseMediaQueryDefaultMatches ? (
                                     <SettingsUIEnum
                                         classes={listStyle}
                                         secondary={currentEthereumNetwork}
@@ -190,7 +191,7 @@ export default function DashboardSettingsRouter() {
                                     value={disableOpenNewTabInBackgroundSettings}
                                 />
                                 {/* This feature is not ready for iOS */}
-                                {webpackEnv.target !== 'WKWebview' ? (
+                                {!NoShadowRootSupport ? (
                                     <SettingsUI
                                         classes={listStyle}
                                         icon={shadowRoot ? <EnhancedEncryptionIcon /> : <NoEncryptionIcon />}

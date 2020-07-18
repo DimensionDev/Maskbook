@@ -49,7 +49,4 @@ globalThis.webkit.messageHandlers.maskbookjsonrpc = {
     postMessage(data) {},
 }
 
-// webpack env
-globalThis.webpackEnv = {
-    target: 'Chromium',
-}
+process.env.target = 'Chromium'

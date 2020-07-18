@@ -12,6 +12,7 @@ import { PreDefinedVirtualGroupNames } from '../../../database/type'
 import { twitterUICustomUI, startWatchThemeColor } from './custom'
 import { notifyPermissionUpdate } from '../../../utils/permissions'
 import { injectMaskbookIconToProfile, injectMaskbookIconIntoFloatingProfileCard } from './injectMaskbookIcon'
+import { NotSupportWebExtensionDynamicPermissionRequesing } from '../../../utils/constants'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -51,8 +52,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     },
     friendlyName: 'Twitter (Insider Preview)',
     requestPermission() {
-        // TODO: wait for webextension-shim to support <all_urls> in permission.
-        if (webpackEnv.target === 'WKWebview' || webpackEnv.target === 'E2E') return Promise.resolve(true)
+        if (NotSupportWebExtensionDynamicPermissionRequesing) return Promise.resolve(true)
         return browser.permissions
             .request({
                 origins: [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`],

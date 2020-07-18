@@ -31,4 +31,4 @@ const systemJSLoader = parallel(
 export function libs() {
     return promisify(parallel(ttsclib, webExtensionPolyfill, systemJSLoader))()
 }
-named(libs.name!, libs, 'Copy libraries to the extension folder')
+named(libs.name!, 'Copy libraries to the extension folder', libs)

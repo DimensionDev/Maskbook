@@ -40,6 +40,7 @@ import { useWallet } from '../../../plugins/shared/useWallet'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
 import type { RedPacketRecord } from '../../../plugins/Wallet/database/types'
 import { useHistory } from 'react-router-dom'
+import { UseMediaQueryDefaultMatches } from '../../../utils/constants'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -110,7 +111,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     const { t } = useI18N()
     const color = useColorStyles()
     const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
-        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+        defaultMatches: UseMediaQueryDefaultMatches,
     })
 
     const network = useValueRef(currentEthereumNetworkSettings)
@@ -280,7 +281,7 @@ export default function DashboardWalletsRouter() {
     const { error } = useQueryParams(['error'])
     const { rpid } = useQueryParams(['rpid'])
     const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
-        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+        defaultMatches: UseMediaQueryDefaultMatches,
     })
 
     const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)

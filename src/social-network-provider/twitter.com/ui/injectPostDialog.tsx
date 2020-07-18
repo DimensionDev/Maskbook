@@ -7,6 +7,7 @@ import { useTwitterButton, useTwitterCloseButton, useTwitterLabel, useTwitterDia
 import { makeStyles } from '@material-ui/core/styles'
 import type { Theme } from '@material-ui/core'
 import { postEditorContentInPopupSelector, rootSelector } from '../utils/selector'
+import { PreferShadowRootMode } from '../../../utils/constants'
 
 const useStyles = makeStyles((theme: Theme) => ({
     input: {
@@ -34,7 +35,7 @@ export function injectPostDialogAtTwitter() {
 function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>) {
     const watcher = new MutationObserverWatcher(ls)
         .setDOMProxyOption({
-            afterShadowRootInit: { mode: webpackEnv.shadowRootMode },
+            afterShadowRootInit: { mode: PreferShadowRootMode },
         })
         .startWatch({
             childList: true,

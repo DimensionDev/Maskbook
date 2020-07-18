@@ -44,6 +44,7 @@ import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
 import { PluginUI } from '../../plugins/plugin'
+import { NotSupportImagePayload } from '../../utils/constants'
 
 const defaultTheme = {}
 
@@ -227,7 +228,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             </SelectRecipientsUI>
                         </Box>
                         {/* This feature is not ready for mobile version */}
-                        {webpackEnv.genericTarget === 'browser' ? (
+                        {NotSupportImagePayload ? (
                             <>
                                 <Typography style={{ marginBottom: 10 }}>
                                     {t('post_dialog__more_options_title')}

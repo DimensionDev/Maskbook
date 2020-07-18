@@ -2,18 +2,14 @@
 /// <reference types="react/experimental" />
 /// <reference types="react-dom/experimental" />
 
-declare const webpackEnv: {
-    readonly target: 'Chromium' | 'Firefox' | 'WKWebview' | 'E2E' | undefined
-    readonly firefoxVariant: 'android' | 'desktop' | 'GeckoView' | undefined
-    readonly genericTarget: 'facebookApp' | 'browser'
-    readonly perferResponsiveTarget: 'xs' | undefined
-    readonly shadowRootMode: 'open' | 'closed'
-}
-
 declare module NodeJS {
     interface ProcessEnv {
         NODE_ENV: 'development' | 'production' | 'test'
         STORYBOOK?: boolean
+        target: 'chromium' | 'firefox' | 'safari' | 'E2E'
+        architecture: 'web' | 'app'
+        firefoxVariant: 'fennec' | 'geckoview'
+        resolution: 'desktop' | 'mobile'
     }
 }
 
