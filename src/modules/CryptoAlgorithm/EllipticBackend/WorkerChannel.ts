@@ -11,7 +11,7 @@ export class WorkerMessage implements MessageChannel {
             this.ref = { type: 'main', worker: [] }
             if (typeof window !== 'object') break skipSSR
             OnlyRunInContext('background', '')
-            const worker = new Worker('/js/crypto-worker.js')
+            const worker = new Worker('/isolated/crypto_worker.js')
             worker.addEventListener(
                 'message',
                 () => {

@@ -7,34 +7,33 @@ import {
 } from '../../settings/settings'
 import type { SocialNetworkUI } from '../../social-network/ui'
 import { memoizePromise } from '../../utils/memoize'
-import { safeGetActiveUI } from '../../utils/safeRequire'
 import Serialization from '../../utils/type-transform/Serialization'
 import { sideEffect } from '../../utils/side-effects'
 import { untilDocumentReady } from '../../utils/dom'
 import { sleep } from '../../utils/utils'
 
 function getActivatedUI() {
-    return safeGetActiveUI()
+    return import('../../social-network/ui').then((x) => x.getActivatedUI())
 }
 
 const _tasks = {
-    getPostContent: () => getActivatedUI().taskGetPostContent(),
+    getPostContent: async () => (await getActivatedUI()).taskGetPostContent(),
     /**
      * Access profile page
      * Get Profile
      */
-    getProfile: (identifier: ProfileIdentifier) => getActivatedUI().taskGetProfile(identifier),
+    getProfile: async (identifier: ProfileIdentifier) => (await getActivatedUI()).taskGetProfile(identifier),
     /**
      * Access profile page
      * Paste text into bio
      */
-    pasteIntoBio: async (text: string) => getActivatedUI().taskPasteIntoBio(text),
+    pasteIntoBio: async (text: string) => (await getActivatedUI()).taskPasteIntoBio(text),
     /**
      * Access main page
      * Paste text into PostBox
      */
     pasteIntoPostBox: async (text: string, options: Parameters<SocialNetworkUI['taskPasteIntoPostBox']>[1]) =>
-        getActivatedUI().taskPasteIntoPostBox(text, options),
+        (await getActivatedUI()).taskPasteIntoPostBox(text, options),
     /**
      * Fetch a url in the current context
      */
@@ -48,7 +47,7 @@ const _tasks = {
         (x) => x,
     ),
     async immersiveSetup(for_: ECKeyIdentifier) {
-        getActivatedUI().taskStartImmersiveSetup(for_)
+        ;(await getActivatedUI()).taskStartImmersiveSetup(for_)
     },
     async noop() {},
 }
@@ -124,9 +123,9 @@ export function exclusiveTasks(...args: Parameters<typeof realTasks>) {
     })
 }
 
-sideEffect.then(untilDocumentReady).then(() => {
+sideEffect.then(untilDocumentReady).then(async () => {
     if (GetContext() !== 'content') return
-    const network = getActivatedUI().networkIdentifier
+    const network = (await getActivatedUI()).networkIdentifier
     const id = currentImmersiveSetupStatus[network].value
     const onStatusUpdate = (id: string) => {
         const status: ImmersiveSetupCrossContextStatus = JSON.parse(id || '{}')

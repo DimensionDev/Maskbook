@@ -72,8 +72,6 @@ export function selectElementContents(el: Node) {
 }
 
 import { noop } from 'lodash-es'
-export { noop as nop } from 'lodash-es'
-export { identity as bypass } from 'lodash-es'
 export function nopWithUnmount(..._args: unknown[]) {
     return noop
 }

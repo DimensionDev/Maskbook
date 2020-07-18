@@ -1,0 +1,37 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "outDir": "./temp/extension/esm/",
+    "noEmit": false,
+    // ? Cannot turn this on currently
+    // "tsBuildInfoFile": "./temp/tsconfig.esm.tsbuildinfo",
+    // "incremental": true,
+    // ! Once you change the plugin config, you have to remove the tsBuildInfoFile to clear cache
+    "plugins": [
+      {
+        "transform": "@magic-works/ttypescript-browser-like-import-transformer",
+        "after": true,
+        "importHelpers": "/polyfills/ttsclib.js",
+        "jsonImport": "inline",
+        "folderImport": true,
+        "umdCheckCompact": true,
+        "rules": {
+          "/(.+)/": {
+            "type": "umd",
+            "target": "__deps__",
+            "treeshake": {
+              "out": "./temp/__deps__esm__generated__.js"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "include": [
+    "./src/extension/options-page/index.tsx",
+    "./src/content-script.ts",
+    "./src/background-service.ts",
+    "./src/extension/popup-page/index.tsx"
+  ]
+}

@@ -6,7 +6,7 @@ const worker: typeof methods =
     process.env.NODE_ENV === 'test' || process.env.STORYBOOK === true
         ? // In the test env run it in main thread
           require('./methods').default
-        : AsyncCall<typeof methods>(typeof document === 'object' ? {} : require('./methods').default, {
+        : AsyncCall<typeof methods>(typeof document === 'object' ? {} : import('./methods').then((x) => x.default), {
               messageChannel: new WorkerMessage(),
               log: false,
           })

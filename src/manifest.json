@@ -3,6 +3,7 @@
     "version": "1.13.1",
     "manifest_version": 2,
     "permissions": ["storage", "downloads", "webNavigation", "activeTab"],
+    "web_accessible_resources": ["*.js"],
     "optional_permissions": ["<all_urls>", "notifications"],
     "background": { "page": "background.html" },
     "options_ui": { "page": "index.html", "open_in_tab": true },

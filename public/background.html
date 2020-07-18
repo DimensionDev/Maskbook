@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Maskbook</title>
     </head>
     <body>
         <script src="/polyfills/browser-polyfill.js"></script>
         <script src="/patches/firefox-fix.js"></script>
         <script src="/env.js"></script>
         <script src="/umd_es.js"></script>
-        <script src="/esm/extension/options-page/index.js" type="module"></script>
+        <!-- WebExtension content script SystemJS loader background service -->
+        <script src="/loaders/background-script.js"></script>
+        <script type="module" src="/esm/background-service.js"></script>
     </body>
 </html>
