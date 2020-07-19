@@ -1860,23 +1860,23 @@
     meow "^5.0.0"
 
 "@dimensiondev/webcrypto@unstable":
-  version "0.0.0-ea9772e"
-  resolved "https://npm.pkg.github.com/download/@dimensiondev/webcrypto/0.0.0-ea9772e/ccd0d90d5a189e5664387766a517c216ac92420f06ddc6a3c328fb4ed726ee4a#e6223bfaee2f4f2391ce215683a3b22790ac129a"
-  integrity sha512-iteUPK/n72LPXmp9l61Om78UE6/FN5C8N/4MaIuzU2o45iiBIOkCBYlc7eC1lAJMCNWv01OUZYZAhJF45EYKrQ==
+  version "0.0.0-574e5f7"
+  resolved "https://npm.pkg.github.com/download/@dimensiondev/webcrypto/0.0.0-574e5f7/6ced386bb2abb2184ac03a025f4a699dd0bf526d0a04f6a68c29512c4e7e4730#fd9c0430ac2b70a87be74bfc0c49e683a87f5053"
+  integrity sha512-Q/upeZLe6sD0O1gtreKQnOsxUlwPkI4mK14Fbn9tUpSAQHpd6/YYgrdw+f5cQr2EwAiPy73pZHAhSBlZE7COXg==
 
 "@dimensiondev/webextension-shim@unstable":
-  version "0.0.0-6a67963"
-  resolved "https://npm.pkg.github.com/download/@dimensiondev/webextension-shim/0.0.0-6a67963/ecaee42dfbbdfebee46775521297663b3bb718ffcaef1586cda00f376f50e6d0#5abd668a14ed82a7faa0ebaa631223544010969d"
-  integrity sha512-AKJRZPJOUPGP4XD8HkN5gcXnrwveetiK5i2+LR3236XpCYIzERPuV2xu4jE7FTdEe/Qer0bs8NX8UaDHwiTZnw==
+  version "0.0.0-054dadc"
+  resolved "https://npm.pkg.github.com/download/@dimensiondev/webextension-shim/0.0.0-054dadc/6d10ed3a06d67918f0b4f42f3f1d9824646ded100bf02726791cd98267da2ed2#031eef6cc747a256f1b3ed440df65434e6ed1048"
+  integrity sha512-PRqPIaw34Vbf111+4Av0IyfWmiVYzOmnpzjKrh5JOg174Q23X6ZnjXNanBFffJ99zx2c2MmPtGIYU2AerpEeCQ==
   dependencies:
     async-call-rpc "^1.0.4"
     systemjs "^6.3.2"
     web-ext-types "^3.2.1"
 
 "@dimensiondev/webpack-web-ext-plugin@unstable":
-  version "0.0.0-51a6bef"
-  resolved "https://npm.pkg.github.com/download/@dimensiondev/webpack-web-ext-plugin/0.0.0-51a6bef/a7835058f0c720d083233cc9653b3edc319e88584051dd6f45028a9946e6e379#7bd7cbb1ceaa450e06ff9b600d39aa0ca2e229b1"
-  integrity sha512-i1hFrMCb9pbwgNKxgayd0DED8lcIzf+mZWb4ioGo96fWhgMvoebcdbVsS7R/BnZEwOVYO4RKr3pZIRCQ7RRfVQ==
+  version "0.0.0-bc4a827"
+  resolved "https://npm.pkg.github.com/download/@dimensiondev/webpack-web-ext-plugin/0.0.0-bc4a827/b72bcdc60de320b820ce5b6b8de32a442abf5820096de5842f22ffedff870899#3024e33857ddf32c57e4c313bcac2996e4340d67"
+  integrity sha512-NHrYM0y/BZBz2a8nwVguzqNKeRmOpfpwQG2PjVSmJfDxjD+NGI4llLIvm1Z/vgqyazIi3jygEpZcevdgJ3UjfQ==
   dependencies:
     inquirer "^7.0.0"
 
