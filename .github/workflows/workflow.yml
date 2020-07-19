@@ -26,6 +26,7 @@ jobs:
 
             - name: Install Dependencies
               run: |
+                  npm install -g yarn@latest
                   yarn config set cache-folder /tmp/.yarn-cache-1000/v6
                   yarn install --link-duplicates --frozen-lockfile --pure-lockfile
     linters:
