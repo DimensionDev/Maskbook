@@ -40,10 +40,6 @@ jobs:
             # @v2 requires too much configurations
             - uses: actions/checkout@v1
 
-            - uses: jgierer12/npm-auth-gpr@v1
-              with:
-                  token: ${{ secrets.GITHUB_TOKEN }}
-
             - name: Install Dependencies
               run: |
                   yarn config set cache-folder /tmp/.yarn-cache-1000/v6
