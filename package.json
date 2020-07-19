@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@dimensiondev/matrix-js-sdk-type": "unstable",
-    "@dimensiondev/stego-js": "^0.11.0",
+    "@dimensiondev/stego-js": "unstable",
     "@holoflows/kit": "npm:@dimensiondev/holoflows-kit@unstable",
     "@material-ui/core": "4.10.2",
     "@material-ui/icons": "4.9.1",
