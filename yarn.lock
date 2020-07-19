@@ -1852,10 +1852,10 @@
     "@types/node" "^12.12.14"
     "@types/request" "^2.48.4"
 
-"@dimensiondev/stego-js@unstable":
-  version "0.0.0-d613b3f"
-  resolved "https://npm.pkg.github.com/download/@dimensiondev/stego-js/0.0.0-d613b3f/dbdea8d7cfbcd99fec2c43b04b991398289b9c485c4a5bedb6a0d15612ef556b#5d9a4bd6d01bbe7d7abc50b1923ccc8352503086"
-  integrity sha512-9uNdQDwqScgzEKFtC+GePdvLAxi6le8OUnQEpsf1CnYB7ot/iVkCs5xmpd8P05d3dkJI86RodOWukiYKuHjy1w==
+"@dimensiondev/stego-js@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@dimensiondev/stego-js/-/stego-js-0.11.0.tgz#4cc874fd51564e1a0b7380ecf2f52eb3dbb0bd7e"
+  integrity sha512-CKJv/bh5s4wvmQhUgTOof+DQ3UXrD/spJZZB6vuViqdlAvzn9T8GT3WuvVBKYTvsiAUHA01sOWLqUeNIWWdCwA==
   dependencies:
     meow "^5.0.0"
 
