@@ -2219,7 +2219,7 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@holoflows/kit@npm:@dimensiondev/holoflows-kit@latest":
+"@holoflows/kit@npm:@dimensiondev/holoflows-kit@0.7.0-7":
   version "0.7.0-7"
   resolved "https://npm.pkg.github.com/download/@dimensiondev/holoflows-kit/0.7.0-7/ee709ba70160543445d3f76075989466bfc481a25eb271b8cfefb59f2fbbfe93#ca2a9fd88f54412b459556ccecb2bf99eb0d503f"
   integrity sha512-c2/y8r+1u9XAZnML86svHHC/5B4flgy+wu/PnxEr+/X+GbHiJETARn7iOtaSC2SwcVDuZVCR5Yze0i1Wg3tHVA==
