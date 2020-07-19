@@ -62,10 +62,7 @@ const Dropzone: React.FC<DropzoneProps> = ({ onImgChange }) => {
                     if (!file) {
                         return
                     }
-                    // TODO: remove me
-                    console.log('file', file)
-                    console.log('onImgChange', onImgChange)
-                    onImgChange?.(file)
+                    onImgChange(file)
                 }}
             />
         </div>
