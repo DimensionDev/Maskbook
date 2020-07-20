@@ -6,8 +6,8 @@ export const ROOT_PATH = path.resolve(__dirname, '..')
 export const NODE_MODULES_PATH = path.resolve(ROOT_PATH, 'node_modules')
 export const BUILD_PATH = path.resolve(ROOT_PATH, 'build')
 
-export function run(cwd: string | undefined, cmd: string, ...args: string[]) {
-    console.log('$', cmd, args.join(' '), '# cwd:', cwd)
+export function run(cwd = ROOT_PATH, cmd: string, ...args: string[]) {
+    console.log('$', cmd, args.join(' '), '# cwd:', path.relative(cwd, ROOT_PATH))
     return execFileSync(cmd, args, {
         cwd,
         stdio: [process.stdin, process.stdout, process.stderr],
