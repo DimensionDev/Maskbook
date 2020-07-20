@@ -9,29 +9,27 @@
     "build-storybook": "build-storybook -s public --quiet",
     "build:base": "webpack --mode production",
     "build:chromium": "webpack --mode production --chromium",
+    "build:e2e": "webpack --mode production --e2e",
     "build:firefox": "webpack --mode production --firefox --reproducible-build",
     "build:gecko": "webpack --mode production --firefox-gecko",
-    "build:e2e": "webpack --mode production --e2e",
     "build:ios": "run-s build:ios:webpack build:ios:ext:prebuilt",
-    "build:ios:webpack": "webpack --mode production --wk-webview",
     "build:ios:ext:prebuilt": "ts-node scripts/webextensiom-shim-prebuilt.ts",
+    "build:ios:webpack": "webpack --mode production --wk-webview",
     "compile:contracts": "./scripts/contracts.sh",
-    "install": "ts-node scripts/postinstall.ts",
     "lint": "eslint src/ --ext .ts,.tsx --fix",
     "lint:report": "eslint src/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml",
     "lint:typecoverage": "type-coverage --strict --ignore-catch --ignore-files src/plugins/Wallet/contracts/** --ignore-files **/__tests__/** --ignore-files **\\__tests__\\** --detail --at-least 98",
     "start": "webpack-dev-server --mode development",
     "start:android": "webpack-dev-server --firefox-android --mode development",
     "start:chromium": "webpack-dev-server --chromium --mode development",
+    "start:e2e": "webpack-dev-server --e2e --mode development",
     "start:firefox": "webpack-dev-server --firefox --mode development",
     "start:gecko": "webpack-dev-server --firefox-gecko --mode development",
     "start:ios": "webpack-dev-server --wk-webview --mode development",
-    "start:e2e": "webpack-dev-server --e2e --mode development",
     "storybook": "start-storybook -p 9009 -s public --quiet",
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
-    "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
-    "uninstall": "ts-node scripts/postinstall.ts"
+    "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js"
   },
   "husky": {
     "hooks": {
@@ -45,8 +43,9 @@
     ]
   },
   "dependencies": {
-    "@dimensiondev/stego-js": "^0.11.0",
-    "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",
+    "@dimensiondev/matrix-js-sdk-type": "^1.0.0-3",
+    "@dimensiondev/stego-js": "^0.11.0-11",
+    "@holoflows/kit": "npm:@dimensiondev/holoflows-kit@0.7.0-7",
     "@material-ui/core": "4.10.2",
     "@material-ui/icons": "4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
@@ -86,7 +85,6 @@
     "jsqr": "^1.3.1",
     "lodash-es": "^4.17.11",
     "matrix-js-sdk": "^7.0.0",
-    "matrix-js-sdk-type": "https://github.com/Jack-Works/matrix-js-sdk-type",
     "metamask-extension-provider": "^1.1.1",
     "notistack": "^0.9.17",
     "pvtsutils": "^1.0.10",
@@ -117,6 +115,9 @@
   "devDependencies": {
     "@commitlint/cli": "^9.0.1",
     "@commitlint/config-conventional": "^9.0.1",
+    "@dimensiondev/webcrypto": "^0.1.0-11",
+    "@dimensiondev/webextension-shim": "^0.0.3-17",
+    "@dimensiondev/webpack-web-ext-plugin": "^0.0.3-6",
     "@nice-labs/git-flow-init": "^1.0.1",
     "@nice-labs/git-rev": "^3.4.2",
     "@sinonjs/text-encoding": "^0.7.1",
@@ -182,23 +183,20 @@
     "typechain-target-web3-v1": "^1.0.4",
     "typescript": "^3.9.6",
     "web-ext": "^4.3.0",
-    "webcrypto": "https://github.com/DimensionDev/webcrypto",
-    "webextension-shim": "https://github.com/DimensionDev/webextension-polyfill",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
     "webpack-extension-manifest-plugin": "^0.5.0",
     "webpack-manifest-plugin": "^2.2.0",
     "webpack-notifier": "^1.8.0",
-    "webpack-web-ext-plugin": "github:DimensionDev/webpack-web-ext-plugin",
     "yargs": "^15.3.1"
-  },
-  "engines": {
-    "node": ">=14.4.0"
   },
   "optionalDependencies": {
     "expect-puppeteer": "^4.4.0",
     "jest-puppeteer": "^4.4.0",
     "puppeteer": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=14.4.0"
   }
 }

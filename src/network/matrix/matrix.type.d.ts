@@ -1,3 +1,3 @@
 declare module 'matrix-js-sdk' {
-    export * from 'matrix-js-sdk-type'
+    export * from '@dimensiondev/matrix-js-sdk-type'
 }
