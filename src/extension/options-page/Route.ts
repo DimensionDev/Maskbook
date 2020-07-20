@@ -1,4 +1,5 @@
 export enum DashboardRoute {
+    Nav = '/nav',
     Personas = '/personas',
     Wallets = '/wallets',
     Contacts = '/contacts',

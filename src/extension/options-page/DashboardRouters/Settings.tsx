@@ -42,13 +42,25 @@ const useStyles = makeStyles((theme) =>
             fontWeight: 'normal',
             lineHeight: '30px',
             marginBottom: theme.spacing(1.5),
+            [theme.breakpoints.down('xs')]: {
+                marginBottom: 0,
+            },
         },
         section: {
             padding: '26px 40px',
             margin: theme.spacing(3, 0),
+            [theme.breakpoints.down('xs')]: {
+                padding: theme.spacing(2),
+            },
         },
         secondaryAction: {
-            paddingRight: '90px',
+            paddingRight: 90,
+        },
+        list: {
+            [theme.breakpoints.down('xs')]: {
+                marginLeft: theme.spacing(-2),
+                marginRight: theme.spacing(-2),
+            },
         },
         listItemRoot: {
             paddingTop: theme.spacing(1.5),
@@ -61,6 +73,9 @@ const useStyles = makeStyles((theme) =>
             minWidth: 'unset',
             marginLeft: 0,
             marginRight: theme.spacing(3),
+            [theme.breakpoints.down('xs')]: {
+                display: 'none',
+            },
         },
     }),
 )
@@ -68,7 +83,7 @@ const useStyles = makeStyles((theme) =>
 const settingsTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
         wrapper: {
-            padding: '0 24px',
+            padding: theme.spacing(0, 3),
         },
         typography: {
             body1: {
@@ -78,7 +93,7 @@ const settingsTheme = (theme: Theme): Theme =>
         overrides: {
             MuiPaper: {
                 rounded: {
-                    borderRadius: '12px',
+                    borderRadius: 12,
                 },
             },
             MuiCard: {
@@ -132,7 +147,7 @@ export default function DashboardSettingsRouter() {
                             {t('general')}
                         </Typography>
                         <Card elevation={0}>
-                            <List disablePadding>
+                            <List className={classes.list} disablePadding>
                                 <SettingsUIEnum
                                     classes={listStyle}
                                     secondary={langMapper(currentLang)}
@@ -166,7 +181,7 @@ export default function DashboardSettingsRouter() {
                             {t('advanced_options')}
                         </Typography>
                         <Card elevation={0}>
-                            <List disablePadding>
+                            <List className={classes.list} disablePadding>
                                 <SettingsUI
                                     classes={listStyle}
                                     icon={<TabIcon />}
@@ -193,7 +208,7 @@ export default function DashboardSettingsRouter() {
                             {t('database_management')}
                         </Typography>
                         <Card elevation={0}>
-                            <List disablePadding>
+                            <List className={classes.list} disablePadding>
                                 <SettingsUIDummy
                                     classes={listStyle}
                                     icon={<UnarchiveOutlinedIcon />}

@@ -2,7 +2,7 @@ import '../../social-network-provider/popup-page/index'
 import '../../setup.ui'
 import React from 'react'
 
-import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
+import { ThemeProvider, makeStyles, Theme } from '@material-ui/core/styles'
 import { Button, useMediaQuery, Paper, Divider, Typography } from '@material-ui/core'
 import TuneIcon from '@material-ui/icons/Tune'
 import PlayCircleIcon from '@material-ui/icons/PlayCircleFilled'
@@ -17,7 +17,7 @@ import i18nNextInstance from '../../utils/i18n-next'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getUrl } from '../../utils/utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     container: {
         userSelect: 'none',
         lineHeight: 1.75,

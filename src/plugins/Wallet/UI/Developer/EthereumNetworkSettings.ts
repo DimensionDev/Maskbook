@@ -32,9 +32,9 @@ const settings = {
         [EthereumNetwork.Ropsten]: '0xb1f8e55c7f64d203c1400b9d8555d050f94adf39',
     },
     middlewareAddress: {
-        [EthereumNetwork.Mainnet]: 'wss://mainnet.infura.io/ws/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
-        [EthereumNetwork.Rinkeby]: 'wss://rinkeby.infura.io/ws/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
-        [EthereumNetwork.Ropsten]: 'wss://ropsten.infura.io/ws/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
+        [EthereumNetwork.Mainnet]: 'https://mainnet.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
+        [EthereumNetwork.Rinkeby]: 'https://rinkeby.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
+        [EthereumNetwork.Ropsten]: 'https://ropsten.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
     },
 }
 

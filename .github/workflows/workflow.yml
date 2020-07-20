@@ -23,7 +23,7 @@ jobs:
             - name: Install Dependencies
               run: |
                   yarn config set cache-folder /tmp/.yarn-cache-1000/v6
-                  yarn install --link-duplicates --frozen-lockfile --pure-lockfile
+                  yarn install --link-duplicates --frozen-lockfile --pure-lockfile --verbose
     linters:
         needs: setup
         runs-on: self-hosted

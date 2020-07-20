@@ -1,6 +1,7 @@
 import React from 'react'
-import { Typography, makeStyles, createStyles, Box, Button, Avatar, ButtonBase } from '@material-ui/core'
+import { Typography, makeStyles, createStyles, Box, ButtonBase, Theme, useMediaQuery } from '@material-ui/core'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import classNames from 'classnames'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -33,6 +34,13 @@ const useStyles = makeStyles((theme) =>
                 width: '4px',
                 backgroundColor: theme.palette.primary.main,
             },
+            [theme.breakpoints.down('xs')]: {
+                opacity: 'unset',
+                padding: theme.spacing(2, 6, 2, 2),
+                '&::after': {
+                    display: 'none',
+                },
+            },
         },
         default: {
             '&::before': {
@@ -62,19 +70,33 @@ const useStyles = makeStyles((theme) =>
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
+            [theme.breakpoints.down('xs')]: {
+                fontSize: 20,
+            },
         },
         label: {
             color: theme.palette.text.secondary,
             fontWeight: 500,
+            [theme.breakpoints.down('xs')]: {
+                display: 'none',
+            },
         },
         address: {
             color: theme.palette.text.primary,
             fontFamily: 'var(--monospace)',
             wordBreak: 'break-all',
+            [theme.breakpoints.down('xs')]: {
+                fontSize: 14,
+            },
         },
         coin: {
             marginTop: theme.spacing(1),
             marginRight: theme.spacing(1),
+        },
+        chevron: {
+            left: 'auto',
+            right: theme.spacing(2),
+            position: 'absolute',
         },
     }),
 )
@@ -89,6 +111,10 @@ interface WalletItemProps {
 export function WalletItem(props: WalletItemProps) {
     const { t } = useI18N()
     const classes = useStyles()
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
+        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+    })
+
     const { wallet, selected, onClick, tokens } = props
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
@@ -105,7 +131,7 @@ export function WalletItem(props: WalletItemProps) {
             <Typography className={classes.title} variant="h5">
                 {wallet.name}
             </Typography>
-            <Box paddingY={2}>
+            <Box paddingY={xsMatched ? 0 : 2}>
                 <Typography className={classes.label} component="p" color="textSecondary" variant="overline">
                     {t('wallet_address')}
                 </Typography>
@@ -123,18 +149,20 @@ export function WalletItem(props: WalletItemProps) {
                     </Typography>
                 </Box>
             ) : null}
-            <ActionButton
-                color="primary"
-                size="small"
-                variant="outlined"
-                startIcon={<FileCopyOutlinedIcon />}
-                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                    e.stopPropagation()
-                    copyWalletAddress(wallet.address)
-                }}>
-                {t('copy')}
-            </ActionButton>
-            <Box py={1} display="flex" flexWrap="wrap">
+            {xsMatched ? null : (
+                <ActionButton
+                    color="primary"
+                    size="small"
+                    variant="outlined"
+                    startIcon={<FileCopyOutlinedIcon />}
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                        e.stopPropagation()
+                        copyWalletAddress(wallet.address)
+                    }}>
+                    {t('copy')}
+                </ActionButton>
+            )}
+            <Box py={xsMatched ? 0 : 1} display="flex" flexWrap="wrap">
                 <TokenIcon classes={{ coin: classes.coin }} address={ETH_ADDRESS} name="ETH" />
                 {tokens &&
                     tokens.map((token) => (
@@ -146,6 +174,7 @@ export function WalletItem(props: WalletItemProps) {
                         />
                     ))}
             </Box>
+            {xsMatched ? <ChevronRightIcon className={classes.chevron} color="action" /> : null}
         </ButtonBase>
     )
 }

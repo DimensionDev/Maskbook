@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { useState } from 'react'
+import React from 'react'
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@holoflows/kit'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import type { SocialNetworkUI } from '../../../social-network/ui'

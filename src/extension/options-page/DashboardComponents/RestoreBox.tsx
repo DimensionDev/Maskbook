@@ -19,16 +19,29 @@ const useStyle = makeStyles((theme) =>
             textAlign: 'center',
             cursor: 'pointer',
             transition: '0.4s',
+            overflow: 'hidden',
             '&[data-active=true]': {
                 color: 'black',
             },
         },
+        icon: {
+            top: 0,
+            bottom: 0,
+            left: 4,
+            right: 'auto',
+            margin: 'auto',
+            position: 'absolute',
+        },
         button: {
+            maxWidth: '90%',
+            position: 'relative',
             '& > span:first-child': {
-                whiteSpace: 'nowrap',
                 display: 'inline-block',
-                maxWidth: 320,
+                maxWidth: '100%',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
                 textOverflow: 'ellipsis',
+                lineHeight: 1.2,
             },
         },
         buttonText: {
@@ -44,7 +57,7 @@ const useStyle = makeStyles((theme) =>
             pointerEvents: 'none',
             width: 64,
             height: 64,
-            margin: '0 auto 20px',
+            margin: '20px auto',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
             backgroundSize: '64px 64px',
@@ -83,11 +96,12 @@ export function RestoreBox(props: RestoreBoxProps) {
                 )}
             </div>
             <ActionButton
-                className={file ? classes.button : ''}
+                className={classes.button}
                 classes={{ text: classes.buttonText }}
                 color="primary"
                 variant="text"
-                startIcon={entered || file ? null : <AddBoxOutlinedIcon />}
+                style={{ paddingLeft: entered || file ? 8 : 28 }}
+                startIcon={entered || file ? null : <AddBoxOutlinedIcon className={classes.icon} />}
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault()}>
                 {entered ? enterText : file ? file.name : leaveText}
             </ActionButton>

@@ -24,7 +24,7 @@ interface Props {
 const useStyles = makeStyles((theme) =>
     createStyles({
         card: {
-            width: '350px',
+            width: 350,
             flex: '0 0 auto',
             marginRight: theme.spacing(6),
             marginBottom: theme.spacing(5),
@@ -33,6 +33,11 @@ const useStyles = makeStyles((theme) =>
                 theme.palette.type === 'dark'
                     ? 'none'
                     : '0px 2px 4px rgba(96, 97, 112, 0.16), 0px 0px 1px rgba(40, 41, 61, 0.04)',
+
+            [theme.breakpoints.down('xs')]: {
+                width: '100%',
+                marginRight: 0,
+            },
         },
         header: {
             display: 'flex',

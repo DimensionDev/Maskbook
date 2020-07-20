@@ -1,9 +1,9 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import classNames from 'classnames'
 import { Box, createStyles, Theme, makeStyles, InputBase, ThemeProvider } from '@material-ui/core'
 import { Database as DatabaseIcon } from 'react-feather'
 import { v4 as uuid } from 'uuid'
-import { WrappedDialogProps, DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback } from './Base'
+import { WrappedDialogProps, DashboardDialogCore, DashboardDialogWrapper } from './Base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { DatabaseRecordType, DatabasePreviewCard } from '../DashboardComponents/DatabasePreviewCard'
 import ActionButton, { DebounceButton } from '../DashboardComponents/ActionButton'
@@ -120,6 +120,7 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
     const [file, setFile] = useState<File | null>(null)
+    const [json, setJSON] = useState<BackupJSONFileLatest | null>(null)
     const [backupValue, setBackupValue] = useState('')
     const [textValue, setTextValue] = useState('')
 
@@ -163,27 +164,27 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
         height: 176,
     }
 
-    const restoreDB = useCallback(
-        async (str: string) => {
-            try {
-                const json = UpgradeBackupJSONFile(decompressBackupFile(str))
-                if (!json) throw new Error('UpgradeBackupJSONFile failed')
-
-                // grant permissions before jump into confirmation page
-                const permissions = await extraPermissions(json.grantedHostPermissions)
-                if (permissions) {
-                    const granted = await browser.permissions.request({ origins: permissions ?? [] })
-                    if (!granted) return
-                }
-                const restoreId = uuid()
-                await Services.Welcome.setUnconfirmedBackup(restoreId, json)
-                onConfirm?.(restoreId, json)
-            } catch (e) {
-                enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
+    const permissionState = useAsync(async () => {
+        const json = UpgradeBackupJSONFile(decompressBackupFile(state[0] === 0 ? backupValue : textValue))
+        setJSON(json)
+        if (!json) throw new Error('UpgradeBackupJSONFile failed')
+        return extraPermissions(json.grantedHostPermissions)
+    }, [state[0], backupValue, textValue])
+    const restoreDB = async () => {
+        try {
+            if (!json) return
+            const permissions = permissionState.value ?? []
+            if (permissions.length) {
+                const granted = await browser.permissions.request({ origins: permissions ?? [] })
+                if (!granted) return
             }
-        },
-        [enqueueSnackbar, onConfirm, t],
-    )
+            const restoreId = uuid()
+            await Services.Welcome.setUnconfirmedBackup(restoreId, json)
+            onConfirm?.(restoreId, json)
+        } catch (e) {
+            enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
+        }
+    }
 
     return (
         <DashboardDialogWrapper
@@ -205,8 +206,13 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
                         className={selectBackupClasses.button}
                         variant="contained"
                         color="primary"
-                        disabled={!(state[0] === 0 && backupValue) && !(state[0] === 1 && textValue)}
-                        onClick={() => restoreDB(state[0] === 0 ? backupValue : textValue)}
+                        disabled={
+                            (!(state[0] === 0 && backupValue) && !(state[0] === 1 && textValue)) ||
+                            !json ||
+                            permissionState.loading ||
+                            !!permissionState.error
+                        }
+                        onClick={restoreDB}
                         data-testid="restore_button">
                         {t('set_up_button_restore')}
                     </ActionButton>
