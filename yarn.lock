@@ -1844,38 +1844,50 @@
   resolved "https://registry.yarnpkg.com/@commitlint/types/-/types-9.0.1.tgz#df281f0f3d8f3adb10c95e4dd72b16acf41b5400"
   integrity sha512-wo2rHprtDzTHf4tiSxavktJ52ntiwmg7eHNGFLH38G1of8OfGVwOc1sVbpM4jN/HK/rCMhYOi6xzoPqsv0537A==
 
-"@dimensiondev/matrix-js-sdk-type@^1.0.0-3":
+"@dimensiondev/holoflows-kit@^0.7.0-22", "@holoflows/kit@npm:@dimensiondev/holoflows-kit":
+  version "0.7.0-22"
+  resolved "https://npm.dimension.im/@dimensiondev%2fholoflows-kit/-/93c22c52af4deaa4e07e69ecca7ff6b1a4bd45143b5c9863da02ba3e189f7836#7b8f1dba9cbed144dfebb979264880cfdf5b4058"
+  integrity sha512-sfkh7kLGNfSS5sxlIEJNngHjo1haH2EfimMA7CF8bAZyrXiWLUoNHornYBamS6U+MvqYUwiIjOXf/Jk2kPaftw==
+  dependencies:
+    "@servie/events" "^1.0.0"
+    async-call-rpc "^1.0.4"
+    concurrent-lock "^1.0.7"
+    jsx-jsonml-devtools-renderer "^1.4.1"
+    lodash-es "^4.17.15"
+    memorize-decorator "^0.2.2"
+
+"@dimensiondev/matrix-js-sdk-type@1.0.0-3":
   version "1.0.0-3"
-  resolved "https://npm.pkg.github.com/download/@dimensiondev/matrix-js-sdk-type/1.0.0-3/2673c86a4dfa54575cd9754a20621d99d5501069bc1478d35af75a0cad1b25e9#5cdc4d849457d02b4446ccb5848963fc0737fc54"
+  resolved "https://npm.dimension.im/@dimensiondev%2fmatrix-js-sdk-type/-/2673c86a4dfa54575cd9754a20621d99d5501069bc1478d35af75a0cad1b25e9#5cdc4d849457d02b4446ccb5848963fc0737fc54"
   integrity sha512-sXkKU1SITVFgh/iweWpcTyut4wdT5Okzx6RKGKJJ5oy8hYxXBTN1hVNRrsjutRHsL6xTwo4qptjRjeituvDqCQ==
   dependencies:
     "@types/node" "^12.12.14"
     "@types/request" "^2.48.4"
 
-"@dimensiondev/stego-js@^0.11.0-11":
-  version "0.11.0-11"
-  resolved "https://npm.pkg.github.com/download/@dimensiondev/stego-js/0.11.0-11/4bb0b86a1cddd03a7579896dc0c85fc2423058f3d907c25dc0c32abc32b65f3e#11eab81d86580e049e71369dff495d08b13ff104"
-  integrity sha512-OJBy3HqKPjKvKFO8/8hdT+yxf+obUrvtNskW7hdBvJaqRnJ7mjbyFeQop33MbYx8uUrCqgd4V6JpWEHtlE0KYQ==
+"@dimensiondev/stego-js@^0.11.1-14":
+  version "0.11.1-14"
+  resolved "https://npm.dimension.im/@dimensiondev%2fstego-js/-/2c61f92b5cff100c9d5ceb567067e75d408c39a436180705fd363afc10555ea9#f39fdc69cf671fa42b2d375f6060fc1c5a9161d6"
+  integrity sha512-dRv/aad6HpUvDNjMW3fKmJsXQlaRKO3QwqAWNWks7nj3e7tyZ2gFJFb6PG+DgtfU3PaYajfSaLGrEspeVlFtyQ==
   dependencies:
     meow "^5.0.0"
 
-"@dimensiondev/webcrypto@^0.1.0-11":
+"@dimensiondev/webcrypto@0.1.0-11":
   version "0.1.0-11"
-  resolved "https://npm.pkg.github.com/download/@dimensiondev/webcrypto/0.1.0-11/cb2e2644ba52534514eb832f54581d1eeed47c088ea0e97946fba21d8bded7e8#c94feae45f77b0c5eae305c86c2ef3e0f4f79eb7"
+  resolved "https://npm.dimension.im/@dimensiondev%2fwebcrypto/-/cb2e2644ba52534514eb832f54581d1eeed47c088ea0e97946fba21d8bded7e8#c94feae45f77b0c5eae305c86c2ef3e0f4f79eb7"
   integrity sha512-DCDWiHOA/2Gddqair/m1TQ1yC2wgcR+1qo2Rb9Jt69ttPqXnoE5G3DV71Yb76oiBui6YG49T8R9RSqmpdhWBww==
 
-"@dimensiondev/webextension-shim@^0.0.3-17":
+"@dimensiondev/webextension-shim@0.0.3-17":
   version "0.0.3-17"
-  resolved "https://npm.pkg.github.com/download/@dimensiondev/webextension-shim/0.0.3-17/ac8a04a67e2035ddd7018f2735d2d5c80d060b7b82c88eb99c221d8982938f3b#871e49200aea659ef9160d0be182bb2371c27343"
+  resolved "https://npm.dimension.im/@dimensiondev%2fwebextension-shim/-/ac8a04a67e2035ddd7018f2735d2d5c80d060b7b82c88eb99c221d8982938f3b#871e49200aea659ef9160d0be182bb2371c27343"
   integrity sha512-dg/yM5J1bnKtdokMdI+e4PxgSTOsEN+92gstkIiRPDO+IWEfK62yuJqWy9EJkCsapCGpzoBupBFfAVfxtkC8Jg==
   dependencies:
     async-call-rpc "^1.0.4"
     systemjs "^6.3.2"
     web-ext-types "^3.2.1"
 
-"@dimensiondev/webpack-web-ext-plugin@^0.0.3-6":
+"@dimensiondev/webpack-web-ext-plugin@0.0.3-6":
   version "0.0.3-6"
-  resolved "https://npm.pkg.github.com/download/@dimensiondev/webpack-web-ext-plugin/0.0.3-6/79f98489eb2259fc107f5500091ec500f9cee8181da5943f573a58cdc869a5e4#5a25a905a4f80c32aacd1a4805ad8546ad3527cc"
+  resolved "https://npm.dimension.im/@dimensiondev%2fwebpack-web-ext-plugin/-/79f98489eb2259fc107f5500091ec500f9cee8181da5943f573a58cdc869a5e4#5a25a905a4f80c32aacd1a4805ad8546ad3527cc"
   integrity sha512-UAL/DxJlJeW1xYwt/VlCNyL9+9VXfrW2G6Ofmo9C+4G9Xq4xSqbRQgThi4mLXyFrE016/3hHwHcOAxJsOIWoTw==
   dependencies:
     inquirer "^7.0.0"
@@ -2218,18 +2230,6 @@
   integrity sha512-tAag0jEcjwH+P2quUfipd7liWCNX2F8NvYjQp2wtInsZxnMlypdw0FtAOLxtvvkO+GSRRbmNi8m/5y42PQJYCQ==
   dependencies:
     "@hapi/hoek" "^8.3.0"
-
-"@holoflows/kit@npm:@dimensiondev/holoflows-kit@0.7.0-7":
-  version "0.7.0-7"
-  resolved "https://npm.pkg.github.com/download/@dimensiondev/holoflows-kit/0.7.0-7/ee709ba70160543445d3f76075989466bfc481a25eb271b8cfefb59f2fbbfe93#ca2a9fd88f54412b459556ccecb2bf99eb0d503f"
-  integrity sha512-c2/y8r+1u9XAZnML86svHHC/5B4flgy+wu/PnxEr+/X+GbHiJETARn7iOtaSC2SwcVDuZVCR5Yze0i1Wg3tHVA==
-  dependencies:
-    "@servie/events" "^1.0.0"
-    async-call-rpc "^1.0.4"
-    concurrent-lock "^1.0.7"
-    jsx-jsonml-devtools-renderer "^1.4.1"
-    lodash-es "^4.17.15"
-    memorize-decorator "^0.2.2"
 
 "@icons/material@^0.2.4":
   version "0.2.4"
