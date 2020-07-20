@@ -339,12 +339,9 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
     const { data } = useManagedWalletDetail(wallet.address)
     const { value: privateKeyInHex } = useAsync(async () => {
         if (!data) return
-        const { privateKeyInHex } = await Services.Plugin.invokePlugin(
-            'maskbook.wallet',
-            'recoverWallet',
-            data.mnemonic,
-            data.passphrase,
-        )
+        const { privateKeyInHex } = data.privateKey
+            ? await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', data.privateKey)
+            : await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWallet', data.mnemonic, data.passphrase)
         return privateKeyInHex
     }, [data])
 
