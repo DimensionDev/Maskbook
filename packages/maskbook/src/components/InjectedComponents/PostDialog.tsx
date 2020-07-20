@@ -15,6 +15,9 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
+import Jimp from 'jimp'
+import type JimpT from '@jimp/core/types'
+var toBuffer = require('typedarray-to-buffer')
 import { CompositionEvent, MaskMessage } from '../../utils/messages'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
@@ -79,6 +82,7 @@ export interface PostDialogUIProps extends withClasses<never> {
     currentShareTarget: Array<Profile | Group>
     currentIdentity: Profile | null
     postContent: TypedMessage
+    onImgChange: (img: File) => Promise<void>
     postBoxButtonDisabled: boolean
     onPostContentChanged: (nextMessage: TypedMessage) => void
     onOnlyMyselfChanged: (checked: boolean) => void
@@ -92,11 +96,16 @@ export interface PostDialogUIProps extends withClasses<never> {
     SelectRecipientsUIProps?: Partial<SelectRecipientsUIProps>
 }
 
-const readFileAsync: (file: File) => Promise<FileReader['result']> = (file: File) => {
+// TODO: you will want to move this elsewhere
+const readFileAsync: (file: File) => Promise<ArrayBuffer | null> = (file: File) => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader()
         reader.onload = () => {
-            resolve(reader.result)
+            if (typeof reader.result === 'string') {
+                resolve(null)
+            } else {
+                resolve(reader.result)
+            }
         }
         reader.onerror = reject
         reader.readAsArrayBuffer(file)
@@ -113,26 +122,6 @@ export function PostDialogUI(props: PostDialogUIProps) {
         if (isTypedMessageText(msg)) props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
         else throw new Error('Not impled yet')
     }
-    const onImgChange = useCallback(
-        async (img: File) => {
-            // * not setting any images so that they are not stored by React
-            const imgBuffer = await readFileAsync(img)
-            console.debug('imgBuffer', imgBuffer)
-            if (!imgBuffer) {
-                console.debug('empty image, nothing to do')
-                return
-            }
-            // const [encrypted, token] = await Services.Crypto.encryptTo(
-            //     makeTypedMessage('some text to hide'),
-            //     [],
-            //     props.currentIdentity!.identifier,
-            //     true,
-            // )
-            // console.debug('encrypted', encrypted)
-            // console.debug('token', token)
-        },
-        [props.currentIdentity],
-    )
 
     if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
     const metadataBadge = [...PluginUI].flatMap((plugin) =>
@@ -278,7 +267,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 />
                             )}
                         </Box>
-                        <Box>{props.imageEncrypt && <Dropzone onImgChange={onImgChange} />}</Box>
+                        <Box>{props.imageEncrypt && <Dropzone onImgChange={props.onImgChange} />}</Box>
                     </DialogContent>
                     {/* TODO: not disabled when the image has been uploaded */}
                     <DialogActions>
@@ -350,6 +339,18 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             currentImageEncryptStatus[getActivatedUI().networkIdentifier].value = String(checked)
         }, []),
     )
+    const [imgToEncrypt, setImgToEncrypt] = useState<typeof JimpT | null>(null)
+    const onImgChange = useCallback(async (imgFile: File) => {
+        const arrayBuffer = await readFileAsync(imgFile)
+        if (!arrayBuffer) {
+            console.debug('empty image file')
+            return
+        }
+        const uintArr = new Uint8Array(arrayBuffer)
+        const buf = toBuffer(uintArr)
+        const img = await Jimp.read(buf)
+        setImgToEncrypt(img)
+    }, [])
     //#endregion
     //#region callbacks
     const onRequestPost = or(
@@ -401,6 +402,14 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                         autoPasteFailedRecover: true,
                         relatedText,
                     })
+                } else if (imageEncryptEnabled) {
+                    // ! don't know what red packets are and it looks like it is experimental anyway
+                    activeUI.taskPasteIntoPostBox(
+                        // * TODO: change message
+                        t('additional_post_box__steganography_post_pre', { random: String(Date.now()) }),
+                        { autoPasteFailedRecover: true, shouldOpenPostDialog: true },
+                    )
+                    // activeUI.taskUploadToPostBox()
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
                     if (redPacketMetadata.ok) {
@@ -428,7 +437,15 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                 // there is nothing to write if it is shared with public
                 if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayloadEnabled, t, i18n.language],
+            [
+                currentIdentity,
+                shareToEveryone,
+                typedMessageMetadata,
+                imagePayloadEnabled,
+                imageEncryptEnabled,
+                t,
+                i18n.language,
+            ],
         ),
     )
     const onRequestReset = or(
@@ -476,6 +493,18 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             checked && setOnlyMyself(false)
         }, []),
     )
+    const postBoxButtonDisabled = useCallback(() => {
+        const allOrMe = onlyMyself || shareToEveryoneLocal
+        const textFromTypedMessage = extractTextFromTypedMessage(postBoxContent).val
+        console.log('imgToEncrypt', imgToEncrypt)
+        const condition = allOrMe
+            ? imageEncryptEnabled
+                ? imgToEncrypt?.bitmap?.data
+                : textFromTypedMessage
+            : currentShareTarget.length && textFromTypedMessage
+        return !condition
+    }, [onlyMyself, shareToEveryoneLocal, currentShareTarget.length, postBoxContent, imageEncryptEnabled, imgToEncrypt])
+
     //#endregion
 
     //#region Red Packet
@@ -507,6 +536,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             postContent={postBoxContent}
             postBoxButtonDisabled={isPostButtonDisabled}
             maxLength={560}
+            onImgChange={onImgChange}
             onSetSelected={setCurrentShareTarget}
             onPostContentChanged={setPostBoxContent}
             onShareToEveryoneChanged={onShareToEveryoneChanged}

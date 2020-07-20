@@ -12,7 +12,7 @@
     "add_token": "Add Token",
     "add_token_search_hint": "Search Tokens",
     "additional_post_box__encrypted_post_pre": "Decrypt this post with #mask_io ! {{encrypted}}",
-    "additional_post_box__steganography_post_pre": "This image is encrypted with #mask_io. 📪🔑 Install mask.io to decrypt it. {{random}}",
+    "additional_post_box__steganography_post_pre": "This post is shared with my friends. To see the content, install mask.io browser extension. ([I:b]) {{random}}.",
     "auto_paste_failed_dialog_title": "Paste manually",
     "auto_paste_failed_dialog_content": "Please copy the following text and image (if there is any) and publish it",
     "auto_paste_failed_dialog_image_caption": "Open in a new tab",
