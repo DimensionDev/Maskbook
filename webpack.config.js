@@ -24,7 +24,7 @@ const publicPolyfill = src('./public/polyfill')
 process.env.BROWSER = 'none'
 
 const SSRPlugin = require('./config-overrides/SSRPlugin')
-const WebExtensionHotLoadPlugin = require('webpack-web-ext-plugin')
+const WebExtensionHotLoadPlugin = require('@dimensiondev/webpack-web-ext-plugin')
 const ManifestGeneratorPlugin = require('webpack-extension-manifest-plugin')
 
 /**
@@ -263,6 +263,8 @@ module.exports = (argvEnv, argv) => {
         let firefoxVariant = undefined
         /** @type {'app' | 'browser' | 'facebookApp'} */
         let genericTarget = 'browser'
+        /** @type {'xs' | 'sm' | 'md' | 'lg' | 'xl'} */
+        let perferResponsiveTarget = undefined
         if (target.Chromium) buildTarget = 'Chromium'
         if (target.Firefox) buildTarget = 'Firefox'
         if (target.FirefoxDesktop) firefoxVariant = 'desktop'
@@ -275,6 +277,9 @@ module.exports = (argvEnv, argv) => {
             buildTarget = 'WKWebview'
             genericTarget = 'facebookApp'
         }
+        if (target.WKWebview || target.FirefoxForAndroid) {
+            perferResponsiveTarget = 'xs'
+        }
         if (target.E2E) buildTarget = 'E2E'
         config.plugins.push(
             new webpack.DefinePlugin({
@@ -286,6 +291,7 @@ module.exports = (argvEnv, argv) => {
                 new webpack.DefinePlugin({
                     'webpackEnv.target': JSON.stringify(buildTarget),
                     'webpackEnv.genericTarget': JSON.stringify(genericTarget),
+                    'webpackEnv.perferResponsiveTarget': JSON.stringify(perferResponsiveTarget),
                     'process.env.STORYBOOK': 'false',
                 }),
             )

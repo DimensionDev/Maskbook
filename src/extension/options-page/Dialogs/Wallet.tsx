@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { useAsync } from 'react-use'
+import { useAsync, useCopyToClipboard } from 'react-use'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import {
     CreditCard as CreditCardIcon,
@@ -7,6 +7,7 @@ import {
     Clock as ClockIcon,
     Info as InfoIcon,
     Trash2 as TrashIcon,
+    Share2 as ShareIcon,
 } from 'react-feather'
 import {
     Button,
@@ -19,7 +20,11 @@ import {
     FormControlLabel,
     Checkbox,
     Chip,
+    Theme,
+    InputAdornment,
+    IconButton,
 } from '@material-ui/core'
+import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -46,6 +51,7 @@ import type { WalletDetails, ERC20TokenDetails } from '../../background-script/P
 import { useManagedWalletDetail } from '../../../plugins/shared/useWallet'
 import { difference } from 'lodash-es'
 import { RedPacket } from '../../../plugins/Wallet/UI/Dashboard/Components/RedPacket'
+import { QRCode } from '../../../components/shared/qrcode'
 
 //#region wallet import dialog
 export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
@@ -153,11 +159,14 @@ interface WalletProps {
     wallet: WalletDetails
 }
 
-const useWalletCreateDialogStyle = makeStyles((theme) =>
+const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
     createStyles({
         confirmation: {
             fontSize: 16,
             lineHeight: 1.75,
+            [theme.breakpoints.down('xs')]: {
+                fontSize: 14,
+            },
         },
         notification: {
             fontSize: 12,
@@ -167,6 +176,9 @@ const useWalletCreateDialogStyle = makeStyles((theme) =>
             color: 'black',
             padding: '8px 22px',
             margin: '24px -36px 0',
+            [theme.breakpoints.down('xs')]: {
+                margin: '24px -16px 0',
+            },
         },
         notificationIcon: {
             width: 16,
@@ -193,7 +205,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
     )
 
     return (
-        <DashboardDialogCore {...props}>
+        <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 icon={<CreditCardIcon />}
                 iconColor="#4EE0BC"
@@ -244,6 +256,70 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                         disabled={!name || !confirmed}>
                         {t('create')}
                     </DebounceButton>
+                }
+            />
+        </DashboardDialogCore>
+    )
+}
+//#endregion
+
+//#region wallet share dialog
+const useWalletShareDialogStyle = makeStyles((theme: Theme) =>
+    createStyles({
+        qr: {
+            marginTop: theme.spacing(3),
+        },
+    }),
+)
+
+export function DashboardWalletShareDialog(props: WrappedDialogProps<WalletProps>) {
+    const { t } = useI18N()
+    const classes = useWalletShareDialogStyle()
+    const { wallet } = props.ComponentProps!
+
+    const [, copyToClipboard] = useCopyToClipboard()
+    const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
+
+    return (
+        <DashboardDialogCore {...props}>
+            <DashboardDialogWrapper
+                icon={<ShareIcon />}
+                iconColor="#4EE0BC"
+                primary={t('share_wallet')}
+                secondary={t('share_wallet_hint')}
+                content={
+                    <>
+                        <form>
+                            <TextField
+                                required
+                                label={t('wallet_address')}
+                                value={wallet.address}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                size="small"
+                                                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                                    e.stopPropagation()
+                                                    copyWalletAddress(wallet.address)
+                                                }}>
+                                                <FileCopyOutlinedIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </form>
+                        <Box className={classes.qr} display="flex" justifyContent="center" alignItems="center">
+                            <QRCode
+                                text={`ethereum:${wallet.address}`}
+                                options={{ width: 200 }}
+                                canvasProps={{
+                                    style: { display: 'block', margin: 'auto' },
+                                }}
+                            />
+                        </Box>
+                    </>
                 }
             />
         </DashboardDialogCore>
@@ -324,7 +400,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
 //#endregion
 
 //#region wallet backup dialog
-const useBackupDialogStyles = makeStyles((theme) =>
+const useBackupDialogStyles = makeStyles((theme: Theme) =>
     createStyles({
         section: {
             textAlign: 'left',
@@ -385,7 +461,7 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
         props.onClose,
     )
     return (
-        <DashboardDialogCore {...props}>
+        <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 size="small"
                 primary={t('wallet_new_name')}
@@ -429,7 +505,7 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
         props.onClose,
     )
     return (
-        <DashboardDialogCore {...props}>
+        <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 size="small"
                 icon={<CreditCardIcon />}
@@ -468,7 +544,7 @@ export function DashboardWalletHideTokenConfirmDialog(
         props.onClose,
     )
     return (
-        <DashboardDialogCore {...props}>
+        <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 size="small"
                 icon={<TrashIcon />}
@@ -540,7 +616,7 @@ export function DashboardWalletErrorDialog(props: WrappedDialogProps<object>) {
 //#endregion
 
 //#region wallet history dialog
-const useHistoryDialogStyles = makeStyles((theme) =>
+const useHistoryDialogStyles = makeStyles((theme: Theme) =>
     createStyles({
         list: {
             width: '100%',
@@ -633,7 +709,7 @@ export function DashboardWalletHistoryDialog(
 //#endregion
 
 //#region red packet detail dialog
-const useRedPacketDetailStyles = makeStyles((theme) =>
+const useRedPacketDetailStyles = makeStyles((theme: Theme) =>
     createStyles({
         openBy: {
             margin: theme.spacing(2, 0, 0.5),

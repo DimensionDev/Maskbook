@@ -1,6 +1,7 @@
 import React, { useMemo, useContext, useEffect, useRef, useCallback } from 'react'
-import { makeStyles, createStyles, useTheme } from '@material-ui/core'
+import { makeStyles, createStyles, useTheme, useMediaQuery, Theme } from '@material-ui/core'
 import { useLocation } from 'react-router-dom'
+import { noop } from 'lodash-es'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -34,7 +35,12 @@ export interface DashboardBlurContextUIProps {
 export function DashboardBlurContextUI({ children }: DashboardBlurContextUIProps) {
     const classes = useStyles()
     const location = useLocation()
+    const theme = useTheme()
     const ref = useRef<HTMLDivElement>(null!)
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
+        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+    })
+
     const blur = useCallback(() => {
         blurRequest += 1
         ref.current.classList.add(classes.blur)
@@ -50,7 +56,6 @@ export function DashboardBlurContextUI({ children }: DashboardBlurContextUIProps
         }),
         [blur, unblur],
     )
-    const theme = useTheme()
 
     useEffect(unblur, [location, unblur])
     useEffect(() => {
@@ -59,7 +64,7 @@ export function DashboardBlurContextUI({ children }: DashboardBlurContextUIProps
     }, [theme])
 
     return (
-        <DashboardBlurContext.Provider value={toggle}>
+        <DashboardBlurContext.Provider value={xsMatched ? { blur: noop, unblur: noop } : toggle}>
             <div className={classes.root} ref={ref}>
                 {children}
             </div>

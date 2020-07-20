@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             width: '100%',
-            height: 120,
+            height: 112,
         },
         file: {
             display: 'none',
@@ -21,16 +21,16 @@ const useStyles = makeStyles((theme) =>
             display: 'block',
         },
         restoreBoxRoot: {
-            overflow: 'auto',
             boxSizing: 'border-box',
             border: `solid 1px ${theme.palette.divider}`,
             display: 'flex',
             justifyContent: 'center',
-            height: 120,
+            height: 112,
             marginBottom: 16,
             borderRadius: 4,
         },
         restoreBoxPlaceholder: {
+            marginTop: 0,
             marginBottom: 6,
         },
     }),

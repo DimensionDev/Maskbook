@@ -36,7 +36,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     }
 
     return (
-        <DashboardDialogCore {...props}>
+        <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 icon={<UserPlus />}
                 iconColor="#5FDD97"
@@ -47,6 +47,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                         <form>
                             <TextField
                                 style={{ marginBottom: 20 }}
+                                autoFocus
                                 required
                                 label={t('name')}
                                 value={name}
@@ -249,7 +250,7 @@ export function DashboardPersonaRenameDialog(props: WrappedDialogProps<PersonaPr
         props.onClose,
     )
     return (
-        <DashboardDialogCore {...props}>
+        <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 size="small"
                 primary={t('persona_new_name')}
@@ -356,7 +357,7 @@ export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<Pe
         props.onClose,
     )
     return (
-        <DashboardDialogCore {...props}>
+        <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 size="small"
                 icon={<UserMinus />}
@@ -372,7 +373,7 @@ export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<Pe
                             data-testid="confirm_button">
                             {t('confirm')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
+                        <DebounceButton variant="outlined" color="default" onClick={props.onClose}>
                             {t('cancel')}
                         </DebounceButton>
                     </SpacedButtonGroup>

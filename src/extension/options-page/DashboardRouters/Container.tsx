@@ -1,12 +1,21 @@
 import React from 'react'
-import { makeStyles, createStyles, Typography, Divider, Fade } from '@material-ui/core'
+import {
+    makeStyles,
+    createStyles,
+    Typography,
+    Divider,
+    Fade,
+    IconButton,
+    useMediaQuery,
+    Theme,
+} from '@material-ui/core'
 import classNames from 'classnames'
-import { useRouteMatch } from 'react-router-dom'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { getUrl } from '../../../utils/utils'
+import { useHistory } from 'react-router-dom'
 
 interface DashboardRouterContainerProps {
     title?: string
-    actions?: React.ReactElement[]
     children: React.ReactNode
     /**
      * add or remove the space between divider and left panel
@@ -16,14 +25,35 @@ interface DashboardRouterContainerProps {
      * add or remove the placeholder
      */
     empty?: boolean
+    /**
+     * add or remove the padding of scroller
+     */
+    compact?: boolean
+    /**
+     * (mobile only)
+     * icons on the left of title
+     */
+    leftIcons?: React.ReactElement[]
+
+    /**
+     * (mobile only)
+     * icons onthe right of title
+     */
+    rightIcons?: React.ReactElement[]
+
+    /**
+     * (pc only)
+     * buttons on the right of title
+     */
+    actions?: React.ReactElement[]
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
+const useStyles = makeStyles((theme) => {
+    return createStyles<string, { isSetup: boolean }>({
         wrapper: {
             flex: 1,
             display: 'grid',
-            gridTemplateRows: '[titleAction] 0fr [divider] 0fr [content] auto',
+            gridTemplateRows: (props) => (props.isSetup ? '1fr' : '[titleAction] 0fr [divider] 0fr [content] auto'),
             height: '100%',
         },
         placeholder: {
@@ -39,6 +69,9 @@ const useStyles = makeStyles((theme) =>
             backgroundImage: `url(${getUrl(
                 theme.palette.type === 'light' ? 'dashboard-placeholder.png' : 'dashboard-placeholder-dark.png',
             )})`,
+            [theme.breakpoints.down('xs')]: {
+                backgroundSize: '100px 70px',
+            },
         },
         scroller: {
             height: '100%',
@@ -47,18 +80,46 @@ const useStyles = makeStyles((theme) =>
                 display: 'none',
             },
         },
-        titleAction: {
+        scrollerCompact: {
+            paddingLeft: '0 !important',
+            paddingRight: '0 !important',
+        },
+        title: {
             display: 'flex',
+            flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
             height: 129,
             padding: '40px 24px 40px 34px',
+            [theme.breakpoints.down('xs')]: {
+                height: 'auto',
+                padding: theme.spacing(2),
+                backgroundColor: theme.palette.type === 'light' ? theme.palette.primary.main : 'transparent',
+            },
         },
-        title: {
+        titleContent: {
             color: theme.palette.text.primary,
             fontWeight: 500,
             fontSize: 40,
-            lineHeight: '48px',
+            lineHeight: 1.2,
+            [theme.breakpoints.down('xs')]: {
+                color: theme.palette.type === 'light' ? theme.palette.common.white : theme.palette.text.primary,
+                left: 0,
+                right: 0,
+                pointerEvents: 'none',
+                position: 'absolute',
+                fontSize: 20,
+                fontWeight: 500,
+                lineHeight: 1.2,
+                textAlign: 'center',
+                marginBottom: 0,
+            },
+        },
+        titleIcon: {
+            color: theme.palette.type === 'light' ? theme.palette.common.white : theme.palette.text.primary,
+        },
+        titlePlaceholder: {
+            flex: 1,
         },
         content: {
             display: 'flex',
@@ -66,15 +127,8 @@ const useStyles = makeStyles((theme) =>
             overflow: 'hidden',
             position: 'relative',
         },
-        dividerPadded: {
-            paddingLeft: 34,
-            paddingRight: 24,
-        },
-        divider: {
-            backgroundColor: theme.palette.divider,
-        },
         contentPadded: {
-            '& > * ': {
+            '& > *': {
                 overflow: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
@@ -84,6 +138,27 @@ const useStyles = makeStyles((theme) =>
                 '&::-webkit-scrollbar': {
                     display: 'none',
                 },
+                [theme.breakpoints.down('xs')]: {
+                    paddingLeft: theme.spacing(2),
+                    paddingRight: theme.spacing(2),
+                },
+            },
+        },
+        divider: {
+            backgroundColor: theme.palette.divider,
+            [theme.breakpoints.down('xs')]: {
+                display: theme.palette.type === 'light' ? 'none' : 'block',
+            },
+        },
+        dividerPadded: {
+            padding: '0 24px 0 34px',
+            [theme.breakpoints.down('xs')]: {
+                padding: theme.spacing(0, 2),
+            },
+        },
+        dividerCompact: {
+            [theme.breakpoints.down('xs')]: {
+                padding: '0 !important',
             },
         },
         buttons: {
@@ -91,38 +166,75 @@ const useStyles = makeStyles((theme) =>
                 margin: theme.spacing(0, 1),
             },
         },
-    }),
-)
+    })
+})
 
 export default function DashboardRouterContainer(props: DashboardRouterContainerProps) {
-    const { title, actions, children, padded, empty } = props
-    const classes = useStyles()
-    const match = useRouteMatch('/:param/')
-    const forSetupPurpose = match?.url.includes('/setup')
+    const { title, actions, children, padded, empty, compact = false, leftIcons = [], rightIcons = [] } = props
+    const isSetup = location.hash.includes('/setup')
+    const classes = useStyles({
+        isSetup,
+    })
+    const history = useHistory()
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
+        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+    })
+
+    if (xsMatched && !leftIcons.length) {
+        leftIcons.push(
+            <IconButton onClick={() => history.goBack()}>
+                <ArrowBackIosIcon />
+            </IconButton>,
+        )
+    }
+
     return (
         <Fade in>
-            <section
-                className={classes.wrapper}
-                style={{
-                    gridTemplateRows: forSetupPurpose ? '1fr' : '[titleAction] 0fr [divider] 0fr [content] auto',
-                }}>
-                {forSetupPurpose ? null : (
+            <section className={classes.wrapper}>
+                {isSetup ? null : (
                     <>
-                        <section className={classes.titleAction}>
-                            <Typography className={classes.title} color="textPrimary" variant="h6">
+                        <section className={classes.title}>
+                            {xsMatched
+                                ? leftIcons?.map((icon, index) =>
+                                      React.cloneElement(icon, {
+                                          key: index,
+                                          size: 'small',
+                                          className: classes.titleIcon,
+                                      }),
+                                  )
+                                : null}
+                            <Typography className={classes.titleContent} color="textPrimary" variant="h6">
                                 {title}
                             </Typography>
-                            <div className={classes.buttons}>
-                                {actions?.map((action, index) => React.cloneElement(action, { key: index }))}
-                            </div>
+                            {xsMatched ? <div className={classes.titlePlaceholder}></div> : null}
+                            {xsMatched
+                                ? rightIcons?.map((icon, index) =>
+                                      React.cloneElement(icon, {
+                                          key: index,
+                                          size: 'small',
+                                          className: classes.titleIcon,
+                                      }),
+                                  )
+                                : null}
+                            {xsMatched ? null : (
+                                <div className={classes.buttons}>
+                                    {actions?.map((action, index) => React.cloneElement(action, { key: index }))}
+                                </div>
+                            )}
                         </section>
-                        <div className={classNames({ [classes.dividerPadded]: padded !== false })}>
+                        <div
+                            className={classNames({
+                                [classes.dividerPadded]: padded !== false,
+                                [classes.dividerCompact]: xsMatched,
+                            })}>
                             <Divider className={classes.divider} />
                         </div>
                     </>
                 )}
                 <main className={classNames(classes.content, { [classes.contentPadded]: padded !== false })}>
-                    <div className={classes.scroller}>{children}</div>
+                    <div className={classNames(classes.scroller, { [classes.scrollerCompact]: compact !== false })}>
+                        {children}
+                    </div>
                     {empty ? <div className={classes.placeholder}></div> : null}
                 </main>
             </section>

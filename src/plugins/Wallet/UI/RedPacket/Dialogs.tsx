@@ -15,8 +15,13 @@ import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
-            width: 340,
-            margin: '0 auto',
+            [`@media (min-width: ${theme.breakpoints.width('md')}px)`]: {
+                width: 340,
+                margin: '0 auto',
+            },
+        },
+        content: {
+            wordBreak: 'break-word',
         },
     }),
 )
@@ -35,10 +40,16 @@ export function FeedbackDialog(props: RedPacketDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { open, title = 'failed', message, onClose } = props
     return (
-        <ShadowRootDialog classes={{ container: classes.container }} open={open} onClose={onClose}>
+        <ShadowRootDialog
+            classes={{
+                container: classes.container,
+            }}
+            open={open}
+            fullScreen={false}
+            onClose={onClose}>
             <DialogTitle>{title}</DialogTitle>
             <DialogContent>
-                <DialogContentText>{message}</DialogContentText>
+                <DialogContentText className={classes.content}>{message}</DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="primary">

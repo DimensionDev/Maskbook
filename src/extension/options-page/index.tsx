@@ -3,7 +3,7 @@ import '../../setup.ui'
 
 import React from 'react'
 import { CssBaseline, useMediaQuery, NoSsr } from '@material-ui/core'
-import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'
+import { ThemeProvider, makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
@@ -31,64 +31,58 @@ import { DashboardRoute } from './Route'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 
-import DashboardInitializeDialog from './Initialize'
-import { DialogRouter } from './DashboardDialogs/DialogBase'
 import { useAsync } from 'react-use'
 import Services from '../service'
 import { RequestPermissionPage } from '../../components/RequestPermission/RequestPermission'
 import { grey } from '@material-ui/core/colors'
 import { DashboardSnackbarProvider } from './DashboardComponents/DashboardSnackbar'
 import { SetupStep } from './SetupStep'
+import DashboardNavRouter from './DashboardRouters/Nav'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.type === 'dark'
     return createStyles({
         wrapper: {
             '--monospace': 'SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace',
-
             '--drawerHeader': dark ? '#121212' : theme.palette.primary.main,
-            '--drawerBody': dark ? '#121212' : theme.palette.primary.main,
+            '--drawerBody': dark
+                ? '#121212'
+                : theme.breakpoints.down('xs')
+                ? 'transparent'
+                : theme.palette.primary.main,
 
-            position: 'absolute',
+            backgroundColor: dark ? grey[900] : grey[50],
+            userSelect: 'none',
             width: '100vw',
             height: '100vh',
-            backgroundColor: dark ? grey[900] : grey[50],
-            display: 'grid',
-            gridTemplateColumns: '1fr [content-start] 1110px [content-end] 1fr',
-            gridTemplateRows: '32px [content-start] auto [content-end] 50px',
-            placeItems: 'center',
-            userSelect: 'none',
+            position: 'absolute',
+
+            [theme.breakpoints.up('sm')]: {
+                display: 'grid',
+                gridTemplateColumns: '1fr [content-start] 1110px [content-end] 1fr',
+                gridTemplateRows: '32px [content-start] auto [content-end] 50px',
+                placeItems: 'center',
+            },
 
             transition: 'filter 0.3s linear',
             willChange: 'filter',
 
-            '--thumbBG': 'rgba(0, 0, 0, 0.15)',
-            '--scrollbarBG': 'rgba(15, 34, 0, 0.05)',
-
-            scrollbarWidth: 'thin',
-            scrollbarColor: 'var(--thumbBG) var(--scrollbarBG)',
             '& *::-webkit-scrollbar': {
-                width: '8px',
-            },
-            '& *::-webkit-scrollbar-track': {
-                borderRadius: '6px',
-                background: 'var(--scrollbarBG)',
-            },
-            '& *::-webkit-scrollbar-thumb': {
-                borderRadius: '50px',
-                backgroundColor: 'var(--thumbBG)',
+                display: 'none',
             },
         },
         container: {
             width: '100%',
             height: '100%',
             overflow: 'auto',
-            borderRadius: '12px',
+            borderRadius: 12,
             backgroundColor: dark ? '#121212' : '#FFFFFF',
             gridRow: 'content-start / content-end',
             gridColumn: 'content-start / content-end',
-
             display: 'flex',
+            [theme.breakpoints.down('xs')]: {
+                borderRadius: 0,
+            },
         },
         footer: {
             gridRow: 'content-end / span 1',
@@ -104,6 +98,9 @@ function DashboardUI() {
     const { t } = useI18N()
     const classes = useStyles()
     const history = useHistory<unknown>()
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
+        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
+    })
 
     const routers = ([
         [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
@@ -128,14 +125,18 @@ function DashboardUI() {
         )
     }, [])
 
+    const drawer = <Drawer routers={routers} exitDashboard={null} />
+    const nav = () => <DashboardNavRouter children={drawer} />
+
     return (
         <DashboardBlurContextUI>
             <div className={classes.wrapper}>
                 <div className={classes.container}>
                     {loading ? null : (
                         <>
-                            <Drawer routers={routers} exitDashboard={null} />
+                            {xsMatched ? null : drawer}
                             <Switch>
+                                {xsMatched ? <Route path={DashboardRoute.Nav} component={nav} /> : null}
                                 <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
                                 <Route path={DashboardRoute.Wallets} component={DashboardWalletsRouter} />
                                 <Route path={DashboardRoute.Contacts} component={DashboardContactsRouter} />
@@ -143,20 +144,16 @@ function DashboardUI() {
                                 <Route path={DashboardRoute.Setup} component={DashboardSetupRouter} />
                                 {/* // TODO: this page should be boardless */}
                                 <Route path={DashboardRoute.RequestPermission} component={RequestPermissionPage} />
-                                <DialogRouter
-                                    path="/initialize"
-                                    component={DashboardInitializeDialog}
-                                    onExit={'/'}
-                                    fullscreen
-                                />
-                                <Redirect path="*" to={DashboardRoute.Personas} />
+                                <Redirect path="*" to={xsMatched ? DashboardRoute.Nav : DashboardRoute.Personas} />
                             </Switch>
                         </>
                     )}
                 </div>
-                <footer className={classes.footer}>
-                    <FooterLine />
-                </footer>
+                {xsMatched ? null : (
+                    <footer className={classes.footer}>
+                        <FooterLine />
+                    </footer>
+                )}
             </div>
         </DashboardBlurContextUI>
     )

@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            background: 'url(/aboutDialogBackground.png) no-repeat center / cover',
+            background: 'url(/about-dialog-background.png) no-repeat center / cover',
         },
         maskface: {
             width: 120,

@@ -5,7 +5,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles'
 import { FixedSizeList } from 'react-window'
 import { ListItem, ListItemText, Box, Typography, Avatar, ListItemIcon } from '@material-ui/core'
 import type { ERC20Token } from '../../../token'
-import Wallet from 'wallet.ts'
+import { EthereumAddress } from 'wallet.ts'
 import { getNetworkERC20Tokens } from '../../Developer/EthereumNetworkSettings'
 import { TokenIcon } from '../../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { currentEthereumNetworkSettings } from '../../../../../settings/settings'
@@ -175,7 +175,7 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
     const [decimals, setDecimal] = useState(0)
     const [name, setName] = useState('')
     const [symbol, setSymbol] = useState('')
-    const isValidAddress = Wallet.EthereumAddress.isValid(address)
+    const isValidAddress = EthereumAddress.isValid(address)
 
     useEffect(() => {
         if (isValidAddress)
