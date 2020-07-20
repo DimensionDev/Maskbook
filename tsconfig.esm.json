@@ -3,7 +3,9 @@
   "compilerOptions": {
     "module": "ESNext",
     "outDir": "./temp/extension/esm/",
+    // "outDir": "./debug/",
     "noEmit": false,
+    // "removeComments": true,
     // ? Cannot turn this on currently
     // "tsBuildInfoFile": "./temp/tsconfig.esm.tsbuildinfo",
     // "incremental": true,
@@ -25,6 +27,11 @@
           }
         }
       }
+      // Debug use this:
+      // {
+      //   "transform": "./scripts/gulp/tree-shake-loader.ts",
+      //   "import": "transform"
+      // }
     ]
   },
   "include": [

@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script src="./loaders/dependencies.js"></script>
+        <script src="/polyfills/browser-polyfill.js"></script>
+        <script src="/patches/firefox-fix.js"></script>
+        <script src="/loaders/background-script.js"></script>
+        <script src="/env.js"></script>
         <meta charset="UTF-8" />
     </head>
     <body>
-        <script src="/polyfills/browser-polyfill.js"></script>
-        <script src="/patches/firefox-fix.js"></script>
-        <script src="/env.js"></script>
-        <script src="/umd_es.js"></script>
-        <!-- WebExtension content script SystemJS loader background service -->
-        <script src="/loaders/background-script.js"></script>
-        <script type="module" src="/esm/background-service.js"></script>
+        <script async type="module" src="/esm/background-service.js"></script>
     </body>
 </html>

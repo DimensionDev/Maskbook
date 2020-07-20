@@ -6,7 +6,7 @@ import { sideEffect } from '../../utils/side-effects'
 const noop = () => {}
 let worker: Worker
 sideEffect.then(() => {
-    worker = new Worker(getUrl('/isolated/qrcode_worker.js'))
+    worker = new Worker(getUrl('/workers/qrcode_worker.js'))
 })
 
 class BarcodeDetectorPolyfill implements BarcodeDetector {

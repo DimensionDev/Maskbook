@@ -27,14 +27,8 @@ import { HasNoBrowserTabUI, HasNativeWelcomeProcess, SupportNativeInjectedScript
 
 if (GetContext() === 'background') {
     const injectedScript = getInjectedScript()
-    const contentScripts: Array<{ code: string } | { file: string }> = [
-        { file: '/env.js' },
-        { file: '/patches/firefox-fix.js' },
-        { file: '/polyfills/browser-polyfill.js' },
-        { file: '/loaders/content-script.js' },
-        { file: '/umd_es.js' },
-        { file: '/loaders/content-script-entry.js' },
-    ]
+    let contentScripts: Promise<Array<{ code: string } | { file: string }>> = getContentScripts()
+
     browser.webNavigation.onCommitted.addListener(async (arg) => {
         if (arg.url === 'about:blank') return
         /**
@@ -42,7 +36,7 @@ if (GetContext() === 'background') {
          *
          * A `iOS-injected-scripts` field is used to add extra scripts
          */
-        if (!SupportNativeInjectedScriptDeclaration)
+        if (!SupportNativeInjectedScriptDeclaration) {
             browser.tabs
                 .executeScript(arg.tabId, {
                     runAt: 'document_start',
@@ -50,14 +44,15 @@ if (GetContext() === 'background') {
                     // refresh it every time in the dev mode so it's easier to debug injected script
                     code: process.env.NODE_ENV === 'development' ? await getInjectedScript() : await injectedScript,
                 })
-                .catch(IgnoreError(arg))
+                .catch((x) => IgnoreError(x, arg))
+        }
         // In Firefox
         browser.tabs.executeScript(arg.tabId, {
             runAt: 'document_start',
             frameId: arg.frameId,
             file: 'js/injected-script.js',
         })
-        for (const script of contentScripts) {
+        for (const script of await contentScripts) {
             const option: browser.extensionTypes.InjectDetails = {
                 runAt: 'document_idle',
                 frameId: arg.frameId,
@@ -66,7 +61,7 @@ if (GetContext() === 'background') {
             try {
                 await browser.tabs.executeScript(arg.tabId, option)
             } catch (e) {
-                IgnoreError(option)(e)
+                IgnoreError(e, option)
             }
         }
     })
@@ -87,10 +82,24 @@ if (GetContext() === 'background') {
         }
     })
 
-    if (HasNoBrowserTabUI) {
-        exclusiveTasks('https://m.facebook.com/', { important: true })
-    }
-    exclusiveTasks(getWelcomePageURL(), { important: true })
+    contentScripts.then(() => {
+        if (HasNoBrowserTabUI) {
+            exclusiveTasks('https://m.facebook.com/', { important: true })
+        }
+        exclusiveTasks(getWelcomePageURL(), { important: true })
+    })
+}
+async function getContentScripts() {
+    const contentScripts: Array<{ code: string } | { file: string }> = []
+    const x = await fetch('content-script.html')
+    const html = await x.text()
+    const parser = new DOMParser()
+    const root = parser.parseFromString(html, 'text/html')
+    root.querySelectorAll('script').forEach((script) => {
+        if (script.innerText) contentScripts.push({ code: script.innerText })
+        else if (script.src) contentScripts.push({ file: new URL(script.src, browser.runtime.getURL('')).pathname })
+    })
+    return contentScripts
 }
 async function getInjectedScript() {
     return `{
@@ -101,18 +110,16 @@ async function getInjectedScript() {
         document.documentElement.appendChild(script)
     }`
 }
-function IgnoreError(arg: unknown): (reason: Error) => void {
-    return (e) => {
-        if (e.message.includes('non-structured-clonable data')) {
-            // It's okay we don't need the result, happened on Firefox
-        } else if (e.message.includes('Frame not found, or missing host permission')) {
-            // It's maybe okay, happened on Firefox
-        } else if (e.message.includes('must request permission')) {
-            // It's okay, we inject to the wrong site and browser rejected it.
-        } else if (e.message.includes('Cannot access a chrome')) {
-            // It's okay, we inject to the wrong site and browser rejected it.
-        } else console.error('Inject error', e, arg, Object.entries(e))
-    }
+function IgnoreError(e: Error, ...args: any) {
+    if (e.message.includes('non-structured-clonable data')) {
+        // It's okay we don't need the result, happened on Firefox
+    } else if (e.message.includes('Frame not found, or missing host permission')) {
+        // It's maybe okay, happened on Firefox
+    } else if (e.message.includes('must request permission')) {
+        // It's okay, we inject to the wrong site and browser rejected it.
+    } else if (e.message.includes('Cannot access a chrome')) {
+        // It's okay, we inject to the wrong site and browser rejected it.
+    } else console.error('Inject error:', e, e.message, ...args)
 }
 
 console.log('Build info', {

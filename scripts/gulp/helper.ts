@@ -1,9 +1,9 @@
-import through2 = require('through2')
+import through2 from 'through2'
 import { promisify } from 'util'
 import type { Configuration } from 'webpack'
-import webpack = require('webpack')
+import webpack from 'webpack'
 import type { TaskFunction } from 'gulp'
-import ts = require('typescript')
+import ts from 'typescript'
 import { getEnvironment } from './env'
 
 export function modifyFile(fn: (x: string) => string) {
@@ -27,14 +27,18 @@ export function getWebpackConfig(
     return {
         mode,
         entry,
-        plugins: [
-            new webpack.EnvironmentPlugin(getEnvironment(mode)),
-            new webpack.optimize.LimitChunkCountPlugin({
-                maxChunks: 1,
-            }),
-        ],
+        plugins: [new webpack.EnvironmentPlugin(getEnvironment(mode))],
         devtool: isDev ? 'cheap-source-map' : false,
-        optimization: { splitChunks: false, minimize: false, runtimeChunk: false },
+        optimization: {
+            minimize: false,
+            namedModules: true,
+            namedChunks: true,
+            runtimeChunk: false,
+            splitChunks: {
+                // https://bugs.chromium.org/p/chromium/issues/detail?id=1108199#c2
+                automaticNameDelimiter: '-',
+            },
+        },
         output: {
             path: distPath,
             globalObject: 'globalThis',
@@ -57,7 +61,8 @@ export function getWebpackConfig(
                         transpileOnly: true,
                         compilerOptions: {
                             noEmit: false,
-                            importsNotUsedAsValues: 'remove',
+                            importsNotUsedAsValues: 'preserve',
+                            removeComments: true,
                         },
                     },
                 },
@@ -69,9 +74,11 @@ export function buildWebpackTask(name: string, desc: string, config: (mode: Conf
     const build: TaskFunction = async () => {
         const f = webpack(config('production'))
         const p: webpack.Stats = await promisify(f.run.bind(f))()
+        const log = p.toString({ warningsFilter: (x) => !!x.match(/source map/) })
         if (p.hasErrors()) {
-            throw p.compilation.errors.join('\n')
+            throw new Error(log)
         }
+        console.log(log)
     }
     build.displayName = name
     build.description = `${desc} (build)`

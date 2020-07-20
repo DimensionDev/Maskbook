@@ -4,15 +4,21 @@ import { watchManifest, assets, manifest, watchAssets, environmentFile, watchEnv
 import { dependenciesWatch, dependenciesBuild } from './dependencies'
 import { tscESModuleBuild, tscESModuleWatch, tscSystemBuild, tscSystemWatch } from './tsc'
 import { libs } from './libraries'
-import { workerBuild, workerWatch } from './build-isolated'
 // @ts-ignore
 import gulpMultiProcess from 'gulp-multi-process'
 import { output } from './paths'
 import { named } from './helper'
+import { workerBuild, workerWatch } from './build-worker'
+import { isolatedBuild, isolatedWatch } from './build-isolated'
 
 function parallelProcessWatch(done: any) {
     return gulpMultiProcess(
-        [dependenciesWatch.displayName, tscESModuleWatch.name, tscSystemWatch.name, workerWatch.displayName],
+        [
+            dependenciesWatch.displayName,
+            tscESModuleWatch.displayName,
+            tscSystemWatch.displayName,
+            workerWatch.displayName,
+        ],
         done,
     )
 }
@@ -25,7 +31,7 @@ named(
 export const watch = named(
     'watch',
     'Start the development build process',
-    series(env, parallel(watchManifest, watchEnvironmentFile, watchAssets, parallelProcessWatch)),
+    series(env, parallel(watchManifest, watchEnvironmentFile, watchAssets, isolatedWatch, parallelProcessWatch)),
 )
 
 export async function env() {
@@ -33,7 +39,6 @@ export async function env() {
     output.extension.ensure()
     output.esmBuild.ensure()
     output.systemBuild.ensure()
-    output.dependencies.ensure()
     output.polyfills.ensure()
     return promisify(parallel(manifest, assets, libs))()
 }
@@ -45,7 +50,13 @@ export const build = named(
     series(
         clean,
         env,
-        parallel(environmentFile, workerBuild, series(tscESModuleBuild, parallel(tscSystemBuild, dependenciesBuild))),
+        parallel(
+            environmentFile,
+            workerBuild,
+            isolatedBuild,
+            dependenciesBuild,
+            series(tscESModuleBuild, tscSystemBuild),
+        ),
     ),
 )
 export function clean(cb: any) {
@@ -60,3 +71,4 @@ export * from './tsc'
 export * from './dependencies'
 export * from './build-isolated'
 export * from './libraries'
+export * from './build-worker'

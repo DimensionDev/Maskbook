@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Maskbook</title>
         <script src="./loaders/dependencies.js"></script>
         <script src="/polyfills/browser-polyfill.js"></script>
         <script src="/patches/firefox-fix.js"></script>
+        <script src="/loaders/content-script.js"></script>
+
         <script src="/env.js"></script>
     </head>
     <body>
-        <script async src="/esm/extension/options-page/index.js" type="module"></script>
+        <script async src="./loaders/content-script-entry.js"></script>
+        Warning: This isn't a real page in the runtime so it doesn't make sense to add any tags other than script tag.
+        Any attributes other than src will be ignored.
     </body>
 </html>
