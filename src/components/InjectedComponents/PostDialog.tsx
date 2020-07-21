@@ -17,8 +17,8 @@ import {
     Tooltip,
 } from '@material-ui/core'
 import Jimp from 'jimp'
-import type JimpT from '@jimp/core/types'
-var toBuffer = require('typedarray-to-buffer')
+import type JimpT from 'jimp'
+var toBuffer = require('typedarray-to-buffer') // TODO: !
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
@@ -45,6 +45,10 @@ import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
+import {
+    shuffle,
+    uploadShuffleToPostBoxFacebook,
+} from '../../social-network-provider/facebook.com/tasks/uploadToPostBox'
 import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
 import { PluginUI } from '../../plugins/plugin'
 import Dropzone from '../shared/Dropzone'
@@ -362,7 +366,7 @@ export function PostDialog(props: PostDialogProps) {
             currentImageEncryptStatus[getActivatedUI().networkIdentifier].value = String(checked)
         }, []),
     )
-    const [imgToEncrypt, setImgToEncrypt] = useState<typeof JimpT | null>(null)
+    const [imgToEncrypt, setImgToEncrypt] = useState<JimpT | null>(null)
     const onImgChange = useCallback(async (imgFile: File) => {
         const arrayBuffer = await readFileAsync(imgFile)
         if (!arrayBuffer) {
@@ -371,6 +375,7 @@ export function PostDialog(props: PostDialogProps) {
         }
         const uintArr = new Uint8Array(arrayBuffer)
         const buf = toBuffer(uintArr)
+        // TODO: convert to jpeg as well
         const img = await Jimp.read(buf)
         setImgToEncrypt(img)
     }, [])
@@ -384,7 +389,7 @@ export function PostDialog(props: PostDialogProps) {
                     content,
                     target.map((x) => x.identifier),
                     currentIdentity!.identifier,
-                    !!shareToEveryone,
+                    shareToEveryone,
                 )
                 const activeUI = getActivatedUI()
                 // TODO: move into the plugin system
@@ -408,13 +413,30 @@ export function PostDialog(props: PostDialogProps) {
                         warningText: t('additional_post_box__steganography_post_failed'),
                     })
                 } else if (imageEncryptEnabled) {
-                    // ! don't know what red packets are and it looks like it is experimental anyway
-                    activeUI.taskPasteIntoPostBox(
-                        // * TODO: change message
-                        t('additional_post_box__steganography_post_pre', { random: String(Date.now()) }),
-                        { shouldOpenPostDialog: false },
+                    if (!imgToEncrypt) {
+                        console.debug('nothing to encrypt')
+                        return
+                    }
+                    const seed = shuffle({ file: imgToEncrypt, blockWidth: 64 })
+                    const seedTypedMessage = makeTypedMessage(seed)
+                    const [encrypted, _] = await Services.Crypto.encryptTo(
+                        seedTypedMessage,
+                        target.map((x) => x.identifier),
+                        currentIdentity!.identifier,
+                        // TODO: ! public share
+                        true,
                     )
-                    // activeUI.taskUploadToPostBox()
+
+                    const text = t('additional_post_box__encrypted_post_pre', { encrypted })
+                    activeUI.taskPasteIntoPostBox(text, {
+                        warningText: t('additional_post_box__encrypted_failed'),
+                        shouldOpenPostDialog: false,
+                    })
+                    activeUI.taskUploadShuffleToPostBox(imgToEncrypt.bitmap.data, {
+                        template: 'v2',
+                        // ! not steganography failed
+                        warningText: t('additional_post_box__steganography_post_failed'),
+                    })
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
                     if (metadata.ok) {
@@ -447,6 +469,7 @@ export function PostDialog(props: PostDialogProps) {
                 imageEncryptEnabled,
                 t,
                 i18n.language,
+                imgToEncrypt,
             ],
         ),
     )
@@ -496,7 +519,6 @@ export function PostDialog(props: PostDialogProps) {
     const postBoxButtonDisabled = useCallback(() => {
         const allOrMe = onlyMyself || shareToEveryoneLocal
         const textFromTypedMessage = extractTextFromTypedMessage(postBoxContent).val
-        console.log('imgToEncrypt', imgToEncrypt)
         const condition = allOrMe
             ? imageEncryptEnabled
                 ? imgToEncrypt?.bitmap?.data
