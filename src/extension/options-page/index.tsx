@@ -2,7 +2,7 @@ import '../../provider.worker'
 import '../../setup.ui'
 
 import React from 'react'
-import { CssBaseline, useMediaQuery, NoSsr } from '@material-ui/core'
+import { CssBaseline, useMediaQuery, NoSsr, CircularProgress, Box } from '@material-ui/core'
 import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
@@ -90,6 +90,12 @@ const useStyles = makeStyles((theme) => {
 
             display: 'flex',
         },
+        suspend: {
+            display: 'flex',
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
         footer: {
             gridRow: 'content-end / span 1',
             gridColumn: 'content-start / content-end',
@@ -132,7 +138,11 @@ function DashboardUI() {
         <DashboardBlurContextUI>
             <div className={classes.wrapper}>
                 <div className={classes.container}>
-                    {loading ? null : (
+                    {loading ? (
+                        <Box className={classes.suspend}>
+                            <CircularProgress />
+                        </Box>
+                    ) : (
                         <>
                             <Drawer routers={routers} exitDashboard={null} />
                             <Switch>
