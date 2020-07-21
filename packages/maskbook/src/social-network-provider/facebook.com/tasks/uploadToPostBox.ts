@@ -5,7 +5,16 @@ import Services from '../../../extension/service'
 import { decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'
 import { MaskMessage } from '../../../utils/messages'
-import type Jimp from '@jimp/core/types'
+import type Jimp from 'jimp'
+import seedrandom from 'seedrandom'
+
+export async function uploadShuffleToPostBoxFacebook(
+    shuffledImage: Uint8Array,
+    options: Parameters<SocialNetworkUI['taskUploadToPostBox']>[1],
+) {
+    pasteImageToActiveElements(shuffledImage)
+    await untilDocumentReady()
+}
 
 export async function uploadToPostBoxFacebook(
     text: string,
@@ -26,7 +35,7 @@ export async function uploadToPostBoxFacebook(
                 text,
                 pass: lastRecognizedIdentity.value ? lastRecognizedIdentity.value.identifier.toText() : '',
                 template,
-                // ! the color image cannot compression resistance in Facebook
+                // ! the color image cannot pass the compression resistance in Facebook
                 grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
             }),
         ),
@@ -46,15 +55,15 @@ export async function uploadToPostBoxFacebook(
 
 // ----- Image Encryption
 
-const BytesInPixel = 4
+const BytesInPixel = 3
 const optimalWidth = 960 // https://louisem.com/1730/how-to-optimize-photos-for-facebook#:~:text=According%20to%20Facebook%2C%20they%20will,NOT%20be%20reduced%20in%20size.
 
 // TODO: might want to move this somewhere more appropriate
-export const rand = (min: number, max: number) => {
+export const rand = (min: number, max: number, prng: CallableFunction) => {
     // it is important that the number of states of the pseudo-random number generator is >> (much greater) than the number of states for which it generates the random values
     // for example, using pseudo random number generator that has 2 ** 32 states is a bad idea to generate all the permutations of the 52 playing deck of cards, since the latter has 2 ** 225.6! states
     // scrolls to the PRNG section here: https://www.wikiwand.com/en/Fisher%E2%80%93Yates_shuffle
-    const randomNum = Math.random() * (max - min) + min
+    const randomNum = prng() * (max - min) + min
     return Math.round(randomNum)
 }
 
@@ -99,12 +108,12 @@ export const swapPixelBlocks = ({ img, imgWidth, blockWidth, blockIx1, blockIx2 
 }
 
 type shuffleArgs = {
-    file: typeof Jimp & { resize: (w: number, h: number, mode?: any, cb?: any) => void }
+    file: Jimp
     blockWidth: number
 }
 
 // changes the image in place
-const shuffle = ({ file, blockWidth }: shuffleArgs) => {
+export const shuffle = ({ file, blockWidth }: shuffleArgs) => {
     const w = file.bitmap.width
     const h = file.bitmap.height
 
@@ -124,34 +133,40 @@ const shuffle = ({ file, blockWidth }: shuffleArgs) => {
     }
 
     const totalBlocksNum = (w * h) / (blockWidth * blockWidth) // this will be a whole number, because we resize earlier
-    const permutations: number[] = []
+    // const permutations: number[] = []
     const img = file.bitmap.data
+    const seed = String(Math.random()) // ! how many states can this generate?
+    const prng = seedrandom(seed)
 
     for (var blockNum = totalBlocksNum - 1; blockNum > 1; blockNum = blockNum - 1) {
-        const r = rand(0, blockNum - 1) // ! might need to use rand(0, blockNum) depending on what the "off-by-one" error means (https://www.wikiwand.com/en/Fisher%E2%80%93Yates_shuffle)
-        permutations.push(r)
+        const r = rand(0, blockNum - 1, prng) // ! might need to use rand(0, blockNum) depending on what the "off-by-one" error means (https://www.wikiwand.com/en/Fisher%E2%80%93Yates_shuffle)
+        // permutations.push(r)
         swapPixelBlocks({ img, imgWidth: w, blockWidth, blockIx1: blockNum, blockIx2: r })
     }
 
-    return permutations
+    return seed
+    // return permutations
 }
 
 type deshuffleArgs = {
-    file: typeof Jimp
-    permutations: number[]
+    file: Jimp
+    // permutations: number[]
     blockWidth: number
+    seed: string
 }
 
-const deshuffle = ({ file, permutations, blockWidth }: deshuffleArgs) => {
+export const deshuffle = ({ file, blockWidth, seed }: deshuffleArgs) => {
     const w = file.bitmap.width
     const h = file.bitmap.height
     const totalBlocksNum = (w * h) / (blockWidth * blockWidth) // this will be a whole number, because we resized earlier
     const img = file.bitmap.data
-    const permutationsLen = permutations.length
+    // const permutationsLen = permutations.length
+    const prng = seedrandom(seed)
 
     for (var blockNum = 1; blockNum < totalBlocksNum; blockNum = blockNum + 1) {
+        const swapWith = rand(0, totalBlocksNum - 1 - blockNum, prng)
         // ! there is an error here somewhere with an index. one block does not get copied over
-        const swapWith = permutations[permutationsLen - blockNum + 1]
+        // const swapWith = permutations[permutationsLen - blockNum + 1]
         swapPixelBlocks({ img, imgWidth: w, blockWidth, blockIx1: swapWith, blockIx2: blockNum })
     }
 }

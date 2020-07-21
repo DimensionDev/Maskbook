@@ -174,6 +174,18 @@ export interface SocialNetworkUITasks {
     ): void
 
     /**
+     * This function pastes the shuffled imaged to the post box
+     * @param image - the shuffled image to upload
+     */
+    taskUploadShuffleToPostBox(
+        image: Uint8Array,
+        options: {
+            template?: 'v1' | 'v2' | 'eth' | 'dai' | 'okb'
+            warningText: string
+        },
+    ): void
+
+    /**
      * This function should paste `text` into the post box.
      */
     taskPasteIntoPostBox(
@@ -183,6 +195,7 @@ export interface SocialNetworkUITasks {
             shouldOpenPostDialog: boolean
         },
     ): void
+
     /**
      * This function should open the compose box with given post content.
      * If failed, warning user to do it by themselves with `warningText`

@@ -7,7 +7,7 @@ import { injectSetupPromptFacebook } from './UI/injectSetupPrompt'
 import { collectPeopleFacebook } from './UI/collectPeople'
 import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
 import { taskOpenComposeBoxFacebook } from './tasks/openComposeBox'
-import { uploadToPostBoxFacebook } from './tasks/uploadToPostBox'
+import { uploadToPostBoxFacebook, uploadShuffleToPostBoxFacebook } from './tasks/uploadToPostBox'
 import { getPostContentFacebook } from './tasks/getPostContent'
 import { resolveLastRecognizedIdentityFacebook } from './UI/resolveLastRecognizedIdentity'
 import { getProfileFacebook } from './tasks/getProfile'
@@ -105,6 +105,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
     taskOpenComposeBox: taskOpenComposeBoxFacebook,
     taskUploadToPostBox: uploadToPostBoxFacebook,
+    taskUploadShuffleToPostBox: uploadShuffleToPostBoxFacebook,
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
     taskStartSetupGuide: createTaskStartSetupGuideDefault(() => facebookUISelf),
