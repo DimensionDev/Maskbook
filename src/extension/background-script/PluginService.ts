@@ -1,11 +1,13 @@
 import * as RedPacket from '../../plugins/Wallet/red-packet-fsm'
 import * as Wallet from '../../plugins/Wallet/wallet'
 import * as Gitcoin from '../../plugins/Gitcoin/Services'
+import * as Arweave from '../../plugins/FileService/arweave'
 import type { ERC20TokenRecord, ManagedWalletRecord, ExoticWalletRecord } from '../../plugins/Wallet/database/types'
 
 const Plugins = {
     'maskbook.red_packet': RedPacket,
     'maskbook.wallet': Wallet,
+    'maskbook.fileservice.arweave': Arweave,
     'co.gitcoin': Gitcoin,
 } as const
 type Plugins = typeof Plugins

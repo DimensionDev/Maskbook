@@ -19,6 +19,8 @@ export function getSignablePayload(payload: Payload) {
 import type { RedPacketJSONPayload } from '../../../plugins/Wallet/database/types'
 import { Result, Err, Ok } from 'ts-results'
 import { RedPacketMetaKey } from '../../../plugins/Wallet/RedPacketMetaKey'
+import type { META_KEY_1 as FileServiceMetaKey } from '../../../plugins/FileService/constants'
+import type { FileInfo } from '../../../plugins/FileService/hooks/Exchange'
 
 export interface TypedMessageMetadata {
     readonly meta?: ReadonlyMap<string, unknown>
@@ -48,6 +50,7 @@ export function makeTypedMessage(content: string, meta?: ReadonlyMap<string, unk
 
 interface KnownMetadata {
     [RedPacketMetaKey]: RedPacketJSONPayload
+    [FileServiceMetaKey]: FileInfo
 }
 const builtinMetadataSchema: Partial<Record<string, object>> = {} as Partial<Record<keyof KnownMetadata, object>>
 export function readTypedMessageMetadata<T extends keyof KnownMetadata>(

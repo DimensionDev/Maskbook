@@ -7,6 +7,7 @@ import { getCurrentNetworkWorkerService } from './background-script/WorkerServic
 
 import { MessageCenter } from '@holoflows/kit/es'
 import { IdentifierMap } from '../database/IdentifierMap'
+import type { upload as pluginArweaveUpload } from '../plugins/FileService/arweave/index'
 
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
@@ -45,6 +46,7 @@ if (!('Services' in globalThis)) {
 interface ServicesWithProgress {
     // Sorry you should add import at '../_background_loader.1.ts'
     decryptFrom: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromMessageWithProgress
+    pluginArweaveUpload: typeof pluginArweaveUpload
 }
 function createProxyToService(name: string) {
     return new Proxy(

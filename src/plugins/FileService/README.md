@@ -1,5 +1,13 @@
 # Plugin: File Service
 
+## Feature Set
+
+- [ ] Upload File
+- [ ] File History (Show More)
+- [ ] Builit Preview
+- [ ] Insert File via Recent Files
+- [ ] Insert File via File History
+
 ## Remote signing
 
 - `arweave/token.json` remote signing public key
@@ -9,7 +17,7 @@
 - <https://github.com/DimensionDev/Maskbook-FileService-LandingPage>
 - <https://github.com/DimensionDev/Maskbook-FileService-RemoteSigning>
 
-## Discussion
+## Related discussion
 
 - <https://github.com/DimensionDev/Maskbook/issues/1057>
 - <https://github.com/DimensionDev/Maskbook-Talks/issues/36>

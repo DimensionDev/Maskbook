@@ -17,7 +17,7 @@ const useStyles = makeStyles({
         boxSizing: 'border-box',
         borderRadius: 4,
         textAlign: 'center',
-        height: 206,
+        flex: 1,
         padding: 12,
         overflow: 'hidden',
         userSelect: 'none',
@@ -56,6 +56,11 @@ const useStyles = makeStyles({
         background: 'rgba(255, 255, 255, 0.85)',
         fontSize: 30,
         color: '#2CA4EF',
+        userSelect: 'none',
+    },
+    uploader: {
+        position: 'absolute',
+        top: 38,
         userSelect: 'none',
     },
 })
@@ -104,6 +109,7 @@ export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
         <Typography component="label" {...bond} className={classNames(classes.label, { [classes.over]: over })}>
             <input type="file" onInput={onInput} hidden />
             <section className={classes.indicator}>Drop To Upload</section>
+            <img className={classes.uploader} src="https://via.placeholder.com/64x64" />
             <b className={classes.here}>Drop a file here to upload</b>
             <p className={classes.hint}>Size limit: {formatFileSize(maxFileSize)}.</p>
             <p className={classes.hint}>The file will be uploaded immediately and cannot be cancelled.</p>

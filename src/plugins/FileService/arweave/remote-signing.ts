@@ -1,9 +1,8 @@
 import type Transaction from 'arweave/web/lib/transaction'
-
-const endpoint = 'https://tfuhgly4y0.execute-api.ap-east-1.amazonaws.com/arweave-submit-agent'
+import { signing } from '../constants'
 
 export async function sign(transaction: Transaction) {
-    const response = await fetch(endpoint, {
+    const response = await fetch(signing, {
         method: 'POST',
         body: await transaction.getSignatureData(),
     })
