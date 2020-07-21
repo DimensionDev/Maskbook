@@ -8,7 +8,7 @@ import { figmaLink } from './utils'
 storiesOf(displayName, module).add(
     'Main Dialog',
     () => (
-        <div style={{ padding: 16, background: 'white' }}>
+        <div style={{ padding: 16, background: '#fff' }}>
             <MainDialog open onConfirm={action('onConfirm')} onDecline={action('onDecline')} />
         </div>
     ),

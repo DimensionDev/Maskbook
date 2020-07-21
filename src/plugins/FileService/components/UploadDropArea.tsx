@@ -4,7 +4,7 @@ import { isNil } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import React from 'react'
 import { useDropArea } from 'react-use'
-import { formatFileSize } from '../utils/file'
+import { formatFileSize } from '../utils'
 
 const useStyles = makeStyles({
     label: {

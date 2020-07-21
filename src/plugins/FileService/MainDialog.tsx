@@ -82,13 +82,11 @@ const MainDialog: React.FC<Props> = (props) => {
                 <Typography className={classes.title} display="inline" variant="inherit" children={displayName} />
             </DialogTitle>
             <DialogContent className={classes.content}>
-                <Grid container>
-                    <Entry />
-                    <Grid container xs={12} justify="center">
-                        <Button className={classes.insert} variant="contained" color="primary" disabled>
-                            Insert
-                        </Button>
-                    </Grid>
+                <Entry />
+                <Grid container justify="center">
+                    <Button className={classes.insert} variant="contained" color="primary" disabled>
+                        Insert
+                    </Button>
                 </Grid>
             </DialogContent>
         </ShadowRootDialog>
