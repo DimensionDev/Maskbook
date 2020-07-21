@@ -25,7 +25,6 @@ interface Props
         | 'input'
         | 'header'
         | 'content'
-        | 'actions'
         | 'close'
         | 'button'
         | 'label'
@@ -48,17 +47,14 @@ const useStyles = makeStyles({
         fontSize: 18,
         minHeight: '8em',
     },
-    title: {
-        marginLeft: 6,
-    },
-    actions: {
-        paddingLeft: 26,
-    },
-    container: {
-        width: '100%',
-    },
-    content: {
-        padding: 12,
+    title: { marginLeft: 6 },
+    container: { width: '100%' },
+    content: { padding: 12 },
+    insert: {
+        justifyContent: 'center',
+        background: '#9ED2F7',
+        borderRadius: 26,
+        marginTop: 24,
     },
 })
 
@@ -87,11 +83,11 @@ const MainDialog: React.FC<Props> = (props) => {
             </DialogTitle>
             <DialogContent className={classes.content}>
                 <Grid container>
-                    <Grid item xs={12}>
-                        <Entry />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button>Inject</Button>
+                    <Entry />
+                    <Grid container xs={12} justify="center">
+                        <Button className={classes.insert} variant="contained" color="primary" disabled>
+                            Insert
+                        </Button>
                     </Grid>
                 </Grid>
             </DialogContent>
