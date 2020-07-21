@@ -4,6 +4,7 @@ import contractMap from 'eth-contract-metadata'
 import mainnet from '../../erc20/mainnet.json'
 import rinkeby from '../../erc20/rinkeby.json'
 import type { ERC20Token } from '../../token'
+import { uniqBy } from 'lodash-es'
 
 const settings = {
     gitcoinMaintainerAddress: {
@@ -69,5 +70,5 @@ const ERC20Tokens = {
 }
 
 export function getNetworkERC20Tokens(network: EthereumNetwork = currentEthereumNetworkSettings.value) {
-    return ERC20Tokens[network] as ERC20Token[]
+    return uniqBy(ERC20Tokens[network] as ERC20Token[], (token) => token.address.toUpperCase())
 }

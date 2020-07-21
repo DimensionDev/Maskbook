@@ -1,4 +1,4 @@
-import { omit } from 'lodash-es'
+import { omit, uniqBy } from 'lodash-es'
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
 import {
@@ -74,7 +74,10 @@ export async function getManagedWallets(): Promise<{
             return `0x${buf2hex(recover.privateKey)}`
         }
     }
-    return { wallets: await makeWallets(), tokens }
+    function makeTokens() {
+        return uniqBy(tokens, (token) => token.address.toUpperCase())
+    }
+    return { wallets: await makeWallets(), tokens: makeTokens() }
 }
 
 export async function getDefaultWallet(): Promise<WalletRecord> {
