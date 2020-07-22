@@ -1,10 +1,20 @@
 import { src, dest, watch, lastRun } from 'gulp'
 import * as modifier from '../manifest.overrides'
 import { createTask, modifyFile, named } from './helper'
-import { assetsPath, output, manifestPath } from './paths'
+import { assetsPath, output, manifestPath, srcPath } from './paths'
 import { buildTarget, getEnvironment } from './env'
 // @ts-ignore
 import rename from 'gulp-rename'
+
+const sourceAssetsDesc =
+    'Copy all assets allocated in src/* to extension/esm/* to enable them to be used by import.meta'
+export function sourceAssets() {
+    return src(srcPath.files, { since: lastRun(sourceAssets), ignore: '*.js' }).pipe(dest(output.esmBuildClone.folder))
+}
+named('src-assets', sourceAssetsDesc + ' (build)', sourceAssets)
+export const watchSourceAssets = named('watch-src-assets', sourceAssetsDesc + ' (watch)', () =>
+    watch(srcPath.folder, { ignoreInitial: true, ignored: ['*.ts', '*.tsx'] }, sourceAssets),
+)
 
 export function assets() {
     return src(assetsPath.files, { since: lastRun(assets) }).pipe(dest(output.extension.folder))

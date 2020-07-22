@@ -1,6 +1,15 @@
 import { promisify } from 'util'
 import { parallel, series } from 'gulp'
-import { watchManifest, assets, manifest, watchAssets, environmentFile, watchEnvironmentFile } from './assets'
+import {
+    watchManifest,
+    assets,
+    manifest,
+    watchAssets,
+    environmentFile,
+    watchEnvironmentFile,
+    watchSourceAssets,
+    sourceAssets,
+} from './assets'
 import { dependenciesWatch, dependenciesBuild } from './dependencies'
 import { copyESMOut, tscESModuleBuild, tscESModuleWatch, tscSystemBuild, tscSystemWatch, watchCopyESMOut } from './tsc'
 import { libs } from './libraries'
@@ -38,8 +47,9 @@ export const watch = named(
             watchEnvironmentFile,
             watchAssets,
             isolatedWatch,
-            parallelProcessWatch,
             watchCopyESMOut,
+            watchSourceAssets,
+            parallelProcessWatch,
         ),
     ),
 )
@@ -61,6 +71,7 @@ export const build = named(
         clean,
         env,
         parallel(
+            sourceAssets,
             environmentFile,
             workerBuild,
             isolatedBuild,
