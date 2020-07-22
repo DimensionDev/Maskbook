@@ -132,7 +132,8 @@ export const shuffle = ({ file, blockWidth }: shuffleArgs) => {
 
     const totalBlocksNum = (file.bitmap.width * file.bitmap.height) / (blockWidth * blockWidth) // this will be a whole number, because we resize earlier
     const img = file.bitmap.data
-    const seed = String(Math.random())
+    let seed = String(Math.random())
+    seed = seed.slice(2)
     const prng = seedrandom(seed)
 
     for (var blockNum = totalBlocksNum - 1; blockNum > 1; blockNum = blockNum - 1) {
