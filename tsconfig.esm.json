@@ -2,14 +2,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "ESNext",
-    "outDir": "./temp/extension/esm/",
+    "outDir": "./temp/esm/",
     // "outDir": "./debug/",
     "noEmit": false,
     // "removeComments": true,
-    // ? Cannot turn this on currently
-    // "tsBuildInfoFile": "./temp/tsconfig.esm.tsbuildinfo",
-    // "incremental": true,
-    // ! Once you change the plugin config, you have to remove the tsBuildInfoFile to clear cache
+    // ! Once you change the plugin config, you have to bump the version of tsBuildInfoFile to clear cache
+    "tsBuildInfoFile": "./temp/esm/tsconfig.esm.tsbuildinfo.v1",
+    "incremental": true,
     "plugins": [
       {
         "transform": "@magic-works/ttypescript-browser-like-import-transformer",
@@ -20,10 +19,7 @@
         "rules": {
           "/(.+)/": {
             "type": "umd",
-            "target": "__deps__",
-            "treeshake": {
-              "out": "./temp/__deps__esm__generated__.js"
-            }
+            "target": "__deps__"
           }
         }
       }
@@ -34,10 +30,12 @@
       // }
     ]
   },
-  "include": [
-    "./src/extension/options-page/index.tsx",
-    "./src/content-script.ts",
-    "./src/background-service.ts",
-    "./src/extension/popup-page/index.tsx"
-  ]
+  // https://github.com/microsoft/TypeScript/issues/39700
+  // "include": [
+  //   "./src/extension/options-page/index.tsx",
+  //   "./src/content-script.ts",
+  //   "./src/background-service.ts",
+  //   "./src/extension/popup-page/index.tsx"
+  // ]
+  "include": ["./src/**/*"]
 }

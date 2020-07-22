@@ -29,7 +29,8 @@ export const tsconfigESMPath = file('../../tsconfig.esm.json')
 export const output = {
     temp: folder('../../temp/'),
     extension: folder('../../temp/extension/'),
-    esmBuild: folder('../../temp/extension/esm/'),
+    esmBuildOriginal: folder('../../temp/esm/'),
+    esmBuildClone: folder('../../temp/extension/esm/'),
     systemBuild: folder('../../temp/extension/system/'),
     libraries: folder('../../temp/extension/libraries/'),
     polyfills: folder('../../temp/extension/polyfills/'),

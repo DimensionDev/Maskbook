@@ -11,7 +11,7 @@ export const { build: tscESModuleBuild, watch: tscESModuleWatch } = createTask(
     (mode) => () =>
         spawn(
             'node',
-            [typescriptCLI, '--preserveWatchOutput', '-p', tsconfigESMPath.file, mode === 'development' ? ' -w' : ''],
+            [typescriptCLI, '-b', '--preserveWatchOutput', tsconfigESMPath.file, mode === 'development' ? ' -w' : ''],
             {
                 stdio: 'inherit',
                 cwd: srcPath.relative('../'),
@@ -20,12 +20,20 @@ export const { build: tscESModuleBuild, watch: tscESModuleWatch } = createTask(
         ),
 )
 export const tscSystemBuild = named('system', 'Build all TypeScript into SystemJS format for Firefox (build)', () =>
-    src(output.esmBuild.files, { since: lastRun(tscSystemBuild) })
+    src(output.esmBuildOriginal.files, { since: lastRun(tscSystemBuild) })
         .pipe(modifyFile((x) => toSystem(x).replace('ttsclib.js', 'ttsclib-system.js')))
         .pipe(dest(output.systemBuild.folder)),
 )
 export const tscSystemWatch = named(
     'watch-system',
     'Build all TypeScript into SystemJS format for Firefox (watch)',
-    () => watch(output.esmBuild.folder, { ignoreInitial: false }, tscSystemBuild),
+    () => watch(output.esmBuildOriginal.folder, { ignoreInitial: false }, tscSystemBuild),
+)
+// We have to do the copy, cause https://bugzilla.mozilla.org/show_bug.cgi?id=1654463
+export function copyESMOut() {
+    return src(output.esmBuildOriginal.js, { since: lastRun(copyESMOut) }).pipe(dest(output.esmBuildClone.folder))
+}
+named('copy-esm-out', 'Copy files from tsc output (build)', copyESMOut)
+export const watchCopyESMOut = named('watch-copy-esm-out', 'Copy files from tsc output (watch)', () =>
+    watch(output.esmBuildOriginal.js, { ignoreInitial: false }, copyESMOut),
 )

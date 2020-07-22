@@ -2,7 +2,7 @@ import { promisify } from 'util'
 import { parallel, series } from 'gulp'
 import { watchManifest, assets, manifest, watchAssets, environmentFile, watchEnvironmentFile } from './assets'
 import { dependenciesWatch, dependenciesBuild } from './dependencies'
-import { tscESModuleBuild, tscESModuleWatch, tscSystemBuild, tscSystemWatch } from './tsc'
+import { copyESMOut, tscESModuleBuild, tscESModuleWatch, tscSystemBuild, tscSystemWatch, watchCopyESMOut } from './tsc'
 import { libs } from './libraries'
 // @ts-ignore
 import gulpMultiProcess from 'gulp-multi-process'
@@ -31,13 +31,23 @@ named(
 export const watch = named(
     'watch',
     'Start the development build process',
-    series(env, parallel(watchManifest, watchEnvironmentFile, watchAssets, isolatedWatch, parallelProcessWatch)),
+    series(
+        env,
+        parallel(
+            watchManifest,
+            watchEnvironmentFile,
+            watchAssets,
+            isolatedWatch,
+            parallelProcessWatch,
+            watchCopyESMOut,
+        ),
+    ),
 )
 
 export async function env() {
     output.temp.ensure()
     output.extension.ensure()
-    output.esmBuild.ensure()
+    output.esmBuildOriginal.ensure()
     output.systemBuild.ensure()
     output.polyfills.ensure()
     return promisify(parallel(manifest, assets, libs))()
@@ -55,7 +65,7 @@ export const build = named(
             workerBuild,
             isolatedBuild,
             dependenciesBuild,
-            series(tscESModuleBuild, tscSystemBuild),
+            series(tscESModuleBuild, parallel(copyESMOut, tscSystemBuild)),
         ),
     ),
 )
