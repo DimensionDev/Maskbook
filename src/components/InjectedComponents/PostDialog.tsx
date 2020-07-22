@@ -55,6 +55,8 @@ import Dropzone from '../shared/Dropzone'
 
 const defaultTheme = {}
 
+const DEFAULT_BLOCK_WIDTH = 8
+
 const useStyles = makeStyles({
     MUIInputRoot: {
         minHeight: 108,
@@ -375,7 +377,6 @@ export function PostDialog(props: PostDialogProps) {
         }
         const uintArr = new Uint8Array(arrayBuffer)
         const buf = toBuffer(uintArr)
-        // TODO: convert to jpeg as well
         const img = await Jimp.read(buf)
         setImgToEncrypt(img)
     }, [])
@@ -417,7 +418,7 @@ export function PostDialog(props: PostDialogProps) {
                         console.debug('nothing to encrypt')
                         return
                     }
-                    const seed = shuffle({ file: imgToEncrypt, blockWidth: 64 })
+                    const seed = shuffle({ file: imgToEncrypt, blockWidth: DEFAULT_BLOCK_WIDTH })
                     const seedTypedMessage = makeTypedMessage(seed)
                     const [encrypted, _] = await Services.Crypto.encryptTo(
                         seedTypedMessage,
@@ -432,10 +433,12 @@ export function PostDialog(props: PostDialogProps) {
                         warningText: t('additional_post_box__encrypted_failed'),
                         shouldOpenPostDialog: false,
                     })
-                    activeUI.taskUploadShuffleToPostBox(imgToEncrypt.bitmap.data, {
-                        template: 'v2',
-                        // ! not steganography failed
-                        warningText: t('additional_post_box__steganography_post_failed'),
+                    imgToEncrypt.getBuffer(Jimp.MIME_JPEG, (_, buffer) => {
+                        activeUI.taskUploadShuffleToPostBox(buffer, {
+                            template: 'v2',
+                            // ! not steganography failed
+                            warningText: t('additional_post_box__steganography_post_failed'),
+                        })
                     })
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
