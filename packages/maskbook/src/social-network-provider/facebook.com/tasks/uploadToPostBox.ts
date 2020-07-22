@@ -1,6 +1,6 @@
 import { SocialNetworkUI, getActivatedUI } from '../../../social-network/ui'
 import { untilDocumentReady } from '../../../utils/dom'
-import { getUrl, downloadUrl, pasteImageToActiveElements } from '../../../utils/utils'
+import { getUrl, downloadUrl, pasteImageToActiveElements, sleep } from '../../../utils/utils'
 import Services from '../../../extension/service'
 import { decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'
@@ -12,6 +12,8 @@ export async function uploadShuffleToPostBoxFacebook(
     shuffledImage: Uint8Array,
     options: Parameters<SocialNetworkUI['taskUploadToPostBox']>[1],
 ) {
+    // ! race conditions, thus sleep
+    await sleep(500)
     pasteImageToActiveElements(shuffledImage)
     await untilDocumentReady()
 }
@@ -55,7 +57,7 @@ export async function uploadToPostBoxFacebook(
 
 // ----- Image Encryption
 
-const BytesInPixel = 3
+const BytesInPixel = 4
 const optimalWidth = 960 // https://louisem.com/1730/how-to-optimize-photos-for-facebook#:~:text=According%20to%20Facebook%2C%20they%20will,NOT%20be%20reduced%20in%20size.
 
 // TODO: might want to move this somewhere more appropriate
@@ -112,45 +114,38 @@ type shuffleArgs = {
     blockWidth: number
 }
 
-// changes the image in place
 export const shuffle = ({ file, blockWidth }: shuffleArgs) => {
-    const w = file.bitmap.width
-    const h = file.bitmap.height
-
-    if (w > optimalWidth) {
-        // we want to preserve the aspect ratio here, but at the same time, ensure that we blockWidth blocks will fit into this new resized
-        // image without us having to pad the image
-        const aspectRatio = w / h
+    if (file.bitmap.width > optimalWidth) {
+        const aspectRatio = file.bitmap.width / file.bitmap.height
         const targetHeight = optimalWidth / aspectRatio
         file.resize(optimalWidth - (optimalWidth % blockWidth), targetHeight - (targetHeight % blockWidth))
     } else {
         // TODO: you might want to avoid the throws
-        if (w < blockWidth) {
+        if (file.bitmap.width < blockWidth) {
             throw new Error('blockWidth is larger than image width')
         }
         // * you can still get an image with a ridiculous height
-        file.resize(w - (w % blockWidth), h - (h % blockWidth))
+        file.resize(
+            file.bitmap.width - (file.bitmap.width % blockWidth),
+            file.bitmap.height - (file.bitmap.height % blockWidth),
+        )
     }
 
-    const totalBlocksNum = (w * h) / (blockWidth * blockWidth) // this will be a whole number, because we resize earlier
-    // const permutations: number[] = []
+    const totalBlocksNum = (file.bitmap.width * file.bitmap.height) / (blockWidth * blockWidth) // this will be a whole number, because we resize earlier
     const img = file.bitmap.data
-    const seed = String(Math.random()) // ! how many states can this generate?
+    const seed = String(Math.random())
     const prng = seedrandom(seed)
 
     for (var blockNum = totalBlocksNum - 1; blockNum > 1; blockNum = blockNum - 1) {
-        const r = rand(0, blockNum - 1, prng) // ! might need to use rand(0, blockNum) depending on what the "off-by-one" error means (https://www.wikiwand.com/en/Fisher%E2%80%93Yates_shuffle)
-        // permutations.push(r)
-        swapPixelBlocks({ img, imgWidth: w, blockWidth, blockIx1: blockNum, blockIx2: r })
+        const r = rand(0, blockNum - 1, prng) // might need to use rand(0, blockNum) depending on what the "off-by-one" error means
+        swapPixelBlocks({ img, imgWidth: file.bitmap.width, blockWidth, blockIx1: blockNum, blockIx2: r })
     }
 
     return seed
-    // return permutations
 }
 
 type deshuffleArgs = {
     file: Jimp
-    // permutations: number[]
     blockWidth: number
     seed: string
 }
@@ -160,13 +155,11 @@ export const deshuffle = ({ file, blockWidth, seed }: deshuffleArgs) => {
     const h = file.bitmap.height
     const totalBlocksNum = (w * h) / (blockWidth * blockWidth) // this will be a whole number, because we resized earlier
     const img = file.bitmap.data
-    // const permutationsLen = permutations.length
     const prng = seedrandom(seed)
 
     for (var blockNum = 1; blockNum < totalBlocksNum; blockNum = blockNum + 1) {
         const swapWith = rand(0, totalBlocksNum - 1 - blockNum, prng)
         // ! there is an error here somewhere with an index. one block does not get copied over
-        // const swapWith = permutations[permutationsLen - blockNum + 1]
         swapPixelBlocks({ img, imgWidth: w, blockWidth, blockIx1: swapWith, blockIx2: blockNum })
     }
 }

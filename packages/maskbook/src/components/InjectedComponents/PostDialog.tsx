@@ -56,6 +56,8 @@ import { shuffle } from '../../social-network-provider/facebook.com/tasks/upload
 
 const defaultTheme = {}
 
+const DEFAULT_BLOCK_WIDTH = 8
+
 const useStyles = makeStyles({
     MUIInputRoot: {
         minHeight: 108,
@@ -350,7 +352,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
         }
         const uintArr = new Uint8Array(arrayBuffer)
         const buf = toBuffer(uintArr)
-        // TODO: convert to jpeg as well
         const img = await Jimp.read(buf)
         setImgToEncrypt(img)
     }, [])
@@ -410,7 +411,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                         console.debug('nothing to encrypt')
                         return
                     }
-                    const seed = shuffle({ file: imgToEncrypt, blockWidth: 64 })
+                    const seed = shuffle({ file: imgToEncrypt, blockWidth: DEFAULT_BLOCK_WIDTH })
                     const seedTypedMessage = makeTypedMessageText(seed)
                     const [encrypted, _] = await Services.Crypto.encryptTo(
                         seedTypedMessage,
@@ -424,10 +425,12 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     activeUI.taskPasteIntoPostBox(text, {
                         autoPasteFailedRecover: true, shouldOpenPostDialog: true
                     })
-                    activeUI.taskUploadShuffleToPostBox(imgToEncrypt.bitmap.data, {
-                        template: 'v2',
-                        // ! not steganography failed
-                        warningText: '',
+                    imgToEncrypt.getBuffer(Jimp.MIME_JPEG, (_, buffer) => {
+                        activeUI.taskUploadShuffleToPostBox(buffer, {
+                            template: 'v2',
+                            // ! not steganography failed
+                            warningText: '',
+                        })
                     })
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
