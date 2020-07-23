@@ -39,11 +39,6 @@ interface RouteState {
     block: Uint8Array
 }
 
-interface UploadHooks {
-    onStart(id: string): void
-    onProgress?(pct: number): void
-}
-
 export const Uploading: React.FC = () => {
     const history = useHistory()
     const [startedAt] = React.useState(Date.now())
