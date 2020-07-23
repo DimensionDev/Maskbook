@@ -39,12 +39,26 @@ export abstract class PostInfo {
     abstract readonly rootNodeProxy: DOMProxy
     // TODO: Implement this
     readonly postMetadataImages = new ObservableSet<HTMLImageElement>()
+    // The links appears under the post content
+    readonly postAttachments = new ObservableMap<string, PostInfoAttachment>()
     /** The links appears in the post content */
     readonly postMentionedLinks = new ObservableSet<string>()
     /** The links does not appear in the post content */
     readonly postMetadataMentionedLinks = new ObservableMap<HTMLAnchorElement, string>()
     readonly postMetadataMentionedLinksEncrypted = new ObservableMap<unknown, string>()
 }
+
+export interface PostInfoTextAttachment {
+    type: 'text'
+    content: string
+}
+
+export interface PostInfoImageAttachment {
+    type: 'image'
+    url: string
+}
+
+export type PostInfoAttachment = PostInfoTextAttachment | PostInfoImageAttachment
 
 export const emptyPostInfo: PostInfo = new (class extends PostInfo {
     commentBoxSelector = undefined

@@ -9,7 +9,7 @@ import type {
 import { PostInfo } from '../../../social-network/PostInfo'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
-import { bioCardParser, postParser, postImageParser, postIdParser } from '../utils/fetch'
+import { bioCardParser, postParser, postIdParser, postImageAttachmentsParser } from '../utils/fetch'
 import { isNil } from 'lodash-es'
 import Services from '../../../extension/service'
 import { twitterUrl } from '../utils/url'
@@ -183,11 +183,11 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self:
     // decode steganographic image
     // don't add await on this
     untilElementAvailable(postsImageSelector(tweetNode), 10000)
-        .then(() => postImageParser(tweetNode))
-        .then((content) => {
-            if (content && info.postContent.value.indexOf(content) < 0) {
-                info.postContent.value = content
-            }
+        .then(() => postImageAttachmentsParser(tweetNode))
+        .then((attachments) => {
+            console.log('DEBUG: post attachments')
+            console.log(attachments)
+            for (const attachment of attachments) info.postAttachments.set(attachment.url, attachment)
         })
         .catch(() => {})
 }

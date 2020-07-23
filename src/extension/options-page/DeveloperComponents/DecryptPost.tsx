@@ -43,7 +43,6 @@ export function DecryptPostDeveloperMode() {
                 <div style={{ minHeight: 200 }}>
                     <DecryptPost
                         alreadySelectedPreviously={[]}
-                        encryptedText={encryptedText}
                         onDecrypted={(post) => {}}
                         profiles={[]}
                         whoAmI={whoAmIIdentifier}

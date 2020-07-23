@@ -276,6 +276,7 @@
     "service_others_key_not_found": "{{name}} 的公鑰無法找到！",
     "service_publish_post_aes_key_failed": "未能發佈 AES 密鑰。",
     "service_self_key_decryption_failed": "解密失敗。或許您選取了錯誤的檔案或導入了錯誤的金鑰。",
+    "service_decode_image_payload_failed": "解码圖片失敗。",
     "service_unknown_payload": "不支援的訊息構造。或許你需要更新 Maskbook 版本了？",
     "service_username_invalid": "無效用戶名",
     "set_as_default": "設為默認",

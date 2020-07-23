@@ -1,13 +1,12 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import type { SocialNetworkUI } from '../../../social-network/ui'
-import { PostInfo } from '../../../social-network/PostInfo'
+import { PostInfo, PostInfoImageAttachment } from '../../../social-network/PostInfo'
 import { isMobileFacebook } from '../isMobile'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
-import Services from '../../../extension/service'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
-    isMobileFacebook ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',
+    isMobileFacebook ? '.story_body_container ' : '.userContent',
 )
 
 export function collectPostsFacebook(this: SocialNetworkUI) {
@@ -67,9 +66,8 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 info.postContent.value = collectNodeText(node)
                 info.postBy.value = getPostBy(metadata, info.postPayload.value !== null).identifier
                 info.postID.value = getPostID(metadata)
-                getSteganographyContent(metadata).then((content) => {
-                    if (content && info.postContent.value.indexOf(content) === -1 && content.substr(0, 2) === '🎼')
-                        info.postContent.value = content
+                getImageAttachments(metadata).then((attachments) => {
+                    for (const attachment of attachments) info.postAttachments.set(attachment.url, attachment)
                 })
             }
             collectPostInfo()
@@ -93,7 +91,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
 function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {
     const dom = isMobileFacebook
         ? node.current.querySelectorAll('a')
-        : [node.current.parentElement!.querySelectorAll('a')[1]]
+        : [(node.current.closest('[role="article"]') ?? node.current.parentElement)!.querySelectorAll('a')[1]]
     // side effect: save to service
     return getProfileIdentifierAtFacebook(Array.from(dom), allowCollectInfo)
 }
@@ -122,14 +120,15 @@ function getPostID(node: DOMProxy): null | string {
         }
     }
 }
-async function getSteganographyContent(node: DOMProxy) {
+
+async function getImageAttachments(node: DOMProxy): Promise<PostInfoImageAttachment[]> {
     const parent = node.current.parentElement
 
-    if (!parent) return ''
+    if (!parent) return []
     const imgNodes = parent.querySelectorAll<HTMLElement>(
         isMobileFacebook ? 'div>div>div>a>div>div>i.img' : '.userContentWrapper a[data-ploi]',
     )
-    if (!imgNodes.length) return ''
+    if (!imgNodes.length) return []
     const imgUrls = isMobileFacebook
         ? (getComputedStyle(imgNodes[0]).backgroundImage || '')
               .slice(4, -1)
@@ -139,22 +138,9 @@ async function getSteganographyContent(node: DOMProxy) {
         : Array.from(imgNodes)
               .map((node) => node.getAttribute('data-ploi') || '')
               .filter(Boolean)
-    if (!imgUrls.length) return ''
-    const pass = getPostBy(node, false).identifier.toText()
-    return (
-        await Promise.all(
-            imgUrls.map(async (url) => {
-                try {
-                    const content = await Services.Steganography.decodeImageUrl(url, {
-                        pass,
-                    })
-                    return content.indexOf('🎼') === 0 ? content : ''
-                } catch {
-                    return ''
-                }
-            }),
-        )
-    )
-        .filter(Boolean)
-        .join('\n')
+    if (!imgUrls.length) return []
+    return imgUrls.map((url) => ({
+        url,
+        type: 'image',
+    }))
 }
