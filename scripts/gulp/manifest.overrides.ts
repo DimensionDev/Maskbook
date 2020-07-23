@@ -1,4 +1,4 @@
-import type base from '../src/manifest.json'
+import type base from '../../src/manifest.json'
 export function firefox(manifest: typeof base) {
     // TODO: To make `browser.tabs.executeScript` run on Firefox,
     // we need an extra permission "tabs".

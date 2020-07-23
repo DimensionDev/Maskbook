@@ -11,6 +11,8 @@ import i18nNextInstance from '../i18n-next'
 import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
 import '../../components/InjectedComponents/ShadowRootSwitchNotifier'
+// https://github.com/microsoft/TypeScript/issues/35002#issuecomment-557293043
+import ShadowRoot = globalThis.ShadowRoot
 
 const previousShadowedElement = new Set<HTMLElement>()
 /**

@@ -92,7 +92,7 @@ type Encoder = SocialNetworkWorkerAndUI['payloadEncoder']
 export function deconstructPayload(str: string, decoder: Decoder): Result<Payload, TypeError> {
     const decoders = (() => {
         if (isNil(decoder)) {
-            // TODO:
+            // TODO: Use activeUI payload decoder
             // if (GetContext() === 'content') {
             //     return [safeGetActiveUI().payloadDecoder]
             // }

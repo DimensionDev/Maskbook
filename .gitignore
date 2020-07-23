@@ -7,7 +7,6 @@
 /.awcache
 /.tscache
 /.log
-public/polyfill
 # dependencies
 /node_modules
 /.pnp

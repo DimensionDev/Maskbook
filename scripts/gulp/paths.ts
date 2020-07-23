@@ -23,7 +23,7 @@ export const assetsPath = folder('../../public/')
 export const manifestPath = file('../../src/manifest.json')
 
 // config
-export const tsconfigESMPath = file('../../tsconfig.esm.json')
+export const tsconfigESMPath = file('../../src/tsconfig.json')
 
 // out
 export const output = {

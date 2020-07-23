@@ -47,8 +47,8 @@ const _tasks = {
         },
         (x) => x,
     ),
-    async immersiveSetup(for_: ECKeyIdentifier) {
-        ;(await getActivatedUI()).taskStartImmersiveSetup(for_)
+    async immersiveSetup(identifier: ECKeyIdentifier) {
+        ;(await getActivatedUI()).taskStartImmersiveSetup(identifier)
     },
     async noop() {},
 }

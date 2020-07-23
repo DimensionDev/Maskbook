@@ -1,13 +1,14 @@
 ;(() => {
     if (typeof browser === 'undefined' || !browser) return
+    if (process.env.architecture === 'web') return
     const _permissions = browser.permissions || {}
     browser.permissions = new Proxy(_permissions, {
         get(target, prop, receiver) {
             if (prop === 'request') {
                 return ({ origins }) => {
                     const item = localStorage.getItem('requestedUrls')
-                    let requestedUrls = JSON.parse(item) || []
-                    for (let i of origins) {
+                    const requestedUrls = JSON.parse(item) || []
+                    for (const i of origins) {
                         if (!requestedUrls.includes(i)) requestedUrls.push(i)
                     }
                     localStorage.setItem('requestedUrls', JSON.stringify(requestedUrls))

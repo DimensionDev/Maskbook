@@ -1,12 +1,7 @@
 *.test.tsx
 package.json
 package-lock.json
-build/
-dist/
 esm/
 gulp*
-__deps__esm__generated__.js
-public/polyfill
 scripts/
-src/polyfill
 e2e

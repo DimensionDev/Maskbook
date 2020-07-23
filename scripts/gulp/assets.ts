@@ -1,5 +1,5 @@
 import { src, dest, watch, lastRun } from 'gulp'
-import * as modifier from '../manifest.overrides'
+import * as modifier from './manifest.overrides'
 import { createTask, modifyFile, named } from './helper'
 import { assetsPath, output, manifestPath, srcPath } from './paths'
 import { buildTarget, getEnvironment } from './env'

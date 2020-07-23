@@ -1,14 +1,22 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../tsconfig.json",
+  // https://github.com/microsoft/TypeScript/issues/39700
+  // "include": [
+  //   "./extension/options-page/index.tsx",
+  //   "./content-script.ts",
+  //   "./background-service.ts",
+  //   "./extension/popup-page/index.tsx"
+  // ]
+  "include": ["./**/*", "./**/*.json"],
   "compilerOptions": {
-    "module": "ESNext",
-    "outDir": "./temp/esm/",
-    // "outDir": "./debug/",
+    "outDir": "../temp/esm/",
+    "declaration": true,
     "noEmit": false,
-    // "removeComments": true,
+    // project composition
+    "composite": true,
     // ! Once you change the plugin config, you have to bump the version of tsBuildInfoFile to clear cache
-    "tsBuildInfoFile": "./temp/esm/tsconfig.esm.tsbuildinfo.v1",
-    "incremental": true,
+    "tsBuildInfoFile": "../temp/esm/tsconfig.esm.tsbuildinfo.v1",
+    // plugins
     "plugins": [
       {
         "transform": "@magic-works/ttypescript-browser-like-import-transformer",
@@ -30,13 +38,5 @@
       //   "import": "transform"
       // }
     ]
-  },
-  // https://github.com/microsoft/TypeScript/issues/39700
-  // "include": [
-  //   "./src/extension/options-page/index.tsx",
-  //   "./src/content-script.ts",
-  //   "./src/background-service.ts",
-  //   "./src/extension/popup-page/index.tsx"
-  // ]
-  "include": ["./src/**/*"]
+  }
 }

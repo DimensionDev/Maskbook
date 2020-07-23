@@ -12,7 +12,7 @@ const opts = {
 // @ts-ignore
 import minimist from 'minimist'
 import type { Configuration } from 'webpack'
-import * as modifier from '../manifest.overrides'
+import * as modifier from './manifest.overrides'
 const args = minimist(process.argv.slice(2), opts)
 export const buildTarget: 'chromium' | 'firefox' | 'safari' | 'E2E' = args.target
 export const buildArchitecture: 'app' | 'web' = args.arch

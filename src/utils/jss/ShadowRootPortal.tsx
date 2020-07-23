@@ -2,6 +2,8 @@ import { GetContext } from '@holoflows/kit/es'
 import { untilDomLoaded } from '../dom'
 import { renderInShadowRootSettings } from '../../settings/settings'
 import { PreferShadowRootMode } from '../constants'
+// https://github.com/microsoft/TypeScript/issues/35002#issuecomment-557293043
+import ShadowRoot = globalThis.ShadowRoot
 
 const div = document.createElement('div')
 export const portalShadowRoot = div.attachShadow({ mode: PreferShadowRootMode })

@@ -24,9 +24,6 @@ declare global {
         adoptedStyleSheets: ReadonlyArray<StyleSheet>
     }
     interface Document extends ConstructableStyleSheets {}
-    interface ShadowRoot extends ConstructableStyleSheets {
-        __polyfilled_root_: HTMLElement
-    }
 }
 interface CSSRuleBase<T extends { type: unknown }> {
     type: T['type']

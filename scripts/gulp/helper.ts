@@ -1,21 +1,23 @@
-import through2 from 'through2'
 import { promisify } from 'util'
 import type { Configuration } from 'webpack'
 import webpack from 'webpack'
 import type { TaskFunction } from 'gulp'
 import ts from 'typescript'
 import { getEnvironment } from './env'
+import { Readable, Transform } from 'stream'
 
 export function modifyFile(fn: (x: string) => string) {
-    return through2.obj((file, _, cb) => {
-        const contents = fn(String(file.contents)) || file.contents
-
-        if (file.isBuffer() === true) {
-            file.contents = Buffer.from(contents, 'utf-8')
-        }
-
-        cb(null, file)
+    const stream = new Transform({
+        objectMode: true,
+        transform(file, _enc, callback) {
+            if (!file.isBuffer()) return callback(null, file)
+            const text = fn(String(file.contents)) || file.contents
+            // un-typed API?
+            file.contents = (Readable as any).from(text)
+            return callback(null, file)
+        },
     })
+    return stream
 }
 
 export function getWebpackConfig(
