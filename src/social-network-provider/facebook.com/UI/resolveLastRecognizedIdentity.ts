@@ -1,15 +1,14 @@
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { ProfileIdentifier } from '../../../database/type'
 import type { SocialNetworkUI } from '../../../social-network/ui'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import type { Profile } from '../../../database'
+import { isMobileFacebook } from '../isMobile'
 
 export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
     const ref = this.lastRecognizedIdentity
-    const self = myUsernameLiveSelectorPC
+    const self = (isMobileFacebook ? myUsernameLiveSelectorMobile : myUsernameLiveSelectorPC)
         .clone()
         .map((x) => getProfileIdentifierAtFacebook(x, false))
-        .concat(myUsernameLiveSelectorOnMobile)
         .enableSingleMode()
     new MutationObserverWatcher(self)
         .setComparer(undefined, (a, b) => a.identifier.equals(b.identifier))
@@ -30,19 +29,9 @@ export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
 const myUsernameLiveSelectorPC = new LiveSelector().querySelector<HTMLAnchorElement>(
     `[aria-label="Facebook"][role="navigation"] [data-click="profile_icon"] a`,
 )
+const myUsernameLiveSelectorMobile = new LiveSelector().querySelector<HTMLAnchorElement>(
+    '#bookmarks_flyout .mSideMenu > div > ul > li:first-child a, #MComposer a',
+)
 
 type part = Pick<Profile, 'identifier' | 'nickname' | 'avatar'>
-
-const myUsernameLiveSelectorOnMobile = new LiveSelector()
-    .querySelectorAll('article')
-    .map((x) => x.dataset.store)
-    .map((x) => JSON.parse(x).actor_id as number)
-    .filter((x) => x)
-    .replace((orig) => {
-        if (orig.length && location.hostname === 'm.facebook.com' && location.pathname.match(/^\/(?:home)?[^/]*$/)) {
-            if (orig.every((x) => x === orig[0])) return [orig[0]]
-        }
-        return []
-    })
-    .map((x) => ({ identifier: new ProfileIdentifier('facebook.com', x.toString()) } as part))
 //#endregion
