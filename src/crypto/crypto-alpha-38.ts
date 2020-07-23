@@ -1,4 +1,4 @@
-import { TypedMessage, makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
+import { TypedMessage, makeTypedMessageText } from '../extension/background-script/CryptoServices/utils'
 import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
 export * from './crypto-alpha-39'
 
@@ -29,7 +29,7 @@ export function typedMessageParse(x: string) {
         const json: unknown = JSON.parse(maybeMetadata)
         if (typeof json !== 'object' || json === null || Object.keys(json).length === 0)
             throw new Error('Not a metadata')
-        return makeTypedMessage(end.join('🧩'), new Map(Object.entries(json)))
+        return makeTypedMessageText(end.join('🧩'), new Map(Object.entries(json)))
     } catch {}
-    return makeTypedMessage(x)
+    return makeTypedMessageText(x)
 }

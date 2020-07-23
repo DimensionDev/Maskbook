@@ -19,6 +19,9 @@ export function getSignablePayload(payload: Payload) {
 import type { RedPacketJSONPayload } from '../../../plugins/Wallet/database/types'
 import { Result, Err, Ok } from 'ts-results'
 import { RedPacketMetaKey } from '../../../plugins/Wallet/RedPacketMetaKey'
+import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
+import { isArrayBuffer } from 'lodash-es'
+import { imgType } from '@dimensiondev/stego-js/cjs/helper'
 
 export interface TypedMessageMetadata {
     readonly meta?: ReadonlyMap<string, unknown>
@@ -28,6 +31,10 @@ export interface TypedMessageText extends TypedMessageMetadata {
     readonly type: 'text'
     readonly content: string
 }
+export interface TypedMessageImage extends TypedMessageMetadata {
+    readonly type: 'image'
+    readonly content: string
+}
 export interface TypedMessageComplex extends TypedMessageMetadata {
     readonly type: 'complex'
     readonly items: readonly TypedMessage[]
@@ -35,12 +42,21 @@ export interface TypedMessageComplex extends TypedMessageMetadata {
 export interface TypedMessageUnknown extends TypedMessageMetadata {
     readonly type: 'unknown'
 }
-export type TypedMessage = TypedMessageText | TypedMessageComplex | TypedMessageUnknown
-export function makeTypedMessage(text: string, meta?: ReadonlyMap<string, unknown>): TypedMessageText
-export function makeTypedMessage(content: string, meta?: ReadonlyMap<string, unknown>): TypedMessage {
-    if (typeof content === 'string') {
-        const text: TypedMessageText = { type: 'text', content, version: 1, meta }
-        return text
+export type TypedMessage = TypedMessageText | TypedMessageImage | TypedMessageComplex | TypedMessageUnknown
+
+export function makeTypedMessageText(text: string, meta?: ReadonlyMap<string, unknown>) {
+    return { type: 'text', content: text, version: 1, meta } as TypedMessageText
+}
+
+export function makeTypedMessageImage(buf: ArrayBuffer, meta?: ReadonlyMap<string, unknown>) {
+    if (imgType(new Uint8Array(buf)).includes('image')) {
+        const image: TypedMessageImage = {
+            version: 1,
+            meta,
+            type: 'image',
+            content: encodeArrayBuffer(buf),
+        }
+        return image
     }
     const msg: TypedMessageUnknown = { type: 'unknown', version: 1, meta }
     return msg
@@ -107,5 +123,5 @@ export function textIntoTypedMessage(x: TypedMessage | string): TypedMessage {
         content: x,
         type: 'text',
         version: 1,
-    }
+    } as TypedMessageText
 }

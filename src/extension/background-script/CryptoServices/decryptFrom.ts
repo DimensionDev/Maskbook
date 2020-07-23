@@ -17,13 +17,10 @@ import type { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { verifyOthersProve } from './verifyOthersProve'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 import { DecryptFailedReason } from '../../../utils/constants'
-import {
-    asyncIteratorWithResult,
-    asyncIteratorToAsyncFunction,
-    memorizeAsyncGenerator,
-} from '../../../utils/type-transform/asyncIteratorHelpers'
+import { asyncIteratorWithResult, memorizeAsyncGenerator } from '../../../utils/type-transform/asyncIteratorHelpers'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
+import { decodeImageUrl } from '../SteganographyService'
 
 type Progress =
     | { type: 'progress'; progress: 'finding_person_public_key' | 'finding_post_key' | 'init' }
@@ -33,12 +30,14 @@ type DebugInfo = {
     hash: [string, string]
     type: 'debug'
 }
+type SuccessSignatureVerifyResult = boolean | 'verifying'
+type SuccessThrough = 'author_key_not_found' | 'post_key_cached' | 'normal_decrypted'
 type Success = {
     type: 'success'
-    signatureVerifyResult: boolean | 'verifying'
+    signatureVerifyResult: SuccessSignatureVerifyResult
     content: TypedMessage
     rawContent: string
-    through: ('author_key_not_found' | 'post_key_cached' | 'normal_decrypted')[]
+    through: SuccessThrough[]
 }
 type Failure = {
     error: string
@@ -47,11 +46,11 @@ type Failure = {
 export type SuccessDecryption = Success
 export type FailureDecryption = Failure
 export type DecryptionProgress = Progress
-type ReturnOfDecryptFromMessageWithProgress = AsyncGenerator<Failure | Progress | DebugInfo, Success | Failure, void>
+type ReturnOfDecryptPostContentWithProgress = AsyncGenerator<Failure | Progress | DebugInfo, Success | Failure, void>
 
 const successDecryptionCache = new Map<string, Success>()
 const makeSuccessResultF = (
-    rawPayload: string,
+    cacheKey: string,
     cryptoProvider: typeof cryptoProviderTable[keyof typeof cryptoProviderTable],
 ) => (
     rawEncryptedContent: string,
@@ -65,9 +64,10 @@ const makeSuccessResultF = (
         content: cryptoProvider.typedMessageParse(rawEncryptedContent),
         type: 'success',
     }
-    successDecryptionCache.set(rawPayload, success)
+    successDecryptionCache.set(cacheKey, success)
     return success
 }
+
 function makeProgress(progress: Exclude<Progress['progress'], 'intermediate_success'> | Success): Progress {
     if (typeof progress === 'string') return { type: 'progress', progress }
     return { type: 'progress', progress: 'intermediate_success', data: progress }
@@ -78,7 +78,7 @@ function makeError(error: string | Error): Failure {
 }
 /**
  * Decrypt message from a user
- * @param encrypted post
+ * @param post post
  * @param author Post by
  * @param whoAmI My username
  *
@@ -106,26 +106,28 @@ function makeError(error: string | Error): Failure {
  *      1. listen to future new keys on Gun
  *      2. try to decrypt with that key
  */
-export async function* decryptFromMessageWithProgress_raw(
-    encrypted: string,
+async function* decryptFromTextWithProgress_raw(
+    post: string,
     author: ProfileIdentifier,
     whoAmI: ProfileIdentifier,
-    publicShared: boolean,
-): ReturnOfDecryptFromMessageWithProgress {
-    if (successDecryptionCache.has(encrypted)) return successDecryptionCache.get(encrypted)!
+    publicShared?: boolean,
+): ReturnOfDecryptPostContentWithProgress {
+    if (successDecryptionCache.has(post)) return successDecryptionCache.get(post)!
     yield makeProgress('init')
 
     const authorNetworkWorker = getNetworkWorker(author.network)
     if (authorNetworkWorker.err) return makeError(authorNetworkWorker.val)
-    const decodeResult = deconstructPayload(encrypted, authorNetworkWorker.val.payloadDecoder)
+    const decodeResult = deconstructPayload(post, authorNetworkWorker.val.payloadDecoder)
+
     if (decodeResult.err) return makeError(decodeResult.val)
     const data = decodeResult.val
     const { version } = data
+    const sharePublic = publicShared ?? (data.version === -38 ? data.sharedPublic ?? false : false)
 
     if (version === -40 || version === -39 || version === -38) {
         const { encryptedText, iv, signature, version } = data
         const cryptoProvider = cryptoProviderTable[version]
-        const makeSuccessResult = makeSuccessResultF(encrypted, cryptoProvider)
+        const makeSuccessResult = makeSuccessResultF(post, cryptoProvider)
         const ownersAESKeyEncrypted = data.version === -38 ? data.AESKeyEncrypted : data.ownersAESKeyEncrypted
         const waitForVerifySignaturePayload = getSignablePayload(data)
 
@@ -289,7 +291,7 @@ export async function* decryptFromMessageWithProgress_raw(
         }
 
         async function decryptAsAuthor(authorIdentifier: ProfileIdentifier, authorPublic: EC_Public_JsonWebKey) {
-            const localKey = publicShared ? publicSharedAESKey : await queryLocalKey(authorIdentifier)
+            const localKey = sharePublic ? publicSharedAESKey : await queryLocalKey(authorIdentifier)
             if (!localKey) throw new Error(`Local key for identity ${authorIdentifier.toText()} not found`)
             const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByMyself({
                 version,
@@ -312,10 +314,33 @@ export async function* decryptFromMessageWithProgress_raw(
     return makeError(i18n.t('service_unknown_payload'))
 }
 
-export const decryptFromMessageWithProgress = memorizeAsyncGenerator(
-    decryptFromMessageWithProgress_raw,
-    (encrypted, author, whoAmI, publicShared) =>
+async function* decryptFromImageUrlWithProgress_raw(
+    url: string,
+    author: ProfileIdentifier,
+    whoAmI: ProfileIdentifier,
+    publicShared?: boolean,
+): ReturnOfDecryptPostContentWithProgress {
+    if (successDecryptionCache.has(url)) return successDecryptionCache.get(url)!
+    yield makeProgress('init')
+    const post = await decodeImageUrl(url, {
+        pass: author.toText(),
+    })
+    if (post.indexOf('🎼') !== 0 && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
+        return makeError(i18n.t('service_decode_image_payload_failed'))
+    return yield* decryptFromText(post, author, whoAmI, publicShared)
+}
+
+export const decryptFromText = memorizeAsyncGenerator(
+    decryptFromTextWithProgress_raw,
+    (encrypted, author, whoAmI, publicShared = undefined) =>
         JSON.stringify([encrypted, author.toText(), whoAmI.toText(), publicShared]),
+    1000 * 30,
+)
+
+export const decryptFromImageUrl = memorizeAsyncGenerator(
+    decryptFromImageUrlWithProgress_raw,
+    (url, author, whoAmI, publicShared = undefined) =>
+        JSON.stringify([url, author.toText(), whoAmI.toText(), publicShared]),
     1000 * 30,
 )
 
@@ -379,8 +404,6 @@ async function* findAuthorPublicKey(
     if (author && author.publicKey) return author
     return 'out of chance'
 }
-
-export const decryptFrom = asyncIteratorToAsyncFunction(decryptFromMessageWithProgress_raw)
 
 async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
     const { encryptedText, iv, version } = postPayload

@@ -37,10 +37,10 @@ export abstract class PostInfo {
     readonly decryptedPostContentRaw = new ValueRef('')
     abstract readonly rootNode: HTMLElement
     abstract readonly rootNodeProxy: DOMProxy
-    // TODO: Implement this
-    readonly postMetadataImages = new ObservableSet<HTMLImageElement>()
     /** The links appears in the post content */
     readonly postMentionedLinks = new ObservableSet<string>()
+    /** The images as attachment of post */
+    readonly postMetadataImages = new ObservableSet<string>()
     /** The links does not appear in the post content */
     readonly postMetadataMentionedLinks = new ObservableMap<HTMLAnchorElement, string>()
     readonly postMetadataMentionedLinksEncrypted = new ObservableMap<unknown, string>()
