@@ -60,9 +60,9 @@ padding: 0px 10px;`,
 }
 function clickSeeMore(node: DOMProxy) {
     const more = node.current.parentElement!.querySelector<HTMLDivElement | HTMLSpanElement>(
-        isMobileFacebook ? '[data-sigil="more"]' : '.see_more_link_inner',
+        isMobileFacebook ? '[data-sigil="more"] a' : '.see_more_link_inner',
     )
-    if (more && node.current.innerText.match(/🎼.+\|/)) {
+    if (more && node.current.innerText.includes('🎼')) {
         const trap = (e: Event) => {
             e.preventDefault()
         }
