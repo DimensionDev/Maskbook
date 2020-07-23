@@ -8,6 +8,8 @@ export interface FileInfo {
     key: string | null | undefined
     payloadTxID: string
     landingTxID: string
+
+    checksum: Uint8Array
 }
 
 export interface Props {

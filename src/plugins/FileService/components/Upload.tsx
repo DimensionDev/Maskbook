@@ -6,6 +6,9 @@ import { legalPolicy, legalTerms, MAX_FILE_SIZE } from '../constants'
 import { toUint8Array } from '../utils'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
+import { Attachment } from '@dimensiondev/common-protocols'
+import type { FileInfo } from '../hooks/Exchange'
+import { useSnackbar } from 'notistack'
 
 const LEGAL_TERMS = (
     <a target="_blank" href={legalTerms}>
@@ -57,25 +60,43 @@ const useStyles = makeStyles({
 export const Upload: React.FC = () => {
     const classes = useStyles()
     const history = useHistory()
+    const snackbar = useSnackbar()
     const [encrypted, setEncrypted] = React.useState(true)
+    // TODO: query recent uploaded files (the first 4 records)
+    const files: FileInfo[] = []
     const onFile = async (file: File) => {
         let key
         if (encrypted) {
             key = makeFileKey()
         }
+        const block = await toUint8Array(file)
+        const checksum = await Attachment.checksum(block)
+        // TODO: check upload history
+        // if [ same checksum exists ]; then
+        //    goto uploaded page
+        // else
+        //    goto uploading page
+        // fi
         history.push('/uploading', {
             key,
             name: file.name,
             size: file.size,
             type: file.type,
-            block: await toUint8Array(file), // copy
+            block,
+            checksum,
         })
+    }
+    const onMore = () => {
+        // TODO: open new tab
+        // show a selectable list
+        // not started any designed
+        snackbar.enqueueSnackbar('NOT SUPPORTED, Stage 2 feature')
     }
     return (
         <section className={classes.container}>
             <section className={classes.upload}>
                 <UploadDropArea maxFileSize={MAX_FILE_SIZE} onFile={onFile} />
-                <RecentFiles files={[]} />
+                <RecentFiles files={files} onMore={onMore} />
             </section>
             <section className={classes.legal}>
                 <FormControlLabel

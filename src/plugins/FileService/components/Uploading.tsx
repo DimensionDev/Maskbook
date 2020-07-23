@@ -3,7 +3,6 @@ import React from 'react'
 import { useHistory, useLocation } from 'react-router'
 import { useAsync, useBeforeUnload } from 'react-use'
 import Services, { ServicesWithProgress } from '../../../extension/service'
-import type { AttachmentOptions } from '../arweave'
 import { FileName } from './FileName'
 import { ProgressBar } from './ProgressBar'
 
@@ -37,6 +36,7 @@ interface RouteState {
     size: number
     type: string
     block: Uint8Array
+    checksum: Uint8Array
 }
 
 export const Uploading: React.FC = () => {
@@ -69,6 +69,7 @@ export const Uploading: React.FC = () => {
             size: state.size,
             createdAt: new Date(startedAt),
             key: state.key,
+            checksum: state.checksum,
             payloadTxID: payloadTxID,
             landingTxID: landingTxID,
         })

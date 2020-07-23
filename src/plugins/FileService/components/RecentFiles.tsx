@@ -60,9 +60,10 @@ const useItemTextStyles = makeStyles({
 
 interface Props {
     files: FileInfo[]
+    onMore(): void
 }
 
-export const RecentFiles: React.FC<Props> = ({ files }) => {
+export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
     const history = useHistory()
     const classes = useStyles()
     const itemClasses = useItemStyles()
@@ -84,7 +85,9 @@ export const RecentFiles: React.FC<Props> = ({ files }) => {
         <section className={classes.container}>
             <Typography className={classes.heading}>Recent Files</Typography>
             <List className={classes.listing}>{map(files.slice(0, 4), renderItem)}</List>
-            <Button className={classes.more}>Show More</Button>
+            <Button className={classes.more} onClick={onMore}>
+                Show More
+            </Button>
         </section>
     )
 }

@@ -5,7 +5,7 @@ import { identifier, META_KEY_1, pluginName } from './constants'
 import type { FileInfo } from './hooks/Exchange'
 import { readTypedMessageMetadata } from '../../extension/background-script/CryptoServices/utils'
 import { formatFileSize } from './utils'
-import { Preview } from './components/Preview'
+import { Preview } from './Preview'
 
 export const FileServicePluginDefine: PluginConfig = {
     pluginName,
