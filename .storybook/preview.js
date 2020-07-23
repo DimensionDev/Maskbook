@@ -1,4 +1,3 @@
-import '../public/env'
 import { addParameters, addDecorator } from '@storybook/react'
 import { withKnobs, radios } from '@storybook/addon-knobs'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../src/utils/theme'

@@ -10,7 +10,7 @@ executors:
         working_directory: ~/repo
 commands:
     restore_workspace:
-        description: "Restore the workspace"
+        description: 'Restore the workspace'
         steps:
             - attach_workspace:
                   at: ~/
@@ -40,14 +40,11 @@ jobs:
         steps:
             - restore_workspace
             - run:
-                  name: Install zip
-                  command: sudo apt-get install zip
-            - run:
                   name: Build Maskbook
                   command: yarn build-ci
-            - store_artifacts:
-                  path: Maskbook.base.zip
-                  destination: /Maskbook.base.zip
+            # - store_artifacts:
+            #       path: Maskbook.base.zip
+            #       destination: /Maskbook.base.zip
             - store_artifacts:
                   path: Maskbook.iOS.zip
                   destination: /Maskbook.iOS.zip
@@ -63,7 +60,7 @@ jobs:
             - persist_to_workspace:
                   root: ~/repo/
                   paths:
-                      - Maskbook.base.zip
+                      #   - Maskbook.base.zip
                       - Maskbook.iOS.zip
                       - Maskbook.chromium.zip
                       - Maskbook.firefox.zip
@@ -74,7 +71,7 @@ jobs:
         steps:
             - restore_workspace
             - run:
-                  name: "Publish Release on GitHub"
+                  name: 'Publish Release on GitHub'
                   command: |
                       set -o nounset
                       mkdir ~/repo/release

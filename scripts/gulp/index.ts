@@ -20,6 +20,7 @@ import { named } from './helper'
 import { workerBuild, workerWatch } from './build-worker'
 import { isolatedBuild, isolatedWatch } from './build-isolated'
 import { prebuilt_iOS } from './build-iOS'
+import { buildTarget } from './env'
 
 function parallelProcessWatch(done: any) {
     return gulpMultiProcess(
@@ -76,13 +77,22 @@ export const build = named(
             srcAssets,
             environmentFile,
             parallelProcessBuild,
-            series(tscESModuleBuild, parallel(series(copyESMOut, prebuilt_iOS), tscSystemBuild)),
+            series(
+                tscESModuleBuild,
+                parallel(series(copyESMOut, prebuilt_iOS), function system(done: any) {
+                    return buildTarget === 'firefox' ? tscSystemBuild(done) : done()
+                }),
+            ),
         ),
     ),
 )
 
 function parallelProcessBuild(done: any) {
-    return gulpMultiProcess([workerBuild.displayName, isolatedBuild.displayName, dependenciesBuild.displayName], done)
+    return gulpMultiProcess(
+        [workerBuild.displayName, isolatedBuild.displayName, dependenciesBuild.displayName],
+        done,
+        true,
+    )
 }
 export function clean(cb: any) {
     require('rimraf')(output.extension.folder, cb)
@@ -98,3 +108,4 @@ export * from './build-isolated'
 export * from './libraries'
 export * from './build-worker'
 export * from './build-iOS'
+export * from './build-ci'

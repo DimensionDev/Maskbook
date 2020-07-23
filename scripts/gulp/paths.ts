@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs'
 import { join, relative, posix } from 'path'
 import { pathToFileURL } from 'url'
 // Source file
+export const root = folder('../../')
 export const srcPath = folder('../../src/')
 export const entries = {
     content_script: file('../../src/content-script.ts').file,

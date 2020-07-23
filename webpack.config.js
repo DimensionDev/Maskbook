@@ -1,6 +1,5 @@
 // Compress for firefox store version.
 // Make sure React devtools works
-// CI build to gulp
 /**
  * If you are using Firefox and want to use React devtools,
  * use Firefox nightly or start without the flag --firefox,

@@ -13,7 +13,7 @@ try {
 }
 
 const path = require('path')
-const extension = path.join(__dirname, '../build/')
+const extension = path.join(__dirname, '../temp/extension/')
 
 // Extensions only work with non-headless.
 // This will have to be refactored to .connect() with puppeteer-firefox.

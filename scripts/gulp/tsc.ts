@@ -3,6 +3,7 @@ import { spawn } from 'child_process'
 import { output, srcPath, tsconfigESMPath } from './paths'
 import { createTask, modifyFile, named, toSystem } from './helper'
 import { join } from 'path'
+import { buildTarget } from './env'
 
 const typescriptCLI = join(require.resolve('ttypescript'), '../tsc.js')
 export const { build: tscESModuleBuild, watch: tscESModuleWatch } = createTask(
@@ -19,10 +20,15 @@ export const { build: tscESModuleBuild, watch: tscESModuleWatch } = createTask(
             },
         ),
 )
-export const tscSystemBuild = named('system', 'Build all TypeScript into SystemJS format for Firefox (build)', () =>
-    src(output.esmBuildOriginal.files, { since: lastRun(tscSystemBuild) })
-        .pipe(modifyFile((x) => toSystem(x).replace('ttsclib.js', 'ttsclib-system.js')))
-        .pipe(dest(output.systemBuild.folder)),
+export const tscSystemBuild = named(
+    'system',
+    'Build all TypeScript into SystemJS format for Firefox (build)',
+    (done: any) => {
+        if (buildTarget !== 'firefox') return done()
+        return src(output.esmBuildOriginal.js, { since: lastRun(tscSystemBuild) })
+            .pipe(modifyFile((x) => toSystem(x).replace('ttsclib.js', 'ttsclib-system.js')))
+            .pipe(dest(output.systemBuild.folder))
+    },
 )
 export const tscSystemWatch = named(
     'watch-system',

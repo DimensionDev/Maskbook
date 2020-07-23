@@ -8,20 +8,63 @@ const opts = {
         firefox: 'fennec',
         reproducible: false,
     },
+    alias: {
+        // fx: '--target firefox --reproducible'.split(' '),
+        // android: '--target firefox --firefox geckoview --arch app --resolution mobile'.split(' '),
+        // ios: '--target safari --arch app --resolution mobile'.split(' '),
+    },
 }
 // @ts-ignore
 import minimist from 'minimist'
 import type { Configuration } from 'webpack'
 import * as modifier from './manifest.overrides'
-const args = minimist(process.argv.slice(2), opts)
-export const buildTarget: 'chromium' | 'firefox' | 'safari' | 'E2E' = args.target
-export const buildArchitecture: 'app' | 'web' = args.arch
-export const buildResolution: 'desktop' | 'mobile' = args.resolution
-export const reproducibleBuild: boolean = args.reproducible
+const args: Record<'chrome' | 'fx' | 'ios' | 'e2e' | 'android', boolean | undefined> & {
+    target: typeof buildTarget
+    arch: typeof buildArchitecture
+    resolution: typeof buildResolution
+    reproducible: typeof reproducibleBuild
+    firefox: typeof firefoxVariant
+} = minimist(process.argv.slice(2), opts)
+export let buildTarget = ((): 'chromium' | 'firefox' | 'safari' | 'E2E' => {
+    if (args.chrome) return 'chromium'
+    if (args.fx || args.android) return 'firefox'
+    if (args.ios) return 'safari'
+    if (args.e2e) return 'E2E'
+    return args.target
+})()
+export let buildArchitecture = ((): 'app' | 'web' => {
+    if (args.android || args.ios) return 'app'
+    return args.arch
+})()
+export let buildResolution = ((): 'desktop' | 'mobile' => {
+    if (args.ios || args.android) return 'mobile'
+    return args.resolution
+})()
+export let reproducibleBuild = ((): boolean => {
+    if (args.fx) return true
+    return args.reproducible
+})()
 // fennec is Firefox for Android before https://github.com/mozilla-mobile/fenix lands
 // in future there will only be geckoview
-export const firefoxVariant: 'fennec' | 'geckoview' = args.firefox
-if (!(buildTarget in modifier)) throw new Error(`Unknown target ${buildTarget}`)
+export let firefoxVariant = ((): 'fennec' | 'geckoview' => {
+    if (args.android) return 'geckoview'
+    return args.firefox
+})()
+export function setEnv(env: {
+    target?: typeof buildTarget
+    arch?: typeof buildArchitecture
+    resolution?: typeof buildResolution
+    repro?: boolean
+    fx?: typeof firefoxVariant
+}) {
+    const { arch, fx, repro, resolution, target } = env
+    buildTarget = target ?? buildTarget
+    buildArchitecture = arch ?? buildArchitecture
+    firefoxVariant = fx ?? firefoxVariant
+    reproducibleBuild = repro ?? reproducibleBuild
+    buildResolution = resolution ?? buildResolution
+}
+if (!modifier[buildTarget]) throw new Error(`Unknown target ${buildTarget}`)
 if (!['app', 'web'].includes(buildArchitecture)) throw new Error(`Unknown platform ${buildArchitecture}`)
 if (!['desktop', 'mobile'].includes(buildResolution)) throw new Error(`Unknown resolution ${buildResolution}`)
 if (!['fennec', 'geckoview'].includes(firefoxVariant)) throw new Error(`Unknown Firefox variant ${firefoxVariant}`)
