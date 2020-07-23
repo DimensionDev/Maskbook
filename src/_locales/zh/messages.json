@@ -227,6 +227,7 @@
     "post_dialog__button": "完成",
     "post_dialog__dismiss_aria": "關閉編輯框",
     "post_dialog__image_payload": "隱藏到圖片",
+    "post_dialog__image_encrypt": "加密圖片",
     "post_dialog__more_options_title": "更多選項",
     "post_dialog__placeholder": "請輸入…",
     "post_dialog__select_recipients_only_myself": "我自己",

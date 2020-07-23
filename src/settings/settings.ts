@@ -67,6 +67,7 @@ export const languageSettings = createGlobalSettings<Language>(
 )
 
 export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
+export const currentImageEncryptStatus = createNetworkSettings('currentImageEncryptStatus')
 export const currentSelectedIdentity = createNetworkSettings('currentSelectedIdentity')
 
 export type ImmersiveSetupCrossContextStatus = {
