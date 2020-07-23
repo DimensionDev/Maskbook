@@ -8,12 +8,22 @@ import rename from 'gulp-rename'
 
 const sourceAssetsDesc =
     'Copy all assets allocated in src/* to extension/esm/* to enable them to be used by import.meta'
-export function sourceAssets() {
-    return src(srcPath.files, { since: lastRun(sourceAssets), ignore: '*.js' }).pipe(dest(output.esmBuildClone.folder))
+export function srcAssets() {
+    return src(
+        [
+            srcPath.files,
+            `!${srcPath.relative('./**/*.ts')}`,
+            `!${srcPath.relative('./**/*.tsx')}`,
+            `!${srcPath.relative('./**/*.js')}`,
+        ],
+        {
+            since: lastRun(srcAssets),
+        },
+    ).pipe(dest(output.esmBuildClone.folder))
 }
-named('src-assets', sourceAssetsDesc + ' (build)', sourceAssets)
-export const watchSourceAssets = named('watch-src-assets', sourceAssetsDesc + ' (watch)', () =>
-    watch(srcPath.folder, { ignoreInitial: true, ignored: ['*.ts', '*.tsx'] }, sourceAssets),
+named('src-assets', sourceAssetsDesc + ' (build)', srcAssets)
+export const watchSrcAssets = named('watch-src-assets', sourceAssetsDesc + ' (watch)', () =>
+    watch(srcPath.folder, { ignoreInitial: true, ignored: ['*.ts', '*.tsx'] }, srcAssets),
 )
 
 export function assets() {

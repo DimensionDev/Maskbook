@@ -19,7 +19,8 @@
         "rules": {
           "/(.+)/": {
             "type": "umd",
-            "target": "__deps__"
+            "target": "$1",
+            "globalObject": "__deps__"
           }
         }
       }

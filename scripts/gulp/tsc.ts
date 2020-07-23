@@ -35,5 +35,5 @@ export function copyESMOut() {
 }
 named('copy-esm-out', 'Copy files from tsc output (build)', copyESMOut)
 export const watchCopyESMOut = named('watch-copy-esm-out', 'Copy files from tsc output (watch)', () =>
-    watch(output.esmBuildOriginal.js, { ignoreInitial: false }, copyESMOut),
+    watch(output.esmBuildOriginal.folder, { ignoreInitial: false }, copyESMOut),
 )

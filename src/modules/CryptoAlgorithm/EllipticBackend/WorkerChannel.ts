@@ -1,8 +1,7 @@
-import type { AsyncCallOptions } from 'async-call-rpc/full'
+import type { EventBasedChannel } from 'async-call-rpc/full'
 import { OnlyRunInContext } from '@holoflows/kit'
-type MessageChannel = AsyncCallOptions['messageChannel']
 
-export class WorkerMessage implements MessageChannel {
+export class WorkerMessage implements EventBasedChannel {
     private isMainRealm = typeof document === 'object'
     private ref: { type: 'worker'; main: Worker } | { type: 'main'; worker: Worker[] }
     private listeners: Set<(...args: any) => void> = new Set()
@@ -32,21 +31,25 @@ export class WorkerMessage implements MessageChannel {
             this.ref.main.postMessage('online')
         }
     }
-    emit(event: string, data: object): void {
+    send(data: object): void {
         // TODO: maybe ArrayBuffers can transfer instead of clone?
         if (this.ref.type === 'main') {
             const worker1 = this.ref.worker[0]
-            if (!worker1) return void setTimeout(() => this.emit(event, data), 200)
+            if (!worker1) return void setTimeout(() => this.send(data), 200)
             worker1.postMessage(data)
         } else {
             this.ref.main.postMessage(data)
         }
     }
-    on(event: string, callback: (data: unknown) => void) {
+    on(callback: (data: unknown) => void) {
         if (this.ref.type === 'main') {
             this.listeners.add(callback)
+            return () => this.listeners.delete(callback)
         } else {
-            this.ref.main.addEventListener('message', (e) => callback(e.data))
+            const x = this.ref.main
+            const cb = (e: MessageEvent): void => callback(e.data)
+            x.addEventListener('message', cb)
+            return () => x.removeEventListener('message', cb)
         }
     }
 }

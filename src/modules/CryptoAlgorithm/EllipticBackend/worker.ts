@@ -7,7 +7,7 @@ const worker: typeof methods =
         ? // In the test env run it in main thread
           require('./methods').default
         : AsyncCall<typeof methods>(typeof document === 'object' ? {} : import('./methods').then((x) => x.default), {
-              messageChannel: new WorkerMessage(),
+              channel: new WorkerMessage(),
               log: false,
           })
 export default worker

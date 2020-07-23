@@ -28,6 +28,7 @@ const logOptions: AsyncCallOptions['log'] = {
     remoteError: true,
     sendLocalStack: true,
     type: 'pretty',
+    requestReplay: process.env.NODE_ENV === 'development',
 }
 if (!('Services' in globalThis)) {
     Object.assign(globalThis, { Services })
@@ -71,7 +72,7 @@ export const ServicesWithProgress = AsyncGeneratorCall<ServicesWithProgress>(
         key: 'Service+',
         log: logOptions,
         serializer: Serialization,
-        messageChannel: new MessageCenter(false),
+        channel: new MessageCenter(false, 'async generator').eventBasedChannel,
         strict: false,
     },
 )
@@ -91,13 +92,13 @@ type Service = Record<string, (...args: unknown[]) => Promise<unknown>>
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
     if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false) || process.env.STORYBOOK) {
         GetContext() !== 'debugging' && console.log(`Service ${name} registered in ${GetContext()}`)
-        const mc = new MessageCenter(process.env.STORYBOOK ? true : false)
+        const mc = new MessageCenter(process.env.STORYBOOK ? true : false, name)
         Object.assign(Services, {
             [name]: AsyncCall(service, {
                 key: name,
                 serializer: Serialization,
                 log: logOptions,
-                messageChannel: mc,
+                channel: mc.eventBasedChannel,
                 preferLocalImplementation: GetContext() === 'background',
                 preservePauseOnException: process.env.NODE_ENV === 'development',
                 strict: false,
@@ -118,7 +119,7 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                 key: name,
                 serializer: Serialization,
                 log: logOptions,
-                messageChannel: mc,
+                channel: mc.eventBasedChannel,
                 preservePauseOnException: process.env.NODE_ENV === 'development',
                 strict: false,
             })

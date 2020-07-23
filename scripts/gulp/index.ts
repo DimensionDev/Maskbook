@@ -7,8 +7,8 @@ import {
     watchAssets,
     environmentFile,
     watchEnvironmentFile,
-    watchSourceAssets,
-    sourceAssets,
+    watchSrcAssets,
+    srcAssets,
 } from './assets'
 import { dependenciesWatch, dependenciesBuild } from './dependencies'
 import { copyESMOut, tscESModuleBuild, tscESModuleWatch, tscSystemBuild, tscSystemWatch, watchCopyESMOut } from './tsc'
@@ -19,6 +19,7 @@ import { output } from './paths'
 import { named } from './helper'
 import { workerBuild, workerWatch } from './build-worker'
 import { isolatedBuild, isolatedWatch } from './build-isolated'
+import { prebuilt_iOS } from './build-iOS'
 
 function parallelProcessWatch(done: any) {
     return gulpMultiProcess(
@@ -43,12 +44,13 @@ export const watch = named(
     series(
         env,
         parallel(
+            watchSrcAssets,
             watchManifest,
             watchEnvironmentFile,
+            watchCopyESMOut,
             watchAssets,
             isolatedWatch,
             watchCopyESMOut,
-            watchSourceAssets,
             parallelProcessWatch,
         ),
     ),
@@ -71,15 +73,17 @@ export const build = named(
         clean,
         env,
         parallel(
-            sourceAssets,
+            srcAssets,
             environmentFile,
-            workerBuild,
-            isolatedBuild,
-            dependenciesBuild,
-            series(tscESModuleBuild, parallel(copyESMOut, tscSystemBuild)),
+            parallelProcessBuild,
+            series(tscESModuleBuild, parallel(series(copyESMOut, prebuilt_iOS), tscSystemBuild)),
         ),
     ),
 )
+
+function parallelProcessBuild(done: any) {
+    return gulpMultiProcess([workerBuild.displayName, isolatedBuild.displayName, dependenciesBuild.displayName], done)
+}
 export function clean(cb: any) {
     require('rimraf')(output.extension.folder, cb)
 }
@@ -93,3 +97,4 @@ export * from './dependencies'
 export * from './build-isolated'
 export * from './libraries'
 export * from './build-worker'
+export * from './build-iOS'
