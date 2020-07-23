@@ -136,7 +136,9 @@ function DashboardUI() {
                         <>
                             {xsMatched ? null : drawer}
                             <Switch>
-                                {xsMatched ? <Route path={DashboardRoute.Nav} component={nav} /> : null}
+                                {webpackEnv.perferResponsiveTarget === 'xs' ? (
+                                    <Route path={DashboardRoute.Nav} component={nav} />
+                                ) : null}
                                 <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
                                 <Route path={DashboardRoute.Wallets} component={DashboardWalletsRouter} />
                                 <Route path={DashboardRoute.Contacts} component={DashboardContactsRouter} />
@@ -144,7 +146,14 @@ function DashboardUI() {
                                 <Route path={DashboardRoute.Setup} component={DashboardSetupRouter} />
                                 {/* // TODO: this page should be boardless */}
                                 <Route path={DashboardRoute.RequestPermission} component={RequestPermissionPage} />
-                                <Redirect path="*" to={xsMatched ? DashboardRoute.Nav : DashboardRoute.Personas} />
+                                <Redirect
+                                    path="*"
+                                    to={
+                                        webpackEnv.perferResponsiveTarget === 'xs'
+                                            ? DashboardRoute.Nav
+                                            : DashboardRoute.Personas
+                                    }
+                                />
                             </Switch>
                         </>
                     )}
