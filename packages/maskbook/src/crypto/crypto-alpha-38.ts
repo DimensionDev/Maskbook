@@ -23,7 +23,9 @@ export function typedMessageStringify(x: TypedMessage) {
 
     return JSON.stringify(obj) + '🧩' + x.content
 }
-export function typedMessageParse(x: string) {
+export function typedMessageParse(type: TypedMessage['type'], x: string | ArrayBuffer) {
+    // unify the type declartion across different crypto versions
+    if (typeof x !== 'string') return makeTypedMessageText('')
     const [maybeMetadata, ...end] = x.split('🧩')
     try {
         const json: unknown = JSON.parse(maybeMetadata)

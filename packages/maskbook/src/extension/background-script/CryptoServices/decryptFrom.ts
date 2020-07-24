@@ -1,7 +1,7 @@
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
 import { GunAPI as Gun2, GunAPISubscribe as Gun2Subscribe, GunWorker } from '../../../network/gun/'
-import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
+import { decodeText, decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../utils/i18n-next'
 import { queryPersonaRecord, queryLocalKey } from '../../../database'
@@ -24,6 +24,7 @@ import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
 import { MaskMessage } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
 import { calculatePostKeyPartition } from '../../../network/gun/version.2/hash'
+import { deshuffleImageUrl } from '../ImageShuffleService'
 
 type Progress = (
     | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
@@ -46,7 +47,7 @@ type Success = {
     iv: string
     decryptedPayloadForImage: Payload
     content: TypedMessage
-    rawContent: string
+    rawContent: string | ArrayBuffer
     through: SuccessThrough[]
     internal: boolean
 }
@@ -72,7 +73,7 @@ const makeSuccessResultF = (
         through,
         iv,
         decryptedPayloadForImage,
-        content: cryptoProvider.typedMessageParse(rawEncryptedContent),
+        content: cryptoProvider.typedMessageParse('', rawEncryptedContent),
         type: 'success',
         internal: false,
     }
@@ -319,6 +320,24 @@ async function* decryptFromImageUrlWithProgress_raw(
     return yield* decryptFromText(payload.val, author, whoAmI, publicShared)
 }
 
+async function* decryptFromShuffledImageWithProgress_raw(attachment: PostInfoImageAttachment, seed: string) {
+    const cacheKey = `shuffle_${attachment.url}`
+    if (successDecryptionCache.has(cacheKey)) return successDecryptionCache.get(cacheKey)!
+    yield makeProgress('init')
+    const makeSuccessResult = makeSuccessResultF('image', cacheKey, cryptoProviderTable['-40'])
+    try {
+        return makeSuccessResult(
+            await deshuffleImageUrl(attachment.url, {
+                seed,
+            }),
+            [],
+            true,
+        )
+    } catch (e) {
+        return makeError(i18n.t('service_decode_image_payload_failed'))
+    }
+}
+
 export const decryptFromText = memorizeAsyncGenerator(
     decryptFromPayloadWithProgress_raw,
     (encrypted, author, whoAmI, publicShared = undefined) =>
@@ -330,6 +349,12 @@ export const decryptFromImageUrl = memorizeAsyncGenerator(
     decryptFromImageUrlWithProgress_raw,
     (url, author, whoAmI, publicShared = undefined) =>
         JSON.stringify([url, author.toText(), whoAmI.toText(), publicShared]),
+    1000 * 30,
+)
+
+export const decryptFromShuffledImage = memorizeAsyncGenerator(
+    decryptFromShuffledImageWithProgress_raw,
+    ({ url }: PostInfoImageAttachment) => url,
     1000 * 30,
 )
 

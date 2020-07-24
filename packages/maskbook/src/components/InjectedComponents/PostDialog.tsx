@@ -397,8 +397,11 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     })
                 } else if (imageEncryptEnabled) {
                     if (!imgToEncrypt) return
-                    const seed = String(Math.random()).slice(2)
-                    const seedTypedMessage = makeTypedMessageText(String(seed))
+
+                    // TODO:
+                    // use dynamic seed
+                    const seed = '7380309746363496'
+                    const seedTypedMessage = makeTypedMessageText('text', seed)
                     const [encrypted] = await Services.Crypto.encryptTo(
                         seedTypedMessage,
                         target.map((x) => x.identifier),
