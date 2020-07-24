@@ -20,11 +20,15 @@ const useStyles = makeStyles({
         borderRadius: 12,
         padding: 16,
         background: '#fff',
+        cursor: 'default',
+        userSelect: 'none',
         '& p': { margin: 0 },
     },
     meta: {
         flex: 1,
         minWidth: '1%',
+        marginLeft: 18,
+        marginRight: 18,
     },
     name: {
         fontSize: 16,
@@ -51,13 +55,13 @@ const useStyles = makeStyles({
     },
     code: {
         lineHeight: 1,
+        userSelect: 'auto',
     },
     icon: {
         display: 'block',
         width: 35,
         height: 45,
         background: '#ccc',
-        marginRight: 18,
         cursor: 'pointer',
     },
     download: {
@@ -77,13 +81,19 @@ export const Preview: React.FC<Props> = ({ info }) => {
     ) : (
         <p className={classes.unencrypted}>This file is not encrypted</p>
     )
-    const link = `https://arweave.net/${info.landingTxID}#${info.key}`
-    const onOpen = () => {
-        open(link)
+    const link = `https://arweave.net/${info.landingTxID}`
+    const onClick = (event: React.MouseEvent) => {
+        event.preventDefault()
+        event.stopPropagation()
+        if (info.key) {
+            open(`${link}#${info.key}`)
+        } else {
+            open(link)
+        }
     }
     return (
         <Typography className={classes.root}>
-            <i onClick={onOpen} className={classes.icon} />
+            <i onClick={onClick} className={classes.icon} />
             <section className={classes.meta}>
                 <p className={classes.name} title={info.name}>
                     {info.name}
@@ -91,7 +101,7 @@ export const Preview: React.FC<Props> = ({ info }) => {
                 <p className={classes.size}>{formatFileSize(info.size)}</p>
                 {fileKey}
             </section>
-            <a className={classes.download} target="_blank" href={link} />
+            <a className={classes.download} target="_blank" onClick={onClick} href={link} />
         </Typography>
     )
 }
