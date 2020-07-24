@@ -14,7 +14,11 @@ import * as HelperService from './extension/background-script/HelperService'
 import * as NonceService from './extension/background-script/NonceService'
 import * as ProviderService from './extension/background-script/ProviderService'
 import * as ImageShuffleService from './extension/background-script/ImageShuffleService'
-import { decryptFromText, decryptFromImage } from './extension/background-script/CryptoServices/decryptFrom'
+import {
+    decryptFromText,
+    decryptFromImage,
+    decryptFromShuffledImage,
+} from './extension/background-script/CryptoServices/decryptFrom'
 
 Object.assign(globalThis, {
     CryptoService,
@@ -33,5 +37,6 @@ Object.assign(globalThis, {
     ServicesWithProgress: {
         decryptFromText,
         decryptFromImage,
+        decryptFromShuffledImage,
     },
 })

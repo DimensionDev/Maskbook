@@ -63,6 +63,8 @@ export async function shuffle(buf: string | ArrayBuffer, { seed, blockWidth = DE
     const { width, height } = imageData
     if (width < blockWidth) throw new Error('blockWidth is larger than image width')
 
+    // TODO:
+    // use canvas to resize image
     // if (width > optimalWidth) {
     //     const aspectRatio = width / height
     //     const targetHeight = optimalWidth / aspectRatio
@@ -76,10 +78,11 @@ export async function shuffle(buf: string | ArrayBuffer, { seed, blockWidth = DE
     //     file.resize(width - (width % blockWidth), height - (height % blockWidth))
     // }
 
-    const aspectRatio = width / height
-    const targetHeight = optimalWidth / aspectRatio
-    const imgWidth = width > optimalWidth ? optimalWidth - (optimalWidth % blockWidth) : width - (width % blockWidth)
-    const imgHegiht = width > optimalWidth ? targetHeight - (targetHeight % blockWidth) : height - (height % blockWidth)
+    // const aspectRatio = width / height
+    // const targetHeight = optimalWidth / aspectRatio
+    // const imgWidth = width > optimalWidth ? optimalWidth - (optimalWidth % blockWidth) : width - (width % blockWidth)
+    // const imgHegiht = width > optimalWidth ? targetHeight - (targetHeight % blockWidth) : height - (height % blockWidth)
+
     const totalBlocksNum = (width * height) / (blockWidth * blockWidth) // this will be a whole number, because we resize earlier
     const prng = seedrandom(seed)
     for (var blockNum = totalBlocksNum - 1; blockNum > 1; blockNum = blockNum - 1) {
@@ -89,25 +92,31 @@ export async function shuffle(buf: string | ArrayBuffer, { seed, blockWidth = DE
     return encodeArrayBuffer(await img2Buf(imageData))
 }
 
-export interface DeshuffleOptions {
-    blockWidth: number
-    seed: string
-}
+export interface DeshuffleOptions extends ShuffleOptions {}
 
-export async function deshuffle(buf: ArrayBuffer, { blockWidth, seed }: DeshuffleOptions) {
+export async function deshuffle(buf: ArrayBuffer, { seed, blockWidth = DEFAULT_BLOCK_WIDTH }: DeshuffleOptions) {
     const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
     const imageData = await buf2Img(_buf)
     const { width, height } = imageData
     const totalBlocksNum = (width * height) / (blockWidth * blockWidth) // this will be a whole number, because we resized earlier
     const prng = seedrandom(seed)
 
+    console.log('DEBUG: deshuffle')
+    console.log({
+        seed,
+        imageData,
+        totalBlocksNum,
+    })
+
     for (var blockNum = 1; blockNum < totalBlocksNum; blockNum = blockNum + 1) {
         const swapWith = rand(0, totalBlocksNum - 1 - blockNum, prng)
         // ! there is an error here somewhere with an index. one block does not get copied over
         swapPixelBlocks(imageData, { blockWidth, blockIx1: swapWith, blockIx2: blockNum })
     }
+    return encodeArrayBuffer(await img2Buf(imageData))
 }
 
 export async function deshuffleImageUrl(url: string, options: DeshuffleOptions) {
     return deshuffle(await downloadUrl(url), options)
+    // return decodeImage(await downloadUrl(url), options)
 }

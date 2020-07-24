@@ -130,7 +130,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const [, inputRef] = useCapturedInput(
         (newText) => {
             const msg = props.postContent
-            if (msg.type === 'text') props.onPostContentChanged(makeTypedMessage(newText, msg.meta))
+            if (msg.type === 'text') props.onPostContentChanged(makeTypedMessage('text', newText, msg.meta))
             else throw new Error('Not impled yet')
         },
         [props.open, props.postContent],
@@ -323,7 +323,9 @@ export function PostDialog(props: PostDialogProps) {
     const [open, setOpen] = or(props.open, useState<boolean>(false)) as NonNullable<PostDialogProps['open']>
 
     //#region TypedMessage
-    const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessage('', typedMessageMetadata))
+    const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(
+        makeTypedMessage('text', '', typedMessageMetadata),
+    )
     useEffect(() => {
         if (typedMessageMetadata !== postBoxContent.meta)
             setPostBoxContent({ ...postBoxContent, meta: typedMessageMetadata })
@@ -399,8 +401,11 @@ export function PostDialog(props: PostDialogProps) {
                     })
                 } else if (imageEncryptEnabled) {
                     if (!imgToEncrypt) return
-                    const seed = String(Math.random()).slice(2)
-                    const seedTypedMessage = makeTypedMessage(String(seed))
+
+                    // TODO:
+                    // use dynamic seed
+                    const seed = '7380309746363496'
+                    const seedTypedMessage = makeTypedMessage('text', seed)
                     const [encrypted] = await Services.Crypto.encryptTo(
                         seedTypedMessage,
                         target.map((x) => x.identifier),
@@ -456,7 +461,7 @@ export function PostDialog(props: PostDialogProps) {
             setOpen(false)
             setOnlyMyself(false)
             setShareToEveryone(false)
-            setPostBoxContent(makeTypedMessage(''))
+            setPostBoxContent(makeTypedMessage('text', ''))
             setCurrentShareTarget([])
             getActivatedUI().typedMessageMetadata.value = new Map()
         }, [setOpen]),

@@ -118,7 +118,7 @@ export function DecryptPost(props: DecryptPostProps) {
             const iter =
                 attachment.type === 'text'
                     ? ServicesWithProgress.decryptFromText(attachment, postBy, whoAmI, sharedPublic)
-                    : ServicesWithProgress.decryptFromImage(attachment, postBy, whoAmI, sharedPublic)
+                    : ServicesWithProgress.decryptFromShuffledImage(attachment, '7380309746363496')
             for await (const status of asyncIteratorWithResult(iter)) {
                 if (signal.signal.aborted) return iter.return?.()
                 if (status.done) {
@@ -148,7 +148,6 @@ export function DecryptPost(props: DecryptPostProps) {
         sharedPublic,
     ])
     //#endregion
-
     const progressValues = progress.map((p) => p.progress)
     if (!deconstructedPayload.ok && progressValues.every((x) => x.type === 'error')) return null
     return (

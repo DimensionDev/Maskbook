@@ -23,13 +23,15 @@ export function typedMessageStringify(x: TypedMessage) {
 
     return JSON.stringify(obj) + '🧩' + x.content
 }
-export function typedMessageParse(x: string) {
+export function typedMessageParse(type: TypedMessage['type'], x: string | ArrayBuffer) {
+    // unify the type declartion across different crypto versions
+    if (typeof x !== 'string') return makeTypedMessage('text', '')
     const [maybeMetadata, ...end] = x.split('🧩')
     try {
         const json: unknown = JSON.parse(maybeMetadata)
         if (typeof json !== 'object' || json === null || Object.keys(json).length === 0)
             throw new Error('Not a metadata')
-        return makeTypedMessage(end.join('🧩'), new Map(Object.entries(json)))
+        return makeTypedMessage('text', end.join('🧩'), new Map(Object.entries(json)))
     } catch {}
-    return makeTypedMessage(x)
+    return makeTypedMessage('text', x)
 }

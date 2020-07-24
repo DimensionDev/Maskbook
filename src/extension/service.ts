@@ -48,6 +48,7 @@ interface ServicesWithProgress {
     // Sorry you should add import at '../_background_loader.1.ts'
     decryptFromText: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromText
     decryptFromImage: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromImage
+    decryptFromShuffledImage: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromShuffledImage
 }
 function createProxyToService(name: string) {
     return new Proxy(

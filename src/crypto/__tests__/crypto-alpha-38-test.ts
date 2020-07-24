@@ -35,9 +35,10 @@ beforeAll(() => {
 // Test for:
 c.typedMessageParse && c.typedMessageStringify
 test('Crypto alpha v38 Typed Message', () => {
-    const textWith0Meta = makeTypedMessage('text message1')
-    const textWith1Meta = makeTypedMessage('text message', new Map([['MetadataKey', 'MetadataValue']]))
+    const textWith0Meta = makeTypedMessage('text', 'text message1')
+    const textWith1Meta = makeTypedMessage('text', 'text message', new Map([['MetadataKey', 'MetadataValue']]))
     const textWith2Meta = makeTypedMessage(
+        'text',
         'text message',
         new Map([
             ['MetadataKey', 'MetadataValue'],

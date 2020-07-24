@@ -19,9 +19,6 @@ export function getSignablePayload(payload: Payload) {
 import type { RedPacketJSONPayload } from '../../../plugins/Wallet/database/types'
 import { Result, Err, Ok } from 'ts-results'
 import { RedPacketMetaKey } from '../../../plugins/Wallet/RedPacketMetaKey'
-import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
-import { isArrayBuffer } from 'lodash-es'
-import { imgType } from '@dimensiondev/stego-js/cjs/helper'
 
 export interface TypedMessageMetadata {
     readonly meta?: ReadonlyMap<string, unknown>
@@ -43,33 +40,29 @@ export interface TypedMessageUnknown extends TypedMessageMetadata {
     readonly type: 'unknown'
 }
 export type TypedMessage = TypedMessageText | TypedMessageImage | TypedMessageComplex | TypedMessageUnknown
-export function makeTypedMessage(text: string, meta?: ReadonlyMap<string, unknown>): TypedMessageText
-export function makeTypedMessage(buf: ArrayBuffer, meta?: ReadonlyMap<string, unknown>): TypedMessageImage
-export function makeTypedMessage(message: TypedMessage, meta?: ReadonlyMap<string, unknown>): TypedMessage
 export function makeTypedMessage(
-    content: string | ArrayBuffer | TypedMessage,
+    type: 'text' | 'image' | 'complex' | 'unknown',
+    content: string,
     meta?: ReadonlyMap<string, unknown>,
 ): TypedMessage {
-    if (typeof content === 'string') {
-        const text: TypedMessageText = { type: 'text', content, version: 1, meta }
-        return text
-    }
-    if (isArrayBuffer(content)) {
-        if (imgType(new Uint8Array(content)).includes('image')) {
-            const image: TypedMessageImage = {
-                version: 1,
-                meta,
-                type: 'image',
-                content: encodeArrayBuffer(content),
-            }
-            return image
-        }
-        const msg: TypedMessageUnknown = { type: 'unknown', version: 1, meta }
-        return msg
-    }
-    if ((content as TypedMessage).type) return content
-    const msg: TypedMessageUnknown = { type: 'unknown', version: 1, meta }
-    return msg
+    if (type === 'complex') throw new Error('Not implemented yet!')
+    if (type === 'text')
+        return {
+            version: 1,
+            type: 'text',
+            content,
+            meta,
+        } as TypedMessageText
+    if (type === 'image')
+        return {
+            version: 1,
+            type: 'image',
+            content,
+            meta,
+        } as TypedMessageImage
+    return {
+        type: 'unknown',
+    } as TypedMessageUnknown
 }
 
 interface KnownMetadata {

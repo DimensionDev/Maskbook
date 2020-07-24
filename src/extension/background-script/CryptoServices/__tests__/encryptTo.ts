@@ -11,6 +11,6 @@ test('Encrypt to', async () => {
      */
     // await restoreNewIdentityWithMnemonicWord('aaaa', 'bbbb', { whoAmI: a })
     // await restoreNewIdentityWithMnemonicWord('bbbbb', 'aaa', { whoAmI: b })
-    // const [text, token] = await encryptTo(makeTypedMessage('Test message'), [b], a, false)
+    // const [text, token] = await encryptTo(makeTypedMessage('text', 'Test message'), [b], a, false)
     // console.log(text)
 })
