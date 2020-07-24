@@ -104,7 +104,6 @@
     "swr": "0.3.0-beta.10",
     "tiny-secp256k1": "^1.1.5",
     "ts-results": "^2.0.1",
-    "typedarray-to-buffer": "^3.1.5",
     "typeson": "^5.18.2",
     "typeson-registry": "^1.0.0-alpha.37",
     "use-subscription": "^1.4.1",
