@@ -16,9 +16,6 @@ import {
     DialogProps,
     Tooltip,
 } from '@material-ui/core'
-import Jimp from 'jimp'
-import type JimpT from 'jimp'
-var toBuffer = require('typedarray-to-buffer') // TODO: !
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
@@ -45,17 +42,11 @@ import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
-import {
-    shuffle,
-    uploadShuffleToPostBoxFacebook,
-} from '../../social-network-provider/facebook.com/tasks/uploadToPostBox'
 import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
 import { PluginUI } from '../../plugins/plugin'
 import Dropzone from '../shared/Dropzone'
 
 const defaultTheme = {}
-
-const DEFAULT_BLOCK_WIDTH = 8
 
 const useStyles = makeStyles({
     MUIInputRoot: {
@@ -357,6 +348,8 @@ export function PostDialog(props: PostDialogProps) {
             currentImagePayloadStatus[getActivatedUI().networkIdentifier].value = String(checked)
         }, []),
     )
+    //#endregion
+    //#region Image Encrypt Payload Switch
     const imageEncryptStatus = useValueRef(currentImageEncryptStatus[getActivatedUI().networkIdentifier])
     const imageEncryptEnabled = imageEncryptStatus === 'true'
     const onImageEncryptSwitchChanged = or(
@@ -365,17 +358,11 @@ export function PostDialog(props: PostDialogProps) {
             currentImageEncryptStatus[getActivatedUI().networkIdentifier].value = String(checked)
         }, []),
     )
-    const [imgToEncrypt, setImgToEncrypt] = useState<JimpT | null>(null)
+    const [imgToEncrypt, setImgToEncrypt] = useState<ArrayBuffer | null>(null)
     const onImgChange = useCallback(async (imgFile: File) => {
-        const arrayBuffer = await readFileAsync(imgFile)
-        if (!arrayBuffer) {
-            console.debug('empty image file')
-            return
-        }
-        const uintArr = new Uint8Array(arrayBuffer)
-        const buf = toBuffer(uintArr)
-        const img = await Jimp.read(buf)
-        setImgToEncrypt(img)
+        const buf = await readFileAsync(imgFile)
+        if (!buf) return
+        setImgToEncrypt(buf)
     }, [])
     //#endregion
     //#region callbacks
@@ -411,31 +398,21 @@ export function PostDialog(props: PostDialogProps) {
                         warningText: t('additional_post_box__steganography_post_failed'),
                     })
                 } else if (imageEncryptEnabled) {
-                    if (!imgToEncrypt) {
-                        console.debug('nothing to encrypt')
-                        return
-                    }
-                    const seed = shuffle({ file: imgToEncrypt, blockWidth: DEFAULT_BLOCK_WIDTH })
-                    const seedTypedMessage = makeTypedMessage(seed)
-                    const [encrypted, _] = await Services.Crypto.encryptTo(
+                    if (!imgToEncrypt) return
+                    const seed = String(Math.random()).slice(2)
+                    const seedTypedMessage = makeTypedMessage(String(seed))
+                    const [encrypted] = await Services.Crypto.encryptTo(
                         seedTypedMessage,
                         target.map((x) => x.identifier),
                         currentIdentity!.identifier,
-                        // TODO: ! public share
-                        true,
+                        shareToEveryone,
                     )
-
-                    const text = t('additional_post_box__encrypted_post_pre', { encrypted })
-                    activeUI.taskPasteIntoPostBox(text, {
-                        warningText: t('additional_post_box__encrypted_failed'),
+                    activeUI.taskPasteIntoPostBox(t('additional_post_box__encrypted_post_pre', { encrypted }), {
+                        warningText: t('additional_post_box__encrypted_post_failed'),
                         shouldOpenPostDialog: false,
                     })
-                    imgToEncrypt.getBuffer(Jimp.MIME_JPEG, (_, buffer) => {
-                        activeUI.taskUploadShuffleToPostBox(buffer, {
-                            template: 'v2',
-                            // ! not steganography failed
-                            warningText: t('additional_post_box__steganography_post_failed'),
-                        })
+                    activeUI.taskUploadShuffleToPostBox(imgToEncrypt, seed, {
+                        warningText: t('additional_post_box__shuffle_post_failed'),
                     })
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
@@ -453,7 +430,7 @@ export function PostDialog(props: PostDialogProps) {
                         }
                     }
                     activeUI.taskPasteIntoPostBox(text, {
-                        warningText: t('additional_post_box__encrypted_failed'),
+                        warningText: t('additional_post_box__encrypted_post_failed'),
                         shouldOpenPostDialog: false,
                     })
                 }
@@ -521,7 +498,7 @@ export function PostDialog(props: PostDialogProps) {
         const textFromTypedMessage = extractTextFromTypedMessage(postBoxContent).val
         const condition = allOrMe
             ? imageEncryptEnabled
-                ? imgToEncrypt?.bitmap?.data
+                ? imgToEncrypt
                 : textFromTypedMessage
             : currentShareTarget.length && textFromTypedMessage
         return !condition

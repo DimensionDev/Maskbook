@@ -156,9 +156,9 @@ export interface SocialNetworkUITasks {
      * @param image - the shuffled image to upload
      */
     taskUploadShuffleToPostBox(
-        image: Uint8Array,
+        image: ArrayBuffer,
+        seed: string,
         options: {
-            template?: 'v1' | 'v2' | 'eth' | 'dai' | 'okb'
             warningText: string
         },
     ): void
