@@ -20,10 +20,12 @@ export const PluginUI: ReadonlySet<PluginConfig> = plugins
 
 import { GitcoinPluginDefine } from './Gitcoin/define'
 import { RedPacketPluginDefine } from './Wallet/define'
+import { PollsPluginDefine } from './Polls/define'
 import type { PostInfo } from '../social-network/PostInfo'
 import { StorybookPluginDefine } from './Storybook/define'
 plugins.add(GitcoinPluginDefine)
 plugins.add(RedPacketPluginDefine)
+plugins.add(PollsPluginDefine)
 if (process.env.STORYBOOK) {
     plugins.add(StorybookPluginDefine)
 }

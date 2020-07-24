@@ -294,7 +294,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                 <PollsDialog
                     classes={classes}
                     open={props.open && pollsDialogOpen}
-                    onConfirm={() => setPollsDialogOpen(true)}
+                    onConfirm={() => setPollsDialogOpen(false)}
                     onDecline={() => setPollsDialogOpen(false)}
                     DialogProps={props.DialogProps}
                 />

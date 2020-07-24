@@ -1,6 +1,7 @@
 import * as RedPacket from '../../plugins/Wallet/red-packet-fsm'
 import * as Wallet from '../../plugins/Wallet/wallet'
 import * as Gitcoin from '../../plugins/Gitcoin/Services'
+import * as Poll from '../../plugins/Polls/Services'
 import type BigNumber from 'bignumber.js'
 import type { ERC20TokenRecord } from '../../plugins/Wallet/database/types'
 
@@ -8,6 +9,7 @@ const Plugins = {
     'maskbook.red_packet': RedPacket,
     'maskbook.wallet': Wallet,
     'co.gitcoin': Gitcoin,
+    'maskbook.polls': Poll,
 } as const
 type Plugins = typeof Plugins
 export async function invokePlugin<K extends keyof Plugins, M extends keyof Plugins[K], P extends Plugins[K][M]>(

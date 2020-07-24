@@ -14,30 +14,36 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             justifyContent: 'space-between',
             margin: theme.spacing(1, 0),
-            height: '20px',
+            height: '28px',
         },
         bar: {
             backgroundColor: theme.palette.primary.main,
             minWidth: theme.spacing(1),
-            height: '20px',
+            height: '28px',
             borderRadius: theme.spacing(0.8),
         },
         text: {
             marginLeft: theme.spacing(0.5),
+            lineHeight: '28px',
+        },
+        deadline: {
+            color: '#657786',
         },
     }),
 )
 
 interface PollCardProps {
     poll: PollGunDB
+    onClick?(): void
 }
 
 export function PollCardUI(props: PollCardProps) {
-    const { poll } = props
+    const { poll, onClick } = props
     const classes = useStyles()
+    const isClosed = new Date().getTime() > poll.end_time ? true : false
 
     return (
-        <Card className={classes.card}>
+        <Card className={classes.card} onClick={() => onClick?.()}>
             <Typography variant="h5" color="inherit">
                 {poll.question}
             </Typography>
@@ -55,8 +61,8 @@ export function PollCardUI(props: PollCardProps) {
                     </div>
                 ))}
             </div>
-            <Typography variant="body2" color="inherit">
-                {dateFormat('YYYY-mm-dd', new Date(poll.start_time))}
+            <Typography variant="body2" classes={{ root: classes.deadline }}>
+                {isClosed ? 'Closed' : `Deadline: ${dateFormat('YYYY-mm-dd HH:MM', new Date(poll.end_time))}`}
             </Typography>
         </Card>
     )
