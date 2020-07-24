@@ -3,7 +3,6 @@ import { buildArchitecture, buildTarget } from './env'
 import { output } from './paths'
 import { gulpPrebuilt } from '@dimensiondev/webextension-shim/dist/bin/prebuilt-lib'
 import { named } from './helper'
-// @ts-ignore
 import rimraf from 'rimraf'
 import { promisify } from 'util'
 export function prebuilt_iOS(done: any) {

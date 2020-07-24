@@ -1,10 +1,11 @@
 import { promisify } from 'util'
 import type { Configuration } from 'webpack'
 import webpack from 'webpack'
-import type { TaskFunction } from 'gulp'
+import { dest, lastRun, src, TaskFunction, watch } from 'gulp'
 import ts from 'typescript'
 import { getEnvironment } from './env'
 import { Readable, Transform } from 'stream'
+import changed from 'gulp-changed'
 
 export function modifyFile(fn: (x: string) => string) {
     const stream = new Transform({
@@ -90,13 +91,13 @@ export function buildWebpackTask(name: string, desc: string, config: (mode: Conf
     }
     watch.displayName = `watch-${name}`
     watch.description = `${desc} (watch)`
-    return { watch, build }
+    return [build, watch] as const
 }
 export function createTask(name: string, desc: string, f: (mode: Configuration['mode']) => TaskFunction) {
-    return {
-        watch: named(`watch-${name}`, `${desc} (watch)`, f('development')),
-        build: named(name, `${desc} (build)`, f('production')),
-    }
+    return [
+        named(name, `${desc} (build)`, f('production')),
+        named(`watch-${name}`, `${desc} (watch)`, f('development')),
+    ] as const
 }
 export function named(displayName: string, desc: string, f: TaskFunction) {
     f.displayName = displayName
@@ -110,4 +111,24 @@ export function toSystem(x: string) {
             module: ts.ModuleKind.System,
         },
     }).outputText
+}
+export function copyOnChange(opts: {
+    name: string
+    desc: string
+    from: Parameters<typeof src>
+    to: string
+    watch: Parameters<typeof watch>
+    transform?: (s: NodeJS.ReadWriteStream) => NodeJS.ReadWriteStream
+}) {
+    const { desc, name, from, to, watch: watchProps, transform } = opts
+    function copy() {
+        let s = src(from[0], { since: lastRun(copy), ...from[1] })
+        if (transform) s = transform(s)
+        return s.pipe(changed(to)).pipe(dest(to))
+    }
+    named(name, desc + ' (build)', copy)
+    const watchCopy = named('watch-' + name, desc + ' (watch)', () =>
+        watch(watchProps[0], { ignoreInitial: false, ...watchProps[1] }, copy),
+    )
+    return [copy, watchCopy] as const
 }

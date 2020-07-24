@@ -5,6 +5,7 @@ import './_background_loader.1'
 import './_background_loader.2'
 import './extension/service'
 import './provider.worker'
+import './utils/hmr-client'
 if (process.env.NODE_ENV === 'development') import('./network/matrix/instance')
 if (process.env.NODE_ENV === 'development') import('./protocols/wallet-provider/metamask-provider')
 
@@ -86,7 +87,7 @@ if (GetContext() === 'background') {
         if (HasNoBrowserTabUI) {
             exclusiveTasks('https://m.facebook.com/', { important: true })
         }
-        exclusiveTasks(getWelcomePageURL(), { important: true })
+        // exclusiveTasks(getWelcomePageURL({}), { important: true })
     })
 }
 async function getContentScripts() {

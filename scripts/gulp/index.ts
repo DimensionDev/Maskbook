@@ -21,6 +21,8 @@ import { workerBuild, workerWatch } from './build-worker'
 import { isolatedBuild, isolatedWatch } from './build-isolated'
 import { prebuilt_iOS } from './build-iOS'
 import { buildTarget } from './env'
+import { hmrServer } from './hmr'
+import rimraf from 'rimraf'
 
 function parallelProcessWatch(done: any) {
     return gulpMultiProcess(
@@ -53,6 +55,7 @@ export const watch = named(
             isolatedWatch,
             watchCopyESMOut,
             parallelProcessWatch,
+            hmrServer,
         ),
     ),
 )
@@ -95,7 +98,7 @@ function parallelProcessBuild(done: any) {
     )
 }
 export function clean(cb: any) {
-    require('rimraf')(output.extension.folder, cb)
+    rimraf(output.extension.folder, cb)
 }
 named(clean.name!, 'Clean previous extension build', clean)
 
@@ -109,3 +112,4 @@ export * from './libraries'
 export * from './build-worker'
 export * from './build-iOS'
 export * from './build-ci'
+export * from './hmr'

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, CSSProperties, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Fuse from 'fuse.js'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-import { FixedSizeList } from 'react-window'
+import { FixedSizeList, ListChildComponentProps } from 'react-window'
 import { ListItem, ListItemText, Box, Typography, Avatar, ListItemIcon } from '@material-ui/core'
 import type { ERC20Token } from '../../../token'
 import { EthereumAddress } from 'wallet.ts'
@@ -34,8 +34,6 @@ const useTokenInListStyles = makeStyles((theme) =>
 )
 
 interface TokenInListProps {
-    index: number
-    style: CSSProperties
     data: {
         tokens: ERC20Token[]
         excludeTokens: string[]
@@ -44,13 +42,13 @@ interface TokenInListProps {
     }
 }
 
-function TokenInList({ data, index, style }: TokenInListProps) {
+function TokenInList({ data, index, style }: TokenInListProps & ListChildComponentProps) {
     const { address, name, symbol } = data.tokens[index]
     const classes = useTokenInListStyles()
     return (
         <ListItem
             button
-            style={style}
+            style={style as any}
             disabled={data.excludeTokens.includes(address)}
             selected={data.selected === address}
             onClick={() => data.onSelect(address)}>
@@ -99,7 +97,6 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
             new Fuse(erc20Tokens, {
                 shouldSort: true,
                 threshold: 0.45,
-                maxPatternLength: 32,
                 minMatchCharLength: 1,
                 keys: [
                     { name: 'name', weight: 0.5 },

@@ -1,14 +1,37 @@
 import { readFileSync } from 'fs'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import type { Configuration } from 'webpack'
-import { buildWebpackTask, getWebpackConfig } from './helper'
+import { buildWebpackTask, copyOnChange, getWebpackConfig } from './helper'
 import { assetsPath, entries, output } from './paths'
 
-export const { watch: dependenciesWatch, build: dependenciesBuild } = buildWebpackTask(
+const runtimeOut = output.libraries.relativeFolder('./bundle/')
+const [, copyWebpackOut1] = copyOnChange({
+    name: 'copy-webpack-output',
+    desc: 'Copy webpack output',
+    from: [output.webpackDependenciesJS.files],
+    to: output.librariesBundle.folder,
+    watch: [output.webpackDependenciesJS.folder],
+})
+const [, copyWebpackOut2] = copyOnChange({
+    name: 'copy-webpack-output',
+    desc: 'Copy webpack output',
+    from: [output.webpackDependenciesHTML.relative('./*.html')],
+    to: output.extension.folder,
+    watch: [output.webpackDependenciesHTML.folder],
+})
+export const [dependenciesBuild, dependenciesWatch] = buildWebpackTask(
     'dependencies',
     'Build all node style dependencies by Webpack',
     (mode) => {
-        const obj = getWebpackConfig(mode, entries, output.libraries.relative('./bundle/'))
+        const obj = getWebpackConfig(
+            mode,
+            entries,
+            mode === 'development' ? output.webpackDependenciesJS.folder : runtimeOut.folder,
+        )
+        if (mode === 'development') {
+            copyWebpackOut1(() => {})
+            copyWebpackOut2(() => {})
+        }
         obj.output!.publicPath = output.libraries.relativeFromRuntimeExtensionRoot('./bundle/')
         // replace ts-loader
         obj.module!.rules[2] = {

@@ -7,12 +7,8 @@
  */
 import { buildWebpackTask, getWebpackConfig } from './helper'
 import { output, WorkerEntries } from './paths'
-export const { build: workerBuild, watch: workerWatch } = buildWebpackTask(
-    'workers',
-    'Build Web Workers by Webpack',
-    (mode) => {
-        const conf = getWebpackConfig(mode, WorkerEntries, output.workers.folder)
-        conf.target = 'webworker'
-        return conf
-    },
-)
+export const [workerBuild, workerWatch] = buildWebpackTask('workers', 'Build Web Workers by Webpack', (mode) => {
+    const conf = getWebpackConfig(mode, WorkerEntries, output.workers.folder)
+    conf.target = 'webworker'
+    return conf
+})

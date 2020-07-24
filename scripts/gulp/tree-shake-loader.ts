@@ -91,7 +91,7 @@ function createRegisterFromImportCall(node: CallExpression) {
     if (!isImportCall(node)) return createEmptyStatement()
     const arg0 = node.arguments[0]
     if (isStringLiteral(arg0) && arg0.text.startsWith('.')) return createImportDeclaration(void 0, void 0, void 0, arg0)
-    return createExpressionStatement(createRegisterCall(arg0, node))
+    return createEmptyStatement()
 }
 /**
  * export { x as y } from 'z'

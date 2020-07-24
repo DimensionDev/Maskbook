@@ -87,7 +87,7 @@ export function readTypedMessageMetadataUntyped<T>(
             jsonSchema = builtinMetadataSchema[key]
         // TODO: validate the schema.
     }
-    return new Ok(meta.get(key))
+    return Ok<T>(meta.get(key))
 }
 
 export function withMetadata<T extends keyof KnownMetadata>(
