@@ -177,13 +177,7 @@ export interface SocialNetworkUITasks {
      * This function pastes the shuffled imaged to the post box
      * @param image - the shuffled image to upload
      */
-    taskUploadShuffleToPostBox(
-        image: Uint8Array,
-        options: {
-            template?: 'v1' | 'v2' | 'eth' | 'dai' | 'okb'
-            warningText: string
-        },
-    ): void
+    taskUploadShuffleToPostBox(image: ArrayBuffer, seed: string, options: {}): void
 
     /**
      * This function should paste `text` into the post box.

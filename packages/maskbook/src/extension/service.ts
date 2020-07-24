@@ -49,6 +49,7 @@ export const Services = {
     Helper: add(() => import('./background-script/HelperService'), 'Helper', MockService.HelperService),
     Provider: add(() => import('./background-script/ProviderService'), 'Provider'),
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
+    ImageShuffle: add(() => import('./background-script/ImageShuffleService'), 'ImageShuffle'),
 }
 
 Object.assign(globalThis, { Services })
