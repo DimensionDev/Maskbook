@@ -1,5 +1,7 @@
 import Gun from 'gun'
+import 'gun/lib/then.js'
 import { gunServers } from '../../network/gun-servers'
+import { Result, Err, Ok } from 'ts-results'
 
 const gun = new Gun('https://safe-citadel-45310.herokuapp.com/gun')
 // @ts-ignore
@@ -12,8 +14,16 @@ interface NewPollProps {
     end_time: Date
 }
 
-export async function createNewPoll(poll: NewPollProps) {
+enum Reason {
+    NoPermission,
+    InvalidURL,
+    FetchFailed,
+}
+
+export async function createNewPoll(poll: NewPollProps): Promise<Result<NewPollProps, [Reason, Error?]>> {
     const { question, options, start_time, end_time } = poll
+
+    console.log('polls')
 
     let results = {}
     for (let i = 0; i < Object.values(options).length; i++) {
@@ -34,10 +44,18 @@ export async function createNewPoll(poll: NewPollProps) {
     // @ts-ignore
     const key = `${Gun.time.is()}_${Gun.text.random(4)}`
 
-    gun.get('polls')
+    await gun
+        .get('polls')
         .get(key)
         // @ts-ignore
-        .put(poll_item)
+        .put(poll_item).then!()
+
+    return new Ok({
+        question,
+        options,
+        start_time,
+        end_time,
+    })
 }
 
 export interface PollGunDB {

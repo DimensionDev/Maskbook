@@ -14,6 +14,7 @@ import {
     Select,
     MenuItem,
     Divider,
+    CircularProgress,
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
@@ -21,7 +22,10 @@ import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
 import { useStylesExtends, or } from '../../../components/custom-ui-helper'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
-import { array } from 'yargs'
+import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
+import type { PollGunDB } from '../Services'
+import { PollCardUI } from './Polls'
+import Services from '../../../extension/service'
 
 const useNewPollStyles = makeStyles((theme) =>
     createStyles({
@@ -58,13 +62,20 @@ const useNewPollStyles = makeStyles((theme) =>
             bottom: '0',
             right: '10px',
         },
+        loading: {
+            color: '#fff',
+        },
     }),
 )
 
-interface NewPollProps {}
+interface NewPollProps {
+    loading: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
+    createNewPoll: () => void
+}
 
 function NewPollUI(props: PollsDialogProps & NewPollProps) {
     const classes = useStylesExtends(useNewPollStyles(), props)
+    const [loading, setLoading] = props.loading
     const [question, setQuestion] = useState('')
     const [options, setOptions] = useState(new Array(2).fill(''))
 
@@ -72,7 +83,24 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
         setOptions([...options, ''])
     }
 
-    const renderSelect = (count: number, defaultIndex?: number) => {
+    const sendPoll = async () => {
+        const start_time = new Date()
+        const end_time = new Date(
+            start_time.getTime() + days * 24 * 60 * 60 * 1000 + hours * 60 * 60 * 1000 + minutes * 60 * 1000,
+        )
+        setLoading(true)
+        Services.Plugin.invokePlugin('maskbook.polls', 'createNewPoll', {
+            question,
+            options: optionsInput,
+            start_time,
+            end_time,
+        }).then((res) => {
+            setLoading(false)
+            props.createNewPoll()
+        })
+    }
+
+    const renderSelect = (count: number, fn: (newVal: number) => void, defaultIndex = 0) => {
         const options = new Array(count).fill('')
 
         return (
@@ -124,11 +152,46 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                 </div>
             </div>
             <div className={classes.line} style={{ justifyContent: 'flex-end' }}>
-                <Button className={classes.button} color="primary" variant="contained" style={{ color: '#fff' }}>
+                <Button
+                    className={classes.button}
+                    color="primary"
+                    variant="contained"
+                    startIcon={loading ? <CircularProgress classes={{ root: classes.loading }} size={24} /> : null}
+                    style={{ color: '#fff' }}
+                    onClick={sendPoll}>
                     Send Poll
                 </Button>
             </div>
         </>
+    )
+}
+
+interface ExistingPollsProps {
+    onSelectExistingPoll(): void
+}
+
+function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
+    const [polls, setPolls] = useState<Array<PollGunDB>>([])
+    const classes = useStylesExtends(useNewPollStyles(), props)
+
+    useEffect(() => {
+        Services.Plugin.invokePlugin('maskbook.polls', 'getExistingPolls').then((data) => {
+            console.log(data)
+            setPolls(data.reverse() as Array<PollGunDB>)
+        })
+    }, [])
+
+    const insertPoll = () => {
+        props.onSelectExistingPoll()
+        console.log('点击')
+    }
+
+    return (
+        <div className={classes.wrapper}>
+            {polls.map((p) => (
+                <PollCardUI onClick={insertPoll} poll={p} key={p.key as string | number} />
+            ))}
+        </div>
     )
 }
 
@@ -158,25 +221,35 @@ interface PollsDialogProps
         | 'button'
     > {
     open: boolean
-    onConfirm: () => void
+    onConfirm: (opt?: any) => void
     onDecline: () => void
     DialogProps?: Partial<DialogProps>
 }
 
 export default function PollsDialog(props: PollsDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
-
     const state = useState(0)
+    const [, setTabState] = state
+    const loading = useState(false)
+
+    const createNewPoll = () => {
+        setTabState(1)
+    }
+
+    const insertPoll = () => {
+        props.onConfirm('111')
+    }
+
     const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: 'Create New',
-                children: <NewPollUI {...props} />,
+                children: <NewPollUI {...props} loading={loading} createNewPoll={createNewPoll} />,
                 p: 0,
             },
             {
                 label: 'Select Existing',
-                children: <div>Select Existing</div>,
+                children: <ExistingPollsUI {...props} onSelectExistingPoll={insertPoll} />,
                 p: 0,
             },
         ],
