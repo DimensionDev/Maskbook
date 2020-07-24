@@ -1,8 +1,7 @@
 import React from 'react'
-import { getUrl } from '../../../utils/utils'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Box } from '@material-ui/core'
 import Services from '../../../extension/service'
 import { MaskbookIcon } from '../../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
 
@@ -27,21 +26,25 @@ const useStyle = makeStyles({
         lineHeight: '42px',
         fontSize: '1rem',
         borderBottom: '1px solid rgb(233, 234, 237)',
-        width: 34,
+        width: '100%',
         height: 34,
     },
-    icon: { transform: 'translate(-1px, 1px)', margin: '4px 5px 0 7px' },
+    icon: {
+        width: 34,
+        height: 34,
+        margin: '4px 5px 0 7px',
+    },
 })
 function Link() {
-    const style = useStyle()
+    const classes = useStyle()
     return (
-        <a
-            className={style.root}
+        <Box
+            className={classes.root}
             onClick={() => {
-                Services.Welcome.openOptionsPage('/')
+                Services.Welcome.openOptionsPage()
             }}>
-            <MaskbookIcon className={style.icon}></MaskbookIcon>
+            <MaskbookIcon className={classes.icon} />
             Maskbook Settings
-        </a>
+        </Box>
     )
 }
