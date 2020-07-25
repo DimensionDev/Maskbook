@@ -58,6 +58,7 @@ export const currentEthereumNetworkSettings = createGlobalSettings<EthereumNetwo
 export enum Language {
     zh = 'zh',
     en = 'en',
+    ja = 'ja',
 }
 const lang: string = i18nNextInstance.language
 export const languageSettings = createGlobalSettings<Language>(

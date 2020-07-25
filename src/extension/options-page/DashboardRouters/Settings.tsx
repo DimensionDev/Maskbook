@@ -118,6 +118,7 @@ export default function DashboardSettingsRouter() {
     const langMapper = React.useRef((x: Language) => {
         if (x === Language.en) return 'English'
         if (x === Language.zh) return '中文'
+        if (x === Language.ja) return '日本語'
         return ''
     }).current
     const apperanceMapper = React.useRef((x: Appearance) => {
