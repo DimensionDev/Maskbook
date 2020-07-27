@@ -10,7 +10,7 @@ import { PluginMessageCenter } from '../PluginMessages'
 import type { _UnboxPromise } from 'async-call-rpc/full'
 import { omit } from 'lodash-es'
 import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
-import { createPluginWalletAccess } from '../pluginDatabase'
+import { createPluginWalletAccess } from '../../database/Plugin/wrap-wallet-for-plugin'
 
 const createTransaction = createPluginWalletAccess<GitcoinDonationRecordInDatabase, []>(
     'com.maskbook.provide.co.gitcoin',
