@@ -1,3 +1,6 @@
+/**
+ *
+ */
 import { CustomEventId } from '../../utils/constants'
 export interface CustomEvents {
     paste: [string | { type: 'image'; value: Array<number> }]
@@ -99,15 +102,21 @@ export interface CustomEvents {
         invoke(eventName, param)
     }
     document.addEventListener(CustomEventId, invokeCustomEvent)
-    EventTarget.prototype.addEventListener = new Proxy(EventTarget.prototype.addEventListener, {
-        apply(target, thisRef: EventTarget, args: Parameters<EventTarget['addEventListener']>) {
-            const [[event, f], once] = normalizeArgs(args)
-            if (isHacked(event) && f) {
-                if (once) store[event]?.set((e) => (store[event]?.delete(f), f(e)), thisRef)
-                else store[event]?.set(f, thisRef)
-            }
-            return apply(target, thisRef, args)
-        },
+    redefine('addEventListener', (raw, _this: EventTarget, args: Parameters<EventTarget['addEventListener']>) => {
+        const [[event, f], once] = normalizeArgs(args)
+        if (isHacked(event) && f) {
+            if (once) store[event]?.set((e) => (store[event]?.delete(f), f(e)), _this)
+            else store[event]?.set(f, _this)
+        }
+        return apply(raw, _this, args)
+    })
+    redefine('removeEventListener', (raw, _this: EventTarget, args: Parameters<EventTarget['removeEventListener']>) => {
+        const [[event, f], once] = normalizeArgs(args)
+        if (isHacked(event) && f) {
+            if (once) store[event]?.set((e) => (store[event]?.delete(f), f(e)), _this)
+            else store[event]?.set(f, _this)
+        }
+        return apply(raw, _this, args)
     })
     EventTarget.prototype.removeEventListener = new Proxy(EventTarget.prototype.removeEventListener, {
         apply(target, thisRef: unknown, args: Parameters<EventTarget['removeEventListener']>) {
@@ -116,6 +125,24 @@ export interface CustomEvents {
             return apply(target, thisRef, args)
         },
     })
+
+    function redefine<K extends keyof EventTarget>(key: K, f: NonNullable<ProxyHandler<EventTarget[K]>['apply']>) {
+        try {
+            if (typeof 'XPCNativeWrapper' !== 'undefined') {
+                const raw = XPCNativeWrapper.unwrap(window.EventTarget.prototype)
+                const rawF = raw[key]
+                exportFunction(
+                    function (this: any, ...args: unknown[]) {
+                        return f(rawF, this, ...args)
+                    },
+                    raw,
+                    { defineAs: key },
+                )
+                return
+            }
+        } catch {}
+        EventTarget.prototype[key] = new Proxy(EventTarget.prototype[key], { apply: f })
+    }
 
     const normalizeArgs = (args: Parameters<EventTarget['addEventListener']>) => {
         const [type, listener, options] = args
@@ -135,3 +162,9 @@ export interface CustomEvents {
 type Events = keyof DocumentEventMap
 type Callback = (event: Event) => void
 type CallbackMap = Map<Callback, EventTarget>
+/** @see https://mdn.io/XPCNativeWrapper Firefox only */
+declare namespace XPCNativeWrapper {
+    function unwrap<T>(object: T): T
+}
+/** @see https://mdn.io/Component.utils.exportFunction Firefox only */
+declare function exportFunction(f: Function, target: object, opts: { defineAs: string }): void
