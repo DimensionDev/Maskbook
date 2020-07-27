@@ -17,5 +17,8 @@
             "fileMatch": ["/src/manifest.json"],
             "url": "http://json.schemastore.org/chrome-manifest"
         }
+    ],
+    "cSpell.words": [
+        "Reificated"
     ]
 }
