@@ -92,7 +92,7 @@ if (GetContext() === 'background') {
         if (webpackEnv.genericTarget === 'facebookApp') {
             exclusiveTasks('https://m.facebook.com/', { important: true })
         }
-        exclusiveTasks(getWelcomePageURL({}), { important: true })
+        exclusiveTasks(getWelcomePageURL(), { important: true })
     })
 }
 async function getInjectedScript() {
