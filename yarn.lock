@@ -5133,6 +5133,11 @@ async-call-rpc@^3.2.2:
   resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-3.2.2.tgz#1f139913c465e1820a4c8c3152017f5c78e0aa90"
   integrity sha512-0pCSCQhwPFZr6SuAhXKPYwHIvMSfVRily5ZaCpk15Y21sSCVHhFKSD+QOu9NKYVfW6arxL9TpIdb9XimqkBI1Q==
 
+async-call-rpc@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-4.0.0.tgz#825aecfd54bed4873b70ae027ca5a4d0655949e4"
+  integrity sha512-sDNNa5BIgUYknloEAacx4ool/CKU+IZF8tzbvVGPO8s0ivTcKse7YLsG1U9aBcrXtkdAdqR1nEFNmTdZO6CycA==
+
 async-each@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.3.tgz#b727dbf87d7651602f06f4d4ac387f47d91b0cbf"
