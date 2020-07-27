@@ -24,8 +24,5 @@ export async function getFileInfo(checksum: string) {
 }
 
 export async function setFileInfo(info: FileInfo) {
-    return Database.set('arweave', info).catch((reason) => {
-        console.error(reason)
-        return Promise.reject(reason)
-    })
+    return Database.set('arweave', info)
 }
