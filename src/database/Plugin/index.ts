@@ -27,7 +27,7 @@ const db = createDBAccess(() => {
     return openDB<PluginDatabase>('maskbook-plugin-data', 1, {
         upgrade(db, oldVersion, newVersion, transaction) {
             // Out line keys
-            const os = db.createObjectStore('PluginStore', { keyPath: 'record_id' })
+            const os = db.createObjectStore('PluginStore')
         },
     })
 })

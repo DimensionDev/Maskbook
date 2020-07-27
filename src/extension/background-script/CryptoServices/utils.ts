@@ -68,11 +68,11 @@ export function readTypedMessageMetadataUntyped<T>(
     if (!meta) return Err.EMPTY
     if (!meta.has(key)) return Err.EMPTY
     if (!jsonSchema) {
-        console.warn('You should add a JSON Schema to verify the metadata')
+        console.warn('You should add a JSON Schema to verify the metadata in the TypedMessage')
     } else {
         if (key in builtinMetadataSchema && builtinMetadataSchema[key] && !jsonSchema)
             jsonSchema = builtinMetadataSchema[key]
-        // TODO: validate the schema.
+        // TODO: validate the schema use a library.
     }
     return new Ok(meta.get(key))
 }
