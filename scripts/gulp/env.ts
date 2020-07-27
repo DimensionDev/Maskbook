@@ -8,11 +8,6 @@ const opts = {
         firefox: 'fennec',
         reproducible: false,
     },
-    alias: {
-        // fx: '--target firefox --reproducible'.split(' '),
-        // android: '--target firefox --firefox geckoview --arch app --resolution mobile'.split(' '),
-        // ios: '--target safari --arch app --resolution mobile'.split(' '),
-    },
 }
 // @ts-ignore
 import minimist from 'minimist'

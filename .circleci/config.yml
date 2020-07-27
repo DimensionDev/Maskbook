@@ -42,9 +42,6 @@ jobs:
             - run:
                   name: Build Maskbook
                   command: yarn build-ci
-            # - store_artifacts:
-            #       path: Maskbook.base.zip
-            #       destination: /Maskbook.base.zip
             - store_artifacts:
                   path: Maskbook.iOS.zip
                   destination: /Maskbook.iOS.zip
@@ -60,7 +57,6 @@ jobs:
             - persist_to_workspace:
                   root: ~/repo/
                   paths:
-                      #   - Maskbook.base.zip
                       - Maskbook.iOS.zip
                       - Maskbook.chromium.zip
                       - Maskbook.firefox.zip

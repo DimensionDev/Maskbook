@@ -1,12 +1,5 @@
 {
   "extends": "../tsconfig.json",
-  // https://github.com/microsoft/TypeScript/issues/39700
-  // "include": [
-  //   "./extension/options-page/index.tsx",
-  //   "./content-script.ts",
-  //   "./background-service.ts",
-  //   "./extension/popup-page/index.tsx"
-  // ]
   "include": ["./**/*", "./**/*.json"],
   "compilerOptions": {
     "outDir": "../temp/esm/",

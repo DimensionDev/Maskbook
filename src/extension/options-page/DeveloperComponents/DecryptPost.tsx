@@ -7,6 +7,7 @@ import { useTextField } from '../../../utils/hooks/useForms'
 import { DecryptPost } from '../../../components/InjectedComponents/DecryptedPost/DecryptedPost'
 import { useIsolatedChooseIdentity } from '../../../components/shared/ChooseIdentity'
 import { FormControlLabel, Checkbox } from '@material-ui/core'
+import { noop } from 'lodash-es'
 
 export function DecryptPostDeveloperMode() {
     const [whoAmI, chooseIdentity] = useIsolatedChooseIdentity()

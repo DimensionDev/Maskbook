@@ -15,8 +15,6 @@ module.exports = {
         require.resolve('fake-indexeddb/auto'),
         path.join(__dirname, './scripts/jest-setup.js'),
     ],
-    // skip packages other than 'ts-results'
-    transformIgnorePatterns: [],
     transform: {
         'node_modules.+(ts-results).+.js$': 'jest-esm-transformer',
     },

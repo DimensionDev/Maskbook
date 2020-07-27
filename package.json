@@ -5,7 +5,7 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "gulp build",
-    "build-ci": "node --max_old_space_size=4096 node_modules/gulp/bin/gulp.js ci",
+    "build-ci": "gulp ci",
     "build-storybook": "build-storybook -s public --quiet",
     "build:base": "gulp build",
     "build:chromium": "gulp build --chrome",
