@@ -4,6 +4,7 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { makeStyles, Box } from '@material-ui/core'
 import Services from '../../../extension/service'
 import { MaskbookIcon } from '../../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
+import { DashboardRoute } from '../../../extension/options-page/Route'
 
 const settings = new LiveSelector().querySelector('.mSideMenu').enableSingleMode()
 export function injectOptionsPageLinkAtFacebook() {
