@@ -20,7 +20,7 @@ import type { RedPacketJSONPayload } from '../../../plugins/Wallet/database/type
 import { Result, Err, Ok } from 'ts-results'
 import { RedPacketMetaKey } from '../../../plugins/Wallet/RedPacketMetaKey'
 import type { META_KEY_1 as FileServiceMetaKey } from '../../../plugins/FileService/constants'
-import type { FileInfo } from '../../../plugins/FileService/hooks/Exchange'
+import type { FileInfo } from '../../../plugins/FileService/types'
 
 export interface TypedMessageMetadata {
     readonly meta?: ReadonlyMap<string, unknown>

@@ -1,14 +1,15 @@
 import { DialogContent, DialogProps, DialogTitle, Grid, IconButton, makeStyles, Typography } from '@material-ui/core'
+import { isNil } from 'lodash-es'
 import React from 'react'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
+import { getActivatedUI } from '../../social-network/ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { Entry } from './components'
 import { InsertButton } from './components/InsertButton'
 import { displayName, META_KEY_1 } from './constants'
-import { Exchange, FileInfo } from './hooks/Exchange'
-import { isNil } from 'lodash-es'
-import { getActivatedUI } from '../../social-network/ui'
+import { Exchange } from './hooks/Exchange'
+import type { FileInfo } from './types'
 
 interface Props
     extends withClasses<

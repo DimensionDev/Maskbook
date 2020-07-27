@@ -1,11 +1,11 @@
-import React from 'react'
 import { truncate } from 'lodash-es'
+import React from 'react'
+import { readTypedMessageMetadata } from '../../extension/background-script/CryptoServices/utils'
 import type { PluginConfig } from '../plugin'
 import { identifier, META_KEY_1, pluginName } from './constants'
-import type { FileInfo } from './hooks/Exchange'
-import { readTypedMessageMetadata } from '../../extension/background-script/CryptoServices/utils'
-import { formatFileSize } from './utils'
 import { Preview } from './Preview'
+import type { FileInfo } from './types'
+import { formatFileSize } from './utils'
 
 export const FileServicePluginDefine: PluginConfig = {
     pluginName,

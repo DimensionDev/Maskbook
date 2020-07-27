@@ -1,16 +1,5 @@
 import React from 'react'
-
-export interface FileInfo {
-    name: string
-    size: number
-    createdAt: Date
-
-    key: string | null | undefined
-    payloadTxID: string
-    landingTxID: string
-
-    checksum: Uint8Array
-}
+import type { FileInfo } from '../types'
 
 export interface Props {
     onInsert(info: FileInfo): void

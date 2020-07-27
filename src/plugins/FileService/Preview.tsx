@@ -1,8 +1,8 @@
 import { makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
-import type { FileInfo } from './hooks/Exchange'
-import { formatFileSize } from './utils'
 import { CopyableCode } from './components/Copyable'
+import type { FileInfo } from './types'
+import { formatFileSize } from './utils'
 
 interface Props {
     info: FileInfo

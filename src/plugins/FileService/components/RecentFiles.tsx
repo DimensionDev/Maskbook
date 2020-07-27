@@ -2,7 +2,7 @@ import { Button, List, ListItem, ListItemText, makeStyles, Typography } from '@m
 import { map } from 'lodash-es'
 import React from 'react'
 import { useHistory } from 'react-router'
-import type { FileInfo } from '../hooks/Exchange'
+import type { FileInfo } from '../types'
 import { formatDateTime } from '../utils'
 
 const useStyles = makeStyles({

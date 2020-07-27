@@ -1844,6 +1844,13 @@
   resolved "https://registry.yarnpkg.com/@commitlint/types/-/types-9.0.1.tgz#df281f0f3d8f3adb10c95e4dd72b16acf41b5400"
   integrity sha512-wo2rHprtDzTHf4tiSxavktJ52ntiwmg7eHNGFLH38G1of8OfGVwOc1sVbpM4jN/HK/rCMhYOi6xzoPqsv0537A==
 
+"@dimensiondev/common-protocols@^1.6.0-34":
+  version "1.6.0-34"
+  resolved "https://npm.dimension.im/download/@dimensiondev/common-protocols/1.6.0-34/a2de09f0ea2aa5dfa87c5d6d465c8be45fa46eafb97a715ccf7addbd26efd3b9#9a2b4fd10e07bc32b2c0c98eb1abf25f4e5586a0"
+  integrity sha512-VG+G48G0okPpv2vdQ8p28MCM4gw2VSbZSlKVnkFO1I633gjUEc6CjCDemIG2qZhZuBRq6hjBkMZpCHXQ8PLD1g==
+  dependencies:
+    "@msgpack/msgpack" "^1.12.2"
+
 "@dimensiondev/matrix-js-sdk-type@^1.0.0-6":
   version "1.0.0-6"
   resolved "https://npm.dimension.im/download/@dimensiondev/matrix-js-sdk-type/1.0.0-6/13f4ed706505fd68afbd1354f8c3f2ca3ebb9b7517dd4ac32853d36d1f9a05c4#a4d30dee4e876b66333dcb86bf4c8821eab0b03a"
@@ -2655,6 +2662,11 @@
   dependencies:
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
+
+"@msgpack/msgpack@^1.12.2":
+  version "1.12.2"
+  resolved "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-1.12.2.tgz#6a22e99a49b131a8789053d0b0903834552da36f"
+  integrity sha512-Vwhc3ObxmDZmA5hY8mfsau2rJ4vGPvzbj20QSZ2/E1GDPF61QVyjLfNHak9xmel6pW4heRt3v1fHa6np9Ehfeg==
 
 "@nice-labs/git-flow-init@^1.0.1":
   version "1.0.1"

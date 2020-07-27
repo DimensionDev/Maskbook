@@ -1,8 +1,9 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
 import { useLocation } from 'react-router'
+import { useExchange } from '../hooks/Exchange'
+import type { FileInfo } from '../types'
 import { formatDateTime, formatFileSize } from '../utils'
-import { FileInfo, useExchange } from '../hooks/Exchange'
 import { FileName } from './FileName'
 
 const useStyles = makeStyles({

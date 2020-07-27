@@ -1,14 +1,17 @@
+import { Attachment } from '@dimensiondev/common-protocols'
 import { Checkbox, FormControlLabel, makeStyles, Typography } from '@material-ui/core'
+import { isNil } from 'lodash-es'
+import { useSnackbar } from 'notistack'
 import React from 'react'
 import { useHistory } from 'react-router'
+import { useAsync } from 'react-use'
+import Services from '../../../extension/service'
 import { makeFileKey } from '../arweave'
-import { legalPolicy, legalTerms, MAX_FILE_SIZE } from '../constants'
+import { legalPolicy, legalTerms, MAX_FILE_SIZE, pluginId } from '../constants'
+import type { FileInfo } from '../types'
 import { toUint8Array } from '../utils'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
-import { Attachment } from '@dimensiondev/common-protocols'
-import type { FileInfo } from '../hooks/Exchange'
-import { useSnackbar } from 'notistack'
 
 const LEGAL_TERMS = (
     <a target="_blank" href={legalTerms}>
@@ -62,29 +65,27 @@ export const Upload: React.FC = () => {
     const history = useHistory()
     const snackbar = useSnackbar()
     const [encrypted, setEncrypted] = React.useState(true)
-    // TODO: query recent uploaded files (the first 4 records)
-    const files: FileInfo[] = []
+    const recents = useAsync(() => Services.Plugin.invokePlugin(pluginId, 'getRecentFiles'), [])
     const onFile = async (file: File) => {
         let key
         if (encrypted) {
             key = makeFileKey()
         }
         const block = await toUint8Array(file)
-        const checksum = await Attachment.checksum(block)
-        // TODO: check upload history
-        // if [ same checksum exists ]; then
-        //    goto uploaded page
-        // else
-        //    goto uploading page
-        // fi
-        history.push('/uploading', {
-            key,
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            block,
-            checksum,
-        })
+        const checksum = Buffer.from(await Attachment.checksum(block)).toString('base64')
+        const item = await Services.Plugin.invokePlugin(pluginId, 'getFileInfo', checksum)
+        if (isNil(item)) {
+            history.push('/uploading', {
+                key,
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                block,
+                checksum,
+            })
+        } else {
+            history.push('/uploaded', item)
+        }
     }
     const onMore = () => {
         // TODO: open new tab
@@ -96,7 +97,7 @@ export const Upload: React.FC = () => {
         <section className={classes.container}>
             <section className={classes.upload}>
                 <UploadDropArea maxFileSize={MAX_FILE_SIZE} onFile={onFile} />
-                <RecentFiles files={files} onMore={onMore} />
+                <RecentFiles files={recents.value ?? []} onMore={onMore} />
             </section>
             <section className={classes.legal}>
                 <FormControlLabel

@@ -3,10 +3,10 @@ import React from 'react'
 import { useHistory, useLocation } from 'react-router'
 import { useAsync, useBeforeUnload } from 'react-use'
 import Services, { ServicesWithProgress } from '../../../extension/service'
+import { pluginId } from '../constants'
+import type { FileInfo } from '../types'
 import { FileName } from './FileName'
 import { ProgressBar } from './ProgressBar'
-
-const plugin = 'maskbook.fileservice.arweave' as const
 
 const useStyles = makeStyles({
     container: {
@@ -36,7 +36,7 @@ interface RouteState {
     size: number
     type: string
     block: Uint8Array
-    checksum: Uint8Array
+    checksum: string
 }
 
 export const Uploading: React.FC = () => {
@@ -46,9 +46,9 @@ export const Uploading: React.FC = () => {
     const [sendSize, setSendSize] = React.useState(0)
     const classes = useStyles()
     const { state } = useLocation<RouteState>()
-    useBeforeUnload(true)
+    useBeforeUnload(true, 'uploading')
     useAsync(async () => {
-        const payloadTxID = await Services.Plugin.invokePlugin(plugin, 'makeAttachment', {
+        const payloadTxID = await Services.Plugin.invokePlugin(pluginId, 'makeAttachment', {
             key: state.key,
             block: state.block,
             type: state.type,
@@ -57,22 +57,26 @@ export const Uploading: React.FC = () => {
         for await (const pctComplete of ServicesWithProgress.pluginArweaveUpload(payloadTxID)) {
             setSendSize(state.size * (pctComplete / 100))
         }
-        const landingTxID = await Services.Plugin.invokePlugin(plugin, 'uploadLandingPage', {
+        const landingTxID = await Services.Plugin.invokePlugin(pluginId, 'uploadLandingPage', {
             name: state.name,
             size: state.size,
             txId: payloadTxID,
             type: state.type,
             key: state.key,
         })
-        history.push('/uploaded', {
+        const item: FileInfo = {
+            type: 'arweave',
+            id: state.checksum,
+
             name: state.name,
             size: state.size,
             createdAt: new Date(startedAt),
             key: state.key,
-            checksum: state.checksum,
             payloadTxID: payloadTxID,
             landingTxID: landingTxID,
-        })
+        }
+        await Services.Plugin.invokePlugin(pluginId, 'setFileInfo', item)
+        history.push('/uploaded', item)
     }, [])
     return (
         <Grid container className={classes.container}>
