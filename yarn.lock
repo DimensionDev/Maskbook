@@ -2656,11 +2656,6 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@msgpack/msgpack@^1.12.2":
-  version "1.12.2"
-  resolved "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-1.12.2.tgz#6a22e99a49b131a8789053d0b0903834552da36f"
-  integrity sha512-Vwhc3ObxmDZmA5hY8mfsau2rJ4vGPvzbj20QSZ2/E1GDPF61QVyjLfNHak9xmel6pW4heRt3v1fHa6np9Ehfeg==
-
 "@nice-labs/git-flow-init@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@nice-labs/git-flow-init/-/git-flow-init-1.0.1.tgz#c9d3f1f1d4764511d544a690530b13027c9f8478"
@@ -5132,11 +5127,6 @@ async-call-rpc@^3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-3.2.2.tgz#1f139913c465e1820a4c8c3152017f5c78e0aa90"
   integrity sha512-0pCSCQhwPFZr6SuAhXKPYwHIvMSfVRily5ZaCpk15Y21sSCVHhFKSD+QOu9NKYVfW6arxL9TpIdb9XimqkBI1Q==
-
-async-call-rpc@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-4.0.0.tgz#825aecfd54bed4873b70ae027ca5a4d0655949e4"
-  integrity sha512-sDNNa5BIgUYknloEAacx4ool/CKU+IZF8tzbvVGPO8s0ivTcKse7YLsG1U9aBcrXtkdAdqR1nEFNmTdZO6CycA==
 
 async-each@^1.0.1:
   version "1.0.3"
