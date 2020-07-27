@@ -17,7 +17,7 @@ export function getWelcomePageURL(query?: Query) {
         return getUrl(
             `index.html#${
                 webpackEnv.perferResponsiveTarget === 'xs' ? DashboardRoute.Nav : DashboardRoute.Personas
-            }/?${param.toString()}`,
+            }?${param.toString()}`,
         )
     } else if (webpackEnv.target === 'E2E') {
         return getUrl(`index.html#${DashboardRoute.Setup}`)

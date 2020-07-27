@@ -263,7 +263,7 @@ module.exports = (argvEnv, argv) => {
         let firefoxVariant = undefined
         /** @type {'app' | 'browser' | 'facebookApp'} */
         let genericTarget = 'browser'
-        /** @type {'xs' | 'sm' | 'md' | 'lg' | 'xl'} */
+        /** @type {'xs'} */
         let perferResponsiveTarget = undefined
         if (target.Chromium) buildTarget = 'Chromium'
         if (target.Firefox) buildTarget = 'Firefox'
@@ -277,7 +277,7 @@ module.exports = (argvEnv, argv) => {
             buildTarget = 'WKWebview'
             genericTarget = 'facebookApp'
         }
-        if (target.WKWebview || target.FirefoxForAndroid) {
+        if (genericTarget === 'facebookApp' || firefoxVariant === 'android') {
             perferResponsiveTarget = 'xs'
         }
         if (target.E2E) buildTarget = 'E2E'
