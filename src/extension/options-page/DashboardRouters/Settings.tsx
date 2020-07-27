@@ -165,7 +165,8 @@ export default function DashboardSettingsRouter() {
                                     icon={<PaletteIcon />}
                                     value={appearanceSettings}
                                 />
-                                {process.env.NODE_ENV === 'development' ? (
+                                {process.env.NODE_ENV === 'development' ||
+                                webpackEnv.perferResponsiveTarget === 'xs' ? (
                                     <SettingsUIEnum
                                         classes={listStyle}
                                         secondary={currentEthereumNetwork}
