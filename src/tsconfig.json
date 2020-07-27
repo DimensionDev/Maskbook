@@ -4,6 +4,7 @@
   "compilerOptions": {
     "outDir": "../temp/esm/",
     "declaration": true,
+    "declarationMap": true,
     "noEmit": false,
     // project composition
     "composite": true,

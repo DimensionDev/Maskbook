@@ -9,16 +9,26 @@ import { MessageCenter } from '@holoflows/kit/es'
 import { IdentifierMap } from '../database/IdentifierMap'
 import type { upload as pluginArweaveUpload } from '../plugins/FileService/arweave/index'
 
+import type * as CryptoService from './background-script/CryptoService'
+import type * as IdentityService from './background-script/IdentityService'
+import type * as WelcomeService from './background-script/WelcomeService'
+import type * as UserGroupService from './background-script/UserGroupService'
+import type * as SteganographyService from './background-script/SteganographyService'
+import type * as PluginService from './background-script/PluginService'
+import type * as HelperService from './background-script/HelperService'
+import type * as NonceService from './background-script/NonceService'
+import type * as ProviderService from './background-script/ProviderService'
+
 interface Services {
-    Crypto: typeof import('./background-script/CryptoService')
-    Identity: typeof import('./background-script/IdentityService')
-    UserGroup: typeof import('./background-script/UserGroupService')
-    Welcome: typeof import('./background-script/WelcomeService')
-    Steganography: typeof import('./background-script/SteganographyService')
-    Plugin: typeof import('./background-script/PluginService')
-    Helper: typeof import('./background-script/HelperService')
-    Nonce: typeof import('./background-script/NonceService')
-    Provider: typeof import('./background-script/ProviderService')
+    Crypto: typeof CryptoService
+    Identity: typeof IdentityService
+    UserGroup: typeof UserGroupService
+    Welcome: typeof WelcomeService
+    Steganography: typeof SteganographyService
+    Plugin: typeof PluginService
+    Helper: typeof HelperService
+    Nonce: typeof NonceService
+    Provider: typeof ProviderService
 }
 const Services = {} as Services
 export default Services

@@ -109,6 +109,7 @@
     "@dimensiondev/webextension-shim": "0.0.3-19",
     "@magic-works/commonjs-import.meta": "^1.0.0",
     "@magic-works/ttypescript-browser-like-import-transformer": "^2.2.0",
+    "@microsoft/api-extractor": "^7.9.2",
     "@nice-labs/git-rev": "^3.5.0",
     "@openzeppelin/contracts": "^3.1.0",
     "@sinonjs/text-encoding": "^0.7.1",
