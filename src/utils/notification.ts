@@ -10,7 +10,7 @@ interface Props {
 }
 
 export async function requestNotification(props: Props) {
-    const { title, icon, body, onClick, plugin } = props
+    const { title, icon, body, onClick } = props
     const granted = await browser.permissions.request({ permissions: ['notifications'] }).then(notifyPermissionUpdate)
     if (!granted) return false
     const notification = new Notification(title || 'Maskbook', {
@@ -20,7 +20,7 @@ export async function requestNotification(props: Props) {
     notification.onclick =
         onClick ||
         (() => {
-            browser.tabs.create({ url: getWelcomePageURL({ plugin }) })
+            browser.tabs.create({ url: getWelcomePageURL() })
         })
     return true
 }

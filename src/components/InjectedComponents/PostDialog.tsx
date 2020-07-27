@@ -228,7 +228,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             </SelectRecipientsUI>
                         </Box>
                         {/* This feature is not ready for mobile version */}
-                        {webpackEnv.target !== 'WKWebview' && webpackEnv.firefoxVariant !== 'android' ? (
+                        {webpackEnv.genericTarget === 'browser' ? (
                             <>
                                 <Typography style={{ marginBottom: 10 }}>
                                     {t('post_dialog__more_options_title')}

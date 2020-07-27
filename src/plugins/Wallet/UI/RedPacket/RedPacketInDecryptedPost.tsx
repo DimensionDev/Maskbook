@@ -31,6 +31,7 @@ import { RedPacketMetaKey } from '../../RedPacketMetaKey'
 import { useWallet } from '../../../shared/useWallet'
 import { usePostInfoDetails } from '../../../../components/DataSource/usePostInfo'
 import type { WalletDetails } from '../../../../extension/background-script/PluginService'
+import { DashboardRoute } from '../../../../extension/options-page/Route'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -82,7 +83,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
             address,
             setAsDefault,
         )
-            .catch((e) => Services.Welcome.openOptionsPage(`/wallets?error=${e.message}`))
+            .catch((e) => Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `error=${e.message}`))
             .finally(() => setLoading(false))
     }
     const { data } = useWallet()
@@ -104,7 +105,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
                 setLoading(false)
             }
         } else {
-            Services.Welcome.openOptionsPage(`/wallets?rpid=${rpid}`)
+            Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `rpid=${rpid}`)
         }
     }
     return (

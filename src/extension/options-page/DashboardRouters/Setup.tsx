@@ -366,7 +366,11 @@ export function ConnectNetwork() {
                                 }),
                             ])
                             await sleep(300)
-                            history.replace(DashboardRoute.Personas)
+                            history.replace(
+                                webpackEnv.perferResponsiveTarget === 'xs'
+                                    ? DashboardRoute.Nav
+                                    : DashboardRoute.Personas,
+                            )
                         }}>
                         {t('set_up_button_finish')}
                     </ActionButton>
@@ -560,7 +564,9 @@ export function RestoreDatabaseAdvance() {
             if (persona) {
                 history.push(
                     persona.linkedProfiles.size
-                        ? DashboardRoute.Personas
+                        ? webpackEnv.perferResponsiveTarget === 'xs'
+                            ? DashboardRoute.Nav
+                            : DashboardRoute.Personas
                         : `${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(persona.identifier.toText())}`,
                 )
             } else {
