@@ -1,4 +1,4 @@
-import { Grid, makeStyles, Typography } from '@material-ui/core'
+import { Grid, makeStyles, Typography, Button } from '@material-ui/core'
 import React from 'react'
 import { useLocation, useHistory } from 'react-router'
 import { useExchange } from '../hooks/Exchange'
@@ -31,6 +31,15 @@ const useStyles = makeStyles({
         lineHeight: 1.71,
         color: '#5D6F88',
         textAlign: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    info: {
+        margin: 0,
+    },
+    back: {
+        color: '#2CA4EF',
     },
 })
 
@@ -49,14 +58,19 @@ export const Uploaded: React.FC = () => {
     return (
         <Grid container className={classes.container}>
             <Grid item>
-                <img src="https://via.placeholder.com/96x120" onClick={onBack} />
+                <img src="https://via.placeholder.com/96x120" />
             </Grid>
             <Grid item>
                 <FileName name={state.name} />
                 <Typography className={classes.meta}>
-                    <span>{formatFileSize(state.size)}</span>
-                    <span>&nbsp;&nbsp;</span>
-                    <span>{formatDateTime(state.createdAt)}</span>
+                    <p className={classes.info}>
+                        <span>{formatFileSize(state.size)}</span>
+                        <span>&nbsp;&nbsp;</span>
+                        <span>{formatDateTime(state.createdAt)}</span>
+                    </p>
+                    <Button className={classes.back} onClick={onBack}>
+                        Change File
+                    </Button>
                 </Typography>
             </Grid>
         </Grid>
