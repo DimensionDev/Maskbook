@@ -8,15 +8,12 @@ const Database = createPluginDatabase<TaggedTypes>(identifier)
 
 export async function getRecentFiles() {
     const files: FileInfo[] = []
-    let count = 0
     for await (const file of Database.iterate('arweave')) {
         files.push(file)
-        if (count > 4) {
-            break
-        }
-        count += 1
     }
-    return files
+    console.log(files)
+    files.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    return files.slice(0, 4)
 }
 
 export async function getFileInfo(checksum: string) {

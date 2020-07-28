@@ -2,7 +2,7 @@ import React from 'react'
 import type { FileInfo } from '../types'
 
 export interface Props {
-    onInsert(info: FileInfo): void
+    onInsert(info: FileInfo | null): void
 }
 
 const Context = React.createContext<Props>({

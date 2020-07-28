@@ -1,6 +1,6 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
-import { useLocation } from 'react-router'
+import { useLocation, useHistory } from 'react-router'
 import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
 import { formatDateTime, formatFileSize } from '../utils'
@@ -36,15 +36,20 @@ const useStyles = makeStyles({
 
 export const Uploaded: React.FC = () => {
     const classes = useStyles()
+    const history = useHistory()
     const { onInsert } = useExchange()
     const { state } = useLocation<FileInfo>()
     React.useEffect(() => {
         onInsert(state)
     }, [onInsert, state])
+    const onBack = () => {
+        onInsert(null)
+        history.goBack()
+    }
     return (
         <Grid container className={classes.container}>
             <Grid item>
-                <img src="https://via.placeholder.com/96x120" />
+                <img src="https://via.placeholder.com/96x120" onClick={onBack} />
             </Grid>
             <Grid item>
                 <FileName name={state.name} />

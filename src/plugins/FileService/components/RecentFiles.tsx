@@ -35,6 +35,7 @@ const useItemStyles = makeStyles({
         padding: 0,
         paddingBottom: 10,
         userSelect: 'none',
+        cursor: 'pointer',
     },
 })
 

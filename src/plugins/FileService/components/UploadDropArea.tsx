@@ -62,6 +62,8 @@ const useStyles = makeStyles({
         position: 'absolute',
         top: 38,
         userSelect: 'none',
+        cursor: 'pointer',
+        zIndex: 0,
     },
 })
 

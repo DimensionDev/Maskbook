@@ -40,8 +40,11 @@ const useStyles = makeStyles({
 
 const MainDialog: React.FC<Props> = (props) => {
     const classes = useStylesExtends(useStyles(), props)
-    const [selectedFileInfo, setSelectedFileInfo] = React.useState<FileInfo>()
+    const [selectedFileInfo, setSelectedFileInfo] = React.useState<FileInfo | null>(null)
     const onInsert = () => {
+        if (isNil(selectedFileInfo)) {
+            return
+        }
         const { typedMessageMetadata } = getActivatedUI()
         const next = new Map(typedMessageMetadata.value.entries())
         if (selectedFileInfo) {
