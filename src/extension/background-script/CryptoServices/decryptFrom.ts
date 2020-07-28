@@ -42,6 +42,7 @@ type Success = {
 type Failure = {
     error: string
     type: 'error'
+    internalError: boolean
 }
 export type SuccessDecryption = Success
 export type FailureDecryption = Failure
@@ -72,9 +73,9 @@ function makeProgress(progress: Exclude<Progress['progress'], 'intermediate_succ
     if (typeof progress === 'string') return { type: 'progress', progress }
     return { type: 'progress', progress: 'intermediate_success', data: progress }
 }
-function makeError(error: string | Error): Failure {
-    if (typeof error === 'string') return { type: 'error', error }
-    return makeError(error.message)
+function makeError(error: string | Error, internalError: boolean = false): Failure {
+    if (typeof error === 'string') return { type: 'error', error, internalError }
+    return makeError(error.message, internalError)
 }
 /**
  * Decrypt message from a user
@@ -326,7 +327,7 @@ async function* decryptFromImageUrlWithProgress_raw(
         pass: author.toText(),
     })
     if (post.indexOf('🎼') !== 0 && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
-        return makeError(i18n.t('service_decode_image_payload_failed'))
+        return makeError(i18n.t('service_decode_image_payload_failed'), false)
     return yield* decryptFromText(post, author, whoAmI, publicShared)
 }
 
@@ -346,7 +347,6 @@ export const decryptFromImageUrl = memorizeAsyncGenerator(
 
 function handleDOMException(e: unknown) {
     if (e instanceof DOMException) {
-        console.error(e)
         return makeError(i18n.t('service_decryption_failed'))
     } else throw e
 }
