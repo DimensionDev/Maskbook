@@ -4,7 +4,6 @@ import { defaultTo } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
 import { ProfileIdentifier } from '../../../database/type'
 import { twitterUrl, canonifyImgUrl } from './url'
-import Services from '../../../extension/service'
 
 /**
  * @example
@@ -161,39 +160,18 @@ export const postContentParser = (node: HTMLElement) => {
     }
 }
 
-export const postImageParser = async (node: HTMLElement) => {
-    if (isMobilePost(node)) {
-        // TODO: Support steganography in legacy twitter
-        return ''
-    } else {
-        const isQuotedTweet = !!node.closest('[role="blockquote"]')
-        const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
-        if (!imgNodes.length) return ''
-        const imgUrls = Array.from(imgNodes)
-            .filter((node) => isQuotedTweet || !node.closest('[role="blockquote"]'))
-            .flatMap((node) => canonifyImgUrl(node.getAttribute('src') ?? ''))
-            .filter(Boolean)
-        if (!imgUrls.length) return ''
-        const { handle } = postNameParser(node)
-        const posterIdentity = new ProfileIdentifier(twitterUrl.hostIdentifier, handle)
-        return (
-            await Promise.all(
-                imgUrls.map(async (url) => {
-                    try {
-                        const content = await Services.Steganography.decodeImageUrl(url, {
-                            pass: posterIdentity.toText(),
-                        })
-                        return /https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(content) ? content : ''
-                    } catch {
-                        // for twitter image url maybe absent
-                        return ''
-                    }
-                }),
-            )
-        )
-            .filter(Boolean)
-            .join('\n')
-    }
+export const postImagesParser = async (node: HTMLElement): Promise<string[]> => {
+    // TODO: Support steganography in legacy twitter
+    if (isMobilePost(node)) return []
+    const isQuotedTweet = !!node.closest('[role="blockquote"]')
+    const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
+    if (!imgNodes.length) return []
+    const imgUrls = Array.from(imgNodes)
+        .filter((node) => isQuotedTweet || !node.closest('[role="blockquote"]'))
+        .flatMap((node) => canonifyImgUrl(node.getAttribute('src') ?? ''))
+        .filter(Boolean)
+    if (!imgUrls.length) return []
+    return imgUrls
 }
 
 export const postParser = (node: HTMLElement) => {

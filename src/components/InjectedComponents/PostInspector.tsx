@@ -25,22 +25,22 @@ export interface PostInspectorProps {
 }
 export function PostInspector(props: PostInspectorProps) {
     const postBy = usePostInfoDetails('postBy')
-    const post = usePostInfoDetails('postContent')
+    const postContent = usePostInfoDetails('postContent')
     const postId = usePostInfoDetails('postIdentifier')
+    const postImages = usePostInfoDetails('postMetadataImages')
     const isDebugging = useValueRef(debugModeSetting)
     const whoAmI = useCurrentIdentity()
     const friends = useFriendsList()
-
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
 
-    const encryptedPost = useMemo(() => deconstructPayload(post, getActivatedUI().payloadDecoder), [post])
-    const provePost = useMemo(() => getActivatedUI().publicKeyDecoder(post), [post])
+    const encryptedPost = useMemo(() => deconstructPayload(postContent, getActivatedUI().payloadDecoder), [postContent])
+    const provePost = useMemo(() => getActivatedUI().publicKeyDecoder(postContent), [postContent])
 
     const { value: sharedListOfPost } = useAsync(async () => {
         if (!whoAmI || !whoAmI.identifier.equals(postBy) || !encryptedPost.ok) return []
         const { iv, version } = encryptedPost.val
         return Services.Crypto.getSharedListOfPost(version, iv, postBy)
-    }, [post, postBy, whoAmI])
+    }, [postContent, postBy, whoAmI])
     useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
 
     if (postBy.isUnknown) return null
@@ -55,26 +55,27 @@ export function PostInspector(props: PostInspectorProps) {
                 ],
                 ['My fingerprint', whoAmI?.linkedPersona?.fingerprint ?? 'Unknown'],
                 ['Post ID', postId?.toText() || 'Unknown'],
-                ['Post Content', post],
+                ['Post Content', postContent],
+                ['Post Attachment Links', JSON.stringify(postImages.values())],
             ]}
         />
     ) : null
 
-    if (encryptedPost.ok) {
+    if (encryptedPost.ok || postImages.length) {
         if (!isDebugging) props.needZip()
-        const { val } = encryptedPost
-        const { iv, version } = val
-        const ownersAESKeyEncrypted = val.version === -38 ? val.AESKeyEncrypted : val.ownersAESKeyEncrypted
         const DecryptPostX = props.DecryptPostComponent || DecryptPost
         return withAdditionalContent(
             <DecryptPostX
                 onDecrypted={props.onDecrypted}
                 requestAppendRecipients={
-                    // Version -40 is leaking info
                     // So should not create new data on version -40
-                    version === -40
-                        ? undefined
-                        : async (people) => {
+                    encryptedPost.ok && encryptedPost.val.version === -40
+                        ? async (people) => {
+                              const { val } = encryptedPost
+                              const { iv, version } = val
+                              const ownersAESKeyEncrypted =
+                                  val.version === -38 ? val.AESKeyEncrypted : val.ownersAESKeyEncrypted
+
                               setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
                               return Services.Crypto.appendShareTarget(
                                   version,
@@ -85,10 +86,10 @@ export function PostInspector(props: PostInspectorProps) {
                                   { type: 'direct', at: new Date() },
                               )
                           }
+                        : undefined
                 }
                 alreadySelectedPreviously={alreadySelectedPreviously}
                 profiles={friends}
-                encryptedText={post}
                 whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown}
                 {...props.DecryptPostProps}
             />,
@@ -96,7 +97,9 @@ export function PostInspector(props: PostInspectorProps) {
     } else if (provePost.length) {
         const AddToKeyStoreX = props.AddToKeyStoreComponent || AddToKeyStore
         if (!AddToKeyStoreX) return null
-        return withAdditionalContent(<AddToKeyStoreX postBy={postBy} provePost={post} {...props.AddToKeyStoreProps} />)
+        return withAdditionalContent(
+            <AddToKeyStoreX postBy={postBy} provePost={postContent} {...props.AddToKeyStoreProps} />,
+        )
     }
     return withAdditionalContent(null)
     function withAdditionalContent(x: JSX.Element | null) {

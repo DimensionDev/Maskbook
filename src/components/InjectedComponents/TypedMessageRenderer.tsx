@@ -2,8 +2,9 @@ import * as React from 'react'
 import { Typography, Link } from '@material-ui/core'
 import anchorme from 'anchorme'
 import type {
-    TypedMessageText,
     TypedMessage,
+    TypedMessageText,
+    TypedMessageImage,
     TypedMessageComplex,
     TypedMessageUnknown,
 } from '../../extension/background-script/CryptoServices/utils'
@@ -26,6 +27,7 @@ export interface TypedMessageRendererProps<T extends TypedMessage> {
     }
     TypedMessageRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessage>>
     TypedMessageTextRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageText>>
+    TypedMessageImageRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageImage>>
     TypedMessageComplexRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageComplex>>
     TypedMessageUnknownRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageUnknown>>
 }
@@ -41,6 +43,10 @@ export const DefaultTypedMessageRenderer = React.memo(function DefaultTypedMessa
         case 'text': {
             const Text = props.TypedMessageTextRenderer || DefaultTypedMessageTextRenderer
             return <Text {...props} message={props.message} />
+        }
+        case 'image': {
+            const Image = props.TypedMessageImageRenderer || DefaultTypedMessageImageRenderer
+            return <Image {...props} message={props.message} />
         }
         case 'unknown': {
             const Unknown = props.TypedMessageUnknownRenderer || DefaultTypedMessageUnknownRenderer
@@ -62,6 +68,18 @@ export const DefaultTypedMessageTextRenderer = React.memo(function DefaultTypedM
     )
 })
 
+export const DefaultTypedMessageImageRenderer = React.memo(function DefaultTypedMessageImageRenderer(
+    props: TypedMessageRendererProps<TypedMessageImage>,
+) {
+    return renderWithMetadata(
+        props,
+        <Typography variant="body1" style={{ lineBreak: 'anywhere' }} data-testid="text_payload">
+            {/* TODO: support different image type */}
+            <img style={{ width: '100%' }} src={`data:image/png;base64,${props.message.content}`} />
+        </Typography>,
+    )
+})
+
 export const DefaultTypedMessageComplexRenderer = React.memo(function DefaultTypedMessageComplexRenderer(
     props: TypedMessageRendererProps<TypedMessageComplex>,
 ) {
@@ -77,13 +95,12 @@ export const DefaultTypedMessageComplexRenderer = React.memo(function DefaultTyp
         }
     }
     const R = props.TypedMessageRenderer || DefaultTypedMessageRenderer
-    return renderWithMetadata(
-        props,
+    return (
         <>
             {props.message.items.map((x, index) => (
                 <R key={index} {...props} message={x} />
             ))}
-        </>,
+        </>
     )
 })
 

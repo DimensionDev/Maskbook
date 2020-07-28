@@ -13,7 +13,7 @@ import * as PluginService from './extension/background-script/PluginService'
 import * as HelperService from './extension/background-script/HelperService'
 import * as NonceService from './extension/background-script/NonceService'
 import * as ProviderService from './extension/background-script/ProviderService'
-import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
+import { decryptFromText, decryptFromImageUrl } from './extension/background-script/CryptoServices/decryptFrom'
 
 Object.assign(globalThis, {
     CryptoService,
@@ -29,6 +29,7 @@ Object.assign(globalThis, {
 
 Object.assign(globalThis, {
     ServicesWithProgress: {
-        decryptFrom: decryptFromMessageWithProgress,
+        decryptFromText,
+        decryptFromImageUrl,
     },
 })

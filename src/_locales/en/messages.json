@@ -275,6 +275,7 @@
     "service_others_key_not_found": "The public key of {{name}} cannot be found!",
     "service_publish_post_aes_key_failed": "Failed to publish the AES key!",
     "service_self_key_decryption_failed": "Decryption failed. Maybe you selected a wrong identity or imported a key that was not used to encrypt this post.",
+    "service_decode_image_payload_failed": "Decode image failed.",
     "service_unknown_payload": "Unknown post version. You may need to update Maskbook.",
     "service_username_invalid": "Invalid Username",
     "set_as_default": "Set as Default",
