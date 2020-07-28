@@ -31,11 +31,11 @@ import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import RedPacketDialog from '../../plugins/Wallet/UI/RedPacket/RedPacketDialog'
 import FileServiceDialog from '../../plugins/FileService/MainDialog'
 import {
-    makeTypedMessage,
     TypedMessage,
     readTypedMessageMetadata,
     extractTextFromTypedMessage,
     withMetadataUntyped,
+    makeTypedMessageText,
 } from '../../extension/background-script/CryptoServices/utils'
 import { EthereumTokenType } from '../../plugins/Wallet/database/types'
 import { isDAI, isOKB } from '../../plugins/Wallet/token'
@@ -110,7 +110,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const [, inputRef] = useCapturedInput(
         (newText) => {
             const msg = props.postContent
-            if (msg.type === 'text') props.onPostContentChanged(makeTypedMessage(newText, msg.meta))
+            if (msg.type === 'text') props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
             else throw new Error('Not impled yet')
         },
         [props.open, props.postContent],
@@ -237,7 +237,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             </SelectRecipientsUI>
                         </Box>
                         {/* This feature is not ready for mobile version */}
-                        {webpackEnv.target !== 'WKWebview' && webpackEnv.firefoxVariant !== 'android' ? (
+                        {webpackEnv.genericTarget === 'browser' ? (
                             <>
                                 <Typography style={{ marginBottom: 10 }}>
                                     {t('post_dialog__more_options_title')}
@@ -309,7 +309,7 @@ export function PostDialog(props: PostDialogProps) {
     const [open, setOpen] = or(props.open, useState<boolean>(false)) as NonNullable<PostDialogProps['open']>
 
     //#region TypedMessage
-    const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessage('', typedMessageMetadata))
+    const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessageText('', typedMessageMetadata))
     useEffect(() => {
         if (typedMessageMetadata !== postBoxContent.meta)
             setPostBoxContent({ ...postBoxContent, meta: typedMessageMetadata })
@@ -400,7 +400,7 @@ export function PostDialog(props: PostDialogProps) {
             setOpen(false)
             setOnlyMyself(false)
             setShareToEveryone(false)
-            setPostBoxContent(makeTypedMessage(''))
+            setPostBoxContent(makeTypedMessageText(''))
             setCurrentShareTarget([])
             getActivatedUI().typedMessageMetadata.value = new Map()
         }, [setOpen]),

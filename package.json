@@ -46,7 +46,7 @@
     "@dimensiondev/common-protocols": "^1.6.0-34",
     "@dimensiondev/matrix-js-sdk-type": "^1.0.0-6",
     "@dimensiondev/stego-js": "^0.11.1-7",
-    "@holoflows/kit": "npm:@dimensiondev/holoflows-kit@0.7.0-22",
+    "@holoflows/kit": "npm:@dimensiondev/holoflows-kit@0.7.0-30",
     "@material-ui/core": "4.10.2",
     "@material-ui/icons": "4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",

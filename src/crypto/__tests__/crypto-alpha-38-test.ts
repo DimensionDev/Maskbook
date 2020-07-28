@@ -1,6 +1,6 @@
 import * as c from '../crypto-alpha-38'
 import {
-    makeTypedMessage,
+    makeTypedMessageText,
     TypedMessageComplex,
     TypedMessageUnknown,
 } from '../../extension/background-script/CryptoServices/utils'
@@ -35,9 +35,9 @@ beforeAll(() => {
 // Test for:
 c.typedMessageParse && c.typedMessageStringify
 test('Crypto alpha v38 Typed Message', () => {
-    const textWith0Meta = makeTypedMessage('text message1')
-    const textWith1Meta = makeTypedMessage('text message', new Map([['MetadataKey', 'MetadataValue']]))
-    const textWith2Meta = makeTypedMessage(
+    const textWith0Meta = makeTypedMessageText('text message1')
+    const textWith1Meta = makeTypedMessageText('text message', new Map([['MetadataKey', 'MetadataValue']]))
+    const textWith2Meta = makeTypedMessageText(
         'text message',
         new Map([
             ['MetadataKey', 'MetadataValue'],

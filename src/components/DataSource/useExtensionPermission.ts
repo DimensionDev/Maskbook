@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import Services from '../../extension/service'
 import { MessageCenter } from '../../utils/messages'
 import useSWR from 'swr'
+import { DashboardRoute } from '../../extension/options-page/Route'
 
 export function useExtensionPermission(host: browser.permissions.Permissions) {
     const { data, revalidate } = useSWR(JSON.stringify(host), {
@@ -17,7 +18,7 @@ export function useExtensionPermission(host: browser.permissions.Permissions) {
         request: () => {
             const _ = new URLSearchParams()
             host.origins?.forEach((x) => _.append('origin', x))
-            Services.Welcome.openOptionsPage('request-permission?' + _.toString())
+            Services.Welcome.openOptionsPage(DashboardRoute.RequestPermission, _.toString())
         },
     }
 }

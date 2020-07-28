@@ -45,8 +45,9 @@ if (!('Services' in globalThis)) {
 }
 interface ServicesWithProgress {
     // Sorry you should add import at '../_background_loader.1.ts'
-    decryptFrom: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromMessageWithProgress
     pluginArweaveUpload: typeof pluginArweaveUpload
+    decryptFromText: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromText
+    decryptFromImageUrl: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromImageUrl
 }
 function createProxyToService(name: string) {
     return new Proxy(

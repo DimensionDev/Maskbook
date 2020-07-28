@@ -12,7 +12,7 @@ import { number, text, select, boolean } from '@storybook/addon-knobs'
 import { Typography, Paper } from '@material-ui/core'
 import { action } from '@storybook/addon-actions'
 import BigNumber from 'bignumber.js'
-import { makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
+import { makeTypedMessageText } from '../extension/background-script/CryptoServices/utils'
 import { DAI_ADDRESS } from '../plugins/Wallet/token'
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
 import { RedPacketMetaKey } from '../plugins/Wallet/RedPacketMetaKey'
@@ -107,7 +107,10 @@ storiesOf('Plugin: Red Packets', module)
                 <div>
                     <DecryptPostSuccess
                         alreadySelectedPreviously={[]}
-                        data={{ signatureVerifyResult: true, content: makeTypedMessage('decrypted message!', meta) }}
+                        data={{
+                            signatureVerifyResult: true,
+                            content: makeTypedMessageText('decrypted message!', meta),
+                        }}
                         profiles={[]}
                     />
                 </div>

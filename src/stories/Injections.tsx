@@ -19,7 +19,7 @@ import { MaskbookLightTheme } from '../utils/theme'
 import { PostDialog } from '../components/InjectedComponents/PostDialog'
 import { PostDialogHint } from '../components/InjectedComponents/PostDialogHint'
 import {
-    makeTypedMessage,
+    makeTypedMessageText,
     TypedMessageText,
     TypedMessageUnknown,
     TypedMessageComplex,
@@ -143,7 +143,7 @@ storiesOf('Injections', module)
                             progress: 'intermediate_success',
                             type: 'progress',
                             data: {
-                                content: makeTypedMessage(msg),
+                                content: makeTypedMessageText(msg),
                                 signatureVerifyResult: vr,
                                 rawContent: '',
                                 through: [],
@@ -174,7 +174,7 @@ storiesOf('Injections', module)
                             alreadySelectedPreviously={[]}
                             requestAppendRecipients={async () => {}}
                             profiles={demoProfiles}
-                            data={{ content: makeTypedMessage(msg), signatureVerifyResult: vr }}
+                            data={{ content: makeTypedMessageText(msg), signatureVerifyResult: vr }}
                         />
                     </FakePost>
                     <FakePost title="Decrypting:">
