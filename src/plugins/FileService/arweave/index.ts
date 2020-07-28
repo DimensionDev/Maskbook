@@ -30,7 +30,7 @@ export interface AttachmentOptions {
 }
 
 export async function makeAttachment(options: AttachmentOptions) {
-    const passphrase = options.key ? new TextEncoder().encode(options.key) : undefined
+    const passphrase = options.key ? encodeText(options.key) : undefined
     const encoded = await Attachment.encode(passphrase, {
         block: options.block,
         metadata: null,
@@ -58,23 +58,18 @@ export interface LandingPageMetadata {
 }
 
 export async function uploadLandingPage(metadata: LandingPageMetadata) {
-    let keyHash
-    if (!isNil(metadata.key)) {
-        const hash = await Attachment.checksum(Buffer.from(metadata.key, 'utf-8'))
-        keyHash = Buffer.from(hash).toString('base64')
-    }
     const encodedMetadata = JSON.stringify({
         name: metadata.name,
         size: metadata.size,
         link: `https://arweave.net/${metadata.txId}`,
-        keyHash,
-        createdAt: new Date().toISOString(),
         mime: metadata.type,
+        signed: await makeFileKeySigned(metadata.key),
+        createdAt: new Date().toISOString(),
     })
     const response = await fetch(landing)
     const text = await response.text()
     const replaced = text.replace('__METADATA__', encodedMetadata)
-    const data = new TextEncoder().encode(replaced)
+    const data = encodeText(replaced)
     const transaction = await makePayload(data, 'text/html')
     await instance.transactions.post(transaction)
     return transaction.id
@@ -85,4 +80,23 @@ async function makePayload(data: Uint8Array, type: string) {
     transaction.addTag('Content-Type', type)
     await sign(transaction)
     return transaction
+}
+
+async function makeFileKeySigned(fileKey: string | undefined | null) {
+    if (isNil(fileKey)) {
+        return null
+    }
+    const encodedKey = encodeText(fileKey)
+    const key = await crypto.subtle.generateKey({ name: 'HMAC', hash: { name: 'SHA-256' } }, true, ['sign', 'verify'])
+    const exportedKey = await crypto.subtle.exportKey('raw', key)
+    const signed = await crypto.subtle.sign({ name: 'HMAC' }, key, encodedKey)
+    return [signed, exportedKey].map(encodeBase64)
+}
+
+function encodeText(input: string) {
+    return new TextEncoder().encode(input)
+}
+
+function encodeBase64(data: ArrayBuffer) {
+    return Buffer.from(data).toString('base64')
 }
