@@ -165,36 +165,38 @@ export function DecryptPost(props: DecryptPostProps) {
     )
 
     function renderProgress(progress: SuccessDecryption | FailureDecryption | DecryptionProgress) {
-        const withDebugger = (jsx: JSX.Element) => {
-            return (
-                <>
-                    {jsx}
-                    <DecryptedPostDebug
-                        debugHash={debugHash}
-                        whoAmI={whoAmI}
-                        decryptedResult={progress.type === 'progress' ? null : progress}
-                    />
-                </>
-            )
+        const render = () => {
+            switch (progress.type) {
+                case 'success':
+                    return (
+                        <Success
+                            data={progress}
+                            alreadySelectedPreviously={alreadySelectedPreviously}
+                            requestAppendRecipients={requestAppendRecipientsWrapped}
+                            profiles={profiles}
+                            sharedPublic={sharedPublic}
+                            {...props.successComponentProps}
+                        />
+                    )
+                case 'error':
+                    return <Failed error={new Error(progress.error)} {...props.failedComponentProps} />
+                case 'progress':
+                    return <Awaiting type={progress} {...props.waitingComponentProps} />
+                default:
+                    return null
+            }
         }
-        switch (progress.type) {
-            case 'success':
-                return withDebugger(
-                    <Success
-                        data={progress}
-                        alreadySelectedPreviously={alreadySelectedPreviously}
-                        requestAppendRecipients={requestAppendRecipientsWrapped}
-                        profiles={profiles}
-                        sharedPublic={sharedPublic}
-                        {...props.successComponentProps}
-                    />,
-                )
-            case 'error':
-                return withDebugger(<Failed error={new Error(progress.error)} {...props.failedComponentProps} />)
-            case 'progress':
-                return withDebugger(<Awaiting type={progress} {...props.waitingComponentProps} />)
-            default:
-                return null
-        }
+        const rendered = render()
+        if (!rendered) return null
+        return (
+            <>
+                {rendered}
+                <DecryptedPostDebug
+                    debugHash={debugHash}
+                    whoAmI={whoAmI}
+                    decryptedResult={progress.type === 'progress' ? null : progress}
+                />
+            </>
+        )
     }
 }
