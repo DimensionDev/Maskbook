@@ -58,7 +58,7 @@ export function PostInspector(props: PostInspectorProps) {
                 ['My fingerprint', whoAmI?.linkedPersona?.fingerprint ?? 'Unknown'],
                 ['Post ID', postId?.toText() || 'Unknown'],
                 ['Post Content', postContent],
-                ['Post Attachment Links', JSON.stringify(postImages.values())],
+                ['Post Image Links', JSON.stringify(postImages.values())],
             ]}
         />
     ) : null
