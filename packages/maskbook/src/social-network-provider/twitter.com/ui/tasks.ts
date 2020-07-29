@@ -75,9 +75,8 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
     worker(abortCtr).then(undefined, (e) => fail(e))
 }
 
-const taskUploadShuffleToPostBox = async (shuffledImage: Uint8Array) => {
+const taskUploadShuffledImageToPostBox = async (shuffledImage: Uint8Array) => {
     pasteImageToActiveElements(shuffledImage)
-    await untilDocumentReady()
 }
 
 const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text, options) => {
@@ -162,7 +161,7 @@ export const twitterUITasks: SocialNetworkUITasks = {
     taskPasteIntoPostBox,
     taskOpenComposeBox,
     taskUploadToPostBox,
-    taskUploadShuffleToPostBox,
+    taskUploadShuffledImageToPostBox,
     taskGetPostContent,
     taskGetProfile,
     taskGotoProfilePage,

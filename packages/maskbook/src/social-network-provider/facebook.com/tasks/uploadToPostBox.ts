@@ -48,7 +48,7 @@ export async function uploadShuffleToPostBoxFacebook(
     seed: string,
     options: Parameters<SocialNetworkUI['taskUploadToPostBox']>[1],
 ) {
-    const {  } = options
+    const {} = options
     const shuffledImage = new Uint8Array(
         decodeArrayBuffer(
             await Services.ImageShuffle.shuffle(encodeArrayBuffer(image), {

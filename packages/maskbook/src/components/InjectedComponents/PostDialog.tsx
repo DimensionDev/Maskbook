@@ -409,11 +409,10 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                         shareToEveryone,
                     )
                     activeUI.taskPasteIntoPostBox(t('additional_post_box__encrypted_post_pre', { encrypted }), {
-                        autoPasteFailedRecover: true, shouldOpenPostDialog: true
+                        autoPasteFailedRecover: true,
+                        shouldOpenPostDialog: true,
                     })
-                    activeUI.taskUploadShuffleToPostBox(imgToEncrypt, seed, {
-                        warningText: '',
-                    })
+                    activeUI.taskUploadShuffledImageToPostBox(imgToEncrypt, seed, {})
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
                     if (redPacketMetadata.ok) {

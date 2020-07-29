@@ -105,7 +105,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
     taskOpenComposeBox: taskOpenComposeBoxFacebook,
     taskUploadToPostBox: uploadToPostBoxFacebook,
-    taskUploadShuffleToPostBox: uploadShuffleToPostBoxFacebook,
+    taskUploadShuffledImageToPostBox: uploadShuffleToPostBoxFacebook,
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
     taskStartSetupGuide: createTaskStartSetupGuideDefault(() => facebookUISelf),
