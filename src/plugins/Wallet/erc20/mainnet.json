@@ -51,7 +51,7 @@
             "address": "0xdac17f958d2ee523a2206206994597c13d831ec7"
         },
         {
-            "decimals": 6,
+            "decimals": 18,
             "symbol": "USDx",
             "name": "dForce USD",
             "address": "0xeb269732ab75A6fD61Ea60b06fE994cD32a83549"
