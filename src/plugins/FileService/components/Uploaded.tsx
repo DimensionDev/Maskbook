@@ -55,10 +55,20 @@ export const Uploaded: React.FC = () => {
         onInsert(null)
         history.push('/upload')
     }
+    const onPreview = (event: React.MouseEvent) => {
+        // ! THIS METHOD IS ONLY IN THE DEBUGGER !
+        // ! Tigger: Shift Key + Click !
+        // see https://mdn.io/shiftKey
+        if (!event.shiftKey) {
+            return
+        }
+        const link = `https://arweave.net/${state.landingTxID}`
+        open(state.key ? `${link}#${state.key}` : link)
+    }
     return (
         <Grid container className={classes.container}>
             <Grid item>
-                <img src="https://via.placeholder.com/96x120" />
+                <img src="https://via.placeholder.com/96x120" onClick={onPreview} />
             </Grid>
             <Grid item>
                 <FileName name={state.name} />

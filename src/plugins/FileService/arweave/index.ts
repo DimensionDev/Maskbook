@@ -62,7 +62,6 @@ export async function uploadLandingPage(metadata: LandingPageMetadata) {
         name: metadata.name,
         size: metadata.size,
         link: `https://arweave.net/${metadata.txId}`,
-        mime: isEmpty(metadata.type) ? 'application/octet-stream' : metadata.type,
         signed: await makeFileKeySigned(metadata.key),
         createdAt: new Date().toISOString(),
     })

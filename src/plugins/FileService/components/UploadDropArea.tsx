@@ -57,6 +57,7 @@ const useStyles = makeStyles({
         fontSize: 30,
         color: '#2CA4EF',
         userSelect: 'none',
+        zIndex: 1,
     },
     uploader: {
         position: 'absolute',
