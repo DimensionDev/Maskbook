@@ -48,7 +48,7 @@ const isSameDimension = (dimension: Dimension, otherDimension: Dimension) =>
     dimension.width === otherDimension.width && dimension.height === otherDimension.height
 
 const getMaskBuf = memoizePromise(
-    (type: Mask) => downloadUrl(getUrl(`/image-payload/mask-${type}.png`)).then((x) => x.arrayBuffer()),
+    async (type: Mask) => (await downloadUrl(getUrl(`/image-payload/mask-${type}.png`))).arrayBuffer(),
     undefined,
 )
 

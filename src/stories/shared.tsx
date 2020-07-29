@@ -30,6 +30,7 @@ storiesOf('Shared Components', module)
                         component={radios('component', { canvas: 'canvas', img: 'img' }, 'canvas')}
                         loading={boolean('loading', false)}
                         src={src}
+                        ref={console.log}
                     />
                 </div>
             </Paper>

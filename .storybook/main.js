@@ -10,7 +10,6 @@ module.exports = {
         '@storybook/addon-viewport/register',
     ],
     webpackFinal: async (/** @type {import('webpack').Configuration} */ config) => {
-        config.output
         config.module.rules.push({
             test: /\.(ts|tsx)$/,
             use: [

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, forwardRef, useImperativeHandle } from 'react'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { Skeleton, SkeletonProps } from '@material-ui/lab'
@@ -36,16 +36,27 @@ export interface ImageProps {
     className?: string
     style?: React.CSSProperties
 }
+
+type ForwardingRef = {
+    img?: HTMLImageElement | null
+    canvas?: HTMLCanvasElement | null
+}
+
 // TODO support concurrent mode
 /**
  * This React Component is used to render images in the content script to bypass the CSP restriction.
  */
-export function Image(props: ImageProps) {
+export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props, outgoingRef) {
     const { src, loading: propsLoading, canvasProps, imgProps, style, className, SkeletonProps } = props
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas#Maximum_canvas_size
     const [height, width] = [Math.min(32767, props.height), Math.min(32767, props.width)]
     const [origin, component] = resolveMode(props)
-    const ref = useRef<HTMLCanvasElement>(null)
+    const canvasRef = useRef<HTMLCanvasElement>(null)
+    const imgRef = useRef<HTMLImageElement>(null)
+    useImperativeHandle(outgoingRef, () => ({ canvas: canvasRef.current, img: imgRef.current }), [
+        canvasRef.current,
+        imgRef.current,
+    ])
 
     // TODO: handle image loading error
     const { loading, error, value } = useAsync(
@@ -61,17 +72,18 @@ export function Image(props: ImageProps) {
     if (error) console.error(error)
 
     useEffect(() => {
-        if (!ref.current) return
+        const e = canvasRef.current
+        if (!e) return
+        if (!(e instanceof HTMLCanvasElement)) return
         if (propsLoading || loading) return
         if (component !== 'canvas') return
-        // TODO: identity discontinuity
         const source = src instanceof Blob ? src : value!
         if (!source) return
         toImage(source).then((data) => {
-            const ctx = ref.current!.getContext('2d')!
+            const ctx = e.getContext('2d')!
             ctx.drawImage(data, 0, 0, width * window.devicePixelRatio, height * window.devicePixelRatio)
         })
-    }, [ref.current, propsLoading, loading, value, component, width, height, src])
+    }, [canvasRef.current, propsLoading, loading, value, component, width, height, src])
 
     if (propsLoading || loading) {
         return (
@@ -86,11 +98,21 @@ export function Image(props: ImageProps) {
         )
     }
     if (component === 'img' && typeof src === 'string') {
-        return <img src={src} width={width} height={height} className={className} style={style} {...imgProps} />
+        return (
+            <img
+                src={src}
+                width={width}
+                height={height}
+                className={className}
+                style={style}
+                ref={imgRef}
+                {...imgProps}
+            />
+        )
     }
     return (
         <canvas
-            ref={ref}
+            ref={canvasRef}
             width={width * window.devicePixelRatio}
             height={height * window.devicePixelRatio}
             style={{ width, height, ...style }}
@@ -98,7 +120,7 @@ export function Image(props: ImageProps) {
             {...canvasProps}
         />
     )
-}
+})
 function resolveMode(
     props: ImageProps,
 ): [Exclude<NonNullable<ImageProps['origin']>, 'auto'>, NonNullable<ImageProps['component']>] {
@@ -129,7 +151,10 @@ async function toImage(arr: ImageBitmapSource): Promise<CanvasImageSource> {
                 resolve(this)
                 URL.revokeObjectURL(img.src)
             })
-            img.addEventListener('error', reject)
+            img.addEventListener('error', (e) => {
+                reject(e)
+                URL.revokeObjectURL(img.src)
+            })
             // TODO: this might be blocked by CSP
             img.src = URL.createObjectURL(arr)
         })
