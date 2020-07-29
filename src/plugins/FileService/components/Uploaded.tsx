@@ -57,7 +57,7 @@ export const Uploaded: React.FC = () => {
     }
     const onPreview = (event: React.MouseEvent) => {
         // ! THIS METHOD IS ONLY IN THE DEBUGGER !
-        // ! Tigger: Shift Key + Click !
+        // ! Trigger: [Shift Key] + [Click] !
         // see https://mdn.io/shiftKey
         if (!event.shiftKey) {
             return
