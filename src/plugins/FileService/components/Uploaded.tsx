@@ -53,7 +53,7 @@ export const Uploaded: React.FC = () => {
     }, [onInsert, state])
     const onBack = () => {
         onInsert(null)
-        history.goBack()
+        history.push('/upload')
     }
     return (
         <Grid container className={classes.container}>
