@@ -4,7 +4,7 @@ import type Transaction from 'arweave/web/lib/transaction'
 import { landing } from '../constants'
 import { sign } from './remote-signing'
 import token from './token.json'
-import { isNil } from 'lodash-es'
+import { isNil, isEmpty } from 'lodash-es'
 
 const stage: Record<Transaction['id'], Transaction> = {}
 
@@ -62,7 +62,7 @@ export async function uploadLandingPage(metadata: LandingPageMetadata) {
         name: metadata.name,
         size: metadata.size,
         link: `https://arweave.net/${metadata.txId}`,
-        mime: metadata.type,
+        mime: isEmpty(metadata.type) ? 'application/octet-stream' : metadata.type,
         signed: await makeFileKeySigned(metadata.key),
         createdAt: new Date().toISOString(),
     })
