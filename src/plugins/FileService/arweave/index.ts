@@ -34,7 +34,7 @@ export async function makeAttachment(options: AttachmentOptions) {
     const encoded = await Attachment.encode(passphrase, {
         block: options.block,
         metadata: null,
-        mime: options.type,
+        mime: isEmpty(options.type) ? 'application/octet-stream' : options.type,
     })
     const transaction = await makePayload(encoded, options.type)
     stage[transaction.id] = transaction
