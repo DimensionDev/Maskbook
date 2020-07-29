@@ -3,11 +3,11 @@
 ## Feature Set
 
 - [x] Insert File via Upload
-- [ ] Insert File via Recent Files
+- [x] Insert File via Recent Files
 - [ ] \[TODO\] Insert File via File History
 - [ ] \[TODO\] File History (Show More)
 - [x] Built Preview (Stage 1)
-- [ ] Built Preview (Stage 2)
+- [ ] \[TODO\] Built Preview (Stage 2)
 
 ## Remote signing
 
