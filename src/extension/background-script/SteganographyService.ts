@@ -47,7 +47,10 @@ const defaultOptions = {
 const isSameDimension = (dimension: Dimension, otherDimension: Dimension) =>
     dimension.width === otherDimension.width && dimension.height === otherDimension.height
 
-const getMaskBuf = memoizePromise((type: Mask) => downloadUrl(getUrl(`/image-payload/mask-${type}.png`)), undefined)
+const getMaskBuf = memoizePromise(
+    (type: Mask) => downloadUrl(getUrl(`/image-payload/mask-${type}.png`)).then((x) => x.arrayBuffer()),
+    undefined,
+)
 
 type EncodeImageOptions = {
     template?: Template
@@ -84,7 +87,7 @@ export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImag
 }
 
 export async function decodeImageUrl(url: string, options: DecodeImageOptions) {
-    return decodeImage(await downloadUrl(url), options)
+    return decodeImage(await (await downloadUrl(url)).arrayBuffer(), options)
 }
 
 export function downloadImage({ buffer }: Uint8Array) {

@@ -3,10 +3,38 @@ import { storiesOf } from '@storybook/react'
 import { ChooseIdentity } from '../components/shared/ChooseIdentity'
 import { SettingsUI, SettingsUIEnum } from '../components/shared-settings/useSettingsUI'
 import { ValueRef } from '@holoflows/kit/es'
-import { List, Paper } from '@material-ui/core'
+import { List, Paper, Typography } from '@material-ui/core'
 import { useValueRef } from '../utils/hooks/useValueRef'
+import { Image } from '../components/shared/Image'
+import { number, radios, boolean, text } from '@storybook/addon-knobs'
+
+let blob: Blob = undefined!
+const data = fetch('https://maskbook.com/img/maskbook--logotype-black.png')
+    .then((x) => x.blob())
+    .then((x) => (blob = x))
 
 storiesOf('Shared Components', module)
+    .add('Image', () => {
+        const url = 'https://maskbook.com/img/maskbook--logotype-white.png'
+        const _ = text('src', 'img')
+        const src = _ === 'img' ? url : _ === 'blob' ? blob : _
+        return (
+            <Paper>
+                <Typography>You can use "img" as src to refer to {url}</Typography>
+                <Typography>You can use "blob" as src to refer to a blob</Typography>
+                <div style={{ border: '1px solid red', display: 'inline-block' }}>
+                    <Image
+                        width={number('width', 400)}
+                        height={number('height', 200)}
+                        origin={radios('origin', { current: 'current', extension: 'extension', auto: 'auto' }, 'auto')}
+                        component={radios('component', { canvas: 'canvas', img: 'img' }, 'canvas')}
+                        loading={boolean('loading', false)}
+                        src={src}
+                    />
+                </div>
+            </Paper>
+        )
+    })
     .add('ChooseIdentity', () => {
         return <ChooseIdentity />
     })

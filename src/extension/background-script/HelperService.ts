@@ -23,7 +23,7 @@ export const resolveTCOLink = memoizePromise(
 )
 
 export function fetch(url: string) {
-    return globalThis.fetch(url).then((x) => x.arrayBuffer())
+    return globalThis.fetch(url).then((x) => x.blob())
 }
 
 export function saveAsFile(file: ArrayBuffer, mineType: string, suggestingFileName: string) {
