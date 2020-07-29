@@ -60,3 +60,12 @@ declare module 'eth-contract-metadata' {
     }
     export default metadata
 }
+
+declare module 'react-middle-ellipsis' {
+    import React from 'react'
+    interface ComponentProps {
+        children?: React.ReactNode
+    }
+    const component: (props: ComponentProps) => JSX.Element
+    export default component
+}
