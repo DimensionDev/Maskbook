@@ -7,8 +7,8 @@ import getCurrentNetworkUI from '../../../social-network/utils/getCurrentNetwork
 import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../../settings/settings'
 import { exclusiveTasks } from '../../content-script/tasks'
 import stringify from 'json-stable-stringify'
-import { useModal } from '../Dialogs/Base'
-import { DashboardPersonaUnlinkConfirmDialog } from '../Dialogs/Persona'
+import { useModal } from '../DashboardDialogs/Base'
+import { DashboardPersonaUnlinkConfirmDialog } from '../DashboardDialogs/Persona'
 import { sleep } from '../../../utils/utils'
 
 interface ProfileBoxProps {

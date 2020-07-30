@@ -27,9 +27,9 @@ import WifiIcon from '@material-ui/icons/Wifi'
 import DashboardRouterContainer from './Container'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
-import { useModal } from '../Dialogs/Base'
+import { useModal } from '../DashboardDialogs/Base'
 import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
-import { DashboardBackupDialog, DashboardRestoreDialog } from '../Dialogs/Backup'
+import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
