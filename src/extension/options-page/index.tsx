@@ -175,7 +175,7 @@ function DashboardUI() {
     )
 }
 
-export default function Dashboard() {
+export function Dashboard() {
     const preferDarkScheme = useMediaQuery('(prefers-color-scheme: dark)')
     const appearance = useValueRef(appearanceSettings)
     return (
