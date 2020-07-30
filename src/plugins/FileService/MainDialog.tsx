@@ -1,5 +1,6 @@
 import { DialogContent, DialogProps, DialogTitle, Grid, IconButton, makeStyles, Typography } from '@material-ui/core'
 import { isNil } from 'lodash-es'
+import { useSnackbar } from 'notistack'
 import React from 'react'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
@@ -40,6 +41,8 @@ const useStyles = makeStyles({
 
 const MainDialog: React.FC<Props> = (props) => {
     const classes = useStylesExtends(useStyles(), props)
+    const snackbar = useSnackbar()
+    const [uploading, onUploading] = React.useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = React.useState<FileInfo | null>(null)
     const onInsert = () => {
         if (isNil(selectedFileInfo)) {
@@ -55,6 +58,13 @@ const MainDialog: React.FC<Props> = (props) => {
         typedMessageMetadata.value = next
         props.onConfirm(selectedFileInfo)
     }
+    const onDecline = () => {
+        if (!uploading) {
+            props.onDecline()
+            return
+        }
+        snackbar.enqueueSnackbar('Uploading, not supported close the window')
+    }
     return (
         <ShadowRootDialog
             className={classes.dialog}
@@ -68,13 +78,13 @@ const MainDialog: React.FC<Props> = (props) => {
             BackdropProps={{ className: classes.backdrop }}
             {...props.DialogProps}>
             <DialogTitle className={classes.header}>
-                <IconButton classes={{ root: classes.close }} onClick={props.onDecline}>
+                <IconButton classes={{ root: classes.close }} onClick={onDecline}>
                     <DialogDismissIconUI />
                 </IconButton>
                 <Typography className={classes.title} display="inline" variant="inherit" children={displayName} />
             </DialogTitle>
             <DialogContent className={classes.content}>
-                <Exchange onInsert={setSelectedFileInfo}>
+                <Exchange onUploading={onUploading} onInsert={setSelectedFileInfo}>
                     <Entry />
                     <Grid container justify="center">
                         <InsertButton onClick={onInsert} disabled={isNil(selectedFileInfo)} />

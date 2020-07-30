@@ -4,6 +4,7 @@ import { useHistory, useLocation } from 'react-router'
 import { useAsync, useBeforeUnload } from 'react-use'
 import Services, { ServicesWithProgress } from '../../../extension/service'
 import { pluginId } from '../constants'
+import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
 import { FileName } from './FileName'
 import { ProgressBar } from './ProgressBar'
@@ -40,13 +41,18 @@ interface RouteState {
 }
 
 export const Uploading: React.FC = () => {
+    const classes = useStyles()
     const history = useHistory()
+    const { onUploading } = useExchange()
     const [startedAt] = React.useState(Date.now())
     const [preparing, setPreparing] = React.useState(true)
     const [sendSize, setSendSize] = React.useState(0)
-    const classes = useStyles()
     const { state } = useLocation<RouteState>()
     useBeforeUnload(true, 'uploading')
+    React.useEffect(() => {
+        onUploading(true)
+        return () => onUploading(false)
+    }, [onUploading])
     useAsync(async () => {
         const payloadTxID = await Services.Plugin.invokePlugin(pluginId, 'makeAttachment', {
             key: state.key,
