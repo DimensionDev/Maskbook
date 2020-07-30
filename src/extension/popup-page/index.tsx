@@ -1,6 +1,6 @@
 import '../../social-network-provider/popup-page/index'
 import '../../setup.ui'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { ThemeProvider, makeStyles, Theme } from '@material-ui/core/styles'
 import { Button, useMediaQuery, Paper, Divider, Typography } from '@material-ui/core'
@@ -99,13 +99,16 @@ function Popup() {
 function PopupWithProvider() {
     const preferDarkScheme = useMediaQuery('(prefers-color-scheme: dark)')
     const appearance = useValueRef(appearanceSettings)
+    const theme = useMemo(
+        () => ({
+            ...((preferDarkScheme && appearance === Appearance.default) || appearance === Appearance.dark
+                ? MaskbookDarkTheme
+                : MaskbookLightTheme),
+        }),
+        [preferDarkScheme, appearance],
+    )
     return (
-        <ThemeProvider
-            theme={
-                (preferDarkScheme && appearance === Appearance.default) || appearance === Appearance.dark
-                    ? MaskbookDarkTheme
-                    : MaskbookLightTheme
-            }>
+        <ThemeProvider theme={theme}>
             <I18nextProvider i18n={i18nNextInstance}>
                 <Popup />
             </I18nextProvider>
