@@ -62,6 +62,7 @@ const useWalletContentStyles = makeStyles((theme) =>
             flex: 1,
             overflow: 'auto',
             scrollbarWidth: 'none',
+            margin: theme.spacing(0, 3),
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
@@ -79,11 +80,6 @@ const walletTheme = (theme: Theme): Theme =>
             MuiIconButton: {
                 root: {
                     color: theme.palette.text,
-                },
-            },
-            MuiList: {
-                root: {
-                    margin: theme.spacing(0, 3),
                 },
             },
             MuiListItemIcon: {
