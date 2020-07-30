@@ -99,13 +99,12 @@ function Popup() {
 function PopupWithProvider() {
     const preferDarkScheme = useMediaQuery('(prefers-color-scheme: dark)')
     const appearance = useValueRef(appearanceSettings)
+    const theme =
+        (preferDarkScheme && appearance === Appearance.default) || appearance === Appearance.dark
+            ? MaskbookDarkTheme
+            : MaskbookLightTheme
     return (
-        <ThemeProvider
-            theme={
-                (preferDarkScheme && appearance === Appearance.default) || appearance === Appearance.dark
-                    ? MaskbookDarkTheme
-                    : MaskbookLightTheme
-            }>
+        <ThemeProvider theme={Object.create(theme)}>
             <I18nextProvider i18n={i18nNextInstance}>
                 <Popup />
             </I18nextProvider>
