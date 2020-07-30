@@ -65,7 +65,7 @@ const MainDialog: React.FC<Props> = (props) => {
             props.onDecline()
             return
         }
-        snackbar.enqueueSnackbar('Uploading, not supported close the window')
+        snackbar.enqueueSnackbar(t('plugin_file_service_uploading_on_cancal'))
     }
     return (
         <ShadowRootDialog

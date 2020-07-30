@@ -362,6 +362,7 @@
     "plugin_file_service_uploading_preparing": "",
     "plugin_file_service_uploading_in_minute_remaining": "",
     "plugin_file_service_uploading_remaining": "",
+    "plugin_file_service_uploading_on_cancal": "",
     "plugin_file_service_encrypt_it": "",
     "plugin_file_service_legal_text": "",
     "plugin_file_service_legal_terms_link": "https://legal.maskbook.com/arweave/file-service/plugin-terms.html",
@@ -374,5 +375,5 @@
     "plugin_file_service_drop_here": "",
     "plugin_file_service_error_101": "",
     "plugin_file_service_error_102": "",
-    "plugin_file_service_on_change_file": ""
+    "plugin_file_service_on_change_file": "a"
 }
