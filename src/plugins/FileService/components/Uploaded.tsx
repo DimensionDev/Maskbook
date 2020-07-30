@@ -1,6 +1,7 @@
-import { Grid, makeStyles, Typography, Button } from '@material-ui/core'
+import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
-import { useLocation, useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
 import { formatDateTime, formatFileSize } from '../utils'
@@ -44,6 +45,7 @@ const useStyles = makeStyles({
 })
 
 export const Uploaded: React.FC = () => {
+    const { t } = useI18N()
     const classes = useStyles()
     const history = useHistory()
     const { onInsert } = useExchange()
@@ -79,7 +81,7 @@ export const Uploaded: React.FC = () => {
                         <span>{formatDateTime(state.createdAt)}</span>
                     </p>
                     <Button className={classes.back} onClick={onBack}>
-                        Change File
+                        {t('plugin_file_service_on_change_file')}
                     </Button>
                 </Typography>
             </Grid>

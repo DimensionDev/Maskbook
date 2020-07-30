@@ -6,23 +6,12 @@ import React from 'react'
 import { useHistory } from 'react-router'
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeFileKey } from '../arweave'
-import { legalPolicy, legalTerms, MAX_FILE_SIZE, pluginId } from '../constants'
-import type { FileInfo } from '../types'
+import { MAX_FILE_SIZE, pluginId } from '../constants'
 import { toUint8Array } from '../utils'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
-
-const LEGAL_TERMS = (
-    <a target="_blank" href={legalTerms}>
-        terms
-    </a>
-)
-const LEGAL_POLICY = (
-    <a target="_blank" href={legalPolicy}>
-        privacy policy
-    </a>
-)
 
 const useStyles = makeStyles({
     container: {
@@ -61,6 +50,7 @@ const useStyles = makeStyles({
 })
 
 export const Upload: React.FC = () => {
+    const { t } = useI18N()
     const classes = useStyles()
     const history = useHistory()
     const snackbar = useSnackbar()
@@ -91,7 +81,7 @@ export const Upload: React.FC = () => {
         // TODO: open new tab
         // show a selectable list
         // not started any designed
-        snackbar.enqueueSnackbar('NOT SUPPORTED, Stage 2 feature')
+        snackbar.enqueueSnackbar(t('plugin_file_service_on_show_more'))
     }
     return (
         <section className={classes.container}>
@@ -103,10 +93,25 @@ export const Upload: React.FC = () => {
                 <FormControlLabel
                     control={<Checkbox checked={encrypted} onChange={(event, checked) => setEncrypted(checked)} />}
                     className={classes.encrypted}
-                    label="Make it encrypted"
+                    label={t('plugin_file_service_on_encrypt_it')}
                 />
                 <Typography className={classes.legalText}>
-                    By using this plugin, you agree to the {LEGAL_TERMS} and the {LEGAL_POLICY}.
+                    {t('plugin_file_service_legal_text', {
+                        terms: (
+                            <a
+                                target="_blank"
+                                href={t('plugin_file_service_legal_terms_link')}
+                                children={t('plugin_file_service_legal_terms_text')}
+                            />
+                        ),
+                        policy: (
+                            <a
+                                target="_blank"
+                                href={t('plugin_file_service_legal_policy_link')}
+                                children={t('plugin_file_service_legal_policy_text')}
+                            />
+                        ),
+                    })}
                 </Typography>
             </section>
         </section>

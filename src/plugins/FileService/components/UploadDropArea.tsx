@@ -5,6 +5,7 @@ import { useSnackbar } from 'notistack'
 import React from 'react'
 import { useDropArea } from 'react-use'
 import { formatFileSize } from '../utils'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles({
     label: {
@@ -74,6 +75,7 @@ interface Props {
 }
 
 export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
+    const { t } = useI18N()
     const classes = useStyles()
     const snackbar = useSnackbar()
     const [bond, { over }] = useDropArea({
@@ -89,6 +91,7 @@ export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
         onText: () => onError(101),
         onUri: () => onError(101),
     })
+    const MAX_FILE_SIZE = formatFileSize(maxFileSize)
     const onInput = (event: React.FormEvent<HTMLInputElement>) => {
         const file = event.currentTarget.files?.item(0)
         if (isNil(file)) {
@@ -101,8 +104,8 @@ export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
     }
     const onError = (code: number) => {
         const messages: Record<number, string> = {
-            101: 'The input is not a single file.',
-            102: `The file is too large; limit is ${formatFileSize(maxFileSize)}.`,
+            101: t('plugin_file_service_error_101'),
+            102: t('plugin_file_service_error_102', { limit: MAX_FILE_SIZE }),
         }
         if (code in messages) {
             snackbar.enqueueSnackbar(`Error ${code}: ${messages[code]}`, { variant: 'error' })
@@ -111,11 +114,11 @@ export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
     return (
         <Typography component="label" {...bond} className={classNames(classes.label, { [classes.over]: over })}>
             <input type="file" onInput={onInput} hidden />
-            <section className={classes.indicator}>Drop To Upload</section>
+            <section className={classes.indicator}>{t('plugin_file_service_drop_indicator')}</section>
             <img className={classes.uploader} src="https://via.placeholder.com/64x64" />
-            <b className={classes.here}>Drop a file here to upload</b>
-            <p className={classes.hint}>Size limit: {formatFileSize(maxFileSize)}.</p>
-            <p className={classes.hint}>The file will be uploaded immediately and cannot be cancelled.</p>
+            <b className={classes.here}>{t('plugin_file_service_drop_here')}</b>
+            <p className={classes.hint}>{t('plugin_file_service_drop_hint_1', { limit: MAX_FILE_SIZE })}</p>
+            <p className={classes.hint}>{t('plugin_file_service_drop_hint_1')}</p>
         </Typography>
     )
 }

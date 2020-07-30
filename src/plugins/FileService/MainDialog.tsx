@@ -5,10 +5,11 @@ import React from 'react'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
 import { getActivatedUI } from '../../social-network/ui'
+import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { Entry } from './components'
 import { InsertButton } from './components/InsertButton'
-import { displayName, META_KEY_1 } from './constants'
+import { META_KEY_1 } from './constants'
 import { Exchange } from './hooks/Exchange'
 import type { FileInfo } from './types'
 
@@ -40,6 +41,7 @@ const useStyles = makeStyles({
 })
 
 const MainDialog: React.FC<Props> = (props) => {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const snackbar = useSnackbar()
     const [uploading, onUploading] = React.useState(false)
@@ -81,7 +83,12 @@ const MainDialog: React.FC<Props> = (props) => {
                 <IconButton classes={{ root: classes.close }} onClick={onDecline}>
                     <DialogDismissIconUI />
                 </IconButton>
-                <Typography className={classes.title} display="inline" variant="inherit" children={displayName} />
+                <Typography
+                    className={classes.title}
+                    display="inline"
+                    variant="inherit"
+                    children={t('plugin_file_service_display_name')}
+                />
             </DialogTitle>
             <DialogContent className={classes.content}>
                 <Exchange onUploading={onUploading} onInsert={setSelectedFileInfo}>

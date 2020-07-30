@@ -2,6 +2,7 @@ import { Button, List, ListItem, ListItemText, makeStyles, Typography } from '@m
 import { map } from 'lodash-es'
 import React from 'react'
 import { useHistory } from 'react-router'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import type { FileInfo } from '../types'
 import { formatDateTime } from '../utils'
 
@@ -65,6 +66,7 @@ interface Props {
 }
 
 export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
+    const { t } = useI18N()
     const history = useHistory()
     const classes = useStyles()
     const itemClasses = useItemStyles()

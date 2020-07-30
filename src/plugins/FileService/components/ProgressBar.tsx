@@ -1,6 +1,7 @@
-import React from 'react'
-import { formatFileSize } from '../utils'
 import { makeStyles, Typography } from '@material-ui/core'
+import React from 'react'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { formatFileSize } from '../utils'
 
 const useStyles = makeStyles({
     container: {
@@ -61,19 +62,20 @@ interface Props {
 }
 
 export const ProgressBar: React.FC<Props> = (props) => {
+    const { t } = useI18N()
     const classes = useStyles()
     const { startedAt, fileSize, sendSize } = props
     const width = (sendSize / fileSize) * 100
     const elapsed = (Date.now() - startedAt) / 1000
     const remaining = (fileSize - sendSize) / (elapsed ? sendSize / elapsed : 0)
-    let completion = 'Preparing'
+    let completion = t('plugin_file_service_uploading_preparing')
     if (!props.preparing) {
         completion = `${formatFileSize(sendSize)} of ${formatFileSize(fileSize)}`
     }
     return (
         <section className={classes.progress}>
             <Typography className={classes.meta}>
-                <span>{formatDuration(remaining)}</span>
+                <Duration value={remaining} />
                 <span>{completion}</span>
             </Typography>
             <p className={classes.bar}>
@@ -83,11 +85,18 @@ export const ProgressBar: React.FC<Props> = (props) => {
     )
 }
 
-const formatDuration = (value: number) => {
-    if (!Number.isFinite(value)) {
-        return 'Estimating time...'
-    } else if (value < 60) {
-        return `${value.toFixed(0)}s remaining`
+const Duration: React.FC<{ value: number }> = ({ value }) => {
+    const { t } = useI18N()
+    const render = () => {
+        if (!Number.isFinite(value)) {
+            return t('plugin_file_service_uploading_estimating_time')
+        } else if (value < 60) {
+            return t('plugin_file_service_uploading_in_minute_remaining', { seconds: value.toFixed(0) })
+        }
+        return t('plugin_file_service_uploading_remaining', {
+            minutes: Math.trunc(value / 60),
+            seconds: (value % 60).toFixed(0),
+        })
     }
-    return `${Math.trunc(value / 60)}m ${(value % 60).toFixed(0)}s remaining`
+    return <span>{render()}</span>
 }
