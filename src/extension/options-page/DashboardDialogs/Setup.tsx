@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles, createStyles, Typography } from '@material-ui/core'
-import { DashboardDialogCore, WrappedDialogProps } from '../Dialogs/Base'
+import { DashboardDialogCore, WrappedDialogProps } from './Base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { sleep } from '../../../utils/utils'
 import { QRCodeVideoScanner } from '../DashboardComponents/QRCodeVideoScanner'
