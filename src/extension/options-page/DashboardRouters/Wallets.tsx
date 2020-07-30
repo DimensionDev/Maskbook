@@ -268,7 +268,6 @@ const useStyles = makeStyles((theme) =>
             flex: '1 1 auto',
             display: 'flex',
             flexDirection: 'column',
-            [theme.breakpoints.down('xs')]: {},
         },
         wrapper: {
             display: 'flex',
