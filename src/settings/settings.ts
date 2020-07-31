@@ -47,7 +47,7 @@ export const appearanceSettings = createGlobalSettings<Appearance>('apperance', 
 
 export const currentEthereumNetworkSettings = createGlobalSettings<EthereumNetwork>(
     'eth network',
-    webpackEnv.genericTarget === 'browser' ? EthereumNetwork.Mainnet : EthereumNetwork.Rinkeby,
+    EthereumNetwork.Mainnet,
     {
         primary: () => i18n.t('settings_choose_eth_network'),
         secondary: () =>
