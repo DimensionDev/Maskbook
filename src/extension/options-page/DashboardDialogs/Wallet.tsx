@@ -225,6 +225,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                             <FormControlLabel
                                 control={
                                     <Checkbox
+                                        color="primary"
                                         checked={confirmed}
                                         onChange={() => setConfirmed((confirmed) => !confirmed)}
                                     />
