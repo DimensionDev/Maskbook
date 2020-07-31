@@ -24,6 +24,10 @@
 - <https://github.com/DimensionDev/Maskbook-Talks/issues/36>
 - <https://confluence.dimension.chat/x/3IEf>
 
+## Pull requests
+
+- <https://github.com/DimensionDev/Maskbook/pull/1331>
+
 ## UI Design
 
 - <https://www.figma.com/file/jcrvENZmip6PUR66Jz6ENb/Plugin-File-Service>
