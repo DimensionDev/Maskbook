@@ -44,7 +44,6 @@ if (GetContext() === 'background') {
         })
     browser.webNavigation.onCommitted.addListener(async (arg) => {
         if (arg.url === 'about:blank') return
-        await contentScriptReady
         /**
          * For WKWebview, there is a special way to do it in the manifest.json
          *
@@ -58,6 +57,13 @@ if (GetContext() === 'background') {
                     code: process.env.NODE_ENV === 'development' ? await getInjectedScript() : await injectedScript,
                 })
                 .catch(IgnoreError(arg))
+        // In Firefox
+        browser.tabs.executeScript(arg.tabId, {
+            runAt: 'document_start',
+            frameId: arg.frameId,
+            file: 'js/injected-script.js',
+        })
+        await contentScriptReady
         for (const script of contentScripts) {
             const option: browser.extensionTypes.InjectDetails = {
                 runAt: 'document_idle',
@@ -67,7 +73,7 @@ if (GetContext() === 'background') {
             try {
                 await browser.tabs.executeScript(arg.tabId, option)
             } catch (e) {
-                IgnoreError(e)
+                IgnoreError(option)(e)
             }
         }
     })
