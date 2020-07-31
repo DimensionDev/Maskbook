@@ -221,7 +221,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                         startIcon={<HistoryIcon />}
                         variant="text"
                         color="primary">
-                        {t('history')}
+                        {t('activity')}
                     </Button>
                 </div>
             ) : null}

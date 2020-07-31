@@ -16905,6 +16905,11 @@ react-lifecycles-compat@^3.0.2, react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-middle-ellipsis@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-middle-ellipsis/-/react-middle-ellipsis-1.1.0.tgz#c8fb226c5621e8f0852494be05a5d1574ae37b19"
+  integrity sha512-jEkF6l6l12/V70bYqCCEdHRDFHVG8kdR46tcE5HBssgPDaoLm7XC9hkrL1cW4eL4wi2/0g19PMORge38ReXp9A==
+
 react-pdf@^4.0.5:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/react-pdf/-/react-pdf-4.1.0.tgz#fcb874f28050fe9593c4e04652c7bff94bb1acf9"
