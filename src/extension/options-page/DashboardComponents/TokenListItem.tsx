@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             alignItems: 'center',
         },
+        more: {
+            color: theme.palette.text.primary,
+        },
     }),
 )
 
@@ -86,7 +89,10 @@ export function TokenListItem(props: TokenListItemProps) {
             />
             <ListItemSecondaryAction className={classes.amount}>
                 {token.address !== ETH_ADDRESS ? (
-                    <IconButton size="small" onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
+                    <IconButton
+                        className={classes.more}
+                        size="small"
+                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
                         <MoreHorizIcon />
                     </IconButton>
                 ) : null}

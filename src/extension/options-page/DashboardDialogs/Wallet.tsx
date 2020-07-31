@@ -225,6 +225,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                             <FormControlLabel
                                 control={
                                     <Checkbox
+                                        color="primary"
                                         checked={confirmed}
                                         onChange={() => setConfirmed((confirmed) => !confirmed)}
                                     />
@@ -669,7 +670,7 @@ export function DashboardWalletHistoryDialog(
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: t('history_inbound'),
+                label: t('activity_inbound'),
                 children: (
                     <List className={classes.list} disablePadding>
                         {inboundRecords.map(RedPacketRecord)}
@@ -678,7 +679,7 @@ export function DashboardWalletHistoryDialog(
                 p: 0,
             },
             {
-                label: t('history_outbound'),
+                label: t('activity_outbound'),
                 children: (
                     <List className={classes.list} disablePadding>
                         {outboundRecords.map(RedPacketRecord)}
@@ -697,7 +698,7 @@ export function DashboardWalletHistoryDialog(
             <DashboardDialogWrapper
                 icon={<ClockIcon />}
                 iconColor="#FB5858"
-                primary={t('history')}
+                primary={t('activity')}
                 content={<AbstractTab {...tabProps}></AbstractTab>}
             />
         </DashboardDialogCore>

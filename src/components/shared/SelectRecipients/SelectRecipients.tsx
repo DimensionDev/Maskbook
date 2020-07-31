@@ -62,11 +62,8 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
                     checked={selectedGroups.some((x) => x.identifier.equals(item.identifier))}
                     disabled={props.disabled}
                     onChange={(_, checked) => {
-                        if (checked) {
-                            onSetSelected([...selected, item])
-                        } else {
-                            onSetSelected(difference(selected, [item]))
-                        }
+                        if (checked) onSetSelected([...selected, item])
+                        else onSetSelected(difference(selected, [item]))
                     }}
                     {...props.GroupInChipProps}
                 />

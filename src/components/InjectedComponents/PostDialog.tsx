@@ -20,7 +20,7 @@ import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
-import { useFriendsList, useGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
+import { useFriendsList, useCurrentGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { currentImagePayloadStatus } from '../../settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
@@ -298,7 +298,7 @@ export function PostDialog(props: PostDialogProps) {
     //#endregion
     //#region Share target
     const people = useFriendsList()
-    const groups = useGroupsList()
+    const groups = useCurrentGroupsList()
     const availableShareTarget = or(
         props.availableShareTarget,
         useMemo(() => [...groups, ...people], [people, groups]),
