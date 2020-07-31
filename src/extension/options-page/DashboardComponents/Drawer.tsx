@@ -1,19 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import classNames from 'classnames'
-import {
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    Typography,
-    Box,
-    Fade,
-    Divider,
-    useMediaQuery,
-} from '@material-ui/core'
+import { List, ListItem, ListItemIcon, ListItemText, Typography, Box, Divider, useMediaQuery } from '@material-ui/core'
 import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Link, useRouteMatch } from 'react-router-dom'
-import { useInterval } from 'react-use'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
 import { useModal } from '../DashboardDialogs/Base'
@@ -21,26 +10,7 @@ import { DashboardFeedbackDialog } from '../DashboardDialogs/Feedback'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { cloneDeep, merge } from 'lodash-es'
 import Logo from './MaskbookLogo'
-
-interface CarouselProps {
-    items: React.ReactElement[]
-    delay?: number
-}
-
-function Carousel({ items, delay = 1e4 }: CarouselProps) {
-    const [current, setCurrent] = useState(0)
-
-    useInterval(() => setCurrent((c) => c + 1), delay)
-    return (
-        <>
-            {items.map((item, i) => (
-                <Fade in={current % items.length === i} key={i}>
-                    {item}
-                </Fade>
-            ))}
-        </>
-    )
-}
+import { Carousel } from './Carousel'
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -246,7 +216,8 @@ export default function Drawer(props: DrawerProps) {
                             <Typography className={classes.slogan}>
                                 Neutralize the surveillance from tech giants.
                             </Typography>,
-                        ]}></Carousel>
+                        ]}
+                    />
                 ) : null}
             </nav>
         </ThemeProvider>

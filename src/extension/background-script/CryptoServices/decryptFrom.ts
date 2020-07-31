@@ -327,7 +327,7 @@ async function* decryptFromImageUrlWithProgress_raw(
         pass: author.toText(),
     })
     if (post.indexOf('🎼') !== 0 && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
-        return makeError(i18n.t('service_decode_image_payload_failed'), false)
+        return makeError(i18n.t('service_decode_image_payload_failed'), true)
     return yield* decryptFromText(post, author, whoAmI, publicShared)
 }
 
