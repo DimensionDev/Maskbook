@@ -6,7 +6,9 @@ import './_background_loader.1'
 import './_background_loader.2'
 import './extension/service'
 import './provider.worker'
-import './network/matrix/instance'
+if (process.env.NODE_ENV === 'development') {
+    require('./network/matrix/instance')
+}
 
 import * as PersonaDB from './database/Persona/Persona.db'
 import * as PersonaDBHelper from './database/Persona/helpers'
