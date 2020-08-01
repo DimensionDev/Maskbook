@@ -112,7 +112,7 @@
     "wallet.ts": "^0.2.8",
     "web-ext-types": "^3.1.0",
     "web3": "^1.2.9",
-    "web3-core": "^1.2.9",
+    "web3-core": "^1.2.11",
     "webcrypto-liner": "1.2.3",
     "webextension-polyfill": "^0.6.0"
   },
