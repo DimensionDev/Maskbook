@@ -20089,10 +20089,10 @@ ts-pnp@^1.1.2:
   resolved "https://registry.yarnpkg.com/ts-pnp/-/ts-pnp-1.1.5.tgz#840e0739c89fce5f3abd9037bb091dbff16d9dec"
   integrity sha512-ti7OGMOUOzo66wLF3liskw6YQIaSsBgc4GOAlWRnIEj8htCxJUxskanMUoJOD6MDCRAXo36goXJZch+nOS0VMA==
 
-ts-results@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/ts-results/-/ts-results-2.0.1.tgz#94a5969207b16a8bbfd343780f184a69ee1ed5cf"
-  integrity sha512-NpmjHTbTdOpPHx5gM5tGnmrGNeOUhR/OcRwSC0Nh7kwVRS5wWufOIBGByZnpCg8fEhCRyl7c7rqKVmB/QMSr6Q==
+ts-results@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/ts-results/-/ts-results-3.0.0.tgz#f28fc4c6ac0e94fc3af4ea08be42617e169a7ff5"
+  integrity sha512-Txxbn48H4cOMC0v38FMwRJD/uVs/1AoWvfVj0Lqngv6YGvmOibANoLOoa+1mP5G4InGxSvbfZyZyxS9DIWfU3g==
 
 tsconfig-paths@^3.9.0:
   version "3.9.0"
