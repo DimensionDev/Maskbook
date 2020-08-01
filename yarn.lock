@@ -1885,10 +1885,10 @@
     systemjs "^6.3.2"
     web-ext-types "^3.2.1"
 
-"@dimensiondev/webpack-web-ext-plugin@^0.0.3-11":
-  version "0.0.3-11"
-  resolved "https://npm.dimension.im/download/@dimensiondev/webpack-web-ext-plugin/0.0.3-11/c44abbbb4694ce7a6fd0d454e5cc323a011f408722fc1320ef9ec7a5ae3139b8#44b38936f091792ec1678249596e8dbe0134c3dc"
-  integrity sha512-lr9OYmbWLsJNfQF2fBANWFLmrCsFNCMYKIOMk4Vt7qO5w9/XDCP4CHUVpEmYNrKnSeI2pYKf5/kBSEM1s5zwaA==
+"@dimensiondev/webpack-web-ext-plugin@^0.0.3-20200731084410-7de6117":
+  version "0.0.3-20200731084410-7de6117"
+  resolved "https://npm.dimension.im/download/@dimensiondev/webpack-web-ext-plugin/0.0.3-20200731084410-7de6117/1c7faba520214638875b36252b0fa2a85b86171d313554c2ea05cc470943a7c6#842c75317bc05908a3d1d65dc8a54c4c730f29d1"
+  integrity sha512-1iqyS6kBJnKC+A3nHLmh+iHYS7zIAUw93EzaGZLJ2auKpCr7Yko/Usp0CeLJgkjk6o/FR5DJ9W6B8dELn+XCvg==
   dependencies:
     inquirer "^7.0.0"
 
