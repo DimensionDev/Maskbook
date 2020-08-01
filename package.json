@@ -185,7 +185,7 @@
     "type-coverage": "^2.8.3",
     "typechain": "^2.0.0",
     "typechain-target-web3-v1": "^1.0.4",
-    "typescript": "^3.9.6",
+    "typescript": "^3.9.7",
     "web-ext": "^4.3.0",
     "webpack": "^4.43.0",
     "webpack-bundle-analyzer": "^3.8.0",
