@@ -27,6 +27,7 @@
     "start:gecko": "webpack-dev-server --firefox-gecko --mode development",
     "start:ios": "webpack-dev-server --wk-webview --mode development",
     "storybook": "start-storybook -p 9009 -s public --quiet",
+    "profile:build": "yarn build --profile",
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js"
@@ -186,6 +187,7 @@
     "typescript": "^3.9.6",
     "web-ext": "^4.3.0",
     "webpack": "^4.43.0",
+    "webpack-bundle-analyzer": "^3.8.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
     "webpack-extension-manifest-plugin": "^0.5.0",

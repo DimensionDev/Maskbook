@@ -5,6 +5,7 @@ const fs = require('fs')
 const WebpackNotifierPlugin = require('webpack-notifier')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const git = require('@nice-labs/git-rev').default
 const Terser = require('terser-webpack-plugin')
 
@@ -349,6 +350,9 @@ module.exports = (argvEnv, argv) => {
     if (env !== 'development') {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
         config.plugins.push(new SSRPlugin('index.html', src('./src/extension/options-page/index.tsx')))
+    }
+    if (argv.profile) {
+        config.plugins.push(new BundleAnalyzerPlugin())
     }
     // futureEmitAssets prevents webpackDevServer from writing file to disk
     config.output.futureEmitAssets = false
