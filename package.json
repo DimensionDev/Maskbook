@@ -120,7 +120,7 @@
     "@commitlint/cli": "^9.0.1",
     "@commitlint/config-conventional": "^9.0.1",
     "@dimensiondev/webcrypto": "^0.1.1-15",
-    "@dimensiondev/webextension-shim": "^0.0.3-20",
+    "@dimensiondev/webextension-shim": "^0.0.3-20200731084858-bceb59f",
     "@dimensiondev/webpack-web-ext-plugin": "^0.0.3-11",
     "@nice-labs/git-flow-init": "^1.0.1",
     "@nice-labs/git-rev": "^3.4.2",
