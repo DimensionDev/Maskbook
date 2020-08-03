@@ -34,6 +34,8 @@ export function development(manifest: typeof base) {
 }
 // test environment
 export function E2E(manifest: typeof base) {
+    development(manifest)
+
     // can not capture permission dialog in pptr
     manifest.permissions = Array.from(
         new Set([...manifest.permissions, ...manifest.optional_permissions, ...['<all_urls>']]),
