@@ -2219,13 +2219,13 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@holoflows/kit@npm:@dimensiondev/holoflows-kit@0.7.0-30":
-  version "0.7.0-30"
-  resolved "https://npm.dimension.im/download/@dimensiondev/holoflows-kit/0.7.0-30/d7d12be39447ee80f95ecbcb29e81ba179861ad26387e2bb23856fcf008805b9#509b11b0fcc00df2b17e5f0c6270e957d93ee259"
-  integrity sha512-LTjrnWJjE+UcF/x7BcIsZvj9Mmfpw8Llwz6nCPtBCqWKuvoV4hH0GkqMVxbHCb0OflcYfKaTZN+oKSeLhD552Q==
+"@holoflows/kit@npm:@dimensiondev/holoflows-kit@0.7.0-22":
+  version "0.7.0-22"
+  resolved "https://npm.dimension.im/download/@dimensiondev/holoflows-kit/0.7.0-22/93c22c52af4deaa4e07e69ecca7ff6b1a4bd45143b5c9863da02ba3e189f7836#7b8f1dba9cbed144dfebb979264880cfdf5b4058"
+  integrity sha512-sfkh7kLGNfSS5sxlIEJNngHjo1haH2EfimMA7CF8bAZyrXiWLUoNHornYBamS6U+MvqYUwiIjOXf/Jk2kPaftw==
   dependencies:
     "@servie/events" "^1.0.0"
-    async-call-rpc "^4.0.0"
+    async-call-rpc "^1.0.4"
     concurrent-lock "^1.0.7"
     jsx-jsonml-devtools-renderer "^1.4.1"
     lodash-es "^4.17.15"
@@ -5119,11 +5119,6 @@ async-call-rpc@^3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-3.2.2.tgz#1f139913c465e1820a4c8c3152017f5c78e0aa90"
   integrity sha512-0pCSCQhwPFZr6SuAhXKPYwHIvMSfVRily5ZaCpk15Y21sSCVHhFKSD+QOu9NKYVfW6arxL9TpIdb9XimqkBI1Q==
-
-async-call-rpc@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-4.0.0.tgz#825aecfd54bed4873b70ae027ca5a4d0655949e4"
-  integrity sha512-sDNNa5BIgUYknloEAacx4ool/CKU+IZF8tzbvVGPO8s0ivTcKse7YLsG1U9aBcrXtkdAdqR1nEFNmTdZO6CycA==
 
 async-each@^1.0.1:
   version "1.0.3"
