@@ -286,6 +286,7 @@
     "set_up_consent_data_collection_hint": "Maskbookは利用時にデータを収集しますが、Maskbookの開発者はそれらのデータにアクセスすることはできません。収集されたデータは、友達がシェアした投稿を解読できるようにするために必要なデータを除いて、ローカルに保存されます。",
     "set_up_consent_data_collection_privacy_policy_1": "同意します",
     "set_up_consent_data_collection_privacy_policy_2": "プライバシーポリシー",
+    "set_up_consent_data_collection_privacy_policy_3": "。",
     "set_up_create_persona": "はじめよう",
     "set_up_create_persona_hint": "次のステップでは、ソーシャルネットワークのアカウントを人格アカウントに接続することができます。",
     "set_up_connect": "{{name}}に接続する",
