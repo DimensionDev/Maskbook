@@ -1,11 +1,13 @@
-import { Typography, makeStyles } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { isNil } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import React from 'react'
 import { useDropArea } from 'react-use'
-import { formatFileSize } from '../utils'
+import { Image } from '../../../components/shared/Image'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { getUrl } from '../../../utils/utils'
+import { formatFileSize } from '../utils'
 
 const useStyles = makeStyles({
     label: {
@@ -115,10 +117,15 @@ export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
         <Typography component="label" {...bond} className={classNames(classes.label, { [classes.over]: over })}>
             <input type="file" onInput={onInput} hidden />
             <section className={classes.indicator}>{t('plugin_file_service_drop_indicator')}</section>
-            <img className={classes.uploader} src="https://via.placeholder.com/64x64" />
+            <Image
+                className={classes.uploader}
+                src={getUrl('/plugin/file-service/indicator.svg')}
+                width={64}
+                height={64}
+            />
             <b className={classes.here}>{t('plugin_file_service_drop_here')}</b>
             <p className={classes.hint}>{t('plugin_file_service_drop_hint_1', { limit: MAX_FILE_SIZE })}</p>
-            <p className={classes.hint}>{t('plugin_file_service_drop_hint_1')}</p>
+            <p className={classes.hint}>{t('plugin_file_service_drop_hint_2')}</p>
         </Typography>
     )
 }

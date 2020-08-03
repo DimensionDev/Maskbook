@@ -45,6 +45,8 @@ import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
 import { PluginUI } from '../../plugins/plugin'
+import { Image } from '../shared/Image'
+import { getUrl } from '../../utils/utils'
 
 const defaultTheme = {}
 
@@ -201,7 +203,16 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             />
                             <ClickableChip
                                 ChipProps={{
-                                    label: 'File Service',
+                                    label: (
+                                        <>
+                                            <Image
+                                                src={getUrl('/plugin/file-service/entry.svg')}
+                                                width={16}
+                                                height={16}
+                                            />
+                                            &nbsp;File Service
+                                        </>
+                                    ),
                                     onClick() {
                                         setFileServiceDialogOpen(true)
                                     },

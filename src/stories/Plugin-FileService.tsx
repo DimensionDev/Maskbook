@@ -1,11 +1,10 @@
 import { action } from '@storybook/addon-actions'
 import { storiesOf } from '@storybook/react'
 import React from 'react'
-import { displayName } from '../plugins/FileService/constants'
 import MainDialog from '../plugins/FileService/MainDialog'
 import { figmaLink } from './utils'
 
-storiesOf(displayName, module).add(
+storiesOf('Plugin: File Service', module).add(
     'Main Dialog',
     () => (
         <div style={{ padding: 16, background: '#fff' }}>

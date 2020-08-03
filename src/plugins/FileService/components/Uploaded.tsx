@@ -1,7 +1,9 @@
 import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
 import { useHistory, useLocation } from 'react-router'
+import { Image } from '../../../components/shared/Image'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { getUrl } from '../../../utils/utils'
 import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
 import { formatDateTime, formatFileSize } from '../utils'
@@ -69,8 +71,8 @@ export const Uploaded: React.FC = () => {
     }
     return (
         <Grid container className={classes.container}>
-            <Grid item>
-                <img src="https://via.placeholder.com/96x120" onClick={onPreview} />
+            <Grid item onClick={onPreview}>
+                <Image src={getUrl('/plugin/file-service/file.svg')} width={96} height={120} />
             </Grid>
             <Grid item>
                 <FileName name={state.name} />

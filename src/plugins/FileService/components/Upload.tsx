@@ -12,6 +12,7 @@ import { MAX_FILE_SIZE, pluginId } from '../constants'
 import { toUint8Array } from '../utils'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles({
     container: {
@@ -96,22 +97,13 @@ export const Upload: React.FC = () => {
                     label={t('plugin_file_service_on_encrypt_it')}
                 />
                 <Typography className={classes.legalText}>
-                    {t('plugin_file_service_legal_text', {
-                        terms: (
-                            <a
-                                target="_blank"
-                                href={t('plugin_file_service_legal_terms_link')}
-                                children={t('plugin_file_service_legal_terms_text')}
-                            />
-                        ),
-                        policy: (
-                            <a
-                                target="_blank"
-                                href={t('plugin_file_service_legal_policy_link')}
-                                children={t('plugin_file_service_legal_policy_text')}
-                            />
-                        ),
-                    })}
+                    <Trans
+                        i18nKey="plugin_file_service_legal_text"
+                        components={{
+                            terms: <a target="_blank" href={t('plugin_file_service_legal_terms_link')} />,
+                            policy: <a target="_blank" href={t('plugin_file_service_legal_policy_link')} />,
+                        }}
+                    />
                 </Typography>
             </section>
         </section>

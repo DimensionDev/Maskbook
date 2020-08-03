@@ -3,6 +3,8 @@ import React from 'react'
 import { CopyableCode } from './components/Copyable'
 import type { FileInfo } from './types'
 import { formatFileSize } from './utils'
+import { Image } from '../../components/shared/Image'
+import { getUrl } from '../../utils/utils'
 
 interface Props {
     info: FileInfo
@@ -57,18 +59,9 @@ const useStyles = makeStyles({
         lineHeight: 1,
         userSelect: 'auto',
     },
-    icon: {
-        display: 'block',
-        width: 35,
-        height: 45,
-        background: '#ccc',
-        cursor: 'pointer',
-    },
     download: {
         display: 'block',
-        width: 24,
-        height: 24,
-        background: '#ccc',
+        cursor: 'pointer',
     },
 })
 
@@ -93,15 +86,25 @@ export const Preview: React.FC<Props> = ({ info }) => {
     }
     return (
         <Typography className={classes.root}>
-            <i onClick={onClick} className={classes.icon} />
+            <Image
+                className={classes.download}
+                src={getUrl('/plugin/file-service/preview-file.svg')}
+                width={44}
+                height={44}
+                onClick={onClick}
+            />
             <section className={classes.meta}>
-                <p className={classes.name} title={info.name}>
-                    {info.name}
-                </p>
+                <p className={classes.name} title={info.name} children={info.name} />
                 <p className={classes.size}>{formatFileSize(info.size)}</p>
                 {fileKey}
             </section>
-            <a className={classes.download} target="_blank" onClick={onClick} href={link} />
+            <Image
+                className={classes.download}
+                src={getUrl('/plugin/file-service/download.svg')}
+                width={24}
+                height={24}
+                onClick={onClick}
+            />
         </Typography>
     )
 }

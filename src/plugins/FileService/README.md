@@ -31,3 +31,4 @@
 ## UI Design
 
 - <https://www.figma.com/file/jcrvENZmip6PUR66Jz6ENb/Plugin-File-Service>
+- [/public/plugin/file-service](../../../public/plugin/file-service)

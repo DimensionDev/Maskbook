@@ -2,7 +2,9 @@ import { Button, List, ListItem, ListItemText, makeStyles, Typography } from '@m
 import { map } from 'lodash-es'
 import React from 'react'
 import { useHistory } from 'react-router'
+import { Image } from '../../../components/shared/Image'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { getUrl } from '../../../utils/utils'
 import type { FileInfo } from '../types'
 import { formatDateTime } from '../utils'
 
@@ -76,7 +78,7 @@ export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
     }
     const renderItem = (file: FileInfo, index: number) => (
         <ListItem classes={itemClasses} key={index} onClick={onClick(file)}>
-            <img src="https://via.placeholder.com/32x32" />
+            <Image src={getUrl('/plugin/file-service/recent-file.svg')} width={32} height={32} />
             <ListItemText
                 classes={itemTextClasses}
                 primary={file.name}
