@@ -1,4 +1,4 @@
-import { ProfileIdentifier } from '../database/type'
+import { sleep } from '../utils/utils'
 
 export const CryptoService: Partial<typeof import('./background-script/CryptoService')> = {
     async getMyProveBio() {
@@ -23,6 +23,14 @@ export const SteganographyService: Partial<typeof import('./background-script/St
     },
     async decodeImage() {
         return ''
+    },
+}
+
+export const HelperService: Partial<typeof import('./background-script/HelperService')> = {
+    async fetch(url) {
+        console.log('Fetching by mock')
+        await sleep(1000)
+        return globalThis.fetch(url).then((x) => x.blob())
     },
 }
 

@@ -12,8 +12,8 @@ import { useSWRInfinite } from 'swr'
 import Services from '../../service'
 import type { Profile } from '../../../database'
 import { last } from 'lodash-es'
-import { useModal } from '../Dialogs/Base'
-import { DashboardContactSearchDialog } from '../Dialogs/Contact'
+import { useModal } from '../DashboardDialogs/Base'
+import { DashboardContactSearchDialog } from '../DashboardDialogs/Contact'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

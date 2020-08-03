@@ -39,24 +39,6 @@
             "address": "0x75231f58b43240c9718dd58b4967c5114342a86c"
         },
         {
-            "decimals": 6,
-            "symbol": "USDC",
-            "name": "USD Coin",
-            "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-        },
-        {
-            "decimals": 6,
-            "symbol": "USDT",
-            "name": "Tether USD",
-            "address": "0xdac17f958d2ee523a2206206994597c13d831ec7"
-        },
-        {
-            "decimals": 6,
-            "symbol": "USDx",
-            "name": "dForce USD",
-            "address": "0xeb269732ab75A6fD61Ea60b06fE994cD32a83549"
-        },
-        {
             "decimals": 18,
             "symbol": "USDK",
             "name": "USDK Stablecoin",

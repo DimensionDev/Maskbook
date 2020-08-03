@@ -81,7 +81,7 @@ const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text,
     const { lastRecognizedIdentity } = getActivatedUI()
     const blankImage = await downloadUrl(
         getUrl(`${template === 'v2' ? '/image-payload' : '/wallet'}/payload-${template}.png`),
-    )
+    ).then((x) => x.arrayBuffer())
     const secretImage = new Uint8Array(
         decodeArrayBuffer(
             await Services.Steganography.encodeImage(encodeArrayBuffer(blankImage), {

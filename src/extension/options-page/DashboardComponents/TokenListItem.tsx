@@ -16,8 +16,8 @@ import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { TokenIcon } from './TokenIcon'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
 import DashboardMenu from './DashboardMenu'
-import { useModal } from '../Dialogs/Base'
-import { DashboardWalletHideTokenConfirmDialog } from '../Dialogs/Wallet'
+import { useModal } from '../DashboardDialogs/Base'
+import { DashboardWalletHideTokenConfirmDialog } from '../DashboardDialogs/Wallet'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
 
@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) =>
         amount: {
             display: 'flex',
             alignItems: 'center',
+        },
+        more: {
+            color: theme.palette.text.primary,
         },
     }),
 )
@@ -86,7 +89,10 @@ export function TokenListItem(props: TokenListItemProps) {
             />
             <ListItemSecondaryAction className={classes.amount}>
                 {token.address !== ETH_ADDRESS ? (
-                    <IconButton size="small" onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
+                    <IconButton
+                        className={classes.more}
+                        size="small"
+                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
                         <MoreHorizIcon />
                     </IconButton>
                 ) : null}

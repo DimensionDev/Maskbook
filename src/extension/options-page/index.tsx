@@ -2,7 +2,7 @@ import '../../provider.worker'
 import '../../setup.ui'
 
 import React from 'react'
-import { CssBaseline, useMediaQuery, NoSsr } from '@material-ui/core'
+import { CssBaseline, useMediaQuery, NoSsr, CircularProgress, Box } from '@material-ui/core'
 import { ThemeProvider, makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
@@ -42,14 +42,14 @@ import DashboardNavRouter from './DashboardRouters/Nav'
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.type === 'dark'
     return createStyles({
-        wrapper: {
+        root: {
             '--monospace': 'SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace',
             '--drawerHeader': dark ? '#121212' : theme.palette.primary.main,
-            '--drawerBody': dark
-                ? '#121212'
-                : theme.breakpoints.down('xs')
-                ? 'transparent'
-                : theme.palette.primary.main,
+            '--drawerBody': dark ? '#121212' : theme.palette.primary.main,
+
+            [theme.breakpoints.down('xs')]: {
+                '--drawerBody': 'transparent',
+            },
 
             backgroundColor: dark ? grey[900] : grey[50],
             userSelect: 'none',
@@ -84,6 +84,12 @@ const useStyles = makeStyles((theme) => {
                 borderRadius: 0,
             },
         },
+        suspend: {
+            display: 'flex',
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
         footer: {
             gridRow: 'content-end / span 1',
             gridColumn: 'content-start / content-end',
@@ -101,7 +107,6 @@ function DashboardUI() {
     const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
         defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
     })
-
     const routers = ([
         [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
         [t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />],
@@ -129,46 +134,48 @@ function DashboardUI() {
     const nav = () => <DashboardNavRouter children={drawer} />
 
     return (
-        <DashboardBlurContextUI>
-            <div className={classes.wrapper}>
-                <div className={classes.container}>
-                    {loading ? null : (
-                        <>
-                            {xsMatched ? null : drawer}
-                            <Switch>
-                                {webpackEnv.perferResponsiveTarget === 'xs' ? (
-                                    <Route path={DashboardRoute.Nav} component={nav} />
-                                ) : null}
-                                <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
-                                <Route path={DashboardRoute.Wallets} component={DashboardWalletsRouter} />
-                                <Route path={DashboardRoute.Contacts} component={DashboardContactsRouter} />
-                                <Route path={DashboardRoute.Settings} component={DashboardSettingsRouter} />
-                                <Route path={DashboardRoute.Setup} component={DashboardSetupRouter} />
-                                {/* // TODO: this page should be boardless */}
-                                <Route path={DashboardRoute.RequestPermission} component={RequestPermissionPage} />
-                                <Redirect
-                                    path="*"
-                                    to={
-                                        webpackEnv.perferResponsiveTarget === 'xs'
-                                            ? DashboardRoute.Nav
-                                            : DashboardRoute.Personas
-                                    }
-                                />
-                            </Switch>
-                        </>
-                    )}
-                </div>
-                {xsMatched ? null : (
-                    <footer className={classes.footer}>
-                        <FooterLine />
-                    </footer>
+        <div className={classes.root}>
+            <div className={classes.container}>
+                {loading ? (
+                    <Box className={classes.suspend}>
+                        <CircularProgress />
+                    </Box>
+                ) : (
+                    <>
+                        {xsMatched ? null : drawer}
+                        <Switch>
+                            {webpackEnv.perferResponsiveTarget === 'xs' ? (
+                                <Route path={DashboardRoute.Nav} component={nav} />
+                            ) : null}
+                            <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
+                            <Route path={DashboardRoute.Wallets} component={DashboardWalletsRouter} />
+                            <Route path={DashboardRoute.Contacts} component={DashboardContactsRouter} />
+                            <Route path={DashboardRoute.Settings} component={DashboardSettingsRouter} />
+                            <Route path={DashboardRoute.Setup} component={DashboardSetupRouter} />
+                            {/* // TODO: this page should be boardless */}
+                            <Route path={DashboardRoute.RequestPermission} component={RequestPermissionPage} />
+                            <Redirect
+                                path="*"
+                                to={
+                                    webpackEnv.perferResponsiveTarget === 'xs'
+                                        ? DashboardRoute.Nav
+                                        : DashboardRoute.Personas
+                                }
+                            />
+                        </Switch>
+                    </>
                 )}
             </div>
-        </DashboardBlurContextUI>
+            {xsMatched ? null : (
+                <footer className={classes.footer}>
+                    <FooterLine />
+                </footer>
+            )}
+        </div>
     )
 }
 
-export default function Dashboard() {
+export function Dashboard() {
     const preferDarkScheme = useMediaQuery('(prefers-color-scheme: dark)')
     const appearance = useValueRef(appearanceSettings)
     return (
@@ -183,7 +190,9 @@ export default function Dashboard() {
                     <NoSsr>
                         <Router>
                             <CssBaseline />
-                            <DashboardUI />
+                            <DashboardBlurContextUI>
+                                <DashboardUI />
+                            </DashboardBlurContextUI>
                         </Router>
                     </NoSsr>
                 </DashboardSnackbarProvider>

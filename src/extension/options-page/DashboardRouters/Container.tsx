@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => {
             padding: '40px 24px 40px 34px',
             [theme.breakpoints.down('xs')]: {
                 height: 'auto',
-                padding: theme.spacing(2),
+                padding: theme.spacing(1, 2),
                 backgroundColor: theme.palette.type === 'light' ? theme.palette.primary.main : 'transparent',
             },
         },
@@ -117,6 +117,7 @@ const useStyles = makeStyles((theme) => {
         },
         titleIcon: {
             color: theme.palette.type === 'light' ? theme.palette.common.white : theme.palette.text.primary,
+            padding: theme.spacing(1),
         },
         titlePlaceholder: {
             flex: 1,

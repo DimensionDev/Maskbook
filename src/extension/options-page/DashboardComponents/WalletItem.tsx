@@ -5,10 +5,11 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import classNames from 'classnames'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useSnackbarCallback } from '../Dialogs/Base'
+import { useSnackbarCallback } from '../DashboardDialogs/Base'
 import ActionButton from './ActionButton'
 import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
 import { TokenIcon } from './TokenIcon'
+import { Address } from './Address'
 import type { ERC20TokenDetails, WalletDetails } from '../../background-script/PluginService'
 
 const useStyles = makeStyles((theme) =>
@@ -82,12 +83,9 @@ const useStyles = makeStyles((theme) =>
             },
         },
         address: {
+            width: '100%',
             color: theme.palette.text.primary,
             fontFamily: 'var(--monospace)',
-            wordBreak: 'break-all',
-            [theme.breakpoints.down('xs')]: {
-                fontSize: 14,
-            },
         },
         coin: {
             marginTop: theme.spacing(1),
@@ -131,13 +129,11 @@ export function WalletItem(props: WalletItemProps) {
             <Typography className={classes.title} variant="h5">
                 {wallet.name}
             </Typography>
-            <Box paddingY={xsMatched ? 0 : 2}>
+            <Box className={classes.address} paddingY={xsMatched ? 0 : 2}>
                 <Typography className={classes.label} component="p" color="textSecondary" variant="overline">
                     {t('wallet_address')}
                 </Typography>
-                <Typography className={classes.address} component="code">
-                    {wallet.address}
-                </Typography>
+                <Address address={wallet.address} />
             </Box>
             {isExotic ? (
                 <Box paddingBottom={2} marginTop={-2}>

@@ -1,3 +1,4 @@
+import './extension/injected-script/addEventListener'
 import './setup.ui'
 import { GetContext } from '@holoflows/kit/es'
 if (GetContext() === 'content') {
