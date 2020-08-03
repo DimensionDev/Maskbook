@@ -34,23 +34,17 @@ export function serializable<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q)
     }
 }
 
-const customTypes = {
-    BigNumber: {
-        test: BigNumber.isBigNumber,
-        replace(input: BigNumber) {
-            return input.toString()
-        },
-        revive(input: string) {
-            return new BigNumber(input)
-        },
-    },
-}
-
 // @ts-ignore
-import builtins from 'typeson-registry/dist/presets/builtin'
+import builtins from 'typeson-registry/dist/presets/builtin' // @ts-ignore
+import blob from 'typeson-registry/dist/types/blob' // @ts-ignore
+import file from 'typeson-registry/dist/types/file' // @ts-ignore
+import fileList from 'typeson-registry/dist/types/filelist' // @ts-ignore
+import imageBitMap from 'typeson-registry/dist/types/imagebitmap' // @ts-ignore
+import num from 'typeson-registry/dist/presets/special-numbers'
 const typeson = new Typeson({})
 typeson.register(builtins)
-typeson.register([customTypes])
+typeson.register(num)
+typeson.register([blob, file, fileList, imageBitMap, num])
 serializable('Ok')(Ok)
 serializable('Err')(Err)
 const serialization: Serialization = {

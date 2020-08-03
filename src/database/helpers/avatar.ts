@@ -44,7 +44,7 @@ export async function storeAvatar(
         if (typeof avatar === 'string') {
             if (avatar.startsWith('http') === false) return
             if (force || (await isAvatarOutdatedDB(identifier, 'lastUpdateTime'))) {
-                await storeAvatarDB(identifier, await downloadUrl(avatar))
+                await storeAvatarDB(identifier, await (await downloadUrl(avatar)).arrayBuffer())
             }
             // else do nothing
         } else {
