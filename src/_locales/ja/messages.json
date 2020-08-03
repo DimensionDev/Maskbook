@@ -312,7 +312,7 @@
     "settings_enable_debug_desc": "デバッグのための追加情報を参照してください。",
     "settings_image_based_payload": "イメージモードを有効にする",
     "settings_image_based_payload_desc": "テキストの代わりに画像のペイロードで投稿を公開します。",
-    "settings_appearance": "外観",
+    "settings_appearance": "テーマ",
     "settings_appearance_default": "システム設定に従う",
     "settings_appearance_dark": "ダークモード",
     "settings_appearance_light": "ライトモード",
