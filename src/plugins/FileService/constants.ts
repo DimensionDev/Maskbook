@@ -8,4 +8,4 @@ export const MAX_FILE_SIZE = 0xa00000 // = 10 MiB
 export const landing = 'https://files.maskbook.com/partner/arweave/landing-page.html'
 // in production
 // https://service.maskbook.com/arweave-remote-signing
-export const signing = 'https://37oxcroa15.execute-api.ap-east-1.amazonaws.com'
+export const signing = 'https://f8149vcdfi.execute-api.ap-east-1.amazonaws.com/arweave-remote-signing'
