@@ -5,6 +5,8 @@ import MainDialog from '../plugins/FileService/MainDialog'
 import { figmaLink } from './utils'
 import { Preview } from '../plugins/FileService/Preview'
 import { text, boolean, number } from '@storybook/addon-knobs'
+import { UploadDropArea } from '../plugins/FileService/components/UploadDropArea'
+import { Paper } from '@material-ui/core'
 
 storiesOf('Plugin: File Service', module)
     .add(
@@ -32,3 +34,8 @@ storiesOf('Plugin: File Service', module)
             </div>
         )
     })
+    .add('UploadDropArea', () => (
+        <Paper style={{ height: 225, width: 500, display: 'flex', flex: 1 }}>
+            <UploadDropArea maxFileSize={number('max file size', 2000)} onFile={action('onFile')} />
+        </Paper>
+    ))
