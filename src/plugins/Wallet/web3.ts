@@ -43,11 +43,11 @@ export const resetWallet = async () => {
 
     const { wallets } = await Services.Plugin.invokePlugin('maskbook.wallet', 'getManagedWallets')
     for await (const { mnemonic, passphrase, privateKey } of wallets) {
-        const { privateKeyInHex } =
+        const { privateKeyValid, privateKeyInHex } =
             mnemonic && passphrase
                 ? await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWallet', mnemonic, passphrase)
                 : await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', privateKey)
-        web3.eth.accounts.wallet.add(privateKeyInHex)
+        if (privateKeyValid) web3.eth.accounts.wallet.add(privateKeyInHex)
     }
 }
 

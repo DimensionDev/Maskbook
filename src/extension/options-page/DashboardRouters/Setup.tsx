@@ -200,6 +200,7 @@ export function ConsentDataCollection() {
                                     rel="noopener noreferrer">
                                     {t('set_up_consent_data_collection_privacy_policy_2')}
                                 </MuiLink>
+                                {t('set_up_consent_data_collection_privacy_policy_3')}
                             </>
                         }
                     />
