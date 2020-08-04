@@ -352,7 +352,7 @@
     "plugin_file_service_uploading_preparing": "Preparing",
     "plugin_file_service_uploading_estimating_time": "Estimating time…",
     "plugin_file_service_uploading_in_minute_remaining": "{{seconds}}s remaining",
-    "plugin_file_service_uploading_remaining": "{{minutes}}m {{seconds}}s remaining`",
+    "plugin_file_service_uploading_remaining": "{{minutes}}m {{seconds}}s remaining",
     "plugin_file_service_uploading_on_cancal": "Uploading. Please do not close this page.",
     "plugin_file_service_on_encrypt_it": "Make It Encrypted",
     "plugin_file_service_on_show_more": "NOT SUPPORTED",
