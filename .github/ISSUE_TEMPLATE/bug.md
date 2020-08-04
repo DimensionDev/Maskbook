@@ -3,7 +3,7 @@ name: Bug
 about: Report a bug
 title: "[Bug] "
 labels: 'Type: Bug'
-assignees: Jack-Works
+assignees: Jack-Works,jk234ert
 
 ---
 
@@ -16,16 +16,31 @@ assignees: Jack-Works
 - OS:
 - OS Version:
 
-### Browser
+### Platform/Browser
 
-- Browser:
-- Browser Version:
+- [ ] Chrome
+  - Maskbook Version:
+  - Browser Version:
+  
+- [ ] Firefox
+  - Maskbook Version:
+  - Browser Version:
+  
+- [ ] Android
+  - Maskbook Version:
+  - Android Version:
+  
+- [ ] iOS
+  - Maskbook Version:
+  - iOS Version:
 
-### Maskbook
+### Build Variant
 
-- Maskbook Version:
-- Installation: /* May be "Store", "ZIP", or "Self-Complied" */
-- Build Commit: Optionally attach a Commit ID, if it is from an pre-release branch head
+- Where do you get maskbook? 
+  - [ ] Store
+  - [ ] ZIP
+  - [ ] Self-Compiled
+    - Build Commit: /* Optionally attach a Commit ID, if it is from an pre-release branch head */
 
 ## Bug Info
 
