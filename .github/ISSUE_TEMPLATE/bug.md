@@ -7,51 +7,49 @@ assignees: Jack-Works,jk234ert
 
 ---
 
-# Bug Report
+# Bug Report 
 
 ## Environment
 
 ### System
 
-- OS:
-- OS Version:
+- [ ] Windows
+    - OS Version:
+- [ ] Mac OS X
+    - OS Version:
+- [ ] Linux
+    - Linux Distribution:
+    - OS Version:
 
 ### Platform/Browser
 
 - [ ] Chrome
-  - Maskbook Version:
+  - Maskbook Version: 
   - Browser Version:
-  
+
 - [ ] Firefox
   - Maskbook Version:
   - Browser Version:
-  
+
 - [ ] Android
   - Maskbook Version:
   - Android Version:
-  
+
 - [ ] iOS
   - Maskbook Version:
   - iOS Version:
 
 ### Build Variant
 
-- Where do you get maskbook? 
+- Where do you get Maskbook? 
   - [ ] Store
   - [ ] ZIP
   - [ ] Self-Compiled
     - Build Commit: /* Optionally attach a Commit ID, if it is from an pre-release branch head */
 
+
 ## Bug Info
-
-### Expected Behavior
-
-/* Write the expected behavior here. */
 
 ### Actual Behavior
 
-/* Write the actual behavior here. */
-
-### How To Reproduce
-
-/* Specify how it may be produced here. */
+/* What happened? */
