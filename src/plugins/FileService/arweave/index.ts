@@ -36,7 +36,7 @@ export async function makeAttachment(options: AttachmentOptions) {
         metadata: null,
         mime: isEmpty(options.type) ? 'application/octet-stream' : options.type,
     })
-    const transaction = await makePayload(encoded, options.type)
+    const transaction = await makePayload(encoded, 'application/octet-stream')
     stage[transaction.id] = transaction
     return transaction.id
 }
