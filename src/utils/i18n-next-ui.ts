@@ -1,3 +1,4 @@
+/// <reference path="../polyfill/global.d.ts" />
 import type { i18n } from 'i18next'
 import { initReactI18next, useTranslation as useTranslation_, UseTranslationOptions } from 'react-i18next'
 import type { TOptions } from 'i18next'
@@ -49,30 +50,4 @@ export function useIntlListFormat() {
         return new Intl.ListFormat({ type: 'conjunction' })
     }, [])
     return React.useCallback((list: string[]) => formatter.format(list), [formatter])
-}
-
-// See: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/ListFormat
-declare namespace Intl {
-    interface ListFormatOptions {
-        localeMatcher: 'lookup' | 'best fit'
-        type: 'conjunction' | 'disjunction' | 'unit'
-        style: 'long' | 'short' | 'narrow'
-    }
-    class ListFormat {
-        constructor(options?: Partial<ListFormatOptions>)
-        constructor(locales?: string, options?: Partial<ListFormatOptions>)
-        format(str: string[]): string
-    }
-}
-
-// A simple polyfill. Enough for us.
-if (!Intl.ListFormat) {
-    Intl.ListFormat = class {
-        constructor(public locales?: string | Partial<Intl.ListFormatOptions>, options?: Intl.ListFormatOptions) {}
-        format(string: string[]) {
-            const locale = typeof this.locales === 'string' ? this.locales : i18nNextInstance.language
-            if (locale.startsWith('zh')) return string.join('、')
-            return string.join(', ')
-        }
-    }
 }

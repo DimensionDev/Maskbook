@@ -1,3 +1,4 @@
+import './polyfill/index'
 import { MessageCenter } from './utils/messages'
 import { definedSocialNetworkUIs, activateSocialNetworkUI } from './social-network/ui'
 import './provider.ui'
