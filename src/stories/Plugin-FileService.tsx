@@ -16,17 +16,19 @@ storiesOf('Plugin: File Service', module)
         const decrypted = boolean('Decrypted', true)
         const key = text('Key', 'Decrypted key')
         return (
-            <Preview
-                info={{
-                    createdAt: new Date(),
-                    id: text('id', 'id'),
-                    key: decrypted ? key : void 0,
-                    landingTxID: text('Transaction ID', 'Transaction ID'),
-                    name: text('File name', 'file.png'),
-                    payloadTxID: text('Payload TxID', 'Payload TxID'),
-                    size: number('File Size', 2333),
-                    type: 'arweave',
-                }}
-            />
+            <div style={{ background: 'gray', padding: 20 }}>
+                <Preview
+                    info={{
+                        createdAt: new Date(),
+                        id: text('id', 'id'),
+                        key: decrypted ? key : void 0,
+                        landingTxID: text('Transaction ID', 'Transaction ID'),
+                        name: text('File name', 'file.png'),
+                        payloadTxID: text('Payload TxID', 'Payload TxID'),
+                        size: number('File Size', 2333),
+                        type: 'arweave',
+                    }}
+                />
+            </div>
         )
     })
