@@ -248,7 +248,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             </SelectRecipientsUI>
                         </Box>
                         {/* This feature is not ready for mobile version */}
-                        {webpackEnv.genericTarget === 'browser' ? (
+                        {webpackEnv.genericTarget !== 'facebookApp' ? (
                             <>
                                 <Typography style={{ marginBottom: 10 }}>
                                     {t('post_dialog__more_options_title')}

@@ -1,6 +1,6 @@
 {
   "name": "maskbook",
-  "version": "1.13.1",
+  "version": "1.13.2",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -78,6 +78,7 @@
     "bignumber.js": "^9.0.0",
     "bip39": "^3.0.2",
     "classnames": "^2.2.6",
+    "clipboard-polyfill": "^3.0.1",
     "elliptic": "^6.5.3",
     "eth-contract-metadata": "^1.15.0",
     "fuse.js": "^6.4.0",

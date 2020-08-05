@@ -120,12 +120,14 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                     passphrase: '',
                 })
             return Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', privKey).then(
-                ({ address }) =>
-                    Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                ({ address, privateKeyValid }) => {
+                    if (!privateKeyValid) throw new Error(t('import_failed'))
+                    return Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
                         name,
                         address,
                         _private_key_: privKey,
-                    }),
+                    })
+                },
             )
         },
         [state[0], name, mnemonic, privKey],

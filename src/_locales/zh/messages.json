@@ -288,6 +288,7 @@
     "set_up_consent_data_collection_hint": "Maskbook 在使用時會收集一些數據（在隱私政策中列出），但是 Maskbook 的開發人員無法訪問它們。 除了使您的朋友解密您共享的帖子所需的數據外，收集的數據存儲在本地。",
     "set_up_consent_data_collection_privacy_policy_1": "我同意",
     "set_up_consent_data_collection_privacy_policy_2": "隱私政策",
+    "set_up_consent_data_collection_privacy_policy_3": "。",
     "set_up_create_persona": "開始",
     "set_up_create_persona_hint": "您可以在下一步中將社交網絡個人資料連接到您的角色。",
     "set_up_connect": "連接「{{name}}」的社交網絡個人資料",

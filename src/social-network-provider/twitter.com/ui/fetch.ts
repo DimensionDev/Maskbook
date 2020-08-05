@@ -9,8 +9,8 @@ import type {
 import { PostInfo } from '../../../social-network/PostInfo'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
-import { bioCardParser, postParser, postIdParser, postImagesParser } from '../utils/fetch'
-import { isNil } from 'lodash-es'
+import { bioCardParser, postParser, postIdParser, postImagesParser, postNameParser } from '../utils/fetch'
+import { isNil, noop } from 'lodash-es'
 import Services from '../../../extension/service'
 import { twitterUrl } from '../utils/url'
 import { untilElementAvailable } from '../../../utils/dom'
@@ -171,12 +171,11 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self:
     if (!tweetNode) return
     const { pid, content, handle, name, avatar } = postParser(tweetNode)
     if (!pid) return
+
     const postBy = new ProfileIdentifier(self.networkIdentifier, handle)
     info.postID.value = pid
     info.postContent.value = content
-    if (!info.postBy.value.equals(postBy)) {
-        info.postBy.value = postBy
-    }
+    if (!info.postBy.value.equals(postBy)) info.postBy.value = postBy
     info.nickname.value = name
     info.avatarURL.value = avatar || null
 
@@ -187,5 +186,5 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self:
         .then((urls) => {
             for (const url of urls) info.postMetadataImages.add(url)
         })
-        .catch(() => {})
+        .catch(noop)
 }
