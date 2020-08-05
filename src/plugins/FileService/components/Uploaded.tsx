@@ -1,12 +1,12 @@
+import { formatFileSize } from '@dimensiondev/kit'
 import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
+import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
-import { Image } from '../../../components/shared/Image'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { getUrl } from '../../../utils/utils'
 import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
-import { formatDateTime, formatFileSize } from '../utils'
+import { formatDateTime } from '../utils'
 import { FileName } from './FileName'
 
 const useStyles = makeStyles({
@@ -72,14 +72,14 @@ export const Uploaded: React.FC = () => {
     return (
         <Grid container className={classes.container}>
             <Grid item onClick={onPreview}>
-                <Image src={getUrl('/plugin/file-service/file.svg')} width={96} height={120} />
+                <File width={96} height={120} />
             </Grid>
             <Grid item>
                 <FileName name={state.name} />
                 <Typography className={classes.meta}>
                     <p className={classes.info}>
                         <span>{formatFileSize(state.size)}</span>
-                        <span>&nbsp;&nbsp;</span>
+                        <span>{'  '}</span>
                         <span>{formatDateTime(state.createdAt)}</span>
                     </p>
                     <Button className={classes.back} onClick={onBack}>

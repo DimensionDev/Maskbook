@@ -1,10 +1,9 @@
-import { makeStyles, Typography, Theme, Paper } from '@material-ui/core'
+import { formatFileSize } from '@dimensiondev/kit'
+import { makeStyles, Paper, Theme, Typography } from '@material-ui/core'
 import React from 'react'
+import { DownloadCloud, File } from 'react-feather'
 import { CopyableCode } from './components/Copyable'
 import type { FileInfo } from './types'
-import { formatFileSize } from './utils'
-import { Image } from '../../components/shared/Image'
-import { getUrl } from '../../utils/utils'
 
 interface Props {
     info: FileInfo
@@ -83,13 +82,7 @@ export const Preview: React.FC<Props> = ({ info }) => {
     }
     return (
         <Paper elevation={0} className={classes.root}>
-            <Image
-                className={classes.download}
-                src={getUrl('/plugin/file-service/preview-file.svg')}
-                width={44}
-                height={44}
-                onClick={onClick}
-            />
+            <File className={classes.download} width={44} height={44} onClick={onClick} />
             <section className={classes.meta}>
                 <Typography color="textPrimary" className={classes.name} component="p" title={info.name}>
                     {info.name}
@@ -99,13 +92,7 @@ export const Preview: React.FC<Props> = ({ info }) => {
                 </Typography>
                 {fileKey}
             </section>
-            <Image
-                className={classes.download}
-                src={getUrl('/plugin/file-service/download.svg')}
-                width={24}
-                height={24}
-                onClick={onClick}
-            />
+            <DownloadCloud className={classes.download} width={24} height={24} onClick={onClick} />
         </Paper>
     )
 }

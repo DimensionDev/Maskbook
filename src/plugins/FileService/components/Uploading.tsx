@@ -1,10 +1,9 @@
 import { Grid, makeStyles } from '@material-ui/core'
 import React from 'react'
+import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
 import { useAsync, useBeforeUnload } from 'react-use'
-import { Image } from '../../../components/shared/Image'
 import Services, { ServicesWithProgress } from '../../../extension/service'
-import { getUrl } from '../../../utils/utils'
 import { pluginId } from '../constants'
 import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
@@ -89,7 +88,7 @@ export const Uploading: React.FC = () => {
     return (
         <Grid container className={classes.container}>
             <Grid item>
-                <Image src={getUrl('/plugin/file-service/file.svg')} width={96} height={120} />
+                <File width={96} height={120} />
             </Grid>
             <Grid item>
                 <FileName name={state.name} />

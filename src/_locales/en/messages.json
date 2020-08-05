@@ -355,6 +355,7 @@
     "plugin_file_service_uploading_in_minute_remaining": "{{seconds}}s remaining",
     "plugin_file_service_uploading_remaining": "{{minutes}}m {{seconds}}s remaining",
     "plugin_file_service_uploading_on_cancal": "Uploading. Please do not close this page.",
+    "plugin_file_service_show_more": "Show More",
     "plugin_file_service_on_encrypt_it": "Make It Encrypted",
     "plugin_file_service_on_show_more": "NOT SUPPORTED",
     "plugin_file_service_legal_text": "By using this plugin, you agree to the <terms>terms</terms> and the <policy>privacy policy</policy>.",

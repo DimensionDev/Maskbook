@@ -6,7 +6,7 @@ export interface FileInfo {
     size: number
     createdAt: Date
 
-    key: string | null | undefined
+    key: string | undefined
     payloadTxID: string
     landingTxID: string
 }

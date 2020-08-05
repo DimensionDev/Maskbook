@@ -1,7 +1,7 @@
-import { makeStyles, Typography } from '@material-ui/core'
+import { formatFileSize } from '@dimensiondev/kit'
+import { makeStyles, Typography, LinearProgress, Box } from '@material-ui/core'
 import React from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatFileSize } from '../utils'
 
 const useStyles = makeStyles({
     container: {
@@ -29,28 +29,6 @@ const useStyles = makeStyles({
         fontSize: 12,
         lineHeight: 1.75,
     },
-    bar: {
-        display: 'flex',
-        overflow: 'hidden',
-        width: '100%',
-        height: 5,
-        borderRadius: 6.5,
-        backgroundColor: '#f5f5f5',
-        fontSize: 12,
-        lineHeight: 0,
-    },
-    insideBar: {
-        display: 'flex',
-        overflow: 'hidden',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        transition: 'width 100ms linear',
-        textAlign: 'center',
-        whiteSpace: 'nowrap',
-        color: '#fff',
-        borderRadius: 6.5,
-        backgroundColor: '#2ca4ef',
-    },
 })
 
 interface Props {
@@ -65,23 +43,24 @@ export const ProgressBar: React.FC<Props> = (props) => {
     const { t } = useI18N()
     const classes = useStyles()
     const { startedAt, fileSize, sendSize } = props
-    const width = (sendSize / fileSize) * 100
+    const value = (sendSize / fileSize) * 100
     const elapsed = (Date.now() - startedAt) / 1000
     const remaining = (fileSize - sendSize) / (elapsed ? sendSize / elapsed : 0)
+    const variant = props.preparing ? 'indeterminate' : 'determinate'
     let completion = t('plugin_file_service_uploading_preparing')
     if (!props.preparing) {
         completion = `${formatFileSize(sendSize)} of ${formatFileSize(fileSize)}`
     }
     return (
-        <section className={classes.progress}>
+        <Box className={classes.progress}>
             <Typography className={classes.meta}>
                 <Duration value={remaining} />
                 <span>{completion}</span>
             </Typography>
-            <p className={classes.bar}>
-                <span className={classes.insideBar} style={{ width: `${width}%` }} />
-            </p>
-        </section>
+            <Box width="100%">
+                <LinearProgress variant={variant} value={value} />
+            </Box>
+        </Box>
     )
 }
 

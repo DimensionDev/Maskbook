@@ -1,3 +1,4 @@
+import { formatFileSize } from '@dimensiondev/kit'
 import { truncate } from 'lodash-es'
 import React from 'react'
 import { readTypedMessageMetadata } from '../../extension/background-script/CryptoServices/utils'
@@ -5,7 +6,6 @@ import type { PluginConfig } from '../plugin'
 import { identifier, META_KEY_1, pluginName } from './constants'
 import { Preview } from './Preview'
 import type { FileInfo } from './types'
-import { formatFileSize } from './utils'
 
 export const FileServicePluginDefine: PluginConfig = {
     pluginName,

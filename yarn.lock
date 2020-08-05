@@ -1844,6 +1844,11 @@
   dependencies:
     "@msgpack/msgpack" "^1.12.2"
 
+"@dimensiondev/kit@^0.0.0-20200805070012-5a4b993":
+  version "0.0.0-20200805070012-5a4b993"
+  resolved "https://npm.dimension.im/download/@dimensiondev/kit/0.0.0-20200805070012-5a4b993/9e47da175f5e6899b34d75b7467a68bc707b960c7a8a93f3395e4df994653a5c#10c9f76c568bfd9cf0b91b3dcc8c4ade35df55ba"
+  integrity sha512-n7nM2Sbhn3yA2Hothnxt7vv0VaoOEU85j79XYa3WoYID5iuvzGd9iuwuCcpIp++txg0DiMJF8VMO+dPvRfCCWA==
+
 "@dimensiondev/matrix-js-sdk-type@^1.0.0-6":
   version "1.0.0-6"
   resolved "https://npm.dimension.im/download/@dimensiondev/matrix-js-sdk-type/1.0.0-6/13f4ed706505fd68afbd1354f8c3f2ca3ebb9b7517dd4ac32853d36d1f9a05c4#a4d30dee4e876b66333dcb86bf4c8821eab0b03a"

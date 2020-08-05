@@ -1,10 +1,8 @@
 import { Button, List, ListItem, ListItemText, makeStyles, Typography } from '@material-ui/core'
-import { map } from 'lodash-es'
 import React from 'react'
+import { File } from 'react-feather'
 import { useHistory } from 'react-router'
-import { Image } from '../../../components/shared/Image'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { getUrl } from '../../../utils/utils'
 import type { FileInfo } from '../types'
 import { formatDateTime } from '../utils'
 
@@ -78,7 +76,7 @@ export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
     }
     const renderItem = (file: FileInfo, index: number) => (
         <ListItem classes={itemClasses} key={index} onClick={onClick(file)}>
-            <Image src={getUrl('/plugin/file-service/recent-file.svg')} width={32} height={32} />
+            <File width={32} height={32} />
             <ListItemText
                 classes={itemTextClasses}
                 primary={file.name}
@@ -89,9 +87,9 @@ export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
     return (
         <section className={classes.container}>
             <Typography className={classes.heading}>Recent Files</Typography>
-            <List className={classes.listing}>{map(files.slice(0, 4), renderItem)}</List>
+            <List className={classes.listing}>{files.slice(0, 4).map(renderItem)}</List>
             <Button className={classes.more} onClick={onMore}>
-                Show More
+                {t('plugin_file_service_show_more')}
             </Button>
         </section>
     )
