@@ -1,4 +1,4 @@
-import { makeStyles, Typography } from '@material-ui/core'
+import { makeStyles, Typography, Theme, Paper } from '@material-ui/core'
 import React from 'react'
 import { CopyableCode } from './components/Copyable'
 import type { FileInfo } from './types'
@@ -10,18 +10,17 @@ interface Props {
     info: FileInfo
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
         width: 345,
         borderWidth: 1,
         borderStyle: 'solid',
-        borderColor: '#E6ECF0',
+        borderColor: theme.palette.divider,
         boxSizing: 'border-box',
         borderRadius: 12,
         padding: 16,
-        background: '#fff',
         cursor: 'default',
         userSelect: 'none',
         '& p': { margin: 0 },
@@ -35,7 +34,6 @@ const useStyles = makeStyles({
     name: {
         fontSize: 16,
         lineHeight: 1.85,
-        color: '#14171A',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
@@ -43,17 +41,14 @@ const useStyles = makeStyles({
     size: {
         fontSize: 14,
         lineHeight: 1.85,
-        color: '#979797',
     },
     unencrypted: {
         fontSize: 14,
         lineHeight: 1.85,
-        color: '#C4C4C4',
     },
     encrypted: {
         fontSize: 14,
         lineHeight: 1.85,
-        color: '#444',
     },
     code: {
         lineHeight: 1,
@@ -63,16 +58,18 @@ const useStyles = makeStyles({
         display: 'block',
         cursor: 'pointer',
     },
-})
+}))
 
 export const Preview: React.FC<Props> = ({ info }) => {
     const classes = useStyles()
     const fileKey = info.key ? (
-        <p className={classes.encrypted}>
+        <Typography component="p" color="textPrimary" className={classes.encrypted}>
             File Key: <CopyableCode className={classes.code}>{info.key}</CopyableCode>
-        </p>
+        </Typography>
     ) : (
-        <p className={classes.unencrypted}>This file is not encrypted</p>
+        <Typography component="p" color="textSecondary" className={classes.unencrypted}>
+            This file is not encrypted
+        </Typography>
     )
     const link = `https://arweave.net/${info.landingTxID}`
     const onClick = (event: React.MouseEvent) => {
@@ -85,7 +82,7 @@ export const Preview: React.FC<Props> = ({ info }) => {
         }
     }
     return (
-        <Typography className={classes.root}>
+        <Paper elevation={0} className={classes.root}>
             <Image
                 className={classes.download}
                 src={getUrl('/plugin/file-service/preview-file.svg')}
@@ -94,8 +91,12 @@ export const Preview: React.FC<Props> = ({ info }) => {
                 onClick={onClick}
             />
             <section className={classes.meta}>
-                <p className={classes.name} title={info.name} children={info.name} />
-                <p className={classes.size}>{formatFileSize(info.size)}</p>
+                <Typography color="textPrimary" className={classes.name} component="p" title={info.name}>
+                    {info.name}
+                </Typography>
+                <Typography color="textSecondary" className={classes.size} component="p">
+                    {formatFileSize(info.size)}
+                </Typography>
                 {fileKey}
             </section>
             <Image
@@ -105,6 +106,6 @@ export const Preview: React.FC<Props> = ({ info }) => {
                 height={24}
                 onClick={onClick}
             />
-        </Typography>
+        </Paper>
     )
 }
