@@ -12,7 +12,6 @@ import Serialization from '../../utils/type-transform/Serialization'
 import { sideEffect } from '../../utils/side-effects'
 import { untilDocumentReady } from '../../utils/dom'
 import { sleep } from '../../utils/utils'
-import { SetupGuideStep } from '../../components/InjectedComponents/ImmersiveGuide/SetupGuide'
 
 function getActivatedUI() {
     return safeGetActiveUI()

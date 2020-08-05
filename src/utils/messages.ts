@@ -11,6 +11,11 @@ export interface UpdateEvent<Data> {
 export interface CompositionEvent {
     readonly reason: 'timeline' | 'popup'
     readonly open: boolean
+    readonly content?: string
+    readonly options?: {
+        onlyMySelf?: boolean
+        shareToEveryOne?: boolean
+    }
 }
 
 interface MaskbookMessages {

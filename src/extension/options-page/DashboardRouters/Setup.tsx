@@ -319,10 +319,10 @@ export function ConnectNetwork() {
     const initializedPersonas = useMyPersonas()
     const uninitializedPersonas = useMyUninitializedPersonas()
     const { identifier } = useQueryParams(['identifier'])
-
     const { value = null, loading, error } = useAsync(async () => {
+        const persona = initializedPersonas.find((x) => x.identifier.toText() === identifier)
         // auto-finished by immersive guider
-        if (initializedPersonas.some((persona) => persona.identifier.toText() === identifier)) {
+        if (persona?.linkedProfiles.size) {
             history.replace(webpackEnv.perferResponsiveTarget === 'xs' ? DashboardRoute.Nav : DashboardRoute.Personas)
             return null
         }
@@ -765,7 +765,7 @@ export function RestoreDatabaseConfirmation() {
     ]
 
     const restoreFinish = async () => {
-        if (backup?.personas && personas === 1 && profiles === 0) {
+        if (backup?.personas.length && personas === 1 && profiles === 0) {
             history.push(`${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(backup.personas[0].identifier)}`)
         } else if (personas === 0 && profiles === 0) {
             history.replace(SetupStep.CreatePersona)

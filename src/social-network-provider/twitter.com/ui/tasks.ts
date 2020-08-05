@@ -27,6 +27,7 @@ import { instanceOfTwitterUI } from '.'
 import type { ProfileIdentifier } from '../../../database/type'
 import { encodeArrayBuffer, decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { isMobileTwitter } from '../utils/isMobile'
+import { MessageCenter } from '../../../utils/messages'
 
 /**
  * Wait for up to 5000 ms
@@ -135,6 +136,21 @@ const taskPasteIntoBio = async (text: string) => {
     }
 }
 
+const taskOpenComposeBox = async (
+    content: string,
+    options?: {
+        onlyMySelf?: boolean
+        shareToEveryOne?: boolean
+    },
+) => {
+    MessageCenter.emit('compositionUpdated', {
+        reason: 'timeline',
+        open: true,
+        content,
+        options,
+    })
+}
+
 const taskGetPostContent: SocialNetworkUITasks['taskGetPostContent'] = async () => {
     const contentNode = (await timeout(new MutationObserverWatcher(postsSelector()), 10000))[0]
     return contentNode ? postContentParser(contentNode) : ''
@@ -172,6 +188,7 @@ function taskGotoNewsFeedPage() {
 
 export const twitterUITasks: SocialNetworkUITasks = {
     taskPasteIntoPostBox,
+    taskOpenComposeBox,
     taskUploadToPostBox,
     taskPasteIntoBio,
     taskGetPostContent,

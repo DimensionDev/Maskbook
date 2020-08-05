@@ -163,6 +163,21 @@ export interface SocialNetworkUITasks {
         },
     ): void
     /**
+     * This function should open the compose box with given post content.
+     * If failed, warning user to do it by themselves with `warningText`
+     */
+    taskOpenComposeBox(
+        content: string,
+        options?: {
+            onlyMySelf?: boolean
+            shareToEveryOne?: boolean
+
+            // TODO:
+            // after we revamped compose dialog (#1300)
+            // payloadType?: string
+        },
+    ): void
+    /**
      * This function should paste `text` into the bio box.
      * If failed, warning user to do it by themselves with automation_request_click_edit_bio_button
      */
