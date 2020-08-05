@@ -19,12 +19,9 @@ export const CopyableCode: React.FC<Props> = ({ children, className }) => {
     const onDeselect = () => {
         global.getSelection()?.removeAllRanges()
     }
-    const onCopy = (event: React.MouseEvent<Node>) => {
+    const onCopy = async (event: React.MouseEvent<HTMLElement>) => {
         onSelect(event)
-        const success = global.document.execCommand('copy')
-        if (!success) {
-            return
-        }
+        await navigator.clipboard.writeText(event.currentTarget.textContent!)
         snackbar.enqueueSnackbar(t('plugin_file_service_file_key_copied'))
     }
     return (
