@@ -4,16 +4,15 @@ import type { Configuration } from 'webpack'
 import { buildWebpackTask, copyOnChange, getWebpackConfig } from './helper'
 import { assetsPath, entries, output } from './paths'
 
-const runtimeOut = output.libraries.relativeFolder('./bundle/')
-const [, copyWebpackOut1] = copyOnChange({
-    name: 'copy-webpack-output',
+const [copyJS, watchCopyJS] = copyOnChange({
+    name: 'copy-webpack-output-js',
     desc: 'Copy webpack output',
     from: [output.webpackDependenciesJS.files],
     to: output.librariesBundle.folder,
     watch: [output.webpackDependenciesJS.folder],
 })
-const [, copyWebpackOut2] = copyOnChange({
-    name: 'copy-webpack-output',
+export const [copyHTML, watchCopyHTML] = copyOnChange({
+    name: 'copy-webpack-output-html',
     desc: 'Copy webpack output',
     from: [output.webpackDependenciesHTML.relative('./*.html')],
     to: output.extension.folder,
@@ -26,13 +25,13 @@ export const [dependenciesBuild, dependenciesWatch] = buildWebpackTask(
         const obj = getWebpackConfig(
             mode,
             entries,
-            mode === 'development' ? output.webpackDependenciesJS.folder : runtimeOut.folder,
+            mode === 'development' ? output.webpackDependenciesJS.folder : output.librariesBundle.folder,
         )
         if (mode === 'development') {
-            copyWebpackOut1(() => {})
-            copyWebpackOut2(() => {})
+            watchCopyJS(() => {})
+            watchCopyHTML(() => {})
         }
-        obj.output!.publicPath = output.libraries.relativeFromRuntimeExtensionRoot('./bundle/')
+        obj.output!.publicPath = output.librariesBundle.relativeFromRuntimeExtensionRoot('./')
         // replace ts-loader
         obj.module!.rules[2] = {
             test: /\.(ts|tsx)$/,

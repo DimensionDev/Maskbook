@@ -10,7 +10,7 @@ import {
     watchSrcAssets,
     srcAssets,
 } from './assets'
-import { dependenciesWatch, dependenciesBuild } from './dependencies'
+import { dependenciesWatch, dependenciesBuild, copyHTML } from './dependencies'
 import { copyESMOut, tscESModuleBuild, tscESModuleWatch, tscSystemBuild, tscSystemWatch, watchCopyESMOut } from './tsc'
 import { libs } from './libraries'
 // @ts-ignore
@@ -81,6 +81,7 @@ export const build = named(
             environmentFile,
             parallelProcessBuild,
             series(
+                copyHTML,
                 tscESModuleBuild,
                 parallel(series(copyESMOut, prebuilt_iOS), function system(done: any) {
                     return buildTarget === 'firefox' ? tscSystemBuild(done) : done()
