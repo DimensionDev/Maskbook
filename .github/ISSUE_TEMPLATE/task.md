@@ -7,12 +7,8 @@ assignees: ''
 
 ---
 
-## Metadata
-
-Field | Value
---- | ---
-Parent Task/Demand | /* Issue Number*/
-Expected Delivery Date | 2020-W??-5
+## Inroduction and Background
+/* Describe the background of this task */
 
 ## Content
 

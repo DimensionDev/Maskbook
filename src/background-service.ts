@@ -1,3 +1,4 @@
+import './polyfill'
 import { GetContext } from '@holoflows/kit/es'
 import { MessageCenter } from './utils/messages'
 import 'webcrypto-liner'
@@ -28,7 +29,7 @@ import { HasNoBrowserTabUI, HasNativeWelcomeProcess, SupportNativeInjectedScript
 
 if (GetContext() === 'background') {
     const injectedScript = getInjectedScript()
-    let contentScripts: Promise<Array<{ code: string } | { file: string }>> = getContentScripts()
+    const contentScripts: Promise<Array<{ code: string } | { file: string }>> = getContentScripts()
 
     browser.webNavigation.onCommitted.addListener(async (arg) => {
         if (arg.url === 'about:blank') return

@@ -76,6 +76,10 @@ async function SSR(htmlPath: string, ssrEntry: string) {
     const html = readFileSync(htmlPath, 'utf-8')
     require = require('esm')(module, {})
     require('../../src/setup.ssr')
+    globalThis.window = globalThis as any
+    require('../../src/polyfill/index')
+    // @ts-ignore
+    delete globalThis.window
     const ssrResult = await import(ssrEntry).then((x) => x.default)
     return html.replace('<!-- ssr -->', ssrResult)
 }

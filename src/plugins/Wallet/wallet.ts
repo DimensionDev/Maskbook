@@ -57,8 +57,7 @@ export async function getManagedWallets(): Promise<{
             .map(WalletRecordOutDB)
             .filter((x): x is ManagedWalletRecord => x.type !== 'exotic')
             .map(async (record) => ({ ...record, privateKey: await makePrivateKey(record) }))
-        const recordWithKeys = await Promise.all(records)
-        return recordWithKeys.sort((a, b) => {
+        return (await Promise.all(records)).sort((a, b) => {
             if (a._wallet_is_default) return -1
             if (b._wallet_is_default) return 1
             if (a.updatedAt > b.updatedAt) return -1
@@ -68,10 +67,10 @@ export async function getManagedWallets(): Promise<{
             return 0
         })
         async function makePrivateKey(record: ManagedWalletRecord) {
-            const recover = record._private_key_
+            const { privateKey } = record._private_key_
                 ? await recoverWalletFromPrivateKey(record._private_key_)
                 : await recoverWallet(record.mnemonic, record.passphrase)
-            return `0x${buf2hex(recover.privateKey)}`
+            return `0x${buf2hex(privateKey)}`
         }
     }
     function makeTokens() {
@@ -174,7 +173,10 @@ export async function importNewWallet(
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
     async function getWalletAddress() {
         if (rec.address) return rec.address
-        if (rec._private_key_) return (await recoverWalletFromPrivateKey(rec._private_key_)).address
+        if (rec._private_key_) {
+            const recover = await recoverWalletFromPrivateKey(rec._private_key_)
+            return recover.privateKeyValid ? recover.address : ''
+        }
         return (await recoverWallet(mnemonic, passphrase)).address
     }
 }
@@ -213,18 +215,24 @@ export async function recoverWallet(mnemonic: string[], password: string) {
     const walletPublicKey = wallet.publicKey
     const walletPrivateKey = wallet.privateKey!
     const address = EthereumAddress.from(walletPublicKey).address
-    return { address, privateKey: walletPrivateKey, privateKeyInHex: `0x${buf2hex(walletPrivateKey)}`, mnemonic }
+    return {
+        address,
+        privateKey: walletPrivateKey,
+        privateKeyValid: true,
+        privateKeyInHex: `0x${buf2hex(walletPrivateKey)}`,
+        mnemonic,
+    }
 }
 
 export async function recoverWalletFromPrivateKey(privateKey: string) {
     const ec = new EC('secp256k1')
     const privateKey_ = privateKey.replace(/^0x/, '') // strip 0x
-    if (!privateKeyVerify(privateKey_)) throw new Error('cannot import invalid private key')
     const key = ec.keyFromPrivate(privateKey_)
     const address = EthereumAddress.from(key.getPublic(false, 'array') as any).address
     return {
         address,
         privateKey: hex2buf(privateKey_),
+        privateKeyValid: privateKeyVerify(privateKey_),
         privateKeyInHex: privateKey.startsWith('0x') ? privateKey : `0x${privateKey}`,
         mnemonic: [],
     }
