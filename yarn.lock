@@ -1837,10 +1837,10 @@
   resolved "https://registry.yarnpkg.com/@commitlint/types/-/types-9.0.1.tgz#df281f0f3d8f3adb10c95e4dd72b16acf41b5400"
   integrity sha512-wo2rHprtDzTHf4tiSxavktJ52ntiwmg7eHNGFLH38G1of8OfGVwOc1sVbpM4jN/HK/rCMhYOi6xzoPqsv0537A==
 
-"@dimensiondev/common-protocols@^1.6.0-34":
-  version "1.6.0-34"
-  resolved "https://npm.dimension.im/download/@dimensiondev/common-protocols/1.6.0-34/a2de09f0ea2aa5dfa87c5d6d465c8be45fa46eafb97a715ccf7addbd26efd3b9#9a2b4fd10e07bc32b2c0c98eb1abf25f4e5586a0"
-  integrity sha512-VG+G48G0okPpv2vdQ8p28MCM4gw2VSbZSlKVnkFO1I633gjUEc6CjCDemIG2qZhZuBRq6hjBkMZpCHXQ8PLD1g==
+"@dimensiondev/common-protocols@^1.6.0-20200803025805-90de43a":
+  version "1.6.0-20200803025805-90de43a"
+  resolved "https://npm.dimension.im/download/@dimensiondev/common-protocols/1.6.0-20200803025805-90de43a/207fc9146517488217b12c78fbac06b5f04d81739fa0e7061bdd5beb039982d7#b9bb17e0517cf009e59fc380cb34a1ee87c94122"
+  integrity sha512-ccTYaRU1yMU8Y0DsoZ18QiAynbUFyEDsP3O5Bm4uYRe7e1iQ8Evo2T+RIVL++NmELn5Yk1A0yBIPJYEX6O9NAQ==
   dependencies:
     "@msgpack/msgpack" "^1.12.2"
 

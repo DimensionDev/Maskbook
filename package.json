@@ -45,7 +45,7 @@
     ]
   },
   "dependencies": {
-    "@dimensiondev/common-protocols": "^1.6.0-34",
+    "@dimensiondev/common-protocols": "^1.6.0-20200803025805-90de43a",
     "@dimensiondev/kit": "^0.0.0-20200805070012-5a4b993",
     "@dimensiondev/matrix-js-sdk-type": "^1.0.0-6",
     "@dimensiondev/stego-js": "^0.11.1-7",
