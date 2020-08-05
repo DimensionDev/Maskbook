@@ -9,7 +9,6 @@ import Services from '../../../extension/service'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeFileKey } from '../arweave'
 import { MAX_FILE_SIZE, pluginId } from '../constants'
-import { toUint8Array } from '../utils'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
 import { Trans } from 'react-i18next'
@@ -62,7 +61,7 @@ export const Upload: React.FC = () => {
         if (encrypted) {
             key = makeFileKey()
         }
-        const block = await toUint8Array(file)
+        const block = await file.arrayBuffer()
         const checksum = Buffer.from(await Attachment.checksum(block)).toString('base64')
         const item = await Services.Plugin.invokePlugin(pluginId, 'getFileInfo', checksum)
         if (isNil(item)) {

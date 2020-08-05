@@ -1,16 +1,3 @@
-export function toUint8Array(blob: Blob) {
-    return new Promise<Uint8Array>((resolve, reject) => {
-        const reader = new FileReader()
-        reader.addEventListener('abort', reject)
-        reader.addEventListener('error', reject)
-        reader.addEventListener('load', () => {
-            const result = reader.result as ArrayBuffer
-            resolve(new Uint8Array(result))
-        })
-        reader.readAsArrayBuffer(blob)
-    })
-}
-
 export function formatFileSize(input = 0, si = isApplePlatform()) {
     if (input === 0 || Number.isNaN(input)) {
         return '0 B'
