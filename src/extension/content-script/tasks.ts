@@ -131,9 +131,7 @@ sideEffect.then(untilDocumentReady).then(() => {
     const id = currentImmersiveSetupStatus[network].value
     const onStatusUpdate = (id: string) => {
         const { persona, status }: ImmersiveSetupCrossContextStatus = JSON.parse(id || '{}')
-        if (persona && status) {
-            _tasks.immersiveSetup(Identifier.fromString(persona, ECKeyIdentifier).unwrap())
-        }
+        if (persona && status) _tasks.immersiveSetup(Identifier.fromString(persona, ECKeyIdentifier).unwrap())
     }
     currentImmersiveSetupStatus[network].addListener(onStatusUpdate)
     currentImmersiveSetupStatus[network].readyPromise.then(onStatusUpdate)

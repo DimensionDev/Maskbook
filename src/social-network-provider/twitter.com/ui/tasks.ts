@@ -159,12 +159,24 @@ function taskGotoProfilePage(profile: ProfileIdentifier) {
     }, 400)
 }
 
+function taskGotoNewsFeedPage() {
+    const homeLink = document.querySelector<HTMLAnchorElement>(
+        [
+            '[role="banner"] [role="heading"] > a[href]', // PC
+            '#layers [role="navigation"] > a[href]', // mobile
+        ].join(','),
+    )
+    if (homeLink) homeLink.click()
+    else if (!location.pathname.includes('/home')) location.pathname = '/home'
+}
+
 export const twitterUITasks: SocialNetworkUITasks = {
     taskPasteIntoPostBox,
     taskUploadToPostBox,
     taskPasteIntoBio,
     taskGetPostContent,
     taskGetProfile,
+    taskGotoProfilePage,
+    taskGotoNewsFeedPage,
     taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(() => instanceOfTwitterUI),
-    taskGotoProfilePage: taskGotoProfilePage,
 }

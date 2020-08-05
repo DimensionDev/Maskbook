@@ -318,13 +318,16 @@ export function ConnectNetwork() {
     const uninitializedPersonas = useMyUninitializedPersonas()
     const { identifier } = useQueryParams(['identifier'])
 
-    const { value = null, loading, error } = useAsync(
-        async () =>
-            identifier
-                ? Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
-                : null,
-        [identifier, initializedPersonas, uninitializedPersonas],
-    )
+    const { value = null, loading, error } = useAsync(async () => {
+        // auto-finished by immersive guider
+        if (initializedPersonas.some((persona) => persona.identifier.toText() === identifier)) {
+            history.replace(webpackEnv.perferResponsiveTarget === 'xs' ? DashboardRoute.Nav : DashboardRoute.Personas)
+            return null
+        }
+        return identifier
+            ? Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
+            : null
+    }, [identifier, initializedPersonas, uninitializedPersonas])
 
     // update persona when link/unlink really happen
     if (!loading && value?.linkedProfiles.size !== persona?.linkedProfiles.size) setPersona(value)

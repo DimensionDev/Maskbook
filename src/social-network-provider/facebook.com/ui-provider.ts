@@ -99,9 +99,19 @@ export const facebookUISelf = defineSocialNetworkUI({
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
     taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(() => facebookUISelf),
-    taskGotoProfilePage(profilePage) {
+    taskGotoProfilePage(profile) {
         // there is no PWA way on Facebook desktop.
         // mobile not tested
-        location.href = getProfilePageUrlAtFacebook(profilePage, 'open')
+        location.href = getProfilePageUrlAtFacebook(profile, 'open')
+    },
+    taskGotoNewsFeedPage() {
+        const homeLink = document.querySelector<HTMLAnchorElement>(
+            [
+                '[data-click="bluebar_logo"] a[href]', // PC
+                '#feed_jewel a[href]', // mobile
+            ].join(','),
+        )
+        if (homeLink) homeLink.click()
+        else if (location.pathname !== '/') location.pathname = '/'
     },
 })

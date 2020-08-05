@@ -173,6 +173,11 @@ export interface SocialNetworkUITasks {
      */
     taskGotoProfilePage(profile: ProfileIdentifier): void
     /**
+     * Jump to news feed page
+     * This task should go to the news feed page. The PWA way (no page refreshing) is preferred.
+     */
+    taskGotoNewsFeedPage(): void
+    /**
      * This function should return the given single post on the current page,
      * Called by `AutomatedTabTask`
      */
@@ -289,7 +294,6 @@ export function activateSocialNetworkUI(): void {
                 }
                 ui.lastRecognizedIdentity.addListener((id) => {
                     if (id.identifier.isUnknown) return
-
                     if (isNull(ui.currentIdentity.value)) {
                         ui.currentIdentity.value =
                             ui.myIdentitiesRef.value.find((x) => id.identifier.equals(x.identifier)) || null

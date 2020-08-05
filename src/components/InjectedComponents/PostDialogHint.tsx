@@ -2,14 +2,11 @@ import React from 'react'
 import { Card, Typography, Button } from '@material-ui/core'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
-import { useStylesExtends, or } from '../custom-ui-helper'
+import { useStylesExtends } from '../custom-ui-helper'
 import { useMyIdentities } from '../DataSource/useActivatedUI'
-import type { Profile } from '../../database'
 import type { BannerProps } from '../Welcomes/Banner'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
-import { useValueRef } from '../../utils/hooks/useValueRef'
-import { currentImmersiveSetupStatus } from '../../settings/settings'
-import { getActivatedUI } from '../../social-network/ui'
+import { useMyUninitializedPersonas } from '../DataSource/independent'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -60,16 +57,14 @@ export const PostDialogHintUI = React.memo(function PostDialogHintUI(props: Post
 })
 
 export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
-    identities?: Profile[]
     NotSetupYetPromptProps?: Partial<BannerProps>
 }
 export function PostDialogHint(props: PostDialogHintProps) {
-    const identities = or(props.identities, useMyIdentities())
+    const identities = useMyIdentities()
+    const initializedPersonas = useMyUninitializedPersonas()
     const ui = <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
 
-    const connecting = useValueRef(currentImmersiveSetupStatus[getActivatedUI().networkIdentifier])
-
-    if (connecting) return null
+    if (initializedPersonas.length === 0) return null
     if (identities.length === 0) return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     return ui
 }

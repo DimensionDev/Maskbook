@@ -25,7 +25,7 @@ import { getActivatedUI } from '../../../social-network/ui'
 import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../../settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
-import { PersonaIdentifier, ProfileIdentifier } from '../../../database/type'
+import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../../database/type'
 import Services from '../../../extension/service'
 
 export enum SetupGuideStep {
@@ -447,9 +447,21 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
             }
             footer={
                 <>
-                    <ActionButton className={classes.button} variant="contained" color="primary" onClick={onCreate}>
-                        {t('create_now')}
-                    </ActionButton>
+                    <ActionButtonPromise
+                        className={classes.button}
+                        variant="contained"
+                        color="primary"
+                        init={t('immersive_setup_create_post_auto')}
+                        waiting={t('adding')}
+                        complete={t('done')}
+                        failed={t('immersive_setup_create_post_failed')}
+                        executor={onCreate}
+                        completeOnClick={onSkip}
+                        completeIcon={null}
+                        failIcon={null}
+                        failedOnClick="use executor"
+                        data-testid="create_button"
+                    />
                     <ActionButton
                         className={classes.textButton}
                         variant="text"
@@ -473,6 +485,7 @@ export interface SetupGuideProps {
 }
 
 export function SetupGuide(props: SetupGuideProps) {
+    const { t } = useI18N()
     const { persona, provePost } = props
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
     const ui = getActivatedUI()
@@ -529,6 +542,7 @@ export function SetupGuide(props: SetupGuideProps) {
                     username,
                     persona: persona.toText(),
                 } as ImmersiveSetupCrossContextStatus)
+                ui.taskGotoNewsFeedPage()
                 setStep(SetupGuideStep.SayHelloWorld)
                 break
             case SetupGuideStep.SayHelloWorld:
@@ -562,14 +576,36 @@ export function SetupGuide(props: SetupGuideProps) {
     const onPaste = async () => {
         try {
             await navigator.clipboard.writeText(provePost)
-            await sleep(400)
             ui.taskPasteIntoBio(provePost)
             setPastedStatus(true)
         } catch (e) {
             setPastedStatus(false)
         }
     }
-    const onCreate = async () => {}
+    const onCreate = async () => {
+        if (!lastState.persona) return
+        const persona = await Services.Identity.queryPersona(
+            Identifier.fromString(lastState.persona, ECKeyIdentifier).unwrap(),
+        )
+        if (!persona) return
+
+        console.log('DEBUG: we have persona')
+        console.log(persona)
+
+        // auto-finish the setup process
+        await Promise.all([
+            Services.Identity.setupPersona(persona.identifier),
+            Services.Plugin.invokePlugin('maskbook.wallet', 'importFirstWallet', {
+                name: persona.nickname ?? t('untitled_wallet'),
+                mnemonic: persona.mnemonic?.words.split(' '),
+                passphrase: '',
+                _wallet_is_default: true,
+            }),
+        ])
+
+        // connected!
+        console.log('DEBUG: connected')
+    }
     const onClose = () => {
         currentImmersiveSetupStatus[ui.networkIdentifier].value = ''
         props.onClose?.()
@@ -583,7 +619,7 @@ export function SetupGuide(props: SetupGuideProps) {
                     onConfirm={onNext}
                     onBack={onBack}
                     onClose={onClose}
-                    onUsernameChange={(u) => setUsername(u)}></FindUsername>
+                    onUsernameChange={setUsername}></FindUsername>
             )
         case SetupGuideStep.PasteIntoBio:
             return (
