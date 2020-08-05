@@ -48,6 +48,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     },
     taskPasteIntoBio() {},
     taskPasteIntoPostBox() {},
+    taskOpenComposeBox() {},
     taskUploadToPostBox() {},
     version: 1,
     gunNetworkHint: 'invalid-',

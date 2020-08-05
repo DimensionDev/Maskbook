@@ -397,10 +397,12 @@ export function PostDialog(props: PostDialogProps) {
     //#region My Identity
     const identities = useMyIdentities()
     useEffect(() => {
-        return MessageCenter.on('compositionUpdated', ({ reason, open }: CompositionEvent) => {
-            if (reason === props.reason && identities.length > 0) {
-                setOpen(open)
-            }
+        return MessageCenter.on('compositionUpdated', ({ reason, open, content, options }: CompositionEvent) => {
+            if (reason !== props.reason || identities.length <= 0) return
+            setOpen(open)
+            if (content) setPostBoxContent(makeTypedMessageText(content))
+            if (options?.onlyMySelf) setOnlyMyself(true)
+            if (options?.shareToEveryOne) setShareToEveryone(true)
         })
     }, [identities.length, props.reason, setOpen])
 

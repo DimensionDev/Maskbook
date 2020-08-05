@@ -16,6 +16,7 @@ import classNames from 'classnames'
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
 import CloseIcon from '@material-ui/icons/Close'
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
+import stringify from 'json-stable-stringify'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import ShowcaseBox from '../../../extension/options-page/DashboardComponents/ShowcaseBox'
 import { merge, cloneDeep, noop } from 'lodash-es'
@@ -27,10 +28,12 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../../database/type'
 import Services from '../../../extension/service'
+import { MessageCenter } from '../../../utils/messages'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
     PasteIntoBio = 'paste-into-bio',
+    SayHelloWorld = 'say-hello-world',
 }
 //#region wizard dialog
 const wizardTheme = (theme: Theme): Theme =>
@@ -138,8 +141,8 @@ const useWizardDialogStyles = makeStyles((theme) =>
             wordBreak: 'keep-all',
         },
         textButton: {
-            fontSize: 16,
-            marginTop: theme.spacing(2),
+            fontSize: 14,
+            marginTop: theme.spacing(1),
             marginBottom: theme.spacing(-2),
         },
         header: {
@@ -452,7 +455,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                         variant="contained"
                         color="primary"
                         init={t('immersive_setup_create_post_auto')}
-                        waiting={t('adding')}
+                        waiting={t('creating')}
                         complete={t('done')}
                         failed={t('immersive_setup_create_post_failed')}
                         executor={onCreate}
@@ -526,7 +529,7 @@ export function SetupGuide(props: SetupGuideProps) {
     const onNext = async () => {
         switch (step) {
             case SetupGuideStep.FindUsername:
-                currentImmersiveSetupStatus[ui.networkIdentifier].value = JSON.stringify({
+                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.PasteIntoBio,
                     username,
                     persona: persona.toText(),
@@ -537,7 +540,7 @@ export function SetupGuide(props: SetupGuideProps) {
                 setStep(SetupGuideStep.PasteIntoBio)
                 break
             case SetupGuideStep.PasteIntoBio:
-                currentImmersiveSetupStatus[ui.networkIdentifier].value = JSON.stringify({
+                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.SayHelloWorld,
                     username,
                     persona: persona.toText(),
@@ -554,7 +557,7 @@ export function SetupGuide(props: SetupGuideProps) {
         switch (step) {
             case SetupGuideStep.PasteIntoBio:
                 const username_ = getUsername()
-                currentImmersiveSetupStatus[ui.networkIdentifier].value = JSON.stringify({
+                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.FindUsername,
                     username: '', // ensure staying find-username page
                     persona: persona.toText(),
@@ -564,13 +567,14 @@ export function SetupGuide(props: SetupGuideProps) {
                 setStep(SetupGuideStep.FindUsername)
                 break
             case SetupGuideStep.SayHelloWorld:
-                currentImmersiveSetupStatus[ui.networkIdentifier].value = JSON.stringify({
+                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
                     ...lastState,
                     status: SetupGuideStep.PasteIntoBio,
                 } as ImmersiveSetupCrossContextStatus)
+                const connecting = new ProfileIdentifier(ui.networkIdentifier, username)
+                ui.taskGotoProfilePage(connecting)
                 setStep(SetupGuideStep.PasteIntoBio)
                 break
-            case SetupGuideStep.SayHelloWorld:
         }
     }
     const onPaste = async () => {
@@ -589,9 +593,6 @@ export function SetupGuide(props: SetupGuideProps) {
         )
         if (!persona) return
 
-        console.log('DEBUG: we have persona')
-        console.log(persona)
-
         // auto-finish the setup process
         await Promise.all([
             Services.Identity.setupPersona(persona.identifier),
@@ -603,8 +604,12 @@ export function SetupGuide(props: SetupGuideProps) {
             }),
         ])
 
-        // connected!
-        console.log('DEBUG: connected')
+        // open compose dialog
+        const content = t('immersive_setup_say_hello_content')
+        await navigator.clipboard.writeText(content)
+        ui.taskOpenComposeBox(content, {
+            shareToEveryOne: true,
+        })
     }
     const onClose = () => {
         currentImmersiveSetupStatus[ui.networkIdentifier].value = ''

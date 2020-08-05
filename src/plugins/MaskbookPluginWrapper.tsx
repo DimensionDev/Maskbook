@@ -1,6 +1,5 @@
 import React from 'react'
-import { makeStyles, createStyles, Typography, ThemeProvider } from '@material-ui/core'
-import { getUrl } from '../utils/utils'
+import { makeStyles, Typography, ThemeProvider } from '@material-ui/core'
 import { getActivatedUI } from '../social-network/ui'
 import { MaskbookIcon } from '../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
 
