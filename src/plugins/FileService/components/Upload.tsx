@@ -61,7 +61,7 @@ export const Upload: React.FC = () => {
         if (encrypted) {
             key = makeFileKey()
         }
-        const block = await file.arrayBuffer()
+        const block = new Uint8Array(await file.arrayBuffer())
         const checksum = Buffer.from(await Attachment.checksum(block)).toString('base64')
         const item = await Services.Plugin.invokePlugin(pluginId, 'getFileInfo', checksum)
         if (isNil(item)) {
