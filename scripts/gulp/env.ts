@@ -66,7 +66,7 @@ if (!['fennec', 'geckoview'].includes(firefoxVariant)) throw new Error(`Unknown 
 
 export function getEnvironment(mode: Configuration['mode']) {
     return {
-        NODE_ENV: buildTarget === 'E2E' ? 'test' : mode,
+        NODE_ENV: mode,
         target: buildTarget,
         architecture: buildArchitecture,
         resolution: buildResolution,

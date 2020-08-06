@@ -33,6 +33,8 @@ deleteFolderRecursive(
     join(process.env.E2E_ALICE_USER_DATA_DIR, 'Default', 'Local Extension Settings', process.env.E2E_EXT_ID),
 )
 
+// TODO:
+// This judgment can be removed when the ESM branch released
 if (!existsSync(process.env.E2E_EXT_DIR)) {
     process.env.E2E_EXT_DIR = './temp/extension'
 }

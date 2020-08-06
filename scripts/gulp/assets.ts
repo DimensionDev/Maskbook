@@ -65,8 +65,10 @@ export const [environmentFile, watchEnvironmentFile] = createTask(
         src(manifestPath.file)
             .pipe(
                 modifyFile(
-                    (x) => `globalThis.process = {};
-globalThis.process.env = ${JSON.stringify(getEnvironment(mode))};`,
+                    (x) => `
+                        globalThis.process = {};
+                        globalThis.process.env = ${JSON.stringify(getEnvironment(mode))};
+                    `,
                 ),
             )
             .pipe(rename('env.js'))
