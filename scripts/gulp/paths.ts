@@ -3,6 +3,8 @@ import { join, relative, posix } from 'path'
 import { pathToFileURL } from 'url'
 // Source file
 export const root = folder('../../')
+export const firefoxProfile = folder('../../temp/.firefox')
+export const chromeProfile = folder('../../temp/.chrome')
 export const srcPath = folder('../../src/')
 export const entries = {
     content_script: file('../../src/content-script.ts').file,

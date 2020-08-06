@@ -13,13 +13,13 @@ const opts = {
 import minimist from 'minimist'
 import type { Configuration } from 'webpack'
 import * as modifier from './manifest.overrides'
-const args: Record<'chrome' | 'fx' | 'ios' | 'e2e' | 'android', boolean | undefined> & {
+const args: Record<'chrome' | 'fx' | 'ios' | 'e2e' | 'android' | 'open', boolean | undefined> & {
     target: typeof buildTarget
     arch: typeof buildArchitecture
     resolution: typeof buildResolution
-    reproducible: typeof reproducibleBuild
+    reproducible: boolean
     firefox: typeof firefoxVariant
-} = minimist(process.argv.slice(2), opts)
+} = minimist(process.argv.slice(2), opts) as any
 export let buildTarget = ((): 'chromium' | 'firefox' | 'safari' | 'E2E' => {
     if (args.chrome) return 'chromium'
     if (args.fx || args.android) return 'firefox'
