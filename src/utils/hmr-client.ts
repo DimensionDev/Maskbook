@@ -2,6 +2,7 @@ import { Emitter } from '@servie/events'
 import { sideEffect } from './side-effects'
 sideEffect.then(() => {
     if (process.env.NODE_ENV === 'production') return undefined
+    if (typeof WebSocket === 'undefined') return undefined
     const ws = new WebSocket('ws://localhost:7687')
     console.log('HMR client started')
     ws.addEventListener('message', async (e) => {

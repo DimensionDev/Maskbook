@@ -13,7 +13,7 @@ const [copyJS, watchCopyJS] = copyOnChange({
 })
 export const [copyHTML, watchCopyHTML] = copyOnChange({
     name: 'copy-webpack-output-html',
-    desc: 'Copy webpack output',
+    desc: 'Copy webpack HTML output',
     from: [output.webpackDependenciesHTML.relative('./*.html')],
     to: output.extension.folder,
     watch: [output.webpackDependenciesHTML.folder],
@@ -28,8 +28,8 @@ export const [dependenciesBuild, dependenciesWatch] = buildWebpackTask(
             mode === 'development' ? output.webpackDependenciesJS.folder : output.librariesBundle.folder,
         )
         if (mode === 'development') {
-            watchCopyJS(() => {})
-            watchCopyHTML(() => {})
+            watchCopyJS()
+            watchCopyHTML()
         }
         obj.output!.publicPath = output.librariesBundle.relativeFromRuntimeExtensionRoot('./')
         // replace ts-loader

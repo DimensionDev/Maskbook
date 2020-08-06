@@ -24,7 +24,7 @@ export const [srcAssets, watchSrcAssets] = copyOnChange({
 export const [assets, watchAssets] = copyOnChange({
     name: 'assets',
     desc: 'Copy all assets to the extension folder',
-    from: [assetsPath.files],
+    from: [[assetsPath.files, `!${assetsPath.relative('./**/*.html')}`]],
     to: output.extension.folder,
     watch: [assetsPath.folder],
 })

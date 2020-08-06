@@ -1,19 +1,20 @@
 const opts = {
     string: ['target', 'arch', 'resolution', 'firefox'],
-    boolean: ['reproducible'],
+    boolean: ['reproducible', 'silent'],
     default: {
         target: 'chromium',
         arch: 'web',
         resolution: 'desktop',
         firefox: 'fennec',
         reproducible: false,
+        silent: false,
     },
 }
 // @ts-ignore
 import minimist from 'minimist'
 import type { Configuration } from 'webpack'
 import * as modifier from './manifest.overrides'
-const args: Record<'chrome' | 'fx' | 'ios' | 'e2e' | 'android' | 'open', boolean | undefined> & {
+const args: Record<'chrome' | 'fx' | 'ios' | 'e2e' | 'android' | 'open' | 'silent', boolean | undefined> & {
     target: typeof buildTarget
     arch: typeof buildArchitecture
     resolution: typeof buildResolution
@@ -27,6 +28,7 @@ export let buildTarget = ((): 'chromium' | 'firefox' | 'safari' | 'E2E' => {
     if (args.e2e) return 'E2E'
     return args.target
 })()
+export const { silent } = args
 export let buildArchitecture = ((): 'app' | 'web' => {
     if (args.android || args.ios) return 'app'
     return args.arch

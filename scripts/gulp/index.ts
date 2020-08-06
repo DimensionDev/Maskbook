@@ -13,10 +13,8 @@ import {
 import { dependenciesWatch, dependenciesBuild, copyHTML } from './dependencies'
 import { copyESMOut, tscESModuleBuild, tscESModuleWatch, tscSystemBuild, tscSystemWatch, watchCopyESMOut } from './tsc'
 import { libs } from './libraries'
-// @ts-ignore
-import gulpMultiProcess from 'gulp-multi-process'
 import { output } from './paths'
-import { named } from './helper'
+import { multiProcess, named, parallelL, seriesL } from './helper'
 import { workerBuild, workerWatch } from './build-worker'
 import { isolatedBuild, isolatedWatch } from './build-isolated'
 import { prebuilt_iOS } from './build-iOS'
@@ -24,16 +22,8 @@ import { buildTarget } from './env'
 import { hmrServer } from './hmr'
 import rimraf from 'rimraf'
 
-function parallelProcessWatch(done: any) {
-    return gulpMultiProcess(
-        [
-            dependenciesWatch.displayName,
-            tscESModuleWatch.displayName,
-            tscSystemWatch.displayName,
-            workerWatch.displayName,
-        ],
-        done,
-    )
+function parallelProcessWatch() {
+    return multiProcess([dependenciesWatch, tscESModuleWatch, tscSystemWatch, workerWatch]).run()
 }
 named(
     'watch dependencies, esm, system, worker in 4 process',
@@ -70,38 +60,33 @@ export async function env() {
 }
 named(env.name!, 'Prepare the build process', env)
 
-export const build = named(
-    'build',
-    'Build the Maskbook in production mode',
-    series(
-        clean,
+export const build = named('build', 'Build the Maskbook in production mode', function () {
+    const t = seriesL(
+        'Build Maskbook',
         env,
-        parallel(
+        parallelL(
+            '',
             srcAssets,
             environmentFile,
-            parallelProcessBuild,
-            series(
-                copyHTML,
+            seriesL('', parallelProcessBuild, copyHTML),
+            seriesL(
+                'TypeScript (ESM & System JS)',
                 tscESModuleBuild,
-                parallel(series(copyESMOut, prebuilt_iOS), function system(done: any) {
-                    return buildTarget === 'firefox' ? tscSystemBuild(done) : done()
+                parallelL('', seriesL('', copyESMOut, prebuilt_iOS), function system(done: any) {
+                    return buildTarget === 'firefox' ? tscSystemBuild() : done()
                 }),
             ),
         ),
-    ),
-)
-
-function parallelProcessBuild(done: any) {
-    return gulpMultiProcess(
-        [workerBuild.displayName, isolatedBuild.displayName, dependenciesBuild.displayName],
-        done,
-        true,
     )
-}
+    return t.run()
+})
+
+const parallelProcessBuild = multiProcess([workerBuild, isolatedBuild, dependenciesBuild])
 export function clean(cb: any) {
     rimraf(output.extension.folder, cb)
 }
 named(clean.name!, 'Clean previous extension build', clean)
+export const cleanBuild = named('clean-build', 'Clean before build', series(clean, build))
 
 // export default watch
 export * from './assets'
@@ -115,3 +100,4 @@ export * from './build-iOS'
 export * from './build-ci'
 export * from './hmr'
 export * from './web-ext-cli'
+export * from './cli-ui'

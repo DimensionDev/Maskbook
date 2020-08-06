@@ -72,6 +72,7 @@ function folder(x: string, path = join(__dirname, x)) {
         ensure() {
             if (!existsSync(path)) mkdirSync(path)
         },
+        existsSync: () => existsSync(path),
     }
 }
 function file(x: string) {

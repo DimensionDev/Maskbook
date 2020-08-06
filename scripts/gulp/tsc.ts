@@ -24,8 +24,7 @@ export const [tscESModuleBuild, tscESModuleWatch] = createTask(
 export const tscSystemBuild = named(
     'system',
     'Build all TypeScript into SystemJS format for Firefox (build)',
-    (done: any) => {
-        if (buildTarget !== 'firefox') return done()
+    (): NodeJS.ReadWriteStream => {
         return src(output.esmBuildOriginal.js, { since: lastRun(tscSystemBuild) })
             .pipe(modifyFile((x) => toSystem(x).replace('ttsclib.js', 'ttsclib-system.js')))
             .pipe(changed(output.systemBuild.folder))
