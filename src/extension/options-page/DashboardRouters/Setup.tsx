@@ -153,6 +153,7 @@ function SetupForm(props: SetupFormProps) {
 const useConsentDataCollectionStyles = makeStyles((theme) =>
     createStyles({
         form: {
+            color: theme.palette.text.primary,
             fontSize: 16,
             lineHeight: 1.75,
             width: 660,
@@ -160,6 +161,7 @@ const useConsentDataCollectionStyles = makeStyles((theme) =>
             marginTop: 78,
         },
         label: {
+            color: theme.palette.text.primary,
             marginBottom: 32,
         },
         button: {

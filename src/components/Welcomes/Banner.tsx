@@ -10,6 +10,7 @@ import { setStorage } from '../../utils/browser.storage'
 import { useStylesExtends } from '../custom-ui-helper'
 import { ProfileIdentifier } from '../../database/type'
 import { MaskbookIcon } from '../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
+import { DashboardRoute } from '../../extension/options-page/Route'
 
 interface BannerUIProps
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'header' | 'content' | 'actions' | 'button'> {
@@ -104,11 +105,8 @@ export function Banner(props: BannerProps) {
             return
         }
         setStorage(networkIdentifier, { forceDisplayWelcome: false })
-        const id = { ...lastRecognizedIdentity }
-        id.identifier =
-            value === '' ? lastRecognizedIdentity.identifier : new ProfileIdentifier(networkIdentifier, value)
-        Services.Welcome.openWelcomePage(id)
-    }, [lastRecognizedIdentity, networkIdentifier, nextStep, value])
+        Services.Welcome.openOptionsPage(DashboardRoute.Setup)
+    }, [networkIdentifier, nextStep])
     const defaultUserName = networkIdentifier
         ? {
               defaultValue: lastRecognizedIdentity.identifier.isUnknown ? '' : lastRecognizedIdentity.identifier.userId,
