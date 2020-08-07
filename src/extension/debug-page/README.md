@@ -3,12 +3,11 @@
 ## Feature Set
 
 - [x] Backup Database
-- [ ] Restore Database
-- [ ] Clear Database
-- [ ] Clear Avatar Cache
-- [ ] Check Provider avabilabe
-  - [ ] Test Gundb Backend
-  - [ ] Test Gitcoin Backend
-  - [ ] Test ETH Network
+- [x] Restore Database
+- [x] Clear Database
+- [ ] Self-tests
+  - [ ] Test R/W Gundb
+  - [ ] Test R/W Gitcoin
+  - [ ] Test R/W ETH Network
 - [ ] Check Database integrity
 - [ ] Refresh Remote Feature Control
