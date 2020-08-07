@@ -3,7 +3,7 @@ import type { Configuration } from 'webpack'
 import webpack from 'webpack'
 import { dest, lastRun, series, src, TaskFunction, watch } from 'gulp'
 import ts from 'typescript'
-import { getEnvironment, silent } from './env'
+import { buildArchitecture, buildTarget, getEnvironment, silent } from './env'
 import { Readable, Transform } from 'stream'
 import changed from 'gulp-changed'
 import Listr from 'listr'
@@ -29,13 +29,14 @@ export function getWebpackConfig(
     distPath: string,
 ): Configuration {
     const isDev = mode === 'development'
+    const needCompress = !isDev && buildTarget === 'firefox' && buildArchitecture === 'web'
     return {
         mode,
         entry,
         plugins: [new webpack.EnvironmentPlugin(getEnvironment(mode))],
         devtool: isDev ? 'cheap-source-map' : false,
         optimization: {
-            minimize: false,
+            minimize: needCompress,
             namedModules: true,
             namedChunks: true,
             runtimeChunk: false,

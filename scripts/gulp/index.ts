@@ -72,7 +72,8 @@ export const build = named('build', 'Build the Maskbook in production mode', fun
             seriesL(
                 'TypeScript (ESM & System JS)',
                 tscESModuleBuild,
-                parallelL('', seriesL('', copyESMOut, prebuilt_iOS), function system(done: any) {
+                copyESMOut,
+                parallelL('', prebuilt_iOS, function system(done: any) {
                     return buildTarget === 'firefox' ? tscSystemBuild() : done()
                 }),
             ),

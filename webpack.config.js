@@ -1,4 +1,3 @@
-// Compress for firefox store version.
 // Make sure React devtools works
 /**
  * If you are using Firefox and want to use React devtools,
