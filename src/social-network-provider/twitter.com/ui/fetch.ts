@@ -9,10 +9,9 @@ import type {
 import { PostInfo } from '../../../social-network/PostInfo'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
-import { bioCardParser, postParser, postIdParser, postImagesParser, postNameParser } from '../utils/fetch'
+import { bioCardParser, postParser, postIdParser, postImagesParser } from '../utils/fetch'
 import { isNil, noop } from 'lodash-es'
 import Services from '../../../extension/service'
-import { twitterUrl } from '../utils/url'
 import { untilElementAvailable } from '../../../utils/dom'
 import { injectMaskbookIconToPost } from './injectMaskbookIcon'
 
@@ -40,14 +39,15 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
         })
 }
 
-const registerUserCollector = () => {
+const registerUserCollector = (self: SocialNetworkUI) => {
     new MutationObserverWatcher(bioCardSelector())
         .useForeach((cardNode: HTMLDivElement) => {
             const resolve = async () => {
                 if (!cardNode) return
-                const { isFollower, isFollowing, identifier, bio } = bioCardParser(cardNode)
-                const myIdentities = await Services.Identity.queryMyProfiles(twitterUrl.hostIdentifier)
-                const myIdentity = myIdentities[0] || ProfileIdentifier.unknown
+                const { isFollower, isFollowing, identifier } = bioCardParser(cardNode)
+                const ref = self.lastRecognizedIdentity
+                if (!ref) return
+                const myIdentity = await Services.Identity.queryProfile(self.lastRecognizedIdentity.value.identifier)
                 const myFriends = GroupIdentifier.getFriendsGroupIdentifier(
                     myIdentity.identifier,
                     PreDefinedVirtualGroupNames.friends,
@@ -61,18 +61,10 @@ const registerUserCollector = () => {
                     PreDefinedVirtualGroupNames.following,
                 )
                 if (isFollower || isFollowing) {
-                    if (isFollower) {
-                        Services.UserGroup.addProfileToFriendsGroup(myFollowers, [identifier]).then()
-                    }
-                    if (isFollowing) {
-                        Services.UserGroup.addProfileToFriendsGroup(myFollowing, [identifier]).then()
-                    }
-                    if (isFollower && isFollowing) {
-                        Services.UserGroup.addProfileToFriendsGroup(myFriends, [identifier]).then()
-                    }
-                } else {
-                    Services.UserGroup.removeProfileFromFriendsGroup(myFriends, [identifier]).then()
-                }
+                    if (isFollower) Services.UserGroup.addProfileToFriendsGroup(myFollowers, [identifier])
+                    if (isFollowing) Services.UserGroup.addProfileToFriendsGroup(myFollowing, [identifier])
+                    if (isFollower && isFollowing) Services.UserGroup.addProfileToFriendsGroup(myFriends, [identifier])
+                } else Services.UserGroup.removeProfileFromFriendsGroup(myFriends, [identifier])
             }
             resolve()
             return {
@@ -149,7 +141,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
 
 export const twitterUIFetch: SocialNetworkUIInformationCollector = {
     resolveLastRecognizedIdentity: () => resolveLastRecognizedIdentity(instanceOfTwitterUI),
-    collectPeople: registerUserCollector,
+    collectPeople: () => registerUserCollector(instanceOfTwitterUI),
     collectPosts: () => registerPostCollector(instanceOfTwitterUI),
 }
 
