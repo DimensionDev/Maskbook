@@ -1,4 +1,4 @@
-import { openDB, wrap } from 'idb'
+import { openDB, wrap } from 'idb/with-async-ittr'
 import React from 'react'
 import type { BackupFormat, Instance, ObjectStore } from './types'
 import typeson from './typeson'
@@ -95,7 +95,7 @@ async function restoreAll(parsed: BackupFormat) {
                 }
             },
         })
-        for (const [storeName, { records, keyPath }] of Object.entries(stores)) {
+        for (const [storeName, { records, keyPath }] of stores.entries()) {
             await db.clear(storeName)
             for (const [key, value] of records) {
                 try {
@@ -125,7 +125,7 @@ async function backupAll() {
         if (db === undefined) {
             continue
         }
-        const stores: Instance['stores'] = {}
+        const stores: Instance['stores'] = new Map()
         for (const name of db.objectStoreNames) {
             const store = db.transaction(name).store
             const indexes: ObjectStore['indexes'] = []
@@ -138,18 +138,16 @@ async function backupAll() {
                     keyPath: index.keyPath,
                 })
             }
-            const records: ObjectStore['records'] = []
-            let cursor = await store.openCursor()
-            while (cursor) {
-                records.push([cursor.key, cursor.value])
-                cursor = await cursor.continue()
+            const records: ObjectStore['records'] = new Map()
+            for await (const cursor of store) {
+                records.set(cursor.key, cursor.value)
             }
-            stores[name] = {
+            stores.set(name, {
                 keyPath: store.keyPath,
                 autoIncrement: store.autoIncrement,
                 indexes,
                 records,
-            }
+            })
         }
         instances.push({ name: name, version: version, stores })
     }
