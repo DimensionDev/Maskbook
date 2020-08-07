@@ -92,6 +92,7 @@
     "dashboard_item_copy_failed": "複製失敗。",
     "dashboard_item_deleted": "好了。",
     "dashboard_item_done": "好了。",
+    "dashboard_load_failed_title": "載入儀表板失敗。",
     "dashboard_mobile_test": "加入移動端測試",
     "dashboard_mobile_test_link": "https://maskbook.com/download-links/#mobile",
     "dashboard_new_persona_created": "新角色 «{{name}}» 已創建。 立即連接個人資料！([I:b])",

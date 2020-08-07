@@ -91,6 +91,7 @@
     "dashboard_item_copy_failed": "Copy failed.",
     "dashboard_item_deleted": "Deleted.",
     "dashboard_item_done": "Done.",
+    "dashboard_load_failed_title": "Fail to load dashboard.",
     "dashboard_mobile_test": "Join Tests for Mobile",
     "dashboard_mobile_test_link": "https://maskbook.com/download-links/#mobile",
     "dashboard_new_persona_created": "A new persona \"{{name}}\" has been created. Connect a profile now! ([I:b])",
