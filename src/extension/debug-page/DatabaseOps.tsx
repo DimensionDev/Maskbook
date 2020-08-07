@@ -17,7 +17,7 @@ export const DatabaseOps: React.FC = () => {
             return
         }
         const parsed = await typeson.parse(await file.text())
-        await restoreAll(parsed)
+        await restoreAll(parsed as Info)
     }
     const onClear = async () => {
         const databases = await indexedDB.databases?.()
@@ -31,7 +31,7 @@ export const DatabaseOps: React.FC = () => {
     return (
         <section>
             <button onClick={onBackup}>Backup Database</button>
-            <button onClick={onRestore}>Restore Database</button>
+            <button onClick={onRestore}>Overwrite Database with backup</button>
             <button onClick={onClear}>Clear Database</button>
         </section>
     )
@@ -58,19 +58,37 @@ function download(name: string, part: BlobPart) {
 function timeout<T>(promise: PromiseLike<T>, time: number): Promise<T | undefined> {
     return Promise.race([promise, new Promise<T>((resolve) => setTimeout(() => resolve(undefined), time))])
 }
-
-async function restoreAll(parsed: any) {
+type Info = {
+    buildInfo: Record<string, any>
+    databases: { name: string; version: number }[]
+    instances: Record<
+        string,
+        {
+            stores: Record<string, any[]>
+            indexes: any[]
+            keyPath: Record<string, string | string[] | null>
+            autoIncrement: Record<string, boolean>
+        }
+    >
+}
+async function restoreAll(parsed: Info) {
+    console.log('restoring with', parsed)
     const { databases, instances } = parsed
     for (const { name, version } of databases) {
-        const { stores, indexes } = instances[name]
+        if (!instances[name]) continue
+        const { stores, indexes, autoIncrement, keyPath } = instances[name]
         const db = await openDB(name, version, {
             upgrade(db) {
                 for (const name of db.objectStoreNames) {
                     db.deleteObjectStore(name)
                 }
                 for (const storeName of keys(stores)) {
-                    const store = db.createObjectStore(storeName)
-                    for (const index of indexes[storeName]) {
+                    const store = db.createObjectStore(storeName, {
+                        autoIncrement: autoIncrement[storeName],
+                        keyPath: keyPath[storeName],
+                    })
+                    for (const _ of Object.values(indexes[storeName as any] || {})) {
+                        const index: any = _
                         store.createIndex(index.name, index.keyPath, {
                             multiEntry: index.multiEntry,
                             unique: index.unique,
@@ -80,11 +98,18 @@ async function restoreAll(parsed: any) {
             },
         })
         for (const storeName of keys(stores)) {
+            await db.clear(storeName)
             for (const [key, value] of stores[storeName]) {
-                if (indexes[storeName]) {
-                    await db.add(storeName, value, key)
-                } else {
-                    await db.add(storeName, value)
+                try {
+                    if (!keyPath[storeName]) {
+                        await db.add(storeName, value, key)
+                    } else {
+                        await db.add(storeName, value)
+                    }
+                } catch (e) {
+                    console.error('Recover error when ', key, value, parsed)
+                    // Error from IndexedDB transaction is not recoverable
+                    throw e
                 }
             }
         }
@@ -102,10 +127,14 @@ async function backupAll() {
         if (db === undefined) {
             continue
         }
+        const keyPath: Record<string, unknown> = {}
+        const autoIncrement: Record<string, boolean> = {}
         const indexes: Record<string, unknown[]> = {}
         const stores: Record<string, [unknown, unknown][]> = {}
         for (const name of db.objectStoreNames) {
             const store = db.transaction(name).store
+            keyPath[name] = store.keyPath
+            autoIncrement[name] = store.autoIncrement
             indexes[name] = []
             for (const indexName of store.indexNames) {
                 const index = store.index(indexName)
@@ -129,7 +158,7 @@ async function backupAll() {
                 delete stores[name]
             }
         }
-        instances[name] = { stores, indexes }
+        instances[name] = { stores, indexes, keyPath, autoIncrement }
     }
     const payload = {
         buildInfo: {
