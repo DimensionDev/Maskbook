@@ -1,6 +1,6 @@
 import { openDB, wrap } from 'idb'
-import { keys, get } from 'lodash-es'
 import React from 'react'
+import type { BackupFormat, Instance, ObjectStore } from './types'
 import typeson from './typeson'
 
 export const DatabaseOps: React.FC = () => {
@@ -9,30 +9,50 @@ export const DatabaseOps: React.FC = () => {
         if (payload === undefined) {
             return
         }
-        download('backup.json', payload)
+        const timestamp = ((value: Date) => {
+            const values = [
+                value.getUTCFullYear(),
+                value.getUTCMonth() + 1,
+                value.getUTCDate(),
+                value.getUTCHours(),
+                value.getUTCMinutes(),
+                value.getUTCSeconds(),
+            ]
+            return values.map((value) => value.toString().padStart(2, '0')).join('')
+        })(new Date())
+        download(`maskbook-dump-${timestamp}.json`, payload)
     }
     const onRestore = async () => {
         const file = await select()
         if (file === undefined) {
             return
         }
-        const parsed = await typeson.parse(await file.text())
-        await restoreAll(parsed as Info)
+        const parsed: BackupFormat = await typeson.parse(await file.text())
+        await restoreAll(parsed)
     }
     const onClear = async () => {
         const databases = await indexedDB.databases?.()
         if (databases === undefined) {
             return
         }
-        for (const { name } of databases) {
-            await timeout(wrap(indexedDB.deleteDatabase(name)), 10000)
-        }
+        await Promise.all(
+            databases.map(async ({ name }) => {
+                await timeout(wrap(indexedDB.deleteDatabase(name)), 500)
+                console.log(`clear ${name}`)
+            }),
+        )
     }
     return (
         <section>
-            <button onClick={onBackup}>Backup Database</button>
-            <button onClick={onRestore}>Overwrite Database with backup</button>
-            <button onClick={onClear}>Clear Database</button>
+            <p>
+                <button onClick={onBackup}>Backup Database</button>
+            </p>
+            <p>
+                <button onClick={onRestore}>Overwrite Database with backup</button>
+            </p>
+            <p>
+                <button onClick={onClear}>Clear Database</button>
+            </p>
         </section>
     )
 }
@@ -58,53 +78,31 @@ function download(name: string, part: BlobPart) {
 function timeout<T>(promise: PromiseLike<T>, time: number): Promise<T | undefined> {
     return Promise.race([promise, new Promise<T>((resolve) => setTimeout(() => resolve(undefined), time))])
 }
-type Info = {
-    buildInfo: Record<string, any>
-    databases: { name: string; version: number }[]
-    instances: Record<
-        string,
-        {
-            stores: Record<string, any[]>
-            indexes: any[]
-            keyPath: Record<string, string | string[] | null>
-            autoIncrement: Record<string, boolean>
-        }
-    >
-}
-async function restoreAll(parsed: Info) {
+
+async function restoreAll(parsed: BackupFormat) {
     console.log('restoring with', parsed)
-    const { databases, instances } = parsed
-    for (const { name, version } of databases) {
-        if (!instances[name]) continue
-        const { stores, indexes, autoIncrement, keyPath } = instances[name]
+    for (const { name, version, stores } of parsed.instances) {
         const db = await openDB(name, version, {
             upgrade(db) {
                 for (const name of db.objectStoreNames) {
                     db.deleteObjectStore(name)
                 }
-                for (const storeName of keys(stores)) {
-                    const store = db.createObjectStore(storeName, {
-                        autoIncrement: autoIncrement[storeName],
-                        keyPath: keyPath[storeName],
-                    })
-                    for (const _ of Object.values(indexes[storeName as any] || {})) {
-                        const index: any = _
-                        store.createIndex(index.name, index.keyPath, {
-                            multiEntry: index.multiEntry,
-                            unique: index.unique,
-                        })
+                for (const [storeName, { autoIncrement, keyPath, indexes }] of Object.entries(stores)) {
+                    const store = db.createObjectStore(storeName, { autoIncrement, keyPath })
+                    for (const { name, keyPath, multiEntry, unique } of indexes) {
+                        store.createIndex(name, keyPath, { multiEntry, unique })
                     }
                 }
             },
         })
-        for (const storeName of keys(stores)) {
+        for (const [storeName, { records, keyPath }] of Object.entries(stores)) {
             await db.clear(storeName)
-            for (const [key, value] of stores[storeName]) {
+            for (const [key, value] of records) {
                 try {
-                    if (!keyPath[storeName]) {
-                        await db.add(storeName, value, key)
-                    } else {
+                    if (keyPath) {
                         await db.add(storeName, value)
+                    } else {
+                        await db.add(storeName, value, key)
                     }
                 } catch (e) {
                     console.error('Recover error when ', key, value, parsed)
@@ -121,46 +119,41 @@ async function backupAll() {
     if (databases === undefined) {
         return
     }
-    const instances: Record<string, unknown> = {}
+    const instances: BackupFormat['instances'] = []
     for (const { name, version } of databases) {
         const db = await timeout(openDB(name, version), 500)
         if (db === undefined) {
             continue
         }
-        const keyPath: Record<string, unknown> = {}
-        const autoIncrement: Record<string, boolean> = {}
-        const indexes: Record<string, unknown[]> = {}
-        const stores: Record<string, [unknown, unknown][]> = {}
+        const stores: Instance['stores'] = {}
         for (const name of db.objectStoreNames) {
             const store = db.transaction(name).store
-            keyPath[name] = store.keyPath
-            autoIncrement[name] = store.autoIncrement
-            indexes[name] = []
+            const indexes: ObjectStore['indexes'] = []
             for (const indexName of store.indexNames) {
                 const index = store.index(indexName)
-                indexes[name].push({
+                indexes.push({
                     name: index.name,
                     unique: index.unique,
                     multiEntry: index.multiEntry,
                     keyPath: index.keyPath,
                 })
             }
-            stores[name] = []
+            const records: ObjectStore['records'] = []
             let cursor = await store.openCursor()
             while (cursor) {
-                stores[name].push([cursor.key, cursor.value])
+                records.push([cursor.key, cursor.value])
                 cursor = await cursor.continue()
             }
-            if (indexes[name].length === 0) {
-                delete indexes[name]
-            }
-            if (stores[name].length === 0) {
-                delete stores[name]
+            stores[name] = {
+                keyPath: store.keyPath,
+                autoIncrement: store.autoIncrement,
+                indexes,
+                records,
             }
         }
-        instances[name] = { stores, indexes, keyPath, autoIncrement }
+        instances.push({ name: name, version: version, stores })
     }
-    const payload = {
+    const payload: BackupFormat = {
         buildInfo: {
             'user-agent': navigator.userAgent,
             version: process.env.VERSION,
@@ -173,7 +166,6 @@ async function backupAll() {
             dirty: process.env.DIRTY,
             'tag-dirty': process.env.TAG_DIRTY,
         },
-        databases,
         instances,
     }
     return typeson.stringify(payload, undefined, 2)
