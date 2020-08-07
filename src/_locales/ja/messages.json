@@ -266,6 +266,7 @@
     "service_others_key_not_found": "{{name}} の公開鍵が見つかりません!",
     "service_publish_post_aes_key_failed": "AES キーを公開するのに失敗しました。",
     "service_self_key_decryption_failed": "復号化に失敗しました。間違ったIDを選択したか、この投稿の暗号化に使用されていない鍵をインポートしたのかもしれません。",
+    "service_decode_image_payload_failed": "画像のデコードに失敗しました。",
     "service_unknown_payload": "投稿のバージョンが不明です。Maskbookのアップデートが必要かもしれません。",
     "service_username_invalid": "無効なユーザー名",
     "set_as_default": "初期値に設定",
