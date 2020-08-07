@@ -3,13 +3,14 @@ export default function loader(this: loader.LoaderContext, source: string) {
     this.cacheable(true)
     return transpileModule(source, {
         compilerOptions: {
-            target: ScriptTarget.ES2018,
+            target: ScriptTarget.ESNext,
             module: ModuleKind.ESNext,
-            sourceMap: false,
             jsx: JsxEmit.Preserve,
+            importsNotUsedAsValues: ImportsNotUsedAsValues.Remove,
+            sourceMap: false,
         },
         transformers: {
-            before: [TreeShakeTransformer(source.includes('import('))],
+            after: [TreeShakeTransformer(source.includes('import('))],
         },
     }).outputText
 }
@@ -38,7 +39,7 @@ function TreeShakeTransformer<T extends Node>(usingImportCall: boolean): Transfo
                         // @ts-ignore
                         ...exports.flatMap(createRegisterFromExport),
                         ...importCalls.map(createRegisterFromImportCall),
-                    ],
+                    ].filter((x) => !isEmptyStatement(x)),
                     false,
                     [],
                     [],
@@ -67,21 +68,11 @@ function createRegisterFromImport(node: ImportDeclaration) {
         }
     }
     // import x from 'y' => _d('y', { default: x })
-    if (c.name) bindings.push(createObjectLiteral([createPropertyAssignment('default', checkInitializer(c.name))]))
+    if (c.name) bindings.push(createObjectLiteral([createPropertyAssignment('default', c.name)]))
     return createExpressionStatement(createRegisterCall(node.moduleSpecifier, ...bindings))
     function createBinding(node: ImportSpecifier) {
-        if (node.propertyName) return createPropertyAssignment(node.propertyName, checkInitializer(node.name))
-        return createPropertyAssignment(node.name, checkInitializer(node.name))
-    }
-    function checkInitializer(x: Identifier) {
-        const xIsDefined = createBinary(
-            createTypeOf(x),
-            createToken(SyntaxKind.EqualsEqualsToken),
-            createStringLiteral('undefined'),
-        )
-        const void0 = createVoid(createNumericLiteral('0'))
-        // createConditional is deprecated, why?
-        return createConditional(xIsDefined, void0, x)
+        if (node.propertyName) return createPropertyAssignment(node.propertyName, node.name)
+        return createShorthandPropertyAssignment(node.name)
     }
 }
 /**
@@ -140,6 +131,7 @@ function dropLocalImport(node: ImportDeclaration) {
     if (!isStringLiteral(x)) return node
     if (node.importClause?.isTypeOnly) return null
     if (!x.text.startsWith('.')) return node
+    if (x.text.endsWith('.json')) return null
     return updateImportDeclaration(node, void 0, void 0, void 0, x)
 }
 function dropLocalExport(node: ExportDeclaration) {
@@ -194,7 +186,6 @@ import {
     createPropertyAssignment,
     ImportSpecifier,
     createIdentifier,
-    isIdentifier,
     createImportDeclaration,
     isNamedExports,
     ExportSpecifier,
@@ -204,11 +195,7 @@ import {
     createFileLevelUniqueName,
     createImportSpecifier,
     isNamespaceExport,
-    createTypeOf,
-    createStringLiteral,
-    createToken,
-    createBinary,
-    createVoid,
-    createNumericLiteral,
-    createConditional,
+    isEmptyStatement,
+    ImportsNotUsedAsValues,
+    createShorthandPropertyAssignment,
 } from 'typescript'

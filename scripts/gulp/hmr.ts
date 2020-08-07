@@ -3,6 +3,8 @@ import { watch } from 'gulp'
 import { output } from './paths'
 import { posix } from 'path'
 import { pathToFileURL } from 'url'
+// @ts-ignore
+import log from 'fancy-log'
 export function hmrServer() {
     const server = new Server({ port: 7687 })
     const clients = new Set<WebSocket>()
@@ -14,7 +16,7 @@ export function hmrServer() {
     watcher.addListener('change', (fileName) => {
         const url = pathToFileURL(fileName).href
         const r = posix.relative(pathToFileURL(output.extension.folder).href, url)
-        console.log(r, 'changed')
+        log(r, 'changed')
         for (const each of clients) each.send(r)
     })
 }
