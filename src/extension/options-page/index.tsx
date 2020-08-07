@@ -39,7 +39,6 @@ import { DashboardSnackbarProvider } from './DashboardComponents/DashboardSnackb
 import { SetupStep } from './SetupStep'
 import DashboardNavRouter from './DashboardRouters/Nav'
 import ActionButton from './DashboardComponents/ActionButton'
-import { sleep } from '../../utils/utils'
 import ShowcaseBox from './DashboardComponents/ShowcaseBox'
 
 const useStyles = makeStyles((theme) => {
