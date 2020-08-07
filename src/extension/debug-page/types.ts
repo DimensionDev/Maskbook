@@ -6,14 +6,14 @@ export interface BackupFormat {
 export interface Instance {
     name: string
     version: number
-    stores: Record<string, ObjectStore>
+    stores: Map<string, ObjectStore>
 }
 
 export interface ObjectStore {
     indexes: Index[]
     keyPath: IDBObjectStoreParameters['keyPath']
     autoIncrement: IDBObjectStoreParameters['autoIncrement']
-    records: [any, unknown][]
+    records: Map<any, unknown>
 }
 
 export interface Index {
