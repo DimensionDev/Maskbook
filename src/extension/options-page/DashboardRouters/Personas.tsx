@@ -9,7 +9,7 @@ import { DashboardPersonaCreateDialog, DashboardImportPersonaDialog } from '../D
 import { useModal } from '../DashboardDialogs/Base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
-import { useMyPersonas } from '../../../components/DataSource/independent'
+import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
