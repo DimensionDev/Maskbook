@@ -1,4 +1,5 @@
-const { exec } = require('child_process')
+const { execFile } = require('child_process')
+const { promisify } = require('util')
 const { appendScript } = require('./utils')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -15,10 +16,9 @@ class SSRPlugin {
     /**
      * @returns {Promise<string>}
      */
-    renderSSR() {
-        return new Promise((resolve, reject) => {
-            exec('node ./src/setup.ssr.js ' + this.pathName, (err, stdout) => (err ? reject(err) : resolve(stdout)))
-        })
+    async renderSSR() {
+        const { stdout } = await promisify(execFile)('node', ['./src/setup.ssr.js', this.pathName])
+        return stdout
     }
     /**
      * @param {string} original
