@@ -10,12 +10,12 @@ interface Props {
     info: FileInfo
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
         width: 345,
-        border: `solid 1px ${theme.palette.divider}`,
+        border: `1px solid ${theme.palette.divider}`,
         boxSizing: 'border-box',
         borderRadius: 12,
         padding: theme.spacing(2),

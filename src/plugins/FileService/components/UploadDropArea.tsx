@@ -8,7 +8,7 @@ import { UploadCloud } from 'react-feather'
 import { useDropArea } from 'react-use'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     label: {
         display: 'flex',
         flexDirection: 'column',
@@ -27,7 +27,7 @@ const useStyles = makeStyles({
     here: {
         fontSize: 14,
         lineHeight: 2.5,
-        color: '#2CA4EF',
+        color: theme.palette.grey[100],
         userSelect: 'none',
     },
     hint: {
@@ -68,7 +68,7 @@ const useStyles = makeStyles({
         cursor: 'pointer',
         zIndex: 0,
     },
-})
+}))
 
 interface Props {
     maxFileSize: number

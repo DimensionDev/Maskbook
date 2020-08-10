@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     heading: {
         fontSize: 14,
         lineHeight: 1.1,
-        color: theme.palette.common.black,
+        color: theme.palette.primary.dark,
         marginTop: 0,
         marginBottom: 10,
     },
@@ -40,7 +40,7 @@ const useItemStyles = makeStyles({
     },
 })
 
-const useItemTextStyles = makeStyles({
+const useItemTextStyles = makeStyles((theme) => ({
     root: {
         margin: 0,
         marginLeft: 3,
@@ -48,7 +48,7 @@ const useItemTextStyles = makeStyles({
     primary: {
         fontSize: 12,
         lineHeight: 1.1,
-        color: '#14171A',
+        color: theme.palette.primary.dark,
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
@@ -56,9 +56,9 @@ const useItemTextStyles = makeStyles({
     secondary: {
         fontSize: 10,
         lineHeight: 1.2,
-        color: '#667886',
+        color: theme.palette.secondary.dark,
     },
-})
+}))
 
 interface Props {
     files: FileInfo[]

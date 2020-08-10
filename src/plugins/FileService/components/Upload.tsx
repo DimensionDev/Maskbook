@@ -13,7 +13,7 @@ import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
 import { Trans } from 'react-i18next'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -34,20 +34,20 @@ const useStyles = makeStyles({
         '& span': {
             fontSize: 12,
             lineHeight: 1.75,
-            color: '#3B3B3B',
+            color: theme.palette.grey[600],
         },
     },
     legalText: {
         userSelect: 'none',
         fontSize: 12,
         lineHeight: 1.75,
-        color: '#3B3B3B',
+        color: theme.palette.grey[600],
         '& a': {
             color: '#2CA4EF',
             textDecoration: 'none',
         },
     },
-})
+}))
 
 export const Upload: React.FC = () => {
     const { t } = useI18N()
