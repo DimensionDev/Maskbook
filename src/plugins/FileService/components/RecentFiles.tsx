@@ -6,8 +6,9 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import type { FileInfo } from '../types'
 import { formatDateTime } from '../utils'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => {
     container: {
+        userSelect: 'none',
         display: 'flex',
         flexDirection: 'column',
         width: 150,
@@ -16,8 +17,7 @@ const useStyles = makeStyles({
     heading: {
         fontSize: 14,
         lineHeight: 1.1,
-        color: '#000',
-        userSelect: 'none',
+        color: theme.palette.common.black,
         marginTop: 0,
         marginBottom: 10,
     },
@@ -29,7 +29,7 @@ const useStyles = makeStyles({
         lineHeight: 1.2,
         color: '#2CA4EF',
     },
-})
+}))
 
 const useItemStyles = makeStyles({
     root: {

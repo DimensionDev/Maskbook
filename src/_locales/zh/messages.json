@@ -356,7 +356,7 @@
     "plugin_file_service_uploading_in_minute_remaining": "剩餘 {{seconds}} 秒",
     "plugin_file_service_uploading_remaining": "剩餘 {{minutes}} 分 {{seconds}} 秒",
     "plugin_file_service_uploading_on_cancal": "上傳中，請勿關閉頁面",
-    "plugin_file_service_show_more": "Show More",
+    "plugin_file_service_show_more": "更多",
     "plugin_file_service_on_encrypt_it": "上傳前加密",
     "plugin_file_service_on_show_more": "功能尚未實現，請期待新版",
     "plugin_file_service_legal_text": "使用本插件意味著同意<terms>使用條款</terms>與<policy>隱私政策</policy>",

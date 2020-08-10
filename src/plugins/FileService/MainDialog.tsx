@@ -34,11 +34,11 @@ interface Props
     DialogProps?: Partial<DialogProps>
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => {
     title: { marginLeft: 6 },
     container: { width: '100%' },
-    content: { padding: 12, background: '#fff' },
-})
+    content: { padding: 12, background: theme.palette.common.white },
+}))
 
 const MainDialog: React.FC<Props> = (props) => {
     const { t } = useI18N()

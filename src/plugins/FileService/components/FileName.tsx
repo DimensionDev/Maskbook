@@ -2,18 +2,18 @@ import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import React from 'react'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => {
     name: {
         fontSize: 16,
         lineHeight: 1.75,
         textAlign: 'center',
-        color: '#3B3B3B',
+        color: theme.palette.text.secondary,
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         maxWidth: 400,
     },
-})
+}))
 
 interface Props {
     name: string

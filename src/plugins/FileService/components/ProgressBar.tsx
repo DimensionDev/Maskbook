@@ -77,5 +77,5 @@ const Duration: React.FC<{ value: number }> = ({ value }) => {
             seconds: (value % 60).toFixed(0),
         })
     }
-    return <span>{render()}</span>
+    return <Typography>{render()}</Typography>
 }
