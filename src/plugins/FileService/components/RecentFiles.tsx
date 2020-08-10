@@ -6,7 +6,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import type { FileInfo } from '../types'
 import { formatDateTime } from '../utils'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles((theme) => ({
     container: {
         userSelect: 'none',
         display: 'flex',

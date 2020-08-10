@@ -4,6 +4,7 @@ import React from 'react'
 import { DownloadCloud, File } from 'react-feather'
 import { CopyableCode } from './components/Copyable'
 import type { FileInfo } from './types'
+import { useI18N } from '../../utils/i18n-next-ui'
 
 interface Props {
     info: FileInfo
@@ -27,6 +28,8 @@ const useStyles = makeStyles((theme: Theme) => ({
         minWidth: '1%',
         marginLeft: 18,
         marginRight: 18,
+        fontSize: 14,
+        lineHeight: 1.85,
     },
     name: {
         fontSize: 16,
@@ -34,18 +37,6 @@ const useStyles = makeStyles((theme: Theme) => ({
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
-    },
-    size: {
-        fontSize: 14,
-        lineHeight: 1.85,
-    },
-    unencrypted: {
-        fontSize: 14,
-        lineHeight: 1.85,
-    },
-    encrypted: {
-        fontSize: 14,
-        lineHeight: 1.85,
     },
     code: {
         lineHeight: 1,
@@ -58,13 +49,15 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export const Preview: React.FC<Props> = ({ info }) => {
+    const { t } = useI18N()
     const classes = useStyles()
     const fileKey = info.key ? (
-        <Typography component="p" color="textPrimary" className={classes.encrypted}>
-            File Key: <CopyableCode className={classes.code}>{info.key}</CopyableCode>
+        <Typography component="p" color="textPrimary">
+            {t('plugin_file_service_file_key')} <CopyableCode className={classes.code}>{info.key}</CopyableCode>
         </Typography>
     ) : (
-        <Typography component="p" color="textSecondary" className={classes.unencrypted}>
+        <Typography component="p" color="textSecondary">
+            {t('plugin_file_service_unencrypted')}
             This file is not encrypted
         </Typography>
     )
@@ -82,10 +75,10 @@ export const Preview: React.FC<Props> = ({ info }) => {
         <Paper elevation={0} className={classes.root}>
             <File className={classes.download} width={44} height={44} onClick={onClick} />
             <section className={classes.meta}>
-                <Typography color="textPrimary" className={classes.name} component="p" title={info.name}>
+                <Typography component="p" color="textPrimary" className={classes.name} title={info.name}>
                     {info.name}
                 </Typography>
-                <Typography color="textSecondary" className={classes.size} component="p">
+                <Typography component="p" color="textSecondary">
                     {formatFileSize(info.size)}
                 </Typography>
                 {fileKey}

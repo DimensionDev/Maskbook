@@ -34,7 +34,7 @@ interface Props
     DialogProps?: Partial<DialogProps>
 }
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles((theme) => ({
     title: { marginLeft: 6 },
     container: { width: '100%' },
     content: { padding: 12, background: theme.palette.common.white },
@@ -44,7 +44,7 @@ const MainDialog: React.FC<Props> = (props) => {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const snackbar = useSnackbar()
-    const [uploading, onUploading] = React.useState(false)
+    const [uploading, setUploading] = React.useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = React.useState<FileInfo | null>(null)
     const onInsert = () => {
         if (isNil(selectedFileInfo)) {
@@ -91,7 +91,7 @@ const MainDialog: React.FC<Props> = (props) => {
                 />
             </DialogTitle>
             <DialogContent className={classes.content}>
-                <Exchange onUploading={onUploading} onInsert={setSelectedFileInfo}>
+                <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
                     <Entry />
                     <Grid container justify="center">
                         <InsertButton onClick={onInsert} disabled={isNil(selectedFileInfo)} />
