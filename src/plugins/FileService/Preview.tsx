@@ -58,7 +58,6 @@ export const Preview: React.FC<Props> = ({ info }) => {
     ) : (
         <Typography component="p" color="textSecondary">
             {t('plugin_file_service_unencrypted')}
-            This file is not encrypted
         </Typography>
     )
     const link = `https://arweave.net/${info.landingTxID}`
