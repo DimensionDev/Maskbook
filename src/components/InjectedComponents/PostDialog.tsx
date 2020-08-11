@@ -45,8 +45,7 @@ import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
 import { PluginUI } from '../../plugins/plugin'
-import { Image } from '../shared/Image'
-import { getUrl } from '../../utils/utils'
+import FileServiceEntryIcon from './FileServiceEntryIcon'
 
 const defaultTheme = {}
 
@@ -205,11 +204,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 ChipProps={{
                                     label: (
                                         <>
-                                            <Image
-                                                src={getUrl('/plugin/file-service/entry.svg')}
-                                                width={16}
-                                                height={16}
-                                            />
+                                            <FileServiceEntryIcon width={16} height={16} />
                                             &nbsp;File Service
                                         </>
                                     ),
