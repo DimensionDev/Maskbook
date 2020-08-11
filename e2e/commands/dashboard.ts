@@ -76,6 +76,9 @@ export async function reset(page: Page) {
             } else {
                 break
             }
+
+            // waiting for personas list to be updated
+            await page.waitFor(500)
         }
     }
 }
