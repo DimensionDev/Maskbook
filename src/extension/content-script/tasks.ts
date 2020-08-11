@@ -12,6 +12,7 @@ import Serialization from '../../utils/type-transform/Serialization'
 import { sideEffect } from '../../utils/side-effects'
 import { untilDocumentReady } from '../../utils/dom'
 import { sleep } from '../../utils/utils'
+import { SetupGuideStep } from '../../components/InjectedComponents/ImmersiveGuide/SetupGuide'
 
 function getActivatedUI() {
     return safeGetActiveUI()
@@ -129,9 +130,9 @@ sideEffect.then(untilDocumentReady).then(() => {
     const network = getActivatedUI().networkIdentifier
     const id = currentImmersiveSetupStatus[network].value
     const onStatusUpdate = (id: string) => {
-        const status: ImmersiveSetupCrossContextStatus = JSON.parse(id || '{}')
-        if (status.persona && status.status === 'during') {
-            _tasks.immersiveSetup(Identifier.fromString(status.persona, ECKeyIdentifier).unwrap())
+        const { persona, status }: ImmersiveSetupCrossContextStatus = JSON.parse(id || '{}')
+        if (persona && status) {
+            _tasks.immersiveSetup(Identifier.fromString(persona, ECKeyIdentifier).unwrap())
         }
     }
     currentImmersiveSetupStatus[network].addListener(onStatusUpdate)
