@@ -76,6 +76,7 @@ export async function reset(page: Page) {
             } else {
                 break
             }
+            await page.waitFor(1000)
         }
     }
 }
