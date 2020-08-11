@@ -73,7 +73,7 @@ function PopupUI() {
                 <img className={classes.logo} src={getUrl('MB--ComboCircle--Blue.svg')} />
             ) : (
                 <>
-                    <Typography className={classes.title}>{t('popup_switch_account')}</Typography>
+                    <Typography className={classes.title}>{t('popup_current_persona')}</Typography>
                     <ChooseIdentity />
                 </>
             )}

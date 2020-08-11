@@ -71,13 +71,14 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
                             classes={{ table: classes.dashboardPreviewCardTable }}
                             dense
                             records={records}></DatabasePreviewCard>
-                        <DebounceButton
+                        <ActionButton
+                            loading={loading}
                             disabled={loading || records.every((r) => !r.length)}
                             variant="contained"
                             color="primary"
                             onClick={onConfirm}>
                             {t('dashboard_backup_database_confirmation')}
-                        </DebounceButton>
+                        </ActionButton>
                     </Box>
                 }></DashboardDialogWrapper>
         </DashboardDialogCore>
@@ -317,6 +318,7 @@ function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackupProps) 
                         <ActionButton
                             variant="contained"
                             color="primary"
+                            loading={imported === 'loading'}
                             disabled={imported === 'loading'}
                             onClick={onConfirm}>
                             {t('set_up_button_confirm')}

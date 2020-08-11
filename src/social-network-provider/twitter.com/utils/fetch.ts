@@ -196,6 +196,9 @@ export const postParser = (node: HTMLElement) => {
     return {
         ...postNameParser(node),
         avatar: postAvatarParser(node),
+
+        // TODO:
+        // we get wrong pid for nested tweet
         pid: postIdParser(node),
         content: postContentParser(node),
     }

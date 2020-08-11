@@ -153,14 +153,16 @@ export function DecryptPost(props: DecryptPostProps) {
     }, [firstSucceedDecrypted])
     //#endregion
 
-    // the internal error should not display to the end-user
-    if (!deconstructedPayload.ok && progress.every((x) => x.progress.type === 'error' && x.progress.internalError))
-        return null
+    // it's not a secret post
+    if (!deconstructedPayload.ok && progress.every((x) => x.progress.internal)) return null
     return (
         <>
-            {progress.map(({ progress }, index) => (
-                <React.Fragment key={index}>{renderProgress(progress)}</React.Fragment>
-            ))}
+            {progress
+                // the internal progress should not display to the end-user
+                .filter(({ progress }) => !progress.internal)
+                .map(({ progress }, index) => (
+                    <React.Fragment key={index}>{renderProgress(progress)}</React.Fragment>
+                ))}
         </>
     )
 
