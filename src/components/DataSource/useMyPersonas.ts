@@ -20,7 +20,7 @@ const independentRef = {
                 independentRef.myUninitializedPersonasRef.value = p.filter((x) => x.uninitialized)
             })
         },
-        1000,
+        500,
         {
             trailing: true,
         },
