@@ -133,11 +133,11 @@ storiesOf('Injections', module)
             function getProgress(x: ProgressType): DecryptionProgress | undefined {
                 switch (x) {
                     case ProgressType.finding_person_public_key:
-                        return { progress: 'finding_person_public_key', type: 'progress' }
+                        return { progress: 'finding_person_public_key', type: 'progress', internal: false }
                     case ProgressType.finding_post_key:
-                        return { progress: 'finding_post_key', type: 'progress' }
+                        return { progress: 'finding_post_key', type: 'progress', internal: false }
                     case ProgressType.init:
-                        return { progress: 'init', type: 'progress' }
+                        return { progress: 'init', type: 'progress', internal: false }
                     case ProgressType.intermediate_success:
                         return {
                             progress: 'intermediate_success',
@@ -148,7 +148,9 @@ storiesOf('Injections', module)
                                 rawContent: '',
                                 through: [],
                                 type: 'success',
+                                internal: false,
                             },
+                            internal: false,
                         }
                     case ProgressType.undefined:
                         return undefined
