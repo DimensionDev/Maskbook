@@ -5,11 +5,13 @@ import type { FileInfo } from '../types'
 export interface Props {
     onInsert(info: FileInfo | null): void
     onUploading(enabled: boolean): void
+    onUploadFailed(enabled: boolean): void
 }
 
 const Context = React.createContext<Props>({
     onInsert: noop,
     onUploading: noop,
+    onUploadFailed: noop,
 })
 
 export const Exchange: React.FC<Props> = (props) => (

@@ -1,10 +1,11 @@
 import { Attachment } from '@dimensiondev/common-protocols'
+import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 import Arweave from 'arweave/web'
 import type Transaction from 'arweave/web/lib/transaction'
+import { isEmpty, isNil } from 'lodash-es'
 import { landing } from '../constants'
 import { sign } from './remote-signing'
 import token from './token.json'
-import { isNil, isEmpty } from 'lodash-es'
 
 const stage: Record<Transaction['id'], Transaction> = {}
 
@@ -24,8 +25,8 @@ export async function makeAttachment(options: AttachmentOptions) {
     const passphrase = options.key ? encodeText(options.key) : undefined
     const encoded = await Attachment.encode(passphrase, {
         block: options.block,
-        metadata: null,
         mime: isEmpty(options.type) ? 'application/octet-stream' : options.type,
+        metadata: null,
     })
     const transaction = await makePayload(encoded, 'application/octet-stream')
     stage[transaction.id] = transaction
@@ -80,13 +81,5 @@ async function makeFileKeySigned(fileKey: string | undefined | null) {
     const key = await crypto.subtle.generateKey({ name: 'HMAC', hash: { name: 'SHA-256' } }, true, ['sign', 'verify'])
     const exportedKey = await crypto.subtle.exportKey('raw', key)
     const signed = await crypto.subtle.sign({ name: 'HMAC' }, key, encodedKey)
-    return [signed, exportedKey].map(encodeBase64)
-}
-
-function encodeText(input: string) {
-    return new TextEncoder().encode(input)
-}
-
-function encodeBase64(data: ArrayBuffer) {
-    return Buffer.from(data).toString('base64')
+    return [signed, exportedKey].map(encodeArrayBuffer)
 }

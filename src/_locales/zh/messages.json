@@ -359,6 +359,7 @@
     "plugin_file_service_show_more": "更多",
     "plugin_file_service_file_key": "File Key:",
     "plugin_file_service_unencrypted": "This file is not encrypted",
+    "plugin_file_service_signing_failed": "Remote signing failed.",
     "plugin_file_service_on_encrypt_it": "上傳前加密",
     "plugin_file_service_on_show_more": "功能尚未實現，請期待新版",
     "plugin_file_service_legal_text": "使用本插件意味著同意<terms>使用條款</terms>與<policy>隱私政策</policy>",

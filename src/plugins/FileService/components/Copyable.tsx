@@ -11,10 +11,13 @@ export const CopyableCode: React.FC<Props> = ({ children, className }) => {
     const snackbar = useSnackbar()
     const onSelect = (event: React.MouseEvent<Node>) => {
         const selection = global.getSelection()
+        if (selection === null) {
+            return
+        }
         const range = global.document.createRange()
         range.selectNode(event.currentTarget)
-        selection?.removeAllRanges()
-        selection?.addRange(range)
+        selection.removeAllRanges()
+        selection.addRange(range)
     }
     const onDeselect = () => {
         global.getSelection()?.removeAllRanges()

@@ -13,18 +13,16 @@ export async function sign(transaction: Transaction) {
 
 async function makeRequest(transaction: Transaction) {
     await transaction.prepareChunks(transaction.data)
+    const get = (base: { get: typeof transaction.get }, name: string) => base.get(name, { decode: true, string: false })
     return encode([
         toBuffer(transaction.format.toString()),
-        transaction.get('owner', { decode: true, string: false }),
-        transaction.get('target', { decode: true, string: false }),
+        get(transaction, 'owner'),
+        get(transaction, 'target'),
         toBuffer(transaction.quantity),
         toBuffer(transaction.reward),
-        transaction.get('last_tx', { decode: true, string: false }),
-        transaction.tags.map((tag) => [
-            tag.get('name', { decode: true, string: false }),
-            tag.get('value', { decode: true, string: false }),
-        ]),
+        get(transaction, 'last_tx'),
+        transaction.tags.map((tag) => [get(tag, 'name'), get(tag, 'value')]),
         toBuffer(transaction.data_size),
-        transaction.get('data_root', { decode: true, string: false }),
+        get(transaction, 'data_root'),
     ])
 }

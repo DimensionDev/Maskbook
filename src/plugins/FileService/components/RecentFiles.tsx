@@ -1,8 +1,9 @@
-import { Button, List, ListItem, ListItemText, makeStyles, Typography } from '@material-ui/core'
+import { Button, List, ListItem, ListItemIcon, ListItemText, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
 import { File } from 'react-feather'
 import { useHistory } from 'react-router'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { FileRouter } from '../constants'
 import type { FileInfo } from '../types'
 import { formatDateTime } from '../utils'
 
@@ -40,6 +41,12 @@ const useItemStyles = makeStyles({
     },
 })
 
+const useItemIconStyles = makeStyles({
+    root: {
+        minWidth: 32,
+    },
+})
+
 const useItemTextStyles = makeStyles((theme) => ({
     root: {
         margin: 0,
@@ -70,13 +77,16 @@ export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
     const history = useHistory()
     const classes = useStyles()
     const itemClasses = useItemStyles()
+    const itemIconClasses = useItemIconStyles()
     const itemTextClasses = useItemTextStyles()
     const onClick = (info: FileInfo) => () => {
-        history.push('/uploaded', info)
+        history.replace(FileRouter.uploaded, info)
     }
     const renderItem = (file: FileInfo, index: number) => (
         <ListItem classes={itemClasses} key={index} onClick={onClick(file)}>
-            <File width={32} height={32} />
+            <ListItemIcon classes={itemIconClasses}>
+                <File width={32} height={32} />
+            </ListItemIcon>
             <ListItemText
                 classes={itemTextClasses}
                 primary={file.name}

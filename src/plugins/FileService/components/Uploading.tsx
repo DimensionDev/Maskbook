@@ -1,14 +1,17 @@
-import { Grid, makeStyles } from '@material-ui/core'
+import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
 import { useAsync, useBeforeUnload } from 'react-use'
 import Services, { ServicesWithProgress } from '../../../extension/service'
-import { pluginId } from '../constants'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { FileRouter, pluginId } from '../constants'
 import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
 import { FileName } from './FileName'
 import { ProgressBar } from './ProgressBar'
+import { isNil } from 'lodash-es'
+import { timeout } from '../../../utils/utils'
 
 const useStyles = makeStyles({
     container: {
@@ -42,9 +45,10 @@ interface RouteState {
 }
 
 export const Uploading: React.FC = () => {
+    const { t } = useI18N()
     const classes = useStyles()
     const history = useHistory()
-    const { onUploading } = useExchange()
+    const { onUploading, onUploadFailed } = useExchange()
     const [startedAt] = React.useState(Date.now())
     const [preparing, setPreparing] = React.useState(true)
     const [sendSize, setSendSize] = React.useState(0)
@@ -54,23 +58,29 @@ export const Uploading: React.FC = () => {
         onUploading(true)
         return () => onUploading(false)
     }, [onUploading])
-    useAsync(async () => {
-        const payloadTxID = await Services.Plugin.invokePlugin(pluginId, 'makeAttachment', {
-            key: state.key,
-            block: state.block,
-            type: state.type,
-        })
+    const { error } = useAsync(async () => {
+        const payloadTxID = await timeout(
+            Services.Plugin.invokePlugin(pluginId, 'makeAttachment', {
+                key: state.key,
+                block: state.block,
+                type: state.type,
+            }),
+            60000, // ≈ 1 minute
+        )
         setPreparing(false)
         for await (const pctComplete of ServicesWithProgress.pluginArweaveUpload(payloadTxID)) {
             setSendSize(state.size * (pctComplete / 100))
         }
-        const landingTxID = await Services.Plugin.invokePlugin(pluginId, 'uploadLandingPage', {
-            name: state.name,
-            size: state.size,
-            txId: payloadTxID,
-            type: state.type,
-            key: state.key,
-        })
+        const landingTxID = await timeout(
+            Services.Plugin.invokePlugin(pluginId, 'uploadLandingPage', {
+                name: state.name,
+                size: state.size,
+                txId: payloadTxID,
+                type: state.type,
+                key: state.key,
+            }),
+            300000, // ≈ 5 minutes
+        )
         const item: FileInfo = {
             type: 'arweave',
             id: state.checksum,
@@ -83,8 +93,23 @@ export const Uploading: React.FC = () => {
             landingTxID: landingTxID,
         }
         await Services.Plugin.invokePlugin(pluginId, 'setFileInfo', item)
-        history.push('/uploaded', item)
+        history.replace(FileRouter.uploaded, item)
     }, [])
+    React.useEffect(() => {
+        onUploadFailed(!isNil(error))
+    }, [error, onUploadFailed])
+    if (error) {
+        return (
+            <Grid container className={classes.container}>
+                <Grid item>
+                    <File width={96} height={120} />
+                </Grid>
+                <Grid item>
+                    <Typography>{t('plugin_file_service_signing_failed')}</Typography>
+                </Grid>
+            </Grid>
+        )
+    }
     return (
         <Grid container className={classes.container}>
             <Grid item>

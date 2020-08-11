@@ -103,6 +103,8 @@ export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
             onFile(file)
         }
     }
+    // error code definition:
+    // see https://confluence.dimension.chat/x/3IEf#Maskbook:Plugin:FileService-ErrorHandling
     const onError = (code: number) => {
         const messages: Record<number, string> = {
             101: t('plugin_file_service_error_101'),

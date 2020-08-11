@@ -1,6 +1,5 @@
 import { ButtonBase, makeStyles } from '@material-ui/core'
 import React from 'react'
-import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles({
     root: {
@@ -23,15 +22,7 @@ interface Props {
     disabled?: boolean
 }
 
-export const InsertButton: React.FC<Props> = ({ onClick, disabled }) => {
-    const { t } = useI18N()
+export const InsertButton: React.FC<Props> = ({ onClick, disabled, children }) => {
     const classes = useStyles()
-    return (
-        <ButtonBase
-            classes={classes}
-            onClick={onClick}
-            disabled={disabled}
-            children={t('plugin_file_service_on_insert')}
-        />
-    )
+    return <ButtonBase classes={classes} onClick={onClick} disabled={disabled} children={children} />
 }

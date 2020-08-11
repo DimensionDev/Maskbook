@@ -4,6 +4,7 @@ import React from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { FileRouter } from '../constants'
 import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
 import { formatDateTime } from '../utils'
@@ -57,7 +58,7 @@ export const Uploaded: React.FC = () => {
     }, [onInsert, state])
     const onBack = () => {
         onInsert(null)
-        history.push('/upload')
+        history.replace(FileRouter.upload)
     }
     const onPreview = (event: React.MouseEvent) => {
         // ! THIS METHOD IS ONLY IN THE DEBUGGER !

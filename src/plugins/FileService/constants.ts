@@ -9,3 +9,9 @@ export const landing = 'https://files.maskbook.com/partner/arweave/landing-page.
 // in production
 // https://service.maskbook.com/arweave-remote-signing
 export const signing = 'https://f8149vcdfi.execute-api.ap-east-1.amazonaws.com/arweave-remote-signing'
+
+export const enum FileRouter {
+    upload = '/upload',
+    uploading = '/uploading',
+    uploaded = '/uploaded',
+}

@@ -45,6 +45,7 @@ const MainDialog: React.FC<Props> = (props) => {
     const classes = useStylesExtends(useStyles(), props)
     const snackbar = useSnackbar()
     const [uploading, setUploading] = React.useState(false)
+    const [failed, setFailed] = React.useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = React.useState<FileInfo | null>(null)
     const onInsert = () => {
         if (isNil(selectedFileInfo)) {
@@ -91,10 +92,12 @@ const MainDialog: React.FC<Props> = (props) => {
                 />
             </DialogTitle>
             <DialogContent className={classes.content}>
-                <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
+                <Exchange onUploading={setUploading} onUploadFailed={setFailed} onInsert={setSelectedFileInfo}>
                     <Entry />
                     <Grid container justify="center">
-                        <InsertButton onClick={onInsert} disabled={isNil(selectedFileInfo)} />
+                        <InsertButton onClick={onInsert} disabled={isNil(selectedFileInfo)}>
+                            {failed ? t('plugin_file_service_on_change_file') : t('plugin_file_service_on_insert')}
+                        </InsertButton>
                     </Grid>
                 </Exchange>
             </DialogContent>

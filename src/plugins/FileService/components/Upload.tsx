@@ -1,17 +1,19 @@
 import { Attachment } from '@dimensiondev/common-protocols'
+import { encodeArrayBuffer } from '@dimensiondev/kit'
 import { Checkbox, FormControlLabel, makeStyles, Typography } from '@material-ui/core'
 import { isNil } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import React from 'react'
+import { Trans } from 'react-i18next'
 import { useHistory } from 'react-router'
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeFileKey } from '../arweave/makeFileKey'
-import { MAX_FILE_SIZE, pluginId } from '../constants'
+import { FileRouter, MAX_FILE_SIZE, pluginId } from '../constants'
+import { useExchange } from '../hooks/Exchange'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
-import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -52,20 +54,22 @@ const useStyles = makeStyles((theme) => ({
 export const Upload: React.FC = () => {
     const { t } = useI18N()
     const classes = useStyles()
-    const history = useHistory()
     const snackbar = useSnackbar()
+    const history = useHistory()
+    const { onUploadFailed } = useExchange()
     const [encrypted, setEncrypted] = React.useState(true)
     const recents = useAsync(() => Services.Plugin.invokePlugin(pluginId, 'getRecentFiles'), [])
+    React.useEffect(() => onUploadFailed(false), [onUploadFailed])
     const onFile = async (file: File) => {
         let key
         if (encrypted) {
             key = makeFileKey()
         }
         const block = new Uint8Array(await file.arrayBuffer())
-        const checksum = Buffer.from(await Attachment.checksum(block)).toString('base64')
+        const checksum = encodeArrayBuffer(await Attachment.checksum(block))
         const item = await Services.Plugin.invokePlugin(pluginId, 'getFileInfo', checksum)
         if (isNil(item)) {
-            history.push('/uploading', {
+            history.replace(FileRouter.uploading, {
                 key,
                 name: file.name,
                 size: file.size,
@@ -74,7 +78,7 @@ export const Upload: React.FC = () => {
                 checksum,
             })
         } else {
-            history.push('/uploaded', item)
+            history.replace(FileRouter.uploaded, item)
         }
     }
     const onMore = () => {
