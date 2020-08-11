@@ -22,7 +22,7 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
     const profiles = persona ? [...persona.linkedProfiles] : []
     const providers = [...definedSocialNetworkWorkers]
         .filter((i) => {
-            if (webpackEnv.genericTarget === 'facebookApp') {
+            if (webpackEnv.target === 'WKWebview') {
                 if (i.networkIdentifier !== 'facebook.com') return false
             }
             return true
