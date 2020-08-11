@@ -10,6 +10,7 @@ import stringify from 'json-stable-stringify'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardPersonaUnlinkConfirmDialog } from '../DashboardDialogs/Persona'
 import { sleep } from '../../../utils/utils'
+import { SetupGuideStep } from '../../../components/InjectedComponents/ImmersiveGuide/SetupGuide'
 
 interface ProfileBoxProps {
     persona: Persona | null
@@ -45,7 +46,7 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
         // FIXME:
         // setting storage race condition here
         currentImmersiveSetupStatus[provider.network].value = stringify({
-            status: 'during',
+            status: SetupGuideStep.FindUsername,
             persona: persona.identifier.toText(),
         } as ImmersiveSetupCrossContextStatus)
         await sleep(100)

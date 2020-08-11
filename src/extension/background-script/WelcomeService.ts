@@ -75,12 +75,6 @@ export async function createBackupFile(
     return downloadBackup(obj)
 }
 
-export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdentity']['value']) {
-    if (id && !getCurrentNetworkWorker(id.identifier).unwrap().isValidUsername(id.identifier.userId))
-        throw new TypeError(i18n.t('service_username_invalid'))
-    return exclusiveTasks(getWelcomePageURL())
-}
-
 export async function openOptionsPage(route?: DashboardRoute, search?: string) {
     return exclusiveTasks(getUrl(route ? `/index.html#${route}${search ? `?${search}` : ''}` : '/index.html')).noop()
 }

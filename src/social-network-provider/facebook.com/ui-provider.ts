@@ -5,6 +5,7 @@ import { sharedProvider } from './shared-provider'
 import { injectPostBoxFacebook } from './UI/injectPostBox'
 import { collectPeopleFacebook } from './UI/collectPeople'
 import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
+import { taskOpenComposeBoxFacebook } from './tasks/openComposeBox'
 import { uploadToPostBoxFacebook } from './tasks/uploadToPostBox'
 import { getPostContentFacebook } from './tasks/getPostContent'
 import { resolveLastRecognizedIdentityFacebook } from './UI/resolveLastRecognizedIdentity'
@@ -95,13 +96,24 @@ export const facebookUISelf = defineSocialNetworkUI({
     collectPosts: collectPostsFacebook,
     taskPasteIntoBio: pasteIntoBioFacebook,
     taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
+    taskOpenComposeBox: taskOpenComposeBoxFacebook,
     taskUploadToPostBox: uploadToPostBoxFacebook,
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
     taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(() => facebookUISelf),
-    taskGotoProfilePage(profilePage) {
+    taskGotoProfilePage(profile) {
         // there is no PWA way on Facebook desktop.
         // mobile not tested
-        location.href = getProfilePageUrlAtFacebook(profilePage, 'open')
+        location.href = getProfilePageUrlAtFacebook(profile, 'open')
+    },
+    taskGotoNewsFeedPage() {
+        const homeLink = document.querySelector<HTMLAnchorElement>(
+            [
+                '[data-click="bluebar_logo"] a[href]', // PC
+                '#feed_jewel a[href]', // mobile
+            ].join(','),
+        )
+        if (homeLink) homeLink.click()
+        else if (location.pathname !== '/') location.pathname = '/'
     },
 })

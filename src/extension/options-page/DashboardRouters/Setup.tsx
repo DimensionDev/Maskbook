@@ -153,6 +153,7 @@ function SetupForm(props: SetupFormProps) {
 const useConsentDataCollectionStyles = makeStyles((theme) =>
     createStyles({
         form: {
+            color: theme.palette.text.primary,
             fontSize: 16,
             lineHeight: 1.75,
             width: 660,
@@ -160,6 +161,7 @@ const useConsentDataCollectionStyles = makeStyles((theme) =>
             marginTop: 78,
         },
         label: {
+            color: theme.palette.text.primary,
             marginBottom: 32,
         },
         button: {
@@ -317,14 +319,17 @@ export function ConnectNetwork() {
     const initializedPersonas = useMyPersonas()
     const uninitializedPersonas = useMyUninitializedPersonas()
     const { identifier } = useQueryParams(['identifier'])
-
-    const { value = null, loading, error } = useAsync(
-        async () =>
-            identifier
-                ? Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
-                : null,
-        [identifier, initializedPersonas, uninitializedPersonas],
-    )
+    const { value = null, loading, error } = useAsync(async () => {
+        const persona = initializedPersonas.find((x) => x.identifier.toText() === identifier)
+        // auto-finished by immersive guider
+        if (persona?.linkedProfiles.size) {
+            history.replace(webpackEnv.perferResponsiveTarget === 'xs' ? DashboardRoute.Nav : DashboardRoute.Personas)
+            return null
+        }
+        return identifier
+            ? Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
+            : null
+    }, [identifier, initializedPersonas, uninitializedPersonas])
 
     // update persona when link/unlink really happen
     if (!loading && value?.linkedProfiles.size !== persona?.linkedProfiles.size) setPersona(value)
@@ -760,7 +765,7 @@ export function RestoreDatabaseConfirmation() {
     ]
 
     const restoreFinish = async () => {
-        if (backup?.personas && personas === 1 && profiles === 0) {
+        if (backup?.personas.length && personas === 1 && profiles === 0) {
             history.push(`${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(backup.personas[0].identifier)}`)
         } else if (personas === 0 && profiles === 0) {
             history.replace(SetupStep.CreatePersona)

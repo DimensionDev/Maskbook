@@ -1,6 +1,5 @@
 import React from 'react'
-import { makeStyles, createStyles, Typography, ThemeProvider } from '@material-ui/core'
-import { getUrl } from '../utils/utils'
+import { makeStyles, Typography, ThemeProvider } from '@material-ui/core'
 import { getActivatedUI } from '../social-network/ui'
 import { MaskbookIcon } from '../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
 
@@ -10,11 +9,21 @@ interface PluginWrapperProps {
     width?: number
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
+const useStyles = makeStyles((theme) => {
+    const network = getActivatedUI()?.networkIdentifier
+    return {
         card: {
+            marginTop: theme.spacing(1),
+            width: '100%',
+            boxSizing: 'border-box',
             border: `1px solid ${theme.palette.divider}`,
             cursor: 'default',
+            ...(network === 'twitter.com'
+                ? {
+                      borderRadius: 15,
+                      overflow: 'hidden',
+                  }
+                : null),
         },
         header: {
             backgroundColor: theme.palette.background.paper,
@@ -36,16 +45,16 @@ const useStyles = makeStyles((theme) =>
         body: {
             margin: theme.spacing(2),
         },
-    }),
-)
+    }
+})
 
 export default function MaskbookPluginWrapper(props: PluginWrapperProps) {
     const classes = useStyles()
-    const { pluginName, children, width } = props
+    const { pluginName, children } = props
     const theme = getActivatedUI().useTheme()
     return (
         <ThemeProvider theme={theme}>
-            <div className={classes.card} style={{ width }} onClick={(ev) => ev.stopPropagation()}>
+            <div className={classes.card} onClick={(ev) => ev.stopPropagation()}>
                 <div className={classes.header}>
                     <MaskbookIcon className={classes.icon}></MaskbookIcon>
                     <div className={classes.title}>

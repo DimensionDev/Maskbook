@@ -27,6 +27,7 @@ import { instanceOfTwitterUI } from '.'
 import type { ProfileIdentifier } from '../../../database/type'
 import { encodeArrayBuffer, decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { isMobileTwitter } from '../utils/isMobile'
+import { MessageCenter } from '../../../utils/messages'
 
 /**
  * Wait for up to 5000 ms
@@ -135,6 +136,21 @@ const taskPasteIntoBio = async (text: string) => {
     }
 }
 
+const taskOpenComposeBox = async (
+    content: string,
+    options?: {
+        onlyMySelf?: boolean
+        shareToEveryOne?: boolean
+    },
+) => {
+    MessageCenter.emit('compositionUpdated', {
+        reason: 'timeline',
+        open: true,
+        content,
+        options,
+    })
+}
+
 const taskGetPostContent: SocialNetworkUITasks['taskGetPostContent'] = async () => {
     const contentNode = (await timeout(new MutationObserverWatcher(postsSelector()), 10000))[0]
     return contentNode ? postContentParser(contentNode) : ''
@@ -159,12 +175,25 @@ function taskGotoProfilePage(profile: ProfileIdentifier) {
     }, 400)
 }
 
+function taskGotoNewsFeedPage() {
+    const homeLink = document.querySelector<HTMLAnchorElement>(
+        [
+            '[role="banner"] [role="heading"] > a[href]', // PC
+            '#layers [role="navigation"] > a[href]', // mobile
+        ].join(','),
+    )
+    if (homeLink) homeLink.click()
+    else if (!location.pathname.includes('/home')) location.pathname = '/home'
+}
+
 export const twitterUITasks: SocialNetworkUITasks = {
     taskPasteIntoPostBox,
+    taskOpenComposeBox,
     taskUploadToPostBox,
     taskPasteIntoBio,
     taskGetPostContent,
     taskGetProfile,
+    taskGotoProfilePage,
+    taskGotoNewsFeedPage,
     taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(() => instanceOfTwitterUI),
-    taskGotoProfilePage: taskGotoProfilePage,
 }

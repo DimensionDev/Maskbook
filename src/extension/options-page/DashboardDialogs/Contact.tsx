@@ -45,7 +45,7 @@ export function DashboardContactDeleteConfirmDialog(
                 icon={<UserMinus />}
                 iconColor="#F4637D"
                 primary={t('delete_contact')}
-                secondary={t('delete_contact_confirmation', { contact: contact.nickname })}
+                secondary={t('delete_contact_confirmation', { contact: contact.nickname ?? contact.identifier.userId })}
                 footer={
                     <SpacedButtonGroup>
                         <DebounceButton variant="contained" color="danger" onClick={onDelete}>
