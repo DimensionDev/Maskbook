@@ -10,7 +10,7 @@ import { PostInfo } from '../../../social-network/PostInfo'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
 import { bioCardParser, postParser, postIdParser, postImagesParser } from '../utils/fetch'
-import { isNil, noop } from 'lodash-es'
+import { isNil, noop, memoize } from 'lodash-es'
 import Services from '../../../extension/service'
 import { untilElementAvailable } from '../../../utils/dom'
 import { injectMaskbookIconToPost } from './injectMaskbookIcon'
@@ -89,6 +89,15 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             ].join(),
         )
     }
+    const updateProfileInfo = memoize(
+        (info: PostInfo) => {
+            Services.Identity.updateProfileInfo(info.postBy.value, {
+                nickname: info.nickname.value,
+                avatarURL: info.avatarURL.value,
+            })
+        },
+        (info: PostInfo) => info.postBy.value?.toText(),
+    )
     new MutationObserverWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
@@ -108,10 +117,8 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             run()
             info.postPayload.addListener((payload) => {
                 if (!payload) return
-                Services.Identity.updateProfileInfo(info.postBy.value, {
-                    nickname: info.nickname.value,
-                    avatarURL: info.avatarURL.value,
-                }).then()
+                if (payload.err && info.postMetadataImages.size === 0) return
+                updateProfileInfo(info)
             })
             info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
             info.postContent.addListener((newValue) => {
