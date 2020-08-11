@@ -11,7 +11,6 @@ export async function getRecentFiles() {
     for await (const file of Database.iterate('arweave')) {
         files.push(file)
     }
-    console.log(files)
     files.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
     return files.slice(0, 4)
 }
