@@ -129,6 +129,7 @@
     "debug": "Debug",
     "decrypted_postbox_add_recipients": "View / add recipients",
     "decrypted_postbox_decrypting": "Maskbook decrypting…",
+    "decrypted_postbox_decoding": "Maskbook decoding…",
     "decrypted_postbox_decrypting_finding_person_key": "Maskbook is looking for the public key of the author…",
     "decrypted_postbox_decrypting_finding_post_key": "Maskbook is retrieving the post key to decrypt this post…",
     "decrypted_postbox_failed": "Maskbook decryption failed",

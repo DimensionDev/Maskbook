@@ -129,6 +129,7 @@
     "debug": "デバッグ",
     "decrypted_postbox_add_recipients": "受信者の表示/追加",
     "decrypted_postbox_decrypting": "Maskbookが複号しています。",
+    "decrypted_postbox_decoding": "Maskbookが解読しています。",
     "decrypted_postbox_decrypting_finding_person_key": "Maskbookは公開鍵を探しています…",
     "decrypted_postbox_decrypting_finding_post_key": "Maskbookはこの投稿を復号化するために ポストキーを取得しています…",
     "decrypted_postbox_failed": "Maskbookの復号に失敗しました。",
