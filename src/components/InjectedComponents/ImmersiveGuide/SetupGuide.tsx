@@ -33,6 +33,7 @@ import { MessageCenter } from '../../../utils/messages'
 export enum SetupGuideStep {
     FindUsername = 'find-username',
     PasteIntoBio = 'paste-into-bio',
+    SayHelloWorld = 'say-hello-world',
 }
 //#region wizard dialog
 const wizardTheme = (theme: Theme): Theme =>
