@@ -19,7 +19,12 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                 content={
                     <form>
                         <TextField required label={t('name')} value={name} onChange={(e) => setName(e.target.value)} />
-                        <TextField required label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <TextField
+                            required
+                            label={t('email')}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
                         <TextField
                             multiline
                             rows={4}

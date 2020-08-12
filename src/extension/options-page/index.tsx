@@ -1,8 +1,8 @@
 import '../../provider.worker'
 import '../../setup.ui'
 
-import React from 'react'
-import { CssBaseline, useMediaQuery, NoSsr, CircularProgress, Box } from '@material-ui/core'
+import React, { useState } from 'react'
+import { CssBaseline, useMediaQuery, NoSsr, CircularProgress, Box, Typography, Card } from '@material-ui/core'
 import { ThemeProvider, makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
@@ -38,6 +38,8 @@ import { grey } from '@material-ui/core/colors'
 import { DashboardSnackbarProvider } from './DashboardComponents/DashboardSnackbar'
 import { SetupStep } from './SetupStep'
 import DashboardNavRouter from './DashboardRouters/Nav'
+import ActionButton from './DashboardComponents/ActionButton'
+import ShowcaseBox from './DashboardComponents/ShowcaseBox'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.type === 'dark'
@@ -89,6 +91,7 @@ const useStyles = makeStyles((theme) => {
             width: '100%',
             alignItems: 'center',
             justifyContent: 'center',
+            flexDirection: 'column',
         },
         footer: {
             gridRow: 'content-end / span 1',
@@ -96,6 +99,15 @@ const useStyles = makeStyles((theme) => {
         },
         blur: {
             filter: 'blur(3px)',
+        },
+        errorTitle: {
+            marginBottom: theme.spacing(3),
+        },
+        errorMessage: {
+            maxWidth: '50%',
+            maxHeight: 300,
+            whiteSpace: 'pre-wrap',
+            marginBottom: theme.spacing(3),
         },
     })
 })
@@ -115,63 +127,84 @@ function DashboardUI() {
     ] as const).filter((x) => x)
 
     // jump to persona if needed
-    const { loading } = useAsync(async () => {
+    const [reloadSpy, setReloadSpy] = useState(false)
+    const { loading, error } = useAsync(async () => {
         if (webpackEnv.target === 'E2E' && location.hash.includes('noredirect=true')) return
         if (location.hash.includes(SetupStep.ConsentDataCollection)) return
         const personas = (await Services.Identity.queryMyPersonas()).filter((x) => !x.uninitialized)
-        if (!personas.length) history.replace(`${DashboardRoute.Setup}/${SetupStep.CreatePersona}`)
+        // the user need setup at least one persona
+        if (!personas.length) {
+            history.replace(`${DashboardRoute.Setup}/${SetupStep.CreatePersona}`)
+            return
+        }
+        // the user has got more than one personas, so we cannot make decision for user.
         if (personas.length !== 1) return
-        const profiles = await Services.Identity.queryMyProfiles()
-        if (profiles.length) return
+        // the user has linked the only persona with some profiles
+        if (personas.some((x) => x.linkedProfiles.size)) return
         history.replace(
             `${DashboardRoute.Setup}/${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(
                 personas[0].identifier.toText(),
             )}`,
         )
-    }, [])
+    }, [reloadSpy])
 
-    const drawer = <Drawer routers={routers} exitDashboard={null} />
-    const nav = () => <DashboardNavRouter children={drawer} />
-
-    return (
-        <div className={classes.root}>
-            <div className={classes.container}>
-                {loading ? (
-                    <Box className={classes.suspend}>
-                        <CircularProgress />
-                    </Box>
-                ) : (
-                    <>
-                        {xsMatched ? null : drawer}
-                        <Switch>
-                            {webpackEnv.perferResponsiveTarget === 'xs' ? (
-                                <Route path={DashboardRoute.Nav} component={nav} />
-                            ) : null}
-                            <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
-                            <Route path={DashboardRoute.Wallets} component={DashboardWalletsRouter} />
-                            <Route path={DashboardRoute.Contacts} component={DashboardContactsRouter} />
-                            <Route path={DashboardRoute.Settings} component={DashboardSettingsRouter} />
-                            <Route path={DashboardRoute.Setup} component={DashboardSetupRouter} />
-                            {/* // TODO: this page should be boardless */}
-                            <Route path={DashboardRoute.RequestPermission} component={RequestPermissionPage} />
-                            <Redirect
-                                path="*"
-                                to={
-                                    webpackEnv.perferResponsiveTarget === 'xs'
-                                        ? DashboardRoute.Nav
-                                        : DashboardRoute.Personas
-                                }
-                            />
-                        </Switch>
-                    </>
+    const renderDashboard = (children: React.ReactNode) => {
+        return (
+            <div className={classes.root}>
+                <div className={classes.container}>{children}</div>
+                {xsMatched ? null : (
+                    <footer className={classes.footer}>
+                        <FooterLine />
+                    </footer>
                 )}
             </div>
-            {xsMatched ? null : (
-                <footer className={classes.footer}>
-                    <FooterLine />
-                </footer>
-            )}
-        </div>
+        )
+    }
+
+    if (loading)
+        return renderDashboard(
+            <Box className={classes.suspend}>
+                <CircularProgress />
+            </Box>,
+        )
+    if (error)
+        return renderDashboard(
+            <Box className={classes.suspend}>
+                <Typography className={classes.errorTitle} variant="h5">
+                    {t('dashboard_load_failed_title')}
+                </Typography>
+                {error.message ? (
+                    <Card className={classes.errorMessage}>
+                        <ShowcaseBox>{error.message}</ShowcaseBox>
+                    </Card>
+                ) : null}
+                <ActionButton color="primary" variant="text" onClick={() => setReloadSpy((x) => !x)}>
+                    {t('reload')}
+                </ActionButton>
+            </Box>,
+        )
+
+    const drawer = <Drawer routers={routers} exitDashboard={null} />
+    return renderDashboard(
+        <>
+            {xsMatched ? null : drawer}
+            <Switch>
+                {webpackEnv.perferResponsiveTarget === 'xs' ? (
+                    <Route path={DashboardRoute.Nav} component={() => <DashboardNavRouter children={drawer} />} />
+                ) : null}
+                <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
+                <Route path={DashboardRoute.Wallets} component={DashboardWalletsRouter} />
+                <Route path={DashboardRoute.Contacts} component={DashboardContactsRouter} />
+                <Route path={DashboardRoute.Settings} component={DashboardSettingsRouter} />
+                <Route path={DashboardRoute.Setup} component={DashboardSetupRouter} />
+                {/* // TODO: this page should be boardless */}
+                <Route path={DashboardRoute.RequestPermission} component={RequestPermissionPage} />
+                <Redirect
+                    path="*"
+                    to={webpackEnv.perferResponsiveTarget === 'xs' ? DashboardRoute.Nav : DashboardRoute.Personas}
+                />
+            </Switch>
+        </>,
     )
 }
 

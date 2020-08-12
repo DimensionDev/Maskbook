@@ -416,7 +416,7 @@ export function DashboardPersonaUnlinkConfirmDialog(props: WrappedDialogProps) {
                         <DebounceButton variant="contained" color="danger" onClick={onClick}>
                             {t('confirm')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
+                        <DebounceButton variant="outlined" color="default" onClick={props.onClose}>
                             {t('cancel')}
                         </DebounceButton>
                     </SpacedButtonGroup>

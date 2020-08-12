@@ -140,7 +140,7 @@ export function RedPacketInDecryptedPostCard(
     /* without redpacket */
     const jsx = message
         ? withMetadata(message.meta, RedPacketMetaKey, (r) => (
-              <MaskbookPluginWrapper width={400} pluginName="Red Packet">
+              <MaskbookPluginWrapper pluginName="Red Packet">
                   <RedPacketWithState
                       loading={loading || !!claiming}
                       onClick={onClick}
