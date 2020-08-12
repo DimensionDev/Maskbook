@@ -45,6 +45,12 @@ export async function isEmptyWallets() {
     return count === 0
 }
 
+export async function getWallets(): Promise<WalletRecord[]> {
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet', 'ERC20Token')
+    const wallets = await t.objectStore('Wallet').getAll()
+    return wallets.map(WalletRecordOutDB)
+}
+
 export async function getManagedWallets(): Promise<{
     wallets: (ManagedWalletRecord & { privateKey: string })[]
     tokens: ERC20TokenRecord[]

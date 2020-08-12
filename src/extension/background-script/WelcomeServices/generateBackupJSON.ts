@@ -8,10 +8,13 @@ import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupF
 import { GroupRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
 import { ProfileIdentifier, PersonaIdentifier, Identifier } from '../../../database/type'
+import { getWallets } from '../../../plugins/Wallet/wallet'
+import { WalletRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 
 export interface BackupOptions {
     noPosts: boolean
     noUserGroups: boolean
+    noWallets: boolean
     noPersonas: boolean
     noProfiles: boolean
     hasPrivateKeyOnly: boolean
@@ -20,15 +23,16 @@ export interface BackupOptions {
 export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Promise<BackupJSONFileLatest> {
     const personas: BackupJSONFileLatest['personas'] = []
     const posts: BackupJSONFileLatest['posts'] = []
+    const wallets: BackupJSONFileLatest['wallets'] = []
     const profiles: BackupJSONFileLatest['profiles'] = []
     const userGroups: BackupJSONFileLatest['userGroups'] = []
 
     if (!opts.filter) {
-        if (!opts.noPersonas) await backupPersona()
+        if (!opts.noPersonas) await backupPersonas()
         if (!opts.noProfiles) await backProfiles()
     } else if (opts.filter.type === 'persona') {
         if (opts.noPersonas) throw new TypeError('Invalid opts')
-        await backupPersona(opts.filter.wanted)
+        await backupPersonas(opts.filter.wanted)
         const wantedProfiles: ProfileIdentifier[] = personas.flatMap((q) =>
             q.linkedProfiles
                 .map((y) => Identifier.fromString(y[0], ProfileIdentifier))
@@ -39,6 +43,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     }
     if (!opts.noUserGroups) await backupAllUserGroups()
     if (!opts.noPosts) await backupAllPosts()
+    if (!opts.noWallets) await backupAllWallets()
 
     return {
         _meta_: {
@@ -50,6 +55,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         grantedHostPermissions: (await browser.permissions.getAll()).origins || [],
         personas,
         posts,
+        wallets,
         profiles,
         userGroups,
     }
@@ -74,7 +80,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         profiles.push(...data)
     }
 
-    async function backupPersona(of?: PersonaIdentifier[]) {
+    async function backupPersonas(of?: PersonaIdentifier[]) {
         const data = (
             await queryPersonasDB((p) => {
                 if (opts.hasPrivateKeyOnly && !p.privateKey) return false
@@ -84,5 +90,10 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
             })
         ).map(PersonaRecordToJSONFormat)
         personas.push(...data)
+    }
+
+    async function backupAllWallets() {
+        const wallets_ = (await getWallets()).map(WalletRecordToJSONFormat)
+        wallets.push(...wallets_)
     }
 }
