@@ -7,6 +7,7 @@ import {
     EthereumNetwork,
     WalletRecordInDatabase,
     ManagedWalletRecord,
+    ExoticWalletRecord,
 } from './database/types'
 import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
@@ -45,10 +46,16 @@ export async function isEmptyWallets() {
     return count === 0
 }
 
-export async function getWallets(): Promise<WalletRecord[]> {
-    const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet', 'ERC20Token')
-    const wallets = await t.objectStore('Wallet').getAll()
-    return wallets.map(WalletRecordOutDB)
+export async function getWallets() {
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
+    const recs = await t.objectStore('Wallet').getAll()
+    const r = recs.map(WalletRecordOutDB).sort(sortWallet)
+    return r
+}
+export async function getTokens() {
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token')
+    const tokens = await t.objectStore('ERC20Token').getAll()
+    return uniqBy(tokens, (token) => token.address.toUpperCase())
 }
 
 export async function getManagedWallets(): Promise<{
@@ -63,15 +70,7 @@ export async function getManagedWallets(): Promise<{
             .map(WalletRecordOutDB)
             .filter((x): x is ManagedWalletRecord => x.type !== 'exotic')
             .map(async (record) => ({ ...record, privateKey: await makePrivateKey(record) }))
-        return (await Promise.all(records)).sort((a, b) => {
-            if (a._wallet_is_default) return -1
-            if (b._wallet_is_default) return 1
-            if (a.updatedAt > b.updatedAt) return -1
-            if (a.updatedAt < b.updatedAt) return 1
-            if (a.createdAt > b.createdAt) return -1
-            if (a.createdAt < b.createdAt) return 1
-            return 0
-        })
+        return (await Promise.all(records)).sort(sortWallet)
         async function makePrivateKey(record: ManagedWalletRecord) {
             const { privateKey } = record._private_key_
                 ? await recoverWalletFromPrivateKey(record._private_key_)
@@ -83,6 +82,56 @@ export async function getManagedWallets(): Promise<{
         return uniqBy(tokens, (token) => token.address.toUpperCase())
     }
     return { wallets: await makeWallets(), tokens: makeTokens() }
+}
+
+export async function updateExoticWalletsFromSource(
+    source: ExoticWalletRecord['provider'],
+    updates: Map<string, Partial<ExoticWalletRecord>>,
+): Promise<void> {
+    const walletStore = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet').objectStore('Wallet')
+    let modified = false
+    for await (const cursor of walletStore) {
+        const wallet = cursor.value
+        if (wallet.type !== 'exotic') continue
+        if ((wallet as any).provider !== source) continue
+
+        modified = true
+        const addr = wallet.address
+        if (updates.has(addr)) {
+            const orig = WalletRecordOutDB(cursor.value) as ExoticWalletRecord
+            await cursor.update(WalletRecordIntoDB({ ...orig, ...updates.get(addr)!, updatedAt: new Date() }))
+        } else await cursor.delete()
+    }
+    for (const address of updates.keys()) {
+        if (await walletStore.get(address)) continue
+        modified = true
+        await walletStore.add(
+            WalletRecordIntoDB({
+                address,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                erc20_token_balance: new Map(),
+                erc20_token_blacklist: new Set(),
+                erc20_token_whitelist: new Set(),
+                eth_balance: new BigNumber(0),
+                // TODO: what name should it be?
+                name: address,
+                provider: source,
+                type: 'exotic',
+                ...updates.get(address)!,
+            } as ExoticWalletRecord),
+        )
+    }
+    if (modified) PluginMessageCenter.emit('maskbook.wallets.update', void 0)
+}
+function sortWallet(a: WalletRecord, b: WalletRecord) {
+    if (a._wallet_is_default) return -1
+    if (b._wallet_is_default) return 1
+    if (a.updatedAt > b.updatedAt) return -1
+    if (a.updatedAt < b.updatedAt) return 1
+    if (a.createdAt > b.createdAt) return -1
+    if (a.createdAt < b.createdAt) return 1
+    return 0
 }
 
 export async function getDefaultWallet(): Promise<WalletRecord> {
@@ -376,9 +425,9 @@ function WalletRecordOutDB(x: WalletRecordInDatabase) {
     for (const [name, value] of x.erc20_token_balance.entries()) {
         record.erc20_token_balance.set(name, new BigNumber(String(value ?? 0)))
     }
-    // Add the new DB fields in this way intended to avoid the risk of DB migration.
-    record.erc20_token_whitelist = x.erc20_token_whitelist ?? new Set()
-    record.erc20_token_blacklist = x.erc20_token_blacklist ?? new Set()
+    record.erc20_token_whitelist = x.erc20_token_whitelist || new Set()
+    record.erc20_token_blacklist = x.erc20_token_blacklist || new Set()
+    record.type = record.type || 'managed'
     return record
 }
 function WalletRecordIntoDB(x: WalletRecord) {

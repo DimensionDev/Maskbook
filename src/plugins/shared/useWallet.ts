@@ -9,10 +9,15 @@ import { currentEthereumNetworkSettings } from '../../settings/settings'
 import type { WalletDetails, ERC20TokenDetails } from '../../extension/background-script/PluginService'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 
-export function useWallet() {
-    const swr = useSWR('query', {
-        fetcher: Services.Plugin.getWallets,
-    })
+export function useWallets() {
+    const swr = useSWR('query', { fetcher: Services.Plugin.getWallets })
+    const { revalidate } = swr
+    useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
+    useEffect(() => currentEthereumNetworkSettings.addListener(revalidate), [revalidate])
+    return swr
+}
+export function useTokens() {
+    const swr = useSWR('query', { fetcher: Services.Plugin.getTokens })
     const { revalidate } = swr
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     useEffect(() => currentEthereumNetworkSettings.addListener(revalidate), [revalidate])

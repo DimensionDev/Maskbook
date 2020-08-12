@@ -3,8 +3,7 @@ import * as Wallet from '../../plugins/Wallet/wallet'
 import * as Gitcoin from '../../plugins/Gitcoin/Services'
 import * as FileService from '../../plugins/FileService/service'
 import type { ERC20TokenRecord, ManagedWalletRecord, ExoticWalletRecord } from '../../plugins/Wallet/database/types'
-import BigNumber from 'bignumber.js'
-import { metamask } from '../../protocols/wallet-provider/metamask-provider'
+import { provider } from '../../protocols/wallet-provider/metamask'
 
 const Plugins = {
     'maskbook.red_packet': RedPacket,
@@ -24,24 +23,9 @@ export async function invokePlugin<K extends keyof Plugins, M extends keyof Plug
 
 export type WalletDetails = ManagedWalletRecord | ExoticWalletRecord
 export type ERC20TokenDetails = Pick<ERC20TokenRecord, 'address' | 'decimals' | 'name' | 'network' | 'symbol'>
-
-export async function getWallets(): Promise<{ wallets: WalletDetails[]; tokens: ERC20TokenDetails[] }> {
-    const walletAddress = await metamask.eth_requestAccounts()
-    const wallets = await Promise.all(
-        walletAddress.map<Promise<ExoticWalletRecord>>(async (address, index) => ({
-            name: 'Metamask ' + index,
-            address,
-            eth_balance: new BigNumber(await metamask.eth_getBalance(address, 'latest')),
-            erc20_token_balance: new Map(),
-            erc20_token_blacklist: new Set(),
-            erc20_token_whitelist: new Set(),
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            provider: 'metamask',
-            type: 'exotic',
-        })),
-    )
-    return { wallets, tokens: [] }
+export { getTokens, getWallets } from '../../plugins/Wallet/wallet'
+export async function connectExoticWallet(kind: ExoticWalletRecord['provider']) {
+    if (kind === 'metamask') await provider.requestAccounts()
 }
 export async function getManagedWallet(address: string) {
     const { wallets } = await Wallet.getManagedWallets()

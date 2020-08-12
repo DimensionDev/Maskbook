@@ -36,7 +36,7 @@ import { ETH_ADDRESS, isDAI } from '../../../plugins/Wallet/token'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { currentEthereumNetworkSettings } from '../../../settings/settings'
-import { useWallet } from '../../../plugins/shared/useWallet'
+import { useTokens, useWallets } from '../../../plugins/shared/useWallet'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
 import type { RedPacketRecord } from '../../../plugins/Wallet/database/types'
 import { useHistory } from 'react-router-dom'
@@ -128,10 +128,10 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     )
 
     const backupMenuItem =
-        wallet.type === 'managed' ? (
-            <MenuItem onClick={() => openWalletBackup({ wallet: wallet })}>{t('backup')}</MenuItem>
-        ) : (
+        wallet.type === 'exotic' ? (
             undefined!
+        ) : (
+            <MenuItem onClick={() => openWalletBackup({ wallet })}>{t('backup')}</MenuItem>
         )
     const deleteMenuItem =
         wallet.type === 'managed' ? (
@@ -291,8 +291,8 @@ export default function DashboardWalletsRouter() {
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
     const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
-    const { data: walletData } = useWallet()
-    const { wallets, tokens } = walletData ?? {}
+    const { data: wallets } = useWallets()
+    const { data: tokens } = useTokens()
     const [current, setCurrent] = useState('')
     const currentWallet = wallets?.find((wallet) => wallet.address === current)
 
@@ -354,6 +354,12 @@ export default function DashboardWalletsRouter() {
             empty={!wallets?.length}
             title={t('my_wallets')}
             actions={[
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    onClick={() => Services.Plugin.connectExoticWallet('metamask')}>
+                    Connect MetaMask
+                </Button>,
                 <Button color="primary" variant="outlined" onClick={openWalletImport}>
                     {t('import')}
                 </Button>,

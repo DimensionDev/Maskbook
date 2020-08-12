@@ -6,7 +6,7 @@ import { currentEthereumNetworkSettings } from '../../settings/settings'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
 OnlyRunInContext('background', 'web3')
-import { metamaskProvider } from '../../protocols/wallet-provider/metamask-provider'
+import { metamaskProvider } from '../../protocols/wallet-provider/metamask'
 
 export const web3 = new Web3()
 export const pool = new Map<string, HttpProvider>()

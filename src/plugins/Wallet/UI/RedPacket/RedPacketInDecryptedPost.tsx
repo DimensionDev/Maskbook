@@ -28,7 +28,7 @@ import { useI18N } from '../../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 import { getPostUrl } from '../../../../social-network/utils/getPostUrl'
 import { renderWithRedPacketMetadata } from '../../../RedPacket/utils'
-import { useWallet } from '../../../shared/useWallet'
+import { useWallets } from '../../../shared/useWallet'
 import { usePostInfoDetails } from '../../../../components/DataSource/usePostInfo'
 import type { WalletDetails } from '../../../../extension/background-script/PluginService'
 import { DashboardRoute } from '../../../../extension/options-page/Route'
@@ -86,9 +86,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
             .catch((e) => Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `error=${e.message}`))
             .finally(() => setLoading(false))
     }
-    const { data } = useWallet()
-    const { wallets } = data ?? {}
-
+    const { data: wallets } = useWallets()
     const onClick = async (state: RedPacketStatus, rpid: RedPacketRecord['red_packet_id']) => {
         if (!rpid) return
         if (state === 'incoming' || state === 'normal') {

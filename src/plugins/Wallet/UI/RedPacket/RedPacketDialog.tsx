@@ -31,7 +31,7 @@ import { formatBalance } from '../../formatter'
 import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
 import BigNumber from 'bignumber.js'
-import { useSelectWallet, useWallet } from '../../../shared/useWallet'
+import { useSelectWallet, useTokens, useWallets } from '../../../shared/useWallet'
 import { WalletSelect } from '../../../shared/WalletSelect'
 import { TokenSelect } from '../../../shared/TokenSelect'
 import { currentEthereumNetworkSettings } from '../../../../settings/settings'
@@ -316,8 +316,8 @@ const useStyles = makeStyles({
 })
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
-    const { data: walletData } = useWallet()
-    const { wallets, tokens } = walletData ?? {}
+    const { data: wallets } = useWallets()
+    const { data: tokens } = useTokens()
     const [availableRedPackets, setAvailableRedPackets] = useState<RedPacketRecord[]>([])
     const [justCreatedRedPacket, setJustCreatedRedPacket] = useState<RedPacketRecord | undefined>(undefined)
 
