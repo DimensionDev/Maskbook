@@ -21,6 +21,7 @@ import { GITCOIN_ETH_ADDRESS, isUSDT, ETH_ADDRESS } from './token'
 import { createRedPacketTransaction } from './createRedPacketTransaction'
 import { onWalletBalancesUpdated, BalanceMetadata } from './wallet'
 import type { RedPacketJSONPayload } from '../RedPacket/utils'
+import { getCurrentEthChain } from '../../extension/background-script/PluginService'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
@@ -39,7 +40,6 @@ function createBalanceCheckerContract(address: string) {
 }
 
 export const redPacketAPI = {
-    dataSource: 'real' as const,
     async claimByServer(
         requestSenderAddress: string,
         privateKey: Buffer,
@@ -48,10 +48,7 @@ export const redPacketAPI = {
         const host = 'https://redpacket.gives'
         const x = 'a3323cd1-fa42-44cd-b053-e474365ab3da'
 
-        let network
-        if (getNetworkSettings().networkType === EthereumNetwork.Rinkeby) network = 'rinkeby'
-        else if (getNetworkSettings().networkType === EthereumNetwork.Mainnet) network = 'mainnet'
-        else if (getNetworkSettings().networkType === EthereumNetwork.Ropsten) network = 'ropsten'
+        const network = (await getCurrentEthChain()).toLowerCase()
 
         const auth = await fetch(`${host}/hi?id=${requestSenderAddress}&network=${network}`)
         if (!auth.ok) throw new Error('Auth failed')
@@ -104,7 +101,7 @@ export const redPacketAPI = {
         total_tokens: BigNumber,
         receipt = false,
     ): Promise<CreateRedPacketResult> {
-        const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
+        const contract = await getRedPacketContract()
         return new Promise((resolve, reject) => {
             let txHash = ''
             sendTx(
@@ -163,7 +160,7 @@ export const redPacketAPI = {
         validation: string,
         receipt = false,
     ): Promise<{ claim_transaction_hash: string }> {
-        const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
+        const contract = await getRedPacketContract()
         return new Promise((resolve, reject) => {
             let txHash = ''
             sendTx(
@@ -206,7 +203,8 @@ export const redPacketAPI = {
         if (wallets.every((wallet) => wallet.address !== packet.sender_address))
             throw new Error('can not find available wallet')
 
-        const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
+        const contract = await getRedPacketContract()
+
         return new Promise((resolve, reject) => {
             let txHash = ''
             sendTx(
@@ -241,12 +239,10 @@ export const redPacketAPI = {
      * @param id Red packet ID
      */
     async checkClaimedList(id: RedPacketID): Promise<string[]> {
-        return createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
-            .methods.check_claimed_list(id.redPacketID)
-            .call()
+        return (await getRedPacketContract()).methods.check_claimed_list(id.redPacketID).call()
     },
     async watchClaimResult(id: TxHashID & DatabaseID) {
-        const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
+        const contract = await getRedPacketContract()
         asyncTimes(10, async () => {
             const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
             if (!blockNumber) return
@@ -290,7 +286,7 @@ export const redPacketAPI = {
             })
     },
     async watchCreateResult(id: TxHashID & DatabaseID) {
-        const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
+        const contract = await getRedPacketContract()
         asyncTimes(10, async () => {
             const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
             if (!blockNumber) return
@@ -347,7 +343,7 @@ export const redPacketAPI = {
         })
     },
     async checkAvailability(id: RedPacketID): Promise<CheckRedPacketAvailabilityResult> {
-        const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
+        const contract = await getRedPacketContract()
         const {
             balance,
             claimed,
@@ -366,7 +362,7 @@ export const redPacketAPI = {
         }
     },
     async watchRefundResult(id: TxHashID & DatabaseID) {
-        const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
+        const contract = await getRedPacketContract()
         asyncTimes(10, async () => {
             const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
             if (!blockNumber) return
@@ -398,7 +394,6 @@ export const redPacketAPI = {
 }
 
 export const walletAPI = {
-    dataSource: 'real' as const,
     async queryBalance(address: string): Promise<BigNumber> {
         const value = await web3.eth.getBalance(address)
         return new BigNumber(value)
@@ -415,7 +410,6 @@ export const walletAPI = {
 }
 
 export const erc20API = {
-    dataSource: 'real' as const,
     async balanceOf(address: string, erc20TokenAddress: string) {
         const erc20Contract = createERC20Contract(erc20TokenAddress)
         const value = await erc20Contract.methods.balanceOf(address).call()
@@ -539,8 +533,6 @@ export const erc20API = {
 }
 
 export const gitcoinAPI = {
-    dataSource: 'real' as const,
-
     /**
      * Bulk checkout donation
      * @param donorAddress The account address of donor
@@ -550,7 +542,7 @@ export const gitcoinAPI = {
      * @param erc20Address An optional ERC20 contract address when donate with ERC20 token
      * @param tipPercentage For each donation of gitcoin grant, a small tip will be transferred to the gitcoin maintainer's account
      */
-    donate(
+    async donate(
         donorAddress: string,
         maintainerAddress: string,
         donationAddress: string,
@@ -569,7 +561,9 @@ export const gitcoinAPI = {
         // validate amount
         if (!grantAmount.isPositive()) throw new Error('Cannot have negative donation amounts')
 
-        const contract = createBulkCheckoutContract(getNetworkSettings().bulkCheckoutContractAddress)
+        const contract = createBulkCheckoutContract(
+            getNetworkSettings(await getCurrentEthChain()).bulkCheckoutContractAddress,
+        )
         const donations: {
             token: string
             amount: BigNumber
@@ -644,7 +638,9 @@ export const balanceCheckerAPI = (() => {
         if (!accounts.length || !tokens.length) return balances
         try {
             idle = false
-            balances = await createBalanceCheckerContract(getNetworkSettings().balanceCheckerContractAddress)
+            balances = await createBalanceCheckerContract(
+                getNetworkSettings(await getCurrentEthChain()).balanceCheckerContractAddress,
+            )
                 .methods.balances(accounts, tokens)
                 .call()
         } catch (e) {
@@ -657,6 +653,7 @@ export const balanceCheckerAPI = (() => {
     async function updateBalances(accounts: string[] = Array.from(watchedAccounts)) {
         const validAccounts = accounts.filter(EthereumAddress.isValid)
         if (!validAccounts.length) return
+        const chain = await getCurrentEthChain()
         const tokens = [
             {
                 address: ETH_ADDRESS,
@@ -664,7 +661,7 @@ export const balanceCheckerAPI = (() => {
                 name: 'Ether',
                 symbol: 'ETH',
             },
-            ...getNetworkERC20Tokens(),
+            ...getNetworkERC20Tokens(chain),
         ]
         const balances = await getBalances(
             validAccounts,
@@ -677,7 +674,7 @@ export const balanceCheckerAPI = (() => {
             if (token)
                 accumulate[accountAddress].push({
                     ...token,
-                    network: getNetworkSettings().networkType,
+                    network: chain,
                     balance: new BigNumber(balance),
                 })
             return accumulate
@@ -686,7 +683,6 @@ export const balanceCheckerAPI = (() => {
     }
 
     return {
-        dataSource: 'real' as const,
         getBalances,
         updateBalances,
         watchAccounts(accounts: string[]) {
@@ -703,3 +699,6 @@ export const balanceCheckerAPI = (() => {
 type TxHashID = { transactionHash: string }
 type RedPacketID = { redPacketID: string }
 type DatabaseID = { databaseID: string }
+async function getRedPacketContract() {
+    return createRedPacketContract(getNetworkSettings(await getCurrentEthChain()).happyRedPacketContractAddress)
+}

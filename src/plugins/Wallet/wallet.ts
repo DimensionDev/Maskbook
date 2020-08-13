@@ -167,6 +167,7 @@ export async function createNewWallet(
         | 'erc20_token_blacklist'
         | 'createdAt'
         | 'updatedAt'
+        | 'type'
     >,
 ) {
     const mnemonic = bip39.generateMnemonic().split(' ')
@@ -187,6 +188,7 @@ export async function importNewWallet(
     if (!address) throw new Error('cannot get the address of wallet')
     if (rec.name === null) rec.name = address.slice(0, 6)
     const record: ManagedWalletRecord = {
+        type: 'managed',
         name,
         mnemonic,
         passphrase,
@@ -198,7 +200,6 @@ export async function importNewWallet(
         ]),
         erc20_token_whitelist: new Set(),
         erc20_token_blacklist: new Set(),
-        _data_source_: getWalletProvider().dataSource,
         createdAt: new Date(),
         updatedAt: new Date(),
     }
@@ -355,7 +356,7 @@ export function watchWalletBalances(address: string) {
 export function unwatchWalletBalances(address: string) {
     return getWalletProvider().unwatchAccounts([address])
 }
-
+export { switchToProvider } from './web3'
 export interface BalanceMetadata {
     [key: string]: (ERC20Token & { balance: BigNumber; network: EthereumNetwork })[]
 }

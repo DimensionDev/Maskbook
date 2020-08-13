@@ -186,6 +186,7 @@
     "immersive_setup_say_hello_content": "こんにちは、Maskbook！",
     "import": "インポート",
     "import_failed": "インポートに失敗",
+    "import_from_metamask": "Metamask をインポートする",
     "import_persona": "人格をインポート",
     "import_successful": "インポートに成功",
     "import_wallet": "仮想通貨ウォレットをインポート",

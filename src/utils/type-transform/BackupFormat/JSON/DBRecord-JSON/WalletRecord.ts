@@ -36,7 +36,7 @@ export function WalletRecordToJSONFormat(wallet: WalletRecord): WalletBackup {
 }
 
 export function WalletRecordFromJSONFormat(wallet: WalletBackup): WalletRecord {
-    const record: Partial<WalletRecord> = {
+    const record = {
         type: 'exotic',
         name: wallet.name,
         address: wallet.address,

@@ -1,29 +1,34 @@
 import Web3 from 'web3'
-import type { AbstractProvider, HttpProvider } from 'web3-core'
-import { PluginMessageCenter } from '../PluginMessages'
 import { sideEffect } from '../../utils/side-effects'
-import { currentEthereumNetworkSettings } from '../../settings/settings'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
 OnlyRunInContext('background', 'web3')
-import { metamaskProvider } from '../../protocols/wallet-provider/metamask'
+import { WalletProviderType } from '../shared/findOutProvider'
+import { MetaMaskProvider } from '../../protocols/wallet-provider/metamask'
+import type { WalletProvider } from '../../protocols/wallet-provider'
+import { MaskbookProvider } from '../../protocols/wallet-provider/maskbook'
+import { unreachable } from '../../utils/utils'
+import { PluginMessageCenter } from '../PluginMessages'
+import { lastActivatedWalletProvider } from '../../settings/settings'
 
 export const web3 = new Web3()
-export const pool = new Map<string, HttpProvider>()
-
-let provider: AbstractProvider
-
-export const resetProvider = () => {
-    provider = metamaskProvider
-    web3.setProvider(provider)
+let currentProvider: WalletProvider
+function resetProvider() {
+    switchToProvider(lastActivatedWalletProvider.value)
 }
-
-export const resetWallet = async () => {}
-
-currentEthereumNetworkSettings.addListener(resetProvider)
-PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
-
-sideEffect.then(() => {
-    resetWallet()
-    resetProvider()
-})
+sideEffect.then(resetProvider)
+export function switchToProvider(provider: WalletProviderType) {
+    console.log('[Web3] Switch to', provider)
+    const nextProvider = getWalletProvider(provider)
+    if (currentProvider === nextProvider) return
+    currentProvider?.noLongerUseWeb3Provider?.()
+    currentProvider = nextProvider
+    web3.setProvider(getWalletProvider(provider).getWeb3Provider())
+    PluginMessageCenter.emit('maskbook.wallets.reset', void 0)
+    lastActivatedWalletProvider.value = provider
+}
+export function getWalletProvider(provider: WalletProviderType) {
+    if (provider === WalletProviderType.managed) return MaskbookProvider
+    if (provider === WalletProviderType.metamask) return MetaMaskProvider
+    return unreachable(provider)
+}

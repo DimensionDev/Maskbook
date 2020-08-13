@@ -33,13 +33,13 @@ import { merge, cloneDeep } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { sleep } from '../../../utils/utils'
 import { ETH_ADDRESS, isDAI } from '../../../plugins/Wallet/token'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
-import { currentEthereumNetworkSettings } from '../../../settings/settings'
-import { useTokens, useWallets } from '../../../plugins/shared/useWallet'
+import { useCurrentEthChain, useTokens, useWallets } from '../../../plugins/shared/useWallet'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
 import type { RedPacketRecord } from '../../../plugins/Wallet/database/types'
 import { useHistory } from 'react-router-dom'
+import { WalletProviderType } from '../../../plugins/shared/findOutProvider'
+import { useSnackbar } from 'notistack'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -113,7 +113,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
         defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
     })
 
-    const network = useValueRef(currentEthereumNetworkSettings)
+    const network = useCurrentEthChain()
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
     const [walletShare, , openWalletShare] = useModal(DashboardWalletShareDialog)
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
@@ -133,17 +133,14 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
         ) : (
             <MenuItem onClick={() => openWalletBackup({ wallet })}>{t('backup')}</MenuItem>
         )
-    const deleteMenuItem =
-        wallet.type === 'managed' ? (
-            <MenuItem
-                onClick={() => openWalletDelete({ wallet: wallet })}
-                className={color.error}
-                data-testid="delete_button">
-                {t('delete')}
-            </MenuItem>
-        ) : (
-            undefined!
-        )
+    const deleteMenuItem = (
+        <MenuItem
+            onClick={() => openWalletDelete({ wallet: wallet })}
+            className={color.error}
+            data-testid="delete_button">
+            {t('delete')}
+        </MenuItem>
+    )
     const menus = useMemo(
         () =>
             [
@@ -294,9 +291,10 @@ export default function DashboardWalletsRouter() {
     const { data: wallets } = useWallets()
     const { data: tokens } = useTokens()
     const [current, setCurrent] = useState('')
+    const notify = useSnackbar()
     const currentWallet = wallets?.find((wallet) => wallet.address === current)
 
-    const network = useValueRef(currentEthereumNetworkSettings)
+    const network = useCurrentEthChain()
     const getTokensForWallet = (wallet?: WalletDetails) => {
         if (!wallet) return []
         return (tokens ?? [])
@@ -357,8 +355,13 @@ export default function DashboardWalletsRouter() {
                 <Button
                     color="primary"
                     variant="outlined"
-                    onClick={() => Services.Plugin.connectExoticWallet('metamask')}>
-                    Connect MetaMask
+                    onClick={async () => {
+                        try {
+                            await Services.Plugin.connectExoticWallet(WalletProviderType.metamask)
+                            notify.enqueueSnackbar('Success', { variant: 'success' })
+                        } catch (e) {}
+                    }}>
+                    {t('import_from_metamask')}
                 </Button>,
                 <Button color="primary" variant="outlined" onClick={openWalletImport}>
                     {t('import')}

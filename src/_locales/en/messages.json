@@ -186,6 +186,7 @@
     "immersive_setup_say_hello_content": "Hello, Maskbook!",
     "import": "Import",
     "import_failed": "Import Failed",
+    "import_from_metamask": "Import from MetaMask",
     "import_persona": "Import your persona",
     "import_successful": "Import Successful",
     "import_wallet": "Import Wallet",

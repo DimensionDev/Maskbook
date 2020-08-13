@@ -47,7 +47,7 @@ MessageCenter.on('settingsUpdated', async (payload) => {
     settings.resolve(settings.value)
 })
 
-function createInternalSettings<T extends browser.storage.StorageValue>(
+export function createInternalSettings<T extends browser.storage.StorageValue>(
     key: string,
     value: T,
     comparer: (a: T, b: T) => boolean = (a, b) => a === b,

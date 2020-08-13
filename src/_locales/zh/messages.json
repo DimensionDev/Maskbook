@@ -187,6 +187,7 @@
     "immersive_setup_say_hello_content": "你好, Maskbook！",
     "import": "導入",
     "import_failed": "導入失敗",
+    "import_from_metamask": "從 MetaMask 導入",
     "import_persona": "導入角色",
     "import_successful": "導入成功",
     "import_wallet": "導入錢包",

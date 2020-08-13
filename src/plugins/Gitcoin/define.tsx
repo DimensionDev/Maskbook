@@ -90,7 +90,7 @@ function Gitcoin(props: { url: string }) {
                 donation_address: donationAddress,
                 donation_total: new BigNumber(amount).multipliedBy(new BigNumber(10).pow(power)),
                 donor_address: address,
-                network: getNetworkSettings().networkType,
+                network: getNetworkSettings(await Services.Plugin.getCurrentEthChain()).networkType,
                 token_type: tokenType,
                 token: token,
             })

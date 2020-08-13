@@ -138,7 +138,6 @@ function createRecord(opts: {
     token?: NonNullable<RedPacketRecord['raw_payload']>['token']
 }): RedPacketRecord {
     const x: RedPacketRecord = {
-        _data_source_: 'mock',
         aes_version: 1,
         contract_address: 'contract_address',
         contract_version: 1,

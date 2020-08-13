@@ -3,10 +3,11 @@ import w3 from 'web3'
 import { AsyncCall, EventBasedChannel } from 'async-call-rpc/full'
 import { EventEmitter } from 'events'
 import type { AbstractProvider } from 'web3-core'
-import type { WalletProvider, EthereumAPI } from './index'
+import type { EthereumAPI, WalletProvider } from './index'
 import { timeout } from '../../utils/utils'
 import { updateExoticWalletsFromSource } from '../../plugins/Wallet/wallet'
 import type { ExoticWalletRecord } from '../../plugins/Wallet/database/types'
+import { WalletProviderType } from '../../plugins/shared/findOutProvider'
 
 const web3 = new w3()
 export const metamaskProvider = createMetaMaskProvider()
@@ -21,7 +22,8 @@ class EthereumJSONRpcChannel implements EventBasedChannel {
         return () => void this.e.off('m', eventListener)
     }
 }
-export const MetamaskJSONRpc = AsyncCall<EthereumAPI>(
+const MetaMaskWeb3Provider = createMetaMaskProvider()
+const MetamaskJSONRPC = AsyncCall<EthereumAPI>(
     {},
     {
         channel: new EthereumJSONRpcChannel(metamaskProvider),
@@ -30,22 +32,24 @@ export const MetamaskJSONRpc = AsyncCall<EthereumAPI>(
         key: 'Metamask',
     },
 )
-web3.setProvider(metamaskProvider)
 
-export const provider: WalletProvider = {
+export const MetaMaskProvider: WalletProvider = {
     async checkAvailability() {
         try {
-            await timeout(MetamaskJSONRpc.eth_getBalance('0', 'latest'), 2000)
+            await timeout(MetamaskJSONRPC.eth_getBalance('0', 'latest'), 2000)
             return true
         } catch {
             return false
         }
     },
     async requestAccounts() {
-        const list = await timeout(MetamaskJSONRpc.eth_requestAccounts(), 2000)
+        const list = await timeout(MetamaskJSONRPC.eth_requestAccounts(), 2000)
         const map = new Map<string, Partial<ExoticWalletRecord>>()
         for (const address of list) map.set(address, { address })
-        await updateExoticWalletsFromSource('metamask', map)
+        await updateExoticWalletsFromSource(WalletProviderType.metamask, map)
         return list
+    },
+    getWeb3Provider() {
+        return MetaMaskWeb3Provider
     },
 }
