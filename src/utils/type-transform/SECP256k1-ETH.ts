@@ -1,3 +1,4 @@
+import secp256k1 from 'tiny-secp256k1'
 import { ec as EC } from 'elliptic'
 import { EthereumAddress } from 'wallet.ts'
 import type {
@@ -5,7 +6,7 @@ import type {
     EC_Private_JsonWebKey,
     EC_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
-import { Convert } from 'pvtsutils'
+import { Convert, combine } from 'pvtsutils'
 
 export function keyToJWK(key: string, type: 'public'): EC_Public_JsonWebKey
 export function keyToJWK(key: string, type: 'private'): EC_Private_JsonWebKey
@@ -30,7 +31,21 @@ export function keyToJWK(key: string, type: 'public' | 'private'): JsonWebKey {
 }
 
 export function JWKToKey(jwk: EC_JsonWebKey, type: 'public' | 'private'): string {
-    return ''
+    const ec = new EC('secp256k1')
+    if (type === 'public' && jwk.x && jwk.y) {
+        const xb = ab(jwk.x)
+        const yb = ab(jwk.y)
+        const point = Buffer.from(combine(new Uint8Array([0x04]), xb, yb))
+        if (secp256k1.isPoint(point)) return `0x${ec.keyFromPublic(point).getPublic(false, 'hex')}`
+    }
+    if (type === 'private' && jwk.d) {
+        const db = Buffer.from(ab(jwk.d))
+        if (secp256k1.isPrivate(db)) return `0x${ec.keyFromPrivate(db).getPrivate('hex')}`
+    }
+    throw new Error('invalid private key')
+    function ab(base64: string) {
+        return Convert.FromBase64Url(base64)
+    }
 }
 
 export function keyToAddr(key: string, type: 'public' | 'private'): string {
