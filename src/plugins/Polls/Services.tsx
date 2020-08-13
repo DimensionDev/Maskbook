@@ -1,13 +1,15 @@
 import Gun from 'gun'
 import 'gun/lib/then.js'
-import { gunServers } from '../../network/gun-servers'
 import { Result, Err, Ok } from 'ts-results'
+import { gunServers } from '../../network/gun-servers'
+import type { PollMetaData } from './types'
+import { PluginMessageCenter } from '../PluginMessages'
 
 const gun = new Gun('https://safe-citadel-45310.herokuapp.com/gun')
-// @ts-ignore
-window.gun = gun
 
 interface NewPollProps {
+    sender?: string | undefined
+    id?: string | undefined
     question: string
     options: Object
     start_time: Date
@@ -21,9 +23,7 @@ enum Reason {
 }
 
 export async function createNewPoll(poll: NewPollProps): Promise<Result<NewPollProps, [Reason, Error?]>> {
-    const { question, options, start_time, end_time } = poll
-
-    console.log('polls')
+    const { id, sender, question, options, start_time, end_time } = poll
 
     let results = {}
     for (let i = 0; i < Object.values(options).length; i++) {
@@ -34,6 +34,8 @@ export async function createNewPoll(poll: NewPollProps): Promise<Result<NewPollP
     }
 
     const poll_item = {
+        id,
+        sender,
         question,
         start_time: start_time.getTime(),
         end_time: end_time.getTime(),
@@ -42,7 +44,7 @@ export async function createNewPoll(poll: NewPollProps): Promise<Result<NewPollP
     }
 
     // @ts-ignore
-    const key = `${Gun.time.is()}_${Gun.text.random(4)}`
+    const key = `${id}_${Gun.time.is()}_${Gun.text.random(4)}`
 
     await gun
         .get('polls')
@@ -51,6 +53,7 @@ export async function createNewPoll(poll: NewPollProps): Promise<Result<NewPollP
         .put(poll_item).then!()
 
     return new Ok({
+        sender,
         question,
         options,
         start_time,
@@ -58,14 +61,7 @@ export async function createNewPoll(poll: NewPollProps): Promise<Result<NewPollP
     })
 }
 
-export interface PollGunDB {
-    key: string | number | symbol
-    question: string
-    start_time: number
-    end_time: number
-    options: Array<string>
-    results: Array<number>
-}
+export type PollGunDB = PollMetaData
 
 export async function getExistingPolls() {
     let polls: Array<PollGunDB> = []
@@ -73,8 +69,11 @@ export async function getExistingPolls() {
     gun.get('polls')
         .map()
         .on((data: any, key) => {
+            const keys = (key as string).split('_')
             let poll: PollGunDB = {
                 key: key,
+                id: keys[0],
+                sender: data.sender,
                 question: data.question,
                 start_time: data.start_time,
                 end_time: data.end_time,
@@ -103,4 +102,39 @@ export async function getExistingPolls() {
         })
 
     return polls
+}
+
+interface voteProps {
+    poll: PollGunDB
+    index: number
+}
+
+export async function vote(props: voteProps) {
+    const { poll, index } = props
+    let results: Array<number> = [0, 0]
+    gun.get('polls')
+        .get(poll.key)
+        .get('results')
+        .on((item) => {
+            delete item._
+            results = Object.values(item)
+        })
+    const count = ++results[index]
+    const newResults = {
+        ...results,
+        [index]: count,
+    }
+
+    gun.get('polls')
+        .get(poll.key)
+        .get('results')
+        // @ts-ignore
+        .put(newResults)
+
+    PluginMessageCenter.emit('maskbook.polls.update', undefined)
+
+    return {
+        ...poll,
+        results: Object.values(newResults),
+    }
 }

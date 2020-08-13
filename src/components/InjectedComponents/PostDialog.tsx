@@ -210,12 +210,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 ChipProps={{
                                     label: '🗳️ Poll',
                                     onClick: async () => {
-                                        const { wallets } = await Services.Plugin.getWallets()
-                                        if (wallets.length) {
-                                            setPollsDialogOpen(true)
-                                        } else {
-                                            Services.Welcome.openOptionsPage('/wallets?error=nowallet')
-                                        }
+                                        setPollsDialogOpen(true)
                                     },
                                 }}
                             />
