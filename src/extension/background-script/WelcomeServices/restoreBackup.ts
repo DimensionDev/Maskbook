@@ -54,8 +54,6 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
                 for (const x of data.wallets) {
                     const record = WalletRecordFromJSONFormat(x)
                     if (record.type === 'managed') await importNewWallet(record)
-                    // TODO:
-                    // restore exotic wallets
                 }
             })
         }
