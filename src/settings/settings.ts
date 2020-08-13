@@ -17,8 +17,8 @@ export const disableOpenNewTabInBackgroundSettings = createGlobalSettings<boolea
     'disable automated tab task open new tab',
     true,
     {
-        primary: () => i18n.t('settings_disable_new_background_tab'),
-        secondary: () => i18n.t('settings_disable_new_background_tab_desc'),
+        primary: () => i18n.t('settings_ancient_post_compatibility_mode'),
+        secondary: () => i18n.t('settings_ancient_post_compatibility_mode_desc'),
     },
 )
 
