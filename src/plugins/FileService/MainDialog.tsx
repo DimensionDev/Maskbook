@@ -2,6 +2,7 @@ import { DialogContent, DialogProps, DialogTitle, Grid, IconButton, makeStyles, 
 import { isNil } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import React from 'react'
+import { useBeforeUnload } from 'react-use'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
 import { getActivatedUI } from '../../social-network/ui'
@@ -45,8 +46,8 @@ const MainDialog: React.FC<Props> = (props) => {
     const classes = useStylesExtends(useStyles(), props)
     const snackbar = useSnackbar()
     const [uploading, setUploading] = React.useState(false)
-    const [failed, setFailed] = React.useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = React.useState<FileInfo | null>(null)
+    useBeforeUnload(uploading)
     const onInsert = () => {
         if (isNil(selectedFileInfo)) {
             return
@@ -92,11 +93,11 @@ const MainDialog: React.FC<Props> = (props) => {
                 />
             </DialogTitle>
             <DialogContent className={classes.content}>
-                <Exchange onUploading={setUploading} onUploadFailed={setFailed} onInsert={setSelectedFileInfo}>
+                <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
                     <Entry />
                     <Grid container justify="center">
                         <InsertButton onClick={onInsert} disabled={isNil(selectedFileInfo)}>
-                            {failed ? t('plugin_file_service_on_change_file') : t('plugin_file_service_on_insert')}
+                            {t('plugin_file_service_on_insert')}
                         </InsertButton>
                     </Grid>
                 </Exchange>

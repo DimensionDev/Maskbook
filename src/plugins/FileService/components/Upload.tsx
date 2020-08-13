@@ -11,7 +11,6 @@ import Services from '../../../extension/service'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeFileKey } from '../arweave/makeFileKey'
 import { FileRouter, MAX_FILE_SIZE, pluginId } from '../constants'
-import { useExchange } from '../hooks/Exchange'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
 
@@ -56,10 +55,8 @@ export const Upload: React.FC = () => {
     const classes = useStyles()
     const snackbar = useSnackbar()
     const history = useHistory()
-    const { onUploadFailed } = useExchange()
     const [encrypted, setEncrypted] = React.useState(true)
     const recents = useAsync(() => Services.Plugin.invokePlugin(pluginId, 'getRecentFiles'), [])
-    React.useEffect(() => onUploadFailed(false), [onUploadFailed])
     const onFile = async (file: File) => {
         let key
         if (encrypted) {

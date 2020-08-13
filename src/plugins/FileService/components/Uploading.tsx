@@ -1,17 +1,16 @@
-import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
+import { Grid, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
-import { useAsync, useBeforeUnload } from 'react-use'
+import { useAsync } from 'react-use'
 import Services, { ServicesWithProgress } from '../../../extension/service'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { timeout } from '../../../utils/utils'
 import { FileRouter, pluginId } from '../constants'
 import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
 import { FileName } from './FileName'
 import { ProgressBar } from './ProgressBar'
-import { isNil } from 'lodash-es'
-import { timeout } from '../../../utils/utils'
 
 const useStyles = makeStyles({
     container: {
@@ -48,12 +47,11 @@ export const Uploading: React.FC = () => {
     const { t } = useI18N()
     const classes = useStyles()
     const history = useHistory()
-    const { onUploading, onUploadFailed } = useExchange()
+    const { onUploading } = useExchange()
     const [startedAt] = React.useState(Date.now())
     const [preparing, setPreparing] = React.useState(true)
     const [sendSize, setSendSize] = React.useState(0)
     const { state } = useLocation<RouteState>()
-    useBeforeUnload(true, 'uploading')
     React.useEffect(() => {
         onUploading(true)
         return () => onUploading(false)
@@ -96,8 +94,10 @@ export const Uploading: React.FC = () => {
         history.replace(FileRouter.uploaded, item)
     }, [])
     React.useEffect(() => {
-        onUploadFailed(!isNil(error))
-    }, [error, onUploadFailed])
+        if (error) {
+            onUploading(false)
+        }
+    }, [error, onUploading])
     if (error) {
         return (
             <Grid container className={classes.container}>
