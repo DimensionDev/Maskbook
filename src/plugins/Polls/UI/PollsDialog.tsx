@@ -23,9 +23,12 @@ import { DialogDismissIconUI } from '../../../components/InjectedComponents/Dial
 import { useStylesExtends, or } from '../../../components/custom-ui-helper'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
 import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
+import Services from '../../../extension/service'
+import { getActivatedUI } from '../../../social-network/ui'
+import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
-import Services from '../../../extension/service'
+import type { PollMetaData } from '../types'
 
 const useNewPollStyles = makeStyles((theme) =>
     createStyles({
@@ -70,6 +73,8 @@ const useNewPollStyles = makeStyles((theme) =>
 
 interface NewPollProps {
     loading: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
+    senderName: string | undefined
+    senderId: string | undefined
     createNewPoll: () => void
 }
 
@@ -94,6 +99,8 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
             options: optionsInput,
             start_time,
             end_time,
+            sender: props.senderName,
+            id: props.senderId,
         }).then((res) => {
             setLoading(false)
             props.createNewPoll()
@@ -167,7 +174,8 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
 }
 
 interface ExistingPollsProps {
-    onSelectExistingPoll(): void
+    onSelectExistingPoll(poll?: PollMetaData | null): void
+    senderId: string | undefined
 }
 
 function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
@@ -175,21 +183,25 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
     const classes = useStylesExtends(useNewPollStyles(), props)
 
     useEffect(() => {
-        Services.Plugin.invokePlugin('maskbook.polls', 'getExistingPolls').then((data) => {
-            console.log(data)
-            setPolls(data.reverse() as Array<PollGunDB>)
+        Services.Plugin.invokePlugin('maskbook.polls', 'getExistingPolls').then((polls) => {
+            let myPolls: Array<PollGunDB> = []
+            polls.map((poll) => {
+                if (poll.id === props.senderId) {
+                    myPolls.push(poll)
+                }
+            })
+            setPolls(polls.reverse())
         })
     }, [])
 
-    const insertPoll = () => {
-        props.onSelectExistingPoll()
-        console.log('点击')
+    const insertPoll = (poll?: PollMetaData | null) => {
+        props.onSelectExistingPoll(poll)
     }
 
     return (
         <div className={classes.wrapper}>
             {polls.map((p) => (
-                <PollCardUI onClick={insertPoll} poll={p} key={p.key as string | number} />
+                <PollCardUI onClick={() => insertPoll(p)} poll={p} key={p.key as string | number} />
             ))}
         </div>
     )
@@ -236,20 +248,38 @@ export default function PollsDialog(props: PollsDialogProps) {
         setTabState(1)
     }
 
-    const insertPoll = () => {
-        props.onConfirm('111')
+    const insertPoll = (data?: PollMetaData | null) => {
+        const ref = getActivatedUI().typedMessageMetadata
+        const next = new Map(ref.value.entries())
+        data ? next.set('poll', data) : next.delete('poll')
+        ref.value = next
+        props.onConfirm()
     }
 
     const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: 'Create New',
-                children: <NewPollUI {...props} loading={loading} createNewPoll={createNewPoll} />,
+                children: (
+                    <NewPollUI
+                        {...props}
+                        loading={loading}
+                        createNewPoll={createNewPoll}
+                        senderName={useCurrentIdentity()?.linkedPersona?.nickname}
+                        senderId={useCurrentIdentity()?.linkedPersona?.fingerprint}
+                    />
+                ),
                 p: 0,
             },
             {
                 label: 'Select Existing',
-                children: <ExistingPollsUI {...props} onSelectExistingPoll={insertPoll} />,
+                children: (
+                    <ExistingPollsUI
+                        {...props}
+                        onSelectExistingPoll={insertPoll}
+                        senderId={useCurrentIdentity()?.linkedPersona?.fingerprint}
+                    />
+                ),
                 p: 0,
             },
         ],
