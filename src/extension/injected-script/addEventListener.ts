@@ -1,8 +1,6 @@
 import { CustomEventId } from '../../utils/constants'
-export interface CustomEvents {
-    paste: [string | { type: 'image'; value: Array<number> }]
-    input: [string]
-}
+import type { CustomEvents } from './CustomEvents'
+
 {
     const store: Partial<Record<Events, CallbackMap>> = {}
     const { apply } = Reflect
