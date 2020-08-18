@@ -77,6 +77,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     async function backupPersona(of?: PersonaIdentifier[]) {
         const data = (
             await queryPersonasDB((p) => {
+                if (p.uninitialized) return false
                 if (opts.hasPrivateKeyOnly && !p.privateKey) return false
                 if (of === undefined) return true
                 if (!of.some((x) => x.equals(p.identifier))) return false

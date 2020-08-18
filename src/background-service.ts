@@ -60,11 +60,13 @@ if (GetContext() === 'background') {
                 })
                 .catch(IgnoreError(arg))
         // In Firefox
-        browser.tabs.executeScript(arg.tabId, {
-            runAt: 'document_start',
-            frameId: arg.frameId,
-            file: 'js/injected-script.js',
-        })
+        if (webpackEnv.target === 'Firefox') {
+            browser.tabs.executeScript(arg.tabId, {
+                runAt: 'document_start',
+                frameId: arg.frameId,
+                file: 'js/injected-script.js',
+            })
+        }
         await contentScriptReady
         for (const script of contentScripts) {
             const option: browser.extensionTypes.InjectDetails = {
