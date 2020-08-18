@@ -3,7 +3,7 @@
  * in this file please.
  */
 import { CustomEventId } from './constants'
-import type { CustomEvents } from '../extension/injected-script/addEventListener'
+import type { CustomEvents } from '../extension/injected-script/CustomEvents'
 
 import { flatten, isNull, random } from 'lodash-es'
 
