@@ -30,6 +30,7 @@ import { DialogDismissIconUI } from './DialogDismissIcon'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import RedPacketDialog from '../../plugins/Wallet/UI/RedPacket/RedPacketDialog'
 import FileServiceDialog from '../../plugins/FileService/MainDialog'
+import FileServiceEntryIcon from './FileServiceEntryIcon'
 import {
     TypedMessage,
     readTypedMessageMetadata,
@@ -45,7 +46,6 @@ import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
 import { PluginUI } from '../../plugins/plugin'
-import FileServiceEntryIcon from './FileServiceEntryIcon'
 
 const defaultTheme = {}
 
