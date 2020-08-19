@@ -1,4 +1,4 @@
-import type { TypedMessage } from '../extension/background-script/CryptoServices/utils'
+import type { TypedMessage } from '../protocols/typed-message'
 
 type PluginInjectFunction<T> =
     | {

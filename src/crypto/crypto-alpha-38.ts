@@ -1,4 +1,4 @@
-import { TypedMessage, makeTypedMessageText } from '../extension/background-script/CryptoServices/utils'
+import { TypedMessage, makeTypedMessageText } from '../protocols/typed-message'
 import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
 export * from './crypto-alpha-39'
 

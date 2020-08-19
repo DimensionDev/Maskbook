@@ -6,11 +6,12 @@ import { queryPrivateKey, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier } from '../../../database/type'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { getNetworkWorker } from '../../../social-network/worker'
-import { getSignablePayload, TypedMessage } from './utils'
+import { getSignablePayload } from './utils'
 import { createPostDB } from '../../../database/post'
 import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 import { i18n } from '../../../utils/i18n-next'
+import type { TypedMessage } from '../../../protocols/typed-message'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string

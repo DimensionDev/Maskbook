@@ -1,5 +1,5 @@
 import React from 'react'
-import { withMetadata, TypedMessage } from '../../../../extension/background-script/CryptoServices/utils'
+import type { TypedMessage } from '../../../../protocols/typed-message'
 import MaskbookPluginWrapper from '../../../MaskbookPluginWrapper'
 import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import type { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../database/types'
@@ -27,7 +27,7 @@ import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 import { getPostUrl } from '../../../../social-network/utils/getPostUrl'
-import { RedPacketMetaKey } from '../../RedPacketMetaKey'
+import { renderWithRedPacketMetadata } from '../../../RedPacket/utils'
 import { useWallet } from '../../../shared/useWallet'
 import { usePostInfoDetails } from '../../../../components/DataSource/usePostInfo'
 import type { WalletDetails } from '../../../../extension/background-script/PluginService'
@@ -139,7 +139,7 @@ export function RedPacketInDecryptedPostCard(
     const storybookDebugging: boolean = !!process.env.STORYBOOK
     /* without redpacket */
     const jsx = message
-        ? withMetadata(message.meta, RedPacketMetaKey, (r) => (
+        ? renderWithRedPacketMetadata(message.meta, (r) => (
               <MaskbookPluginWrapper pluginName="Red Packet">
                   <RedPacketWithState
                       loading={loading || !!claiming}

@@ -1,9 +1,8 @@
 import * as React from 'react'
-import { getUrl } from '../../utils/utils'
 import { makeStyles, Typography, Card, Theme, Box, CircularProgress, CircularProgressProps } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
-import { textIntoTypedMessage, TypedMessage } from '../../extension/background-script/CryptoServices/utils'
+import { TypedMessage, makeTypedMessageText } from '../../protocols/typed-message'
 import { TypedMessageRendererProps, DefaultTypedMessageRenderer } from './TypedMessageRenderer'
 import CheckIcon from '@material-ui/icons/Check'
 import CloseIcon from '@material-ui/icons/Close'
@@ -64,7 +63,11 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
         </Typography>
     )
     const TypedMessageRenderer = props.TypedMessageRenderer || DefaultTypedMessageRenderer
-    const TypedMessage = React.useMemo(() => (message ? textIntoTypedMessage(message) : null!), [message])
+    const TypedMessage = React.useMemo(() => {
+        if (typeof message === 'string') return makeTypedMessageText(message)
+        if (typeof message === 'undefined') return makeTypedMessageText('')
+        return message
+    }, [message])
     return (
         <Card variant="outlined" className={classes.root} elevation={0} onClick={stop}>
             <header className={classes.content}>{header}</header>

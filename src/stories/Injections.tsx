@@ -22,11 +22,11 @@ import {
     makeTypedMessageText,
     TypedMessageText,
     TypedMessageUnknown,
-    TypedMessageComplex,
-} from '../extension/background-script/CryptoServices/utils'
+    TypedMessageCompound,
+} from '../protocols/typed-message'
 import {
     DefaultTypedMessageTextRenderer,
-    DefaultTypedMessageComplexRenderer,
+    DefaultTypedMessageCompoundRenderer,
     DefaultTypedMessageUnknownRenderer,
 } from '../components/InjectedComponents/TypedMessageRenderer'
 import { useTwitterThemedPostDialogHint } from '../social-network-provider/twitter.com/ui/injectPostDialogHint'
@@ -34,8 +34,7 @@ import { useTwitterButton } from '../social-network-provider/twitter.com/utils/t
 import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
 import { PersonKnownSelf } from '../components/InjectedComponents/PersonKnown'
 import { figmaLink } from './utils'
-import type { RedPacketMetadata } from '../plugins/Wallet/database/types'
-import { RedPacketMetaKey } from '../plugins/Wallet/RedPacketMetaKey'
+import { RedPacketJSONPayload, RedPacketMetaKey } from '../plugins/RedPacket/utils'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
@@ -77,8 +76,8 @@ storiesOf('Injections', module)
             content: text('DefaultTypedMessageTextRenderer', 'text'),
         }
         const unknown: TypedMessageUnknown = { type: 'unknown', version: 1 }
-        const complex: TypedMessageComplex = {
-            type: 'complex',
+        const compound: TypedMessageCompound = {
+            type: 'compound',
             version: 1,
             items: [_text, unknown],
         }
@@ -89,8 +88,8 @@ storiesOf('Injections', module)
                     <Typography>DefaultTypedMessageTextRenderer</Typography>
                     <DefaultTypedMessageTextRenderer message={_text} />
                     {divider}
-                    <Typography>DefaultTypedMessageComplexRenderer</Typography>
-                    <DefaultTypedMessageComplexRenderer message={complex} />
+                    <Typography>DefaultTypedMessageCompoundRenderer</Typography>
+                    <DefaultTypedMessageCompoundRenderer message={compound} />
                     {divider}
                     <Typography>DefaultTypedMessageUnknownRenderer</Typography>
                     <DefaultTypedMessageUnknownRenderer message={unknown} />
@@ -291,7 +290,7 @@ function FakePost(props: React.PropsWithChildren<{ title: string }>) {
     )
 }
 
-const redpacket: RedPacketMetadata = {
+const redpacket: RedPacketJSONPayload = {
     contract_address: 'addr',
     contract_version: 1,
     creation_time: Date.now(),

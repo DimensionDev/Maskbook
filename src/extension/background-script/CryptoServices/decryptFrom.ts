@@ -11,7 +11,7 @@ import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
 import { MessageCenter } from '../../../utils/messages'
 import { getNetworkWorker } from '../../../social-network/worker'
-import { getSignablePayload, TypedMessage } from './utils'
+import { getSignablePayload } from './utils'
 import { cryptoProviderTable } from './cryptoProviderTable'
 import type { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { verifyOthersProve } from './verifyOthersProve'
@@ -21,6 +21,7 @@ import { asyncIteratorWithResult, memorizeAsyncGenerator } from '../../../utils/
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 import { decodeImageUrl } from '../SteganographyService'
+import type { TypedMessage } from '../../../protocols/typed-message'
 
 type Progress =
     | {
