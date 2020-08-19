@@ -33,18 +33,18 @@ import FileServiceDialog from '../../plugins/FileService/MainDialog'
 import FileServiceEntryIcon from './FileServiceEntryIcon'
 import {
     TypedMessage,
-    readTypedMessageMetadata,
     extractTextFromTypedMessage,
-    withMetadataUntyped,
+    renderWithMetadataUntyped,
     makeTypedMessageText,
-} from '../../extension/background-script/CryptoServices/utils'
+    isTypedMessageText,
+} from '../../protocols/typed-message'
 import { EthereumTokenType } from '../../plugins/Wallet/database/types'
 import { isDAI, isOKB } from '../../plugins/Wallet/token'
 import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
-import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
+import { RedPacketMetadataReader } from '../../plugins/RedPacket/utils'
 import { PluginUI } from '../../plugins/plugin'
 
 const defaultTheme = {}
@@ -111,7 +111,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const [, inputRef] = useCapturedInput(
         (newText) => {
             const msg = props.postContent
-            if (msg.type === 'text') props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
+            if (isTypedMessageText(msg)) props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
             else throw new Error('Not impled yet')
         },
         [props.open, props.postContent],
@@ -124,7 +124,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
         const knownMeta = plugin.postDialogMetadataBadge
         if (!knownMeta) return undefined
         return [...knownMeta.entries()].map(([metadataKey, tag]) => {
-            return withMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
+            return renderWithMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
                 <Box key={metadataKey} marginRight={1} marginTop={1} display="inline-block">
                     <Tooltip title={`Provided by plugin "${plugin.pluginName}"`}>
                         <Chip
@@ -354,7 +354,7 @@ export function PostDialog(props: PostDialogProps) {
                 )
                 const activeUI = getActivatedUI()
                 // TODO: move into the plugin system
-                const metadata = readTypedMessageMetadata(typedMessageMetadata, RedPacketMetaKey)
+                const metadata = RedPacketMetadataReader(typedMessageMetadata)
                 if (imagePayloadEnabled) {
                     const isRedPacket = metadata.ok && metadata.val.rpid
                     const isErc20 =
@@ -448,7 +448,7 @@ export function PostDialog(props: PostDialogProps) {
     //#endregion
     //#region Red Packet
     // TODO: move into the plugin system
-    const hasRedPacket = readTypedMessageMetadata(postBoxContent.meta, RedPacketMetaKey).ok
+    const hasRedPacket = RedPacketMetadataReader(postBoxContent.meta).ok
     const theme = hasRedPacket ? PluginRedPacketTheme : undefined
     const mustSelectShareToEveryone = hasRedPacket && !shareToEveryone
 

@@ -9,7 +9,7 @@ import {
     decodeText,
 } from '../utils/type-transform/String-ArrayBuffer'
 import { memoizePromise } from '../utils/memoize'
-import { makeTypedMessageText } from '../extension/background-script/CryptoServices/utils'
+import { makeTypedMessageText } from '../protocols/typed-message'
 import { i18n } from '../utils/i18n-next'
 import { CryptoWorker } from '../modules/workers'
 import type {

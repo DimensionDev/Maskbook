@@ -13,13 +13,14 @@ import type { BulkCheckout } from './contracts/bulk-checkout/BulkCheckout'
 import type { HappyRedPacket } from './contracts/happy-red-packet/HappyRedPacket'
 import type { BalanceChecker } from './contracts/balance-checker/BalanceChecker'
 import type { CheckRedPacketAvailabilityResult, CreateRedPacketResult, DonateResult } from './types'
-import { EthereumTokenType, EthereumNetwork, RedPacketJSONPayload } from './database/types'
+import { EthereumTokenType, EthereumNetwork } from './database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 import { sendTx, sendTxConfigForTxHash } from './tx'
 import { getNetworkSettings, getNetworkERC20Tokens } from './UI/Developer/EthereumNetworkSettings'
-import { GITCOIN_ETH_ADDRESS, isUSDT, ETH_ADDRESS, ERC20Token } from './token'
+import { GITCOIN_ETH_ADDRESS, isUSDT, ETH_ADDRESS } from './token'
 import { createRedPacketTransaction } from './createRedPacketTransaction'
 import { onWalletBalancesUpdated, BalanceMetadata } from './wallet'
+import type { RedPacketJSONPayload } from '../RedPacket/utils'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
