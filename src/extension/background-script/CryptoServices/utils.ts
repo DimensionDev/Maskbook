@@ -19,8 +19,9 @@ export function getSignablePayload(payload: Payload) {
 import type { RedPacketJSONPayload } from '../../../plugins/Wallet/database/types'
 import { Result, Err, Ok } from 'ts-results'
 import { RedPacketMetaKey } from '../../../plugins/Wallet/RedPacketMetaKey'
+import type { META_KEY_1 as FileServiceMetaKey } from '../../../plugins/FileService/constants'
+import type { FileInfo } from '../../../plugins/FileService/types'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
-import { isArrayBuffer } from 'lodash-es'
 import { imgType } from '@dimensiondev/stego-js/cjs/helper'
 
 export interface TypedMessageMetadata {
@@ -64,6 +65,7 @@ export function makeTypedMessageImage(buf: ArrayBuffer, meta?: ReadonlyMap<strin
 
 interface KnownMetadata {
     [RedPacketMetaKey]: RedPacketJSONPayload
+    [FileServiceMetaKey]: FileInfo
 }
 const builtinMetadataSchema: Partial<Record<string, object>> = {} as Partial<Record<keyof KnownMetadata, object>>
 export function readTypedMessageMetadata<T extends keyof KnownMetadata>(

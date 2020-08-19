@@ -22,8 +22,10 @@ import { GitcoinPluginDefine } from './Gitcoin/define'
 import { RedPacketPluginDefine } from './Wallet/define'
 import type { PostInfo } from '../social-network/PostInfo'
 import { StorybookPluginDefine } from './Storybook/define'
+import { FileServicePluginDefine } from './FileService/define'
 plugins.add(GitcoinPluginDefine)
 plugins.add(RedPacketPluginDefine)
+plugins.add(FileServicePluginDefine)
 if (process.env.STORYBOOK) {
     plugins.add(StorybookPluginDefine)
 }

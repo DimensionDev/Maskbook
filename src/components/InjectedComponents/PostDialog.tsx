@@ -29,6 +29,7 @@ import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRec
 import { DialogDismissIconUI } from './DialogDismissIcon'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import RedPacketDialog from '../../plugins/Wallet/UI/RedPacket/RedPacketDialog'
+import FileServiceDialog from '../../plugins/FileService/MainDialog'
 import {
     TypedMessage,
     readTypedMessageMetadata,
@@ -44,6 +45,7 @@ import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
 import { PluginUI } from '../../plugins/plugin'
+import FileServiceEntryIcon from './FileServiceEntryIcon'
 
 const defaultTheme = {}
 
@@ -115,6 +117,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
         [props.open, props.postContent],
     )
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
+    const [fileServiceDialogOpen, setFileServiceDialogOpen] = useState(false)
 
     if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
     const metadataBadge = [...PluginUI].flatMap((plugin) => {
@@ -197,6 +200,19 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     },
                                 }}
                             />
+                            <ClickableChip
+                                ChipProps={{
+                                    label: (
+                                        <>
+                                            <FileServiceEntryIcon width={16} height={16} />
+                                            &nbsp;File Service
+                                        </>
+                                    ),
+                                    onClick() {
+                                        setFileServiceDialogOpen(true)
+                                    },
+                                }}
+                            />
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
@@ -265,6 +281,15 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     open={props.open && redPacketDialogOpen}
                     onConfirm={() => setRedPacketDialogOpen(false)}
                     onDecline={() => setRedPacketDialogOpen(false)}
+                    DialogProps={props.DialogProps}
+                />
+            )}
+            {!process.env.STORYBOOK && (
+                <FileServiceDialog
+                    classes={classes}
+                    open={props.open && fileServiceDialogOpen}
+                    onConfirm={() => setFileServiceDialogOpen(false)}
+                    onDecline={() => setFileServiceDialogOpen(false)}
                     DialogProps={props.DialogProps}
                 />
             )}

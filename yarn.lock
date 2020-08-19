@@ -1837,17 +1837,17 @@
   resolved "https://registry.yarnpkg.com/@commitlint/types/-/types-9.0.1.tgz#df281f0f3d8f3adb10c95e4dd72b16acf41b5400"
   integrity sha512-wo2rHprtDzTHf4tiSxavktJ52ntiwmg7eHNGFLH38G1of8OfGVwOc1sVbpM4jN/HK/rCMhYOi6xzoPqsv0537A==
 
-"@dimensiondev/holoflows-kit@^0.7.0-30":
-  version "0.7.0-30"
-  resolved "https://npm.dimension.im/download/@dimensiondev/holoflows-kit/0.7.0-30/d7d12be39447ee80f95ecbcb29e81ba179861ad26387e2bb23856fcf008805b9#509b11b0fcc00df2b17e5f0c6270e957d93ee259"
-  integrity sha512-LTjrnWJjE+UcF/x7BcIsZvj9Mmfpw8Llwz6nCPtBCqWKuvoV4hH0GkqMVxbHCb0OflcYfKaTZN+oKSeLhD552Q==
+"@dimensiondev/common-protocols@^1.6.0-20200803025805-90de43a":
+  version "1.6.0-20200803025805-90de43a"
+  resolved "https://npm.dimension.im/download/@dimensiondev/common-protocols/1.6.0-20200803025805-90de43a/207fc9146517488217b12c78fbac06b5f04d81739fa0e7061bdd5beb039982d7#b9bb17e0517cf009e59fc380cb34a1ee87c94122"
+  integrity sha512-ccTYaRU1yMU8Y0DsoZ18QiAynbUFyEDsP3O5Bm4uYRe7e1iQ8Evo2T+RIVL++NmELn5Yk1A0yBIPJYEX6O9NAQ==
   dependencies:
-    "@servie/events" "^1.0.0"
-    async-call-rpc "^4.0.0"
-    concurrent-lock "^1.0.7"
-    jsx-jsonml-devtools-renderer "^1.4.1"
-    lodash-es "^4.17.15"
-    memorize-decorator "^0.2.2"
+    "@msgpack/msgpack" "^1.12.2"
+
+"@dimensiondev/kit@^0.0.0-20200805070012-5a4b993":
+  version "0.0.0-20200805070012-5a4b993"
+  resolved "https://npm.dimension.im/download/@dimensiondev/kit/0.0.0-20200805070012-5a4b993/9e47da175f5e6899b34d75b7467a68bc707b960c7a8a93f3395e4df994653a5c#10c9f76c568bfd9cf0b91b3dcc8c4ade35df55ba"
+  integrity sha512-n7nM2Sbhn3yA2Hothnxt7vv0VaoOEU85j79XYa3WoYID5iuvzGd9iuwuCcpIp++txg0DiMJF8VMO+dPvRfCCWA==
 
 "@dimensiondev/matrix-js-sdk-type@^1.0.0-6":
   version "1.0.0-6"
@@ -2662,6 +2662,11 @@
   dependencies:
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
+
+"@msgpack/msgpack@^1.12.2":
+  version "1.12.2"
+  resolved "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-1.12.2.tgz#6a22e99a49b131a8789053d0b0903834552da36f"
+  integrity sha512-Vwhc3ObxmDZmA5hY8mfsau2rJ4vGPvzbj20QSZ2/E1GDPF61QVyjLfNHak9xmel6pW4heRt3v1fHa6np9Ehfeg==
 
 "@nice-labs/git-flow-init@^1.0.1":
   version "1.0.1"
@@ -5016,6 +5021,24 @@ arrify@^2.0.1:
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-2.0.1.tgz#c9655e9331e0abcd588d2a7cad7e9956f66701fa"
   integrity sha512-3duEwti880xqi4eAMN8AyR4a0ByT90zoYdLlevfrvU43vb0YZwZVfxOgxWrLXXXpyugL0hNZc9G6BiB5B3nUug==
 
+"arweave-asn1@github:arweave-kyle/asn1.js":
+  version "5.0.1"
+  resolved "https://codeload.github.com/arweave-kyle/asn1.js/tar.gz/afc4c325183f6a9d1ff84454106319d3e08d2b0e"
+  dependencies:
+    bn.js "^4.0.0"
+    inherits "^2.0.1"
+    minimalistic-assert "^1.0.0"
+
+arweave@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/arweave/-/arweave-1.8.0.tgz#69235d27eb62f4b528ed08ab1b3a9c6c0856875c"
+  integrity sha512-bBJ6HcbdJzB17UDLQkj1HjM4RbQEEONVoc4u3xLHxvd+HfOvSOLYfvUu/j06EqR8EnByKua1/d0MJhABkTNWwA==
+  dependencies:
+    arweave-asn1 "github:arweave-kyle/asn1.js"
+    axios "^0.18.0"
+    base64-js "^1.3.0"
+    bignumber.js "^8.1.1"
+
 asap@~2.0.3:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
@@ -5101,11 +5124,6 @@ async-call-rpc@^3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-3.2.2.tgz#1f139913c465e1820a4c8c3152017f5c78e0aa90"
   integrity sha512-0pCSCQhwPFZr6SuAhXKPYwHIvMSfVRily5ZaCpk15Y21sSCVHhFKSD+QOu9NKYVfW6arxL9TpIdb9XimqkBI1Q==
-
-async-call-rpc@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-4.0.0.tgz#825aecfd54bed4873b70ae027ca5a4d0655949e4"
-  integrity sha512-sDNNa5BIgUYknloEAacx4ool/CKU+IZF8tzbvVGPO8s0ivTcKse7YLsG1U9aBcrXtkdAdqR1nEFNmTdZO6CycA==
 
 async-each@^1.0.1:
   version "1.0.3"
@@ -5214,6 +5232,14 @@ axios@0.19.0:
   version "0.19.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.0.tgz#8e09bff3d9122e133f7b8101c8fbdd00ed3d2ab8"
   integrity sha512-1uvKqKQta3KBxIz14F2v06AEHZ/dIoeKfbTRkK1E5oqjDnuEerLmYTgJB5AiQZHJcljpg1TuRzdjDR06qNk0DQ==
+  dependencies:
+    follow-redirects "1.5.10"
+    is-buffer "^2.0.2"
+
+axios@^0.18.0:
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.18.1.tgz#ff3f0de2e7b5d180e757ad98000f1081b87bcea3"
+  integrity sha512-0BfJq4NSfQXd+SkFdrvFbG7addhYSBA2mQwISr46pD6E5iqkWg02RAs8vyTT/j0RTnoYmeXauBuSv1qKwR179g==
   dependencies:
     follow-redirects "1.5.10"
     is-buffer "^2.0.2"
@@ -6160,7 +6186,7 @@ base64-arraybuffer-es6@0.6.0:
   resolved "https://registry.yarnpkg.com/base64-arraybuffer-es6/-/base64-arraybuffer-es6-0.6.0.tgz#036f79f57588dca0018de7792ddf149299382007"
   integrity sha512-57nLqKj4ShsDwFJWJsM4sZx6u60WbCge35rWRSevUwqxDtRwwxiKAO800zD2upPv4CfdWjQp//wSLar35nDKvA==
 
-base64-js@^1.0.2:
+base64-js@^1.0.2, base64-js@^1.3.0:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.3.1.tgz#58ece8cb75dd07e71ed08c736abc5fac4dbf8df1"
   integrity sha512-mLQ4i2QO1ytvGWFWmcngKO//JXAQueZvwEKtjgQFM4jIK0kU+ytMfplL8j+n5mspOfjHwoAg+9yhb7BwAHm36g==
@@ -6209,6 +6235,11 @@ big.js@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-5.2.2.tgz#65f0af382f578bcdc742bd9c281e9cb2d7768328"
   integrity sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==
+
+bignumber.js@^8.1.1:
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-8.1.1.tgz#4b072ae5aea9c20f6730e4e5d529df1271c4d885"
+  integrity sha512-QD46ppGintwPGuL1KqmwhR0O+N2cZUg8JG/VzwI2e28sM9TqHjQB10lI4QAaMHVbLzwVLLAwEglpKPViWX+5NQ==
 
 bignumber.js@^9.0.0:
   version "9.0.0"
