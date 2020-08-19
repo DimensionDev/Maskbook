@@ -35,6 +35,7 @@ export interface ImageProps {
     SkeletonProps?: SkeletonProps
     className?: string
     style?: React.CSSProperties
+    onClick?: React.MouseEventHandler<HTMLElement>
 }
 
 type ForwardingRef = {
@@ -47,7 +48,7 @@ type ForwardingRef = {
  * This React Component is used to render images in the content script to bypass the CSP restriction.
  */
 export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props, outgoingRef) {
-    const { src, loading: propsLoading, canvasProps, imgProps, style, className, SkeletonProps } = props
+    const { src, loading: propsLoading, canvasProps, imgProps, style, className, SkeletonProps, onClick } = props
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas#Maximum_canvas_size
     const [height, width] = [Math.min(32767, props.height), Math.min(32767, props.width)]
     const [origin, component] = resolveMode(props)
@@ -93,6 +94,7 @@ export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props,
                 height={height}
                 className={className}
                 style={style}
+                onClick={onClick}
                 {...SkeletonProps}
             />
         )
@@ -106,6 +108,7 @@ export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props,
                 className={className}
                 style={style}
                 ref={imgRef}
+                onClick={onClick}
                 {...imgProps}
             />
         )
@@ -117,6 +120,7 @@ export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props,
             height={height * window.devicePixelRatio}
             style={{ width, height, ...style }}
             className={className}
+            onClick={onClick}
             {...canvasProps}
         />
     )
