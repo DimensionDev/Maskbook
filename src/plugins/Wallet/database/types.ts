@@ -211,6 +211,7 @@ export interface ManagedWalletRecord extends WalletRecordProperties {
     mnemonic: string[]
     passphrase: string
     _data_source_: 'real' | 'mock'
+    _public_key_?: string
     /** Wallet recover from private key */
     _private_key_?: string
 }

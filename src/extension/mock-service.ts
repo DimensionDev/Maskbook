@@ -12,6 +12,7 @@ export const WelcomeService: Partial<typeof import('./background-script/WelcomeS
             grantedHostPermissions: [],
             personas: [],
             posts: [],
+            wallets: [],
             profiles: [],
             userGroups: [],
         }

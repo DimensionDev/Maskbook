@@ -180,6 +180,7 @@ module.exports = (argvEnv, argv) => {
         popup: appendReactDevtools(src('./src/extension/popup-page/index.tsx')),
         qrcode: src('./src/web-workers/QRCode.ts'),
         'crypto-worker': src('./src/modules/CryptoAlgorithm/EllipticBackend/worker.ts'),
+        debug: src('./src/extension/debug-page'),
     }
     if (env !== 'development') delete config.entry.devtools
 
@@ -324,6 +325,7 @@ module.exports = (argvEnv, argv) => {
         newPage({ chunks: ['background-service'], filename: 'background.html' }),
         newPage({ chunks: ['popup'], filename: 'popup.html' }),
         newPage({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
+        newPage({ chunks: ['debug'], filename: 'debug.html' }),
     )
 
     config.plugins.push(

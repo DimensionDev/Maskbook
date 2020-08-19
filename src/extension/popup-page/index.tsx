@@ -65,7 +65,16 @@ function PopupUI() {
 
     const ui = getActivatedUI()
     const myIdentities = useValueRef(ui.myIdentitiesRef)
-    const openOptionsPage = () => browser.runtime.openOptionsPage()
+    const openOptionsPage = (event: React.MouseEvent) => {
+        if (event.shiftKey) {
+            browser.tabs.create({
+                active: true,
+                url: browser.runtime.getURL('/debug.html'),
+            })
+        } else {
+            browser.runtime.openOptionsPage()
+        }
+    }
 
     return (
         <Paper className={classes.container}>

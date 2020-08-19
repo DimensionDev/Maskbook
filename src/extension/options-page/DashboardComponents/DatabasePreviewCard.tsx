@@ -40,6 +40,7 @@ export enum DatabaseRecordType {
     Profile,
     Post,
     Group,
+    Wallet,
 }
 
 export interface DatabasePreviewCardProps
@@ -67,6 +68,8 @@ export function DatabasePreviewCard(props: DatabasePreviewCardProps) {
                 return t('posts')
             case DatabaseRecordType.Group:
                 return t('groups')
+            case DatabaseRecordType.Wallet:
+                return t('wallets')
             default:
                 return unreachable(type)
         }

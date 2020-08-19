@@ -15,6 +15,8 @@ import { createOrUpdateUserGroupDatabase } from '../../../database/group'
 import { i18n } from '../../../utils/i18n-next'
 import { MessageCenter } from '../../../utils/messages'
 import { currentImportingBackup } from '../../../settings/settings'
+import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
+import { importNewWallet } from '../../../plugins/Wallet/wallet'
 
 /**
  * Restore the backup
@@ -47,6 +49,11 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
                             t,
                         )
                     }
+                }
+
+                for (const x of data.wallets) {
+                    const record = WalletRecordFromJSONFormat(x)
+                    if (record.type === 'managed') await importNewWallet(record)
                 }
             })
         }
