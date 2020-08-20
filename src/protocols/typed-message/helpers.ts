@@ -1,5 +1,7 @@
-import { TypedMessage, isTypedMessageText, isTypedMessageCompound } from './types'
+import { TypedMessage, isTypedMessageText, isTypedMessageCompound, TypedMessageCompound } from './types'
 import { Result, Ok, Err } from 'ts-results'
+import { eq } from 'lodash-es'
+import { safeUnreachable } from '../../utils/utils'
 /**
  * Get inner text from a TypedMessage
  * @param message message
@@ -7,9 +9,40 @@ import { Result, Ok, Err } from 'ts-results'
 export function extractTextFromTypedMessage(message: TypedMessage | null): Result<string, void> {
     if (message === null) return Err.EMPTY
     if (isTypedMessageText(message)) return new Ok(message.content)
-    if (isTypedMessageCompound(message))
-        return new Ok(
-            message.items.map(extractTextFromTypedMessage).filter((x) => x.ok && x.val.length > 0)[0].val as string,
-        )
+    if (isTypedMessageCompound(message)) {
+        const str: string[] = []
+        for (const item of message.items) {
+            const text = extractTextFromTypedMessage(item)
+            if (text.ok) str.push(text.val)
+        }
+        if (str.length) return new Ok(str.join(' '))
+        return Err.EMPTY
+    }
     return Err.EMPTY
+}
+
+/**
+ * This is a tree diff algorithm, may need to find a more efficient one from NPM
+ * TODO: support plugin contributed TypedMessage type
+ */
+export function isTypedMessageEqual(message1: TypedMessage, message2: TypedMessage): boolean {
+    if (message1.type !== message2.type) return false
+    if (message1.meta !== message2.meta) return false
+    if (message1.version !== message1.version) return false
+    switch (message1.type) {
+        case 'compound': {
+            const msg2 = message2 as TypedMessageCompound
+            if (message1.items.length !== msg2.items.length) return false
+            return message1.items.every((item, index) => isTypedMessageEqual(item, msg2.items[index]))
+        }
+        case 'image':
+        case 'text':
+        case 'unknown':
+        case 'empty':
+        case 'suspended':
+            return eq(message1, message2)
+        default:
+            safeUnreachable(message1)
+            return false
+    }
 }

@@ -7,8 +7,11 @@ import type {
     TypedMessageImage,
     TypedMessageCompound,
     TypedMessageUnknown,
+    TypedMessageSuspended,
 } from '../../protocols/typed-message'
 import { unreachable } from '../../utils/utils'
+import { Image } from '../shared/Image'
+import { useAsync } from 'react-use'
 
 interface MetadataRendererProps {
     metadata: TypedMessage['meta']
@@ -29,6 +32,7 @@ export interface TypedMessageRendererProps<T extends TypedMessage> {
     TypedMessageTextRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageText>>
     TypedMessageImageRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageImage>>
     TypedMessageCompoundRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageCompound>>
+    TypedMessageSuspendedRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageSuspended>>
     TypedMessageUnknownRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageUnknown>>
 }
 
@@ -52,6 +56,11 @@ export const DefaultTypedMessageRenderer = React.memo(function DefaultTypedMessa
             const Unknown = props.TypedMessageUnknownRenderer || DefaultTypedMessageUnknownRenderer
             return <Unknown {...props} message={props.message} />
         }
+        case 'empty':
+            return renderWithMetadata(props, <></>)
+        case 'suspended':
+            const Suspended = props.TypedMessageSuspendedRenderer || DefaultTypedMessageSuspendedRenderer
+            return <Suspended {...props} message={props.message} />
         default:
             return unreachable(props.message)
     }
@@ -71,11 +80,11 @@ export const DefaultTypedMessageTextRenderer = React.memo(function DefaultTypedM
 export const DefaultTypedMessageImageRenderer = React.memo(function DefaultTypedMessageImageRenderer(
     props: TypedMessageRendererProps<TypedMessageImage>,
 ) {
+    const { image, width, height } = props.message
     return renderWithMetadata(
         props,
         <Typography variant="body1" style={{ lineBreak: 'anywhere' }} data-testid="text_payload">
-            {/* TODO: support different image type */}
-            <img style={{ width: '100%' }} src={`data:image/png;base64,${props.message.content}`} />
+            <Image src={image} width={width} height={height} />
         </Typography>,
     )
 })
@@ -107,9 +116,18 @@ export const DefaultTypedMessageCompoundRenderer = React.memo(function DefaultTy
 export const DefaultTypedMessageUnknownRenderer = React.memo(function DefaultTypedMessageUnknownRenderer(
     props: TypedMessageRendererProps<TypedMessageUnknown>,
 ) {
-    // prevent unused warning
-    props.message
     return renderWithMetadata(props, <Typography>Unknown message</Typography>)
+})
+
+export const DefaultTypedMessageSuspendedRenderer = React.memo(function DefaultTypedMessageSuspendedRenderer(
+    props: TypedMessageRendererProps<TypedMessageSuspended>,
+) {
+    const { promise } = props.message
+    const { loading, error, value } = useAsync(() => promise, [promise])
+    return renderWithMetadata(
+        props,
+        loading ? 'Loading...' : error ? 'Error' : <DefaultTypedMessageRenderer {...props} message={value!} />,
+    )
 })
 
 function DefaultMetadataRender() {

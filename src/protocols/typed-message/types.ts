@@ -13,7 +13,9 @@ export interface TypedMessageText extends TypedMessageMetadata {
 /** It represents a single image */
 export interface TypedMessageImage extends TypedMessageMetadata {
     readonly type: 'image'
-    readonly content: string
+    readonly image: string | Blob
+    readonly width?: number
+    readonly height?: number
 }
 /** It represents multiple TypedMessages (ordered) */
 export interface TypedMessageCompound<T extends readonly TypedMessage[] = readonly TypedMessage[]>
@@ -27,7 +29,22 @@ export interface TypedMessageUnknown extends TypedMessageMetadata {
     /** The unrecognized data */
     readonly raw?: unknown
 }
-export type TypedMessage = TypedMessageText | TypedMessageImage | TypedMessageCompound | TypedMessageUnknown
+export interface TypedMessageEmpty extends TypedMessageMetadata {
+    readonly type: 'empty'
+}
+export interface TypedMessageSuspended<T extends TypedMessage = TypedMessage> extends TypedMessageMetadata {
+    readonly type: 'suspended'
+    readonly promise: Promise<T>
+    readonly value: T | null
+    readonly tag?: string
+}
+export type TypedMessage =
+    | TypedMessageText
+    | TypedMessageImage
+    | TypedMessageCompound
+    | TypedMessageUnknown
+    | TypedMessageEmpty
+    | TypedMessageSuspended
 
 export function isTypedMessageText(x: TypedMessage): x is TypedMessageText {
     return x.type === 'text'
@@ -40,4 +57,10 @@ export function isTypedMessageCompound(x: TypedMessage): x is TypedMessageCompou
 }
 export function isTypedMessageImage(x: TypedMessage): x is TypedMessageImage {
     return x.type === 'image'
+}
+export function isTypedMessageEmpty(x: TypedMessage): x is TypedMessageEmpty {
+    return x.type === 'empty'
+}
+export function isTypedMessageSuspended(x: TypedMessage): x is TypedMessageSuspended {
+    return x.type === 'suspended'
 }

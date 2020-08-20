@@ -4,6 +4,12 @@ import type { SocialNetworkUI } from '../../../social-network/ui'
 import { PostInfo } from '../../../social-network/PostInfo'
 import { isMobileFacebook } from '../isMobile'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
+import {
+    makeTypedMessageText,
+    makeTypedMessageImage,
+    TypedMessage,
+    makeTypedMessageFromList,
+} from '../../../protocols/typed-message'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container ' : '.userContent',
@@ -63,12 +69,20 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 ].join('\n')
             }
             function collectPostInfo() {
-                info.postContent.value = collectNodeText(node)
+                const nextTypedMessage: TypedMessage[] = []
                 info.postBy.value = getPostBy(metadata, info.postPayload.value !== null).identifier
                 info.postID.value = getPostID(metadata)
-                getMetadataImages(metadata).then((urls) => {
-                    for (const url of urls) info.postMetadataImages.add(url)
-                })
+                // parse text
+                const text = collectNodeText(node)
+                nextTypedMessage.push(makeTypedMessageText(text))
+                info.postContent.value = text
+                // parse image
+                const images = getMetadataImages(metadata)
+                for (const url of images) {
+                    info.postMetadataImages.add(url)
+                    nextTypedMessage.push(makeTypedMessageImage(url))
+                }
+                info.parsedPostContent.value = makeTypedMessageFromList(...nextTypedMessage)
             }
             collectPostInfo()
             info.postPayload.value = deconstructPayload(info.postContent.value, this.payloadDecoder)
@@ -121,7 +135,7 @@ function getPostID(node: DOMProxy): null | string {
     }
 }
 
-async function getMetadataImages(node: DOMProxy): Promise<string[]> {
+function getMetadataImages(node: DOMProxy): string[] {
     const parent = node.current.parentElement
 
     if (!parent) return []
