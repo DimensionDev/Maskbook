@@ -27,7 +27,7 @@ import type { CustomEvents } from './CustomEvents'
             ...mocks,
         }
         // The "window."" here is used to create a un-xrayed Proxy on Firefox
-        return new window.Proxy(
+        return new globalThis.window.Proxy(
             event,
             clone_into({
                 get(target: T, key: keyof T) {
@@ -53,7 +53,7 @@ import type { CustomEvents } from './CustomEvents'
                 document.activeElement!.dispatchEvent(e)
                 return undefined!
             } else if (textOrImage.type === 'image') {
-                const xray_binary = window.Uint8Array.from(textOrImage.value)
+                const xray_binary = globalThis.window.Uint8Array.from(textOrImage.value)
                 const xray_blob = new Blob([clone_into(xray_binary)], { type: 'image/png' })
                 const file = un_xray(
                     new File([un_xray(xray_blob)], 'image.png', {
@@ -61,7 +61,7 @@ import type { CustomEvents } from './CustomEvents'
                         type: 'image/png',
                     }),
                 )
-                const dt = new window.Proxy(
+                const dt = new globalThis.window.Proxy(
                     un_xray(data),
                     clone_into({
                         get(target, key: keyof DataTransfer) {
@@ -92,7 +92,9 @@ import type { CustomEvents } from './CustomEvents'
             // Cause react hooks the input.value getter & setter
             const proto: HTMLInputElement | HTMLTextAreaElement = document.activeElement!.constructor.prototype
             Object.getOwnPropertyDescriptor(proto, 'value')!.set!.call(document.activeElement, text)
-            return getEvent(new window.InputEvent('input', clone_into({ inputType: 'insertText', data: text })))
+            return getEvent(
+                new globalThis.window.InputEvent('input', clone_into({ inputType: 'insertText', data: text })),
+            )
         },
     }
     ;(Object.keys(hacks) as (keyof DocumentEventMap)[]).concat(['keyup', 'input']).forEach(hijack)
@@ -140,7 +142,7 @@ import type { CustomEvents } from './CustomEvents'
         try {
             if (typeof XPCNativeWrapper !== 'undefined') {
                 console.log('Redefine with Firefox private API, cool!')
-                const raw = XPCNativeWrapper.unwrap(window.EventTarget.prototype)
+                const raw = XPCNativeWrapper.unwrap(globalThis.window.EventTarget.prototype)
                 const rawF = raw[key]
                 exportFunction(
                     function (this: any, ...args: unknown[]) {

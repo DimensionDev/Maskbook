@@ -59,6 +59,9 @@ try {
         transpileOnly: true,
         // ignore: [],
     })
+    globalThis.window = globalThis
+    require('./polyfill/index')
+    delete globalThis.window
     module.exports = require(process.argv[process.argv.length - 1])
 } finally {
     cleanup()

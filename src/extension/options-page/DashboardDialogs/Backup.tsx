@@ -44,6 +44,7 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
         { type: DatabaseRecordType.Profile, length: value?.profiles.length ?? 0, checked: false },
         { type: DatabaseRecordType.Post, length: value?.posts.length ?? 0, checked: false },
         { type: DatabaseRecordType.Group, length: value?.userGroups.length ?? 0, checked: false },
+        { type: DatabaseRecordType.Wallet, length: value?.wallets.length ?? 0, checked: false },
     ]
 
     const onConfirm = async () => {
@@ -70,7 +71,8 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
                         <DatabasePreviewCard
                             classes={{ table: classes.dashboardPreviewCardTable }}
                             dense
-                            records={records}></DatabasePreviewCard>
+                            records={records}
+                        />
                         <ActionButton
                             loading={loading}
                             disabled={loading || records.every((r) => !r.length)}
@@ -263,6 +265,7 @@ function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackupProps) 
         { type: DatabaseRecordType.Profile, length: backup?.profiles.length ?? 0, checked: imported === true },
         { type: DatabaseRecordType.Post, length: backup?.posts.length ?? 0, checked: imported === true },
         { type: DatabaseRecordType.Group, length: backup?.userGroups.length ?? 0, checked: imported === true },
+        { type: DatabaseRecordType.Wallet, length: backup?.wallets.length ?? 0, checked: imported === true },
     ]
 
     const onConfirm = async () => {

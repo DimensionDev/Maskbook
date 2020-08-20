@@ -5,9 +5,9 @@ import type {
     TypedMessage,
     TypedMessageText,
     TypedMessageImage,
-    TypedMessageComplex,
+    TypedMessageCompound,
     TypedMessageUnknown,
-} from '../../extension/background-script/CryptoServices/utils'
+} from '../../protocols/typed-message'
 import { unreachable } from '../../utils/utils'
 
 interface MetadataRendererProps {
@@ -28,7 +28,7 @@ export interface TypedMessageRendererProps<T extends TypedMessage> {
     TypedMessageRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessage>>
     TypedMessageTextRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageText>>
     TypedMessageImageRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageImage>>
-    TypedMessageComplexRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageComplex>>
+    TypedMessageCompoundRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageCompound>>
     TypedMessageUnknownRenderer?: React.ComponentType<TypedMessageRendererProps<TypedMessageUnknown>>
 }
 
@@ -36,9 +36,9 @@ export const DefaultTypedMessageRenderer = React.memo(function DefaultTypedMessa
     props: TypedMessageRendererProps<TypedMessage>,
 ) {
     switch (props.message.type) {
-        case 'complex': {
-            const Complex = props.TypedMessageComplexRenderer || DefaultTypedMessageComplexRenderer
-            return <Complex {...props} message={props.message} />
+        case 'compound': {
+            const Compound = props.TypedMessageCompoundRenderer || DefaultTypedMessageCompoundRenderer
+            return <Compound {...props} message={props.message} />
         }
         case 'text': {
             const Text = props.TypedMessageTextRenderer || DefaultTypedMessageTextRenderer
@@ -80,8 +80,8 @@ export const DefaultTypedMessageImageRenderer = React.memo(function DefaultTyped
     )
 })
 
-export const DefaultTypedMessageComplexRenderer = React.memo(function DefaultTypedMessageComplexRenderer(
-    props: TypedMessageRendererProps<TypedMessageComplex>,
+export const DefaultTypedMessageCompoundRenderer = React.memo(function DefaultTypedMessageCompoundRenderer(
+    props: TypedMessageRendererProps<TypedMessageCompound>,
 ) {
     try {
         JSON.stringify(props.message.items)

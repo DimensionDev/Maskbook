@@ -1,5 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import { unreachable } from '../../../utils/utils'
+import type { RedPacketJSONPayload } from '../../RedPacket/utils'
 
 export enum EthereumNetwork {
     Mainnet = 'Mainnet',
@@ -159,27 +160,7 @@ export function isNextRedPacketStatusValid(current: RedPacketStatus, next: RedPa
             return unreachable(current)
     }
 }
-export type RedPacketMetadata = RedPacketJSONPayload
 export type WalletRecord = ManagedWalletRecord | ExoticWalletRecord
-export interface RedPacketJSONPayload {
-    contract_version: number
-    contract_address: string
-    rpid: string
-    password: string
-    shares: number
-    sender: {
-        address: string
-        name: string
-        message: string
-    }
-    is_random: boolean
-    total: string
-    creation_time: number
-    duration: number
-    network?: EthereumNetwork
-    token_type: EthereumTokenType
-    token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
-}
 //#endregion
 
 //#region wallet
@@ -211,6 +192,7 @@ export interface ManagedWalletRecord extends WalletRecordProperties {
     mnemonic: string[]
     passphrase: string
     _data_source_: 'real' | 'mock'
+    _public_key_?: string
     /** Wallet recover from private key */
     _private_key_?: string
 }

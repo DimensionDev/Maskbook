@@ -4,7 +4,6 @@ import {
     RedPacketStatus,
     EthereumTokenType,
     isNextRedPacketStatusValid,
-    RedPacketJSONPayload,
     EthereumNetwork,
     RedPacketRecordInDatabase,
 } from './database/types'
@@ -19,6 +18,7 @@ import BigNumber from 'bignumber.js'
 import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
 import { createRedPacketTransaction, RedPacketPluginReificatedWalletDBReadOnly } from './createRedPacketTransaction'
 import { assert } from '../../utils/utils'
+import type { RedPacketJSONPayload } from '../RedPacket/utils'
 
 function getProvider() {
     return redPacketAPI

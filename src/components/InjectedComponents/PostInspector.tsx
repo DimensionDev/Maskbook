@@ -11,7 +11,7 @@ import { getActivatedUI } from '../../social-network/ui'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../../settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
-import type { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
+import type { TypedMessage } from '../../protocols/typed-message'
 import { PluginUI, PluginConfig } from '../../plugins/plugin'
 import { usePostInfoDetails, usePostInfo } from '../DataSource/usePostInfo'
 

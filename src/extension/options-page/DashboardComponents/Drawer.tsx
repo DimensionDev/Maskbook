@@ -11,6 +11,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { cloneDeep, merge } from 'lodash-es'
 import Logo from './MaskbookLogo'
 import { Carousel } from './Carousel'
+import { makeNewBugIssueURL } from '../../debug-page/issue'
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -132,11 +133,28 @@ export default function Drawer(props: DrawerProps) {
     const { routers, exitDashboard } = props
     const [feedback, openFeedback] = useModal(DashboardFeedbackDialog)
 
+    const onDebugPage = (event: React.MouseEvent) => {
+        if (event.shiftKey) {
+            browser.tabs.create({
+                active: true,
+                url: browser.runtime.getURL('/debug.html'),
+            })
+        } else if (event.altKey) {
+            browser.tabs.create({
+                active: true,
+                url: makeNewBugIssueURL(),
+            })
+        }
+    }
+
     return (
         <ThemeProvider theme={drawerTheme}>
             <nav className={classes.drawer}>
                 {xsMatched ? null : (
-                    <Box className={classes.drawerHeader} style={{ backgroundColor: `var(--drawerBody)` }}>
+                    <Box
+                        onClick={onDebugPage}
+                        className={classes.drawerHeader}
+                        style={{ backgroundColor: `var(--drawerBody)` }}>
                         <Logo />
                         <Typography
                             className={classes.maskDescription}

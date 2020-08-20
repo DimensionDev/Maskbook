@@ -1,7 +1,7 @@
 import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
 import { ProfileIdentifier, PostIdentifier, Identifier } from '../database/type'
 import type { Payload } from '../utils/type-transform/Payload'
-import type { TypedMessage } from '../extension/background-script/CryptoServices/utils'
+import type { TypedMessage } from '../protocols/typed-message'
 import { Result, Err } from 'ts-results'
 import { ObservableSet, ObservableMap } from '../utils/ObservableMapSet'
 import { parseURL } from '../utils/utils'

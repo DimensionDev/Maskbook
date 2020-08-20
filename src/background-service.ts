@@ -1,3 +1,4 @@
+import './polyfill'
 import { GetContext } from '@holoflows/kit/es'
 import { MessageCenter } from './utils/messages'
 import 'webcrypto-liner'

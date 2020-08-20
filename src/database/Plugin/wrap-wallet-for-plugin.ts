@@ -1,13 +1,15 @@
-import { createTransaction, IDBPSafeTransaction } from '../database/helpers/openDB'
-import { createWalletDBAccess, WalletDB } from './Wallet/database/Wallet.db'
+import { createTransaction, IDBPSafeTransaction } from '../helpers/openDB'
+import { createWalletDBAccess, WalletDB } from '../../plugins/Wallet/database/Wallet.db'
 import { unwrap, IDBPTransaction, IndexKey } from 'idb/with-async-ittr-cjs'
 
 type AllKeys = 0 | 1 | 2
+/** @deprecated */
 export type PluginReificatedWalletDB<
     Data,
     Index extends [IDBValidKey?, IDBValidKey?, IDBValidKey?],
     Mode extends 'readonly' | 'readwrite'
 > = IDBPSafeTransaction<WalletDB<Data, Index>, ['ERC20Token', 'PluginStore', 'Wallet'], Mode>
+/** @deprecated */
 export function createPluginWalletAccess<Data, Index extends [IDBValidKey?, IDBValidKey?, IDBValidKey?]>(
     pluginID: string,
 ) {
@@ -66,11 +68,12 @@ export function createPluginWalletAccess<Data, Index extends [IDBValidKey?, IDBV
             })
             return obj
         }
-        function _unwrap(x?: { value: Data }) {
-            return x?.value
-        }
-        function unwrapArray(x: { value: Data }[]) {
-            return x.map((x) => x.value)
-        }
     }
+}
+
+function unwrapArray<Data>(x: { value: Data }[]) {
+    return x.map((x) => x.value)
+}
+function _unwrap<Data>(x?: { value: Data }) {
+    return x?.value
 }

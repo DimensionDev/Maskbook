@@ -7,6 +7,7 @@ import { getCurrentNetworkWorkerService } from './background-script/WorkerServic
 
 import { MessageCenter } from '@holoflows/kit/es'
 import { IdentifierMap } from '../database/IdentifierMap'
+import type { upload as pluginArweaveUpload } from '../plugins/FileService/arweave/index'
 
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
@@ -38,12 +39,13 @@ if (!('Services' in globalThis)) {
     register(createProxyToService('IdentityService'), 'Identity', {})
     register(createProxyToService('UserGroupService'), 'UserGroup', {})
     register(createProxyToService('PluginService'), 'Plugin', MockService.PluginService)
-    register(createProxyToService('HelperService'), 'Helper', {})
+    register(createProxyToService('HelperService'), 'Helper', MockService.HelperService)
     register(createProxyToService('NonceService'), 'Nonce', {})
     register(createProxyToService('ProviderService'), 'Provider', {})
 }
 interface ServicesWithProgress {
     // Sorry you should add import at '../_background_loader.1.ts'
+    pluginArweaveUpload: typeof pluginArweaveUpload
     decryptFromText: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromText
     decryptFromImageUrl: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromImageUrl
 }
@@ -89,9 +91,9 @@ Object.assign(globalThis, {
 //#region
 type Service = Record<string, (...args: unknown[]) => Promise<unknown>>
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
-    if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false)) {
+    if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false) || process.env.STORYBOOK) {
         GetContext() !== 'debugging' && console.log(`Service ${name} registered in ${GetContext()}`)
-        const mc = new MessageCenter(false)
+        const mc = new MessageCenter(process.env.STORYBOOK ? true : false)
         Object.assign(Services, {
             [name]: AsyncCall(service, {
                 key: name,
@@ -118,7 +120,7 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                 key: name,
                 serializer: Serialization,
                 log: logOptions,
-                messageChannel: new MessageCenter(true),
+                messageChannel: mc,
                 preservePauseOnException: process.env.NODE_ENV === 'development',
                 strict: false,
             })
