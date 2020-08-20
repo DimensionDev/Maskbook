@@ -34,7 +34,7 @@ export interface TypedMessageRendererProps<T extends TypedMessage> {
 export const DefaultTypedMessageRenderer = React.memo(function DefaultTypedMessageRenderer(
     props: TypedMessageRendererProps<TypedMessage>,
 ) {
-    const Renderer = getRendererOfTypedMessage(props.message)[0] || DefaultTypedMessageUnknownRenderer
+    const Renderer = getRendererOfTypedMessage(props.message)[0]?.component || DefaultTypedMessageUnknownRenderer
     return <Renderer {...props} message={props.message} />
 })
 
