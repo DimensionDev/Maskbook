@@ -2,14 +2,13 @@ import type {
     TypedMessageText,
     TypedMessageImage,
     TypedMessageUnknown,
-    TypedMessageMetadata,
     TypedMessageCompound,
     TypedMessage,
     TypedMessageEmpty,
     TypedMessageSuspended,
-} from './types'
+} from './'
 
-type Meta = TypedMessageMetadata['meta']
+type Meta = TypedMessage['meta']
 /**
  * Create a TypedMessageText from a string
  * @param content Text

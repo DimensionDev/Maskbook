@@ -23,7 +23,6 @@ export function extractTextFromTypedMessage(message: TypedMessage | null): Resul
 
 /**
  * This is a tree diff algorithm, may need to find a more efficient one from NPM
- * TODO: support plugin contributed TypedMessage type
  */
 export function isTypedMessageEqual(message1: TypedMessage, message2: TypedMessage): boolean {
     if (message1.type !== message2.type) return false
@@ -31,18 +30,17 @@ export function isTypedMessageEqual(message1: TypedMessage, message2: TypedMessa
     if (message1.version !== message1.version) return false
     switch (message1.type) {
         case 'compound': {
+            const msg1 = message1 as TypedMessageCompound
             const msg2 = message2 as TypedMessageCompound
-            if (message1.items.length !== msg2.items.length) return false
-            return message1.items.every((item, index) => isTypedMessageEqual(item, msg2.items[index]))
+            if (msg1.items.length !== msg2.items.length) return false
+            return msg1.items.every((item, index) => isTypedMessageEqual(item, msg2.items[index]))
         }
         case 'image':
         case 'text':
         case 'unknown':
         case 'empty':
         case 'suspended':
-            return eq(message1, message2)
         default:
-            safeUnreachable(message1)
-            return false
+            return eq(message1, message2)
     }
 }

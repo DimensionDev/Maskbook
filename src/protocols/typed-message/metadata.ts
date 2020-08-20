@@ -1,5 +1,5 @@
 import { Result, Ok, Err } from 'ts-results'
-import type { TypedMessageMetadata } from './types'
+import type { TypedMessage } from './types'
 
 const metadataSchemaStore = new Map<string, object>()
 /**
@@ -20,7 +20,7 @@ export function registerMetadataSchema(key: string, jsonSchema: object) {
  */
 export function createTypedMessageMetadataReader<T>(key: string, jsonSchema?: object) {
     if (jsonSchema) registerMetadataSchema(key, jsonSchema)
-    return (meta: TypedMessageMetadata['meta']) => readTypedMessageMetadataUntyped<T>(meta, key)
+    return (meta: TypedMessage['meta']) => readTypedMessageMetadataUntyped<T>(meta, key)
 }
 /**
  * The raw parser of metadata reader
@@ -29,7 +29,7 @@ export function createTypedMessageMetadataReader<T>(key: string, jsonSchema?: ob
  * @param jsonSchema JSON Schema to validate the metadata
  */
 export function readTypedMessageMetadataUntyped<T>(
-    meta: TypedMessageMetadata['meta'],
+    meta: TypedMessage['meta'],
     key: string,
     jsonSchema?: object,
 ): Result<T, void> {
@@ -48,8 +48,8 @@ export function readTypedMessageMetadataUntyped<T>(
  * Create a render of Metadata.
  * @param metadataReader A metadata reader (can be return value of createTypedMessageMetadataReader)
  */
-export function createRenderWithMetadata<T>(metadataReader: (meta: TypedMessageMetadata['meta']) => Result<T, void>) {
-    return (metadata: TypedMessageMetadata['meta'], render: (data: T) => React.ReactNode): React.ReactNode | null => {
+export function createRenderWithMetadata<T>(metadataReader: (meta: TypedMessage['meta']) => Result<T, void>) {
+    return (metadata: TypedMessage['meta'], render: (data: T) => React.ReactNode): React.ReactNode | null => {
         const message = metadataReader(metadata)
         if (message.ok) return render(message.val)
         return null
@@ -64,7 +64,7 @@ export function createRenderWithMetadata<T>(metadataReader: (meta: TypedMessageM
  * @param jsonSchema JSON Schema to validate the metadata
  */
 export function renderWithMetadataUntyped(
-    metadata: TypedMessageMetadata['meta'],
+    metadata: TypedMessage['meta'],
     key: string,
     render: (data: unknown) => React.ReactNode,
     jsonSchema?: object,
