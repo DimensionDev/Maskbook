@@ -20,21 +20,18 @@ import { PostDialog } from '../components/InjectedComponents/PostDialog'
 import { PostDialogHint } from '../components/InjectedComponents/PostDialogHint'
 import {
     makeTypedMessageText,
-    TypedMessageText,
-    TypedMessageUnknown,
-    TypedMessageCompound,
+    makeTypedMessageFromList,
+    makeTypedMessageUnknown,
+    makeTypedMessageSuspended,
 } from '../protocols/typed-message'
-import {
-    DefaultTypedMessageTextRenderer,
-    DefaultTypedMessageCompoundRenderer,
-    DefaultTypedMessageUnknownRenderer,
-} from '../components/InjectedComponents/TypedMessageRenderer'
+import { DefaultTypedMessageRenderer } from '../components/InjectedComponents/TypedMessageRenderer'
 import { useTwitterThemedPostDialogHint } from '../social-network-provider/twitter.com/ui/injectPostDialogHint'
 import { useTwitterButton } from '../social-network-provider/twitter.com/utils/theme'
 import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
 import { PersonKnownSelf } from '../components/InjectedComponents/PersonKnown'
 import { figmaLink } from './utils'
 import { RedPacketJSONPayload, RedPacketMetaKey } from '../plugins/RedPacket/utils'
+import type { TypedMessageStorybookTest } from '../plugins/Storybook/define'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
@@ -70,29 +67,37 @@ storiesOf('Injections', module)
         figmaLink('https://www.figma.com/file/TCHH8gXbhww88I5tHwHOW9/tweet-details?node-id=0%3A1'),
     )
     .add('Typed Message Renderer', () => {
-        const _text: TypedMessageText = {
-            type: 'text',
-            version: 1,
-            content: text('DefaultTypedMessageTextRenderer', 'text'),
-        }
-        const unknown: TypedMessageUnknown = { type: 'unknown', version: 1 }
-        const compound: TypedMessageCompound = {
-            type: 'compound',
-            version: 1,
-            items: [_text, unknown],
-        }
-        const divider = <Divider style={{ marginTop: 24 }} />
+        const _text = makeTypedMessageText(text('DefaultTypedMessageTextRenderer', 'text'))
+        const unknown = makeTypedMessageUnknown()
+        const compound = makeTypedMessageFromList(_text, unknown)
+        const suspended = makeTypedMessageSuspended(
+            (async function () {
+                await sleep(2000)
+                return makeTypedMessageText('Resolved text!')
+            })(),
+        )
+        const plugin: TypedMessageStorybookTest = { payload: text('Plugin payload', 'test'), type: 'test', version: 1 }
         return (
             <>
                 <Paper>
-                    <Typography>DefaultTypedMessageTextRenderer</Typography>
-                    <DefaultTypedMessageTextRenderer message={_text} />
-                    {divider}
-                    <Typography>DefaultTypedMessageCompoundRenderer</Typography>
-                    <DefaultTypedMessageCompoundRenderer message={compound} />
-                    {divider}
-                    <Typography>DefaultTypedMessageUnknownRenderer</Typography>
-                    <DefaultTypedMessageUnknownRenderer message={unknown} />
+                    <Typography>Text</Typography>
+                    <DefaultTypedMessageRenderer message={_text} />
+                </Paper>
+                <Paper style={{ marginTop: 24 }}>
+                    <Typography>Compound</Typography>
+                    <DefaultTypedMessageRenderer message={compound} />
+                </Paper>
+                <Paper style={{ marginTop: 24 }}>
+                    <Typography>Unknown</Typography>
+                    <DefaultTypedMessageRenderer message={unknown} />
+                </Paper>
+                <Paper style={{ marginTop: 24 }}>
+                    <Typography>Suspended</Typography>
+                    <DefaultTypedMessageRenderer message={suspended} />
+                </Paper>
+                <Paper style={{ marginTop: 24 }}>
+                    <Typography>Custom(Plugin renderer)</Typography>
+                    <DefaultTypedMessageRenderer message={plugin} />
                 </Paper>
             </>
         )
