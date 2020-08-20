@@ -10,10 +10,17 @@ import { PostInfo } from '../../../social-network/PostInfo'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
 import { bioCardParser, postParser, postIdParser, postImagesParser } from '../utils/fetch'
-import { isNil, noop, memoize } from 'lodash-es'
+import { isNil, memoize } from 'lodash-es'
 import Services from '../../../extension/service'
 import { untilElementAvailable } from '../../../utils/dom'
 import { injectMaskbookIconToPost } from './injectMaskbookIcon'
+import {
+    makeTypedMessageText,
+    makeTypedMessageImage,
+    makeTypedMessageFromList,
+    makeTypedMessageEmpty,
+    makeTypedMessageSuspended,
+} from '../../../protocols/typed-message'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -180,10 +187,18 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self:
 
     // decode steganographic image
     // don't add await on this
-    untilElementAvailable(postsImageSelector(tweetNode), 10000)
+    const images = untilElementAvailable(postsImageSelector(tweetNode), 10000)
         .then(() => postImagesParser(tweetNode))
         .then((urls) => {
-            for (const url of urls) info.postMetadataImages.add(url)
+            for (const url of urls) {
+                info.postMetadataImages.add(url)
+            }
+            if (urls.length) return makeTypedMessageFromList(...urls.map((x) => makeTypedMessageImage(x)))
+            return makeTypedMessageEmpty()
         })
-        .catch(noop)
+        .catch(() => makeTypedMessageEmpty())
+    info.parsedPostContent.value = makeTypedMessageFromList(
+        makeTypedMessageText(content),
+        makeTypedMessageSuspended(images),
+    )
 }
