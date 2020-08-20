@@ -119,7 +119,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
     const [fileServiceDialogOpen, setFileServiceDialogOpen] = useState(false)
 
-    if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
+    if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
     const metadataBadge = [...PluginUI].flatMap((plugin) => {
         const knownMeta = plugin.postDialogMetadataBadge
         if (!knownMeta) return undefined

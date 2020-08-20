@@ -1,6 +1,14 @@
 // @ts-ignore
 const React = require('jsx-jsonml-devtools-renderer') as any
-import type { TypedMessage, TypedMessageCompound, TypedMessageImage, TypedMessageText } from './types'
+import {
+    TypedMessage,
+    TypedMessageCompound,
+    TypedMessageImage,
+    TypedMessageText,
+    isTypedMessageCompound,
+    isTypedMessageText,
+    isTypedMessageImage,
+} from './types'
 
 class TypedMessageFormatter {
     isTypedMessage(obj: unknown): obj is TypedMessage {
@@ -53,16 +61,10 @@ class TypedMessageFormatter {
         return this.fields(obj)
     }
     body(obj: TypedMessage) {
-        switch (obj.type) {
-            case 'compound':
-                return this.compound(obj)
-            case 'text':
-                return this.text(obj)
-            case 'image':
-                return this.image(obj)
-            default:
-                return this.fields(obj)
-        }
+        if (isTypedMessageCompound(obj)) return this.compound(obj)
+        if (isTypedMessageText(obj)) return this.text(obj)
+        if (isTypedMessageImage(obj)) return this.image(obj)
+        return this.fields(obj)
     }
     header(obj: unknown) {
         if (!this.isTypedMessage(obj)) return null

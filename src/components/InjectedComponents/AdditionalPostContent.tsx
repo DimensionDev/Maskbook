@@ -62,7 +62,6 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
             {props.headerActions}
         </Typography>
     )
-    const TypedMessageRenderer = props.TypedMessageRenderer || DefaultTypedMessageRenderer
     const TypedMessage = React.useMemo(() => {
         if (typeof message === 'string') return makeTypedMessageText(message)
         if (typeof message === 'undefined') return makeTypedMessageText('')
@@ -73,7 +72,7 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
             <header className={classes.content}>{header}</header>
             {message ? (
                 <main className={classes.content}>
-                    <TypedMessageRenderer {...props} message={TypedMessage} />
+                    <DefaultTypedMessageRenderer {...props} message={TypedMessage} />
                 </main>
             ) : null}
         </Card>
