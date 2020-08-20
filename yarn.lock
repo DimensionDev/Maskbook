@@ -13285,7 +13285,7 @@ jstransformer@1.0.0:
     is-promise "^2.0.0"
     promise "^7.0.1"
 
-jsx-jsonml-devtools-renderer@^1.4.1:
+jsx-jsonml-devtools-renderer@^1.4.1, jsx-jsonml-devtools-renderer@^1.4.2:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/jsx-jsonml-devtools-renderer/-/jsx-jsonml-devtools-renderer-1.4.2.tgz#600edbe8841b4a88665d47275464d747d78ba6e5"
   integrity sha512-G2/5Nh2BXnOWzfXTKwHpSg05ZI9l6yf1VAx7tbgjkoUN6fBdcqev0jgBxD8tQgy+zBBxXI73Uu6qZG4NmefV0g==
