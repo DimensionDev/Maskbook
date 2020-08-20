@@ -13,7 +13,9 @@ export abstract class PostInfo {
             if (by.isUnknown || id === null) this.postIdentifier.value = null
             else this.postIdentifier.value = new PostIdentifier(by, id)
         }
-        if (process.env.NODE_ENV === 'development') console.log(this.parsedPostContent)
+        if (process.env.NODE_ENV === 'development') {
+            this.parsedPostContent.addListener((x) => console.log(x))
+        }
         this.postID.addListener(calc)
         this.postBy.addListener(calc)
 
