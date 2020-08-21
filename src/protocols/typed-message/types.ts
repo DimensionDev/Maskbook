@@ -11,6 +11,13 @@ export interface TypedMessageText extends TypedMessage {
     readonly type: 'text'
     readonly content: string
 }
+/** It represents a signle link */
+export interface TypedMessageAnchor extends TypedMessage {
+    readonly type: 'anchor'
+    readonly category: 'normal' | 'user' | 'cash' | 'hash'
+    readonly href: string
+    readonly content: string
+}
 /** It represents a single image */
 export interface TypedMessageImage extends TypedMessage {
     readonly type: 'image'
@@ -39,8 +46,12 @@ export interface TypedMessageSuspended<T extends TypedMessage = TypedMessage> ex
     readonly value: T | null
     readonly tag?: string
 }
+
 export function isTypedMessageText(x: TypedMessage): x is TypedMessageText {
     return x.type === 'text'
+}
+export function isTypedMessgaeAnchor(x: TypedMessage): x is TypedMessageAnchor {
+    return x.type === 'anchor'
 }
 export function isTypedMessageUnknown(x: TypedMessage): x is TypedMessageUnknown {
     return x.type === 'unknown'

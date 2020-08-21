@@ -4,6 +4,13 @@ import { defaultTo } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
 import { ProfileIdentifier } from '../../../database/type'
 import { twitterUrl, canonifyImgUrl } from './url'
+import {
+    makeTypedMessageText,
+    makeTypedMessageAnchor,
+    makeTypedMessageEmpty,
+    TypedMessage,
+    isTypedMessageEmpty,
+} from '../../../protocols/typed-message'
 
 /**
  * @example
@@ -155,9 +162,7 @@ export const postAvatarParser = (node: HTMLElement) => {
 export const postContentParser = (node: HTMLElement) => {
     if (isMobilePost(node)) {
         const containerNode = node.querySelector('.tweet-text > div')
-        if (!containerNode) {
-            return ''
-        }
+        if (!containerNode) return ''
         return Array.from(containerNode.childNodes)
             .map((node) => {
                 if (node.nodeType === Node.TEXT_NODE) return node.nodeValue
@@ -176,6 +181,44 @@ export const postContentParser = (node: HTMLElement) => {
         ]
         return sto.filter(Boolean).join(' ')
     }
+}
+
+export const postContentMessageParser = (node: HTMLElement) => {
+    function resolve(content: string) {
+        if (content.startsWith('@')) return 'user'
+        if (content.startsWith('#')) return 'hash'
+        if (content.startsWith('$')) return 'cash'
+        return 'normal'
+    }
+    function make(node: Node): TypedMessage | TypedMessage[] {
+        const nodeName = node.nodeName.toLowerCase()
+        if (node.nodeType === Node.TEXT_NODE) {
+            if (!node.nodeValue) return makeTypedMessageEmpty()
+            return makeTypedMessageText(node.nodeValue)
+        } else if (nodeName === 'a') {
+            const anchor = node as HTMLAnchorElement
+            const href = anchor.getAttribute('href')
+            const content = anchor.textContent
+            if (!content) return makeTypedMessageEmpty()
+            return makeTypedMessageAnchor(resolve(content), href ?? 'javascript: void(0);', content)
+        } else if (nodeName === 'img') {
+            const image = node as HTMLImageElement
+            const src = image.getAttribute('src')
+            const matched = src?.match(/emoji\/v2\/svg\/([\d\w]+)\.svg/)
+            if (matched && matched[1])
+                return makeTypedMessageText(String.fromCodePoint(Number.parseInt(`0x${matched[1]}`)))
+            return makeTypedMessageEmpty()
+        } else if (node.childNodes)
+            return Array.from(node.childNodes).flatMap((x) => {
+                const x_ = make(x)
+                return Array.isArray(x_) ? x_ : [x_]
+            })
+        else return makeTypedMessageEmpty()
+    }
+    const lang = node.parentElement!.querySelector<HTMLDivElement>('[lang]')
+    if (!lang) return []
+    const maked = make(lang)
+    return Array.isArray(maked) ? maked : [maked]
 }
 
 export const postImagesParser = async (node: HTMLElement): Promise<string[]> => {
@@ -197,9 +240,10 @@ export const postParser = (node: HTMLElement) => {
         ...postNameParser(node),
         avatar: postAvatarParser(node),
 
-        // TODO:
+        // FIXME:
         // we get wrong pid for nested tweet
         pid: postIdParser(node),
-        content: postContentParser(node),
+
+        messages: postContentMessageParser(node).filter((x) => !isTypedMessageEmpty(x)),
     }
 }

@@ -5,10 +5,11 @@ import { PostInfo } from '../../../social-network/PostInfo'
 import { isMobileFacebook } from '../isMobile'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import {
+    TypedMessage,
     makeTypedMessageText,
     makeTypedMessageImage,
-    TypedMessage,
     makeTypedMessageFromList,
+    makeTypedMessageCompound,
 } from '../../../protocols/typed-message'
 import { Flags } from '../../../utils/flags'
 
@@ -83,7 +84,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                     info.postMetadataImages.add(url)
                     nextTypedMessage.push(makeTypedMessageImage(url))
                 }
-                info.parsedPostContent.value = makeTypedMessageFromList(...nextTypedMessage)
+                info.parsedPostContent.value = makeTypedMessageCompound(nextTypedMessage)
             }
             collectPostInfo()
             info.postPayload.value = deconstructPayload(info.postContent.value, this.payloadDecoder)

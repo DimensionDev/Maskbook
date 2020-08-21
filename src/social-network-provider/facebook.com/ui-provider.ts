@@ -14,6 +14,7 @@ import { pasteIntoBioFacebook } from './tasks/pasteIntoBio'
 import { injectPostCommentsDefault } from '../../social-network/defaults/injectComments'
 import { dispatchCustomEvents, selectElementContents, sleep } from '../../utils/utils'
 import { collectPostsFacebook } from './UI/collectPosts'
+import { injectPostDummyFacebook } from './UI/injectPostDummy'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
@@ -92,6 +93,7 @@ export const facebookUISelf = defineSocialNetworkUI({
             if (!root.innerText.includes(encryptedComment)) return fail()
         }
     }),
+    injectPostDummy: injectPostDummyFacebook,
     injectPostInspector: injectPostInspectorFacebook,
     collectPeople: collectPeopleFacebook,
     collectPosts: collectPostsFacebook,

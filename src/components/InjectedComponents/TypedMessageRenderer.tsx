@@ -4,11 +4,14 @@ import anchorme from 'anchorme'
 import {
     TypedMessage,
     TypedMessageText,
+    TypedMessageAnchor,
     TypedMessageImage,
     TypedMessageCompound,
     TypedMessageUnknown,
     TypedMessageSuspended,
     registerTypedMessageRenderer,
+    TypedMessageEmpty,
+    makeTypedMessageText,
 } from '../../protocols/typed-message'
 import { Image } from '../shared/Image'
 import { useAsync } from 'react-use'
@@ -43,7 +46,11 @@ export const DefaultTypedMessageTextRenderer = React.memo(function DefaultTypedM
 ) {
     return renderWithMetadata(
         props,
-        <Typography variant="body1" style={{ lineBreak: 'anywhere' }} data-testid="text_payload">
+        <Typography
+            color="textPrimary"
+            variant="body1"
+            style={{ lineBreak: 'anywhere', display: 'inline' }}
+            data-testid="text_payload">
             <RenderText text={props.message.content}></RenderText>
         </Typography>,
     )
@@ -54,13 +61,32 @@ registerTypedMessageRenderer('text', {
     priority: 0,
 })
 
+export const DefaultTypedMessageAnchorRenderer = React.memo(function DefaultTypedMessageAnchorRenderer(
+    props: TypedMessageRendererProps<TypedMessageAnchor>,
+) {
+    const { content, href } = props.message
+    return renderWithMetadata(
+        props,
+        <Typography variant="body1" style={{ lineBreak: 'anywhere', display: 'inline' }} data-testid="anchor_payload">
+            <Link color="textPrimary" target="_blank" rel="noopener noreferrer" href={href}>
+                {content}
+            </Link>
+        </Typography>,
+    )
+})
+registerTypedMessageRenderer('anchor', {
+    component: DefaultTypedMessageAnchorRenderer,
+    id: 'maskbook.anchor',
+    priority: 0,
+})
+
 export const DefaultTypedMessageImageRenderer = React.memo(function DefaultTypedMessageImageRenderer(
     props: TypedMessageRendererProps<TypedMessageImage>,
 ) {
     const { image, width, height } = props.message
     return renderWithMetadata(
         props,
-        <Typography variant="body1" style={{ lineBreak: 'anywhere' }} data-testid="text_payload">
+        <Typography variant="body1" style={{ lineBreak: 'anywhere' }} data-testid="image_payload">
             <Image src={image} width={width} height={height} />
         </Typography>,
     )
@@ -99,10 +125,21 @@ registerTypedMessageRenderer('compound', {
     priority: 0,
 })
 
+export const DefaultTypedMessageEmptyRenderer = React.memo(function DefaultTypedMessageEmptyRenderer(
+    props: TypedMessageRendererProps<TypedMessageEmpty>,
+) {
+    return renderWithMetadata(props, null)
+})
+registerTypedMessageRenderer('empty', {
+    component: DefaultTypedMessageEmptyRenderer,
+    id: 'maskbook.empty',
+    priority: 0,
+})
+
 export const DefaultTypedMessageUnknownRenderer = React.memo(function DefaultTypedMessageUnknownRenderer(
     props: TypedMessageRendererProps<TypedMessageUnknown>,
 ) {
-    return renderWithMetadata(props, <Typography>Unknown message</Typography>)
+    return renderWithMetadata(props, <Typography color="textPrimary">Unknown message</Typography>)
 })
 registerTypedMessageRenderer('unknown', {
     component: DefaultTypedMessageUnknownRenderer,
@@ -115,9 +152,16 @@ export const DefaultTypedMessageSuspendedRenderer = React.memo(function DefaultT
 ) {
     const { promise } = props.message
     const { loading, error, value } = useAsync(() => promise, [promise])
+
     return renderWithMetadata(
         props,
-        loading ? 'Loading...' : error ? 'Error' : <DefaultTypedMessageRenderer {...props} message={value!} />,
+        loading ? (
+            <DefaultTypedMessageTextRenderer {...props} message={makeTypedMessageText('Loading...')} />
+        ) : error ? (
+            <DefaultTypedMessageTextRenderer {...props} message={makeTypedMessageText('Error!')} />
+        ) : (
+            <DefaultTypedMessageRenderer {...props} message={value!} />
+        ),
     )
 })
 registerTypedMessageRenderer('suspended', {

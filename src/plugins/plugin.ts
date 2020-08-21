@@ -1,4 +1,4 @@
-import type { TypedMessage } from '../protocols/typed-message'
+import type { TypedMessage, TypedMessageCompound } from '../protocols/typed-message'
 
 type PluginInjectFunction<T> =
     | {
@@ -11,6 +11,7 @@ export interface PluginConfig {
     pluginName: string
     identifier: string
     successDecryptionInspector?: PluginInjectFunction<{ message: TypedMessage }>
+    postMessageProcessor?: (message: TypedMessageCompound) => TypedMessageCompound
     postInspector?: PluginInjectFunction<{}>
     postDialogMetadataBadge?: Map<string, (metadata: any) => string>
 }

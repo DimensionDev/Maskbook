@@ -1,4 +1,10 @@
-import { TypedMessage, isTypedMessageText, isTypedMessageCompound, TypedMessageCompound } from './types'
+import {
+    TypedMessage,
+    isTypedMessageText,
+    isTypedMessageCompound,
+    TypedMessageCompound,
+    isTypedMessgaeAnchor,
+} from './types'
 import { Result, Ok, Err } from 'ts-results'
 import { eq } from 'lodash-es'
 /**
@@ -36,10 +42,21 @@ export function isTypedMessageEqual(message1: TypedMessage, message2: TypedMessa
         }
         case 'image':
         case 'text':
+        case 'anchor':
         case 'unknown':
         case 'empty':
         case 'suspended':
         default:
             return eq(message1, message2)
     }
+}
+
+/**
+ * Serialize typed message
+ */
+export function serializeTypedMessage(message: TypedMessage | null) {
+    if (!message) return ''
+    if (isTypedMessageText(message)) return message.content
+    if (isTypedMessgaeAnchor(message)) return message.content
+    return ''
 }

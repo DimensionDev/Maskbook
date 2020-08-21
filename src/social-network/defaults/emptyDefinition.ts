@@ -30,6 +30,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     injectCommentBox: nopWithUnmount,
     injectPostBox: nop,
     injectPostComments: nopWithUnmount,
+    injectPostDummy: nopWithUnmount,
     injectPostInspector: nopWithUnmount,
     resolveLastRecognizedIdentity: nop,
     posts: new ObservableWeakMap(),

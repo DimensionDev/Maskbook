@@ -1,5 +1,6 @@
 import type {
     TypedMessageText,
+    TypedMessageAnchor,
     TypedMessageImage,
     TypedMessageUnknown,
     TypedMessageCompound,
@@ -17,6 +18,22 @@ type Meta = TypedMessage['meta']
 export function makeTypedMessageText(content: string, meta?: Meta): TypedMessageText {
     return { type: 'text', version: 1, content, meta }
 }
+
+/**
+ * Create a TypedAnchorText from a html link
+ * @param content Text
+ * @param href the hypter link
+ * @param meta
+ */
+export function makeTypedMessageAnchor(
+    category: 'normal' | 'user' | 'cash' | 'hash',
+    href: string,
+    content: string,
+    meta?: Meta,
+): TypedMessageAnchor {
+    return { type: 'anchor', version: 1, category, href, content, meta }
+}
+
 /**
  * Create a TypedMessageCompound from a list of TypedMessage
  * @param items A ordered list of TypedMessage

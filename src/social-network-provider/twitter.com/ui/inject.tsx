@@ -4,6 +4,7 @@ import { injectPostDialogAtTwitter } from './injectPostDialog'
 import { injectPostDialogHintAtTwitter } from './injectPostDialogHint'
 import { injectPostInspectorAtTwitter } from './injectPostInspector'
 import { injectPostDialogIconAtTwitter } from './injectPostDialogIcon'
+import { injectPostDummyAtTwitter } from './injectPostDummy'
 
 const injectPostBox = () => {
     injectPostDialogAtTwitter()
@@ -13,6 +14,7 @@ const injectPostBox = () => {
 
 export const twitterUIInjections: SocialNetworkUIInjections = {
     injectPostBox,
+    injectPostDummy: injectPostDummyAtTwitter,
     injectPostInspector: injectPostInspectorAtTwitter,
     injectKnownIdentity: injectKnownIdentityAtTwitter,
 }

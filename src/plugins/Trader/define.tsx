@@ -1,30 +1,23 @@
 import React from 'react'
 import type { PluginConfig } from '../plugin'
-import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
-import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
-import { Suspense } from 'react'
-import { SnackbarContent } from '@material-ui/core'
+import {
+    TypedMessage,
+    isTypedMessgaeAnchor,
+    TypedMessageAnchor,
+    TypedMessageCompound,
+} from '../../protocols/typed-message'
+import { makeTypedMessageCashTrending } from './messages/TypedMessageCashTrending'
+
+const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor => isTypedMessgaeAnchor(m) && m.category === 'cash'
 
 export const TraderPluginDefine: PluginConfig = {
     pluginName: 'Trader',
     identifier: 'co.maskbook.trader',
     postDialogMetadataBadge: new Map([['com.maskbook.trader:1', (meta) => 'no metadata']]),
-
-    postInspector: function Component(): JSX.Element | null {
-        const tokenName = usePostInfoDetails('postMetadataMentionedLinks')
-        if (!tokenName) return null
-        return (
-            <MaskbookPluginWrapper pluginName="Trader">
-                <Suspense fallback={<SnackbarContent message="Maskbook is loading this plugin..." />}>
-                    <Trader></Trader>
-                </Suspense>
-            </MaskbookPluginWrapper>
-        )
+    postMessageProcessor(message: TypedMessageCompound) {
+        return {
+            ...message,
+            items: message.items.map((m: TypedMessage) => (isCashTagMessage(m) ? makeTypedMessageCashTrending(m) : m)),
+        }
     },
-}
-
-interface TranderProps {}
-
-function Trader(props: TranderProps) {
-    return null
 }
