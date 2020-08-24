@@ -9,7 +9,7 @@ import type {
     SuccessDecryption,
 } from '../../../extension/background-script/CryptoServices/decryptFrom'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
-import type { TypedMessage } from '../../../extension/background-script/CryptoServices/utils'
+import type { TypedMessage } from '../../../protocols/typed-message'
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
 import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwaiting'
 import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'
@@ -154,14 +154,16 @@ export const DecryptPost = hmr(function DecryptPost(props: DecryptPostProps) {
     }, [firstSucceedDecrypted])
     //#endregion
 
-    // the internal error should not display to the end-user
-    if (!deconstructedPayload.ok && progress.every((x) => x.progress.type === 'error' && x.progress.internalError))
-        return null
+    // it's not a secret post
+    if (!deconstructedPayload.ok && progress.every((x) => x.progress.internal)) return null
     return (
         <>
-            {progress.map(({ progress }, index) => (
-                <React.Fragment key={index}>{renderProgress(progress)}</React.Fragment>
-            ))}
+            {progress
+                // the internal progress should not display to the end-user
+                .filter(({ progress }) => !progress.internal)
+                .map(({ progress }, index) => (
+                    <React.Fragment key={index}>{renderProgress(progress)}</React.Fragment>
+                ))}
         </>
     )
 

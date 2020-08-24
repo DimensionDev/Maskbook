@@ -3,7 +3,6 @@ import { compressSecp256k1Key } from '../utils/type-transform/SECP256k1-Compress
 import { CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
 import { Result, Ok, Err } from 'ts-results'
 import type { EC_JsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
-import { unreachable } from '../utils/utils'
 
 /**
  * @internal symbol that used to construct this type from the Identifier
@@ -48,19 +47,19 @@ const fromString = (id: string | Identifier, constructor?: typeof Identifier): R
         else if (type === 'post') result = PostIdentifier[$fromString](rest.join(':'))
         else if (type === 'post_iv') result = PostIVIdentifier[$fromString](rest.join(':'))
         else if (type === 'ec_key') result = ECKeyIdentifier[$fromString](rest.join(':'))
-        else return new Err(new TypeError('Unreachable case:' + type))
+        else return Err(new TypeError('Unreachable case:' + type))
         fromStringCache.set(id, result)
     }
-    const err = new Err(
+    const err = Err(
         new TypeError(
             `Can't cast to Identifier. Expected: ${
                 constructor?.name || 'Any Identifier'
             }, Try to convert from string: ${id}`,
         ),
     )
-    if (!constructor) return result ? new Ok(result) : err
+    if (!constructor) return result ? Ok(result) : err
     // the first overload
-    else if (result instanceof constructor) return new Ok(result)
+    else if (result instanceof constructor) return Ok(result)
     else return err
 }
 export abstract class Identifier {

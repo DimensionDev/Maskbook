@@ -4,10 +4,9 @@ import { makeStyles, createStyles, Theme, Typography, SnackbarContent, Button, B
 const border = '1.5px solid rgb(0, 154, 87)'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        root: {
+        container: {
             borderRadius: 12,
             border: border,
-            minWidth: 400,
             width: '100%',
             height: 200,
             display: 'grid',
@@ -18,6 +17,19 @@ const useStyles = makeStyles((theme: Theme) =>
                 "info  image"
             `,
             overflow: 'hidden',
+            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                gridTemplateColumns: '1fr',
+                gridTemplateRows: '1fr 1fr',
+                gridTemplateAreas: `
+                "title"
+                "info"
+            `,
+            },
+        },
+        footer: {
+            paddingTop: theme.spacing(2),
+            display: 'flex',
+            justifyContent: 'center',
         },
         aside: {
             gridArea: 'image',
@@ -26,6 +38,9 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'center',
             borderLeft: border,
             backgroundColor: 'rgba(255, 255, 255, 0.3)',
+            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                display: 'none',
+            },
         },
         image: {
             maxWidth: '90%',
@@ -100,7 +115,7 @@ export function PreviewCard(props: PreviewCardProps) {
     }
     return (
         <>
-            <Paper className={classes.root}>
+            <Paper className={classes.container}>
                 <div className={classes.title}>
                     <Typography variant="h5">{props.title}</Typography>
                 </div>
@@ -122,7 +137,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     {props.logo ? <img className={classes.image} src={props.logo} /> : null}
                 </aside>
             </Paper>
-            <Box paddingTop={2} display="flex" justifyContent="center">
+            <Box className={classes.footer}>
                 <Button
                     // If failed to fetch the contract address, fallback
                     onClick={() => (props.address ? props.onRequestGrant() : window.open(props.originalURL))}

@@ -65,6 +65,19 @@ export interface BackupJSONFileVersion2 {
         recipientGroups: string[] // Array<GroupIdentifier.toText()>
         foundAt: number // Unix timestamp
     }>
+    wallets: Array<{
+        address: string
+        name: string
+        passphrase?: string
+        publicKey?: EC_Public_JsonWebKey
+        privateKey?: EC_Private_JsonWebKey
+        mnemonic?: {
+            words: string
+            parameter: { path: string; withPassword: boolean }
+        }
+        createdAt: number // Unix timestamp
+        updatedAt: number // Unix timestamp
+    }>
     grantedHostPermissions: string[]
 }
 
@@ -156,9 +169,15 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
             createdAt: 0,
         },
         posts: [],
+        wallets: [],
         personas,
         profiles,
         userGroups,
         grantedHostPermissions: json.grantedHostPermissions,
     }
+}
+
+export function upgradeFromBackupJSONFileVersion2(json: BackupJSONFileVersion2): BackupJSONFileVersion2 {
+    json.wallets = json.wallets ?? []
+    return json
 }

@@ -13,6 +13,7 @@ import * as PluginService from './extension/background-script/PluginService'
 import * as HelperService from './extension/background-script/HelperService'
 import * as NonceService from './extension/background-script/NonceService'
 import * as ProviderService from './extension/background-script/ProviderService'
+import { upload as pluginArweaveUpload } from './plugins/FileService/arweave/index'
 import { decryptFromText, decryptFromImageUrl } from './extension/background-script/CryptoServices/decryptFrom'
 
 Object.assign(globalThis, {
@@ -29,6 +30,7 @@ Object.assign(globalThis, {
 
 Object.assign(globalThis, {
     ServicesWithProgress: {
+        pluginArweaveUpload,
         decryptFromText,
         decryptFromImageUrl,
     },

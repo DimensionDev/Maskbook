@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { isMobileFacebook } from '../isMobile'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { PreferShadowRootMode } from '../../../utils/constants'
+import { MessageCenter } from '../../../utils/messages'
 
 let composeBox: LiveSelector<Element>
 if (isMobileFacebook) {
@@ -28,12 +29,14 @@ export function injectPostBoxFacebook() {
     })
 }
 function UI() {
-    const [open, setOpen] = React.useState(false)
-    const toOpen = () => setOpen(true)
+    const onHintButtonClicked = useCallback(
+        () => MessageCenter.emit('compositionUpdated', { reason: 'popup', open: true }),
+        [],
+    )
     return (
         <>
-            <PostDialogHint onHintButtonClicked={toOpen} />
-            <PostDialog open={[open, setOpen]} />
+            <PostDialogHint onHintButtonClicked={onHintButtonClicked} />
+            <PostDialog reason="popup" />
         </>
     )
 }

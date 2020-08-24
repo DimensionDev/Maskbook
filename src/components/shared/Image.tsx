@@ -26,8 +26,8 @@ export interface ImageProps {
      * @default auto
      */
     component?: 'img' | 'canvas'
-    width: number
-    height: number
+    width?: number
+    height?: number
     loading?: boolean
     // usability
     canvasProps?: React.DetailedHTMLProps<React.CanvasHTMLAttributes<HTMLCanvasElement>, HTMLCanvasElement>
@@ -35,6 +35,7 @@ export interface ImageProps {
     SkeletonProps?: SkeletonProps
     className?: string
     style?: React.CSSProperties
+    onClick?: React.MouseEventHandler<HTMLElement>
 }
 
 type ForwardingRef = {
@@ -47,9 +48,9 @@ type ForwardingRef = {
  * This React Component is used to render images in the content script to bypass the CSP restriction.
  */
 export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props, outgoingRef) {
-    const { src, loading: propsLoading, canvasProps, imgProps, style, className, SkeletonProps } = props
+    const { src, loading: propsLoading, canvasProps, imgProps, style, className, SkeletonProps, onClick } = props
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas#Maximum_canvas_size
-    const [height, width] = [Math.min(32767, props.height), Math.min(32767, props.width)]
+    const [height, width] = [Math.min(32767, props.height || 500), Math.min(32767, props.width || 500)]
     const [origin, component] = resolveMode(props)
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const imgRef = useRef<HTMLImageElement>(null)
@@ -93,6 +94,7 @@ export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props,
                 height={height}
                 className={className}
                 style={style}
+                onClick={onClick}
                 {...SkeletonProps}
             />
         )
@@ -106,6 +108,7 @@ export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props,
                 className={className}
                 style={style}
                 ref={imgRef}
+                onClick={onClick}
                 {...imgProps}
             />
         )
@@ -117,6 +120,7 @@ export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props,
             height={height * window.devicePixelRatio}
             style={{ width, height, ...style }}
             className={className}
+            onClick={onClick}
             {...canvasProps}
         />
     )

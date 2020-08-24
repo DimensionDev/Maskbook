@@ -20,6 +20,9 @@ const useStyles = makeStyles({
     icon: {
         backgroundColor: 'transparent !important',
     },
+    label: {
+        display: 'flex',
+    },
 })
 
 export function ClickableChip(props: ClickableChipProps) {
@@ -29,7 +32,8 @@ export function ClickableChip(props: ClickableChipProps) {
             avatar={props.checked ? <DoneIcon className={classes.icon} /> : undefined}
             color={props.checked ? 'primary' : 'default'}
             {...props.ChipProps}
-            className={classNames(classes.root, props.ChipProps?.className)}
+            classes={classes}
+            className={props.ChipProps?.className}
         />
     )
 }

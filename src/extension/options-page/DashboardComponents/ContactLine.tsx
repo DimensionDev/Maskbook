@@ -1,21 +1,11 @@
 import React, { useMemo } from 'react'
-import {
-    Typography,
-    ButtonBase,
-    ButtonBaseProps,
-    IconButton,
-    MenuItem,
-    ListItem,
-    ListItemTypeMap,
-    useMediaQuery,
-} from '@material-ui/core'
+import { Typography, IconButton, MenuItem, ListItem, ListItemTypeMap, useMediaQuery } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardContactDialog, DashboardContactDeleteConfirmDialog } from '../DashboardDialogs/Contact'
-import { Skeleton } from '@material-ui/lab'
 import DashboardMenu from './DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'

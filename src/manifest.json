@@ -1,6 +1,6 @@
 {
     "name": "Maskbook",
-    "version": "1.13.2",
+    "version": "1.13.5",
     "manifest_version": 2,
     "permissions": ["storage", "downloads", "webNavigation", "activeTab"],
     "web_accessible_resources": ["*.js"],

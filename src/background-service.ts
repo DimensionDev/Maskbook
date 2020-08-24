@@ -49,11 +49,13 @@ if (GetContext() === 'background') {
                 .catch((x) => IgnoreError(x, arg))
         }
         // In Firefox
-        browser.tabs.executeScript(arg.tabId, {
-            runAt: 'document_start',
-            frameId: arg.frameId,
-            file: 'js/injected-script.js',
-        })
+        if (process.env.target === 'firefox') {
+            browser.tabs.executeScript(arg.tabId, {
+                runAt: 'document_start',
+                frameId: arg.frameId,
+                file: 'js/injected-script.js',
+            })
+        }
         for (const script of await contentScripts) {
             const option: browser.extensionTypes.InjectDetails = {
                 runAt: 'document_idle',

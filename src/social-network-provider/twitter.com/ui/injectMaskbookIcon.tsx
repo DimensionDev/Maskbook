@@ -7,6 +7,7 @@ import { MaskbookIcon } from '../../../resources/Maskbook-Circle-WhiteGraph-Blue
 import React from 'react'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PreferShadowRootMode } from '../../../utils/constants'
+import { memoizePromise } from '../../../utils/memoize'
 
 function Icon(props: { size: number }) {
     return (
@@ -78,6 +79,8 @@ export function injectMaskbookIconToPost(post: PostInfo) {
         remover()
     }
 }
-function ifUsingMaskbook(pid: ProfileIdentifier) {
-    return Services.Identity.queryProfile(pid).then((x) => (!!x.linkedPersona ? Promise.resolve() : Promise.reject()))
-}
+const ifUsingMaskbook = memoizePromise(
+    (pid: ProfileIdentifier) =>
+        Services.Identity.queryProfile(pid).then((x) => (!!x.linkedPersona ? Promise.resolve() : Promise.reject())),
+    (pid: ProfileIdentifier) => pid.toText(),
+)

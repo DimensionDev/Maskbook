@@ -1,7 +1,4 @@
-import { restoreNewIdentityWithMnemonicWord } from '../../WelcomeService'
 import { ProfileIdentifier } from '../../../../database/type'
-import { encryptTo } from '../encryptTo'
-import { makeTypedMessageText } from '../utils'
 
 const a = new ProfileIdentifier('test', 'a')
 const b = new ProfileIdentifier('test', 'b')

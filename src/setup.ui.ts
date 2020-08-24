@@ -6,11 +6,13 @@ import './provider.ui'
 import { LiveSelector, Watcher, DOMProxy } from '@holoflows/kit/es'
 import { exclusiveTasks } from './extension/content-script/tasks'
 import { HasNoBrowserTabUI } from './utils/constants'
+import { enhanceTypedMessageDebugger } from './protocols/typed-message/debugger'
 
 if (typeof window === 'object') {
     LiveSelector.enhanceDebugger()
     Watcher.enhanceDebugger()
     DOMProxy.enhanceDebugger()
+    enhanceTypedMessageDebugger()
 }
 Object.assign(globalThis, {
     definedSocialNetworkUIs: definedSocialNetworkUIs,

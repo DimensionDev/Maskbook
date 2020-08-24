@@ -61,7 +61,7 @@ export default function DashboardContactsRouter() {
     const actions = useMemo(
         () => [
             <TextField
-                placeholder="Search…"
+                placeholder={t('search')}
                 variant="outlined"
                 size="small"
                 value={searchUI}

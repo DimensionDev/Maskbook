@@ -76,11 +76,11 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             // take screenshot
             await helpers.screenshot(snsPage, `${sns.name}_connect_1`)
 
-            // click the 'next' button
-            const nextButton = await snsPage.waitForFunction(
-                `document.querySelector('${sns.setupGuideSelector}').shadowRoot.querySelector('[data-testid="next_button"]')`,
+            // click the 'confirm' button
+            const confirmButton = await snsPage.waitForFunction(
+                `document.querySelector('${sns.setupGuideSelector}').shadowRoot.querySelector('[data-testid="confirm_button"]')`,
             )
-            await (nextButton as any).click()
+            await (confirmButton as any).click()
             await page.waitFor(500)
 
             // redirect to profile page

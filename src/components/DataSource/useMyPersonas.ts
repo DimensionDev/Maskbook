@@ -5,6 +5,7 @@ import { MessageCenter } from '../../utils/messages'
 import type { Persona } from '../../database'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { sideEffect } from '../../utils/side-effects'
+import { debounce } from 'lodash-es'
 
 const independentRef = {
     myPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),
@@ -12,14 +13,20 @@ const independentRef = {
 }
 
 {
+    const query = debounce(
+        () => {
+            Services.Identity.queryMyPersonas().then((p) => {
+                independentRef.myPersonasRef.value = p.filter((x) => !x.uninitialized)
+                independentRef.myUninitializedPersonasRef.value = p.filter((x) => x.uninitialized)
+            })
+        },
+        500,
+        {
+            trailing: true,
+        },
+    )
     sideEffect.then(query)
     MessageCenter.on('personaUpdated', query)
-    function query() {
-        Services.Identity.queryMyPersonas().then((p) => {
-            independentRef.myPersonasRef.value = p.filter((x) => !x.uninitialized)
-            independentRef.myUninitializedPersonasRef.value = p.filter((x) => x.uninitialized)
-        })
-    }
 }
 
 export function useMyPersonas() {

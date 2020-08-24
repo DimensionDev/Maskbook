@@ -11,7 +11,7 @@ import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
 import { MessageCenter } from '../../../utils/messages'
 import { getNetworkWorker } from '../../../social-network/worker'
-import { getSignablePayload, TypedMessage } from './utils'
+import { getSignablePayload } from './utils'
 import { cryptoProviderTable } from './cryptoProviderTable'
 import type { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { verifyOthersProve } from './verifyOthersProve'
@@ -21,10 +21,15 @@ import { asyncIteratorWithResult, memorizeAsyncGenerator } from '../../../utils/
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 import { decodeImageUrl } from '../SteganographyService'
+import type { TypedMessage } from '../../../protocols/typed-message'
 
 type Progress =
-    | { type: 'progress'; progress: 'finding_person_public_key' | 'finding_post_key' | 'init' }
-    | { type: 'progress'; progress: 'intermediate_success'; data: Success }
+    | {
+          type: 'progress'
+          progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post'
+          internal: boolean
+      }
+    | { type: 'progress'; progress: 'intermediate_success'; data: Success; internal: boolean }
 type DebugInfo = {
     debug: 'debug_finding_hash'
     hash: [string, string]
@@ -38,11 +43,12 @@ type Success = {
     content: TypedMessage
     rawContent: string
     through: SuccessThrough[]
+    internal: boolean
 }
 type Failure = {
     error: string
     type: 'error'
-    internalError: boolean
+    internal: boolean
 }
 export type SuccessDecryption = Success
 export type FailureDecryption = Failure
@@ -64,18 +70,22 @@ const makeSuccessResultF = (
         through,
         content: cryptoProvider.typedMessageParse(rawEncryptedContent),
         type: 'success',
+        internal: false,
     }
     successDecryptionCache.set(cacheKey, success)
     return success
 }
 
-function makeProgress(progress: Exclude<Progress['progress'], 'intermediate_success'> | Success): Progress {
-    if (typeof progress === 'string') return { type: 'progress', progress }
-    return { type: 'progress', progress: 'intermediate_success', data: progress }
+function makeProgress(
+    progress: Exclude<Progress['progress'], 'intermediate_success'> | Success,
+    internal = false,
+): Progress {
+    if (typeof progress === 'string') return { type: 'progress', progress, internal }
+    return { type: 'progress', progress: 'intermediate_success', data: progress, internal }
 }
-function makeError(error: string | Error, internalError: boolean = false): Failure {
-    if (typeof error === 'string') return { type: 'error', error, internalError }
-    return makeError(error.message, internalError)
+function makeError(error: string | Error, internal: boolean = false): Failure {
+    if (typeof error === 'string') return { type: 'error', error, internal }
+    return makeError(error.message, internal)
 }
 /**
  * Decrypt message from a user
@@ -322,7 +332,7 @@ async function* decryptFromImageUrlWithProgress_raw(
     publicShared?: boolean,
 ): ReturnOfDecryptPostContentWithProgress {
     if (successDecryptionCache.has(url)) return successDecryptionCache.get(url)!
-    yield makeProgress('init')
+    yield makeProgress('decode_post', true)
     const post = await decodeImageUrl(url, {
         pass: author.toText(),
     })

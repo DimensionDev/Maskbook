@@ -29,20 +29,22 @@ import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRec
 import { DialogDismissIconUI } from './DialogDismissIcon'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import RedPacketDialog from '../../plugins/Wallet/UI/RedPacket/RedPacketDialog'
+import FileServiceDialog from '../../plugins/FileService/MainDialog'
+import FileServiceEntryIcon from './FileServiceEntryIcon'
 import {
     TypedMessage,
-    readTypedMessageMetadata,
     extractTextFromTypedMessage,
-    withMetadataUntyped,
+    renderWithMetadataUntyped,
     makeTypedMessageText,
-} from '../../extension/background-script/CryptoServices/utils'
+    isTypedMessageText,
+} from '../../protocols/typed-message'
 import { EthereumTokenType } from '../../plugins/Wallet/database/types'
 import { isDAI, isOKB } from '../../plugins/Wallet/token'
 import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
-import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
+import { RedPacketMetadataReader } from '../../plugins/RedPacket/utils'
 import { PluginUI } from '../../plugins/plugin'
 import { NotSupportImagePayload } from '../../utils/constants'
 
@@ -110,19 +112,20 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const [, inputRef] = useCapturedInput(
         (newText) => {
             const msg = props.postContent
-            if (msg.type === 'text') props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
+            if (isTypedMessageText(msg)) props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
             else throw new Error('Not impled yet')
         },
         [props.open, props.postContent],
     )
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
+    const [fileServiceDialogOpen, setFileServiceDialogOpen] = useState(false)
 
-    if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
+    if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
     const metadataBadge = [...PluginUI].flatMap((plugin) => {
         const knownMeta = plugin.postDialogMetadataBadge
         if (!knownMeta) return undefined
         return [...knownMeta.entries()].map(([metadataKey, tag]) => {
-            return withMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
+            return renderWithMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
                 <Box key={metadataKey} marginRight={1} marginTop={1} display="inline-block">
                     <Tooltip title={`Provided by plugin "${plugin.pluginName}"`}>
                         <Chip
@@ -198,6 +201,19 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     },
                                 }}
                             />
+                            <ClickableChip
+                                ChipProps={{
+                                    label: (
+                                        <>
+                                            <FileServiceEntryIcon width={16} height={16} />
+                                            &nbsp;File Service
+                                        </>
+                                    ),
+                                    onClick() {
+                                        setFileServiceDialogOpen(true)
+                                    },
+                                }}
+                            />
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
@@ -269,6 +285,15 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     DialogProps={props.DialogProps}
                 />
             )}
+            {!process.env.STORYBOOK && (
+                <FileServiceDialog
+                    classes={classes}
+                    open={props.open && fileServiceDialogOpen}
+                    onConfirm={() => setFileServiceDialogOpen(false)}
+                    onDecline={() => setFileServiceDialogOpen(false)}
+                    DialogProps={props.DialogProps}
+                />
+            )}
         </div>
     )
 }
@@ -330,7 +355,7 @@ export function PostDialog(props: PostDialogProps) {
                 )
                 const activeUI = getActivatedUI()
                 // TODO: move into the plugin system
-                const metadata = readTypedMessageMetadata(typedMessageMetadata, RedPacketMetaKey)
+                const metadata = RedPacketMetadataReader(typedMessageMetadata)
                 if (imagePayloadEnabled) {
                     const isRedPacket = metadata.ok && metadata.val.rpid
                     const isErc20 =
@@ -398,10 +423,12 @@ export function PostDialog(props: PostDialogProps) {
     //#region My Identity
     const identities = useMyIdentities()
     useEffect(() => {
-        return MessageCenter.on('compositionUpdated', ({ reason, open }: CompositionEvent) => {
-            if (reason === props.reason && identities.length > 0) {
-                setOpen(open)
-            }
+        return MessageCenter.on('compositionUpdated', ({ reason, open, content, options }: CompositionEvent) => {
+            if (reason !== props.reason || identities.length <= 0) return
+            setOpen(open)
+            if (content) setPostBoxContent(makeTypedMessageText(content))
+            if (options?.onlyMySelf) setOnlyMyself(true)
+            if (options?.shareToEveryOne) setShareToEveryone(true)
         })
     }, [identities.length, props.reason, setOpen])
 
@@ -422,7 +449,7 @@ export function PostDialog(props: PostDialogProps) {
     //#endregion
     //#region Red Packet
     // TODO: move into the plugin system
-    const hasRedPacket = readTypedMessageMetadata(postBoxContent.meta, RedPacketMetaKey).ok
+    const hasRedPacket = RedPacketMetadataReader(postBoxContent.meta).ok
     const theme = hasRedPacket ? PluginRedPacketTheme : undefined
     const mustSelectShareToEveryone = hasRedPacket && !shareToEveryone
 

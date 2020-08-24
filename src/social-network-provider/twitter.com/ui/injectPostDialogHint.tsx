@@ -7,7 +7,7 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { makeStyles, Theme } from '@material-ui/core'
 import { MessageCenter } from '../../../utils/messages'
-import { useTwitterButton, useTwitterBanner } from '../utils/theme'
+import { useTwitterButton } from '../utils/theme'
 import { hasEditor, isCompose } from '../utils/postBox'
 import { PreferShadowRootMode } from '../../../utils/constants'
 
@@ -76,7 +76,6 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
             classes={classes}
             NotSetupYetPromptProps={{
                 classes: {
-                    ...useTwitterBanner(),
                     ...useTwitterButton(),
                 },
             }}

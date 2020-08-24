@@ -1,8 +1,6 @@
 import { CustomEventId } from '../../utils/constants'
-export interface CustomEvents {
-    paste: [string | { type: 'image'; value: Array<number> }]
-    input: [string]
-}
+import type { CustomEvents } from './CustomEvents'
+
 {
     const store: Partial<Record<Events, CallbackMap>> = {}
     const { apply } = Reflect
@@ -142,7 +140,7 @@ export interface CustomEvents {
 
     function redefine<K extends keyof EventTarget>(key: K, f: NonNullable<ProxyHandler<EventTarget[K]>['apply']>) {
         try {
-            if (typeof 'XPCNativeWrapper' !== 'undefined') {
+            if (typeof XPCNativeWrapper !== 'undefined') {
                 console.log('Redefine with Firefox private API, cool!')
                 const raw = XPCNativeWrapper.unwrap(globalThis.window.EventTarget.prototype)
                 const rawF = raw[key]

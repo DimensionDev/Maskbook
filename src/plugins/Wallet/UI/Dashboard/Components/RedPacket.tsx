@@ -1,12 +1,13 @@
 import React from 'react'
 import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
 import classNames from 'classnames'
-import type { RedPacketRecord, RedPacketJSONPayload, RedPacketStatus, ERC20TokenRecord } from '../../../database/types'
+import type { RedPacketRecord, RedPacketStatus, ERC20TokenRecord } from '../../../database/types'
 import Services from '../../../../../extension/service'
 import { PluginMessageCenter } from '../../../../PluginMessages'
 import { formatBalance } from '../../../formatter'
 import { getUrl } from '../../../../../utils/utils'
 import { isDAI, isOKB } from '../../../token'
+import type { RedPacketJSONPayload } from '../../../../RedPacket/utils'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -119,7 +120,7 @@ export function RedPacketWithState(props: RedPacketProps) {
             updateRedPacket()
             return PluginMessageCenter.on('maskbook.red_packets.update', updateRedPacket)
         } else return () => {}
-    }, [from, unknownRedPacket])
+    }, [from, JSON.stringify(unknownRedPacket)])
 
     React.useEffect(() => {
         if (knownRedPacket) setRedPacket(knownRedPacket)
