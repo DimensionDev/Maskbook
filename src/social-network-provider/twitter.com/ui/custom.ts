@@ -6,8 +6,7 @@ import type { SocialNetworkUICustomUI } from '../../../social-network/ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { composeAnchorSelector } from '../utils/selector'
 import React from 'react'
-
-type RGB = [number, number, number]
+import { toRGB, getBackgroundColor, isDark, fromRGB, shade } from '../../../utils/theme-tools'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
@@ -70,39 +69,6 @@ function useTheme() {
 
 export function TwitterThemeProvider(props: Required<React.PropsWithChildren<{}>>) {
     return React.createElement(ThemeProvider, { theme: useTheme(), children: props.children })
-}
-
-function isDark([r, g, b]: RGB) {
-    return r < 68 && g < 68 && b < 68
-}
-
-function toRGB(channels: RGB | undefined) {
-    if (!channels) return ''
-    return `rgb(${channels.join()})`
-}
-
-function fromRGB(rgb: string): RGB | undefined {
-    const matched = rgb.match(/rgb\(\s*(\d+?)\s*,\s*(\d+?)\s*,\s*(\d+?)\s*\)/)
-    if (matched) {
-        const [_, r, g, b] = matched
-        return [parseInt(r), parseInt(g), parseInt(b)]
-    }
-    return
-}
-
-function clamp(num: number, min: number, max: number) {
-    if (num < min) return min
-    if (num > max) return max
-    return num
-}
-
-function shade(channels: RGB, percentage: number): RGB {
-    return channels.map((c) => clamp(Math.floor((c * (100 + percentage)) / 100), 0, 255)) as RGB
-}
-
-function getBackgroundColor(element: HTMLElement | HTMLBodyElement) {
-    const color = getComputedStyle(element).backgroundColor
-    return color ? toRGB(fromRGB(color)) : ''
 }
 
 export const twitterUICustomUI: SocialNetworkUICustomUI = {
