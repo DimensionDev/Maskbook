@@ -61,7 +61,7 @@ jobs:
             image: differui/node-14.4.0-browsers:v1
 
             # more: https://github.community/t/how-to-run-action-as-a-non-root-user/17572/2#M6330
-            options: |
+            options: >
                 --user 1000
                 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
                 -v /home/ubuntu/.cache/alice_home:/tmp/alice_home
