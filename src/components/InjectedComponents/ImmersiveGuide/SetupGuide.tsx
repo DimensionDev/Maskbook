@@ -97,7 +97,6 @@ const useWizardDialogStyles = makeStyles((theme) =>
             padding: '56px 20px 48px',
             position: 'relative',
             width: 320,
-            minHeight: 404,
             borderRadius: 12,
             boxShadow: theme.palette.type === 'dark' ? 'none' : theme.shadows[4],
             border: `${theme.palette.type === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
@@ -259,11 +258,12 @@ const useFindUsernameStyles = makeStyles((theme) =>
 
 interface FindUsernameProps extends Partial<WizardDialogProps> {
     username: string
-    onConfirm?: () => void
     onUsernameChange?: (username: string) => void
+    onConnect: () => Promise<void>
+    onDone?: () => void
 }
 
-function FindUsername({ username, onConfirm, onClose, onUsernameChange = noop }: FindUsernameProps) {
+function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange = noop }: FindUsernameProps) {
     const { t } = useI18N()
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
@@ -275,10 +275,10 @@ function FindUsername({ username, onConfirm, onClose, onUsernameChange = noop }:
                 e.stopPropagation()
                 if (e.key === 'Enter') {
                     e.preventDefault()
-                    onConfirm?.()
+                    onConnect?.()
                 }
             })(),
-        [onConfirm, binder],
+        [onConnect, binder],
     )
     return (
         <WizardDialog
@@ -311,15 +311,23 @@ function FindUsername({ username, onConfirm, onClose, onUsernameChange = noop }:
                 </form>
             }
             footer={
-                <ActionButton
+                <ActionButtonPromise
                     className={classes.button}
                     variant="contained"
                     color="primary"
-                    onClick={onConfirm}
+                    init={t('immersive_setup_connect_auto')}
+                    waiting={t('connecting')}
+                    complete={t('done')}
+                    failed={t('immersive_setup_connect_failed')}
+                    executor={onConnect}
+                    completeOnClick={onDone}
                     disabled={!username}
+                    completeIcon={null}
+                    failIcon={null}
+                    failedOnClick="use executor"
                     data-testid="confirm_button">
                     {t('confirm')}
-                </ActionButton>
+                </ActionButtonPromise>
             }
             onClose={onClose}></WizardDialog>
     )
@@ -534,9 +542,7 @@ export function SetupGuide(props: SetupGuideProps) {
                     username,
                     persona: persona.toText(),
                 } as ImmersiveSetupCrossContextStatus)
-                const connecting = new ProfileIdentifier(ui.networkIdentifier, username)
-                await Services.Identity.attachProfile(connecting, persona, { connectionConfirmState: 'confirmed' })
-                ui.taskGotoProfilePage(connecting)
+                ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, username))
                 setStep(SetupGuideStep.PasteIntoBio)
                 break
             case SetupGuideStep.PasteIntoBio:
@@ -577,6 +583,27 @@ export function SetupGuide(props: SetupGuideProps) {
                 break
         }
     }
+    const onConnect = async () => {
+        // attach persona with SNS profile
+        await Services.Identity.attachProfile(new ProfileIdentifier(ui.networkIdentifier, username), persona, {
+            connectionConfirmState: 'confirmed',
+        })
+
+        // auto-finish the setup process
+        const persona_ = await Services.Identity.queryPersona(
+            Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap(),
+        )
+        if (!persona_.hasPrivateKey) throw new Error('invalid persona')
+        await Promise.all([
+            Services.Identity.setupPersona(persona_.identifier),
+            Services.Plugin.invokePlugin('maskbook.wallet', 'importFirstWallet', {
+                name: persona_.nickname ?? t('untitled_wallet'),
+                mnemonic: persona_.mnemonic?.words.split(' '),
+                passphrase: '',
+                _wallet_is_default: true,
+            }),
+        ])
+    }
     const onPaste = async () => {
         try {
             await navigator.clipboard.writeText(provePost)
@@ -587,24 +614,6 @@ export function SetupGuide(props: SetupGuideProps) {
         }
     }
     const onCreate = async () => {
-        if (!lastState.persona) return
-        const persona = await Services.Identity.queryPersona(
-            Identifier.fromString(lastState.persona, ECKeyIdentifier).unwrap(),
-        )
-        if (!persona) return
-
-        // auto-finish the setup process
-        await Promise.all([
-            Services.Identity.setupPersona(persona.identifier),
-            Services.Plugin.invokePlugin('maskbook.wallet', 'importFirstWallet', {
-                name: persona.nickname ?? t('untitled_wallet'),
-                mnemonic: persona.mnemonic?.words.split(' '),
-                passphrase: '',
-                _wallet_is_default: true,
-            }),
-        ])
-
-        // open compose dialog
         const content = t('immersive_setup_say_hello_content')
         await navigator.clipboard.writeText(content)
         ui.taskOpenComposeBox(content, {
@@ -621,10 +630,12 @@ export function SetupGuide(props: SetupGuideProps) {
             return (
                 <FindUsername
                     username={username}
-                    onConfirm={onNext}
+                    onUsernameChange={setUsername}
+                    onConnect={onConnect}
+                    onDone={onNext}
                     onBack={onBack}
                     onClose={onClose}
-                    onUsernameChange={setUsername}></FindUsername>
+                />
             )
         case SetupGuideStep.PasteIntoBio:
             return (
@@ -635,7 +646,8 @@ export function SetupGuide(props: SetupGuideProps) {
                     onDone={onNext}
                     onSkip={onNext}
                     onBack={onBack}
-                    onClose={onClose}></PasteIntoBio>
+                    onClose={onClose}
+                />
             )
         case SetupGuideStep.SayHelloWorld:
             return (
@@ -644,7 +656,8 @@ export function SetupGuide(props: SetupGuideProps) {
                     onCreate={onCreate}
                     onSkip={onNext}
                     onBack={onBack}
-                    onClose={onClose}></SayHelloWorld>
+                    onClose={onClose}
+                />
             )
         default:
             return null

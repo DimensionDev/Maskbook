@@ -176,6 +176,8 @@
     "immersive_setup_add_bio_text": "更なる機能を使用するためには次の文字列を自己紹介欄に追加します。削除はしないでください。",
     "immersive_setup_paste_into_bio_auto": "これを追加してください",
     "immersive_setup_paste_into_bio_failed": "失敗してしまいました… あなたの自己紹介欄に手動で入れてください。",
+    "immersive_setup_connect_auto": "接続",
+    "immersive_setup_connect_failed": "失敗しました… もう一度お試しください。",
     "immersive_setup_create_post_auto": "今すぐ作成",
     "immersive_setup_create_post_failed": "失敗してしまいました… 作成ダイアログに手動で入れてください。",
     "immersive_setup_say_hello_title": "みんなによろしくお伝えください！",

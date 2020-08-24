@@ -176,14 +176,8 @@ function taskGotoProfilePage(profile: ProfileIdentifier) {
 }
 
 function taskGotoNewsFeedPage() {
-    const homeLink = document.querySelector<HTMLAnchorElement>(
-        [
-            '[role="banner"] [role="heading"] > a[href]', // PC
-            '#layers [role="navigation"] > a[href]', // mobile
-        ].join(','),
-    )
-    if (homeLink) homeLink.click()
-    else if (!location.pathname.includes('/home')) location.pathname = '/home'
+    if (location.pathname.includes('/home')) location.reload()
+    else location.pathname = '/home'
 }
 
 export const twitterUITasks: SocialNetworkUITasks = {
