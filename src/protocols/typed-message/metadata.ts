@@ -41,7 +41,7 @@ export function readTypedMessageMetadataUntyped<T>(
         if (metadataSchemaStore.has(key) && !jsonSchema) jsonSchema = metadataSchemaStore.get(key)!
         // TODO: validate the schema use a library.
     }
-    return new Ok(meta.get(key) as T)
+    return Ok(meta.get(key) as T)
 }
 
 /**

@@ -1,21 +1,20 @@
 import { TypedMessage, isTypedMessageText, isTypedMessageCompound, TypedMessageCompound } from './types'
 import { Result, Ok, Err } from 'ts-results'
 import { eq } from 'lodash-es'
-import { safeUnreachable } from '../../utils/utils'
 /**
  * Get inner text from a TypedMessage
  * @param message message
  */
 export function extractTextFromTypedMessage(message: TypedMessage | null): Result<string, void> {
     if (message === null) return Err.EMPTY
-    if (isTypedMessageText(message)) return new Ok(message.content)
+    if (isTypedMessageText(message)) return Ok(message.content)
     if (isTypedMessageCompound(message)) {
         const str: string[] = []
         for (const item of message.items) {
             const text = extractTextFromTypedMessage(item)
             if (text.ok) str.push(text.val)
         }
-        if (str.length) return new Ok(str.join(' '))
+        if (str.length) return Ok(str.join(' '))
         return Err.EMPTY
     }
     return Err.EMPTY
