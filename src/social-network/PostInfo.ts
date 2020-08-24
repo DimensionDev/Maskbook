@@ -54,6 +54,7 @@ export abstract class PostInfo {
     readonly decryptedPostContentRaw = new ValueRef('')
     abstract readonly rootNode: HTMLElement
     abstract readonly rootNodeProxy: DOMProxy
+    abstract readonly postContentNode?: HTMLElement
     /** The links appears in the post content */
     readonly postMentionedLinks = new ObservableSet<string>()
     /**
@@ -73,4 +74,5 @@ export const emptyPostInfo: PostInfo = new (class extends PostInfo {
     commentsSelector = undefined
     rootNode = undefined!
     rootNodeProxy = undefined!
+    postContentNode = undefined
 })()

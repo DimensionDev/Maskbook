@@ -2,13 +2,28 @@ import type { DOMProxy } from '@holoflows/kit'
 import { isMobileFacebook } from '../isMobile'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
+import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 
+const map = new Map<HTMLElement, ShadowRoot>()
+function getShadowRoot(node: HTMLElement) {
+    if (map.has(node)) return map.get(node)!
+    const dom = node.attachShadow({ mode: webpackEnv.shadowRootMode })
+    map.set(node, dom)
+    return dom
+}
 export function injectPostInspectorFacebook(current: PostInfo) {
     clickSeeMore(current.rootNodeProxy)
     return injectPostInspectorDefault({
         zipPost(node) {
             zipEncryptedPostContent(node)
             zipPostLinkPreview(node)
+        },
+        render(jsx, postInfo) {
+            return renderInShadowRoot(jsx, {
+                shadow: () => getShadowRoot(postInfo.postContentNode!),
+                normal: () => getShadowRoot(postInfo.postContentNode!) as any,
+                concurrent: true,
+            })
         },
     })(current)
 }
