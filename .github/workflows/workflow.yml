@@ -14,8 +14,10 @@ jobs:
         runs-on: self-hosted
         container:
             image: differui/node-14.4.0-browsers:v1
-            # more: https://github.community/t5/GitHub-Actions/How-to-run-action-as-a-non-root-user/m-p/45733/highlight/true#M6330
-            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6 # $(id -u ubuntu)
+            # more: https://github.community/t/how-to-run-action-as-a-non-root-user/17572/2#M6330
+            options: |
+                --user 1000
+                -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6 # $(id -u ubuntu)
         steps:
             # @v2 requires too much configurations
             - uses: actions/checkout@v1
@@ -25,11 +27,13 @@ jobs:
                   yarn config set cache-folder /tmp/.yarn-cache-1000/v6
                   yarn install --link-duplicates --frozen-lockfile --pure-lockfile --verbose
     linters:
-        needs: setup
+        needs: [setup]
         runs-on: self-hosted
         container:
             image: differui/node-14.4.0-browsers:v1
-            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
+            options: |
+                --user 1000
+                -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
         steps:
             - name: TypeScript type check
               run: yarn tsc --noEmit
@@ -45,11 +49,13 @@ jobs:
                   name: eslint
                   path: ./reports/junit
     storybook:
-        needs: [setup, linters]
+        needs: [setup]
         runs-on: self-hosted
         container:
             image: differui/node-14.4.0-browsers:v1
-            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
+            options: |
+                --user 1000
+                -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
         steps:
             - name: Build storybook
               run: yarn build-storybook
@@ -58,3 +64,61 @@ jobs:
               with:
                   name: storybook
                   path: ./storybook-static
+    e2e-tests:
+        runs-on: self-hosted
+
+        needs: [linters, storybook]
+
+        container:
+            image: differui/node-14.4.0-browsers:v1
+
+            # more: https://github.community/t/how-to-run-action-as-a-non-root-user/17572/2#M6330
+            options: |
+                --user 1000
+                -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
+                -v /home/ubuntu/.cache/alice_home:/tmp/alice_home
+                -v /home/ubuntu/.cache/bob_home:/tmp/bob_home
+                -v /home/ubuntu/.e2e/e2e-test:/tmp/e2e-test
+
+            # more: https://stackoverflow.com/a/60202672/1986338
+            # volumes:
+            #     - /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
+            #     - /home/ubuntu/.cache/alice_home:/tmp/alice_home
+            #     - /home/ubuntu/.cache/bob_home:/tmp/bob_home
+            #     - /home/ubuntu/.e2e/e2e-test:/tmp/e2e-test
+        steps:
+            # - name: Debug
+            #   run: |
+            #       pwd
+            #       ls /tmp/alice_home
+            #       ls /tmp/bob_home
+            #       ls -alh
+
+            # @v2 requires too much configurations
+            - uses: actions/checkout@v1
+
+            - name: Install Dependencies
+              run: |
+                  yarn config set cache-folder /tmp/.yarn-cache-1000/v6
+                  yarn install --link-duplicates --frozen-lockfile --pure-lockfile
+
+            - name: Build
+              run: yarn build:e2e
+
+            - name: Setup E2E
+              run: |
+                  mkdir -p ./.env
+                  cp /tmp/e2e-test ./.env/e2e-test
+                  mkdir -p ./screenshots
+
+            - name: Jest E2E
+              run: xvfb-run --server-args="-screen 0 1366x768x24" yarn test:e2e
+
+            - name: Teardown E2E
+              run: rm -rf ./build
+
+            - name: Archive Artifacts
+              uses: actions/upload-artifact@v1
+              with:
+                  name: screenshots
+                  path: ./screenshots
