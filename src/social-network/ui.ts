@@ -295,7 +295,8 @@ let activatedSocialNetworkUI = ({
 export function activateSocialNetworkUI(): void {
     for (const ui of definedSocialNetworkUIs)
         if (ui.shouldActivate()) {
-            console.log('Activating UI provider', ui.networkIdentifier, ui)
+            console.log('Activating UI provider', ui.networkIdentifier, ui, 'access it by globalThis.ui')
+            Object.assign(globalThis, { ui })
             {
                 // Do i18nOverwrite
                 for (const lng in ui.i18nOverwrite) {
