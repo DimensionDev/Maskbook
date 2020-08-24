@@ -34,7 +34,7 @@ export abstract class PostInfo {
     /** @deprecated Use parsedPostContent instead */
     readonly postContent = new ValueRef('')
     /** @deprecated It should appear in the transformedPostContent */
-    readonly postPayload = new ValueRef<Result<Payload, Error>>(new Err(new Error('Empty')))
+    readonly postPayload = new ValueRef<Result<Payload, Error>>(Err(new Error('Empty')))
     abstract readonly commentsSelector?: LiveSelector<HTMLElement, false>
     abstract readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
     /**

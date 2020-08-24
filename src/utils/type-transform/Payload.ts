@@ -107,11 +107,11 @@ export function deconstructPayload(str: string, decoder: Decoder): Result<Payloa
         for (const networkDecoder of decoders) {
             if (isNil(networkDecoder(str))) continue
             const result = versionDecoder(networkDecoder(str)!, false)
-            if (!isNil(result)) return new Ok(result)
+            if (!isNil(result)) return Ok(result)
         }
     }
-    if (str.includes('🎼') && str.includes(':||')) return new Err(new TypeError(i18n.t('service_unknown_payload')))
-    return new Err(new TypeError(i18n.t('payload_not_found')))
+    if (str.includes('🎼') && str.includes(':||')) return Err(new TypeError(i18n.t('service_unknown_payload')))
+    return Err(new TypeError(i18n.t('payload_not_found')))
 }
 
 export function constructAlpha38(data: PayloadAlpha38, encoder: Encoder) {

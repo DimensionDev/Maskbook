@@ -45,8 +45,8 @@ const typeson = new Typeson({})
 typeson.register(builtins)
 typeson.register(num)
 typeson.register([blob, file, fileList, imageBitMap, num])
-serializable('Ok')(Ok)
-serializable('Err')(Err)
+serializable('Ok')(Ok as any)
+serializable('Err')(Err as any)
 serializable('BigNumber')(BigNumber)
 const serialization: Serialization = {
     async serialization(from: unknown) {
