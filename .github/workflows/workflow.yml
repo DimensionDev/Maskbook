@@ -10,33 +10,19 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-    setup:
-        runs-on: self-hosted
-        container:
-            image: differui/node-14.4.0-browsers:v1
-            # more: https://github.community/t/how-to-run-action-as-a-non-root-user/17572/2#M6330
-            options: |
-                --user 1000
-                -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
-        steps:
-            # @v2 requires too much configurations
-            - uses: actions/checkout@v1
-
-            - name: Install Dependencies
-              run: |
-                  yarn config set cache-folder /tmp/.yarn-cache-1000/v6
-                  yarn install --link-duplicates --frozen-lockfile --pure-lockfile --verbose
     linters:
-        needs: [setup]
         runs-on: self-hosted
-        container:
-            image: differui/node-14.4.0-browsers:v1
-            options: |
-                --user 1000
-                -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
         steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Install
+              run: yarn install --link-duplicates --frozen-lockfile --pure-lockfile
+            - name: Setup Node
+              uses: actions/setup-node@v2-beta
+              with:
+                  node-version: 14
             - name: TypeScript type check
-              run: yarn tsc --noEmit
+              run: yarn tsc --noEmitOnError
             - name: Type coverage
               run: yarn lint:typecoverage
             - name: ESLint
@@ -49,14 +35,16 @@ jobs:
                   name: eslint
                   path: ./reports/junit
     storybook:
-        needs: [setup]
         runs-on: self-hosted
-        container:
-            image: differui/node-14.4.0-browsers:v1
-            options: |
-                --user 1000
-                -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
         steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Setup Node
+              uses: actions/setup-node@v2-beta
+              with:
+                  node-version: 14
+            - name: Install
+              run: yarn install --link-duplicates --frozen-lockfile --pure-lockfile
             - name: Build storybook
               run: yarn build-storybook
             - name: Storybook output
