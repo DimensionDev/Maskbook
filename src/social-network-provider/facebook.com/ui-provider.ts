@@ -27,6 +27,10 @@ import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/
 import { getProfilePageUrlAtFacebook } from './parse-username'
 import { notifyPermissionUpdate } from '../../utils/permissions'
 import { Flags } from '../../utils/flags'
+import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
+import { isDarkTheme } from '../../utils/theme-tools'
+import { useState } from 'react'
+import { useInterval } from 'react-use'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
@@ -119,4 +123,15 @@ export const facebookUISelf = defineSocialNetworkUI({
         if (homeLink) homeLink.click()
         else if (location.pathname !== '/') location.pathname = '/'
     },
+    useTheme() {
+        const [theme, setTheme] = useState(getTheme())
+        const updateTheme = () => setTheme(getTheme())
+        // TODO: it's buggy.
+        useInterval(updateTheme, 2000)
+        return theme
+    },
 })
+function getTheme() {
+    if (isDarkTheme()) return MaskbookDarkTheme
+    return MaskbookLightTheme
+}
