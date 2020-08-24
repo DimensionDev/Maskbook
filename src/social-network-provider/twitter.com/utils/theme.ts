@@ -99,6 +99,7 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
             },
         },
         actions: {
+            padding: '10px 15px',
             [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
                 '&': {
                     display: 'flex',

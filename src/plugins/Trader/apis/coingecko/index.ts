@@ -1,4 +1,6 @@
-const BASE_URL = 'https://coingecko.com/api/documentations/v3'
+import type { Currency } from '../../type'
+
+const BASE_URL = 'https://api.coingecko.com/api/v3'
 
 //#region get currency
 export async function getAllCurrenies() {

@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { useStylesExtends } from '../custom-ui-helper'
+import { getEnumAsArray } from '../../utils/enum'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -153,16 +154,12 @@ export function useSettingsUI(ref: ValueRef<boolean>) {
 function useEnumSettings<Q extends object>(
     ...[ref, enumObject, getText, selectProps]: useEnumSettingsParams<Q>
 ): HookedUI<Q[keyof Q]> {
-    const enum_ = Object.keys(enumObject)
-        // Leave only key of enum
-        .filter((x) => Number.isNaN(parseInt(x)))
-        .map((key) => ({ key, value: enumObject[key as keyof Q] }))
+    const enum_ = getEnumAsArray(enumObject)
     const change = (value: any) => {
         if (!Number.isNaN(parseInt(value))) {
             value = parseInt(value)
         }
         if (!enum_.some((x) => x.value === value)) {
-            console.log(value)
             throw new Error('Invalid state')
         }
         ref.value = value
