@@ -2668,15 +2668,6 @@
   resolved "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-1.12.2.tgz#6a22e99a49b131a8789053d0b0903834552da36f"
   integrity sha512-Vwhc3ObxmDZmA5hY8mfsau2rJ4vGPvzbj20QSZ2/E1GDPF61QVyjLfNHak9xmel6pW4heRt3v1fHa6np9Ehfeg==
 
-"@nice-labs/git-flow-init@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@nice-labs/git-flow-init/-/git-flow-init-1.0.1.tgz#c9d3f1f1d4764511d544a690530b13027c9f8478"
-  integrity sha512-X42hKp+9AtLLMlZiHVecVGg1WC7XG+GqU3Z2G7pAB9MGXrHOnsCu8smgSKkxsn2KBzh6517yun/fdedJ/jGT5A==
-  dependencies:
-    find-up "^4.1.0"
-    schema-utils "^2.6.4"
-    yargs "^15.1.0"
-
 "@nice-labs/git-rev@^3.4.2":
   version "3.4.2"
   resolved "https://registry.yarnpkg.com/@nice-labs/git-rev/-/git-rev-3.4.2.tgz#24262ac0281bb535bd9d2523803e4dcef71161d4"
@@ -22346,7 +22337,7 @@ yargs@^13.2.4, yargs@^13.3.2:
     y18n "^4.0.0"
     yargs-parser "^13.1.2"
 
-yargs@^15.1.0, yargs@^15.3.1, yargs@^15.4.1:
+yargs@^15.3.1, yargs@^15.4.1:
   version "15.4.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.4.1.tgz#0d87a16de01aee9d8bec2bfbf74f67851730f4f8"
   integrity sha512-aePbxDmcYW++PaqBsJ+HYUFwCdv4LVvdnhBy78E57PIor8/OVvhMrADFFEDh8DHDFRv/O9i3lPhsENjO7QX0+A==
