@@ -42,7 +42,7 @@ export function PostInspector(props: PostInspectorProps) {
     }, [postBy, whoAmI, encryptedPost])
     useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
 
-    if (postBy.isUnknown) return null
+    if (postBy.isUnknown) return <slot />
 
     const debugInfo = isDebugging ? (
         <DebugList
@@ -104,6 +104,7 @@ export function PostInspector(props: PostInspectorProps) {
     function withAdditionalContent(x: JSX.Element | null) {
         return (
             <>
+                <slot />
                 {x}
                 <PluginPostInspector />
                 {debugInfo}

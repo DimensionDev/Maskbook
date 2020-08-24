@@ -119,6 +119,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 rootNodeProxy = proxy
                 commentsSelector = undefined
                 commentBoxSelector = undefined
+                postContentNode = undefined
             })()
             function run() {
                 collectPostInfo(tweetNode, info, self)
