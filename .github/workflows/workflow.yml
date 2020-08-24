@@ -17,7 +17,7 @@ jobs:
             # more: https://github.community/t/how-to-run-action-as-a-non-root-user/17572/2#M6330
             options: |
                 --user 1000
-                -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6 # $(id -u ubuntu)
+                -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
         steps:
             # @v2 requires too much configurations
             - uses: actions/checkout@v1
