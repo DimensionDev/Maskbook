@@ -5,6 +5,7 @@ import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import { safeGetActiveUI } from '../safeRequire'
 import { i18n } from '../i18n-next'
 import { Result, Ok, Err } from 'ts-results'
+import { Identifier, ProfileIdentifier } from '../../database/type'
 
 export type Payload = PayloadAlpha40_Or_Alpha39 | PayloadAlpha38
 export type PayloadLatest = PayloadAlpha38
@@ -24,6 +25,7 @@ export interface PayloadAlpha38 {
     /** @deprecated but don't remove it cause it will break */
     signature: string
     authorPublicKey?: string
+    authorUserID?: ProfileIdentifier
     sharedPublic?: boolean
 }
 
@@ -33,9 +35,10 @@ export interface PayloadAlpha38 {
 function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): Payload | null {
     // ? payload is 🎼2/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
     // ? payload is 🎼3/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
-    // ? payload is 🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?:||
+    // ? payload is 🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?|authorIdentifier:||
     // ? if publicShared is true, that means AESKeyEncrypted is shared with public
     // ? "1" treated as true, "0" or not defined treated as false
+    // ? authorIdentifier is encoded as `${network}/${id}`
     const isVersion40 = str.includes('🎼2/4')
     const isVersion39 = str.includes('🎼3/4')
     const isVersion38 = str.includes('🎼4/4')
@@ -49,7 +52,8 @@ function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): 
     if (rest === undefined)
         if (throws) throw new Error(i18n.t('payload_incomplete'))
         else return null
-    const [AESKeyEncrypted, iv, encryptedText, signature, authorPublicKey, publicShared, ...extra] = payload.split('|')
+    const [AESKeyEncrypted, iv, encryptedText, signature, ...optional] = payload.split('|')
+    const [authorPublicKey, publicShared, authorID, ...extra] = optional
     if (!(AESKeyEncrypted && iv && encryptedText))
         if (throws) throw new Error(i18n.t('payload_bad'))
         else return null
@@ -64,6 +68,7 @@ function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): 
             signature,
             authorPublicKey,
             sharedPublic: publicShared === '1',
+            authorUserID: Identifier.fromString('person:' + authorID, ProfileIdentifier).unwrapOr(undefined),
         }
     }
     return {
@@ -86,7 +91,7 @@ function deconstructAlpha41(str: string, throws = false): null | never {
 const versions = new Set([deconstructAlpha40_Or_Alpha39_Or_Alpha38, deconstructAlpha41])
 
 /**
- * @type Decoder    defines decoder. if null, auto select decoder.
+ * @type Decoder - defines decoder. if null, auto select decoder.
  */
 type Decoder = SocialNetworkWorkerAndUI['payloadDecoder'] | null
 type Encoder = SocialNetworkWorkerAndUI['payloadEncoder']
@@ -116,12 +121,16 @@ export function deconstructPayload(str: string, decoder: Decoder): Result<Payloa
 }
 
 export function constructAlpha38(data: PayloadAlpha38, encoder: Encoder) {
-    const fields = [data.AESKeyEncrypted, data.iv, data.encryptedText, data.signature]
-    if (data.authorPublicKey) {
-        fields.push(data.authorPublicKey)
-        if (data.sharedPublic) fields.push('1')
-        else fields.push('0')
-    }
+    const userID = data.authorUserID?.toText().replace('person:', '') || ''
+    const fields = [
+        data.AESKeyEncrypted,
+        data.iv,
+        data.encryptedText,
+        data.signature,
+        data.authorPublicKey,
+        data.sharedPublic ? '1' : '0',
+        userID.includes('|') ? undefined : userID,
+    ]
     return encoder(`🎼4/4|${fields.join('|')}:||`)
 }
 

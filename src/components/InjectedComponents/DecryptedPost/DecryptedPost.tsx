@@ -17,6 +17,8 @@ import { DecryptedPostDebug } from './DecryptedPostDebug'
 import { usePostInfoDetails } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
 import { getActivatedUI } from '../../../social-network/ui'
+import { Err, Ok } from 'ts-results'
+import { or } from '../../custom-ui-helper'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
@@ -61,8 +63,11 @@ export interface DecryptPostProps {
 }
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
-    const postBy = usePostInfoDetails('postBy')
     const deconstructedPayload = usePostInfoDetails('postPayload')
+    const authorInPayload = deconstructedPayload
+        .andThen((x) => (x.version === -38 ? Ok(x.authorUserID) : Err.EMPTY))
+        .unwrapOr(undefined)
+    const postBy = or(authorInPayload, usePostInfoDetails('postBy'))
     const postMetadataImages = usePostInfoDetails('postMetadataImages')
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
