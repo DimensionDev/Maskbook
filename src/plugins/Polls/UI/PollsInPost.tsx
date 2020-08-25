@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { withMetadata, TypedMessage } from '../../../extension/background-script/CryptoServices/utils'
 import Services from '../../../extension/service'
-import { getActivatedUI } from '../../../social-network/ui'
 import type { PollGunDB } from '../Services'
-import { PollCardUI } from './Polls'
-import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
+import { PollCardUI, PollStatus } from './Polls'
+import type { PollMetaData } from '../types'
 
 interface PollsInPostProps {
     message: TypedMessage
@@ -13,32 +12,37 @@ interface PollsInPostProps {
 
 export default function PollsInPost(props: PollsInPostProps) {
     const { message } = props
-    const [open, setOpen] = useState(false)
+    const [status, setStatus] = useState<PollStatus>('Inactive')
+    const [updatedPoll, setUpdatedPoll] = useState<PollMetaData | undefined>(undefined)
 
     const vote = (poll: PollGunDB, index: number) => {
-        setOpen(true)
         if (new Date().getTime() <= poll.end_time) {
+            setStatus('Voting')
             Services.Plugin.invokePlugin('maskbook.polls', 'vote', {
                 poll,
                 index,
             }).then((res) => {
-                const ref = getActivatedUI().typedMessageMetadata
-                const next = new Map(ref.value.entries())
-                res ? next.set('poll', res) : next.delete('poll')
-                ref.value = next
+                setStatus('Voted')
+                setUpdatedPoll(res as PollMetaData)
             })
+        } else {
+            setStatus('Closed')
         }
     }
 
     const jsx = message
-        ? withMetadata(props.message.meta, 'poll', (r) => (
-              <div>
-                  <MaskbookPluginWrapper width={400} pluginName="Poll">
-                      <PollCardUI poll={r} vote={vote} />
-                  </MaskbookPluginWrapper>
-                  <PostDialog open={[open, setOpen]} />
-              </div>
-          ))
+        ? withMetadata(props.message.meta, 'poll', (r) => {
+              Services.Plugin.invokePlugin('maskbook.polls', 'getPollByKey', { key: r.key }).then((res) => {
+                  setUpdatedPoll(res as PollMetaData)
+              })
+              return (
+                  <div>
+                      <MaskbookPluginWrapper width={400} pluginName="Poll">
+                          <PollCardUI poll={updatedPoll ?? r} vote={vote} status={status} />
+                      </MaskbookPluginWrapper>
+                  </div>
+              )
+          })
         : null
     return <>{jsx}</>
 }

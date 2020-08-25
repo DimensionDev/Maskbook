@@ -8,7 +8,8 @@ export const PollsPluginDefine: PluginConfig = {
     pluginName: 'Poll',
     identifier: 'com.maskbook.poll',
     successDecryptionInspector: function Comp(props) {
-        if (!readTypedMessageMetadata(props.message.meta, 'poll').ok) return null
+        if (!readTypedMessageMetadata(props.message.meta, 'poll', {}).ok) return null
+        console.log('11')
         return <PollsInPost {...props} />
     },
     postDialogMetadataBadge: new Map([

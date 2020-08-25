@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { makeStyles, createStyles, Card, Typography } from '@material-ui/core'
+import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
 import Services from '../../../extension/service'
 import { getActivatedUI } from '../../../social-network/ui'
 import type { PollGunDB } from '../Services'
@@ -11,6 +11,19 @@ const useStyles = makeStyles((theme) =>
             borderRadius: theme.spacing(1),
             margin: theme.spacing(2, 0),
             padding: theme.spacing(2),
+        },
+        line: {
+            display: 'flex',
+            justifyContent: 'space-between',
+        },
+        status: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        statusText: {
+            margin: '3px',
+            fontSize: '13px',
+            color: theme.palette.primary.main,
         },
         option: {
             position: 'relative',
@@ -46,10 +59,13 @@ interface PollCardProps {
     poll: PollGunDB
     onClick?(): void
     vote?(poll: PollGunDB, index: number): void
+    status?: PollStatus
 }
 
+export type PollStatus = 'Voted' | 'Voting' | 'Error' | 'Closed' | 'Inactive'
+
 export function PollCardUI(props: PollCardProps) {
-    const { poll, onClick, vote } = props
+    const { poll, onClick, vote, status } = props
     const classes = useStyles()
     const isClosed = new Date().getTime() > poll.end_time ? true : false
 
@@ -59,9 +75,15 @@ export function PollCardUI(props: PollCardProps) {
 
     return (
         <Card className={classes.card} onClick={() => onClick?.()}>
-            <Typography variant="h5" color="inherit">
-                {poll.question}
-            </Typography>
+            <div className={classes.line}>
+                <div style={{ fontSize: '16px' }}>{poll.question}</div>
+                {!status || status === 'Inactive' ? null : (
+                    <div className={classes.status}>
+                        {status === 'Voting' ? <CircularProgress size={18} /> : null}
+                        <span className={classes.statusText}>{status}</span>
+                    </div>
+                )}
+            </div>
             <div>
                 {poll.options.map((option, index) => (
                     <div
