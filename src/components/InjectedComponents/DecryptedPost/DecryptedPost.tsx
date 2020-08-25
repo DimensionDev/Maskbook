@@ -94,10 +94,9 @@ export function DecryptPost(props: DecryptPostProps) {
 
     // pass 1:
     // decrypt post content and image attachments
-    const sharedPublic =
-        deconstructedPayload.ok && deconstructedPayload.val.version === -38
-            ? !!deconstructedPayload.val.sharedPublic
-            : false
+    const sharedPublic = deconstructedPayload
+        .andThen((x) => (x.version === -38 ? Ok(!!x.sharedPublic) : Err.EMPTY))
+        .unwrapOr(false)
     useEffect(() => {
         const controller = new AbortController()
         async function makeProgress(key: string, iter: ReturnType<typeof ServicesWithProgress.decryptFromText>) {

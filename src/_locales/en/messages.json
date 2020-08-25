@@ -75,6 +75,7 @@
     "decrypted_postbox_decoding": "Maskbook decoding…",
     "decrypted_postbox_decrypting_finding_person_key": "Maskbook is looking for the public key of the author…",
     "decrypted_postbox_decrypting_finding_post_key": "Maskbook is retrieving the post key to decrypt this post…",
+    "decrypted_postbox_author_mismatch": "Originally posted by {{name}}",
     "decrypted_postbox_title": "Decrypted by Maskbook:",
     "delete": "Delete",
     "delete_contact": "Delete Contact",

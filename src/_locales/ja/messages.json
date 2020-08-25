@@ -75,6 +75,7 @@
     "decrypted_postbox_decoding": "Maskbook が解読しています。",
     "decrypted_postbox_decrypting_finding_person_key": "Maskbook は公開鍵を探しています…",
     "decrypted_postbox_decrypting_finding_post_key": "Maskbook はこの投稿を復号化するために ポストキーを取得しています…",
+    "decrypted_postbox_author_mismatch": "最初の作者は {{name}}",
     "decrypted_postbox_title": "Maskbook で暗号化されています:",
     "delete": "削除",
     "delete_contact": "連絡先を削除する",
