@@ -38,7 +38,7 @@ addParameters({
             i18nNextInstance.language !== props.locale && i18nNextInstance.changeLanguage(props.locale)
             return React.createElement(I18nextProvider, { i18n: i18nNextInstance }, props.children)
         },
-        supportedLocales: ['en', 'zh'],
+        supportedLocales: ['en', 'zh', 'ja'],
         providerLocaleKey: 'locale',
     },
 })

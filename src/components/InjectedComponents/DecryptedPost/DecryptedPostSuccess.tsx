@@ -9,6 +9,8 @@ import { useStylesExtends } from '../../custom-ui-helper'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import { PluginUI, PluginConfig } from '../../../plugins/plugin'
 import { usePostInfo } from '../../DataSource/usePostInfo'
+import type { ProfileIdentifier } from '../../../database/type'
+import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { content: TypedMessage }
@@ -17,13 +19,16 @@ export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseSty
     profiles: Profile[]
     sharedPublic?: boolean
     AdditionalContentProps?: Partial<AdditionalContentProps>
+    /** The author in the payload */
+    author?: ProfileIdentifier
+    /** The author of the encrypted post */
+    postedBy?: ProfileIdentifier
 }
 
 const useSuccessStyles = makeStyles((theme) => {
-    const dark = theme.palette.type === 'dark'
     return createStyles({
         header: { display: 'flex', alignItems: 'center' },
-        addRecipientsLink: { cursor: 'pointer' },
+        addRecipientsLink: { cursor: 'pointer', marginLeft: theme.spacing(1) },
         signatureVerifyPassed: { display: 'flex' },
         signatureVerifyFailed: { display: 'flex' },
     })
@@ -33,6 +38,8 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
     const {
         data: { content },
         profiles,
+        author,
+        postedBy,
     } = props
     const classes = useStylesExtends(useSuccessStyles(), props)
     const { t } = useI18N()
@@ -51,7 +58,7 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
             {shareMenu.ShareMenu}
             <AdditionalContent
                 metadataRenderer={{ after: SuccessDecryptionPlugin }}
-                headerActions={rightActions}
+                headerActions={wrapAuthorDifferentMessage(author, postedBy, rightActions)}
                 title={t('decrypted_postbox_title')}
                 message={content}
                 {...props.AdditionalContentProps}

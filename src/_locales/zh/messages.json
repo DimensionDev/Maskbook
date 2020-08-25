@@ -78,6 +78,7 @@
     "decrypted_postbox_decoding": "Maskbook 正在解码…",
     "decrypted_postbox_decrypting_finding_person_key": "Maskbook 正在搜尋對方的公鈅…",
     "decrypted_postbox_decrypting_finding_post_key": "Maskbook 正在搜尋分享給您的密鑰以解密这篇内容…",
+    "decrypted_postbox_author_mismatch": "最初为 {{name}} 分享的讯息",
     "decrypted_postbox_title": "此消息使用 Maskbook 解密：",
     "delete": "刪除",
     "delete_contact": "刪除聯絡人",
