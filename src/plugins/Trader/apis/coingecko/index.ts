@@ -1,5 +1,3 @@
-import type { Currency } from '../../type'
-
 const BASE_URL = 'https://api.coingecko.com/api/v3'
 
 //#region get currency
@@ -54,11 +52,12 @@ export interface CoinInfo {
     localization: Record<string, string>
     market_cap_rank: number
     market_data: {
+        current_price: Record<string, number>
         high_24h: Record<string, number>
         low_24h: Record<string, number>
         market_cap: Record<string, number>
         market_cap_rank: number
-        price_change_24h: number
+        price_change_percentage_24h: number
         total_supply: number
         total_volume: Record<string, number>
     }

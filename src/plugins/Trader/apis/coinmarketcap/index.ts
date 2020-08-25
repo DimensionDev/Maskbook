@@ -3,8 +3,7 @@ import CURRENCY_DATA from './currency.json'
 // proxy: https://web-api.coinmarketcap.com/v1
 const BASE_URL = 'https://coinmarketcap.provide.maskbook.com/v1'
 
-// porxy: https://widgets.coinmarketcap.com/v2
-const WIDGET_BASE_URL = 'https://coinmarketcap.provide.maskbook.com/v2'
+const WIDGET_BASE_URL = 'https://widgets.coinmarketcap.com/v2'
 
 export interface Status {
     credit_count: number
@@ -73,8 +72,11 @@ export interface CoinInfo {
     last_updated: number
 }
 
-export async function getCoinInfo(id: number, currency: string) {
+export async function getCoinInfo(id: string, currency: string) {
     const response = await fetch(`${WIDGET_BASE_URL}/ticker/${id}/?ref=widget&convert=${currency}`)
-    return response.json() as Promise<CoinInfo>
+    return response.json() as Promise<{
+        data: CoinInfo
+        status: Status
+    }>
 }
 //#endregion

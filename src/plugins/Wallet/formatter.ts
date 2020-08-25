@@ -21,3 +21,7 @@ export function formatBalance(balance: BigNumber, decimals: number, precision: n
 
     return raw.indexOf('.') > -1 ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
 }
+
+export function formatCurrency(balance: number) {
+    return balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+}

@@ -1,28 +1,47 @@
 import React, { useState, useEffect } from 'react'
-import { makeStyles, Avatar, Typography, Card, CardHeader, IconButton, CardActions } from '@material-ui/core'
+import {
+    makeStyles,
+    Avatar,
+    Typography,
+    Card,
+    CardHeader,
+    IconButton,
+    CardActions,
+    Theme,
+    createStyles,
+} from '@material-ui/core'
 import { useAsync } from 'react-use'
 import SettingsIcon from '@material-ui/icons/Settings'
+import classNames from 'classnames'
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp'
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { SettingsDialog } from './SettingsDialog'
 import { Platform, Currency, resolvePlatformName, Settings } from '../type'
-import { getCurrenies } from '../apis'
 import { PortalShadowRoot, portalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
 import { setStorage, getStorage } from '../../../utils/browser.storage'
 import { getActivatedUI } from '../../../social-network/ui'
 import stringify from 'json-stable-stringify'
 import { currentTrendingViewSettings, currentTrendingViewPlatformSettings } from '../settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
+import Services from '../../../extension/service'
+import { formatCurrency } from '../../Wallet/formatter'
+import { useColorStyles } from '../../../utils/theme'
 
 const network = getActivatedUI().networkIdentifier
 
-const useStyles = makeStyles({
-    root: {},
-    header: {
-        display: 'flex',
-    },
-    body: {},
-    avatar: {},
-    amount: {},
-})
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {},
+        header: {
+            display: 'flex',
+        },
+        body: {},
+        avatar: {},
+        percentage: {
+            marginLeft: theme.spacing(1),
+        },
+    }),
+)
 
 export interface TrendingViewProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     keyword: string
@@ -30,6 +49,7 @@ export interface TrendingViewProps extends withClasses<KeysInferFromUseStyles<ty
 
 export function TrendingView(props: TrendingViewProps) {
     const classes = useStyles()
+    const color = useColorStyles()
     const [settingsDialogOpen, setSettingsDialogOpen] = useState(false)
 
     const [platform, setPlatform] = useState(Platform.COIN_GECKO)
@@ -40,9 +60,10 @@ export function TrendingView(props: TrendingViewProps) {
     const trendingPlatformSettings = useValueRef<string>(currentTrendingViewPlatformSettings[network])
 
     //#region currency & platform
-    const { value: currencies = [], loading: loadingCurrencies, error } = useAsync(() => getCurrenies(platform), [
-        platform,
-    ])
+    const { value: currencies = [], loading: loadingCurrencies } = useAsync(
+        () => Services.Plugin.invokePlugin('maskbook.trader', 'getCurrenies', platform),
+        [platform],
+    )
 
     // sync platform
     useEffect(() => {
@@ -65,25 +86,52 @@ export function TrendingView(props: TrendingViewProps) {
     }, [trendingSettings, currencies.length])
     //#endregion
 
+    //#region coins info
+    const { value: coinInfo, loading: loadingCoinInfo, error } = useAsync(async () => {
+        if (!currency) return null
+        return Services.Plugin.invokePlugin(
+            'maskbook.trader',
+            'getCoinTrendingByKeyword',
+            props.keyword,
+            platform,
+            currency,
+        )
+    }, [platform, currency, props.keyword])
+    //#endregion
     if (loadingCurrencies || !currency) return null
+    if (loadingCoinInfo || !coinInfo) return null
+
     return (
         <>
             <Card className={classes.root} elevation={0} component="article">
                 <CardHeader
                     className={classes.header}
-                    avatar={
-                        <Avatar src="https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/45_Bitcoin_logo_logos-512.png" />
-                    }
+                    avatar={<Avatar src={coinInfo.coin.image_url} alt={coinInfo.coin.symbol} />}
                     action={
                         <IconButton size="small" onClick={() => setSettingsDialogOpen(true)}>
                             <SettingsIcon />
                         </IconButton>
                     }
-                    title={<Typography variant="h6">{`BTC / ${currency.name}`}</Typography>}
+                    title={
+                        <Typography variant="h6">{`${coinInfo.coin.symbol.toUpperCase()} / ${
+                            currency.name
+                        }`}</Typography>
+                    }
                     subheader={
                         <Typography variant="body1">
-                            <span>{`${currency.name} 12,223`}</span>
-                            <span>(1.2%)</span>
+                            <span>{`${currency.symbol ?? currency.name} ${formatCurrency(
+                                coinInfo.market.current_price,
+                            )}`}</span>
+                            {coinInfo.market.price_change_24h ? (
+                                <span
+                                    className={classNames(
+                                        classes.percentage,
+                                        coinInfo.market.price_change_24h > 0 ? color.success : color.error,
+                                    )}>
+                                    {coinInfo.market.price_change_24h > 0 ? '\u25B2 ' : '\u25BC '}
+                                    {coinInfo.market.price_change_24h.toFixed(2)}%
+                                </span>
+                            ) : null}
                         </Typography>
                     }
                 />
