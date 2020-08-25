@@ -22,7 +22,6 @@ import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
 import { useStylesExtends, or } from '../../../components/custom-ui-helper'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
-import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
 import Services from '../../../extension/service'
 import { getActivatedUI } from '../../../social-network/ui'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -75,7 +74,6 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
     const classes = useStylesExtends(useNewPollStyles(), props)
     const [loading, setLoading] = props.loading
     const [question, setQuestion] = useState('')
-    const [, questionRef] = useCapturedInput(setQuestion)
 
     const [optionsInput, setOptionsInput] = useState<Object>({ 0: '', 1: '' })
     const options = Object.values(optionsInput)
@@ -138,7 +136,15 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
     return (
         <>
             <FormControl className={classes.line}>
-                <TextField label="Ask a question..." variant="filled" InputProps={{ inputRef: questionRef }} />
+                <TextField
+                    label="Ask a question..."
+                    variant="filled"
+                    InputProps={{
+                        onChange: (e) => {
+                            setQuestion((e.target as HTMLInputElement)?.value)
+                        },
+                    }}
+                />
             </FormControl>
             <div className={classes.pollWrap}>
                 <div className={classes.optionsWrap}>
@@ -204,7 +210,7 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
 
     useEffect(() => {
         Services.Plugin.invokePlugin('maskbook.polls', 'getExistingPolls').then((polls) => {
-            let myPolls: Array<PollGunDB> = []
+            const myPolls: Array<PollGunDB> = []
             polls.map((poll) => {
                 if (poll.id === props.senderId) {
                     myPolls.push(poll)
@@ -212,7 +218,7 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
             })
             setPolls(polls.reverse())
         })
-    }, [])
+    }, [props.senderId])
 
     const insertPoll = (poll?: PollMetaData | null) => {
         props.onSelectExistingPoll(poll)

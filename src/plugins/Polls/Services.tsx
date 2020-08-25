@@ -5,7 +5,7 @@ import { gunServers } from '../../network/gun-servers'
 import type { PollMetaData } from './types'
 import { PluginMessageCenter } from '../PluginMessages'
 
-const gun = new Gun('https://safe-citadel-45310.herokuapp.com/gun')
+const gun = new Gun(gunServers)
 
 interface NewPollProps {
     sender?: string | undefined
@@ -26,7 +26,7 @@ export async function createNewPoll(poll: NewPollProps): Promise<Result<NewPollP
     const { id, sender, question, options, start_time, end_time } = poll
 
     let results = {}
-    for (let i = 0; i < Object.values(options).length; i++) {
+    for (let i = 0; i < Object.values(options).length; i = i + 1) {
         results = {
             ...results,
             [i]: 0,
@@ -64,13 +64,13 @@ export async function createNewPoll(poll: NewPollProps): Promise<Result<NewPollP
 export type PollGunDB = PollMetaData
 
 export async function getExistingPolls() {
-    let polls: Array<PollGunDB> = []
+    const polls: Array<PollGunDB> = []
 
     gun.get('polls')
         .map()
         .on((data: any, key) => {
             const keys = (key as string).split('_')
-            let poll: PollGunDB = {
+            const poll: PollGunDB = {
                 key: key,
                 id: keys[0],
                 sender: data.sender,
@@ -119,7 +119,7 @@ export async function vote(props: voteProps) {
             delete item._
             results = Object.values(item)
         })
-    const count = ++results[index]
+    const count = results[index] + 1
     const newResults = {
         ...results,
         [index]: count,
@@ -137,4 +137,51 @@ export async function vote(props: voteProps) {
         ...poll,
         results: Object.values(newResults),
     }
+}
+
+export async function getPollByKey(props: { key: string | number | symbol }) {
+    const keys = (props.key as string).split('_')
+    let poll: PollGunDB = {
+        key: props.key,
+        id: keys[0],
+        sender: '',
+        question: '',
+        start_time: 0,
+        end_time: 0,
+        options: ['', ''],
+        results: [0, 0],
+    }
+    gun.get('polls')
+        .get(props.key)
+        .on((data) => {
+            poll = {
+                key: props.key,
+                id: keys[0],
+                sender: data.sender,
+                question: data.question,
+                start_time: data.start_time,
+                end_time: data.end_time,
+                options: ['', ''],
+                results: [0, 0],
+            }
+            if (data.options) {
+                gun.get('polls')
+                    .get(props.key)
+                    .get('options')
+                    .on((options) => {
+                        delete options._
+                        poll.options = Object.values(options)
+                    })
+            }
+            if (data.results) {
+                gun.get('polls')
+                    .get(props.key)
+                    .get('results')
+                    .on((results) => {
+                        delete results._
+                        poll.results = Object.values(results)
+                    })
+            }
+        })
+    return poll
 }
