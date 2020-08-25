@@ -83,6 +83,11 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             await (confirmButton as any).click()
             await page.waitFor(500)
 
+            // click the 'done' button
+            const doneButton = confirmButton
+            await (doneButton as any).click()
+            await page.waitFor(500)
+
             // redirect to profile page
             await snsPage.waitFor(sns.profileSelector)
 
