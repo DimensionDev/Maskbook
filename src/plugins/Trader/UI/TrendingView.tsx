@@ -9,16 +9,14 @@ import {
     CardActions,
     Theme,
     createStyles,
+    CircularProgress,
+    CardContent,
 } from '@material-ui/core'
 import { useAsync } from 'react-use'
 import SettingsIcon from '@material-ui/icons/Settings'
 import classNames from 'classnames'
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp'
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
-import { SettingsDialog } from './SettingsDialog'
+import { SettingsDialog, SettingsDialogProps } from './SettingsDialog'
 import { Platform, Currency, resolvePlatformName, Settings } from '../type'
-import { PortalShadowRoot, portalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
-import { setStorage, getStorage } from '../../../utils/browser.storage'
 import { getActivatedUI } from '../../../social-network/ui'
 import stringify from 'json-stable-stringify'
 import { currentTrendingViewSettings, currentTrendingViewPlatformSettings } from '../settings'
@@ -29,22 +27,34 @@ import { useColorStyles } from '../../../utils/theme'
 
 const network = getActivatedUI().networkIdentifier
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {},
+const useStyles = makeStyles((theme: Theme) => {
+    const internalName = getActivatedUI()?.internalName
+    return createStyles({
+        root: {
+            ...(internalName === 'twitter'
+                ? { border: `1px solid ${theme.palette.type === 'dark' ? '#2f3336' : '#ccd6dd'}` }
+                : null),
+        },
         header: {
             display: 'flex',
         },
         body: {},
+        footer: {
+            justifyContent: 'flex-end',
+        },
+        footnote: {
+            fontSize: 10,
+        },
         avatar: {},
         percentage: {
             marginLeft: theme.spacing(1),
         },
-    }),
-)
+    })
+})
 
 export interface TrendingViewProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     keyword: string
+    SettingsDialogProps?: Partial<SettingsDialogProps>
 }
 
 export function TrendingView(props: TrendingViewProps) {
@@ -98,17 +108,31 @@ export function TrendingView(props: TrendingViewProps) {
         )
     }, [platform, currency, props.keyword])
     //#endregion
-    if (loadingCurrencies || !currency) return null
-    if (loadingCoinInfo || !coinInfo) return null
+
+    if (loadingCurrencies || loadingCoinInfo)
+        return (
+            <Card className={classes.root} elevation={0} component="article">
+                <CardActions className={classes.footer}>
+                    <CircularProgress size={20} />
+                </CardActions>
+            </Card>
+        )
+    if (!currency) return null
+    if (!coinInfo) return null
 
     return (
         <>
-            <Card className={classes.root} elevation={0} component="article">
+            <Card className={classes.root} elevation={0} component="article" style={{ minWidth: 250 }}>
                 <CardHeader
                     className={classes.header}
                     avatar={<Avatar src={coinInfo.coin.image_url} alt={coinInfo.coin.symbol} />}
                     action={
-                        <IconButton size="small" onClick={() => setSettingsDialogOpen(true)}>
+                        <IconButton
+                            size="small"
+                            onClick={() => {
+                                console.log('DEUBG: click')
+                                setSettingsDialogOpen(true)
+                            }}>
                             <SettingsIcon />
                         </IconButton>
                     }
@@ -119,7 +143,7 @@ export function TrendingView(props: TrendingViewProps) {
                     }
                     subheader={
                         <Typography variant="body1">
-                            <span>{`${currency.symbol ?? currency.name} ${formatCurrency(
+                            <span>{`${currency.symbol ?? `${currency.name} `}${formatCurrency(
                                 coinInfo.market.current_price,
                             )}`}</span>
                             {coinInfo.market.price_change_24h ? (
@@ -135,8 +159,8 @@ export function TrendingView(props: TrendingViewProps) {
                         </Typography>
                     }
                 />
-                <CardActions>
-                    <Typography color="textSecondary" variant="body2">
+                <CardActions className={classes.footer}>
+                    <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
                         Powered by {resolvePlatformName(platform)}
                     </Typography>
                 </CardActions>
@@ -155,6 +179,7 @@ export function TrendingView(props: TrendingViewProps) {
                     currentTrendingViewPlatformSettings[network].value = String(platform)
                 }}
                 onClose={() => setSettingsDialogOpen(false)}
+                {...props.SettingsDialogProps}
             />
         </>
     )

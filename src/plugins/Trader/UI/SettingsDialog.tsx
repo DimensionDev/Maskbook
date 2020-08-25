@@ -75,6 +75,10 @@ function SettingsDialogUI(props: SettingsDialogUIProps) {
     const { t } = useI18N()
     const { currency, platform, currencies } = props
     const classes = useStylesExtends(useStyles(), props)
+
+    console.log('DEBUG: SettingsDialogUI')
+    console.log(props)
+
     return (
         <div className={classes.root}>
             <ShadowRootDialog

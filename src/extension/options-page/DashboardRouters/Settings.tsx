@@ -9,9 +9,11 @@ import {
     languageSettings,
     Language,
     renderInShadowRootSettings,
+    currentWholePostVisibilitySettings,
     currentLocalWalletEthereumNetworkSettings,
     appearanceSettings,
     Appearance,
+    WholePostVisibility,
 } from '../../../settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 
@@ -20,6 +22,7 @@ import NoEncryptionIcon from '@material-ui/icons/NoEncryption'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined'
+import VisibilityIcon from '@material-ui/icons/Visibility'
 import TabIcon from '@material-ui/icons/Tab'
 import PaletteIcon from '@material-ui/icons/Palette'
 import LanguageIcon from '@material-ui/icons/Language'
@@ -115,6 +118,7 @@ export default function DashboardSettingsRouter() {
     const { t } = useI18N()
     const currentLang = useValueRef(languageSettings)
     const currentApperance = useValueRef(appearanceSettings)
+    const currentWholePostVisibility = useValueRef(currentWholePostVisibilitySettings)
     const langMapper = React.useRef((x: Language) => {
         if (x === Language.en) return 'English'
         if (x === Language.zh) return '中文'
@@ -125,6 +129,11 @@ export default function DashboardSettingsRouter() {
         if (x === Appearance.dark) return t('settings_appearance_dark')
         if (x === Appearance.light) return t('settings_appearance_light')
         return t('settings_appearance_default')
+    }).current
+    const wholePostVisibilityMapper = React.useRef((x: WholePostVisibility) => {
+        if (x === WholePostVisibility.all) return 'All Posts'
+        if (x === WholePostVisibility.encryptedOnly) return 'Encrypted Posts'
+        return 'Enhanced Posts'
     }).current
     const classes = useStyles()
     const shadowRoot = useValueRef(renderInShadowRootSettings)
@@ -173,6 +182,14 @@ export default function DashboardSettingsRouter() {
                                         value={currentLocalWalletEthereumNetworkSettings}
                                     />
                                 ) : null}
+                                <SettingsUIEnum
+                                    classes={listStyle}
+                                    secondary={wholePostVisibilityMapper(currentWholePostVisibility)}
+                                    enumObject={WholePostVisibility}
+                                    getText={wholePostVisibilityMapper}
+                                    icon={<VisibilityIcon />}
+                                    value={currentWholePostVisibilitySettings}
+                                />
                             </List>
                         </Card>
                     </Paper>

@@ -2,6 +2,8 @@ import React from 'react'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
 import { PluginUI } from '../../plugins/plugin'
+import { remove } from 'lodash-es'
+import { makeTypedMessageCompound, isTypedMessageSuspended } from '../../protocols/typed-message'
 
 export interface PostDummyProps {}
 
@@ -11,5 +13,9 @@ export function PostDummy(props: PostDummyProps) {
         (x, plugin) => (plugin.postMessageProcessor ? plugin.postMessageProcessor(x) : x),
         postMessage,
     )
-    return <DefaultTypedMessageRenderer message={processedPostMessage}></DefaultTypedMessageRenderer>
+    return (
+        <DefaultTypedMessageRenderer
+            message={makeTypedMessageCompound(processedPostMessage.items.filter((x) => !isTypedMessageSuspended(x)))}
+        />
+    )
 }

@@ -35,7 +35,7 @@ export async function getCoinInfo(id: string, platform: Platform, currency: Curr
                 id,
                 name: info.name,
                 symbol: info.symbol,
-                image_url: info.image.thumb,
+                image_url: info.image.small,
             },
             currency,
             platform,

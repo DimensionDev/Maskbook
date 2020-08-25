@@ -68,7 +68,7 @@ export const DefaultTypedMessageAnchorRenderer = React.memo(function DefaultType
     return renderWithMetadata(
         props,
         <Typography variant="body1" style={{ lineBreak: 'anywhere', display: 'inline' }} data-testid="anchor_payload">
-            <Link color="textPrimary" target="_blank" rel="noopener noreferrer" href={href}>
+            <Link color="primary" target="_blank" rel="noopener noreferrer" href={href}>
                 {content}
             </Link>
         </Typography>,
