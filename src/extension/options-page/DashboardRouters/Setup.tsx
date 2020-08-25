@@ -43,7 +43,7 @@ import { sleep } from '../../../utils/utils'
 import { SetupStep } from '../SetupStep'
 
 //#region setup form
-const useSetupFormSetyles = makeStyles((theme) =>
+const useSetupFormStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
             flex: 1,
@@ -108,7 +108,7 @@ const useSetupFormSetyles = makeStyles((theme) =>
         doneButton: {
             color: '#fff',
             backgroundColor: green[500],
-            // extra 36 pixel eliminats the visual shaking when switch between pages
+            // extra 36 pixel eliminates the visual shaking when switch between pages
             marginBottom: 20 + 36,
             '&:hover': {
                 backgroundColor: green[700],
@@ -117,7 +117,7 @@ const useSetupFormSetyles = makeStyles((theme) =>
     }),
 )
 
-interface SetupFormProps extends withClasses<KeysInferFromUseStyles<typeof useSetupFormSetyles>> {
+interface SetupFormProps extends withClasses<KeysInferFromUseStyles<typeof useSetupFormStyles>> {
     primary: string
     secondary?: string
     content?: React.ReactNode
@@ -125,7 +125,7 @@ interface SetupFormProps extends withClasses<KeysInferFromUseStyles<typeof useSe
 }
 
 function SetupForm(props: SetupFormProps) {
-    const classes = useStylesExtends(useSetupFormSetyles(), props)
+    const classes = useStylesExtends(useSetupFormStyles(), props)
     return (
         <Fade in>
             <div className={classes.wrapper}>
@@ -172,7 +172,7 @@ const useConsentDataCollectionStyles = makeStyles((theme) =>
 
 export function ConsentDataCollection() {
     const { t } = useI18N()
-    const setupFormClasses = useSetupFormSetyles()
+    const setupFormClasses = useSetupFormStyles()
     const consentDataCollection = useConsentDataCollectionStyles()
     const [checked, setChecked] = useState(false)
     return (
@@ -233,7 +233,7 @@ const userCreatePersonaStyles = makeStyles((theme) =>
 
 export function CreatePersona() {
     const { t } = useI18N()
-    const setupFormClasses = useSetupFormSetyles()
+    const setupFormClasses = useSetupFormStyles()
     const createPersonaClasses = userCreatePersonaStyles()
     const [name, setName] = useState('')
     const history = useHistory<unknown>()
@@ -310,7 +310,7 @@ const useProviderLineStyle = makeStyles((theme: Theme) => ({
 
 export function ConnectNetwork() {
     const { t } = useI18N()
-    const classes = useSetupFormSetyles()
+    const classes = useSetupFormStyles()
     const providerLineClasses = useProviderLineStyle()
     const history = useHistory<unknown>()
 
@@ -426,7 +426,7 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
 export function RestoreDatabase() {
     const { t } = useI18N()
     const history = useHistory<unknown>()
-    const classes = useSetupFormSetyles()
+    const classes = useSetupFormStyles()
     const restoreDatabaseClasses = useRestoreDatabaseStyle()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
@@ -552,7 +552,7 @@ export function RestoreDatabaseAdvance() {
     const { enqueueSnackbar } = useSnackbar()
     const history = useHistory<unknown>()
 
-    const classes = useSetupFormSetyles()
+    const classes = useSetupFormStyles()
 
     const [nickname, setNickname] = useState('')
     const [mnemonicWordsValue, setMnemonicWordsValue] = useState('')
@@ -743,7 +743,7 @@ const useRestoreDatabaseConfirmationStyles = makeStyles((theme: Theme) =>
 
 export function RestoreDatabaseConfirmation() {
     const { t } = useI18N()
-    const classes = useSetupFormSetyles()
+    const classes = useSetupFormStyles()
     const restoreDatabaseConfirmationClasses = useRestoreDatabaseConfirmationStyles()
     const history = useHistory<unknown>()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
