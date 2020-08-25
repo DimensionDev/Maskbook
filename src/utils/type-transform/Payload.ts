@@ -68,7 +68,9 @@ function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): 
             signature,
             authorPublicKey,
             sharedPublic: publicShared === '1',
-            authorUserID: Identifier.fromString('person:' + authorID, ProfileIdentifier).unwrapOr(undefined),
+            authorUserID: Result.wrap(() =>
+                Identifier.fromString('person:' + atob(authorID), ProfileIdentifier).unwrap(),
+            ).unwrapOr(undefined),
         }
     }
     return {
@@ -129,7 +131,7 @@ export function constructAlpha38(data: PayloadAlpha38, encoder: Encoder) {
         data.signature,
         data.authorPublicKey,
         data.sharedPublic ? '1' : '0',
-        userID.includes('|') ? undefined : userID,
+        userID.includes('|') ? undefined : btoa(userID),
     ]
     return encoder(`🎼4/4|${fields.join('|')}:||`)
 }

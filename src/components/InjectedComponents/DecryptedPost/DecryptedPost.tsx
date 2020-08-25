@@ -184,13 +184,29 @@ export function DecryptPost(props: DecryptPostProps) {
                             requestAppendRecipients={requestAppendRecipientsWrapped}
                             profiles={profiles}
                             sharedPublic={sharedPublic}
+                            author={authorInPayload}
+                            postedBy={currentPostBy}
                             {...props.successComponentProps}
                         />
                     )
                 case 'error':
-                    return <Failed error={new Error(progress.error)} {...props.failedComponentProps} />
+                    return (
+                        <Failed
+                            error={new Error(progress.error)}
+                            author={authorInPayload}
+                            postedBy={currentPostBy}
+                            {...props.failedComponentProps}
+                        />
+                    )
                 case 'progress':
-                    return <Awaiting type={progress} {...props.waitingComponentProps} />
+                    return (
+                        <Awaiting
+                            type={progress}
+                            author={authorInPayload}
+                            postedBy={currentPostBy}
+                            {...props.waitingComponentProps}
+                        />
+                    )
                 default:
                     return null
             }
