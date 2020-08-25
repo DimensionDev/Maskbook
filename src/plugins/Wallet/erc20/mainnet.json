@@ -9,6 +9,18 @@
     ],
     "predefined_tokens": [
         {
+            "decimals": 18,
+            "symbol": "YFII",
+            "name": "YFII.finance",
+            "address": "0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83"
+        },
+        {
+            "decimals": 18,
+            "symbol": "ARPA",
+            "name": "ARPA Token",
+            "address": "0xba50933c268f567bdc86e1ac131be072c6b0b71a"
+        },
+        {
             "decimals": 8,
             "symbol": "HUSD",
             "name": "HUSD Stablecoin",
