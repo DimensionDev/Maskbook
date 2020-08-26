@@ -32,6 +32,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     injectPostComments: nopWithUnmount,
     injectPostDummy: nopWithUnmount,
     injectPostInspector: nopWithUnmount,
+    injectPageInspector: nopWithUnmount,
     resolveLastRecognizedIdentity: nop,
     posts: new ObservableWeakMap(),
     friendsRef: new ValueRef([], ProfileArrayComparer),

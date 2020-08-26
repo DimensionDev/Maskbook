@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react'
+import React from 'react'
 import { TypedMessageAnchor, registerTypedMessageRenderer } from '../../../protocols/typed-message'
-import { Link, Typography, Popper } from '@material-ui/core'
+import { Link, Typography } from '@material-ui/core'
 import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
-import { TrendingView } from '../UI/TrendingView'
+import { MessageCenter } from '../messages'
 
 export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type'> {
     readonly type: 'anchor/cash_trending'
@@ -24,27 +24,18 @@ registerTypedMessageRenderer('anchor/cash_trending', {
 })
 
 function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProps<TypedMessageCashTrending>) {
-    const rootEl = useRef<HTMLDivElement>(null)
-    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+    const onHoverCashTag = (ev: React.MouseEvent<HTMLAnchorElement>) => {
+        MessageCenter.emit('cashTagObserved', {
+            name: props.message.name,
+            element: ev.currentTarget,
+        })
+    }
 
     return (
-        <div ref={rootEl} style={{ display: 'inline' }}>
-            <Typography color="textPrimary" variant="body1" style={{ lineBreak: 'anywhere', display: 'inline' }}>
-                <Link
-                    href={props.message.href}
-                    onMouseOver={(e: React.MouseEvent<HTMLAnchorElement>) => setAnchorEl(e.currentTarget)}>
-                    {props.message.content}
-                </Link>
-            </Typography>
-            <Popper
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
-                disablePortal
-                container={() => rootEl.current}
-                transition
-                style={{ zIndex: 1 }}>
-                <TrendingView keyword={props.message.name} />
-            </Popper>
-        </div>
+        <Typography color="textPrimary" variant="body1" style={{ lineBreak: 'anywhere', display: 'inline' }}>
+            <Link href={props.message.href} onMouseOver={onHoverCashTag}>
+                {props.message.content}
+            </Link>
+        </Typography>
     )
 }

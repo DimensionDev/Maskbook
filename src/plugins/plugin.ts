@@ -11,8 +11,9 @@ export interface PluginConfig {
     pluginName: string
     identifier: string
     successDecryptionInspector?: PluginInjectFunction<{ message: TypedMessage }>
-    postMessageProcessor?: (message: TypedMessageCompound) => TypedMessageCompound
+    pageInspector?: React.ComponentType<{}>
     postInspector?: PluginInjectFunction<{}>
+    postMessageProcessor?: (message: TypedMessageCompound) => TypedMessageCompound
     postDialogMetadataBadge?: Map<string, (metadata: any) => string>
 }
 

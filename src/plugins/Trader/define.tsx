@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import type { PluginConfig } from '../plugin'
 import {
     TypedMessage,
@@ -7,6 +7,8 @@ import {
     TypedMessageCompound,
 } from '../../protocols/typed-message'
 import { makeTypedMessageCashTrending } from './messages/TypedMessageCashTrending'
+import { TrendingPopper } from './UI/TrendingPopper'
+import { TrendingView } from './UI/TrendingView'
 
 const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor => isTypedMessgaeAnchor(m) && m.category === 'cash'
 
@@ -19,5 +21,14 @@ export const TraderPluginDefine: PluginConfig = {
             ...message,
             items: message.items.map((m: TypedMessage) => (isCashTagMessage(m) ? makeTypedMessageCashTrending(m) : m)),
         }
+    },
+    pageInspector() {
+        return (
+            <TrendingPopper>
+                {(name: string) => {
+                    return <TrendingView name={name}></TrendingView>
+                }}
+            </TrendingPopper>
+        )
     },
 }

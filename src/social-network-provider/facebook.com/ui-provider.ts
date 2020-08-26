@@ -16,6 +16,7 @@ import { dispatchCustomEvents, selectElementContents, sleep } from '../../utils/
 import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostDummyFacebook } from './UI/injectPostDummy'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
+import { injectPageInspectorFacebook } from './UI/injectPageInspector'
 import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
 import { i18n } from '../../utils/i18n-next'
@@ -95,6 +96,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     }),
     injectPostDummy: injectPostDummyFacebook,
     injectPostInspector: injectPostInspectorFacebook,
+    injectPageInspector: injectPageInspectorFacebook,
     collectPeople: collectPeopleFacebook,
     collectPosts: collectPostsFacebook,
     taskPasteIntoBio: pasteIntoBioFacebook,

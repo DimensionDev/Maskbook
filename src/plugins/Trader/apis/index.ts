@@ -18,6 +18,24 @@ export async function getCurrenies(platform: Platform): Promise<Currency[]> {
     }))
 }
 
+export async function getLimitedCurrenies(platform: Platform): Promise<Currency[]> {
+    const usd =
+        platform === Platform.COIN_GECKO
+            ? {
+                  id: 'usd',
+                  name: 'USD',
+                  symbol: '$',
+                  description: 'Unite State Dollar',
+              }
+            : {
+                  id: '2781',
+                  name: 'USD',
+                  symbol: '$',
+                  description: 'Unite State Dollar',
+              }
+    return Promise.resolve([usd])
+}
+
 export async function getCoins(platform: Platform): Promise<Coin[]> {
     if (platform === Platform.COIN_GECKO) return coinGeckoAPI.getAllCoins()
     return (await coinMarketCapAPI.getAllCoins()).data.map((x) => ({

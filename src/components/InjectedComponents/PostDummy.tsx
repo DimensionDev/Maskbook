@@ -2,7 +2,6 @@ import React from 'react'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
 import { PluginUI } from '../../plugins/plugin'
-import { remove } from 'lodash-es'
 import { makeTypedMessageCompound, isTypedMessageSuspended } from '../../protocols/typed-message'
 
 export interface PostDummyProps {}

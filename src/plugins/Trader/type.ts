@@ -28,9 +28,9 @@ export interface Market {
 }
 
 export interface Trending {
+    currency: Currency
     platform: Platform
     coin: Coin
-    currency: Currency
     market: Market
 }
 

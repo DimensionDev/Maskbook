@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import {
     makeStyles,
@@ -16,6 +16,7 @@ import {
     DialogActions,
     Button,
     Divider,
+    MenuProps,
 } from '@material-ui/core'
 import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
@@ -69,16 +70,13 @@ interface SettingsDialogUIProps
     onPlatformChange?: (platform: Platform) => void
     onClose?: () => void
     DialogProps?: Partial<DialogProps>
+    MenuProps?: Partial<MenuProps>
 }
 
 function SettingsDialogUI(props: SettingsDialogUIProps) {
     const { t } = useI18N()
     const { currency, platform, currencies } = props
     const classes = useStylesExtends(useStyles(), props)
-
-    console.log('DEBUG: SettingsDialogUI')
-    console.log(props)
-
     return (
         <div className={classes.root}>
             <ShadowRootDialog
@@ -116,7 +114,11 @@ function SettingsDialogUI(props: SettingsDialogUIProps) {
                                 fullWidth
                                 value={platform}
                                 onChange={(e) => props.onPlatformChange?.(e.target.value as Platform)}
-                                MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}>
+                                MenuProps={{
+                                    classes: { paper: classes.menuPaper },
+                                    container: props.DialogProps?.container ?? PortalShadowRoot,
+                                    ...props.MenuProps,
+                                }}>
                                 {getEnumAsArray(Platform).map(({ key, value }) => (
                                     <MenuItem key={key} value={value}>
                                         {resolvePlatformName(value)}
@@ -134,8 +136,9 @@ function SettingsDialogUI(props: SettingsDialogUIProps) {
                                     if (target) props.onCurrencyChange?.(target)
                                 }}
                                 MenuProps={{
-                                    container: props.DialogProps?.container ?? PortalShadowRoot,
                                     classes: { paper: classes.menuPaper },
+                                    container: props.DialogProps?.container ?? PortalShadowRoot,
+                                    ...props.MenuProps,
                                 }}>
                                 {currencies.map((x) => (
                                     <MenuItem key={x.id} value={x.id}>
