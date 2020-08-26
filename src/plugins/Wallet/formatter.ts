@@ -25,3 +25,7 @@ export function formatBalance(balance: BigNumber, decimals: number, precision: n
 export function formatCurrency(balance: number) {
     return balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
 }
+
+export function formatEthAddress(address: string, size = 2) {
+    return /0x[\w\d]{40}/i.test(address) ? `${address.substr(0, 2 + size)}...${address.substr(-size)}` : address
+}

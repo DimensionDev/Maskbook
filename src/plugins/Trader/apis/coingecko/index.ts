@@ -1,5 +1,7 @@
 const BASE_URL = 'https://api.coingecko.com/api/v3'
 
+const CHART_BASE_URL = 'https://www'
+
 //#region get currency
 export async function getAllCurrenies() {
     const response = await fetch(`${BASE_URL}/simple/supported_vs_currencies`)
@@ -57,16 +59,70 @@ export interface CoinInfo {
         low_24h: Record<string, number>
         market_cap: Record<string, number>
         market_cap_rank: number
-        price_change_percentage_24h: number
+
+        price_change_percentage_1h_in_currency: number
+        price_change_percentage_1y_in_currency: number
+        price_change_percentage_7d_in_currency: number
+        price_change_percentage_14d_in_currency: number
+        price_change_percentage_24h_in_currency: number
+        price_change_percentage_30d_in_currency: number
+        price_change_percentage_60d_in_currency: number
+        price_change_percentage_200d_in_currency: number
+
         total_supply: number
         total_volume: Record<string, number>
     }
     name: string
     symbol: string
+    tickers: {
+        base: string
+        target: string
+        market: {
+            name: 'string'
+            identifier: string
+            has_trading_incentive: boolean
+            logo: string
+        }
+        last: number
+        volumn: number
+        converted_last: {
+            btc: number
+            eth: number
+            usd: number
+        }
+        converted_volume: {
+            btc: number
+            eth: number
+            usd: number
+        }
+        trust_score: 'green'
+        bid_ask_spread_percentage: number
+        timestamp: string
+        last_traded_at: string
+        last_fetch_at: string
+        is_anomaly: boolean
+        is_stale: boolean
+        trade_url: string
+        coin_id: string
+        target_coin_id?: string
+    }[]
 }
 
-export async function getCoinInfo(id: string) {
-    const response = await fetch(`${BASE_URL}/coins/${id}?developer_data=false&community_data=false&tickers=false`)
+export async function getCoinInfo(coinId: string) {
+    const response = await fetch(`${BASE_URL}/coins/${coinId}?developer_data=false&community_data=false&tickers=true`)
     return response.json() as Promise<CoinInfo>
+}
+//#endregion
+
+//#region get price chart
+export type Stat = [number, number]
+
+export async function getPriceStats(coinId: string, currencyId: string, days: number) {
+    const response = await fetch(`${BASE_URL}/coins/${coinId}/market_chart?vs_currency=${currencyId}&days=${days}`)
+    return response.json() as Promise<{
+        market_caps: Stat[]
+        prices: Stat[]
+        total_volumes: Stat[]
+    }>
 }
 //#endregion
