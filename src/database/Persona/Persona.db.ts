@@ -350,7 +350,6 @@ export async function queryProfilesDB(
 const fuse = new Fuse([] as ProfileRecord[], {
     shouldSort: true,
     threshold: 0.45,
-    maxPatternLength: 32,
     minMatchCharLength: 1,
     keys: [
         { name: 'nickname', weight: 0.8 },

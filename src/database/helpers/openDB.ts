@@ -63,8 +63,7 @@ export interface IDBPSafeObjectStore<
     DBTypes extends DBSchema,
     TxStores extends StoreNames<DBTypes>[] = StoreNames<DBTypes>[],
     StoreName extends StoreNames<DBTypes> = StoreNames<DBTypes>
->
-    extends Omit<
+> extends Omit<
         IDBPObjectStore<DBTypes, TxStores, StoreName> /** createIndex is only available in versionchange transaction */,
         | 'createIndex'
         /** deleteIndex is only available in versionchange transaction */

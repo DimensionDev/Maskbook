@@ -9,11 +9,12 @@ import { memoize } from 'lodash-es'
 type Required<T> = { [P in keyof T]-?: NonNullable<T[P]> }
 type ServiceType = Required<Pick<SocialNetworkWorker, 'autoVerifyBio' | 'autoVerifyPost' | 'manualVerifyPost'>>
 
+const workerChannel = new MessageCenter(false, 'worker-service').eventBasedChannel
 const getServiceFromNetworkWorker = memoize((worker: SocialNetworkWorker) => {
     return AsyncCall<ServiceType>(undefined, {
         serializer: Serialization,
         key: worker.internalName,
-        messageChannel: new MessageCenter(false),
+        channel: workerChannel,
         strict: false,
     })
 })
@@ -35,8 +36,15 @@ export function startWorkerService(e: SocialNetworkWorker) {
     AsyncCall(impl, {
         serializer: Serialization,
         key: e.internalName,
-        messageChannel: new MessageCenter(false),
-        log: true,
+        channel: workerChannel,
+        log: {
+            beCalled: true,
+            localError: true,
+            remoteError: true,
+            requestReplay: true,
+            sendLocalStack: true,
+            type: 'pretty',
+        },
         strict: { methodNotFound: true, unknownMessage: false },
     })
 }

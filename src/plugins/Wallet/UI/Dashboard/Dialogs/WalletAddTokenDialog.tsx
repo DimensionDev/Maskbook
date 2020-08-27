@@ -35,7 +35,7 @@ const useTokenInListStyles = makeStyles((theme) =>
 
 interface TokenInListProps {
     index: number
-    style: CSSProperties
+    style: any
     data: {
         tokens: ERC20Token[]
         excludeTokens: string[]
@@ -99,7 +99,6 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
             new Fuse(erc20Tokens, {
                 shouldSort: true,
                 threshold: 0.45,
-                maxPatternLength: 32,
                 minMatchCharLength: 1,
                 keys: [
                     { name: 'name', weight: 0.5 },
