@@ -1,7 +1,10 @@
 import CURRENCY_DATA from './currency.json'
 
 // proxy: https://web-api.coinmarketcap.com/v1
-const BASE_URL = 'https://coinmarketcap.provide.maskbook.com/v1'
+const BASE_URL_v1 = 'https://coinmarketcap.provide.maskbook.com/v1'
+
+// proxy: https://web-api.coinmarketcap.com/v1.1
+const BASE_URL_v1_1 = 'https://coinmarketcap.provide.maskbook.com/v1'
 
 const WIDGET_BASE_URL = 'https://widgets.coinmarketcap.com/v2'
 
@@ -39,7 +42,7 @@ export interface Coin {
 
 export async function getAllCoins() {
     const response = await fetch(
-        `${BASE_URL}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
+        `${BASE_URL_v1}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
     )
     return response.json() as Promise<{
         data: Coin[]
@@ -76,6 +79,89 @@ export async function getCoinInfo(id: string, currency: string) {
     const response = await fetch(`${WIDGET_BASE_URL}/ticker/${id}/?ref=widget&convert=${currency}`)
     return response.json() as Promise<{
         data: CoinInfo
+        status: Status
+    }>
+}
+//#endregion
+
+//#region historical
+export type Stat = [number, number, number]
+
+export async function getHistorical(
+    id: string,
+    currency: string,
+    startDate: Date,
+    endDate: Date,
+    interval: string = '1d',
+) {
+    const toUnixTimestamp = (d: Date) => Math.floor(d.getTime() / 1000)
+    const response = await fetch(
+        `${BASE_URL_v1_1}/cryptocurrency/quotes/historical?convert=${currency}&format=chart_crypto_details&id=${id}&interval=${interval}&time_end=${toUnixTimestamp(
+            endDate,
+        )}&time_start=${toUnixTimestamp(startDate)}`,
+    )
+    return response.json() as Promise<{
+        data: Record<string, Record<string, Stat>>
+        status: Status
+    }>
+}
+//#endregion
+
+//#region latest market pairs
+export interface Pair {
+    exchange: {
+        id: number
+        name: string
+        slug: string
+    }
+    market_id: number
+    market_pair: string
+    market_pair_base: {
+        currency_id: number
+        currency_symbol: string
+        currency_type: string
+        exchange_symbol: string
+    }
+    market_pair_quote: {
+        currency_id: number
+        currency_symbol: string
+        currency_type: string
+        exchange_symbol: string
+    }
+    market_reputation: number
+    market_score: number
+    market_url: string
+    outlier_detected: 0 | 1
+    quote: Record<
+        string,
+        {
+            effective_liquidity: 0 | 1
+            last_updated: string
+            price: number
+            price_quote: number
+            volume_24h: number
+        }
+    > & {
+        exchange_reported: {
+            last_updated: string
+            price: number
+            volume_24h_base: number
+            volume_24h_quote: number
+        }
+    }
+}
+export async function getLatestMarketPairs(id: string, currency: string) {
+    const response = await fetch(
+        `${BASE_URL_v1}/cryptocurrency/market-pairs/latest?aux=num_market_pairs,market_url,price_quote,effective_liquidity,market_score,market_reputation&convert=${currency}&id=${id}&limit=40&sort=cmc_rank&start=1`,
+    )
+    return response.json() as Promise<{
+        data: {
+            id: number
+            market_pairs: Pair[]
+            name: string
+            num_market_pairs: number
+            symbol: string
+        }
         status: Status
     }>
 }

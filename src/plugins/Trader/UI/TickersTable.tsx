@@ -10,8 +10,9 @@ import {
     TableCell,
     TableBody,
     Link,
+    Typography,
 } from '@material-ui/core'
-import type { Ticker } from '../type'
+import type { Ticker, Platform } from '../type'
 import { formatCurrency, formatEthAddress } from '../../Wallet/formatter'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -29,18 +30,23 @@ const useStyles = makeStyles((theme: Theme) =>
             width: 20,
             height: 20,
         },
+        placeholder: {
+            paddingTop: theme.spacing(16),
+            borderStyle: 'none',
+        },
     }),
 )
 
 export interface TickersTableProps {
+    platform: Platform
     tickers: Ticker[]
 }
 
 export function TickersTable(props: TickersTableProps) {
     const classes = useStyles()
-    const rows = ['Exchange', 'Pair', 'Price', 'Volumn']
-    const tickers = props.tickers.map((ticker) => (
-        <TableRow key={ticker.market_name + ticker.base_name + ticker.target_name}>
+    const rows = ['Exchange', 'Pair', 'Price', 'Volumn (24h)']
+    const tickers = props.tickers.map((ticker, index) => (
+        <TableRow key={index}>
             <TableCell className={classes.cell}>
                 <Link color="primary" target="_blank" rel="noopener noreferrer" href={ticker.trade_url}>
                     {ticker.market_name}
@@ -75,7 +81,19 @@ export function TickersTable(props: TickersTableProps) {
                         ))}
                     </TableRow>
                 </TableHead>
-                <TableBody>{tickers}</TableBody>
+                {tickers.length ? (
+                    <TableBody>{tickers}</TableBody>
+                ) : (
+                    <TableBody>
+                        <TableRow>
+                            <TableCell className={classes.cell} colSpan={4} style={{ borderStyle: 'none' }}>
+                                <Typography className={classes.placeholder} align="center" color="textSecondary">
+                                    No Data
+                                </Typography>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                )}
             </Table>
         </TableContainer>
     )

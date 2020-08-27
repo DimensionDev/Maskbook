@@ -33,7 +33,7 @@ export function PriceChartDaysControl(props: PriceChartDaysControlProps) {
     const classes = useStyles()
     return (
         <div className={classes.root}>
-            {[1, 7, 14, 30, 365].map((days) => (
+            {[1, 7, 14, 30, 90, 365].map((days) => (
                 <Link className={classes.link} key={days} onClick={() => props.onDaysChange?.(days)}>
                     <Typography
                         className={classes.text}

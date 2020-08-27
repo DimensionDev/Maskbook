@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import * as d3 from 'd3'
 import type { Stat } from '../type'
-import { makeStyles, Theme, createStyles, CircularProgress } from '@material-ui/core'
+import { makeStyles, Theme, createStyles, CircularProgress, Typography } from '@material-ui/core'
 
 const DEFAULT_WIDTH = 460
 const DEFAULT_HEIGHT = 250
@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme: Theme) => {
             bottom: theme.spacing(1),
             right: theme.spacing(1),
             position: 'absolute',
+        },
+        placeholder: {
+            paddingTop: theme.spacing(14),
         },
     })
 })
@@ -54,10 +57,12 @@ export function PriceChart(props: PriceChartProps) {
 
     useEffect(() => {
         if (!svgRef.current) return
-        if (!props.stats.length) return
 
         // empty the svg
         svgRef.current.innerHTML = ''
+
+        // render savg if necessary
+        if (!props.stats.length) return
 
         // contine to create the chart
         const svg = d3
@@ -116,9 +121,17 @@ export function PriceChart(props: PriceChartProps) {
     }, [svgRef, data.length])
     return (
         <div className={classes.root} style={{ width: canvasWidth, height: canvasHeight }}>
-            {props.children}
-            <svg className={classes.svg} ref={svgRef} width={canvasWidth} height={canvasHeight}></svg>
             {props.loading ? <CircularProgress className={classes.progress} color="primary" size={15} /> : null}
+            {props.stats.length ? (
+                <>
+                    {props.children}
+                    <svg className={classes.svg} ref={svgRef} width={canvasWidth} height={canvasHeight}></svg>
+                </>
+            ) : (
+                <Typography className={classes.placeholder} align="center" color="textSecondary">
+                    No Data
+                </Typography>
+            )}
         </div>
     )
 }

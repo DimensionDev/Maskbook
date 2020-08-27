@@ -7,9 +7,15 @@ export interface LinkingProps {
 }
 
 export function Linking(props: LinkingProps) {
-    return props.href ? (
-        <Link color="primary" target="_blank" rel="noopener noreferrer" href={props.href}>
-            {props.children}
-        </Link>
-    ) : null
+    return (
+        <>
+            {props.href ? (
+                <Link color="primary" target="_blank" rel="noopener noreferrer" href={props.href}>
+                    {props.children}
+                </Link>
+            ) : (
+                props.children
+            )}
+        </>
+    )
 }

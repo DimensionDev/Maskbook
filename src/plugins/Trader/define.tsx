@@ -26,7 +26,7 @@ export const TraderPluginDefine: PluginConfig = {
         return (
             <TrendingPopper>
                 {(name: string) => {
-                    return <TrendingView name={name}></TrendingView>
+                    return <TrendingView name={name} />
                 }}
             </TrendingPopper>
         )

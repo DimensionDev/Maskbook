@@ -57,7 +57,7 @@ export interface Trending {
     tickers: Ticker[]
 }
 
-export type Stat = [number, number]
+export type Stat = [number | string, number]
 
 export function resolveCurrencyName(currency: Currency) {
     return [
@@ -73,6 +73,17 @@ export function resolvePlatformName(platform: Platform) {
             return 'Coin Gecko'
         case Platform.COIN_MARKET_CAP:
             return 'Coin Market Cap'
+        default:
+            return ''
+    }
+}
+
+export function resolvePlatformLink(platform: Platform) {
+    switch (platform) {
+        case Platform.COIN_GECKO:
+            return 'https://www.coingecko.com/'
+        case Platform.COIN_MARKET_CAP:
+            return 'https://coinmarketcap.com/'
         default:
             return ''
     }

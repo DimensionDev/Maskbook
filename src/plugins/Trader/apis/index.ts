@@ -80,23 +80,39 @@ export async function getCoinInfo(id: string, platform: Platform, currency: Curr
             })),
         }
     }
-    const info = await coinMarketCapAPI.getCoinInfo(id, currency.name.toUpperCase())
+
+    const currencyName = currency.name.toUpperCase()
+    const { data: info } = await coinMarketCapAPI.getCoinInfo(id, currencyName)
+    const { data: market } = await coinMarketCapAPI.getLatestMarketPairs(id, currencyName)
+
     return {
         coin: {
             id,
-            name: info.data.name,
-            symbol: info.data.symbol,
+            name: info.name,
+            symbol: info.symbol,
             image_url: `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`,
-            market_cap_rank: info.data.rank,
+            market_cap_rank: info.rank,
         },
         currency,
         platform,
         market: {
-            current_price: info.data.quotes[currency.name.toUpperCase()].price,
-            total_volume: info.data.quotes[currency.name.toUpperCase()].volume_24h,
-            price_change_percentage_24h: info.data.quotes[currency.name.toUpperCase()].percent_change_24h,
+            current_price: info.quotes[currencyName].price,
+            total_volume: info.quotes[currencyName].volume_24h,
+            price_change_percentage_24h: info.quotes[currencyName].percent_change_24h,
         },
-        tickers: [],
+        tickers: market.market_pairs.map((pair) => ({
+            logo_url: '',
+            trade_url: pair.market_url,
+            market_name: pair.exchange.name,
+            base_name: pair.market_pair_base.exchange_symbol,
+            target_name: pair.market_pair_quote.exchange_symbol,
+            price:
+                pair.market_pair_base.currency_id === market.id
+                    ? pair.quote[currencyName].price
+                    : pair.quote[currencyName].price_quote,
+            volumn: pair.quote[currencyName].volume_24h,
+            score: String(pair.market_score),
+        })),
     }
 }
 
@@ -108,5 +124,20 @@ export async function getCoinTrendingByKeyword(keyword: string, platform: Platfo
 }
 
 export async function getPriceStats(id: string, platform: Platform, currency: Currency, days: number): Promise<Stat[]> {
-    return platform === Platform.COIN_GECKO ? (await coinGeckoAPI.getPriceStats(id, currency.id, days)).prices : []
+    if (platform === Platform.COIN_GECKO) {
+        const stats = await coinGeckoAPI.getPriceStats(id, currency.id, days)
+        return stats.prices
+    }
+    const interval = (() => {
+        if (days > 365) return '1d' // 1y
+        if (days > 90) return '2h' // 3m
+        if (days > 30) return '1h' // 1m
+        if (days > 7) return '15m' // 1w
+        return '5m'
+    })()
+    const endDate = new Date()
+    const startDate = new Date()
+    startDate.setDate(startDate.getDate() - days)
+    const stats = await coinMarketCapAPI.getHistorical(id, currency.name.toUpperCase(), startDate, endDate, interval)
+    return Object.entries(stats.data).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
 }

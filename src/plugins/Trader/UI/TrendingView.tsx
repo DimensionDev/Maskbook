@@ -28,6 +28,9 @@ import { Linking } from './Linking'
 import { usePriceStats } from '../hooks/usePriceStats'
 import { Skeleton } from '@material-ui/lab'
 import { PriceChartDaysControl } from './PriceChartDaysControl'
+import { useCurrentPlatform } from '../hooks/useCurrentPlatform'
+import { useCurrentCurrency } from '../hooks/useCurrentCurrency'
+import { currentTrendingViewPlatformSettings } from '../settings'
 
 const useStyles = makeStyles((theme: Theme) => {
     const internalName = getActivatedUI()?.internalName
@@ -94,19 +97,33 @@ export interface TrendingViewProps extends withClasses<KeysInferFromUseStyles<ty
 
 export function TrendingView(props: TrendingViewProps) {
     const classes = useStyles()
-
     const [tabIndex, setTabIndex] = useState(0)
-    const { value: trending, loading } = useTrending(props.name)
 
-    const [days, setDays] = useState(30)
+    const platform = useCurrentPlatform(Platform.COIN_GECKO)
+    const { value: currency, loading: loadingCurrency } = useCurrentCurrency(platform)
+
+    //#region trending
+    const { value: trending, loading: loadingTrending } = useTrending(props.name, platform)
+    //#endregion
+
+    console.log('DEBUG: TrendingView')
+    console.log({
+        currency,
+        trending,
+    })
+
+    //#region stats
+    const [days, setDays] = useState(365)
     const { value: stats = [], loading: loadingStats } = usePriceStats({
         coinId: trending?.coin.id,
         platform: trending?.platform,
         currency: trending?.currency,
         days,
     })
+    //#endregion
 
-    if (loading)
+    //#region display loading skeleton
+    if (loadingCurrency || loadingTrending)
         return (
             <Card className={classes.root} elevation={0} component="article">
                 <CardHeader
@@ -115,16 +132,25 @@ export function TrendingView(props: TrendingViewProps) {
                     subheader={<Skeleton animation="wave" height={10} width="20%" />}
                 />
                 <CardContent className={classes.content}>
-                    <Skeleton animation="wave" variant="rect" height={366} />
+                    <Skeleton animation="wave" variant="rect" height={58} style={{ marginBottom: 8 }} />
+                    <Skeleton animation="wave" variant="rect" height={300} />
                 </CardContent>
                 <CardActions className={classes.footer}>
                     <Skeleton animation="wave" height={10} width="30%" />
                 </CardActions>
             </Card>
         )
-    if (!trending) return null
+    //#endregion
 
-    const { coin, currency, platform, market, tickers } = trending
+    //#region error handling
+    // error: fail to load currency
+    if (!currency) return null
+
+    // error: unknown coin
+    if (!trending) return null
+    //#endregion
+
+    const { coin, market, tickers } = trending
 
     return (
         <Card className={classes.root} elevation={0} component="article">
@@ -186,7 +212,7 @@ export function TrendingView(props: TrendingViewProps) {
                             </PriceChart>
                         </>
                     ) : (
-                        <TickersTable tickers={tickers} />
+                        <TickersTable tickers={tickers} platform={platform} />
                     )}
                 </Paper>
             </CardContent>
@@ -197,7 +223,12 @@ export function TrendingView(props: TrendingViewProps) {
                         <Link
                             className={classes.platform}
                             key={x.key}
-                            color={platform === x.value ? 'primary' : 'textSecondary'}>
+                            color={platform === x.value ? 'primary' : 'textSecondary'}
+                            onClick={() => {
+                                currentTrendingViewPlatformSettings[getActivatedUI().networkIdentifier].value = String(
+                                    x.value,
+                                )
+                            }}>
                             {resolvePlatformName(x.value)}
                         </Link>
                     ))}

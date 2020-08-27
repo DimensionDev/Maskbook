@@ -9,7 +9,6 @@ import {
     TableRow,
     TableCell,
     TableBody,
-    Paper,
 } from '@material-ui/core'
 import type { Market } from '../type'
 import { PriceChanged } from './PriceChanged'
@@ -26,16 +25,18 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
+type Record = {
+    name: string
+    percentage?: number
+}
+
 export interface PriceChangedTableProps {
     market: Market
 }
 
 export function PriceChangedTable({ market }: PriceChangedTableProps) {
     const classes = useStyles()
-    const records: {
-        name: string
-        percentage?: number
-    }[] = [
+    const records: Record[] = [
         {
             name: '1h',
             percentage: market.price_change_percentage_1h_in_currency,
@@ -62,29 +63,27 @@ export function PriceChangedTable({ market }: PriceChangedTableProps) {
         },
     ]
 
+    const filteredRecords = records.filter((record) => typeof record.percentage === 'number') as Required<Record>[]
+
     return (
         <TableContainer className={classes.container}>
             <Table className={classes.table} size="small" stickyHeader>
                 <TableHead>
                     <TableRow>
-                        {records.map((x) =>
-                            typeof x.percentage === 'number' ? (
-                                <TableCell className={classes.cell} key={x.name}>
-                                    {x.name}
-                                </TableCell>
-                            ) : null,
-                        )}
+                        {filteredRecords.map((x) => (
+                            <TableCell className={classes.cell} key={x.name}>
+                                {x.name}
+                            </TableCell>
+                        ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     <TableRow>
-                        {records.map((x) =>
-                            typeof x.percentage === 'number' ? (
-                                <TableCell className={classes.cell} key={x.name}>
-                                    <PriceChanged amount={x.percentage} />
-                                </TableCell>
-                            ) : null,
-                        )}
+                        {filteredRecords.map((x) => (
+                            <TableCell className={classes.cell} key={x.name}>
+                                <PriceChanged amount={x.percentage} />
+                            </TableCell>
+                        ))}
                     </TableRow>
                 </TableBody>
             </Table>
