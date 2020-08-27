@@ -133,7 +133,7 @@ export default function DashboardContactsRouter() {
                             {({ index, style }) =>
                                 items[index] ? (
                                     <ContactLine
-                                        style={style}
+                                        style={style as any}
                                         key={index}
                                         contact={items[index]}
                                         onUpdated={revalidate}
