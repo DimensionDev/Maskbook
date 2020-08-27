@@ -22,7 +22,7 @@
     "additional_post_box__encrypted_failed": "Please paste the following text into the post box.",
     "additional_post_box__encrypted_post_pre": "Decrypt this post with #Maskbook ! {{encrypted}}",
     "additional_post_box__steganography_post_failed": "In the next step, Maskbook will save an image that contains encrypted message. Please attach this image to your post so others can decrypt it.",
-    "additional_post_box__steganography_post_pre": "This post is shared with my friends. You may install Maskbook to decrypt the content from the image. ([I:b]) {{random}}",
+    "additional_post_box__steganography_post_pre": "This image is encrypted with #Maskbook. 📪🔑 Install maskbook.com to decrypt it. {{random}}",
     "advanced": "Advanced…",
     "advanced_options": "Advanced",
     "database_management": "Database Management",
