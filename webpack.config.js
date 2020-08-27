@@ -5,6 +5,7 @@ const fs = require('fs')
 const WebpackNotifierPlugin = require('webpack-notifier')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const git = require('@nice-labs/git-rev').default
 const Terser = require('terser-webpack-plugin')
 
@@ -179,6 +180,7 @@ module.exports = (argvEnv, argv) => {
         popup: appendReactDevtools(src('./src/extension/popup-page/index.tsx')),
         qrcode: src('./src/web-workers/QRCode.ts'),
         'crypto-worker': src('./src/modules/CryptoAlgorithm/EllipticBackend/worker.ts'),
+        debug: src('./src/extension/debug-page'),
     }
     if (env !== 'development') delete config.entry.devtools
 
@@ -263,7 +265,7 @@ module.exports = (argvEnv, argv) => {
         let firefoxVariant = undefined
         /** @type {'app' | 'browser' | 'facebookApp'} */
         let genericTarget = 'browser'
-        /** @type {'xs' | 'sm' | 'md' | 'lg' | 'xl'} */
+        /** @type {'xs'} */
         let perferResponsiveTarget = undefined
         if (target.Chromium) buildTarget = 'Chromium'
         if (target.Firefox) buildTarget = 'Firefox'
@@ -277,7 +279,7 @@ module.exports = (argvEnv, argv) => {
             buildTarget = 'WKWebview'
             genericTarget = 'facebookApp'
         }
-        if (target.WKWebview || target.FirefoxForAndroid) {
+        if (genericTarget === 'facebookApp' || firefoxVariant === 'android') {
             perferResponsiveTarget = 'xs'
         }
         if (target.E2E) buildTarget = 'E2E'
@@ -323,6 +325,7 @@ module.exports = (argvEnv, argv) => {
         newPage({ chunks: ['background-service'], filename: 'background.html' }),
         newPage({ chunks: ['popup'], filename: 'popup.html' }),
         newPage({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
+        newPage({ chunks: ['debug'], filename: 'debug.html' }),
     )
 
     config.plugins.push(
@@ -349,6 +352,9 @@ module.exports = (argvEnv, argv) => {
     if (env !== 'development') {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
         config.plugins.push(new SSRPlugin('index.html', src('./src/extension/options-page/index.tsx')))
+    }
+    if (argv.profile) {
+        config.plugins.push(new BundleAnalyzerPlugin())
     }
     // futureEmitAssets prevents webpackDevServer from writing file to disk
     config.output.futureEmitAssets = false

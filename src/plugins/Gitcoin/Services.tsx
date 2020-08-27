@@ -15,12 +15,12 @@ export interface GitcoinGrantMetadata {
     permalink?: string
 }
 const domain = 'https://gitcoin.co/'
-export async function fetchMetadata(url: string): Promise<Result<GitcoinGrantMetadata, [Reason, Error?]>> {
-    if (!url.startsWith(domain)) return new Err([Reason.InvalidURL])
+export async function fetchMetadata(url: string): Promise<Result<GitcoinGrantMetadata, readonly [Reason, Error?]>> {
+    if (!url.startsWith(domain)) return Err([Reason.InvalidURL] as const)
     const id = url.match(/\d+/)?.[0]
-    if (!id) return new Err([Reason.InvalidURL])
+    if (!id) return Err([Reason.InvalidURL] as const)
     const data = await fetchData(id)
-    if (data.err) return data.mapErr((e) => [Reason.FetchFailed, e])
+    if (data.err) return data.mapErr((e) => [Reason.FetchFailed, e] as const)
     const { val } = data
     const { title, slug, description, logo: image, admin_address: address } = val.grant
     const { transactions = [] } = val.report.grantee.find((x) => x.grant_name === val.grant.title) ?? {}
@@ -32,7 +32,7 @@ export async function fetchMetadata(url: string): Promise<Result<GitcoinGrantMet
         (accumulate, tx) => accumulate.plus(tx.asset === 'DAI' ? tx.amount : 0),
         new BigNumber(0),
     )
-    return new Ok({
+    return Ok({
         estimatedAmount,
         daiAmount,
         transactions: transactions.length,
@@ -55,14 +55,14 @@ async function fetchData(id: string) {
         )
     try {
         const grant = await fetchGrant(id)
-        if (!grant.admin_address) return new Err<Error>(new Error('cannot find the admin address'))
+        if (!grant.admin_address) return Err<Error>(new Error('cannot find the admin address'))
         const report = await fetchGrantReport(grant.admin_address)
-        return new Ok({
+        return Ok({
             grant,
             report,
         })
     } catch (e) {
-        return new Err<Error>(e)
+        return Err<Error>(e)
     }
 }
 

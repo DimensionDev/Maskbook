@@ -97,6 +97,7 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
         },
         grantedHostPermissions: grantedHostPermissions.split(';').filter(Boolean),
         posts: [],
+        wallets: [],
         userGroups: [],
         personas: [
             {

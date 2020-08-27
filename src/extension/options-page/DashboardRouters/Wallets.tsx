@@ -12,7 +12,7 @@ import HistoryIcon from '@material-ui/icons/History'
 
 import { WalletItem } from '../DashboardComponents/WalletItem'
 import { TokenListItem } from '../DashboardComponents/TokenListItem'
-import { useModal, useSnackbarCallback } from '../Dialogs/Base'
+import { useModal, useSnackbarCallback } from '../DashboardDialogs/Base'
 import {
     DashboardWalletImportDialog,
     DashboardWalletCreateDialog,
@@ -24,7 +24,7 @@ import {
     DashboardWalletErrorDialog,
     DashboardWalletRedPacketDetailDialog,
     DashboardWalletShareDialog,
-} from '../Dialogs/Wallet'
+} from '../DashboardDialogs/Wallet'
 import DashboardMenu from '../DashboardComponents/DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorStyles } from '../../../utils/theme'
@@ -62,6 +62,7 @@ const useWalletContentStyles = makeStyles((theme) =>
             flex: 1,
             overflow: 'auto',
             scrollbarWidth: 'none',
+            margin: theme.spacing(0, 3),
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
@@ -79,11 +80,6 @@ const walletTheme = (theme: Theme): Theme =>
             MuiIconButton: {
                 root: {
                     color: theme.palette.text,
-                },
-            },
-            MuiList: {
-                root: {
-                    margin: theme.spacing(0, 3),
                 },
             },
             MuiListItemIcon: {
@@ -225,7 +221,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                         startIcon={<HistoryIcon />}
                         variant="text"
                         color="primary">
-                        {t('history')}
+                        {t('activity')}
                     </Button>
                 </div>
             ) : null}
@@ -268,7 +264,6 @@ const useStyles = makeStyles((theme) =>
             flex: '1 1 auto',
             display: 'flex',
             flexDirection: 'column',
-            [theme.breakpoints.down('xs')]: {},
         },
         wrapper: {
             display: 'flex',

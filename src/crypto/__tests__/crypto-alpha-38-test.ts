@@ -1,9 +1,5 @@
 import * as c from '../crypto-alpha-38'
-import {
-    makeTypedMessage,
-    TypedMessageComplex,
-    TypedMessageUnknown,
-} from '../../extension/background-script/CryptoServices/utils'
+import { makeTypedMessageText, TypedMessageCompound, TypedMessageUnknown } from '../../protocols/typed-message'
 import { encodeText, encodeArrayBuffer, decodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { CryptoWorker } from '../../modules/workers'
@@ -35,9 +31,9 @@ beforeAll(() => {
 // Test for:
 c.typedMessageParse && c.typedMessageStringify
 test('Crypto alpha v38 Typed Message', () => {
-    const textWith0Meta = makeTypedMessage('text message1')
-    const textWith1Meta = makeTypedMessage('text message', new Map([['MetadataKey', 'MetadataValue']]))
-    const textWith2Meta = makeTypedMessage(
+    const textWith0Meta = makeTypedMessageText('text message1')
+    const textWith1Meta = makeTypedMessageText('text message', new Map([['MetadataKey', 'MetadataValue']]))
+    const textWith2Meta = makeTypedMessageText(
         'text message',
         new Map([
             ['MetadataKey', 'MetadataValue'],
@@ -56,8 +52,8 @@ test('Crypto alpha v38 Typed Message', () => {
     expect(c.typedMessageParse(text3)).toStrictEqual(textWith2Meta)
 
     // Test inputs that v38 refuse to resolve
-    const complex: TypedMessageComplex = { type: 'complex', items: [textWith2Meta], version: 1 }
-    expect(() => c.typedMessageStringify(complex)).toThrow()
+    const compound: TypedMessageCompound = { type: 'compound', items: [textWith2Meta], version: 1 }
+    expect(() => c.typedMessageStringify(compound)).toThrow()
 
     const unk: TypedMessageUnknown = { type: 'unknown', version: 1 }
     expect(() => c.typedMessageStringify(unk)).toThrow()

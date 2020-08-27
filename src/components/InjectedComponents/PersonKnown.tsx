@@ -6,6 +6,7 @@ import Services from '../../extension/service'
 import type { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useAsync } from 'react-use'
+import { useMyIdentities } from '../DataSource/useActivatedUI'
 export interface PersonKnownProps {
     pageOwner: ValueRef<ProfileIdentifier | null>
     bioContent: ValueRef<string>
@@ -16,11 +17,11 @@ export function PersonKnown(props: PersonKnownProps) {
     const { pageOwner, bioContent } = props
     const bio = useValueRef(bioContent)
     const owner = useValueRef(pageOwner)
+    const myProfiles = useMyIdentities()
 
     const state = useAsync(async () => {
         if (!owner) return null
-        const profiles = await Services.Identity.queryMyProfiles(owner.network)
-        const myProfile = profiles.find((x) => x.identifier.equals(owner))
+        const myProfile = myProfiles.find((x) => x.identifier.equals(owner))
 
         if (bio && myProfile) {
             const prove = await Services.Crypto.getMyProveBio(myProfile.identifier)
@@ -28,7 +29,7 @@ export function PersonKnown(props: PersonKnownProps) {
             return { type: 'self', prove } as const
         }
         return null
-    }, [owner?.toText(), bio])
+    }, [owner?.toText(), bio, myProfiles.map((x) => x.identifier.toText()).join(',')])
     if (state.loading) return null
     if (!state.value) return null
     return <PersonKnownSelf {...props} bio={state.value.prove} />

@@ -1,4 +1,4 @@
-import { TypedMessage, makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
+import { TypedMessage, makeTypedMessageText, isTypedMessageText } from '../protocols/typed-message'
 import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
 export * from './crypto-alpha-39'
 
@@ -15,7 +15,7 @@ export const publicSharedAESKey: AESJsonWebKey = {
  * Without plugin: My message
  */
 export function typedMessageStringify(x: TypedMessage) {
-    if (x.type !== 'text') throw new Error('Not supported typed message.')
+    if (!isTypedMessageText(x)) throw new Error('Not supported typed message.')
     if (!x.meta || x.meta.size === 0) return x.content
 
     const obj: Record<string, any> = {}
@@ -29,7 +29,7 @@ export function typedMessageParse(x: string) {
         const json: unknown = JSON.parse(maybeMetadata)
         if (typeof json !== 'object' || json === null || Object.keys(json).length === 0)
             throw new Error('Not a metadata')
-        return makeTypedMessage(end.join('🧩'), new Map(Object.entries(json)))
+        return makeTypedMessageText(end.join('🧩'), new Map(Object.entries(json)))
     } catch {}
-    return makeTypedMessage(x)
+    return makeTypedMessageText(x)
 }

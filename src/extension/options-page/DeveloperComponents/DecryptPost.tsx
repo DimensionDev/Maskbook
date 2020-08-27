@@ -10,7 +10,6 @@ import { FormControlLabel, Checkbox } from '@material-ui/core'
 
 export function DecryptPostDeveloperMode() {
     const [whoAmI, chooseIdentity] = useIsolatedChooseIdentity()
-    // const [network, networkInput] = useTextField('Network', { defaultValue: 'facebook.com', required: true })
     const [postByMyself, setPostByMyself] = useState(false)
     const [author, authorInput] = useTextField('Author ID of this post', {
         required: !postByMyself,
@@ -43,7 +42,6 @@ export function DecryptPostDeveloperMode() {
                 <div style={{ minHeight: 200 }}>
                     <DecryptPost
                         alreadySelectedPreviously={[]}
-                        encryptedText={encryptedText}
                         onDecrypted={(post) => {}}
                         profiles={[]}
                         whoAmI={whoAmIIdentifier}

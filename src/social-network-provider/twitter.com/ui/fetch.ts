@@ -9,12 +9,18 @@ import type {
 import { PostInfo } from '../../../social-network/PostInfo'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
-import { bioCardParser, postParser, postImageParser, postIdParser } from '../utils/fetch'
-import { isNil } from 'lodash-es'
+import { bioCardParser, postParser, postIdParser, postImagesParser } from '../utils/fetch'
+import { isNil, memoize } from 'lodash-es'
 import Services from '../../../extension/service'
-import { twitterUrl } from '../utils/url'
 import { untilElementAvailable } from '../../../utils/dom'
 import { injectMaskbookIconToPost } from './injectMaskbookIcon'
+import {
+    makeTypedMessageText,
+    makeTypedMessageImage,
+    makeTypedMessageFromList,
+    makeTypedMessageEmpty,
+    makeTypedMessageSuspended,
+} from '../../../protocols/typed-message'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -40,14 +46,15 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
         })
 }
 
-const registerUserCollector = () => {
+const registerUserCollector = (self: SocialNetworkUI) => {
     new MutationObserverWatcher(bioCardSelector())
         .useForeach((cardNode: HTMLDivElement) => {
             const resolve = async () => {
                 if (!cardNode) return
-                const { isFollower, isFollowing, identifier, bio } = bioCardParser(cardNode)
-                const myIdentities = await Services.Identity.queryMyProfiles(twitterUrl.hostIdentifier)
-                const myIdentity = myIdentities[0] || ProfileIdentifier.unknown
+                const { isFollower, isFollowing, identifier } = bioCardParser(cardNode)
+                const ref = self.lastRecognizedIdentity
+                if (!ref) return
+                const myIdentity = await Services.Identity.queryProfile(self.lastRecognizedIdentity.value.identifier)
                 const myFriends = GroupIdentifier.getFriendsGroupIdentifier(
                     myIdentity.identifier,
                     PreDefinedVirtualGroupNames.friends,
@@ -61,18 +68,10 @@ const registerUserCollector = () => {
                     PreDefinedVirtualGroupNames.following,
                 )
                 if (isFollower || isFollowing) {
-                    if (isFollower) {
-                        Services.UserGroup.addProfileToFriendsGroup(myFollowers, [identifier]).then()
-                    }
-                    if (isFollowing) {
-                        Services.UserGroup.addProfileToFriendsGroup(myFollowing, [identifier]).then()
-                    }
-                    if (isFollower && isFollowing) {
-                        Services.UserGroup.addProfileToFriendsGroup(myFriends, [identifier]).then()
-                    }
-                } else {
-                    Services.UserGroup.removeProfileFromFriendsGroup(myFriends, [identifier]).then()
-                }
+                    if (isFollower) Services.UserGroup.addProfileToFriendsGroup(myFollowers, [identifier])
+                    if (isFollowing) Services.UserGroup.addProfileToFriendsGroup(myFollowing, [identifier])
+                    if (isFollower && isFollowing) Services.UserGroup.addProfileToFriendsGroup(myFriends, [identifier])
+                } else Services.UserGroup.removeProfileFromFriendsGroup(myFriends, [identifier])
             }
             resolve()
             return {
@@ -97,6 +96,15 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             ].join(),
         )
     }
+    const updateProfileInfo = memoize(
+        (info: PostInfo) => {
+            Services.Identity.updateProfileInfo(info.postBy.value, {
+                nickname: info.nickname.value,
+                avatarURL: info.avatarURL.value,
+            })
+        },
+        (info: PostInfo) => info.postBy.value?.toText(),
+    )
     new MutationObserverWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
@@ -116,10 +124,8 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             run()
             info.postPayload.addListener((payload) => {
                 if (!payload) return
-                Services.Identity.updateProfileInfo(info.postBy.value, {
-                    nickname: info.nickname.value,
-                    avatarURL: info.avatarURL.value,
-                }).then()
+                if (payload.err && info.postMetadataImages.size === 0) return
+                updateProfileInfo(info)
             })
             info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
             info.postContent.addListener((newValue) => {
@@ -149,7 +155,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
 
 export const twitterUIFetch: SocialNetworkUIInformationCollector = {
     resolveLastRecognizedIdentity: () => resolveLastRecognizedIdentity(instanceOfTwitterUI),
-    collectPeople: registerUserCollector,
+    collectPeople: () => registerUserCollector(instanceOfTwitterUI),
     collectPosts: () => registerPostCollector(instanceOfTwitterUI),
 }
 
@@ -171,23 +177,28 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self:
     if (!tweetNode) return
     const { pid, content, handle, name, avatar } = postParser(tweetNode)
     if (!pid) return
+
     const postBy = new ProfileIdentifier(self.networkIdentifier, handle)
     info.postID.value = pid
     info.postContent.value = content
-    if (!info.postBy.value.equals(postBy)) {
-        info.postBy.value = postBy
-    }
+    if (!info.postBy.value.equals(postBy)) info.postBy.value = postBy
     info.nickname.value = name
     info.avatarURL.value = avatar || null
 
     // decode steganographic image
     // don't add await on this
-    untilElementAvailable(postsImageSelector(tweetNode), 10000)
-        .then(() => postImageParser(tweetNode))
-        .then((content) => {
-            if (content && info.postContent.value.indexOf(content) < 0) {
-                info.postContent.value = content
+    const images = untilElementAvailable(postsImageSelector(tweetNode), 10000)
+        .then(() => postImagesParser(tweetNode))
+        .then((urls) => {
+            for (const url of urls) {
+                info.postMetadataImages.add(url)
             }
+            if (urls.length) return makeTypedMessageFromList(...urls.map((x) => makeTypedMessageImage(x)))
+            return makeTypedMessageEmpty()
         })
-        .catch(() => {})
+        .catch(() => makeTypedMessageEmpty())
+    info.parsedPostContent.value = makeTypedMessageFromList(
+        makeTypedMessageText(content),
+        makeTypedMessageSuspended(images),
+    )
 }

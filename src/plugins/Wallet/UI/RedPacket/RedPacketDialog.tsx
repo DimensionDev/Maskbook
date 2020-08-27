@@ -21,7 +21,7 @@ import AbstractTab, { AbstractTabProps } from '../../../../extension/options-pag
 import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import Services from '../../../../extension/service'
 import type { CreateRedPacketInit } from '../../red-packet-fsm'
-import { EthereumTokenType, RedPacketRecord, RedPacketStatus, RedPacketJSONPayload } from '../../database/types'
+import { EthereumTokenType, RedPacketRecord, RedPacketStatus } from '../../database/types'
 import { useCurrentIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { useCapturedInput } from '../../../../utils/hooks/useCapturedEvents'
 import { PluginMessageCenter } from '../../../PluginMessages'
@@ -34,10 +34,10 @@ import BigNumber from 'bignumber.js'
 import { useSelectWallet, useWallet } from '../../../shared/useWallet'
 import { WalletSelect } from '../../../shared/WalletSelect'
 import { TokenSelect } from '../../../shared/TokenSelect'
-import { RedPacketMetaKey } from '../../RedPacketMetaKey'
 import { currentEthereumNetworkSettings } from '../../../../settings/settings'
 import { FeedbackDialog } from './Dialogs'
 import type { WalletDetails, ERC20TokenDetails } from '../../../../extension/background-script/PluginService'
+import { RedPacketJSONPayload, RedPacketMetaKey } from '../../../RedPacket/utils'
 
 //#region new red packet
 const useNewPacketStyles = makeStyles((theme) =>

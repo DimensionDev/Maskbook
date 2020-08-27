@@ -3,7 +3,7 @@
  * in this file please.
  */
 import { CustomEventId } from './constants'
-import type { CustomEvents } from '../extension/injected-script/addEventListener'
+import type { CustomEvents } from '../extension/injected-script/CustomEvents'
 
 import { flatten, isNull, random } from 'lodash-es'
 
@@ -26,7 +26,7 @@ export function getUrl(path: string, fallback: string = '') {
 }
 
 /**
- * Download given url return as ArrayBuffer
+ * Download given url return as Blob
  */
 export async function downloadUrl(url: string) {
     try {
@@ -36,7 +36,7 @@ export async function downloadUrl(url: string) {
     } catch {}
     const res = await fetch(url)
     if (!res.ok) throw new Error('Fetch failed.')
-    return res.arrayBuffer()
+    return res.blob()
 }
 
 /**

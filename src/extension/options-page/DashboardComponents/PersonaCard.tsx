@@ -9,12 +9,12 @@ import { useColorStyles } from '../../../utils/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import ProfileBox from './ProfileBox'
 import type { ProfileIdentifier } from '../../../database/type'
-import { useModal, useSnackbarCallback } from '../Dialogs/Base'
+import { useModal, useSnackbarCallback } from '../DashboardDialogs/Base'
 import {
     DashboardPersonaRenameDialog,
     DashboardPersonaBackupDialog,
     DashboardPersonaDeleteConfirmDialog,
-} from '../Dialogs/Persona'
+} from '../DashboardDialogs/Persona'
 import DashboardMenu from './DashboardMenu'
 
 interface Props {

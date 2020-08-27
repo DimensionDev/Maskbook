@@ -19,23 +19,19 @@ import { MaskbookLightTheme } from '../utils/theme'
 import { PostDialog } from '../components/InjectedComponents/PostDialog'
 import { PostDialogHint } from '../components/InjectedComponents/PostDialogHint'
 import {
-    makeTypedMessage,
-    TypedMessageText,
-    TypedMessageUnknown,
-    TypedMessageComplex,
-} from '../extension/background-script/CryptoServices/utils'
-import {
-    DefaultTypedMessageTextRenderer,
-    DefaultTypedMessageComplexRenderer,
-    DefaultTypedMessageUnknownRenderer,
-} from '../components/InjectedComponents/TypedMessageRenderer'
+    makeTypedMessageText,
+    makeTypedMessageFromList,
+    makeTypedMessageUnknown,
+    makeTypedMessageSuspended,
+} from '../protocols/typed-message'
+import { DefaultTypedMessageRenderer } from '../components/InjectedComponents/TypedMessageRenderer'
 import { useTwitterThemedPostDialogHint } from '../social-network-provider/twitter.com/ui/injectPostDialogHint'
 import { useTwitterButton } from '../social-network-provider/twitter.com/utils/theme'
 import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
 import { PersonKnownSelf } from '../components/InjectedComponents/PersonKnown'
 import { figmaLink } from './utils'
-import type { RedPacketMetadata } from '../plugins/Wallet/database/types'
-import { RedPacketMetaKey } from '../plugins/Wallet/RedPacketMetaKey'
+import { RedPacketJSONPayload, RedPacketMetaKey } from '../plugins/RedPacket/utils'
+import type { TypedMessageStorybookTest } from '../plugins/Storybook/define'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
@@ -71,29 +67,37 @@ storiesOf('Injections', module)
         figmaLink('https://www.figma.com/file/TCHH8gXbhww88I5tHwHOW9/tweet-details?node-id=0%3A1'),
     )
     .add('Typed Message Renderer', () => {
-        const _text: TypedMessageText = {
-            type: 'text',
-            version: 1,
-            content: text('DefaultTypedMessageTextRenderer', 'text'),
-        }
-        const unknown: TypedMessageUnknown = { type: 'unknown', version: 1 }
-        const complex: TypedMessageComplex = {
-            type: 'complex',
-            version: 1,
-            items: [_text, unknown],
-        }
-        const divider = <Divider style={{ marginTop: 24 }} />
+        const _text = makeTypedMessageText(text('DefaultTypedMessageTextRenderer', 'text'))
+        const unknown = makeTypedMessageUnknown()
+        const compound = makeTypedMessageFromList(_text, unknown)
+        const suspended = makeTypedMessageSuspended(
+            (async function () {
+                await sleep(2000)
+                return makeTypedMessageText('Resolved text!')
+            })(),
+        )
+        const plugin: TypedMessageStorybookTest = { payload: text('Plugin payload', 'test'), type: 'test', version: 1 }
         return (
             <>
                 <Paper>
-                    <Typography>DefaultTypedMessageTextRenderer</Typography>
-                    <DefaultTypedMessageTextRenderer message={_text} />
-                    {divider}
-                    <Typography>DefaultTypedMessageComplexRenderer</Typography>
-                    <DefaultTypedMessageComplexRenderer message={complex} />
-                    {divider}
-                    <Typography>DefaultTypedMessageUnknownRenderer</Typography>
-                    <DefaultTypedMessageUnknownRenderer message={unknown} />
+                    <Typography>Text</Typography>
+                    <DefaultTypedMessageRenderer message={_text} />
+                </Paper>
+                <Paper style={{ marginTop: 24 }}>
+                    <Typography>Compound</Typography>
+                    <DefaultTypedMessageRenderer message={compound} />
+                </Paper>
+                <Paper style={{ marginTop: 24 }}>
+                    <Typography>Unknown</Typography>
+                    <DefaultTypedMessageRenderer message={unknown} />
+                </Paper>
+                <Paper style={{ marginTop: 24 }}>
+                    <Typography>Suspended</Typography>
+                    <DefaultTypedMessageRenderer message={suspended} />
+                </Paper>
+                <Paper style={{ marginTop: 24 }}>
+                    <Typography>Custom(Plugin renderer)</Typography>
+                    <DefaultTypedMessageRenderer message={plugin} />
                 </Paper>
             </>
         )
@@ -133,22 +137,24 @@ storiesOf('Injections', module)
             function getProgress(x: ProgressType): DecryptionProgress | undefined {
                 switch (x) {
                     case ProgressType.finding_person_public_key:
-                        return { progress: 'finding_person_public_key', type: 'progress' }
+                        return { progress: 'finding_person_public_key', type: 'progress', internal: false }
                     case ProgressType.finding_post_key:
-                        return { progress: 'finding_post_key', type: 'progress' }
+                        return { progress: 'finding_post_key', type: 'progress', internal: false }
                     case ProgressType.init:
-                        return { progress: 'init', type: 'progress' }
+                        return { progress: 'init', type: 'progress', internal: false }
                     case ProgressType.intermediate_success:
                         return {
                             progress: 'intermediate_success',
                             type: 'progress',
                             data: {
-                                content: makeTypedMessage(msg),
+                                content: makeTypedMessageText(msg),
                                 signatureVerifyResult: vr,
                                 rawContent: '',
                                 through: [],
                                 type: 'success',
+                                internal: false,
                             },
+                            internal: false,
                         }
                     case ProgressType.undefined:
                         return undefined
@@ -174,7 +180,7 @@ storiesOf('Injections', module)
                             alreadySelectedPreviously={[]}
                             requestAppendRecipients={async () => {}}
                             profiles={demoProfiles}
-                            data={{ content: makeTypedMessage(msg), signatureVerifyResult: vr }}
+                            data={{ content: makeTypedMessageText(msg), signatureVerifyResult: vr }}
                         />
                     </FakePost>
                     <FakePost title="Decrypting:">
@@ -289,7 +295,7 @@ function FakePost(props: React.PropsWithChildren<{ title: string }>) {
     )
 }
 
-const redpacket: RedPacketMetadata = {
+const redpacket: RedPacketJSONPayload = {
     contract_address: 'addr',
     contract_version: 1,
     creation_time: Date.now(),

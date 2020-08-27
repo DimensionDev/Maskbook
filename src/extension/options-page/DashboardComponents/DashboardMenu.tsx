@@ -1,5 +1,5 @@
 import React from 'react'
-import type { WrappedDialogProps } from '../Dialogs/Base'
+import type { WrappedDialogProps } from '../DashboardDialogs/Base'
 import { Popper, Grow, Paper, ClickAwayListener, MenuList } from '@material-ui/core'
 
 export default function DashboardMenu(props: WrappedDialogProps<{ anchorEl?: Element; menus: JSX.Element[] }>) {

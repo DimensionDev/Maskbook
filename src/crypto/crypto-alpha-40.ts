@@ -9,7 +9,7 @@ import {
     decodeText,
 } from '../utils/type-transform/String-ArrayBuffer'
 import { memoizePromise } from '../utils/memoize'
-import { makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
+import { makeTypedMessageText } from '../protocols/typed-message'
 import { i18n } from '../utils/i18n-next'
 import { CryptoWorker } from '../modules/workers'
 import type {
@@ -350,5 +350,5 @@ export function typedMessageStringify(x: any) {
     throw new Error('Not supported typed message in version older than v39.')
 }
 export function typedMessageParse(x: string) {
-    return makeTypedMessage(x)
+    return makeTypedMessageText(x)
 }

@@ -1,46 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import classNames from 'classnames'
-import {
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    Typography,
-    Box,
-    Fade,
-    Divider,
-    useMediaQuery,
-} from '@material-ui/core'
+import { List, ListItem, ListItemIcon, ListItemText, Typography, Box, Divider, useMediaQuery } from '@material-ui/core'
 import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Link, useRouteMatch } from 'react-router-dom'
-import { useInterval } from 'react-use'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
-import { useModal } from '../Dialogs/Base'
-import { DashboardFeedbackDialog } from '../Dialogs/Feedback'
+import { useModal } from '../DashboardDialogs/Base'
+import { DashboardFeedbackDialog } from '../DashboardDialogs/Feedback'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { cloneDeep, merge } from 'lodash-es'
 import Logo from './MaskbookLogo'
-
-interface CarouselProps {
-    items: React.ReactElement[]
-    delay?: number
-}
-
-function Carousel({ items, delay = 1e4 }: CarouselProps) {
-    const [current, setCurrent] = useState(0)
-
-    useInterval(() => setCurrent((c) => c + 1), delay)
-    return (
-        <>
-            {items.map((item, i) => (
-                <Fade in={current % items.length === i} key={i}>
-                    {item}
-                </Fade>
-            ))}
-        </>
-    )
-}
+import { Carousel } from './Carousel'
+import { makeNewBugIssueURL } from '../../debug-page/issue'
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -162,11 +133,28 @@ export default function Drawer(props: DrawerProps) {
     const { routers, exitDashboard } = props
     const [feedback, openFeedback] = useModal(DashboardFeedbackDialog)
 
+    const onDebugPage = (event: React.MouseEvent) => {
+        if (event.shiftKey) {
+            browser.tabs.create({
+                active: true,
+                url: browser.runtime.getURL('/debug.html'),
+            })
+        } else if (event.altKey) {
+            browser.tabs.create({
+                active: true,
+                url: makeNewBugIssueURL(),
+            })
+        }
+    }
+
     return (
         <ThemeProvider theme={drawerTheme}>
             <nav className={classes.drawer}>
                 {xsMatched ? null : (
-                    <Box className={classes.drawerHeader} style={{ backgroundColor: `var(--drawerBody)` }}>
+                    <Box
+                        onClick={onDebugPage}
+                        className={classes.drawerHeader}
+                        style={{ backgroundColor: `var(--drawerBody)` }}>
                         <Logo />
                         <Typography
                             className={classes.maskDescription}
@@ -246,7 +234,8 @@ export default function Drawer(props: DrawerProps) {
                             <Typography className={classes.slogan}>
                                 Neutralize the surveillance from tech giants.
                             </Typography>,
-                        ]}></Carousel>
+                        ]}
+                    />
                 ) : null}
             </nav>
         </ThemeProvider>

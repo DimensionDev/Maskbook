@@ -4,7 +4,6 @@ import { defaultTo } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
 import { ProfileIdentifier } from '../../../database/type'
 import { twitterUrl, canonifyImgUrl } from './url'
-import Services from '../../../extension/service'
 
 /**
  * @example
@@ -31,6 +30,20 @@ const parseNameArea = (nameArea: string) => {
 
 const parseId = (t: string) => {
     return regexMatch(t, /status\/(\d+)/, 1)!
+}
+
+const serializeToText = (node: ChildNode): string => {
+    const snippets: string[] = []
+    for (const childNode of Array.from(node.childNodes)) {
+        if (childNode.nodeType === Node.TEXT_NODE) {
+            if (childNode.nodeValue) snippets.push(childNode.nodeValue)
+        } else if (childNode.nodeName === 'IMG') {
+            const img = childNode as HTMLImageElement
+            const matched = (img.getAttribute('src') ?? '').match(/emoji\/v2\/svg\/([\d\w]+)\.svg/) ?? []
+            if (matched[1]) snippets.push(String.fromCodePoint(Number.parseInt(`0x${matched[1]}`)))
+        } else if (childNode.childNodes.length) snippets.push(serializeToText(childNode))
+    }
+    return snippets.join('')
 }
 
 const isMobilePost = (node: HTMLElement) => {
@@ -99,19 +112,27 @@ export const postNameParser = (node: HTMLElement) => {
         return parseNameArea(notNullable(node.querySelector<HTMLTableCellElement>('.user-info')).innerText)
     } else {
         const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
-        const nameInUniqueAnchorTweet =
-            tweetElement.children[1]?.querySelector<HTMLAnchorElement>('a[data-focusable="true"]')?.innerText ?? ''
+
+        // type 1:
+        // normal tweet
+        const anchorElement = tweetElement.children[1]?.querySelector<HTMLAnchorElement>('a[data-focusable="true"]')
+        const nameInUniqueAnchorTweet = anchorElement ? serializeToText(anchorElement) : ''
+
+        // type 2:
         const nameInDoubleAnchorsTweet = Array.from(
             tweetElement.children[1]?.querySelectorAll<HTMLAnchorElement>('a[data-focusable="true"]') ?? [],
         )
-            .map((a) => a.textContent)
+            .map(serializeToText)
             .join('')
-        const nameInQuoteTweet = nthChild(tweetElement, 0, 0, 0)?.innerText
 
+        // type 3:
+        // parse name in quoted tweet
+        const nameElementInQuoted = nthChild(tweetElement, 0, 0, 0)
+        const nameInQuoteTweet = nameElementInQuoted ? serializeToText(nameElementInQuoted) : ''
         return (
             [nameInUniqueAnchorTweet, nameInDoubleAnchorsTweet, nameInQuoteTweet]
                 .filter(Boolean)
-                .map((n) => parseNameArea(n!))
+                .map(parseNameArea)
                 .find((r) => r.name && r.handle) ?? {
                 name: '',
                 handle: '',
@@ -139,12 +160,8 @@ export const postContentParser = (node: HTMLElement) => {
         }
         return Array.from(containerNode.childNodes)
             .map((node) => {
-                if (node.nodeType === Node.TEXT_NODE) {
-                    return node.nodeValue
-                }
-                if (node.nodeName === 'A') {
-                    return (node as HTMLAnchorElement).getAttribute('title')
-                }
+                if (node.nodeType === Node.TEXT_NODE) return node.nodeValue
+                if (node.nodeName === 'A') return (node as HTMLAnchorElement).getAttribute('title')
                 return ''
             })
             .join(',')
@@ -161,45 +178,27 @@ export const postContentParser = (node: HTMLElement) => {
     }
 }
 
-export const postImageParser = async (node: HTMLElement) => {
-    if (isMobilePost(node)) {
-        // TODO: Support steganography in legacy twitter
-        return ''
-    } else {
-        const isQuotedTweet = !!node.closest('[role="blockquote"]')
-        const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
-        if (!imgNodes.length) return ''
-        const imgUrls = Array.from(imgNodes)
-            .filter((node) => isQuotedTweet || !node.closest('[role="blockquote"]'))
-            .flatMap((node) => canonifyImgUrl(node.getAttribute('src') ?? ''))
-            .filter(Boolean)
-        if (!imgUrls.length) return ''
-        const { handle } = postNameParser(node)
-        const posterIdentity = new ProfileIdentifier(twitterUrl.hostIdentifier, handle)
-        return (
-            await Promise.all(
-                imgUrls.map(async (url) => {
-                    try {
-                        const content = await Services.Steganography.decodeImageUrl(url, {
-                            pass: posterIdentity.toText(),
-                        })
-                        return /https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(content) ? content : ''
-                    } catch {
-                        // for twitter image url maybe absent
-                        return ''
-                    }
-                }),
-            )
-        )
-            .filter(Boolean)
-            .join('\n')
-    }
+export const postImagesParser = async (node: HTMLElement): Promise<string[]> => {
+    // TODO: Support steganography in legacy twitter
+    if (isMobilePost(node)) return []
+    const isQuotedTweet = !!node.closest('[role="blockquote"]')
+    const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
+    if (!imgNodes.length) return []
+    const imgUrls = Array.from(imgNodes)
+        .filter((node) => isQuotedTweet || !node.closest('[role="blockquote"]'))
+        .flatMap((node) => canonifyImgUrl(node.getAttribute('src') ?? ''))
+        .filter(Boolean)
+    if (!imgUrls.length) return []
+    return imgUrls
 }
 
 export const postParser = (node: HTMLElement) => {
     return {
         ...postNameParser(node),
         avatar: postAvatarParser(node),
+
+        // TODO:
+        // we get wrong pid for nested tweet
         pid: postIdParser(node),
         content: postContentParser(node),
     }

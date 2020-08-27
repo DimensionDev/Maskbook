@@ -2,6 +2,7 @@ import { createGlobalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { EthereumNetwork } from '../plugins/Wallet/database/types'
+import type { SetupGuideStep } from '../components/InjectedComponents/ImmersiveGuide/SetupGuide'
 
 /**
  * Does the debug mode on
@@ -17,8 +18,8 @@ export const disableOpenNewTabInBackgroundSettings = createGlobalSettings<boolea
     'disable automated tab task open new tab',
     true,
     {
-        primary: () => i18n.t('settings_disable_new_background_tab'),
-        secondary: () => i18n.t('settings_disable_new_background_tab_desc'),
+        primary: () => i18n.t('settings_ancient_post_compatibility_mode'),
+        secondary: () => i18n.t('settings_ancient_post_compatibility_mode_desc'),
     },
 )
 
@@ -71,9 +72,12 @@ export const currentImagePayloadStatus = createNetworkSettings('currentImagePayl
 export const currentSelectedIdentity = createNetworkSettings('currentSelectedIdentity')
 
 export type ImmersiveSetupCrossContextStatus = {
-    status?: false | 'during'
+    /** The persona to be connected */
     persona?: string
+    /** The user name given by user */
     username?: string
+    /** The WIP step */
+    status?: SetupGuideStep
 }
 export const currentImmersiveSetupStatus = createNetworkSettings('currentImmersiveSetupStatus')
 export const currentImportingBackup = createGlobalSettings<boolean>('importingBackup', false, {

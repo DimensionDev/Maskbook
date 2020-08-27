@@ -14,6 +14,7 @@ import { i18n } from '../../utils/i18n-next'
 import { exclusiveTasks } from '../content-script/tasks'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { saveAsFile } from './HelperService'
+import type { DashboardRoute } from '../options-page/Route'
 
 OnlyRunInContext(['background', 'debugging'], 'WelcomeService')
 export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
@@ -74,16 +75,8 @@ export async function createBackupFile(
     return downloadBackup(obj)
 }
 
-export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdentity']['value']) {
-    if (id) {
-        if (!getCurrentNetworkWorker(id.identifier).unwrap().isValidUsername(id.identifier.userId))
-            throw new TypeError(i18n.t('service_username_invalid'))
-    }
-    return exclusiveTasks(getWelcomePageURL(id))
-}
-
-export async function openOptionsPage(route?: string) {
-    return exclusiveTasks(getUrl(route ? '/index.html#' + route : '/index.html')).noop()
+export async function openOptionsPage(route?: DashboardRoute, search?: string) {
+    return exclusiveTasks(getUrl(route ? `/index.html#${route}${search ? `?${search}` : ''}` : '/index.html')).noop()
 }
 
 export { createPersonaByMnemonic } from '../../database'

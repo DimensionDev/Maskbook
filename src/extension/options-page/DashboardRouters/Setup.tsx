@@ -25,7 +25,7 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useAsync } from 'react-use'
 import { Identifier, ECKeyIdentifier } from '../../../database/type'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useMyPersonas, useMyUninitializedPersonas } from '../../../components/DataSource/independent'
+import { useMyPersonas, useMyUninitializedPersonas } from '../../../components/DataSource/useMyPersonas'
 import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import { extraPermissions } from '../../../utils/permissions'
@@ -43,7 +43,7 @@ import { sleep } from '../../../utils/utils'
 import { SetupStep } from '../SetupStep'
 
 //#region setup form
-const useSetupFormSetyles = makeStyles((theme) =>
+const useSetupFormStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
             flex: 1,
@@ -108,7 +108,7 @@ const useSetupFormSetyles = makeStyles((theme) =>
         doneButton: {
             color: '#fff',
             backgroundColor: green[500],
-            // extra 36 pixel eliminats the visual shaking when switch between pages
+            // extra 36 pixel eliminates the visual shaking when switch between pages
             marginBottom: 20 + 36,
             '&:hover': {
                 backgroundColor: green[700],
@@ -117,7 +117,7 @@ const useSetupFormSetyles = makeStyles((theme) =>
     }),
 )
 
-interface SetupFormProps extends withClasses<KeysInferFromUseStyles<typeof useSetupFormSetyles>> {
+interface SetupFormProps extends withClasses<KeysInferFromUseStyles<typeof useSetupFormStyles>> {
     primary: string
     secondary?: string
     content?: React.ReactNode
@@ -125,7 +125,7 @@ interface SetupFormProps extends withClasses<KeysInferFromUseStyles<typeof useSe
 }
 
 function SetupForm(props: SetupFormProps) {
-    const classes = useStylesExtends(useSetupFormSetyles(), props)
+    const classes = useStylesExtends(useSetupFormStyles(), props)
     return (
         <Fade in>
             <div className={classes.wrapper}>
@@ -153,6 +153,7 @@ function SetupForm(props: SetupFormProps) {
 const useConsentDataCollectionStyles = makeStyles((theme) =>
     createStyles({
         form: {
+            color: theme.palette.text.primary,
             fontSize: 16,
             lineHeight: 1.75,
             width: 660,
@@ -160,6 +161,7 @@ const useConsentDataCollectionStyles = makeStyles((theme) =>
             marginTop: 78,
         },
         label: {
+            color: theme.palette.text.primary,
             marginBottom: 32,
         },
         button: {
@@ -170,7 +172,7 @@ const useConsentDataCollectionStyles = makeStyles((theme) =>
 
 export function ConsentDataCollection() {
     const { t } = useI18N()
-    const setupFormClasses = useSetupFormSetyles()
+    const setupFormClasses = useSetupFormStyles()
     const consentDataCollection = useConsentDataCollectionStyles()
     const [checked, setChecked] = useState(false)
     return (
@@ -200,6 +202,7 @@ export function ConsentDataCollection() {
                                     rel="noopener noreferrer">
                                     {t('set_up_consent_data_collection_privacy_policy_2')}
                                 </MuiLink>
+                                {t('set_up_consent_data_collection_privacy_policy_3')}
                             </>
                         }
                     />
@@ -230,7 +233,7 @@ const userCreatePersonaStyles = makeStyles((theme) =>
 
 export function CreatePersona() {
     const { t } = useI18N()
-    const setupFormClasses = useSetupFormSetyles()
+    const setupFormClasses = useSetupFormStyles()
     const createPersonaClasses = userCreatePersonaStyles()
     const [name, setName] = useState('')
     const history = useHistory<unknown>()
@@ -307,7 +310,7 @@ const useProviderLineStyle = makeStyles((theme: Theme) => ({
 
 export function ConnectNetwork() {
     const { t } = useI18N()
-    const classes = useSetupFormSetyles()
+    const classes = useSetupFormStyles()
     const providerLineClasses = useProviderLineStyle()
     const history = useHistory<unknown>()
 
@@ -316,14 +319,17 @@ export function ConnectNetwork() {
     const initializedPersonas = useMyPersonas()
     const uninitializedPersonas = useMyUninitializedPersonas()
     const { identifier } = useQueryParams(['identifier'])
-
-    const { value = null, loading, error } = useAsync(
-        async () =>
-            identifier
-                ? Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
-                : null,
-        [identifier, initializedPersonas, uninitializedPersonas],
-    )
+    const { value = null, loading, error } = useAsync(async () => {
+        const persona = initializedPersonas.find((x) => x.identifier.toText() === identifier)
+        // auto-finished by immersive guider
+        if (persona?.linkedProfiles.size) {
+            history.replace(webpackEnv.perferResponsiveTarget === 'xs' ? DashboardRoute.Nav : DashboardRoute.Personas)
+            return null
+        }
+        return identifier
+            ? Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
+            : null
+    }, [identifier, initializedPersonas, uninitializedPersonas])
 
     // update persona when link/unlink really happen
     if (!loading && value?.linkedProfiles.size !== persona?.linkedProfiles.size) setPersona(value)
@@ -366,7 +372,11 @@ export function ConnectNetwork() {
                                 }),
                             ])
                             await sleep(300)
-                            history.replace(DashboardRoute.Personas)
+                            history.replace(
+                                webpackEnv.perferResponsiveTarget === 'xs'
+                                    ? DashboardRoute.Nav
+                                    : DashboardRoute.Personas,
+                            )
                         }}>
                         {t('set_up_button_finish')}
                     </ActionButton>
@@ -416,7 +426,7 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
 export function RestoreDatabase() {
     const { t } = useI18N()
     const history = useHistory<unknown>()
-    const classes = useSetupFormSetyles()
+    const classes = useSetupFormStyles()
     const restoreDatabaseClasses = useRestoreDatabaseStyle()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
@@ -542,7 +552,7 @@ export function RestoreDatabaseAdvance() {
     const { enqueueSnackbar } = useSnackbar()
     const history = useHistory<unknown>()
 
-    const classes = useSetupFormSetyles()
+    const classes = useSetupFormStyles()
 
     const [nickname, setNickname] = useState('')
     const [mnemonicWordsValue, setMnemonicWordsValue] = useState('')
@@ -560,7 +570,9 @@ export function RestoreDatabaseAdvance() {
             if (persona) {
                 history.push(
                     persona.linkedProfiles.size
-                        ? DashboardRoute.Personas
+                        ? webpackEnv.perferResponsiveTarget === 'xs'
+                            ? DashboardRoute.Nav
+                            : DashboardRoute.Personas
                         : `${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(persona.identifier.toText())}`,
                 )
             } else {
@@ -731,7 +743,7 @@ const useRestoreDatabaseConfirmationStyles = makeStyles((theme: Theme) =>
 
 export function RestoreDatabaseConfirmation() {
     const { t } = useI18N()
-    const classes = useSetupFormSetyles()
+    const classes = useSetupFormStyles()
     const restoreDatabaseConfirmationClasses = useRestoreDatabaseConfirmationStyles()
     const history = useHistory<unknown>()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -745,15 +757,17 @@ export function RestoreDatabaseConfirmation() {
     const profiles = backup?.profiles.length ?? 0
     const posts = backup?.posts.length ?? 0
     const contacts = backup?.userGroups.length ?? 0
+    const wallets = backup?.wallets.length ?? 0
     const records = [
         { type: DatabaseRecordType.Persona, length: personas, checked: imported === true },
         { type: DatabaseRecordType.Profile, length: profiles, checked: imported === true },
         { type: DatabaseRecordType.Post, length: posts, checked: imported === true },
         { type: DatabaseRecordType.Group, length: contacts, checked: imported === true },
+        { type: DatabaseRecordType.Wallet, length: wallets, checked: imported === true },
     ]
 
     const restoreFinish = async () => {
-        if (backup?.personas && personas === 1 && profiles === 0) {
+        if (backup?.personas.length && personas === 1 && profiles === 0) {
             history.push(`${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(backup.personas[0].identifier)}`)
         } else if (personas === 0 && profiles === 0) {
             history.replace(SetupStep.CreatePersona)

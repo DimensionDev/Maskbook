@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) =>
             marginLeft: 0,
         },
         arrowIcon: {
-            color: theme.palette.text.secondary,
+            color: theme.palette.text.primary,
         },
     }),
 )

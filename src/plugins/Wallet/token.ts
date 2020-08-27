@@ -14,7 +14,7 @@ export const OKB_ADDRESS = '0x75231f58b43240c9718dd58b4967c5114342a86c'
 export const USDT_ADDRESS = '0xdAC17F958D2ee523a2206206994597C13D831ec7'
 export const USDT_RINKEBY_ADDRESS = '0xf88Bf61674BA3eD8B55a15f820CA8C2228953d08'
 
-const isSameAddr = (addrA: string, addrB: string) => addrA.toLowerCase() === addrB.toLowerCase()
+export const isSameAddr = (addrA: string, addrB: string) => addrA.toLowerCase() === addrB.toLowerCase()
 export const isDAI = (addr: string) => isSameAddr(addr, DAI_ADDRESS)
 export const isOKB = (addr: string) => isSameAddr(addr, OKB_ADDRESS)
 export const isUSDT = (addr: string) => isSameAddr(addr, USDT_ADDRESS) || isSameAddr(addr, USDT_RINKEBY_ADDRESS)

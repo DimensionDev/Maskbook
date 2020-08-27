@@ -15,10 +15,10 @@ module.exports = {
         require.resolve('fake-indexeddb/auto'),
         path.join(__dirname, './scripts/jest-setup.js'),
     ],
-    // skip packages other than 'ts-results' and 'holoflows/kit'
+    // skip packages other than 'holoflows/kit'
     transformIgnorePatterns: [],
     transform: {
-        'node_modules.+(ts-results|holoflows).+.js$': 'jest-esm-transformer',
+        'node_modules.+(holoflows).+.js$': 'jest-esm-transformer',
     },
     moduleNameMapper: {
         'lodash-es': require.resolve('lodash'),

@@ -1,21 +1,11 @@
 import React, { useMemo } from 'react'
-import {
-    Typography,
-    ButtonBase,
-    ButtonBaseProps,
-    IconButton,
-    MenuItem,
-    ListItem,
-    ListItemTypeMap,
-    useMediaQuery,
-} from '@material-ui/core'
+import { Typography, IconButton, MenuItem, ListItem, ListItemTypeMap, useMediaQuery } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
-import { useModal } from '../Dialogs/Base'
-import { DashboardContactDialog, DashboardContactDeleteConfirmDialog } from '../Dialogs/Contact'
-import { Skeleton } from '@material-ui/lab'
+import { useModal } from '../DashboardDialogs/Base'
+import { DashboardContactDialog, DashboardContactDeleteConfirmDialog } from '../DashboardDialogs/Contact'
 import DashboardMenu from './DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
@@ -50,12 +40,14 @@ const useStyles = makeStyles((theme) =>
             },
         },
         fingerprint: {
+            color: theme.palette.text.secondary,
             marginLeft: 'auto',
             marginRight: 0,
             fontFamily: 'var(--monospace)',
         },
-        icon: {
+        more: {
             marginLeft: theme.spacing(1),
+            color: theme.palette.text.primary,
         },
     }),
 )
@@ -93,12 +85,12 @@ export function ContactLine(props: ContactLineProps) {
                 <Typography className={classes.user}>{contact.nickname || contact.identifier.userId}</Typography>
                 <Typography className={classes.provider}>@{contact.identifier.network}</Typography>
                 {xsMatched ? null : (
-                    <Typography component="code" color="textSecondary" className={classes.fingerprint}>
+                    <Typography className={classes.fingerprint} component="code">
                         {contact.linkedPersona?.fingerprint}
                     </Typography>
                 )}
                 <IconButton
-                    className={classes.icon}
+                    className={classes.more}
                     size="small"
                     onClick={(e) => {
                         e.stopPropagation()
@@ -111,20 +103,5 @@ export function ContactLine(props: ContactLineProps) {
             {contactDialog}
             {deleteContactConfirmDialog}
         </>
-    )
-}
-
-export function ContactLineSkeleton(props: ButtonBaseProps) {
-    const classes = useStyles()
-    const text = (len: number) => <Skeleton height={16} width={len} />
-    return (
-        <ButtonBase disabled className={classes.line} {...props}>
-            <Skeleton variant="circle" className={classes.avatar} />
-            <Typography className={classes.user}>{text(16 * 10)}</Typography>
-            <Typography className={classes.provider}>{text(16 * 5)}</Typography>
-            <Typography component="code" color="textSecondary" className={classes.fingerprint}>
-                {text(16 * 25)}
-            </Typography>
-        </ButtonBase>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState, useEffect, useReducer } from 'react'
 import { sleep, unreachable } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
@@ -9,18 +9,46 @@ import type {
     SuccessDecryption,
 } from '../../../extension/background-script/CryptoServices/decryptFrom'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
-import type { TypedMessage } from '../../../extension/background-script/CryptoServices/utils'
+import type { TypedMessage } from '../../../protocols/typed-message'
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
 import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwaiting'
 import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
 import { usePostInfoDetails } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
+import { getActivatedUI } from '../../../social-network/ui'
+
+function progressReducer(
+    state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
+    payload: {
+        type: 'refresh'
+        key: string
+        progress: SuccessDecryption | FailureDecryption | DecryptionProgress
+    },
+) {
+    const { key, progress } = payload
+    const currentProgressIndex = state.findIndex((x) => x.key === key)
+    if (currentProgressIndex === -1) {
+        return [
+            ...state,
+            {
+                key,
+                progress,
+            },
+        ]
+    }
+    const currentProgress = state[currentProgressIndex].progress
+    if (currentProgress && currentProgress.type !== 'progress' && progress.type === 'progress') return state
+    state[currentProgressIndex] = {
+        key,
+        progress,
+    }
+    return [...state]
+}
 
 export interface DecryptPostProps {
     onDecrypted: (post: TypedMessage, raw: string) => void
     whoAmI: ProfileIdentifier
-    encryptedText: string
     profiles: Profile[]
     alreadySelectedPreviously: Profile[]
     requestAppendRecipients?(to: Profile[]): Promise<void>
@@ -32,8 +60,10 @@ export interface DecryptPostProps {
     failedComponentProps?: Partial<DecryptPostFailedProps>
 }
 export function DecryptPost(props: DecryptPostProps) {
-    const { whoAmI, encryptedText, profiles, alreadySelectedPreviously, onDecrypted } = props
+    const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
     const postBy = usePostInfoDetails('postBy')
+    const postContent = usePostInfoDetails('postContent')
+    const postMetadataImages = usePostInfoDetails('postMetadataImages')
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
     const Failed = props.failedComponent || DecryptPostFailed
@@ -46,33 +76,41 @@ export function DecryptPost(props: DecryptPostProps) {
             await sleep(1500)
         }
     }, [props.requestAppendRecipients, postBy, whoAmI])
+    const deconstructedPayload = useMemo(() => deconstructPayload(postContent, getActivatedUI().payloadDecoder), [
+        postContent,
+    ])
 
     //#region Debug info
-    const [postPayload, setPostPayload] = useState(() => deconstructPayload(encryptedText, null))
-    const sharedPublic = postPayload.ok && postPayload.val.version === -38 ? !!postPayload.val.sharedPublic : false
-    useEffect(() => setPostPayload(deconstructPayload(encryptedText, null)), [encryptedText])
     const [debugHash, setDebugHash] = useState<string>('Unknown')
     //#endregion
+
     //#region Progress
-    const [progress, setDecryptingStatus] = useState<DecryptionProgress | FailureDecryption>({
-        progress: 'init',
-        type: 'progress',
-    })
-    const [decrypted, setDecrypted] = useState<SuccessDecryption | FailureDecryption | undefined>(undefined)
+    const [progress, dispatch] = useReducer(progressReducer, [])
     //#endregion
-    // Do the query
+
+    //#region decrypt
+
+    // pass 1:
+    // decrypt post content and image attachments
+    const sharedPublic =
+        deconstructedPayload.ok && deconstructedPayload.val.version === -38
+            ? !!deconstructedPayload.val.sharedPublic
+            : false
     useEffect(() => {
-        const signal = new AbortController()
-        async function run() {
-            const iter = ServicesWithProgress.decryptFrom(encryptedText, postBy, whoAmI, sharedPublic)
+        const controller = new AbortController()
+        async function makeProgress(key: string, iter: ReturnType<typeof ServicesWithProgress.decryptFromText>) {
+            const refreshProgress = (progress: SuccessDecryption | FailureDecryption | DecryptionProgress) =>
+                dispatch({
+                    type: 'refresh',
+                    key,
+                    progress,
+                })
             for await (const status of asyncIteratorWithResult(iter)) {
-                if (signal.signal.aborted) return iter.return?.()
+                if (controller.signal.aborted) return iter.return?.()
                 if (status.done) {
-                    if (sharedPublic && status.value.type !== 'error') {
-                        // HACK: the is patch, hidden NOT VERIFIED in everyone
-                        status.value.signatureVerifyResult = true
-                    }
-                    return setDecrypted(status.value)
+                    // HACK: this is patch, hidden NOT VERIFIED in everyone
+                    if (sharedPublic && status.value.type !== 'error') status.value.signatureVerifyResult = true
+                    return refreshProgress(status.value)
                 }
                 if (status.value.type === 'debug') {
                     switch (status.value.debug) {
@@ -82,53 +120,83 @@ export function DecryptPost(props: DecryptPostProps) {
                         default:
                             unreachable(status.value.debug)
                     }
-                } else setDecryptingStatus(status.value)
+                } else refreshProgress(status.value)
                 if (status.value.type === 'progress' && status.value.progress === 'intermediate_success')
-                    setDecrypted(status.value.data)
+                    refreshProgress(status.value.data)
             }
         }
-        run().catch((e) => setDecrypted({ error: e?.message } as FailureDecryption))
-        return () => signal.abort()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [encryptedText, postBy.toText(), whoAmI.toText(), sharedPublic])
 
-    // Report the result
+        if (deconstructedPayload.ok)
+            makeProgress(postContent, ServicesWithProgress.decryptFromText(postContent, postBy, whoAmI, sharedPublic))
+        postMetadataImages.forEach((url) => {
+            if (controller.signal.aborted) return
+            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI))
+        })
+        return () => controller.abort()
+    }, [postContent, postMetadataImages.join(), postBy.toText(), whoAmI.toText(), sharedPublic])
+
+    // pass 2:
+    // decrypt rest attachments which depend on post content
+    const decryptedPostContent = progress.find((p) => p.key === postContent)
     useEffect(() => {
-        decrypted && decrypted.type !== 'error' && onDecrypted(decrypted.content, decrypted.rawContent)
-    }, [decrypted, onDecrypted])
+        if (decryptedPostContent?.progress.type !== 'success') return
+        // TODO:
+        // decrypt shuffled image here
+    }, [decryptedPostContent])
 
-    // Decrypting
-    if (decrypted === undefined) {
-        // Decrypting with recoverable error
-        if (progress.type === 'error')
-            return withDebugger(<Failed error={new Error(progress.error)} {...props.failedComponentProps} />)
-        // Decrypting...
-        else return withDebugger(<Awaiting type={progress} {...props.waitingComponentProps} />)
-    }
-    // Error
-    if (decrypted.type === 'error') return <Failed error={new Error(decrypted.error)} {...props.failedComponentProps} />
-    // Success
-    return withDebugger(
-        <Success
-            data={decrypted}
-            alreadySelectedPreviously={alreadySelectedPreviously}
-            requestAppendRecipients={requestAppendRecipientsWrapped}
-            profiles={profiles}
-            sharedPublic={sharedPublic}
-            {...props.successComponentProps}
-        />,
+    // pass 3:
+    // inovke callback
+    const firstSucceedDecrypted = progress.find((p) => p.progress.type === 'success')
+    useEffect(() => {
+        if (firstSucceedDecrypted?.progress.type !== 'success') return
+        onDecrypted(firstSucceedDecrypted.progress.content, firstSucceedDecrypted.progress.rawContent)
+    }, [firstSucceedDecrypted])
+    //#endregion
+
+    // it's not a secret post
+    if (!deconstructedPayload.ok && progress.every((x) => x.progress.internal)) return null
+    return (
+        <>
+            {progress
+                // the internal progress should not display to the end-user
+                .filter(({ progress }) => !progress.internal)
+                .map(({ progress }, index) => (
+                    <React.Fragment key={index}>{renderProgress(progress)}</React.Fragment>
+                ))}
+        </>
     )
-    function withDebugger(jsx: JSX.Element) {
+
+    function renderProgress(progress: SuccessDecryption | FailureDecryption | DecryptionProgress) {
+        const render = () => {
+            switch (progress.type) {
+                case 'success':
+                    return (
+                        <Success
+                            data={progress}
+                            alreadySelectedPreviously={alreadySelectedPreviously}
+                            requestAppendRecipients={requestAppendRecipientsWrapped}
+                            profiles={profiles}
+                            sharedPublic={sharedPublic}
+                            {...props.successComponentProps}
+                        />
+                    )
+                case 'error':
+                    return <Failed error={new Error(progress.error)} {...props.failedComponentProps} />
+                case 'progress':
+                    return <Awaiting type={progress} {...props.waitingComponentProps} />
+                default:
+                    return null
+            }
+        }
+        const rendered = render()
+        if (!rendered) return null
         return (
             <>
-                {jsx}
+                {rendered}
                 <DecryptedPostDebug
                     debugHash={debugHash}
-                    decryptedResult={decrypted}
-                    encryptedText={encryptedText}
-                    postBy={postBy}
-                    postPayload={postPayload.unwrap()}
                     whoAmI={whoAmI}
+                    decryptedResult={progress.type === 'progress' ? null : progress}
                 />
             </>
         )

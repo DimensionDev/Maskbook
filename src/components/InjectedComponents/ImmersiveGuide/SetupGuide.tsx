@@ -10,10 +10,13 @@ import {
     InputAdornment,
     LinearProgress,
     createMuiTheme,
+    IconButton,
 } from '@material-ui/core'
 import classNames from 'classnames'
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
 import CloseIcon from '@material-ui/icons/Close'
+import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
+import stringify from 'json-stable-stringify'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import ShowcaseBox from '../../../extension/options-page/DashboardComponents/ShowcaseBox'
 import { merge, cloneDeep, noop } from 'lodash-es'
@@ -23,12 +26,14 @@ import { getActivatedUI } from '../../../social-network/ui'
 import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../../settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
-import { PersonaIdentifier, ProfileIdentifier } from '../../../database/type'
+import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../../database/type'
 import Services from '../../../extension/service'
+import { MessageCenter } from '../../../utils/messages'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
     PasteIntoBio = 'paste-into-bio',
+    SayHelloWorld = 'say-hello-world',
 }
 //#region wizard dialog
 const wizardTheme = (theme: Theme): Theme =>
@@ -53,7 +58,6 @@ const wizardTheme = (theme: Theme): Theme =>
                 root: {
                     marginTop: theme.spacing(2),
                     marginBottom: 0,
-
                     '&:first-child': {
                         marginTop: 0,
                     },
@@ -88,15 +92,21 @@ const wizardTheme = (theme: Theme): Theme =>
 const useWizardDialogStyles = makeStyles((theme) =>
     createStyles({
         root: {
+            userSelect: 'none',
             boxSizing: 'border-box',
-            padding: '48px 20px 0',
+            padding: '56px 20px 48px',
             position: 'relative',
             width: 320,
-            minHeight: 404,
             borderRadius: 12,
             boxShadow: theme.palette.type === 'dark' ? 'none' : theme.shadows[4],
             border: `${theme.palette.type === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
             overflow: 'hidden',
+        },
+        back: {
+            color: theme.palette.text.primary,
+            position: 'absolute',
+            left: 10,
+            top: 10,
         },
         close: {
             color: theme.palette.text.primary,
@@ -127,10 +137,12 @@ const useWizardDialogStyles = makeStyles((theme) =>
             fontSize: 16,
             width: 200,
             height: 40,
-            marginBottom: 14,
+            wordBreak: 'keep-all',
         },
         textButton: {
-            fontSize: 16,
+            fontSize: 14,
+            marginTop: theme.spacing(1),
+            marginBottom: theme.spacing(-2),
         },
         header: {
             marginBottom: 0,
@@ -156,16 +168,17 @@ const useWizardDialogStyles = makeStyles((theme) =>
 interface WizardDialogProps {
     title: string
     completion: number
-    status: boolean | 'undecided'
+    status: boolean | 'undetermined'
     optional?: boolean
     content?: React.ReactNode
     footer?: React.ReactNode
+    onBack?: () => void
     onClose?: () => void
 }
 
 function WizardDialog(props: WizardDialogProps) {
     const { t } = useI18N()
-    const { title, optional = false, completion, status, content, footer, onClose } = props
+    const { title, optional = false, completion, status, content, footer, onBack, onClose } = props
     const classes = useWizardDialogStyles(props)
 
     return (
@@ -208,7 +221,16 @@ function WizardDialog(props: WizardDialogProps) {
                         color="secondary"
                         variant="determinate"
                         value={completion}></LinearProgress>
-                    <CloseIcon className={classes.close} cursor="pointer" onClick={onClose}></CloseIcon>
+                    {onBack ? (
+                        <IconButton className={classes.back} size="small">
+                            <ArrowBackIosOutlinedIcon cursor="pointer" onClick={onBack}></ArrowBackIosOutlinedIcon>
+                        </IconButton>
+                    ) : null}
+                    {onClose ? (
+                        <IconButton className={classes.close} size="small">
+                            <CloseIcon cursor="pointer" onClick={onClose}></CloseIcon>
+                        </IconButton>
+                    ) : null}
                 </Paper>
             </ThemeProvider>
         </ThemeProvider>
@@ -236,11 +258,12 @@ const useFindUsernameStyles = makeStyles((theme) =>
 
 interface FindUsernameProps extends Partial<WizardDialogProps> {
     username: string
-    onNext?: () => void
     onUsernameChange?: (username: string) => void
+    onConnect: () => Promise<void>
+    onDone?: () => void
 }
 
-function FindUsername({ username, onNext, onClose, onUsernameChange = noop }: FindUsernameProps) {
+function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange = noop }: FindUsernameProps) {
     const { t } = useI18N()
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
@@ -252,15 +275,15 @@ function FindUsername({ username, onNext, onClose, onUsernameChange = noop }: Fi
                 e.stopPropagation()
                 if (e.key === 'Enter') {
                     e.preventDefault()
-                    onNext?.()
+                    onConnect?.()
                 }
             })(),
-        [onNext, binder],
+        [onConnect, binder],
     )
     return (
         <WizardDialog
-            completion={50}
-            status="undecided"
+            completion={33.33}
+            status="undetermined"
             title={t('immersive_setup_find_username_title')}
             content={
                 <form>
@@ -288,15 +311,23 @@ function FindUsername({ username, onNext, onClose, onUsernameChange = noop }: Fi
                 </form>
             }
             footer={
-                <ActionButton
+                <ActionButtonPromise
                     className={classes.button}
                     variant="contained"
                     color="primary"
-                    onClick={onNext}
+                    init={t('immersive_setup_connect_auto')}
+                    waiting={t('connecting')}
+                    complete={t('done')}
+                    failed={t('immersive_setup_connect_failed')}
+                    executor={onConnect}
+                    completeOnClick={onDone}
                     disabled={!username}
-                    data-testid="next_button">
-                    {t('next')}
-                </ActionButton>
+                    completeIcon={null}
+                    failIcon={null}
+                    failedOnClick="use executor"
+                    data-testid="confirm_button">
+                    {t('confirm')}
+                </ActionButtonPromise>
             }
             onClose={onClose}></WizardDialog>
     )
@@ -321,30 +352,20 @@ const usePasteIntoBioStyles = makeStyles((theme) =>
 
 interface PasteIntoBioProps extends Partial<WizardDialogProps> {
     provePost: string
-    onCancel?: () => void
+    pastedStatus: boolean | 'undetermined'
+    onPaste: () => Promise<void>
+    onDone?: () => Promise<void>
+    onSkip?: () => void
 }
 
-function PasteIntoBio({ provePost, onClose, onCancel }: PasteIntoBioProps) {
+function PasteIntoBio({ provePost, pastedStatus, onPaste, onDone, onSkip, onBack, onClose }: PasteIntoBioProps) {
     const { t } = useI18N()
     const classes = useWizardDialogStyles()
     const pasteIntoBioClasses = usePasteIntoBioStyles()
-    const ui = getActivatedUI()
-
-    const [pastedStatus, setPastedStatus] = useState<boolean | 'undecided'>('undecided')
-    const onConfirm = async () => {
-        try {
-            await navigator.clipboard.writeText(provePost)
-            await sleep(400)
-            ui.taskPasteIntoBio(provePost)
-            setPastedStatus(true)
-        } catch (e) {
-            setPastedStatus(false)
-        }
-    }
 
     return (
         <WizardDialog
-            completion={100}
+            completion={66.66}
             status={pastedStatus}
             title={t('immersive_setup_add_bio_title')}
             optional
@@ -373,8 +394,8 @@ function PasteIntoBio({ provePost, onClose, onCancel }: PasteIntoBioProps) {
                         waiting={t('adding')}
                         complete={t('done')}
                         failed={t('immersive_setup_paste_into_bio_failed')}
-                        executor={onConfirm}
-                        completeOnClick={onClose}
+                        executor={onPaste}
+                        completeOnClick={onDone}
                         completeIcon={null}
                         failIcon={null}
                         failedOnClick="use executor"
@@ -383,12 +404,85 @@ function PasteIntoBio({ provePost, onClose, onCancel }: PasteIntoBioProps) {
                     <ActionButton
                         className={classes.textButton}
                         variant="text"
-                        onClick={onCancel}
-                        data-testid="cancel_button">
-                        {t('cancel')}
+                        onClick={onSkip}
+                        data-testid="skip_button">
+                        {t('skip')}
                     </ActionButton>
                 </>
             }
+            onBack={onBack}
+            onClose={onClose}></WizardDialog>
+    )
+}
+//#endregion
+
+//#region say hello world
+const useSayHelloWorldStyles = makeStyles((theme) =>
+    createStyles({
+        primary: {
+            marginTop: 24,
+            marginBottom: 16,
+        },
+        secondary: {
+            color: theme.palette.text.secondary,
+            fontSize: 14,
+        },
+    }),
+)
+
+interface SayHelloWorldProps extends Partial<WizardDialogProps> {
+    createStatus: boolean | 'undetermined'
+    onSkip?: () => void
+    onCreate: () => Promise<void>
+}
+
+function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayHelloWorldProps) {
+    const { t } = useI18N()
+    const classes = useWizardDialogStyles()
+    const sayHelloWorldClasses = useSayHelloWorldStyles()
+    return (
+        <WizardDialog
+            completion={100}
+            status={createStatus}
+            optional
+            title={t('immersive_setup_say_hello_title')}
+            content={
+                <form>
+                    <Typography className={classNames(classes.tip, sayHelloWorldClasses.primary)} variant="body2">
+                        {t('immersive_setup_say_hello_primary')}
+                    </Typography>
+                    <Typography className={classNames(classes.tip, sayHelloWorldClasses.secondary)} variant="body2">
+                        {t('immersive_setup_say_hello_secondary')}
+                    </Typography>
+                </form>
+            }
+            footer={
+                <>
+                    <ActionButtonPromise
+                        className={classes.button}
+                        variant="contained"
+                        color="primary"
+                        init={t('immersive_setup_create_post_auto')}
+                        waiting={t('creating')}
+                        complete={t('done')}
+                        failed={t('immersive_setup_create_post_failed')}
+                        executor={onCreate}
+                        completeOnClick={onSkip}
+                        completeIcon={null}
+                        failIcon={null}
+                        failedOnClick="use executor"
+                        data-testid="create_button"
+                    />
+                    <ActionButton
+                        className={classes.textButton}
+                        variant="text"
+                        onClick={onSkip}
+                        data-testid="skip_button">
+                        {t('skip')}
+                    </ActionButton>
+                </>
+            }
+            onBack={onBack}
             onClose={onClose}></WizardDialog>
     )
 }
@@ -402,6 +496,7 @@ export interface SetupGuideProps {
 }
 
 export function SetupGuide(props: SetupGuideProps) {
+    const { t } = useI18N()
     const { persona, provePost } = props
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
     const ui = getActivatedUI()
@@ -417,12 +512,10 @@ export function SetupGuide(props: SetupGuideProps) {
         }
     }, [lastState_])
     useEffect(() => {
-        if (lastState.status !== 'during') return
-        if (step === SetupGuideStep.FindUsername && lastState.username) {
-            setStep(SetupGuideStep.PasteIntoBio)
-        } else if (step === SetupGuideStep.PasteIntoBio && !lastState.username) {
-            setStep(SetupGuideStep.FindUsername)
-        }
+        if (!lastState.status) return
+        if (step === SetupGuideStep.FindUsername && lastState.username) setStep(lastState.status)
+        else if (step === SetupGuideStep.PasteIntoBio && !lastState.username) setStep(SetupGuideStep.FindUsername)
+        else if (step === SetupGuideStep.SayHelloWorld && !lastState.username) setStep(SetupGuideStep.FindUsername)
     }, [step, setStep, lastState])
     //#endregion
 
@@ -433,29 +526,99 @@ export function SetupGuide(props: SetupGuideProps) {
     const [username, setUsername] = useState(getUsername)
     //#endregion
 
+    //#region paste status
+    const [pastedStatus, setPastedStatus] = useState<boolean | 'undetermined'>('undetermined')
+    //#ednregion
+
+    //#region create post status
+    const [createStatus, setCreateStatus] = useState<boolean | 'undetermined'>('undetermined')
+    //#endregion
+
     const onNext = async () => {
-        currentImmersiveSetupStatus[ui.networkIdentifier].value = JSON.stringify({
-            status: 'during',
-            username: username,
-            persona: persona.toText(),
-        } as ImmersiveSetupCrossContextStatus)
-        const connecting = new ProfileIdentifier(ui.networkIdentifier, username)
-        await Services.Identity.attachProfile(connecting, persona, { connectionConfirmState: 'confirmed' })
-        ui.taskGotoProfilePage(connecting)
-        await sleep(400)
-        setStep(SetupGuideStep.PasteIntoBio)
+        switch (step) {
+            case SetupGuideStep.FindUsername:
+                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
+                    status: SetupGuideStep.PasteIntoBio,
+                    username,
+                    persona: persona.toText(),
+                } as ImmersiveSetupCrossContextStatus)
+                ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, username))
+                setStep(SetupGuideStep.PasteIntoBio)
+                break
+            case SetupGuideStep.PasteIntoBio:
+                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
+                    status: SetupGuideStep.SayHelloWorld,
+                    username,
+                    persona: persona.toText(),
+                } as ImmersiveSetupCrossContextStatus)
+                ui.taskGotoNewsFeedPage()
+                setStep(SetupGuideStep.SayHelloWorld)
+                break
+            case SetupGuideStep.SayHelloWorld:
+                onClose()
+                break
+        }
     }
-    const onCancel = async () => {
-        const username_ = getUsername()
-        currentImmersiveSetupStatus[ui.networkIdentifier].value = JSON.stringify({
-            status: 'during',
-            // ensure staying find-username page
-            username: '',
-            persona: persona.toText(),
-        } as ImmersiveSetupCrossContextStatus)
-        const connected = new ProfileIdentifier(ui.networkIdentifier, username_)
-        await Services.Identity.detachProfile(connected)
-        setStep(SetupGuideStep.FindUsername)
+    const onBack = async () => {
+        switch (step) {
+            case SetupGuideStep.PasteIntoBio:
+                const username_ = getUsername()
+                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
+                    status: SetupGuideStep.FindUsername,
+                    username: '', // ensure staying find-username page
+                    persona: persona.toText(),
+                } as ImmersiveSetupCrossContextStatus)
+                const connected = new ProfileIdentifier(ui.networkIdentifier, username_)
+                await Services.Identity.detachProfile(connected)
+                setStep(SetupGuideStep.FindUsername)
+                break
+            case SetupGuideStep.SayHelloWorld:
+                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
+                    ...lastState,
+                    status: SetupGuideStep.PasteIntoBio,
+                } as ImmersiveSetupCrossContextStatus)
+                const connecting = new ProfileIdentifier(ui.networkIdentifier, username)
+                ui.taskGotoProfilePage(connecting)
+                setStep(SetupGuideStep.PasteIntoBio)
+                break
+        }
+    }
+    const onConnect = async () => {
+        // attach persona with SNS profile
+        await Services.Identity.attachProfile(new ProfileIdentifier(ui.networkIdentifier, username), persona, {
+            connectionConfirmState: 'confirmed',
+        })
+
+        // auto-finish the setup process
+        const persona_ = await Services.Identity.queryPersona(
+            Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap(),
+        )
+        if (!persona_.hasPrivateKey) throw new Error('invalid persona')
+        await Promise.all([
+            Services.Identity.setupPersona(persona_.identifier),
+            Services.Plugin.invokePlugin('maskbook.wallet', 'importFirstWallet', {
+                name: persona_.nickname ?? t('untitled_wallet'),
+                mnemonic: persona_.mnemonic?.words.split(' '),
+                passphrase: '',
+                _wallet_is_default: true,
+            }),
+        ])
+    }
+    const onPaste = async () => {
+        try {
+            await navigator.clipboard.writeText(provePost)
+            ui.taskPasteIntoBio(provePost)
+            setPastedStatus(true)
+        } catch (e) {
+            setPastedStatus(false)
+        }
+    }
+    const onCreate = async () => {
+        const content = t('immersive_setup_say_hello_content')
+        await navigator.clipboard.writeText(content)
+        ui.taskOpenComposeBox(content, {
+            shareToEveryOne: true,
+        })
     }
     const onClose = () => {
         currentImmersiveSetupStatus[ui.networkIdentifier].value = ''
@@ -467,12 +630,35 @@ export function SetupGuide(props: SetupGuideProps) {
             return (
                 <FindUsername
                     username={username}
-                    onNext={onNext}
+                    onUsernameChange={setUsername}
+                    onConnect={onConnect}
+                    onDone={onNext}
+                    onBack={onBack}
                     onClose={onClose}
-                    onUsernameChange={(u) => setUsername(u)}></FindUsername>
+                />
             )
         case SetupGuideStep.PasteIntoBio:
-            return <PasteIntoBio provePost={provePost} onCancel={onCancel} onClose={onClose}></PasteIntoBio>
+            return (
+                <PasteIntoBio
+                    provePost={provePost}
+                    pastedStatus={pastedStatus}
+                    onPaste={onPaste}
+                    onDone={onNext}
+                    onSkip={onNext}
+                    onBack={onBack}
+                    onClose={onClose}
+                />
+            )
+        case SetupGuideStep.SayHelloWorld:
+            return (
+                <SayHelloWorld
+                    createStatus={createStatus}
+                    onCreate={onCreate}
+                    onSkip={onNext}
+                    onBack={onBack}
+                    onClose={onClose}
+                />
+            )
         default:
             return null
     }

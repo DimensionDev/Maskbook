@@ -26,10 +26,6 @@ const { join } = require('path')
 const { writeFileSync, readFileSync, unlinkSync } = require('fs')
 
 const restoreLodash = modifyPackage('lodash-es', (x) => (x.main = '../lodash'))
-const restoreTSResult = modifyPackage('ts-results', (x) => {
-    x.main = './cjs.cjs'
-})
-const undoTSResult = compileToCJS('../node_modules/ts-results/index.js', '../node_modules/ts-results/cjs.cjs')
 const restoreKit = modifyPackage('@holoflows/kit', (x) => {
     x.exports = {
         '.': './umd/index.js',
@@ -50,8 +46,6 @@ process.on('unhandledRejection', (err) => {
 function cleanup() {
     restoreLodash()
     restoreKit()
-    undoTSResult()
-    restoreTSResult()
 }
 try {
     require('ts-node').register({
@@ -59,6 +53,9 @@ try {
         transpileOnly: true,
         // ignore: [],
     })
+    globalThis.window = globalThis
+    require('./polyfill/index')
+    delete globalThis.window
     module.exports = require(process.argv[process.argv.length - 1])
 } finally {
     cleanup()
