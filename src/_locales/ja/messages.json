@@ -1,6 +1,6 @@
 {
     "about": "概要",
-    "about_dialog_description": "Maskbook は大企業からのビッグデータ監視から逃れるために SNS への投稿を暗号化できます。あなたと友だちだけが暗号化された投稿を解読できます。",
+    "about_dialog_description": "Maskbookは、新しいオープンなインターネットへのポータルです。Maskbookを使えば、暗号化された投稿を友達に送ったり、暗号通貨の宝くじに参加したり、すでに使っているプラットフォームで暗号化されたファイルを共有したりすることができます。",
     "about_dialog_touch": "連絡する",
     "about_dialog_feedback": "フィードバック: ",
     "about_dialog_source_code": "ソースコード: ",
@@ -238,7 +238,7 @@
     "post_dialog__select_specific_friends_title": "選ばれし友だち ({{selected}} 名)",
     "post_dialog__title": "Maskbook: 作成",
     "post_dialog__not_posting_as": "<strong>{{name}}</strong> として投稿していませんが?",
-    "post_modal_hint__button": "🔒 投稿を暗号化しました 🔒",
+    "post_modal_hint__button": "🔒 投稿を暗号化 🔒",
     "post_modal_hint__title": "Maskbook を探していますか？",
     "privacy_policy": "プライバシー・ポリシー（個人情報に関する方針）",
     "privacy_policy_link": "https://legal.maskbook.com/maskbook/",
