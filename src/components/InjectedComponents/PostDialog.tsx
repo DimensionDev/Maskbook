@@ -200,19 +200,21 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     },
                                 }}
                             />
-                            <ClickableChip
-                                ChipProps={{
-                                    label: (
-                                        <>
-                                            <FileServiceEntryIcon width={16} height={16} />
-                                            &nbsp;File Service
-                                        </>
-                                    ),
-                                    onClick() {
-                                        setFileServiceDialogOpen(true)
-                                    },
-                                }}
-                            />
+                            {webpackEnv.genericTarget === 'browser' && (
+                                <ClickableChip
+                                    ChipProps={{
+                                        label: (
+                                            <>
+                                                <FileServiceEntryIcon width={16} height={16} />
+                                                &nbsp;File Service
+                                            </>
+                                        ),
+                                        onClick() {
+                                            setFileServiceDialogOpen(true)
+                                        },
+                                    }}
+                                />
+                            )}
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
@@ -284,7 +286,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     DialogProps={props.DialogProps}
                 />
             )}
-            {!process.env.STORYBOOK && (
+            {!process.env.STORYBOOK && webpackEnv.genericTarget === 'browser' && (
                 <FileServiceDialog
                     classes={classes}
                     open={props.open && fileServiceDialogOpen}

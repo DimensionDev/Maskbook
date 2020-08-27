@@ -25,7 +25,7 @@ import { StorybookPluginDefine } from './Storybook/define'
 import { FileServicePluginDefine } from './FileService/define'
 plugins.add(GitcoinPluginDefine)
 plugins.add(RedPacketPluginDefine)
-plugins.add(FileServicePluginDefine)
+if (webpackEnv.genericTarget === 'browser') plugins.add(FileServicePluginDefine)
 if (process.env.STORYBOOK) {
     plugins.add(StorybookPluginDefine)
 }
