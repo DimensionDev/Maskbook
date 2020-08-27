@@ -234,7 +234,7 @@
     "post_dialog__select_specific_friends_title": "選ばれし友だち ({{selected}} 名)",
     "post_dialog__title": "Maskbook: 作成",
     "post_dialog__not_posting_as": "<strong>{{name}}</strong> として投稿していませんが?",
-    "post_modal_hint__button": "🔒 投稿を暗号化しました 🔒",
+    "post_modal_hint__button": "🔒 投稿を暗号化 🔒",
     "post_modal_hint__title": "Maskbookを探していますか？",
     "privacy_policy": "プライバシー・ポリシー（個人情報に関する方針）",
     "privacy_policy_link": "https://legal.maskbook.com/maskbook/",
