@@ -118,11 +118,11 @@ export const redPacketAPI = {
                     name,
                     token_type,
                     token_addr,
-                    total_tokens.toString(),
+                    total_tokens.toFixed(),
                 ),
                 {
                     from: ____sender__addr,
-                    value: token_type === EthereumTokenType.ETH ? total_tokens.toString() : undefined,
+                    value: token_type === EthereumTokenType.ETH ? total_tokens.toFixed() : undefined,
                 },
                 {
                     onTransactionHash(hash) {
@@ -410,7 +410,7 @@ export const walletAPI = {
             from: ownerAddress,
             to: recipientAddress,
             gas: 21000,
-            value: amount.toString(),
+            value: amount.toFixed(),
         })
     },
 }
@@ -463,7 +463,7 @@ export const erc20API = {
             (resolve, reject) => {
                 let txHash = ''
                 sendTx(
-                    erc20Contract.methods.approve(spenderAddress, amount.toString()),
+                    erc20Contract.methods.approve(spenderAddress, amount.toFixed()),
                     { from: ownerAddress },
                     {
                         onTransactionHash(hash) {
@@ -508,7 +508,7 @@ export const erc20API = {
             (resolve, reject) => {
                 let txHash = ''
                 sendTx(
-                    erc20Contract.methods.transfer(recipientAddress, amount.toString()),
+                    erc20Contract.methods.transfer(recipientAddress, amount.toFixed()),
                     {
                         from: ownerAddress,
                     },
@@ -593,7 +593,7 @@ export const gitcoinAPI = {
                 contract.methods.donate(
                     donations.map((x) => ({
                         ...x,
-                        amount: x.amount.toString(),
+                        amount: x.amount.toFixed(),
                     })),
                 ),
                 {
@@ -604,7 +604,7 @@ export const gitcoinAPI = {
                                 accumulator.plus(token === GITCOIN_ETH_ADDRESS ? amount : 0),
                             new BigNumber(0),
                         )
-                        .toString(),
+                        .toFixed(),
                 },
                 {
                     onTransactionHash(hash) {
