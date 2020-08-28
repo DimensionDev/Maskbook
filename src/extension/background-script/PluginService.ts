@@ -26,8 +26,8 @@ export async function invokePlugin<K extends keyof Plugins, M extends keyof Plug
 export type WalletDetails = ManagedWalletRecord | ExoticWalletRecord
 export type ERC20TokenDetails = Pick<ERC20TokenRecord, 'address' | 'decimals' | 'name' | 'network' | 'symbol'>
 export { getTokens, getWallets } from '../../plugins/Wallet/wallet'
-export async function connectExoticWallet(kind: WalletProviderType) {
-    await getWalletProvider(kind).requestAccounts()
+export function connectExoticWallet(kind: WalletProviderType) {
+    return getWalletProvider(kind).requestAccounts()
 }
 export async function getCurrentEthChain() {
     const x = await web3.eth.getChainId()

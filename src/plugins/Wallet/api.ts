@@ -41,8 +41,7 @@ function createBalanceCheckerContract(address: string) {
 
 export const redPacketAPI = {
     async claimByServer(
-        requestSenderAddress: string,
-        privateKey: Buffer,
+        claimWithWallet: string,
         payload: RedPacketJSONPayload,
     ): Promise<{ claim_transaction_hash: string }> {
         const host = 'https://redpacket.gives'
@@ -50,7 +49,7 @@ export const redPacketAPI = {
 
         const network = (await getCurrentEthChain()).toLowerCase()
 
-        const auth = await fetch(`${host}/hi?id=${requestSenderAddress}&network=${network}`)
+        const auth = await fetch(`${host}/hi?id=${claimWithWallet}&network=${network}`)
         if (!auth.ok) throw new Error('Auth failed')
         const verify = await auth.text()
 
@@ -62,11 +61,11 @@ export const redPacketAPI = {
             signature: string
         } = {
             password: payload.password,
-            recipient: requestSenderAddress,
+            recipient: claimWithWallet,
             redpacket_id: payload.rpid,
-            validation: web3.utils.sha3(requestSenderAddress)!,
+            validation: web3.utils.sha3(claimWithWallet)!,
             // TODO: This is not working on MetaMask cause it require the private key.
-            signature: web3.eth.accounts.sign(verify, `0x${privateKey.toString('hex')}`).signature,
+            signature: await web3.eth.sign(verify, claimWithWallet),
         }
         const pay = await fetch(
             `${host}/please?payload=${jwt.sign(jwt_encoded, x, { algorithm: 'HS256' })}&network=${network}`,

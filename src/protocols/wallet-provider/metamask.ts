@@ -15,7 +15,7 @@ class EthereumJSONRpcChannel implements EventBasedChannel {
     private e = new EventEmitter()
     constructor(public currentProvider: AbstractProvider) {}
     send(data: any): void {
-        this.currentProvider.sendAsync(data, (error, result: unknown) => this.e.emit('message', result))
+        this.currentProvider.sendAsync(data, (error, result: unknown) => this.e.emit('m', result))
     }
     on(eventListener: (data: unknown) => void) {
         this.e.on('m', eventListener)
@@ -43,7 +43,7 @@ export const MetaMaskProvider: WalletProvider = {
         }
     },
     async requestAccounts() {
-        const list = await timeout(MetamaskJSONRPC.eth_requestAccounts(), 2000)
+        const list = await MetamaskJSONRPC.eth_requestAccounts()
         const map = new Map<string, Partial<ExoticWalletRecord>>()
         for (const address of list) map.set(address, { address })
         await updateExoticWalletsFromSource(WalletProviderType.metamask, map)

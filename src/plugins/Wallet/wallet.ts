@@ -114,8 +114,7 @@ export async function updateExoticWalletsFromSource(
                 erc20_token_blacklist: new Set(),
                 erc20_token_whitelist: new Set(),
                 eth_balance: new BigNumber(0),
-                // TODO: what name should it be?
-                name: address,
+                name: source,
                 provider: source,
                 type: 'exotic',
                 ...updates.get(address)!,
