@@ -10,19 +10,21 @@ import type { WalletDetails, ERC20TokenDetails } from '../../extension/backgroun
 import { findOutWalletProvider } from './findOutProvider'
 
 export function useWallets() {
-    const swr = useSWR('wallets', { fetcher: Services.Plugin.getWallets })
+    const swr = useSWR('com.maskbook.wallet.wallets', { fetcher: Services.Plugin.getWallets })
     const { revalidate } = swr
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     return swr
 }
 export function useTokens() {
-    const swr = useSWR('tokens', { fetcher: Services.Plugin.getTokens })
+    const swr = useSWR('com.maskbook.wallet.tokens', { fetcher: Services.Plugin.getTokens })
     const { revalidate } = swr
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     return swr
 }
 export function useCurrentEthChain() {
-    const { data, revalidate } = useSWR('eth-chain', { fetcher: Services.Plugin.getCurrentEthChain })
+    const { data, revalidate } = useSWR('com.maskbook.wallet.eth-chain', {
+        fetcher: Services.Plugin.getCurrentEthChain,
+    })
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     useEffect(() => currentLocalWalletEthereumNetworkSettings.addListener(revalidate), [revalidate])
     return data ?? EthereumNetwork.Mainnet

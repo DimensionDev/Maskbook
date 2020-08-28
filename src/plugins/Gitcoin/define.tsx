@@ -50,7 +50,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     )
 }
 
-function fetcher(url: string) {
+function fetcher(key: string, url: string) {
     return Services.Plugin.invokePlugin('co.gitcoin', 'fetchMetadata', url)
 }
 function Gitcoin(props: { url: string }) {
@@ -58,7 +58,7 @@ function Gitcoin(props: { url: string }) {
     const { data: wallets } = useWallets()
     const { data: tokens } = useTokens()
     const url = props.url
-    const { data, isValidating } = useSWR(url, { fetcher })
+    const { data, isValidating } = useSWR(['co.gitcoin', url], { fetcher })
     const {
         transactions,
         daiAmount,

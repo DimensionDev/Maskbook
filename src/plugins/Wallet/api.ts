@@ -65,6 +65,7 @@ export const redPacketAPI = {
             recipient: requestSenderAddress,
             redpacket_id: payload.rpid,
             validation: web3.utils.sha3(requestSenderAddress)!,
+            // TODO: This is not working on MetaMask cause it require the private key.
             signature: web3.eth.accounts.sign(verify, `0x${privateKey.toString('hex')}`).signature,
         }
         const pay = await fetch(
