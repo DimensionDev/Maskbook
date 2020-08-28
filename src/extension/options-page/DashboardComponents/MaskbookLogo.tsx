@@ -4,7 +4,7 @@ export default function MaskbookLogo() {
     return (
         <svg
             style={{ display: 'block' }}
-            height="18.6"
+            height="17.59"
             viewBox="0 0 138 21"
             width="119"
             xmlns="http://www.w3.org/2000/svg">

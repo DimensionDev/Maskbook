@@ -29,17 +29,11 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerHeader: {
         color: 'white',
-        padding: theme.spacing(4, 2, 3, 4),
+        padding: theme.spacing(5.5, 2, 4, 4),
         backgroundColor: 'var(--drawerHeader)',
     },
     drawerBody: {
         backgroundColor: 'var(--drawerBody)',
-    },
-    maskDescription: {
-        fontSize: 14,
-        lineHeight: '24px',
-        marginTop: 6,
-        display: 'block',
     },
     drawerList: {
         padding: 0,
@@ -156,12 +150,6 @@ export default function Drawer(props: DrawerProps) {
                         className={classes.drawerHeader}
                         style={{ backgroundColor: `var(--drawerBody)` }}>
                         <Logo />
-                        <Typography
-                            className={classes.maskDescription}
-                            color={theme.palette.type === 'dark' ? 'textSecondary' : 'inherit'}
-                            variant="caption">
-                            Make Privacy Protected Again
-                        </Typography>
                     </Box>
                 )}
                 <Box
