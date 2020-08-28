@@ -10,7 +10,7 @@ import {
     TableCell,
     TableBody,
 } from '@material-ui/core'
-import type { Market } from '../type'
+import type { Market } from '../types'
 import { PriceChanged } from './PriceChanged'
 
 const useStyles = makeStyles((theme: Theme) =>

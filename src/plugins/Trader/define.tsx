@@ -25,9 +25,7 @@ export const TraderPluginDefine: PluginConfig = {
     pageInspector() {
         return (
             <TrendingPopper>
-                {(name: string) => {
-                    return <TrendingView name={name} />
-                }}
+                {(name: string, reposition?: () => void) => <TrendingView name={name} onUpdate={reposition} />}
             </TrendingPopper>
         )
     },

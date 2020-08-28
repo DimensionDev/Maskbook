@@ -20,7 +20,7 @@ import {
 } from '@material-ui/core'
 import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
-import { Currency, Platform, resolveCurrencyName, resolvePlatformName } from '../type'
+import { Currency, Platform, resolveCurrencyName, resolvePlatformName } from '../types'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { getActivatedUI } from '../../../social-network/ui'
 import {

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 import * as d3 from 'd3'
-import type { Stat } from '../type'
+import type { Stat } from '../types'
 import { makeStyles, Theme, createStyles, CircularProgress, Typography } from '@material-ui/core'
 
 const DEFAULT_WIDTH = 460

@@ -1,4 +1,4 @@
-import { Platform, Currency, Coin, Trending, Market, Stat } from '../type'
+import { Platform, Currency, Coin, Trending, Market, Stat } from '../types'
 import * as coinGeckoAPI from './coingecko'
 import * as coinMarketCapAPI from './coinmarketcap'
 
@@ -98,7 +98,9 @@ export async function getCoinInfo(id: string, platform: Platform, currency: Curr
         market: {
             current_price: info.quotes[currencyName].price,
             total_volume: info.quotes[currencyName].volume_24h,
-            price_change_percentage_24h: info.quotes[currencyName].percent_change_24h,
+            price_change_percentage_1h_in_currency: info.quotes[currencyName].percent_change_1h,
+            price_change_percentage_24h_in_currency: info.quotes[currencyName].percent_change_24h,
+            price_change_percentage_7d_in_currency: info.quotes[currencyName].percent_change_7d,
         },
         tickers: market.market_pairs.map((pair) => ({
             logo_url: '',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     makeStyles,
     Avatar,
@@ -15,7 +15,7 @@ import {
     Tab,
     Tabs,
 } from '@material-ui/core'
-import { resolvePlatformName, Platform } from '../type'
+import { resolvePlatformName, Platform } from '../types'
 import { getActivatedUI } from '../../../social-network/ui'
 import { formatCurrency } from '../../Wallet/formatter'
 import { useTrending } from '../hooks/useTrending'
@@ -42,7 +42,13 @@ const useStyles = makeStyles((theme: Theme) => {
                 display: 'none',
             },
             ...(internalName === 'twitter'
-                ? { border: `1px solid ${theme.palette.type === 'dark' ? '#2f3336' : '#ccd6dd'}` }
+                ? {
+                      boxShadow: `${
+                          theme.palette.type === 'dark'
+                              ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
+                              : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
+                      }`,
+                  }
                 : null),
         },
         header: {
@@ -93,24 +99,18 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export interface TrendingViewProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     name: string
+    onUpdate?: () => void
 }
 
 export function TrendingView(props: TrendingViewProps) {
     const classes = useStyles()
     const [tabIndex, setTabIndex] = useState(0)
 
+    //#region trending
     const platform = useCurrentPlatform(Platform.COIN_GECKO)
     const { value: currency, loading: loadingCurrency } = useCurrentCurrency(platform)
-
-    //#region trending
-    const { value: trending, loading: loadingTrending } = useTrending(props.name, platform)
+    const { value: trending, loading: loadingTrending } = useTrending(props.name, platform, currency)
     //#endregion
-
-    console.log('DEBUG: TrendingView')
-    console.log({
-        currency,
-        trending,
-    })
 
     //#region stats
     const [days, setDays] = useState(365)
@@ -120,6 +120,12 @@ export function TrendingView(props: TrendingViewProps) {
         currency: trending?.currency,
         days,
     })
+    //#endregion
+
+    //#region api ready callback
+    useEffect(() => {
+        props.onUpdate?.()
+    }, [tabIndex, loadingCurrency, loadingTrending])
     //#endregion
 
     //#region display loading skeleton
@@ -133,7 +139,7 @@ export function TrendingView(props: TrendingViewProps) {
                 />
                 <CardContent className={classes.content}>
                     <Skeleton animation="wave" variant="rect" height={58} style={{ marginBottom: 8 }} />
-                    <Skeleton animation="wave" variant="rect" height={300} />
+                    <Skeleton animation="wave" variant="rect" height={318} />
                 </CardContent>
                 <CardActions className={classes.footer}>
                     <Skeleton animation="wave" height={10} width="30%" />

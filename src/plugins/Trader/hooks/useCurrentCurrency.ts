@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
-import type { Platform, Currency, Settings } from '../type'
+import type { Platform, Currency, Settings } from '../types'
 import Services from '../../../extension/service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../../social-network/ui'
@@ -28,10 +28,10 @@ export function useCurrentCurrency(platform: Platform) {
         } catch (e) {
             setCurrency(null)
         }
-    }, [trendingSettings, currencies.length])
+    }, [platform, trendingSettings, currencies.map((x) => x.id).join()])
 
     return {
-        value: currency,
+        value: loading ? null : currency,
         loading,
         error,
     }

@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
+import type PopperJs from 'popper.js'
 import { Popper, ClickAwayListener, PopperProps } from '@material-ui/core'
 import { MessageCenter, ObserveCashTagEvent } from '../messages'
+import { useInterval } from 'react-use'
 
 export interface TrendingPopperProps {
-    children?: (name: string) => React.ReactNode
+    children?: (name: string, reposition?: () => void) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
 
 export function TrendingPopper(props: TrendingPopperProps) {
+    const popperRef = useRef<PopperJs | null>(null)
     const [name, setName] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
@@ -31,8 +34,9 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 disablePortal
                 transition
                 style={{ zIndex: 1, marginTop: 8 }}
+                popperRef={popperRef}
                 {...props.PopperProps}>
-                {props.children?.(name)}
+                {props.children?.(name, () => setTimeout(() => popperRef.current?.scheduleUpdate(), 0))}
             </Popper>
         </ClickAwayListener>
     )

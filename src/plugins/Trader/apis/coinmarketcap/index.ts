@@ -43,6 +43,7 @@ export interface Coin {
 export async function getAllCoins() {
     const response = await fetch(
         `${BASE_URL_v1}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
+        { cache: 'force-cache' },
     )
     return response.json() as Promise<{
         data: Coin[]

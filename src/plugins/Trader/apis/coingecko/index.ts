@@ -4,7 +4,7 @@ const CHART_BASE_URL = 'https://www'
 
 //#region get currency
 export async function getAllCurrenies() {
-    const response = await fetch(`${BASE_URL}/simple/supported_vs_currencies`)
+    const response = await fetch(`${BASE_URL}/simple/supported_vs_currencies`, { cache: 'force-cache' })
     return response.json() as Promise<string[]>
 }
 //#endregion
@@ -17,7 +17,7 @@ export interface Coin {
 }
 
 export async function getAllCoins() {
-    const response = await fetch(`${BASE_URL}/coins/list`)
+    const response = await fetch(`${BASE_URL}/coins/list`, { cache: 'force-cache' })
     return response.json() as Promise<Coin[]>
 }
 //#endregion

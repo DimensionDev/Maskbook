@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles, Theme, createStyles, Link, Typography } from '@material-ui/core'
-import { resolveDaysName } from '../type'
+import { resolveDaysName } from '../types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

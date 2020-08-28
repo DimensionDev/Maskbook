@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
-import type { Currency, Platform } from '../type'
+import type { Currency, Platform } from '../types'
 import { isUndefined } from 'lodash-es'
 
 interface Options {

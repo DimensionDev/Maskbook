@@ -1,4 +1,4 @@
-import type { Currency, Platform } from './type'
+import type { Currency, Platform } from './types'
 import { BatchedMessageCenter } from '../../utils/messages'
 
 export interface SettingsEvent {

@@ -32,7 +32,7 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
     }
 
     return (
-        <Typography color="textPrimary" variant="body1" style={{ lineBreak: 'anywhere', display: 'inline' }}>
+        <Typography component="span" color="textPrimary" variant="body1">
             <Link href={props.message.href} onMouseOver={onHoverCashTag}>
                 {props.message.content}
             </Link>

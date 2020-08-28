@@ -1,5 +1,5 @@
 import { createNetworkSettings } from '../../settings/createSettings'
-import { Platform } from './type'
+import { Platform } from './types'
 
 export const currentTrendingViewPlatformSettings = createNetworkSettings('currentTrendingViewPlatformSettings')
 

@@ -46,11 +46,7 @@ export const DefaultTypedMessageTextRenderer = React.memo(function DefaultTypedM
 ) {
     return renderWithMetadata(
         props,
-        <Typography
-            color="textPrimary"
-            variant="body1"
-            style={{ lineBreak: 'anywhere', display: 'inline' }}
-            data-testid="text_payload">
+        <Typography component="span" color="textPrimary" variant="body1" data-testid="text_payload">
             <RenderText text={props.message.content}></RenderText>
         </Typography>,
     )
@@ -67,7 +63,7 @@ export const DefaultTypedMessageAnchorRenderer = React.memo(function DefaultType
     const { content, href } = props.message
     return renderWithMetadata(
         props,
-        <Typography variant="body1" style={{ lineBreak: 'anywhere', display: 'inline' }} data-testid="anchor_payload">
+        <Typography component="span" variant="body1" data-testid="anchor_payload">
             <Link color="primary" target="_blank" rel="noopener noreferrer" href={href}>
                 {content}
             </Link>

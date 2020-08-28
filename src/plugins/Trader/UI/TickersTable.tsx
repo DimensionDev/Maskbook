@@ -12,7 +12,7 @@ import {
     Link,
     Typography,
 } from '@material-ui/core'
-import type { Ticker, Platform } from '../type'
+import type { Ticker, Platform } from '../types'
 import { formatCurrency, formatEthAddress } from '../../Wallet/formatter'
 
 const useStyles = makeStyles((theme: Theme) =>
