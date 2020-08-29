@@ -19,6 +19,9 @@
     "lint": "eslint src/ --ext .ts,.tsx --fix",
     "lint:report": "eslint src/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml",
     "lint:typecoverage": "type-coverage --strict --ignore-catch --ignore-files src/plugins/Wallet/contracts/** --ignore-files **/__tests__/** --ignore-files **\\__tests__\\** --detail --at-least 98",
+    "locale-kit": "ts-node scripts/locale-kit.ts",
+    "profile:build": "yarn build --profile",
+    "profile:start": "yarn start --profile",
     "start": "webpack-dev-server --mode development",
     "start:android": "webpack-dev-server --firefox-android --mode development",
     "start:chromium": "webpack-dev-server --chromium --mode development",
@@ -27,8 +30,6 @@
     "start:gecko": "webpack-dev-server --firefox-gecko --mode development",
     "start:ios": "webpack-dev-server --wk-webview --mode development",
     "storybook": "start-storybook -p 9009 -s public --quiet",
-    "profile:build": "yarn build --profile",
-    "profile:start": "yarn start --profile",
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js"
