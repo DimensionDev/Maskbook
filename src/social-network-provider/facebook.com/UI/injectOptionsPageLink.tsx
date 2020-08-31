@@ -39,11 +39,7 @@ const useStyle = makeStyles({
 function Link() {
     const classes = useStyle()
     return (
-        <Box
-            className={classes.root}
-            onClick={() => {
-                Services.Welcome.openOptionsPage()
-            }}>
+        <Box className={classes.root} onClick={() => Services.Welcome.openOptionsPage()}>
             <MaskbookIcon className={classes.icon} />
             Maskbook Settings
         </Box>
