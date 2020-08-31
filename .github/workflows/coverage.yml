@@ -27,7 +27,7 @@ jobs:
                   key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: ${{ runner.os }}-yarn-
             - name: Install
-              run: yarn install --link-duplicates --frozen-lockfile --pure-lockfile
+              run: yarn install --frozen-lockfile
             - name: Type Checking
               run: yarn tsc --noEmitOnError
     type-coverage:
@@ -50,7 +50,7 @@ jobs:
                   key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: ${{ runner.os }}-yarn-
             - name: Install
-              run: yarn install --link-duplicates --frozen-lockfile --pure-lockfile
+              run: yarn install --frozen-lockfile
             - name: Type Coverage
               run: yarn lint:typecoverage
     import-linter:
@@ -73,7 +73,7 @@ jobs:
                   key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: ${{ runner.os }}-yarn-
             - name: Install
-              run: yarn install --link-duplicates --frozen-lockfile --pure-lockfile
+              run: yarn install --frozen-lockfile
             - name: Import linter
               run: yarn ts-node -T ./scripts/import-linter.ts
     eslint:
@@ -96,7 +96,7 @@ jobs:
                   key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: ${{ runner.os }}-yarn-
             - name: Install
-              run: yarn install --link-duplicates --frozen-lockfile --pure-lockfile
+              run: yarn install --frozen-lockfile
             - name: ESLint
               run: yarn lint:report
             - name: Upload ESLint Report
@@ -124,7 +124,7 @@ jobs:
                   key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: ${{ runner.os }}-yarn-
             - name: Install
-              run: yarn install --link-duplicates --frozen-lockfile --pure-lockfile
+              run: yarn install --frozen-lockfile
             - name: Build Storybook
               run: yarn build-storybook
             - name: Upload Storybook output
