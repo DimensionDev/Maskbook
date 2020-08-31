@@ -130,6 +130,10 @@ export interface SocialNetworkUIInjections {
      * @returns unmount the injected components
      */
     injectPostInspector(current: PostInfo): () => void
+    /**
+     * Inject Maskbook dashboard entry on Mobile
+     */
+    injectDashboardEntryInMobile?(): void
 }
 //#endregion
 //#region SocialNetworkUITasks
@@ -296,6 +300,7 @@ export function activateSocialNetworkUI(): void {
                 ui.injectPostBox()
                 ui.collectPeople()
                 ui.collectPosts()
+                ui.injectDashboardEntryInMobile()
                 ui.myIdentitiesRef.addListener((val) => {
                     if (val.length === 1) ui.currentIdentity.value = val[0]
                 })
