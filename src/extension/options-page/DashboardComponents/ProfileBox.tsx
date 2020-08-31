@@ -20,23 +20,16 @@ interface ProfileBoxProps {
 
 export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxProps) {
     const profiles = persona ? [...persona.linkedProfiles] : []
-    const providers = [...definedSocialNetworkWorkers]
-        .filter((i) => {
-            if (webpackEnv.target === 'WKWebview') {
-                if (i.networkIdentifier !== 'facebook.com') return false
-            }
-            return true
-        })
-        .map((i) => {
-            const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
-            return {
-                internalName: i.internalName,
-                network: i.networkIdentifier,
-                connected: !!profile,
-                userId: profile?.[0].userId,
-                identifier: profile?.[0],
-            }
-        })
+    const providers = [...definedSocialNetworkWorkers].map((i) => {
+        const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
+        return {
+            internalName: i.internalName,
+            network: i.networkIdentifier,
+            connected: !!profile,
+            userId: profile?.[0].userId,
+            identifier: profile?.[0],
+        }
+    })
     const [detachProfile, , setDetachProfile] = useModal(DashboardPersonaUnlinkConfirmDialog)
 
     const onConnect = async (provider: typeof providers[0]) => {

@@ -20,6 +20,7 @@ activateSocialNetworkUI()
 const close = globalThis.close
 globalThis.close = () => {
     if (webpackEnv.genericTarget === 'facebookApp') {
+        // TODO: support twitter
         exclusiveTasks('https://m.facebook.com/')
         return
     }
