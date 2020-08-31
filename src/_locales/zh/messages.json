@@ -192,7 +192,6 @@
     "select_specific_friends_dialog__title": "額外選擇特定聯繫人",
     "service_decryption_failed": "解密失敗。",
     "service_invalid_backup_file": "這貌似不是 Maskbook 的備份。",
-    "service_key_parse_failed": "未能剖析金鑰",
     "service_not_share_target": "找不到 AES 密鑰。或許這條訊息不是分享給您的？",
     "service_others_key_not_found": "{{name}} 的公鑰無法找到！",
     "service_publish_post_aes_key_failed": "未能發佈 AES 密鑰。",

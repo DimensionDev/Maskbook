@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs'
 import _ from 'lodash'
 import path from 'path'
+import ts from 'typescript'
 
 const SOURCE_PATH = path.join(__dirname, '..', 'src')
 const LOCALE_PATH = path.join(SOURCE_PATH, '_locales')
@@ -26,15 +27,45 @@ async function writeMessages(name: string, messages: unknown) {
     await fs.writeFile(target, JSON.stringify(messages, null, 4), 'utf-8')
 }
 
+function getUsedKeys(content: string) {
+    const keys = new Set<string>()
+    const closest = <T extends ts.Node>(node: ts.Node, match: (node: ts.Node) => node is T): T | undefined => {
+        while (node) {
+            if (match(node)) {
+                return node
+            }
+            node = node.parent
+        }
+        return undefined
+    }
+    const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (rootNode: T) => {
+        function visit(node: ts.Node): ts.Node {
+            if (ts.isIdentifier(node) && node.text === 't') {
+                const parentNode = closest(node, ts.isCallExpression)?.arguments[0]
+                if (parentNode && (ts.isStringLiteral(parentNode) || ts.isNoSubstitutionTemplateLiteral(parentNode))) {
+                    keys.add(parentNode.text)
+                }
+            } else if (
+                ts.isJsxAttribute(node) &&
+                node.name.escapedText === 'i18nKey' &&
+                node.initializer &&
+                ts.isStringLiteral(node.initializer)
+            ) {
+                keys.add(node.initializer.text)
+            }
+            return ts.visitEachChild(node, visit, context)
+        }
+        return ts.visitNode(rootNode, visit)
+    }
+    ts.transform(ts.createSourceFile('', content, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX), [transformer])
+    return keys
+}
+
 async function findAllUnusedKeys() {
     const usedKeys: string[] = []
     const keys = _.keys(await readMessages('en'))
     for await (const file of walk(SOURCE_PATH)) {
-        const content = await fs.readFile(file, 'utf-8')
-        const filteredKeys = keys.filter(
-            (key) => content.includes(`t('${key}'`) || content.includes(`i18nKey="${key}"`),
-        )
-        usedKeys.push(...filteredKeys)
+        usedKeys.push(...getUsedKeys(await fs.readFile(file, 'utf-8')))
     }
     return _.difference(keys, usedKeys)
 }
@@ -69,7 +100,7 @@ async function main() {
     }
     if (process.argv.includes('--sync-key-order')) {
         await syncKeyOrder()
-        console.log('Synced key orders')
+        console.log('Synced keys order')
     }
 }
 

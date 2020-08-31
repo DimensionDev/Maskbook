@@ -192,7 +192,6 @@
     "select_specific_friends_dialog__title": "Select Specific Contacts",
     "service_decryption_failed": "Decryption failed.",
     "service_invalid_backup_file": "This does not seem like a backup of Maskbook.",
-    "service_key_parse_failed": "Key parse failed",
     "service_not_share_target": "Maskbook does not find the post key. This post may not be intended to share with you.",
     "service_others_key_not_found": "The public key of {{name}} cannot be found!",
     "service_publish_post_aes_key_failed": "Failed to publish the AES key!",

@@ -191,7 +191,6 @@
     "select_specific_friends_dialog__title": "特定の友だちを選ぶ",
     "service_decryption_failed": "復号化に失敗",
     "service_invalid_backup_file": "これはバックアップには見えないかもしれません。",
-    "service_key_parse_failed": "キーフレーズが間違っています",
     "service_not_share_target": " Maskbook では投稿キーが見つかりません。この投稿は、あなたと共有することを意図していないかもしれません。",
     "service_others_key_not_found": "{{name}} の公開鍵が見つかりません!",
     "service_publish_post_aes_key_failed": "AES キーを公開するのに失敗しました。",
