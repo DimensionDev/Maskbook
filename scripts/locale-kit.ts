@@ -44,12 +44,12 @@ function getUsedKeys(content: string) {
                 const localeKey = closest(node, ts.isCallExpression)?.arguments[0]
                 if (localeKey === undefined) {
                     return node
-                } else if (ts.isStringLiteral(localeKey) || ts.isNoSubstitutionTemplateLiteral(localeKey)) {
+                } else if (ts.isStringLiteralLike(localeKey)) {
                     keys.add(localeKey.text)
                 } else if (
                     ts.isConditionalExpression(localeKey) &&
-                    ts.isStringLiteral(localeKey.whenTrue) &&
-                    ts.isStringLiteral(localeKey.whenFalse)
+                    ts.isStringLiteralLike(localeKey.whenTrue) &&
+                    ts.isStringLiteralLike(localeKey.whenFalse)
                 ) {
                     keys.add(localeKey.whenTrue.text)
                     keys.add(localeKey.whenFalse.text)
@@ -58,7 +58,7 @@ function getUsedKeys(content: string) {
                 ts.isJsxAttribute(node) &&
                 node.name.escapedText === 'i18nKey' &&
                 node.initializer &&
-                ts.isStringLiteral(node.initializer)
+                ts.isStringLiteralLike(node.initializer)
             ) {
                 keys.add(node.initializer.text)
             }
