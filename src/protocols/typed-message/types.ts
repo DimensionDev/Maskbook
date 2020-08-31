@@ -53,6 +53,9 @@ export function isTypedMessageText(x: TypedMessage): x is TypedMessageText {
 export function isTypedMessgaeAnchor(x: TypedMessage): x is TypedMessageAnchor {
     return x.type === 'anchor'
 }
+export function isTypedMessageKnown(x: TypedMessage) {
+    return ['text', 'anchor', 'compound', 'image', 'empty', 'suspended'].includes(x.type)
+}
 export function isTypedMessageUnknown(x: TypedMessage): x is TypedMessageUnknown {
     return x.type === 'unknown'
 }
