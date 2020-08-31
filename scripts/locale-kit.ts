@@ -41,9 +41,10 @@ function getUsedKeys(content: string) {
     const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (rootNode: T) => {
         function visit(node: ts.Node): ts.Node {
             if (ts.isIdentifier(node) && node.text === 't') {
-                const parentNode = closest(node, ts.isCallExpression)?.arguments[0]
-                if (parentNode && (ts.isStringLiteral(parentNode) || ts.isNoSubstitutionTemplateLiteral(parentNode))) {
-                    keys.add(parentNode.text)
+                const parentNode = closest(node, ts.isCallExpression)
+                const localeKey = parentNode?.arguments[0]
+                if (localeKey && (ts.isStringLiteral(localeKey) || ts.isNoSubstitutionTemplateLiteral(localeKey))) {
+                    keys.add(localeKey.text)
                 }
             } else if (
                 ts.isJsxAttribute(node) &&
