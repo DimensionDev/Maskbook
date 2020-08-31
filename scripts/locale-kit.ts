@@ -38,13 +38,21 @@ function getUsedKeys(content: string) {
         }
         return undefined
     }
-    const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (rootNode: T) => {
+    const transformer = (context: ts.TransformationContext) => (rootNode: ts.Node) => {
         function visit(node: ts.Node): ts.Node {
             if (ts.isIdentifier(node) && node.text === 't') {
-                const parentNode = closest(node, ts.isCallExpression)
-                const localeKey = parentNode?.arguments[0]
-                if (localeKey && (ts.isStringLiteral(localeKey) || ts.isNoSubstitutionTemplateLiteral(localeKey))) {
+                const localeKey = closest(node, ts.isCallExpression)?.arguments[0]
+                if (localeKey === undefined) {
+                    return node
+                } else if (ts.isStringLiteral(localeKey) || ts.isNoSubstitutionTemplateLiteral(localeKey)) {
                     keys.add(localeKey.text)
+                } else if (
+                    ts.isConditionalExpression(localeKey) &&
+                    ts.isStringLiteral(localeKey.whenTrue) &&
+                    ts.isStringLiteral(localeKey.whenFalse)
+                ) {
+                    keys.add(localeKey.whenTrue.text)
+                    keys.add(localeKey.whenFalse.text)
                 }
             } else if (
                 ts.isJsxAttribute(node) &&
