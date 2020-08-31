@@ -12,6 +12,7 @@ import { PreDefinedVirtualGroupNames } from '../../../database/type'
 import { twitterUICustomUI, startWatchThemeColor } from './custom'
 import { notifyPermissionUpdate } from '../../../utils/permissions'
 import { injectMaskbookIconToProfile, injectMaskbookIconIntoFloatingProfileCard } from './injectMaskbookIcon'
+import { injectDashboardEntryInMobileTwitter } from './injectDashboardEntryInMobile'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -70,4 +71,5 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     ignoreSetupAccount() {
         setStorage(twitterUrl.hostIdentifier, { userIgnoredWelcome: true, forceDisplayWelcome: false }).then()
     },
+    injectDashboardEntryInMobile: injectDashboardEntryInMobileTwitter,
 })

@@ -24,6 +24,7 @@ export function renderInShadowRoot(
         shadow(): ShadowRoot
         normal(): HTMLElement
         concurrent?: boolean
+        rootProps?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
     },
 ) {
     const get = (): HTMLElement => {
@@ -48,7 +49,7 @@ export function renderInShadowRoot(
             unmount = mount(
                 element,
                 <ErrorBoundary>
-                    <Maskbook children={node} />
+                    <Maskbook {...config.rootProps} children={node} />
                 </ErrorBoundary>,
                 config.concurrent,
             )
@@ -66,7 +67,7 @@ export function renderInShadowRoot(
                     element,
                     <ErrorBoundary>
                         <RenderInShadowRootWrapper shadow={element}>
-                            <Maskbook children={node} />
+                            <Maskbook {...config.rootProps} children={node} />
                         </RenderInShadowRootWrapper>
                     </ErrorBoundary>,
                     config.concurrent,
@@ -194,7 +195,7 @@ class ErrorBoundary extends React.Component {
 }
 
 import { SnackbarProvider } from 'notistack'
-type MaskbookProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+type MaskbookProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
 
 function Maskbook(_props: MaskbookProps) {
     const theme = getActivatedUI().useTheme()
