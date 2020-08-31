@@ -13,10 +13,7 @@ export function injectDashboardEntryInMobileTwitter() {
         .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
         .useForeach((e, k, meta) => {
             return renderInShadowRoot(
-                <MaskbookIcon
-                    onClick={() => Services.Welcome.openOptionsPage(DashboardRoute.Personas)}
-                    style={{ zoom: 1.25 }}
-                />,
+                <MaskbookIcon onClick={() => Services.Welcome.openOptionsPage()} style={{ zoom: 1.25 }} />,
                 {
                     normal: () => meta.after,
                     shadow: () => meta.afterShadow,
