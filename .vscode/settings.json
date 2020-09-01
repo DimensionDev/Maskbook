@@ -16,6 +16,10 @@
         {
             "fileMatch": ["/src/manifest.json"],
             "url": "http://json.schemastore.org/chrome-manifest"
+        },
+        {
+            "fileMatch": ["/src/_locales/*/messages.json"],
+            "url": "/.vscode/schema/locale.json"
         }
     ],
     "cSpell.words": ["Reificated"]
