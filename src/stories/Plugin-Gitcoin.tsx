@@ -39,6 +39,7 @@ storiesOf('Plugin: Gitcoin', module)
                     open
                     address="fake"
                     title={text('Title', 'Mask + Test Kit Mutual Aid Fund')}
+                    onDonate={action('onDonate')}
                     onClose={action('onClose')}
                 />
             </div>

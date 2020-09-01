@@ -5,7 +5,7 @@ import { parseURL } from '../../utils/utils'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { extractTextFromTypedMessage } from '../../protocols/typed-message'
 import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
-import { Gitcoin } from './UI/Gitcoin'
+import { PostAffixingCanvas } from './UI/PostAffixingCanvas'
 
 const isGitcoin = (x: string): boolean => x.startsWith('https://gitcoin.co/grants')
 
@@ -26,13 +26,16 @@ export const GitcoinPluginDefine: PluginConfig = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    pageInspector() {
+        return null
+    },
 }
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     return (
         <MaskbookPluginWrapper pluginName="Gitcoin">
             <Suspense fallback={<SnackbarContent message="Maskbook is loading this plugin..." />}>
-                <Gitcoin url={props.url} />
+                <PostAffixingCanvas url={props.url} />
             </Suspense>
         </MaskbookPluginWrapper>
     )
