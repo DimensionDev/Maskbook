@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
 import { PluginUI } from '../../plugins/plugin'
@@ -6,7 +6,10 @@ import { makeTypedMessageCompound, isTypedMessageSuspended, isTypedMessageKnown 
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentWholePostVisibilitySettings, WholePostVisibility } from '../../settings/settings'
 
-export interface PostDummyProps {}
+export interface PostDummyProps {
+    zip?: () => void
+    unzip?: () => void
+}
 
 export function PostDummy(props: PostDummyProps) {
     const parsedPostContent = usePostInfoDetails('parsedPostContent')
@@ -17,21 +20,30 @@ export function PostDummy(props: PostDummyProps) {
         (x, plugin) => (plugin.postMessageProcessor ? plugin.postMessageProcessor(x) : x),
         parsedPostContent,
     )
+    const postDummyVisible =
+        // render dummy for all posts
+        wholePostVisibilitySettings === WholePostVisibility.all ||
+        // render dummy for posts which enhanced by plugins
+        (wholePostVisibilitySettings === WholePostVisibility.enhancedOnly &&
+            processedPostMessage.items.some((x) => !isTypedMessageKnown(x))) ||
+        // render dummy for posts which encrypted by maskbook
+        (wholePostVisibilitySettings === WholePostVisibility.encryptedOnly && postPayload.ok)
 
-    // render dummy for posts which enhanced by plugins
-    if (
-        wholePostVisibilitySettings === WholePostVisibility.enhancedOnly &&
-        processedPostMessage.items.every(isTypedMessageKnown)
-    )
-        return null
+    console.log(`DEBUG: postDummyVisible`)
+    console.log({
+        postDummyVisible,
+        wholePostVisibilitySettings,
+    })
 
-    // render dummy for posts which encrypted by maskbook
-    if (wholePostVisibilitySettings === WholePostVisibility.encryptedOnly && !postPayload.ok) return null
+    // zip original post
+    useEffect(() => {
+        if (postDummyVisible) props.zip?.()
+        else props.unzip?.()
+    }, [postDummyVisible])
 
-    // render dummy for all posts
-    return (
+    return postDummyVisible ? (
         <DefaultTypedMessageRenderer
             message={makeTypedMessageCompound(processedPostMessage.items.filter((x) => !isTypedMessageSuspended(x)))}
         />
-    )
+    ) : null
 }
