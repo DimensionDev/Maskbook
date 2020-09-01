@@ -1,5 +1,3 @@
-import { Days } from '../../UI/PriceChartDaysControl'
-
 const BASE_URL = 'https://api.coingecko.com/api/v3'
 
 //#region get currency
@@ -118,7 +116,11 @@ export async function getCoinInfo(coinId: string) {
 export type Stat = [number, number]
 
 export async function getPriceStats(coinId: string, currencyId: string, days: number) {
-    const response = await fetch(`${BASE_URL}/coins/${coinId}/market_chart?vs_currency=${currencyId}&days=${days}`)
+    const params = new URLSearchParams()
+    params.append('vs_currency', currencyId)
+    params.append('days', String(days))
+
+    const response = await fetch(`${BASE_URL}/coins/${coinId}/market_chart?${params.toString()}`)
     return response.json() as Promise<{
         market_caps: Stat[]
         prices: Stat[]

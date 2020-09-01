@@ -77,7 +77,10 @@ export interface CoinInfo {
 }
 
 export async function getCoinInfo(id: string, currency: string) {
-    const response = await fetch(`${WIDGET_BASE_URL}/ticker/${id}/?ref=widget&convert=${currency}`)
+    const params = new URLSearchParams('ref=widget')
+    params.append('convert', currency)
+
+    const response = await fetch(`${WIDGET_BASE_URL}/ticker/${id}/?${params.toString()}`)
     return response.json() as Promise<{
         data: CoinInfo
         status: Status
@@ -95,12 +98,15 @@ export async function getHistorical(
     endDate: Date,
     interval: string = '1d',
 ) {
-    const toUnixTimestamp = (d: Date) => Math.floor(d.getTime() / 1000)
-    const response = await fetch(
-        `${BASE_URL_v1_1}/cryptocurrency/quotes/historical?convert=${currency}&format=chart_crypto_details&id=${id}&interval=${interval}&time_end=${toUnixTimestamp(
-            endDate,
-        )}&time_start=${toUnixTimestamp(startDate)}`,
-    )
+    const toUnixTimestamp = (d: Date) => String(Math.floor(d.getTime() / 1000))
+    const params = new URLSearchParams('format=chart_crypto_details')
+    params.append('convert', currency)
+    params.append('id', id)
+    params.append('interval', interval)
+    params.append('time_end', toUnixTimestamp(endDate))
+    params.append('time_start', toUnixTimestamp(startDate))
+
+    const response = await fetch(`${BASE_URL_v1_1}/cryptocurrency/quotes/historical?${params.toString()}`)
     return response.json() as Promise<{
         data: Record<string, Record<string, Stat>>
         status: Status
@@ -152,9 +158,13 @@ export interface Pair {
     }
 }
 export async function getLatestMarketPairs(id: string, currency: string) {
-    const response = await fetch(
-        `${BASE_URL_v1}/cryptocurrency/market-pairs/latest?aux=num_market_pairs,market_url,price_quote,effective_liquidity,market_score,market_reputation&convert=${currency}&id=${id}&limit=40&sort=cmc_rank&start=1`,
+    const params = new URLSearchParams(
+        'aux=num_market_pairs,market_url,price_quote,effective_liquidity,market_score,market_reputation&limit=40&sort=cmc_rank&start=1',
     )
+    params.append('convert', currency)
+    params.append('id', id)
+
+    const response = await fetch(`${BASE_URL_v1}/cryptocurrency/market-pairs/latest?${params.toString()}`)
     return response.json() as Promise<{
         data: {
             id: number
