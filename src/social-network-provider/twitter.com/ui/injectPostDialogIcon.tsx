@@ -8,6 +8,7 @@ import { PostDialogIcon } from '../../../components/InjectedComponents/PostDialo
 import { MessageCenter } from '../../../utils/messages'
 import { isCompose, isMobile } from '../utils/postBox'
 import { useTwitterMaskbookIcon } from '../utils/theme'
+import { Flags } from '../../../utils/flags'
 
 export function injectPostDialogIconAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
@@ -18,7 +19,7 @@ export function injectPostDialogIconAtTwitter() {
 function renderPostDialogIconTo<T>(ls: LiveSelector<T, true>) {
     const watcher = new MutationObserverWatcher(ls)
         .setDOMProxyOption({
-            afterShadowRootInit: { mode: webpackEnv.shadowRootMode },
+            afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
         })
         .startWatch({
             childList: true,

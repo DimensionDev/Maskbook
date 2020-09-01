@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { bioCardParser } from '../utils/fetch'
 import { twitterEncoding } from '../encoding'
 import { ProfileIdentifier } from '../../../database/type'
+import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles({
     root: {
@@ -36,7 +37,7 @@ export function PersonKnownAtTwitter(props: PersonKnownProps) {
 export function injectKnownIdentityAtTwitter() {
     const watcher = new MutationObserverWatcher(bioCardSelector<false>(false))
         .setDOMProxyOption({
-            afterShadowRootInit: { mode: webpackEnv.shadowRootMode },
+            afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
         })
         .useForeach((content) => {
             const bioRef = new ValueRef('')

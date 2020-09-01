@@ -4,12 +4,13 @@ import { fetchPostContentFacebook } from './Worker/fetchPostContent'
 import { fetchProfileFacebook } from './Worker/fetchProfile'
 import { autoVerifyBioFacebook } from './Worker/autoVerifyBio'
 import { autoVerifyPostFacebook } from './Worker/autoVerifyPost'
+import { Flags } from '../../utils/flags'
 
 export const facebookWorkerSelf = defineSocialNetworkWorker({
     ...sharedProvider,
     fetchPostContent: fetchPostContentFacebook,
     fetchProfile: fetchProfileFacebook,
-    autoVerifyBio: webpackEnv.target === 'WKWebview' ? null : autoVerifyBioFacebook,
+    autoVerifyBio: Flags.no_auto_verify_bio ? null : autoVerifyBioFacebook,
     autoVerifyPost: autoVerifyPostFacebook,
     manualVerifyPost: null,
 })

@@ -41,6 +41,7 @@ import { DatabaseRecordType, DatabasePreviewCard } from '../DashboardComponents/
 import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQRCodeCameraBox'
 import { sleep } from '../../../utils/utils'
 import { SetupStep } from '../SetupStep'
+import { Flags } from '../../../utils/flags'
 
 //#region setup form
 const useSetupFormStyles = makeStyles((theme) =>
@@ -323,7 +324,7 @@ export function ConnectNetwork() {
         const persona = initializedPersonas.find((x) => x.identifier.toText() === identifier)
         // auto-finished by immersive guider
         if (persona?.linkedProfiles.size) {
-            history.replace(webpackEnv.perferResponsiveTarget === 'xs' ? DashboardRoute.Nav : DashboardRoute.Personas)
+            history.replace(Flags.has_no_browser_tab_ui ? DashboardRoute.Nav : DashboardRoute.Personas)
             return null
         }
         return identifier
@@ -372,11 +373,7 @@ export function ConnectNetwork() {
                                 }),
                             ])
                             await sleep(300)
-                            history.replace(
-                                webpackEnv.perferResponsiveTarget === 'xs'
-                                    ? DashboardRoute.Nav
-                                    : DashboardRoute.Personas,
-                            )
+                            history.replace(Flags.has_no_browser_tab_ui ? DashboardRoute.Nav : DashboardRoute.Personas)
                         }}>
                         {t('set_up_button_finish')}
                     </ActionButton>
@@ -570,7 +567,7 @@ export function RestoreDatabaseAdvance() {
             if (persona) {
                 history.push(
                     persona.linkedProfiles.size
-                        ? webpackEnv.perferResponsiveTarget === 'xs'
+                        ? Flags.has_no_browser_tab_ui
                             ? DashboardRoute.Nav
                             : DashboardRoute.Personas
                         : `${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(persona.identifier.toText())}`,

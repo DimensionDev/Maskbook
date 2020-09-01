@@ -7,6 +7,7 @@ import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { dispatchCustomEvents, nop, selectElementContents, sleep } from '../../utils/utils'
 import { makeStyles } from '@material-ui/core'
 import { PostInfoContext, usePostInfoDetails, usePostInfo } from '../../components/DataSource/usePostInfo'
+import { Flags } from '../../utils/flags'
 
 const defHandler = async (encryptedComment: string, current: PostInfo, realCurrent: HTMLElement | null) => {
     const root = realCurrent || current.rootNode
@@ -60,7 +61,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
                     },
                 ),
             )
-            .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
+            .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
             .startWatch({
                 childList: true,
                 subtree: true,

@@ -21,6 +21,7 @@ import {
     makeTypedMessageEmpty,
     makeTypedMessageSuspended,
 } from '../../../protocols/typed-message'
+import { Flags } from '../../../utils/flags'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -139,7 +140,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 onNodeMutation: run,
             }
         })
-        .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
             const isQuotedTweet = tweetNode?.getAttribute('role') === 'blockquote'

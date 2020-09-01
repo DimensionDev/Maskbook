@@ -12,6 +12,7 @@ import { cloneDeep, merge } from 'lodash-es'
 import Logo from './MaskbookLogo'
 import { Carousel } from './Carousel'
 import { makeNewBugIssueURL } from '../../debug-page/issue'
+import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -117,12 +118,9 @@ interface DrawerProps {
 export default function Drawer(props: DrawerProps) {
     const { t } = useI18N()
     const classes = useStyles()
-    const theme = useTheme()
     const match = useRouteMatch('/:param/')
     const forSetupPurpose = match?.url.includes('/setup')
-    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
-        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
-    })
+    const xsMatched = useMatchXS()
 
     const { routers, exitDashboard } = props
     const [feedback, openFeedback] = useModal(DashboardFeedbackDialog)

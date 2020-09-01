@@ -25,6 +25,7 @@ import { injectKnownIdentityAtFacebook } from './UI/injectKnownIdentity'
 import { createTaskStartImmersiveSetupDefault } from '../../social-network/defaults/taskStartImmersiveSetupDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
 import { notifyPermissionUpdate } from '../../utils/permissions'
+import { Flags } from '../../utils/flags'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
@@ -41,7 +42,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     friendlyName: 'Facebook',
     requestPermission() {
         // TODO: wait for webextension-shim to support <all_urls> in permission.
-        if (webpackEnv.target === 'WKWebview' || webpackEnv.target === 'E2E') return Promise.resolve(true)
+        if (Flags.no_web_extension_dynamic_permission_request) return Promise.resolve(true)
         return browser.permissions
             .request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
             .then(notifyPermissionUpdate)

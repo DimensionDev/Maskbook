@@ -4,6 +4,7 @@ import { sideEffect } from '../utils/side-effects'
 import { EthereumNetwork } from '../plugins/Wallet/database/types'
 import type { SetupGuideStep } from '../components/InjectedComponents/ImmersiveGuide/SetupGuide'
 import { WalletProviderType } from '../plugins/shared/findOutProvider'
+import { Flags } from '../utils/flags'
 
 /**
  * Does the debug mode on
@@ -24,13 +25,9 @@ export const disableOpenNewTabInBackgroundSettings = createGlobalSettings<boolea
     },
 )
 
-const disableShadowRoot = webpackEnv.target === 'WKWebview' || process.env.STORYBOOK
 export const renderInShadowRootSettings = createGlobalSettings<boolean>(
     'render in shadow root',
-    /**
-     * ? In WKWebview, the web extension polyfill is not ready for it.
-     */
-    !disableShadowRoot,
+    !Flags.no_ShadowDOM_support,
     {
         primary: () => i18n.t('settings_advance_security'),
         secondary: () => i18n.t('settings_advance_security_desc'),

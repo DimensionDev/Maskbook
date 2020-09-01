@@ -9,6 +9,7 @@ import { DashboardContactDialog, DashboardContactDeleteConfirmDialog } from '../
 import DashboardMenu from './DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
+import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -63,9 +64,7 @@ export function ContactLine(props: ContactLineProps) {
     const classes = useStyles()
     const { contact, onUpdated, onDeleted, ...rest } = props
     const [contactDialog, openContactDialog] = useModal(DashboardContactDialog, { contact, onUpdated })
-    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
-        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
-    })
+    const xsMatched = useMatchXS()
 
     const [deleteContactConfirmDialog, openDeleteContactConfirmDialog] = useModal(DashboardContactDeleteConfirmDialog, {
         contact,

@@ -40,6 +40,8 @@ import { SetupStep } from './SetupStep'
 import DashboardNavRouter from './DashboardRouters/Nav'
 import ActionButton from './DashboardComponents/ActionButton'
 import ShowcaseBox from './DashboardComponents/ShowcaseBox'
+import { Flags } from '../../utils/flags'
+import { useMatchXS } from '../../utils/hooks/useMatchXS'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.type === 'dark'
@@ -116,9 +118,7 @@ function DashboardUI() {
     const { t } = useI18N()
     const classes = useStyles()
     const history = useHistory<unknown>()
-    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
-        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
-    })
+    const xsMatched = useMatchXS()
     const routers = ([
         [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
         [t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />],
@@ -129,7 +129,7 @@ function DashboardUI() {
     // jump to persona if needed
     const [reloadSpy, setReloadSpy] = useState(false)
     const { loading, error } = useAsync(async () => {
-        if (webpackEnv.target === 'E2E' && location.hash.includes('noredirect=true')) return
+        if (process.env.target === 'E2E' && location.hash.includes('noredirect=true')) return
         if (location.hash.includes(SetupStep.ConsentDataCollection)) return
         const personas = (await Services.Identity.queryMyPersonas()).filter((x) => !x.uninitialized)
         // the user need setup at least one persona
@@ -189,7 +189,7 @@ function DashboardUI() {
         <>
             {xsMatched ? null : drawer}
             <Switch>
-                {webpackEnv.perferResponsiveTarget === 'xs' ? (
+                {Flags.has_no_browser_tab_ui ? (
                     <Route path={DashboardRoute.Nav} component={() => <DashboardNavRouter children={drawer} />} />
                 ) : null}
                 <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
@@ -199,10 +199,7 @@ function DashboardUI() {
                 <Route path={DashboardRoute.Setup} component={DashboardSetupRouter} />
                 {/* // TODO: this page should be boardless */}
                 <Route path={DashboardRoute.RequestPermission} component={RequestPermissionPage} />
-                <Redirect
-                    path="*"
-                    to={webpackEnv.perferResponsiveTarget === 'xs' ? DashboardRoute.Nav : DashboardRoute.Personas}
-                />
+                <Redirect path="*" to={Flags.has_no_browser_tab_ui ? DashboardRoute.Nav : DashboardRoute.Personas} />
             </Switch>
         </>,
     )

@@ -12,6 +12,7 @@ import Serialization from '../../utils/type-transform/Serialization'
 import { sideEffect } from '../../utils/side-effects'
 import { untilDocumentReady } from '../../utils/dom'
 import { sleep } from '../../utils/utils'
+import { Flags } from '../../utils/flags'
 
 function getActivatedUI() {
     return safeGetActiveUI()
@@ -91,7 +92,7 @@ export function exclusiveTasks(...args: Parameters<typeof realTasks>) {
         memorable: false,
         autoClose: false,
     }
-    if (webpackEnv.genericTarget !== 'facebookApp') return tasks(uri, { ...updatedOptions, ...options }, ...others)
+    if (Flags.has_no_browser_tab_ui) return tasks(uri, { ...updatedOptions, ...options }, ...others)
     let _key: keyof typeof _tasks
     let _args: any[]
     async function p() {
