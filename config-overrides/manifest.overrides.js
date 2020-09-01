@@ -23,7 +23,7 @@ function chromium(manifest) {}
 /**
  * @param {typeof base} manifest
  */
-function WKWebview(manifest) {
+function safari(manifest) {
     manifest['iOS-injected-scripts'] = ['js/injected-script.js']
     manifest.permissions.push('<all_urls>')
 }
@@ -52,4 +52,4 @@ function E2E(manifest) {
     manifest.optional_permissions = []
 }
 function production(manifest, target) {}
-module.exports = { firefox, geckoview, chromium, WKWebview, development, production, E2E }
+module.exports = { firefox, geckoview, chromium, safari, development, production, E2E }

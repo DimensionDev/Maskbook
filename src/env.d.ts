@@ -2,18 +2,21 @@
 /// <reference types="react/experimental" />
 /// <reference types="react-dom/experimental" />
 
-declare const webpackEnv: {
-    readonly target: 'Chromium' | 'Firefox' | 'WKWebview' | 'E2E' | undefined
-    readonly firefoxVariant: 'android' | 'desktop' | 'GeckoView' | undefined
-    readonly genericTarget: 'facebookApp' | 'browser'
-    readonly perferResponsiveTarget: 'xs' | undefined
-    readonly shadowRootMode: 'open' | 'closed'
-}
-
 declare module NodeJS {
     interface ProcessEnv {
-        NODE_ENV: 'development' | 'production' | 'test'
-        STORYBOOK?: boolean
+        /** test means Jest. Puppeteer test does not use "test".  */
+        readonly NODE_ENV: 'development' | 'production' | 'test'
+        readonly STORYBOOK?: boolean
+        readonly target: 'chromium' | 'firefox' | 'safari' | 'E2E'
+        readonly architecture: 'web' | 'app'
+        /** fennec = stable firefox; geckoview = next generation firefox (used in Android App, in future it will become the default engine on Firefox for Android) */
+        readonly firefoxVariant: 'fennec' | 'geckoview'
+        /**
+         * STRONGLY SUGGEST to make the app flexible as possible!
+         * This value is the build time fallback for the screen size.
+         * It DOESN't means the app MUST run in this size.
+         */
+        readonly resolution: 'desktop' | 'mobile'
     }
 }
 

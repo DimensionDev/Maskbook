@@ -50,7 +50,7 @@ const calcArgs = (argv) => ({
     /** @type {boolean} */
     Chromium: argv.chromium,
     /** @type {boolean} */
-    WKWebview: argv['wk-webview'],
+    Safari: argv['wk-webview'],
     /** @type {boolean} */
     E2E: argv.e2e,
     /** @type {boolean} */
@@ -68,7 +68,7 @@ module.exports = (argvEnv, argv) => {
     if (target.Firefox) {
         polyfills = polyfills.filter((name) => !name.includes('webextension-polyfill'))
     }
-    if (target.StandaloneGeckoView || target.WKWebview) polyfills.push(require.resolve('./src/polyfill/permissions.js'))
+    if (target.StandaloneGeckoView || target.Safari) polyfills.push(require.resolve('./src/polyfill/permissions.js'))
 
     /** @type {"production" | "development"} */
     const env = argv.mode
@@ -259,48 +259,38 @@ module.exports = (argvEnv, argv) => {
 
     // Setting conditional compilations
     {
-        /** @type {'Chromium' | 'Firefox' | 'WKWebview' | 'E2E' | undefined} */
+        /** @type {'chromium' | 'firefox' | 'safari' | 'E2E' | undefined} */
         let buildTarget = undefined
-        /** @type {'android' | 'desktop' | 'GeckoView' | undefined} */
+        /** @type {'fennec' | 'geckoview'} */
         let firefoxVariant = undefined
-        /** @type {'app' | 'browser' | 'facebookApp'} */
-        let genericTarget = 'browser'
-        /** @type {'xs'} */
-        let perferResponsiveTarget = undefined
-        if (target.Chromium) buildTarget = 'Chromium'
-        if (target.Firefox) buildTarget = 'Firefox'
-        if (target.FirefoxDesktop) firefoxVariant = 'desktop'
-        if (target.FirefoxForAndroid) firefoxVariant = 'android'
+        /** @type {'web' | 'app'} */
+        let architecture = 'web'
+        /** @type { 'desktop' | 'mobile'} */
+        let resolution = undefined
+        if (target.Chromium) buildTarget = 'chromium'
+        if (target.Firefox) buildTarget = 'firefox'
+        if (target.FirefoxDesktop) firefoxVariant = 'fennec'
+        if (target.FirefoxForAndroid) firefoxVariant = 'fennec'
         if (target.StandaloneGeckoView) {
-            firefoxVariant = 'GeckoView'
-            genericTarget = 'facebookApp'
+            firefoxVariant = 'geckoview'
+            architecture = 'app'
         }
-        if (target.WKWebview) {
-            buildTarget = 'WKWebview'
-            genericTarget = 'facebookApp'
+        if (target.Safari) {
+            buildTarget = 'safari'
+            architecture = 'app'
         }
-        if (genericTarget === 'facebookApp' || firefoxVariant === 'android') {
-            perferResponsiveTarget = 'xs'
-        }
+        if (architecture === 'app' || firefoxVariant === 'fennec') {
+            resolution = 'mobile'
+        } else resolution = 'desktop'
         if (target.E2E) buildTarget = 'E2E'
-        config.plugins.push(
-            new webpack.DefinePlugin({
-                'webpackEnv.shadowRootMode': JSON.stringify(target.E2E ? 'open' : 'closed'),
-            }),
-        )
         if (buildTarget)
             config.plugins.push(
-                new webpack.DefinePlugin({
-                    'webpackEnv.target': JSON.stringify(buildTarget),
-                    'webpackEnv.genericTarget': JSON.stringify(genericTarget),
-                    'webpackEnv.perferResponsiveTarget': JSON.stringify(perferResponsiveTarget),
-                    'process.env.STORYBOOK': 'false',
-                }),
-            )
-        if (firefoxVariant)
-            config.plugins.push(
-                new webpack.DefinePlugin({
-                    'webpackEnv.firefoxVariant': JSON.stringify(firefoxVariant),
+                new webpack.EnvironmentPlugin({
+                    STORYBOOK: false,
+                    target: buildTarget,
+                    architecture,
+                    resolution,
+                    firefoxVariant,
                 }),
             )
     }
@@ -313,7 +303,7 @@ module.exports = (argvEnv, argv) => {
         if (target.FirefoxDesktop) modifiers.firefox(manifest)
         if (target.FirefoxForAndroid) modifiers.firefox(manifest)
         if (target.StandaloneGeckoView) modifiers.geckoview(manifest)
-        if (target.WKWebview) modifiers.WKWebview(manifest)
+        if (target.Safari) modifiers.safari(manifest)
         if (target.E2E) modifiers.E2E(manifest)
         if (env === 'development' || target.E2E) modifiers.development(manifest, target)
         else modifiers.production(manifest, target)

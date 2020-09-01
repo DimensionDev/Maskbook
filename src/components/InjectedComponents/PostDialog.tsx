@@ -46,6 +46,7 @@ import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/utils'
 import { PluginUI } from '../../plugins/plugin'
+import { Flags } from '../../utils/flags'
 
 const defaultTheme = {}
 
@@ -200,7 +201,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     },
                                 }}
                             />
-                            {webpackEnv.genericTarget === 'browser' && (
+                            {Flags.file_service_enabled && (
                                 <ClickableChip
                                     ChipProps={{
                                         label: (
@@ -244,8 +245,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 />
                             </SelectRecipientsUI>
                         </Box>
-                        {/* This feature is not ready for mobile version */}
-                        {webpackEnv.genericTarget !== 'facebookApp' ? (
+                        {Flags.no_post_image_payload_support ? null : (
                             <>
                                 <Typography style={{ marginBottom: 10 }}>
                                     {t('post_dialog__more_options_title')}
@@ -261,7 +261,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     />
                                 </Box>
                             </>
-                        ) : null}
+                        )}
                     </DialogContent>
                     <DialogActions className={classes.actions}>
                         <Button
@@ -286,7 +286,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     DialogProps={props.DialogProps}
                 />
             )}
-            {!process.env.STORYBOOK && webpackEnv.genericTarget === 'browser' && (
+            {Flags.file_service_enabled && (
                 <FileServiceDialog
                     classes={classes}
                     open={props.open && fileServiceDialogOpen}

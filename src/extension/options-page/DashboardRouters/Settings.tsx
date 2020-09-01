@@ -30,6 +30,7 @@ import { merge, cloneDeep } from 'lodash-es'
 import { useModal } from '../DashboardDialogs/Base'
 import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
+import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -164,8 +165,7 @@ export default function DashboardSettingsRouter() {
                                     icon={<PaletteIcon />}
                                     value={appearanceSettings}
                                 />
-                                {process.env.NODE_ENV === 'development' ||
-                                webpackEnv.perferResponsiveTarget === 'xs' ? (
+                                {Flags.support_eth_network_switch ? (
                                     <SettingsUIEnum
                                         classes={listStyle}
                                         enumObject={EthereumNetwork}
@@ -187,14 +187,13 @@ export default function DashboardSettingsRouter() {
                                     icon={<TabIcon />}
                                     value={disableOpenNewTabInBackgroundSettings}
                                 />
-                                {/* This feature is not ready for iOS */}
-                                {webpackEnv.target !== 'WKWebview' ? (
+                                {Flags.no_ShadowDOM_support ? null : (
                                     <SettingsUI
                                         classes={listStyle}
                                         icon={shadowRoot ? <EnhancedEncryptionIcon /> : <NoEncryptionIcon />}
                                         value={renderInShadowRootSettings}
                                     />
-                                ) : null}
+                                )}
                                 <SettingsUI
                                     classes={listStyle}
                                     icon={<MemoryOutlinedIcon />}

@@ -2,6 +2,7 @@ import React, { useMemo, useContext, useEffect, useRef, useCallback } from 'reac
 import { makeStyles, createStyles, useTheme, useMediaQuery, Theme } from '@material-ui/core'
 import { useLocation } from 'react-router-dom'
 import { noop } from 'lodash-es'
+import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -37,9 +38,7 @@ export function DashboardBlurContextUI({ children }: DashboardBlurContextUIProps
     const location = useLocation()
     const theme = useTheme()
     const ref = useRef<HTMLDivElement>(null!)
-    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
-        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
-    })
+    const xsMatched = useMatchXS()
 
     const blur = useCallback(() => {
         blurRequest += 1
