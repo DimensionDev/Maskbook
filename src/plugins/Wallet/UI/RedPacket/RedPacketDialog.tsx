@@ -31,10 +31,9 @@ import { formatBalance } from '../../formatter'
 import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
 import BigNumber from 'bignumber.js'
-import { useSelectWallet, useWallet } from '../../../shared/useWallet'
+import { useSelectWallet, useTokens, useWallets } from '../../../shared/useWallet'
 import { WalletSelect } from '../../../shared/WalletSelect'
 import { TokenSelect } from '../../../shared/TokenSelect'
-import { currentEthereumNetworkSettings } from '../../../../settings/settings'
 import { FeedbackDialog } from './Dialogs'
 import type { WalletDetails, ERC20TokenDetails } from '../../../../extension/background-script/PluginService'
 import { RedPacketJSONPayload, RedPacketMetaKey } from '../../../RedPacket/utils'
@@ -82,8 +81,6 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const [shares, setShares] = useState(5)
     const [, sharesRef] = useCapturedInput((x) => setShares(parseInt(x)))
 
-    const network = useValueRef(currentEthereumNetworkSettings)
-
     const useSelectWalletResult = useSelectWallet(wallets, tokens)
     const {
         erc20Balance,
@@ -115,12 +112,12 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     ]
     const isSendButtonDisabled = isDisabled.some((x) => x)
 
-    const onCreate = () => {
+    const onCreate = async () => {
         const power = selectedTokenType === EthereumTokenType.ETH ? 18 : selectedToken!.decimals
         props.onCreateNewPacket({
             duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
             is_random: Boolean(is_random),
-            network,
+            network: await Services.Plugin.getCurrentEthChain(),
             send_message,
             send_total: new BigNumber(send_total).multipliedBy(new BigNumber(10).pow(power)),
             sender_address: selectedWalletAddress!,
@@ -316,8 +313,8 @@ const useStyles = makeStyles({
 })
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
-    const { data: walletData } = useWallet()
-    const { wallets, tokens } = walletData ?? {}
+    const { data: wallets } = useWallets()
+    const { data: tokens } = useTokens()
     const [availableRedPackets, setAvailableRedPackets] = useState<RedPacketRecord[]>([])
     const [justCreatedRedPacket, setJustCreatedRedPacket] = useState<RedPacketRecord | undefined>(undefined)
 

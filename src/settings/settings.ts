@@ -1,8 +1,9 @@
-import { createGlobalSettings, createNetworkSettings } from './createSettings'
+import { createGlobalSettings, createInternalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { EthereumNetwork } from '../plugins/Wallet/database/types'
 import type { SetupGuideStep } from '../components/InjectedComponents/ImmersiveGuide/SetupGuide'
+import { WalletProviderType } from '../plugins/shared/findOutProvider'
 
 /**
  * Does the debug mode on
@@ -46,14 +47,19 @@ export const appearanceSettings = createGlobalSettings<Appearance>('apperance', 
     primary: () => i18n.t('settings_appearance'),
 })
 
-export const currentEthereumNetworkSettings = createGlobalSettings<EthereumNetwork>(
+export const currentLocalWalletEthereumNetworkSettings = createGlobalSettings<EthereumNetwork>(
     'eth network',
     EthereumNetwork.Mainnet,
     {
         primary: () => i18n.t('settings_choose_eth_network'),
         secondary: () =>
-            `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Ropsten}`,
+            `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Ropsten}. This only effects the built-in wallet.`,
     },
+)
+
+export const lastActivatedWalletProvider = createInternalSettings<WalletProviderType>(
+    'last activated wallet provider',
+    WalletProviderType.managed,
 )
 
 export enum Language {

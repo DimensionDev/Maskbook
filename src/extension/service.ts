@@ -8,6 +8,7 @@ import { getCurrentNetworkWorkerService } from './background-script/WorkerServic
 import { MessageCenter } from '@holoflows/kit/es'
 import { IdentifierMap } from '../database/IdentifierMap'
 import type { upload as pluginArweaveUpload } from '../plugins/FileService/arweave/index'
+import BigNumber from 'bignumber.js'
 
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
@@ -87,6 +88,13 @@ Object.assign(globalThis, {
     getCurrentNetworkWorkerService,
     ECKeyIdentifier,
     IdentifierMap,
+    BigNumber,
+})
+Object.defineProperty(BigNumber.prototype, '__debug__amount__', {
+    get(this: BigNumber) {
+        return this.toNumber()
+    },
+    configurable: true,
 })
 
 //#region
@@ -102,7 +110,6 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                 log: logOptions,
                 channel: mc.eventBasedChannel,
                 preferLocalImplementation: GetContext() === 'background',
-                preservePauseOnException: process.env.NODE_ENV === 'development',
                 strict: false,
             }),
         })
@@ -122,7 +129,6 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                 serializer: Serialization,
                 log: logOptions,
                 channel: mc.eventBasedChannel,
-                preservePauseOnException: process.env.NODE_ENV === 'development',
                 strict: false,
             })
         }

@@ -1,23 +1,35 @@
 import { useState, useEffect } from 'react'
 import useSWR from 'swr'
-import { EthereumTokenType } from '../Wallet/database/types'
+import { EthereumNetwork, EthereumTokenType } from '../Wallet/database/types'
 import Services from '../../extension/service'
 import { PluginMessageCenter } from '../PluginMessages'
 import { formatBalance } from '../Wallet/formatter'
 import { ETH_ADDRESS } from '../Wallet/token'
-import { currentEthereumNetworkSettings } from '../../settings/settings'
+import { currentLocalWalletEthereumNetworkSettings } from '../../settings/settings'
 import type { WalletDetails, ERC20TokenDetails } from '../../extension/background-script/PluginService'
-import { useValueRef } from '../../utils/hooks/useValueRef'
+import { findOutWalletProvider } from './findOutProvider'
 
-export function useWallet() {
-    const swr = useSWR('query', {
-        fetcher: Services.Plugin.getWallets,
-    })
+export function useWallets() {
+    const swr = useSWR('com.maskbook.wallet.wallets', { fetcher: Services.Plugin.getWallets })
     const { revalidate } = swr
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
-    useEffect(() => currentEthereumNetworkSettings.addListener(revalidate), [revalidate])
     return swr
 }
+export function useTokens() {
+    const swr = useSWR('com.maskbook.wallet.tokens', { fetcher: Services.Plugin.getTokens })
+    const { revalidate } = swr
+    useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
+    return swr
+}
+export function useCurrentEthChain() {
+    const { data, revalidate } = useSWR('com.maskbook.wallet.eth-chain', {
+        fetcher: Services.Plugin.getCurrentEthChain,
+    })
+    useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
+    useEffect(() => currentLocalWalletEthereumNetworkSettings.addListener(revalidate), [revalidate])
+    return data ?? EthereumNetwork.Mainnet
+}
+
 export function useManagedWalletDetail(address: string) {
     const swr = useSWR(address, { fetcher: Services.Plugin.getManagedWallet })
     const { revalidate } = swr
@@ -25,7 +37,7 @@ export function useManagedWalletDetail(address: string) {
     return swr
 }
 export function useSelectWallet(wallets: WalletDetails[] | undefined, tokens: ERC20TokenDetails[] | undefined) {
-    const network = useValueRef(currentEthereumNetworkSettings)
+    const network = useCurrentEthChain()
     const [selectedWalletAddress, setSelectedWalletAddress] = useState<undefined | string>(undefined)
 
     const [selectedTokenAddress, setSelectedTokenAddress] = useState(ETH_ADDRESS)
@@ -55,10 +67,13 @@ export function useSelectWallet(wallets: WalletDetails[] | undefined, tokens: ER
     const erc20Balance = selectedToken
         ? `${formatBalance(selectedToken.amount, selectedToken.decimals)} ${selectedToken.symbol}`
         : undefined
+
+    const provider = selectedWallet ? findOutWalletProvider(selectedWallet) : undefined
     return {
         ethBalance,
         erc20Balance,
         //
+        provider,
         selectedWallet,
         selectedWalletAddress,
         setSelectedWalletAddress,

@@ -15,28 +15,28 @@ export async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx:
     const address = tx.from
     if (!address) throw new Error('cannot find address')
     return Promise.all([txObject.estimateGas(tx), web3.eth.getGasPrice(), Services.Nonce.getNonce(address)])
-        .then(([gas, gasPrice, nonce]) =>
-            txObject
-                .send({
-                    ...tx,
-                    gas,
-                    gasPrice,
-                    nonce,
-                })
-                .on('transactionHash', (hash: string) => {
-                    Services.Nonce.commitNonce(address)
-                    listeners?.onTransactionHash?.(hash)
-                })
-                .on('receipt', (receipt: TransactionReceipt) => listeners?.onReceipt?.(receipt))
+        .then(([gas, gasPrice, nonce]) => {
+            const sent = txObject.send({
+                ...tx,
+                gas,
+                gasPrice,
+                nonce,
+            })
+            sent.catch((err: Error) => listeners.onTransactionError?.(err))
+            sent.on('transactionHash', (hash: string) => {
+                Services.Nonce.commitNonce(address)
+                listeners.onTransactionHash?.(hash)
+            })
+                .on('receipt', (receipt: TransactionReceipt) => listeners.onReceipt?.(receipt))
                 .on('confirmation', (no: number, receipt: TransactionReceipt) =>
-                    listeners?.onConfirmation?.(no, receipt),
+                    listeners.onConfirmation?.(no, receipt),
                 )
                 .on('error', (err: Error) => {
                     if (err.message.includes('nonce too low')) Services.Nonce.resetNonce(address)
-                    listeners?.onTransactionError?.(err)
-                }),
-        )
-        .catch((err: Error) => listeners?.onEstimateError?.(err))
+                    listeners.onTransactionError?.(err)
+                })
+        })
+        .catch((err: Error) => listeners.onEstimateError?.(err))
 }
 
 export async function sendTxConfigForTxHash(config: TransactionConfig & { from?: string }) {

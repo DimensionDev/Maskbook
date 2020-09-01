@@ -9,7 +9,7 @@ import {
     languageSettings,
     Language,
     renderInShadowRootSettings,
-    currentEthereumNetworkSettings,
+    currentLocalWalletEthereumNetworkSettings,
     appearanceSettings,
     Appearance,
 } from '../../../settings/settings'
@@ -114,12 +114,11 @@ export default function DashboardSettingsRouter() {
     const { t } = useI18N()
     const currentLang = useValueRef(languageSettings)
     const currentApperance = useValueRef(appearanceSettings)
-    const currentEthereumNetwork = useValueRef(currentEthereumNetworkSettings)
     const langMapper = React.useRef((x: Language) => {
         if (x === Language.en) return 'English'
         if (x === Language.zh) return '中文'
         if (x === Language.ja) return '日本語'
-        return ''
+        return x
     }).current
     const apperanceMapper = React.useRef((x: Appearance) => {
         if (x === Appearance.dark) return t('settings_appearance_dark')
@@ -169,10 +168,9 @@ export default function DashboardSettingsRouter() {
                                 webpackEnv.perferResponsiveTarget === 'xs' ? (
                                     <SettingsUIEnum
                                         classes={listStyle}
-                                        secondary={currentEthereumNetwork}
                                         enumObject={EthereumNetwork}
                                         icon={<WifiIcon />}
-                                        value={currentEthereumNetworkSettings}
+                                        value={currentLocalWalletEthereumNetworkSettings}
                                     />
                                 ) : null}
                             </List>

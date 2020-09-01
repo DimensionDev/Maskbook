@@ -1,60 +1,50 @@
 import Web3 from 'web3'
-import type { HttpProvider } from 'web3-core'
-import { PluginMessageCenter } from '../PluginMessages'
 import { sideEffect } from '../../utils/side-effects'
-import { currentEthereumNetworkSettings } from '../../settings/settings'
-import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
-import Services from '../../extension/service'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
 OnlyRunInContext('background', 'web3')
+import { WalletProviderType } from '../shared/findOutProvider'
+import { MetaMaskProvider } from '../../protocols/wallet-provider/metamask'
+import type { WalletProvider } from '../../protocols/wallet-provider'
+import { MaskbookProvider } from '../../protocols/wallet-provider/maskbook'
+import { unreachable } from '../../utils/utils'
+import { PluginMessageCenter } from '../PluginMessages'
+import { lastActivatedWalletProvider } from '../../settings/settings'
+import { getManagedWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
 
 export const web3 = new Web3()
-export const pool = new Map<string, HttpProvider>()
-
-let provider: HttpProvider
-
-export const resetProvider = () => {
-    const url = getNetworkSettings().middlewareAddress
-    provider = pool.has(url)
-        ? pool.get(url)!
-        : // more: https://github.com/ethereum/web3.js/blob/1.x/packages/web3-providers-ws/README.md
-          new Web3.providers.HttpProvider(url, {
-              timeout: 5000, // ms
-              // @ts-ignore
-              clientConfig: {
-                  keepalive: true,
-                  keepaliveInterval: 1, // ms
-              },
-              reconnect: {
-                  auto: true,
-                  delay: 5000, // ms
-                  maxAttempts: Number.MAX_SAFE_INTEGER,
-                  onTimeout: true,
-              },
-          })
-    if (pool.has(url)) provider.disconnect()
-    else pool.set(url, provider)
-    web3.setProvider(provider)
+Object.assign(globalThis, { web3 })
+let currentProvider: WalletProvider
+function resetProvider() {
+    switchToProvider(lastActivatedWalletProvider.value)
+}
+sideEffect.then(resetProvider)
+export function switchToProvider(provider: WalletProviderType) {
+    console.log('[Web3] Switch to', provider)
+    const nextProvider = getWalletProvider(provider)
+    if (currentProvider === nextProvider) return
+    currentProvider?.noLongerUseWeb3Provider?.()
+    currentProvider = nextProvider
+    web3.setProvider(getWalletProvider(provider).getWeb3Provider())
+    importBuiltinWalletPrivateKey()
+    PluginMessageCenter.emit('maskbook.wallets.reset', void 0)
+    lastActivatedWalletProvider.value = provider
+}
+export function getWalletProvider(provider: WalletProviderType) {
+    if (provider === WalletProviderType.managed) return MaskbookProvider
+    if (provider === WalletProviderType.metamask) return MetaMaskProvider
+    return unreachable(provider)
 }
 
-export const resetWallet = async () => {
+const importBuiltinWalletPrivateKey = async () => {
     web3.eth.accounts.wallet.clear()
 
-    const { wallets } = await Services.Plugin.invokePlugin('maskbook.wallet', 'getManagedWallets')
+    const { wallets } = await getManagedWallets()
     for await (const { mnemonic, passphrase, privateKey } of wallets) {
         const { privateKeyValid, privateKeyInHex } =
             mnemonic && passphrase
-                ? await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWallet', mnemonic, passphrase)
-                : await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', privateKey)
+                ? await recoverWallet(mnemonic, passphrase)
+                : await recoverWalletFromPrivateKey(privateKey)
         if (privateKeyValid) web3.eth.accounts.wallet.add(privateKeyInHex)
     }
 }
-
-currentEthereumNetworkSettings.addListener(resetProvider)
-PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
-
-sideEffect.then(() => {
-    resetWallet()
-    resetProvider()
-})
