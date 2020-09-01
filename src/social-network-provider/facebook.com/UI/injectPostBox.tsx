@@ -5,6 +5,7 @@ import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { isMobileFacebook } from '../isMobile'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { MessageCenter } from '../../../utils/messages'
+import { Flags } from '../../../utils/flags'
 
 let composeBox: LiveSelector<Element>
 if (isMobileFacebook) {
@@ -17,7 +18,7 @@ if (isMobileFacebook) {
 }
 export function injectPostBoxFacebook() {
     const watcher = new MutationObserverWatcher(composeBox.clone().enableSingleMode())
-        .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         .startWatch({
             childList: true,
             subtree: true,

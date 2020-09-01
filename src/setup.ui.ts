@@ -5,6 +5,7 @@ import './provider.ui'
 import { LiveSelector, Watcher, DOMProxy } from '@holoflows/kit/es'
 import { exclusiveTasks } from './extension/content-script/tasks'
 import { enhanceTypedMessageDebugger } from './protocols/typed-message/debugger'
+import { Flags } from './utils/flags'
 
 if (typeof window === 'object') {
     LiveSelector.enhanceDebugger()
@@ -19,7 +20,7 @@ activateSocialNetworkUI()
 
 const close = globalThis.close
 globalThis.close = () => {
-    if (webpackEnv.genericTarget === 'facebookApp') {
+    if (Flags.has_no_browser_tab_ui) {
         // TODO: support twitter
         exclusiveTasks('https://m.facebook.com/')
         return

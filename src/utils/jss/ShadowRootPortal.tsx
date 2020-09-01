@@ -1,9 +1,10 @@
 import { GetContext } from '@holoflows/kit/es'
 import { untilDomLoaded } from '../dom'
 import { renderInShadowRootSettings } from '../../settings/settings'
+import { Flags } from '../flags'
 
 const div = document.createElement('div')
-export const portalShadowRoot = div.attachShadow({ mode: webpackEnv.shadowRootMode })
+export const portalShadowRoot = div.attachShadow({ mode: Flags.using_ShadowDOM_attach_mode })
 untilDomLoaded().then(() => document.body.appendChild(div))
 
 /**

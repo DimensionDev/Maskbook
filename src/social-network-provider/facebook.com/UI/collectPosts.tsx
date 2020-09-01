@@ -10,6 +10,7 @@ import {
     TypedMessage,
     makeTypedMessageFromList,
 } from '../../../protocols/typed-message'
+import { Flags } from '../../../utils/flags'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container ' : '.userContent',
@@ -95,7 +96,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 onRemove: () => this.posts.delete(metadata),
             }
         })
-        .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         .startWatch({
             childList: true,
             subtree: true,
