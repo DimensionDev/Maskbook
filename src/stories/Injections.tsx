@@ -1,6 +1,6 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { text, boolean, select, radios } from '@storybook/addon-knobs'
+import { text, boolean, select, radios, number } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
 import { AdditionalContent, AdditionalIcon } from '../components/InjectedComponents/AdditionalPostContent'
 import { DecryptPostFailed } from '../components/InjectedComponents/DecryptedPost/DecryptPostFailed'
@@ -16,7 +16,7 @@ import { CommentBox } from '../components/InjectedComponents/CommentBox'
 import type { DecryptionProgress } from '../extension/background-script/CryptoServices/decryptFrom'
 import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/SelectPeopleAndGroups'
 import { MaskbookLightTheme } from '../utils/theme'
-import { PostDialog } from '../components/InjectedComponents/PostDialog'
+import { CharLimitIndicator, PostDialog } from '../components/InjectedComponents/PostDialog'
 import { PostDialogHint } from '../components/InjectedComponents/PostDialogHint'
 import {
     makeTypedMessageText,
@@ -274,6 +274,7 @@ storiesOf('Injections', module)
             return <PostDialogHint classes={style} onHintButtonClicked={action('clicked')} />
         }
     })
+    .add('CharLimitIndicator', () => <CharLimitIndicator max={number('max', 560)} value={number('current', 530)} />)
 
 function FakePost(props: React.PropsWithChildren<{ title: string }>) {
     return (

@@ -15,6 +15,8 @@ import {
     Theme,
     DialogProps,
     Tooltip,
+    CircularProgressProps,
+    CircularProgress,
 } from '@material-ui/core'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
@@ -91,6 +93,7 @@ export interface PostDialogUIProps
     onlyMyself: boolean
     shareToEveryone: boolean
     imagePayload: boolean
+    maxLength?: number
     availableShareTarget: Array<Profile | Group>
     currentShareTarget: Array<Profile | Group>
     currentIdentity: Profile | null
@@ -264,9 +267,11 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         )}
                     </DialogContent>
                     <DialogActions className={classes.actions}>
+                        {isTypedMessageText(props.postContent) && props.maxLength ? (
+                            <CharLimitIndicator value={props.postContent.content.length} max={props.maxLength} />
+                        ) : null}
                         <Button
                             className={classes.button}
-                            style={{ marginLeft: 'auto' }}
                             color="primary"
                             variant="contained"
                             disabled={props.postBoxButtonDisabled}
@@ -307,7 +312,7 @@ export interface PostDialogProps extends Omit<Partial<PostDialogUIProps>, 'open'
     onRequestReset?: () => void
     typedMessageMetadata?: ReadonlyMap<string, any>
 }
-export function PostDialog(props: PostDialogProps) {
+export function PostDialog({ reason: props_reason = 'timeline', ...props }: PostDialogProps) {
     const { t, i18n } = useI18N()
     const [onlyMyselfLocal, setOnlyMyself] = useState(false)
     const onlyMyself = props.onlyMyself ?? onlyMyselfLocal
@@ -425,13 +430,13 @@ export function PostDialog(props: PostDialogProps) {
     const identities = useMyIdentities()
     useEffect(() => {
         return MessageCenter.on('compositionUpdated', ({ reason, open, content, options }: CompositionEvent) => {
-            if (reason !== props.reason || identities.length <= 0) return
+            if (reason !== props_reason || identities.length <= 0) return
             setOpen(open)
             if (content) setPostBoxContent(makeTypedMessageText(content))
             if (options?.onlyMySelf) setOnlyMyself(true)
             if (options?.shareToEveryOne) setShareToEveryone(true)
         })
-    }, [identities.length, props.reason, setOpen])
+    }, [identities.length, props_reason, setOpen])
 
     const onOnlyMyselfChanged = or(
         props.onOnlyMyselfChanged,
@@ -458,6 +463,11 @@ export function PostDialog(props: PostDialogProps) {
         if (mustSelectShareToEveryone) onShareToEveryoneChanged(true)
     }, [mustSelectShareToEveryone, onShareToEveryoneChanged])
     //#endregion
+    const isPostButtonDisabled = !(() => {
+        const text = extractTextFromTypedMessage(postBoxContent)
+        if (text.ok && text.val.length > 560) return false
+        return onlyMyself || shareToEveryoneLocal ? text.val : currentShareTarget.length && text
+    })()
 
     return (
         <PostDialogUI
@@ -469,11 +479,8 @@ export function PostDialog(props: PostDialogProps) {
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
             postContent={postBoxContent}
-            postBoxButtonDisabled={
-                !(onlyMyself || shareToEveryoneLocal
-                    ? extractTextFromTypedMessage(postBoxContent).val
-                    : currentShareTarget.length && extractTextFromTypedMessage(postBoxContent).val)
-            }
+            postBoxButtonDisabled={isPostButtonDisabled}
+            maxLength={560}
             onSetSelected={setCurrentShareTarget}
             onPostContentChanged={setPostBoxContent}
             onShareToEveryoneChanged={onShareToEveryoneChanged}
@@ -487,7 +494,35 @@ export function PostDialog(props: PostDialogProps) {
         />
     )
 }
-
-PostDialog.defaultProps = {
-    reason: 'timeline',
+export function CharLimitIndicator({ value, max, ...props }: CircularProgressProps & { value: number; max: number }) {
+    const displayLabel = max - value < 40
+    const normalized = Math.min((value / max) * 100, 100)
+    const style = { transitionProperty: 'transform,width,height,color' } as React.CSSProperties
+    return (
+        <Box position="relative" display="inline-flex">
+            <CircularProgress
+                variant="static"
+                value={normalized}
+                color={displayLabel ? 'secondary' : 'primary'}
+                size={displayLabel ? void 0 : 16}
+                {...props}
+                style={value >= max ? { color: 'red', ...style, ...props.style } : { ...style, ...props.style }}
+            />
+            {displayLabel ? (
+                <Box
+                    top={0}
+                    left={0}
+                    bottom={0}
+                    right={0}
+                    position="absolute"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center">
+                    <Typography variant="caption" component="div" color="textSecondary">
+                        {max - value}
+                    </Typography>
+                </Box>
+            ) : null}
+        </Box>
+    )
 }
