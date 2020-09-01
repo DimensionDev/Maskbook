@@ -21,18 +21,15 @@ import ActionButton, { ActionButtonPromise } from '../../../extension/options-pa
 import ShowcaseBox from '../../../extension/options-page/DashboardComponents/ShowcaseBox'
 import { merge, cloneDeep, noop } from 'lodash-es'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { sleep } from '@holoflows/kit/es/util/sleep'
 import { getActivatedUI } from '../../../social-network/ui'
 import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../../settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../../database/type'
 import Services from '../../../extension/service'
-import { MessageCenter } from '../../../utils/messages'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
-    PasteIntoBio = 'paste-into-bio',
     SayHelloWorld = 'say-hello-world',
 }
 //#region wizard dialog
@@ -334,88 +331,6 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
 }
 //#endregion
 
-//#region paste into bio
-const usePasteIntoBioStyles = makeStyles((theme) =>
-    createStyles({
-        tip: {
-            marginBottom: 8,
-        },
-        showcaseBoxContent: {
-            fontSize: 14,
-            wordBreak: 'break-all',
-        },
-        doneButton: {
-            color: theme.palette.common.white,
-        },
-    }),
-)
-
-interface PasteIntoBioProps extends Partial<WizardDialogProps> {
-    provePost: string
-    pastedStatus: boolean | 'undetermined'
-    onPaste: () => Promise<void>
-    onDone?: () => Promise<void>
-    onSkip?: () => void
-}
-
-function PasteIntoBio({ provePost, pastedStatus, onPaste, onDone, onSkip, onBack, onClose }: PasteIntoBioProps) {
-    const { t } = useI18N()
-    const classes = useWizardDialogStyles()
-    const pasteIntoBioClasses = usePasteIntoBioStyles()
-
-    return (
-        <WizardDialog
-            completion={66.66}
-            status={pastedStatus}
-            title={t('immersive_setup_add_bio_title')}
-            optional
-            content={
-                <form>
-                    <Typography className={classNames(classes.tip, pasteIntoBioClasses.tip)} variant="body2">
-                        {pastedStatus === false
-                            ? t('immersive_setup_paste_into_bio_failed')
-                            : t('immersive_setup_add_bio_text')}
-                    </Typography>
-                    <ShowcaseBox
-                        ContentProps={{
-                            className: pasteIntoBioClasses.showcaseBoxContent,
-                        }}>
-                        {provePost}
-                    </ShowcaseBox>
-                </form>
-            }
-            footer={
-                <>
-                    <ActionButtonPromise
-                        className={classes.button}
-                        variant="contained"
-                        color="primary"
-                        init={t('immersive_setup_paste_into_bio_auto')}
-                        waiting={t('adding')}
-                        complete={t('done')}
-                        failed={t('immersive_setup_paste_into_bio_failed')}
-                        executor={onPaste}
-                        completeOnClick={onDone}
-                        completeIcon={null}
-                        failIcon={null}
-                        failedOnClick="use executor"
-                        data-testid="add_button"
-                    />
-                    <ActionButton
-                        className={classes.textButton}
-                        variant="text"
-                        onClick={onSkip}
-                        data-testid="skip_button">
-                        {t('skip')}
-                    </ActionButton>
-                </>
-            }
-            onBack={onBack}
-            onClose={onClose}></WizardDialog>
-    )
-}
-//#endregion
-
 //#region say hello world
 const useSayHelloWorldStyles = makeStyles((theme) =>
     createStyles({
@@ -514,7 +429,6 @@ export function SetupGuide(props: SetupGuideProps) {
     useEffect(() => {
         if (!lastState.status) return
         if (step === SetupGuideStep.FindUsername && lastState.username) setStep(lastState.status)
-        else if (step === SetupGuideStep.PasteIntoBio && !lastState.username) setStep(SetupGuideStep.FindUsername)
         else if (step === SetupGuideStep.SayHelloWorld && !lastState.username) setStep(SetupGuideStep.FindUsername)
     }, [step, setStep, lastState])
     //#endregion
@@ -538,15 +452,6 @@ export function SetupGuide(props: SetupGuideProps) {
         switch (step) {
             case SetupGuideStep.FindUsername:
                 currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
-                    status: SetupGuideStep.PasteIntoBio,
-                    username,
-                    persona: persona.toText(),
-                } as ImmersiveSetupCrossContextStatus)
-                ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, username))
-                setStep(SetupGuideStep.PasteIntoBio)
-                break
-            case SetupGuideStep.PasteIntoBio:
-                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.SayHelloWorld,
                     username,
                     persona: persona.toText(),
@@ -561,7 +466,7 @@ export function SetupGuide(props: SetupGuideProps) {
     }
     const onBack = async () => {
         switch (step) {
-            case SetupGuideStep.PasteIntoBio:
+            case SetupGuideStep.SayHelloWorld:
                 const username_ = getUsername()
                 currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.FindUsername,
@@ -571,15 +476,6 @@ export function SetupGuide(props: SetupGuideProps) {
                 const connected = new ProfileIdentifier(ui.networkIdentifier, username_)
                 await Services.Identity.detachProfile(connected)
                 setStep(SetupGuideStep.FindUsername)
-                break
-            case SetupGuideStep.SayHelloWorld:
-                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
-                    ...lastState,
-                    status: SetupGuideStep.PasteIntoBio,
-                } as ImmersiveSetupCrossContextStatus)
-                const connecting = new ProfileIdentifier(ui.networkIdentifier, username)
-                ui.taskGotoProfilePage(connecting)
-                setStep(SetupGuideStep.PasteIntoBio)
                 break
         }
     }
@@ -604,15 +500,6 @@ export function SetupGuide(props: SetupGuideProps) {
             }),
         ])
     }
-    const onPaste = async () => {
-        try {
-            await navigator.clipboard.writeText(provePost)
-            ui.taskPasteIntoBio(provePost)
-            setPastedStatus(true)
-        } catch (e) {
-            setPastedStatus(false)
-        }
-    }
     const onCreate = async () => {
         const content = t('immersive_setup_say_hello_content')
         await navigator.clipboard.writeText(content)
@@ -633,18 +520,6 @@ export function SetupGuide(props: SetupGuideProps) {
                     onUsernameChange={setUsername}
                     onConnect={onConnect}
                     onDone={onNext}
-                    onBack={onBack}
-                    onClose={onClose}
-                />
-            )
-        case SetupGuideStep.PasteIntoBio:
-            return (
-                <PasteIntoBio
-                    provePost={provePost}
-                    pastedStatus={pastedStatus}
-                    onPaste={onPaste}
-                    onDone={onNext}
-                    onSkip={onNext}
                     onBack={onBack}
                     onClose={onClose}
                 />
