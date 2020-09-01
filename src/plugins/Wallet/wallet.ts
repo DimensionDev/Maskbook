@@ -49,8 +49,7 @@ export async function isEmptyWallets() {
 export async function getWallets() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     const recs = await t.objectStore('Wallet').getAll()
-    const r = recs.map(WalletRecordOutDB).sort(sortWallet)
-    return r
+    return recs.map(WalletRecordOutDB).sort(sortWallet)
 }
 export async function getTokens() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token')

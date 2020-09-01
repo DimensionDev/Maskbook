@@ -110,7 +110,6 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                 log: logOptions,
                 channel: mc.eventBasedChannel,
                 preferLocalImplementation: GetContext() === 'background',
-                // preservePauseOnException: process.env.NODE_ENV === 'development',
                 strict: false,
             }),
         })
