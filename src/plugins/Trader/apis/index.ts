@@ -1,6 +1,7 @@
 import { Platform, Currency, Coin, Trending, Market, Stat } from '../types'
 import * as coinGeckoAPI from './coingecko'
 import * as coinMarketCapAPI from './coinmarketcap'
+import { Days } from '../UI/PriceChartDaysControl'
 
 export async function getCurrenies(platform: Platform): Promise<Currency[]> {
     if (platform === Platform.COIN_GECKO) {
@@ -127,10 +128,11 @@ export async function getCoinTrendingByKeyword(keyword: string, platform: Platfo
 
 export async function getPriceStats(id: string, platform: Platform, currency: Currency, days: number): Promise<Stat[]> {
     if (platform === Platform.COIN_GECKO) {
-        const stats = await coinGeckoAPI.getPriceStats(id, currency.id, days)
+        const stats = await coinGeckoAPI.getPriceStats(id, currency.id, days === Days.MAX ? 11430 : days)
         return stats.prices
     }
     const interval = (() => {
+        if (days === 0) return '1d' // max
         if (days > 365) return '1d' // 1y
         if (days > 90) return '2h' // 3m
         if (days > 30) return '1h' // 1m
@@ -140,6 +142,13 @@ export async function getPriceStats(id: string, platform: Platform, currency: Cu
     const endDate = new Date()
     const startDate = new Date()
     startDate.setDate(startDate.getDate() - days)
-    const stats = await coinMarketCapAPI.getHistorical(id, currency.name.toUpperCase(), startDate, endDate, interval)
+    const stats = await coinMarketCapAPI.getHistorical(
+        id,
+        currency.name.toUpperCase(),
+        // the bitcoin ledger started at 03 Jan 2009
+        days === Days.MAX ? new Date(1230940800000) : startDate,
+        endDate,
+        interval,
+    )
     return Object.entries(stats.data).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
 }

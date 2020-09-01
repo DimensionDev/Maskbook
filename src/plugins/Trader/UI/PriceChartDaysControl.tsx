@@ -24,6 +24,16 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
+export enum Days {
+    MAX = 0,
+    ONE_DAY = 1,
+    ONE_WEEK = 7,
+    TWO_WEEKS = 14,
+    ONE_MONTH = 30,
+    THREE_MONTHS = 90,
+    ONE_YEAR = 365,
+}
+
 export interface PriceChartDaysControlProps {
     days: number
     onDaysChange?: (days: number) => void
@@ -33,7 +43,15 @@ export function PriceChartDaysControl(props: PriceChartDaysControlProps) {
     const classes = useStyles()
     return (
         <div className={classes.root}>
-            {[1, 7, 14, 30, 90, 365].map((days) => (
+            {[
+                Days.ONE_DAY,
+                Days.ONE_WEEK,
+                Days.TWO_WEEKS,
+                Days.ONE_MONTH,
+                Days.THREE_MONTHS,
+                Days.ONE_YEAR,
+                Days.MAX,
+            ].map((days) => (
                 <Link className={classes.link} key={days} onClick={() => props.onDaysChange?.(days)}>
                     <Typography
                         className={classes.text}

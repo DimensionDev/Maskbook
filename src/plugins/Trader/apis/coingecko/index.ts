@@ -1,6 +1,6 @@
-const BASE_URL = 'https://api.coingecko.com/api/v3'
+import { Days } from '../../UI/PriceChartDaysControl'
 
-const CHART_BASE_URL = 'https://www'
+const BASE_URL = 'https://api.coingecko.com/api/v3'
 
 //#region get currency
 export async function getAllCurrenies() {

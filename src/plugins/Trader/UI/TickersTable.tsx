@@ -47,20 +47,16 @@ export function TickersTable(props: TickersTableProps) {
     const rows = ['Exchange', 'Pair', 'Price', 'Volumn (24h)']
     const tickers = props.tickers.map((ticker, index) => (
         <TableRow key={index}>
-            <TableCell className={classes.cell}>
-                <Link color="primary" target="_blank" rel="noopener noreferrer" href={ticker.trade_url}>
-                    {ticker.market_name}
-                </Link>
-            </TableCell>
+            <TableCell className={classes.cell}>{ticker.market_name}</TableCell>
             <TableCell className={classes.cell}>
                 {(() => {
                     const formated = formatEthAddress(ticker.base_name)
                     return (
-                        <>
+                        <Link color="primary" target="_blank" rel="noopener noreferrer" href={ticker.trade_url}>
                             <span title={formated !== ticker.base_name ? ticker.base_name : ''}>{formated}</span>
                             <span>/</span>
                             <span>{ticker.target_name}</span>
-                        </>
+                        </Link>
                     )
                 })()}
             </TableCell>
