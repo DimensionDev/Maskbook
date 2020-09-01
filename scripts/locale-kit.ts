@@ -38,29 +38,25 @@ function getUsedKeys(content: string) {
         }
         return undefined
     }
+    const addKey = (node: ts.Node) => {
+        if (ts.isStringLiteralLike(node)) {
+            keys.add(node.text)
+        }
+    }
     const transformer = (context: ts.TransformationContext) => (rootNode: ts.Node) => {
-        function visit(node: ts.Node): ts.Node {
+        const visit: ts.Visitor = (node) => {
             if (ts.isIdentifier(node) && node.text === 't') {
                 const localeKey = closest(node, ts.isCallExpression)?.arguments[0]
                 if (localeKey === undefined) {
                     return node
                 } else if (ts.isStringLiteralLike(localeKey)) {
-                    keys.add(localeKey.text)
-                } else if (
-                    ts.isConditionalExpression(localeKey) &&
-                    ts.isStringLiteralLike(localeKey.whenTrue) &&
-                    ts.isStringLiteralLike(localeKey.whenFalse)
-                ) {
-                    keys.add(localeKey.whenTrue.text)
-                    keys.add(localeKey.whenFalse.text)
+                    addKey(localeKey)
+                } else if (ts.isConditionalExpression(localeKey)) {
+                    addKey(localeKey.whenTrue)
+                    addKey(localeKey.whenFalse)
                 }
-            } else if (
-                ts.isJsxAttribute(node) &&
-                node.name.escapedText === 'i18nKey' &&
-                node.initializer &&
-                ts.isStringLiteralLike(node.initializer)
-            ) {
-                keys.add(node.initializer.text)
+            } else if (ts.isJsxAttribute(node) && node.name.escapedText === 'i18nKey' && node.initializer) {
+                addKey(node.initializer)
             }
             return ts.visitEachChild(node, visit, context)
         }
@@ -111,6 +107,15 @@ async function main() {
         await syncKeyOrder()
         console.log('Synced keys order')
     }
+    return unusedKeys
 }
 
-main()
+main().then((unusedKeys) => {
+    if (!process.env.CI) {
+        return
+    }
+    if (unusedKeys.length > 0) {
+        console.log(unusedKeys)
+        process.exit(1)
+    }
+})
