@@ -96,6 +96,7 @@ if (GetContext() === 'background') {
     })
 
     contentScriptReady.then(() => {
+        // TODO: support twitter
         if (webpackEnv.genericTarget === 'facebookApp') {
             exclusiveTasks('https://m.facebook.com/', { important: true })
         }

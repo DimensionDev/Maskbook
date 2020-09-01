@@ -1,6 +1,6 @@
 {
   "name": "maskbook",
-  "version": "1.14.1",
+  "version": "1.14.2",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -19,6 +19,9 @@
     "lint": "eslint src/ --ext .ts,.tsx --fix",
     "lint:report": "eslint src/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml",
     "lint:typecoverage": "type-coverage --strict --ignore-catch --ignore-files src/plugins/Wallet/contracts/** --ignore-files **/__tests__/** --ignore-files **\\__tests__\\** --detail --at-least 98",
+    "locale-kit": "ts-node scripts/locale-kit.ts",
+    "profile:build": "yarn build --profile",
+    "profile:start": "yarn start --profile",
     "start": "webpack-dev-server --mode development",
     "start:android": "webpack-dev-server --firefox-android --mode development",
     "start:chromium": "webpack-dev-server --chromium --mode development",
@@ -27,8 +30,6 @@
     "start:gecko": "webpack-dev-server --firefox-gecko --mode development",
     "start:ios": "webpack-dev-server --wk-webview --mode development",
     "storybook": "start-storybook -p 9009 -s public --quiet",
-    "profile:build": "yarn build --profile",
-    "profile:start": "yarn start --profile",
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js"
@@ -197,8 +198,7 @@
     "webpack-dev-server": "^3.11.0",
     "webpack-extension-manifest-plugin": "^0.5.0",
     "webpack-manifest-plugin": "^2.2.0",
-    "webpack-notifier": "^1.8.0",
-    "yargs": "^15.4.1"
+    "webpack-notifier": "^1.8.0"
   },
   "optionalDependencies": {
     "expect-puppeteer": "^4.4.0",

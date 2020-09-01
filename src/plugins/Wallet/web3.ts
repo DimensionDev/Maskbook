@@ -13,6 +13,7 @@ import { lastActivatedWalletProvider } from '../../settings/settings'
 import { getManagedWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
 
 export const web3 = new Web3()
+Object.assign(globalThis, { web3 })
 let currentProvider: WalletProvider
 function resetProvider() {
     switchToProvider(lastActivatedWalletProvider.value)
