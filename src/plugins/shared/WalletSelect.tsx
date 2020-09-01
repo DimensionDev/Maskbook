@@ -23,7 +23,7 @@ interface WalletSelectProps {
     DialogProps?: Partial<DialogProps>
 }
 export function WalletSelect({ useSelectWalletHooks, wallets, ...props }: WalletSelectProps) {
-    const { selectedWalletAddress, setSelectedWalletAddress } = useSelectWalletHooks
+    const { selectedWalletAddress, setSelectedWalletAddress, provider } = useSelectWalletHooks
     const { SelectProps, className, FormControlProps } = props
 
     // tracking wallet balance
@@ -32,6 +32,10 @@ export function WalletSelect({ useSelectWalletHooks, wallets, ...props }: Wallet
         Services.Plugin.invokePlugin('maskbook.wallet', 'watchWalletBalances', selectedWalletAddress)
         Services.Plugin.invokePlugin('maskbook.wallet', 'updateWalletBalances', [selectedWalletAddress])
     }, [selectedWalletAddress])
+    useEffect(() => {
+        if (!provider) return
+        Services.Plugin.invokePlugin('maskbook.wallet', 'switchToProvider', provider)
+    }, [provider])
 
     return (
         <FormControl variant="filled" {...FormControlProps} className={className}>

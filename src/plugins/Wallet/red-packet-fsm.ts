@@ -19,6 +19,7 @@ import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
 import { createRedPacketTransaction, RedPacketPluginReificatedWalletDBReadOnly } from './createRedPacketTransaction'
 import { assert } from '../../utils/utils'
 import type { RedPacketJSONPayload } from '../RedPacket/utils'
+import { getCurrentEthChain } from '../../extension/background-script/PluginService'
 
 function getProvider() {
     return redPacketAPI
@@ -45,7 +46,6 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInUR
     const original = await t.getByIndex('red_packet_id', payload.rpid)
     if (original) return RedPacketRecordOutDB(original)
     const record: RedPacketRecord = {
-        _data_source_: getProvider().dataSource,
         aes_version: 1,
         contract_address: payload.contract_address,
         contract_version: payload.contract_version,
@@ -95,7 +95,7 @@ export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedP
         if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
         const res = await getWalletProvider().approve(
             packet.sender_address,
-            getNetworkSettings().happyRedPacketContractAddress,
+            getNetworkSettings(await getCurrentEthChain()).happyRedPacketContractAddress,
             packet.erc20_token,
             packet.send_total,
         )
@@ -117,10 +117,9 @@ export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedP
         packet.send_total,
     )
     const record: RedPacketRecord = {
-        _data_source_: getProvider().dataSource,
         aes_version: 1,
         contract_version: 1,
-        contract_address: getNetworkSettings().happyRedPacketContractAddress,
+        contract_address: getNetworkSettings(await getCurrentEthChain()).happyRedPacketContractAddress,
         id: uuid(),
         duration: packet.duration,
         is_random: packet.is_random,
@@ -227,9 +226,7 @@ export async function claimRedPacket(
         .claim(id, passwords, claimWithWallet, Web3Utils.sha3(claimWithWallet)!)
         .catch(async (e) => {
             if ((e.message as string).includes('insufficient funds for gas')) {
-                const wallet = (await getManagedWallets()).wallets.find((x) => x.address === claimWithWallet)!
-                const { privateKey } = await recoverWallet(wallet.mnemonic, wallet.passphrase)
-                return getProvider().claimByServer(claimWithWallet, privateKey, rec.raw_payload!)
+                return getProvider().claimByServer(claimWithWallet, rec.raw_payload!)
             }
             throw e
         })

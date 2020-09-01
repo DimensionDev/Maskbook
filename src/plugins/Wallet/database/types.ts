@@ -1,6 +1,7 @@
 import type { BigNumber } from 'bignumber.js'
 import { unreachable } from '../../../utils/utils'
 import type { RedPacketJSONPayload } from '../../RedPacket/utils'
+import type { WalletProviderType } from '../../shared/findOutProvider'
 
 export enum EthereumNetwork {
     Mainnet = 'Mainnet',
@@ -81,7 +82,6 @@ export interface RedPacketRecord {
     /** Number of red packet shares */
     shares: BigNumber
     _found_in_url_?: string
-    _data_source_: 'real' | 'mock'
 }
 export interface RedPacketRecordInDatabase
     extends Omit<RedPacketRecord, 'send_total' | 'claim_amount' | 'refund_amount' | 'erc20_approve_value' | 'shares'> {
@@ -179,19 +179,18 @@ export interface WalletRecordProperties {
      * undefined means "managed"
      * "exotic" means the wallet is managed by an external wallet. for example, Metamask
      */
-    type?: 'managed' | 'exotic'
+    type: 'managed' | 'exotic'
     createdAt: Date
     updatedAt: Date
 }
 export interface ExoticWalletRecord extends WalletRecordProperties {
-    provider: 'metamask'
+    provider: WalletProviderType
     type: 'exotic'
 }
 export interface ManagedWalletRecord extends WalletRecordProperties {
-    type?: 'managed'
+    type: 'managed'
     mnemonic: string[]
     passphrase: string
-    _data_source_: 'real' | 'mock'
     _public_key_?: string
     /** Wallet recover from private key */
     _private_key_?: string
@@ -233,7 +232,6 @@ export interface GitcoinDonationRecord {
     erc20_approve_value?: BigNumber
     /** ERC20 approve transaction hash */
     erc20_approve_transaction_hash?: string
-    _data_source_: 'real' | 'mock'
 }
 
 export interface GitcoinDonationRecordInDatabase

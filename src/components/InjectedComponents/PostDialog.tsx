@@ -194,7 +194,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 ChipProps={{
                                     label: '💰 Red Packet',
                                     onClick: async () => {
-                                        const { wallets } = await Services.Plugin.getWallets()
+                                        const wallets = await Services.Plugin.getWallets()
                                         if (wallets.length) setRedPacketDialogOpen(true)
                                         else Services.Provider.requestConnectWallet()
                                     },
@@ -378,7 +378,7 @@ export function PostDialog(props: PostDialogProps) {
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
                     if (metadata.ok) {
-                        if (i18n.language.includes('zh')) {
+                        if (i18n.language?.includes('zh')) {
                             text =
                                 activeUI.networkIdentifier === twitterUrl.hostIdentifier
                                     ? `用 #Maskbook @realMaskbook 開啟紅包 ${encrypted}`

@@ -1,5 +1,4 @@
 import { EthereumNetwork } from '../../database/types'
-import { currentEthereumNetworkSettings } from '../../../../settings/settings'
 import contractMap from 'eth-contract-metadata'
 import mainnet from '../../erc20/mainnet.json'
 import rinkeby from '../../erc20/rinkeby.json'
@@ -39,7 +38,7 @@ const settings = {
     },
 }
 
-export function getNetworkSettings(network: EthereumNetwork = currentEthereumNetworkSettings.value) {
+export function getNetworkSettings(network: EthereumNetwork) {
     return {
         networkType: network,
         gitcoinMaintainerAddress: settings.gitcoinMaintainerAddress[network],
@@ -69,6 +68,6 @@ const ERC20Tokens = {
     [EthereumNetwork.Ropsten]: [],
 }
 
-export function getNetworkERC20Tokens(network: EthereumNetwork = currentEthereumNetworkSettings.value) {
+export function getNetworkERC20Tokens(network: EthereumNetwork) {
     return uniqBy(ERC20Tokens[network] as ERC20Token[], (token) => token.address.toUpperCase())
 }

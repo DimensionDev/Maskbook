@@ -11,6 +11,7 @@ import type { _UnboxPromise } from 'async-call-rpc/full'
 import { omit } from 'lodash-es'
 import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
 import { createPluginWalletAccess } from '../../database/Plugin/wrap-wallet-for-plugin'
+import { getCurrentEthChain } from '../../extension/background-script/PluginService'
 
 const createTransaction = createPluginWalletAccess<GitcoinDonationRecordInDatabase, []>(
     'com.maskbook.provide.co.gitcoin',
@@ -28,7 +29,9 @@ function getProvider() {
 }
 
 export async function donateGrant(donation: GitcoinDonationPayload) {
-    const { networkType, gitcoinMaintainerAddress } = getNetworkSettings()
+    const { networkType, gitcoinMaintainerAddress, bulkCheckoutContractAddress } = getNetworkSettings(
+        await getCurrentEthChain(),
+    )
     const { donor_address, donation_address, donation_total, token, token_type } = donation
 
     let approved: _UnboxPromise<ReturnType<typeof erc20API.approve>> | undefined
@@ -37,7 +40,7 @@ export async function donateGrant(donation: GitcoinDonationPayload) {
     if (token_type === EthereumTokenType.ERC20) {
         approved = await getProvider().approve(
             donor_address,
-            getNetworkSettings().bulkCheckoutContractAddress,
+            bulkCheckoutContractAddress,
             token?.address!,
             new BigNumber(donation_total),
         )
@@ -54,7 +57,6 @@ export async function donateGrant(donation: GitcoinDonationPayload) {
 
     // persistant record in DB
     const record: GitcoinDonationRecord = {
-        _data_source_: 'real',
         donor_address,
         donation_address,
         donation_total,

@@ -43,6 +43,6 @@ export const PluginService: Partial<typeof import('./background-script/PluginSer
         return {} as any
     },
     async getWallets() {
-        return { tokens: [], wallets: [] }
+        return []
     },
 }
