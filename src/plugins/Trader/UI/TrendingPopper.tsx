@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import type PopperJs from 'popper.js'
 import { Popper, ClickAwayListener, PopperProps } from '@material-ui/core'
 import { MessageCenter, ObserveCashTagEvent } from '../messages'
-import { useInterval } from 'react-use'
 
 export interface TrendingPopperProps {
     children?: (name: string, reposition?: () => void) => React.ReactNode

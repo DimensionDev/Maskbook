@@ -9,13 +9,17 @@ import {
 import { makeTypedMessageCashTrending } from './messages/TypedMessageCashTrending'
 import { TrendingPopper } from './UI/TrendingPopper'
 import { TrendingView } from './UI/TrendingView'
+import Services from '../../extension/service'
+import { Platform } from './types'
+import { getEnumAsArray } from '../../utils/enum'
+import { PLUGIN_IDENTIFIER, PLUGIN_METADATA_KEY } from './constants'
 
 const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor => isTypedMessgaeAnchor(m) && m.category === 'cash'
 
 export const TraderPluginDefine: PluginConfig = {
     pluginName: 'Trader',
-    identifier: 'co.maskbook.trader',
-    postDialogMetadataBadge: new Map([['com.maskbook.trader:1', (meta) => 'no metadata']]),
+    identifier: PLUGIN_IDENTIFIER,
+    postDialogMetadataBadge: new Map([[PLUGIN_METADATA_KEY, (meta) => 'no metadata']]),
     postMessageProcessor(message: TypedMessageCompound) {
         return {
             ...message,
@@ -23,6 +27,10 @@ export const TraderPluginDefine: PluginConfig = {
         }
     },
     pageInspector() {
+        // build availability cache in the background page
+        getEnumAsArray(Platform).forEach((p) =>
+            Services.Plugin.invokePlugin('maskbook.trader', 'checkAvailability', 'BTC'),
+        )
         return (
             <TrendingPopper>
                 {(name: string, reposition?: () => void) => <TrendingView name={name} onUpdate={reposition} />}

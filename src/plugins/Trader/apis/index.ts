@@ -1,7 +1,8 @@
-import { Platform, Currency, Coin, Trending, Market, Stat } from '../types'
+import { Platform, Currency, Coin, Trending, Stat } from '../types'
 import * as coinGeckoAPI from './coingecko'
 import * as coinMarketCapAPI from './coinmarketcap'
 import { Days } from '../UI/PriceChartDaysControl'
+import { getEnumAsArray } from '../../../utils/enum'
 
 export async function getCurrenies(platform: Platform): Promise<Currency[]> {
     if (platform === Platform.COIN_GECKO) {
@@ -45,6 +46,39 @@ export async function getCoins(platform: Platform): Promise<Coin[]> {
         symbol: x.symbol,
     }))
 }
+
+//#region check a specific coin is available on specific platform
+const availabilityCache = new Map<
+    Platform,
+    {
+        supported: Set<string>
+        lastUpdated: Date
+    }
+>()
+
+export async function checkAvailabilityAtPlatform(platform: Platform, keyword: string) {
+    if (
+        // cache never built before
+        !availabilityCache.has(platform) ||
+        // cache expired in 24h
+        new Date().getTime() - (availabilityCache.get(platform)?.lastUpdated.getTime() ?? 0) >
+            24 /* hours */ * 60 /* minutes */ * 60 /* seconds */ * 1000 /* milliseconds */
+    ) {
+        const coins = await getCoins(platform)
+        availabilityCache.set(platform, {
+            supported: new Set<string>(coins.map((x) => x.symbol.toLowerCase())),
+            lastUpdated: new Date(),
+        })
+    }
+    return availabilityCache.get(platform)?.supported.has(keyword.toLowerCase()) ?? false
+}
+
+export async function checkAvailability(keyword: string) {
+    return (await Promise.all(getEnumAsArray(Platform).map((x) => checkAvailabilityAtPlatform(x.value, keyword)))).some(
+        Boolean,
+    )
+}
+//#endregion
 
 export async function getCoinInfo(id: string, platform: Platform, currency: Currency): Promise<Trending> {
     if (platform === Platform.COIN_GECKO) {

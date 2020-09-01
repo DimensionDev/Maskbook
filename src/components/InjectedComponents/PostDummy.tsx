@@ -29,12 +29,6 @@ export function PostDummy(props: PostDummyProps) {
         // render dummy for posts which encrypted by maskbook
         (wholePostVisibilitySettings === WholePostVisibility.encryptedOnly && postPayload.ok)
 
-    console.log(`DEBUG: postDummyVisible`)
-    console.log({
-        postDummyVisible,
-        wholePostVisibilitySettings,
-    })
-
     // zip original post
     useEffect(() => {
         if (postDummyVisible) props.zip?.()
