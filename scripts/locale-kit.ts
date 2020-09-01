@@ -1,10 +1,12 @@
-import { promises as fs } from 'fs'
+import { promises as fs, readdirSync } from 'fs'
 import _ from 'lodash'
 import path from 'path'
 import ts from 'typescript'
 
 const SOURCE_PATH = path.join(__dirname, '..', 'src')
 const LOCALE_PATH = path.join(SOURCE_PATH, '_locales')
+
+const _locales = readdirSync(LOCALE_PATH)
 
 async function* walk(dir: string): AsyncIterableIterator<string> {
     for await (const dirent of await fs.opendir(dir)) {
@@ -24,7 +26,7 @@ async function readMessages(name: string) {
 
 async function writeMessages(name: string, messages: unknown) {
     const target = path.join(LOCALE_PATH, name, 'messages.json')
-    await fs.writeFile(target, JSON.stringify(messages, null, 4), 'utf-8')
+    await fs.writeFile(target, JSON.stringify(messages, null, 4) + '\n', 'utf-8')
 }
 
 function getUsedKeys(content: string) {
@@ -75,21 +77,43 @@ async function findAllUnusedKeys() {
     return _.difference(keys, usedKeys)
 }
 
-async function removeAllUnusedKeys(keys: string[]) {
-    const locales = ['en', 'zh', 'ja']
+async function findAllUnsyncedLocales(locales = _.without(_locales, 'en')) {
+    const keys = _.keys(await readMessages('en'))
+    const names: string[] = []
+    for (const name of locales) {
+        const nextKeys = _.keys(await readMessages(name))
+        const diffKeys = _.difference(keys, nextKeys)
+        if (diffKeys.length) {
+            names.push(name)
+        }
+    }
+    return names
+}
+
+async function removeAllUnusedKeys(keys: string[], locales = _locales) {
     for (const name of locales) {
         const modifedMessages = _.omit(await readMessages(name), keys)
         await writeMessages(name, modifedMessages)
     }
 }
 
-async function syncKeyOrder() {
-    const locales = ['zh', 'ja']
-    const keys = _.keys(await readMessages('en'))
+async function syncKey(locales = _.without(_locales, 'en')) {
+    const baseMessages = await readMessages('en')
+    const baseKeys = _.keys(baseMessages)
     for (const name of locales) {
-        const modifedMessages = _.chain(await readMessages(name))
+        const nextMessages = await readMessages(name)
+        const emptyKeys = _.reduce(
+            _.difference(baseKeys, _.keys(nextMessages)),
+            (record, name) => {
+                record[name] = ''
+                return record
+            },
+            {} as Record<string, string>,
+        )
+        const modifedMessages = _.chain(nextMessages)
+            .assign(emptyKeys)
             .toPairs()
-            .sortBy(([key]) => keys.indexOf(key))
+            .sortBy(([key]) => baseKeys.indexOf(key))
             .fromPairs()
             .value()
         await writeMessages(name, modifedMessages)
@@ -98,24 +122,16 @@ async function syncKeyOrder() {
 
 async function main() {
     const unusedKeys = await findAllUnusedKeys()
-    console.log('Scanned', unusedKeys.length, 'unused keys')
+    console.error('Scanned', unusedKeys.length, 'unused keys')
+    console.error('Unsynced', await findAllUnsyncedLocales(), 'locales')
     if (process.argv.includes('--remove-unused-keys')) {
         await removeAllUnusedKeys(unusedKeys)
         console.log('Unused keys removed')
     }
-    if (process.argv.includes('--sync-key-order')) {
-        await syncKeyOrder()
-        console.log('Synced keys order')
+    if (process.argv.includes('--sync-key')) {
+        await syncKey()
+        console.log('Synced keys')
     }
-    return unusedKeys
 }
 
-main().then((unusedKeys) => {
-    if (!process.env.CI) {
-        return
-    }
-    if (unusedKeys.length > 0) {
-        console.log(unusedKeys)
-        process.exit(1)
-    }
-})
+main()
