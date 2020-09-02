@@ -30,7 +30,6 @@ if (Flags.matrix_based_service_enabled) {
 }
 
 if (GetContext() === 'background') {
-    const injectedScript = getInjectedScript()
     const contentScripts: Array<{ code: string } | { file: string }> = []
     const contentScriptReady = fetch('generated__content__script.html')
         .then((x) => x.text())
@@ -45,27 +44,6 @@ if (GetContext() === 'background') {
         })
     browser.webNavigation.onCommitted.addListener(async (arg) => {
         if (arg.url === 'about:blank') return
-        /**
-         * For iOS App, there is a special way to do it in the manifest.json
-         *
-         * A `iOS-injected-scripts` field is used to add extra scripts
-         */
-        if (!Flags.support_native_injected_script_declaration)
-            browser.tabs
-                .executeScript(arg.tabId, {
-                    runAt: 'document_start',
-                    frameId: arg.frameId,
-                    // Refresh the injected script every time in the development mode.
-                    code: process.env.NODE_ENV === 'development' ? await getInjectedScript() : await injectedScript,
-                })
-                .catch(IgnoreError(arg))
-        if (Flags.requires_injected_script_run_directly) {
-            browser.tabs.executeScript(arg.tabId, {
-                runAt: 'document_start',
-                frameId: arg.frameId,
-                file: 'js/injected-script.js',
-            })
-        }
         await contentScriptReady
         for (const script of contentScripts) {
             const option: browser.extensionTypes.InjectDetails = {
@@ -103,15 +81,6 @@ if (GetContext() === 'background') {
             exclusiveTasks('https://m.facebook.com/', { important: true })
         }
     })
-}
-async function getInjectedScript() {
-    return `{
-        const script = document.createElement('script')
-        script.innerHTML = ${await fetch('js/injected-script.js')
-            .then((x) => x.text())
-            .then(JSON.stringify)}
-        document.documentElement.appendChild(script)
-    }`
 }
 function IgnoreError(arg: unknown): (reason: Error) => void {
     return (e) => {
