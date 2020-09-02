@@ -2,6 +2,7 @@ import { promises as fs, readdirSync } from 'fs'
 import _ from 'lodash'
 import path from 'path'
 import ts from 'typescript'
+import { run } from './utils'
 
 const SOURCE_PATH = path.join(__dirname, '..', 'src')
 const LOCALE_PATH = path.join(SOURCE_PATH, '_locales')
@@ -134,4 +135,6 @@ async function main() {
     }
 }
 
-main()
+main().then(() => {
+    run(undefined, 'git', 'add', 'src/_locales')
+})
