@@ -80,6 +80,7 @@ export function renderInShadowRoot(
 }
 
 function mount(e: (HTMLElement & ShadowRoot) | HTMLElement, _: JSX.Element, concurrent?: boolean) {
+    if (e instanceof ShadowRoot) e = e.querySelector('div') || e.appendChild(document.createElement('div'))
     if (concurrent) {
         const root = ReactDOM.unstable_createRoot(e)
         root.render(_)
@@ -146,22 +147,11 @@ interface RenderInShadowRootWrapperProps {
 }
 
 class RenderInShadowRootWrapper extends React.PureComponent<RenderInShadowRootWrapperProps> {
-    proxy: HTMLElement = new Proxy(this.props.shadow as any, {
-        get(target, property: keyof ShadowRoot) {
-            if (property === 'parentNode') {
-                const host = target.getRootNode({ composed: true })
-                if (host !== document) {
-                    // ! severe error! The style cannot be managed by DOMRender
-                    return null
-                }
-                return target
-            }
-            return target[property]
-        },
-    })
+    insertionPoint = document.createElement('div')
+    _ = this.props.shadow.appendChild(document.createElement('head')).appendChild(this.insertionPoint)
     jss: Jss = create({
         ...jssPreset(),
-        insertionPoint: this.proxy,
+        insertionPoint: this.insertionPoint,
     })
     registry: InformativeSheetsRegistry = new InformativeSheetsRegistry()
     manager = new WeakMap()
@@ -190,6 +180,7 @@ class ErrorBoundary extends React.Component {
         return this.props.children
     }
     componentDidCatch(error: Error) {
+        console.error(error)
         this.setState({ error })
     }
 }
