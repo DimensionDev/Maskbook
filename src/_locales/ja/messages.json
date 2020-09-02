@@ -278,7 +278,11 @@
     "plugin_file_service_legal_terms_link": "https://legal.maskbook.com/arweave/file-service/plugin-terms.html",
     "plugin_file_service_legal_policy_link": "https://legal.maskbook.com/arweave/file-service/privacy-policy-uploader.html",
     "plugin_file_service_drop_indicator": "ファイルをドラッグ＆ドロップしてアップロード！",
+<<<<<<< HEAD
     "plugin_file_service_drop_hint_1": "ファイル容量の超過:{{limit}}.",
+=======
+    "plugin_file_service_drop_hint_1": "ファイル容量の超過：{{limit}}.",
+>>>>>>> upstream/master
     "plugin_file_service_drop_hint_2": "このファイルはすぐにアップロードされ、取り消すことはできません。",
     "plugin_file_service_drop_here": "ファイルをここにドラッグ＆ドロップ",
     "plugin_file_service_error_101": "一つのファイルだけにしてください！",
