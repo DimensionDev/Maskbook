@@ -143,7 +143,7 @@
     "person_or_group_in_list_many_no_preview": "全部で{{count}}",
     "personas": "人格",
     "please_include_proof_your_bio": "以下の「 」内の内容を自己紹介欄に追加すれば Maskbook が使えるようになります。「{{bio}}」",
-    "popup_current_persona": "現在の人格アカウント",
+    "popup_current_persona": "",
     "popup_enter_dashboard": "ダッシュボードに入る",
     "popup_setup_first_persona": "最初の人格アカウントを作る",
     "profiles": "プロフィール",
