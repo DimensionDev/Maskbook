@@ -4,12 +4,6 @@ import zh from '../_locales/zh/messages.json'
 import ja from '../_locales/ja/messages.json'
 import type { I18NFunction } from './i18n-next-ui'
 export type I18NStrings = typeof en
-
-function check(lang: I18NStrings) {}
-check(en)
-check(zh)
-// check(ja)
-
 i18nNextInstance.init({
     resources: {
         en: { translation: en },
