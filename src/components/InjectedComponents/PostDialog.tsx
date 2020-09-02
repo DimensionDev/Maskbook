@@ -368,7 +368,7 @@ export function PostDialog(props: PostDialogProps) {
                     const isOkb = isErc20 && metadata.ok && isOKB(metadata.val.token?.address ?? '')
 
                     activeUI.taskPasteIntoPostBox(
-                        t('additional_post_box__steganography_post_pre', { random: String(Date.now()) }),
+                        t('additional_post_box__steganography_post_pre', { random: new Date().toLocaleString() }),
                         { shouldOpenPostDialog: false },
                     )
                     activeUI.taskUploadToPostBox(encrypted, {
