@@ -230,7 +230,6 @@ export function RedPacketInDecryptedPostClaimDialog(
                 <Button
                     className={classes.button}
                     style={{ marginLeft: 'auto', marginRight: 0, width: 100 }}
-                    color="primary"
                     variant="contained"
                     onClick={() => props.onClaimRedPacket(selectedWalletAddress!, claiming?.rpid, defaultChecked)}>
                     {t('ok')}

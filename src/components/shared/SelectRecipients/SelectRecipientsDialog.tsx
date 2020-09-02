@@ -110,7 +110,6 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 <Button
                     className={classes.button}
                     style={{ marginLeft: 'auto' }}
-                    color="primary"
                     variant="contained"
                     disabled={props.submitDisabled}
                     onClick={props.onSubmit}>

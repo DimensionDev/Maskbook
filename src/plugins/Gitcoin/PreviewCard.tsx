@@ -143,8 +143,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 <Button
                     // If failed to fetch the contract address, fallback
                     onClick={() => (props.address ? props.onRequestGrant() : window.open(props.originalURL))}
-                    variant="contained"
-                    color="primary">
+                    variant="contained">
                     {t('plugin_gitcoin_preview_card_fund')}
                 </Button>
             </Box>

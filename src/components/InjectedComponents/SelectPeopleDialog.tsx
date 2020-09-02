@@ -68,7 +68,7 @@ export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
                 <Button className={classes.button} size="large" disabled={canClose} onClick={onClose}>
                     {t('cancel')}
                 </Button>
-                <Button className={classes.button} size="large" disabled={canCommit} color="primary" onClick={share}>
+                <Button className={classes.button} size="large" disabled={canCommit} onClick={share}>
                     {committed && (
                         <CircularProgress aria-busy className={classes.progress} size={16} variant="indeterminate" />
                     )}

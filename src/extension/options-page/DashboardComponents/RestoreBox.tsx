@@ -98,7 +98,6 @@ export function RestoreBox(props: RestoreBoxProps) {
             <ActionButton
                 className={classes.button}
                 classes={{ text: classes.buttonText }}
-                color="primary"
                 variant="text"
                 style={{ paddingLeft: entered || file ? 8 : 28 }}
                 startIcon={entered || file ? null : <AddBoxOutlinedIcon className={classes.icon} />}

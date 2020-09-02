@@ -67,7 +67,6 @@ export function RestoreFromQRCodeCameraBox(props: RestoreFromQRCodeCameraBoxProp
             </FormControl>
             <Button
                 className={classes.button}
-                color="primary"
                 variant="outlined"
                 disabled={!selectedDeviceId}
                 onClick={() =>

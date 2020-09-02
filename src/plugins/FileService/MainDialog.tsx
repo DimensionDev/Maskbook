@@ -95,7 +95,7 @@ const MainDialog: React.FC<Props> = (props) => {
             <DialogContent className={classes.content}>
                 <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
                     <Entry />
-                    <Grid container justify="center">
+                    <Grid container justifyContent="center">
                         <InsertButton onClick={onInsert} disabled={isNil(selectedFileInfo)}>
                             {t('plugin_file_service_on_insert')}
                         </InsertButton>

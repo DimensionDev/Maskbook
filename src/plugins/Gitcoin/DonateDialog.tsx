@@ -196,7 +196,6 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                     <Button
                         className={classes.button}
                         style={{ marginLeft: 'auto' }}
-                        color="primary"
                         startIcon={props.loading ? <CircularProgress size={24} /> : null}
                         variant="contained"
                         disabled={isButtonDisabled || props.loading}

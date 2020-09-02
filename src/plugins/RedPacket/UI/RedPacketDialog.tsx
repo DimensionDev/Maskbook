@@ -202,7 +202,6 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                 <Button
                     className={classes.button}
                     style={{ marginLeft: 'auto', minWidth: 140, whiteSpace: 'nowrap' }}
-                    color="primary"
                     variant="contained"
                     startIcon={props.loading ? <CircularProgress size={24} /> : null}
                     disabled={loading || isSendButtonDisabled}

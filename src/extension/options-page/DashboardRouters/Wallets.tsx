@@ -163,7 +163,6 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                         <Button
                             className={classes.addButton}
                             variant="text"
-                            color="primary"
                             onClick={() => openAddToken({ wallet })}
                             startIcon={<AddIcon />}>
                             {t('add_token')}
@@ -214,8 +213,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                             })
                         }
                         startIcon={<HistoryIcon />}
-                        variant="text"
-                        color="primary">
+                        variant="text">
                         {t('activity')}
                     </Button>
                 </div>
@@ -349,7 +347,6 @@ export default function DashboardWalletsRouter() {
             title={t('my_wallets')}
             actions={[
                 <Button
-                    color="primary"
                     variant="outlined"
                     onClick={async () => {
                         try {
@@ -359,11 +356,10 @@ export default function DashboardWalletsRouter() {
                     }}>
                     {t('import_from_metamask')}
                 </Button>,
-                <Button color="primary" variant="outlined" onClick={openWalletImport}>
+                <Button variant="outlined" onClick={openWalletImport}>
                     {t('import')}
                 </Button>,
                 <Button
-                    color="primary"
                     variant="contained"
                     onClick={openWalletCreate}
                     endIcon={<AddCircleIcon />}
