@@ -96,7 +96,7 @@ export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
     )
     return (
         <section className={classes.container}>
-            <Typography className={classes.heading}>Recent Files</Typography>
+            <Typography className={classes.heading}>{t('plugin_file_service_recent_files')}</Typography>
             <List className={classes.listing}>{files.slice(0, 4).map(renderItem)}</List>
             <Button className={classes.more} onClick={onMore}>
                 {t('plugin_file_service_show_more')}
