@@ -1,9 +1,10 @@
 import React from 'react'
-import type { TypedMessage } from '../../../../protocols/typed-message'
-import MaskbookPluginWrapper from '../../../MaskbookPluginWrapper'
-import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
-import type { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../database/types'
-import Services from '../../../../extension/service'
+import type { TypedMessage } from '../../../protocols/typed-message'
+import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import { RedPacketWithState } from './RedPacket'
+import type { WalletRecord } from '../../Wallet/database/types'
+import type { RedPacketRecord, RedPacketStatus } from '../types'
+import Services from '../../../extension/service'
 
 import {
     makeStyles,
@@ -21,17 +22,17 @@ import {
     FormControlLabel,
     Divider,
 } from '@material-ui/core'
-import { useStylesExtends, or } from '../../../../components/custom-ui-helper'
-import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
-import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
-import { getPostUrl } from '../../../../social-network/utils/getPostUrl'
-import { renderWithRedPacketMetadata } from '../../../RedPacket/utils'
-import { useWallets } from '../../../shared/useWallet'
-import { usePostInfoDetails } from '../../../../components/DataSource/usePostInfo'
-import type { WalletDetails } from '../../../../extension/background-script/PluginService'
-import { DashboardRoute } from '../../../../extension/options-page/Route'
+import { useStylesExtends, or } from '../../../components/custom-ui-helper'
+import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
+import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
+import { getPostUrl } from '../../../social-network/utils/getPostUrl'
+import { renderWithRedPacketMetadata } from '../utils'
+import { useWallets } from '../../shared/useWallet'
+import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
+import type { WalletDetails } from '../../../extension/background-script/PluginService'
+import { DashboardRoute } from '../../../extension/options-page/Route'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

@@ -1,7 +1,8 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { RedPacketWithStateUI, RedPacket } from '../plugins/Wallet/UI/Dashboard/Components/RedPacket'
-import { RedPacketRecord, EthereumNetwork, RedPacketStatus, EthereumTokenType } from '../plugins/Wallet/database/types'
+import { RedPacketWithStateUI, RedPacket } from '../plugins/RedPacket/UI/RedPacket'
+import { EthereumNetwork, EthereumTokenType } from '../plugins/Wallet/database/types'
+import { RedPacketRecord, RedPacketStatus, RedPacketJSONPayload } from '../plugins/RedPacket/types'
 import { number, text, select, boolean } from '@storybook/addon-knobs'
 import { Typography, Paper } from '@material-ui/core'
 import { action } from '@storybook/addon-actions'
@@ -9,7 +10,7 @@ import BigNumber from 'bignumber.js'
 import { makeTypedMessageText } from '../protocols/typed-message'
 import { DAI_ADDRESS } from '../plugins/Wallet/token'
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
-import { RedPacketMetaKey, RedPacketJSONPayload } from '../plugins/RedPacket/utils'
+import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
 
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacketWithStateUI', () => {

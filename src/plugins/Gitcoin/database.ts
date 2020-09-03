@@ -1,15 +1,12 @@
 import { BigNumber } from 'bignumber.js'
-import { gitcoinAPI, walletAPI, erc20API } from './api'
-import {
-    GitcoinDonationPayload,
-    GitcoinDonationRecord,
-    GitcoinDonationRecordInDatabase,
-    EthereumTokenType,
-} from './database/types'
+import { walletAPI, erc20API } from '../Wallet/api'
+import { gitcoinAPI } from './contracts'
+import { EthereumTokenType } from '../Wallet/database/types'
+import type { GitcoinDonationPayload, GitcoinDonationRecord, GitcoinDonationRecordInDatabase } from './types'
 import { PluginMessageCenter } from '../PluginMessages'
 import type { _UnboxPromise } from 'async-call-rpc/full'
 import { omit } from 'lodash-es'
-import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
+import { getNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
 import { createPluginWalletAccess } from '../../database/Plugin/wrap-wallet-for-plugin'
 import { getCurrentEthChain } from '../../extension/background-script/PluginService'
 
@@ -17,9 +14,7 @@ const createTransaction = createPluginWalletAccess<GitcoinDonationRecordInDataba
     'com.maskbook.provide.co.gitcoin',
 )({}, 'donation_transaction_hash')
 const ro = () => createTransaction('readonly')
-const rw = () => createTransaction('readwrite')
 type GitcoinPluginReificatedWalletDBReadOnly = _UnboxPromise<ReturnType<typeof ro>>
-type GitcoinPluginReificatedWalletDBReadWrite = _UnboxPromise<ReturnType<typeof rw>>
 function getProvider() {
     return {
         ...gitcoinAPI,

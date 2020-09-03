@@ -16,6 +16,4 @@ Current Provider:
 
 ## TODO
 
-- Move RedPacket related types & files to their folder
-- Move GitCoin related types & files to their folder
 - Migrate deprecated createPluginWalletAccess to new createPluginDatabase

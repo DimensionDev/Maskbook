@@ -30,7 +30,8 @@ import { useTwitterButton } from '../social-network-provider/twitter.com/utils/t
 import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
 import { PersonKnownSelf } from '../components/InjectedComponents/PersonKnown'
 import { figmaLink } from './utils'
-import { RedPacketJSONPayload, RedPacketMetaKey } from '../plugins/RedPacket/utils'
+import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
+import type { RedPacketJSONPayload } from '../plugins/RedPacket/types'
 import type { TypedMessageStorybookTest } from '../plugins/Storybook/define'
 
 storiesOf('Injections', module)

@@ -84,7 +84,7 @@ const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
     }),
 )
 
-export interface ERC20PredefinedTokenSelectorProps {
+interface ERC20PredefinedTokenSelectorProps {
     excludeTokens?: string[]
     onTokenChange?: (next: ERC20Token | null) => void
 }
