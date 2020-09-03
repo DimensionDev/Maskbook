@@ -32,14 +32,14 @@ import ActionButton, { DebounceButton } from '../DashboardComponents/ActionButto
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import Services from '../../service'
-import type { RedPacketRecord } from '../../../plugins/Wallet/database/types'
+import type { RedPacketRecord } from '../../../plugins/RedPacket/types'
 import {
     ERC20PredefinedTokenSelector,
     ERC20CustomizedTokenSelector,
 } from '../../../plugins/Wallet/UI/Dashboard/Dialogs/WalletAddTokenDialog'
 import type { ERC20Token } from '../../../plugins/Wallet/token'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
-import WalletLine from '../../../plugins/Wallet/UI/Dashboard/Components/WalletLine'
+import WalletLine from './WalletLine'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useHistory } from 'react-router-dom'
@@ -48,7 +48,7 @@ import { sleep } from '../../../utils/utils'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
 import { useCurrentEthChain, useManagedWalletDetail } from '../../../plugins/shared/useWallet'
 import { difference } from 'lodash-es'
-import { RedPacket } from '../../../plugins/Wallet/UI/Dashboard/Components/RedPacket'
+import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
 import { QRCode } from '../../../components/shared/qrcode'
 
 //#region wallet import dialog

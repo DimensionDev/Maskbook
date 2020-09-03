@@ -9,8 +9,8 @@ import {
     DialogActions,
     DialogContentText,
 } from '@material-ui/core'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
+import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

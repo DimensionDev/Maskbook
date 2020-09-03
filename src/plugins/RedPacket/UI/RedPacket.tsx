@@ -1,13 +1,12 @@
 import React from 'react'
 import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
 import classNames from 'classnames'
-import type { RedPacketRecord, RedPacketStatus, ERC20TokenRecord } from '../../../database/types'
-import Services from '../../../../../extension/service'
-import { PluginMessageCenter } from '../../../../PluginMessages'
-import { formatBalance } from '../../../formatter'
-import { getUrl } from '../../../../../utils/utils'
-import { isDAI, isOKB } from '../../../token'
-import type { RedPacketJSONPayload } from '../../../../RedPacket/utils'
+import type { RedPacketRecord, RedPacketStatus, RedPacketJSONPayload } from '../types'
+import Services from '../../../extension/service'
+import { PluginMessageCenter } from '../../PluginMessages'
+import { formatBalance } from '../../Wallet/formatter'
+import { getUrl } from '../../../utils/utils'
+import { isDAI, isOKB } from '../../Wallet/token'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

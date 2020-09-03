@@ -19,7 +19,7 @@ const plugins = new Set<PluginConfig>()
 export const PluginUI: ReadonlySet<PluginConfig> = plugins
 
 import { GitcoinPluginDefine } from './Gitcoin/define'
-import { RedPacketPluginDefine } from './Wallet/define'
+import { RedPacketPluginDefine } from './RedPacket/define'
 import type { PostInfo } from '../social-network/PostInfo'
 import { StorybookPluginDefine } from './Storybook/define'
 import { FileServicePluginDefine } from './FileService/define'

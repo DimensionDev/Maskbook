@@ -1,6 +1,6 @@
-import * as RedPacket from '../../plugins/Wallet/red-packet-fsm'
+import * as RedPacket from '../../plugins/RedPacket/state-machine'
 import * as Wallet from '../../plugins/Wallet/wallet'
-import * as Gitcoin from '../../plugins/Gitcoin/Services'
+import * as Gitcoin from '../../plugins/Gitcoin/service'
 import * as FileService from '../../plugins/FileService/service'
 import type { ERC20TokenRecord, ManagedWalletRecord, ExoticWalletRecord } from '../../plugins/Wallet/database/types'
 import { EthereumNetwork } from '../../plugins/Wallet/database/types'

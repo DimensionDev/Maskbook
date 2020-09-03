@@ -1,11 +1,9 @@
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { createDBAccess } from '../../../database/helpers/openDB'
-import type {
-    ERC20TokenRecord,
-    WalletRecordInDatabase,
-    RedPacketRecordInDatabase,
-    GitcoinDonationRecordInDatabase,
-} from './types'
+import type { ERC20TokenRecord, WalletRecordInDatabase } from './types'
+import type { GitcoinDonationRecordInDatabase } from '../../Gitcoin/types'
+import type { RedPacketRecordInDatabase } from '../../RedPacket/types'
+import { RedPacketPluginID } from '../../RedPacket/constants'
 
 function path<T>(x: T) {
     return x
@@ -51,7 +49,7 @@ export const createWalletDBAccess = createDBAccess(() => {
                 // @ts-expect-error
                 const redPacket: RedPacketRecordInDatabase[] = await db.getAll('RedPacket')
                 for (const each of redPacket) {
-                    const id = 'com.maskbook.redpacket'
+                    const id = RedPacketPluginID
                     os.add({
                         plugin_id: id,
                         record_id: `${id}:${each.id}`,

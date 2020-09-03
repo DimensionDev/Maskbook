@@ -1,24 +1,17 @@
 import { omit } from 'lodash-es'
-import {
-    RedPacketRecord,
-    RedPacketStatus,
-    EthereumTokenType,
-    isNextRedPacketStatusValid,
-    EthereumNetwork,
-    RedPacketRecordInDatabase,
-} from './database/types'
+import { EthereumTokenType, EthereumNetwork } from '../Wallet/database/types'
+import { RedPacketRecord, RedPacketStatus, RedPacketRecordInDatabase, RedPacketJSONPayload } from './types'
 import { v4 as uuid } from 'uuid'
 import type { RedPacketCreationResult, RedPacketClaimResult } from './types'
-import { getWalletProvider, recoverWallet, getDefaultWallet, setDefaultWallet, getManagedWallets } from './wallet'
+import { getWalletProvider, getDefaultWallet, setDefaultWallet } from '../Wallet/wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import Web3Utils from 'web3-utils'
-import { redPacketAPI } from './api'
+import { redPacketAPI } from './contracts'
 import { sideEffect } from '../../utils/side-effects'
 import BigNumber from 'bignumber.js'
-import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
-import { createRedPacketTransaction, RedPacketPluginReificatedWalletDBReadOnly } from './createRedPacketTransaction'
-import { assert } from '../../utils/utils'
-import type { RedPacketJSONPayload } from '../RedPacket/utils'
+import { getNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
+import { createRedPacketTransaction, RedPacketPluginReificatedWalletDBReadOnly } from './database'
+import { assert, unreachable } from '../../utils/utils'
 import { getCurrentEthChain } from '../../extension/background-script/PluginService'
 
 function getProvider() {
@@ -364,4 +357,30 @@ function RedPacketRecordIntoDB(x: RedPacketRecord): RedPacketRecordInDatabase {
         }
     }
     return record
+}
+
+export function isNextRedPacketStatusValid(current: RedPacketStatus, next: RedPacketStatus) {
+    switch (current) {
+        case RedPacketStatus.initial:
+            return [RedPacketStatus.pending, RedPacketStatus.fail].includes(next)
+        case RedPacketStatus.pending:
+            return [RedPacketStatus.fail, RedPacketStatus.normal].includes(next)
+        case RedPacketStatus.fail:
+        case RedPacketStatus.empty:
+        case RedPacketStatus.refunded:
+            return false
+        case RedPacketStatus.normal:
+        case RedPacketStatus.incoming:
+            return [RedPacketStatus.claim_pending, RedPacketStatus.expired, RedPacketStatus.empty].includes(next)
+        case RedPacketStatus.claim_pending:
+            return [RedPacketStatus.normal, RedPacketStatus.incoming, RedPacketStatus.claimed].includes(next)
+        case RedPacketStatus.claimed:
+            return [RedPacketStatus.refund_pending, RedPacketStatus.expired].includes(next)
+        case RedPacketStatus.expired:
+            return RedPacketStatus.refund_pending === next
+        case RedPacketStatus.refund_pending:
+            return RedPacketStatus.refunded === next
+        default:
+            return unreachable(current)
+    }
 }

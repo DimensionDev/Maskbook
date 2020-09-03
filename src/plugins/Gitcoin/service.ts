@@ -2,7 +2,7 @@ import { Result, Err, Ok } from 'ts-results'
 import { GitcoinGrantFailedReason as Reason } from './types'
 import BigNumber from 'bignumber.js'
 
-export * from '../Wallet/gitcoin'
+export * from './database'
 
 export interface GitcoinGrantMetadata {
     title?: string
