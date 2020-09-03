@@ -143,6 +143,7 @@ export function RedPacketWithStateUI(props: {
     const { onClick, redPacket, loading } = props
     const info = getInfo(redPacket)
     const status = redPacket?.status ?? 'pending'
+    const description = getDescription(redPacket, info)
     return (
         <Card
             elevation={0}
@@ -172,13 +173,7 @@ export function RedPacketWithStateUI(props: {
                 <Typography className={classes.words} variant="h6">
                     {redPacket?.send_message}
                 </Typography>
-                <Typography variant="body2">
-                    {status === 'incoming'
-                        ? 'Ready to open'
-                        : `${redPacket?.send_total ? formatBalance(redPacket.send_total, info?.decimals ?? 0) : '?'} ${
-                              info?.name ?? '(unknown)'
-                          } / ${redPacket?.shares?.toString() ?? '?'} Shares`}
-                </Typography>
+                <Typography variant="body2">{description}</Typography>
             </div>
             <div
                 className={classNames(classes.packet, {
@@ -238,6 +233,32 @@ export function RedPacket(props: { redPacket?: RedPacketRecord }) {
             <div className={classes.packet}></div>
         </Card>
     )
+}
+
+function getDescription(
+    redPacket?: Partial<RedPacketRecord>,
+    info?: { name?: string; decimals?: number; address?: string; symbol?: string },
+): string {
+    switch (redPacket?.status) {
+        case 'pending':
+            return 'Creating'
+        case 'incoming':
+            return 'Ready to open'
+        case 'fail':
+            return 'Create failed'
+        case 'claimed':
+            return 'You has already claimed'
+        case 'expired':
+            return 'You came too late'
+        case 'claim_pending':
+            return 'Claiming'
+        case 'empty':
+            return 'You came too late'
+        default:
+            return `Total: ${redPacket?.send_total ? formatBalance(redPacket.send_total, info?.decimals ?? 0) : '?'} ${
+                getInfo(redPacket)?.name ?? '(unknown)'
+            } / ${redPacket?.shares?.toString() ?? '?'} Shares`
+    }
 }
 
 function getInfo(
