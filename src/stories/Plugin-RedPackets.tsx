@@ -20,6 +20,7 @@ storiesOf('Plugin: Red Packets', module)
             ...opts,
             total: total * 1000000000000000000,
             type: EthereumTokenType.ETH,
+            status: RedPacketStatus.incoming,
         })
         const erc20 = createRecord({
             ...opts,
@@ -31,6 +32,7 @@ storiesOf('Plugin: Red Packets', module)
                 decimals,
                 symbol: erc20symbol,
             },
+            status: RedPacketStatus.claimed,
         })
         const dai = createRecord({
             ...opts,
@@ -42,6 +44,7 @@ storiesOf('Plugin: Red Packets', module)
                 decimals,
                 symbol: erc20symbol,
             },
+            status: RedPacketStatus.empty,
         })
         return (
             <>
