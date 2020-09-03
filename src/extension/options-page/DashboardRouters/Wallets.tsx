@@ -41,6 +41,7 @@ import { useHistory } from 'react-router-dom'
 import { WalletProviderType } from '../../../plugins/shared/findOutProvider'
 import { useSnackbar } from 'notistack'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
+import { Flags } from '../../../utils/flags'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -346,16 +347,20 @@ export default function DashboardWalletsRouter() {
             empty={!wallets?.length}
             title={t('my_wallets')}
             actions={[
-                <Button
-                    variant="outlined"
-                    onClick={async () => {
-                        try {
-                            await Services.Plugin.connectExoticWallet(WalletProviderType.metamask)
-                            notify.enqueueSnackbar('Success', { variant: 'success' })
-                        } catch (e) {}
-                    }}>
-                    {t('import_from_metamask')}
-                </Button>,
+                Flags.metamask_support_enabled ? (
+                    <Button
+                        variant="outlined"
+                        onClick={async () => {
+                            try {
+                                await Services.Plugin.connectExoticWallet(WalletProviderType.metamask)
+                                notify.enqueueSnackbar('Success', { variant: 'success' })
+                            } catch (e) {}
+                        }}>
+                        {t('import_from_metamask')}
+                    </Button>
+                ) : (
+                    <></>
+                ),
                 <Button variant="outlined" onClick={openWalletImport}>
                     {t('import')}
                 </Button>,
