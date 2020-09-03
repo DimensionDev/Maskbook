@@ -264,7 +264,7 @@
     "plugin_file_service_file_key_copied": "ファイルの鍵がコピーされました",
     "plugin_file_service_on_insert": "ファイルを使用する",
     "plugin_file_service_uploading_preparing": "準備しています",
-    "plugin_file_service_uploading_estimating_time": "予定準備時間...",
+    "plugin_file_service_uploading_estimating_time": "転送時間計算中...",
     "plugin_file_service_uploading_in_minute_remaining": "{{seconds}}秒残っています",
     "plugin_file_service_uploading_remaining": "{{minutes}}分{{seconds}}秒残っています",
     "plugin_file_service_uploading_on_cancal": "アップロードしています...今このページを閉じないでください。",
