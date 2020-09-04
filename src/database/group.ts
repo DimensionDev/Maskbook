@@ -5,6 +5,7 @@ import { MessageCenter } from '../utils/messages'
 import { PrototypeLess, restorePrototypeArray } from '../utils/type'
 import { createDBAccess } from './helpers/openDB'
 import type { Ok } from 'ts-results'
+import { Flags } from '../utils/flags'
 
 //#region Schema
 interface GroupRecordBase {
@@ -180,8 +181,7 @@ export async function queryUserGroupsDatabase(
         }
     } else {
         result.push(
-            // ? WKWebview bug https://bugs.webkit.org/show_bug.cgi?id=177350
-            ...(webpackEnv.target === 'WKWebview'
+            ...(Flags.has_Safari_IndexedDB_bug
                 ? (await t.objectStore('groups').getAll()).filter((obj) => obj.network === query.network)
                 : await t.objectStore('groups').index('network').getAll(IDBKeyRange.only(query.network))),
         )

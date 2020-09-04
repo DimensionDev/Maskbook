@@ -3,14 +3,13 @@ import Fuse from 'fuse.js'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import { FixedSizeList } from 'react-window'
-import { ListItem, ListItemText, Box, Typography, Avatar, ListItemIcon } from '@material-ui/core'
+import { ListItem, ListItemText, Box, Typography, ListItemIcon } from '@material-ui/core'
 import type { ERC20Token } from '../../../token'
 import { EthereumAddress } from 'wallet.ts'
 import { getNetworkERC20Tokens } from '../../Developer/EthereumNetworkSettings'
 import { TokenIcon } from '../../../../../extension/options-page/DashboardComponents/TokenIcon'
-import { currentEthereumNetworkSettings } from '../../../../../settings/settings'
-import { useValueRef } from '../../../../../utils/hooks/useValueRef'
 import { useI18N } from '../../../../../utils/i18n-next-ui'
+import { useCurrentEthChain } from '../../../../shared/useWallet'
 
 //#region token
 const useTokenInListStyles = makeStyles((theme) =>
@@ -35,7 +34,7 @@ const useTokenInListStyles = makeStyles((theme) =>
 
 interface TokenInListProps {
     index: number
-    style: CSSProperties
+    style: any
     data: {
         tokens: ERC20Token[]
         excludeTokens: string[]
@@ -85,29 +84,27 @@ const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
     }),
 )
 
-export interface ERC20PredefinedTokenSelectorProps {
+interface ERC20PredefinedTokenSelectorProps {
     excludeTokens?: string[]
     onTokenChange?: (next: ERC20Token | null) => void
 }
 
 export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = [] }: ERC20PredefinedTokenSelectorProps) {
     const { t } = useI18N()
-    const network = useValueRef(currentEthereumNetworkSettings)
-    const erc20Tokens = useMemo(getNetworkERC20Tokens, [network])
-    const fuse = useMemo(
-        () =>
-            new Fuse(erc20Tokens, {
-                shouldSort: true,
-                threshold: 0.45,
-                maxPatternLength: 32,
-                minMatchCharLength: 1,
-                keys: [
-                    { name: 'name', weight: 0.5 },
-                    { name: 'symbol', weight: 0.5 },
-                ],
-            }),
-        [network],
-    )
+    const network = useCurrentEthChain()
+    const [erc20Tokens, fuse] = useMemo(() => {
+        const tokens = getNetworkERC20Tokens(network)
+        const fuse = new Fuse(tokens, {
+            shouldSort: true,
+            threshold: 0.45,
+            minMatchCharLength: 1,
+            keys: [
+                { name: 'name', weight: 0.5 },
+                { name: 'symbol', weight: 0.5 },
+            ],
+        })
+        return [tokens, fuse] as const
+    }, [network])
 
     const classes = useERC20PredefinedTokenSelectorStyles()
     const [address, setAddress] = useState('')
@@ -122,7 +119,7 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
                   ]
                 : [],
         )
-    }, [query])
+    }, [erc20Tokens, fuse, query])
 
     return (
         <Box textAlign="left">

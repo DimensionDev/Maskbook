@@ -7,9 +7,6 @@ import './_background_loader.1'
 import './_background_loader.2'
 import './extension/service'
 import './provider.worker'
-if (process.env.NODE_ENV === 'development') {
-    require('./network/matrix/instance')
-}
 
 import * as PersonaDB from './database/Persona/Persona.db'
 import * as PersonaDBHelper from './database/Persona/helpers'
@@ -26,9 +23,10 @@ import * as post from './database/post'
 import { definedSocialNetworkWorkers } from './social-network/worker'
 import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
 import { exclusiveTasks } from './extension/content-script/tasks'
+import { Flags } from './utils/flags'
 
-if (process.env.NODE_ENV === 'development') {
-    require('./protocols/wallet-provider/metamask-provider')
+if (Flags.matrix_based_service_enabled) {
+    require('./network/matrix/instance')
 }
 
 if (GetContext() === 'background') {
@@ -48,20 +46,20 @@ if (GetContext() === 'background') {
     browser.webNavigation.onCommitted.addListener(async (arg) => {
         if (arg.url === 'about:blank') return
         /**
-         * For WKWebview, there is a special way to do it in the manifest.json
+         * For iOS App, there is a special way to do it in the manifest.json
          *
          * A `iOS-injected-scripts` field is used to add extra scripts
          */
-        if (webpackEnv.target !== 'WKWebview')
+        if (!Flags.support_native_injected_script_declaration)
             browser.tabs
                 .executeScript(arg.tabId, {
                     runAt: 'document_start',
                     frameId: arg.frameId,
+                    // Refresh the injected script every time in the development mode.
                     code: process.env.NODE_ENV === 'development' ? await getInjectedScript() : await injectedScript,
                 })
                 .catch(IgnoreError(arg))
-        // In Firefox
-        if (webpackEnv.target === 'Firefox') {
+        if (Flags.requires_injected_script_run_directly) {
             browser.tabs.executeScript(arg.tabId, {
                 runAt: 'document_start',
                 frameId: arg.frameId,
@@ -84,7 +82,7 @@ if (GetContext() === 'background') {
     })
 
     browser.runtime.onInstalled.addListener((detail) => {
-        if (webpackEnv.genericTarget === 'facebookApp') return
+        if (Flags.has_native_welcome_ui) return
         if (detail.reason === 'install') {
             browser.tabs.create({ url: getWelcomePageURL() })
         }
@@ -100,10 +98,10 @@ if (GetContext() === 'background') {
     })
 
     contentScriptReady.then(() => {
-        if (webpackEnv.genericTarget === 'facebookApp') {
+        // TODO: support twitter
+        if (Flags.has_no_browser_tab_ui) {
             exclusiveTasks('https://m.facebook.com/', { important: true })
         }
-        exclusiveTasks(getWelcomePageURL(), { important: true })
     })
 }
 async function getInjectedScript() {
@@ -120,11 +118,10 @@ function IgnoreError(arg: unknown): (reason: Error) => void {
         if (e.message.includes('non-structured-clonable data')) {
             // It's okay we don't need the result, happened on Firefox
         } else if (e.message.includes('Frame not found, or missing host permission')) {
-            // It's maybe okay, happened on Firefox
+            // It's okay, we inject to the wrong site and browser rejected it.
         } else if (e.message.includes('must request permission')) {
-            // It's okay, we inject to the wrong site and browser rejected it.
         } else if (e.message.includes('Cannot access a chrome')) {
-            // It's okay, we inject to the wrong site and browser rejected it.
+        } else if (e.message.includes('extension:// URL of different extension')) {
         } else console.error('Inject error', e, arg, Object.entries(e))
     }
 }
@@ -141,6 +138,7 @@ console.log('Build info', {
     DIRTY: process.env.DIRTY,
     TAG_DIRTY: process.env.TAG_DIRTY,
 })
+console.log('Flags', Flags)
 
 // Friendly to debug
 Object.assign(window, {

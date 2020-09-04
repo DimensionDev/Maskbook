@@ -14,7 +14,9 @@ import { pasteIntoBioFacebook } from './tasks/pasteIntoBio'
 import { injectPostCommentsDefault } from '../../social-network/defaults/injectComments'
 import { dispatchCustomEvents, selectElementContents, sleep } from '../../utils/utils'
 import { collectPostsFacebook } from './UI/collectPosts'
+import { injectPostReplacerFacebook } from './UI/injectPostReplacer'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
+import { injectPageInspectorFacebook } from './UI/injectPageInspector'
 import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
 import { i18n } from '../../utils/i18n-next'
@@ -25,6 +27,7 @@ import { injectKnownIdentityAtFacebook } from './UI/injectKnownIdentity'
 import { createTaskStartImmersiveSetupDefault } from '../../social-network/defaults/taskStartImmersiveSetupDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
 import { notifyPermissionUpdate } from '../../utils/permissions'
+import { Flags } from '../../utils/flags'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
@@ -41,7 +44,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     friendlyName: 'Facebook',
     requestPermission() {
         // TODO: wait for webextension-shim to support <all_urls> in permission.
-        if (webpackEnv.target === 'WKWebview' || webpackEnv.target === 'E2E') return Promise.resolve(true)
+        if (Flags.no_web_extension_dynamic_permission_request) return Promise.resolve(true)
         return browser.permissions
             .request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
             .then(notifyPermissionUpdate)
@@ -91,7 +94,9 @@ export const facebookUISelf = defineSocialNetworkUI({
             if (!root.innerText.includes(encryptedComment)) return fail()
         }
     }),
+    injectPostReplacer: injectPostReplacerFacebook,
     injectPostInspector: injectPostInspectorFacebook,
+    injectPageInspector: injectPageInspectorFacebook,
     collectPeople: collectPeopleFacebook,
     collectPosts: collectPostsFacebook,
     taskPasteIntoBio: pasteIntoBioFacebook,

@@ -5,6 +5,7 @@ import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { PostInspector, PostInspectorProps } from '../../components/InjectedComponents/PostInspector'
 import { makeStyles } from '@material-ui/core'
 import { PostInfoContext, usePostInfoDetails } from '../../components/DataSource/usePostInfo'
+import { noop } from 'lodash-es'
 
 export function injectPostInspectorDefault<T extends string>(
     config: InjectPostInspectorDefaultConfig = {},
@@ -29,7 +30,7 @@ export function injectPostInspectorDefault<T extends string>(
     })
 
     const { zipPost } = config
-    const zipPostF = zipPost || (() => {})
+    const zipPostF = zipPost || noop
     return function injectPostInspector(current: PostInfo) {
         return renderInShadowRoot(
             <PostInfoContext.Provider value={current}>

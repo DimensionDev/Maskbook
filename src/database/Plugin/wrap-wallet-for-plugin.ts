@@ -9,7 +9,7 @@ export type PluginReificatedWalletDB<
     Index extends [IDBValidKey?, IDBValidKey?, IDBValidKey?],
     Mode extends 'readonly' | 'readwrite'
 > = IDBPSafeTransaction<WalletDB<Data, Index>, ['ERC20Token', 'PluginStore', 'Wallet'], Mode>
-/** @deprecated */
+/** @deprecated Because with exotic wallet, it is impossible to keep consistency state with the wallet. */
 export function createPluginWalletAccess<Data, Index extends [IDBValidKey?, IDBValidKey?, IDBValidKey?]>(
     pluginID: string,
 ) {

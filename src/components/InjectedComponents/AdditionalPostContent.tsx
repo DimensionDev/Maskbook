@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     root: { boxSizing: 'border-box', width: '100%', backgroundColor: 'transparent', borderColor: 'transparent' },
     title: { display: 'flex', alignItems: 'center' },
     icon: { paddingRight: theme.spacing(0.75), display: 'flex', width: 20, height: 20 },
-    content: { margin: theme.spacing(1, 0), padding: 0 },
+    content: { margin: theme.spacing(1, 0), padding: 0, overflowWrap: 'break-word' },
     rightIcon: { paddingLeft: theme.spacing(0.75) },
 }))
 
@@ -62,7 +62,6 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
             {props.headerActions}
         </Typography>
     )
-    const TypedMessageRenderer = props.TypedMessageRenderer || DefaultTypedMessageRenderer
     const TypedMessage = React.useMemo(() => {
         if (typeof message === 'string') return makeTypedMessageText(message)
         if (typeof message === 'undefined') return makeTypedMessageText('')
@@ -73,7 +72,7 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
             <header className={classes.content}>{header}</header>
             {message ? (
                 <main className={classes.content}>
-                    <TypedMessageRenderer {...props} message={TypedMessage} />
+                    <DefaultTypedMessageRenderer {...props} message={TypedMessage} />
                 </main>
             ) : null}
         </Card>

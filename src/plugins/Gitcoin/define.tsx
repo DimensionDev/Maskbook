@@ -8,8 +8,8 @@ import Services from '../../extension/service'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { extractTextFromTypedMessage } from '../../protocols/typed-message'
 import { DonateDialog, DonatePayload } from './DonateDialog'
-import { useWallet } from '../shared/useWallet'
-import type { GitcoinGrantMetadata } from './Services'
+import { useTokens, useWallets } from '../shared/useWallet'
+import type { GitcoinGrantMetadata } from './service'
 import BigNumber from 'bignumber.js'
 import { EthereumTokenType } from '../Wallet/database/types'
 import { isNumber } from 'lodash-es'
@@ -50,16 +50,15 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     )
 }
 
+function fetcher(key: string, url: string) {
+    return Services.Plugin.invokePlugin('co.gitcoin', 'fetchMetadata', url)
+}
 function Gitcoin(props: { url: string }) {
     const [open, setOpen] = useState(false)
-    const { data: walletData } = useWallet()
-    const { wallets, tokens } = walletData ?? {}
+    const { data: wallets } = useWallets()
+    const { data: tokens } = useTokens()
     const url = props.url
-    const { data, isValidating } = useSWR(url, {
-        fetcher(url: string) {
-            return Services.Plugin.invokePlugin('co.gitcoin', 'fetchMetadata', url)
-        },
-    })
+    const { data, isValidating } = useSWR(['co.gitcoin', url], { fetcher })
     const {
         transactions,
         daiAmount,
@@ -91,7 +90,7 @@ function Gitcoin(props: { url: string }) {
                 donation_address: donationAddress,
                 donation_total: new BigNumber(amount).multipliedBy(new BigNumber(10).pow(power)),
                 donor_address: address,
-                network: getNetworkSettings().networkType,
+                network: getNetworkSettings(await Services.Plugin.getCurrentEthChain()).networkType,
                 token_type: tokenType,
                 token: token,
             })

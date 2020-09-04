@@ -7,6 +7,7 @@ import { MaskbookIcon } from '../../../resources/Maskbook-Circle-WhiteGraph-Blue
 import React from 'react'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { memoizePromise } from '../../../utils/memoize'
+import { Flags } from '../../../utils/flags'
 
 function Icon(props: { size: number }) {
     return (
@@ -19,7 +20,7 @@ function Icon(props: { size: number }) {
             }}></MaskbookIcon>
     )
 }
-const opt = { afterShadowRootInit: { mode: webpackEnv.shadowRootMode } } as const
+const opt = { afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } } as const
 function _(main: () => LiveSelector<HTMLSpanElement, true>, size: number) {
     // TODO: for unknown reason the MutationObserverWatcher doesn't work well
     // To reproduce, open a profile and switch to another profile.

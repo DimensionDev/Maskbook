@@ -8,6 +8,7 @@ import { getCurrentNetworkWorkerService } from './background-script/WorkerServic
 import { MessageCenter } from '@holoflows/kit/es'
 import { IdentifierMap } from '../database/IdentifierMap'
 import type { upload as pluginArweaveUpload } from '../plugins/FileService/arweave/index'
+import BigNumber from 'bignumber.js'
 
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
@@ -29,6 +30,7 @@ const logOptions: AsyncCallOptions['log'] = {
     remoteError: true,
     sendLocalStack: true,
     type: 'pretty',
+    requestReplay: process.env.NODE_ENV === 'development',
 }
 if (!('Services' in globalThis)) {
     Object.assign(globalThis, { Services })
@@ -73,7 +75,7 @@ export const ServicesWithProgress = AsyncGeneratorCall<ServicesWithProgress>(
         key: 'Service+',
         log: logOptions,
         serializer: Serialization,
-        messageChannel: new MessageCenter(false),
+        channel: new MessageCenter(false, 'service-progress').eventBasedChannel,
         strict: false,
     },
 )
@@ -86,6 +88,13 @@ Object.assign(globalThis, {
     getCurrentNetworkWorkerService,
     ECKeyIdentifier,
     IdentifierMap,
+    BigNumber,
+})
+Object.defineProperty(BigNumber.prototype, '__debug__amount__', {
+    get(this: BigNumber) {
+        return this.toNumber()
+    },
+    configurable: true,
 })
 
 //#region
@@ -93,15 +102,14 @@ type Service = Record<string, (...args: unknown[]) => Promise<unknown>>
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
     if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false) || process.env.STORYBOOK) {
         GetContext() !== 'debugging' && console.log(`Service ${name} registered in ${GetContext()}`)
-        const mc = new MessageCenter(process.env.STORYBOOK ? true : false)
+        const mc = new MessageCenter(process.env.STORYBOOK ? true : false, name)
         Object.assign(Services, {
             [name]: AsyncCall(service, {
                 key: name,
                 serializer: Serialization,
                 log: logOptions,
-                messageChannel: mc,
+                channel: mc.eventBasedChannel,
                 preferLocalImplementation: GetContext() === 'background',
-                preservePauseOnException: process.env.NODE_ENV === 'development',
                 strict: false,
             }),
         })
@@ -120,8 +128,7 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                 key: name,
                 serializer: Serialization,
                 log: logOptions,
-                messageChannel: mc,
-                preservePauseOnException: process.env.NODE_ENV === 'development',
+                channel: mc.eventBasedChannel,
                 strict: false,
             })
         }

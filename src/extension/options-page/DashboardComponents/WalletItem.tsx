@@ -11,6 +11,7 @@ import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
 import { TokenIcon } from './TokenIcon'
 import { Address } from './Address'
 import type { ERC20TokenDetails, WalletDetails } from '../../background-script/PluginService'
+import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -109,9 +110,7 @@ interface WalletItemProps {
 export function WalletItem(props: WalletItemProps) {
     const { t } = useI18N()
     const classes = useStyles()
-    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'), {
-        defaultMatches: webpackEnv.perferResponsiveTarget === 'xs',
-    })
+    const xsMatched = useMatchXS()
 
     const { wallet, selected, onClick, tokens } = props
     const [, copyToClipboard] = useCopyToClipboard()
@@ -135,7 +134,7 @@ export function WalletItem(props: WalletItemProps) {
                 </Typography>
                 <Address address={wallet.address} />
             </Box>
-            {isExotic ? (
+            {isExotic && !xsMatched ? (
                 <Box paddingBottom={2} marginTop={-2}>
                     <Typography className={classes.label} component="p" color="textSecondary" variant="overline">
                         Managed by

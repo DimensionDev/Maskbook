@@ -1,8 +1,10 @@
-import { createGlobalSettings, createNetworkSettings } from './createSettings'
+import { createGlobalSettings, createInternalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { EthereumNetwork } from '../plugins/Wallet/database/types'
 import type { SetupGuideStep } from '../components/InjectedComponents/ImmersiveGuide/SetupGuide'
+import { WalletProviderType } from '../plugins/shared/findOutProvider'
+import { Flags } from '../utils/flags'
 
 /**
  * Does the debug mode on
@@ -23,18 +25,22 @@ export const disableOpenNewTabInBackgroundSettings = createGlobalSettings<boolea
     },
 )
 
-const disableShadowRoot = webpackEnv.target === 'WKWebview' || process.env.STORYBOOK
 export const renderInShadowRootSettings = createGlobalSettings<boolean>(
     'render in shadow root',
-    /**
-     * ? In WKWebview, the web extension polyfill is not ready for it.
-     */
-    !disableShadowRoot,
+    !Flags.no_ShadowDOM_support,
     {
         primary: () => i18n.t('settings_advance_security'),
         secondary: () => i18n.t('settings_advance_security_desc'),
     },
 )
+
+/**
+ * Whether if create substitute post for all posts
+ */
+export const allPostReplacementSettings = createGlobalSettings<boolean>('post replacement all', false, {
+    primary: () => i18n.t('settings_post_replacement'),
+    secondary: () => i18n.t('settings_post_replacement_desc'),
+})
 
 export enum Appearance {
     default = 'default',
@@ -46,14 +52,19 @@ export const appearanceSettings = createGlobalSettings<Appearance>('apperance', 
     primary: () => i18n.t('settings_appearance'),
 })
 
-export const currentEthereumNetworkSettings = createGlobalSettings<EthereumNetwork>(
+export const currentLocalWalletEthereumNetworkSettings = createGlobalSettings<EthereumNetwork>(
     'eth network',
     EthereumNetwork.Mainnet,
     {
         primary: () => i18n.t('settings_choose_eth_network'),
         secondary: () =>
-            `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Ropsten}`,
+            `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Ropsten}. This only effects the built-in wallet.`,
     },
+)
+
+export const lastActivatedWalletProvider = createInternalSettings<WalletProviderType>(
+    'last activated wallet provider',
+    WalletProviderType.managed,
 )
 
 export enum Language {

@@ -98,6 +98,10 @@ export interface SocialNetworkUIInjections {
      */
     injectPostBox(): void
     /**
+     * This function should inject the page inspector
+     */
+    injectPageInspector(): void
+    /**
      * This is an optional function.
      *
      * This function should inject a link to open the options page.
@@ -125,11 +129,21 @@ export interface SocialNetworkUIInjections {
      */
     injectCommentBox?: ((current: PostInfo) => () => void) | 'disabled'
     /**
+     * This function should inject the post replacer
+     * @param current The current post
+     * @returns unmount the injected components
+     */
+    injectPostReplacer(current: PostInfo): () => void
+    /**
      * This function should inject the post box
      * @param current The current post
      * @returns unmount the injected components
      */
     injectPostInspector(current: PostInfo): () => void
+    /**
+     * Inject Maskbook dashboard entry on Mobile
+     */
+    injectDashboardEntryInMobile?(): void
 }
 //#endregion
 //#region SocialNetworkUITasks
@@ -294,8 +308,10 @@ export function activateSocialNetworkUI(): void {
                 ui.init(env, {})
                 ui.resolveLastRecognizedIdentity()
                 ui.injectPostBox()
+                ui.injectPageInspector()
                 ui.collectPeople()
                 ui.collectPosts()
+                ui.injectDashboardEntryInMobile()
                 ui.myIdentitiesRef.addListener((val) => {
                     if (val.length === 1) ui.currentIdentity.value = val[0]
                 })
@@ -322,6 +338,7 @@ export function activateSocialNetworkUI(): void {
 function hookUIPostMap(ui: SocialNetworkUI) {
     const unmountFunctions = new WeakMap<object, () => void>()
     ui.posts.event.on('set', (key, value) => {
+        const unmountPostReplacer = ui.injectPostReplacer(value)
         const unmountPostInspector = ui.injectPostInspector(value)
         const unmountCommentBox: () => void =
             ui.injectCommentBox === 'disabled' ? nopWithUnmount : defaultTo(ui.injectCommentBox, nopWithUnmount)(value)
@@ -331,6 +348,7 @@ function hookUIPostMap(ui: SocialNetworkUI) {
                 : defaultTo(ui.injectPostComments, nopWithUnmount)(value)
         unmountFunctions.set(key, () => {
             unmountPostInspector()
+            unmountPostReplacer()
             unmountCommentBox()
             unmountPostComments()
         })

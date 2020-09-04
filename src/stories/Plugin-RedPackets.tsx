@@ -1,7 +1,8 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { RedPacketWithStateUI, RedPacket } from '../plugins/Wallet/UI/Dashboard/Components/RedPacket'
-import { RedPacketRecord, EthereumNetwork, RedPacketStatus, EthereumTokenType } from '../plugins/Wallet/database/types'
+import { RedPacketWithStateUI, RedPacket } from '../plugins/RedPacket/UI/RedPacket'
+import { EthereumNetwork, EthereumTokenType } from '../plugins/Wallet/database/types'
+import { RedPacketRecord, RedPacketStatus, RedPacketJSONPayload } from '../plugins/RedPacket/types'
 import { number, text, select, boolean } from '@storybook/addon-knobs'
 import { Typography, Paper } from '@material-ui/core'
 import { action } from '@storybook/addon-actions'
@@ -9,7 +10,7 @@ import BigNumber from 'bignumber.js'
 import { makeTypedMessageText } from '../protocols/typed-message'
 import { DAI_ADDRESS } from '../plugins/Wallet/token'
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
-import { RedPacketMetaKey, RedPacketJSONPayload } from '../plugins/RedPacket/utils'
+import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
 
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacketWithStateUI', () => {
@@ -19,6 +20,7 @@ storiesOf('Plugin: Red Packets', module)
             ...opts,
             total: total * 1000000000000000000,
             type: EthereumTokenType.ETH,
+            status: RedPacketStatus.incoming,
         })
         const erc20 = createRecord({
             ...opts,
@@ -30,6 +32,7 @@ storiesOf('Plugin: Red Packets', module)
                 decimals,
                 symbol: erc20symbol,
             },
+            status: RedPacketStatus.claimed,
         })
         const dai = createRecord({
             ...opts,
@@ -41,6 +44,7 @@ storiesOf('Plugin: Red Packets', module)
                 decimals,
                 symbol: erc20symbol,
             },
+            status: RedPacketStatus.empty,
         })
         return (
             <>
@@ -138,7 +142,6 @@ function createRecord(opts: {
     token?: NonNullable<RedPacketRecord['raw_payload']>['token']
 }): RedPacketRecord {
     const x: RedPacketRecord = {
-        _data_source_: 'mock',
         aes_version: 1,
         contract_address: 'contract_address',
         contract_version: 1,

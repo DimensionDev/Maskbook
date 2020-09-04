@@ -12,6 +12,8 @@ import { PreDefinedVirtualGroupNames } from '../../../database/type'
 import { twitterUICustomUI, startWatchThemeColor } from './custom'
 import { notifyPermissionUpdate } from '../../../utils/permissions'
 import { injectMaskbookIconToProfile, injectMaskbookIconIntoFloatingProfileCard } from './injectMaskbookIcon'
+import { injectDashboardEntryInMobileTwitter } from './injectDashboardEntryInMobile'
+import { Flags } from '../../../utils/flags'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -52,7 +54,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     friendlyName: 'Twitter (Insider Preview)',
     requestPermission() {
         // TODO: wait for webextension-shim to support <all_urls> in permission.
-        if (webpackEnv.target === 'WKWebview' || webpackEnv.target === 'E2E') return Promise.resolve(true)
+        if (Flags.no_web_extension_dynamic_permission_request) return Promise.resolve(true)
         return browser.permissions
             .request({
                 origins: [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`],
@@ -70,4 +72,5 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     ignoreSetupAccount() {
         setStorage(twitterUrl.hostIdentifier, { userIgnoredWelcome: true, forceDisplayWelcome: false }).then()
     },
+    injectDashboardEntryInMobile: injectDashboardEntryInMobileTwitter,
 })

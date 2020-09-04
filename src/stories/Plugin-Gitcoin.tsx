@@ -56,7 +56,6 @@ storiesOf('Plugin: Gitcoin', module)
                             eth_balance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
                             createdAt: new Date(),
                             updatedAt: new Date(),
-                            _data_source_: 'mock',
                         },
                     ]}
                     address="fake"

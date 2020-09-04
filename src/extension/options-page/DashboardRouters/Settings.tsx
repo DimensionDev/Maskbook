@@ -9,7 +9,8 @@ import {
     languageSettings,
     Language,
     renderInShadowRootSettings,
-    currentEthereumNetworkSettings,
+    allPostReplacementSettings,
+    currentLocalWalletEthereumNetworkSettings,
     appearanceSettings,
     Appearance,
 } from '../../../settings/settings'
@@ -20,6 +21,7 @@ import NoEncryptionIcon from '@material-ui/icons/NoEncryption'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined'
+import FlipToFrontIcon from '@material-ui/icons/FlipToFront'
 import TabIcon from '@material-ui/icons/Tab'
 import PaletteIcon from '@material-ui/icons/Palette'
 import LanguageIcon from '@material-ui/icons/Language'
@@ -30,6 +32,7 @@ import { merge, cloneDeep } from 'lodash-es'
 import { useModal } from '../DashboardDialogs/Base'
 import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
+import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -114,12 +117,11 @@ export default function DashboardSettingsRouter() {
     const { t } = useI18N()
     const currentLang = useValueRef(languageSettings)
     const currentApperance = useValueRef(appearanceSettings)
-    const currentEthereumNetwork = useValueRef(currentEthereumNetworkSettings)
     const langMapper = React.useRef((x: Language) => {
-        if (x === Language.en) return 'English'
-        if (x === Language.zh) return '中文'
-        if (x === Language.ja) return '日本語'
-        return ''
+        if (x === Language.en) return t('language_en')
+        if (x === Language.zh) return t('language_zh')
+        if (x === Language.ja) return t('language_ja')
+        return x
     }).current
     const apperanceMapper = React.useRef((x: Appearance) => {
         if (x === Appearance.dark) return t('settings_appearance_dark')
@@ -165,14 +167,12 @@ export default function DashboardSettingsRouter() {
                                     icon={<PaletteIcon />}
                                     value={appearanceSettings}
                                 />
-                                {process.env.NODE_ENV === 'development' ||
-                                webpackEnv.perferResponsiveTarget === 'xs' ? (
+                                {Flags.support_eth_network_switch ? (
                                     <SettingsUIEnum
                                         classes={listStyle}
-                                        secondary={currentEthereumNetwork}
                                         enumObject={EthereumNetwork}
                                         icon={<WifiIcon />}
-                                        value={currentEthereumNetworkSettings}
+                                        value={currentLocalWalletEthereumNetworkSettings}
                                     />
                                 ) : null}
                             </List>
@@ -189,18 +189,22 @@ export default function DashboardSettingsRouter() {
                                     icon={<TabIcon />}
                                     value={disableOpenNewTabInBackgroundSettings}
                                 />
-                                {/* This feature is not ready for iOS */}
-                                {webpackEnv.target !== 'WKWebview' ? (
+                                {Flags.no_ShadowDOM_support ? null : (
                                     <SettingsUI
                                         classes={listStyle}
                                         icon={shadowRoot ? <EnhancedEncryptionIcon /> : <NoEncryptionIcon />}
                                         value={renderInShadowRootSettings}
                                     />
-                                ) : null}
+                                )}
                                 <SettingsUI
                                     classes={listStyle}
                                     icon={<MemoryOutlinedIcon />}
                                     value={debugModeSetting}
+                                />
+                                <SettingsUI
+                                    classes={listStyle}
+                                    icon={<FlipToFrontIcon />}
+                                    value={allPostReplacementSettings}
                                 />
                             </List>
                         </Card>

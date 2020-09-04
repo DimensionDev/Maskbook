@@ -10,10 +10,19 @@ import { PostInfo } from '../../../social-network/PostInfo'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
 import { bioCardParser, postParser, postIdParser, postImagesParser } from '../utils/fetch'
-import { isNil, noop, memoize } from 'lodash-es'
+import { isNil, memoize } from 'lodash-es'
 import Services from '../../../extension/service'
 import { untilElementAvailable } from '../../../utils/dom'
 import { injectMaskbookIconToPost } from './injectMaskbookIcon'
+import {
+    makeTypedMessageImage,
+    makeTypedMessageFromList,
+    makeTypedMessageEmpty,
+    makeTypedMessageSuspended,
+    makeTypedMessageCompound,
+    extractTextFromTypedMessage,
+} from '../../../protocols/typed-message'
+import { Flags } from '../../../utils/flags'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -132,7 +141,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 onNodeMutation: run,
             }
         })
-        .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
             const isQuotedTweet = tweetNode?.getAttribute('role') === 'blockquote'
@@ -168,22 +177,32 @@ function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo) {
 }
 function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self: Required<SocialNetworkUIDefinition>) {
     if (!tweetNode) return
-    const { pid, content, handle, name, avatar } = postParser(tweetNode)
-    if (!pid) return
+    const { pid, messages, handle, name, avatar } = postParser(tweetNode)
 
+    if (!pid) return
     const postBy = new ProfileIdentifier(self.networkIdentifier, handle)
     info.postID.value = pid
-    info.postContent.value = content
+    info.postContent.value = messages
+        .map((x) => {
+            const extracted = extractTextFromTypedMessage(x)
+            return extracted.ok ? extracted.val : ''
+        })
+        // add space between anchor and plain text
+        .join(' ')
     if (!info.postBy.value.equals(postBy)) info.postBy.value = postBy
     info.nickname.value = name
     info.avatarURL.value = avatar || null
 
     // decode steganographic image
     // don't add await on this
-    untilElementAvailable(postsImageSelector(tweetNode), 10000)
+    const images = untilElementAvailable(postsImageSelector(tweetNode), 10000)
         .then(() => postImagesParser(tweetNode))
         .then((urls) => {
             for (const url of urls) info.postMetadataImages.add(url)
+            if (urls.length) return makeTypedMessageFromList(...urls.map((x) => makeTypedMessageImage(x)))
+            return makeTypedMessageEmpty()
         })
-        .catch(noop)
+        .catch(() => makeTypedMessageEmpty())
+
+    info.postMessage.value = makeTypedMessageCompound([...messages, makeTypedMessageSuspended(images)])
 }

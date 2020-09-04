@@ -28,7 +28,7 @@ import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
 import { DialogDismissIconUI } from './DialogDismissIcon'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
-import RedPacketDialog from '../../plugins/Wallet/UI/RedPacket/RedPacketDialog'
+import RedPacketDialog from '../../plugins/RedPacket/UI/RedPacketDialog'
 import FileServiceDialog from '../../plugins/FileService/MainDialog'
 import FileServiceEntryIcon from './FileServiceEntryIcon'
 import {
@@ -40,12 +40,13 @@ import {
 } from '../../protocols/typed-message'
 import { EthereumTokenType } from '../../plugins/Wallet/database/types'
 import { isDAI, isOKB } from '../../plugins/Wallet/token'
-import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
+import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/utils'
 import { PluginUI } from '../../plugins/plugin'
+import { Flags } from '../../utils/flags'
 
 const defaultTheme = {}
 
@@ -119,7 +120,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
     const [fileServiceDialogOpen, setFileServiceDialogOpen] = useState(false)
 
-    if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
+    if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
     const metadataBadge = [...PluginUI].flatMap((plugin) => {
         const knownMeta = plugin.postDialogMetadataBadge
         if (!knownMeta) return undefined
@@ -194,25 +195,27 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 ChipProps={{
                                     label: '💰 Red Packet',
                                     onClick: async () => {
-                                        const { wallets } = await Services.Plugin.getWallets()
+                                        const wallets = await Services.Plugin.getWallets()
                                         if (wallets.length) setRedPacketDialogOpen(true)
                                         else Services.Provider.requestConnectWallet()
                                     },
                                 }}
                             />
-                            <ClickableChip
-                                ChipProps={{
-                                    label: (
-                                        <>
-                                            <FileServiceEntryIcon width={16} height={16} />
-                                            &nbsp;File Service
-                                        </>
-                                    ),
-                                    onClick() {
-                                        setFileServiceDialogOpen(true)
-                                    },
-                                }}
-                            />
+                            {Flags.file_service_enabled && (
+                                <ClickableChip
+                                    ChipProps={{
+                                        label: (
+                                            <>
+                                                <FileServiceEntryIcon width={16} height={16} />
+                                                &nbsp;File Service
+                                            </>
+                                        ),
+                                        onClick() {
+                                            setFileServiceDialogOpen(true)
+                                        },
+                                    }}
+                                />
+                            )}
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
@@ -242,8 +245,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 />
                             </SelectRecipientsUI>
                         </Box>
-                        {/* This feature is not ready for mobile version */}
-                        {webpackEnv.genericTarget !== 'facebookApp' ? (
+                        {Flags.no_post_image_payload_support ? null : (
                             <>
                                 <Typography style={{ marginBottom: 10 }}>
                                     {t('post_dialog__more_options_title')}
@@ -259,7 +261,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     />
                                 </Box>
                             </>
-                        ) : null}
+                        )}
                     </DialogContent>
                     <DialogActions className={classes.actions}>
                         <Button
@@ -284,7 +286,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     DialogProps={props.DialogProps}
                 />
             )}
-            {!process.env.STORYBOOK && (
+            {Flags.file_service_enabled && (
                 <FileServiceDialog
                     classes={classes}
                     open={props.open && fileServiceDialogOpen}
@@ -366,7 +368,7 @@ export function PostDialog(props: PostDialogProps) {
                     const isOkb = isErc20 && metadata.ok && isOKB(metadata.val.token?.address ?? '')
 
                     activeUI.taskPasteIntoPostBox(
-                        t('additional_post_box__steganography_post_pre', { random: String(Date.now()) }),
+                        t('additional_post_box__steganography_post_pre', { random: new Date().toLocaleString() }),
                         { shouldOpenPostDialog: false },
                     )
                     activeUI.taskUploadToPostBox(encrypted, {
@@ -376,7 +378,7 @@ export function PostDialog(props: PostDialogProps) {
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
                     if (metadata.ok) {
-                        if (i18n.language.includes('zh')) {
+                        if (i18n.language?.includes('zh')) {
                             text =
                                 activeUI.networkIdentifier === twitterUrl.hostIdentifier
                                     ? `用 #Maskbook @realMaskbook 開啟紅包 ${encrypted}`

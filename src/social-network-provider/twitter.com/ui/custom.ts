@@ -56,6 +56,9 @@ function useTheme() {
                         dark: toRGB(shade(primaryColorRGB, -10)),
                     },
                 },
+                shape: {
+                    borderRadius: 15,
+                },
                 breakpoints: {
                     values: { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 },
                 },

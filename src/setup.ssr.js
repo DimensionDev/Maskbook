@@ -12,6 +12,9 @@ globalThis.document = {
     },
     body: { appendChild() {} },
     addEventListener() {},
+    documentElement: {
+        onmouseenter() {},
+    },
 }
 globalThis.CSSStyleSheet = { name: 'CSSStyleSheet' }
 globalThis.ShadowRoot = class {}
@@ -26,10 +29,6 @@ const { join } = require('path')
 const { writeFileSync, readFileSync, unlinkSync } = require('fs')
 
 const restoreLodash = modifyPackage('lodash-es', (x) => (x.main = '../lodash'))
-const restoreTSResult = modifyPackage('ts-results', (x) => {
-    x.main = './cjs.cjs'
-})
-const undoTSResult = compileToCJS('../node_modules/ts-results/index.js', '../node_modules/ts-results/cjs.cjs')
 const restoreKit = modifyPackage('@holoflows/kit', (x) => {
     x.exports = {
         '.': './umd/index.js',
@@ -38,7 +37,6 @@ const restoreKit = modifyPackage('@holoflows/kit', (x) => {
         './package.json': './package.json',
     }
 })
-
 process.on('uncaughtException', function (err) {
     cleanup()
     throw err
@@ -50,8 +48,6 @@ process.on('unhandledRejection', (err) => {
 function cleanup() {
     restoreLodash()
     restoreKit()
-    undoTSResult()
-    restoreTSResult()
 }
 try {
     require('ts-node').register({
