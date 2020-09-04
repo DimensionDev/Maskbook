@@ -1,5 +1,5 @@
 export interface BackupFormat {
-    buildInfo: Record<string, string | undefined>
+    buildInfo: Record<string, string | boolean | undefined>
     instances: Instance[]
 }
 

@@ -1,5 +1,6 @@
 const is_iOSApp = process.env.target === 'safari' && process.env.architecture === 'app'
 const isAndroidApp = process.env.architecture === 'app' && process.env.target === 'firefox'
+
 // TODO: In future, we can turn this object into a Proxy to receive flags from remote
 export const Flags = {
     /** There is no "tabs" to navigate to. We must be careful with this. */
