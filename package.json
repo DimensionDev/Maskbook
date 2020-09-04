@@ -205,7 +205,7 @@
   "optionalDependencies": {
     "expect-puppeteer": "^4.4.0",
     "jest-puppeteer": "^4.4.0",
-    "puppeteer": "^3.1.0"
+    "puppeteer": "^5.2.1"
   },
   "engines": {
     "node": ">=14.4.0"
