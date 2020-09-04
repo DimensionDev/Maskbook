@@ -1,7 +1,8 @@
 import React from 'react'
 import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
 import classNames from 'classnames'
-import type { RedPacketRecord, RedPacketStatus, RedPacketJSONPayload } from '../types'
+import type { RedPacketRecord, RedPacketJSONPayload } from '../types'
+import { RedPacketStatus } from '../types'
 import Services from '../../../extension/service'
 import { PluginMessageCenter } from '../../PluginMessages'
 import { formatBalance } from '../../Wallet/formatter'
@@ -142,7 +143,7 @@ export function RedPacketWithStateUI(props: {
     const classes = useStyles()
     const { onClick, redPacket, loading } = props
     const info = getInfo(redPacket)
-    const status = redPacket?.status ?? 'pending'
+    const status = redPacket?.status ?? RedPacketStatus.pending
     const description = getDescription(redPacket, info)
     return (
         <Card
@@ -153,7 +154,7 @@ export function RedPacketWithStateUI(props: {
             component="article"
             onClick={() => onClick?.()}>
             <div className={classNames(classes.header, { [classes.flex1]: status === 'incoming' })}>
-                {status === 'claimed' ? (
+                {status === RedPacketStatus.claimed ? (
                     <Typography variant="h5" color="inherit">
                         {redPacket?.claim_amount ? formatBalance(redPacket.claim_amount, info?.decimals ?? 0) : '?'}{' '}
                         {info?.name ?? '(unknown)'}
@@ -163,9 +164,9 @@ export function RedPacketWithStateUI(props: {
                         From: {redPacket?.sender_name ?? '(unknown)'}
                     </Typography>
                 )}
-                {status !== 'incoming' && status !== 'normal' && (
+                {status !== RedPacketStatus.incoming && status !== RedPacketStatus.normal && (
                     <Typography className={classes.label} variant="body2">
-                        {status === 'claim_pending' ? 'opening…' : status ?? 'Pending'}
+                        {status === RedPacketStatus.claim_pending ? 'opening…' : status ?? 'Pending'}
                     </Typography>
                 )}
             </div>
@@ -183,10 +184,10 @@ export function RedPacketWithStateUI(props: {
             <div
                 className={classNames(classes.loader, {
                     [classes.dimmer]:
-                        status === 'refunded' ||
-                        status === 'expired' ||
-                        status === 'pending' ||
-                        status === 'claimed' ||
+                        status === RedPacketStatus.refunded ||
+                        status === RedPacketStatus.expired ||
+                        status === RedPacketStatus.pending ||
+                        status === RedPacketStatus.claimed ||
                         loading,
                 })}>
                 {(loading || status === 'pending') && <CircularProgress color="secondary" />}
@@ -235,29 +236,27 @@ export function RedPacket(props: { redPacket?: RedPacketRecord }) {
     )
 }
 
-function getDescription(
-    redPacket?: Partial<RedPacketRecord>,
-    info?: { name?: string; decimals?: number; address?: string; symbol?: string },
-): string {
+function getDescription(redPacket?: Partial<RedPacketRecord>, info?: ReturnType<typeof getInfo>): string {
     switch (redPacket?.status) {
-        case 'pending':
+        case RedPacketStatus.pending:
             return 'Creating'
-        case 'incoming':
+        case RedPacketStatus.incoming:
             return 'Ready to open'
-        case 'fail':
+        case RedPacketStatus.fail:
             return 'Create failed'
-        case 'claimed':
+        case RedPacketStatus.claimed:
             return 'You has already claimed'
-        case 'expired':
+        case RedPacketStatus.expired:
             return 'You came too late'
-        case 'claim_pending':
+        case RedPacketStatus.claim_pending:
             return 'Claiming'
-        case 'empty':
+        case RedPacketStatus.empty:
             return 'You came too late'
         default:
-            return `Total: ${redPacket?.send_total ? formatBalance(redPacket.send_total, info?.decimals ?? 0) : '?'} ${
-                getInfo(redPacket)?.name ?? '(unknown)'
-            } / ${redPacket?.shares?.toString() ?? '?'} Shares`
+            const total = redPacket?.send_total ? formatBalance(redPacket.send_total, info?.decimals ?? 0) : '?'
+            const name = info?.name ?? '(unknown)'
+            const shares = redPacket?.shares?.toString() ?? '?'
+            return `Total: ${total} ${name} / ${shares} Shares`
     }
 }
 
