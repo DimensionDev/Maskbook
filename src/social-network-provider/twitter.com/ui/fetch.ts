@@ -187,7 +187,8 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self:
             const extracted = extractTextFromTypedMessage(x)
             return extracted.ok ? extracted.val : ''
         })
-        .join('')
+        // add space between anchor and plain text
+        .join(' ')
     if (!info.postBy.value.equals(postBy)) info.postBy.value = postBy
     info.nickname.value = name
     info.avatarURL.value = avatar || null

@@ -198,7 +198,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
             return makeTypedMessageText(node.nodeValue)
         } else if (node instanceof HTMLAnchorElement) {
             const anchor = node
-            const href = anchor.getAttribute('href')
+            const href = anchor.getAttribute('title')
             const content = anchor.textContent
             if (!content) return makeTypedMessageEmpty()
             return makeTypedMessageAnchor(resolve(content), href ?? 'javascript: void 0;', content)
