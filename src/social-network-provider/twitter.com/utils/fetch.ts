@@ -1,6 +1,6 @@
 import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
-import { defaultTo } from 'lodash-es'
+import { defaultTo, flattenDeep } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
 import { ProfileIdentifier } from '../../../database/type'
 import { twitterUrl, canonifyImgUrl } from './url'
@@ -10,6 +10,8 @@ import {
     makeTypedMessageEmpty,
     TypedMessage,
     isTypedMessageEmpty,
+    isTypedMessageText,
+    TypedMessageText,
 } from '../../../protocols/typed-message'
 
 /**
@@ -191,7 +193,6 @@ export const postContentMessageParser = (node: HTMLElement) => {
         return 'normal'
     }
     function make(node: Node): TypedMessage | TypedMessage[] {
-        const nodeName = node.nodeName.toLowerCase()
         if (node.nodeType === Node.TEXT_NODE) {
             if (!node.nodeValue) return makeTypedMessageEmpty()
             return makeTypedMessageText(node.nodeValue)
@@ -208,17 +209,16 @@ export const postContentMessageParser = (node: HTMLElement) => {
             if (matched && matched[1])
                 return makeTypedMessageText(String.fromCodePoint(Number.parseInt(`0x${matched[1]}`)))
             return makeTypedMessageEmpty()
-        } else if (node.childNodes)
-            return Array.from(node.childNodes).flatMap((x) => {
-                const x_ = make(x)
-                return Array.isArray(x_) ? x_ : [x_]
-            })
-        else return makeTypedMessageEmpty()
+        } else if (node.childNodes.length) {
+            const flattened = flattenDeep(Array.from(node.childNodes).map(make))
+            // conjunct text messages under same node
+            if (flattened.every(isTypedMessageText))
+                return makeTypedMessageText((flattened as TypedMessageText[]).map((x) => x.content).join(''))
+            return flattened
+        } else return makeTypedMessageEmpty()
     }
     const lang = node.parentElement!.querySelector<HTMLDivElement>('[lang]')
-    if (!lang) return []
-    const made = make(lang)
-    return Array.isArray(made) ? made : [made]
+    return lang ? Array.from(lang.childNodes).flatMap(make) : []
 }
 
 export const postImagesParser = async (node: HTMLElement): Promise<string[]> => {

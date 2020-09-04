@@ -338,8 +338,8 @@ export function activateSocialNetworkUI(): void {
 function hookUIPostMap(ui: SocialNetworkUI) {
     const unmountFunctions = new WeakMap<object, () => void>()
     ui.posts.event.on('set', (key, value) => {
-        const unmountPostInspector = ui.injectPostInspector(value)
         const unmountPostReplacer = ui.injectPostReplacer(value)
+        const unmountPostInspector = ui.injectPostInspector(value)
         const unmountCommentBox: () => void =
             ui.injectCommentBox === 'disabled' ? nopWithUnmount : defaultTo(ui.injectCommentBox, nopWithUnmount)(value)
         const unmountPostComments: () => void =

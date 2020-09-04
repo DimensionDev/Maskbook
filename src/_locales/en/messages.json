@@ -163,6 +163,7 @@
     "post_dialog__title": "Maskbook: Compose",
     "post_modal_hint__button": "🔒 Compose encrypted post 🔒",
     "post_modal_hint__title": "Looking for Maskbook?",
+    "post_substitute_label": "<Maskbook_Post_Payload />",
     "privacy_policy": "Privacy Policy",
     "privacy_policy_link": "https://legal.maskbook.com/maskbook/",
     "private_key": "Private key",
