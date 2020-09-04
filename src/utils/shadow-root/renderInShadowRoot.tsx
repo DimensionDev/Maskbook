@@ -80,7 +80,7 @@ export function renderInShadowRoot(
 }
 
 function mount(e: (HTMLElement & ShadowRoot) | HTMLElement, _: JSX.Element, concurrent?: boolean) {
-    if (e instanceof ShadowRoot) e = e.querySelector('div') || e.appendChild(document.createElement('div'))
+    if (e instanceof ShadowRoot) e = e.querySelector('main') || e.appendChild(document.createElement('main'))
     if (concurrent) {
         const root = ReactDOM.unstable_createRoot(e)
         root.render(_)

@@ -10,7 +10,7 @@ import {
     DialogContentText,
 } from '@material-ui/core'
 import { EthereumTokenType, ERC20TokenRecord } from '../Wallet/database/types'
-import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
+import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { getActivatedUI } from '../../social-network/ui'
 import type { ERC20TokenDetails } from '../../extension/background-script/PluginService'

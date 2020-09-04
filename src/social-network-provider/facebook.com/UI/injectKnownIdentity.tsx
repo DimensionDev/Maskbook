@@ -1,6 +1,6 @@
 import React from 'react'
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@holoflows/kit'
-import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
+import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import type { SocialNetworkUI } from '../../../social-network/ui'
 import { PersonKnown, PersonKnownProps } from '../../../components/InjectedComponents/PersonKnown'
 import { ProfileIdentifier } from '../../../database/type'

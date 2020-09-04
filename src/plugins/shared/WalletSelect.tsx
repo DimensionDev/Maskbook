@@ -9,7 +9,7 @@ import {
     DialogProps,
     InputProps,
 } from '@material-ui/core'
-import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
+import { PortalShadowRoot } from '../../utils/shadow-root/ShadowRootPortal'
 import type { useSelectWallet } from './useWallet'
 import type { WalletDetails } from '../../extension/background-script/PluginService'
 import Services from '../../extension/service'

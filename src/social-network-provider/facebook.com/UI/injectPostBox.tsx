@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
+import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { isMobileFacebook } from '../isMobile'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'

@@ -4,7 +4,7 @@ import { DashboardRoute } from '../../../extension/options-page/Route'
 import Services from '../../../extension/service'
 import { MaskbookIcon } from '../../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
 import { Flags } from '../../../utils/flags'
-import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
+import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { isMobileTwitter } from '../utils/isMobile'
 
 export function injectDashboardEntryInMobileTwitter() {

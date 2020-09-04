@@ -17,7 +17,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { ProfileInList } from './ProfileInList'
 import type { Profile } from '../../../database'
 import { DialogDismissIconUI } from '../../InjectedComponents/DialogDismissIcon'
-import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
+import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 
 const useStyles = makeStyles((theme) => ({
     content: {

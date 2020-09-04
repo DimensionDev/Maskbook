@@ -1,6 +1,6 @@
 import React from 'react'
 import type { PersonaIdentifier } from '../../database/type'
-import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
+import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
 import { Draggable } from '../../components/InjectedComponents/ImmersiveGuide/Draggable'
 import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'

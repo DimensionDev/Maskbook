@@ -15,7 +15,7 @@ import {
     CircularProgress,
 } from '@material-ui/core'
 import { useI18N } from '../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
+import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
 import { TokenSelect } from '../shared/TokenSelect'
 import { WalletSelect } from '../shared/WalletSelect'

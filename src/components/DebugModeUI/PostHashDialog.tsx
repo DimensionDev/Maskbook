@@ -15,7 +15,7 @@ import Services from '../../extension/service'
 import { PostIVIdentifier } from '../../database/type'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { DialogContentText, DialogContent } from '@material-ui/core'
-import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
+import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 
 const useStyles = makeStyles({
     avatar: {

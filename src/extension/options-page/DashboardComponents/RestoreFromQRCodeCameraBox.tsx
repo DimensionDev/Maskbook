@@ -3,7 +3,7 @@ import { makeStyles, createStyles, Box, FormControl, Select, MenuItem, Button } 
 import CropFreeIcon from '@material-ui/icons/CropFree'
 import { useModal } from '../DashboardDialogs/Base'
 import { QRCodeVideoScannerDialog } from '../DashboardDialogs/Setup'
-import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
+import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useVideoDevices } from '../../../utils/hooks/useVideoDevices'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
+import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { makeStyles, Box } from '@material-ui/core'
 import Services from '../../../extension/service'
 import { MaskbookIcon } from '../../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'

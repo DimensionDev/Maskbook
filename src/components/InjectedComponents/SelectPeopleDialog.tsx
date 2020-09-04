@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Button, CircularProgress, DialogActions, DialogContent, DialogTitle } from '@material-ui/core'
 import type { Profile } from '../../database'
 import { useStylesExtends } from '../custom-ui-helper'
-import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
+import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 
 export interface SelectPeopleDialogProps
     extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'content'> | 'button'> {

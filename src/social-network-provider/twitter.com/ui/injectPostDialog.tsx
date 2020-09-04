@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher, LiveSelector, ValueRef } from '@holoflows/kit/es'
-import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
+import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { useTwitterButton, useTwitterCloseButton, useTwitterLabel, useTwitterDialog } from '../utils/theme'
 import { makeStyles } from '@material-ui/core/styles'
