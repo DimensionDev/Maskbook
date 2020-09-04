@@ -134,7 +134,7 @@ export function WalletItem(props: WalletItemProps) {
                 </Typography>
                 <Address address={wallet.address} />
             </Box>
-            {isExotic ? (
+            {isExotic && !xsMatched ? (
                 <Box paddingBottom={2} marginTop={-2}>
                     <Typography className={classes.label} component="p" color="textSecondary" variant="overline">
                         Managed by
