@@ -34,9 +34,9 @@ export function PostReplacer(props: PostReplacerProps) {
         // replace all posts
         allPostReplacement ||
         // replace posts which enhanced by plugins
-        (!allPostReplacement && processedPostMessage.items.some((x) => !isTypedMessageKnown(x))) ||
+        processedPostMessage.items.some((x) => !isTypedMessageKnown(x)) ||
         // replace posts which encrypted by maskbook
-        (!allPostReplacement && postPayload.ok)
+        postPayload.ok
 
     // zip/unzip original post
     useEffect(() => {

@@ -295,10 +295,10 @@
     "plugin_file_service_on_change_file": "選擇其他文檔",
     "plugin_trader_no_data": "暫無數據",
     "plugin_trader_tab_price": "價格",
-    "plugin_trader_tab_exchange": "交易標的",
+    "plugin_trader_tab_exchange": "交易",
     "plugin_trader_tab_switch_data_source": "切換數據來源： ",
-    "plugin_trader_table_exchange": "交易標的",
-    "plugin_trader_table_pair": "對",
+    "plugin_trader_table_exchange": "來源",
+    "plugin_trader_table_pair": "交易對",
     "plugin_trader_table_price": "價格",
     "plugin_trader_table_volume": "交易量 （24小時）"
 }

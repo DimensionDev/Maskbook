@@ -297,7 +297,7 @@
     "plugin_trader_tab_price": "価格",
     "plugin_trader_tab_exchange": "取引所",
     "plugin_trader_tab_switch_data_source": "データソースの切り替え： ",
-    "plugin_trader_table_exchange": "取引所",
+    "plugin_trader_table_exchange": "ソース",
     "plugin_trader_table_pair": "通貨ペア",
     "plugin_trader_table_price": "価格",
     "plugin_trader_table_volume": "取引高"
