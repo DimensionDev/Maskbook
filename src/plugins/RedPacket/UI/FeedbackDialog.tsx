@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,6 +38,7 @@ export interface RedPacketDialogProps extends withClasses<KeysInferFromUseStyles
 export interface FeedbackDialogProps extends RedPacketDialogProps {}
 
 export function FeedbackDialog(props: RedPacketDialogProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const { open, title = 'failed', message, onClose } = props
     return (
@@ -53,7 +55,7 @@ export function FeedbackDialog(props: RedPacketDialogProps) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="primary">
-                    Close
+                    {t('close')}
                 </Button>
             </DialogActions>
         </ShadowRootDialog>
