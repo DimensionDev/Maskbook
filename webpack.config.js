@@ -75,21 +75,9 @@ module.exports = (argvEnv, argv) => {
 
     const dist = env === 'production' ? src('./build') : src('./dist')
 
-    const gitInfo = () => {
-        const reproducible = new webpack.EnvironmentPlugin({
-            BUILD_DATE: new Date(0).toISOString(),
-            VERSION: require('./package.json').version + '-reproducible',
-            TAG_NAME: 'N/A',
-            COMMIT_HASH: 'N/A',
-            COMMIT_DATE: 'N/A',
-            REMOTE_URL: 'N/A',
-            BRANCH_NAME: 'N/A',
-            DIRTY: 'N/A',
-            TAG_DIRTY: 'N/A',
-        })
-        if (target.ReproducibleBuild) return reproducible
+    const getDebugInfo = () => {
         if (git.isRepository())
-            return new webpack.EnvironmentPlugin({
+            return {
                 BUILD_DATE: new Date().toISOString(),
                 VERSION: git.describe('--dirty'),
                 TAG_NAME: git.tag(),
@@ -99,8 +87,53 @@ module.exports = (argvEnv, argv) => {
                 BRANCH_NAME: git.branchName(),
                 DIRTY: git.isDirty(),
                 TAG_DIRTY: git.isTagDirty(),
-            })
-        return reproducible
+            }
+        return {
+            BUILD_DATE: new Date(0).toISOString(),
+            VERSION: require('./package.json').version + '-reproducible',
+            TAG_NAME: 'N/A',
+            COMMIT_HASH: 'N/A',
+            COMMIT_DATE: 'N/A',
+            REMOTE_URL: 'N/A',
+            BRANCH_NAME: 'N/A',
+            DIRTY: false,
+            TAG_DIRTY: false,
+        }
+    }
+    const getCompilationInfo = () => {
+        /** @type {'chromium' | 'firefox' | 'safari' | 'E2E' | undefined} */
+        let buildTarget = 'chromium'
+        /** @type {'fennec' | 'geckoview'} */
+        let firefoxVariant = undefined
+        /** @type {'web' | 'app'} */
+        let architecture = 'web'
+        /** @type { 'desktop' | 'mobile'} */
+        let resolution = 'desktop'
+        if (target.Chromium) buildTarget = 'chromium'
+        if (target.Firefox) buildTarget = 'firefox'
+        if (target.FirefoxDesktop) firefoxVariant = 'fennec'
+        if (target.FirefoxForAndroid) firefoxVariant = 'fennec'
+        if (target.StandaloneGeckoView) {
+            firefoxVariant = 'geckoview'
+            architecture = 'app'
+        }
+        if (target.Safari) {
+            buildTarget = 'safari'
+            architecture = 'app'
+        }
+        if (architecture === 'app' || firefoxVariant === 'fennec') resolution = 'mobile'
+        else resolution = 'desktop'
+        if (target.E2E) buildTarget = 'E2E'
+
+        // build the envs
+        const envs = {
+            STORYBOOK: false,
+            target: buildTarget,
+            architecture,
+            resolution,
+        }
+        if (firefoxVariant) envs[firefoxVariant] = firefoxVariant
+        return envs
     }
     /** @type {import('webpack').Configuration} */
     const config = {
@@ -134,8 +167,10 @@ module.exports = (argvEnv, argv) => {
         plugins: [
             new webpack.EnvironmentPlugin({
                 NODE_ENV: env,
+                ...getDebugInfo(),
+                ...getCompilationInfo(),
             }),
-            gitInfo(),
+
             // The following plugins are from react-dev-utils. let me know if any one need it.
             // WatchMissingNodeModulesPlugin
             // ModuleNotFoundPlugin
@@ -231,7 +266,7 @@ module.exports = (argvEnv, argv) => {
         config.plugins.push(new TerserPlugin())
     }
     // Loading debuggers
-    if (target.FirefoxDesktop) {
+    if (target.FirefoxDesktop)
         config.plugins.push(
             new WebExtensionHotLoadPlugin({
                 sourceDir: dist,
@@ -242,7 +277,7 @@ module.exports = (argvEnv, argv) => {
                 firefox: typeof target.FirefoxDesktop === 'string' ? target.FirefoxDesktop : undefined,
             }),
         )
-    }
+
     if (target.Chromium) {
         config.plugins.push(
             new WebExtensionHotLoadPlugin({
@@ -253,47 +288,13 @@ module.exports = (argvEnv, argv) => {
             }),
         )
     }
-    if (target.FirefoxForAndroid) {
-        config.plugins.push(new WebExtensionHotLoadPlugin({ sourceDir: dist, target: 'firefox-android' }))
-    }
-
-    // Setting conditional compilations
-    {
-        /** @type {'chromium' | 'firefox' | 'safari' | 'E2E' | undefined} */
-        let buildTarget = undefined
-        /** @type {'fennec' | 'geckoview'} */
-        let firefoxVariant = undefined
-        /** @type {'web' | 'app'} */
-        let architecture = 'web'
-        /** @type { 'desktop' | 'mobile'} */
-        let resolution = undefined
-        if (target.Chromium) buildTarget = 'chromium'
-        if (target.Firefox) buildTarget = 'firefox'
-        if (target.FirefoxDesktop) firefoxVariant = 'fennec'
-        if (target.FirefoxForAndroid) firefoxVariant = 'fennec'
-        if (target.StandaloneGeckoView) {
-            firefoxVariant = 'geckoview'
-            architecture = 'app'
-        }
-        if (target.Safari) {
-            buildTarget = 'safari'
-            architecture = 'app'
-        }
-        if (architecture === 'app' || firefoxVariant === 'fennec') {
-            resolution = 'mobile'
-        } else resolution = 'desktop'
-        if (target.E2E) buildTarget = 'E2E'
-        if (buildTarget)
-            config.plugins.push(
-                new webpack.EnvironmentPlugin({
-                    STORYBOOK: false,
-                    target: buildTarget,
-                    architecture,
-                    resolution,
-                    firefoxVariant,
-                }),
-            )
-    }
+    if (target.FirefoxForAndroid)
+        config.plugins.push(
+            new WebExtensionHotLoadPlugin({
+                sourceDir: dist,
+                target: 'firefox-android',
+            }),
+        )
 
     // Manifest modifies
     {

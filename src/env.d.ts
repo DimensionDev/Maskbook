@@ -17,6 +17,19 @@ declare module NodeJS {
          * It DOESN't means the app MUST run in this size.
          */
         readonly resolution: 'desktop' | 'mobile'
+
+        /**
+         * Debug flags
+         */
+        BUILD_DATE: string
+        VERSION: string
+        TAG_NAME: string
+        COMMIT_HASH: string
+        COMMIT_DATE: string
+        REMOTE_URL: string
+        BRANCH_NAME: string
+        DIRTY: boolean
+        TAG_DIRTY: boolean
     }
 }
 

@@ -1,5 +1,6 @@
 const is_iOSApp = process.env.target === 'safari' && process.env.architecture === 'app'
 const isAndroidApp = process.env.architecture === 'app' && process.env.target === 'firefox'
+
 // TODO: In future, we can turn this object into a Proxy to receive flags from remote
 export const Flags = {
     /** There is no "tabs" to navigate to. We must be careful with this. */
@@ -21,8 +22,8 @@ export const Flags = {
     // TODO: document why it enabled on app
     support_eth_network_switch: process.env.NODE_ENV === 'development' || process.env.architecture === 'app',
     //#region Experimental features
-    trader_enabled: process.env.architecture === 'app' || process.env.NODE_ENV === 'development',
-    file_service_enabled: process.env.architecture === 'app' || process.env.NODE_ENV === 'development',
+    trader_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
+    file_service_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
     matrix_based_service_enabled: process.env.NODE_ENV === 'development',
     //#endregion
 
