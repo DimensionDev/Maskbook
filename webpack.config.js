@@ -96,8 +96,8 @@ module.exports = (argvEnv, argv) => {
             COMMIT_DATE: 'N/A',
             REMOTE_URL: 'N/A',
             BRANCH_NAME: 'N/A',
-            DIRTY: 'N/A',
-            TAG_DIRTY: 'N/A',
+            DIRTY: false,
+            TAG_DIRTY: false,
         }
     }
     const getCompilationInfo = () => {
