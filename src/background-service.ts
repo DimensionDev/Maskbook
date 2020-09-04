@@ -100,7 +100,7 @@ if (GetContext() === 'background') {
     contentScriptReady.then(() => {
         // TODO: support twitter
         if (Flags.has_no_browser_tab_ui) {
-            exclusiveTasks('https://m.facebook.com/', { important: true })
+            exclusiveTasks(getWelcomePageURL(), { important: true })
         }
     })
 }
