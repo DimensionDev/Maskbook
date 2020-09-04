@@ -21,3 +21,11 @@ export function formatBalance(balance: BigNumber, decimals: number, precision: n
 
     return raw.indexOf('.') > -1 ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
 }
+
+export function formatCurrency(balance: number, sign: string = '$') {
+    return balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, `${sign}&,`)
+}
+
+export function formatEthAddress(address: string, size = 2) {
+    return /0x[\w\d]{40}/i.test(address) ? `${address.substr(0, 2 + size)}...${address.substr(-size)}` : address
+}

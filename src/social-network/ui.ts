@@ -98,6 +98,10 @@ export interface SocialNetworkUIInjections {
      */
     injectPostBox(): void
     /**
+     * This function should inject the page inspector
+     */
+    injectPageInspector(): void
+    /**
      * This is an optional function.
      *
      * This function should inject a link to open the options page.
@@ -124,6 +128,12 @@ export interface SocialNetworkUIInjections {
      * @returns unmount the injected components
      */
     injectCommentBox?: ((current: PostInfo) => () => void) | 'disabled'
+    /**
+     * This function should inject the post replacer
+     * @param current The current post
+     * @returns unmount the injected components
+     */
+    injectPostReplacer(current: PostInfo): () => void
     /**
      * This function should inject the post box
      * @param current The current post
@@ -298,6 +308,7 @@ export function activateSocialNetworkUI(): void {
                 ui.init(env, {})
                 ui.resolveLastRecognizedIdentity()
                 ui.injectPostBox()
+                ui.injectPageInspector()
                 ui.collectPeople()
                 ui.collectPosts()
                 ui.injectDashboardEntryInMobile()
@@ -328,6 +339,7 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     const unmountFunctions = new WeakMap<object, () => void>()
     ui.posts.event.on('set', (key, value) => {
         const unmountPostInspector = ui.injectPostInspector(value)
+        const unmountPostReplacer = ui.injectPostReplacer(value)
         const unmountCommentBox: () => void =
             ui.injectCommentBox === 'disabled' ? nopWithUnmount : defaultTo(ui.injectCommentBox, nopWithUnmount)(value)
         const unmountPostComments: () => void =
@@ -336,6 +348,7 @@ function hookUIPostMap(ui: SocialNetworkUI) {
                 : defaultTo(ui.injectPostComments, nopWithUnmount)(value)
         unmountFunctions.set(key, () => {
             unmountPostInspector()
+            unmountPostReplacer()
             unmountCommentBox()
             unmountPostComments()
         })

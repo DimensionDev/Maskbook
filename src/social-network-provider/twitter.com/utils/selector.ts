@@ -90,7 +90,10 @@ export const postsContentSelector = () =>
         ].join(),
     ).concat(
         querySelectorAll('[data-testid="tweet"] > div:last-child').map(
-            (x) => x.querySelector('[role="group"]')?.parentElement?.firstElementChild as HTMLDivElement | undefined,
+            (x) =>
+                x.querySelector('[role="group"]')?.parentElement?.querySelector('div[lang]') as
+                    | HTMLDivElement
+                    | undefined,
         ), // timeline page for new twitter
     )
 

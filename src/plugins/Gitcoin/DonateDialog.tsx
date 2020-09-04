@@ -35,7 +35,11 @@ import type { ERC20TokenDetails, WalletDetails } from '../../extension/backgroun
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        form: { '& > *': { margin: theme.spacing(1, 0) } },
+        form: {
+            '& > *': {
+                margin: theme.spacing(1, 0),
+            },
+        },
         title: {
             marginLeft: 6,
         },

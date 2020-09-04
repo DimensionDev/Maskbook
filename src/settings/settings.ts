@@ -44,6 +44,21 @@ export const appearanceSettings = createGlobalSettings<Appearance>('apperance', 
     primary: () => i18n.t('settings_appearance'),
 })
 
+export enum PostReplacementScope {
+    all = 'all',
+    enhancedOnly = 'enhancedOnly',
+    encryptedOnly = 'encryptedOnly',
+}
+
+export const currentPostReplacementScopeSettings = createGlobalSettings<PostReplacementScope>(
+    'post replacement scope',
+    PostReplacementScope.enhancedOnly,
+    {
+        primary: () => i18n.t('settings_post_replacement_scope'),
+        secondary: () => i18n.t('settings_post_replacement_scope_desc'),
+    },
+)
+
 export const currentLocalWalletEthereumNetworkSettings = createGlobalSettings<EthereumNetwork>(
     'eth network',
     EthereumNetwork.Mainnet,

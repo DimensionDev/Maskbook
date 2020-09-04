@@ -1,0 +1,59 @@
+import React, { useState } from 'react'
+import { v4 as uuid } from 'uuid'
+import { TypedMessageAnchor, registerTypedMessageRenderer } from '../../../protocols/typed-message'
+import { Link, Typography } from '@material-ui/core'
+import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
+import { MessageCenter } from '../messages'
+import Services from '../../../extension/service'
+import { useUnmount, useEffectOnce } from 'react-use'
+
+export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type'> {
+    readonly type: 'x-cash-trending'
+    readonly name: string
+}
+
+export function makeTypedMessageCashTrending(message: TypedMessageAnchor) {
+    return {
+        ...message,
+        type: 'x-cash-trending',
+        name: message.content.substr(1).toLowerCase(),
+    } as TypedMessageCashTrending
+}
+
+registerTypedMessageRenderer('x-cash-trending', {
+    component: DefaultTypedMessageCashTrendingRenderer,
+    id: 'co.maskbook.trader.x-cash-trending',
+    priority: 0,
+})
+
+function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProps<TypedMessageCashTrending>) {
+    const [openTimer, setOpenTimer] = useState<NodeJS.Timeout | null>(null)
+    const onMouseOver = (ev: React.MouseEvent<HTMLAnchorElement>) => {
+        // cache for async operations
+        const element = ev.currentTarget
+        if (openTimer !== null) clearTimeout(openTimer)
+        setOpenTimer(
+            setTimeout(async () => {
+                const available = await Services.Plugin.invokePlugin(
+                    'maskbook.trader',
+                    'checkAvailability',
+                    props.message.name,
+                )
+                if (available) MessageCenter.emit('cashTagObserved', { name: props.message.name, element })
+            }, 500),
+        )
+    }
+    const onMouseLeave = (ev: React.MouseEvent<HTMLAnchorElement>) => {
+        if (openTimer !== null) clearTimeout(openTimer)
+    }
+    const onClick = (ev: React.MouseEvent<HTMLAnchorElement>) => {
+        ev.stopPropagation()
+    }
+    return (
+        <Typography component="span" color="textPrimary" variant="body1">
+            <Link href={props.message.href} onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} onClick={onClick}>
+                {props.message.content}
+            </Link>
+        </Typography>
+    )
+}

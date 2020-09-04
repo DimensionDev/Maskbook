@@ -1,7 +1,12 @@
 import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
 import { ProfileIdentifier, PostIdentifier, Identifier } from '../database/type'
 import type { Payload } from '../utils/type-transform/Payload'
-import { TypedMessage, makeTypedMessageCompound, isTypedMessageEqual } from '../protocols/typed-message'
+import {
+    TypedMessage,
+    makeTypedMessageCompound,
+    isTypedMessageEqual,
+    TypedMessageCompound,
+} from '../protocols/typed-message'
 import { Result, Err } from 'ts-results'
 import { ObservableSet, ObservableMap } from '../utils/ObservableMapSet'
 import { parseURL } from '../utils/utils'
@@ -12,9 +17,6 @@ export abstract class PostInfo {
             const id = this.postID.value
             if (by.isUnknown || id === null) this.postIdentifier.value = null
             else this.postIdentifier.value = new PostIdentifier(by, id)
-        }
-        if (process.env.NODE_ENV === 'development') {
-            this.parsedPostContent.addListener((x) => console.log(x))
         }
         this.postID.addListener(calc)
         this.postBy.addListener(calc)
@@ -31,17 +33,17 @@ export abstract class PostInfo {
     readonly postID = new ValueRef<string | null>(null)
     /** This property is auto computed. */
     readonly postIdentifier = new ValueRef<null | PostIdentifier<ProfileIdentifier>>(null, Identifier.equals)
-    /** @deprecated Use parsedPostContent instead */
+    /** The post message in plain text */
     readonly postContent = new ValueRef('')
-    /** @deprecated It should appear in the transformedPostContent */
-    readonly postPayload = new ValueRef<Result<Payload, Error>>(Err(new Error('Empty')))
-    abstract readonly commentsSelector?: LiveSelector<HTMLElement, false>
-    abstract readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
     /**
      * The un-decrypted post content.
      * It MUST be the original result (but can be updated by the original parser).
      */
-    readonly parsedPostContent = new ValueRef<TypedMessage>(makeTypedMessageCompound([]), isTypedMessageEqual)
+    readonly postMessage = new ValueRef<TypedMessageCompound>(makeTypedMessageCompound([]), isTypedMessageEqual)
+    /** @deprecated It should appear in the transformedPostContent */
+    readonly postPayload = new ValueRef<Result<Payload, Error>>(Err(new Error('Empty')))
+    abstract readonly commentsSelector?: LiveSelector<HTMLElement, false>
+    abstract readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
     /**
      * The un-decrypted post content after transformation.
      */
@@ -56,7 +58,7 @@ export abstract class PostInfo {
     readonly postMentionedLinks = new ObservableSet<string>()
     /**
      * The images as attachment of post
-     * @deprecated it should appear in parsedPostContent
+     * @deprecated it should appear in postMessage
      */
     readonly postMetadataImages = new ObservableSet<string>()
     /**

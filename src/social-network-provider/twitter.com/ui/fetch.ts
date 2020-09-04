@@ -15,11 +15,12 @@ import Services from '../../../extension/service'
 import { untilElementAvailable } from '../../../utils/dom'
 import { injectMaskbookIconToPost } from './injectMaskbookIcon'
 import {
-    makeTypedMessageText,
     makeTypedMessageImage,
     makeTypedMessageFromList,
     makeTypedMessageEmpty,
     makeTypedMessageSuspended,
+    makeTypedMessageCompound,
+    extractTextFromTypedMessage,
 } from '../../../protocols/typed-message'
 import { Flags } from '../../../utils/flags'
 
@@ -176,12 +177,17 @@ function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo) {
 }
 function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self: Required<SocialNetworkUIDefinition>) {
     if (!tweetNode) return
-    const { pid, content, handle, name, avatar } = postParser(tweetNode)
-    if (!pid) return
+    const { pid, messages, handle, name, avatar } = postParser(tweetNode)
 
+    if (!pid) return
     const postBy = new ProfileIdentifier(self.networkIdentifier, handle)
     info.postID.value = pid
-    info.postContent.value = content
+    info.postContent.value = messages
+        .map((x) => {
+            const extracted = extractTextFromTypedMessage(x)
+            return extracted.ok ? extracted.val : ''
+        })
+        .join('')
     if (!info.postBy.value.equals(postBy)) info.postBy.value = postBy
     info.nickname.value = name
     info.avatarURL.value = avatar || null
@@ -191,15 +197,11 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self:
     const images = untilElementAvailable(postsImageSelector(tweetNode), 10000)
         .then(() => postImagesParser(tweetNode))
         .then((urls) => {
-            for (const url of urls) {
-                info.postMetadataImages.add(url)
-            }
+            for (const url of urls) info.postMetadataImages.add(url)
             if (urls.length) return makeTypedMessageFromList(...urls.map((x) => makeTypedMessageImage(x)))
             return makeTypedMessageEmpty()
         })
         .catch(() => makeTypedMessageEmpty())
-    info.parsedPostContent.value = makeTypedMessageFromList(
-        makeTypedMessageText(content),
-        makeTypedMessageSuspended(images),
-    )
+
+    info.postMessage.value = makeTypedMessageCompound([...messages, makeTypedMessageSuspended(images)])
 }

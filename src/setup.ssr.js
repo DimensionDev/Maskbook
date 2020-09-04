@@ -12,6 +12,9 @@ globalThis.document = {
     },
     body: { appendChild() {} },
     addEventListener() {},
+    documentElement: {
+        onmouseenter() {},
+    },
 }
 globalThis.CSSStyleSheet = { name: 'CSSStyleSheet' }
 globalThis.ShadowRoot = class {}
@@ -34,7 +37,6 @@ const restoreKit = modifyPackage('@holoflows/kit', (x) => {
         './package.json': './package.json',
     }
 })
-
 process.on('uncaughtException', function (err) {
     cleanup()
     throw err
