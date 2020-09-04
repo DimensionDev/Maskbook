@@ -1,10 +1,18 @@
-import { createNetworkSettings } from '../../settings/createSettings'
+import { createInternalSettings } from '../../settings/createSettings'
 import { Platform } from './types'
+import { PLUGIN_IDENTIFIER } from './constants'
 
-export const currentTrendingViewPlatformSettings = createNetworkSettings('currentTrendingViewPlatformSettings')
+function createPluginInternalSettings<T extends browser.storage.StorageValue>(key: string, initial: T) {
+    return createInternalSettings<T>(`${PLUGIN_IDENTIFIER}+${key}`, initial)
+}
 
-const coinGeckoSettings = createNetworkSettings('currentTrendingViewPlatformCoinGeckoSettings')
-const coinMarketCapSettings = createNetworkSettings('currentTrendingViewPlatformCoinMarketCapSettings')
+export const currentTrendingViewPlatformSettings = createPluginInternalSettings(
+    'currentTrendingViewPlatformSettings',
+    String(Platform.COIN_GECKO),
+)
+
+const coinGeckoSettings = createPluginInternalSettings('currentTrendingViewPlatformCoinGeckoSettings', '')
+const coinMarketCapSettings = createPluginInternalSettings('currentTrendingViewPlatformCoinMarketCapSettings', '')
 
 export function getCurrentTrendingViewPlatformSettings(platform: Platform) {
     return platform === Platform.COIN_GECKO ? coinGeckoSettings : coinMarketCapSettings

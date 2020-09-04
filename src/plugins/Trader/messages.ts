@@ -1,13 +1,13 @@
 import type { Currency, Platform } from './types'
 import { BatchedMessageCenter } from '../../utils/messages'
 
-export interface SettingsEvent {
+interface SettingsEvent {
     currency: Currency
     platform: Platform
     currencies: Currency[]
 }
 
-export interface ObserveCashTagEvent {
+interface CashTagEvent {
     name: string
     element: HTMLAnchorElement | null
 }
@@ -16,12 +16,12 @@ interface MaskbookTraderMessages {
     /**
      * View a cash tag
      */
-    cashTagObserved: ObserveCashTagEvent
+    cashTagObserved: CashTagEvent
 
     /**
      * Update settings dialog
      */
-    settingsDialogUpdated: SettingsEvent
+    settingsUpdated: SettingsEvent
 }
 
 export const MessageCenter = new BatchedMessageCenter<MaskbookTraderMessages>(true, 'maskbook-trader-events')

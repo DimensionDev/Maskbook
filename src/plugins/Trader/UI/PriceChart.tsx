@@ -1,15 +1,17 @@
-import React, { useRef, useEffect } from 'react'
-import * as d3 from 'd3'
+import React, { useRef } from 'react'
 import type { Stat } from '../types'
 import { makeStyles, Theme, createStyles, CircularProgress, Typography } from '@material-ui/core'
+import { useDimension, Dimension } from '../graphs/useDimension'
+import { usePriceLineChart } from '../graphs/usePriceLineChart'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
-const DEFAULT_WIDTH = 460
-const DEFAULT_HEIGHT = 250
-const DEFAULT_MARGIN = {
+const DEFAULT_DIMENSION: Dimension = {
     top: 32,
     right: 16,
     bottom: 32,
     left: 16,
+    width: 410,
+    height: 200,
 }
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -24,7 +26,8 @@ const useStyles = makeStyles((theme: Theme) => {
             position: 'absolute',
         },
         placeholder: {
-            paddingTop: theme.spacing(14),
+            paddingTop: theme.spacing(10),
+            borderStyle: 'none',
         },
     })
 })
@@ -38,98 +41,36 @@ export interface PriceChartProps {
 }
 
 export function PriceChart(props: PriceChartProps) {
+    const { t } = useI18N()
     const classes = useStyles()
     const svgRef = useRef<SVGSVGElement>(null)
 
-    // define dimensions
-    const {
-        width = DEFAULT_WIDTH - DEFAULT_MARGIN.left - DEFAULT_MARGIN.right,
-        height = DEFAULT_HEIGHT - DEFAULT_MARGIN.top - DEFAULT_MARGIN.bottom,
-    } = props
-    const canvasWidth = width + DEFAULT_MARGIN.left + DEFAULT_MARGIN.right
-    const canvasHeight = height + DEFAULT_MARGIN.top + DEFAULT_MARGIN.bottom
-
-    // process data
-    const data = props.stats.map(([date, price]) => ({
-        date: new Date(date),
-        value: price,
-    }))
-
-    useEffect(() => {
-        if (!svgRef.current) return
-
-        // empty the svg
-        svgRef.current.innerHTML = ''
-
-        // render savg if necessary
-        if (!props.stats.length) return
-
-        // contine to create the chart
-        const svg = d3
-            .select(svgRef.current)
-            .attr('width', canvasWidth)
-            .attr('height', canvasHeight)
-            .append('g')
-            .attr('transform', `translate(${DEFAULT_MARGIN.left}, ${DEFAULT_MARGIN.top})`)
-
-        // create X axis
-        const x = d3
-            .scaleTime()
-            .domain(d3.extent(data, (d) => d.date) as [Date, Date])
-            .range([0, width])
-
-        // create Y axis
-        const min = d3.min(data, (d) => d.value) as number
-        const max = d3.max(data, (d) => d.value) as number
-        const dist = Math.abs(max - min)
-        const y = d3
-            .scaleLinear()
-            .domain([min - dist * 0.05, max + dist * 0.05])
-            .range([height, 0])
-
-        // add X axis
-        svg.append('g')
-            .attr('transform', `translate(0, ${height})`)
-            .call(d3.axisBottom(x).ticks(width / 100))
-
-        // add Y axis
-        svg.append('g')
-            .attr('transform', `translate(0, 0)`)
-            .call(
-                d3
-                    .axisRight(y)
-                    .ticks(height / 50, '$,.2s')
-                    .tickSize(width),
-            )
-            .call((g) => g.select('.domain').remove())
-            .call((g) => g.selectAll('.tick line').attr('stroke-opacity', 0.5).attr('stroke-dasharray', '2,2'))
-            .call((g) => g.selectAll('.tick text').attr('x', 4).attr('dy', -4))
-
-        // add line
-        svg.append('path')
-            .datum(data)
-            .attr('fill', 'none')
-            .attr('stroke', 'steelblue')
-            .attr('stroke-width', 1.5)
-            .attr(
-                'd',
-                d3
-                    .line()
-                    .x((d) => x((d as any).date))
-                    .y((d) => y((d as any).value)) as any,
-            )
-    }, [svgRef, data.length])
+    useDimension(svgRef, DEFAULT_DIMENSION)
+    usePriceLineChart(
+        svgRef,
+        props.stats.map(([date, price]) => ({
+            date: new Date(date),
+            value: price,
+        })),
+        DEFAULT_DIMENSION,
+        'x-trader-price-line-chart',
+    )
     return (
-        <div className={classes.root} style={{ width: canvasWidth, height: canvasHeight }}>
+        <div className={classes.root} style={{ width: DEFAULT_DIMENSION.width, height: DEFAULT_DIMENSION.height }}>
             {props.loading ? <CircularProgress className={classes.progress} color="primary" size={15} /> : null}
             {props.stats.length ? (
                 <>
                     {props.children}
-                    <svg className={classes.svg} ref={svgRef} width={canvasWidth} height={canvasHeight}></svg>
+                    <svg
+                        className={classes.svg}
+                        ref={svgRef}
+                        width={DEFAULT_DIMENSION.width}
+                        height={DEFAULT_DIMENSION.height}
+                    />
                 </>
             ) : (
                 <Typography className={classes.placeholder} align="center" color="textSecondary">
-                    No Data
+                    {t('plugin_trader_no_data')}
                 </Typography>
             )}
         </div>

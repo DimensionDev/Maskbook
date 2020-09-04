@@ -1,33 +1,33 @@
 import React from 'react'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { PostInfoContext } from '../../components/DataSource/usePostInfo'
-import { PostDummy, PostDummyProps } from '../../components/InjectedComponents/PostDummy'
+import { PostReplacer, PostReplacerProps } from '../../components/InjectedComponents/PostReplacer'
 import type { PostInfo } from '../PostInfo'
 import { makeStyles } from '@material-ui/core'
 import type { DOMProxy } from '@holoflows/kit/es'
 import { noop } from 'lodash-es'
 
-export function injectPostDummyDefault<T extends string>(
-    config: InjectPostDummyDefaultConfig = {},
-    additionalPropsToPostDummy: (classes: Record<T, string>) => Partial<PostDummyProps> = () => ({}),
+export function injectPostReplacer<T extends string>(
+    config: injectPostReplacerConfig = {},
+    additionalPropsToPostReplacer: (classes: Record<T, string>) => Partial<PostReplacerProps> = () => ({}),
     useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
 ) {
-    const PostDummyDefault = React.memo(function PostDummyDefault(props: {
-        zipPost: PostDummyProps['zip']
-        unZipPost: PostDummyProps['unzip']
+    const PostReplacerDefault = React.memo(function PostReplacerDefault(props: {
+        zipPost: PostReplacerProps['zip']
+        unZipPost: PostReplacerProps['unzip']
     }) {
         const classes = useCustomStyles()
-        const additionalProps = additionalPropsToPostDummy(classes)
-        return <PostDummy {...additionalProps} zip={props.zipPost} unzip={props.unZipPost} />
+        const additionalProps = additionalPropsToPostReplacer(classes)
+        return <PostReplacer {...additionalProps} zip={props.zipPost} unzip={props.unZipPost} />
     })
 
     const { zipPost, unzipPost } = config
     const zipPostF = zipPost || noop
     const unzipPostF = unzipPost || noop
-    return function injectPostDummy(current: PostInfo) {
+    return function injectPostReplacer(current: PostInfo) {
         return renderInShadowRoot(
             <PostInfoContext.Provider value={current}>
-                <PostDummyDefault
+                <PostReplacerDefault
                     zipPost={() => zipPostF(current.rootNodeProxy)}
                     unZipPost={() => unzipPostF(current.rootNodeProxy)}
                     {...current}
@@ -42,7 +42,7 @@ export function injectPostDummyDefault<T extends string>(
     }
 }
 
-interface InjectPostDummyDefaultConfig {
+interface injectPostReplacerConfig {
     zipPost?(node: DOMProxy): void
     unzipPost?(node: DOMProxy): void
 }

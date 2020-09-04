@@ -1,12 +1,5 @@
 import CURRENCY_DATA from './currency.json'
-
-// proxy: https://web-api.coinmarketcap.com/v1
-const BASE_URL_v1 = 'https://coinmarketcap.provide.maskbook.com/v1'
-
-// proxy: https://web-api.coinmarketcap.com/v1.1
-const BASE_URL_v1_1 = 'https://coinmarketcap.provide.maskbook.com/v1'
-
-const WIDGET_BASE_URL = 'https://widgets.coinmarketcap.com/v2'
+import { CMC_V1_BASE_URL, CMC_V2_BASE_URL } from '../../constants'
 
 export interface Status {
     credit_count: number
@@ -42,7 +35,7 @@ export interface Coin {
 
 export async function getAllCoins() {
     const response = await fetch(
-        `${BASE_URL_v1}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
+        `${CMC_V1_BASE_URL}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
         { cache: 'force-cache' },
     )
     return response.json() as Promise<{
@@ -80,7 +73,7 @@ export async function getCoinInfo(id: string, currency: string) {
     const params = new URLSearchParams('ref=widget')
     params.append('convert', currency)
 
-    const response = await fetch(`${WIDGET_BASE_URL}/ticker/${id}/?${params.toString()}`)
+    const response = await fetch(`${CMC_V2_BASE_URL}/ticker/${id}/?${params.toString()}`)
     return response.json() as Promise<{
         data: CoinInfo
         status: Status
@@ -106,7 +99,7 @@ export async function getHistorical(
     params.append('time_end', toUnixTimestamp(endDate))
     params.append('time_start', toUnixTimestamp(startDate))
 
-    const response = await fetch(`${BASE_URL_v1_1}/cryptocurrency/quotes/historical?${params.toString()}`)
+    const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/quotes/historical?${params.toString()}`)
     return response.json() as Promise<{
         data: Record<string, Record<string, Stat>>
         status: Status
@@ -164,7 +157,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
     params.append('convert', currency)
     params.append('id', id)
 
-    const response = await fetch(`${BASE_URL_v1}/cryptocurrency/market-pairs/latest?${params.toString()}`)
+    const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/market-pairs/latest?${params.toString()}`)
     return response.json() as Promise<{
         data: {
             id: number

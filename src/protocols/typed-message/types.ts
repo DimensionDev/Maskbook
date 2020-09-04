@@ -50,7 +50,7 @@ export interface TypedMessageSuspended<T extends TypedMessage = TypedMessage> ex
 export function isTypedMessageText(x: TypedMessage): x is TypedMessageText {
     return x.type === 'text'
 }
-export function isTypedMessgaeAnchor(x: TypedMessage): x is TypedMessageAnchor {
+export function isTypedMessageAnchor(x: TypedMessage): x is TypedMessageAnchor {
     return x.type === 'anchor'
 }
 export function isTypedMessageKnown(x: TypedMessage) {

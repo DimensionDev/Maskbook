@@ -45,7 +45,7 @@ export interface Ticker {
     base_name: string
     target_name: string
     price: number
-    volumn: number
+    volume: number
     score: string
 }
 

@@ -1,3 +1,0 @@
-export function injectPostDummyFacebook() {
-    return () => {}
-}

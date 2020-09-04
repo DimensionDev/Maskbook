@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Platform } from '../types'
-import { getActivatedUI } from '../../../social-network/ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { currentTrendingViewPlatformSettings } from '../settings'
 
 export function useCurrentPlatform(defaultPlatform: Platform) {
     const [platform, setPlatform] = useState(defaultPlatform)
-    const trendingPlatformSettings = useValueRef<string>(
-        currentTrendingViewPlatformSettings[getActivatedUI().networkIdentifier],
-    )
+    const trendingPlatformSettings = useValueRef<string>(currentTrendingViewPlatformSettings)
 
     // sync platform
     useEffect(() => {

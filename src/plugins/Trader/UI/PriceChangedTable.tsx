@@ -15,11 +15,15 @@ import { PriceChanged } from './PriceChanged'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        container: {},
+        container: {
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
         table: {},
         cell: {
-            paddingLeft: theme.spacing(1.5),
-            paddingRight: theme.spacing(1),
+            paddingLeft: theme.spacing(1),
+            paddingRight: theme.spacing(1.5),
             whiteSpace: 'nowrap',
         },
     }),

@@ -195,14 +195,14 @@ export const postContentMessageParser = (node: HTMLElement) => {
         if (node.nodeType === Node.TEXT_NODE) {
             if (!node.nodeValue) return makeTypedMessageEmpty()
             return makeTypedMessageText(node.nodeValue)
-        } else if (nodeName === 'a') {
-            const anchor = node as HTMLAnchorElement
+        } else if (node instanceof HTMLAnchorElement) {
+            const anchor = node
             const href = anchor.getAttribute('href')
             const content = anchor.textContent
             if (!content) return makeTypedMessageEmpty()
-            return makeTypedMessageAnchor(resolve(content), href ?? 'javascript: void(0);', content)
-        } else if (nodeName === 'img') {
-            const image = node as HTMLImageElement
+            return makeTypedMessageAnchor(resolve(content), href ?? 'javascript: void 0;', content)
+        } else if (node instanceof HTMLImageElement) {
+            const image = node
             const src = image.getAttribute('src')
             const matched = src?.match(/emoji\/v2\/svg\/([\d\w]+)\.svg/)
             if (matched && matched[1])
@@ -217,8 +217,8 @@ export const postContentMessageParser = (node: HTMLElement) => {
     }
     const lang = node.parentElement!.querySelector<HTMLDivElement>('[lang]')
     if (!lang) return []
-    const maked = make(lang)
-    return Array.isArray(maked) ? maked : [maked]
+    const made = make(lang)
+    return Array.isArray(made) ? made : [made]
 }
 
 export const postImagesParser = async (node: HTMLElement): Promise<string[]> => {

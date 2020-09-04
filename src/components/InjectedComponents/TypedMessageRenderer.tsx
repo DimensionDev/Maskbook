@@ -82,7 +82,7 @@ export const DefaultTypedMessageImageRenderer = React.memo(function DefaultTyped
     const { image, width, height } = props.message
     return renderWithMetadata(
         props,
-        <Typography variant="body1" style={{ lineBreak: 'anywhere' }} data-testid="image_payload">
+        <Typography variant="body1" data-testid="image_payload">
             <Image src={image} width={width} height={height} />
         </Typography>,
     )

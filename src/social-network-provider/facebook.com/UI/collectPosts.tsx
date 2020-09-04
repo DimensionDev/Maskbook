@@ -85,7 +85,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                     nextTypedMessage.push(makeTypedMessageImage(url))
                 }
                 // parse post content
-                info.parsedPostContent.value = makeTypedMessageCompound(nextTypedMessage)
+                info.postMessage.value = makeTypedMessageCompound(nextTypedMessage)
             }
             collectPostInfo()
             info.postPayload.value = deconstructPayload(info.postContent.value, this.payloadDecoder)

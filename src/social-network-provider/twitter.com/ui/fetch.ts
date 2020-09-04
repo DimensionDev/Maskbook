@@ -19,8 +19,8 @@ import {
     makeTypedMessageFromList,
     makeTypedMessageEmpty,
     makeTypedMessageSuspended,
-    serializeTypedMessage,
     makeTypedMessageCompound,
+    extractTextFromTypedMessage,
 } from '../../../protocols/typed-message'
 import { Flags } from '../../../utils/flags'
 
@@ -182,7 +182,12 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self:
     if (!pid) return
     const postBy = new ProfileIdentifier(self.networkIdentifier, handle)
     info.postID.value = pid
-    info.postContent.value = messages.map(serializeTypedMessage).join('')
+    info.postContent.value = messages
+        .map((x) => {
+            const extracted = extractTextFromTypedMessage(x)
+            return extracted.ok ? extracted.val : ''
+        })
+        .join('')
     if (!info.postBy.value.equals(postBy)) info.postBy.value = postBy
     info.nickname.value = name
     info.avatarURL.value = avatar || null
@@ -198,5 +203,5 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self:
         })
         .catch(() => makeTypedMessageEmpty())
 
-    info.parsedPostContent.value = makeTypedMessageCompound([...messages, makeTypedMessageSuspended(images)])
+    info.postMessage.value = makeTypedMessageCompound([...messages, makeTypedMessageSuspended(images)])
 }

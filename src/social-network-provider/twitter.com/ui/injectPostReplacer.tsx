@@ -1,12 +1,12 @@
 import type { PostInfo } from '../../../social-network/PostInfo'
-import { injectPostDummyDefault } from '../../../social-network/defaults/injectPostDummy'
+import { injectPostReplacer } from '../../../social-network/defaults/injectPostReplacer'
 
 function resolveLangNode(node: HTMLElement) {
     return node.hasAttribute('lang') ? node : node.querySelector<HTMLDivElement>('[lang]')
 }
 
-export function injectPostDummyAtTwitter(current: PostInfo) {
-    return injectPostDummyDefault({
+export function injectPostReplacerAtTwitter(current: PostInfo) {
+    return injectPostReplacer({
         zipPost(node) {
             const langNode = resolveLangNode(node.current)
             if (langNode) langNode.style.display = 'none'

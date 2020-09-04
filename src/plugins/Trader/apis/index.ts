@@ -3,6 +3,7 @@ import * as coinGeckoAPI from './coingecko'
 import * as coinMarketCapAPI from './coinmarketcap'
 import { Days } from '../UI/PriceChartDaysControl'
 import { getEnumAsArray } from '../../../utils/enum'
+import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../constants'
 
 export async function getCurrenies(platform: Platform): Promise<Currency[]> {
     if (platform === Platform.COIN_GECKO) {
@@ -60,9 +61,9 @@ export async function checkAvailabilityAtPlatform(platform: Platform, keyword: s
     if (
         // cache never built before
         !availabilityCache.has(platform) ||
-        // cache expired in 24h
+        // cache expired
         new Date().getTime() - (availabilityCache.get(platform)?.lastUpdated.getTime() ?? 0) >
-            24 /* hours */ * 60 /* minutes */ * 60 /* seconds */ * 1000 /* milliseconds */
+            CRYPTOCURRENCY_MAP_EXPIRES_AT
     ) {
         const coins = await getCoins(platform)
         availabilityCache.set(platform, {
@@ -110,7 +111,7 @@ export async function getCoinInfo(id: string, platform: Platform, currency: Curr
                 base_name: x.base,
                 target_name: x.target,
                 price: x.converted_last.usd,
-                volumn: x.converted_volume.usd,
+                volume: x.converted_volume.usd,
                 score: x.trust_score,
             })),
         }
@@ -147,7 +148,7 @@ export async function getCoinInfo(id: string, platform: Platform, currency: Curr
                 pair.market_pair_base.currency_id === market.id
                     ? pair.quote[currencyName].price
                     : pair.quote[currencyName].price_quote,
-            volumn: pair.quote[currencyName].volume_24h,
+            volume: pair.quote[currencyName].volume_24h,
             score: String(pair.market_score),
         })),
     }
@@ -179,8 +180,7 @@ export async function getPriceStats(id: string, platform: Platform, currency: Cu
     const stats = await coinMarketCapAPI.getHistorical(
         id,
         currency.name.toUpperCase(),
-        // the bitcoin ledger started at 03 Jan 2009
-        days === Days.MAX ? new Date(1230940800000) : startDate,
+        days === Days.MAX ? BTC_FIRST_LEGER_DATE : startDate,
         endDate,
         interval,
     )

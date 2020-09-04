@@ -33,17 +33,17 @@ export abstract class PostInfo {
     readonly postID = new ValueRef<string | null>(null)
     /** This property is auto computed. */
     readonly postIdentifier = new ValueRef<null | PostIdentifier<ProfileIdentifier>>(null, Identifier.equals)
-    /** @deprecated Use parsedPostContent instead */
+    /** The post message in plain text */
     readonly postContent = new ValueRef('')
-    /** @deprecated It should appear in the transformedPostContent */
-    readonly postPayload = new ValueRef<Result<Payload, Error>>(Err(new Error('Empty')))
-    abstract readonly commentsSelector?: LiveSelector<HTMLElement, false>
-    abstract readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
     /**
      * The un-decrypted post content.
      * It MUST be the original result (but can be updated by the original parser).
      */
-    readonly parsedPostContent = new ValueRef<TypedMessageCompound>(makeTypedMessageCompound([]), isTypedMessageEqual)
+    readonly postMessage = new ValueRef<TypedMessageCompound>(makeTypedMessageCompound([]), isTypedMessageEqual)
+    /** @deprecated It should appear in the transformedPostContent */
+    readonly postPayload = new ValueRef<Result<Payload, Error>>(Err(new Error('Empty')))
+    abstract readonly commentsSelector?: LiveSelector<HTMLElement, false>
+    abstract readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
     /**
      * The un-decrypted post content after transformation.
      */
@@ -58,7 +58,7 @@ export abstract class PostInfo {
     readonly postMentionedLinks = new ObservableSet<string>()
     /**
      * The images as attachment of post
-     * @deprecated it should appear in parsedPostContent
+     * @deprecated it should appear in postMessage
      */
     readonly postMetadataImages = new ObservableSet<string>()
     /**

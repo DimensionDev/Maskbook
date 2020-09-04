@@ -8,12 +8,10 @@ import { getCurrentTrendingViewPlatformSettings } from '../settings'
 
 export function useCurrentCurrency(platform: Platform) {
     const [currency, setCurrency] = useState<Currency | null>(null)
-    const trendingSettings = useValueRef<string>(
-        getCurrentTrendingViewPlatformSettings(platform)[getActivatedUI().networkIdentifier],
-    )
+    const trendingSettings = useValueRef<string>(getCurrentTrendingViewPlatformSettings(platform))
 
     // TODO:
-    // support multiple currencies
+    // support multiple crcurrencies
     const { value: currencies = [], loading, error } = useAsync(
         () => Services.Plugin.invokePlugin('maskbook.trader', 'getLimitedCurrenies', platform),
         [platform],

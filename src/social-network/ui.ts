@@ -98,7 +98,7 @@ export interface SocialNetworkUIInjections {
      */
     injectPostBox(): void
     /**
-     * This function should inject rthe page inspector
+     * This function should inject the page inspector
      */
     injectPageInspector(): void
     /**
@@ -129,11 +129,11 @@ export interface SocialNetworkUIInjections {
      */
     injectCommentBox?: ((current: PostInfo) => () => void) | 'disabled'
     /**
-     * This function should inject the post dummy
+     * This function should inject the post replacer
      * @param current The current post
      * @returns unmount the injected components
      */
-    injectPostDummy(current: PostInfo): () => void
+    injectPostReplacer(current: PostInfo): () => void
     /**
      * This function should inject the post box
      * @param current The current post
@@ -339,7 +339,7 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     const unmountFunctions = new WeakMap<object, () => void>()
     ui.posts.event.on('set', (key, value) => {
         const unmountPostInspector = ui.injectPostInspector(value)
-        const unmountPostDummy = ui.injectPostDummy(value)
+        const unmountPostReplacer = ui.injectPostReplacer(value)
         const unmountCommentBox: () => void =
             ui.injectCommentBox === 'disabled' ? nopWithUnmount : defaultTo(ui.injectCommentBox, nopWithUnmount)(value)
         const unmountPostComments: () => void =
@@ -348,7 +348,7 @@ function hookUIPostMap(ui: SocialNetworkUI) {
                 : defaultTo(ui.injectPostComments, nopWithUnmount)(value)
         unmountFunctions.set(key, () => {
             unmountPostInspector()
-            unmountPostDummy()
+            unmountPostReplacer()
             unmountCommentBox()
             unmountPostComments()
         })

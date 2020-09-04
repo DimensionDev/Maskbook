@@ -31,12 +31,13 @@ import { PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentPlatform } from '../hooks/useCurrentPlatform'
 import { useCurrentCurrency } from '../hooks/useCurrentCurrency'
 import { currentTrendingViewPlatformSettings } from '../settings'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme: Theme) => {
     const internalName = getActivatedUI()?.internalName
     return createStyles({
         root: {
-            width: 500,
+            width: 450,
             overflow: 'auto',
             '&::-webkit-scrollbar': {
                 display: 'none',
@@ -63,18 +64,15 @@ const useStyles = makeStyles((theme: Theme) => {
             justifyContent: 'flex-end',
         },
         tabs: {
-            width: 468,
+            width: '100%',
+            height: 35,
+            minHeight: 'unset',
+        },
+        tab: {
+            height: 35,
+            minHeight: 'unset',
         },
         section: {},
-        description: {
-            overflow: 'auto',
-            maxHeight: '4.3em',
-            wordBreak: 'break-word',
-            marginBottom: theme.spacing(2),
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
         rank: {
             color: theme.palette.text.primary,
             fontWeight: 300,
@@ -97,12 +95,38 @@ const useStyles = makeStyles((theme: Theme) => {
     })
 })
 
+//#region skeleton
+interface TrendingViewSkeletonProps {}
+
+function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
+    const classes = useStyles()
+    return (
+        <Card className={classes.root} elevation={0} component="article">
+            <CardHeader
+                avatar={<Skeleton animation="wave" variant="circle" width={40} height={40} />}
+                title={<Skeleton animation="wave" height={10} width="30%" />}
+                subheader={<Skeleton animation="wave" height={10} width="20%" />}
+            />
+            <CardContent className={classes.content}>
+                <Skeleton animation="wave" variant="rect" height={58} style={{ marginBottom: 8 }} />
+                <Skeleton animation="wave" variant="rect" height={254} />
+            </CardContent>
+            <CardActions className={classes.footer}>
+                <Skeleton animation="wave" height={10} width="30%" />
+            </CardActions>
+        </Card>
+    )
+}
+//#endregion
+
+//#region trending view
 export interface TrendingViewProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     name: string
     onUpdate?: () => void
 }
 
 export function TrendingView(props: TrendingViewProps) {
+    const { t } = useI18N()
     const classes = useStyles()
     const [tabIndex, setTabIndex] = useState(0)
 
@@ -129,30 +153,14 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region display loading skeleton
-    if (loadingCurrency || loadingTrending)
-        return (
-            <Card className={classes.root} elevation={0} component="article">
-                <CardHeader
-                    avatar={<Skeleton animation="wave" variant="circle" width={40} height={40} />}
-                    title={<Skeleton animation="wave" height={10} width="30%" />}
-                    subheader={<Skeleton animation="wave" height={10} width="20%" />}
-                />
-                <CardContent className={classes.content}>
-                    <Skeleton animation="wave" variant="rect" height={58} style={{ marginBottom: 8 }} />
-                    <Skeleton animation="wave" variant="rect" height={318} />
-                </CardContent>
-                <CardActions className={classes.footer}>
-                    <Skeleton animation="wave" height={10} width="30%" />
-                </CardActions>
-            </Card>
-        )
+    if (loadingCurrency || loadingTrending) return <TrendingViewSkeleton />
     //#endregion
 
     //#region error handling
     // error: fail to load currency
     if (!currency) return null
 
-    // error: unknown coin
+    // error: unknown coin or api error
     if (!trending) return null
     //#endregion
 
@@ -207,8 +215,8 @@ export function TrendingView(props: TrendingViewProps) {
                                 display: 'none',
                             },
                         }}>
-                        <Tab label="Price"></Tab>
-                        <Tab label="Exchange"></Tab>
+                        <Tab className={classes.tab} label={t('plugin_trader_tab_price')}></Tab>
+                        <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')}></Tab>
                     </Tabs>
                     {tabIndex === 0 ? (
                         <>
@@ -224,16 +232,14 @@ export function TrendingView(props: TrendingViewProps) {
             </CardContent>
             <CardActions className={classes.footer}>
                 <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
-                    <span>Switch Data Source: </span>
+                    <span>{t('plugin_trader_tab_switch_data_source')}</span>
                     {getEnumAsArray(Platform).map((x) => (
                         <Link
                             className={classes.platform}
                             key={x.key}
                             color={platform === x.value ? 'primary' : 'textSecondary'}
                             onClick={() => {
-                                currentTrendingViewPlatformSettings[getActivatedUI().networkIdentifier].value = String(
-                                    x.value,
-                                )
+                                currentTrendingViewPlatformSettings.value = String(x.value)
                             }}>
                             {resolvePlatformName(x.value)}
                         </Link>
@@ -243,3 +249,4 @@ export function TrendingView(props: TrendingViewProps) {
         </Card>
     )
 }
+//#endregion

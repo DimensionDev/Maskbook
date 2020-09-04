@@ -1,8 +1,8 @@
-const BASE_URL = 'https://api.coingecko.com/api/v3'
+import { COIN_GECKO_BASE_URL } from '../../constants'
 
 //#region get currency
 export async function getAllCurrenies() {
-    const response = await fetch(`${BASE_URL}/simple/supported_vs_currencies`, { cache: 'force-cache' })
+    const response = await fetch(`${COIN_GECKO_BASE_URL}/simple/supported_vs_currencies`, { cache: 'force-cache' })
     return response.json() as Promise<string[]>
 }
 //#endregion
@@ -15,7 +15,7 @@ export interface Coin {
 }
 
 export async function getAllCoins() {
-    const response = await fetch(`${BASE_URL}/coins/list`, { cache: 'force-cache' })
+    const response = await fetch(`${COIN_GECKO_BASE_URL}/coins/list`, { cache: 'force-cache' })
     return response.json() as Promise<Coin[]>
 }
 //#endregion
@@ -82,7 +82,7 @@ export interface CoinInfo {
             logo: string
         }
         last: number
-        volumn: number
+        volume: number
         converted_last: {
             btc: number
             eth: number
@@ -107,7 +107,9 @@ export interface CoinInfo {
 }
 
 export async function getCoinInfo(coinId: string) {
-    const response = await fetch(`${BASE_URL}/coins/${coinId}?developer_data=false&community_data=false&tickers=true`)
+    const response = await fetch(
+        `${COIN_GECKO_BASE_URL}/coins/${coinId}?developer_data=false&community_data=false&tickers=true`,
+    )
     return response.json() as Promise<CoinInfo>
 }
 //#endregion
@@ -120,7 +122,7 @@ export async function getPriceStats(coinId: string, currencyId: string, days: nu
     params.append('vs_currency', currencyId)
     params.append('days', String(days))
 
-    const response = await fetch(`${BASE_URL}/coins/${coinId}/market_chart?${params.toString()}`)
+    const response = await fetch(`${COIN_GECKO_BASE_URL}/coins/${coinId}/market_chart?${params.toString()}`)
     return response.json() as Promise<{
         market_caps: Stat[]
         prices: Stat[]

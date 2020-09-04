@@ -30,7 +30,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     injectCommentBox: nopWithUnmount,
     injectPostBox: nop,
     injectPostComments: nopWithUnmount,
-    injectPostDummy: nopWithUnmount,
+    injectPostReplacer: nopWithUnmount,
     injectPostInspector: nopWithUnmount,
     injectPageInspector: nopWithUnmount,
     resolveLastRecognizedIdentity: nop,

@@ -3,7 +3,7 @@ import {
     isTypedMessageText,
     isTypedMessageCompound,
     TypedMessageCompound,
-    isTypedMessgaeAnchor,
+    isTypedMessageAnchor,
 } from './types'
 import { Result, Ok, Err } from 'ts-results'
 import { eq } from 'lodash-es'
@@ -14,6 +14,7 @@ import { eq } from 'lodash-es'
 export function extractTextFromTypedMessage(message: TypedMessage | null): Result<string, void> {
     if (message === null) return Err.EMPTY
     if (isTypedMessageText(message)) return Ok(message.content)
+    if (isTypedMessageAnchor(message)) return Ok(message.content)
     if (isTypedMessageCompound(message)) {
         const str: string[] = []
         for (const item of message.items) {
@@ -49,14 +50,4 @@ export function isTypedMessageEqual(message1: TypedMessage, message2: TypedMessa
         default:
             return eq(message1, message2)
     }
-}
-
-/**
- * Serialize typed message
- */
-export function serializeTypedMessage(message: TypedMessage | null) {
-    if (!message) return ''
-    if (isTypedMessageText(message)) return message.content
-    if (isTypedMessgaeAnchor(message)) return message.content
-    return ''
 }

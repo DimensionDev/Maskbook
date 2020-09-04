@@ -44,18 +44,18 @@ export const appearanceSettings = createGlobalSettings<Appearance>('apperance', 
     primary: () => i18n.t('settings_appearance'),
 })
 
-export enum WholePostVisibility {
+export enum PostReplacementScope {
     all = 'all',
     enhancedOnly = 'enhancedOnly',
     encryptedOnly = 'encryptedOnly',
 }
 
-export const currentWholePostVisibilitySettings = createGlobalSettings<WholePostVisibility>(
-    'whole post visibility',
-    WholePostVisibility.all,
+export const currentPostReplacementScopeSettings = createGlobalSettings<PostReplacementScope>(
+    'post replacement scope',
+    PostReplacementScope.enhancedOnly,
     {
-        primary: () => 'Whole Post Visibility',
-        secondary: () => '',
+        primary: () => i18n.t('settings_post_replacement_scope'),
+        secondary: () => i18n.t('settings_post_replacement_scope_desc'),
     },
 )
 
