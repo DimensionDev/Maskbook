@@ -4,7 +4,7 @@ import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
 import { PluginUI } from '../../plugins/plugin'
 import { makeTypedMessageCompound, isTypedMessageSuspended, isTypedMessageKnown } from '../../protocols/typed-message'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { currentPostReplacementScopeSettings, PostReplacementScope } from '../../settings/settings'
+import { allPostReplacementSettings } from '../../settings/settings'
 import { makeStyles, Theme } from '@material-ui/core'
 
 const useStlyes = makeStyles((theme: Theme) => ({
@@ -23,7 +23,7 @@ export function PostReplacer(props: PostReplacerProps) {
     const postContent = usePostInfoDetails('postContent')
     const postMessage = usePostInfoDetails('postMessage')
     const postPayload = usePostInfoDetails('postPayload')
-    const postRepalcementScope = useValueRef(currentPostReplacementScopeSettings)
+    const allPostReplacement = useValueRef(allPostReplacementSettings)
 
     const plugins = [...PluginUI.values()]
     const processedPostMessage = useMemo(
@@ -32,12 +32,11 @@ export function PostReplacer(props: PostReplacerProps) {
     )
     const shouldReplacePost =
         // replace all posts
-        postRepalcementScope === PostReplacementScope.all ||
+        allPostReplacement ||
         // replace posts which enhanced by plugins
-        (postRepalcementScope === PostReplacementScope.enhancedOnly &&
-            processedPostMessage.items.some((x) => !isTypedMessageKnown(x))) ||
+        processedPostMessage.items.some((x) => !isTypedMessageKnown(x)) ||
         // replace posts which encrypted by maskbook
-        (postRepalcementScope === PostReplacementScope.encryptedOnly && postPayload.ok)
+        postPayload.ok
 
     // zip/unzip original post
     useEffect(() => {

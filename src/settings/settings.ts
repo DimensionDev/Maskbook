@@ -34,6 +34,14 @@ export const renderInShadowRootSettings = createGlobalSettings<boolean>(
     },
 )
 
+/**
+ * Whether if create substitute post for all posts
+ */
+export const allPostReplacementSettings = createGlobalSettings<boolean>('post replacement all', false, {
+    primary: () => i18n.t('settings_post_replacement'),
+    secondary: () => i18n.t('settings_post_replacement_desc'),
+})
+
 export enum Appearance {
     default = 'default',
     light = 'light',
@@ -43,21 +51,6 @@ const appearance = Appearance.default
 export const appearanceSettings = createGlobalSettings<Appearance>('apperance', appearance, {
     primary: () => i18n.t('settings_appearance'),
 })
-
-export enum PostReplacementScope {
-    all = 'all',
-    enhancedOnly = 'enhancedOnly',
-    encryptedOnly = 'encryptedOnly',
-}
-
-export const currentPostReplacementScopeSettings = createGlobalSettings<PostReplacementScope>(
-    'post replacement scope',
-    PostReplacementScope.enhancedOnly,
-    {
-        primary: () => i18n.t('settings_post_replacement_scope'),
-        secondary: () => i18n.t('settings_post_replacement_scope_desc'),
-    },
-)
 
 export const currentLocalWalletEthereumNetworkSettings = createGlobalSettings<EthereumNetwork>(
     'eth network',

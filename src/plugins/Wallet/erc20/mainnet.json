@@ -10,6 +10,12 @@
     "predefined_tokens": [
         {
             "decimals": 18,
+            "symbol": "RING",
+            "name": "Darwinia Network Native Token",
+            "address": "0x9469d013805bffb7d3debe5e7839237e535ec483"
+        },
+        {
+            "decimals": 18,
             "symbol": "YFII",
             "name": "YFII.finance",
             "address": "0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83"
