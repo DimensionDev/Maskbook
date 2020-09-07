@@ -13,6 +13,7 @@ import BigNumber from 'bignumber.js'
 import type { useSelectWallet } from './useWallet'
 import { EthereumTokenType } from '../Wallet/database/types'
 import { ETH_ADDRESS } from '../Wallet/token'
+import { useI18N } from '../../utils/i18n-next-ui'
 interface TokenSelectProps {
     useSelectWalletHooks: ReturnType<typeof useSelectWallet>
     className?: string
@@ -21,6 +22,7 @@ interface TokenSelectProps {
     DialogProps?: Partial<DialogProps>
 }
 export function TokenSelect({ useSelectWalletHooks, ...p }: TokenSelectProps) {
+    const { t } = useI18N()
     const { SelectProps, className, FormControlProps } = p
     const {
         availableTokens,
@@ -31,7 +33,7 @@ export function TokenSelect({ useSelectWalletHooks, ...p }: TokenSelectProps) {
     } = useSelectWalletHooks
     return (
         <FormControl variant="filled" {...FormControlProps} className={className}>
-            <InputLabel>Token</InputLabel>
+            <InputLabel>{t('wallet_token')}</InputLabel>
             <Select
                 {...SelectProps}
                 onChange={(e) => {
