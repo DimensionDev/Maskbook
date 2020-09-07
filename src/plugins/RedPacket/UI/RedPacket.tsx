@@ -8,6 +8,7 @@ import { PluginMessageCenter } from '../../PluginMessages'
 import { formatBalance } from '../../Wallet/formatter'
 import { getUrl } from '../../../utils/utils'
 import { isDAI, isOKB } from '../../Wallet/token'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -140,11 +141,11 @@ export function RedPacketWithStateUI(props: {
     redPacket?: Partial<RedPacketRecord>
     loading?: boolean
 }) {
+    const { t } = useI18N()
     const classes = useStyles()
     const { onClick, redPacket, loading } = props
     const info = getInfo(redPacket)
     const status = redPacket?.status ?? RedPacketStatus.pending
-    const description = getDescription(redPacket, info)
     return (
         <Card
             elevation={0}
@@ -161,12 +162,14 @@ export function RedPacketWithStateUI(props: {
                     </Typography>
                 ) : (
                     <Typography variant="body1" color="inherit">
-                        From: {redPacket?.sender_name ?? '(unknown)'}
+                        {t('plugin_red_packet_from', { from: redPacket?.sender_name ?? '(unknown)' })}
                     </Typography>
                 )}
                 {status !== RedPacketStatus.incoming && status !== RedPacketStatus.normal && (
                     <Typography className={classes.label} variant="body2">
-                        {status === RedPacketStatus.claim_pending ? 'opening…' : status ?? 'Pending'}
+                        {status === RedPacketStatus.claim_pending
+                            ? t('plugin_red_packet_user_status_opening')
+                            : status ?? t('plugin_red_packet_user_status_pending')}
                     </Typography>
                 )}
             </div>
@@ -174,7 +177,9 @@ export function RedPacketWithStateUI(props: {
                 <Typography className={classes.words} variant="h6">
                     {redPacket?.send_message}
                 </Typography>
-                <Typography variant="body2">{description}</Typography>
+                <Typography variant="body2">
+                    <Description redPacket={redPacket} />
+                </Typography>
             </div>
             <div
                 className={classNames(classes.packet, {
@@ -190,7 +195,7 @@ export function RedPacketWithStateUI(props: {
                         status === RedPacketStatus.claimed ||
                         loading,
                 })}>
-                {(loading || status === 'pending') && <CircularProgress color="secondary" />}
+                {(loading || status === RedPacketStatus.pending) && <CircularProgress color="secondary" />}
             </div>
         </Card>
     )
@@ -236,28 +241,34 @@ export function RedPacket(props: { redPacket?: RedPacketRecord }) {
     )
 }
 
-function getDescription(redPacket?: Partial<RedPacketRecord>, info?: ReturnType<typeof getInfo>): string {
-    switch (redPacket?.status) {
-        case RedPacketStatus.pending:
-            return 'Creating'
-        case RedPacketStatus.incoming:
-            return 'Ready to open'
-        case RedPacketStatus.fail:
-            return 'Create failed'
-        case RedPacketStatus.claimed:
-            return 'You has already claimed'
-        case RedPacketStatus.expired:
-            return 'You came too late'
-        case RedPacketStatus.claim_pending:
-            return 'Claiming'
-        case RedPacketStatus.empty:
-            return 'You came too late'
-        default:
-            const total = redPacket?.send_total ? formatBalance(redPacket.send_total, info?.decimals ?? 0) : '?'
-            const name = info?.name ?? '(unknown)'
-            const shares = redPacket?.shares?.toString() ?? '?'
-            return `Total: ${total} ${name} / ${shares} Shares`
+function Description(props: { redPacket?: Partial<RedPacketRecord> }) {
+    const { redPacket } = props
+    const { t } = useI18N()
+    const info = getInfo(redPacket)
+    const getDescription = () => {
+        switch (redPacket?.status) {
+            case RedPacketStatus.pending:
+                return t('plugin_red_packet_description_pending')
+            case RedPacketStatus.incoming:
+                return t('plugin_red_packet_description_incoming')
+            case RedPacketStatus.fail:
+                return t('plugin_red_packet_description_fail')
+            case RedPacketStatus.claimed:
+                return t('plugin_red_packet_description_claimed')
+            case RedPacketStatus.expired:
+                return t('plugin_red_packet_description_expired')
+            case RedPacketStatus.claim_pending:
+                return t('plugin_red_packet_description_claim_pending')
+            case RedPacketStatus.empty:
+                return t('plugin_red_packet_description_empty')
+        }
+        return t('plugin_red_packet_description_failover', {
+            total: redPacket?.send_total ? formatBalance(redPacket.send_total, info?.decimals ?? 0) : '?',
+            name: info?.name ?? '(unknown)',
+            shares: redPacket?.shares?.toString() ?? '?',
+        })
     }
+    return <span>{getDescription()}</span>
 }
 
 function getInfo(

@@ -32,6 +32,7 @@ import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import BigNumber from 'bignumber.js'
 import { formatBalance } from '../Wallet/formatter'
 import type { ERC20TokenDetails, WalletDetails } from '../../extension/background-script/PluginService'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -141,7 +142,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                         <DialogDismissIconUI />
                     </IconButton>
                     <Typography className={classes.title} display="inline" variant="inherit">
-                        Plugin: Gitcoin Grant
+                        {t('plugin_gitcoin_display_name')}
                     </Typography>
                 </DialogTitle>
                 <Divider />
@@ -169,28 +170,28 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                             fullWidth
                             defaultValue={amount}
                             type="number"
-                            label="Amount"
+                            label={t('plugin_gitcoin_donate_amount')}
                         />
                         <Typography variant="body1">
-                            By using this service, you'll also be contributing 5% of your contribution to the{' '}
-                            <Link
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href="https://gitcoin.co/grants/86/gitcoin-sustainability-fund">
-                                Gitcoin grants development fund
-                            </Link>
+                            <Trans
+                                i18nKey="plugin_gitcoin_readme"
+                                components={{
+                                    fund: <Link target="_blank" href={t('plugin_gitcoin_readme_fund_link')} />,
+                                }}
+                            />
                         </Typography>
                     </form>
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Typography variant="body2">
                         {selectedWallet
-                            ? erc20Balance
-                                ? `Balance: ${erc20Balance} (${ethBalance})`
-                                : `Balance: ${ethBalance}`
+                            ? t(erc20Balance ? 'wallet_balance_with_erc20' : 'wallet_balance', {
+                                  erc20Balance,
+                                  ethBalance,
+                              })
                             : null}
                         <br />
-                        Notice: A small gas fee will occur for publishing.
+                        {t('wallet_balance_notice')}
                     </Typography>
                     <Button
                         className={classes.button}
@@ -208,10 +209,12 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                             })
                         }>
                         {isButtonDisabled
-                            ? 'Not valid'
-                            : `Donate ${+amount.toFixed(3) === +amount.toFixed(9) ? '' : '~'}${+amount.toFixed(3)} ${
-                                  selectedTokenType === EthereumTokenType.ETH ? 'ETH' : selectedToken?.symbol
-                              }`}
+                            ? t('plugin_gitcoin_not_valid')
+                            : t('plugin_gitcoin_donate', {
+                                  symbol: +amount.toFixed(3) === +amount.toFixed(9) ? '' : '~',
+                                  amount: +amount.toFixed(3),
+                                  type: selectedTokenType === EthereumTokenType.ETH ? 'ETH' : selectedToken?.symbol,
+                              })}
                     </Button>
                 </DialogActions>
             </ShadowRootDialog>
