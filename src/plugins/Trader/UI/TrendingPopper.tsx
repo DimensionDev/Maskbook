@@ -28,9 +28,10 @@ export function TrendingPopper(props: TrendingPopperProps) {
                     setAvailablePlatforms(ev.availablePlatforms)
                     setLocked(false)
                 }
-
+                // observe the same element
+                if (anchorEl === ev.element) return
                 // close popper on previous element
-                if (anchorEl && anchorEl !== ev.element) {
+                if (anchorEl) {
                     setAnchorEl(null)
                     setTimeout(update, 400)
                     return
@@ -50,10 +51,10 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const position = useWindowScroll()
     useEffect(() => {
         if (!anchorEl) return
-        const rect = anchorEl.getBoundingClientRect()
+        const { top } = anchorEl.getBoundingClientRect()
         if (
-            rect.top < 0 || // out off top bound
-            rect.top > document.documentElement.clientHeight // out off bottom bound
+            top < 0 || // out off top bound
+            top > document.documentElement.clientHeight // out off bottom bound
         )
             setAnchorEl(null)
     }, [anchorEl, Math.floor(position.y / 50)])
