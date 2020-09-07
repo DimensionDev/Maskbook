@@ -83,7 +83,7 @@ export function DonateSuccessDialog(props: DonateSuccessDialogProps) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="primary">
-                    {t('plugin_gitcoin_dialog_close')}
+                    {t('close')}
                 </Button>
                 {ui.internalName === 'twitter' ? (
                     <Button onClick={onShare} color="primary" autoFocus>
@@ -117,7 +117,7 @@ export function DonateFailDialog(props: DonateFailDialogProps) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="primary">
-                    {t('plugin_gitcoin_dialog_close')}
+                    {t('close')}
                 </Button>
             </DialogActions>
         </ShadowRootDialog>

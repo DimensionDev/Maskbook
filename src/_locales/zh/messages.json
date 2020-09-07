@@ -308,7 +308,6 @@
     "plugin_gitcoin_donated_successfully": "",
     "plugin_gitcoin_donated_failed": "",
     "plugin_gitcoin_dialog_share": "",
-    "plugin_gitcoin_dialog_close": "",
     "plugin_file_service_display_name": "插件: 文檔服務",
     "plugin_file_service_file_key_copied": "已拷貝 FileKey",
     "plugin_file_service_on_insert": "使用此文檔",

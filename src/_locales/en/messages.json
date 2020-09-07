@@ -308,7 +308,6 @@
     "plugin_gitcoin_donated_successfully": "Donated Successfully",
     "plugin_gitcoin_donated_failed": "Donated Successfully",
     "plugin_gitcoin_dialog_share": "Share",
-    "plugin_gitcoin_dialog_close": "Close",
     "plugin_file_service_display_name": "Plugin: File Service",
     "plugin_file_service_file_key_copied": "File key copied.",
     "plugin_file_service_on_insert": "Use the file",

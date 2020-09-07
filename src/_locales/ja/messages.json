@@ -308,7 +308,6 @@
     "plugin_gitcoin_donated_successfully": "",
     "plugin_gitcoin_donated_failed": "",
     "plugin_gitcoin_dialog_share": "",
-    "plugin_gitcoin_dialog_close": "",
     "plugin_file_service_display_name": "プラグイン: ファイル転送",
     "plugin_file_service_file_key_copied": "ファイルの鍵がコピーされました",
     "plugin_file_service_on_insert": "ファイルを使用する",
