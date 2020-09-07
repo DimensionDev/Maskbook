@@ -3,15 +3,16 @@ import { Platform } from '../types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { currentTrendingViewPlatformSettings } from '../settings'
 
-export function useCurrentPlatform(defaultPlatform: Platform) {
-    const [platform, setPlatform] = useState(defaultPlatform)
+export function useCurrentPlatform(availablePlatforms: Platform[]) {
+    const [platform, setPlatform] = useState(availablePlatforms.length ? availablePlatforms[0] : Platform.COIN_GECKO)
     const trendingPlatformSettings = useValueRef<string>(currentTrendingViewPlatformSettings)
 
     // sync platform
     useEffect(() => {
-        if (String(platform) === trendingPlatformSettings) return
+        // cached platform unavailable
+        if (!availablePlatforms.map(String).includes(trendingPlatformSettings)) return
         if (trendingPlatformSettings === String(Platform.COIN_GECKO)) setPlatform(Platform.COIN_GECKO)
         else if (trendingPlatformSettings === String(Platform.COIN_MARKET_CAP)) setPlatform(Platform.COIN_MARKET_CAP)
-    }, [platform, trendingPlatformSettings])
+    }, [availablePlatforms.sort().join(','), trendingPlatformSettings])
     return platform
 }

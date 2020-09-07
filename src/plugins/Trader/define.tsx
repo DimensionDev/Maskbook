@@ -11,6 +11,7 @@ import { TrendingPopper } from './UI/TrendingPopper'
 import { TrendingView } from './UI/TrendingView'
 import Services from '../../extension/service'
 import { PLUGIN_IDENTIFIER, PLUGIN_METADATA_KEY } from './constants'
+import type { Platform } from './types'
 
 const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor => isTypedMessageAnchor(m) && m.category === 'cash'
 
@@ -26,11 +27,12 @@ export const TraderPluginDefine: PluginConfig = {
     },
     pageInspector() {
         // build availability cache in the background page
-        Services.Plugin.invokePlugin('maskbook.trader', 'checkAvailability', 'BTC')
-
+        Services.Plugin.invokePlugin('maskbook.trader', 'getAvailablePlatforms', 'BTC')
         return (
             <TrendingPopper>
-                {(name: string, reposition?: () => void) => <TrendingView name={name} onUpdate={reposition} />}
+                {(name: string, platforms: Platform[], reposition?: () => void) => (
+                    <TrendingView name={name} platforms={platforms} onUpdate={reposition} />
+                )}
             </TrendingPopper>
         )
     },

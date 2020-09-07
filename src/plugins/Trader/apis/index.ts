@@ -22,7 +22,7 @@ export async function getCurrenies(platform: Platform): Promise<Currency[]> {
 }
 
 export async function getLimitedCurrenies(platform: Platform): Promise<Currency[]> {
-    const usd =
+    return Promise.resolve([
         platform === Platform.COIN_GECKO
             ? {
                   id: 'usd',
@@ -35,8 +35,8 @@ export async function getLimitedCurrenies(platform: Platform): Promise<Currency[
                   name: 'USD',
                   symbol: '$',
                   description: 'Unite State Dollar',
-              }
-    return Promise.resolve([usd])
+              },
+    ])
 }
 
 export async function getCoins(platform: Platform): Promise<Coin[]> {
@@ -57,7 +57,7 @@ const availabilityCache = new Map<
     }
 >()
 
-export async function checkAvailabilityAtPlatform(platform: Platform, keyword: string) {
+export async function checkAvailabilityOnPlatform(platform: Platform, keyword: string) {
     if (
         // cache never built before
         !availabilityCache.has(platform) ||
@@ -74,10 +74,13 @@ export async function checkAvailabilityAtPlatform(platform: Platform, keyword: s
     return availabilityCache.get(platform)?.supported.has(keyword.toLowerCase()) ?? false
 }
 
-export async function checkAvailability(keyword: string) {
-    return (await Promise.all(getEnumAsArray(Platform).map((x) => checkAvailabilityAtPlatform(x.value, keyword)))).some(
-        Boolean,
+export async function getAvailablePlatforms(keyword: string) {
+    const checked = await Promise.all(
+        getEnumAsArray(Platform).map(
+            async (x) => [x.value, await checkAvailabilityOnPlatform(x.value, keyword)] as const,
+        ),
     )
+    return checked.filter(([_, y]) => y).map(([x]) => x)
 }
 //#endregion
 

@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import { v4 as uuid } from 'uuid'
 import { TypedMessageAnchor, registerTypedMessageRenderer } from '../../../protocols/typed-message'
 import { Link, Typography } from '@material-ui/core'
 import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
 import { MessageCenter } from '../messages'
 import Services from '../../../extension/service'
-import { useUnmount, useEffectOnce } from 'react-use'
 
 export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type'> {
     readonly type: 'x-cash-trending'
@@ -34,12 +32,17 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
         if (openTimer !== null) clearTimeout(openTimer)
         setOpenTimer(
             setTimeout(async () => {
-                const available = await Services.Plugin.invokePlugin(
+                const availablePlatforms = await Services.Plugin.invokePlugin(
                     'maskbook.trader',
-                    'checkAvailability',
+                    'getAvailablePlatforms',
                     props.message.name,
                 )
-                if (available) MessageCenter.emit('cashTagObserved', { name: props.message.name, element })
+                if (availablePlatforms.length)
+                    MessageCenter.emit('cashTagObserved', {
+                        name: props.message.name,
+                        element,
+                        availablePlatforms,
+                    })
             }, 500),
         )
     }

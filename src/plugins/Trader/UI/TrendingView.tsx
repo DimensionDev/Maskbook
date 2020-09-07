@@ -32,6 +32,7 @@ import { useCurrentPlatform } from '../hooks/useCurrentPlatform'
 import { useCurrentCurrency } from '../hooks/useCurrentCurrency'
 import { currentTrendingViewPlatformSettings } from '../settings'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { useAvailablePlatforms } from '../hooks/useAvailablePlatforms'
 
 const useStyles = makeStyles((theme: Theme) => {
     const internalName = getActivatedUI()?.internalName
@@ -122,6 +123,7 @@ function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
 //#region trending view
 export interface TrendingViewProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     name: string
+    platforms: Platform[]
     onUpdate?: () => void
 }
 
@@ -131,7 +133,7 @@ export function TrendingView(props: TrendingViewProps) {
     const [tabIndex, setTabIndex] = useState(0)
 
     //#region trending
-    const platform = useCurrentPlatform(Platform.COIN_GECKO)
+    const platform = useCurrentPlatform(props.platforms)
     const { value: currency, loading: loadingCurrency } = useCurrentCurrency(platform)
     const { value: trending, loading: loadingTrending } = useTrending(props.name, platform, currency)
     //#endregion
@@ -155,8 +157,10 @@ export function TrendingView(props: TrendingViewProps) {
     //#region display loading skeleton
     if (loadingCurrency || loadingTrending) return <TrendingViewSkeleton />
     //#endregion
-
     //#region error handling
+    // error: no available platform
+    if (props.platforms.length === 0) return null
+
     // error: fail to load currency
     if (!currency) return null
 
@@ -233,15 +237,15 @@ export function TrendingView(props: TrendingViewProps) {
             <CardActions className={classes.footer}>
                 <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
                     <span>{t('plugin_trader_tab_switch_data_source')}</span>
-                    {getEnumAsArray(Platform).map((x) => (
+                    {props.platforms.map((x) => (
                         <Link
                             className={classes.platform}
-                            key={x.key}
-                            color={platform === x.value ? 'primary' : 'textSecondary'}
+                            key={x}
+                            color={platform === x ? 'primary' : 'textSecondary'}
                             onClick={() => {
-                                currentTrendingViewPlatformSettings.value = String(x.value)
+                                currentTrendingViewPlatformSettings.value = String(x)
                             }}>
-                            {resolvePlatformName(x.value)}
+                            {resolvePlatformName(x)}
                         </Link>
                     ))}
                 </Typography>

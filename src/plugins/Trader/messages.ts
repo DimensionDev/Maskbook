@@ -10,6 +10,7 @@ interface SettingsEvent {
 interface CashTagEvent {
     name: string
     element: HTMLAnchorElement | null
+    availablePlatforms: Platform[]
 }
 
 interface MaskbookTraderMessages {

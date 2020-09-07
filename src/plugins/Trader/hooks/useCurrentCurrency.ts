@@ -3,7 +3,6 @@ import { useAsync } from 'react-use'
 import type { Platform, Currency, Settings } from '../types'
 import Services from '../../../extension/service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { getActivatedUI } from '../../../social-network/ui'
 import { getCurrentTrendingViewPlatformSettings } from '../settings'
 
 export function useCurrentCurrency(platform: Platform) {

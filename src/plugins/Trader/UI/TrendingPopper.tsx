@@ -1,30 +1,37 @@
 import React, { useState, useEffect, useRef } from 'react'
 import type PopperJs from 'popper.js'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@material-ui/core'
-import { MessageCenter } from '../messages'
 import { useLocation, useWindowScroll } from 'react-use'
+import { MessageCenter } from '../messages'
+import type { Platform } from '../types'
 
 export interface TrendingPopperProps {
-    children?: (name: string, reposition?: () => void) => React.ReactNode
+    children?: (name: string, platforms: Platform[], reposition?: () => void) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
 
 export function TrendingPopper(props: TrendingPopperProps) {
     const popperRef = useRef<PopperJs | null>(null)
+    const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+    const [availablePlatforms, setAvailablePlatforms] = useState<Platform[]>([])
 
     // open popper
     useEffect(
         () =>
             MessageCenter.on('cashTagObserved', (ev) => {
                 const update = () => {
+                    setLocked(true)
                     setName(ev.name)
                     setAnchorEl(ev.element)
+                    setAvailablePlatforms(ev.availablePlatforms)
+                    setLocked(false)
                 }
-
+                // observe the same element
+                if (anchorEl === ev.element) return
                 // close popper on previous element
-                if (anchorEl && anchorEl !== ev.element) {
+                if (anchorEl) {
                     setAnchorEl(null)
                     setTimeout(update, 400)
                     return
@@ -44,14 +51,15 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const position = useWindowScroll()
     useEffect(() => {
         if (!anchorEl) return
-        const rect = anchorEl.getBoundingClientRect()
+        const { top } = anchorEl.getBoundingClientRect()
         if (
-            rect.top < 0 || // out off top bound
-            rect.top > document.documentElement.clientHeight // out off bottom bound
+            top < 0 || // out off top bound
+            top > document.documentElement.clientHeight // out off bottom bound
         )
             setAnchorEl(null)
     }, [anchorEl, Math.floor(position.y / 50)])
 
+    if (locked) return null
     if (!anchorEl) return null
     return (
         <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
@@ -66,7 +74,9 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
-                            {props.children?.(name, () => setTimeout(() => popperRef.current?.scheduleUpdate(), 100))}
+                            {props.children?.(name, availablePlatforms, () =>
+                                setTimeout(() => popperRef.current?.scheduleUpdate(), 100),
+                            )}
                         </div>
                     </Fade>
                 )}
