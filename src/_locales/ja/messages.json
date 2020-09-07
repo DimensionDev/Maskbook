@@ -134,7 +134,7 @@
     "no_search_result": "該当なし",
     "not_available": "現在使用できません",
     "ok": "OK",
-    "close": "",
+    "close": "Close",
     "password": "パスワード",
     "payload_bad": "この投稿は破損しており、Maskbook が復号することができません。",
     "payload_incomplete": "この投稿は不完全です。完全版を見ることにより復号が可能になります。",

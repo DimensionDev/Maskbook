@@ -134,7 +134,7 @@
     "no_search_result": "沒有結果",
     "not_available": "不可用",
     "ok": "好的",
-    "close": "",
+    "close": "關閉",
     "password": "密碼",
     "payload_bad": "Payload 可能遭到了篡改。",
     "payload_incomplete": "不完整的 payload。請點擊「查看全文」。",
