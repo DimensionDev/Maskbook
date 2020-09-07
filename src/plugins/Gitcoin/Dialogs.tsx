@@ -14,6 +14,7 @@ import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { getActivatedUI } from '../../social-network/ui'
 import type { ERC20TokenDetails } from '../../extension/background-script/PluginService'
+import { useI18N } from '../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -45,6 +46,7 @@ export interface DonateSuccessDialogProps extends GitcoinDialogProps {
 }
 
 export function DonateSuccessDialog(props: DonateSuccessDialogProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const { title, url, amount, token, tokenType, open, onClose } = props
     const ui = getActivatedUI()
@@ -73,7 +75,7 @@ export function DonateSuccessDialog(props: DonateSuccessDialogProps) {
             open={open}
             fullScreen={false}
             onClose={onClose}>
-            <DialogTitle>Donated Successfully</DialogTitle>
+            <DialogTitle>{t('plugin_gitcoin_donated_successfully')}</DialogTitle>
             <DialogContent>
                 <DialogContentText className={classes.content}>{`You have donated "${title}" ${
                     tokenType === EthereumTokenType.ETH ? 'ETH' : token?.symbol
@@ -81,11 +83,11 @@ export function DonateSuccessDialog(props: DonateSuccessDialogProps) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="primary">
-                    Close
+                    {t('plugin_gitcoin_dialog_close')}
                 </Button>
                 {ui.internalName === 'twitter' ? (
                     <Button onClick={onShare} color="primary" autoFocus>
-                        Share
+                        {t('plugin_gitcoin_dialog_share')}
                     </Button>
                 ) : null}
             </DialogActions>
@@ -98,6 +100,7 @@ export function DonateSuccessDialog(props: DonateSuccessDialogProps) {
 export interface DonateFailDialogProps extends GitcoinDialogProps {}
 
 export function DonateFailDialog(props: DonateFailDialogProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const { message, open, onClose } = props
     return (
@@ -108,13 +111,13 @@ export function DonateFailDialog(props: DonateFailDialogProps) {
             open={open}
             fullScreen={false}
             onClose={onClose}>
-            <DialogTitle>Donated Failed</DialogTitle>
+            <DialogTitle>{t('plugin_gitcoin_donated_failed')}</DialogTitle>
             <DialogContent>
                 <DialogContentText className={classes.content}>{message}</DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="primary">
-                    Close
+                    {t('plugin_gitcoin_dialog_close')}
                 </Button>
             </DialogActions>
         </ShadowRootDialog>

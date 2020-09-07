@@ -191,13 +191,13 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
             <div className={classes.line}>
                 <Typography variant="body2">
                     {selectedWallet
-                        ? t(erc20Balance ? 'plugin_red_packet_balance_with_erc20' : 'plugin_red_packet_balance', {
+                        ? t(erc20Balance ? 'wallet_balance_with_erc20' : 'wallet_balance', {
                               erc20Balance,
                               ethBalance,
                           })
                         : null}
                     <br />
-                    {t('plugin_red_packet_balance_notice')}
+                    {t('wallet_balance_notice')}
                 </Typography>
                 <Button
                     className={classes.button}
