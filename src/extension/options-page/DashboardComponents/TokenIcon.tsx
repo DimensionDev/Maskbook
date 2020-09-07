@@ -1,6 +1,7 @@
 import React from 'react'
-import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
+import { EthereumAddress } from 'wallet.ts'
 import { makeStyles, createStyles, Avatar } from '@material-ui/core'
+import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme) =>
@@ -13,22 +14,23 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface TokenIconProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+    name?: string
     address: string
-    name: string
 }
 
 export function TokenIcon(props: TokenIconProps) {
     const { address, name } = props
     const classes = useStylesExtends(useStyles(), props)
+    const checksumAddress = EthereumAddress.checksumAddress(address)
     return (
         <Avatar
             className={classes.coin}
             src={
-                address === ETH_ADDRESS
+                checksumAddress === ETH_ADDRESS
                     ? 'https://rawcdn.githack.com/trustwallet/assets/257c82b25e6f27ede7a2b309aadc0ed17bca45ae/blockchains/ethereum/info/logo.png'
-                    : `https://rawcdn.githack.com/trustwallet/assets/257c82b25e6f27ede7a2b309aadc0ed17bca45ae/blockchains/ethereum/assets/${address}/logo.png`
+                    : `https://rawcdn.githack.com/trustwallet/assets/257c82b25e6f27ede7a2b309aadc0ed17bca45ae/blockchains/ethereum/assets/${checksumAddress}/logo.png`
             }>
-            {name}
+            {name?.substr(0, 1).toLocaleUpperCase()}
         </Avatar>
     )
 }

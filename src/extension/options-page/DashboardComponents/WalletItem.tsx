@@ -165,7 +165,7 @@ export function WalletItem(props: WalletItemProps) {
                             classes={{ coin: classes.coin }}
                             key={token.address}
                             address={token.address}
-                            name={token.name?.substr(0, 1).toLocaleUpperCase()}
+                            name={token.name}
                         />
                     ))}
             </Box>
