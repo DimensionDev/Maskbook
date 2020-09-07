@@ -1,6 +1,6 @@
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeArrayBuffer } from '@dimensiondev/kit'
-import { Checkbox, FormControlLabel, makeStyles, Typography } from '@material-ui/core'
+import { Checkbox, FormControlLabel, makeStyles, Typography, Link } from '@material-ui/core'
 import { isNil } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import React from 'react'
@@ -100,8 +100,8 @@ export const Upload: React.FC = () => {
                     <Trans
                         i18nKey="plugin_file_service_legal_text"
                         components={{
-                            terms: <a target="_blank" href={t('plugin_file_service_legal_terms_link')} />,
-                            policy: <a target="_blank" href={t('plugin_file_service_legal_policy_link')} />,
+                            terms: <Link target="_blank" href={t('plugin_file_service_legal_terms_link')} />,
+                            policy: <Link target="_blank" href={t('plugin_file_service_legal_policy_link')} />,
                         }}
                     />
                 </Typography>

@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles, createStyles, Theme, Typography, SnackbarContent, Button, Box, Paper } from '@material-ui/core'
+import { useI18N } from '../../utils/i18n-next-ui'
 
 const border = '1.5px solid rgb(0, 154, 87)'
 const useStyles = makeStyles((theme: Theme) =>
@@ -97,6 +98,7 @@ interface PreviewCardProps {
     originalURL: string
 }
 export function PreviewCard(props: PreviewCardProps) {
+    const { t } = useI18N()
     const classes = useStyles()
     if (!props.hasPermission) {
         return (
@@ -143,7 +145,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     onClick={() => (props.address ? props.onRequestGrant() : window.open(props.originalURL))}
                     variant="contained"
                     color="primary">
-                    Fund this grant
+                    {t('plugin_gitcoin_preview_card_fund')}
                 </Button>
             </Box>
         </>

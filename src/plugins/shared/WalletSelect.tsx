@@ -13,6 +13,7 @@ import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 import type { useSelectWallet } from './useWallet'
 import type { WalletDetails } from '../../extension/background-script/PluginService'
 import Services from '../../extension/service'
+import { useI18N } from '../../utils/i18n-next-ui'
 interface WalletSelectProps {
     useSelectWalletHooks: ReturnType<typeof useSelectWallet>
     wallets: WalletDetails[] | undefined
@@ -23,6 +24,7 @@ interface WalletSelectProps {
     DialogProps?: Partial<DialogProps>
 }
 export function WalletSelect({ useSelectWalletHooks, wallets, ...props }: WalletSelectProps) {
+    const { t } = useI18N()
     const { selectedWalletAddress, setSelectedWalletAddress, provider } = useSelectWalletHooks
     const { SelectProps, className, FormControlProps } = props
 
@@ -39,7 +41,7 @@ export function WalletSelect({ useSelectWalletHooks, wallets, ...props }: Wallet
 
     return (
         <FormControl variant="filled" {...FormControlProps} className={className}>
-            <InputLabel>Wallet</InputLabel>
+            <InputLabel>{t('wallet_select_wallet')}</InputLabel>
             <Select
                 {...SelectProps}
                 onChange={(e) => setSelectedWalletAddress(e.target.value as string)}

@@ -22,7 +22,8 @@ import { RedPacketWithState } from './RedPacket'
 import Services from '../../../extension/service'
 import type { CreateRedPacketInit } from '../state-machine'
 import { EthereumTokenType } from '../../Wallet/database/types'
-import type { RedPacketRecord, RedPacketStatus, RedPacketJSONPayload } from '../types'
+import type { RedPacketRecord, RedPacketJSONPayload } from '../types'
+import { RedPacketStatus } from '../types'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
 import { PluginMessageCenter } from '../../PluginMessages'
@@ -37,6 +38,7 @@ import { TokenSelect } from '../../shared/TokenSelect'
 import { FeedbackDialog } from './FeedbackDialog'
 import type { WalletDetails, ERC20TokenDetails } from '../../../extension/background-script/PluginService'
 import { RedPacketMetaKey } from '../constants'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 //#region new red packet
 const useNewPacketStyles = makeStyles((theme) =>
@@ -68,6 +70,7 @@ interface NewPacketProps {
 }
 
 function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useNewPacketStyles(), props)
     const { loading, wallets, tokens } = props
     const [is_random, setIsRandom] = useState(0)
@@ -142,13 +145,13 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                     className={classes.input}
                     useSelectWalletHooks={useSelectWalletResult}></TokenSelect>
                 <FormControl variant="filled" className={classes.input}>
-                    <InputLabel>Split Mode</InputLabel>
+                    <InputLabel>{t('plugin_red_packet_split_mode')}</InputLabel>
                     <Select
                         MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}
                         value={is_random ? 1 : 0}
                         onChange={(e) => setIsRandom(e.target.value as number)}>
-                        <MenuItem value={0}>Average</MenuItem>
-                        <MenuItem value={1}>Random</MenuItem>
+                        <MenuItem value={0}>{t('plugin_red_packet_average')}</MenuItem>
+                        <MenuItem value={1}>{t('plugin_red_packet_random')}</MenuItem>
                     </Select>
                 </FormControl>
             </div>
@@ -161,7 +164,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                         max: amountPreShareMaxNumber,
                         className: classes.nativeInput,
                     }}
-                    label={is_random ? 'Total Amount' : 'Amount per Share'}
+                    label={is_random ? t('plugin_red_packet_total_amount') : t('plugin_red_packet_amount_per_share')}
                     variant="filled"
                     type="number"
                     defaultValue={send_per_share}
@@ -170,7 +173,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                     className={classes.input}
                     InputProps={{ inputRef: sharesRef }}
                     inputProps={{ min: 1 }}
-                    label="Shares"
+                    label={t('plugin_red_packet_shares')}
                     variant="filled"
                     type="number"
                     defaultValue={shares}
@@ -180,20 +183,21 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                 <TextField
                     className={classes.input}
                     InputProps={{ inputRef: msgRef }}
-                    label="Attached Message"
+                    label={t('plugin_red_packet_attached_message')}
                     variant="filled"
-                    defaultValue="Best Wishes!"
+                    defaultValue={t('plugin_red_packet_best_wishes')}
                 />
             </div>
             <div className={classes.line}>
                 <Typography variant="body2">
                     {selectedWallet
-                        ? erc20Balance
-                            ? `Balance: ${erc20Balance} (${ethBalance})`
-                            : `Balance: ${ethBalance}`
+                        ? t(erc20Balance ? 'wallet_balance_with_erc20' : 'wallet_balance', {
+                              erc20Balance,
+                              ethBalance,
+                          })
                         : null}
                     <br />
-                    Notice: A small gas fee will occur for publishing.
+                    {t('wallet_balance_notice')}
                 </Typography>
                 <Button
                     className={classes.button}
@@ -204,10 +208,12 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                     disabled={loading || isSendButtonDisabled}
                     onClick={onCreate}>
                     {isSendButtonDisabled
-                        ? 'Not valid'
-                        : `Send ${+send_total.toFixed(3) === +send_total.toFixed(9) ? '' : '~'}${+send_total.toFixed(
-                              3,
-                          )} ${selectedTokenType === EthereumTokenType.ETH ? 'ETH' : selectedToken?.symbol}`}
+                        ? t('plugin_red_packet_not_valid')
+                        : t('plugin_red_packet_send', {
+                              symbol: +send_total.toFixed(3) === +send_total.toFixed(9) ? '' : '~',
+                              amount: +send_total.toFixed(3),
+                              type: selectedTokenType === EthereumTokenType.ETH ? 'ETH' : selectedToken?.symbol,
+                          })}
                 </Button>
             </div>
         </div>
@@ -246,7 +252,7 @@ function ExistingPacketUI(props: RedPacketDialogProps & ExistingPacketProps) {
 
     const insertRedPacket = (status?: RedPacketStatus | null, rpid?: RedPacketRecord['red_packet_id']) => {
         if (status === null) return onSelectExistingPacket(null)
-        if (status === 'pending' || !rpid) return
+        if (status === RedPacketStatus.pending || !rpid) return
         Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, rpid).then((p) =>
             onSelectExistingPacket(p.raw_payload),
         )
@@ -313,6 +319,7 @@ const useStyles = makeStyles({
 })
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
+    const { t } = useI18N()
     const { data: wallets } = useWallets()
     const { data: tokens } = useTokens()
     const [availableRedPackets, setAvailableRedPackets] = useState<RedPacketRecord[]>([])
@@ -349,11 +356,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     packets.filter(
                         (p) =>
                             p.create_transaction_hash &&
-                            (p.status === 'normal' ||
-                                p.status === 'incoming' ||
-                                p.status === 'claimed' ||
-                                p.status === 'pending' ||
-                                p.status === 'claim_pending'),
+                            (p.status === RedPacketStatus.normal ||
+                                p.status === RedPacketStatus.incoming ||
+                                p.status === RedPacketStatus.claimed ||
+                                p.status === RedPacketStatus.pending ||
+                                p.status === RedPacketStatus.claim_pending),
                     ),
                 )
                 .then(setAvailableRedPackets)
@@ -368,7 +375,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: 'Create New',
+                label: t('plugin_red_packet_create_new'),
                 children: (
                     <NewPacketUI
                         {...props}
@@ -382,7 +389,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 p: 0,
             },
             {
-                label: 'Select Existing',
+                label: t('plugin_red_packet_select_existing'),
                 children: (
                     <ExistingPacketUI {...props} redPackets={availableRedPackets} onSelectExistingPacket={onSelect} />
                 ),
@@ -396,26 +403,21 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         <>
             <ShadowRootDialog
                 className={classes.dialog}
-                classes={{
-                    container: classes.container,
-                    paper: classes.paper,
-                }}
+                classes={{ container: classes.container, paper: classes.paper }}
                 open={props.open}
                 scroll="paper"
                 fullWidth
                 maxWidth="sm"
                 disableAutoFocus
                 disableEnforceFocus
-                BackdropProps={{
-                    className: classes.backdrop,
-                }}
+                BackdropProps={{ className: classes.backdrop }}
                 {...props.DialogProps}>
                 <DialogTitle className={classes.header}>
                     <IconButton classes={{ root: classes.close }} onClick={props.onDecline}>
                         <DialogDismissIconUI />
                     </IconButton>
                     <Typography className={classes.title} display="inline" variant="inherit">
-                        Plugin: Red Packet
+                        {t('plugin_red_packet_display_name')}
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
@@ -423,7 +425,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 </DialogContent>
             </ShadowRootDialog>
             <FeedbackDialog
-                title="Create Failed"
+                title={t('plugin_red_packet_create_failed')}
                 message={createError?.message}
                 open={status === 'failed'}
                 onClose={() => setStatus('initial')}
