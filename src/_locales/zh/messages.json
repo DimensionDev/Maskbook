@@ -1,7 +1,4 @@
 {
-    "plugin_red_packet_balance": "",
-    "plugin_red_packet_balance_with_erc20": "",
-    "plugin_red_packet_balance_notice": "",
     "about": "關於",
     "about_dialog_description": "Maskbook 允許您在社交網絡上發布加密的帖子，從而可以減輕大公司對大數據的監視。只有您和您的朋友（也在使用 Maskbook）可以解密您的加密帖子。",
     "about_dialog_touch": "保持聯繫",
