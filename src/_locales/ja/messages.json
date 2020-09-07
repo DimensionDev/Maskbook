@@ -1,4 +1,5 @@
 {
+    "plugin_gitcoin_readme_link": "",
     "about": "概要",
     "about_dialog_description": "Maskbookは、新しいオープンなインターネットへのポータルです。Maskbookを使えば、暗号化された投稿を友達に送ったり、暗号通貨の宝くじに参加したり、すでに使っているプラットフォームで暗号化されたファイルを共有したりすることができます。",
     "about_dialog_touch": "連絡する",
@@ -301,7 +302,7 @@
     "plugin_red_packet_description_failover": "",
     "plugin_gitcoin_display_name": "",
     "plugin_gitcoin_readme": "",
-    "plugin_gitcoin_readme_link": "",
+    "plugin_gitcoin_readme_fund_link": "",
     "plugin_gitcoin_not_valid": "",
     "plugin_gitcoin_donate": "",
     "plugin_gitcoin_preview_card_fund": "",

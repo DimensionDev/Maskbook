@@ -176,7 +176,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                             <Trans
                                 i18nKey="plugin_gitcoin_readme"
                                 components={{
-                                    link: <Link target="_blank" href={t('plugin_gitcoin_readme_link')} />,
+                                    fund: <Link target="_blank" href={t('plugin_gitcoin_readme_fund_link')} />,
                                 }}
                             />
                         </Typography>
