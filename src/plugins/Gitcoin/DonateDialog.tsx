@@ -175,7 +175,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                         <Typography variant="body1">
                             <Trans
                                 i18nKey="plugin_gitcoin_readme"
-                                values={{
+                                components={{
                                     link: <Link target="_blank" href={t('plugin_gitcoin_readme_link')} />,
                                 }}
                             />
