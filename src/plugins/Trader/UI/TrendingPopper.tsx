@@ -1,26 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react'
 import type PopperJs from 'popper.js'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@material-ui/core'
-import { MessageCenter } from '../messages'
 import { useLocation, useWindowScroll } from 'react-use'
+import { MessageCenter } from '../messages'
+import type { Platform } from '../types'
 
 export interface TrendingPopperProps {
-    children?: (name: string, reposition?: () => void) => React.ReactNode
+    children?: (name: string, platforms: Platform[], reposition?: () => void) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
 
 export function TrendingPopper(props: TrendingPopperProps) {
     const popperRef = useRef<PopperJs | null>(null)
+    const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+    const [availablePlatforms, setAvailablePlatforms] = useState<Platform[]>([])
 
     // open popper
     useEffect(
         () =>
             MessageCenter.on('cashTagObserved', (ev) => {
                 const update = () => {
+                    setLocked(true)
                     setName(ev.name)
                     setAnchorEl(ev.element)
+                    setAvailablePlatforms(ev.availablePlatforms)
+                    setLocked(false)
                 }
 
                 // close popper on previous element
@@ -52,6 +58,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
             setAnchorEl(null)
     }, [anchorEl, Math.floor(position.y / 50)])
 
+    if (locked) return null
     if (!anchorEl) return null
     return (
         <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
@@ -66,7 +73,9 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
-                            {props.children?.(name, () => setTimeout(() => popperRef.current?.scheduleUpdate(), 100))}
+                            {props.children?.(name, availablePlatforms, () =>
+                                setTimeout(() => popperRef.current?.scheduleUpdate(), 100),
+                            )}
                         </div>
                     </Fade>
                 )}
