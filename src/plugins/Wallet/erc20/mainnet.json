@@ -12,7 +12,7 @@
             "decimals": 18,
             "symbol": "RING",
             "name": "Darwinia Network Native Token",
-            "address": "0x9469d013805bffb7d3debe5e7839237e535ec483"
+            "address": "0x9469D013805bFfB7D3DEBe5E7839237e535ec483"
         },
         {
             "decimals": 18,
@@ -24,7 +24,7 @@
             "decimals": 18,
             "symbol": "ARPA",
             "name": "ARPA Token",
-            "address": "0xba50933c268f567bdc86e1ac131be072c6b0b71a"
+            "address": "0xBA50933C268F567BDC86E1aC131BE072C6B0b71a"
         },
         {
             "decimals": 8,
@@ -54,7 +54,7 @@
             "decimals": 18,
             "symbol": "OKB",
             "name": "OKB",
-            "address": "0x75231f58b43240c9718dd58b4967c5114342a86c"
+            "address": "0x75231F58b43240C9718Dd58B4967c5114342a86c"
         },
         {
             "decimals": 18,

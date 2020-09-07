@@ -1,4 +1,3 @@
-import CURRENCY_DATA from './currency.json'
 import { CMC_V1_BASE_URL, CMC_V2_BASE_URL } from '../../constants'
 
 export interface Status {
@@ -12,7 +11,13 @@ export interface Status {
 
 //#region get all currency
 export function getAllCurrenies() {
-    return CURRENCY_DATA
+    return [] as {
+        id: number
+        name: string
+        symbol: string
+        token: string
+        space: string
+    }[]
 }
 //#endregion
 

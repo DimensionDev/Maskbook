@@ -195,7 +195,7 @@ export function RedPacketInDecryptedPostClaimDialog(
                     <DialogDismissIconUI />
                 </IconButton>
                 <Typography className={classes.title} style={{ display: 'inline' }} variant="inherit">
-                    Select Wallet
+                    {t('plugin_red_packet_select_wallet')}
                 </Typography>
             </DialogTitle>
             <Divider />
@@ -225,7 +225,7 @@ export function RedPacketInDecryptedPostClaimDialog(
                             color="primary"
                         />
                     }
-                    label="Set as Default"
+                    label={t('plugin_red_packet_set_as_default')}
                 />
                 <Button
                     className={classes.button}
