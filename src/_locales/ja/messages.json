@@ -305,6 +305,7 @@
     "plugin_gitcoin_not_valid": "",
     "plugin_gitcoin_donate": "",
     "plugin_gitcoin_preview_card_fund": "",
+    "plugin_gitcoin_donate_amount": "",
     "plugin_gitcoin_donated_successfully": "",
     "plugin_gitcoin_donated_failed": "",
     "plugin_gitcoin_dialog_share": "",

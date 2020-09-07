@@ -305,6 +305,7 @@
     "plugin_gitcoin_not_valid": "Not valid",
     "plugin_gitcoin_donate": "Donate {{symbol}}{{amount}} {{type}}",
     "plugin_gitcoin_preview_card_fund": "Fund this grant",
+    "plugin_gitcoin_donate_amount": "Amount",
     "plugin_gitcoin_donated_successfully": "Donated Successfully",
     "plugin_gitcoin_donated_failed": "Donated Failed",
     "plugin_gitcoin_dialog_share": "Share",

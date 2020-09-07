@@ -170,7 +170,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                             fullWidth
                             defaultValue={amount}
                             type="number"
-                            label="Amount"
+                            label={t('plugin_gitcoin_donate_amount')}
                         />
                         <Typography variant="body1">
                             <Trans
