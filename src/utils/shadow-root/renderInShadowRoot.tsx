@@ -99,6 +99,20 @@ function mount(e: ({} | ShadowRoot) & HTMLElement, _: JSX.Element, keyBy = 'app'
         return () => ReactDOM.unmountComponentAtNode(container)
     }
 }
+try {
+    // After the hosting DOM node removed, the mutation watcher will receive the event in async
+    // then unmount the React component.
+    // but before the unmount, JSS might update the CSS of disconnected DOM then throws error.
+    // These lines of code mute this kind of error in this case.
+    const orig = Object.getOwnPropertyDescriptor(HTMLStyleElement.prototype, 'sheet')!
+    Object.defineProperty(HTMLStyleElement.prototype, 'sheet', {
+        ...orig,
+        get(this: HTMLStyleElement) {
+            if (this.isConnected) return orig.get!.call(this)
+            return { cssRules: [], insertRule() {} }
+        },
+    })
+} catch (e) {}
 
 // ! let jss tell us if it has made an update
 class InformativeSheetsRegistry extends SheetsRegistry {
