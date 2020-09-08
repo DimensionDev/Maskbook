@@ -25,7 +25,7 @@ import {
     DashboardWalletRedPacketDetailDialog,
     DashboardWalletShareDialog,
 } from '../DashboardDialogs/Wallet'
-import DashboardMenu from '../DashboardComponents/DashboardMenu'
+import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorStyles } from '../../../utils/theme'
 import Services from '../../service'
@@ -126,32 +126,17 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
         [wallet?.address],
     )
 
-    const backupMenuItem =
-        wallet.type === 'exotic' ? (
-            undefined!
-        ) : (
+    const [menu, openMenu] = useMenu(
+        <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
+        <MenuItem onClick={() => openWalletShare({ wallet })}>{t('share')}</MenuItem>,
+        <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
+        wallet.type === 'exotic' ? undefined : (
             <MenuItem onClick={() => openWalletBackup({ wallet })}>{t('backup')}</MenuItem>
-        )
-    const deleteMenuItem = (
-        <MenuItem
-            onClick={() => openWalletDelete({ wallet: wallet })}
-            className={color.error}
-            data-testid="delete_button">
+        ),
+        <MenuItem onClick={() => openWalletDelete({ wallet })} className={color.error} data-testid="delete_button">
             {t('delete')}
-        </MenuItem>
+        </MenuItem>,
     )
-    const menus = useMemo(
-        () =>
-            [
-                <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
-                <MenuItem onClick={() => openWalletShare({ wallet: wallet })}>{t('share')}</MenuItem>,
-                <MenuItem onClick={() => openWalletRename({ wallet: wallet })}>{t('rename')}</MenuItem>,
-                backupMenuItem,
-                deleteMenuItem,
-            ].filter((x) => x),
-        [setAsDefault, t, backupMenuItem, deleteMenuItem, openWalletRename, wallet],
-    )
-    const [menu, , openMenu] = useModal(DashboardMenu, { menus })
     if (!wallet) return null
     return (
         <div className={classes.root} ref={ref}>
@@ -172,7 +157,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                     <IconButton
                         className={classes.moreButton}
                         size="small"
-                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}
+                        onClick={openMenu}
                         data-testid="setting_icon">
                         <MoreVertOutlinedIcon />
                     </IconButton>

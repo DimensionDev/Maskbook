@@ -21,6 +21,7 @@ i18nNextInstance.init({
     },
     fallbackLng: 'en',
 })
+i18nNextInstance.languages = ['en', 'zh', 'ja']
 
 export default i18nNextInstance
 export const i18n = {

@@ -138,7 +138,6 @@ console.log('Build info', {
     DIRTY: process.env.DIRTY,
     TAG_DIRTY: process.env.TAG_DIRTY,
 })
-console.log('Flags', Flags)
 
 // Friendly to debug
 Object.assign(window, {

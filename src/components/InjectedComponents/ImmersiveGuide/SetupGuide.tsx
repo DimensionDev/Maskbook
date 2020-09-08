@@ -9,7 +9,7 @@ import {
     ThemeProvider,
     InputAdornment,
     LinearProgress,
-    createMuiTheme,
+    unstable_createMuiStrictModeTheme,
     IconButton,
 } from '@material-ui/core'
 import classNames from 'classnames'
@@ -192,7 +192,7 @@ function WizardDialog(props: WizardDialogProps) {
                                 return theme.palette.warning
                         }
                     }
-                    return createMuiTheme({
+                    return unstable_createMuiStrictModeTheme({
                         ...theme,
                         palette: {
                             ...theme.palette,

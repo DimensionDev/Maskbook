@@ -15,7 +15,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { TokenIcon } from './TokenIcon'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
-import DashboardMenu from './DashboardMenu'
+import { useMenu } from '../../../utils/hooks/useMenu'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog } from '../DashboardDialogs/Wallet'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -53,14 +53,9 @@ export function TokenListItem(props: TokenListItemProps) {
     const { balance, wallet, token } = props
 
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
-    const menus = useMemo(
-        () =>
-            [<MenuItem onClick={() => openHideTokenConfirmDialog({ wallet, token })}>{t('hide')}</MenuItem>].filter(
-                (x) => x,
-            ),
-        [openHideTokenConfirmDialog, wallet],
+    const [menu, openMenu] = useMenu(
+        <MenuItem onClick={() => openHideTokenConfirmDialog({ wallet, token })}>{t('hide')}</MenuItem>,
     )
-    const [menu, , openMenu] = useModal(DashboardMenu, { menus })
 
     return (
         <ListItem divider disableGutters>
@@ -85,10 +80,7 @@ export function TokenListItem(props: TokenListItemProps) {
             />
             <ListItemSecondaryAction className={classes.amount}>
                 {token.address !== ETH_ADDRESS ? (
-                    <IconButton
-                        className={classes.more}
-                        size="small"
-                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
+                    <IconButton className={classes.more} size="small" onClick={openMenu}>
                         <MoreHorizIcon />
                     </IconButton>
                 ) : null}

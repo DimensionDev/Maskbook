@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react'
-import { Typography, IconButton, MenuItem, ListItem, ListItemTypeMap, useMediaQuery } from '@material-ui/core'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import React from 'react'
+import { Typography, IconButton, MenuItem, ListItem, ListItemTypeMap } from '@material-ui/core'
+import { makeStyles, createStyles } from '@material-ui/core/styles'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardContactDialog, DashboardContactDeleteConfirmDialog } from '../DashboardDialogs/Contact'
-import DashboardMenu from './DashboardMenu'
+import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
@@ -71,15 +71,14 @@ export function ContactLine(props: ContactLineProps) {
         onDeleted,
     })
 
-    const menus = useMemo(
-        () => [<MenuItem onClick={() => openDeleteContactConfirmDialog()}>{t('delete')}</MenuItem>].filter((x) => x),
-        [openDeleteContactConfirmDialog, contact],
+    const [menu, openMenu] = useMenu(
+        <MenuItem onClick={() => openDeleteContactConfirmDialog()}>{t('delete')}</MenuItem>,
     )
-    const [menu, , openMenu] = useModal(DashboardMenu, { menus })
 
     return (
         <>
-            <ListItem button selected={false} onClick={() => openContactDialog()} className={classes.line} {...rest}>
+            {/* // TODO: Use standard ListItemAvatar, ListItemText and ListItemSecondaryAction instead of custom one. */}
+            <ListItem button selected={false} onClick={openContactDialog} className={classes.line} {...rest}>
                 <Avatar className={classes.avatar} person={contact} />
                 <Typography className={classes.user}>{contact.nickname || contact.identifier.userId}</Typography>
                 <Typography className={classes.provider}>@{contact.identifier.network}</Typography>
@@ -93,7 +92,7 @@ export function ContactLine(props: ContactLineProps) {
                     size="small"
                     onClick={(e) => {
                         e.stopPropagation()
-                        openMenu({ anchorEl: e.currentTarget })
+                        openMenu(e)
                     }}>
                     <MoreHorizIcon />
                 </IconButton>

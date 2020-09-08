@@ -101,7 +101,7 @@ module.exports = (argvEnv, argv) => {
         }
     }
     const getCompilationInfo = () => {
-        /** @type {'chromium' | 'firefox' | 'safari' | 'E2E' | undefined} */
+        /** @type {'chromium' | 'firefox' | 'safari' | 'E2E'} */
         let buildTarget = 'chromium'
         /** @type {'fennec' | 'geckoview'} */
         let firefoxVariant = undefined
@@ -122,7 +122,6 @@ module.exports = (argvEnv, argv) => {
             architecture = 'app'
         }
         if (architecture === 'app' || firefoxVariant === 'fennec') resolution = 'mobile'
-        else resolution = 'desktop'
         if (target.E2E) buildTarget = 'E2E'
 
         // build the envs

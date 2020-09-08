@@ -9,13 +9,13 @@ import { useColorStyles } from '../../../utils/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import ProfileBox from './ProfileBox'
 import type { ProfileIdentifier } from '../../../database/type'
-import { useModal, useSnackbarCallback } from '../DashboardDialogs/Base'
+import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardPersonaRenameDialog,
     DashboardPersonaBackupDialog,
     DashboardPersonaDeleteConfirmDialog,
 } from '../DashboardDialogs/Persona'
-import DashboardMenu from './DashboardMenu'
+import { useMenu } from '../../../utils/hooks/useMenu'
 
 interface Props {
     persona: Persona
@@ -69,18 +69,13 @@ export default function PersonaCard({ persona }: Props) {
     const [backupPersona, openBackupPersona] = useModal(DashboardPersonaBackupDialog, { persona })
     const [renamePersona, openRenamePersona] = useModal(DashboardPersonaRenameDialog, { persona })
 
-    const menus = useMemo(
-        () => [
-            <MenuItem onClick={openRenamePersona}>{t('rename')}</MenuItem>,
-            <MenuItem onClick={openBackupPersona}>{t('backup')}</MenuItem>,
-            <MenuItem onClick={openDeletePersona} className={color.error} data-testid="delete_button">
-                {t('delete')}
-            </MenuItem>,
-        ],
-        [openRenamePersona, t, openBackupPersona, openDeletePersona, color.error],
+    const [menu, openMenu] = useMenu(
+        <MenuItem onClick={openRenamePersona}>{t('rename')}</MenuItem>,
+        <MenuItem onClick={openBackupPersona}>{t('backup')}</MenuItem>,
+        <MenuItem onClick={openDeletePersona} className={color.error} data-testid="delete_button">
+            {t('delete')}
+        </MenuItem>,
     )
-
-    const [menu, , openMenu] = useModal(DashboardMenu, { menus })
 
     const id = persona.linkedProfiles.keys().next().value as ProfileIdentifier | undefined
     React.useEffect(() => {
@@ -100,11 +95,7 @@ export default function PersonaCard({ persona }: Props) {
                     <span title={persona.nickname} className={classes.title} data-testid="persona_title">
                         {persona.nickname}
                     </span>
-                    <IconButton
-                        size="small"
-                        className={classes.menu}
-                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}
-                        data-testid="setting_icon">
+                    <IconButton size="small" className={classes.menu} onClick={openMenu} data-testid="setting_icon">
                         <MoreVertIcon />
                     </IconButton>
                     {menu}

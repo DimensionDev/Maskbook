@@ -3,6 +3,10 @@ const isAndroidApp = process.env.architecture === 'app' && process.env.target ==
 
 // TODO: In future, we can turn this object into a Proxy to receive flags from remote
 export const Flags = {
+    __raw__: {
+        target: process.env.target,
+        architecture: process.env.architecture,
+    },
     /** There is no "tabs" to navigate to. We must be careful with this. */
     has_no_browser_tab_ui: process.env.architecture === 'app',
     /**
@@ -46,3 +50,7 @@ export const Flags = {
     has_Safari_IndexedDB_bug: process.env.target === 'safari',
     //#endregion
 } as const
+
+if (process.env.NODE_ENV === 'development') {
+    console.log('Run with flags:', Flags)
+}
