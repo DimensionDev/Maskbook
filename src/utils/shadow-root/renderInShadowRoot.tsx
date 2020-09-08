@@ -1,4 +1,4 @@
-import { create, Jss, SheetsRegistry } from 'jss'
+import { create, SheetsRegistry } from 'jss'
 import { jssPreset, StylesProvider, ThemeProvider } from '@material-ui/core/styles'
 import ReactDOM from 'react-dom'
 import React from 'react'
@@ -68,9 +68,9 @@ export function renderInShadowRoot(
                 unmount = mount(
                     element,
                     <ErrorBoundary>
-                        <RenderInShadowRootWrapper shadow={element}>
+                        <ShadowRootStyleProvider shadow={element}>
                             <Maskbook {...config.rootProps} children={node} />
-                        </RenderInShadowRootWrapper>
+                        </ShadowRootStyleProvider>
                     </ErrorBoundary>,
                     config.keyBy,
                     config.concurrent,
@@ -144,9 +144,9 @@ class InformativeSheetsRegistry extends SheetsRegistry {
     }
 }
 
-export const jssRegistryMap: WeakMap<ShadowRoot, InformativeSheetsRegistry> = new WeakMap()
+const jssRegistryMap: WeakMap<ShadowRoot, InformativeSheetsRegistry> = new WeakMap()
 
-export const useSheetsRegistryStyles = (_current: Node | null) => {
+export function useSheetsRegistryStyles(_current: Node | null) {
     const subscription = React.useMemo(() => {
         let registry: InformativeSheetsRegistry | null | undefined = null
         if (_current) {
@@ -164,36 +164,31 @@ export const useSheetsRegistryStyles = (_current: Node | null) => {
     }, [_current])
     return useSubscription(subscription)
 }
-
-interface RenderInShadowRootWrapperProps {
-    shadow: ShadowRoot
+const initOnceMap = new WeakMap<ShadowRoot, unknown>()
+function initOnce<T>(keyBy: ShadowRoot, init: () => T): T {
+    if (initOnceMap.has(keyBy)) return initOnceMap.get(keyBy) as T
+    const val = init()
+    initOnceMap.set(keyBy, val)
+    return val
 }
-
-class RenderInShadowRootWrapper extends React.PureComponent<RenderInShadowRootWrapperProps> {
-    insertionPoint = document.createElement('div')
-    _ = this.props.shadow.appendChild(document.createElement('head')).appendChild(this.insertionPoint)
-    jss: Jss = create({
-        ...jssPreset(),
-        insertionPoint: this.insertionPoint,
+function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{ shadow: ShadowRoot }>) {
+    const { jss, registry, manager } = initOnce(shadow, () => {
+        const insertionPoint = document.createElement('div')
+        shadow.appendChild(document.createElement('head')).appendChild(insertionPoint)
+        const jss = create({
+            ...jssPreset(),
+            insertionPoint: insertionPoint,
+        })
+        const registry = new InformativeSheetsRegistry()
+        const manager = new WeakMap()
+        jssRegistryMap.set(shadow, registry)
+        return { jss, registry, manager }
     })
-    registry: InformativeSheetsRegistry = new InformativeSheetsRegistry()
-    manager = new WeakMap()
-    constructor(props: RenderInShadowRootWrapperProps) {
-        super(props)
-        jssRegistryMap.set(props.shadow, this.registry)
-    }
-    render() {
-        return (
-            // ! sheetsRegistry: We use this to get styles as a whole string
-            // ! sheetsManager: Material-ui uses this to detect if the style has been rendered
-            <StylesProvider
-                sheetsRegistry={this.registry}
-                jss={this.jss}
-                sheetsManager={this.manager}
-                children={this.props.children}
-            />
-        )
-    }
+    return (
+        // ! sheetsRegistry: We use this to get styles as a whole string
+        // ! sheetsManager: Material-ui uses this to detect if the style has been rendered
+        <StylesProvider sheetsRegistry={registry} jss={jss} sheetsManager={manager} children={props.children} />
+    )
 }
 
 class ErrorBoundary extends React.Component {
@@ -216,16 +211,11 @@ function Maskbook(_props: MaskbookProps) {
     return (
         <ThemeProvider theme={theme}>
             <I18nextProvider i18n={i18nNextInstance}>
-                <React.StrictMode>
-                    <SnackbarProvider
-                        maxSnack={30}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right',
-                        }}>
+                <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                    <React.StrictMode>
                         <span {..._props} />
-                    </SnackbarProvider>
-                </React.StrictMode>
+                    </React.StrictMode>
+                </SnackbarProvider>
             </I18nextProvider>
         </ThemeProvider>
     )
