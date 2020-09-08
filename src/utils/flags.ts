@@ -23,7 +23,7 @@ export const Flags = {
     support_eth_network_switch: process.env.NODE_ENV === 'development' || process.env.architecture === 'app',
     //#region Experimental features
     trader_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
-    file_service_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
+    file_service_create_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
     matrix_based_service_enabled: process.env.NODE_ENV === 'development',
     metamask_support_enabled: process.env.architecture === 'web',
     //#endregion

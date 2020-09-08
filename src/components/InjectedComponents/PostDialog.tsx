@@ -201,7 +201,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     },
                                 }}
                             />
-                            {Flags.file_service_enabled && (
+                            {Flags.file_service_create_enabled && (
                                 <ClickableChip
                                     ChipProps={{
                                         label: (
@@ -284,7 +284,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     DialogProps={props.DialogProps}
                 />
             )}
-            {Flags.file_service_enabled && (
+            {Flags.file_service_create_enabled && (
                 <FileServiceDialog
                     classes={classes}
                     open={props.open && fileServiceDialogOpen}
