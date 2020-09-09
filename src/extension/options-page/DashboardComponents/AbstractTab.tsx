@@ -37,7 +37,7 @@ export default function AbstractTab({ tabs, state, height = 200 }: AbstractTabPr
                     variant="fullWidth"
                     indicatorColor="primary"
                     textColor="primary"
-                    onChange={(_: React.ChangeEvent<{}>, newValue: number) => setValue(newValue)}>
+                    onChange={(_: React.SyntheticEvent, newValue: number) => setValue(newValue)}>
                     {tabs.map((tab) => (
                         <Tab
                             className={classes.tab}

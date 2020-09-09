@@ -7,7 +7,7 @@ import { useStylesExtends } from '../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
 import { getActivatedUI } from '../../social-network/ui'
 import { useI18N } from '../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
+import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { Entry } from './components'
 import { InsertButton } from './components/InsertButton'
 import { META_KEY_1 } from './constants'
@@ -95,7 +95,7 @@ const MainDialog: React.FC<Props> = (props) => {
             <DialogContent className={classes.content}>
                 <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
                     <Entry />
-                    <Grid container justify="center">
+                    <Grid container justifyContent="center">
                         <InsertButton onClick={onInsert} disabled={isNil(selectedFileInfo)}>
                             {t('plugin_file_service_on_insert')}
                         </InsertButton>

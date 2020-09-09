@@ -15,7 +15,7 @@ import Services from '../../extension/service'
 import { PostIVIdentifier } from '../../database/type'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { DialogContentText, DialogContent } from '@material-ui/core'
-import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
+import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 
 const useStyles = makeStyles({
     avatar: {
@@ -94,7 +94,7 @@ export function DebugModeUI_PostHashDialog(props: { post: string; network: strin
     }, [props.post])
     return (
         <>
-            <Button variant="outlined" color="primary" onClick={() => setOpen(true)}>
+            <Button variant="outlined" onClick={() => setOpen(true)}>
                 My friend can't see this post even I shared with them!
             </Button>
             <SimpleDialog hashMap={hashMap} friends={friends} open={open} onClose={() => setOpen(false)} />

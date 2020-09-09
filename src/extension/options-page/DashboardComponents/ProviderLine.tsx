@@ -66,7 +66,7 @@ export default function ProviderLine(props: ProviderLineProps) {
                 className={classNames(classes.text, { [classes.cursor]: !connected })}
                 color={connected ? 'textPrimary' : 'primary'}
                 variant="body1"
-                component="a"
+                component="div"
                 onClick={connected ? undefined : onAction}
                 data-testid={`connect_button_${network.toLowerCase()}`}>
                 {connected ? Goto(network, userId) : <span>{`${t('connect_to')} ${network}`}</span>}

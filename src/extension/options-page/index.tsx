@@ -178,7 +178,7 @@ function DashboardUI() {
                         <ShowcaseBox>{error.message}</ShowcaseBox>
                     </Card>
                 ) : null}
-                <ActionButton color="primary" variant="text" onClick={() => setReloadSpy((x) => !x)}>
+                <ActionButton variant="text" onClick={() => setReloadSpy((x) => !x)}>
                     {t('reload')}
                 </ActionButton>
             </Box>,

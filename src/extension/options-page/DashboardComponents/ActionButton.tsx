@@ -17,7 +17,7 @@ enum ThrottledButtonState {
 }
 
 interface DebounceButtonProps extends Omit<ButtonProps, 'color' | 'onClick'> {
-    color: ButtonProps['color'] | 'danger'
+    color?: ButtonProps['color'] | 'danger'
     onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => unknown
 }
 

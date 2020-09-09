@@ -41,10 +41,10 @@ export function RequestPermission(props: RequestPermissionProps) {
                 </List>
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.onCancel} variant="text" color="default">
+                <Button onClick={props.onCancel} variant="text">
                     Cancel
                 </Button>
-                <Button onClick={props.onRequestApprove} variant="contained" color="primary">
+                <Button onClick={props.onRequestApprove} variant="contained">
                     Approve
                 </Button>
             </DialogActions>

@@ -209,7 +209,6 @@ export function ConsentDataCollection() {
                     />
                     <ActionButton<typeof Link>
                         className={consentDataCollection.button}
-                        color="primary"
                         variant="contained"
                         component={Link}
                         disabled={!checked}
@@ -277,7 +276,6 @@ export function CreatePersona() {
                     <ActionButton
                         className={setupFormClasses.button}
                         variant="contained"
-                        color="primary"
                         onClick={createPersonaAndNext}
                         disabled={!name}
                         data-testid="next_button">
@@ -287,7 +285,6 @@ export function CreatePersona() {
                         {t('set_up_tip_or')}
                     </Typography>
                     <ActionButton<typeof Link>
-                        color="primary"
                         variant="text"
                         component={Link}
                         to={SetupStep.RestoreDatabase}
@@ -360,7 +357,6 @@ export function ConnectNetwork() {
                     <ActionButton
                         className={classes.button}
                         variant="contained"
-                        color="primary"
                         disabled={persona?.linkedProfiles.size === 0}
                         onClick={async () => {
                             await Promise.all([
@@ -505,7 +501,6 @@ export function RestoreDatabase() {
                 <>
                     <ActionButton
                         className={classNames(classes.button, classes.restoreButton)}
-                        color="primary"
                         variant="contained"
                         disabled={
                             (!(state[0] === 0 && backupValue) && !(state[0] === 1 && textValue)) ||
@@ -519,7 +514,6 @@ export function RestoreDatabase() {
                     </ActionButton>
                     <ActionButton<typeof Link>
                         className={classes.button}
-                        color="primary"
                         variant="outlined"
                         component={Link}
                         to={SetupStep.RestoreDatabaseAdvance}
@@ -529,11 +523,7 @@ export function RestoreDatabase() {
                     <Typography className={classes.or} variant="body1">
                         {t('set_up_tip_or')}
                     </Typography>
-                    <ActionButton
-                        color="primary"
-                        variant="text"
-                        onClick={() => history.goBack()}
-                        data-testid="restart_button">
+                    <ActionButton variant="text" onClick={() => history.goBack()} data-testid="restart_button">
                         {t('set_up_button_from_scratch')}
                     </ActionButton>
                 </>
@@ -678,7 +668,6 @@ export function RestoreDatabaseAdvance() {
                     <ActionButton
                         className={classNames(classes.button, classes.importButton)}
                         variant="contained"
-                        color="primary"
                         disabled={
                             !(tabState === 0 && nickname && mnemonicWordsValue) &&
                             !(tabState === 1 && base64Value) &&
@@ -824,7 +813,6 @@ export function RestoreDatabaseConfirmation() {
                         <ActionButton
                             className={classes.button}
                             variant="contained"
-                            color="primary"
                             disabled={imported === 'loading'}
                             onClick={restoreConfirmation}
                             data-testid="confirm_button">

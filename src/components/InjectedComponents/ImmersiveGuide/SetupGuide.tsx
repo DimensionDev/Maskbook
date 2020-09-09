@@ -9,7 +9,7 @@ import {
     ThemeProvider,
     InputAdornment,
     LinearProgress,
-    createMuiTheme,
+    unstable_createMuiStrictModeTheme,
     IconButton,
 } from '@material-ui/core'
 import classNames from 'classnames'
@@ -192,7 +192,7 @@ function WizardDialog(props: WizardDialogProps) {
                                 return theme.palette.warning
                         }
                     }
-                    return createMuiTheme({
+                    return unstable_createMuiStrictModeTheme({
                         ...theme,
                         palette: {
                             ...theme.palette,
@@ -311,7 +311,6 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                 <ActionButtonPromise
                     className={classes.button}
                     variant="contained"
-                    color="primary"
                     init={t('immersive_setup_connect_auto')}
                     waiting={t('connecting')}
                     complete={t('done')}
@@ -376,7 +375,6 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                     <ActionButtonPromise
                         className={classes.button}
                         variant="contained"
-                        color="primary"
                         init={t('immersive_setup_create_post_auto')}
                         waiting={t('creating')}
                         complete={t('done')}
