@@ -47,7 +47,6 @@ export function injectPostInspectorDefault<T extends string>(
                 shadow: () => current.rootNodeProxy.afterShadow,
                 normal: () => current.rootNodeProxy.after,
                 concurrent: true,
-                keyBy: 'post-inspector',
             },
         )
     }

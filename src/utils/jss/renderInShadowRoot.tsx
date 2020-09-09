@@ -21,7 +21,6 @@ const previousShadowedElement = new Set<HTMLElement>()
 export function renderInShadowRoot(
     node: React.ReactNode,
     config: {
-        keyBy?: string
         shadow(): ShadowRoot
         normal(): HTMLElement
         concurrent?: boolean
@@ -52,7 +51,6 @@ export function renderInShadowRoot(
                 <ErrorBoundary>
                     <Maskbook {...config.rootProps} children={node} />
                 </ErrorBoundary>,
-                config.keyBy,
                 config.concurrent,
             )
         }
@@ -72,7 +70,6 @@ export function renderInShadowRoot(
                             <Maskbook {...config.rootProps} children={node} />
                         </RenderInShadowRootWrapper>
                     </ErrorBoundary>,
-                    config.keyBy,
                     config.concurrent,
                 )
             }
@@ -82,21 +79,14 @@ export function renderInShadowRoot(
     return () => rendered && unmount()
 }
 
-function mount(e: ({} | ShadowRoot) & HTMLElement, _: JSX.Element, keyBy = 'app', concurrent?: boolean) {
-    const container =
-        e.querySelector<HTMLElement>(`main.${keyBy}`) ||
-        (() => {
-            const dom = (e as ShadowRoot).appendChild(document.createElement('main'))
-            dom.className = keyBy
-            return dom
-        })()
+function mount(e: (HTMLElement & ShadowRoot) | HTMLElement, _: JSX.Element, concurrent?: boolean) {
     if (concurrent) {
-        const root = ReactDOM.unstable_createRoot(container)
+        const root = ReactDOM.unstable_createRoot(e)
         root.render(_)
         return () => root.unmount()
     } else {
-        ReactDOM.render(_, container)
-        return () => ReactDOM.unmountComponentAtNode(container)
+        ReactDOM.render(_, e)
+        return () => ReactDOM.unmountComponentAtNode(e)
     }
 }
 
