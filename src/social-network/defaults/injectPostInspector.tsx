@@ -4,7 +4,7 @@ import type { PostInfo } from '../PostInfo'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { PostInspector, PostInspectorProps } from '../../components/InjectedComponents/PostInspector'
 import { makeStyles } from '@material-ui/core'
-import { PostInfoContext, usePostInfoDetails } from '../../components/DataSource/usePostInfo'
+import { PostInfoContext } from '../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-es'
 
 export function injectPostInspectorDefault<T extends string>(
