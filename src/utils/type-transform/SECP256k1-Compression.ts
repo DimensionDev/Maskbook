@@ -6,6 +6,7 @@ import type {
     EC_Private_JsonWebKey,
     EC_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
+import { Buffer } from 'buffer'
 /**
  * Compress x & y into a single x
  */
