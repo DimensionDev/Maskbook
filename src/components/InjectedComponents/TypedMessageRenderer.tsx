@@ -52,11 +52,7 @@ export const DefaultTypedMessageTextRenderer = React.memo(function DefaultTypedM
     return renderWithMetadata(
         props,
         <Typography component="span" color="textPrimary" variant="body1" data-testid="text_payload">
-            {deconstructed.ok ? (
-                <Chip label={t('post_substitute_label')} size="small" />
-            ) : (
-                <RenderText text={content} />
-            )}
+            {deconstructed.ok ? t('post_substitute_label') : <RenderText text={content} />}
         </Typography>,
     )
 })
@@ -74,9 +70,9 @@ export const DefaultTypedMessageAnchorRenderer = React.memo(function DefaultType
     const deconstructed = deconstructPayload(content, null)
     return renderWithMetadata(
         props,
-        <Typography component="span" variant="body1" data-testid="anchor_payload">
+        <Typography component="span" color="textPrimary" variant="body1" data-testid="anchor_payload">
             {deconstructed.ok ? (
-                <Chip label={t('post_substitute_label')} size="small" />
+                t('post_substitute_label')
             ) : (
                 // TODO:
                 // shrink link size
