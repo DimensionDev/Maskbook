@@ -27,6 +27,7 @@ export interface Coin {
     image_url?: string
     description?: string
     market_cap_rank?: number
+    eth_address?: string
 }
 
 export interface Market {
@@ -60,6 +61,7 @@ export interface Trending {
     coin: Coin
     market: Market
     tickers: Ticker[]
+    lastUpdated: string
 }
 
 export type Stat = [number | string, number]

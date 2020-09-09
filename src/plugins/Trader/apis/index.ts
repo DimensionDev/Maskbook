@@ -45,11 +45,12 @@ export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
         id: String(x.id),
         name: x.name,
         symbol: x.symbol,
+        eth_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
     }))
 }
 
 //#region check a specific coin is available on specific dataProvider
-const availabilityCache = new Map<
+const coinNamespace = new Map<
     DataProvider,
     {
         supported: Set<string>
@@ -60,18 +61,18 @@ const availabilityCache = new Map<
 export async function checkAvailabilityOnDataProvider(dataProvider: DataProvider, keyword: string) {
     if (
         // cache never built before
-        !availabilityCache.has(dataProvider) ||
+        !coinNamespace.has(dataProvider) ||
         // cache expired
-        new Date().getTime() - (availabilityCache.get(dataProvider)?.lastUpdated.getTime() ?? 0) >
+        new Date().getTime() - (coinNamespace.get(dataProvider)?.lastUpdated.getTime() ?? 0) >
             CRYPTOCURRENCY_MAP_EXPIRES_AT
     ) {
         const coins = await getCoins(dataProvider)
-        availabilityCache.set(dataProvider, {
+        coinNamespace.set(dataProvider, {
             supported: new Set<string>(coins.map((x) => x.symbol.toLowerCase())),
             lastUpdated: new Date(),
         })
     }
-    return availabilityCache.get(dataProvider)?.supported.has(keyword.toLowerCase()) ?? false
+    return coinNamespace.get(dataProvider)?.supported.has(keyword.toLowerCase()) ?? false
 }
 
 export async function getAvailableDataProviders(keyword: string) {
@@ -88,6 +89,9 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
     if (dataProvider === DataProvider.COIN_GECKO) {
         const info = await coinGeckoAPI.getCoinInfo(id)
         return {
+            lastUpdated: info.last_updated,
+            dataProvider,
+            currency,
             coin: {
                 id,
                 name: info.name,
@@ -99,9 +103,8 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
                 market_cap_rank: info.market_cap_rank,
                 image_url: info.image.small,
                 home_url: info.links.homepage.filter(Boolean)[0],
+                eth_address: info.asset_platform_id === 'ethereum' ? info.contract_address : undefined,
             },
-            currency,
-            dataProvider,
             market: Object.entries(info.market_data).reduce((accumulated, [key, value]) => {
                 if (value && typeof value === 'object') accumulated[key] = value[currency.id]
                 else accumulated[key] = value
@@ -121,25 +124,31 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
     }
 
     const currencyName = currency.name.toUpperCase()
-    const { data: info } = await coinMarketCapAPI.getCoinInfo(id, currencyName)
-    const { data: market } = await coinMarketCapAPI.getLatestMarketPairs(id, currencyName)
-
+    const [{ data: quotesInfo }, { data: coinInfo }, { data: market, status }] = await Promise.all([
+        coinMarketCapAPI.getQuotesInfo(id, currencyName),
+        coinMarketCapAPI.getCoinInfo(id),
+        coinMarketCapAPI.getLatestMarketPairs(id, currencyName),
+    ])
     return {
+        lastUpdated: status.timestamp,
         coin: {
             id,
-            name: info.name,
-            symbol: info.symbol,
+            name: coinInfo.name,
+            symbol: coinInfo.symbol,
             image_url: `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`,
-            market_cap_rank: info.rank,
+            market_cap_rank: quotesInfo.rank,
+            description: coinInfo.description,
+            eth_address: coinInfo.platform?.name === 'Ethereum' ? coinInfo.platform?.token_address : undefined,
+            home_url: coinInfo.urls.website[0],
         },
         currency,
         dataProvider,
         market: {
-            current_price: info.quotes[currencyName].price,
-            total_volume: info.quotes[currencyName].volume_24h,
-            price_change_percentage_1h_in_currency: info.quotes[currencyName].percent_change_1h,
-            price_change_percentage_24h_in_currency: info.quotes[currencyName].percent_change_24h,
-            price_change_percentage_7d_in_currency: info.quotes[currencyName].percent_change_7d,
+            current_price: quotesInfo.quotes[currencyName].price,
+            total_volume: quotesInfo.quotes[currencyName].volume_24h,
+            price_change_percentage_1h_in_currency: quotesInfo.quotes[currencyName].percent_change_1h,
+            price_change_percentage_24h_in_currency: quotesInfo.quotes[currencyName].percent_change_24h,
+            price_change_percentage_7d_in_currency: quotesInfo.quotes[currencyName].percent_change_7d,
         },
         tickers: market.market_pairs
             .map((pair) => ({
