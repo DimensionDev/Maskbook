@@ -12,12 +12,14 @@ if (isMobileFacebook) {
     composeBox = new LiveSelector().querySelector('#structured_composer_form')
 } else {
     composeBox = new LiveSelector()
-        .querySelector('[aria-multiline="true"][contenteditable="true"][role="textbox"]')
-        .closest('[role="dialog"], #pagelet_event_composer')
-        .map((x) => (x.getAttribute('role') === 'dialog' ? x.lastElementChild!.lastElementChild : x))
+        .querySelectorAll('form [role="button"]')
+        .map((x) => x.parentElement)
+        // TODO: should be nth(-1), see https://github.com/DimensionDev/Holoflows-Kit/issues/270
+        .reverse()
+        .nth(0)
 }
 export function injectPostBoxFacebook() {
-    const watcher = new MutationObserverWatcher(composeBox.clone().enableSingleMode())
+    const watcher = new MutationObserverWatcher(composeBox.clone())
         .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         .startWatch({
             childList: true,
@@ -26,6 +28,7 @@ export function injectPostBoxFacebook() {
     renderInShadowRoot(<UI />, {
         shadow: () => watcher.firstDOMProxy.afterShadow,
         normal: () => watcher.firstDOMProxy.after,
+        rootProps: { style: { display: 'block', padding: '0 16px', marginTop: 16 } },
     })
 }
 function UI() {
