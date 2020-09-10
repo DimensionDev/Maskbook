@@ -22,7 +22,6 @@ globalThis.Event = class {
     get target() {}
 }
 globalThis.Worker = class {}
-globalThis.webpackEnv = {}
 globalThis.sessionStorage = {}
 
 const { join } = require('path')
