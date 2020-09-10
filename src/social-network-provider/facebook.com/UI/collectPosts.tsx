@@ -8,7 +8,6 @@ import {
     TypedMessage,
     makeTypedMessageText,
     makeTypedMessageImage,
-    makeTypedMessageFromList,
     makeTypedMessageCompound,
 } from '../../../protocols/typed-message'
 import { Flags } from '../../../utils/flags'
@@ -23,7 +22,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             const root = new LiveSelector()
                 .replace(() => [metadata.realCurrent])
                 .filter((x) => x)
-                .closest(isMobileFacebook ? '[role=article]' : '[data-store]')
+                .closest('[role=article]')
 
             // ? inject after comments
             const commentSelectorPC = root
@@ -60,17 +59,6 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             })()
 
             this.posts.set(metadata, info)
-            function collectNodeText(node: HTMLElement): string {
-                return [
-                    node.innerText,
-                    ...Array.from(node.querySelectorAll('a'))
-                        .map((anchor) => {
-                            const href = anchor.getAttribute('href') ?? ''
-                            return href.includes('l.facebook.com') ? new URL(href).searchParams.get('u') : href
-                        })
-                        .filter(Boolean),
-                ].join('\n')
-            }
             function collectPostInfo() {
                 const nextTypedMessage: TypedMessage[] = []
                 info.postBy.value = getPostBy(metadata, info.postPayload.value !== null).identifier
@@ -104,6 +92,24 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             childList: true,
             subtree: true,
         })
+}
+
+function collectNodeText(node: HTMLElement | undefined): string {
+    if (!node) return ''
+    if (!node.querySelector('a,img')) return node.innerText
+    return [...node.childNodes]
+        .map((each) => {
+            if (each.nodeType === document.TEXT_NODE) return (each as Text).nodeValue || ''
+            if (each instanceof HTMLAnchorElement) {
+                const href = each.getAttribute('href')
+                if (!href) return each.innerText
+                return '\n' + href.includes('l.facebook.com') ? new URL(href).searchParams.get('u') : each.innerText
+            }
+            if (each instanceof HTMLImageElement) return each.alt
+            if (each instanceof HTMLElement) return collectNodeText(each)
+            return ''
+        })
+        .join('')
 }
 
 function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {
