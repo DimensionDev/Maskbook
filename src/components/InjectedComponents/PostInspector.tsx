@@ -104,7 +104,7 @@ export function PostInspector(props: PostInspectorProps) {
     function withAdditionalContent(x: JSX.Element | null) {
         return (
             <>
-                <slot />
+                {encryptedPost.ok ? null : <slot />}
                 {x}
                 <PluginPostInspector />
                 {debugInfo}
