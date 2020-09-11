@@ -437,6 +437,13 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const getUsername = () =>
         lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
     const [username, setUsername] = useState(getUsername)
+    useEffect(
+        () =>
+            getActivatedUI().lastRecognizedIdentity.addListener((val) => {
+                if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
+            }),
+        [username],
+    )
     //#endregion
 
     //#region create post status
