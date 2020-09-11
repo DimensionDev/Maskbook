@@ -438,6 +438,13 @@ export function SetupGuide(props: SetupGuideProps) {
     const getUsername = () =>
         lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
     const [username, setUsername] = useState(getUsername)
+    useEffect(
+        () =>
+            getActivatedUI().lastRecognizedIdentity.addListener((val) => {
+                if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
+            }),
+        [username],
+    )
     //#endregion
 
     //#region paste status
