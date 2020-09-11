@@ -13,12 +13,15 @@ import { lastActivatedWalletProvider } from '../../settings/settings'
 import { getManagedWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
 
 export const web3 = new Web3()
+web3.eth.transactionConfirmationBlocks = 6
+
 Object.assign(globalThis, { web3 })
 let currentProvider: WalletProvider
 function resetProvider() {
     switchToProvider(lastActivatedWalletProvider.value)
 }
 sideEffect.then(resetProvider)
+
 export function switchToProvider(provider: WalletProviderType) {
     console.log('[Web3] Switch to', provider)
     const nextProvider = getWalletProvider(provider)
