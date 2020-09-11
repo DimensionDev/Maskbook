@@ -37,7 +37,6 @@ export const Flags = {
 
     //#region Functionality missing / broken
     must_not_start_web_worker: process.env.NODE_ENV === 'test' || process.env.STORYBOOK,
-    no_auto_verify_bio: process.env.architecture === 'app',
     /**
      * - iOS: WebExtension polyfill didn't implemented the dynamic permission API
      * - E2E: Cannot click the "allow" button (maybe a Puppeteer bug) in the Puppeteer (maybe a bug)
