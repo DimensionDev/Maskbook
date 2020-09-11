@@ -49,7 +49,6 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     async taskGetProfile() {
         return { bioContent: '' }
     },
-    taskPasteIntoBio() {},
     taskPasteIntoPostBox() {},
     taskOpenComposeBox() {},
     taskUploadToPostBox() {},
