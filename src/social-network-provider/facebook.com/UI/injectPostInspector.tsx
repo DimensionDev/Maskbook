@@ -5,7 +5,7 @@ import { injectPostInspectorDefault } from '../../../social-network/defaults/inj
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { Flags } from '../../../utils/flags'
 
-const map = new Map<HTMLElement, ShadowRoot>()
+const map = new WeakMap<HTMLElement, ShadowRoot>()
 function getShadowRoot(node: HTMLElement) {
     if (map.has(node)) return map.get(node)!
     const dom = node.attachShadow({ mode: Flags.using_ShadowDOM_attach_mode })

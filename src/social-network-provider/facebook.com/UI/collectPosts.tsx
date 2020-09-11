@@ -21,13 +21,13 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
         .useForeach((node, key, metadata) => {
             const root = new LiveSelector()
                 .replace(() => [metadata.realCurrent])
-                .filter((x) => x)
                 .closest('[role=article]')
+                .map((x) => x.parentElement?.parentElement?.parentElement)
 
             // ? inject after comments
             const commentSelectorPC = root
                 .clone()
-                .querySelectorAll('[role=article] [data-ft] > div > a + span')
+                .querySelectorAll('[role=article] span[dir="auto"] div[dir="auto"]')
                 .closest<HTMLElement>(2)
             const commentSelectorMobile = root
                 .clone()
@@ -94,7 +94,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
         })
 }
 
-function collectNodeText(node: HTMLElement | undefined): string {
+export function collectNodeText(node: HTMLElement | undefined): string {
     if (!node) return ''
     if (!node.querySelector('a,img')) return node.innerText
     return [...node.childNodes]
