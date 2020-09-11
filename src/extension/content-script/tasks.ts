@@ -26,11 +26,6 @@ const _tasks = {
      */
     getProfile: (identifier: ProfileIdentifier) => getActivatedUI().taskGetProfile(identifier),
     /**
-     * Access profile page
-     * Paste text into bio
-     */
-    pasteIntoBio: async (text: string) => getActivatedUI().taskPasteIntoBio(text),
-    /**
      * Access main page
      * Paste text into PostBox
      */

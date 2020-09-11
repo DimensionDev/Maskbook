@@ -184,7 +184,6 @@ export const twitterUITasks: SocialNetworkUITasks = {
     taskPasteIntoPostBox,
     taskOpenComposeBox,
     taskUploadToPostBox,
-    taskPasteIntoBio,
     taskGetPostContent,
     taskGetProfile,
     taskGotoProfilePage,
