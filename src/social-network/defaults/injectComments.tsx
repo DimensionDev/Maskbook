@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core'
 import { PostInfoContext } from '../../components/DataSource/usePostInfo'
 import { Flags } from '../../utils/flags'
 import { noop } from 'lodash-es'
+import { collectNodeText } from '../../social-network-provider/facebook.com/UI/collectPosts'
 
 interface injectPostCommentsDefaultConfig {
     needZip?(): void
@@ -32,7 +33,7 @@ export function injectPostCommentsDefault<T extends string>(
         if (!selector) return noop
         const commentWatcher = new MutationObserverWatcher(selector, current.rootNode)
             .useForeach((commentNode, key, meta) => {
-                const commentRef = new ValueRef(commentNode.innerText)
+                const commentRef = new ValueRef(collectNodeText(commentNode))
                 const needZipF =
                     needZip ||
                     (() => {
@@ -45,12 +46,13 @@ export function injectPostCommentsDefault<T extends string>(
                     </PostInfoContext.Provider>,
                     { normal: () => meta.after, shadow: () => meta.afterShadow },
                 )
+                commentRef.addListener(console.log)
                 return {
                     onNodeMutation() {
-                        commentRef.value = commentNode.innerText
+                        commentRef.value = collectNodeText(commentNode)
                     },
                     onTargetChanged() {
-                        commentRef.value = commentNode.innerText
+                        commentRef.value = collectNodeText(commentNode)
                     },
                     onRemove() {
                         unmount()
