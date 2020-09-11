@@ -5,7 +5,7 @@ import BN from 'bn.js'
 import { EventLog } from 'web3-core/types'
 import { EventEmitter } from 'events'
 // @ts-ignore
-import type PromiEvent from 'web3/promiEvent'
+import PromiEvent from 'web3/promiEvent'
 
 interface EstimateGasOptions {
     from?: string
