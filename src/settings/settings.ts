@@ -2,7 +2,7 @@ import { createGlobalSettings, createInternalSettings, createNetworkSettings } f
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { EthereumNetwork } from '../plugins/Wallet/database/types'
-import type { SetupGuideStep } from '../components/InjectedComponents/ImmersiveGuide/SetupGuide'
+import type { SetupGuideStep } from '../components/InjectedComponents/SetupGuide'
 import { WalletProviderType } from '../plugins/shared/findOutProvider'
 import { Flags } from '../utils/flags'
 

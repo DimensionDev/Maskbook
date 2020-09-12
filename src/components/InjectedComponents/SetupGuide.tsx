@@ -17,16 +17,16 @@ import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
 import CloseIcon from '@material-ui/icons/Close'
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 import stringify from 'json-stable-stringify'
-import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import ShowcaseBox from '../../../extension/options-page/DashboardComponents/ShowcaseBox'
+import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
+import ShowcaseBox from '../../extension/options-page/DashboardComponents/ShowcaseBox'
 import { merge, cloneDeep, noop } from 'lodash-es'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { getActivatedUI } from '../../../social-network/ui'
-import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../../settings/settings'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
-import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../../database/type'
-import Services from '../../../extension/service'
+import { useI18N } from '../../utils/i18n-next-ui'
+import { getActivatedUI } from '../../social-network/ui'
+import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../settings/settings'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
+import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
+import Services from '../../extension/service'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -200,14 +200,14 @@ function WizardDialog(props: WizardDialogProps) {
                         },
                     })
                 }}>
-                <Paper id="draggable_handle" className={classes.root}>
+                <Paper className={classes.root}>
                     <header className={classes.header}>
                         <Typography className={classes.primary} color="textPrimary" variant="h1">
                             {title}
                         </Typography>
                         {optional ? (
                             <Typography className={classes.secondary} color="textSecondary" variant="body2">
-                                {t('immersive_setup_optional')}
+                                {t('setup_guide_optional')}
                             </Typography>
                         ) : null}
                     </header>
@@ -281,7 +281,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
         <WizardDialog
             completion={33.33}
             status="undetermined"
-            title={t('immersive_setup_find_username_title')}
+            title={t('setup_guide_find_username_title')}
             content={
                 <form>
                     <TextField
@@ -304,17 +304,17 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     <Typography
                         className={classes.tip}
                         variant="body2"
-                        dangerouslySetInnerHTML={{ __html: t('immersive_setup_find_username_text') }}></Typography>
+                        dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}></Typography>
                 </form>
             }
             footer={
                 <ActionButtonPromise
                     className={classes.button}
                     variant="contained"
-                    init={t('immersive_setup_connect_auto')}
+                    init={t('setup_guide_connect_auto')}
                     waiting={t('connecting')}
                     complete={t('done')}
-                    failed={t('immersive_setup_connect_failed')}
+                    failed={t('setup_guide_connect_failed')}
                     executor={onConnect}
                     completeOnClick={onDone}
                     disabled={!username}
@@ -359,14 +359,14 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
             completion={100}
             status={createStatus}
             optional
-            title={t('immersive_setup_say_hello_title')}
+            title={t('setup_guide_say_hello_title')}
             content={
                 <form>
                     <Typography className={classNames(classes.tip, sayHelloWorldClasses.primary)} variant="body2">
-                        {t('immersive_setup_say_hello_primary')}
+                        {t('setup_guide_say_hello_primary')}
                     </Typography>
                     <Typography className={classNames(classes.tip, sayHelloWorldClasses.secondary)} variant="body2">
-                        {t('immersive_setup_say_hello_secondary')}
+                        {t('setup_guide_say_hello_secondary')}
                     </Typography>
                 </form>
             }
@@ -375,10 +375,10 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                     <ActionButtonPromise
                         className={classes.button}
                         variant="contained"
-                        init={t('immersive_setup_create_post_auto')}
+                        init={t('setup_guide_create_post_auto')}
                         waiting={t('creating')}
                         complete={t('done')}
-                        failed={t('immersive_setup_create_post_failed')}
+                        failed={t('setup_guide_create_post_failed')}
                         executor={onCreate}
                         completeOnClick={onSkip}
                         completeIcon={null}
@@ -401,13 +401,13 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
 }
 //#endregion
 
-//#region setup guide
-export interface SetupGuideProps {
+//#region setup guide ui
+interface SetupGuideUIProps {
     persona: PersonaIdentifier
     onClose?: () => void
 }
 
-export function SetupGuide(props: SetupGuideProps) {
+function SetupGuideUI(props: SetupGuideUIProps) {
     const { t } = useI18N()
     const { persona } = props
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
@@ -494,7 +494,7 @@ export function SetupGuide(props: SetupGuideProps) {
         ])
     }
     const onCreate = async () => {
-        const content = t('immersive_setup_say_hello_content')
+        const content = t('setup_guide_say_hello_content')
         await navigator.clipboard.writeText(content)
         ui.taskOpenComposeBox(content, {
             shareToEveryOne: true,
@@ -530,5 +530,27 @@ export function SetupGuide(props: SetupGuideProps) {
         default:
             return null
     }
+}
+//#endregion
+
+//#region setup guide
+const useSetupGuideStyles = makeStyles((theme: Theme) => ({
+    root: {
+        position: 'fixed',
+        zIndex: 9999,
+        maxWidth: 550,
+        top: '2em',
+        right: '2em',
+    },
+}))
+export interface SetupGuideProps extends SetupGuideUIProps {}
+
+export function SetupGuide(props: SetupGuideProps) {
+    const classes = useSetupGuideStyles()
+    return (
+        <div className={classes.root}>
+            <SetupGuideUI {...props} />
+        </div>
+    )
 }
 //#endregion
