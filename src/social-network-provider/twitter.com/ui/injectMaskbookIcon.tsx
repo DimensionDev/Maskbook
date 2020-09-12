@@ -22,7 +22,7 @@ function Icon(props: { size: number }) {
     )
 }
 const opt = { afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } } as const
-function _(main: () => LiveSelector<HTMLSpanElement, true>, size: number) {
+function _(main: () => LiveSelector<HTMLElement, true>, size: number) {
     // TODO: for unknown reason the MutationObserverWatcher doesn't work well
     // To reproduce, open a profile and switch to another profile.
     new MutationObserverWatcher(main())
