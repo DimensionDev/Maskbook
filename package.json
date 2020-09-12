@@ -102,7 +102,6 @@
     "qrcode": "^1.4.4",
     "react": "=0.0.0-experimental-94c0244ba",
     "react-dom": "=0.0.0-experimental-94c0244ba",
-    "react-draggable": "^4.4.2",
     "react-feather": "^2.0.3",
     "react-i18next": "^11.7.2",
     "react-middle-ellipsis": "^1.1.0",
