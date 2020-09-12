@@ -219,13 +219,13 @@ function WizardDialog(props: WizardDialogProps) {
                         variant="determinate"
                         value={completion}></LinearProgress>
                     {onBack ? (
-                        <IconButton className={classes.back} size="small">
-                            <ArrowBackIosOutlinedIcon cursor="pointer" onClick={onBack}></ArrowBackIosOutlinedIcon>
+                        <IconButton className={classes.back} size="small" onClick={onBack}>
+                            <ArrowBackIosOutlinedIcon cursor="pointer" />
                         </IconButton>
                     ) : null}
                     {onClose ? (
-                        <IconButton className={classes.close} size="small">
-                            <CloseIcon cursor="pointer" onClick={onClose}></CloseIcon>
+                        <IconButton className={classes.close} size="small" onClick={onClose}>
+                            <CloseIcon cursor="pointer" />
                         </IconButton>
                     ) : null}
                 </Paper>
@@ -403,14 +403,13 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
 
 //#region setup guide
 export interface SetupGuideProps {
-    provePost: string
     persona: PersonaIdentifier
     onClose?: () => void
 }
 
 export function SetupGuide(props: SetupGuideProps) {
     const { t } = useI18N()
-    const { persona, provePost } = props
+    const { persona } = props
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
     const ui = getActivatedUI()
 
@@ -437,10 +436,6 @@ export function SetupGuide(props: SetupGuideProps) {
         lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
     const [username, setUsername] = useState(getUsername)
     //#endregion
-
-    //#region paste status
-    const [pastedStatus, setPastedStatus] = useState<boolean | 'undetermined'>('undetermined')
-    //#ednregion
 
     //#region create post status
     const [createStatus, setCreateStatus] = useState<boolean | 'undetermined'>('undetermined')
