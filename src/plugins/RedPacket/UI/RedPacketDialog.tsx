@@ -29,8 +29,8 @@ import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
 import { PluginMessageCenter } from '../../PluginMessages'
 import { getActivatedUI } from '../../../social-network/ui'
 import { formatBalance } from '../../Wallet/formatter'
-import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
-import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
+import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
+import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import BigNumber from 'bignumber.js'
 import { useSelectWallet, useTokens, useWallets } from '../../shared/useWallet'
 import { WalletSelect } from '../../shared/WalletSelect'
@@ -202,7 +202,6 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                 <Button
                     className={classes.button}
                     style={{ marginLeft: 'auto', minWidth: 140, whiteSpace: 'nowrap' }}
-                    color="primary"
                     variant="contained"
                     startIcon={props.loading ? <CircularProgress size={24} /> : null}
                     disabled={loading || isSendButtonDisabled}

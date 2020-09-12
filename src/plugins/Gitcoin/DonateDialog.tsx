@@ -15,7 +15,7 @@ import {
     CircularProgress,
 } from '@material-ui/core'
 import { useI18N } from '../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
+import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
 import { TokenSelect } from '../shared/TokenSelect'
 import { WalletSelect } from '../shared/WalletSelect'
@@ -196,7 +196,6 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                     <Button
                         className={classes.button}
                         style={{ marginLeft: 'auto' }}
-                        color="primary"
                         startIcon={props.loading ? <CircularProgress size={24} /> : null}
                         variant="contained"
                         disabled={isButtonDisabled || props.loading}

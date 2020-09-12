@@ -10,8 +10,8 @@ import {
     DialogContentText,
 } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -54,9 +54,7 @@ export function FeedbackDialog(props: RedPacketDialogProps) {
                 <DialogContentText className={classes.content}>{message}</DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="primary">
-                    {t('close')}
-                </Button>
+                <Button onClick={onClose}>{t('close')}</Button>
             </DialogActions>
         </ShadowRootDialog>
     )

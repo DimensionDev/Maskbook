@@ -22,7 +22,7 @@ import { MutationObserverWatcher } from '@holoflows/kit'
 import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
 import Services from '../../../extension/service'
 import { twitterEncoding } from '../encoding'
-import { createTaskStartImmersiveSetupDefault } from '../../../social-network/defaults/taskStartImmersiveSetupDefault'
+import { createTaskStartSetupGuideDefault } from '../../../social-network/defaults/taskStartSetupGuideDefault'
 import { instanceOfTwitterUI } from '.'
 import type { ProfileIdentifier } from '../../../database/type'
 import { encodeArrayBuffer, decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
@@ -189,5 +189,5 @@ export const twitterUITasks: SocialNetworkUITasks = {
     taskGetProfile,
     taskGotoProfilePage,
     taskGotoNewsFeedPage,
-    taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(() => instanceOfTwitterUI),
+    taskStartSetupGuide: createTaskStartSetupGuideDefault(() => instanceOfTwitterUI),
 }

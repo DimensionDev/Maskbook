@@ -220,7 +220,7 @@ export interface SocialNetworkUITasks {
     /**
      * For a PersonaIdentifier setup a new account
      */
-    taskStartImmersiveSetup(for_: PersonaIdentifier): void
+    taskStartSetupGuide(for_: PersonaIdentifier): void
 }
 
 //#endregion

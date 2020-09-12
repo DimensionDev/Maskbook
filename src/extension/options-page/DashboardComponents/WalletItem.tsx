@@ -146,7 +146,6 @@ export function WalletItem(props: WalletItemProps) {
             ) : null}
             {xsMatched ? null : (
                 <ActionButton
-                    color="primary"
                     size="small"
                     variant="outlined"
                     startIcon={<FileCopyOutlinedIcon />}

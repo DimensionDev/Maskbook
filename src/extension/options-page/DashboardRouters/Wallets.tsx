@@ -25,7 +25,7 @@ import {
     DashboardWalletRedPacketDetailDialog,
     DashboardWalletShareDialog,
 } from '../DashboardDialogs/Wallet'
-import DashboardMenu from '../DashboardComponents/DashboardMenu'
+import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorStyles } from '../../../utils/theme'
 import Services from '../../service'
@@ -41,6 +41,7 @@ import { useHistory } from 'react-router-dom'
 import { WalletProviderType } from '../../../plugins/shared/findOutProvider'
 import { useSnackbar } from 'notistack'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
+import { Flags } from '../../../utils/flags'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -125,32 +126,17 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
         [wallet?.address],
     )
 
-    const backupMenuItem =
-        wallet.type === 'exotic' ? (
-            undefined!
-        ) : (
+    const [menu, openMenu] = useMenu(
+        <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
+        <MenuItem onClick={() => openWalletShare({ wallet })}>{t('share')}</MenuItem>,
+        <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
+        wallet.type === 'exotic' ? undefined : (
             <MenuItem onClick={() => openWalletBackup({ wallet })}>{t('backup')}</MenuItem>
-        )
-    const deleteMenuItem = (
-        <MenuItem
-            onClick={() => openWalletDelete({ wallet: wallet })}
-            className={color.error}
-            data-testid="delete_button">
+        ),
+        <MenuItem onClick={() => openWalletDelete({ wallet })} className={color.error} data-testid="delete_button">
             {t('delete')}
-        </MenuItem>
+        </MenuItem>,
     )
-    const menus = useMemo(
-        () =>
-            [
-                <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
-                <MenuItem onClick={() => openWalletShare({ wallet: wallet })}>{t('share')}</MenuItem>,
-                <MenuItem onClick={() => openWalletRename({ wallet: wallet })}>{t('rename')}</MenuItem>,
-                backupMenuItem,
-                deleteMenuItem,
-            ].filter((x) => x),
-        [setAsDefault, t, backupMenuItem, deleteMenuItem, openWalletRename, wallet],
-    )
-    const [menu, , openMenu] = useModal(DashboardMenu, { menus })
     if (!wallet) return null
     return (
         <div className={classes.root} ref={ref}>
@@ -163,7 +149,6 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                         <Button
                             className={classes.addButton}
                             variant="text"
-                            color="primary"
                             onClick={() => openAddToken({ wallet })}
                             startIcon={<AddIcon />}>
                             {t('add_token')}
@@ -172,7 +157,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                     <IconButton
                         className={classes.moreButton}
                         size="small"
-                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}
+                        onClick={openMenu}
                         data-testid="setting_icon">
                         <MoreVertOutlinedIcon />
                     </IconButton>
@@ -214,8 +199,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                             })
                         }
                         startIcon={<HistoryIcon />}
-                        variant="text"
-                        color="primary">
+                        variant="text">
                         {t('activity')}
                     </Button>
                 </div>
@@ -348,22 +332,24 @@ export default function DashboardWalletsRouter() {
             empty={!wallets?.length}
             title={t('my_wallets')}
             actions={[
-                <Button
-                    color="primary"
-                    variant="outlined"
-                    onClick={async () => {
-                        try {
-                            await Services.Plugin.connectExoticWallet(WalletProviderType.metamask)
-                            notify.enqueueSnackbar('Success', { variant: 'success' })
-                        } catch (e) {}
-                    }}>
-                    {t('import_from_metamask')}
-                </Button>,
-                <Button color="primary" variant="outlined" onClick={openWalletImport}>
+                Flags.metamask_support_enabled ? (
+                    <Button
+                        variant="outlined"
+                        onClick={async () => {
+                            try {
+                                await Services.Plugin.connectExoticWallet(WalletProviderType.metamask)
+                                notify.enqueueSnackbar('Success', { variant: 'success' })
+                            } catch (e) {}
+                        }}>
+                        {t('import_from_metamask')}
+                    </Button>
+                ) : (
+                    <></>
+                ),
+                <Button variant="outlined" onClick={openWalletImport}>
                     {t('import')}
                 </Button>,
                 <Button
-                    color="primary"
                     variant="contained"
                     onClick={openWalletCreate}
                     endIcon={<AddCircleIcon />}

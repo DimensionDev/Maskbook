@@ -1,10 +1,10 @@
 import React from 'react'
 import type { DOMProxy } from '@holoflows/kit'
 import type { PostInfo } from '../PostInfo'
-import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
+import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
 import { PostInspector, PostInspectorProps } from '../../components/InjectedComponents/PostInspector'
 import { makeStyles } from '@material-ui/core'
-import { PostInfoContext, usePostInfoDetails } from '../../components/DataSource/usePostInfo'
+import { PostInfoContext } from '../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-es'
 
 export function injectPostInspectorDefault<T extends string>(
@@ -47,6 +47,7 @@ export function injectPostInspectorDefault<T extends string>(
                 shadow: () => current.rootNodeProxy.afterShadow,
                 normal: () => current.rootNodeProxy.after,
                 concurrent: true,
+                keyBy: 'post-inspector',
             },
         )
     }

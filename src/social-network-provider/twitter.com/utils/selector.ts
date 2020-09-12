@@ -49,7 +49,7 @@ export const bioSelector = () => querySelector<HTMLDivElement>(['[data-testid="U
 export const bioPageUserNickNameSelector = () =>
     querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
         .map((x) => x.parentElement?.parentElement?.previousElementSibling)
-        .querySelector('span')
+        .querySelector<HTMLDivElement>('div[dir]')
 export const bioPageUserIDSelector = (selector: () => LiveSelector<HTMLSpanElement, true>) =>
     selector().map((x) =>
         (x.parentElement?.parentElement?.nextElementSibling as HTMLElement).innerText.replace('@', ''),

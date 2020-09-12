@@ -75,7 +75,6 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = Pers
     const SelectAllButton = (
         <Button
             className={classes.buttons}
-            color="primary"
             onClick={() => onSetSelected([...selected, ...listAfterSearch] as ServeType[])}>
             {t('select_all')}
         </Button>

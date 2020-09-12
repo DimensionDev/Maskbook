@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useReducer } from 'react'
+import React, { useCallback, useReducer } from 'react'
 import classNames from 'classnames'
 import {
     DialogProps,
@@ -102,10 +102,9 @@ function reducer<Props extends object>(
 }
 
 export function useModal<DialogProps extends object, AdditionalPropsAppendByDispatch extends Partial<DialogProps>>(
-    component: React.FunctionComponent<WrappedDialogProps<DialogProps>>,
+    Modal: React.FunctionComponent<WrappedDialogProps<DialogProps>>,
     ComponentProps?: DialogProps,
 ): [React.ReactNode, () => void, (props: AdditionalPropsAppendByDispatch) => void] {
-    const Modal = useMemo(() => component, [component])
     const [status, dispatch] = useReducer(reducer, { state: DialogState.Destroyed })
     const showModal = useCallback(() => dispatch({ type: 'open' }), [])
     const showStatefulModal = useCallback(
@@ -122,6 +121,12 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
 
     const preferDarkScheme = useMediaQuery('(prefers-color-scheme: dark)')
     const appearance = useValueRef(appearanceSettings)
+    const modalProps = {
+        ...compositeProps,
+        open: state === DialogState.Opened,
+        onClose,
+        onExited,
+    }
     const renderedComponent =
         state === DialogState.Destroyed ? null : (
             <ThemeProvider
@@ -130,14 +135,7 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
                         ? MaskbookDarkTheme
                         : MaskbookLightTheme
                 }>
-                <Modal
-                    {...{
-                        ...compositeProps,
-                        open: state === DialogState.Opened,
-                        onClose,
-                        onExited,
-                    }}
-                />
+                <Modal {...modalProps} />
             </ThemeProvider>
         )
 
@@ -151,9 +149,6 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
             flexDirection: 'column',
             width: (props) => (props.size === 'small' ? 280 : 440),
             padding: (props) => (props.size === 'small' ? '40px 24px !important' : '40px 36px !important'),
-            [theme.breakpoints.down('xs')]: {
-                width: '100% !important',
-            },
         },
         header: {
             textAlign: 'center',

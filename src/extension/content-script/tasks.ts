@@ -2,8 +2,8 @@ import { AutomatedTabTask, GetContext, AutomatedTabTaskRuntimeOptions } from '@h
 import { ProfileIdentifier, ECKeyIdentifier, Identifier } from '../../database/type'
 import {
     disableOpenNewTabInBackgroundSettings,
-    currentImmersiveSetupStatus,
-    ImmersiveSetupCrossContextStatus,
+    currentSetupGuideStatus,
+    SetupGuideCrossContextStatus,
 } from '../../settings/settings'
 import type { SocialNetworkUI } from '../../social-network/ui'
 import { memoizePromise } from '../../utils/memoize'
@@ -48,8 +48,8 @@ const _tasks = {
         },
         (x) => x,
     ),
-    async immersiveSetup(for_: ECKeyIdentifier) {
-        getActivatedUI().taskStartImmersiveSetup(for_)
+    async SetupGuide(for_: ECKeyIdentifier) {
+        getActivatedUI().taskStartSetupGuide(for_)
     },
     async noop() {},
 }
@@ -128,12 +128,12 @@ export function exclusiveTasks(...args: Parameters<typeof realTasks>) {
 sideEffect.then(untilDocumentReady).then(() => {
     if (GetContext() !== 'content') return
     const network = getActivatedUI().networkIdentifier
-    const id = currentImmersiveSetupStatus[network].value
+    const id = currentSetupGuideStatus[network].value
     const onStatusUpdate = (id: string) => {
-        const { persona, status }: ImmersiveSetupCrossContextStatus = JSON.parse(id || '{}')
-        if (persona && status) _tasks.immersiveSetup(Identifier.fromString(persona, ECKeyIdentifier).unwrap())
+        const { persona, status }: SetupGuideCrossContextStatus = JSON.parse(id || '{}')
+        if (persona && status) _tasks.SetupGuide(Identifier.fromString(persona, ECKeyIdentifier).unwrap())
     }
-    currentImmersiveSetupStatus[network].addListener(onStatusUpdate)
-    currentImmersiveSetupStatus[network].readyPromise.then(onStatusUpdate)
+    currentSetupGuideStatus[network].addListener(onStatusUpdate)
+    currentSetupGuideStatus[network].readyPromise.then(onStatusUpdate)
     onStatusUpdate(id)
 })

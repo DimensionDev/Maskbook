@@ -25,7 +25,7 @@ import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePa
 import { exclusiveTasks } from './extension/content-script/tasks'
 import { Flags } from './utils/flags'
 
-if (Flags.matrix_based_service_enabled) {
+if (process.env.NODE_ENV === 'development') {
     require('./network/matrix/instance')
 }
 
@@ -138,7 +138,6 @@ console.log('Build info', {
     DIRTY: process.env.DIRTY,
     TAG_DIRTY: process.env.TAG_DIRTY,
 })
-console.log('Flags', Flags)
 
 // Friendly to debug
 Object.assign(window, {

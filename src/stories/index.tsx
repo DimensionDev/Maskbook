@@ -1,7 +1,7 @@
 import './Welcome'
 import './OptionsPage'
 import './Injections'
-import './Immersive-Setup'
+import './SetupGuide'
 import './Plugin-RedPackets'
 import './Settings'
 import './shared'

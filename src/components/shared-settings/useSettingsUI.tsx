@@ -60,7 +60,6 @@ function SharedListItem(
         <ListItem
             onClick={onClick}
             {...((button ? { button: true } : { component: 'div' }) as any)}
-            disableGutters
             classes={{
                 root: classes.listItemRoot,
                 container: classes.container,

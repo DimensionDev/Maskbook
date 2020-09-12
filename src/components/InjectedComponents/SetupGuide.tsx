@@ -9,7 +9,7 @@ import {
     ThemeProvider,
     InputAdornment,
     LinearProgress,
-    createMuiTheme,
+    unstable_createMuiStrictModeTheme,
     IconButton,
 } from '@material-ui/core'
 import classNames from 'classnames'
@@ -17,16 +17,15 @@ import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
 import CloseIcon from '@material-ui/icons/Close'
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 import stringify from 'json-stable-stringify'
-import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import ShowcaseBox from '../../../extension/options-page/DashboardComponents/ShowcaseBox'
+import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { merge, cloneDeep, noop } from 'lodash-es'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { getActivatedUI } from '../../../social-network/ui'
-import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../../settings/settings'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
-import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../../database/type'
-import Services from '../../../extension/service'
+import { useI18N } from '../../utils/i18n-next-ui'
+import { getActivatedUI } from '../../social-network/ui'
+import { currentSetupGuideStatus, SetupGuideCrossContextStatus } from '../../settings/settings'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
+import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
+import Services from '../../extension/service'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -192,7 +191,7 @@ function WizardDialog(props: WizardDialogProps) {
                                 return theme.palette.warning
                         }
                     }
-                    return createMuiTheme({
+                    return unstable_createMuiStrictModeTheme({
                         ...theme,
                         palette: {
                             ...theme.palette,
@@ -200,14 +199,14 @@ function WizardDialog(props: WizardDialogProps) {
                         },
                     })
                 }}>
-                <Paper id="draggable_handle" className={classes.root}>
+                <Paper className={classes.root}>
                     <header className={classes.header}>
                         <Typography className={classes.primary} color="textPrimary" variant="h1">
                             {title}
                         </Typography>
                         {optional ? (
                             <Typography className={classes.secondary} color="textSecondary" variant="body2">
-                                {t('immersive_setup_optional')}
+                                {t('setup_guide_optional')}
                             </Typography>
                         ) : null}
                     </header>
@@ -219,13 +218,13 @@ function WizardDialog(props: WizardDialogProps) {
                         variant="determinate"
                         value={completion}></LinearProgress>
                     {onBack ? (
-                        <IconButton className={classes.back} size="small">
-                            <ArrowBackIosOutlinedIcon cursor="pointer" onClick={onBack}></ArrowBackIosOutlinedIcon>
+                        <IconButton className={classes.back} size="small" onClick={onBack}>
+                            <ArrowBackIosOutlinedIcon cursor="pointer" />
                         </IconButton>
                     ) : null}
                     {onClose ? (
-                        <IconButton className={classes.close} size="small">
-                            <CloseIcon cursor="pointer" onClick={onClose}></CloseIcon>
+                        <IconButton className={classes.close} size="small" onClick={onClose}>
+                            <CloseIcon cursor="pointer" />
                         </IconButton>
                     ) : null}
                 </Paper>
@@ -262,6 +261,8 @@ interface FindUsernameProps extends Partial<WizardDialogProps> {
 
 function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange = noop }: FindUsernameProps) {
     const { t } = useI18N()
+    const ui = getActivatedUI()
+
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
     const [binder, inputRef] = useCapturedInput(onUsernameChange, [])
@@ -272,7 +273,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                 e.stopPropagation()
                 if (e.key === 'Enter') {
                     e.preventDefault()
-                    onConnect?.()
+                    ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, username))
                 }
             })(),
         [onConnect, binder],
@@ -281,7 +282,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
         <WizardDialog
             completion={33.33}
             status="undetermined"
-            title={t('immersive_setup_find_username_title')}
+            title={t('setup_guide_find_username_title')}
             content={
                 <form>
                     <TextField
@@ -304,18 +305,17 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     <Typography
                         className={classes.tip}
                         variant="body2"
-                        dangerouslySetInnerHTML={{ __html: t('immersive_setup_find_username_text') }}></Typography>
+                        dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}></Typography>
                 </form>
             }
             footer={
                 <ActionButtonPromise
                     className={classes.button}
                     variant="contained"
-                    color="primary"
-                    init={t('immersive_setup_connect_auto')}
+                    init={t('setup_guide_connect_auto')}
                     waiting={t('connecting')}
                     complete={t('done')}
-                    failed={t('immersive_setup_connect_failed')}
+                    failed={t('setup_guide_connect_failed')}
                     executor={onConnect}
                     completeOnClick={onDone}
                     disabled={!username}
@@ -360,14 +360,14 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
             completion={100}
             status={createStatus}
             optional
-            title={t('immersive_setup_say_hello_title')}
+            title={t('setup_guide_say_hello_title')}
             content={
                 <form>
                     <Typography className={classNames(classes.tip, sayHelloWorldClasses.primary)} variant="body2">
-                        {t('immersive_setup_say_hello_primary')}
+                        {t('setup_guide_say_hello_primary')}
                     </Typography>
                     <Typography className={classNames(classes.tip, sayHelloWorldClasses.secondary)} variant="body2">
-                        {t('immersive_setup_say_hello_secondary')}
+                        {t('setup_guide_say_hello_secondary')}
                     </Typography>
                 </form>
             }
@@ -376,11 +376,10 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                     <ActionButtonPromise
                         className={classes.button}
                         variant="contained"
-                        color="primary"
-                        init={t('immersive_setup_create_post_auto')}
+                        init={t('setup_guide_create_post_auto')}
                         waiting={t('creating')}
                         complete={t('done')}
-                        failed={t('immersive_setup_create_post_failed')}
+                        failed={t('setup_guide_create_post_failed')}
                         executor={onCreate}
                         completeOnClick={onSkip}
                         completeIcon={null}
@@ -403,23 +402,22 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
 }
 //#endregion
 
-//#region setup guide
-export interface SetupGuideProps {
-    provePost: string
+//#region setup guide ui
+interface SetupGuideUIProps {
     persona: PersonaIdentifier
     onClose?: () => void
 }
 
-export function SetupGuide(props: SetupGuideProps) {
+function SetupGuideUI(props: SetupGuideUIProps) {
     const { t } = useI18N()
-    const { persona, provePost } = props
+    const { persona } = props
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
     const ui = getActivatedUI()
 
     //#region parse setup status
-    const lastStateRef = currentImmersiveSetupStatus[ui.networkIdentifier]
+    const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
     const lastState_ = useValueRef(lastStateRef)
-    const lastState = useMemo<ImmersiveSetupCrossContextStatus>(() => {
+    const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
         try {
             return JSON.parse(lastState_)
         } catch {
@@ -440,10 +438,6 @@ export function SetupGuide(props: SetupGuideProps) {
     const [username, setUsername] = useState(getUsername)
     //#endregion
 
-    //#region paste status
-    const [pastedStatus, setPastedStatus] = useState<boolean | 'undetermined'>('undetermined')
-    //#ednregion
-
     //#region create post status
     const [createStatus, setCreateStatus] = useState<boolean | 'undetermined'>('undetermined')
     //#endregion
@@ -451,11 +445,11 @@ export function SetupGuide(props: SetupGuideProps) {
     const onNext = async () => {
         switch (step) {
             case SetupGuideStep.FindUsername:
-                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
+                currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.SayHelloWorld,
                     username,
                     persona: persona.toText(),
-                } as ImmersiveSetupCrossContextStatus)
+                } as SetupGuideCrossContextStatus)
                 ui.taskGotoNewsFeedPage()
                 setStep(SetupGuideStep.SayHelloWorld)
                 break
@@ -468,11 +462,11 @@ export function SetupGuide(props: SetupGuideProps) {
         switch (step) {
             case SetupGuideStep.SayHelloWorld:
                 const username_ = getUsername()
-                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
+                currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.FindUsername,
                     username: '', // ensure staying find-username page
                     persona: persona.toText(),
-                } as ImmersiveSetupCrossContextStatus)
+                } as SetupGuideCrossContextStatus)
                 const connected = new ProfileIdentifier(ui.networkIdentifier, username_)
                 await Services.Identity.detachProfile(connected)
                 setStep(SetupGuideStep.FindUsername)
@@ -501,14 +495,14 @@ export function SetupGuide(props: SetupGuideProps) {
         ])
     }
     const onCreate = async () => {
-        const content = t('immersive_setup_say_hello_content')
+        const content = t('setup_guide_say_hello_content')
         await navigator.clipboard.writeText(content)
         ui.taskOpenComposeBox(content, {
             shareToEveryOne: true,
         })
     }
     const onClose = () => {
-        currentImmersiveSetupStatus[ui.networkIdentifier].value = ''
+        currentSetupGuideStatus[ui.networkIdentifier].value = ''
         props.onClose?.()
     }
 
@@ -537,5 +531,27 @@ export function SetupGuide(props: SetupGuideProps) {
         default:
             return null
     }
+}
+//#endregion
+
+//#region setup guide
+const useSetupGuideStyles = makeStyles((theme: Theme) => ({
+    root: {
+        position: 'fixed',
+        zIndex: 9999,
+        maxWidth: 550,
+        top: '2em',
+        right: '2em',
+    },
+}))
+export interface SetupGuideProps extends SetupGuideUIProps {}
+
+export function SetupGuide(props: SetupGuideProps) {
+    const classes = useSetupGuideStyles()
+    return (
+        <div className={classes.root}>
+            <SetupGuideUI {...props} />
+        </div>
+    )
 }
 //#endregion

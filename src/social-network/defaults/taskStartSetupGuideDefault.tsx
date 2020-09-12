@@ -1,29 +1,17 @@
 import React from 'react'
 import type { PersonaIdentifier } from '../../database/type'
-import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
-import { Draggable } from '../../components/InjectedComponents/ImmersiveGuide/Draggable'
+import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
 import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'
-import { useValueRef } from '../../utils/hooks/useValueRef'
 import type { SocialNetworkUI } from '../ui'
-import { SetupGuide, SetupGuideProps } from '../../components/InjectedComponents/ImmersiveGuide/SetupGuide'
+import { SetupGuide, SetupGuideProps } from '../../components/InjectedComponents/SetupGuide'
 import { Flags } from '../../utils/flags'
 
-function UI({
-    post,
-    unmount,
-    persona,
-    ...rest
-}: { unmount: () => void; post: ValueRef<string>; persona: PersonaIdentifier } & Partial<SetupGuideProps>) {
-    const provePost = useValueRef(post)
-    return (
-        <Draggable>
-            <SetupGuide persona={persona} provePost={provePost} onClose={unmount}></SetupGuide>
-        </Draggable>
-    )
+function UI({ unmount, persona }: { unmount: () => void; persona: PersonaIdentifier } & Partial<SetupGuideProps>) {
+    return <SetupGuide persona={persona} onClose={unmount} />
 }
 let mounted = false
-export function createTaskStartImmersiveSetupDefault(_: () => SocialNetworkUI, props: Partial<SetupGuideProps> = {}) {
+export function createTaskStartSetupGuideDefault(_: () => SocialNetworkUI, props: Partial<SetupGuideProps> = {}) {
     let shadowRoot: ShadowRoot
     return (for_: PersonaIdentifier) => {
         if (mounted) return
@@ -34,7 +22,6 @@ export function createTaskStartImmersiveSetupDefault(_: () => SocialNetworkUI, p
         const unmount = renderInShadowRoot(
             <UI
                 persona={for_}
-                post={provePost}
                 unmount={() => {
                     unmount()
                     mounted = false
