@@ -58,13 +58,13 @@ function SharedListItem(
     const classes = useStylesExtends(useStyles(), props)
     return (
         <ListItem
-            onClick={onClick}
-            {...((button ? { button: true } : { component: 'div' }) as any)}
             classes={{
                 root: classes.listItemRoot,
                 container: classes.container,
                 secondaryAction: classes.secondaryAction,
-            }}>
+            }}
+            onClick={onClick}
+            {...((button ? { button: true } : { component: 'div' }) as any)}>
             {icon ? <ListItemIcon classes={{ root: classes.listItemIcon }}>{icon}</ListItemIcon> : null}
             <ListItemText classes={{ primary: classes.listItemText }} primary={primary} secondary={secondary} />
             {action}
