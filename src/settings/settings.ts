@@ -82,7 +82,7 @@ export const languageSettings = createGlobalSettings<Language>(
 export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
 export const currentSelectedIdentity = createNetworkSettings('currentSelectedIdentity')
 
-export type ImmersiveSetupCrossContextStatus = {
+export type SetupGuideCrossContextStatus = {
     /** The persona to be connected */
     persona?: string
     /** The user name given by user */
@@ -90,7 +90,7 @@ export type ImmersiveSetupCrossContextStatus = {
     /** The WIP step */
     status?: SetupGuideStep
 }
-export const currentImmersiveSetupStatus = createNetworkSettings('currentImmersiveSetupStatus')
+export const currentSetupGuideStatus = createNetworkSettings('currentSetupGuideStatus')
 export const currentImportingBackup = createGlobalSettings<boolean>('importingBackup', false, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })

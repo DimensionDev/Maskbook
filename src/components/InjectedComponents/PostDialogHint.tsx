@@ -7,7 +7,7 @@ import { useMyIdentities } from '../DataSource/useActivatedUI'
 import type { BannerProps } from '../Welcomes/Banner'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { currentImmersiveSetupStatus } from '../../settings/settings'
+import { currentSetupGuideStatus } from '../../settings/settings'
 import { getActivatedUI } from '../../social-network/ui'
 
 const useStyles = makeStyles((theme) => ({
@@ -62,7 +62,7 @@ export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
 }
 export function PostDialogHint(props: PostDialogHintProps) {
     const identities = useMyIdentities()
-    const connecting = useValueRef(currentImmersiveSetupStatus[getActivatedUI().networkIdentifier])
+    const connecting = useValueRef(currentSetupGuideStatus[getActivatedUI().networkIdentifier])
     if (connecting) return null
     if (identities.length === 0) return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     return <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />

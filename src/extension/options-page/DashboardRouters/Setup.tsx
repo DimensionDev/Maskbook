@@ -319,7 +319,7 @@ export function ConnectNetwork() {
     const { identifier } = useQueryParams(['identifier'])
     const { value = null, loading, error } = useAsync(async () => {
         const persona = initializedPersonas.find((x) => x.identifier.toText() === identifier)
-        // auto-finished by immersive guider
+        // auto-finished by setup guide
         if (persona?.linkedProfiles.size) {
             history.replace(Flags.has_no_browser_tab_ui ? DashboardRoute.Nav : DashboardRoute.Personas)
             return null

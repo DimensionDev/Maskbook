@@ -11,7 +11,7 @@ function UI({ unmount, persona }: { unmount: () => void; persona: PersonaIdentif
     return <SetupGuide persona={persona} onClose={unmount} />
 }
 let mounted = false
-export function createTaskStartImmersiveSetupDefault(_: () => SocialNetworkUI, props: Partial<SetupGuideProps> = {}) {
+export function createTaskStartSetupGuideDefault(_: () => SocialNetworkUI, props: Partial<SetupGuideProps> = {}) {
     let shadowRoot: ShadowRoot
     return (for_: PersonaIdentifier) => {
         if (mounted) return

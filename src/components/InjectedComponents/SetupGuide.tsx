@@ -22,7 +22,7 @@ import ShowcaseBox from '../../extension/options-page/DashboardComponents/Showca
 import { merge, cloneDeep, noop } from 'lodash-es'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { getActivatedUI } from '../../social-network/ui'
-import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../settings/settings'
+import { currentSetupGuideStatus, SetupGuideCrossContextStatus } from '../../settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
@@ -414,9 +414,9 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const ui = getActivatedUI()
 
     //#region parse setup status
-    const lastStateRef = currentImmersiveSetupStatus[ui.networkIdentifier]
+    const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
     const lastState_ = useValueRef(lastStateRef)
-    const lastState = useMemo<ImmersiveSetupCrossContextStatus>(() => {
+    const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
         try {
             return JSON.parse(lastState_)
         } catch {
@@ -444,11 +444,11 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const onNext = async () => {
         switch (step) {
             case SetupGuideStep.FindUsername:
-                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
+                currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.SayHelloWorld,
                     username,
                     persona: persona.toText(),
-                } as ImmersiveSetupCrossContextStatus)
+                } as SetupGuideCrossContextStatus)
                 ui.taskGotoNewsFeedPage()
                 setStep(SetupGuideStep.SayHelloWorld)
                 break
@@ -461,11 +461,11 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         switch (step) {
             case SetupGuideStep.SayHelloWorld:
                 const username_ = getUsername()
-                currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
+                currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.FindUsername,
                     username: '', // ensure staying find-username page
                     persona: persona.toText(),
-                } as ImmersiveSetupCrossContextStatus)
+                } as SetupGuideCrossContextStatus)
                 const connected = new ProfileIdentifier(ui.networkIdentifier, username_)
                 await Services.Identity.detachProfile(connected)
                 setStep(SetupGuideStep.FindUsername)
@@ -501,7 +501,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         })
     }
     const onClose = () => {
-        currentImmersiveSetupStatus[ui.networkIdentifier].value = ''
+        currentSetupGuideStatus[ui.networkIdentifier].value = ''
         props.onClose?.()
     }
 

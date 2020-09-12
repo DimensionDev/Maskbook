@@ -24,7 +24,7 @@ import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/in
 import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
 import { injectKnownIdentityAtFacebook } from './UI/injectKnownIdentity'
-import { createTaskStartImmersiveSetupDefault } from '../../social-network/defaults/taskStartImmersiveSetupDefault'
+import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
 import { notifyPermissionUpdate } from '../../utils/permissions'
 import { Flags } from '../../utils/flags'
@@ -105,7 +105,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     taskUploadToPostBox: uploadToPostBoxFacebook,
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
-    taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(() => facebookUISelf),
+    taskStartSetupGuide: createTaskStartSetupGuideDefault(() => facebookUISelf),
     taskGotoProfilePage(profile) {
         // there is no PWA way on Facebook desktop.
         // mobile not tested

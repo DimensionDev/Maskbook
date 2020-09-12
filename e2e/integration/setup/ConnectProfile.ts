@@ -64,7 +64,7 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             // dimiss dialogs
             await sns.dimissDialog(snsPage)
 
-            // wait maskbook inject immersive dialog
+            // wait maskbook inject setup guide
             await snsPage.waitFor(sns.setupGuideSelector)
 
             // validate username
@@ -90,7 +90,7 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             // redirect to news feed page
             await snsPage.waitFor(sns.composeEditorSelector)
 
-            // wait maskbook inject immersive dialog
+            // wait maskbook inject setup guide
             await snsPage.waitFor(sns.setupGuideSelector)
 
             // click the 'create' button
