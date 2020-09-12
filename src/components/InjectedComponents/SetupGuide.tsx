@@ -18,7 +18,6 @@ import CloseIcon from '@material-ui/icons/Close'
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 import stringify from 'json-stable-stringify'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
-import ShowcaseBox from '../../extension/options-page/DashboardComponents/ShowcaseBox'
 import { merge, cloneDeep, noop } from 'lodash-es'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { getActivatedUI } from '../../social-network/ui'
@@ -262,6 +261,8 @@ interface FindUsernameProps extends Partial<WizardDialogProps> {
 
 function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange = noop }: FindUsernameProps) {
     const { t } = useI18N()
+    const ui = getActivatedUI()
+
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
     const [binder, inputRef] = useCapturedInput(onUsernameChange, [])
@@ -272,7 +273,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                 e.stopPropagation()
                 if (e.key === 'Enter') {
                     e.preventDefault()
-                    onConnect?.()
+                    ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, username))
                 }
             })(),
         [onConnect, binder],
