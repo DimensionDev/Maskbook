@@ -85,7 +85,7 @@ interface DonateDialogUIProps
     address?: string
     open: boolean
     onDonate(opt: DonatePayload): Promise<void> | void
-    onClose(): void
+    onClose?: () => void
     wallets: WalletDetails[] | undefined
     tokens: ERC20TokenDetails[] | undefined
 }

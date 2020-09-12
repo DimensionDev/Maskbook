@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import type { DonateResult } from './types'
 import { sendTx } from '../Wallet/transaction'
-import { getNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
+import { getNetworkSettings } from '../Wallet/UI/EthereumNetworkSettings'
 import { GITCOIN_ETH_ADDRESS } from '../Wallet/token'
 import { getCurrentEthChain } from '../../extension/background-script/PluginService'
 import { createBulkCheckoutContract } from '../Wallet/api'

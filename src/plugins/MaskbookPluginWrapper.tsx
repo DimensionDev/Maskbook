@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles, Typography, ThemeProvider } from '@material-ui/core'
 import { getActivatedUI } from '../social-network/ui'
-import { MaskbookIcon } from '../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
+import { MaskbookIcon } from '../resources/MaskbookIcon'
 
 interface PluginWrapperProps {
     pluginName: string

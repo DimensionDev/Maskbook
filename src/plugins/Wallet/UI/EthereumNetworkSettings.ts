@@ -1,8 +1,8 @@
-import { EthereumNetwork } from '../../database/types'
+import { EthereumNetwork } from '../database/types'
 import contractMap from 'eth-contract-metadata'
-import mainnet from '../../erc20/mainnet.json'
-import rinkeby from '../../erc20/rinkeby.json'
-import type { ERC20Token } from '../../token'
+import mainnet from '../erc20/mainnet.json'
+import rinkeby from '../erc20/rinkeby.json'
+import type { ERC20Token } from '../token'
 import { uniqBy } from 'lodash-es'
 
 const settings = {

@@ -25,7 +25,7 @@ const GlobalCss = withStyles({
             overflowX: 'hidden',
             margin: '0 auto',
             width: 340,
-            minHeight: 191,
+            minHeight: 180,
             maxWidth: '100%',
             backgroundColor: 'transparent',
         },

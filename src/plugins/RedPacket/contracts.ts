@@ -9,7 +9,7 @@ import type { CheckRedPacketAvailabilityResult, CreateRedPacketResult, RedPacket
 import { EthereumTokenType } from '../Wallet/database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 import { sendTx } from '../Wallet/transaction'
-import { getNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
+import { getNetworkSettings } from '../Wallet/UI/EthereumNetworkSettings'
 import { createRedPacketTransaction } from './database'
 import { getCurrentEthChain } from '../../extension/background-script/PluginService'
 import type { TxHashID, DatabaseID } from '../Wallet/api'

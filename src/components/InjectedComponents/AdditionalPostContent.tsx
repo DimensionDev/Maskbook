@@ -7,7 +7,7 @@ import { TypedMessageRendererProps, DefaultTypedMessageRenderer } from './TypedM
 import CheckIcon from '@material-ui/icons/Check'
 import CloseIcon from '@material-ui/icons/Close'
 import green from '@material-ui/core/colors/green'
-import { MaskbookIcon } from '../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
+import { MaskbookIcon } from '../../resources/MaskbookIcon'
 
 export enum AdditionalIcon {
     check = 'check',

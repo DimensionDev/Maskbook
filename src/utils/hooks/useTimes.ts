@@ -11,7 +11,7 @@ export interface TimesOptions {
 }
 
 /**
- * Call callback with given times
+ * Call callback n times
  * @param callback
  * @param options
  */

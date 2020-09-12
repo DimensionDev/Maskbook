@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { makeStyles } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
-import { MaskbookIcon } from '../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
+import { MaskbookIcon } from '../../resources/MaskbookIcon'
 
 const useStyles = makeStyles((theme) => ({
     img: {

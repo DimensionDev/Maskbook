@@ -14,7 +14,7 @@ import BigNumber from 'bignumber.js'
 import { EthereumTokenType } from '../Wallet/database/types'
 import { isNumber } from 'lodash-es'
 import { DonateSuccessDialog, DonateFailDialog } from './Dialogs'
-import { getNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
+import { getNetworkSettings } from '../Wallet/UI/EthereumNetworkSettings'
 import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import { formatBalance } from '../Wallet/formatter'
 

@@ -6,7 +6,7 @@ import type { GitcoinDonationPayload, GitcoinDonationRecord, GitcoinDonationReco
 import { PluginMessageCenter } from '../PluginMessages'
 import type { _UnboxPromise } from 'async-call-rpc/full'
 import { omit } from 'lodash-es'
-import { getNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
+import { getNetworkSettings } from '../Wallet/UI/EthereumNetworkSettings'
 import { createPluginWalletAccess } from '../../database/Plugin/wrap-wallet-for-plugin'
 import { getCurrentEthChain } from '../../extension/background-script/PluginService'
 
