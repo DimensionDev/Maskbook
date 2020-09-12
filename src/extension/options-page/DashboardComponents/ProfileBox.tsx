@@ -4,13 +4,13 @@ import { definedSocialNetworkWorkers } from '../../../social-network/worker'
 
 import ProviderLine, { ProviderLineProps } from './ProviderLine'
 import getCurrentNetworkUI from '../../../social-network/utils/getCurrentNetworkUI'
-import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../../settings/settings'
+import { currentSetupGuideStatus, SetupGuideCrossContextStatus } from '../../../settings/settings'
 import { exclusiveTasks } from '../../content-script/tasks'
 import stringify from 'json-stable-stringify'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardPersonaUnlinkConfirmDialog } from '../DashboardDialogs/Persona'
 import { sleep } from '../../../utils/utils'
-import { SetupGuideStep } from '../../../components/InjectedComponents/ImmersiveGuide/SetupGuide'
+import { SetupGuideStep } from '../../../components/InjectedComponents/SetupGuide'
 
 interface ProfileBoxProps {
     persona: Persona | null
@@ -38,17 +38,17 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
 
         // FIXME:
         // setting storage race condition here
-        currentImmersiveSetupStatus[provider.network].value = stringify({
+        currentSetupGuideStatus[provider.network].value = stringify({
             status: SetupGuideStep.FindUsername,
             persona: persona.identifier.toText(),
-        } as ImmersiveSetupCrossContextStatus)
+        } as SetupGuideCrossContextStatus)
         await sleep(100)
         exclusiveTasks(getCurrentNetworkUI(provider.network).getHomePage(), {
             active: true,
             autoClose: false,
             important: true,
             memorable: false,
-        }).immersiveSetup(persona.identifier)
+        }).SetupGuide(persona.identifier)
     }
     const onDisconnect = (provider: typeof providers[0]) => {
         setDetachProfile({ nickname: persona?.nickname, identifier: provider.identifier })

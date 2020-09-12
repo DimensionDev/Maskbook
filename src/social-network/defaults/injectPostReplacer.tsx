@@ -1,5 +1,5 @@
 import React from 'react'
-import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
+import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
 import { PostInfoContext } from '../../components/DataSource/usePostInfo'
 import { PostReplacer, PostReplacerProps } from '../../components/InjectedComponents/PostReplacer'
 import type { PostInfo } from '../PostInfo'
@@ -37,6 +37,7 @@ export function injectPostReplacer<T extends string>(
                 shadow: () => current.rootNodeProxy.afterShadow,
                 normal: () => current.rootNodeProxy.after,
                 concurrent: true,
+                keyBy: 'post-replacer',
             },
         )
     }

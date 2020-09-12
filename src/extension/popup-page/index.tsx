@@ -91,18 +91,12 @@ function PopupUI() {
                 <Button
                     className={classes.button}
                     variant="text"
-                    color="primary"
                     startIcon={<PlayCircleIcon />}
                     onClick={openOptionsPage}>
                     {t('popup_setup_first_persona')}
                 </Button>
             ) : (
-                <Button
-                    className={classes.button}
-                    variant="text"
-                    color="primary"
-                    startIcon={<TuneIcon />}
-                    onClick={openOptionsPage}>
+                <Button className={classes.button} variant="text" startIcon={<TuneIcon />} onClick={openOptionsPage}>
                     {t('popup_enter_dashboard')}
                 </Button>
             )}

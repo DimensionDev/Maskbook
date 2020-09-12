@@ -1,10 +1,8 @@
 import React, { useCallback, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import ExpansionPanel from '@material-ui/core/ExpansionPanel'
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import type { Profile } from '../../database'
-import { List } from '@material-ui/core'
+import { List, Accordion, AccordionSummary } from '@material-ui/core'
 import { PersonOrGroupInList, PersonOrGroupInListProps } from './SelectPeopleAndGroups'
 import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
@@ -35,7 +33,7 @@ const useStyles = makeStyles({
     },
 })
 
-const useExpansionPanelSummaryStyle = makeStyles({
+const useAccordionSummaryStyle = makeStyles({
     root: {
         padding: 0,
     },
@@ -77,7 +75,7 @@ export interface ChooseIdentityProps extends withClasses<KeysInferFromUseStyles<
  */
 export const ChooseIdentity: React.FC<ChooseIdentityProps> = (props) => {
     const classes = useStylesExtends(useStyles(), props)
-    const expansionPanelSummaryClasses = useStylesExtends(useExpansionPanelSummaryStyle(), props)
+    const expansionPanelSummaryClasses = useStylesExtends(useAccordionSummaryStyle(), props)
     const [expanded, setExpanded] = React.useState<boolean>(false)
 
     const all = useMyIdentities()
@@ -91,15 +89,15 @@ export const ChooseIdentity: React.FC<ChooseIdentityProps> = (props) => {
 
     return (
         <div className={classes.root}>
-            <ExpansionPanel classes={{ root: classes.expansionPanelRoot }} expanded={expanded} onChange={handleChange}>
-                <ExpansionPanelSummary
+            <Accordion classes={{ root: classes.expansionPanelRoot }} expanded={expanded} onChange={handleChange}>
+                <AccordionSummary
                     classes={expansionPanelSummaryClasses}
                     expandIcon={availableIdentities.length > 1 ? <ExpandMoreIcon /> : null}>
                     <PersonOrGroupInList
                         ListItemProps={{ dense: true, classes: { root: classes.listItemRoot } }}
                         item={current}
                         {...props.PersonOrGroupInListProps}></PersonOrGroupInList>
-                </ExpansionPanelSummary>
+                </AccordionSummary>
                 {availableIdentities.length ? (
                     <List classes={{ root: classes.list }}>
                         {availableIdentities.map((person) =>
@@ -118,7 +116,7 @@ export const ChooseIdentity: React.FC<ChooseIdentityProps> = (props) => {
                         )}
                     </List>
                 ) : null}
-            </ExpansionPanel>
+            </Accordion>
         </div>
     )
 }

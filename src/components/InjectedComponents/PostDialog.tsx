@@ -44,7 +44,7 @@ import { EthereumTokenType } from '../../plugins/Wallet/database/types'
 import { isDAI, isOKB } from '../../plugins/Wallet/token'
 import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
+import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/utils'
 import { PluginUI } from '../../plugins/plugin'
@@ -204,7 +204,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     },
                                 }}
                             />
-                            {Flags.file_service_enabled && (
+                            {Flags.file_service_create_enabled && (
                                 <ClickableChip
                                     ChipProps={{
                                         label: (
@@ -272,7 +272,6 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         ) : null}
                         <Button
                             className={classes.button}
-                            color="primary"
                             variant="contained"
                             disabled={props.postBoxButtonDisabled}
                             onClick={props.onFinishButtonClicked}
@@ -291,7 +290,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     DialogProps={props.DialogProps}
                 />
             )}
-            {Flags.file_service_enabled && (
+            {Flags.file_service_create_enabled && (
                 <FileServiceDialog
                     classes={classes}
                     open={props.open && fileServiceDialogOpen}

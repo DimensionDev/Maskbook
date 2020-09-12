@@ -3,6 +3,10 @@ const isAndroidApp = process.env.architecture === 'app' && process.env.target ==
 
 // TODO: In future, we can turn this object into a Proxy to receive flags from remote
 export const Flags = {
+    __raw__: {
+        target: process.env.target,
+        architecture: process.env.architecture,
+    },
     /** There is no "tabs" to navigate to. We must be careful with this. */
     has_no_browser_tab_ui: process.env.architecture === 'app',
     /**
@@ -23,8 +27,9 @@ export const Flags = {
     support_eth_network_switch: process.env.NODE_ENV === 'development' || process.env.architecture === 'app',
     //#region Experimental features
     trader_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
-    file_service_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
+    file_service_create_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
     matrix_based_service_enabled: process.env.NODE_ENV === 'development',
+    metamask_support_enabled: process.env.architecture === 'web',
     //#endregion
 
     //#region Functionality missing / broken
@@ -45,3 +50,7 @@ export const Flags = {
     has_Safari_IndexedDB_bug: process.env.target === 'safari',
     //#endregion
 } as const
+
+if (process.env.NODE_ENV === 'development') {
+    console.log('Run with flags:', Flags)
+}

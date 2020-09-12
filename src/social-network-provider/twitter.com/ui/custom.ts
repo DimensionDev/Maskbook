@@ -62,6 +62,19 @@ function useTheme() {
                 breakpoints: {
                     values: { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 },
                 },
+                overrides: {
+                    MuiButton: {
+                        root: {
+                            borderRadius: 500,
+                            textTransform: 'none',
+                        },
+                    },
+                    MuiTab: {
+                        root: {
+                            textTransform: 'none',
+                        },
+                    },
+                },
             }),
         )
     }, [primaryColor, backgroundColor])

@@ -18,7 +18,7 @@ class Twitter implements SNS {
     // mount point
     setupGuideSelector = 'body > script[nonce] ~ span'
     postDialogHintSelector = '[data-testid="primaryColumn"] [role="progressbar"] ~ span'
-    postDialogModalSelector = 'body > script[nonce] ~ div[aria-hidden="true"]'
+    postDialogModalSelector = 'body > script[nonce] ~ div'
     postAffixingCanvasSelector = '[role="article"] [data-testid="tweet"] + div > div:first-child ~ span'
     commentSelector = '' // no comment for twitter
     commentBoxSelector = '' // no comment form for twitter

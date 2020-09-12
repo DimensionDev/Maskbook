@@ -51,7 +51,7 @@ export function DashboardContactDeleteConfirmDialog(
                         <DebounceButton variant="contained" color="danger" onClick={onDelete}>
                             {t('ok')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" color="default" onClick={props.onClose}>
+                        <DebounceButton variant="outlined" onClick={props.onClose}>
                             {t('cancel')}
                         </DebounceButton>
                     </SpacedButtonGroup>
@@ -112,10 +112,10 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactProps & 
                 }
                 footer={
                     <SpacedButtonGroup>
-                        <DebounceButton variant="contained" color="primary" onClick={onSubmit}>
+                        <DebounceButton variant="contained" onClick={onSubmit}>
                             {t('save')}
                         </DebounceButton>
-                        <ActionButton variant="outlined" color="default" onClick={props.onClose}>
+                        <ActionButton variant="outlined" onClick={props.onClose}>
                             {t('cancel')}
                         </ActionButton>
                     </SpacedButtonGroup>
@@ -161,7 +161,7 @@ export function DashboardContactSearchDialog(props: WrappedDialogProps<{ onSearc
                 }
                 footer={
                     <SpacedButtonGroup>
-                        <ActionButton variant="contained" color="primary" disabled={!text} onClick={searchText}>
+                        <ActionButton variant="contained" disabled={!text} onClick={searchText}>
                             {t('search')}
                         </ActionButton>
                     </SpacedButtonGroup>

@@ -24,9 +24,9 @@ import {
 } from '@material-ui/core'
 import { useStylesExtends, or } from '../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
-import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
+import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
+import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { getPostUrl } from '../../../social-network/utils/getPostUrl'
 import { renderWithRedPacketMetadata } from '../utils'
 import { useWallets } from '../../shared/useWallet'
@@ -230,7 +230,6 @@ export function RedPacketInDecryptedPostClaimDialog(
                 <Button
                     className={classes.button}
                     style={{ marginLeft: 'auto', marginRight: 0, width: 100 }}
-                    color="primary"
                     variant="contained"
                     onClick={() => props.onClaimRedPacket(selectedWalletAddress!, claiming?.rpid, defaultChecked)}>
                     {t('ok')}

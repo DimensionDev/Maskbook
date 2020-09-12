@@ -142,7 +142,6 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                 footer={
                     <DebounceButton
                         variant="contained"
-                        color="primary"
                         onClick={onSubmit}
                         disabled={!(state[0] === 0 && name && mnemonic) && !(state[0] === 1 && name && privKey)}>
                         {t('import')}
@@ -225,7 +224,6 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                             <FormControlLabel
                                 control={
                                     <Checkbox
-                                        color="primary"
                                         checked={confirmed}
                                         onChange={() => setConfirmed((confirmed) => !confirmed)}
                                     />
@@ -250,11 +248,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                     </>
                 }
                 footer={
-                    <DebounceButton
-                        variant="contained"
-                        color="primary"
-                        onClick={onSubmit}
-                        disabled={!name || !confirmed}>
+                    <DebounceButton variant="contained" onClick={onSubmit} disabled={!name || !confirmed}>
                         {t('create')}
                     </DebounceButton>
                 }
@@ -390,7 +384,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
                 primary={t('add_token')}
                 content={<AbstractTab {...tabProps}></AbstractTab>}
                 footer={
-                    <DebounceButton disabled={!token} variant="contained" color="primary" onClick={onSubmit}>
+                    <DebounceButton disabled={!token} variant="contained" onClick={onSubmit}>
                         {t('import')}
                     </DebounceButton>
                 }
@@ -476,10 +470,10 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                 }
                 footer={
                     <SpacedButtonGroup>
-                        <DebounceButton variant="contained" color="primary" onClick={renameWallet}>
+                        <DebounceButton variant="contained" onClick={renameWallet}>
                             {t('ok')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" color="default" onClick={props.onClose}>
+                        <DebounceButton variant="outlined" onClick={props.onClose}>
                             {t('cancel')}
                         </DebounceButton>
                     </SpacedButtonGroup>
@@ -519,7 +513,7 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
                             data-testid="confirm_button">
                             {t('confirm')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" color="default" onClick={props.onClose}>
+                        <DebounceButton variant="outlined" onClick={props.onClose}>
                             {t('cancel')}
                         </DebounceButton>
                     </SpacedButtonGroup>
@@ -554,7 +548,7 @@ export function DashboardWalletHideTokenConfirmDialog(
                         <DebounceButton variant="contained" color="danger" onClick={onConfirm}>
                             {t('confirm')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" color="default" onClick={props.onClose}>
+                        <DebounceButton variant="outlined" onClick={props.onClose}>
                             {t('cancel')}
                         </DebounceButton>
                     </SpacedButtonGroup>
@@ -603,7 +597,7 @@ export function DashboardWalletErrorDialog(props: WrappedDialogProps<object>) {
                 primary={t('error_wallet')}
                 secondary={message}
                 footer={
-                    <Button variant="contained" color="primary" onClick={onClose}>
+                    <Button variant="contained" onClick={onClose}>
                         {t('ok')}
                     </Button>
                 }
@@ -761,8 +755,7 @@ export function DashboardWalletRedPacketDetailDialog(props: WrappedDialogProps<R
                             <ActionButton
                                 onClick={sayThanks}
                                 style={{ display: 'block', margin: 'auto', width: 200 }}
-                                variant="contained"
-                                color="primary">
+                                variant="contained">
                                 Say Thanks
                             </ActionButton>
                         )}

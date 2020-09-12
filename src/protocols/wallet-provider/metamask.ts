@@ -8,25 +8,24 @@ import { timeout } from '../../utils/utils'
 import { updateExoticWalletsFromSource } from '../../plugins/Wallet/wallet'
 import type { ExoticWalletRecord } from '../../plugins/Wallet/database/types'
 import { WalletProviderType } from '../../plugins/shared/findOutProvider'
+import { Result } from 'ts-results'
 
-const web3 = new w3()
-export const metamaskProvider = createMetaMaskProvider()
 class EthereumJSONRpcChannel implements EventBasedChannel {
     private e = new EventEmitter()
-    constructor(public currentProvider: AbstractProvider) {}
+    constructor(public currentProvider: Result<AbstractProvider, unknown>) {}
     send(data: any): void {
-        this.currentProvider.sendAsync(data, (error, result: unknown) => this.e.emit('m', result))
+        this.currentProvider.unwrap().sendAsync(data, (error, result: unknown) => this.e.emit('m', result))
     }
     on(eventListener: (data: unknown) => void) {
         this.e.on('m', eventListener)
         return () => void this.e.off('m', eventListener)
     }
 }
-const MetaMaskWeb3Provider = createMetaMaskProvider()
+const MetaMaskWeb3Provider = Result.wrap(createMetaMaskProvider)
 const MetamaskJSONRPC = AsyncCall<EthereumAPI>(
     {},
     {
-        channel: new EthereumJSONRpcChannel(metamaskProvider),
+        channel: new EthereumJSONRpcChannel(MetaMaskWeb3Provider),
         strict: false,
         log: { remoteError: true },
         key: 'Metamask',
@@ -35,6 +34,7 @@ const MetamaskJSONRPC = AsyncCall<EthereumAPI>(
 
 export const MetaMaskProvider: WalletProvider = {
     async checkAvailability() {
+        if (MetaMaskWeb3Provider.err) return false
         try {
             await timeout(MetamaskJSONRPC.eth_getBalance('0', 'latest'), 2000)
             return true
@@ -50,6 +50,6 @@ export const MetaMaskProvider: WalletProvider = {
         return list
     },
     getWeb3Provider() {
-        return MetaMaskWeb3Provider
+        return MetaMaskWeb3Provider.unwrap()
     },
 }

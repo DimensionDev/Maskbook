@@ -36,7 +36,7 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                     </form>
                 }
                 footer={
-                    <DebounceButton onClick={async () => {}} variant="contained" color="primary">
+                    <DebounceButton onClick={async () => {}} variant="contained">
                         {t('submit')}
                     </DebounceButton>
                 }></DashboardDialogWrapper>

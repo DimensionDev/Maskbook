@@ -1,5 +1,5 @@
-import * as React from 'react'
-import { Typography, Link, Chip } from '@material-ui/core'
+import React from 'react'
+import { Typography, Link } from '@material-ui/core'
 import anchorme from 'anchorme'
 import {
     TypedMessage,
@@ -17,7 +17,7 @@ import { Image } from '../shared/Image'
 import { useAsync } from 'react-use'
 import { getRendererOfTypedMessage } from '../../protocols/typed-message'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
-import { useI18N } from '../../utils/i18n-next-ui'
+import { PayloadReplacer } from './PayloadReplacer'
 
 interface MetadataRendererProps {
     metadata: TypedMessage['meta']
@@ -46,17 +46,12 @@ export const DefaultTypedMessageRenderer = React.memo(function DefaultTypedMessa
 export const DefaultTypedMessageTextRenderer = React.memo(function DefaultTypedMessageTextRenderer(
     props: TypedMessageRendererProps<TypedMessageText>,
 ) {
-    const { t } = useI18N()
     const { content } = props.message
     const deconstructed = deconstructPayload(content, null)
     return renderWithMetadata(
         props,
         <Typography component="span" color="textPrimary" variant="body1" data-testid="text_payload">
-            {deconstructed.ok ? (
-                <Chip label={t('post_substitute_label')} size="small" />
-            ) : (
-                <RenderText text={content} />
-            )}
+            {deconstructed.ok ? <PayloadReplacer payload={content} /> : <RenderText text={content} />}
         </Typography>,
     )
 })
@@ -69,14 +64,13 @@ registerTypedMessageRenderer('text', {
 export const DefaultTypedMessageAnchorRenderer = React.memo(function DefaultTypedMessageAnchorRenderer(
     props: TypedMessageRendererProps<TypedMessageAnchor>,
 ) {
-    const { t } = useI18N()
     const { content, href } = props.message
     const deconstructed = deconstructPayload(content, null)
     return renderWithMetadata(
         props,
         <Typography component="span" variant="body1" data-testid="anchor_payload">
             {deconstructed.ok ? (
-                <Chip label={t('post_substitute_label')} size="small" />
+                <PayloadReplacer payload={href} />
             ) : (
                 // TODO:
                 // shrink link size

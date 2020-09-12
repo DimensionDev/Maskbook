@@ -8,7 +8,7 @@ import {
     FormControlProps,
     DialogProps,
 } from '@material-ui/core'
-import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
+import { PortalShadowRoot } from '../../utils/shadow-root/ShadowRootPortal'
 import BigNumber from 'bignumber.js'
 import type { useSelectWallet } from './useWallet'
 import { EthereumTokenType } from '../Wallet/database/types'

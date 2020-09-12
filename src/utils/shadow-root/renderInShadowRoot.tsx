@@ -1,4 +1,4 @@
-import { create, Jss, SheetsRegistry } from 'jss'
+import { create, SheetsRegistry } from 'jss'
 import { jssPreset, StylesProvider, ThemeProvider } from '@material-ui/core/styles'
 import ReactDOM from 'react-dom'
 import React from 'react'
@@ -21,6 +21,7 @@ const previousShadowedElement = new Set<HTMLElement>()
 export function renderInShadowRoot(
     node: React.ReactNode,
     config: {
+        keyBy?: string
         shadow(): ShadowRoot
         normal(): HTMLElement
         concurrent?: boolean
@@ -51,6 +52,7 @@ export function renderInShadowRoot(
                 <ErrorBoundary>
                     <Maskbook {...config.rootProps} children={node} />
                 </ErrorBoundary>,
+                config.keyBy,
                 config.concurrent,
             )
         }
@@ -66,10 +68,11 @@ export function renderInShadowRoot(
                 unmount = mount(
                     element,
                     <ErrorBoundary>
-                        <RenderInShadowRootWrapper shadow={element}>
+                        <ShadowRootStyleProvider shadow={element}>
                             <Maskbook {...config.rootProps} children={node} />
-                        </RenderInShadowRootWrapper>
+                        </ShadowRootStyleProvider>
                     </ErrorBoundary>,
+                    config.keyBy,
                     config.concurrent,
                 )
             }
@@ -79,16 +82,37 @@ export function renderInShadowRoot(
     return () => rendered && unmount()
 }
 
-function mount(e: (HTMLElement & ShadowRoot) | HTMLElement, _: JSX.Element, concurrent?: boolean) {
+function mount(e: ({} | ShadowRoot) & HTMLElement, _: JSX.Element, keyBy = 'app', concurrent?: boolean) {
+    const container =
+        e.querySelector<HTMLElement>(`main.${keyBy}`) ||
+        (() => {
+            const dom = (e as ShadowRoot).appendChild(document.createElement('main'))
+            dom.className = keyBy
+            return dom
+        })()
     if (concurrent) {
-        const root = ReactDOM.unstable_createRoot(e)
+        const root = ReactDOM.unstable_createRoot(container)
         root.render(_)
         return () => root.unmount()
     } else {
-        ReactDOM.render(_, e)
-        return () => ReactDOM.unmountComponentAtNode(e)
+        ReactDOM.render(_, container)
+        return () => ReactDOM.unmountComponentAtNode(container)
     }
 }
+try {
+    // After the hosting DOM node removed, the mutation watcher will receive the event in async
+    // then unmount the React component.
+    // but before the unmount, JSS might update the CSS of disconnected DOM then throws error.
+    // These lines of code mute this kind of error in this case.
+    const orig = Object.getOwnPropertyDescriptor(HTMLStyleElement.prototype, 'sheet')!
+    Object.defineProperty(HTMLStyleElement.prototype, 'sheet', {
+        ...orig,
+        get(this: HTMLStyleElement) {
+            if (this.isConnected) return orig.get!.call(this)
+            return { cssRules: [], insertRule() {} }
+        },
+    })
+} catch (e) {}
 
 // ! let jss tell us if it has made an update
 class InformativeSheetsRegistry extends SheetsRegistry {
@@ -120,9 +144,9 @@ class InformativeSheetsRegistry extends SheetsRegistry {
     }
 }
 
-export const jssRegistryMap: WeakMap<ShadowRoot, InformativeSheetsRegistry> = new WeakMap()
+const jssRegistryMap: WeakMap<ShadowRoot, InformativeSheetsRegistry> = new WeakMap()
 
-export const useSheetsRegistryStyles = (_current: Node | null) => {
+export function useSheetsRegistryStyles(_current: Node | null) {
     const subscription = React.useMemo(() => {
         let registry: InformativeSheetsRegistry | null | undefined = null
         if (_current) {
@@ -140,47 +164,31 @@ export const useSheetsRegistryStyles = (_current: Node | null) => {
     }, [_current])
     return useSubscription(subscription)
 }
-
-interface RenderInShadowRootWrapperProps {
-    shadow: ShadowRoot
+const initOnceMap = new WeakMap<ShadowRoot, unknown>()
+function initOnce<T>(keyBy: ShadowRoot, init: () => T): T {
+    if (initOnceMap.has(keyBy)) return initOnceMap.get(keyBy) as T
+    const val = init()
+    initOnceMap.set(keyBy, val)
+    return val
 }
-
-class RenderInShadowRootWrapper extends React.PureComponent<RenderInShadowRootWrapperProps> {
-    proxy: HTMLElement = new Proxy(this.props.shadow as any, {
-        get(target, property: keyof ShadowRoot) {
-            if (property === 'parentNode') {
-                const host = target.getRootNode({ composed: true })
-                if (host !== document) {
-                    // ! severe error! The style cannot be managed by DOMRender
-                    return null
-                }
-                return target
-            }
-            return target[property]
-        },
+function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{ shadow: ShadowRoot }>) {
+    const { jss, registry, manager } = initOnce(shadow, () => {
+        const insertionPoint = document.createElement('div')
+        shadow.appendChild(document.createElement('head')).appendChild(insertionPoint)
+        const jss = create({
+            ...jssPreset(),
+            insertionPoint: insertionPoint,
+        })
+        const registry = new InformativeSheetsRegistry()
+        const manager = new WeakMap()
+        jssRegistryMap.set(shadow, registry)
+        return { jss, registry, manager }
     })
-    jss: Jss = create({
-        ...jssPreset(),
-        insertionPoint: this.proxy,
-    })
-    registry: InformativeSheetsRegistry = new InformativeSheetsRegistry()
-    manager = new WeakMap()
-    constructor(props: RenderInShadowRootWrapperProps) {
-        super(props)
-        jssRegistryMap.set(props.shadow, this.registry)
-    }
-    render() {
-        return (
-            // ! sheetsRegistry: We use this to get styles as a whole string
-            // ! sheetsManager: Material-ui uses this to detect if the style has been rendered
-            <StylesProvider
-                sheetsRegistry={this.registry}
-                jss={this.jss}
-                sheetsManager={this.manager}
-                children={this.props.children}
-            />
-        )
-    }
+    return (
+        // ! sheetsRegistry: We use this to get styles as a whole string
+        // ! sheetsManager: Material-ui uses this to detect if the style has been rendered
+        <StylesProvider sheetsRegistry={registry} jss={jss} sheetsManager={manager} children={props.children} />
+    )
 }
 
 class ErrorBoundary extends React.Component {
@@ -190,6 +198,7 @@ class ErrorBoundary extends React.Component {
         return this.props.children
     }
     componentDidCatch(error: Error) {
+        console.error(error)
         this.setState({ error })
     }
 }
@@ -202,16 +211,11 @@ function Maskbook(_props: MaskbookProps) {
     return (
         <ThemeProvider theme={theme}>
             <I18nextProvider i18n={i18nNextInstance}>
-                <React.StrictMode>
-                    <SnackbarProvider
-                        maxSnack={30}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right',
-                        }}>
+                <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                    <React.StrictMode>
                         <span {..._props} />
-                    </SnackbarProvider>
-                </React.StrictMode>
+                    </React.StrictMode>
+                </SnackbarProvider>
             </I18nextProvider>
         </ThemeProvider>
     )
