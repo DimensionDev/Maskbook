@@ -58,7 +58,7 @@ export function TokenListItem(props: TokenListItemProps) {
     )
 
     return (
-        <ListItem divider disableGutters>
+        <ListItem divider>
             <ListItemIcon>
                 <TokenIcon classes={{ coin: classes.coin }} name={token.name} address={token.address} />
             </ListItemIcon>
