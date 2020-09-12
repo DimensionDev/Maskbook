@@ -1,6 +1,6 @@
 import '../../social-network-provider/popup-page/index'
 import '../../setup.ui'
-import React, { useMemo } from 'react'
+import React, { useMemo, useCallback } from 'react'
 
 import { ThemeProvider, makeStyles, Theme, withStyles } from '@material-ui/core/styles'
 import { Button, useMediaQuery, Paper, Divider, Typography } from '@material-ui/core'
@@ -16,6 +16,8 @@ import { useI18N } from '../../utils/i18n-next-ui'
 import i18nNextInstance from '../../utils/i18n-next'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getUrl } from '../../utils/utils'
+import { useWallets } from '../../plugins/shared/useWallet'
+import { ChooseWallet } from '../../components/shared/ChooseWallet'
 
 const GlobalCss = withStyles({
     '@global': {
@@ -46,11 +48,15 @@ const useStyles = makeStyles((theme: Theme) => ({
         pointerEvents: 'none',
     },
     title: {
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: 500,
+        marginTop: theme.spacing(2),
+        '&:first-child': {
+            marginTop: 0,
+        },
     },
     divider: {
-        marginBottom: 20,
+        marginBottom: theme.spacing(2),
     },
     button: {
         fontSize: 16,
@@ -64,8 +70,10 @@ function PopupUI() {
     const classes = useStyles()
 
     const ui = getActivatedUI()
-    const myIdentities = useValueRef(ui.myIdentitiesRef)
-    const openOptionsPage = (event: React.MouseEvent) => {
+    const identities = useValueRef(ui.myIdentitiesRef)
+    const { data: wallets = [] } = useWallets()
+
+    const onEnter = useCallback((event: React.MouseEvent) => {
         if (event.shiftKey) {
             browser.tabs.create({
                 active: true,
@@ -74,29 +82,32 @@ function PopupUI() {
         } else {
             browser.runtime.openOptionsPage()
         }
-    }
+    }, [])
 
     return (
         <Paper className={classes.container}>
-            {myIdentities.length === 0 ? (
+            {ui.networkIdentifier === 'localhost' ? (
                 <img className={classes.logo} src={getUrl('MB--ComboCircle--Blue.svg')} />
-            ) : (
+            ) : null}
+            {ui.networkIdentifier === 'localhost' || identities.length === 0 ? null : (
                 <>
                     <Typography className={classes.title}>{t('popup_current_persona')}</Typography>
-                    <ChooseIdentity />
+                    <ChooseIdentity identities={identities} />
+                </>
+            )}
+            {ui.networkIdentifier === 'localhost' || wallets.length === 0 ? null : (
+                <>
+                    <Typography className={classes.title}>{t('popup_current_wallet')}</Typography>
+                    <ChooseWallet wallets={wallets} />
                 </>
             )}
             <Divider className={classes.divider} />
-            {ui.networkIdentifier !== 'localhost' && myIdentities.length === 0 ? (
-                <Button
-                    className={classes.button}
-                    variant="text"
-                    startIcon={<PlayCircleIcon />}
-                    onClick={openOptionsPage}>
+            {ui.networkIdentifier !== 'localhost' && identities.length === 0 ? (
+                <Button className={classes.button} variant="text" startIcon={<PlayCircleIcon />} onClick={onEnter}>
                     {t('popup_setup_first_persona')}
                 </Button>
             ) : (
-                <Button className={classes.button} variant="text" startIcon={<TuneIcon />} onClick={openOptionsPage}>
+                <Button className={classes.button} variant="text" startIcon={<TuneIcon />} onClick={onEnter}>
                     {t('popup_enter_dashboard')}
                 </Button>
             )}
