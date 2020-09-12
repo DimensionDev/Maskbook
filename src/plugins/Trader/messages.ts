@@ -24,7 +24,7 @@ interface CashTagEvent {
     availablePlatforms: DataProvider[]
 }
 
-interface MaskbookTraderMessages {
+export interface MaskbookTraderMessages {
     /**
      * Select token dialog
      */

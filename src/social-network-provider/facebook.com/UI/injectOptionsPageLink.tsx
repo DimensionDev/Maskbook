@@ -3,7 +3,7 @@ import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { makeStyles, Box } from '@material-ui/core'
 import Services from '../../../extension/service'
-import { MaskbookIcon } from '../../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
+import { MaskbookIcon } from '../../../resources/MaskbookIcon'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { Flags } from '../../../utils/flags'
 

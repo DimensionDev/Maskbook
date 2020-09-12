@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import Fuse from 'fuse.js'
-import { getNetworkERC20Tokens } from '../../Wallet/UI/Developer/EthereumNetworkSettings'
+import { getNetworkERC20Tokens } from '../../Wallet/UI/EthereumNetworkSettings'
 import { useCurrentEthChain } from '../../shared/useWallet'
 import type { ERC20Token } from '../types'
 import {
@@ -18,7 +18,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
-import { MessageCenter } from '../messages'
+import { MessageCenter, MaskbookTraderMessages } from '../messages'
 import { FixedSizeList } from 'react-window'
 import { TokenInList } from '../../../extension/options-page/DashboardComponents/TokenInList'
 import { isSameAddr } from '../../Wallet/token'
@@ -28,6 +28,7 @@ import {
     useTwitterCloseButton,
 } from '../../../social-network-provider/twitter.com/utils/theme'
 import { getActivatedUI } from '../../../social-network/ui'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -102,16 +103,7 @@ function SelectTokenDialogUI(props: SelectTokenDialogUIProps) {
     //#region dialog
     const [open, setOpen] = useState(false)
 
-    // open dialog from message center
-    useEffect(() => {
-        if (open) return
-        MessageCenter.on('selectTokenDialogUpdated', (ev) => {
-            if (!ev.open) return // expect open dialog
-            setOpen(true)
-            setAddress(ev.address ?? '')
-            setExcludeTokens(ev.excludeTokens ?? [])
-        })
-    }, [open])
+    // useRemoteControlledDialog<MaskbookTraderMessages>(MessageCenter, '')
 
     // submit token
     const onSubmit = (address: string) => {
@@ -123,6 +115,17 @@ function SelectTokenDialogUI(props: SelectTokenDialogUIProps) {
             })
         })
     }
+
+    // open dialog from message center
+    useEffect(() => {
+        if (open) return
+        MessageCenter.on('selectTokenDialogUpdated', (ev) => {
+            if (!ev.open) return // expect open dialog
+            setOpen(true)
+            setAddress(ev.address ?? '')
+            setExcludeTokens(ev.excludeTokens ?? [])
+        })
+    }, [open])
 
     // close dialog with message center
     const onClose = () => {
