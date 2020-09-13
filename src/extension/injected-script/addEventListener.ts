@@ -53,7 +53,8 @@ import type { CustomEvents } from './CustomEvents'
                 document.activeElement!.dispatchEvent(e)
                 return undefined!
             } else if (textOrImage.type === 'image') {
-                const xray_binary = globalThis.window.Uint8Array.from(textOrImage.value)
+                const Uint8Array = globalThis.Uint8Array ? globalThis.Uint8Array : globalThis.window.Uint8Array
+                const xray_binary = Uint8Array.from(textOrImage.value)
                 const xray_blob = new Blob([clone_into(xray_binary)], { type: 'image/png' })
                 const file = un_xray(
                     new File([un_xray(xray_blob)], 'image.png', {
