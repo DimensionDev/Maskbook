@@ -15,6 +15,11 @@ function firefox(manifest) {
 function geckoview(manifest) {
     firefox(manifest)
     manifest.permissions.push('<all_urls>')
+    manifest.application = {
+        gecko: {
+            id: 'info@dimension.com',
+        },
+    }
 }
 /**
  * @param {typeof base} manifest
