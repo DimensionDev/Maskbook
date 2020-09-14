@@ -1,5 +1,6 @@
 import { Result, Ok, Err } from 'ts-results'
 import type { TypedMessage } from './types'
+import z_schema from 'z-schema'
 
 const metadataSchemaStore = new Map<string, object>()
 /**
@@ -35,13 +36,17 @@ export function readTypedMessageMetadataUntyped<T>(
 ): Result<T, void> {
     if (!meta) return Err.EMPTY
     if (!meta.has(key)) return Err.EMPTY
-    if (!jsonSchema) {
-        console.warn('You should add a JSON Schema to verify the metadata in the TypedMessage')
-    } else {
-        if (metadataSchemaStore.has(key) && !jsonSchema) jsonSchema = metadataSchemaStore.get(key)!
-        // TODO: validate the schema use a library.
+    if (metadataSchemaStore.has(key) && !jsonSchema) jsonSchema = metadataSchemaStore.get(key)!
+    const data = meta.get(key)! as T
+    if (!jsonSchema) console.warn('You should add a JSON Schema to verify the metadata in the TypedMessage')
+    else {
+        const validator = new z_schema({})
+        if (!validator.validate(data, jsonSchema)) {
+            console.warn('The problematic metadata is dropped', data, 'errors:', validator.getLastErrors())
+            return Err.EMPTY
+        }
     }
-    return Ok(meta.get(key) as T)
+    return Ok(data)
 }
 
 /**
