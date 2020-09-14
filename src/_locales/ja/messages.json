@@ -33,6 +33,7 @@
     "backup_persona": "人格をバックアップする",
     "backup_wallet": "仮想通貨ウォレットをバックアップする",
     "backup_wallet_hint": "<strong>12の単語型パスフレーズ</strong> または以下の <strong>秘密鍵</strong> を <strong>大切に保管</strong>します。これがあれば仮想通貨ウォレットを復元できます。",
+    "backup_qrcode_error": "",
     "banner_get_started": "Maskbook を設定する",
     "banner_preparing_setup": "Maskbook アカウントを設定してください。",
     "banner_title": "Maskbook へようこそ。",
