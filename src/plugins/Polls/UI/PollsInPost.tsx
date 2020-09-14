@@ -12,27 +12,27 @@ interface PollsInPostProps {
 
 export default function PollsInPost(props: PollsInPostProps) {
     const { message } = props
-    const [status, setStatus] = useState<PollStatus>('Inactive')
+    const [status, setStatus] = useState<PollStatus>(PollStatus.Inactive)
     const [updatedPoll, setUpdatedPoll] = useState<PollMetaData | undefined>(undefined)
 
     const vote = (poll: PollGunDB, index: number) => {
         if (new Date().getTime() <= poll.end_time) {
-            setStatus('Voting')
+            setStatus(PollStatus.Voting)
             Services.Plugin.invokePlugin('maskbook.polls', 'vote', {
                 poll,
                 index,
             }).then((res) => {
-                setStatus('Voted')
+                setStatus(PollStatus.Voted)
                 setUpdatedPoll(res as PollMetaData)
             })
         } else {
-            setStatus('Closed')
+            setStatus(PollStatus.Closed)
         }
     }
 
     const jsx = message
-        ? withMetadata(props.message.meta, 'poll', (r) => {
-              Services.Plugin.invokePlugin('maskbook.polls', 'getPollByKey', { key: r.key }).then((res) => {
+        ? withMetadata(props.message.meta, 'com.maskbook.poll:1', (r) => {
+              Services.Plugin.invokePlugin('maskbook.polls', 'getPollByKey', { key: r.key as string }).then((res) => {
                   setUpdatedPoll(res as PollMetaData)
               })
               return (

@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
-import Services from '../../../extension/service'
-import { getActivatedUI } from '../../../social-network/ui'
 import type { PollGunDB } from '../Services'
 import { dateFormat } from '../utils'
 
@@ -62,12 +60,18 @@ interface PollCardProps {
     status?: PollStatus
 }
 
-export type PollStatus = 'Voted' | 'Voting' | 'Error' | 'Closed' | 'Inactive'
+export enum PollStatus {
+    Voted = 'Voted.',
+    Voting = 'Voting',
+    Error = 'Error',
+    Closed = 'Closed',
+    Inactive = 'Inactive',
+}
 
 export function PollCardUI(props: PollCardProps) {
     const { poll, onClick, vote, status } = props
     const classes = useStyles()
-    const isClosed = new Date().getTime() > poll.end_time ? true : false
+    const isClosed = Date.now() > poll.end_time ? true : false
 
     const totalVotes = poll.results.reduce(
         (accumulator: number, currentValue: number): number => accumulator + currentValue,
@@ -77,9 +81,9 @@ export function PollCardUI(props: PollCardProps) {
         <Card className={classes.card} onClick={() => onClick?.()}>
             <div className={classes.line}>
                 <div style={{ fontSize: '16px' }}>{poll.question}</div>
-                {!status || status === 'Inactive' ? null : (
+                {!status || status === PollStatus.Inactive ? null : (
                     <div className={classes.status}>
-                        {status === 'Voting' ? <CircularProgress size={18} /> : null}
+                        {status === PollStatus.Voting ? <CircularProgress size={18} /> : null}
                         <span className={classes.statusText}>{status}</span>
                     </div>
                 )}

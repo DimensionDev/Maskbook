@@ -227,7 +227,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             <ClickableChip
                                 ChipProps={{
                                     label: '🗳️ Poll',
-                                    onClick: async () => {
+                                    onClick: () => {
                                         setPollsDialogOpen(true)
                                     },
                                 }}

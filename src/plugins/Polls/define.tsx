@@ -8,11 +8,10 @@ export const PollsPluginDefine: PluginConfig = {
     pluginName: 'Poll',
     identifier: 'com.maskbook.poll',
     successDecryptionInspector: function Comp(props) {
-        if (!readTypedMessageMetadata(props.message.meta, 'poll', {}).ok) return null
-        console.log('11')
+        if (!readTypedMessageMetadata(props.message.meta, 'com.maskbook.poll:1', {}).ok) return null
         return <PollsInPost {...props} />
     },
     postDialogMetadataBadge: new Map([
-        ['poll', (meta: PollMetaData) => `a poll of '${meta.question}' from ${meta.sender}`],
+        ['com.maskbook.poll:1', (meta: PollMetaData) => `a poll of '${meta.question}' from ${meta.sender}`],
     ]),
 }

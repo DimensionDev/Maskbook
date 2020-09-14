@@ -1,6 +1,6 @@
 export interface PollMetaData {
     question: string
-    key: string | number | symbol
+    key: string
     start_time: number
     end_time: number
     options: Array<string>

@@ -1,46 +1,44 @@
 import Gun from 'gun'
 import 'gun/lib/then.js'
-import { Result, Err, Ok } from 'ts-results'
-import { gunServers } from '../../network/gun-servers'
 import type { PollMetaData } from './types'
 import { PluginMessageCenter } from '../PluginMessages'
+import { gun2 } from '../../network/gun/version.2'
+import { first } from 'lodash-es'
 
-const gun = new Gun(gunServers)
+const gun = gun2
+
+const defaultPoll: PollGunDB = {
+    key: '',
+    sender: '',
+    question: '',
+    start_time: Date.now(),
+    end_time: Date.now(),
+    options: ['', ''],
+    results: [0, 0],
+}
 
 interface NewPollProps {
     sender?: string | undefined
     id?: string | undefined
     question: string
-    options: Object
+    options: Array<string>
     start_time: Date
     end_time: Date
 }
 
-enum Reason {
-    NoPermission,
-    InvalidURL,
-    FetchFailed,
-}
+export async function createNewPoll(poll: NewPollProps) {
+    const { id, options, start_time, end_time } = poll
 
-export async function createNewPoll(poll: NewPollProps): Promise<Result<NewPollProps, [Reason, Error?]>> {
-    const { id, sender, question, options, start_time, end_time } = poll
-
-    let results = {}
-    for (let i = 0; i < Object.values(options).length; i = i + 1) {
-        results = {
-            ...results,
-            [i]: 0,
-        }
-    }
+    const results = new Array<number>(options.length).fill(0)
+    const resultsObj: Object = { ...results }
+    const optionsObj: Object = { ...options }
 
     const poll_item = {
-        id,
-        sender,
-        question,
+        ...poll,
+        results: resultsObj,
+        options: optionsObj,
         start_time: start_time.getTime(),
         end_time: end_time.getTime(),
-        options,
-        results,
     }
 
     // @ts-ignore
@@ -48,17 +46,12 @@ export async function createNewPoll(poll: NewPollProps): Promise<Result<NewPollP
 
     await gun
         .get('polls')
+        // @ts-ignore
         .get(key)
         // @ts-ignore
         .put(poll_item).then!()
 
-    return new Ok({
-        sender,
-        question,
-        options,
-        start_time,
-        end_time,
-    })
+    return poll
 }
 
 export type PollGunDB = PollMetaData
@@ -69,31 +62,34 @@ export async function getExistingPolls() {
     gun.get('polls')
         .map()
         .on((data: any, key) => {
-            const keys = (key as string).split('_')
+            const keys = typeof key === 'string' ? key.split('_') : undefined
             const poll: PollGunDB = {
+                ...defaultPoll,
                 key: key,
-                id: keys[0],
+                id: first(keys),
                 sender: data.sender,
                 question: data.question,
                 start_time: data.start_time,
                 end_time: data.end_time,
-                options: ['', ''],
-                results: [0, 0],
             }
             if (data.options) {
                 gun.get('polls')
+                    // @ts-ignore
                     .get(key)
                     .get('options')
                     .on((options) => {
+                        // @ts-ignore
                         delete options._
                         poll.options = Object.values(options)
                     })
             }
             if (data.results) {
                 gun.get('polls')
+                    // @ts-ignore
                     .get(key)
                     .get('results')
                     .on((results) => {
+                        // @ts-ignore
                         delete results._
                         poll.results = Object.values(results)
                     })
@@ -113,9 +109,11 @@ export async function vote(props: voteProps) {
     const { poll, index } = props
     let results: Array<number> = [0, 0]
     gun.get('polls')
+        // @ts-ignore
         .get(poll.key)
         .get('results')
         .on((item) => {
+            // @ts-ignore
             delete item._
             results = Object.values(item)
         })
@@ -126,6 +124,7 @@ export async function vote(props: voteProps) {
     }
 
     gun.get('polls')
+        // @ts-ignore
         .get(poll.key)
         .get('results')
         // @ts-ignore
@@ -139,45 +138,48 @@ export async function vote(props: voteProps) {
     }
 }
 
-export async function getPollByKey(props: { key: string | number | symbol }) {
-    const keys = (props.key as string).split('_')
+export async function getPollByKey(props: { key: string }) {
+    const keys = props.key.split('_')
     let poll: PollGunDB = {
+        ...defaultPoll,
         key: props.key,
-        id: keys[0],
-        sender: '',
-        question: '',
-        start_time: 0,
-        end_time: 0,
-        options: ['', ''],
-        results: [0, 0],
+        id: first(keys),
     }
     gun.get('polls')
+        // @ts-ignore
         .get(props.key)
         .on((data) => {
             poll = {
-                key: props.key,
-                id: keys[0],
+                ...poll,
+                // @ts-ignore
                 sender: data.sender,
+                // @ts-ignore
                 question: data.question,
+                // @ts-ignore
                 start_time: data.start_time,
+                // @ts-ignore
                 end_time: data.end_time,
-                options: ['', ''],
-                results: [0, 0],
             }
+            // @ts-ignore
             if (data.options) {
                 gun.get('polls')
+                    // @ts-ignore
                     .get(props.key)
                     .get('options')
                     .on((options) => {
+                        // @ts-ignore
                         delete options._
                         poll.options = Object.values(options)
                     })
             }
+            // @ts-ignore
             if (data.results) {
                 gun.get('polls')
+                    // @ts-ignore
                     .get(props.key)
                     .get('results')
                     .on((results) => {
+                        // @ts-ignore
                         delete results._
                         poll.results = Object.values(results)
                     })

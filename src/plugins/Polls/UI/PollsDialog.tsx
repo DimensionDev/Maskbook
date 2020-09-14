@@ -73,8 +73,8 @@ const useNewPollStyles = makeStyles((theme) =>
 interface NewPollProps {
     loading: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
     senderName: string | undefined
-    senderId: string | undefined
-    createNewPoll: () => void
+    senderFingerprint: string | undefined
+    switchToCreateNewPoll: () => void
 }
 
 function NewPollUI(props: PollsDialogProps & NewPollProps) {
@@ -82,22 +82,18 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
     const [loading, setLoading] = props.loading
     const [question, setQuestion] = useState('')
 
-    const [optionsInput, setOptionsInput] = useState<Object>({ 0: '', 1: '' })
-    const options = Object.values(optionsInput)
+    const [options, setOptions] = useState<Array<string>>(['', ''])
 
     const [days, setDays] = useState(1)
     const [hours, setHours] = useState(0)
     const [minutes, setMinutes] = useState(0)
 
-    const handleOptionsInput = (index: number, e: any) => {
-        setOptionsInput({
-            ...optionsInput,
-            [index]: (e.target as HTMLInputElement)?.value,
-        })
+    const handleOptionsInput = (index: number, value: string) => {
+        setOptions(options.map((option, i) => (i === index ? value : option)))
     }
 
     const addNewOption = () => {
-        setOptions([...options, ''])
+        setOptions(options.concat(['']))
     }
 
     const sendPoll = async () => {
@@ -108,14 +104,14 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
         setLoading(true)
         Services.Plugin.invokePlugin('maskbook.polls', 'createNewPoll', {
             question,
-            options: optionsInput,
+            options,
             start_time,
             end_time,
             sender: props.senderName,
-            id: props.senderId,
+            id: props.senderFingerprint,
         }).then((res) => {
             setLoading(false)
-            props.createNewPoll()
+            props.switchToCreateNewPoll()
         })
     }
 
@@ -139,19 +135,22 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                 <TextField
                     label="Ask a question..."
                     variant="filled"
-                    InputProps={{
-                        onChange: (e) => {
-                            setQuestion((e.target as HTMLInputElement)?.value)
-                        },
+                    onChange={(e) => {
+                        setQuestion((e.target as HTMLInputElement)?.value)
                     }}
                 />
             </FormControl>
             <div className={classes.pollWrap}>
                 <div className={classes.optionsWrap}>
                     {options.map((option, index) => (
-                        <FormControl className={classes.line}>
-                            <InputLabel className={classes.inputLabel}>{`choice${index + 1}`}</InputLabel>
-                            <Input className={classes.input}></Input>
+                        <FormControl className={classes.line} key={index}>
+                            <TextField
+                                label={`choice${index + 1}`}
+                                variant="filled"
+                                onChange={(e) => {
+                                    handleOptionsInput(index, (e.target as HTMLInputElement)?.value)
+                                }}
+                            />
                         </FormControl>
                     ))}
                     <IconButton onClick={addNewOption} classes={{ root: classes.addButton }}>
@@ -194,7 +193,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
 
 interface ExistingPollsProps {
     onSelectExistingPoll(poll?: PollMetaData | null): void
-    senderId: string | undefined
+    senderFingerprint: string | undefined
 }
 
 function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
@@ -205,13 +204,13 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
         Services.Plugin.invokePlugin('maskbook.polls', 'getExistingPolls').then((polls) => {
             const myPolls: Array<PollGunDB> = []
             polls.map((poll) => {
-                if (poll.id === props.senderId) {
+                if (poll.id === props.senderFingerprint) {
                     myPolls.push(poll)
                 }
             })
             setPolls(polls.reverse())
         })
-    }, [props.senderId])
+    }, [props.senderFingerprint])
 
     const insertPoll = (poll?: PollMetaData | null) => {
         props.onSelectExistingPoll(poll)
@@ -220,7 +219,7 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
     return (
         <div className={classes.wrapper}>
             {polls.map((p) => (
-                <PollCardUI onClick={() => insertPoll(p)} poll={p} key={p.key as string | number} />
+                <PollCardUI onClick={() => insertPoll(p)} poll={p} key={p.key as string} />
             ))}
         </div>
     )
@@ -269,11 +268,14 @@ export default function PollsDialog(props: PollsDialogProps) {
 
     const insertPoll = (data?: PollMetaData | null) => {
         const ref = getActivatedUI().typedMessageMetadata
-        const next = new Map(ref.value.entries())
-        data ? next.set('poll', data) : next.delete('poll')
+        const next = new Map(ref.value)
+        data ? next.set('com.maskbook.poll:1', data) : next.delete('com.maskbook.poll:1')
         ref.value = next
         props.onConfirm()
     }
+
+    const senderName = useCurrentIdentity()?.linkedPersona?.nickname
+    const senderFingerprint = useCurrentIdentity()?.linkedPersona?.fingerprint
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -283,9 +285,9 @@ export default function PollsDialog(props: PollsDialogProps) {
                     <NewPollUI
                         {...props}
                         loading={loading}
-                        createNewPoll={createNewPoll}
-                        senderName={useCurrentIdentity()?.linkedPersona?.nickname}
-                        senderId={useCurrentIdentity()?.linkedPersona?.fingerprint}
+                        switchToCreateNewPoll={createNewPoll}
+                        senderName={senderName}
+                        senderFingerprint={senderFingerprint}
                     />
                 ),
                 p: 0,
@@ -296,7 +298,7 @@ export default function PollsDialog(props: PollsDialogProps) {
                     <ExistingPollsUI
                         {...props}
                         onSelectExistingPoll={insertPoll}
-                        senderId={useCurrentIdentity()?.linkedPersona?.fingerprint}
+                        senderFingerprint={senderFingerprint}
                     />
                 ),
                 p: 0,
