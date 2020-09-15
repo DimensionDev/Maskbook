@@ -29,9 +29,9 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { getPostUrl } from '../../../social-network/utils/getPostUrl'
 import { renderWithRedPacketMetadata } from '../utils'
-import { useWallets } from '../../shared/useWallet'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { DashboardRoute } from '../../../extension/options-page/Route'
+import { useWallets } from '../../Wallet/hooks/useWallet'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

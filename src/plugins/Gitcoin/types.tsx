@@ -1,5 +1,6 @@
 import type BigNumber from 'bignumber.js'
-import type { EthereumNetwork, EthereumTokenType, ERC20TokenRecord } from '../Wallet/database/types'
+import type { ERC20TokenRecord } from '../Wallet/database/types'
+import type { ChainId, EthereumTokenType } from '../../web3/types'
 
 export enum GitcoinGrantFailedReason {
     NoPermission,
@@ -13,7 +14,7 @@ export interface GitcoinDonationPayload {
     donor_address: string
     donation_address: string
     donation_total: BigNumber
-    network: EthereumNetwork
+    chainId: ChainId
     token_type: EthereumTokenType
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }
@@ -30,7 +31,7 @@ export interface GitcoinDonationRecord {
     /** The donation value which for project owner */
     donation_value: BigNumber
     /** web3 network tag enum. Mainnet or Rinkeby */
-    network: EthereumNetwork
+    chainId: ChainId
     /** token type tag for red packet */
     token_type: EthereumTokenType
     /** The tip transaction hash */

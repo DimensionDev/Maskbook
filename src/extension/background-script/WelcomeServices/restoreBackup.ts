@@ -17,7 +17,7 @@ import { MessageCenter } from '../../../utils/messages'
 import { currentImportingBackup } from '../../../settings/settings'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { importNewWallet } from '../../../plugins/Wallet/wallet'
-import { ProviderType } from '../../../plugins/Wallet/types'
+import { ProviderType } from '../../../web3/types'
 
 /**
  * Restore the backup

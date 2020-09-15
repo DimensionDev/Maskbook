@@ -3,10 +3,9 @@ import * as Wallet from '../../plugins/Wallet/wallet'
 import * as Gitcoin from '../../plugins/Gitcoin/service'
 import * as FileService from '../../plugins/FileService/service'
 import * as Trader from '../../plugins/Trader/services'
-import type { ERC20TokenRecord, WalletRecord } from '../../plugins/Wallet/database/types'
-import { EthereumNetwork } from '../../plugins/Wallet/database/types'
+import type { ERC20TokenRecord } from '../../plugins/Wallet/database/types'
 import { getWalletProvider, web3 } from '../../plugins/Wallet/web3'
-import type { ProviderType } from '../../plugins/Wallet/types'
+import type { ProviderType } from '../../web3/types'
 
 const Plugins = {
     'maskbook.red_packet': RedPacket,
@@ -25,18 +24,13 @@ export async function invokePlugin<K extends keyof Plugins, M extends keyof Plug
     return Plugins[key][method](...args)
 }
 
-export type ERC20TokenDetails = Pick<ERC20TokenRecord, 'address' | 'decimals' | 'name' | 'network' | 'symbol'>
+export type ERC20TokenDetails = Pick<ERC20TokenRecord, 'address' | 'decimals' | 'name' | 'chainId' | 'symbol'>
 export { getTokens, getWallets } from '../../plugins/Wallet/wallet'
+
 export function connectExoticWallet(type: ProviderType) {
     return getWalletProvider(type).requestAccounts()
 }
-export async function getCurrentEthChain() {
-    const x = await web3.eth.getChainId()
-    if (x === 1) return EthereumNetwork.Mainnet
-    if (x === 3) return EthereumNetwork.Ropsten
-    if (x === 4) return EthereumNetwork.Rinkeby
-    throw new Error('Unsupported EthNetwork')
-}
+
 export async function getManagedWallet(address: string) {
     const { wallets } = await Wallet.getManagedWallets()
     return wallets.find((x) => x.address === address)

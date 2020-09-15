@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import {
     ListItem,
     ListItemIcon,
@@ -19,8 +19,9 @@ import { useMenu } from '../../../utils/hooks/useMenu'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog } from '../DashboardDialogs/Wallet'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import { isSameAddress } from '../../../web3/helpers'
+import { useConstant } from '../../../web3/hooks/useConstant'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -57,6 +58,7 @@ export function TokenListItem(props: TokenListItemProps) {
     const [menu, openMenu] = useMenu(
         <MenuItem onClick={() => openHideTokenConfirmDialog({ wallet, token })}>{t('hide')}</MenuItem>,
     )
+    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
 
     return (
         <ListItem divider>
@@ -80,11 +82,11 @@ export function TokenListItem(props: TokenListItemProps) {
                 }}
             />
             <ListItemSecondaryAction className={classes.amount}>
-                {token.address !== ETH_ADDRESS ? (
+                {isSameAddress(token.address, ETH_ADDRESS) ? null : (
                     <IconButton className={classes.more} size="small" onClick={openMenu}>
                         <MoreHorizIcon />
                     </IconButton>
-                ) : null}
+                )}
                 {menu}
                 {hideTokenConfirmDialog}
             </ListItemSecondaryAction>

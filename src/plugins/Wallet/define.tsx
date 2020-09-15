@@ -20,7 +20,6 @@ export const WalletPluginDefine: PluginConfig = {
         return (
             <>
                 <SelectProviderDialog />
-                <SelectERC20TokenDialog />
             </>
         )
     },

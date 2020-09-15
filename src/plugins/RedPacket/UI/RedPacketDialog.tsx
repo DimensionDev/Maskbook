@@ -21,7 +21,7 @@ import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/D
 import { RedPacketWithState } from './RedPacket'
 import Services from '../../../extension/service'
 import type { CreateRedPacketInit } from '../state-machine'
-import { EthereumTokenType, WalletRecord } from '../../Wallet/database/types'
+import type { WalletRecord } from '../../Wallet/database/types'
 import type { RedPacketRecord, RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -32,13 +32,14 @@ import { formatBalance } from '../../Wallet/formatter'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import BigNumber from 'bignumber.js'
-import { useSelectWallet, useTokens, useWallets } from '../../shared/useWallet'
-import { WalletSelect } from '../../shared/WalletSelect'
-import { TokenSelect } from '../../shared/TokenSelect'
 import { FeedbackDialog } from './FeedbackDialog'
 import type { ERC20TokenDetails } from '../../../extension/background-script/PluginService'
 import { RedPacketMetaKey } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { useSelectWallet, useWallets, useTokens } from '../../Wallet/hooks/useWallet'
+import { WalletSelect } from '../../Wallet/UI/WalletSelect'
+import { TokenSelect } from '../../Wallet/UI/TokenSelect'
+import { EthereumTokenType } from '../../../web3/types'
 
 //#region new red packet
 const useNewPacketStyles = makeStyles((theme) =>
@@ -120,7 +121,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
         props.onCreateNewPacket({
             duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
             is_random: Boolean(is_random),
-            network: await Services.Plugin.getCurrentEthChain(),
+            chainId: await Services.Ethereum.getChainId(),
             send_message,
             send_total: new BigNumber(send_total).multipliedBy(new BigNumber(10).pow(power)),
             sender_address: selectedWalletAddress!,
@@ -137,13 +138,11 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                     {...props}
                     className={classes.input}
                     useSelectWalletHooks={useSelectWalletResult}
-                    wallets={wallets}></WalletSelect>
+                    wallets={wallets}
+                />
             </div>
             <div className={classes.line}>
-                <TokenSelect
-                    {...props}
-                    className={classes.input}
-                    useSelectWalletHooks={useSelectWalletResult}></TokenSelect>
+                <TokenSelect {...props} className={classes.input} useSelectWalletHooks={useSelectWalletResult} />
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>{t('plugin_red_packet_split_mode')}</InputLabel>
                     <Select

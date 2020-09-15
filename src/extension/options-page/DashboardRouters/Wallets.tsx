@@ -32,9 +32,7 @@ import Services from '../../service'
 import { merge, cloneDeep } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { sleep } from '../../../utils/utils'
-import { ETH_ADDRESS, isDAI } from '../../../plugins/Wallet/token'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
-import { useCurrentEthChain, useTokens, useWallets } from '../../../plugins/shared/useWallet'
 import type { ERC20TokenDetails } from '../../background-script/PluginService'
 import type { RedPacketRecord } from '../../../plugins/RedPacket/types'
 import { useHistory } from 'react-router-dom'
@@ -44,7 +42,11 @@ import { Flags } from '../../../utils/flags'
 import { MessageCenter, MaskbookWalletMessages } from '../../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { ProviderType } from '../../../plugins/Wallet/types'
+import { ProviderType } from '../../../web3/types'
+import { useChainId } from '../../../web3/hooks/useChainId'
+import { useWallets, useTokens } from '../../../plugins/Wallet/hooks/useWallet'
+import { useConstant } from '../../../web3/hooks/useConstant'
+import { isDAI } from '../../../web3/helpers'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -111,11 +113,12 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     { wallet, tokens }: WalletContentProps,
     ref,
 ) {
+    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
     const classes = useWalletContentStyles()
     const { t } = useI18N()
     const color = useColorStyles()
     const xsMatched = useMatchXS()
-    const network = useCurrentEthChain()
+    const chainId = useChainId()
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
     const [walletShare, , openWalletShare] = useModal(DashboardWalletShareDialog)
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
@@ -174,7 +177,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                             address: ETH_ADDRESS,
                             name: 'Ether',
                             symbol: 'ETH',
-                            network,
+                            chainId,
                             decimals: 18,
                         }}
                     />
@@ -277,13 +280,13 @@ export default function DashboardWalletsRouter() {
     const notify = useSnackbar()
     const currentWallet = wallets?.find((wallet) => wallet.address === current)
 
-    const network = useCurrentEthChain()
+    const chainid = useChainId()
     const getTokensForWallet = (wallet?: WalletRecord) => {
         if (!wallet) return []
         return (tokens ?? [])
             .filter(
                 (token) =>
-                    token.network === network &&
+                    token.chainId === chainid &&
                     wallet.erc20_token_balance.has(token.address) &&
                     !wallet.erc20_token_blacklist.has(token.address),
             )

@@ -4,7 +4,7 @@ import { remove } from 'lodash-es'
 import { updateExoticWalletsFromSource } from '../../../../plugins/Wallet/wallet'
 import { currentWalletConnectChainIdSettings } from '../../../../settings/settings'
 import { ChainId } from '../../../../web3/types'
-import { ProviderType } from '../../../../plugins/Wallet/types'
+import { ProviderType } from '../../../../web3/types'
 
 //#region tracking chain id
 let currentChainId: ChainId = ChainId.Mainnet

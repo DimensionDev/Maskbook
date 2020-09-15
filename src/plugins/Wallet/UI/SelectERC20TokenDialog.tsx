@@ -18,7 +18,6 @@ import { DialogDismissIconUI } from '../../../components/InjectedComponents/Dial
 import { MessageCenter, MaskbookWalletMessages } from '../messages'
 import { FixedSizeList } from 'react-window'
 import { TokenInList } from '../../../extension/options-page/DashboardComponents/TokenInList'
-import { isSameAddr } from '../../Wallet/token'
 import {
     useTwitterDialog,
     useTwitterButton,
@@ -29,6 +28,7 @@ import { ERC20Token, ChainId } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { getERC20Tokens } from '../../../web3/tokens'
 import { useChainId } from '../../../web3/hooks/useChainId'
+import { isSameAddress } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -176,7 +176,7 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                             excludeTokens,
                             selected: address,
                             onSelect(address: string) {
-                                if (!tokens.some((token) => isSameAddr(token.address, address))) return
+                                if (!tokens.some((token) => isSameAddress(token.address, address))) return
                                 setAddress(address)
                                 onSubmit(address)
                             },

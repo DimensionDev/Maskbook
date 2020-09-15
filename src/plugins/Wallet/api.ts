@@ -9,10 +9,13 @@ import type { Erc20 as ERC20 } from '../../contracts/splitter/ERC20'
 import type { BulkCheckout } from '../../contracts/bulk-checkout/BulkCheckout'
 import type { BalanceChecker } from '../../contracts/balance-checker/BalanceChecker'
 import { sendTx, sendTxConfigForTxHash } from './transaction'
-import { getNetworkSettings, getNetworkERC20Tokens } from './UI/EthereumNetworkSettings'
-import { isUSDT, ETH_ADDRESS } from './token'
 import { onWalletBalancesUpdated, BalanceMetadata } from './wallet'
-import { getCurrentEthChain } from '../../extension/background-script/PluginService'
+import { getERC20Tokens } from '../../web3/tokens'
+import { getChainId } from '../../extension/background-script/EthereumService'
+import { getConstant } from '../../web3/constants'
+import { isUSDT } from '../../web3/helpers'
+
+const ETH_ADDRESS = getConstant('ETH_ADDRESS')
 
 function createERC20Contract(address: string) {
     return (new web3.eth.Contract(ERC20ABI as AbiItem[], address) as unknown) as ERC20
@@ -178,9 +181,7 @@ export const balanceCheckerAPI = (() => {
         if (!accounts.length || !tokens.length) return balances
         try {
             idle = false
-            balances = await createBalanceCheckerContract(
-                getNetworkSettings(await getCurrentEthChain()).balanceCheckerContractAddress,
-            )
+            balances = await createBalanceCheckerContract(getConstant('BALANCE_CHECKER_ADDRESS', await getChainId()))
                 .methods.balances(accounts, tokens)
                 .call()
         } catch (e) {
@@ -193,7 +194,7 @@ export const balanceCheckerAPI = (() => {
     async function updateBalances(accounts: string[] = Array.from(watchedAccounts)) {
         const validAccounts = accounts.filter(EthereumAddress.isValid)
         if (!validAccounts.length) return
-        const chain = await getCurrentEthChain()
+        const chainId = await getChainId()
         const tokens = [
             {
                 address: ETH_ADDRESS,
@@ -201,7 +202,7 @@ export const balanceCheckerAPI = (() => {
                 name: 'Ether',
                 symbol: 'ETH',
             },
-            ...getNetworkERC20Tokens(chain),
+            ...getERC20Tokens(chainId),
         ]
         const balances = await getBalances(
             validAccounts,
@@ -214,7 +215,7 @@ export const balanceCheckerAPI = (() => {
             if (token)
                 accumulate[accountAddress].push({
                     ...token,
-                    network: chain,
+                    chainId,
                     balance: new BigNumber(balance),
                 })
             return accumulate

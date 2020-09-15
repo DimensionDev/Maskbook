@@ -7,8 +7,8 @@ import Services from '../../../extension/service'
 import { PluginMessageCenter } from '../../PluginMessages'
 import { formatBalance } from '../../Wallet/formatter'
 import { getUrl } from '../../../utils/utils'
-import { isDAI, isOKB } from '../../Wallet/token'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { isDAI, isOKB } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

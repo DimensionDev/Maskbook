@@ -12,7 +12,7 @@ currentMaskbookChainIdSettings.addListener((v) => (currentChainId = v))
 const pool = new Map<string, HttpProvider>()
 
 export function createProvider(chainId = currentChainId) {
-    const url = getConstant(chainId, 'INFURA_ADDRESS')
+    const url = getConstant('INFURA_ADDRESS', chainId)
     const provider = pool.has(url)
         ? pool.get(url)!
         : new Web3.providers.HttpProvider(url, {

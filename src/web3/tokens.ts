@@ -1,9 +1,8 @@
 import contractMap from 'eth-contract-metadata'
 import mainnet from './erc20/mainnet.json'
 import rinkeby from './erc20/rinkeby.json'
-import { ChainId } from './types'
+import { ChainId, ERC20Token } from './types'
 import { uniqBy } from 'lodash-es'
-import type { ERC20Token } from '../plugins/Wallet/token'
 
 const ERC20Tokens = {
     [ChainId.Mainnet]: [

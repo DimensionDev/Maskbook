@@ -1,21 +1,24 @@
+import * as bip39 from 'bip39'
 import { omit, uniqBy } from 'lodash-es'
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
-import { WalletRecord, ERC20TokenRecord, EthereumNetwork, WalletRecordInDatabase } from './database/types'
+import type { WalletRecord, ERC20TokenRecord, WalletRecordInDatabase } from './database/types'
 import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
-import * as bip39 from 'bip39'
 import { walletAPI, erc20API, balanceCheckerAPI } from './api'
-import { ERC20Token, ETH_ADDRESS } from './token'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { buf2hex, hex2buf, assert } from '../../utils/utils'
-import { ProviderType } from './types'
-import { resolveProviderName } from './pipes'
+import { ProviderType } from '../../web3/types'
+import { resolveProviderName } from '../../web3/pipes'
+import { ChainId, ERC20Token } from '../../web3/types'
+import { getConstant } from '../../web3/constants'
+
+const ETH_ADDRESS = getConstant('ETH_ADDRESS')
 
 //#region predefined tokens
-import mainnet from './erc20/mainnet.json'
-import rinkeby from './erc20/rinkeby.json'
+import mainnet from '../../web3/erc20/mainnet.json'
+import rinkeby from '../../web3/erc20/rinkeby.json'
 
 const sort = (x: ERC20Token, y: ERC20Token): 1 | -1 => ([x.name, y.name].sort()[0] === x.name ? -1 : 1)
 mainnet.built_in_tokens.sort(sort)
@@ -206,14 +209,14 @@ export async function importNewWallet(
         mainnet.built_in_tokens.forEach((token) =>
             t.objectStore('ERC20Token').put({
                 ...token,
-                network: EthereumNetwork.Mainnet,
+                chainId: ChainId.Mainnet,
                 is_user_defined: false,
             }),
         )
         rinkeby.built_in_tokens.forEach((token) =>
             t.objectStore('ERC20Token').put({
                 ...token,
-                network: EthereumNetwork.Rinkeby,
+                chainId: ChainId.Rinkeby,
                 is_user_defined: false,
             }),
         )
@@ -294,7 +297,7 @@ export async function recoverWalletFromPrivateKey(privateKey: string) {
 
 export async function walletAddERC20Token(
     walletAddress: string,
-    network: EthereumNetwork,
+    chainId: ChainId,
     token: ERC20Token,
     user_defined: boolean,
 ) {
@@ -307,7 +310,7 @@ export async function walletAddERC20Token(
             decimals: token.decimals,
             is_user_defined: user_defined,
             name: token.name,
-            network,
+            chainId,
             symbol: token.symbol,
         }
         await t.objectStore('ERC20Token').add(rec)
@@ -350,20 +353,20 @@ export function unwatchWalletBalances(address: string) {
 }
 export { switchToProvider } from './web3'
 export interface BalanceMetadata {
-    [key: string]: (ERC20Token & { balance: BigNumber; network: EthereumNetwork })[]
+    [key: string]: (ERC20Token & { balance: BigNumber; chainId: ChainId })[]
 }
 
 export async function onWalletBalancesUpdated(data: BalanceMetadata) {
     let modified = false
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
     const unaddedTokens: {
-        network: EthereumNetwork
         token: ERC20Token
+        chainId: ChainId
     }[] = []
     for (const [walletAddress, tokens] of Object.entries(data)) {
         const wallet = await getWalletByAddress(t, walletAddress)
         const lastModifiedt = wallet.updatedAt
-        for (const { network, balance, ...token } of tokens) {
+        for (const { chainId, balance, ...token } of tokens) {
             if (token.address === ETH_ADDRESS && !wallet.eth_balance.isEqualTo(balance)) {
                 wallet.eth_balance = balance
                 wallet.updatedAt = new Date()
@@ -372,7 +375,7 @@ export async function onWalletBalancesUpdated(data: BalanceMetadata) {
                 if (!wallet.erc20_token_balance.has(token.address) && balance.isGreaterThan(0)) {
                     unaddedTokens.push({
                         token,
-                        network,
+                        chainId,
                     })
                     wallet.erc20_token_balance.set(token.address, balance)
                     wallet.updatedAt = new Date()
@@ -391,13 +394,13 @@ export async function onWalletBalancesUpdated(data: BalanceMetadata) {
         }
     }
     await Promise.all(
-        unaddedTokens.map(async ({ token, network }) => {
+        unaddedTokens.map(async ({ token, chainId }) => {
             const erc20 = await t.objectStore('ERC20Token').get(token.address)
             if (erc20) return
             modified = true
             await t.objectStore('ERC20Token').add({
                 ...token,
-                network,
+                chainId,
                 is_user_defined: false,
             })
         }),

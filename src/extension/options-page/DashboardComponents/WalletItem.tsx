@@ -7,13 +7,13 @@ import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useSnackbarCallback } from '../DashboardDialogs/Base'
 import ActionButton from './ActionButton'
-import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
 import { TokenIcon } from './TokenIcon'
 import { Address } from './Address'
 import type { ERC20TokenDetails } from '../../background-script/PluginService'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { ProviderType } from '../../../plugins/Wallet/types'
+import { ProviderType } from '../../../web3/types'
+import { useConstant } from '../../../web3/hooks/useConstant'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -110,6 +110,8 @@ interface WalletItemProps {
 }
 
 export function WalletItem(props: WalletItemProps) {
+    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+
     const { t } = useI18N()
     const classes = useStyles()
     const xsMatched = useMatchXS()
