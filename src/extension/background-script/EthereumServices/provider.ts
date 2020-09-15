@@ -1,8 +1,6 @@
 import * as WalletConnect from './providers/WalletConnect'
 import * as MetaMask from './providers/MetaMask'
 import { getManagedWallets, setDefaultWallet } from '../../../plugins/Wallet/wallet'
-import { openOptionsPage } from '../WelcomeService'
-import { DashboardRoute } from '../../options-page/Route'
 
 //#region connect WalletConnect
 // step 1:
@@ -27,10 +25,7 @@ export async function connectMetaMask() {
 export async function connectMaskbook() {
     const { wallets } = await getManagedWallets()
     // no wallet exists go to wallet panel in the dashboard
-    if (wallets.length === 0) {
-        openOptionsPage(DashboardRoute.Wallets, 'error=nowallet')
-        return
-    }
+    if (wallets.length === 0) return
     // return the default wallet
     const defaultWallet = wallets.find((x) => x._wallet_is_default)
     if (defaultWallet) return defaultWallet.address

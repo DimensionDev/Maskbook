@@ -14,7 +14,6 @@ import { WalletItem } from '../DashboardComponents/WalletItem'
 import { TokenListItem } from '../DashboardComponents/TokenListItem'
 import { useModal, useSnackbarCallback } from '../DashboardDialogs/Base'
 import {
-    DashboardWalletImportDialog,
     DashboardWalletCreateDialog,
     DashboardWalletAddTokenDialog,
     DashboardWalletHistoryDialog,
@@ -262,11 +261,9 @@ export default function DashboardWalletsRouter() {
     const classes = useStyles()
     const { t } = useI18N()
     const history = useHistory()
-    const { error } = useQueryParams(['error'])
-    const { rpid } = useQueryParams(['rpid'])
+    const { create, error, rpid } = useQueryParams(['create', 'error', 'rpid'])
     const xsMatched = useMatchXS()
 
-    const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
     const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
@@ -277,7 +274,6 @@ export default function DashboardWalletsRouter() {
     const { data: wallets } = useWallets()
     const { data: tokens } = useTokens()
     const [current, setCurrent] = useState('')
-    const notify = useSnackbar()
     const currentWallet = wallets?.find((wallet) => wallet.address === current)
 
     const chainid = useChainId()
@@ -310,6 +306,11 @@ export default function DashboardWalletsRouter() {
         const first = wallets?.[0]?.address
         if (first) setCurrent(first)
     }, [xsMatched, current, wallets])
+
+    // show create dialog
+    useEffect(() => {
+        if (create) openWalletCreate()
+    }, [create, openWalletCreate])
 
     // show error dialog
     useEffect(() => {
@@ -356,9 +357,6 @@ export default function DashboardWalletsRouter() {
                 ) : (
                     <></>
                 ),
-                <Button variant="outlined" onClick={openWalletImport}>
-                    {t('import')}
-                </Button>,
                 <Button
                     variant="contained"
                     onClick={openWalletCreate}
@@ -379,28 +377,22 @@ export default function DashboardWalletsRouter() {
             rightIcons={[
                 <IconButton
                     onClick={() => {
-                        if (currentWallet) {
-                            openWalletHistory({
-                                wallet: currentWallet,
-                                onClickRedPacketRecord: (record: RedPacketRecord) => {
-                                    openWalletRedPacket({
-                                        redPacket: record,
-                                    })
-                                },
-                            })
-                        } else {
-                            openWalletImport()
-                        }
+                        if (!currentWallet) return
+                        openWalletHistory({
+                            wallet: currentWallet,
+                            onClickRedPacketRecord: (record: RedPacketRecord) => {
+                                openWalletRedPacket({
+                                    redPacket: record,
+                                })
+                            },
+                        })
                     }}>
                     <RestoreIcon />
                 </IconButton>,
                 <IconButton
                     onClick={() => {
-                        if (currentWallet) {
-                            openAddToken({ wallet: currentWallet })
-                        } else {
-                            openWalletCreate()
-                        }
+                        if (currentWallet) openAddToken({ wallet: currentWallet })
+                        else openWalletCreate()
                     }}>
                     <AddIcon />
                 </IconButton>,
@@ -432,7 +424,6 @@ export default function DashboardWalletsRouter() {
             </div>
             {addToken}
             {walletHistory}
-            {walletImport}
             {walletCreate}
             {walletError}
             {walletRedPacket}

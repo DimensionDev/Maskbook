@@ -58,7 +58,8 @@ export function DebounceButton(_props: DebounceButtonProps) {
             onClick={f}
             classes={color === 'danger' ? classes : undefined}
             color={color === 'danger' ? 'primary' : color}
-            {...props}></Button>
+            {...props}
+        />
     )
 }
 

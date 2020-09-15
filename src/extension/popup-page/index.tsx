@@ -30,6 +30,9 @@ const GlobalCss = withStyles({
             minHeight: 180,
             maxWidth: '100%',
             backgroundColor: 'transparent',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
     },
 })(() => null)
@@ -41,12 +44,12 @@ const useStyles = makeStyles((theme: Theme) => ({
         borderRadius: 0,
         boxShadow: 'none',
         userSelect: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     header: {
         margin: theme.spacing(2, 0),
-        '&:first-child': {
-            marginTop: 0,
-        },
     },
     footer: {},
     logo: {
@@ -137,7 +140,7 @@ function PopupUI() {
                         {t('popup_enter_dashboard')}
                     </Button>
                 )}
-                {ui.networkIdentifier === 'localhost' || wallets.length === 0 ? null : (
+                {ui.networkIdentifier === 'localhost' ? null : (
                     <Button className={classes.button} variant="text" onClick={onConnect}>
                         {t('popup_connect_wallet')}
                     </Button>

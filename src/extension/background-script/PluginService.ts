@@ -23,10 +23,3 @@ export async function invokePlugin<K extends keyof Plugins, M extends keyof Plug
 }
 
 export type ERC20TokenDetails = Pick<ERC20TokenRecord, 'address' | 'decimals' | 'name' | 'chainId' | 'symbol'>
-
-export { getTokens, getWallets } from '../../plugins/Wallet/wallet'
-
-export async function getManagedWallet(address: string) {
-    const { wallets } = await Wallet.getManagedWallets()
-    return wallets.find((x) => x.address === address)
-}

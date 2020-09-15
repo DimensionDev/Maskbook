@@ -60,6 +60,11 @@ export async function getTokens() {
     return uniqBy(tokens, (token) => token.address.toUpperCase()).map(ERC20TokenRecordOutDB)
 }
 
+export async function getManagedWallet(address: string) {
+    const { wallets } = await getManagedWallets()
+    return wallets.find((x) => x.address === address)
+}
+
 export async function getManagedWallets(): Promise<{
     wallets: (WalletRecord & { privateKey: string })[]
     tokens: ERC20TokenRecord[]

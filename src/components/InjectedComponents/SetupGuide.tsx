@@ -389,6 +389,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                     />
                     <ActionButton
                         className={classes.textButton}
+                        color="inherit"
                         variant="text"
                         onClick={onSkip}
                         data-testid="skip_button">

@@ -38,7 +38,6 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
             <Chip
                 className={classNames(classes.chip, classes.loadingChip)}
                 icon={<CircularProgress size={16} />}
-                color="default"
                 size="small"
                 clickable={false}
                 variant="outlined"
@@ -46,14 +45,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
         )
     if (!token)
         return (
-            <Chip
-                className={classes.chip}
-                label="Select a token"
-                color="default"
-                size="small"
-                clickable={!readonly}
-                {...ChipProps}
-            />
+            <Chip className={classes.chip} label="Select a token" size="small" clickable={!readonly} {...ChipProps} />
         )
     return (
         <Chip

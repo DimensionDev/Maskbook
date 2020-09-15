@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { TextField } from '@material-ui/core'
+import { TextField, Button } from '@material-ui/core'
 import { UserPlus, UserCheck, User, UserMinus } from 'react-feather'
 
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -113,6 +113,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                         <TextField
                             onChange={(e) => setNickname(e.target.value)}
                             value={nickname}
+                            autoFocus
                             required
                             label={t('name')}
                             inputProps={{
@@ -148,6 +149,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                         inputProps={{ style: { height: 147 } }}
                         multiline
                         rows={1}
+                        autoFocus
                         placeholder={t('dashboard_paste_database_base64_hint')}
                         onChange={(e) => setBase64Value(e.target.value)}
                         value={base64Value}></TextField>
@@ -247,7 +249,7 @@ export function DashboardPersonaRenameDialog(props: WrappedDialogProps<PersonaPr
         <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 size="small"
-                primary={t('persona_new_name')}
+                primary={t('persona_rename')}
                 content={
                     <TextField
                         required
@@ -264,9 +266,9 @@ export function DashboardPersonaRenameDialog(props: WrappedDialogProps<PersonaPr
                         <DebounceButton variant="contained" onClick={renamePersona}>
                             {t('ok')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" onClick={props.onClose}>
+                        <Button variant="outlined" color="inherit" onClick={props.onClose}>
                             {t('cancel')}
-                        </DebounceButton>
+                        </Button>
                     </SpacedButtonGroup>
                 }
             />
@@ -367,9 +369,9 @@ export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<Pe
                             data-testid="confirm_button">
                             {t('confirm')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" onClick={props.onClose}>
+                        <Button variant="outlined" color="inherit" onClick={props.onClose}>
                             {t('cancel')}
-                        </DebounceButton>
+                        </Button>
                     </SpacedButtonGroup>
                 }></DashboardDialogWrapper>
         </DashboardDialogCore>
@@ -410,9 +412,9 @@ export function DashboardPersonaUnlinkConfirmDialog(props: WrappedDialogProps) {
                         <DebounceButton variant="contained" color="danger" onClick={onClick}>
                             {t('confirm')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" onClick={props.onClose}>
+                        <Button variant="outlined" color="inherit" onClick={props.onClose}>
                             {t('cancel')}
-                        </DebounceButton>
+                        </Button>
                     </SpacedButtonGroup>
                 }></DashboardDialogWrapper>
         </DashboardDialogCore>
