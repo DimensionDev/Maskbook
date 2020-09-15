@@ -9,10 +9,10 @@ import { createWeb3 } from './web3'
 import * as Maskbook from './providers/Maskbook'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
-import { isSameAddr } from '../../../web3/helpers'
+import { isSameAddress } from '../../../web3/helpers'
 import { getNonce, resetNonce, commitNonce } from '../NonceService'
 import type { ChainId } from '../../../web3/types'
-import { ProviderType } from '../../../plugins/Wallet/types'
+import { ProviderType } from '../../../web3/types'
 
 //#region tracking wallets
 let wallets: WalletRecord[] = []
@@ -23,7 +23,7 @@ PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
 async function createTransactionSender(from: string, config: TransactionConfig) {
     // Adding the wallet address into DB is required before sending transaction.
     // It helps to determine which provider to be used for sending the transaction.
-    const wallet = wallets.find((x) => isSameAddr(x.address, from))
+    const wallet = wallets.find((x) => isSameAddress(x.address, from))
     if (!wallet) throw new Error('the wallet does not exists')
 
     console.log('DEBUG: send transaction')
@@ -118,7 +118,7 @@ export async function sendSignedTransaction(from: string, config: TransactionCon
  * @param config
  */
 export async function callTransaction(from: string, config: TransactionConfig) {
-    const wallet = wallets.find((x) => isSameAddr(x.address, from))
+    const wallet = wallets.find((x) => isSameAddress(x.address, from))
     if (!wallet) throw new Error('the wallet does not exists')
 
     if (wallet.provider === ProviderType.Maskbook) return createWeb3(Maskbook.createProvider()).eth.call(config)

@@ -4,7 +4,7 @@ import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import Web3 from 'web3'
 import { EthereumAddress } from 'wallet.ts'
 import { updateExoticWalletsFromSource } from '../../../../plugins/Wallet/wallet'
-import { ProviderType } from '../../../../plugins/Wallet/types'
+import { ProviderType } from '../../../../web3/types'
 
 //#region tracking chain id
 let currentChainId: ChainId = ChainId.Mainnet

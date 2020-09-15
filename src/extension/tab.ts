@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import { OnlyRunInContext, GetContext } from '@holoflows/kit/es'
-import { lastActivatedTabIdSetting } from '../settings/settings'
+import { lastActivatedTabIdSettings } from '../settings/settings'
 import { sideEffect } from '../utils/side-effects'
 import { untilDocumentReady } from '../utils/dom'
 
@@ -10,7 +10,7 @@ export const TAB_ID = uuid() // create a id for every tab
 
 const setId = () => {
     if (document.visibilityState === 'visible') console.log(`set id to ${TAB_ID}`)
-    if (document.visibilityState === 'visible') lastActivatedTabIdSetting.value = TAB_ID
+    if (document.visibilityState === 'visible') lastActivatedTabIdSettings.value = TAB_ID
 }
 
 sideEffect.then(untilDocumentReady).then(() => {

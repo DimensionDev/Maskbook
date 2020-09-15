@@ -1,5 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
-import type { ERC20TokenRecord, EthereumNetwork, EthereumTokenType } from '../Wallet/database/types'
+import type { ERC20TokenRecord } from '../Wallet/database/types'
+import type { ChainId, EthereumTokenType } from '../../web3/types'
 export type RedPacketCreationResult =
     | {
           type: 'success'
@@ -87,7 +88,7 @@ export interface RedPacketRecord {
     /** Red packet status machine marker. See RedPacketStatus below */
     status: RedPacketStatus
     /** web3 network tag enum. Mainnet or Rinkeby */
-    network: EthereumNetwork
+    chainId: ChainId
     /** token type tag for red packet */
     token_type: EthereumTokenType
     /** ERC20Token contract address if erc20 token type */
@@ -151,7 +152,7 @@ export interface RedPacketJSONPayload {
     total: string
     creation_time: number
     duration: number
-    network?: EthereumNetwork
+    chainId?: ChainId
     token_type: EthereumTokenType
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }

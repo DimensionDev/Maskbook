@@ -1,12 +1,13 @@
 import { useMemo } from 'react'
-import { useWallets } from '../../plugins/shared/useWallet'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import {
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
     currentWalletConnectChainIdSettings,
 } from '../../settings/settings'
-import { ProviderType } from '../../plugins/Wallet/types'
+import { ProviderType } from '../types'
+import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
+import { ChainId } from '../types'
 
 /**
  * Get the chain id which is using by current wallet
@@ -19,10 +20,10 @@ export function useChainId() {
     const defaultWallet = wallets.find((x) => x._wallet_is_default)
 
     return useMemo(() => {
-        if (!defaultWallet) return null
+        if (!defaultWallet) return ChainId.Mainnet
         if (defaultWallet.provider === ProviderType.Maskbook) return maskbookChainId
         if (defaultWallet.provider === ProviderType.MetaMask) return metamaskChainId
         if (defaultWallet.provider === ProviderType.WalletConnect) return walletconnectChainId
-        return null
+        return ChainId.Mainnet
     }, [defaultWallet?.address, maskbookChainId, metamaskChainId, walletconnectChainId])
 }

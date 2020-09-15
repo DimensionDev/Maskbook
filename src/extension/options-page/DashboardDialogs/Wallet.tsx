@@ -35,7 +35,6 @@ import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import Services from '../../service'
 import type { RedPacketRecord } from '../../../plugins/RedPacket/types'
-import { ERC20Token, isSameAddr } from '../../../plugins/Wallet/token'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import WalletLine from './WalletLine'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
@@ -44,15 +43,17 @@ import { useHistory } from 'react-router-dom'
 import { DashboardRoute } from '../Route'
 import { sleep } from '../../../utils/utils'
 import type { ERC20TokenDetails } from '../../background-script/PluginService'
-import { useCurrentEthChain, useManagedWalletDetail } from '../../../plugins/shared/useWallet'
 import { difference } from 'lodash-es'
 import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
 import { QRCode } from '../../../components/shared/qrcode'
-import { getNetworkERC20Tokens } from '../../../plugins/Wallet/UI/EthereumNetworkSettings'
 import { TokenInList } from '../DashboardComponents/TokenInList'
 import { FixedSizeList } from 'react-window'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { ProviderType } from '../../../plugins/Wallet/types'
+import { useManagedWalletDetail } from '../../../plugins/Wallet/hooks/useWallet'
+import { getERC20Tokens } from '../../../web3/tokens'
+import { useChainId } from '../../../web3/hooks/useChainId'
+import type { ERC20Token } from '../../../web3/types'
+import { isSameAddress } from '../../../web3/helpers'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -76,9 +77,9 @@ interface ERC20PredefinedTokenSelectorProps {
 
 export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = [] }: ERC20PredefinedTokenSelectorProps) {
     const { t } = useI18N()
-    const network = useCurrentEthChain()
+    const chainId = useChainId()
     const [erc20Tokens, fuse] = useMemo(() => {
-        const tokens = getNetworkERC20Tokens(network)
+        const tokens = getERC20Tokens(chainId)
         const fuse = new Fuse(tokens, {
             shouldSort: true,
             threshold: 0.45,
@@ -89,7 +90,7 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
             ],
         })
         return [tokens, fuse] as const
-    }, [network])
+    }, [chainId])
 
     const classes = useERC20PredefinedTokenSelectorStyles()
     const [address, setAddress] = useState('')
@@ -126,7 +127,7 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
                     excludeTokens,
                     selected: address,
                     onSelect(address: string) {
-                        const token = tokens.find((token) => isSameAddr(token.address, address))
+                        const token = tokens.find((token) => isSameAddress(token.address, address))
                         if (!token) return
                         setAddress(address)
                         onTokenChange?.({
@@ -482,7 +483,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
         Array.from(wallet.erc20_token_balance.keys()),
         Array.from(wallet.erc20_token_blacklist.values()),
     )
-    const network = useCurrentEthChain()
+    const chainId = useChainId()
     const [token, setToken] = React.useState<ERC20Token | null>(null)
 
     const [tabState, setTabState] = useState(0)
@@ -518,12 +519,12 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
                 'maskbook.wallet',
                 'walletAddERC20Token',
                 wallet.address,
-                network,
+                chainId,
                 token,
                 tabState === 1,
             )
         },
-        [token, network],
+        [token, chainId],
         props.onClose,
     )
 

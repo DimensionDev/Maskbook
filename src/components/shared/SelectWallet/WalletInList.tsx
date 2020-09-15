@@ -7,7 +7,7 @@ import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { MaskbookIcon } from '../../../resources/MaskbookIcon'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import { WalletConnectIcon } from '../../../resources/WalletConnectIcon'
-import { ProviderType } from '../../../plugins/Wallet/types'
+import { ProviderType } from '../../../web3/types'
 
 const useStyle = makeStyles((theme: Theme) => ({
     root: {

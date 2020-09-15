@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useWallets } from '../../plugins/shared/useWallet'
+import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
 
 /**
  * Get the address of the default wallet

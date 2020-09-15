@@ -1,3 +1,9 @@
+export enum ProviderType {
+    Maskbook = 'Maskbook',
+    MetaMask = 'MetaMask',
+    WalletConnect = 'WalletConnect',
+}
+
 export interface ERC20Token {
     chainId?: ChainId
     address: string

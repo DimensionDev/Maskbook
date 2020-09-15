@@ -8,12 +8,14 @@ import {
     FormControlProps,
     DialogProps,
 } from '@material-ui/core'
-import { PortalShadowRoot } from '../../utils/shadow-root/ShadowRootPortal'
 import BigNumber from 'bignumber.js'
-import type { useSelectWallet } from './useWallet'
-import { EthereumTokenType } from '../Wallet/database/types'
-import { ETH_ADDRESS } from '../Wallet/token'
-import { useI18N } from '../../utils/i18n-next-ui'
+import type { useSelectWallet } from '../hooks/useWallet'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { EthereumTokenType } from '../../../web3/types'
+import { isETH } from '../../../web3/helpers'
+import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
+import { useConstant } from '../../../web3/hooks/useConstant'
+
 interface TokenSelectProps {
     useSelectWalletHooks: ReturnType<typeof useSelectWallet>
     className?: string
@@ -22,8 +24,11 @@ interface TokenSelectProps {
     DialogProps?: Partial<DialogProps>
 }
 export function TokenSelect({ useSelectWalletHooks, ...p }: TokenSelectProps) {
+    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+
     const { t } = useI18N()
     const { SelectProps, className, FormControlProps } = p
+
     const {
         availableTokens,
         selectedTokenType,
@@ -38,7 +43,7 @@ export function TokenSelect({ useSelectWalletHooks, ...p }: TokenSelectProps) {
                 {...SelectProps}
                 onChange={(e) => {
                     const address = e.target.value as string
-                    setSelectedTokenType(address === ETH_ADDRESS ? EthereumTokenType.ETH : EthereumTokenType.ERC20)
+                    setSelectedTokenType(isETH(address) ? EthereumTokenType.ETH : EthereumTokenType.ERC20)
                     setSelectedTokenAddress(address)
                 }}
                 MenuProps={{ container: p.DialogProps?.container ?? PortalShadowRoot }}

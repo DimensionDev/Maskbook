@@ -1,5 +1,4 @@
 import { omit } from 'lodash-es'
-import { EthereumTokenType, EthereumNetwork } from '../Wallet/database/types'
 import { RedPacketRecord, RedPacketStatus, RedPacketRecordInDatabase, RedPacketJSONPayload } from './types'
 import { v4 as uuid } from 'uuid'
 import type { RedPacketCreationResult, RedPacketClaimResult } from './types'
@@ -9,10 +8,11 @@ import Web3Utils from 'web3-utils'
 import { redPacketAPI } from './contracts'
 import { sideEffect } from '../../utils/side-effects'
 import BigNumber from 'bignumber.js'
-import { getNetworkSettings } from '../Wallet/UI/EthereumNetworkSettings'
 import { createRedPacketTransaction, RedPacketPluginReificatedWalletDBReadOnly } from './database'
 import { assert, unreachable } from '../../utils/utils'
-import { getCurrentEthChain } from '../../extension/background-script/PluginService'
+import { ChainId, EthereumTokenType } from '../../web3/types'
+import { getConstant } from '../../web3/constants'
+import { getChainId } from '../../extension/background-script/EthereumService'
 
 function getProvider() {
     return redPacketAPI
@@ -25,7 +25,7 @@ export type CreateRedPacketInit = Pick<
     | 'sender_name'
     | 'send_total'
     | 'send_message'
-    | 'network'
+    | 'chainId'
     | 'token_type'
     | 'erc20_token'
     | 'shares'
@@ -45,7 +45,7 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInUR
         duration: payload.duration,
         id: uuid(),
         is_random: payload.is_random,
-        network: payload.network || EthereumNetwork.Mainnet,
+        chainId: payload.chainId ?? ChainId.Mainnet,
         send_message: payload.sender.message,
         send_total: new BigNumber(payload.total),
         sender_address: payload.sender.address,
@@ -88,7 +88,7 @@ export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedP
         if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
         const res = await getWalletProvider().approve(
             packet.sender_address,
-            getNetworkSettings(await getCurrentEthChain()).happyRedPacketContractAddress,
+            getConstant('HAPPY_RED_PACKET_ADDRESS', await getChainId()),
             packet.erc20_token,
             packet.send_total,
         )
@@ -112,11 +112,11 @@ export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedP
     const record: RedPacketRecord = {
         aes_version: 1,
         contract_version: 1,
-        contract_address: getNetworkSettings(await getCurrentEthChain()).happyRedPacketContractAddress,
+        contract_address: getConstant('HAPPY_RED_PACKET_ADDRESS', await getChainId()),
         id: uuid(),
         duration: packet.duration,
         is_random: packet.is_random,
-        network: packet.network,
+        chainId: packet.chainId,
         send_message: packet.send_message,
         send_total: packet.send_total,
         sender_address: packet.sender_address,
@@ -178,7 +178,7 @@ export async function onCreationResult(id: { databaseID: string }, details: RedP
             },
             token_type: record.token_type,
             total: String(record.send_total),
-            network: record.network,
+            chainId: record.chainId,
             token,
             shares: new BigNumber(String(record.shares)).toNumber(),
         }

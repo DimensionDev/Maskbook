@@ -37,13 +37,13 @@ type ChainTokenList = {
 
 const WETH_ONLY: ChainTokenList = {
     [ChainId.Mainnet]: [
-        createERC20(ChainId.Mainnet, getConstant(ChainId.Mainnet, 'WETH_ADDRESS'), 18, 'Wrapped Ether', 'WETH'),
+        createERC20(ChainId.Mainnet, getConstant('WETH_ADDRESS', ChainId.Mainnet), 18, 'Wrapped Ether', 'WETH'),
     ],
     [ChainId.Ropsten]: [
-        createERC20(ChainId.Ropsten, getConstant(ChainId.Ropsten, 'WETH_ADDRESS'), 18, 'Wrapped Ether', 'WETH'),
+        createERC20(ChainId.Ropsten, getConstant('WETH_ADDRESS', ChainId.Ropsten), 18, 'Wrapped Ether', 'WETH'),
     ],
     [ChainId.Rinkeby]: [
-        createERC20(ChainId.Rinkeby, getConstant(ChainId.Rinkeby, 'WETH_ADDRESS'), 18, 'Wrapped Ether', 'WETH'),
+        createERC20(ChainId.Rinkeby, getConstant('WETH_ADDRESS', ChainId.Rinkeby), 18, 'Wrapped Ether', 'WETH'),
     ],
     [ChainId.Kovan]: [],
 }

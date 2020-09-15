@@ -6,20 +6,21 @@ import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './st
 import HappyRedPacketABI from '../../contracts/happy-red-packet/HappyRedPacket.json'
 import type { HappyRedPacket } from '../../contracts/happy-red-packet/HappyRedPacket'
 import type { CheckRedPacketAvailabilityResult, CreateRedPacketResult, RedPacketJSONPayload } from './types'
-import { EthereumTokenType } from '../Wallet/database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 import { sendTx } from '../Wallet/transaction'
-import { getNetworkSettings } from '../Wallet/UI/EthereumNetworkSettings'
 import { createRedPacketTransaction } from './database'
-import { getCurrentEthChain } from '../../extension/background-script/PluginService'
 import type { TxHashID, DatabaseID } from '../Wallet/api'
+import { getConstant } from '../../web3/constants'
+import { getChainId } from '../../extension/background-script/EthereumService'
+import { EthereumTokenType } from '../../web3/types'
+import { resolveChainName } from '../../web3/pipes'
 
 type RedPacketID = { redPacketID: string }
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
 }
 async function getRedPacketContract() {
-    return createRedPacketContract(getNetworkSettings(await getCurrentEthChain()).happyRedPacketContractAddress)
+    return createRedPacketContract(getConstant('HAPPY_RED_PACKET_ADDRESS', await getChainId()))
 }
 export const redPacketAPI = {
     async claimByServer(
@@ -29,8 +30,7 @@ export const redPacketAPI = {
         const host = 'https://redpacket.gives'
         const x = 'a3323cd1-fa42-44cd-b053-e474365ab3da'
 
-        const network = (await getCurrentEthChain()).toLowerCase()
-
+        const network = resolveChainName(await getChainId())
         const auth = await fetch(`${host}/hi?id=${claimWithWallet}&network=${network}`)
         if (!auth.ok) throw new Error('Auth failed')
         const verify = await auth.text()

@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 import type { BatchedMessageCenter } from '../messages'
 import { TAB_ID } from '../../extension/tab'
 import { useValueRef } from './useValueRef'
-import { lastActivatedTabIdSetting } from '../../settings/settings'
+import { lastActivatedTabIdSettings } from '../../settings/settings'
 
 export interface RemoteControlledDialogEvent {
     open: boolean
@@ -21,7 +21,7 @@ export function useRemoteControlledDialog<T, N extends keyof T>(
 ) {
     const [HOOK_ID] = useState(uuid()) // create a id for every hook
     const [open, setOpen] = useState(false)
-    const lastActivatedTabId = useValueRef(lastActivatedTabIdSetting)
+    const lastActivatedTabId = useValueRef(lastActivatedTabIdSettings)
     useEffect(
         () =>
             MC.on(name, (ev: T[N]) => {

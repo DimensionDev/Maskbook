@@ -1,6 +1,11 @@
 import { createWeb3 } from './web3'
 import { createProvider } from './providers/Maskbook'
 import type { TransactionConfig } from 'web3-core'
+import { ChainId } from '../../../web3/types'
+
+export async function getChainId() {
+    return ChainId.Mainnet
+}
 
 export function getGasPrice() {
     return createWeb3(createProvider()).eth.getGasPrice()

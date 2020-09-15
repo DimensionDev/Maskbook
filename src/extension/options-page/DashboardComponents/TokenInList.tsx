@@ -2,7 +2,7 @@ import React from 'react'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { ListItem, ListItemText, Typography, ListItemIcon } from '@material-ui/core'
 import { TokenIcon } from './TokenIcon'
-import type { ERC20Token } from '../../../plugins/Wallet/token'
+import type { ERC20Token } from '../../../web3/types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

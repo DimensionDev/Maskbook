@@ -16,7 +16,7 @@ import { MessageCenter, MaskbookWalletMessages } from '../messages'
 import { useBlurContext } from '../../../extension/options-page/DashboardContexts/BlurContext'
 import { GetContext } from '@holoflows/kit/es'
 import { DashboardRoute } from '../../../extension/options-page/Route'
-import { ProviderType } from '../types'
+import { ProviderType } from '../../../web3/types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

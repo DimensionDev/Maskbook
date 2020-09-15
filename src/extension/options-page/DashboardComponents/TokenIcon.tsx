@@ -1,8 +1,9 @@
 import React from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { makeStyles, createStyles, Avatar, Theme } from '@material-ui/core'
-import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { isSameAddress } from '../../../web3/helpers'
+import { useConstant } from '../../../web3/hooks/useConstant'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -21,12 +22,13 @@ export interface TokenIconProps extends withClasses<KeysInferFromUseStyles<typeo
 export function TokenIcon(props: TokenIconProps) {
     const { address, name } = props
     const classes = useStylesExtends(useStyles(), props)
+    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
     const checksumAddress = EthereumAddress.checksumAddress(address)
     return (
         <Avatar
             className={classes.coin}
             src={
-                checksumAddress === ETH_ADDRESS
+                isSameAddress(ETH_ADDRESS, checksumAddress)
                     ? 'https://rawcdn.githack.com/trustwallet/assets/257c82b25e6f27ede7a2b309aadc0ed17bca45ae/blockchains/ethereum/info/logo.png'
                     : `https://rawcdn.githack.com/trustwallet/assets/257c82b25e6f27ede7a2b309aadc0ed17bca45ae/blockchains/ethereum/assets/${checksumAddress}/logo.png`
             }>

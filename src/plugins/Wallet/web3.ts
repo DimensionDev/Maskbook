@@ -1,8 +1,6 @@
 import Web3 from 'web3'
 import { sideEffect } from '../../utils/side-effects'
 import { OnlyRunInContext } from '@holoflows/kit/es'
-
-OnlyRunInContext('background', 'web3')
 import { MetaMaskProvider } from '../../protocols/wallet-provider/metamask'
 import type { WalletProvider } from '../../protocols/wallet-provider'
 import { MaskbookProvider } from '../../protocols/wallet-provider/maskbook'
@@ -10,7 +8,9 @@ import { unreachable } from '../../utils/utils'
 import { PluginMessageCenter } from '../PluginMessages'
 import { lastActivatedWalletProvider } from '../../settings/settings'
 import { getManagedWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
-import { ProviderType } from './types'
+import { ProviderType } from '../../web3/types'
+
+OnlyRunInContext('background', 'web3')
 
 export const web3 = new Web3()
 web3.eth.transactionConfirmationBlocks = 6

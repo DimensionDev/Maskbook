@@ -1,14 +1,14 @@
 import { BigNumber } from 'bignumber.js'
 import { walletAPI, erc20API } from '../Wallet/api'
 import { gitcoinAPI } from './contracts'
-import { EthereumTokenType } from '../Wallet/database/types'
 import type { GitcoinDonationPayload, GitcoinDonationRecord, GitcoinDonationRecordInDatabase } from './types'
 import { PluginMessageCenter } from '../PluginMessages'
 import type { _UnboxPromise } from 'async-call-rpc/full'
 import { omit } from 'lodash-es'
-import { getNetworkSettings } from '../Wallet/UI/EthereumNetworkSettings'
 import { createPluginWalletAccess } from '../../database/Plugin/wrap-wallet-for-plugin'
-import { getCurrentEthChain } from '../../extension/background-script/PluginService'
+import { getAllConstants } from '../../web3/constants'
+import { getChainId } from '../../extension/background-script/EthereumService'
+import { EthereumTokenType } from '../../web3/types'
 
 const createTransaction = createPluginWalletAccess<GitcoinDonationRecordInDatabase, []>(
     'com.maskbook.provide.co.gitcoin',
@@ -24,9 +24,8 @@ function getProvider() {
 }
 
 export async function donateGrant(donation: GitcoinDonationPayload) {
-    const { networkType, gitcoinMaintainerAddress, bulkCheckoutContractAddress } = getNetworkSettings(
-        await getCurrentEthChain(),
-    )
+    const chainId = await getChainId()
+    const { GOTCOIN_MAINTAINER_ADDRESS, BULK_CHECKOUT_ADDRESS } = getAllConstants(chainId)
     const { donor_address, donation_address, donation_total, token, token_type } = donation
 
     let approved: _UnboxPromise<ReturnType<typeof erc20API.approve>> | undefined
@@ -35,7 +34,7 @@ export async function donateGrant(donation: GitcoinDonationPayload) {
     if (token_type === EthereumTokenType.ERC20) {
         approved = await getProvider().approve(
             donor_address,
-            bulkCheckoutContractAddress,
+            BULK_CHECKOUT_ADDRESS,
             token?.address!,
             new BigNumber(donation_total),
         )
@@ -44,7 +43,7 @@ export async function donateGrant(donation: GitcoinDonationPayload) {
     // donate
     const donated = await getProvider().donate(
         donor_address,
-        gitcoinMaintainerAddress,
+        GOTCOIN_MAINTAINER_ADDRESS,
         donation_address,
         donation_total,
         token?.address,
@@ -55,7 +54,7 @@ export async function donateGrant(donation: GitcoinDonationPayload) {
         donor_address,
         donation_address,
         donation_total,
-        network: networkType,
+        chainId,
         token_type,
         erc20_token: token?.address,
         ...approved,

@@ -17,10 +17,7 @@ import {
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
-import { TokenSelect } from '../shared/TokenSelect'
-import { WalletSelect } from '../shared/WalletSelect'
-import { useSelectWallet } from '../shared/useWallet'
-import { EthereumTokenType, WalletRecord } from '../Wallet/database/types'
+import type { WalletRecord } from '../Wallet/database/types'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { getActivatedUI } from '../../social-network/ui'
 import {
@@ -33,6 +30,10 @@ import BigNumber from 'bignumber.js'
 import { formatBalance } from '../Wallet/formatter'
 import type { ERC20TokenDetails } from '../../extension/background-script/PluginService'
 import { Trans } from 'react-i18next'
+import { useSelectWallet } from '../Wallet/hooks/useWallet'
+import { TokenSelect } from '../Wallet/UI/TokenSelect'
+import { WalletSelect } from '../Wallet/UI/WalletSelect'
+import { EthereumTokenType } from '../../web3/types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -155,10 +156,12 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                         <WalletSelect
                             FormControlProps={{ fullWidth: true }}
                             wallets={props.wallets}
-                            useSelectWalletHooks={useSelectWalletResult}></WalletSelect>
+                            useSelectWalletHooks={useSelectWalletResult}
+                        />
                         <TokenSelect
                             FormControlProps={{ fullWidth: true }}
-                            useSelectWalletHooks={useSelectWalletResult}></TokenSelect>
+                            useSelectWalletHooks={useSelectWalletResult}
+                        />
                         <TextField
                             InputProps={{ inputRef: amountInputRef }}
                             inputProps={{

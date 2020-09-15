@@ -14,12 +14,12 @@ import { useI18N } from '../../utils/i18n-next-ui'
 import i18nNextInstance from '../../utils/i18n-next'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getUrl } from '../../utils/utils'
-import { useWallets } from '../../plugins/shared/useWallet'
 import { ChooseWallet } from '../../components/shared/ChooseWallet'
 import { EthereumChainChip } from '../../components/shared/EthereumChainChip'
 import { useChainId } from '../../web3/hooks/useChainId'
 import { MessageCenter, MaskbookWalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
+import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
 
 const GlobalCss = withStyles({
     '@global': {

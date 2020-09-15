@@ -1,17 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
-import type { ProviderType } from '../types'
-
-export enum EthereumNetwork {
-    Mainnet = 'Mainnet',
-    Rinkeby = 'Rinkeby',
-    Ropsten = 'Ropsten',
-}
-
-export enum EthereumTokenType {
-    ETH = 0,
-    ERC20 = 1,
-    ERC721 = 2,
-}
+import type { ProviderType } from '../../../web3/types'
+import type { ChainId } from '../../../web3/types'
 
 export interface WalletRecordInDatabase extends Omit<WalletRecord, 'eth_balance' | 'erc20_token_balance'> {
     eth_balance: string | bigint
@@ -26,7 +15,7 @@ export interface ERC20TokenRecord {
     decimals: number
     /** token symbol */
     symbol: string
-    network: EthereumNetwork
+    chainId: ChainId
     /** Yes if user added token */
     is_user_defined: boolean
     /** Delete time for soft delete */

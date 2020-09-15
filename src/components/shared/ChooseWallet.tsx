@@ -5,8 +5,8 @@ import { List, Accordion, AccordionSummary } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
 import type { WalletRecord } from '../../plugins/Wallet/database/types'
 import { WalletInListProps, WalletInList } from './SelectWallet/WalletInList'
-import { isSameAddr } from '../../plugins/Wallet/token'
 import Services from '../../extension/service'
+import { isSameAddress } from '../../web3/helpers'
 
 const useStyles = makeStyles({
     root: {
@@ -76,7 +76,7 @@ export function ChooseWallet(props: ChooseWalletProps) {
         if (wallets.length > 1) setExpanded(!expanded)
     }, [wallets.length, expanded])
 
-    const currentWallet = wallets.find((x) => isSameAddr(x.address, currentAddress))
+    const currentWallet = wallets.find((x) => isSameAddress(x.address, currentAddress))
     if (!currentWallet) return null
 
     return (
@@ -94,7 +94,7 @@ export function ChooseWallet(props: ChooseWalletProps) {
                 {wallets.length ? (
                     <List classes={{ root: classes.list }}>
                         {wallets.map((wallet) =>
-                            isSameAddr(currentAddress, wallet.address) ? null : (
+                            isSameAddress(currentAddress, wallet.address) ? null : (
                                 <WalletInList
                                     key={wallet.address}
                                     ListItemProps={{ dense: true, classes: { root: classes.listItemRoot } }}

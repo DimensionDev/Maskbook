@@ -7,7 +7,7 @@ import { timeout } from '../../utils/utils'
 import { updateExoticWalletsFromSource } from '../../plugins/Wallet/wallet'
 import { Result } from 'ts-results'
 import type { WalletRecord } from '../../plugins/Wallet/database/types'
-import { ProviderType } from '../../plugins/Wallet/types'
+import { ProviderType } from '../../web3/types'
 
 class EthereumJSONRpcChannel implements EventBasedChannel {
     private e = new EventEmitter()
