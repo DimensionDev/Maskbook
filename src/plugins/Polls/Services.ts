@@ -6,6 +6,7 @@ import { gun2 } from '../../network/gun/version.2'
 import { first } from 'lodash-es'
 
 const gun = gun2
+const PollGun = gun.get('polls')
 
 const defaultPoll: PollGunDB = {
     key: '',
@@ -44,8 +45,7 @@ export async function createNewPoll(poll: NewPollProps) {
     // @ts-ignore
     const key = `${id}_${Gun.time.is()}_${Gun.text.random(4)}`
 
-    await gun
-        .get('polls')
+    await PollGun
         // @ts-ignore
         .get(key)
         // @ts-ignore
@@ -56,50 +56,6 @@ export async function createNewPoll(poll: NewPollProps) {
 
 export type PollGunDB = PollMetaData
 
-export async function getExistingPolls() {
-    const polls: Array<PollGunDB> = []
-
-    gun.get('polls')
-        .map()
-        .on((data: any, key) => {
-            const keys = typeof key === 'string' ? key.split('_') : undefined
-            const poll: PollGunDB = {
-                ...defaultPoll,
-                key: key,
-                id: first(keys),
-                sender: data.sender,
-                question: data.question,
-                start_time: data.start_time,
-                end_time: data.end_time,
-            }
-            if (data.options) {
-                gun.get('polls')
-                    // @ts-ignore
-                    .get(key)
-                    .get('options')
-                    .on((options) => {
-                        // @ts-ignore
-                        delete options._
-                        poll.options = Object.values(options)
-                    })
-            }
-            if (data.results) {
-                gun.get('polls')
-                    // @ts-ignore
-                    .get(key)
-                    .get('results')
-                    .on((results) => {
-                        // @ts-ignore
-                        delete results._
-                        poll.results = Object.values(results)
-                    })
-            }
-            polls.push(poll)
-        })
-
-    return polls
-}
-
 interface voteProps {
     poll: PollGunDB
     index: number
@@ -108,7 +64,7 @@ interface voteProps {
 export async function vote(props: voteProps) {
     const { poll, index } = props
     let results: Array<number> = [0, 0]
-    gun.get('polls')
+    PollGun
         // @ts-ignore
         .get(poll.key)
         .get('results')
@@ -123,7 +79,7 @@ export async function vote(props: voteProps) {
         [index]: count,
     }
 
-    gun.get('polls')
+    PollGun
         // @ts-ignore
         .get(poll.key)
         .get('results')
@@ -145,24 +101,20 @@ export async function getPollByKey(props: { key: string }) {
         key: props.key,
         id: first(keys),
     }
-    gun.get('polls')
+
+    PollGun
         // @ts-ignore
         .get(props.key)
-        .on((data) => {
+        .on((data: PollGunDB) => {
             poll = {
                 ...poll,
-                // @ts-ignore
                 sender: data.sender,
-                // @ts-ignore
                 question: data.question,
-                // @ts-ignore
                 start_time: data.start_time,
-                // @ts-ignore
                 end_time: data.end_time,
             }
-            // @ts-ignore
             if (data.options) {
-                gun.get('polls')
+                PollGun
                     // @ts-ignore
                     .get(props.key)
                     .get('options')
@@ -172,9 +124,8 @@ export async function getPollByKey(props: { key: string }) {
                         poll.options = Object.values(options)
                     })
             }
-            // @ts-ignore
             if (data.results) {
-                gun.get('polls')
+                PollGun
                     // @ts-ignore
                     .get(props.key)
                     .get('results')
@@ -186,4 +137,17 @@ export async function getPollByKey(props: { key: string }) {
             }
         })
     return poll
+}
+
+export async function getAllExistingPolls() {
+    const polls: Array<PollGunDB> = []
+
+    gun.get('polls')
+        .map()
+        .on(async (data, key) => {
+            const poll = await getPollByKey({ key })
+            polls.push(poll)
+        })
+
+    return polls
 }

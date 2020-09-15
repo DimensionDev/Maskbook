@@ -65,6 +65,11 @@ const useNewPollStyles = makeStyles((theme) =>
             right: '10px',
         },
         loading: {
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+        },
+        whiteColor: {
             color: '#fff',
         },
     }),
@@ -181,7 +186,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                     className={classes.button}
                     color="primary"
                     variant="contained"
-                    startIcon={loading ? <CircularProgress classes={{ root: classes.loading }} size={24} /> : null}
+                    startIcon={loading ? <CircularProgress classes={{ root: classes.whiteColor }} size={24} /> : null}
                     style={{ color: '#fff' }}
                     onClick={sendPoll}>
                     Send Poll
@@ -198,10 +203,13 @@ interface ExistingPollsProps {
 
 function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
     const [polls, setPolls] = useState<Array<PollGunDB>>([])
+    const [loading, setLoading] = useState(false)
     const classes = useStylesExtends(useNewPollStyles(), props)
 
     useEffect(() => {
-        Services.Plugin.invokePlugin('maskbook.polls', 'getExistingPolls').then((polls) => {
+        setLoading(true)
+        Services.Plugin.invokePlugin('maskbook.polls', 'getAllExistingPolls').then((polls) => {
+            setLoading(false)
             const myPolls: Array<PollGunDB> = []
             polls.map((poll) => {
                 if (poll.id === props.senderFingerprint) {
@@ -218,9 +226,11 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
 
     return (
         <div className={classes.wrapper}>
-            {polls.map((p) => (
-                <PollCardUI onClick={() => insertPoll(p)} poll={p} key={p.key as string} />
-            ))}
+            {loading ? (
+                <CircularProgress size={35} classes={{ root: classes.loading }} />
+            ) : (
+                polls.map((p) => <PollCardUI onClick={() => insertPoll(p)} poll={p} key={p.key as string} />)
+            )}
         </div>
     )
 }
