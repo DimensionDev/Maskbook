@@ -35,7 +35,7 @@ import { sleep } from '../../../utils/utils'
 import { ETH_ADDRESS, isDAI } from '../../../plugins/Wallet/token'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useCurrentEthChain, useTokens, useWallets } from '../../../plugins/shared/useWallet'
-import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
+import type { ERC20TokenDetails } from '../../background-script/PluginService'
 import type { RedPacketRecord } from '../../../plugins/RedPacket/types'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
@@ -43,6 +43,8 @@ import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import { Flags } from '../../../utils/flags'
 import { MessageCenter, MaskbookWalletMessages } from '../../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import { ProviderType } from '../../../plugins/Wallet/types'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -101,7 +103,7 @@ const walletTheme = (theme: Theme): Theme =>
     })
 
 interface WalletContentProps {
-    wallet: WalletDetails
+    wallet: WalletRecord
     tokens?: ERC20TokenDetails[]
 }
 
@@ -131,9 +133,9 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
         <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
         <MenuItem onClick={() => openWalletShare({ wallet })}>{t('share')}</MenuItem>,
         <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
-        wallet.type === 'exotic' ? undefined : (
+        wallet.provider === ProviderType.Maskbook ? (
             <MenuItem onClick={() => openWalletBackup({ wallet })}>{t('backup')}</MenuItem>
-        ),
+        ) : undefined,
         <MenuItem onClick={() => openWalletDelete({ wallet })} className={color.error} data-testid="delete_button">
             {t('delete')}
         </MenuItem>,
@@ -186,7 +188,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                     ))}
                 </List>
             </ThemeProvider>
-            {wallet.type === 'managed' && !xsMatched ? (
+            {wallet.provider === ProviderType.Maskbook && !xsMatched ? (
                 <div className={classes.footer}>
                     <Button
                         onClick={() =>
@@ -276,7 +278,7 @@ export default function DashboardWalletsRouter() {
     const currentWallet = wallets?.find((wallet) => wallet.address === current)
 
     const network = useCurrentEthChain()
-    const getTokensForWallet = (wallet?: WalletDetails) => {
+    const getTokensForWallet = (wallet?: WalletRecord) => {
         if (!wallet) return []
         return (tokens ?? [])
             .filter(

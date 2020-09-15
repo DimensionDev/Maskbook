@@ -21,7 +21,7 @@ import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/D
 import { RedPacketWithState } from './RedPacket'
 import Services from '../../../extension/service'
 import type { CreateRedPacketInit } from '../state-machine'
-import { EthereumTokenType } from '../../Wallet/database/types'
+import { EthereumTokenType, WalletRecord } from '../../Wallet/database/types'
 import type { RedPacketRecord, RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -36,7 +36,7 @@ import { useSelectWallet, useTokens, useWallets } from '../../shared/useWallet'
 import { WalletSelect } from '../../shared/WalletSelect'
 import { TokenSelect } from '../../shared/TokenSelect'
 import { FeedbackDialog } from './FeedbackDialog'
-import type { WalletDetails, ERC20TokenDetails } from '../../../extension/background-script/PluginService'
+import type { ERC20TokenDetails } from '../../../extension/background-script/PluginService'
 import { RedPacketMetaKey } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
@@ -64,7 +64,7 @@ const useNewPacketStyles = makeStyles((theme) =>
 interface NewPacketProps {
     senderName?: string
     loading: boolean
-    wallets: WalletDetails[] | undefined
+    wallets: WalletRecord[] | undefined
     tokens: ERC20TokenDetails[] | undefined
     onCreateNewPacket: (opt: CreateRedPacketInit) => void
 }

@@ -20,7 +20,7 @@ import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogD
 import { TokenSelect } from '../shared/TokenSelect'
 import { WalletSelect } from '../shared/WalletSelect'
 import { useSelectWallet } from '../shared/useWallet'
-import { EthereumTokenType } from '../Wallet/database/types'
+import { EthereumTokenType, WalletRecord } from '../Wallet/database/types'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { getActivatedUI } from '../../social-network/ui'
 import {
@@ -31,7 +31,7 @@ import {
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import BigNumber from 'bignumber.js'
 import { formatBalance } from '../Wallet/formatter'
-import type { ERC20TokenDetails, WalletDetails } from '../../extension/background-script/PluginService'
+import type { ERC20TokenDetails } from '../../extension/background-script/PluginService'
 import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -86,7 +86,7 @@ interface DonateDialogUIProps
     open: boolean
     onDonate(opt: DonatePayload): Promise<void> | void
     onClose?: () => void
-    wallets: WalletDetails[] | undefined
+    wallets: WalletRecord[] | undefined
     tokens: ERC20TokenDetails[] | undefined
 }
 

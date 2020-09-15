@@ -3,9 +3,9 @@ import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { EthereumNetwork } from '../plugins/Wallet/database/types'
 import type { SetupGuideStep } from '../components/InjectedComponents/SetupGuide'
-import { WalletProviderType } from '../plugins/shared/findOutProvider'
 import { Flags } from '../utils/flags'
 import { ChainId } from '../web3/types'
+import { ProviderType } from '../plugins/Wallet/types'
 
 /**
  * The id of last activated tab
@@ -90,9 +90,9 @@ export const currentLocalWalletEthereumNetworkSettings = createGlobalSettings<Et
     },
 )
 
-export const lastActivatedWalletProvider = createInternalSettings<WalletProviderType>(
+export const lastActivatedWalletProvider = createInternalSettings<ProviderType>(
     'last activated wallet provider',
-    WalletProviderType.managed,
+    ProviderType.Maskbook,
 )
 
 export enum Language {

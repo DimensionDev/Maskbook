@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import useSWR from 'swr'
-import { EthereumNetwork, EthereumTokenType } from '../Wallet/database/types'
-import Services from '../../extension/service'
-import { PluginMessageCenter } from '../PluginMessages'
-import { formatBalance } from '../Wallet/formatter'
-import { ETH_ADDRESS } from '../Wallet/token'
-import { currentLocalWalletEthereumNetworkSettings } from '../../settings/settings'
-import type { WalletDetails, ERC20TokenDetails } from '../../extension/background-script/PluginService'
-import { findOutWalletProvider } from './findOutProvider'
+import { PluginMessageCenter } from '../../PluginMessages'
+import Services from '../../../extension/service'
+import { currentLocalWalletEthereumNetworkSettings } from '../../../settings/settings'
+import { ChainId, EthereumTokenType } from '../../../web3/types'
+import type { WalletRecord } from '../database/types'
+import type { ERC20TokenDetails } from '../../../extension/background-script/PluginService'
+import { ETH_ADDRESS } from '../token'
+import { formatBalance } from '../formatter'
 
 export function useWallets() {
     const swr = useSWR('com.maskbook.wallet.wallets', { fetcher: Services.Plugin.getWallets })
@@ -27,7 +27,7 @@ export function useCurrentEthChain() {
     })
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     useEffect(() => currentLocalWalletEthereumNetworkSettings.addListener(revalidate), [revalidate])
-    return data ?? EthereumNetwork.Mainnet
+    return data ?? ChainId.Mainnet
 }
 
 export function useManagedWalletDetail(address: string) {
@@ -36,7 +36,7 @@ export function useManagedWalletDetail(address: string) {
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     return swr
 }
-export function useSelectWallet(wallets: WalletDetails[] | undefined, tokens: ERC20TokenDetails[] | undefined) {
+export function useSelectWallet(wallets: WalletRecord[] | undefined, tokens: ERC20TokenDetails[] | undefined) {
     const network = useCurrentEthChain()
     const [selectedWalletAddress, setSelectedWalletAddress] = useState<undefined | string>(undefined)
 
@@ -68,7 +68,7 @@ export function useSelectWallet(wallets: WalletDetails[] | undefined, tokens: ER
         ? `${formatBalance(selectedToken.amount, selectedToken.decimals)} ${selectedToken.symbol}`
         : undefined
 
-    const provider = selectedWallet ? findOutWalletProvider(selectedWallet) : undefined
+    const provider = selectedWallet?.provider
     return {
         ethBalance,
         erc20Balance,

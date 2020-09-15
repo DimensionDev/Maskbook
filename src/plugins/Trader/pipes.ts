@@ -1,4 +1,5 @@
 import { Currency, DataProvider, SwapProvider } from './types'
+import { unreachable } from '../../utils/utils'
 
 export function resolveCurrencyName(currency: Currency) {
     return [
@@ -15,7 +16,7 @@ export function resolveDataProviderName(dataProvider: DataProvider) {
         case DataProvider.COIN_MARKET_CAP:
             return 'Coin Market Cap'
         default:
-            return ''
+            unreachable(dataProvider)
     }
 }
 
@@ -24,7 +25,7 @@ export function resolveSwapProviderName(swapProvider: SwapProvider) {
         case SwapProvider.UNISWAP:
             return 'Uniswap'
         default:
-            return ''
+            unreachable(swapProvider)
     }
 }
 
@@ -35,7 +36,7 @@ export function resolveDataProviderLink(dataProvider: DataProvider) {
         case DataProvider.COIN_MARKET_CAP:
             return 'https://coinmarketcap.com/'
         default:
-            return ''
+            unreachable(dataProvider)
     }
 }
 

@@ -5,9 +5,9 @@ import type { AbstractProvider } from 'web3-core'
 import type { EthereumAPI, WalletProvider } from './index'
 import { timeout } from '../../utils/utils'
 import { updateExoticWalletsFromSource } from '../../plugins/Wallet/wallet'
-import type { ExoticWalletRecord } from '../../plugins/Wallet/database/types'
-import { WalletProviderType } from '../../plugins/shared/findOutProvider'
 import { Result } from 'ts-results'
+import type { WalletRecord } from '../../plugins/Wallet/database/types'
+import { ProviderType } from '../../plugins/Wallet/types'
 
 class EthereumJSONRpcChannel implements EventBasedChannel {
     private e = new EventEmitter()
@@ -43,9 +43,9 @@ export const MetaMaskProvider: WalletProvider = {
     },
     async requestAccounts() {
         const list = await MetamaskJSONRPC.eth_requestAccounts()
-        const map = new Map<string, Partial<ExoticWalletRecord>>()
+        const map = new Map<string, Partial<WalletRecord>>()
         for (const address of list) map.set(address, { address })
-        await updateExoticWalletsFromSource(WalletProviderType.metamask, map)
+        await updateExoticWalletsFromSource(ProviderType.MetaMask, map)
         return list
     },
     getWeb3Provider() {

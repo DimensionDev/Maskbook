@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, makeStyles, createStyles, Box, ButtonBase, Theme, useMediaQuery } from '@material-ui/core'
+import { Typography, makeStyles, createStyles, Box, ButtonBase } from '@material-ui/core'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import classNames from 'classnames'
@@ -10,8 +10,10 @@ import ActionButton from './ActionButton'
 import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
 import { TokenIcon } from './TokenIcon'
 import { Address } from './Address'
-import type { ERC20TokenDetails, WalletDetails } from '../../background-script/PluginService'
+import type { ERC20TokenDetails } from '../../background-script/PluginService'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
+import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import { ProviderType } from '../../../plugins/Wallet/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -101,7 +103,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 interface WalletItemProps {
-    wallet: WalletDetails
+    wallet: WalletRecord
     selected?: boolean
     tokens?: ERC20TokenDetails[]
     onClick?(): void
@@ -115,8 +117,8 @@ export function WalletItem(props: WalletItemProps) {
     const { wallet, selected, onClick, tokens } = props
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
-    const isExotic = wallet.type === 'exotic'
-    const provider = wallet.type === 'exotic' ? wallet.provider : ''
+    const isExotic = wallet.provider !== ProviderType.Maskbook
+    const provider = wallet.provider !== ProviderType.Maskbook ? wallet.provider : ''
     return (
         <ButtonBase
             component="section"

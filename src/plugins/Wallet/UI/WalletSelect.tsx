@@ -9,14 +9,14 @@ import {
     DialogProps,
     InputProps,
 } from '@material-ui/core'
-import { PortalShadowRoot } from '../../utils/shadow-root/ShadowRootPortal'
-import type { useSelectWallet } from './useWallet'
-import type { WalletDetails } from '../../extension/background-script/PluginService'
-import Services from '../../extension/service'
-import { useI18N } from '../../utils/i18n-next-ui'
+import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
+import type { useSelectWallet } from '../../shared/useWallet'
+import type { WalletRecord } from '../database/types'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import Services from '../../../extension/service'
 interface WalletSelectProps {
     useSelectWalletHooks: ReturnType<typeof useSelectWallet>
-    wallets: WalletDetails[] | undefined
+    wallets: WalletRecord[] | undefined
     className?: string
     InputProps?: InputProps
     SelectProps?: SelectProps

@@ -3,7 +3,6 @@ import { sideEffect } from '../../utils/side-effects'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
 OnlyRunInContext('background', 'web3')
-import { WalletProviderType } from '../shared/findOutProvider'
 import { MetaMaskProvider } from '../../protocols/wallet-provider/metamask'
 import type { WalletProvider } from '../../protocols/wallet-provider'
 import { MaskbookProvider } from '../../protocols/wallet-provider/maskbook'
@@ -11,6 +10,7 @@ import { unreachable } from '../../utils/utils'
 import { PluginMessageCenter } from '../PluginMessages'
 import { lastActivatedWalletProvider } from '../../settings/settings'
 import { getManagedWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
+import { ProviderType } from './types'
 
 export const web3 = new Web3()
 web3.eth.transactionConfirmationBlocks = 6
@@ -22,7 +22,7 @@ function resetProvider() {
 }
 sideEffect.then(resetProvider)
 
-export function switchToProvider(provider: WalletProviderType) {
+export function switchToProvider(provider: ProviderType) {
     console.log('[Web3] Switch to', provider)
     const nextProvider = getWalletProvider(provider)
     if (currentProvider === nextProvider) return
@@ -33,10 +33,10 @@ export function switchToProvider(provider: WalletProviderType) {
     PluginMessageCenter.emit('maskbook.wallets.reset', void 0)
     lastActivatedWalletProvider.value = provider
 }
-export function getWalletProvider(provider: WalletProviderType) {
-    if (provider === WalletProviderType.managed) return MaskbookProvider
-    if (provider === WalletProviderType.metamask) return MetaMaskProvider
-    if (provider === WalletProviderType.wallet_connect) throw new Error('not supported')
+export function getWalletProvider(provider: ProviderType) {
+    if (provider === ProviderType.Maskbook) return MaskbookProvider
+    if (provider === ProviderType.MetaMask) return MetaMaskProvider
+    if (provider === ProviderType.WalletConnect) throw new Error('not supported')
     return unreachable(provider)
 }
 

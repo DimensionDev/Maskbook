@@ -31,7 +31,6 @@ import { getPostUrl } from '../../../social-network/utils/getPostUrl'
 import { renderWithRedPacketMetadata } from '../utils'
 import { useWallets } from '../../shared/useWallet'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
-import type { WalletDetails } from '../../../extension/background-script/PluginService'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 
 const useStyles = makeStyles((theme) =>
@@ -72,7 +71,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
     }
 
     const claimRedPacket = (
-        address: WalletDetails['address'],
+        address: WalletRecord['address'],
         rpid?: RedPacketRecord['red_packet_id'],
         setAsDefault?: boolean,
     ) => {
@@ -123,7 +122,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
 }
 type Claiming = {
     rpid: RedPacketRecord['red_packet_id']
-    wallets: WalletDetails[]
+    wallets: WalletRecord[]
 } | null
 export function RedPacketInDecryptedPostCard(
     props: RedPacketInDecryptedPostProps & {

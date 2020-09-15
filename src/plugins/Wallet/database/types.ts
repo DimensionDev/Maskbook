@@ -1,5 +1,5 @@
 import type { BigNumber } from 'bignumber.js'
-import type { WalletProviderType } from '../../shared/findOutProvider'
+import type { ProviderType } from '../types'
 
 export enum EthereumNetwork {
     Mainnet = 'Mainnet',
@@ -32,7 +32,6 @@ export interface ERC20TokenRecord {
     /** Delete time for soft delete */
     deleted_at?: Date
 }
-export type WalletRecord = ManagedWalletRecord | ExoticWalletRecord
 //#endregion
 
 //#region wallet
@@ -47,20 +46,12 @@ export interface WalletRecordProperties {
     erc20_token_whitelist: Set<string>
     erc20_token_blacklist: Set<string>
     _wallet_is_default?: boolean
-    /**
-     * undefined means "managed"
-     * "exotic" means the wallet is managed by an external wallet. for example, Metamask
-     */
-    type: 'managed' | 'exotic'
     createdAt: Date
     updatedAt: Date
 }
-export interface ExoticWalletRecord extends WalletRecordProperties {
-    provider: WalletProviderType
-    type: 'exotic'
-}
-export interface ManagedWalletRecord extends WalletRecordProperties {
-    type: 'managed'
+
+export interface WalletRecord extends WalletRecordProperties {
+    provider: ProviderType
     mnemonic: string[]
     passphrase: string
     _public_key_?: string

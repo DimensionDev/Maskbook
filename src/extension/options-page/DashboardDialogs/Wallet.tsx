@@ -43,7 +43,7 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useHistory } from 'react-router-dom'
 import { DashboardRoute } from '../Route'
 import { sleep } from '../../../utils/utils'
-import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
+import type { ERC20TokenDetails } from '../../background-script/PluginService'
 import { useCurrentEthChain, useManagedWalletDetail } from '../../../plugins/shared/useWallet'
 import { difference } from 'lodash-es'
 import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
@@ -51,6 +51,8 @@ import { QRCode } from '../../../components/shared/qrcode'
 import { getNetworkERC20Tokens } from '../../../plugins/Wallet/UI/EthereumNetworkSettings'
 import { TokenInList } from '../DashboardComponents/TokenInList'
 import { FixedSizeList } from 'react-window'
+import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import { ProviderType } from '../../../plugins/Wallet/types'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -300,7 +302,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
 
 //#region wallet create dialog
 interface WalletProps {
-    wallet: WalletDetails
+    wallet: WalletRecord
 }
 
 const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
@@ -343,7 +345,11 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
     const [showNotification, setShowNotification] = useState(false)
 
     const onSubmit = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', { name, passphrase }),
+        () =>
+            Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', {
+                name,
+                passphrase,
+            }),
         [name, passphrase],
         props.onClose,
     )
