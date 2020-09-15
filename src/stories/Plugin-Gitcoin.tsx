@@ -6,7 +6,7 @@ import { DonateDialog } from '../plugins/Gitcoin/DonateDialog'
 import { figmaLink } from './utils'
 import { action } from '@storybook/addon-actions'
 import BigNumber from 'bignumber.js'
-import type { WalletRecord } from '../plugins/Wallet/database/types'
+import { ProviderType } from '../web3/types'
 
 storiesOf('Plugin: Gitcoin', module)
     .add(
@@ -45,8 +45,8 @@ storiesOf('Plugin: Gitcoin', module)
                     tokens={[]}
                     wallets={[
                         {
-                            type: 'managed',
                             mnemonic: [],
+                            provider: ProviderType.Maskbook,
                             passphrase: '',
                             address: '0x23333',
                             name: 'Wallet Name',

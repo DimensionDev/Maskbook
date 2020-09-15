@@ -20,9 +20,9 @@ export interface TokenIconProps extends withClasses<KeysInferFromUseStyles<typeo
 }
 
 export function TokenIcon(props: TokenIconProps) {
+    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
     const { address, name } = props
     const classes = useStylesExtends(useStyles(), props)
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
     const checksumAddress = EthereumAddress.checksumAddress(address)
     return (
         <Avatar

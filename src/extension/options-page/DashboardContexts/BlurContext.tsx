@@ -25,10 +25,6 @@ const DashboardBlurContext = React.createContext<{
 
 export function useBlurContext(open: boolean) {
     const context = useContext(DashboardBlurContext)
-
-    console.log('DEBUG: blur')
-    console.log(context)
-
     useEffect(() => {
         // for options page only
         if (GetContext() !== 'options') return

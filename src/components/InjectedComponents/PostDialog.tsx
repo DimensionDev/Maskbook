@@ -40,6 +40,8 @@ import {
     makeTypedMessageText,
     isTypedMessageText,
 } from '../../protocols/typed-message'
+import { EthereumTokenType } from '../../web3/types'
+import { isDAI, isOKB } from '../../web3/helpers'
 import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
@@ -47,8 +49,6 @@ import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/utils'
 import { PluginUI } from '../../plugins/plugin'
 import { Flags } from '../../utils/flags'
-import { isDAI, isOKB } from '../../web3/helpers'
-import { EthereumTokenType } from '../../web3/types'
 
 const defaultTheme = {}
 

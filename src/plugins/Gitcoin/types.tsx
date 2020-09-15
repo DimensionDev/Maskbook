@@ -20,6 +20,8 @@ export interface GitcoinDonationPayload {
 }
 
 export interface GitcoinDonationRecord {
+    /** web3 network tag enum. Mainnet or Rinkeby */
+    chainId: ChainId
     /** The address of donor's account */
     donor_address: string
     /** The donation transaction hash. */
@@ -30,8 +32,6 @@ export interface GitcoinDonationRecord {
     donation_total: BigNumber
     /** The donation value which for project owner */
     donation_value: BigNumber
-    /** web3 network tag enum. Mainnet or Rinkeby */
-    chainId: ChainId
     /** token type tag for red packet */
     token_type: EthereumTokenType
     /** The tip transaction hash */

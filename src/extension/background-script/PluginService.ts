@@ -4,8 +4,6 @@ import * as Gitcoin from '../../plugins/Gitcoin/service'
 import * as FileService from '../../plugins/FileService/service'
 import * as Trader from '../../plugins/Trader/services'
 import type { ERC20TokenRecord } from '../../plugins/Wallet/database/types'
-import { getWalletProvider, web3 } from '../../plugins/Wallet/web3'
-import type { ProviderType } from '../../web3/types'
 
 const Plugins = {
     'maskbook.red_packet': RedPacket,
@@ -25,11 +23,8 @@ export async function invokePlugin<K extends keyof Plugins, M extends keyof Plug
 }
 
 export type ERC20TokenDetails = Pick<ERC20TokenRecord, 'address' | 'decimals' | 'name' | 'chainId' | 'symbol'>
-export { getTokens, getWallets } from '../../plugins/Wallet/wallet'
 
-export function connectExoticWallet(type: ProviderType) {
-    return getWalletProvider(type).requestAccounts()
-}
+export { getTokens, getWallets } from '../../plugins/Wallet/wallet'
 
 export async function getManagedWallet(address: string) {
     const { wallets } = await Wallet.getManagedWallets()

@@ -30,7 +30,7 @@ export const redPacketAPI = {
         const host = 'https://redpacket.gives'
         const x = 'a3323cd1-fa42-44cd-b053-e474365ab3da'
 
-        const network = resolveChainName(await getChainId())
+        const network = resolveChainName(await getChainId()).toLowerCase()
         const auth = await fetch(`${host}/hi?id=${claimWithWallet}&network=${network}`)
         if (!auth.ok) throw new Error('Auth failed')
         const verify = await auth.text()
