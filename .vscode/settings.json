@@ -19,6 +19,10 @@
             "url": "http://json.schemastore.org/chrome-manifest"
         },
         {
+            "fileMatch": ["/src/plugins/*/schema.json"],
+            "url": "http://json-schema.org/draft-07/schema"
+        },
+        {
             "fileMatch": ["/src/_locales/*/messages.json"],
             "url": "/.vscode/schema/locale.json"
         }
