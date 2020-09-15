@@ -49,7 +49,7 @@ import { QRCode } from '../../../components/shared/qrcode'
 import { TokenInList } from '../DashboardComponents/TokenInList'
 import { FixedSizeList } from 'react-window'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { useManagedWalletDetail } from '../../../plugins/Wallet/hooks/useWallet'
+import { useManagedWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { getERC20Tokens } from '../../../web3/tokens'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import type { ERC20Token } from '../../../web3/types'
@@ -112,6 +112,7 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
             <TextField
                 className={classes.search}
                 label={t('add_token_search_hint')}
+                autoFocus
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
             />
@@ -174,8 +175,9 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
         <Box textAlign="left">
             <TextField
                 required
-                error={!isValidAddress && !!address}
+                autoFocus
                 label={t('add_token_contract_address')}
+                error={!isValidAddress && !!address}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
             />
@@ -200,108 +202,6 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
 //#endregion
 
 //#region wallet import dialog
-export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
-    const { t } = useI18N()
-    const state = useState(0)
-
-    const [name, setName] = useState('')
-    const [mnemonic, setMnemonic] = useState('')
-    const [privKey, setPrivKey] = useState('')
-
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            {
-                label: t('mnemonic_words'),
-                children: (
-                    <div>
-                        <TextField
-                            required
-                            label={t('wallet_name')}
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                        <TextField
-                            required
-                            label={t('mnemonic_words')}
-                            value={mnemonic}
-                            onChange={(e) => setMnemonic(e.target.value)}
-                        />
-                    </div>
-                ),
-                p: 0,
-            },
-            {
-                label: t('private_key'),
-                children: (
-                    <div>
-                        <TextField
-                            required
-                            label={t('wallet_name')}
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                        <TextField
-                            type="password"
-                            required
-                            label={t('private_key')}
-                            value={privKey}
-                            onChange={(e) => setPrivKey(e.target.value)}
-                        />
-                    </div>
-                ),
-                display: 'flex',
-                p: 0,
-            },
-        ],
-        state,
-        height: 112,
-    }
-
-    const onSubmit = useSnackbarCallback(
-        () => {
-            if (state[0] === 0)
-                return Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
-                    name,
-                    mnemonic: mnemonic.split(' '),
-                    passphrase: '',
-                })
-            return Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', privKey).then(
-                ({ address, privateKeyValid }) => {
-                    if (!privateKeyValid) throw new Error(t('import_failed'))
-                    return Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
-                        name,
-                        address,
-                        _private_key_: privKey,
-                    })
-                },
-            )
-        },
-        [state[0], name, mnemonic, privKey],
-        props.onClose,
-    )
-
-    return (
-        <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper
-                icon={<CreditCardIcon />}
-                iconColor="#4EE0BC"
-                primary={t('import_wallet')}
-                content={<AbstractTab {...tabProps}></AbstractTab>}
-                footer={
-                    <DebounceButton
-                        variant="contained"
-                        onClick={onSubmit}
-                        disabled={!(state[0] === 0 && name && mnemonic) && !(state[0] === 1 && name && privKey)}>
-                        {t('import')}
-                    </DebounceButton>
-                }
-            />
-        </DashboardDialogCore>
-    )
-}
-//#endregion
-
-//#region wallet create dialog
 interface WalletProps {
     wallet: WalletRecord
 }
@@ -331,41 +231,32 @@ const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
             width: 16,
             height: 16,
             color: '#FF9138',
-            marginLeft: 5,
         },
     }),
 )
 
-export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
+export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
     const { t } = useI18N()
+    const state = useState(0)
     const classes = useWalletCreateDialogStyle()
 
     const [name, setName] = useState('')
     const [passphrase] = useState('')
+    const [mnemonic, setMnemonic] = useState('')
+    const [privKey, setPrivKey] = useState('')
     const [confirmed, setConfirmed] = useState(false)
     const [showNotification, setShowNotification] = useState(false)
 
-    const onSubmit = useSnackbarCallback(
-        () =>
-            Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', {
-                name,
-                passphrase,
-            }),
-        [name, passphrase],
-        props.onClose,
-    )
-
-    return (
-        <DashboardDialogCore fullScreen={false} {...props}>
-            <DashboardDialogWrapper
-                icon={<CreditCardIcon />}
-                iconColor="#4EE0BC"
-                primary={t('create_a_wallet')}
-                content={
+    const tabProps: AbstractTabProps = {
+        tabs: [
+            {
+                label: t('wallet_new'),
+                children: (
                     <>
                         <form>
                             <TextField
                                 required
+                                autoFocus
                                 label={t('wallet_name')}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
@@ -385,23 +276,118 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                                         <Typography className={classes.confirmation} variant="body2">
                                             {t('wallet_confirmation_hint')}
                                         </Typography>
-                                        <InfoOutlinedIcon
-                                            className={classes.notificationIcon}
-                                            cursor="pointer"
-                                            onClick={() => setShowNotification((t) => !t)}
-                                        />
                                     </Box>
                                 }
+                            />
+                            <InfoOutlinedIcon
+                                className={classes.notificationIcon}
+                                cursor="pointer"
+                                onClick={(ev) => {
+                                    ev.stopPropagation()
+                                    setShowNotification((t) => !t)
+                                }}
                             />
                         </Box>
                         {showNotification ? (
                             <Typography className={classes.notification}>{t('wallet_notification')}</Typography>
                         ) : null}
                     </>
-                }
+                ),
+            },
+            {
+                label: t('mnemonic_words'),
+                children: (
+                    <div>
+                        <TextField
+                            required
+                            autoFocus
+                            label={t('wallet_name')}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <TextField
+                            required
+                            label={t('mnemonic_words')}
+                            value={mnemonic}
+                            onChange={(e) => setMnemonic(e.target.value)}
+                        />
+                    </div>
+                ),
+                p: 0,
+            },
+            {
+                label: t('private_key'),
+                children: (
+                    <div>
+                        <TextField
+                            required
+                            autoFocus
+                            label={t('wallet_name')}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <TextField
+                            type="password"
+                            required
+                            label={t('private_key')}
+                            value={privKey}
+                            onChange={(e) => setPrivKey(e.target.value)}
+                        />
+                    </div>
+                ),
+                display: 'flex',
+                p: 0,
+            },
+        ],
+        state,
+        height: 112,
+    }
+
+    const onSubmit = useSnackbarCallback(
+        () => {
+            if (state[0] === 0)
+                return Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', {
+                    name,
+                    passphrase,
+                })
+            if (state[0] === 1)
+                return Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                    name,
+                    mnemonic: mnemonic.split(' '),
+                    passphrase: '',
+                })
+            return Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', privKey).then(
+                ({ address, privateKeyValid }) => {
+                    if (!privateKeyValid) throw new Error(t('import_failed'))
+                    return Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                        name,
+                        address,
+                        _private_key_: privKey,
+                    })
+                },
+            )
+        },
+        [state[0], name, passphrase, mnemonic, privKey],
+        props.onClose,
+    )
+
+    return (
+        <DashboardDialogCore {...props}>
+            <DashboardDialogWrapper
+                icon={<CreditCardIcon />}
+                iconColor="#4EE0BC"
+                primary={t(state[0] === 0 ? 'create_wallet' : 'import_wallet')}
+                content={<AbstractTab {...tabProps}></AbstractTab>}
                 footer={
-                    <DebounceButton variant="contained" onClick={onSubmit} disabled={!name || !confirmed}>
-                        {t('create')}
+                    <DebounceButton
+                        variant="contained"
+                        onClick={onSubmit}
+                        disabled={
+                            !(state[0] === 0 && name && confirmed) &&
+                            !(state[0] === 1 && name && mnemonic) &&
+                            !(state[0] === 2 && name && privKey)
+                        }>
+                        {t('import')}
                     </DebounceButton>
                 }
             />
@@ -559,7 +545,7 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
     const classes = useBackupDialogStyles()
-    const { data } = useManagedWalletDetail(wallet.address)
+    const { data } = useManagedWallet(wallet.address)
     const { value: privateKeyInHex } = useAsync(async () => {
         if (!data) return
         const { privateKeyInHex } = data.privateKey
@@ -608,14 +594,14 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
         <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 size="small"
-                primary={t('wallet_new_name')}
+                primary={t('wallet_rename')}
                 content={
                     <TextField
                         required
+                        autoFocus
                         label={t('wallet_name')}
                         variant="outlined"
                         value={name}
-                        autoFocus
                         onChange={(e) => setName(e.target.value)}
                         inputProps={{ onKeyPress: (e) => e.key === 'Enter' && renameWallet() }}
                     />
@@ -625,9 +611,9 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                         <DebounceButton variant="contained" onClick={renameWallet}>
                             {t('ok')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" onClick={props.onClose}>
+                        <Button variant="outlined" color="inherit" onClick={props.onClose}>
                             {t('cancel')}
-                        </DebounceButton>
+                        </Button>
                     </SpacedButtonGroup>
                 }
             />
@@ -665,9 +651,9 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
                             data-testid="confirm_button">
                             {t('confirm')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" onClick={props.onClose}>
+                        <Button variant="outlined" color="inherit" onClick={props.onClose}>
                             {t('cancel')}
-                        </DebounceButton>
+                        </Button>
                     </SpacedButtonGroup>
                 }
             />
@@ -700,9 +686,9 @@ export function DashboardWalletHideTokenConfirmDialog(
                         <DebounceButton variant="contained" color="danger" onClick={onConfirm}>
                             {t('confirm')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" onClick={props.onClose}>
+                        <Button variant="outlined" color="inherit" onClick={props.onClose}>
                             {t('cancel')}
-                        </DebounceButton>
+                        </Button>
                     </SpacedButtonGroup>
                 }
             />

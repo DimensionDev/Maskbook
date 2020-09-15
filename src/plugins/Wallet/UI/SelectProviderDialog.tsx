@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { MoreHorizontal } from 'react-feather'
+import { MoreHorizontal, Server } from 'react-feather'
 import { makeStyles, Theme, createStyles, DialogContent, GridList, GridListTile } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -17,6 +17,10 @@ import { useBlurContext } from '../../../extension/options-page/DashboardContext
 import { GetContext } from '@holoflows/kit/es'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { ProviderType } from '../../../web3/types'
+import { useHistory } from 'react-router-dom'
+import { useManagedWallets } from '../hooks/useWallet'
+import Wallets from 'arweave/web/wallets'
+import { unreachable } from '../../../utils/utils'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,6 +59,7 @@ interface SelectProviderDialogUIProps
 function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
+    const history = useHistory()
 
     //#region remote controlled dialog logic
     const [open, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
@@ -62,27 +67,37 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
         'selectProviderDialogUpdated',
     )
     const onClose = useCallback(() => {
-        console.log('DEBUG: on close')
         setOpen({
             open: false,
         })
     }, [])
     //#endregion
 
+    // render in dashboard
     useBlurContext(open)
 
-    const onConnect = useCallback(async (type: ProviderType) => {
-        await Services.Welcome.openOptionsPage(DashboardRoute.Wallets)
-        onClose()
-    }, [])
-
-    const onMetaMaskClick = useCallback(() => {
-        alert('TO BE IMPLEMENTED')
-    }, [])
-
-    const onWalletConnectClick = useCallback(() => {
-        alert('TO BE IMPLEMENTED')
-    }, [])
+    const { data: { wallets } = {} } = useManagedWallets()
+    const onConnect = useCallback(
+        async (type: ProviderType) => {
+            onClose()
+            switch (type) {
+                case ProviderType.Maskbook:
+                    if (wallets?.length) await Services.Ethereum.connectMaskbook()
+                    else if (GetContext() === 'options') history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
+                    else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
+                    break
+                case ProviderType.MetaMask:
+                    await Services.Ethereum.connectMetaMask()
+                    break
+                case ProviderType.WalletConnect:
+                    await Services.Ethereum.connectWalletConnect()
+                    break
+                default:
+                    unreachable(type)
+            }
+        },
+        [wallets?.map((x) => x.address).join()],
+    )
 
     return (
         <div className={classes.root}>

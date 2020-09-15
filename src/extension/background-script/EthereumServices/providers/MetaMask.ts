@@ -36,7 +36,7 @@ export async function requestAccounts() {
 
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {
     // validate address
-    if (!!EthereumAddress.isValid(address)) throw new Error('Cannot found account or invalid account')
+    if (!EthereumAddress.isValid(address)) throw new Error('Cannot found account or invalid account')
 
     // update wallet in the DB
     await updateExoticWalletsFromSource(

@@ -25,12 +25,26 @@ const base: ThemeOptions = {
         fontFamily: getFontFamily(),
     },
     overrides: {
-        MuiButton: { root: { textTransform: 'unset', minWidth: '100px' } },
-        MuiTab: { root: { textTransform: 'unset', padding: '0' } },
-        MuiDialog: { paper: { borderRadius: '12px' } },
+        MuiButton: {
+            root: {
+                textTransform: 'unset',
+                minWidth: '100px',
+            },
+        },
+        MuiTab: {
+            root: { textTransform: 'unset', padding: '0' },
+        },
+        MuiDialog: {
+            paper: {
+                borderRadius: '12px',
+            },
+        },
     },
     props: {
-        MuiButton: { size: 'small', disableElevation: true },
+        MuiButton: {
+            size: 'small',
+            disableElevation: true,
+        },
     },
 }
 
@@ -57,8 +71,6 @@ const baseTheme = (theme: 'dark' | 'light') => {
 // Theme
 export const MaskbookLightTheme = unstable_createMuiStrictModeTheme(baseTheme('light'))
 export const MaskbookDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))
-
-const FixedWidthFonts = getFontFamily(true)
 
 export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
     const dark = theme.palette.type === 'dark'

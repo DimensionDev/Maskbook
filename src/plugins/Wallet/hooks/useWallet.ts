@@ -9,20 +9,32 @@ import { formatBalance } from '../formatter'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useChainId } from '../../../web3/hooks/useChainId'
 
+const walletsFetcher = () => Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
+const tokensFetcher = () => Services.Plugin.invokePlugin('maskbook.wallet', 'getTokens')
+const managedWalletFetcher = (address: string) =>
+    Services.Plugin.invokePlugin('maskbook.wallet', 'getManagedWallet', address)
+const managedWalletsFetcher = () => Services.Plugin.invokePlugin('maskbook.wallet', 'getManagedWallets')
+
 export function useWallets() {
-    const swr = useSWR('com.maskbook.wallet.wallets', { fetcher: Services.Plugin.getWallets })
+    const swr = useSWR('com.maskbook.wallet.wallets', { fetcher: walletsFetcher })
     const { revalidate } = swr
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     return swr
 }
 export function useTokens() {
-    const swr = useSWR('com.maskbook.wallet.tokens', { fetcher: Services.Plugin.getTokens })
+    const swr = useSWR('com.maskbook.wallet.tokens', { fetcher: tokensFetcher })
     const { revalidate } = swr
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     return swr
 }
-export function useManagedWalletDetail(address: string) {
-    const swr = useSWR(address, { fetcher: Services.Plugin.getManagedWallet })
+export function useManagedWallet(address: string) {
+    const swr = useSWR(address, { fetcher: managedWalletFetcher })
+    const { revalidate } = swr
+    useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
+    return swr
+}
+export function useManagedWallets() {
+    const swr = useSWR('com.maskbook.wallet.wallets.managed', { fetcher: managedWalletsFetcher })
     const { revalidate } = swr
     useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
     return swr

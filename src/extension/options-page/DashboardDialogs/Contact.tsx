@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback, useModal } from './Base'
-import { TextField, makeStyles, createStyles } from '@material-ui/core'
+import { TextField, makeStyles, createStyles, Button } from '@material-ui/core'
 import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
 import Services from '../../service'
@@ -51,9 +51,9 @@ export function DashboardContactDeleteConfirmDialog(
                         <DebounceButton variant="contained" color="danger" onClick={onDelete}>
                             {t('ok')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" onClick={props.onClose}>
+                        <Button variant="outlined" color="inherit" onClick={props.onClose}>
                             {t('cancel')}
-                        </DebounceButton>
+                        </Button>
                     </SpacedButtonGroup>
                 }></DashboardDialogWrapper>
         </DashboardDialogCore>
@@ -115,9 +115,9 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactProps & 
                         <DebounceButton variant="contained" onClick={onSubmit}>
                             {t('save')}
                         </DebounceButton>
-                        <ActionButton variant="outlined" onClick={props.onClose}>
+                        <Button variant="outlined" color="inherit" onClick={props.onClose}>
                             {t('cancel')}
-                        </ActionButton>
+                        </Button>
                     </SpacedButtonGroup>
                 }></DashboardDialogWrapper>
         </DashboardDialogCore>
