@@ -45,6 +45,7 @@ export function createPluginWalletAccess<Data, Index extends [IDBValidKey?, IDBV
             return this.objectStore('PluginStore').index('plugin_id').getAll().then(unwrapArray)
         }
         const extraMethods = { add, getByIndex, getAll, get, put }
+        /** @deprecated */
         async function createPluginTransaction<Mode extends 'readonly' | 'readwrite'>(
             mode: Mode,
         ): Promise<T<Mode> & typeof extraMethods> {
