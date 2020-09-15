@@ -1,5 +1,6 @@
 {
     "type": "object",
+    "additionalProperties": true,
     "properties": {
         "contract_version": {
             "type": "number",
@@ -23,6 +24,7 @@
         },
         "sender": {
             "type": "object",
+            "additionalProperties": true,
             "properties": {
                 "address": {
                     "type": "string",
@@ -80,6 +82,7 @@
         },
         "token": {
             "type": "object",
+            "additionalProperties": true,
             "properties": {
                 "address": {
                     "description": "token address",
