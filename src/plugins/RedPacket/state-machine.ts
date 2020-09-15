@@ -13,6 +13,7 @@ import { assert, unreachable } from '../../utils/utils'
 import { ChainId, EthereumTokenType } from '../../web3/types'
 import { getConstant } from '../../web3/constants'
 import { getChainId } from '../../extension/background-script/EthereumService'
+import { parseChainName } from '../../web3/pipes'
 
 function getProvider() {
     return redPacketAPI
@@ -341,9 +342,12 @@ function RedPacketRecordOutDB(x: RedPacketRecordInDatabase): RedPacketRecord {
     const record = omit(x, names) as RedPacketRecord
     for (const name of names) {
         const original = x[name]
-        if (typeof original !== 'undefined') {
-            record[name] = new BigNumber(String(original))
-        }
+        if (typeof original !== 'undefined') record[name] = new BigNumber(String(original))
+    }
+    {
+        // fix: network was renamed to chainId
+        const record_ = record as any
+        if (!record.chainId) record.chainId = parseChainName(record_.network)
     }
     return record
 }

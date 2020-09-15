@@ -1,8 +1,8 @@
 import { ChainId, ProviderType } from './types'
 import { unreachable } from '../utils/utils'
 
-export function resolveProviderName(type: ProviderType) {
-    switch (type) {
+export function resolveProviderName(providerType: ProviderType) {
+    switch (providerType) {
         case ProviderType.Maskbook:
             return 'Maskbook'
         case ProviderType.MetaMask:
@@ -10,7 +10,20 @@ export function resolveProviderName(type: ProviderType) {
         case ProviderType.WalletConnect:
             return 'WalletConnect'
         default:
-            unreachable(type)
+            unreachable(providerType)
+    }
+}
+
+export function parseChainName(name: string) {
+    switch (name.toLowerCase()) {
+        case 'ropsten':
+            return ChainId.Ropsten
+        case 'rinkeby':
+            return ChainId.Rinkeby
+        case 'kovan':
+            return ChainId.Kovan
+        default:
+            return ChainId.Mainnet
     }
 }
 

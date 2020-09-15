@@ -8,6 +8,7 @@ import {
 import { ProviderType } from '../types'
 import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
 import { ChainId } from '../types'
+import { unreachable } from '../../utils/utils'
 
 /**
  * Get the chain id which is using by current wallet
@@ -24,6 +25,6 @@ export function useChainId() {
         if (defaultWallet.provider === ProviderType.Maskbook) return maskbookChainId
         if (defaultWallet.provider === ProviderType.MetaMask) return metamaskChainId
         if (defaultWallet.provider === ProviderType.WalletConnect) return walletconnectChainId
-        return ChainId.Mainnet
+        unreachable(defaultWallet.provider)
     }, [defaultWallet?.address, maskbookChainId, metamaskChainId, walletconnectChainId])
 }

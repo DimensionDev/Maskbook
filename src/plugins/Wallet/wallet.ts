@@ -2,7 +2,12 @@ import * as bip39 from 'bip39'
 import { omit, uniqBy } from 'lodash-es'
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
-import type { WalletRecord, ERC20TokenRecord, WalletRecordInDatabase } from './database/types'
+import type {
+    WalletRecord,
+    ERC20TokenRecord,
+    WalletRecordInDatabase,
+    ERC20TokenRecordInDatabase,
+} from './database/types'
 import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import { walletAPI, erc20API, balanceCheckerAPI } from './api'
@@ -10,7 +15,7 @@ import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { buf2hex, hex2buf, assert } from '../../utils/utils'
 import { ProviderType } from '../../web3/types'
-import { resolveProviderName } from '../../web3/pipes'
+import { resolveProviderName, parseChainName } from '../../web3/pipes'
 import { ChainId, ERC20Token } from '../../web3/types'
 import { getConstant } from '../../web3/constants'
 
@@ -52,7 +57,7 @@ export async function getWallets() {
 export async function getTokens() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token')
     const tokens = await t.objectStore('ERC20Token').getAll()
-    return uniqBy(tokens, (token) => token.address.toUpperCase())
+    return uniqBy(tokens, (token) => token.address.toUpperCase()).map(ERC20TokenRecordOutDB)
 }
 
 export async function getManagedWallets(): Promise<{
@@ -76,7 +81,7 @@ export async function getManagedWallets(): Promise<{
         }
     }
     function makeTokens() {
-        return uniqBy(tokens, (token) => token.address.toUpperCase())
+        return uniqBy(tokens, (token) => token.address.toUpperCase()).map(ERC20TokenRecordOutDB)
     }
     return { wallets: await makeWallets(), tokens: makeTokens() }
 }
@@ -303,7 +308,7 @@ export async function walletAddERC20Token(
 ) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
     const wallet = await getWalletByAddress(t, walletAddress)
-    const erc20 = await t.objectStore('ERC20Token').get(token.address)
+    const erc20 = await getERC20TokenByAddress(t, token.address)
     if (!erc20) {
         const rec: ERC20TokenRecord = {
             address: token.address,
@@ -313,7 +318,7 @@ export async function walletAddERC20Token(
             chainId,
             symbol: token.symbol,
         }
-        await t.objectStore('ERC20Token').add(rec)
+        await t.objectStore('ERC20Token').add(ERC20TokenRecordOutDB(rec))
     }
     if (!wallet.erc20_token_balance.has(token.address)) {
         wallet.erc20_token_balance.set(token.address, new BigNumber(0))
@@ -330,7 +335,7 @@ export async function walletAddERC20Token(
 export async function walletBlockERC20Token(walletAddress: string, tokenAddress: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
     const wallet = await getWalletByAddress(t, walletAddress)
-    const erc20 = await t.objectStore('ERC20Token').get(tokenAddress)
+    const erc20 = await getERC20TokenByAddress(t, tokenAddress)
     if (!erc20) return
     if (!wallet.erc20_token_blacklist.has(tokenAddress)) {
         wallet.erc20_token_blacklist.add(tokenAddress)
@@ -395,23 +400,44 @@ export async function onWalletBalancesUpdated(data: BalanceMetadata) {
     }
     await Promise.all(
         unaddedTokens.map(async ({ token, chainId }) => {
-            const erc20 = await t.objectStore('ERC20Token').get(token.address)
+            const erc20 = await getERC20TokenByAddress(t, token.address)
             if (erc20) return
             modified = true
-            await t.objectStore('ERC20Token').add({
-                ...token,
-                chainId,
-                is_user_defined: false,
-            })
+            await t.objectStore('ERC20Token').add(
+                ERC20TokenRecordIntoDB({
+                    ...token,
+                    chainId,
+                    is_user_defined: false,
+                }),
+            )
         }),
     )
     if (modified) PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+}
+
+async function getERC20TokenByAddress(t: IDBPSafeTransaction<WalletDB, ['ERC20Token'], 'readonly'>, address: string) {
+    const record = await t.objectStore('ERC20Token').get(address)
+    return record ? ERC20TokenRecordOutDB(record) : null
 }
 
 async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(address)
     assert(record)
     return WalletRecordOutDB(record)
+}
+
+function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
+    const record = x as ERC20TokenRecord
+    {
+        // fix: network was renamed to chainId
+        const record_ = record as any
+        if (!record.chainId) record.chainId = parseChainName(record_.network)
+    }
+    return record
+}
+
+function ERC20TokenRecordIntoDB(x: ERC20TokenRecord) {
+    return x as ERC20TokenRecordInDatabase
 }
 
 function WalletRecordOutDB(x: WalletRecordInDatabase) {

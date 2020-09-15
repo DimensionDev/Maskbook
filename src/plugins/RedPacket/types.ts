@@ -140,6 +140,7 @@ export enum RedPacketStatus {
 export interface RedPacketJSONPayload {
     contract_version: number
     contract_address: string
+    chainId?: ChainId
     rpid: string
     password: string
     shares: number
@@ -152,7 +153,6 @@ export interface RedPacketJSONPayload {
     total: string
     creation_time: number
     duration: number
-    chainId?: ChainId
     token_type: EthereumTokenType
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }

@@ -2,24 +2,26 @@ import type { BigNumber } from 'bignumber.js'
 import type { ProviderType } from '../../../web3/types'
 import type { ChainId } from '../../../web3/types'
 
+export interface ERC20TokenRecordInDatabase extends ERC20TokenRecord {}
+
 export interface WalletRecordInDatabase extends Omit<WalletRecord, 'eth_balance' | 'erc20_token_balance'> {
     eth_balance: string | bigint
     erc20_token_balance: Map<string, string | bigint>
 }
+
 export interface ERC20TokenRecord {
     /** token address */
     address: string
+    /** eth chain id */
+    chainId: ChainId
     /** token name */
     name: string
     /** token decimal */
     decimals: number
     /** token symbol */
     symbol: string
-    chainId: ChainId
     /** Yes if user added token */
     is_user_defined: boolean
-    /** Delete time for soft delete */
-    deleted_at?: Date
 }
 //#endregion
 

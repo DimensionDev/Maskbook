@@ -14,6 +14,7 @@ import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ProviderType } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
+import { resolveProviderName } from '../../../web3/pipes'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -119,8 +120,6 @@ export function WalletItem(props: WalletItemProps) {
     const { wallet, selected, onClick, tokens } = props
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
-    const isExotic = wallet.provider !== ProviderType.Maskbook
-    const provider = wallet.provider !== ProviderType.Maskbook ? wallet.provider : ''
     return (
         <ButtonBase
             component="section"
@@ -138,13 +137,13 @@ export function WalletItem(props: WalletItemProps) {
                 </Typography>
                 <Address address={wallet.address} />
             </Box>
-            {isExotic && !xsMatched ? (
+            {wallet.provider !== ProviderType.Maskbook && !xsMatched ? (
                 <Box paddingBottom={2} marginTop={-2}>
                     <Typography className={classes.label} component="p" color="textSecondary" variant="overline">
                         Managed by
                     </Typography>
                     <Typography className={classes.address} component="code">
-                        {provider}
+                        {resolveProviderName(wallet.provider)}
                     </Typography>
                 </Box>
             ) : null}
