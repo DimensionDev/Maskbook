@@ -1,14 +1,7 @@
 import { omit, uniqBy } from 'lodash-es'
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
-import {
-    WalletRecord,
-    ERC20TokenRecord,
-    EthereumNetwork,
-    WalletRecordInDatabase,
-    ManagedWalletRecord,
-    ExoticWalletRecord,
-} from './database/types'
+import { WalletRecord, ERC20TokenRecord, EthereumNetwork, WalletRecordInDatabase } from './database/types'
 import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
@@ -17,6 +10,8 @@ import { ERC20Token, ETH_ADDRESS } from './token'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { buf2hex, hex2buf, assert } from '../../utils/utils'
+import { ProviderType } from './types'
+import { resolveProviderName } from './pipes'
 
 //#region predefined tokens
 import mainnet from './erc20/mainnet.json'
@@ -58,7 +53,7 @@ export async function getTokens() {
 }
 
 export async function getManagedWallets(): Promise<{
-    wallets: (ManagedWalletRecord & { privateKey: string })[]
+    wallets: (WalletRecord & { privateKey: string })[]
     tokens: ERC20TokenRecord[]
 }> {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet', 'ERC20Token')
@@ -67,10 +62,10 @@ export async function getManagedWallets(): Promise<{
     async function makeWallets() {
         const records = wallets
             .map(WalletRecordOutDB)
-            .filter((x): x is ManagedWalletRecord => x.type !== 'exotic')
+            .filter((x) => x.provider === ProviderType.Maskbook)
             .map(async (record) => ({ ...record, privateKey: await makePrivateKey(record) }))
         return (await Promise.all(records)).sort(sortWallet)
-        async function makePrivateKey(record: ManagedWalletRecord) {
+        async function makePrivateKey(record: WalletRecord) {
             const { privateKey } = record._private_key_
                 ? await recoverWalletFromPrivateKey(record._private_key_)
                 : await recoverWallet(record.mnemonic, record.passphrase)
@@ -84,20 +79,20 @@ export async function getManagedWallets(): Promise<{
 }
 
 export async function updateExoticWalletsFromSource(
-    source: ExoticWalletRecord['provider'],
-    updates: Map<string, Partial<ExoticWalletRecord>>,
+    provider: ProviderType,
+    updates: Map<string, Partial<WalletRecord>>,
 ): Promise<void> {
     const walletStore = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet').objectStore('Wallet')
     let modified = false
     for await (const cursor of walletStore) {
         const wallet = cursor.value
-        if (wallet.type !== 'exotic') continue
-        if ((wallet as any).provider !== source) continue
+        if (wallet.provider !== ProviderType.Maskbook) continue
+        if (wallet.provider !== provider) continue
 
         modified = true
         const addr = wallet.address
         if (updates.has(addr)) {
-            const orig = WalletRecordOutDB(cursor.value) as ExoticWalletRecord
+            const orig = WalletRecordOutDB(cursor.value) as WalletRecord
             await cursor.update(WalletRecordIntoDB({ ...orig, ...updates.get(addr)!, updatedAt: new Date() }))
         } else await cursor.delete()
     }
@@ -113,11 +108,10 @@ export async function updateExoticWalletsFromSource(
                 erc20_token_blacklist: new Set(),
                 erc20_token_whitelist: new Set(),
                 eth_balance: new BigNumber(0),
-                name: source,
-                provider: source,
-                type: 'exotic',
+                name: resolveProviderName(provider),
+                provider,
                 ...updates.get(address)!,
-            } as ExoticWalletRecord),
+            } as WalletRecord),
         )
     }
     if (modified) {
@@ -157,18 +151,18 @@ export async function setDefaultWallet(address: WalletRecord['address']) {
 
 export async function createNewWallet(
     rec: Omit<
-        ManagedWalletRecord,
+        WalletRecord,
         | 'id'
         | 'address'
         | 'mnemonic'
         | 'eth_balance'
+        | 'provider'
         | '_data_source_'
         | 'erc20_token_balance'
         | 'erc20_token_whitelist'
         | 'erc20_token_blacklist'
         | 'createdAt'
         | 'updatedAt'
-        | 'type'
     >,
 ) {
     const mnemonic = bip39.generateMnemonic().split(' ')
@@ -177,22 +171,19 @@ export async function createNewWallet(
 
 export async function importNewWallet(
     rec: PartialRequired<
-        Omit<
-            ManagedWalletRecord,
-            'id' | 'eth_balance' | '_data_source_' | 'erc20_token_balance' | 'createdAt' | 'updatedAt'
-        >,
+        Omit<WalletRecord, 'id' | 'eth_balance' | '_data_source_' | 'erc20_token_balance' | 'createdAt' | 'updatedAt'>,
         'name'
     >,
 ) {
-    const { name, mnemonic = [], passphrase = '' } = rec
+    const { name, provider = ProviderType.Maskbook, mnemonic = [], passphrase = '' } = rec
     const address = await getWalletAddress()
     if (!address) throw new Error('cannot get the address of wallet')
     if (rec.name === null) rec.name = address.slice(0, 6)
-    const record: ManagedWalletRecord = {
-        type: 'managed',
+    const record: WalletRecord = {
         name,
         mnemonic,
         passphrase,
+        provider,
         address,
         eth_balance: new BigNumber(0),
         erc20_token_balance: new Map([
@@ -429,7 +420,6 @@ function WalletRecordOutDB(x: WalletRecordInDatabase) {
     }
     record.erc20_token_whitelist = x.erc20_token_whitelist || new Set()
     record.erc20_token_blacklist = x.erc20_token_blacklist || new Set()
-    record.type = record.type || 'managed'
     return record
 }
 function WalletRecordIntoDB(x: WalletRecord) {

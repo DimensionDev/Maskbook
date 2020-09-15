@@ -2,10 +2,9 @@ import { EthereumAddress } from 'wallet.ts'
 import WalletConnect from '@walletconnect/client'
 import { remove } from 'lodash-es'
 import { updateExoticWalletsFromSource } from '../../../../plugins/Wallet/wallet'
-import { WalletProviderType } from '../../../../plugins/shared/findOutProvider'
-import type { ExoticWalletRecord } from '../../../../plugins/Wallet/database/types'
 import { currentWalletConnectChainIdSettings } from '../../../../settings/settings'
 import { ChainId } from '../../../../web3/types'
+import { ProviderType } from '../../../../plugins/Wallet/types'
 
 //#region tracking chain id
 let currentChainId: ChainId = ChainId.Mainnet
@@ -91,7 +90,7 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
 
     // update wallet in the DB
     await updateExoticWalletsFromSource(
-        WalletProviderType.wallet_connect,
+        ProviderType.WalletConnect,
         new Map([[address, { address, _wallet_is_default: setAsDefault }]]),
     )
 }

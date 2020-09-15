@@ -9,10 +9,10 @@ import { createWeb3 } from './web3'
 import * as Maskbook from './providers/Maskbook'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
-import { WalletProviderType } from '../../../plugins/shared/findOutProvider'
 import { isSameAddr } from '../../../web3/helpers'
 import { getNonce, resetNonce, commitNonce } from '../NonceService'
 import type { ChainId } from '../../../web3/types'
+import { ProviderType } from '../../../plugins/Wallet/types'
 
 //#region tracking wallets
 let wallets: WalletRecord[] = []
@@ -34,7 +34,7 @@ async function createTransactionSender(from: string, config: TransactionConfig) 
 
     // Managed wallets need calc gas, gasPrice and nonce.
     // Add the private key into eth accounts list is also required.
-    if (wallet.type === 'managed') {
+    if (wallet.provider === ProviderType.Maskbook) {
         const web3 = createWeb3(Maskbook.createProvider())
         const privateKey = wallet._private_key_
         if (privateKey) {
@@ -52,12 +52,12 @@ async function createTransactionSender(from: string, config: TransactionConfig) 
 
     // MetaMask provider can be wrapped into web3 lib directly.
     // https://github.com/MetaMask/extension-provider
-    if (wallet.provider === WalletProviderType.metamask)
+    if (wallet.provider === ProviderType.MetaMask)
         return () => createWeb3(MetaMask.createProvider()).eth.sendTransaction(config)
 
     // Wrap promise as PromiEvent because WalletConnect returns transaction hash only
     // docs: https://docs.walletconnect.org/client-api
-    if (wallet.provider === WalletProviderType.wallet_connect) {
+    if (wallet.provider === ProviderType.WalletConnect) {
         const connector = await WalletConnect.createConnector()
         return () => {
             const listeners: { name: string; listener: Function }[] = []
@@ -121,9 +121,9 @@ export async function callTransaction(from: string, config: TransactionConfig) {
     const wallet = wallets.find((x) => isSameAddr(x.address, from))
     if (!wallet) throw new Error('the wallet does not exists')
 
-    if (wallet.type === 'managed') return createWeb3(Maskbook.createProvider()).eth.call(config)
-    if (wallet.provider === 'metamask') return createWeb3(MetaMask.createProvider()).eth.call(config)
-    if (wallet.provider === WalletProviderType.wallet_connect) {
+    if (wallet.provider === ProviderType.Maskbook) return createWeb3(Maskbook.createProvider()).eth.call(config)
+    if (wallet.provider === ProviderType.MetaMask) return createWeb3(MetaMask.createProvider()).eth.call(config)
+    if (wallet.provider === ProviderType.WalletConnect) {
         const connector = await WalletConnect.createConnector()
         return createWeb3(Maskbook.createProvider(connector.chainId as ChainId), []).eth.call(config)
     }

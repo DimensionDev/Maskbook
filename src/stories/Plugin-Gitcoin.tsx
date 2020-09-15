@@ -6,7 +6,7 @@ import { DonateDialog } from '../plugins/Gitcoin/DonateDialog'
 import { figmaLink } from './utils'
 import { action } from '@storybook/addon-actions'
 import BigNumber from 'bignumber.js'
-import type { ManagedWalletRecord } from '../plugins/Wallet/database/types'
+import type { WalletRecord } from '../plugins/Wallet/database/types'
 
 storiesOf('Plugin: Gitcoin', module)
     .add(

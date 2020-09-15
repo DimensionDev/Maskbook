@@ -17,6 +17,7 @@ import { MessageCenter } from '../../../utils/messages'
 import { currentImportingBackup } from '../../../settings/settings'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { importNewWallet } from '../../../plugins/Wallet/wallet'
+import { ProviderType } from '../../../plugins/Wallet/types'
 
 /**
  * Restore the backup
@@ -53,7 +54,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
 
                 for (const x of data.wallets) {
                     const record = WalletRecordFromJSONFormat(x)
-                    if (record.type === 'managed') await importNewWallet(record)
+                    if (record.mnemonic || record._private_key_) await importNewWallet(record)
                 }
             })
         }

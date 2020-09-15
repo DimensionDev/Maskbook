@@ -6,7 +6,7 @@ import {
     currentMetaMaskChainIdSettings,
     currentWalletConnectChainIdSettings,
 } from '../../settings/settings'
-import { WalletProviderType } from '../../plugins/shared/findOutProvider'
+import { ProviderType } from '../../plugins/Wallet/types'
 
 /**
  * Get the chain id which is using by current wallet
@@ -20,9 +20,9 @@ export function useChainId() {
 
     return useMemo(() => {
         if (!defaultWallet) return null
-        if (defaultWallet.type === 'managed') return maskbookChainId
-        if (defaultWallet.provider === WalletProviderType.metamask) return metamaskChainId
-        if (defaultWallet.provider === WalletProviderType.wallet_connect) return walletconnectChainId
+        if (defaultWallet.provider === ProviderType.Maskbook) return maskbookChainId
+        if (defaultWallet.provider === ProviderType.MetaMask) return metamaskChainId
+        if (defaultWallet.provider === ProviderType.WalletConnect) return walletconnectChainId
         return null
     }, [defaultWallet?.address, maskbookChainId, metamaskChainId, walletconnectChainId])
 }

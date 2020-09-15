@@ -7,18 +7,16 @@ import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { getActivatedUI } from '../../../social-network/ui'
 import { useTwitterDialog } from '../../../social-network-provider/twitter.com/utils/theme'
 import { Provider } from './Provider'
-import { sleep } from '../../../utils/utils'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import { MaskbookIcon } from '../../../resources/MaskbookIcon'
 import { WalletConnectIcon } from '../../../resources/WalletConnectIcon'
-import Services, { ServicesWithProgress } from '../../../extension/service'
-import { useERC20TokenContract } from '../../../web3/hooks/useContract'
+import Services from '../../../extension/service'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { MessageCenter, MaskbookWalletMessages } from '../messages'
 import { useBlurContext } from '../../../extension/options-page/DashboardContexts/BlurContext'
 import { GetContext } from '@holoflows/kit/es'
-import { openOptionsPage } from '../../../extension/background-script/WelcomeService'
 import { DashboardRoute } from '../../../extension/options-page/Route'
+import { ProviderType } from '../types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -73,14 +71,18 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
 
     useBlurContext(open)
 
-    const onMaskbookClick = useCallback(() => {
-        openOptionsPage(DashboardRoute.Wallets)
+    const onConnect = useCallback(async (type: ProviderType) => {
+        await Services.Welcome.openOptionsPage(DashboardRoute.Wallets)
         onClose()
     }, [])
 
-    const onMetaMaskClick = useCallback(() => {}, [])
+    const onMetaMaskClick = useCallback(() => {
+        alert('TO BE IMPLEMENTED')
+    }, [])
 
-    const onWalletConnectClick = useCallback(() => {}, [])
+    const onWalletConnectClick = useCallback(() => {
+        alert('TO BE IMPLEMENTED')
+    }, [])
 
     return (
         <div className={classes.root}>
@@ -108,7 +110,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                 logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
                                 name="Maskbook"
                                 description="Create wallet with Maskbook"
-                                onClick={onMaskbookClick}
+                                onClick={() => onConnect(ProviderType.Maskbook)}
                             />
                         </GridListTile>
                         <GridListTile>
@@ -116,7 +118,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                 logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
                                 name="MetaMask"
                                 description="Connect to your MetaMask Wallet"
-                                onClick={onMetaMaskClick}
+                                onClick={() => onConnect(ProviderType.MetaMask)}
                             />
                         </GridListTile>
                         <GridListTile>
@@ -124,7 +126,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                 logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
                                 name="WalletConnect"
                                 description="Scan with WalletConnect to connect"
-                                onClick={onWalletConnectClick}
+                                onClick={() => onConnect(ProviderType.WalletConnect)}
                             />
                         </GridListTile>
                         <GridListTile>

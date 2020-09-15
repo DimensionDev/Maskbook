@@ -14,12 +14,13 @@ import type BigNumber from 'bignumber.js'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { TokenIcon } from './TokenIcon'
-import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
+import type { ERC20TokenDetails } from '../../background-script/PluginService'
 import { useMenu } from '../../../utils/hooks/useMenu'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog } from '../DashboardDialogs/Wallet'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
+import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 interface TokenListItemProps {
-    wallet: WalletDetails
+    wallet: WalletRecord
     token: ERC20TokenDetails
     balance: BigNumber
 }

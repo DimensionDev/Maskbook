@@ -3,10 +3,10 @@ import * as Wallet from '../../plugins/Wallet/wallet'
 import * as Gitcoin from '../../plugins/Gitcoin/service'
 import * as FileService from '../../plugins/FileService/service'
 import * as Trader from '../../plugins/Trader/services'
-import type { ERC20TokenRecord, ManagedWalletRecord, ExoticWalletRecord } from '../../plugins/Wallet/database/types'
+import type { ERC20TokenRecord, WalletRecord } from '../../plugins/Wallet/database/types'
 import { EthereumNetwork } from '../../plugins/Wallet/database/types'
 import { getWalletProvider, web3 } from '../../plugins/Wallet/web3'
-import type { WalletProviderType } from '../../plugins/shared/findOutProvider'
+import type { ProviderType } from '../../plugins/Wallet/types'
 
 const Plugins = {
     'maskbook.red_packet': RedPacket,
@@ -25,11 +25,10 @@ export async function invokePlugin<K extends keyof Plugins, M extends keyof Plug
     return Plugins[key][method](...args)
 }
 
-export type WalletDetails = ManagedWalletRecord | ExoticWalletRecord
 export type ERC20TokenDetails = Pick<ERC20TokenRecord, 'address' | 'decimals' | 'name' | 'network' | 'symbol'>
 export { getTokens, getWallets } from '../../plugins/Wallet/wallet'
-export function connectExoticWallet(kind: WalletProviderType) {
-    return getWalletProvider(kind).requestAccounts()
+export function connectExoticWallet(type: ProviderType) {
+    return getWalletProvider(type).requestAccounts()
 }
 export async function getCurrentEthChain() {
     const x = await web3.eth.getChainId()

@@ -5,9 +5,9 @@ import { useStylesExtends } from '../../custom-ui-helper'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { MaskbookIcon } from '../../../resources/MaskbookIcon'
-import { WalletProviderType } from '../../../plugins/shared/findOutProvider'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import { WalletConnectIcon } from '../../../resources/WalletConnectIcon'
+import { ProviderType } from '../../../plugins/Wallet/types'
 
 const useStyle = makeStyles((theme: Theme) => ({
     root: {
@@ -36,10 +36,11 @@ export function WalletInList(props: WalletInListProps) {
     const { wallet, disabled, onClick, ListItemProps } = props
 
     const avatar = useMemo(() => {
-        if (wallet.type === 'managed') return <MaskbookIcon className={classes.icon} viewBox="0 0 40 40" />
-        if (wallet.provider === WalletProviderType.metamask)
+        if (wallet.provider === ProviderType.Maskbook)
+            return <MaskbookIcon className={classes.icon} viewBox="0 0 40 40" />
+        if (wallet.provider === ProviderType.MetaMask)
             return <MetaMaskIcon className={classes.icon} viewBox="0 0 40 40" />
-        if (wallet.provider === WalletProviderType.wallet_connect)
+        if (wallet.provider === ProviderType.WalletConnect)
             return <WalletConnectIcon className={classes.icon} viewBox="0 0 40 40" />
         return null
     }, [])
