@@ -110,6 +110,7 @@ export interface RedPacketRecordInDatabase
     refund_amount?: string | bigint
     erc20_approve_value?: string | bigint
     shares: string | bigint
+    type: 'red-packet'
 }
 export enum RedPacketTokenType {
     eth = 0,

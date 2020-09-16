@@ -1,12 +1,18 @@
 import { createTransaction } from '../../../database/helpers/openDB'
+import { RedPacketPluginID } from '../../RedPacket/constants'
+import { RedPacketDatabase } from '../../RedPacket/state-machine'
+import type { RedPacketRecordInDatabase } from '../../RedPacket/types'
 import { createWalletDBAccess } from './Wallet.db'
 export async function migratePluginDatabase() {
-    const db = createTransaction(await createWalletDBAccess(), 'readonly')('PluginStore')
-    for await (const i of db.objectStore('PluginStore')) {
-        if (i.value.plugin_id === 'com.maskbook.provide.co.gitcoin') {
-            // GitCoin data is dropped
-            // i.delete()
+    const ro_db = createTransaction(await createWalletDBAccess(), 'readonly')('PluginStore')
+    const data = await ro_db.objectStore('PluginStore').getAll()
+    // Don't mix two transactions
+    for (const i of data) {
+        if (i.plugin_id === RedPacketPluginID) {
+            const rec = i.value as RedPacketRecordInDatabase
+            await RedPacketDatabase.add({ ...rec, type: 'red-packet' })
         }
-        console.log(i)
     }
+    const rw_db = createTransaction(await createWalletDBAccess(), 'readwrite')('PluginStore')
+    rw_db.objectStore('PluginStore').clear()
 }

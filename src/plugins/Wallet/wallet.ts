@@ -79,6 +79,10 @@ export async function getToken(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token')
     return t.objectStore('ERC20Token').get(checksumAddress(address))
 }
+export async function getToken(addr: string) {
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token')
+    return t.objectStore('ERC20Token').get(addr)
+}
 
 export async function getTokens() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token')

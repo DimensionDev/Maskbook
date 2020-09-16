@@ -1,14 +1,20 @@
 import type { IDBPTransaction } from 'idb/build/cjs'
-import { calculateKey, createPluginDBAccess, PluginDatabase, toStore } from '.'
+import { createPluginDBAccess, PluginDatabase, pluginDataHasValidKeyPath, toStore } from '.'
 
-type IndexableTaggedUnion = { type: string | number; id: string | number }
+type IndexableTaggedUnion = {
+    type: string | number
+    id: string | number
+}
 export function createPluginDatabase<Data extends IndexableTaggedUnion>(plugin_id: string) {
     type Type = Data['type']
     type Of<K extends Type> = Data & {
         type: K
     }
     type ID<K extends Type> = Of<K>['id']
-    let livingIndexedDBTransaction: IDBPTransaction<PluginDatabase, ['PluginStore']> | undefined = undefined
+    let livingTransaction: IDBPTransaction<PluginDatabase, ['PluginStore']> | undefined = undefined
+    function key(data: IndexableTaggedUnion) {
+        return IDBKeyRange.only([plugin_id, data.type, data.id])
+    }
     return {
         // Please keep the API minimal
         /**
@@ -18,9 +24,9 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(plugin_i
          */
         async get<T extends Type>(type: T, id: ID<T>): Promise<Of<T> | undefined> {
             const t = await c('r')
-            const data = await t.store.get(calculateKey(plugin_id, { type, id }))
+            const data = await t.store.get(key({ type, id }))
             if (!data) return undefined
-            return data.value as any
+            return data.value as Of<T>
         },
         /**
          * Store a data into the database.
@@ -28,9 +34,9 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(plugin_i
          */
         async add(data: Data): Promise<void> {
             const t = await c('rw')
-            const key = calculateKey(plugin_id, data)
-            if (await t.store.get(key)) await t.store.add(toStore(plugin_id, data), key)
-            else await t.store.put(toStore(plugin_id, data), key)
+            if (!pluginDataHasValidKeyPath(data)) throw new TypeError("Data doesn't have a valid key path")
+            if (await t.store.get(key(data))) await t.store.put(toStore(plugin_id, data))
+            else await t.store.add(toStore(plugin_id, data))
         },
         /**
          * Remove an object from the database
@@ -38,28 +44,43 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(plugin_i
          * @param id "id" field on the object
          */
         async remove<T extends Type>(type: T, id: ID<T>): Promise<void> {
-            const key = calculateKey(plugin_id, { type, id })
-            await (await c('rw')).store.delete(key)
+            return (await c('rw')).store.delete(key({ type, id }))
         },
         /**
          * Iterate over the database of given type (readonly!)
+         *
+         * !!! During the iterate, you MUST NOT do anything that writes to the store (use iterate_mutate instead)
+         * !!! You MUST NOT do anything asynchronous before the iterate ends
+         *
+         * !!! Otherwise the transaction will be inactivate
          * @param type "type" field on the object
          */
         async *iterate<T extends Type>(type: T) {
-            for await (const each of (await c('r')).objectStore('PluginStore')) {
-                if (each.value.plugin_id !== plugin_id) continue
-                if (each.value.type !== type) continue
+            const db = await c('r')
+            const cursor = await db
+                .objectStore('PluginStore')
+                .index('type')
+                .openCursor(IDBKeyRange.only([plugin_id, type]))
+            if (!cursor) return
+            for await (const each of cursor) {
                 yield each.value.value as Of<T>
             }
         },
         /**
-         * Iterate over the database of given type (modifiable)
+         * Iterate over the database of given type (read-write).
+         *
+         * !!! You MUST NOT do anything asynchronous before the iterate ends
+         *
+         * !!! Otherwise the transaction will be inactivate
          * @param type "type" field on the object
          */
         async *iterate_mutate<T extends Type>(type: T) {
-            for await (const each of (await c('rw')).objectStore('PluginStore')) {
-                if (each.value.plugin_id !== plugin_id) continue
-                if (each.value.type !== type) continue
+            const cursor = await (await c('rw'))
+                .objectStore('PluginStore')
+                .index('type')
+                .openCursor(IDBKeyRange.only([plugin_id, type]))
+            if (!cursor) return
+            for await (const each of cursor) {
                 yield {
                     data: each.value.value as Of<T>,
                     delete: () => each.delete(),
@@ -68,22 +89,22 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(plugin_i
             }
         },
     }
-    async function c(usage: 'r' | 'rw'): Promise<NonNullable<typeof livingIndexedDBTransaction>> {
-        if (usage === 'rw' && livingIndexedDBTransaction?.mode === 'readonly') {
-            livingIndexedDBTransaction = undefined
+    async function c(usage: 'r' | 'rw'): Promise<NonNullable<typeof livingTransaction>> {
+        if (usage === 'rw' && livingTransaction?.mode === 'readonly') invalidateTransaction()
+        try {
+            await livingTransaction?.store.openCursor()
+        } catch {
+            invalidateTransaction()
         }
-        if (livingIndexedDBTransaction === undefined) {
+        if (livingTransaction === undefined) {
             const db = await createPluginDBAccess()
             const tx = db.transaction('PluginStore', usage === 'r' ? 'readonly' : 'readwrite')
-            livingIndexedDBTransaction = tx
-            tx.addEventListener('complete', cleanup)
-            tx.addEventListener('abort', cleanup)
-            tx.addEventListener('error', cleanup)
+            livingTransaction = tx
             return tx
-            function cleanup(this: typeof tx) {
-                if (livingIndexedDBTransaction === this) livingIndexedDBTransaction = undefined
-            }
         }
-        return livingIndexedDBTransaction
+        return livingTransaction
+    }
+    function invalidateTransaction() {
+        livingTransaction = undefined
     }
 }
