@@ -30,6 +30,7 @@ import { PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentPlatform } from '../hooks/useCurrentPlatform'
 import { useCurrentCurrency } from '../hooks/useCurrentCurrency'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { CoinMarketCapIcon } from '../../../resources/CoinMarketCap'
 
 const useStyles = makeStyles((theme: Theme) => {
     const internalName = getActivatedUI()?.internalName
@@ -89,6 +90,11 @@ const useStyles = makeStyles((theme: Theme) => {
         avatar: {},
         percentage: {
             marginLeft: theme.spacing(1),
+        },
+        cmc: {
+            width: 96,
+            height: 16,
+            verticalAlign: 'bottom',
         },
     })
 })
@@ -234,9 +240,17 @@ export function TrendingView(props: TrendingViewProps) {
             <CardActions className={classes.footer}>
                 <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
                     <span>{t('plugin_trader_data_source')}</span>
-                    <Link className={classes.platform} color="primary" href={resolvePlatformLink(platform)}>
-                        {resolvePlatformName(platform)}
-                    </Link>
+
+                    {platform === Platform.COIN_MARKET_CAP ? (
+                        <CoinMarketCapIcon
+                            classes={{
+                                root: classes.cmc,
+                            }}
+                            viewBox="0 0 96 16"
+                        />
+                    ) : (
+                        resolvePlatformName(platform)
+                    )}
                 </Typography>
             </CardActions>
         </Card>
