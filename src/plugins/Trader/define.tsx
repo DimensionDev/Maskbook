@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import type { PluginConfig } from '../plugin'
 import {
     TypedMessage,
@@ -26,14 +26,20 @@ export const TraderPluginDefine: PluginConfig = {
         }
     },
     pageInspector() {
+        return <PageInspector />
+    },
+}
+
+function PageInspector() {
+    useEffect(() => {
         // build availability cache in the background page
         Services.Plugin.invokePlugin('maskbook.trader', 'getAvailablePlatforms', 'BTC')
-        return (
-            <TrendingPopper>
-                {(name: string, platforms: Platform[], reposition?: () => void) => (
-                    <TrendingView name={name} platforms={platforms} onUpdate={reposition} />
-                )}
-            </TrendingPopper>
-        )
-    },
+    }, [])
+    return (
+        <TrendingPopper>
+            {(name: string, platforms: Platform[], reposition?: () => void) => (
+                <TrendingView name={name} platforms={platforms} onUpdate={reposition} />
+            )}
+        </TrendingPopper>
+    )
 }

@@ -3,11 +3,11 @@ import { useAsync } from 'react-use'
 import type { Platform, Currency, Settings } from '../types'
 import Services from '../../../extension/service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { getCurrentTrendingViewPlatformSettings } from '../settings'
+import { getCurrentTrendingViewSettings } from '../settings'
 
 export function useCurrentCurrency(platform: Platform) {
     const [currency, setCurrency] = useState<Currency | null>(null)
-    const trendingSettings = useValueRef<string>(getCurrentTrendingViewPlatformSettings(platform))
+    const trendingSettings = useValueRef<string>(getCurrentTrendingViewSettings(platform))
 
     // TODO:
     // support multiple crcurrencies

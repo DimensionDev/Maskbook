@@ -15,7 +15,7 @@ import {
     Tab,
     Tabs,
 } from '@material-ui/core'
-import { resolvePlatformName, Platform } from '../types'
+import { resolvePlatformName, Platform, resolvePlatformLink } from '../types'
 import { getActivatedUI } from '../../../social-network/ui'
 import { formatCurrency } from '../../Wallet/formatter'
 import { useTrending } from '../hooks/useTrending'
@@ -23,16 +23,13 @@ import { TickersTable } from './TickersTable'
 import { PriceChangedTable } from './PriceChangedTable'
 import { PriceChanged } from './PriceChanged'
 import { PriceChart } from './PriceChart'
-import { getEnumAsArray } from '../../../utils/enum'
 import { Linking } from './Linking'
 import { usePriceStats } from '../hooks/usePriceStats'
 import { Skeleton } from '@material-ui/lab'
 import { PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentPlatform } from '../hooks/useCurrentPlatform'
 import { useCurrentCurrency } from '../hooks/useCurrentCurrency'
-import { currentTrendingViewPlatformSettings } from '../settings'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useAvailablePlatforms } from '../hooks/useAvailablePlatforms'
 
 const useStyles = makeStyles((theme: Theme) => {
     const internalName = getActivatedUI()?.internalName
@@ -236,18 +233,10 @@ export function TrendingView(props: TrendingViewProps) {
             </CardContent>
             <CardActions className={classes.footer}>
                 <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
-                    <span>{t('plugin_trader_tab_switch_data_source')}</span>
-                    {props.platforms.map((x) => (
-                        <Link
-                            className={classes.platform}
-                            key={x}
-                            color={platform === x ? 'primary' : 'textSecondary'}
-                            onClick={() => {
-                                currentTrendingViewPlatformSettings.value = String(x)
-                            }}>
-                            {resolvePlatformName(x)}
-                        </Link>
-                    ))}
+                    <span>{t('plugin_trader_data_source')}</span>
+                    <Link className={classes.platform} color="primary" href={resolvePlatformLink(platform)}>
+                        {resolvePlatformName(platform)}
+                    </Link>
                 </Typography>
             </CardActions>
         </Card>
