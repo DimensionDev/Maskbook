@@ -1,4 +1,5 @@
 {
+    "settings_title_plugin_options": "",
     "about": "概要",
     "about_dialog_description": "Maskbookは、新しいオープンなインターネットへのポータルです。Maskbookを使えば、暗号化された投稿を友達に送ったり、暗号通貨の宝くじに参加したり、すでに使っているプラットフォームで暗号化されたファイルを共有したりすることができます。",
     "about_dialog_touch": "連絡する",
@@ -249,7 +250,6 @@
     "settings_title_general": "一般",
     "settings_title_advanced_options": "追加のオプション",
     "settings_title_database_management": "データベース管理",
-    "settings_title_plugin_options": "",
     "skip": "スキップ",
     "share": "共有",
     "share_to": "共有先",

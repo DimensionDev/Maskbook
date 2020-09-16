@@ -240,7 +240,6 @@ export function TrendingView(props: TrendingViewProps) {
             <CardActions className={classes.footer}>
                 <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
                     <span>{t('plugin_trader_data_source')}</span>
-
                     {platform === Platform.COIN_MARKET_CAP ? (
                         <CoinMarketCapIcon
                             classes={{
