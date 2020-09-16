@@ -143,7 +143,7 @@ export async function getCoinInfo(id: string, platform: Platform, currency: Curr
         },
         tickers: market.market_pairs
             .map((pair) => ({
-                logo_url: `https://s2.coinmarketcap.com/static/img/exchanges/32x32/${pair.market_id}.png`,
+                logo_url: `https://s2.coinmarketcap.com/static/img/exchanges/32x32/${pair.exchange.id}.png`,
                 trade_url: pair.market_url,
                 market_name: pair.exchange.name,
                 market_reputation: pair.market_reputation,

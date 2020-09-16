@@ -30,9 +30,11 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingRight: theme.spacing(1),
             whiteSpace: 'nowrap',
         },
-        avatar: {
-            width: 20,
-            height: 20,
+        logo: {
+            width: 18,
+            height: 18,
+            verticalAlign: 'bottom',
+            marginRight: theme.spacing(0.5),
         },
         placeholder: {
             paddingTop: theme.spacing(10),
@@ -57,7 +59,10 @@ export function TickersTable(props: TickersTableProps) {
     ]
     const tickers = props.tickers.map((ticker, index) => (
         <TableRow key={index}>
-            <TableCell className={classes.cell}>{ticker.market_name}</TableCell>
+            <TableCell className={classes.cell}>
+                {ticker.logo_url ? <img className={classes.logo} src={ticker.logo_url} /> : null}
+                <span>{ticker.market_name}</span>
+            </TableCell>
             <TableCell className={classes.cell}>
                 {(() => {
                     const formated = formatEthAddress(ticker.base_name)
