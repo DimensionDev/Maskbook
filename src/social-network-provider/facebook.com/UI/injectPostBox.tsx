@@ -13,6 +13,7 @@ if (isMobileFacebook) {
 } else {
     composeBox = new LiveSelector()
         .querySelectorAll('form [role="button"]')
+        .filter((x) => x.textContent === 'Post')
         .map((x) => x.parentElement)
         // TODO: should be nth(-1), see https://github.com/DimensionDev/Holoflows-Kit/issues/270
         .reverse()
