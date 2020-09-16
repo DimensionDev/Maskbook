@@ -15,7 +15,7 @@ import {
     Tab,
     Tabs,
 } from '@material-ui/core'
-import { resolvePlatformName, Platform, resolvePlatformLink } from '../types'
+import { resolvePlatformName, Platform } from '../types'
 import { getActivatedUI } from '../../../social-network/ui'
 import { formatCurrency } from '../../Wallet/formatter'
 import { useTrending } from '../hooks/useTrending'
@@ -198,8 +198,9 @@ export function TrendingView(props: TrendingViewProps) {
                 subheader={
                     <>
                         <Typography component="p" variant="body1">
-                            <span>{`${currency.symbol ?? `${currency.name} `}${formatCurrency(
+                            <span>{`${`${currency.name} `}${formatCurrency(
                                 market.current_price,
+                                currency.symbol,
                             )}`}</span>
                             {typeof market.price_change_percentage_24h === 'number' ? (
                                 <PriceChanged amount={market.price_change_percentage_24h} />
