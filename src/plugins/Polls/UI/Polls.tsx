@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
 import type { PollGunDB } from '../Services'
-import { dateFormat } from '../utils'
+import { format, isValid } from 'date-fns'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -77,6 +77,15 @@ export function PollCardUI(props: PollCardProps) {
         (accumulator: number, currentValue: number): number => accumulator + currentValue,
     )
 
+    const getDeadline = (date: number) => {
+        const deadline = new Date(date)
+        if (isValid(deadline)) {
+            return `Deadline: ${format(deadline, 'yyyy-MM-dd HH:mm:ss')}`
+        } else {
+            return 'sorry, cannot get correct deadline...'
+        }
+    }
+
     return (
         <Card className={classes.card} onClick={() => onClick?.()}>
             <div className={classes.line}>
@@ -112,7 +121,7 @@ export function PollCardUI(props: PollCardProps) {
                 ))}
             </div>
             <Typography variant="body2" classes={{ root: classes.deadline }}>
-                {isClosed ? 'Closed' : `Deadline: ${dateFormat('YYYY-mm-dd HH:MM', new Date(poll.end_time))}`}
+                {isClosed ? 'Closed' : `${getDeadline(poll.end_time)}`}
             </Typography>
         </Card>
     )

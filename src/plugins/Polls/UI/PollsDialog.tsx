@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -47,7 +47,7 @@ const useNewPollStyles = makeStyles((theme) =>
         },
         optionsWrap: {
             position: 'relative',
-            '& div': {
+            '& >div': {
                 width: '80%',
                 margin: theme.spacing(2),
             },
