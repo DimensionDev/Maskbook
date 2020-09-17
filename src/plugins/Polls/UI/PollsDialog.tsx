@@ -8,8 +8,8 @@ import {
     Typography,
     IconButton,
     Button,
-    Input,
     InputLabel,
+    TextField,
     FormControl,
     Select,
     MenuItem,
@@ -39,14 +39,6 @@ const useNewPollStyles = makeStyles((theme) =>
             flex: 1,
             margin: theme.spacing(1),
         },
-        input: {
-            flex: 1,
-            padding: theme.spacing(1),
-            backgroundColor: '#F5F8FA',
-        },
-        inputLabel: {
-            zIndex: 99,
-        },
         pollWrap: {
             border: '1px solid #ccd6dd',
             borderRadius: '10px',
@@ -56,7 +48,8 @@ const useNewPollStyles = makeStyles((theme) =>
         optionsWrap: {
             position: 'relative',
             '& div': {
-                width: '90%',
+                width: '80%',
+                margin: theme.spacing(2),
             },
         },
         addButton: {
@@ -126,9 +119,12 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
         return (
             <Select
                 MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}
-                value={defaultIndex || 0}>
+                value={defaultIndex}
+                onChange={(e) => fn(e.target.value as number)}>
                 {options.map((item, index) => (
-                    <MenuItem value={index}>{index}</MenuItem>
+                    <MenuItem value={index} key={index}>
+                        {index}
+                    </MenuItem>
                 ))}
             </Select>
         )
@@ -169,15 +165,15 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                 <div className={classes.line}>
                     <FormControl variant="filled" className={classes.item}>
                         <InputLabel>Days</InputLabel>
-                        {renderSelect(8, 1)}
+                        {renderSelect(8, setDays, days)}
                     </FormControl>
                     <FormControl variant="filled" className={classes.item}>
                         <InputLabel>Hours</InputLabel>
-                        {renderSelect(25)}
+                        {renderSelect(25, setHours, hours)}
                     </FormControl>
                     <FormControl variant="filled" className={classes.item}>
                         <InputLabel>Minutes</InputLabel>
-                        {renderSelect(61)}
+                        {renderSelect(61, setMinutes, minutes)}
                     </FormControl>
                 </div>
             </div>
@@ -250,6 +246,7 @@ interface PollsDialogProps
     extends withClasses<
         | KeysInferFromUseStyles<typeof useStyles>
         | 'dialog'
+        | 'wrapper'
         | 'backdrop'
         | 'container'
         | 'close'
