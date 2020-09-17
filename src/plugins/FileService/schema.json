@@ -37,5 +37,5 @@
             "title": "landingTxID"
         }
     },
-    "required": ["createdAt", "id", "landingTxID", "name", "payloadTxID", "size", "type"]
+    "required": ["createdAt", "id", "landingTxID", "name", "payloadTxID", "size"]
 }
