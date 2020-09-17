@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import type { TypedMessage } from '../../../protocols/typed-message'
-import { renderWithPollMetadata } from '../utils'
+import { renderWithPollMetadata, PollMetadataReader } from '../utils'
 import Services from '../../../extension/service'
 import type { PollGunDB } from '../Services'
 import { PollCardUI, PollStatus } from './Polls'
@@ -31,11 +31,17 @@ export default function PollsInPost(props: PollsInPostProps) {
         }
     }
 
+    useEffect(() => {
+        const { key } = PollMetadataReader(props.message.meta).val as PollMetaData
+        if (key) {
+            Services.Plugin.invokePlugin('maskbook.polls', 'getPollByKey', { key }).then((res) => {
+                setUpdatedPoll(res as PollMetaData)
+            })
+        }
+    }, [])
+
     const jsx = message
         ? renderWithPollMetadata(props.message.meta, (r) => {
-              Services.Plugin.invokePlugin('maskbook.polls', 'getPollByKey', { key: r.key as string }).then((res) => {
-                  setUpdatedPoll(res as PollMetaData)
-              })
               return (
                   <div>
                       <MaskbookPluginWrapper width={400} pluginName="Poll">
