@@ -6,7 +6,7 @@ import { gun2 } from '../../network/gun/version.2'
 import { first } from 'lodash-es'
 
 const gun = gun2
-const PollGun = gun.get('polls')
+const PollGun = gun.get('com.maskbook.plugin.polls')
 
 const defaultPoll: PollGunDB = {
     key: '',
@@ -142,12 +142,10 @@ export async function getPollByKey(props: { key: string }) {
 export async function getAllExistingPolls() {
     const polls: Array<PollGunDB> = []
 
-    gun.get('polls')
-        .map()
-        .on(async (data, key) => {
-            const poll = await getPollByKey({ key })
-            polls.push(poll)
-        })
+    PollGun.map().on(async (data, key) => {
+        const poll = await getPollByKey({ key })
+        polls.push(poll)
+    })
 
     return polls
 }

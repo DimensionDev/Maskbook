@@ -343,5 +343,13 @@
     "plugin_trader_table_price": "價格",
     "plugin_trader_table_volume": "交易量 （24小時）",
     "plugin_trader_settings_data_source_primary": "",
-    "plugin_trader_settings_data_source_secondary": ""
+    "plugin_trader_settings_data_source_secondary": "",
+    "plugin_trader_settings_platform_secondary": "",
+    "plugin_poll_display_name": "插件: 投票",
+    "plugin_poll_question_hint": "輸入妳的問題...",
+    "plugin_poll_options_hint": "選項",
+    "plugin_poll_length": "投票時限",
+    "plugin_poll_length_days": "天數",
+    "plugin_poll_length_hours": "小時",
+    "plugin_poll_length_minutes": "分鐘"
 }

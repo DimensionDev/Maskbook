@@ -343,5 +343,13 @@
     "plugin_trader_table_price": "価格",
     "plugin_trader_table_volume": "取引高",
     "plugin_trader_settings_data_source_primary": "",
-    "plugin_trader_settings_data_source_secondary": ""
+    "plugin_trader_settings_data_source_secondary": "",
+    "plugin_trader_settings_platform_secondary": "",
+    "plugin_poll_display_name": "プラグイン: 投票",
+    "plugin_poll_question_hint": "質問を入力してください...",
+    "plugin_poll_options_hint": "オプション",
+    "plugin_poll_length": "投票期限",
+    "plugin_poll_length_days": "日",
+    "plugin_poll_length_hours": "時間",
+    "plugin_poll_length_minutes": "分"
 }

@@ -343,5 +343,13 @@
     "plugin_trader_table_price": "Price",
     "plugin_trader_table_volume": "Volume (24h)",
     "plugin_trader_settings_data_source_primary": "Data Source",
-    "plugin_trader_settings_data_source_secondary": "Fetch trending data from different platforms."
+    "plugin_trader_settings_data_source_secondary": "Fetch trending data from different platforms.",
+    "plugin_trader_settings_platform_secondary": "Fetch trending data from different platforms.",
+    "plugin_poll_display_name": "Plugin: Poll",
+    "plugin_poll_question_hint": "Ask a question...",
+    "plugin_poll_options_hint": "choice",
+    "plugin_poll_length": "Poll length",
+    "plugin_poll_length_days": "Days",
+    "plugin_poll_length_hours": "Hours",
+    "plugin_poll_length_minutes": "Minutes"
 }

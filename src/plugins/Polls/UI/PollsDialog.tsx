@@ -28,6 +28,7 @@ import { useCurrentIdentity } from '../../../components/DataSource/useActivatedU
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
 import type { PollMetaData } from '../types'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useNewPollStyles = makeStyles((theme) =>
     createStyles({
@@ -79,12 +80,13 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
     const classes = useStylesExtends(useNewPollStyles(), props)
     const [loading, setLoading] = props.loading
     const [question, setQuestion] = useState('')
-
     const [options, setOptions] = useState<Array<string>>(['', ''])
 
     const [days, setDays] = useState(1)
     const [hours, setHours] = useState(0)
     const [minutes, setMinutes] = useState(0)
+
+    const { t } = useI18N()
 
     const handleOptionsInput = (index: number, value: string) => {
         setOptions(options.map((option, i) => (i === index ? value : option)))
@@ -134,7 +136,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
         <>
             <FormControl className={classes.line}>
                 <TextField
-                    label="Ask a question..."
+                    label={t('plugin_poll_question_hint')}
                     variant="filled"
                     onChange={(e) => {
                         setQuestion((e.target as HTMLInputElement)?.value)
@@ -146,7 +148,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                     {options.map((option, index) => (
                         <FormControl className={classes.line} key={index}>
                             <TextField
-                                label={`choice${index + 1}`}
+                                label={`${t('plugin_poll_options_hint')}${index + 1}`}
                                 variant="filled"
                                 onChange={(e) => {
                                     handleOptionsInput(index, (e.target as HTMLInputElement)?.value)
@@ -160,19 +162,19 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                 </div>
                 <Divider light />
                 <Typography variant="h6" className={classes.line}>
-                    Poll length
+                    {t('plugin_poll_length')}
                 </Typography>
                 <div className={classes.line}>
                     <FormControl variant="filled" className={classes.item}>
-                        <InputLabel>Days</InputLabel>
+                        <InputLabel>{t('plugin_poll_length_days')}</InputLabel>
                         {renderSelect(8, setDays, days)}
                     </FormControl>
                     <FormControl variant="filled" className={classes.item}>
-                        <InputLabel>Hours</InputLabel>
+                        <InputLabel>{t('plugin_poll_length_hours')}</InputLabel>
                         {renderSelect(25, setHours, hours)}
                     </FormControl>
                     <FormControl variant="filled" className={classes.item}>
-                        <InputLabel>Minutes</InputLabel>
+                        <InputLabel>{t('plugin_poll_length_minutes')}</InputLabel>
                         {renderSelect(61, setMinutes, minutes)}
                     </FormControl>
                 </div>
@@ -269,6 +271,8 @@ export default function PollsDialog(props: PollsDialogProps) {
     const [, setTabState] = state
     const loading = useState(false)
 
+    const { t } = useI18N()
+
     const createNewPoll = () => {
         setTabState(1)
     }
@@ -337,7 +341,7 @@ export default function PollsDialog(props: PollsDialogProps) {
                         <DialogDismissIconUI />
                     </IconButton>
                     <Typography className={classes.title} display="inline" variant="inherit">
-                        Plugin: Polls
+                        {t('plugin_poll_display_name')}
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
