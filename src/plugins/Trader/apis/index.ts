@@ -164,11 +164,26 @@ export async function getCoinInfo(id: string, platform: Platform, currency: Curr
     }
 }
 
+//#region hotfix
+// FIXME:
+// this is hotfix for duplicate token name
+// we should support multiple-coins switing in the future
+const CMC_KEYWORKD_ID_MAP: {
+    [key: string]: string
+} = {
+    UNI: '7083',
+}
+function resolveCoinId(keyword: string, platform: Platform) {
+    if (platform === Platform.COIN_MARKET_CAP) return CMC_KEYWORKD_ID_MAP[keyword.toUpperCase()]
+    return undefined
+}
+//#endregion
+
 export async function getCoinTrendingByKeyword(keyword: string, platform: Platform, currency: Currency) {
     const coins = await getCoins(platform)
     const coin = coins.find((x) => x.symbol.toLowerCase() === keyword.toLowerCase())
     if (!coin) return null
-    return getCoinInfo(coin.id, platform, currency)
+    return getCoinInfo(resolveCoinId(keyword, platform) ?? coin.id, platform, currency)
 }
 
 export async function getPriceStats(id: string, platform: Platform, currency: Currency, days: number): Promise<Stat[]> {
