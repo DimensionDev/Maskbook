@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) => {
             verticalAlign: 'middle',
         },
         value: {
-            marginLeft: theme.spacing(3),
+            marginLeft: 20,
         },
     })
 })

@@ -9,7 +9,6 @@ export const captureEvents: (keyof HTMLElementEventMap)[] = [
     'keydown',
     'keypress',
     'keyup',
-    'input',
     'drag',
     'dragend',
     'dragenter',
@@ -43,7 +42,7 @@ function binder<T extends keyof HTMLElementEventMap>(
 /**
  * ! Call this hook inside Shadow Root!
  */
-export function useCapturedInput(onChange: (newVal: string) => void, deps: unknown[] = []) {
+export function useCapturedEvents(events: (keyof HTMLElementEventMap)[] = captureEvents, deps: unknown[] = []) {
     const [node, setNode] = React.useState<HTMLInputElement | null>(null)
     const ref = useCallback((nextNode: HTMLInputElement | null) => setNode(nextNode), [])
     const renderInShadowRoot = useValueRef(renderInShadowRootSettings)
@@ -53,16 +52,25 @@ export function useCapturedInput(onChange: (newVal: string) => void, deps: unkno
         },
         [renderInShadowRoot],
     )
-    const use = useCallback(
-        (e: Event) => onChange((e.currentTarget as HTMLInputElement)?.value ?? (e.target as HTMLInputElement)?.value),
-        deps.concat(onChange),
-    )
-    useEffect(binder(node, ['input'], use), deps.concat(node))
-    useEffect(binder(node, captureEvents, stop), deps.concat(node))
+    useEffect(binder(node, events, stop), [...deps, node, events.join(',')])
     return [
         <T extends keyof HTMLElementEventMap>(keys: T[], fn: (e: HTMLElementEventMap[T]) => void) =>
             binder(node, keys, fn),
         ref,
         node,
     ] as const
+}
+
+/**
+ * ! Call this hook inside Shadow Root!
+ */
+export function useCapturedInput(onChange: (newVal: string) => void, deps: unknown[] = []) {
+    const captured = useCapturedEvents(captureEvents.concat('input'), deps)
+    const [binder, node] = captured
+    const use = useCallback(
+        (e: Event) => onChange((e.currentTarget as HTMLInputElement)?.value ?? (e.target as HTMLInputElement)?.value),
+        deps.concat(onChange),
+    )
+    useEffect(binder(['input'], use), deps.concat(node))
+    return captured
 }

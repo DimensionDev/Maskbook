@@ -30,6 +30,18 @@ export interface Coin {
     eth_address?: string
 }
 
+export interface ERC20Token {
+    address: string
+    decimals: number
+    name: string
+    symbol: string
+}
+
+export interface ERC20TokenForUI extends ERC20Token {
+    balance?: string
+    image_url?: string
+}
+
 export interface Market {
     current_price: number
     total_volume?: number

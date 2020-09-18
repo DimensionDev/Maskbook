@@ -36,6 +36,6 @@ const coinMarketCapSettings = createPluginInternalSettings('currentCoinMarketCap
 /**
  * The general settings of specific data source
  */
-export function getCurrentTrendingViewSettings(dataSource: DataProvider) {
+export function getCurrentDataProviderGeneralSettings(dataSource: DataProvider) {
     return dataSource === DataProvider.COIN_GECKO ? coinGeckoSettings : coinMarketCapSettings
 }
