@@ -21,6 +21,7 @@ export interface PayloadAlpha38 {
     AESKeyEncrypted: string
     iv: string
     encryptedText: string
+    /** @deprecated but don't remove it cause it will break */
     signature: string
     authorPublicKey?: string
     sharedPublic?: boolean

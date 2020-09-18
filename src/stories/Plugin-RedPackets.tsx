@@ -106,7 +106,6 @@ storiesOf('Plugin: Red Packets', module)
                     <DecryptPostSuccess
                         alreadySelectedPreviously={[]}
                         data={{
-                            signatureVerifyResult: true,
                             content: makeTypedMessageText('decrypted message!', meta),
                         }}
                         profiles={[]}

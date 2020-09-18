@@ -31,21 +31,6 @@ function initEllipticBackend(_: WebCryptoSupportedMethods): WebCryptoNotSupporte
                 publicKey: await CryptoKeyToJsonWebKey(publicKey),
             }
         },
-        async sign_ecdsa_k256(key, hash, message) {
-            return crypto.subtle.sign(
-                { name: 'ECDSA', hash: { name: hash } },
-                await JsonWebKeyToCryptoKey(key, ...getKeyParameter('ecdsa')),
-                message,
-            )
-        },
-        async verify_ecdsa_k256(key, hash, message, signature) {
-            return crypto.subtle.verify(
-                { name: 'ECDSA', hash: { name: hash } },
-                await JsonWebKeyToCryptoKey(key, ...getKeyParameter('ecdsa')),
-                signature,
-                message,
-            )
-        },
         async derive_aes_from_ecdh_k256(priv, pub, aes = 'AES-GCM', length = 256) {
             const key = await crypto.subtle.deriveKey(
                 { name: 'ECDH', public: await JsonWebKeyToCryptoKey(pub, ...getKeyParameter('ecdh')) },
