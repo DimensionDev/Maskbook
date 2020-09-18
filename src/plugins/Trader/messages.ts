@@ -1,16 +1,16 @@
-import type { Currency, Platform } from './types'
+import type { Currency, DataProvider } from './types'
 import { BatchedMessageCenter } from '../../utils/messages'
 
 interface SettingsEvent {
     currency: Currency
-    platform: Platform
+    platform: DataProvider
     currencies: Currency[]
 }
 
 interface CashTagEvent {
     name: string
     element: HTMLAnchorElement | null
-    availablePlatforms: Platform[]
+    availablePlatforms: DataProvider[]
 }
 
 interface MaskbookTraderMessages {

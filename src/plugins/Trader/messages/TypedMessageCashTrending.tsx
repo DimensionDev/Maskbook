@@ -34,7 +34,7 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
             setTimeout(async () => {
                 const availablePlatforms = await Services.Plugin.invokePlugin(
                     'maskbook.trader',
-                    'getAvailablePlatforms',
+                    'getAvailableDataProviders',
                     props.message.name,
                 )
                 if (availablePlatforms.length)

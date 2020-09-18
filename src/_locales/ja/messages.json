@@ -339,11 +339,13 @@
     "plugin_trader_no_data": "データなし",
     "plugin_trader_tab_price": "価格",
     "plugin_trader_tab_exchange": "取引所",
+    "plugin_trader_tab_swap": "",
     "plugin_trader_data_source": "データソース： ",
+    "plugin_trader_switch_swap_provider": "",
     "plugin_trader_table_exchange": "ソース",
     "plugin_trader_table_pair": "通貨ペア",
     "plugin_trader_table_price": "価格",
     "plugin_trader_table_volume": "取引高",
-    "plugin_trader_settings_platform_primary": "",
-    "plugin_trader_settings_platform_secondary": ""
+    "plugin_trader_settings_data_source_primary": "",
+    "plugin_trader_settings_data_source_secondary": ""
 }

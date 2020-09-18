@@ -12,7 +12,7 @@ import {
     Link,
     Typography,
 } from '@material-ui/core'
-import type { Ticker, Platform } from '../types'
+import type { Ticker, DataProvider } from '../types'
 import { formatCurrency, formatEthAddress } from '../../Wallet/formatter'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export interface TickersTableProps {
-    platform: Platform
+    platform: DataProvider
     tickers: Ticker[]
 }
 

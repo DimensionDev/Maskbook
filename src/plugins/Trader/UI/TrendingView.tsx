@@ -15,7 +15,8 @@ import {
     Tab,
     Tabs,
 } from '@material-ui/core'
-import { resolvePlatformName, Platform } from '../types'
+import { DataProvider, SwapProvider } from '../types'
+import { resolveDataProviderName, resolveSwapProviderName } from '../pipes'
 import { getActivatedUI } from '../../../social-network/ui'
 import { formatCurrency } from '../../Wallet/formatter'
 import { useTrending } from '../hooks/useTrending'
@@ -27,10 +28,13 @@ import { Linking } from './Linking'
 import { usePriceStats } from '../hooks/usePriceStats'
 import { Skeleton } from '@material-ui/lab'
 import { PriceChartDaysControl } from './PriceChartDaysControl'
-import { useCurrentPlatform } from '../hooks/useCurrentPlatform'
+import { useCurrentDataProvider } from '../hooks/useCurrentDataProvider'
+import { useCurrentSwapProvider } from '../hooks/useCurrentSwapProvider'
 import { useCurrentCurrency } from '../hooks/useCurrentCurrency'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CoinMarketCapIcon } from '../../../resources/CoinMarketCap'
+import { UniswapTrader } from './Uniswap'
+import { currentSwapProviderSettings } from '../settings'
 
 const useStyles = makeStyles((theme: Theme) => {
     const internalName = getActivatedUI()?.internalName
@@ -51,25 +55,29 @@ const useStyles = makeStyles((theme: Theme) => {
                   }
                 : null),
         },
+        content: {
+            paddingTop: 0,
+            paddingBottom: 0,
+        },
         header: {
             display: 'flex',
             position: 'relative',
         },
-        content: {
-            paddingTop: 0,
-            paddingBottom: 0,
+        body: {
+            overflow: 'hidden',
         },
         footer: {
             justifyContent: 'flex-end',
         },
         tabs: {
-            width: '100%',
             height: 35,
+            width: '100%',
             minHeight: 'unset',
         },
         tab: {
             height: 35,
             minHeight: 'unset',
+            minWidth: 'unset',
         },
         section: {},
         rank: {
@@ -80,7 +88,7 @@ const useStyles = makeStyles((theme: Theme) => {
         footnote: {
             fontSize: 10,
         },
-        platform: {
+        footlink: {
             cursor: 'pointer',
             marginRight: theme.spacing(0.5),
             '&:last-child': {
@@ -126,7 +134,8 @@ function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
 //#region trending view
 export interface TrendingViewProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     name: string
-    platforms: Platform[]
+    dataProviders: DataProvider[]
+    swapProviders: SwapProvider[]
     onUpdate?: () => void
 }
 
@@ -136,16 +145,20 @@ export function TrendingView(props: TrendingViewProps) {
     const [tabIndex, setTabIndex] = useState(0)
 
     //#region trending
-    const platform = useCurrentPlatform(props.platforms)
-    const { value: currency, loading: loadingCurrency } = useCurrentCurrency(platform)
-    const { value: trending, loading: loadingTrending } = useTrending(props.name, platform, currency)
+    const dataProvider = useCurrentDataProvider(props.dataProviders)
+    const { value: currency, loading: loadingCurrency } = useCurrentCurrency(dataProvider)
+    const { value: trending, loading: loadingTrending } = useTrending(props.name, dataProvider, currency)
+    //#endregion
+
+    //#region swap
+    const swapProvider = useCurrentSwapProvider(props.swapProviders)
     //#endregion
 
     //#region stats
     const [days, setDays] = useState(365)
     const { value: stats = [], loading: loadingStats } = usePriceStats({
         coinId: trending?.coin.id,
-        platform: trending?.platform,
+        dataProvider: trending?.dataProvider,
         currency: trending?.currency,
         days,
     })
@@ -162,7 +175,7 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
     //#region error handling
     // error: no available platform
-    if (props.platforms.length === 0) return null
+    if (props.dataProviders.length === 0) return null
 
     // error: fail to load currency
     if (!currency) return null
@@ -211,7 +224,7 @@ export function TrendingView(props: TrendingViewProps) {
                 disableTypography
             />
             <CardContent className={classes.content}>
-                <Paper variant="outlined">
+                <Paper className={classes.body} variant="outlined">
                     <Tabs
                         className={classes.tabs}
                         textColor="primary"
@@ -225,6 +238,7 @@ export function TrendingView(props: TrendingViewProps) {
                         }}>
                         <Tab className={classes.tab} label={t('plugin_trader_tab_price')}></Tab>
                         <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')}></Tab>
+                        <Tab className={classes.tab} label={t('plugin_trader_tab_swap')}></Tab>
                     </Tabs>
                     {tabIndex === 0 ? (
                         <>
@@ -233,23 +247,42 @@ export function TrendingView(props: TrendingViewProps) {
                                 <PriceChartDaysControl days={days} onDaysChange={setDays}></PriceChartDaysControl>
                             </PriceChart>
                         </>
-                    ) : (
-                        <TickersTable tickers={tickers} platform={platform} />
-                    )}
+                    ) : null}
+                    {tabIndex === 1 ? <TickersTable tickers={tickers} platform={dataProvider} /> : null}
+                    {tabIndex === 2 ? <UniswapTrader coin={coin} /> : null}
                 </Paper>
             </CardContent>
             <CardActions className={classes.footer}>
                 <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
-                    <span>{t('plugin_trader_data_source')}</span>
-                    {platform === Platform.COIN_MARKET_CAP ? (
-                        <CoinMarketCapIcon
-                            classes={{
-                                root: classes.cmc,
-                            }}
-                            viewBox="0 0 96 16"
-                        />
+                    {tabIndex === 2 ? (
+                        <>
+                            <span>{t('plugin_trader_switch_swap_provider')}</span>
+                            {props.swapProviders.map((x) => (
+                                <Link
+                                    className={classes.footlink}
+                                    key={x}
+                                    color={swapProvider === x ? 'primary' : 'textSecondary'}
+                                    onClick={() => {
+                                        currentSwapProviderSettings.value = x
+                                    }}>
+                                    {resolveSwapProviderName(x)}
+                                </Link>
+                            ))}
+                        </>
                     ) : (
-                        resolvePlatformName(platform)
+                        <>
+                            <span>{t('plugin_trader_data_source')}</span>
+                            {dataProvider === DataProvider.COIN_MARKET_CAP ? (
+                                <CoinMarketCapIcon
+                                    classes={{
+                                        root: classes.cmc,
+                                    }}
+                                    viewBox="0 0 96 16"
+                                />
+                            ) : (
+                                resolveDataProviderName(dataProvider)
+                            )}
+                        </>
                     )}
                 </Typography>
             </CardActions>

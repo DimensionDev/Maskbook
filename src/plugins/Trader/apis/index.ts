@@ -1,12 +1,12 @@
-import { Platform, Currency, Coin, Trending, Stat } from '../types'
+import { DataProvider, Currency, Coin, Trending, Stat } from '../types'
 import * as coinGeckoAPI from './coingecko'
 import * as coinMarketCapAPI from './coinmarketcap'
 import { Days } from '../UI/PriceChartDaysControl'
 import { getEnumAsArray } from '../../../utils/enum'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../constants'
 
-export async function getCurrenies(platform: Platform): Promise<Currency[]> {
-    if (platform === Platform.COIN_GECKO) {
+export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
+    if (dataProvider === DataProvider.COIN_GECKO) {
         const currencies = await coinGeckoAPI.getAllCurrenies()
         return currencies.map((x) => ({
             id: x,
@@ -21,9 +21,9 @@ export async function getCurrenies(platform: Platform): Promise<Currency[]> {
     }))
 }
 
-export async function getLimitedCurrenies(platform: Platform): Promise<Currency[]> {
+export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
     return Promise.resolve([
-        platform === Platform.COIN_GECKO
+        dataProvider === DataProvider.COIN_GECKO
             ? {
                   id: 'usd',
                   name: 'USD',
@@ -39,8 +39,8 @@ export async function getLimitedCurrenies(platform: Platform): Promise<Currency[
     ])
 }
 
-export async function getCoins(platform: Platform): Promise<Coin[]> {
-    if (platform === Platform.COIN_GECKO) return coinGeckoAPI.getAllCoins()
+export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
+    if (dataProvider === DataProvider.COIN_GECKO) return coinGeckoAPI.getAllCoins()
     return (await coinMarketCapAPI.getAllCoins()).data.map((x) => ({
         id: String(x.id),
         name: x.name,
@@ -48,44 +48,44 @@ export async function getCoins(platform: Platform): Promise<Coin[]> {
     }))
 }
 
-//#region check a specific coin is available on specific platform
+//#region check a specific coin is available on specific dataProvider
 const availabilityCache = new Map<
-    Platform,
+    DataProvider,
     {
         supported: Set<string>
         lastUpdated: Date
     }
 >()
 
-export async function checkAvailabilityOnPlatform(platform: Platform, keyword: string) {
+export async function checkAvailabilityOnDataProvider(dataProvider: DataProvider, keyword: string) {
     if (
         // cache never built before
-        !availabilityCache.has(platform) ||
+        !availabilityCache.has(dataProvider) ||
         // cache expired
-        new Date().getTime() - (availabilityCache.get(platform)?.lastUpdated.getTime() ?? 0) >
+        new Date().getTime() - (availabilityCache.get(dataProvider)?.lastUpdated.getTime() ?? 0) >
             CRYPTOCURRENCY_MAP_EXPIRES_AT
     ) {
-        const coins = await getCoins(platform)
-        availabilityCache.set(platform, {
+        const coins = await getCoins(dataProvider)
+        availabilityCache.set(dataProvider, {
             supported: new Set<string>(coins.map((x) => x.symbol.toLowerCase())),
             lastUpdated: new Date(),
         })
     }
-    return availabilityCache.get(platform)?.supported.has(keyword.toLowerCase()) ?? false
+    return availabilityCache.get(dataProvider)?.supported.has(keyword.toLowerCase()) ?? false
 }
 
-export async function getAvailablePlatforms(keyword: string) {
+export async function getAvailableDataProviders(keyword: string) {
     const checked = await Promise.all(
-        getEnumAsArray(Platform).map(
-            async (x) => [x.value, await checkAvailabilityOnPlatform(x.value, keyword)] as const,
+        getEnumAsArray(DataProvider).map(
+            async (x) => [x.value, await checkAvailabilityOnDataProvider(x.value, keyword)] as const,
         ),
     )
     return checked.filter(([_, y]) => y).map(([x]) => x)
 }
 //#endregion
 
-export async function getCoinInfo(id: string, platform: Platform, currency: Currency): Promise<Trending> {
-    if (platform === Platform.COIN_GECKO) {
+export async function getCoinInfo(id: string, dataProvider: DataProvider, currency: Currency): Promise<Trending> {
+    if (dataProvider === DataProvider.COIN_GECKO) {
         const info = await coinGeckoAPI.getCoinInfo(id)
         return {
             coin: {
@@ -101,7 +101,7 @@ export async function getCoinInfo(id: string, platform: Platform, currency: Curr
                 home_url: info.links.homepage.filter(Boolean)[0],
             },
             currency,
-            platform,
+            dataProvider,
             market: Object.entries(info.market_data).reduce((accumulated, [key, value]) => {
                 if (value && typeof value === 'object') accumulated[key] = value[currency.id]
                 else accumulated[key] = value
@@ -133,7 +133,7 @@ export async function getCoinInfo(id: string, platform: Platform, currency: Curr
             market_cap_rank: info.rank,
         },
         currency,
-        platform,
+        dataProvider,
         market: {
             current_price: info.quotes[currencyName].price,
             total_volume: info.quotes[currencyName].volume_24h,
@@ -173,21 +173,26 @@ const CMC_KEYWORKD_ID_MAP: {
 } = {
     UNI: '7083',
 }
-function resolveCoinId(keyword: string, platform: Platform) {
-    if (platform === Platform.COIN_MARKET_CAP) return CMC_KEYWORKD_ID_MAP[keyword.toUpperCase()]
+function resolveCoinId(keyword: string, dataProvider: DataProvider) {
+    if (dataProvider === DataProvider.COIN_MARKET_CAP) return CMC_KEYWORKD_ID_MAP[keyword.toUpperCase()]
     return undefined
 }
 //#endregion
 
-export async function getCoinTrendingByKeyword(keyword: string, platform: Platform, currency: Currency) {
-    const coins = await getCoins(platform)
+export async function getCoinTrendingByKeyword(keyword: string, dataProvider: DataProvider, currency: Currency) {
+    const coins = await getCoins(dataProvider)
     const coin = coins.find((x) => x.symbol.toLowerCase() === keyword.toLowerCase())
     if (!coin) return null
-    return getCoinInfo(resolveCoinId(keyword, platform) ?? coin.id, platform, currency)
+    return getCoinInfo(resolveCoinId(keyword, dataProvider) ?? coin.id, dataProvider, currency)
 }
 
-export async function getPriceStats(id: string, platform: Platform, currency: Currency, days: number): Promise<Stat[]> {
-    if (platform === Platform.COIN_GECKO) {
+export async function getPriceStats(
+    id: string,
+    dataProvider: DataProvider,
+    currency: Currency,
+    days: number,
+): Promise<Stat[]> {
+    if (dataProvider === DataProvider.COIN_GECKO) {
         const stats = await coinGeckoAPI.getPriceStats(id, currency.id, days === Days.MAX ? 11430 : days)
         return stats.prices
     }

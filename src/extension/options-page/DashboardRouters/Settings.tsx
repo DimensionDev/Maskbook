@@ -34,8 +34,9 @@ import { useModal } from '../DashboardDialogs/Base'
 import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
 import { Flags } from '../../../utils/flags'
-import { currentTrendingViewPlatformSettings } from '../../../plugins/Trader/settings'
-import { Platform, resolvePlatformName } from '../../../plugins/Trader/types'
+import { currentDataProviderSettings } from '../../../plugins/Trader/settings'
+import { resolveDataProviderName } from '../../../plugins/Trader/pipes'
+import { DataProvider } from '../../../plugins/Trader/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -183,10 +184,10 @@ export default function DashboardSettingsRouter() {
                                 {/* TODO: A singe 'Plugins' tab should be added for listing plugin bio and settings. */}
                                 <SettingsUIEnum
                                     classes={listStyle}
-                                    enumObject={Platform}
-                                    getText={resolvePlatformName}
+                                    enumObject={DataProvider}
+                                    getText={resolveDataProviderName}
                                     icon={<TrendingUpIcon />}
-                                    value={currentTrendingViewPlatformSettings}
+                                    value={currentDataProviderSettings}
                                 />
                             </List>
                         </Card>
