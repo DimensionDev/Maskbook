@@ -3,10 +3,10 @@ import type PopperJs from 'popper.js'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@material-ui/core'
 import { useLocation, useWindowScroll } from 'react-use'
 import { MessageCenter } from '../messages'
-import type { Platform } from '../types'
+import type { DataProvider } from '../types'
 
 export interface TrendingPopperProps {
-    children?: (name: string, platforms: Platform[], reposition?: () => void) => React.ReactNode
+    children?: (name: string, platforms: DataProvider[], reposition?: () => void) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
 
@@ -15,7 +15,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const [availablePlatforms, setAvailablePlatforms] = useState<Platform[]>([])
+    const [availablePlatforms, setAvailablePlatforms] = useState<DataProvider[]>([])
 
     // open popper
     useEffect(

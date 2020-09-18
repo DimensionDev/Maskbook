@@ -11,7 +11,7 @@ import { TrendingPopper } from './UI/TrendingPopper'
 import { TrendingView } from './UI/TrendingView'
 import Services from '../../extension/service'
 import { PLUGIN_IDENTIFIER, PLUGIN_METADATA_KEY } from './constants'
-import type { Platform } from './types'
+import { DataProvider, SwapProvider } from './types'
 
 const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor => isTypedMessageAnchor(m) && m.category === 'cash'
 
@@ -33,12 +33,17 @@ export const TraderPluginDefine: PluginConfig = {
 function PageInspector() {
     useEffect(() => {
         // build availability cache in the background page
-        Services.Plugin.invokePlugin('maskbook.trader', 'getAvailablePlatforms', 'BTC')
+        Services.Plugin.invokePlugin('maskbook.trader', 'getAvailableDataProviders', 'BTC')
     }, [])
     return (
         <TrendingPopper>
-            {(name: string, platforms: Platform[], reposition?: () => void) => (
-                <TrendingView name={name} platforms={platforms} onUpdate={reposition} />
+            {(name: string, platforms: DataProvider[], reposition?: () => void) => (
+                <TrendingView
+                    name={name}
+                    dataProviders={platforms}
+                    swapProviders={[SwapProvider.UNISWAP]}
+                    onUpdate={reposition}
+                />
             )}
         </TrendingPopper>
     )

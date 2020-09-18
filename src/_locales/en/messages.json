@@ -335,11 +335,13 @@
     "plugin_trader_no_data": "No Data",
     "plugin_trader_tab_price": "Price",
     "plugin_trader_tab_exchange": "Exchange",
+    "plugin_trader_tab_swap": "Swap 🔥",
     "plugin_trader_data_source": "Data Source: ",
+    "plugin_trader_switch_swap_provider": "Switch Provider: ",
     "plugin_trader_table_exchange": "Exchange",
     "plugin_trader_table_pair": "Pair",
     "plugin_trader_table_price": "Price",
     "plugin_trader_table_volume": "Volume (24h)",
-    "plugin_trader_settings_platform_primary": "Data Source",
-    "plugin_trader_settings_platform_secondary": "Fetch trending data from different platforms."
+    "plugin_trader_settings_data_source_primary": "Data Source",
+    "plugin_trader_settings_data_source_secondary": "Fetch trending data from different platforms."
 }

@@ -2,9 +2,14 @@ export interface Settings {
     currency: Currency
 }
 
-export enum Platform {
+export enum DataProvider {
     COIN_GECKO,
     COIN_MARKET_CAP,
+}
+
+export enum SwapProvider {
+    UNISWAP,
+    // SUSHISWAP,
 }
 
 export interface Currency {
@@ -51,48 +56,10 @@ export interface Ticker {
 
 export interface Trending {
     currency: Currency
-    platform: Platform
+    dataProvider: DataProvider
     coin: Coin
     market: Market
     tickers: Ticker[]
 }
 
 export type Stat = [number | string, number]
-
-export function resolveCurrencyName(currency: Currency) {
-    return [
-        currency.name,
-        currency.symbol ? `"${currency.symbol}"` : '',
-        currency.description ? `(${currency.description})` : '',
-    ].join(' ')
-}
-
-export function resolvePlatformName(platform: Platform) {
-    switch (platform) {
-        case Platform.COIN_GECKO:
-            return 'Coin Gecko'
-        case Platform.COIN_MARKET_CAP:
-            return 'Coin Market Cap'
-        default:
-            return ''
-    }
-}
-
-export function resolvePlatformLink(platform: Platform) {
-    switch (platform) {
-        case Platform.COIN_GECKO:
-            return 'https://www.coingecko.com/'
-        case Platform.COIN_MARKET_CAP:
-            return 'https://coinmarketcap.com/'
-        default:
-            return ''
-    }
-}
-
-export function resolveDaysName(days: number) {
-    if (days === 0) return 'MAX'
-    if (days >= 365) return `${Math.floor(days / 365)}y`
-    if (days >= 30) return `${Math.floor(days / 30)}m`
-    if (days >= 7) return `${Math.floor(days / 7)}w`
-    return `${days}d`
-}
