@@ -3,7 +3,9 @@ import type PopperJs from 'popper.js'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@material-ui/core'
 import { useLocation, useWindowScroll } from 'react-use'
 import { MessageCenter } from '../messages'
+import { MessageCenter as MessageCenterWallet, MaskbookWalletMessages } from '../../Wallet/messages'
 import type { DataProvider } from '../types'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 
 export interface TrendingPopperProps {
     children?: (name: string, platforms: DataProvider[], reposition?: () => void) => React.ReactNode
@@ -19,12 +21,10 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [availablePlatforms, setAvailablePlatforms] = useState<DataProvider[]>([])
 
     //#region freeze click
-    useEffect(
-        () =>
-            MessageCenter.on('selectTokenDialogUpdated', (ev) => {
-                setFreezed(ev.open)
-            }),
-        [],
+    useRemoteControlledDialog<MaskbookWalletMessages, 'selectERC20TokenDialogUpdated'>(
+        MessageCenterWallet,
+        'selectERC20TokenDialogUpdated',
+        (ev) => setFreezed(ev.open),
     )
     //#endregion
 

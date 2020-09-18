@@ -17,7 +17,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
-import { MessageCenter, MaskbookTraderMessages } from '../messages'
+import { MessageCenter, MaskbookWalletMessages } from '../messages'
 import { FixedSizeList } from 'react-window'
 import { TokenInList } from '../../../extension/options-page/DashboardComponents/TokenInList'
 import { isSameAddr } from '../../Wallet/token'
@@ -28,6 +28,7 @@ import {
 } from '../../../social-network-provider/twitter.com/utils/theme'
 import { getActivatedUI } from '../../../social-network/ui'
 import type { ERC20Token } from '../../../web3/types'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -49,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-interface SelectTokenDialogUIProps
+interface SelectERC20TokenDialogUIProps
     extends withClasses<
         | KeysInferFromUseStyles<typeof useStyles>
         | 'root'
@@ -63,7 +64,7 @@ interface SelectTokenDialogUIProps
         | 'close'
     > {}
 
-function SelectTokenDialogUI(props: SelectTokenDialogUIProps) {
+function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -100,42 +101,29 @@ function SelectTokenDialogUI(props: SelectTokenDialogUIProps) {
     //#endregion
 
     //#region dialog
-    const [open, setOpen] = useState(false)
-
-    // useRemoteControlledDialog<MaskbookTraderMessages>(MessageCenter, '')
-
-    // submit token
-    const onSubmit = (address: string) => {
-        setOpen(false)
-        setTimeout(() => {
-            MessageCenter.emit('selectTokenDialogUpdated', {
-                open: false,
-                token: address ? tokens.find((x) => x.address === address) : undefined,
-            })
-        })
-    }
-
-    // open dialog from message center
-    useEffect(() => {
-        if (open) return
-        MessageCenter.on('selectTokenDialogUpdated', (ev) => {
-            if (!ev.open) return // expect open dialog
-            setOpen(true)
+    const [open, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectERC20TokenDialogUpdated'>(
+        MessageCenter,
+        'selectERC20TokenDialogUpdated',
+        (ev) => {
+            if (!ev.open) return
             setAddress(ev.address ?? '')
             setExcludeTokens(ev.excludeTokens ?? [])
+        },
+    )
+
+    // submit token
+    const onSubmit = (address: string) =>
+        setOpen({
+            open: false,
+            token: address ? tokens.find((x) => x.address === address) : undefined,
         })
-    }, [open])
 
     // close dialog with message center
-    const onClose = () => {
-        if (!open) return
-        setOpen(!open)
-        setTimeout(() => {
-            MessageCenter.emit('selectTokenDialogUpdated', {
-                open: false,
-            })
-        }, 100)
-    }
+    const onClose = () =>
+        setOpen({
+            open: false,
+        })
+
     //#endregion
 
     return (
@@ -202,9 +190,9 @@ function SelectTokenDialogUI(props: SelectTokenDialogUIProps) {
     )
 }
 
-export interface SelectTokenDialogProps extends SelectTokenDialogUIProps {}
+export interface SelectERC20TokenDialogProps extends SelectERC20TokenDialogUIProps {}
 
-export function SelectTokenDialog(props: SelectTokenDialogProps) {
+export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
     const ui = getActivatedUI()
     const twitterClasses = {
         ...useTwitterDialog(),
@@ -213,8 +201,8 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     }
 
     return ui.internalName === 'twitter' ? (
-        <SelectTokenDialogUI classes={twitterClasses} {...props} />
+        <SelectERC20TokenDialogUI classes={twitterClasses} {...props} />
     ) : (
-        <SelectTokenDialogUI {...props} />
+        <SelectERC20TokenDialogUI {...props} />
     )
 }

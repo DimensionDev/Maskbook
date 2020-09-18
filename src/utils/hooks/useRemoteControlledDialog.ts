@@ -1,33 +1,32 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { BatchedMessageCenter } from '../messages'
 
-export interface DialogUpdatedEvent<T> {
+export interface RemoteControlledDialogEvent {
     open: boolean
-    data?: T
 }
 
 /**
- *
+ * Use a dialog state controlled by remote
  */
-export function useRemoteControlledDialog<
-    T,
-    M extends BatchedMessageCenter<T>, // the message center
-    N extends keyof T, // the typeof event name
-    P extends unknown, // the typeof event data
-    U extends DialogUpdatedEvent<P> // the typeof event payload
->(MC: M, name: N, onOpen?: () => P, onClose?: () => P) {
+export function useRemoteControlledDialog<T, N extends keyof T>(
+    MC: BatchedMessageCenter<T>,
+    name: T[N] extends RemoteControlledDialogEvent ? N : never,
+    onUpdate?: (ev: T[N]) => void,
+) {
     const [open, setOpen] = useState(false)
-
-    // const data = onOpen?.()
-    if (onOpen) {
-        const data = onOpen?.()
-        MC.emit(name, ({
-            open: true,
-            data,
-        } as any) as T[N])
-    }
-
-    return {
+    useEffect(
+        () =>
+            MC.on(name, (ev: T[N]) => {
+                setOpen(((ev as unknown) as RemoteControlledDialogEvent).open)
+                onUpdate?.(ev)
+            }),
+        [onUpdate],
+    )
+    return [
         open,
-    }
+        (ev: T[N]) => {
+            setOpen(((ev as unknown) as RemoteControlledDialogEvent).open)
+            setTimeout(() => MC.emit(name, ev), 100)
+        },
+    ] as const
 }
