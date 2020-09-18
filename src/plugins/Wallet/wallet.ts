@@ -120,7 +120,10 @@ export async function updateExoticWalletsFromSource(
             } as ExoticWalletRecord),
         )
     }
-    if (modified) PluginMessageCenter.emit('maskbook.wallets.update', void 0)
+    if (modified) {
+        PluginMessageCenter.emit('maskbook.wallets.update', void 0)
+        PluginMessageCenter.emit('maskbook.wallets.reset', void 0)
+    }
 }
 function sortWallet(a: WalletRecord, b: WalletRecord) {
     if (a._wallet_is_default) return -1

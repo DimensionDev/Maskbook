@@ -1,6 +1,6 @@
 import { useCallCallback } from './useCallback'
-import type { TransactionObject } from '../../../contracts/types'
-import { useTimes, TimesOptions } from '../../../utils/hooks/useTimes'
+import type { TransactionObject } from '../../contracts/types'
+import { useTimes, TimesOptions } from '../../utils/hooks/useTimes'
 
 /**
  * Create a callback and invoke it n times

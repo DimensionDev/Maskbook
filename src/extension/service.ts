@@ -20,6 +20,7 @@ interface Services {
     Helper: typeof import('./background-script/HelperService')
     Nonce: typeof import('./background-script/NonceService')
     Provider: typeof import('./background-script/ProviderService')
+    Ethereum: typeof import('./background-script/EthereumService')
 }
 const Services = {} as Services
 export default Services
@@ -44,12 +45,14 @@ if (!('Services' in globalThis)) {
     register(createProxyToService('HelperService'), 'Helper', MockService.HelperService)
     register(createProxyToService('NonceService'), 'Nonce', {})
     register(createProxyToService('ProviderService'), 'Provider', {})
+    register(createProxyToService('EthereumService'), 'Ethereum', {})
 }
 interface ServicesWithProgress {
     // Sorry you should add import at '../_background_loader.1.ts'
     pluginArweaveUpload: typeof pluginArweaveUpload
     decryptFromText: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromText
     decryptFromImageUrl: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromImageUrl
+    sendTransaction: typeof import('./background-script/EthereumServices/transaction').sendTransaction
 }
 function createProxyToService(name: string) {
     return new Proxy(

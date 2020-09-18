@@ -44,8 +44,8 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
         <Chip
             className={classes.chip}
             icon={
-                token.image_url ? (
-                    <Avatar src={token.image_url} alt={token.symbol} />
+                token.logo ? (
+                    <Avatar src={token.logo} alt={token.symbol} />
                 ) : (
                     <TokenIcon address={token.address} name={token.name} />
                 )

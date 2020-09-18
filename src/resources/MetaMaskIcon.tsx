@@ -5,7 +5,7 @@ export function MetaMaskIcon(props: SvgIconProps) {
     return (
         <SvgIcon {...props}>
             <svg viewBox="0 0 397 355">
-                <g fill="none" fill-rule="evenodd" transform="translate(-1 -1)">
+                <g fill="none" fillRule="evenodd" transform="translate(-1 -1)">
                     <path
                         d="m114.622644 327.195472 52.004717 13.810198v-18.05949l4.245283-4.249292h29.716982v21.246459 14.872523h-31.839624l-39.268868-16.997169z"
                         fill="#cdbdb2"
