@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
-import type { TransactionObject } from '../../../contracts/types'
-import { getNonce, commitNonce, resetNonce } from '../../../extension/background-script/NonceService'
-import { web3 } from '../../Wallet/web3'
+import type { TransactionObject } from '../../contracts/types'
+import { getNonce, commitNonce, resetNonce } from '../../extension/background-script/NonceService'
+import { web3 } from '../'
 import type { TransactionReceipt, TransactionConfig } from 'web3-core'
 import stringify from 'json-stable-stringify'
 

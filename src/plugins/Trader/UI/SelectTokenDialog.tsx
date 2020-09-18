@@ -2,7 +2,6 @@ import React, { useMemo, useState, useEffect } from 'react'
 import Fuse from 'fuse.js'
 import { getNetworkERC20Tokens } from '../../Wallet/UI/EthereumNetworkSettings'
 import { useCurrentEthChain } from '../../shared/useWallet'
-import type { ERC20Token } from '../types'
 import {
     makeStyles,
     createStyles,
@@ -28,7 +27,7 @@ import {
     useTwitterCloseButton,
 } from '../../../social-network-provider/twitter.com/utils/theme'
 import { getActivatedUI } from '../../../social-network/ui'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import type { ERC20Token } from '../../../web3/types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

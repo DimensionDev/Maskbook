@@ -1,5 +1,5 @@
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { web3 } from '../../plugins/Wallet/web3'
+import { getTransactionCount } from './EthereumServices/network'
 
 OnlyRunInContext(['background', 'debugging'], 'NonceService')
 
@@ -29,7 +29,7 @@ class NonceManager {
             const run = async () => {
                 try {
                     this.lock()
-                    callback(null, await web3.eth.getTransactionCount(this.address))
+                    callback(null, await getTransactionCount(this.address))
                 } catch (e) {
                     callback(e)
                 }

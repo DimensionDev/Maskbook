@@ -1,21 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import {
-    makeStyles,
-    Theme,
-    createStyles,
-    DialogContent,
-    Typography,
-    Card,
-    CardHeader,
-    CardContent,
-    ButtonBase,
-} from '@material-ui/core'
+import React from 'react'
+import { makeStyles, Theme, createStyles, Typography, Card, ButtonBase, ButtonBaseProps } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
-import { getActivatedUI } from '../../../social-network/ui'
-import { useTwitterDialog } from '../../../social-network-provider/twitter.com/utils/theme'
-import { MessageCenter } from '../../../utils/messages'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,6 +41,7 @@ export interface ProviderProps
     name: React.ReactNode
     description: React.ReactNode
     onClick?: () => void
+    ButtonBaseProps?: Partial<ButtonBaseProps>
 }
 
 export function Provider(props: ProviderProps) {
@@ -62,7 +49,7 @@ export function Provider(props: ProviderProps) {
     const classes = useStylesExtends(useStyles(), props)
     return (
         <Card className={classes.root} variant="outlined" onClick={props.onClick}>
-            <ButtonBase className={classes.content}>
+            <ButtonBase className={classes.content} {...props.ButtonBaseProps}>
                 <div className={classes.logo}>{props.logo}</div>
                 <Typography className={classes.name} variant="h3">
                     {props.name}

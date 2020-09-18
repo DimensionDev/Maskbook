@@ -114,7 +114,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                         justifyContent="center"
                         alignItems="flex-end">
                         <Typography className={classes.balance} color="textSecondary" variant="body2" component="span">
-                            Balance: {formatBalance(new BigNumber(token?.balance ?? '0'), token.decimals, 6)}
+                            Balance: {formatBalance(new BigNumber(token?.balanceOf), token.decimals, 6)}
                         </Typography>
                         <Box display="flex">
                             <Chip
@@ -122,7 +122,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                 size="small"
                                 label="MAX"
                                 clickable
-                                onClick={() => onAmountChange(token.balance ?? '0')}
+                                onClick={() => onAmountChange(token.balanceOf)}
                                 {...props.MaxChipProps}
                             />
                             <SelectTokenChip token={token} {...props.SelectTokenChip} />

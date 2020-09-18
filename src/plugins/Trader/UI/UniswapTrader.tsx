@@ -2,14 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react'
 import classNames from 'classnames'
 import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
-import type { ERC20Token } from '../types'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenAmountPanel } from './TokenAmountPanel'
-import { useERC20Token } from '../hooks/useERC20Token'
 import BigNumber from 'bignumber.js'
 import { MessageCenter } from '../messages'
-import { isSameAddr } from '../../Wallet/token'
+import { useERC20Token } from '../../../web3/hooks/useERC20Token'
+import type { ERC20Token } from '../../../web3/types'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -92,8 +91,8 @@ export function UniswapTrader(props: UniswapTraderProps) {
     const tradeAmountA = new BigNumber(amountA)
     const tradeAmountB = new BigNumber(amountB)
 
-    const balanceA = new BigNumber(ERC20TokenA?.balance ?? '0')
-    const balanceB = new BigNumber(ERC20TokenB?.balance ?? '0')
+    const balanceA = new BigNumber(ERC20TokenA?.balanceOf ?? '0')
+    const balanceB = new BigNumber(ERC20TokenB?.balanceOf ?? '0')
 
     useEffect(() => {
         // do it
@@ -101,6 +100,8 @@ export function UniswapTrader(props: UniswapTraderProps) {
     //#endregion
 
     console.log({
+        token0Address,
+        token1Address,
         tradeAmountA: tradeAmountA.toFixed(),
         tradeAmountB: tradeAmountB.toFixed(),
         balanceA: balanceA.toFixed(),
@@ -108,9 +109,6 @@ export function UniswapTrader(props: UniswapTraderProps) {
         ERC20TokenA: ERC20TokenA,
         ERC20TokenB: ERC20TokenB,
     })
-
-    if (!ERC20TokenA?.address && !ERC20TokenB?.address) return null
-
     return (
         <form className={classes.form} noValidate autoComplete="off">
             <div className={classes.section}>

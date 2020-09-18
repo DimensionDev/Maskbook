@@ -36,6 +36,7 @@ export function switchToProvider(provider: WalletProviderType) {
 export function getWalletProvider(provider: WalletProviderType) {
     if (provider === WalletProviderType.managed) return MaskbookProvider
     if (provider === WalletProviderType.metamask) return MetaMaskProvider
+    if (provider === WalletProviderType.wallet_connect) throw new Error('not supported')
     return unreachable(provider)
 }
 

@@ -1,4 +1,3 @@
-import type { Currency, DataProvider, ERC20Token } from './types'
 import { BatchedMessageCenter } from '../../utils/messages'
 
 export interface MaskbookWalletMessages {}

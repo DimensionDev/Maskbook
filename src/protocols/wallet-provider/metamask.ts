@@ -1,5 +1,4 @@
 import createMetaMaskProvider from 'metamask-extension-provider'
-import w3 from 'web3'
 import { AsyncCall, EventBasedChannel } from 'async-call-rpc/full'
 import { EventEmitter } from 'events'
 import type { AbstractProvider } from 'web3-core'
