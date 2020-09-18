@@ -333,6 +333,7 @@
     "plugin_file_service_error_101": "只能選擇單個文檔",
     "plugin_file_service_error_102": "文檔尺寸過大。請不要超過 {{limit}}。",
     "plugin_file_service_on_change_file": "選擇其他文檔",
+    "plugin_trader_display_name": "",
     "plugin_trader_no_data": "暫無數據",
     "plugin_trader_tab_price": "價格",
     "plugin_trader_tab_exchange": "交易",

@@ -12,12 +12,24 @@ export interface TrendingPopperProps {
 
 export function TrendingPopper(props: TrendingPopperProps) {
     const popperRef = useRef<PopperJs | null>(null)
+    const [freezed, setFreezed] = useState(false) // disable any click
     const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [availablePlatforms, setAvailablePlatforms] = useState<DataProvider[]>([])
 
-    // open popper
+    //#region freeze click
+    useEffect(
+        () =>
+            MessageCenter.on('selectTokenDialogUpdated', (ev) => {
+                setFreezed(ev.open)
+            }),
+        [],
+    )
+    //#endregion
+
+    //#region open or close popper
+    // open popper from message center
     useEffect(
         () =>
             MessageCenter.on('cashTagObserved', (ev) => {
@@ -43,9 +55,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
 
     // close popper if location was changed
     const location = useLocation()
-    useEffect(() => {
-        setAnchorEl(null)
-    }, [location.state?.key, location.href])
+    useEffect(() => setAnchorEl(null), [location.state?.key, location.href])
 
     // close popper if scroll out of visual screen
     const position = useWindowScroll()
@@ -58,11 +68,17 @@ export function TrendingPopper(props: TrendingPopperProps) {
         )
             setAnchorEl(null)
     }, [anchorEl, Math.floor(position.y / 50)])
+    //#endregion
 
     if (locked) return null
     if (!anchorEl) return null
     return (
-        <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
+        <ClickAwayListener
+            onClickAway={() => {
+                console.log('DEBUG: ClickAwayListener')
+                console.log(freezed)
+                if (!freezed) setAnchorEl(null)
+            }}>
             <Popper
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}

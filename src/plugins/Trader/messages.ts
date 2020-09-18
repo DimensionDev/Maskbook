@@ -1,5 +1,16 @@
-import type { Currency, DataProvider } from './types'
+import type { Currency, DataProvider, ERC20Token } from './types'
 import { BatchedMessageCenter } from '../../utils/messages'
+
+type SelectTokenDialogEvent =
+    | {
+          open: true
+          address?: string
+          excludeTokens?: string[]
+      }
+    | {
+          open: false
+          token?: ERC20Token
+      }
 
 interface SettingsEvent {
     currency: Currency
@@ -14,6 +25,11 @@ interface CashTagEvent {
 }
 
 interface MaskbookTraderMessages {
+    /**
+     * Select token dialog
+     */
+    selectTokenDialogUpdated: SelectTokenDialogEvent
+
     /**
      * View a cash tag
      */

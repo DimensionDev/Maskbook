@@ -251,7 +251,7 @@ export function TrendingView(props: TrendingViewProps) {
                         </>
                     ) : null}
                     {tabIndex === 1 ? <TickersTable tickers={tickers} platform={dataProvider} /> : null}
-                    {tabIndex === 2 ? <UniswapTrader coin={coin} /> : null}
+                    {tabIndex === 2 && coin.eth_address ? <UniswapTrader address={coin.eth_address} /> : null}
                 </Paper>
             </CardContent>
             <CardActions className={classes.footer}>

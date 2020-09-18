@@ -332,6 +332,7 @@
     "plugin_file_service_error_101": "The input is not a single file.",
     "plugin_file_service_error_102": "The file is too large; limit is {{limit}}.",
     "plugin_file_service_on_change_file": "Change File",
+    "plugin_trader_display_name": "Plugin: Trader",
     "plugin_trader_no_data": "No Data",
     "plugin_trader_tab_price": "Price",
     "plugin_trader_tab_exchange": "Exchange",
