@@ -11,7 +11,7 @@ import { PluginUI, PluginConfig } from '../../../plugins/plugin'
 import { usePostInfo } from '../../DataSource/usePostInfo'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
-    data: { signatureVerifyResult: SuccessDecryption['signatureVerifyResult']; content: TypedMessage }
+    data: { content: TypedMessage }
     requestAppendRecipients?(to: Profile[]): Promise<void>
     alreadySelectedPreviously: Profile[]
     profiles: Profile[]
@@ -31,11 +31,10 @@ const useSuccessStyles = makeStyles((theme) => {
 
 export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
     const {
-        data: { content, signatureVerifyResult },
+        data: { content },
         profiles,
     } = props
     const classes = useStylesExtends(useSuccessStyles(), props)
-    const color = useColorStyles()
     const { t } = useI18N()
     const shareMenu = useShareMenu(
         profiles,
@@ -47,23 +46,6 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
             {t('decrypted_postbox_add_recipients')}
         </Link>
     )
-    const verify =
-        signatureVerifyResult === 'verifying' ? (
-            <Typography variant="caption" className={classNames(classes.signatureVerifyPassed, color.success)}>
-                {t('decrypted_postbox_verifying')}
-                <CircularProgress style={{ marginLeft: 6 }} variant="indeterminate" size={16} />
-            </Typography>
-        ) : signatureVerifyResult ? (
-            <Typography variant="caption" className={classNames(classes.signatureVerifyPassed, color.success)}>
-                {t('decrypted_postbox_verified')}
-                <CheckIcon fontSize="small" />
-            </Typography>
-        ) : (
-            <Typography variant="caption" className={classNames(classes.signatureVerifyFailed, color.error)}>
-                {t('decrypted_postbox_not_verified')}
-                <ClearIcon fontSize="small" />
-            </Typography>
-        )
     return (
         <>
             {shareMenu.ShareMenu}
@@ -72,7 +54,6 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
                 headerActions={rightActions}
                 title={t('decrypted_postbox_title')}
                 message={content}
-                beforeLatterMetadata={verify}
                 {...props.AdditionalContentProps}
             />
         </>
