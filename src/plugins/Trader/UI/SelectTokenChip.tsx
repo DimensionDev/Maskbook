@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react'
-import { makeStyles, Theme, createStyles, Chip, Avatar, ChipProps } from '@material-ui/core'
+import React from 'react'
+import classNames from 'classnames'
+import { makeStyles, Theme, createStyles, Chip, Avatar, ChipProps, CircularProgress } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import type { ERC20TokenForUI } from '../types'
 import { noop } from 'lodash-es'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
-import { MessageCenter } from '../messages'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -12,6 +12,9 @@ const useStyles = makeStyles((theme: Theme) => {
             border: 'none',
             borderRadius: 8,
             paddingLeft: theme.spacing(0.5),
+        },
+        loadingChip: {
+            marginRight: theme.spacing(-0.5),
         },
         icon: {
             pointerEvents: 'none',
@@ -21,14 +24,26 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export interface SelectTokenChipProps {
     token?: ERC20TokenForUI | null
+    loading?: boolean
     readonly?: boolean
     ChipProps?: Partial<ChipProps>
 }
 
 export function SelectTokenChip(props: SelectTokenChipProps) {
-    const { token, readonly = false, ChipProps } = props
+    const { token, loading = false, readonly = false, ChipProps } = props
     const classes = useStyles()
 
+    if (loading)
+        return (
+            <Chip
+                className={classNames(classes.chip, classes.loadingChip)}
+                icon={<CircularProgress size={16} />}
+                color="default"
+                size="small"
+                clickable={false}
+                variant="outlined"
+            />
+        )
     if (!token)
         return (
             <Chip
@@ -57,7 +72,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
             clickable={!readonly}
             label={token.symbol}
             // delete icon visible when this callback provided
-            onDelete={noop}
+            onDelete={readonly ? undefined : noop}
             {...ChipProps}
         />
     )

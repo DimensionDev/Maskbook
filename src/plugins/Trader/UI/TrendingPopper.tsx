@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import type PopperJs from 'popper.js'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@material-ui/core'
 import { useLocation, useWindowScroll } from 'react-use'
@@ -24,7 +24,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     useRemoteControlledDialog<MaskbookWalletMessages, 'selectERC20TokenDialogUpdated'>(
         MessageCenterWallet,
         'selectERC20TokenDialogUpdated',
-        (ev) => setFreezed(ev.open),
+        useCallback((ev) => setFreezed(ev.open), []),
     )
     //#endregion
 

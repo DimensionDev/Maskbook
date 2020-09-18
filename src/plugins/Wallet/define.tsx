@@ -16,4 +16,12 @@ export const WalletPluginDefine: PluginConfig = {
             </>
         )
     },
+    dashboardInspector() {
+        return (
+            <>
+                <SelectProviderDialog />
+                <SelectERC20TokenDialog />
+            </>
+        )
+    },
 }

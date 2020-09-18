@@ -3,7 +3,7 @@ import type { ITxData } from '@walletconnect/types'
 
 import { promiEventToIterator, StageType } from '../../../utils/promiEvent'
 import { getWallets } from '../../../plugins/Wallet/wallet'
-import { WalletRecord, EthereumNetwork } from '../../../plugins/Wallet/database/types'
+import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import { createWeb3 } from './web3'
 import * as Maskbook from './providers/Maskbook'
@@ -12,6 +12,7 @@ import * as WalletConnect from './providers/WalletConnect'
 import { WalletProviderType } from '../../../plugins/shared/findOutProvider'
 import { isSameAddr } from '../../../web3/helpers'
 import { getNonce, resetNonce, commitNonce } from '../NonceService'
+import type { ChainId } from '../../../web3/types'
 
 //#region tracking wallets
 let wallets: WalletRecord[] = []
@@ -76,7 +77,8 @@ async function createTransactionSender(from: string, config: TransactionConfig) 
 }
 
 /**
- * Send transaction on different provider with given account same as `eth_sendTransaction`
+ * Send transaction on different providers with a given account
+ * same as `eth_sendTransaction`
  * @param from
  * @param config
  */
@@ -110,7 +112,8 @@ export async function sendSignedTransaction(from: string, config: TransactionCon
 }
 
 /**
- * Call transaction on different provider with given account same as `eth_call`
+ * Call transaction on different providers with a given account
+ * same as `eh_call`
  * @param from
  * @param config
  */
@@ -122,17 +125,7 @@ export async function callTransaction(from: string, config: TransactionConfig) {
     if (wallet.provider === 'metamask') return createWeb3(MetaMask.createProvider()).eth.call(config)
     if (wallet.provider === WalletProviderType.wallet_connect) {
         const connector = await WalletConnect.createConnector()
-        const network = (() => {
-            switch (connector.chainId) {
-                case 3:
-                    return EthereumNetwork.Ropsten
-                case 4:
-                    return EthereumNetwork.Rinkeby
-                default:
-                    return EthereumNetwork.Mainnet
-            }
-        })()
-        return createWeb3(Maskbook.createProvider(network), []).eth.call(config)
+        return createWeb3(Maskbook.createProvider(connector.chainId as ChainId), []).eth.call(config)
     }
     throw new Error(`cannot call transaction for wallet ${wallet.address}`)
 }

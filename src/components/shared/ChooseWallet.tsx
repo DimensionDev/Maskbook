@@ -64,20 +64,21 @@ export function ChooseWallet(props: ChooseWalletProps) {
     const expansionPanelSummaryClasses = useStylesExtends(useAccordionSummaryStyle(), props)
 
     const [expanded, setExpanded] = useState(false)
-    const [currentName, setCurrentName] = useState('')
     const [currentAddress, setCurrentAddress] = useState('')
+
+    useEffect(() => {
+        if (!wallets.length) return
+        const current = wallets.find((x) => x._wallet_is_default) ?? wallets[0]
+        setCurrentAddress(current.address)
+    }, [props.wallets])
 
     const onChange = useCallback(() => {
         if (wallets.length > 1) setExpanded(!expanded)
     }, [wallets.length, expanded])
 
-    useEffect(() => {
-        const current = wallets.find((x) => x._wallet_is_default) ?? wallets[0]
-        setCurrentName(current.name ?? '')
-        setCurrentAddress(current.address)
-    }, [props.wallets])
+    const currentWallet = wallets.find((x) => isSameAddr(x.address, currentAddress))
+    if (!currentWallet) return null
 
-    if (!currentAddress) return null
     return (
         <div className={classes.root}>
             <Accordion classes={{ root: classes.expansionPanelRoot }} expanded={expanded} onChange={onChange}>
@@ -85,8 +86,7 @@ export function ChooseWallet(props: ChooseWalletProps) {
                     classes={expansionPanelSummaryClasses}
                     expandIcon={wallets.length > 1 ? <ExpandMoreIcon /> : null}>
                     <WalletInList
-                        address={currentAddress}
-                        name={currentName ?? ''}
+                        wallet={currentWallet}
                         ListItemProps={{ dense: true, classes: { root: classes.listItemRoot } }}
                         {...props.WalletInListProps}
                     />
@@ -96,13 +96,11 @@ export function ChooseWallet(props: ChooseWalletProps) {
                         {wallets.map((wallet) =>
                             isSameAddr(currentAddress, wallet.address) ? null : (
                                 <WalletInList
-                                    ListItemProps={{ dense: true, classes: { root: classes.listItemRoot } }}
-                                    address={wallet.address}
-                                    name={wallet.name ?? ''}
                                     key={wallet.address}
+                                    ListItemProps={{ dense: true, classes: { root: classes.listItemRoot } }}
+                                    wallet={wallet}
                                     onClick={() => {
                                         setExpanded(false)
-                                        setCurrentName(wallet.name ?? '')
                                         setCurrentAddress(wallet.address)
                                         Services.Plugin.invokePlugin(
                                             'maskbook.wallet',

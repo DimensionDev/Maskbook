@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import DashboardRouterContainer from './Container'
 import { Button, Typography, Box, IconButton, List, MenuItem, Fade, useMediaQuery } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
@@ -38,10 +38,11 @@ import { useCurrentEthChain, useTokens, useWallets } from '../../../plugins/shar
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
 import type { RedPacketRecord } from '../../../plugins/RedPacket/types'
 import { useHistory } from 'react-router-dom'
-import { WalletProviderType } from '../../../plugins/shared/findOutProvider'
 import { useSnackbar } from 'notistack'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import { Flags } from '../../../utils/flags'
+import { MessageCenter, MaskbookWalletMessages } from '../../../plugins/Wallet/messages'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -320,6 +321,17 @@ export default function DashboardWalletsRouter() {
         )
     }, [rpid, openWalletRedPacketDetail])
 
+    // show provider connect dialog
+    const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
+        MessageCenter,
+        'selectProviderDialogUpdated',
+    )
+    const onConnect = useCallback(() => {
+        setOpen({
+            open: true,
+        })
+    }, [setOpen])
+
     const walletContent = (
         <div className={classes.wrapper}>
             {currentWallet && <WalletContent wallet={currentWallet} tokens={getTokensForWallet(currentWallet)} />}
@@ -333,15 +345,8 @@ export default function DashboardWalletsRouter() {
             title={t('my_wallets')}
             actions={[
                 Flags.metamask_support_enabled ? (
-                    <Button
-                        variant="outlined"
-                        onClick={async () => {
-                            try {
-                                await Services.Plugin.connectExoticWallet(WalletProviderType.metamask)
-                                notify.enqueueSnackbar('Success', { variant: 'success' })
-                            } catch (e) {}
-                        }}>
-                        {t('import_from_metamask')}
+                    <Button variant="outlined" onClick={onConnect}>
+                        {t('connect')}
                     </Button>
                 ) : (
                     <></>
