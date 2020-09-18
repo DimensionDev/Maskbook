@@ -1,22 +1,20 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { makeStyles, Theme, createStyles, Chip, Avatar, ChipProps } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import type { ERC20TokenForUI } from '../types'
 import { noop } from 'lodash-es'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
+import { MessageCenter } from '../messages'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
-        balance: {
-            fontSize: 12,
-        },
-        icon: {
-            cursor: 'pointer',
-        },
         chip: {
             border: 'none',
             borderRadius: 8,
             paddingLeft: theme.spacing(0.5),
+        },
+        icon: {
+            pointerEvents: 'none',
         },
     })
 })
@@ -30,6 +28,7 @@ export interface SelectTokenChipProps {
 export function SelectTokenChip(props: SelectTokenChipProps) {
     const { token, readonly = false, ChipProps } = props
     const classes = useStyles()
+
     if (!token)
         return (
             <Chip
@@ -37,7 +36,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
                 label="Select a token"
                 color="default"
                 size="small"
-                clickable
+                clickable={!readonly}
                 {...ChipProps}
             />
         )
@@ -51,7 +50,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
                     <TokenIcon address={token.address} name={token.name} />
                 )
             }
-            deleteIcon={<ExpandMoreIcon style={{ display: readonly ? 'none' : 'unset' }} />}
+            deleteIcon={readonly ? undefined : <ExpandMoreIcon className={classes.icon} />}
             color="default"
             size="small"
             variant="outlined"

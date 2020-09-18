@@ -1,10 +1,10 @@
 import React from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { makeStyles, createStyles, Avatar } from '@material-ui/core'
+import { makeStyles, createStyles, Avatar, Theme } from '@material-ui/core'
 import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         coin: {
             width: 16,

@@ -37,10 +37,10 @@ function PageInspector() {
     }, [])
     return (
         <TrendingPopper>
-            {(name: string, platforms: DataProvider[], reposition?: () => void) => (
+            {(name: string, dataProviders: DataProvider[], reposition?: () => void) => (
                 <TrendingView
                     name={name}
-                    dataProviders={platforms}
+                    dataProviders={dataProviders}
                     swapProviders={[SwapProvider.UNISWAP]}
                     onUpdate={reposition}
                 />

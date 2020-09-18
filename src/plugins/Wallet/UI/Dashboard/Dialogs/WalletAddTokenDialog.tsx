@@ -1,73 +1,15 @@
-import React, { useState, useEffect, CSSProperties, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Fuse from 'fuse.js'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import { FixedSizeList } from 'react-window'
-import { ListItem, ListItemText, Box, Typography, ListItemIcon } from '@material-ui/core'
-import type { ERC20Token } from '../../../token'
+import { Box } from '@material-ui/core'
+import { ERC20Token, isSameAddr } from '../../../token'
 import { EthereumAddress } from 'wallet.ts'
 import { getNetworkERC20Tokens } from '../../Developer/EthereumNetworkSettings'
-import { TokenIcon } from '../../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { useI18N } from '../../../../../utils/i18n-next-ui'
 import { useCurrentEthChain } from '../../../../shared/useWallet'
-
-//#region token
-const useTokenInListStyles = makeStyles((theme) =>
-    createStyles({
-        icon: {
-            width: 28,
-            height: 28,
-            marginRight: theme.spacing(1),
-        },
-        text: {
-            display: 'flex',
-            justifyContent: 'space-between',
-        },
-        primary: {
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            paddingRight: theme.spacing(1),
-        },
-    }),
-)
-
-interface TokenInListProps {
-    index: number
-    style: any
-    data: {
-        tokens: ERC20Token[]
-        excludeTokens: string[]
-        selected: string
-        onSelect: (address: string) => void
-    }
-}
-
-function TokenInList({ data, index, style }: TokenInListProps) {
-    const { address, name, symbol } = data.tokens[index]
-    const classes = useTokenInListStyles()
-    return (
-        <ListItem
-            button
-            style={style}
-            disabled={data.excludeTokens.includes(address)}
-            selected={data.selected === address}
-            onClick={() => data.onSelect(address)}>
-            <ListItemIcon>
-                <TokenIcon classes={{ coin: classes.icon }} address={address} name={name} />
-            </ListItemIcon>
-            <ListItemText classes={{ primary: classes.text }}>
-                <Typography className={classes.primary} color="textPrimary" component="span">
-                    {name}
-                </Typography>
-                <Typography color="textSecondary" component="span">
-                    {symbol}
-                </Typography>
-            </ListItemText>
-        </ListItem>
-    )
-}
-//#endregion
+import { TokenInList } from '../../../../../extension/options-page/DashboardComponents/TokenInList'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -141,7 +83,7 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
                     excludeTokens,
                     selected: address,
                     onSelect(address: string) {
-                        const token = tokens.find((token) => token.address === address)
+                        const token = tokens.find((token) => isSameAddr(token.address, address))
                         if (!token) return
                         setAddress(address)
                         onTokenChange?.({
@@ -169,7 +111,7 @@ export interface ERC20CustomizedTokenSelectorProps {
 export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20CustomizedTokenSelectorProps) {
     const { t } = useI18N()
     const [address, setAddress] = useState('')
-    const [decimals, setDecimal] = useState(0)
+    const [decimals, setDecimals] = useState(0)
     const [name, setName] = useState('')
     const [symbol, setSymbol] = useState('')
     const isValidAddress = EthereumAddress.isValid(address)
@@ -199,7 +141,7 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
                 value={decimals === 0 ? '' : decimals}
                 type="number"
                 inputProps={{ min: 0 }}
-                onChange={(e) => setDecimal(parseInt(e.target.value))}
+                onChange={(e) => setDecimals(parseInt(e.target.value))}
             />
             <TextField required label={t('add_token_name')} value={name} onChange={(e) => setName(e.target.value)} />
             <TextField
