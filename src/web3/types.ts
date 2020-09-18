@@ -1,8 +1,8 @@
 export interface ERC20Token {
+    address: string
     name: string
     symbol: string
     decimals: number
-    address: string
 }
 
 export enum EthereumNetwork {

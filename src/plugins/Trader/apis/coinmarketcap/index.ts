@@ -124,9 +124,10 @@ export interface CoinInfo {
 }
 
 export async function getCoinInfo(id: string) {
-    const response_ = await fetch(
-        `${CMC_V1_BASE_URL}/cryptocurrency/info?id=${id}&aux=urls,logo,description,tags,platform,date_added,notice,status`,
-    )
+    const params = new URLSearchParams('aux=urls,logo,description,tags,platform,date_added,notice,status')
+    params.append('id', id)
+
+    const response_ = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/info?${params.toString()}`)
     const response = (await response_.json()) as {
         data: {
             [id: string]: CoinInfo

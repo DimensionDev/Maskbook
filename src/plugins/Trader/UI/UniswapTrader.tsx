@@ -6,9 +6,10 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenAmountPanel } from './TokenAmountPanel'
 import BigNumber from 'bignumber.js'
-import { MessageCenter } from '../messages'
+import { MessageCenter, MaskbookWalletMessages } from '../../Wallet/messages'
 import { useERC20Token } from '../../../web3/hooks/useERC20Token'
 import type { ERC20Token } from '../../../web3/types'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -58,23 +59,24 @@ export function UniswapTrader(props: UniswapTraderProps) {
     //#region select token
     const [focusedTokenAddress, setFocusedTokenAddress] = useState<string>('')
 
-    // update focused token
-    useEffect(
-        () =>
-            MessageCenter.on('selectTokenDialogUpdated', (ev) => {
-                if (ev.open) return // expect close dialog
-                if (!ev.token) return
-                const { address = '' } = ev.token
+    const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectERC20TokenDialogUpdated'>(
+        MessageCenter,
+        'selectERC20TokenDialogUpdated',
+        useCallback(
+            (ev: MaskbookWalletMessages['selectERC20TokenDialogUpdated']) => {
+                if (ev.open) return
+                const { address = '' } = ev.token ?? {}
                 token0Address === focusedTokenAddress ? setToken0Address(address) : setToken1Address(address)
-            }),
-        [token0Address, focusedTokenAddress],
+            },
+            [token0Address, focusedTokenAddress],
+        ),
     )
 
     // open select token dialog
     const onTokenSelectChipClick = useCallback(
         (token?: ERC20Token | null) => {
             setFocusedTokenAddress(token?.address ?? '')
-            MessageCenter.emit('selectTokenDialogUpdated', {
+            setOpen({
                 open: true,
                 address: token?.address,
                 excludeTokens: [token0Address, token1Address].filter(Boolean),
