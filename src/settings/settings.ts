@@ -5,6 +5,14 @@ import { EthereumNetwork } from '../plugins/Wallet/database/types'
 import type { SetupGuideStep } from '../components/InjectedComponents/SetupGuide'
 import { WalletProviderType } from '../plugins/shared/findOutProvider'
 import { Flags } from '../utils/flags'
+import { ChainId } from '../web3/types'
+
+/**
+ * The id of last activated tab
+ */
+export const lastActivatedTabIdSetting = createGlobalSettings<string>('lastActiveTabId', '', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
 
 /**
  * Does the debug mode on
@@ -51,6 +59,26 @@ const appearance = Appearance.default
 export const appearanceSettings = createGlobalSettings<Appearance>('apperance', appearance, {
     primary: () => i18n.t('settings_appearance'),
 })
+
+//#region provider chain id
+export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>('maskbook chain id', ChainId.Mainnet, {
+    primary: () => i18n.t('settings_choose_eth_network'),
+    secondary: () =>
+        `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Ropsten}. This only effects the built-in wallet.`,
+})
+
+export const currentMetaMaskChainIdSettings = createGlobalSettings<ChainId>('metamask chain id', ChainId.Mainnet, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>(
+    'walletconnect chain id',
+    ChainId.Mainnet,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+//#endregion
 
 export const currentLocalWalletEthereumNetworkSettings = createGlobalSettings<EthereumNetwork>(
     'eth network',

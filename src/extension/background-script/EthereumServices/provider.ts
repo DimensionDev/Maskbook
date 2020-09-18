@@ -1,42 +1,40 @@
-import { web3 } from './web3'
 import * as WalletConnect from './providers/WalletConnect'
 import * as MetaMask from './providers/MetaMask'
-import type { HttpProvider } from 'web3-core'
-import type { EthereumNetwork } from '../../../web3/types'
-import { getManagedWallets, updateExoticWalletsFromSource } from '../../../plugins/Wallet/wallet'
-import type { ExoticWalletRecord } from '../../../plugins/Wallet/database/types'
-import { WalletProviderType } from '../../../plugins/shared/findOutProvider'
+import { getManagedWallets, setDefaultWallet } from '../../../plugins/Wallet/wallet'
+import { openOptionsPage } from '../WelcomeService'
+import { DashboardRoute } from '../../options-page/Route'
 
 //#region connect WalletConnect
-export async function connectWalletConnectURI() {
+// step 1:
+// Generate the connection URI and render a QRCode for scanning by the user
+export async function createConnectionURI() {
     return (await WalletConnect.createConnector()).uri
 }
 
+// step2:
+// If user confirmed the request we will receive the 'connect' event
 export async function connectWalletConnect() {
     const connector = await WalletConnect.createConnector()
     if (connector.connected) return connector.accounts[0]
-    return new Promise<string>((resolve, reject) => {
-        const done = (err: Error | null) => {
-            if (err) reject(err)
-            else resolve(connector.accounts[0])
-        }
-        connector.on('connect', done)
-        connector.on('session_update', done)
-    })
+    return WalletConnect.requestAccounts()
 }
 //#endregion
 
 export async function connectMetaMask() {
-    web3.setProvider(MetaMask.createProvider() as HttpProvider)
-    const address = (await web3.eth.requestAccounts())[0]
-    const record: Partial<ExoticWalletRecord> = { address, _wallet_is_default: true }
-    await updateExoticWalletsFromSource(WalletProviderType.metamask, new Map([[address, record]]))
-    return address
+    return MetaMask.requestAccounts()
 }
 
 export async function connectMaskbook() {
     const { wallets } = await getManagedWallets()
+    // no wallet exists go to wallet panel in the dashboard
+    if (wallets.length === 0) {
+        openOptionsPage(DashboardRoute.Wallets, 'error=nowallet')
+        return
+    }
+    // return the default wallet
     const defaultWallet = wallets.find((x) => x._wallet_is_default)
     if (defaultWallet) return defaultWallet.address
+    // set first managed wallet as the default wallet
+    await setDefaultWallet(wallets[0].address)
     return wallets[0].address
 }

@@ -10,9 +10,9 @@ import {
     Language,
     renderInShadowRootSettings,
     allPostReplacementSettings,
-    currentLocalWalletEthereumNetworkSettings,
     appearanceSettings,
     Appearance,
+    currentMaskbookChainIdSettings,
 } from '../../../settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 
@@ -31,12 +31,12 @@ import DashboardRouterContainer from './Container'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
 import { useModal } from '../DashboardDialogs/Base'
-import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
 import { Flags } from '../../../utils/flags'
 import { currentDataProviderSettings } from '../../../plugins/Trader/settings'
 import { resolveDataProviderName } from '../../../plugins/Trader/pipes'
 import { DataProvider } from '../../../plugins/Trader/types'
+import { ChainId } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -175,9 +175,9 @@ export default function DashboardSettingsRouter() {
                                 {Flags.support_eth_network_switch ? (
                                     <SettingsUIEnum
                                         classes={listStyle}
-                                        enumObject={EthereumNetwork}
+                                        enumObject={ChainId}
                                         icon={<WifiIcon />}
-                                        value={currentLocalWalletEthereumNetworkSettings}
+                                        value={currentMaskbookChainIdSettings}
                                     />
                                 ) : null}
 

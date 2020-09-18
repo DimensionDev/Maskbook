@@ -1,6 +1,5 @@
 import type { Currency, DataProvider } from './types'
 import { BatchedMessageCenter } from '../../utils/messages'
-import type { ERC20Token } from '../Wallet/token'
 
 interface SettingsEvent {
     currency: Currency

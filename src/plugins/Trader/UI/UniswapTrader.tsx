@@ -49,11 +49,14 @@ export function UniswapTrader(props: UniswapTraderProps) {
     const [token0Address, setToken0Address] = useState(props.address)
     const [token1Address, setToken1Address] = useState('')
 
-    const { value: token0 } = useERC20Token(token0Address)
-    const { value: token1 } = useERC20Token(token1Address)
+    const { value: token0, loading: loadingToken0 } = useERC20Token(token0Address)
+    const { value: token1, loading: loadingToken1 } = useERC20Token(token1Address)
 
     const ERC20TokenA = reversed ? token1 : token0
     const ERC20TokenB = reversed ? token0 : token1
+
+    const loadingERC20TokenA = reversed ? loadingToken1 : loadingToken0
+    const loadingERC20TokenB = reversed ? loadingToken0 : loadingToken1
     //#endregion
 
     //#region select token
@@ -66,6 +69,7 @@ export function UniswapTrader(props: UniswapTraderProps) {
             (ev: MaskbookWalletMessages['selectERC20TokenDialogUpdated']) => {
                 if (ev.open) return
                 const { address = '' } = ev.token ?? {}
+                if (!address) return
                 token0Address === focusedTokenAddress ? setToken0Address(address) : setToken1Address(address)
             },
             [token0Address, focusedTokenAddress],
@@ -82,7 +86,7 @@ export function UniswapTrader(props: UniswapTraderProps) {
                 excludeTokens: [token0Address, token1Address].filter(Boolean),
             })
         },
-        [token0Address, token1Address],
+        [setOpen, token0Address, token1Address],
     )
     //#endregion
 
@@ -123,6 +127,7 @@ export function UniswapTrader(props: UniswapTraderProps) {
                         disabled: !ERC20TokenA,
                     }}
                     SelectTokenChip={{
+                        loading: loadingERC20TokenA,
                         ChipProps: {
                             onClick: () => onTokenSelectChipClick(ERC20TokenA),
                         },
@@ -145,6 +150,7 @@ export function UniswapTrader(props: UniswapTraderProps) {
                         disabled: !ERC20TokenB,
                     }}
                     SelectTokenChip={{
+                        loading: loadingERC20TokenB,
                         ChipProps: {
                             onClick: () => onTokenSelectChipClick(ERC20TokenB),
                         },

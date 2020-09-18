@@ -75,6 +75,7 @@
     "@types/tiny-secp256k1": "^1.0.0",
     "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^8.3.0",
+    "@uniswap/sdk": "^3.0.3-beta.1",
     "@walletconnect/client": "^1.2.2",
     "anchorme": "^1.1.2",
     "arweave": "^1.9.1",

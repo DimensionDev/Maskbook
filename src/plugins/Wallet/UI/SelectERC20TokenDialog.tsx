@@ -1,7 +1,5 @@
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState, useEffect, useCallback } from 'react'
 import Fuse from 'fuse.js'
-import { getNetworkERC20Tokens } from '../../Wallet/UI/EthereumNetworkSettings'
-import { useCurrentEthChain } from '../../shared/useWallet'
 import {
     makeStyles,
     createStyles,
@@ -27,8 +25,10 @@ import {
     useTwitterCloseButton,
 } from '../../../social-network-provider/twitter.com/utils/theme'
 import { getActivatedUI } from '../../../social-network/ui'
-import type { ERC20Token } from '../../../web3/types'
+import { ERC20Token, ChainId } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { getERC20Tokens } from '../../../web3/tokens'
+import { useChainId } from '../../../web3/hooks/useChainId'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -71,9 +71,9 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     //#region update tokens
     const [query, setQuery] = useState('')
     const [address, setAddress] = useState('')
-    const network = useCurrentEthChain()
+    const chainId = useChainId()
     const [erc20Tokens, fuse] = useMemo(() => {
-        const tokens = getNetworkERC20Tokens(network)
+        const tokens = getERC20Tokens(chainId ?? ChainId.Mainnet)
         const fuse = new Fuse(tokens, {
             shouldSort: true,
             threshold: 0.45,
@@ -84,7 +84,7 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
             ],
         })
         return [tokens, fuse] as const
-    }, [network])
+    }, [chainId])
     const [tokens, setTokens] = useState<ERC20Token[]>([])
     const [excludeTokens, setExcludeTokens] = useState<string[]>([])
 
@@ -104,11 +104,11 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     const [open, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectERC20TokenDialogUpdated'>(
         MessageCenter,
         'selectERC20TokenDialogUpdated',
-        (ev) => {
+        useCallback((ev: MaskbookWalletMessages['selectERC20TokenDialogUpdated']) => {
             if (!ev.open) return
             setAddress(ev.address ?? '')
             setExcludeTokens(ev.excludeTokens ?? [])
-        },
+        }, []),
     )
 
     // submit token
@@ -123,7 +123,6 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
         setOpen({
             open: false,
         })
-
     //#endregion
 
     return (
@@ -141,6 +140,7 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                 disableAutoFocus
                 disableEnforceFocus
                 onEscapeKeyDown={onClose}
+                onBackdropClick={onClose}
                 onExit={onClose}
                 BackdropProps={{
                     className: classes.backdrop,

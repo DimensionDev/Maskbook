@@ -1,18 +1,18 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { getNetworkSettings } from '../../../../web3/settings'
-import { currentLocalWalletEthereumNetworkSettings } from '../../../../settings/settings'
-import { EthereumNetwork } from '../../../../plugins/Wallet/database/types'
+import { getConstant } from '../../../../web3/constants'
+import { currentMaskbookChainIdSettings } from '../../../../settings/settings'
+import { ChainId } from '../../../../web3/types'
 
-//#region tracking network
-let currentNetwork: EthereumNetwork = EthereumNetwork.Mainnet
-currentLocalWalletEthereumNetworkSettings.addListener((v) => (currentNetwork = v))
+//#region tracking chain id
+let currentChainId: ChainId = ChainId.Mainnet
+currentMaskbookChainIdSettings.addListener((v) => (currentChainId = v))
 //#endregion
 
 const pool = new Map<string, HttpProvider>()
 
-export function createProvider(network: EthereumNetwork = currentNetwork) {
-    const url = getNetworkSettings(network).middlewareAddress
+export function createProvider(chainId = currentChainId) {
+    const url = getConstant(chainId, 'INFURA_ADDRESS')
     const provider = pool.has(url)
         ? pool.get(url)!
         : new Web3.providers.HttpProvider(url, {

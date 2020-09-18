@@ -3,9 +3,7 @@ import '../../setup.ui'
 import React, { useMemo, useCallback } from 'react'
 
 import { ThemeProvider, makeStyles, Theme, withStyles } from '@material-ui/core/styles'
-import { Button, useMediaQuery, Paper, Divider, Typography } from '@material-ui/core'
-import TuneIcon from '@material-ui/icons/Tune'
-import PlayCircleIcon from '@material-ui/icons/PlayCircleFilled'
+import { Button, useMediaQuery, Paper, Divider, Typography, Box } from '@material-ui/core'
 import { MaskbookLightTheme, MaskbookDarkTheme } from '../../utils/theme'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 import { appearanceSettings, Appearance } from '../../settings/settings'
@@ -18,6 +16,10 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getUrl } from '../../utils/utils'
 import { useWallets } from '../../plugins/shared/useWallet'
 import { ChooseWallet } from '../../components/shared/ChooseWallet'
+import { EthereumChainChip } from '../../components/shared/EthereumChainChip'
+import { useChainId } from '../../web3/hooks/useChainId'
+import { MessageCenter, MaskbookWalletMessages } from '../../plugins/Wallet/messages'
+import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 
 const GlobalCss = withStyles({
     '@global': {
@@ -40,6 +42,13 @@ const useStyles = makeStyles((theme: Theme) => ({
         boxShadow: 'none',
         userSelect: 'none',
     },
+    header: {
+        margin: theme.spacing(2, 0),
+        '&:first-child': {
+            marginTop: 0,
+        },
+    },
+    footer: {},
     logo: {
         display: 'block',
         width: 218,
@@ -50,10 +59,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     title: {
         fontSize: 16,
         fontWeight: 500,
-        marginTop: theme.spacing(2),
-        '&:first-child': {
-            marginTop: 0,
-        },
     },
     divider: {
         marginBottom: theme.spacing(2),
@@ -72,6 +77,7 @@ function PopupUI() {
     const ui = getActivatedUI()
     const identities = useValueRef(ui.myIdentitiesRef)
     const { data: wallets = [] } = useWallets()
+    const chainId = useChainId()
 
     const onEnter = useCallback((event: React.MouseEvent) => {
         if (event.shiftKey) {
@@ -84,6 +90,17 @@ function PopupUI() {
         }
     }, [])
 
+    const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
+        MessageCenter,
+        'selectProviderDialogUpdated',
+    )
+    const onConnect = useCallback(async () => {
+        setOpen({
+            open: true,
+        })
+        setTimeout(() => window.close(), 100)
+    }, [setOpen])
+
     return (
         <Paper className={classes.container}>
             {ui.networkIdentifier === 'localhost' ? (
@@ -91,26 +108,41 @@ function PopupUI() {
             ) : null}
             {ui.networkIdentifier === 'localhost' || identities.length === 0 ? null : (
                 <>
-                    <Typography className={classes.title}>{t('popup_current_persona')}</Typography>
+                    <Box className={classes.header} display="flex" justifyContent="space-between">
+                        <Typography className={classes.title}>{t('popup_current_persona')}</Typography>
+                    </Box>
                     <ChooseIdentity identities={identities} />
                 </>
             )}
+
             {ui.networkIdentifier === 'localhost' || wallets.length === 0 ? null : (
                 <>
-                    <Typography className={classes.title}>{t('popup_current_wallet')}</Typography>
+                    <Box className={classes.header} display="flex" justifyContent="space-between">
+                        <Typography className={classes.title}>{t('popup_current_wallet')}</Typography>
+                        {chainId ? <EthereumChainChip chainId={chainId} /> : null}
+                    </Box>
                     <ChooseWallet wallets={wallets} />
                 </>
             )}
+
             <Divider className={classes.divider} />
-            {ui.networkIdentifier !== 'localhost' && identities.length === 0 ? (
-                <Button className={classes.button} variant="text" startIcon={<PlayCircleIcon />} onClick={onEnter}>
-                    {t('popup_setup_first_persona')}
-                </Button>
-            ) : (
-                <Button className={classes.button} variant="text" startIcon={<TuneIcon />} onClick={onEnter}>
-                    {t('popup_enter_dashboard')}
-                </Button>
-            )}
+
+            <Box className={classes.footer} display="flex">
+                {ui.networkIdentifier !== 'localhost' && identities.length === 0 ? (
+                    <Button className={classes.button} variant="text" onClick={onEnter}>
+                        {t('popup_setup_first_persona')}
+                    </Button>
+                ) : (
+                    <Button className={classes.button} variant="text" onClick={onEnter}>
+                        {t('popup_enter_dashboard')}
+                    </Button>
+                )}
+                {ui.networkIdentifier === 'localhost' || wallets.length === 0 ? null : (
+                    <Button className={classes.button} variant="text" onClick={onConnect}>
+                        {t('popup_connect_wallet')}
+                    </Button>
+                )}
+            </Box>
         </Paper>
     )
 }

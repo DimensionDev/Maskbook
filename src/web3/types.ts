@@ -1,14 +1,16 @@
 export interface ERC20Token {
+    chainId?: ChainId
     address: string
     name: string
     symbol: string
     decimals: number
 }
 
-export enum EthereumNetwork {
-    Mainnet = 'Mainnet',
-    Rinkeby = 'Rinkeby',
-    Ropsten = 'Ropsten',
+export enum ChainId {
+    Mainnet = 1,
+    Ropsten = 3,
+    Rinkeby = 4,
+    Kovan = 42,
 }
 
 export enum EthereumTokenType {
