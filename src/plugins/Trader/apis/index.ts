@@ -141,27 +141,49 @@ export async function getCoinInfo(id: string, platform: Platform, currency: Curr
             price_change_percentage_24h_in_currency: info.quotes[currencyName].percent_change_24h,
             price_change_percentage_7d_in_currency: info.quotes[currencyName].percent_change_7d,
         },
-        tickers: market.market_pairs.map((pair) => ({
-            logo_url: '',
-            trade_url: pair.market_url,
-            market_name: pair.exchange.name,
-            base_name: pair.market_pair_base.exchange_symbol,
-            target_name: pair.market_pair_quote.exchange_symbol,
-            price:
-                pair.market_pair_base.currency_id === market.id
-                    ? pair.quote[currencyName].price
-                    : pair.quote[currencyName].price_quote,
-            volume: pair.quote[currencyName].volume_24h,
-            score: String(pair.market_score),
-        })),
+        tickers: market.market_pairs
+            .map((pair) => ({
+                logo_url: `https://s2.coinmarketcap.com/static/img/exchanges/32x32/${pair.exchange.id}.png`,
+                trade_url: pair.market_url,
+                market_name: pair.exchange.name,
+                market_reputation: pair.market_reputation,
+                base_name: pair.market_pair_base.exchange_symbol,
+                target_name: pair.market_pair_quote.exchange_symbol,
+                price:
+                    pair.market_pair_base.currency_id === market.id
+                        ? pair.quote[currencyName].price
+                        : pair.quote[currencyName].price_quote,
+                volume: pair.quote[currencyName].volume_24h,
+                score: String(pair.market_score),
+            }))
+            .sort((a, z) => {
+                if (a.market_reputation !== z.market_reputation) return z.market_reputation - a.market_reputation // reputation from high to low
+                if (a.price.toFixed(2) !== z.price.toFixed(2)) return z.price - a.price // price from high to low
+                return z.volume - a.volume // volumn from high to low
+            }),
     }
 }
+
+//#region hotfix
+// FIXME:
+// this is hotfix for duplicate token name
+// we should support multiple-coins switing in the future
+const CMC_KEYWORKD_ID_MAP: {
+    [key: string]: string
+} = {
+    UNI: '7083',
+}
+function resolveCoinId(keyword: string, platform: Platform) {
+    if (platform === Platform.COIN_MARKET_CAP) return CMC_KEYWORKD_ID_MAP[keyword.toUpperCase()]
+    return undefined
+}
+//#endregion
 
 export async function getCoinTrendingByKeyword(keyword: string, platform: Platform, currency: Currency) {
     const coins = await getCoins(platform)
     const coin = coins.find((x) => x.symbol.toLowerCase() === keyword.toLowerCase())
     if (!coin) return null
-    return getCoinInfo(coin.id, platform, currency)
+    return getCoinInfo(resolveCoinId(keyword, platform) ?? coin.id, platform, currency)
 }
 
 export async function getPriceStats(id: string, platform: Platform, currency: Currency, days: number): Promise<Stat[]> {

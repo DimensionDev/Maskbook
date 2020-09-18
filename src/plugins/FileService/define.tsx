@@ -6,8 +6,9 @@ import type { PluginConfig } from '../plugin'
 import { identifier, META_KEY_1, pluginName } from './constants'
 import { Preview } from './Preview'
 import type { FileInfo } from './types'
+import schema from './schema.json'
 
-export const FileInfoMetadataReader = createTypedMessageMetadataReader<FileInfo>(META_KEY_1)
+export const FileInfoMetadataReader = createTypedMessageMetadataReader<FileInfo>(META_KEY_1, schema)
 export const FileServicePluginDefine: PluginConfig = {
     pluginName,
     identifier,

@@ -16,6 +16,7 @@ import {
 } from '../../../settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 
+import TrendingUpIcon from '@material-ui/icons/TrendingUp'
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption'
 import NoEncryptionIcon from '@material-ui/icons/NoEncryption'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
@@ -33,6 +34,8 @@ import { useModal } from '../DashboardDialogs/Base'
 import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
 import { Flags } from '../../../utils/flags'
+import { currentTrendingViewPlatformSettings } from '../../../plugins/Trader/settings'
+import { Platform, resolvePlatformName } from '../../../plugins/Trader/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -128,6 +131,7 @@ export default function DashboardSettingsRouter() {
         if (x === Appearance.light) return t('settings_appearance_light')
         return t('settings_appearance_default')
     }).current
+
     const classes = useStyles()
     const shadowRoot = useValueRef(renderInShadowRootSettings)
     const theme = useTheme()
@@ -147,7 +151,7 @@ export default function DashboardSettingsRouter() {
                 <ThemeProvider theme={settingsTheme}>
                     <Paper component="section" className={classes.section} elevation={elevation}>
                         <Typography className={classes.title} variant="h6" color="textPrimary">
-                            {t('general')}
+                            {t('settings_title_general')}
                         </Typography>
                         <Card elevation={0}>
                             <List className={classes.list} disablePadding>
@@ -175,12 +179,22 @@ export default function DashboardSettingsRouter() {
                                         value={currentLocalWalletEthereumNetworkSettings}
                                     />
                                 ) : null}
+
+                                {/* TODO: A singe 'Plugins' tab should be added for listing plugin bio and settings. */}
+                                <SettingsUIEnum
+                                    classes={listStyle}
+                                    enumObject={Platform}
+                                    getText={resolvePlatformName}
+                                    icon={<TrendingUpIcon />}
+                                    value={currentTrendingViewPlatformSettings}
+                                />
                             </List>
                         </Card>
                     </Paper>
+
                     <Paper component="section" className={classes.section} elevation={elevation}>
                         <Typography className={classes.title} variant="h6" color="textPrimary">
-                            {t('advanced_options')}
+                            {t('settings_title_advanced_options')}
                         </Typography>
                         <Card elevation={0}>
                             <List className={classes.list} disablePadding>
@@ -209,9 +223,10 @@ export default function DashboardSettingsRouter() {
                             </List>
                         </Card>
                     </Paper>
+
                     <Paper component="section" className={classes.section} elevation={elevation}>
                         <Typography className={classes.title} variant="h6" color="textPrimary">
-                            {t('database_management')}
+                            {t('settings_title_database_management')}
                         </Typography>
                         <Card elevation={0}>
                             <List className={classes.list} disablePadding>

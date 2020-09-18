@@ -7,3 +7,4 @@ public/polyfill
 scripts/
 src/polyfill
 e2e
+src/plugins/Wallet/contracts

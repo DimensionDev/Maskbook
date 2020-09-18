@@ -34,6 +34,7 @@ code: {
         'matchMedia',
         'getComputedStyle',
         'getSelection',
+        'requestIdleCallback',
     ]
 
     const webAPIs = Object.getOwnPropertyDescriptors(window)

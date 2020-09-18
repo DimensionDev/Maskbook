@@ -111,7 +111,6 @@ module.exports = (argvEnv, argv) => {
         let resolution = 'desktop'
         if (target.Chromium) buildTarget = 'chromium'
         if (target.Firefox) buildTarget = 'firefox'
-        if (target.FirefoxDesktop) firefoxVariant = 'fennec'
         if (target.FirefoxForAndroid) firefoxVariant = 'fennec'
         if (target.StandaloneGeckoView) {
             firefoxVariant = 'geckoview'
