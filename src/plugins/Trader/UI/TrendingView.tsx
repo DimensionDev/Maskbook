@@ -14,6 +14,7 @@ import {
     Paper,
     Tab,
     Tabs,
+    Chip,
 } from '@material-ui/core'
 import { DataProvider, SwapProvider } from '../types'
 import { resolveDataProviderName, resolveSwapProviderName } from '../pipes'
@@ -33,8 +34,8 @@ import { useCurrentSwapProvider } from '../hooks/useCurrentSwapProvider'
 import { useCurrentCurrency } from '../hooks/useCurrentCurrency'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CoinMarketCapIcon } from '../../../resources/CoinMarketCap'
-import { UniswapTrader } from './Uniswap'
-import { currentSwapProviderSettings } from '../settings'
+import { UniswapTrader } from './UniswapTrader'
+import { currentDataProviderSettings, currentSwapProviderSettings } from '../settings'
 
 const useStyles = makeStyles((theme: Theme) => {
     const internalName = getActivatedUI()?.internalName
@@ -185,6 +186,7 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     const { coin, market, tickers } = trending
+    const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
 
     return (
         <Card className={classes.root} elevation={0} component="article">
@@ -196,7 +198,7 @@ export function TrendingView(props: TrendingViewProps) {
                     </Linking>
                 }
                 title={
-                    <Box display="flex" alignItems="center">
+                    <Box display="flex" alignItems="center" justifyContent="space-between">
                         <Typography variant="h6">
                             {typeof coin.market_cap_rank === 'number' ? (
                                 <span className={classes.rank} title="Market Cap Rank">
@@ -236,9 +238,9 @@ export function TrendingView(props: TrendingViewProps) {
                                 display: 'none',
                             },
                         }}>
-                        <Tab className={classes.tab} label={t('plugin_trader_tab_price')}></Tab>
-                        <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')}></Tab>
-                        <Tab className={classes.tab} label={t('plugin_trader_tab_swap')}></Tab>
+                        <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
+                        <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
+                        {canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null}
                     </Tabs>
                     {tabIndex === 0 ? (
                         <>

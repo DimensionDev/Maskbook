@@ -95,7 +95,7 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
             coin: {
                 id,
                 name: info.name,
-                symbol: info.symbol,
+                symbol: info.symbol.toUpperCase(),
 
                 // TODO:
                 // use current language setting

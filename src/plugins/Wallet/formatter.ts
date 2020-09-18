@@ -1,4 +1,5 @@
 import { BigNumber } from 'bignumber.js'
+import { EthereumAddress } from 'wallet.ts'
 
 export function formatBalance(balance: BigNumber, decimals: number, precision: number = 10) {
     if (!BigNumber.isBigNumber(balance)) return
@@ -27,5 +28,7 @@ export function formatCurrency(balance: number, sign: string = '$') {
 }
 
 export function formatEthAddress(address: string, size = 2) {
-    return /0x[\w\d]{40}/i.test(address) ? `${address.substr(0, 2 + size)}...${address.substr(-size)}` : address
+    if (!EthereumAddress.isValid(address)) return address
+    const address_ = EthereumAddress.checksumAddress(address)
+    return `${address_.substr(0, 2 + size)}...${address_.substr(-size)}`
 }
