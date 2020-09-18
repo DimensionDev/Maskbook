@@ -55,7 +55,8 @@ const MainDialog: React.FC<Props> = (props) => {
         const { typedMessageMetadata } = getActivatedUI()
         const next = new Map(typedMessageMetadata.value.entries())
         if (selectedFileInfo) {
-            next.set(META_KEY_1, selectedFileInfo)
+            // Make a Date become string
+            next.set(META_KEY_1, JSON.parse(JSON.stringify(selectedFileInfo)))
         } else {
             next.delete(META_KEY_1)
         }

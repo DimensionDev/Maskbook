@@ -64,11 +64,7 @@ export const Preview: React.FC<Props> = ({ info }) => {
     const onClick = (event: React.MouseEvent) => {
         event.preventDefault()
         event.stopPropagation()
-        if (info.key) {
-            open(`${link}#${info.key}`)
-        } else {
-            open(link)
-        }
+        open(info.key ? `${link}#${info.key}` : link)
     }
     return (
         <Paper elevation={0} className={classes.root}>

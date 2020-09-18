@@ -23,7 +23,7 @@ export function formatBalance(balance: BigNumber, decimals: number, precision: n
 }
 
 export function formatCurrency(balance: number, sign: string = '$') {
-    return balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, `${sign}&,`)
+    return `${sign}${balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, `${sign}&,`)}`
 }
 
 export function formatEthAddress(address: string, size = 2) {

@@ -23,16 +23,14 @@ import { TickersTable } from './TickersTable'
 import { PriceChangedTable } from './PriceChangedTable'
 import { PriceChanged } from './PriceChanged'
 import { PriceChart } from './PriceChart'
-import { getEnumAsArray } from '../../../utils/enum'
 import { Linking } from './Linking'
 import { usePriceStats } from '../hooks/usePriceStats'
 import { Skeleton } from '@material-ui/lab'
 import { PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentPlatform } from '../hooks/useCurrentPlatform'
 import { useCurrentCurrency } from '../hooks/useCurrentCurrency'
-import { currentTrendingViewPlatformSettings } from '../settings'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useAvailablePlatforms } from '../hooks/useAvailablePlatforms'
+import { CoinMarketCapIcon } from '../../../resources/CoinMarketCap'
 
 const useStyles = makeStyles((theme: Theme) => {
     const internalName = getActivatedUI()?.internalName
@@ -92,6 +90,11 @@ const useStyles = makeStyles((theme: Theme) => {
         avatar: {},
         percentage: {
             marginLeft: theme.spacing(1),
+        },
+        cmc: {
+            width: 96,
+            height: 16,
+            verticalAlign: 'bottom',
         },
     })
 })
@@ -195,8 +198,9 @@ export function TrendingView(props: TrendingViewProps) {
                 subheader={
                     <>
                         <Typography component="p" variant="body1">
-                            <span>{`${currency.symbol ?? `${currency.name} `}${formatCurrency(
+                            <span>{`${`${currency.name} `}${formatCurrency(
                                 market.current_price,
+                                currency.symbol,
                             )}`}</span>
                             {typeof market.price_change_percentage_24h === 'number' ? (
                                 <PriceChanged amount={market.price_change_percentage_24h} />
@@ -236,18 +240,17 @@ export function TrendingView(props: TrendingViewProps) {
             </CardContent>
             <CardActions className={classes.footer}>
                 <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
-                    <span>{t('plugin_trader_tab_switch_data_source')}</span>
-                    {props.platforms.map((x) => (
-                        <Link
-                            className={classes.platform}
-                            key={x}
-                            color={platform === x ? 'primary' : 'textSecondary'}
-                            onClick={() => {
-                                currentTrendingViewPlatformSettings.value = String(x)
-                            }}>
-                            {resolvePlatformName(x)}
-                        </Link>
-                    ))}
+                    <span>{t('plugin_trader_data_source')}</span>
+                    {platform === Platform.COIN_MARKET_CAP ? (
+                        <CoinMarketCapIcon
+                            classes={{
+                                root: classes.cmc,
+                            }}
+                            viewBox="0 0 96 16"
+                        />
+                    ) : (
+                        resolvePlatformName(platform)
+                    )}
                 </Typography>
             </CardActions>
         </Card>
