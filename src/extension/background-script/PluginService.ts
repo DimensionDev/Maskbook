@@ -11,8 +11,8 @@ const Plugins = {
     'maskbook.wallet': Wallet,
     'maskbook.fileservice': FileService,
     'maskbook.trader': Trader,
-    'co.gitcoin': Gitcoin,
     'maskbook.polls': Poll,
+    'co.gitcoin': Gitcoin,
 } as const
 type Plugins = typeof Plugins
 export async function invokePlugin<K extends keyof Plugins, M extends keyof Plugins[K], P extends Plugins[K][M]>(

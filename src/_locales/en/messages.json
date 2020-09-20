@@ -346,10 +346,19 @@
     "plugin_trader_settings_data_source_secondary": "Fetch trending data from different platforms.",
     "plugin_trader_settings_platform_secondary": "Fetch trending data from different platforms.",
     "plugin_poll_display_name": "Plugin: Poll",
+    "plugin_poll_name": "Poll",
     "plugin_poll_question_hint": "Ask a question...",
     "plugin_poll_options_hint": "choice",
     "plugin_poll_length": "Poll length",
     "plugin_poll_length_days": "Days",
     "plugin_poll_length_hours": "Hours",
-    "plugin_poll_length_minutes": "Minutes"
+    "plugin_poll_length_minutes": "Minutes",
+    "plugin_poll_length_unknown": "Unknown",
+    "plugin_poll_create_new": "Create new",
+    "plugin_poll_select_existing": "Select Existing",
+    "plugin_poll_send_poll": "Send Poll",
+    "plugin_poll_status_closed": "Closed",
+    "plugin_poll_status_voting": "Voting",
+    "plugin_poll_status_voted": "Voted.",
+    "plugin_poll_deadline": "{{time}} left until vote ends"
 }

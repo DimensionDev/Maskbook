@@ -1,12 +1,13 @@
 import Gun from 'gun'
 import 'gun/lib/then.js'
-import type { PollMetaData } from './types'
-import { PluginMessageCenter } from '../PluginMessages'
-import { gun2 } from '../../network/gun/version.2'
 import { first } from 'lodash-es'
+import { gun2 } from '../../network/gun/version.2'
+import type { PollMetaData } from './types'
+import { PollGunServer } from './constants'
+import { PluginMessageCenter } from '../PluginMessages'
 
 const gun = gun2
-const PollGun = gun.get('com.maskbook.plugin.polls')
+const PollGun = gun.get(PollGunServer)
 
 const defaultPoll: PollGunDB = {
     key: '',
@@ -22,7 +23,7 @@ interface NewPollProps {
     sender?: string | undefined
     id?: string | undefined
     question: string
-    options: Array<string>
+    options: string[]
     start_time: Date
     end_time: Date
 }
@@ -31,8 +32,8 @@ export async function createNewPoll(poll: NewPollProps) {
     const { id, options, start_time, end_time } = poll
 
     const results = new Array<number>(options.length).fill(0)
-    const resultsObj: Object = { ...results }
-    const optionsObj: Object = { ...options }
+    const resultsObj = { ...results }
+    const optionsObj = { ...options }
 
     const poll_item = {
         ...poll,
@@ -63,7 +64,7 @@ interface voteProps {
 
 export async function vote(props: voteProps) {
     const { poll, index } = props
-    let results: Array<number> = [0, 0]
+    let results = [0, 0]
     PollGun
         // @ts-ignore
         .get(poll.key)
@@ -140,7 +141,7 @@ export async function getPollByKey(props: { key: string }) {
 }
 
 export async function getAllExistingPolls() {
-    const polls: Array<PollGunDB> = []
+    const polls: PollGunDB[] = []
 
     PollGun.map().on(async (data, key) => {
         const poll = await getPollByKey({ key })

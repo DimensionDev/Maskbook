@@ -17,6 +17,7 @@ import {
     CircularProgress,
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
+import { add } from 'date-fns'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
@@ -28,6 +29,7 @@ import { useCurrentIdentity } from '../../../components/DataSource/useActivatedU
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
 import type { PollMetaData } from '../types'
+import { POLL_META_KEY_1 } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useNewPollStyles = makeStyles((theme) =>
@@ -80,7 +82,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
     const classes = useStylesExtends(useNewPollStyles(), props)
     const [loading, setLoading] = props.loading
     const [question, setQuestion] = useState('')
-    const [options, setOptions] = useState<Array<string>>(['', ''])
+    const [options, setOptions] = useState<string[]>(['', ''])
 
     const [days, setDays] = useState(1)
     const [hours, setHours] = useState(0)
@@ -98,9 +100,11 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
 
     const sendPoll = async () => {
         const start_time = new Date()
-        const end_time = new Date(
-            start_time.getTime() + days * 24 * 60 * 60 * 1000 + hours * 60 * 60 * 1000 + minutes * 60 * 1000,
-        )
+        const end_time = add(start_time, {
+            days,
+            hours,
+            minutes,
+        })
         setLoading(true)
         Services.Plugin.invokePlugin('maskbook.polls', 'createNewPoll', {
             question,
@@ -187,7 +191,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                     startIcon={loading ? <CircularProgress classes={{ root: classes.whiteColor }} size={24} /> : null}
                     style={{ color: '#fff' }}
                     onClick={sendPoll}>
-                    Send Poll
+                    {t('plugin_poll_send_poll')}
                 </Button>
             </div>
         </>
@@ -200,7 +204,7 @@ interface ExistingPollsProps {
 }
 
 function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
-    const [polls, setPolls] = useState<Array<PollGunDB>>([])
+    const [polls, setPolls] = useState<PollGunDB[]>([])
     const [loading, setLoading] = useState(false)
     const classes = useStylesExtends(useNewPollStyles(), props)
 
@@ -208,7 +212,7 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
         setLoading(true)
         Services.Plugin.invokePlugin('maskbook.polls', 'getAllExistingPolls').then((polls) => {
             setLoading(false)
-            const myPolls: Array<PollGunDB> = []
+            const myPolls: PollGunDB[] = []
             polls.map((poll) => {
                 if (poll.id === props.senderFingerprint) {
                     myPolls.push(poll)
@@ -280,7 +284,7 @@ export default function PollsDialog(props: PollsDialogProps) {
     const insertPoll = (data?: PollMetaData | null) => {
         const ref = getActivatedUI().typedMessageMetadata
         const next = new Map(ref.value)
-        data ? next.set('com.maskbook.poll:1', data) : next.delete('com.maskbook.poll:1')
+        data ? next.set(POLL_META_KEY_1, data) : next.delete(POLL_META_KEY_1)
         ref.value = next
         props.onConfirm()
     }
@@ -291,7 +295,7 @@ export default function PollsDialog(props: PollsDialogProps) {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: 'Create New',
+                label: t('plugin_poll_create_new'),
                 children: (
                     <NewPollUI
                         {...props}
@@ -304,7 +308,7 @@ export default function PollsDialog(props: PollsDialogProps) {
                 p: 0,
             },
             {
-                label: 'Select Existing',
+                label: t('plugin_poll_select_existing'),
                 children: (
                     <ExistingPollsUI
                         {...props}

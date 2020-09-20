@@ -4,8 +4,8 @@ import type { TypedMessage } from '../../../protocols/typed-message'
 import { renderWithPollMetadata, PollMetadataReader } from '../utils'
 import Services from '../../../extension/service'
 import type { PollGunDB } from '../Services'
-import { PollCardUI, PollStatus } from './Polls'
-import type { PollMetaData } from '../types'
+import { PollCardUI } from './Polls'
+import { PollMetaData, PollStatus } from '../types'
 
 interface PollsInPostProps {
     message: TypedMessage
@@ -38,7 +38,7 @@ export default function PollsInPost(props: PollsInPostProps) {
                 setUpdatedPoll(res as PollMetaData)
             })
         }
-    }, [])
+    }, [props.message.meta])
 
     const jsx = message
         ? renderWithPollMetadata(props.message.meta, (r) => {

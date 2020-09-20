@@ -1,7 +1,12 @@
 import React from 'react'
-import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
+import { makeStyles, createStyles, Card, Typography, CircularProgress, List, ListItem } from '@material-ui/core'
+import { isValid, formatDistance, intervalToDuration } from 'date-fns'
+import { zhTW, enUS, ja } from 'date-fns/locale'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { languageSettings } from '../../../settings/settings'
 import type { PollGunDB } from '../Services'
-import { format, isValid } from 'date-fns'
+import { PollStatus } from '../types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -60,18 +65,12 @@ interface PollCardProps {
     status?: PollStatus
 }
 
-export enum PollStatus {
-    Voted = 'Voted.',
-    Voting = 'Voting',
-    Error = 'Error',
-    Closed = 'Closed',
-    Inactive = 'Inactive',
-}
-
 export function PollCardUI(props: PollCardProps) {
     const { poll, onClick, vote, status } = props
     const classes = useStyles()
     const isClosed = Date.now() > poll.end_time ? true : false
+    const { t } = useI18N()
+    const lang = useValueRef(languageSettings)
 
     const totalVotes = poll.results.reduce(
         (accumulator: number, currentValue: number): number => accumulator + currentValue,
@@ -80,26 +79,52 @@ export function PollCardUI(props: PollCardProps) {
     const getDeadline = (date: number) => {
         const deadline = new Date(date)
         if (isValid(deadline)) {
-            return `Deadline: ${format(deadline, 'yyyy-MM-dd HH:mm:ss')}`
+            const localeMapping = () => {
+                switch (lang) {
+                    case 'en':
+                        return enUS
+                    case 'ja':
+                        return ja
+                    case 'zh':
+                        return zhTW
+                    default:
+                        return enUS
+                }
+            }
+            const time = formatDistance(new Date(poll.start_time), new Date(poll.end_time), {
+                locale: localeMapping(),
+            })
+            return t('plugin_poll_deadline', { time })
         } else {
-            return 'sorry, cannot get correct deadline...'
+            return t('plugin_poll_length_unknown')
+        }
+    }
+
+    const renderPollStatusI18n = (status: PollStatus) => {
+        switch (status) {
+            case PollStatus.Voting:
+                return t('plugin_poll_status_voting')
+            case PollStatus.Voted:
+                return t('plugin_poll_status_voted')
+            default:
+                return t('plugin_poll_status_closed')
         }
     }
 
     return (
         <Card className={classes.card} onClick={() => onClick?.()}>
-            <div className={classes.line}>
+            <Typography variant="h5" className={classes.line}>
                 <div style={{ fontSize: '16px' }}>{poll.question}</div>
                 {!status || status === PollStatus.Inactive ? null : (
                     <div className={classes.status}>
                         {status === PollStatus.Voting ? <CircularProgress size={18} /> : null}
-                        <span className={classes.statusText}>{status}</span>
+                        <span className={classes.statusText}>{renderPollStatusI18n(status)}</span>
                     </div>
                 )}
-            </div>
-            <div>
+            </Typography>
+            <List>
                 {poll.options.map((option, index) => (
-                    <div
+                    <ListItem
                         className={classes.option}
                         key={index}
                         onClick={() => {
@@ -117,11 +142,11 @@ export function PollCardUI(props: PollCardProps) {
                             <div className={classes.text}>{option}</div>
                         </div>
                         <div className={classes.text}>{poll.results[index]}</div>
-                    </div>
+                    </ListItem>
                 ))}
-            </div>
+            </List>
             <Typography variant="body2" classes={{ root: classes.deadline }}>
-                {isClosed ? 'Closed' : `${getDeadline(poll.end_time)}`}
+                {isClosed ? `${t('plugin_poll_status_closed')}` : `${getDeadline(poll.end_time)}`}
             </Typography>
         </Card>
     )
