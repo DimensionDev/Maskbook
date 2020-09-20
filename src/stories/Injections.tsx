@@ -127,7 +127,6 @@ storiesOf('Injections', module)
 
         Hello world!`,
             )
-            const vr = boolean('Verified', true)
             enum ProgressType {
                 finding_person_public_key,
                 finding_post_key,
@@ -149,7 +148,6 @@ storiesOf('Injections', module)
                             type: 'progress',
                             data: {
                                 content: makeTypedMessageText(msg),
-                                signatureVerifyResult: vr,
                                 rawContent: '',
                                 through: [],
                                 type: 'success',
@@ -181,7 +179,7 @@ storiesOf('Injections', module)
                             alreadySelectedPreviously={[]}
                             requestAppendRecipients={async () => {}}
                             profiles={demoProfiles}
-                            data={{ content: makeTypedMessageText(msg), signatureVerifyResult: vr }}
+                            data={{ content: makeTypedMessageText(msg) }}
                         />
                     </FakePost>
                     <FakePost title="Decrypting:">

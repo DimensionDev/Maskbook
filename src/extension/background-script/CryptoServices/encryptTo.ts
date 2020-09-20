@@ -6,7 +6,6 @@ import { queryPrivateKey, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier } from '../../../database/type'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { getNetworkWorker } from '../../../social-network/worker'
-import { getSignablePayload } from './utils'
 import { createPostDB } from '../../../database/post'
 import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
@@ -74,8 +73,7 @@ export async function encryptTo(
         if (publicKey) payload.authorPublicKey = compressSecp256k1Key(publicKey, 'public')
     } catch (e) {}
 
-    const payloadWaitToSign = getSignablePayload(payload)
-    payload.signature = encodeArrayBuffer(await Alpha38.sign(payloadWaitToSign, minePrivateKey))
+    payload.signature = '_'
 
     await createPostDB({
         identifier: new PostIVIdentifier(whoAmI.network, payload.iv),

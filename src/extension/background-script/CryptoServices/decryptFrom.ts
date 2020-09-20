@@ -11,7 +11,6 @@ import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
 import { MessageCenter } from '../../../utils/messages'
 import { getNetworkWorker } from '../../../social-network/worker'
-import { getSignablePayload } from './utils'
 import { cryptoProviderTable } from './cryptoProviderTable'
 import type { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { verifyOthersProve } from './verifyOthersProve'
@@ -35,11 +34,9 @@ type DebugInfo = {
     hash: [string, string]
     type: 'debug'
 }
-type SuccessSignatureVerifyResult = boolean | 'verifying'
 type SuccessThrough = 'author_key_not_found' | 'post_key_cached' | 'normal_decrypted'
 type Success = {
     type: 'success'
-    signatureVerifyResult: SuccessSignatureVerifyResult
     content: TypedMessage
     rawContent: string
     through: SuccessThrough[]
@@ -59,13 +56,8 @@ const successDecryptionCache = new Map<string, Success>()
 const makeSuccessResultF = (
     cacheKey: string,
     cryptoProvider: typeof cryptoProviderTable[keyof typeof cryptoProviderTable],
-) => (
-    rawEncryptedContent: string,
-    through: Success['through'],
-    signatureVerifyResult: Success['signatureVerifyResult'] = true,
-): Success => {
+) => (rawEncryptedContent: string, through: Success['through']): Success => {
     const success: Success = {
-        signatureVerifyResult,
         rawContent: rawEncryptedContent,
         through,
         content: cryptoProvider.typedMessageParse(rawEncryptedContent),
@@ -136,16 +128,15 @@ async function* decryptFromTextWithProgress_raw(
     const sharePublic = publicShared ?? (data.version === -38 ? data.sharedPublic ?? false : false)
 
     if (version === -40 || version === -39 || version === -38) {
-        const { encryptedText, iv, signature, version } = data
+        const { encryptedText, iv, version } = data
         const cryptoProvider = cryptoProviderTable[version]
         const makeSuccessResult = makeSuccessResultF(post, cryptoProvider)
         const ownersAESKeyEncrypted = data.version === -38 ? data.AESKeyEncrypted : data.ownersAESKeyEncrypted
-        const waitForVerifySignaturePayload = getSignablePayload(data)
 
         // ? Early emit the cache.
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, author)
         if (cachedPostResult) {
-            yield makeProgress(makeSuccessResult(cachedPostResult, ['post_key_cached'], 'verifying'))
+            yield makeProgress(makeSuccessResult(cachedPostResult, ['post_key_cached']))
         }
 
         // ? If the author's key is in the payload, store it.
@@ -163,7 +154,7 @@ async function* decryptFromTextWithProgress_raw(
             if (result === 'out of chance')
                 return makeError(i18n.t('service_others_key_not_found', { name: author.userId }))
             else if (result === 'use cache')
-                return makeSuccessResult(cachedPostResult!, ['author_key_not_found', 'post_key_cached'], false)
+                return makeSuccessResult(cachedPostResult!, ['author_key_not_found', 'post_key_cached'])
             else authorPersona = result
         }
 
@@ -183,10 +174,7 @@ async function* decryptFromTextWithProgress_raw(
                 )
                 yield { type: 'debug', debug: 'debug_finding_hash', hash: [postHash, keyHash] }
             }
-            const signatureVerifyResult = authorPersona.publicKey
-                ? await cryptoProvider.verify(waitForVerifySignaturePayload, signature || '', authorPersona.publicKey)
-                : false
-            return makeSuccessResult(cachedPostResult, ['post_key_cached'], signatureVerifyResult)
+            return makeSuccessResult(cachedPostResult, ['post_key_cached'])
         }
 
         let lastError: unknown
@@ -288,17 +276,7 @@ async function* decryptFromTextWithProgress_raw(
             // Store the key to speed up next time decrypt
             setPostCache(postAESKey)
             const content = decodeText(contentArrayBuffer)
-            try {
-                if (!signature) throw new TypeError('No signature')
-                const signatureVerifyResult = await cryptoProvider.verify(
-                    waitForVerifySignaturePayload,
-                    signature,
-                    authorPersona.publicKey,
-                )
-                return makeSuccessResult(content, ['normal_decrypted'], signatureVerifyResult)
-            } catch {
-                return makeSuccessResult(content, ['normal_decrypted'], false)
-            }
+            return makeSuccessResult(content, ['normal_decrypted'])
         }
 
         async function decryptAsAuthor(authorIdentifier: ProfileIdentifier, authorPublic: EC_Public_JsonWebKey) {
@@ -314,12 +292,7 @@ async function* decryptFromTextWithProgress_raw(
             // Store the key to speed up next time decrypt
             setPostCache(postAESKey)
             const content = decodeText(contentArrayBuffer)
-            const signatureVerifyResult = await cryptoProvider.verify(
-                waitForVerifySignaturePayload,
-                signature || '',
-                authorPublic,
-            )
-            return makeSuccessResult(content, ['normal_decrypted'], signatureVerifyResult)
+            return makeSuccessResult(content, ['normal_decrypted'])
         }
     }
     return makeError(i18n.t('service_unknown_payload'))
@@ -377,7 +350,7 @@ async function* findAuthorPublicKey(
         if (!author?.publicKey) {
             if (hasCache) return 'use cache' as const
             const abort = new AbortController()
-            const gunPromise = new Promise((resolve, reject) => {
+            const gunPromise = new Promise<void>((resolve, reject) => {
                 abort.signal.addEventListener('abort', () => {
                     undo()
                     reject()
@@ -390,7 +363,7 @@ async function* findAuthorPublicKey(
                     }
                 })
             })
-            const databasePromise = new Promise((resolve, reject) => {
+            const databasePromise = new Promise<void>((resolve, reject) => {
                 abort.signal.addEventListener('abort', () => {
                     undo()
                     reject()

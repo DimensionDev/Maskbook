@@ -107,11 +107,7 @@ export function DecryptPost(props: DecryptPostProps) {
                 })
             for await (const status of asyncIteratorWithResult(iter)) {
                 if (controller.signal.aborted) return iter.return?.()
-                if (status.done) {
-                    // HACK: this is patch, hidden NOT VERIFIED in everyone
-                    if (sharedPublic && status.value.type !== 'error') status.value.signatureVerifyResult = true
-                    return refreshProgress(status.value)
-                }
+                if (status.done) return refreshProgress(status.value)
                 if (status.value.type === 'debug') {
                     switch (status.value.debug) {
                         case 'debug_finding_hash':
