@@ -5,4 +5,4 @@ OnlyRunInContext(['content', 'options', 'debugging'], 'web3')
 
 // This is a none-provider client for constructing & deconstructing transactions in the content and options page.
 // In the future, we can replace it by other libraries (maybe ethers.js)
-export const web3 = new Web3()
+export const nonFunctionalWeb3 = new Web3()
