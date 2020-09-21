@@ -13,6 +13,7 @@ export interface Token {
     decimals: number
 }
 
+// A list of chain IDs https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
 export enum ChainId {
     Mainnet = 1,
     Ropsten = 3,
