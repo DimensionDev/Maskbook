@@ -21,6 +21,7 @@ import ActionButton, { ActionButtonPromise } from '../../../extension/options-pa
 import ShowcaseBox from '../../../extension/options-page/DashboardComponents/ShowcaseBox'
 import { merge, cloneDeep, noop } from 'lodash-es'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { MessageCenter } from '../../../utils/messages'
 import { getActivatedUI } from '../../../social-network/ui'
 import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../../settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
@@ -506,6 +507,7 @@ export function SetupGuide(props: SetupGuideProps) {
                 _wallet_is_default: true,
             }),
         ])
+        MessageCenter.emit('identityUpdated', undefined)
     }
     const onCreate = async () => {
         const content = t('immersive_setup_say_hello_content')
