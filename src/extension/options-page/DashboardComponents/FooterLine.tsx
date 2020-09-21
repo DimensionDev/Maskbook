@@ -77,10 +77,11 @@ export default function FooterLine() {
             <Breadcrumbs className={classes.footerButtons} separator=" " aria-label="breadcrumb">
                 <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
                 <FooterLink onClick={openAboutDialog}>{t('about')}</FooterLink>
-                {}
                 <FooterLink href={versionLink} title={process.env.VERSION}>
                     {t('version')}{' '}
-                    {process.env.target === 'BETA' ? `${version}-beta-${process.env.COMMIT_HASH.slice(0, 6)}` : version}
+                    {process.env.build === 'stable'
+                        ? version
+                        : `${version}-${process.env.build}-${process.env.COMMIT_HASH.slice(0, 6)}`}
                 </FooterLink>
                 <FooterLink href={t('dashboard_mobile_test_link')}>{t('dashboard_mobile_test')}</FooterLink>
                 <FooterLink href={t('dashboard_source_code_link')}>{t('dashboard_source_code')}</FooterLink>
