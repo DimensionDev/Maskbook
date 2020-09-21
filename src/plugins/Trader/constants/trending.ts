@@ -16,5 +16,4 @@ export const CMC_V2_BASE_URL = 'https://widgets.coinmarketcap.com/v2'
 export const BTC_FIRST_LEGER_DATE = new Date('2009-01-03T00:00:00.000Z')
 
 //#region settings about trader
-export const CRYPTOCURRENCY_MAP_EXPIRES_AT =
-    24 /* hours */ * 60 /* minutes */ * 60 /* seconds */ * 1000 /* milliseconds */
+export const CRYPTOCURRENCY_MAP_EXPIRES_AT = 60 /* seconds */ * 1000 /* milliseconds */
