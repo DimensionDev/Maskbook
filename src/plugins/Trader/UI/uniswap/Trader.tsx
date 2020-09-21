@@ -17,6 +17,7 @@ import { useComputedApprove } from '../../uniswap/useComputedApprove'
 import { useSwapCallback } from '../../uniswap/useSwapCallback'
 import { useSwapState, SwapActionType } from '../../uniswap/useSwapState'
 import { TradeStrategy } from '../../types'
+import { isSameAddress } from '../../../../web3/helpers'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -94,7 +95,7 @@ export function Trader(props: TraderProps) {
                 if (ev.open) return
                 const { address = '' } = ev.token ?? {}
                 if (!address) return
-                inputTokenAddress === focusedTokenAddress
+                isSameAddress(inputTokenAddress, focusedTokenAddress)
                     ? setInputTokenAddress(address)
                     : setOutputTokenAddress(address)
             },
@@ -103,12 +104,14 @@ export function Trader(props: TraderProps) {
     )
 
     // open select token dialog
+    const lists = useConstant('TOKEN_LISTS')
     const onTokenChipClick = useCallback(
         (token: Token) => {
             setFocusedTokenAddress(token?.address ?? '')
             setOpen({
                 open: true,
                 address: token?.address,
+                lists,
                 excludeTokens: [inputTokenAddress, outputTokenAddress].filter(Boolean),
             })
         },
