@@ -1,5 +1,4 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react'
-import Fuse from 'fuse.js'
+import React, { useState, useCallback } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -27,12 +26,8 @@ import { getActivatedUI } from '../../../social-network/ui'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { isSameAddress } from '../../../web3/helpers'
 import { useCapturedEvents } from '../../../utils/hooks/useCapturedEvents'
-import { useAsync } from 'react-use'
-import Services from '../../../extension/service'
-import { EthereumAddress } from 'wallet.ts'
-import { useToken } from '../../../web3/hooks/useToken'
-import { EthereumTokenType, Token } from '../../../web3/types'
-import { useChainId } from '../../../web3/hooks/useChainId'
+import type { Token } from '../../../web3/types'
+import { useTokenLists, TokenListsState } from '../../../web3/hooks/useTokenLists'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -84,56 +79,6 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     const [, inputRef] = useCapturedEvents()
     //#endregion
 
-    //#region fetch from token lists
-    const [lists, setLists] = useState<string[]>([])
-    const { value: tokens = [], loading: loadingTokens } = useAsync(
-        () => Services.Ethereum.fetchTokensFromTokenLists(lists),
-        [lists.sort().join()],
-    )
-    //#endregion
-
-    //#region search tokens
-    const [query, setQuery] = useState('')
-    const [address, setAddress] = useState('')
-    const [trackedTokens, fuse] = useMemo(() => {
-        const fuse = new Fuse(tokens, {
-            shouldSort: true,
-            threshold: 0.45,
-            minMatchCharLength: 1,
-            keys: [
-                { name: 'name', weight: 0.5 },
-                { name: 'symbol', weight: 0.5 },
-            ],
-        })
-        return [tokens, fuse] as const
-    }, [tokens])
-    const searchedTokens = useMemo(() => {
-        return query
-            ? [
-                  ...(EthereumAddress.isValid(query)
-                      ? trackedTokens.filter((token) => isSameAddress(token.address, query))
-                      : []),
-                  ...fuse.search(query).map((x) => x.item),
-              ]
-            : trackedTokens
-    }, [query, fuse, trackedTokens])
-    //#endregion
-
-    //#region add token by address
-    const chainId = useChainId()
-    const unsearchedToken = useMemo(() => {
-        if (!EthereumAddress.isValid(query)) return
-        if (searchedTokens.length) return
-        else
-            return {
-                chainId,
-                type: EthereumTokenType.ERC20,
-                address: query,
-            }
-    }, [query, chainId, searchedTokens.length])
-    const { value: searchedToken, loading: loadingSearchedToken } = useToken(unsearchedToken)
-    //#endregion
-
     //#region the remote controlled dialog
     const [excludeTokens, setExcludeTokens] = useState<string[]>([])
     const [open, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectERC20TokenDialogUpdated'>(
@@ -167,6 +112,16 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     )
     //#endregion
 
+    //#region search tokens
+    const [keyword, setKeyword] = useState('')
+    const [address, setAddress] = useState('')
+    const [lists, setLists] = useState<string[]>([])
+    const searchedTokens = useTokenLists(lists, {
+        keyword,
+        useEther: true,
+    })
+    //#endregion
+
     //#region UI helpers
     const renderList = useCallback(
         (tokens: Token[]) => {
@@ -183,10 +138,9 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                         selected: address,
                         onSelect(address: string) {
                             const token = tokens.find((token) => isSameAddress(token.address, address))
-                            if (token) {
-                                setAddress(token.address)
-                                onSubmit(token)
-                            }
+                            if (!token) return
+                            setAddress(token.address)
+                            onSubmit(token)
                         },
                     }}
                     itemCount={tokens.length}>
@@ -238,15 +192,16 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                         ref={inputRef}
                         autoFocus
                         fullWidth
-                        value={query}
+                        value={keyword}
                         variant="outlined"
-                        onChange={(e) => setQuery(e.target.value)}
+                        onChange={(e) => setKeyword(e.target.value)}
                     />
                     {(() => {
-                        if (loadingTokens) return renderPlaceholder('Loading token lists...')
-                        if (searchedTokens.length) return renderList(searchedTokens)
-                        if (loadingSearchedToken) return renderPlaceholder('Loading token...')
-                        if (searchedToken) return renderList([searchedToken])
+                        if (searchedTokens.state === TokenListsState.LOADING_TOKEN_LISTS)
+                            return renderPlaceholder('Loading token lists...')
+                        if (searchedTokens.state === TokenListsState.LOADING_SEARCHED_TOKEN)
+                            return renderPlaceholder('Loading token...')
+                        if (searchedTokens.tokens.length) return renderList(searchedTokens.tokens)
                         return renderPlaceholder('No token found')
                     })()}
                 </DialogContent>

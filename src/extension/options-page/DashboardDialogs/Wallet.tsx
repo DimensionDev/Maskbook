@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useAsync, useCopyToClipboard } from 'react-use'
-import Fuse from 'fuse.js'
 import { EthereumAddress } from 'wallet.ts'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import {
@@ -50,10 +49,11 @@ import { TokenInList } from '../DashboardComponents/TokenInList'
 import { FixedSizeList } from 'react-window'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { useManagedWallet } from '../../../plugins/Wallet/hooks/useWallet'
-import { getERC20Tokens } from '../../../web3/tokens'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { Token, EthereumTokenType } from '../../../web3/types'
 import { isSameAddress } from '../../../web3/helpers'
+import { useTokenLists } from '../../../web3/hooks/useTokenLists'
+import { useConstant } from '../../../web3/hooks/useConstant'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -77,35 +77,12 @@ interface ERC20PredefinedTokenSelectorProps {
 
 export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = [] }: ERC20PredefinedTokenSelectorProps) {
     const { t } = useI18N()
-    const chainId = useChainId()
-    const [erc20Tokens, fuse] = useMemo(() => {
-        const tokens = getERC20Tokens(chainId)
-        const fuse = new Fuse(tokens, {
-            shouldSort: true,
-            threshold: 0.45,
-            minMatchCharLength: 1,
-            keys: [
-                { name: 'name', weight: 0.5 },
-                { name: 'symbol', weight: 0.5 },
-            ],
-        })
-        return [tokens, fuse] as const
-    }, [chainId])
-
     const classes = useERC20PredefinedTokenSelectorStyles()
+
+    const TOKEN_LISTS = useConstant('TOKEN_LISTS')
     const [address, setAddress] = useState('')
-    const [query, setQuery] = useState('')
-    const [tokens, setTokens] = useState<Token[]>([])
-    useEffect(() => {
-        setTokens(
-            query
-                ? [
-                      ...erc20Tokens.filter((token) => token.address.toLowerCase() === query.toLowerCase()),
-                      ...fuse.search(query).map((x) => x.item),
-                  ]
-                : [],
-        )
-    }, [erc20Tokens, fuse, query])
+    const [keyword, setKeyword] = useState('')
+    const searchedTokens = useTokenLists(TOKEN_LISTS, { keyword })
 
     return (
         <Box textAlign="left">
@@ -113,28 +90,27 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
                 className={classes.search}
                 label={t('add_token_search_hint')}
                 autoFocus
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
             />
             <FixedSizeList
                 className={classes.list}
-                key={tokens.length}
                 width="100%"
                 height={192}
                 overscanCount={2}
                 itemSize={48}
                 itemData={{
-                    tokens,
+                    tokens: searchedTokens.tokens,
                     excludeTokens,
                     selected: address,
                     onSelect(address: string) {
-                        const token = tokens.find((token) => isSameAddress(token.address, address))
+                        const token = searchedTokens.tokens.find((token) => isSameAddress(token.address, address))
                         if (!token) return
                         setAddress(address)
                         onTokenChange?.(token)
                     },
                 }}
-                itemCount={tokens.length}>
+                itemCount={searchedTokens.tokens.length}>
                 {TokenInList}
             </FixedSizeList>
         </Box>

@@ -73,9 +73,9 @@ export function TradeSummary(props: TradeSummaryProps) {
                       <Typography className={classes.title}>
                           {priceReversed ? (
                               <span>
-                                  {trade.outputAmount.divide(trade.inputAmount).toSignificant(6)} {inputToken.symbol}
+                                  {trade.outputAmount.divide(trade.inputAmount).toSignificant(6)} {outputToken.symbol}
                                   {' per '}
-                                  {outputToken.symbol}
+                                  {inputToken.symbol}
                               </span>
                           ) : (
                               <span>
