@@ -1,10 +1,12 @@
 import contractMap from 'eth-contract-metadata'
 import mainnet from './erc20/mainnet.json'
 import rinkeby from './erc20/rinkeby.json'
-import { ChainId, ERC20Token } from './types'
+import { ChainId, Token, EthereumTokenType } from './types'
 import { uniqBy } from 'lodash-es'
 
-const ERC20Tokens = {
+const ERC20Tokens: {
+    [chainId in ChainId]: Token[]
+} = {
     [ChainId.Mainnet]: [
         ...Object.entries(contractMap)
             .filter(([_, token]) => token.erc20)
@@ -19,19 +21,18 @@ const ERC20Tokens = {
         ...mainnet.predefined_tokens.filter((token) => !contractMap[token.address]),
     ].map((x) => ({
         chainId: ChainId.Mainnet,
+        type: EthereumTokenType.ERC20,
         ...x,
     })),
     [ChainId.Rinkeby]: [...rinkeby.built_in_tokens, ...rinkeby.predefined_tokens].map((x) => ({
         chainId: ChainId.Rinkeby,
+        type: EthereumTokenType.ERC20,
         ...x,
     })),
-    [ChainId.Ropsten]: [].map((x) => ({
-        chainId: ChainId.Ropsten,
-        ...(x as ERC20Token),
-    })),
+    [ChainId.Ropsten]: [],
     [ChainId.Kovan]: [],
 }
 
 export function getERC20Tokens(chainId: ChainId) {
-    return uniqBy(ERC20Tokens[chainId] as ERC20Token[], (token) => token.address.toUpperCase())
+    return uniqBy(ERC20Tokens[chainId], (token) => token.address.toUpperCase())
 }

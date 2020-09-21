@@ -6,8 +6,8 @@
 
 # self hosted contracts
 
-declare -a contract_names=("happy-red-packet" "bulk-checkout" "splitter" "balance-checker" "uniswap-v2-router")
-declare -a contract_hosted=(true true true false false)
+declare -a contract_names=("happy-red-packet" "bulk-checkout" "splitter" "balance-checker" "pair" "uniswap-v2-router" "multicall")
+declare -a contract_hosted=(true true true false false false false)
 declare size=${#contract_names[@]}
 
 for ((i=0; i < $size; i++));
@@ -37,6 +37,18 @@ done
 
 # fix the import path of type.d.ts
 sed -i '' "s/.\/types/..\/types/" ./src/contracts/**/*.d.ts
+
+# fix the type of PromiEvent
+# before: import PromiEvent from 'web/promiEvent'
+# after: import PromiEvent from 'promievent'
+sed -i '' "s/web3\/promiEvent/promievent/" ./src/contracts/types.d.ts
+
+# fix the type of send()
+# before: send(tx?: Tx): PromiEvent<T>
+# after: send(tx?: Tx, callback?: (error: Error, hash: string) => void): PromiEvent<TransactionReceipt>
+sed -i '' "s/import { EventLog }/import { EventLog, TransactionReceipt }/" ./src/contracts/types.d.ts
+sed -i '' "s/send(options?: EstimateGasOptions): PromiEvent<T>/send(options?: EstimateGasOptions, callback: (error: Error | null, hash: string) => void): PromiEvent<TransactionReceipt>/" ./src/contracts/types.d.ts
+sed -i '' "s/send(tx?: Tx): PromiEvent<T>/send(tx?: Tx, callback?: (error: Error | null, hash: string) => void): PromiEvent<TransactionReceipt>/" ./src/contracts/types.d.ts
 
 # format code
 npx prettier ./src/contracts/* --write

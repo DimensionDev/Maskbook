@@ -86,7 +86,7 @@ function Gitcoin(props: { url: string }) {
         async (payload: DonatePayload) => {
             const { amount, address, token, tokenType } = payload
             if (!donationAddress) return
-            const power = tokenType === EthereumTokenType.ETH ? 18 : token!.decimals
+            const power = tokenType === EthereumTokenType.Ether ? 18 : token!.decimals
             try {
                 setStatus('undetermined')
                 await Services.Plugin.invokePlugin('co.gitcoin', 'donateGrant', {
@@ -105,7 +105,7 @@ function Gitcoin(props: { url: string }) {
                 setStatus('failed')
             }
         },
-        [chainId],
+        [chainId, donationAddress],
     )
     const onClose = useCallback(() => setStatus('initial'), [])
 

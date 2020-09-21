@@ -100,12 +100,12 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     const [amount, setAmount] = useState(0.01)
     const [, amountInputRef] = useCapturedInput((x) => setAmount(parseFloat(x)))
     const amountMaxBigint = selectedWallet
-        ? selectedTokenType === EthereumTokenType.ETH
+        ? selectedTokenType === EthereumTokenType.Ether
             ? selectedWallet.eth_balance
             : selectedToken?.amount
         : undefined
     const amountMaxNumber = BigNumber.isBigNumber(amountMaxBigint)
-        ? selectedTokenType === EthereumTokenType.ETH
+        ? selectedTokenType === EthereumTokenType.Ether
             ? formatBalance(amountMaxBigint, 18)
             : selectedToken && formatBalance(amountMaxBigint, selectedToken.decimals)
         : undefined
@@ -215,7 +215,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                             : t('plugin_gitcoin_donate', {
                                   symbol: +amount.toFixed(3) === +amount.toFixed(9) ? '' : '~',
                                   amount: +amount.toFixed(3),
-                                  type: selectedTokenType === EthereumTokenType.ETH ? 'ETH' : selectedToken?.symbol,
+                                  type: selectedTokenType === EthereumTokenType.Ether ? 'ETH' : selectedToken?.symbol,
                               })}
                     </Button>
                 </DialogActions>

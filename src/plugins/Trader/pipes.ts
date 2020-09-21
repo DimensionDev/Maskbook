@@ -20,6 +20,17 @@ export function resolveDataProviderName(dataProvider: DataProvider) {
     }
 }
 
+export function resolveDataProviderLink(dataProvider: DataProvider) {
+    switch (dataProvider) {
+        case DataProvider.COIN_GECKO:
+            return 'https://www.coingecko.com/'
+        case DataProvider.COIN_MARKET_CAP:
+            return 'https://coinmarketcap.com/'
+        default:
+            unreachable(dataProvider)
+    }
+}
+
 export function resolveSwapProviderName(swapProvider: SwapProvider) {
     switch (swapProvider) {
         case SwapProvider.UNISWAP:
@@ -29,14 +40,12 @@ export function resolveSwapProviderName(swapProvider: SwapProvider) {
     }
 }
 
-export function resolveDataProviderLink(dataProvider: DataProvider) {
-    switch (dataProvider) {
-        case DataProvider.COIN_GECKO:
-            return 'https://www.coingecko.com/'
-        case DataProvider.COIN_MARKET_CAP:
-            return 'https://coinmarketcap.com/'
+export function resolveSwapProviderLink(swapProvider: SwapProvider) {
+    switch (swapProvider) {
+        case SwapProvider.UNISWAP:
+            return 'https://uniswap.org/'
         default:
-            unreachable(dataProvider)
+            unreachable(swapProvider)
     }
 }
 

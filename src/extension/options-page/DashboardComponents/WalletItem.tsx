@@ -160,11 +160,11 @@ export function WalletItem(props: WalletItemProps) {
                 </ActionButton>
             )}
             <Box py={xsMatched ? 0 : 1} display="flex" flexWrap="wrap">
-                <TokenIcon classes={{ coin: classes.coin }} address={ETH_ADDRESS} name="ETH" />
+                <TokenIcon classes={{ icon: classes.coin }} address={ETH_ADDRESS} name="ETH" />
                 {tokens &&
                     tokens.map((token) => (
                         <TokenIcon
-                            classes={{ coin: classes.coin }}
+                            classes={{ icon: classes.coin }}
                             key={token.address}
                             address={token.address}
                             name={token.name}

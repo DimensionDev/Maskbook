@@ -10,7 +10,7 @@ import { lastActivatedWalletProvider } from '../../settings/settings'
 import { getManagedWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
 import { ProviderType } from '../../web3/types'
 
-OnlyRunInContext('background', 'web3')
+OnlyRunInContext(['background', 'debugging'], 'web3')
 
 export const web3 = new Web3()
 web3.eth.transactionConfirmationBlocks = 6

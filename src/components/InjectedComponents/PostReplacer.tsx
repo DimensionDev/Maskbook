@@ -28,7 +28,7 @@ export function PostReplacer(props: PostReplacerProps) {
     const plugins = [...PluginUI.values()]
     const processedPostMessage = useMemo(
         () => plugins.reduce((x, plugin) => plugin.messageProcessor?.(x) ?? x, postMessage),
-        [plugins.map((x) => x.identifier).join(), postContent],
+        [plugins.map((x) => x.identifier).join(), postMessage],
     )
     const shouldReplacePost =
         // replace all posts

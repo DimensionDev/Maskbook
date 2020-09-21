@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import type { PluginConfig } from '../plugin'
 import {
     TypedMessage,
@@ -7,11 +7,8 @@ import {
     TypedMessageCompound,
 } from '../../protocols/typed-message'
 import { makeTypedMessageCashTrending } from './messages/TypedMessageCashTrending'
-import { TrendingPopper } from './UI/TrendingPopper'
-import { TrendingView } from './UI/TrendingView'
-import Services from '../../extension/service'
+import { PageInspector } from './UI/PageInspector'
 import { PLUGIN_IDENTIFIER, PLUGIN_METADATA_KEY } from './constants'
-import { DataProvider, SwapProvider } from './types'
 
 const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor => isTypedMessageAnchor(m) && m.category === 'cash'
 
@@ -28,23 +25,4 @@ export const TraderPluginDefine: PluginConfig = {
     pageInspector() {
         return <PageInspector />
     },
-}
-
-function PageInspector() {
-    useEffect(() => {
-        // build availability cache in the background page
-        Services.Plugin.invokePlugin('maskbook.trader', 'getAvailableDataProviders', 'BTC')
-    }, [])
-    return (
-        <TrendingPopper>
-            {(name: string, dataProviders: DataProvider[], reposition?: () => void) => (
-                <TrendingView
-                    name={name}
-                    dataProviders={dataProviders}
-                    swapProviders={[SwapProvider.UNISWAP]}
-                    onUpdate={reposition}
-                />
-            )}
-        </TrendingPopper>
-    )
 }

@@ -1,6 +1,6 @@
 import { useCallCallback } from './useCallback'
 import type { TransactionObject } from '../../contracts/types'
-import { useTimes, TimesOptions } from '../../utils/hooks/useTimes'
+import { useAsyncTimes, TimesOptions } from '../../utils/hooks/useAsyncTimes'
 
 /**
  * Create a callback and invoke it n times
@@ -9,7 +9,7 @@ import { useTimes, TimesOptions } from '../../utils/hooks/useTimes'
  */
 export function useCallByTimes<R, T extends TransactionObject<R>>(tx: T, options: TimesOptions) {
     const callback = useCallCallback<R, T>(tx)
-    return useTimes(callback, options)
+    return useAsyncTimes(callback, options)
 }
 
 /**
@@ -19,7 +19,7 @@ export function useCallByTimes<R, T extends TransactionObject<R>>(tx: T, options
  */
 export function useCallByPolling<R, T extends TransactionObject<R>>(tx: T, options: Omit<TimesOptions, 'times'>) {
     const callback = useCallCallback<R, T>(tx)
-    return useTimes(callback, {
+    return useAsyncTimes(callback, {
         times: Number.MAX_SAFE_INTEGER,
         ...options,
     })

@@ -9,11 +9,19 @@ import { formatBalance } from '../formatter'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useChainId } from '../../../web3/hooks/useChainId'
 
+const defaultWalletFetcher = () => Services.Plugin.invokePlugin('maskbook.wallet', 'getDefaultWallet')
 const walletsFetcher = () => Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
 const tokensFetcher = () => Services.Plugin.invokePlugin('maskbook.wallet', 'getTokens')
 const managedWalletFetcher = (address: string) =>
     Services.Plugin.invokePlugin('maskbook.wallet', 'getManagedWallet', address)
 const managedWalletsFetcher = () => Services.Plugin.invokePlugin('maskbook.wallet', 'getManagedWallets')
+
+export function useDefaultWallet() {
+    const swr = useSWR('com.maskbook.wallet.wallet.default', { fetcher: defaultWalletFetcher })
+    const { revalidate } = swr
+    useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
+    return swr
+}
 
 export function useWallets() {
     const swr = useSWR('com.maskbook.wallet.wallets', { fetcher: walletsFetcher })
@@ -46,7 +54,7 @@ export function useSelectWallet(wallets: WalletRecord[] | undefined, tokens: ERC
     const [selectedWalletAddress, setSelectedWalletAddress] = useState<undefined | string>(undefined)
 
     const [selectedTokenAddress, setSelectedTokenAddress] = useState(ETH_ADDRESS)
-    const [selectedTokenType, setSelectedTokenType] = useState<EthereumTokenType>(EthereumTokenType.ETH)
+    const [selectedTokenType, setSelectedTokenType] = useState<EthereumTokenType>(EthereumTokenType.Ether)
     const selectedWallet = wallets?.find((x) => x.address === selectedWalletAddress)
 
     const availableTokens = (selectedWallet?.erc20_token_balance
@@ -56,7 +64,7 @@ export function useSelectWallet(wallets: WalletRecord[] | undefined, tokens: ERC
         .filter(([address]) => tokens?.find((x) => x.address === address && x.chainId === chainId))
         .map(([address, amount]) => ({ amount, ...tokens?.find((x) => x.address === address)! }))
     const selectedToken =
-        selectedTokenType === EthereumTokenType.ETH
+        selectedTokenType === EthereumTokenType.Ether
             ? undefined
             : availableTokens.find((x) => x.address === selectedTokenAddress)!
 

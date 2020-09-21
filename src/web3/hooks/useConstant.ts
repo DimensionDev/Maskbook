@@ -1,11 +1,14 @@
 import { useMemo } from 'react'
-import { ChainId } from '../types'
 import { CONSTANTS, getConstant, getAllConstants } from '../constants'
+import { useChainId } from './useChainId'
+import type { ChainId } from '../types'
 
-export function useConstant(key: keyof typeof CONSTANTS, chainId: ChainId = ChainId.Mainnet) {
-    return useMemo(() => getConstant(key, chainId), [chainId])
+export function useConstant(key: keyof typeof CONSTANTS, chainId?: ChainId) {
+    const chainId_ = useChainId()
+    return useMemo(() => getConstant(key, chainId ?? chainId_), [chainId ?? chainId_])
 }
 
-export function useAllConstants(chainId: ChainId = ChainId.Mainnet) {
-    return useMemo(() => getAllConstants(chainId), [chainId])
+export function useAllConstants(chainId?: ChainId) {
+    const chainId_ = useChainId()
+    return useMemo(() => getAllConstants(chainId ?? chainId_), [chainId ?? chainId_])
 }

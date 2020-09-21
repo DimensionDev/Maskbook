@@ -54,6 +54,8 @@ const calcArgs = (argv) => ({
     /** @type {boolean} */
     E2E: argv.e2e,
     /** @type {boolean} */
+    BETA: argv.beta,
+    /** @type {boolean} */
     ReproducibleBuild: argv['reproducible-build'],
 })
 
@@ -101,7 +103,7 @@ module.exports = (argvEnv, argv) => {
         }
     }
     const getCompilationInfo = () => {
-        /** @type {'chromium' | 'firefox' | 'safari' | 'E2E'} */
+        /** @type {'chromium' | 'firefox' | 'safari' | 'E2E' | 'BETA'} */
         let buildTarget = 'chromium'
         /** @type {'fennec' | 'geckoview'} */
         let firefoxVariant = undefined
@@ -122,6 +124,7 @@ module.exports = (argvEnv, argv) => {
         }
         if (architecture === 'app' || firefoxVariant === 'fennec') resolution = 'mobile'
         if (target.E2E) buildTarget = 'E2E'
+        if (target.BETA) buildTarget = 'BETA'
 
         // build the envs
         const envs = {

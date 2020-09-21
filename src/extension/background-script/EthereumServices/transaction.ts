@@ -2,7 +2,7 @@ import type { TransactionConfig, PromiEvent, TransactionReceipt } from 'web3-cor
 import type { ITxData } from '@walletconnect/types'
 
 import { promiEventToIterator, StageType } from '../../../utils/promiEvent'
-import { getWallets } from '../../../plugins/Wallet/wallet'
+import { getManagedWallets } from '../../../plugins/Wallet/wallet'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import { createWeb3 } from './web3'
@@ -13,10 +13,14 @@ import { isSameAddress } from '../../../web3/helpers'
 import { getNonce, resetNonce, commitNonce } from '../NonceService'
 import type { ChainId } from '../../../web3/types'
 import { ProviderType } from '../../../web3/types'
+import { unreachable } from '../../../utils/utils'
+import { createTransaction } from '../TransactionService'
 
 //#region tracking wallets
-let wallets: WalletRecord[] = []
-const resetWallet = async () => (wallets = await getWallets())
+let wallets: (WalletRecord & {
+    privateKey: string
+})[] = []
+const resetWallet = async () => ({ wallets } = await getManagedWallets())
 PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
 //#endregion
 
@@ -36,18 +40,25 @@ async function createTransactionSender(from: string, config: TransactionConfig) 
     // Add the private key into eth accounts list is also required.
     if (wallet.provider === ProviderType.Maskbook) {
         const web3 = createWeb3(Maskbook.createProvider())
-        const privateKey = wallet._private_key_
-        if (privateKey) {
-            ;[config.nonce, config.gas, config.gasPrice] = await Promise.all([
-                await getNonce(from),
+        const privateKey = wallet.privateKey
+        if (!privateKey) throw new Error(`cannot find private key for wallet ${wallet.address}`)
+        const [nonce, gas, gasPrice] = await Promise.all([
+            config.nonce ?? getNonce(from),
+            config.gas ??
                 web3.eth.estimateGas({
                     from,
                     ...config,
                 }),
-                web3.eth.getGasPrice(),
-            ])
-            return () => createWeb3(Maskbook.createProvider(), [privateKey]).eth.sendTransaction(config)
-        } else throw new Error(`cannot find private key for wallet ${wallet.address}`)
+            config.gasPrice ?? web3.eth.getGasPrice(),
+        ])
+        return () =>
+            createWeb3(Maskbook.createProvider(), [privateKey]).eth.sendTransaction({
+                from,
+                nonce,
+                gas,
+                gasPrice,
+                ...config,
+            })
     }
 
     // MetaMask provider can be wrapped into web3 lib directly.
@@ -82,22 +93,43 @@ async function createTransactionSender(from: string, config: TransactionConfig) 
  * @param from
  * @param config
  */
-export async function* sendTransaction(from: string, config: TransactionConfig) {
+export async function* sendTransaction(
+    from: string,
+    config: TransactionConfig,
+    meta?: {
+        name?: string
+        args?: string[]
+    },
+) {
     try {
         const sender = await createTransactionSender(from, config)
         for await (const stage of promiEventToIterator(sender())) {
             console.log('DEBUG: stage')
             console.log(stage)
 
-            if (stage.type === StageType.TRANSACTION_HASH) commitNonce(from)
+            if (stage.type === StageType.TRANSACTION_HASH) {
+                await commitNonce(from)
+                await createTransaction(
+                    stage.hash,
+                    {
+                        from,
+                        ...config,
+                    },
+                    meta,
+                ) // record every transaction in DB
+                yield stage
+            }
             yield stage
+            // stop if confirmed
+            if (stage.type === StageType.CONFIRMATION) break
         }
+        return
     } catch (err) {
-        console.log('DEBUG: err')
+        console.log('DEBUG: sendTransaction error')
         console.log(err)
         if (err.message.includes('nonce too low')) resetNonce(from)
         // TODO:
-        // nonce too hige?
+        // nonce too high?
         throw err
     }
 }
@@ -108,16 +140,20 @@ export async function* sendTransaction(from: string, config: TransactionConfig) 
  * @param config
  */
 export async function sendSignedTransaction(from: string, config: TransactionConfig) {
-    throw new Error('not implemented')
+    throw new Error('TO BE IMPLEMENTED')
 }
 
 /**
  * Call transaction on different providers with a given account
- * same as `eh_call`
+ * same as `eth_call`
  * @param from
  * @param config
  */
-export async function callTransaction(from: string, config: TransactionConfig) {
+export async function callTransaction(from: string | undefined, config: TransactionConfig) {
+    // use can use callTransaction without account
+    if (!from) return createWeb3(Maskbook.createProvider()).eth.call(config)
+
+    // select specific provider with given wallet address
     const wallet = wallets.find((x) => isSameAddress(x.address, from))
     if (!wallet) throw new Error('the wallet does not exists')
 
@@ -127,5 +163,5 @@ export async function callTransaction(from: string, config: TransactionConfig) {
         const connector = await WalletConnect.createConnector()
         return createWeb3(Maskbook.createProvider(connector.chainId as ChainId), []).eth.call(config)
     }
-    throw new Error(`cannot call transaction for wallet ${wallet.address}`)
+    unreachable(wallet.provider)
 }

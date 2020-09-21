@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { MoreHorizontal, Server } from 'react-feather'
+import { MoreHorizontal } from 'react-feather'
 import { makeStyles, Theme, createStyles, DialogContent, GridList, GridListTile } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -19,7 +19,6 @@ import { DashboardRoute } from '../../../extension/options-page/Route'
 import { ProviderType } from '../../../web3/types'
 import { useHistory } from 'react-router-dom'
 import { useManagedWallets } from '../hooks/useWallet'
-import Wallets from 'arweave/web/wallets'
 import { unreachable } from '../../../utils/utils'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -70,7 +69,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
         setOpen({
             open: false,
         })
-    }, [])
+    }, [setOpen])
     //#endregion
 
     // render in dashboard
@@ -78,9 +77,9 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
 
     const { data: { wallets } = {} } = useManagedWallets()
     const onConnect = useCallback(
-        async (type: ProviderType) => {
+        async (providerType: ProviderType) => {
             onClose()
-            switch (type) {
+            switch (providerType) {
                 case ProviderType.Maskbook:
                     if (wallets?.length) await Services.Ethereum.connectMaskbook()
                     else if (GetContext() === 'options') history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
@@ -93,10 +92,10 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     await Services.Ethereum.connectWalletConnect()
                     break
                 default:
-                    unreachable(type)
+                    unreachable(providerType)
             }
         },
-        [wallets?.map((x) => x.address).join()],
+        [wallets?.length, onClose, history],
     )
 
     return (

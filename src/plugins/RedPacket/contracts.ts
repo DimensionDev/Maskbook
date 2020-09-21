@@ -101,7 +101,7 @@ export const redPacketAPI = {
                 ),
                 {
                     from: ____sender__addr,
-                    value: token_type === EthereumTokenType.ETH ? total_tokens.toFixed() : undefined,
+                    value: token_type === EthereumTokenType.Ether ? total_tokens.toFixed() : undefined,
                 },
                 {
                     onTransactionHash(hash) {

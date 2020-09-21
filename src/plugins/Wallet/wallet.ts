@@ -14,9 +14,9 @@ import { walletAPI, erc20API, balanceCheckerAPI } from './api'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { buf2hex, hex2buf, assert } from '../../utils/utils'
-import { ProviderType } from '../../web3/types'
+import { ProviderType, EthereumTokenType } from '../../web3/types'
 import { resolveProviderName, parseChainName } from '../../web3/pipes'
-import { ChainId, ERC20Token } from '../../web3/types'
+import { ChainId, Token } from '../../web3/types'
 import { getConstant } from '../../web3/constants'
 
 const ETH_ADDRESS = getConstant('ETH_ADDRESS')
@@ -25,11 +25,11 @@ const ETH_ADDRESS = getConstant('ETH_ADDRESS')
 import mainnet from '../../web3/erc20/mainnet.json'
 import rinkeby from '../../web3/erc20/rinkeby.json'
 
-const sort = (x: ERC20Token, y: ERC20Token): 1 | -1 => ([x.name, y.name].sort()[0] === x.name ? -1 : 1)
-mainnet.built_in_tokens.sort(sort)
-mainnet.predefined_tokens.sort(sort)
-rinkeby.built_in_tokens.sort(sort)
-rinkeby.predefined_tokens.sort(sort)
+const sort = (x: Token, y: Token): 1 | -1 => ([x.name, y.name].sort()[0] === x.name ? -1 : 1)
+mainnet.built_in_tokens.map((x) => ({ type: EthereumTokenType.ERC20, chainId: ChainId.Mainnet, ...x })).sort(sort)
+mainnet.predefined_tokens.map((x) => ({ type: EthereumTokenType.ERC20, chainId: ChainId.Mainnet, ...x })).sort(sort)
+rinkeby.built_in_tokens.map((x) => ({ type: EthereumTokenType.ERC20, chainId: ChainId.Rinkeby, ...x })).sort(sort)
+rinkeby.predefined_tokens.map((x) => ({ type: EthereumTokenType.ERC20, chainId: ChainId.Rinkeby, ...x })).sort(sort)
 //#endregion
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
@@ -142,12 +142,13 @@ function sortWallet(a: WalletRecord, b: WalletRecord) {
     return 0
 }
 
-export async function getDefaultWallet(): Promise<WalletRecord> {
+export async function getDefaultWallet(): Promise<WalletRecord | null> {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     const wallets = await t.objectStore('Wallet').getAll()
-    const wallet = wallets.find((wallet) => wallet._wallet_is_default) || wallets.length === 0 ? null : wallets[0]
-    if (!wallet) throw new Error('no wallet')
-    return WalletRecordOutDB(wallet)
+    const wallet = wallets.find((wallet) => wallet._wallet_is_default)
+    if (wallet) return WalletRecordOutDB(wallet)
+    if (wallets.length) return WalletRecordOutDB(wallets[0])
+    return null
 }
 
 export async function setDefaultWallet(address: WalletRecord['address']) {
@@ -308,7 +309,7 @@ export async function recoverWalletFromPrivateKey(privateKey: string) {
 export async function walletAddERC20Token(
     walletAddress: string,
     chainId: ChainId,
-    token: ERC20Token,
+    token: Token,
     user_defined: boolean,
 ) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
@@ -363,19 +364,19 @@ export function unwatchWalletBalances(address: string) {
 }
 export { switchToProvider } from './web3'
 export interface BalanceMetadata {
-    [key: string]: (ERC20Token & { balance: BigNumber; chainId: ChainId })[]
+    [key: string]: (Token & { balance: BigNumber })[]
 }
 
 export async function onWalletBalancesUpdated(data: BalanceMetadata) {
     let modified = false
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
     const unaddedTokens: {
-        token: ERC20Token
+        token: Token
         chainId: ChainId
     }[] = []
     for (const [walletAddress, tokens] of Object.entries(data)) {
         const wallet = await getWalletByAddress(t, walletAddress)
-        const lastModifiedt = wallet.updatedAt
+        const lastModifiedAt = wallet.updatedAt
         for (const { chainId, balance, ...token } of tokens) {
             if (token.address === ETH_ADDRESS && !wallet.eth_balance.isEqualTo(balance)) {
                 wallet.eth_balance = balance
@@ -384,7 +385,10 @@ export async function onWalletBalancesUpdated(data: BalanceMetadata) {
             if (token.address !== ETH_ADDRESS) {
                 if (!wallet.erc20_token_balance.has(token.address) && balance.isGreaterThan(0)) {
                     unaddedTokens.push({
-                        token,
+                        token: {
+                            chainId,
+                            ...token,
+                        },
                         chainId,
                     })
                     wallet.erc20_token_balance.set(token.address, balance)
@@ -398,7 +402,7 @@ export async function onWalletBalancesUpdated(data: BalanceMetadata) {
                 }
             }
         }
-        if (lastModifiedt !== wallet.updatedAt) {
+        if (lastModifiedAt !== wallet.updatedAt) {
             t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
             modified = true
         }

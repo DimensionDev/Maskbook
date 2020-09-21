@@ -1,4 +1,5 @@
 import { CMC_V1_BASE_URL, CMC_V2_BASE_URL } from '../../constants'
+import { Flags } from '../../../../utils/flags'
 
 export interface Status {
     credit_count: number
@@ -78,7 +79,9 @@ export async function getQuotesInfo(id: string, currency: string) {
     const params = new URLSearchParams('ref=widget')
     params.append('convert', currency)
 
-    const response = await fetch(`${CMC_V2_BASE_URL}/ticker/${id}/?${params.toString()}`)
+    const response = await fetch(`${CMC_V2_BASE_URL}/ticker/${id}/?${params.toString()}`, {
+        cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
+    })
     return response.json() as Promise<{
         data: QuotesInfo
         status: Status
@@ -127,7 +130,9 @@ export async function getCoinInfo(id: string) {
     const params = new URLSearchParams('aux=urls,logo,description,tags,platform,date_added,notice,status')
     params.append('id', id)
 
-    const response_ = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/info?${params.toString()}`)
+    const response_ = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/info?${params.toString()}`, {
+        cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
+    })
     const response = (await response_.json()) as {
         data: {
             [id: string]: CoinInfo
@@ -159,7 +164,9 @@ export async function getHistorical(
     params.append('time_end', toUnixTimestamp(endDate))
     params.append('time_start', toUnixTimestamp(startDate))
 
-    const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/quotes/historical?${params.toString()}`)
+    const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/quotes/historical?${params.toString()}`, {
+        cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
+    })
     return response.json() as Promise<{
         data: Record<string, Record<string, Stat>>
         status: Status
@@ -217,7 +224,9 @@ export async function getLatestMarketPairs(id: string, currency: string) {
     params.append('convert', currency)
     params.append('id', id)
 
-    const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/market-pairs/latest?${params.toString()}`)
+    const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/market-pairs/latest?${params.toString()}`, {
+        cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
+    })
     return response.json() as Promise<{
         data: {
             id: number

@@ -1,7 +1,7 @@
 import { DataProvider, Currency, Coin, Trending, Stat } from '../types'
 import * as coinGeckoAPI from './coingecko'
 import * as coinMarketCapAPI from './coinmarketcap'
-import { Days } from '../UI/PriceChartDaysControl'
+import { Days } from '../UI/trending/PriceChartDaysControl'
 import { getEnumAsArray } from '../../../utils/enum'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../constants'
 
