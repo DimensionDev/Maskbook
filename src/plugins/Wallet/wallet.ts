@@ -76,10 +76,11 @@ export async function getManagedWallets(): Promise<{
     async function makeWallets() {
         const records = wallets
             .map(WalletRecordOutDB)
-            .filter((x) => x.provider === ProviderType.Maskbook)
+            .filter((x) => [ProviderType.Maskbook, ProviderType.MetaMask].includes(x.provider))
             .map(async (record) => ({ ...record, privateKey: await makePrivateKey(record) }))
         return (await Promise.all(records)).sort(sortWallet)
         async function makePrivateKey(record: WalletRecord) {
+            if (record.provider === ProviderType.MetaMask) return '0x'
             const { privateKey } = record._private_key_
                 ? await recoverWalletFromPrivateKey(record._private_key_)
                 : await recoverWallet(record.mnemonic, record.passphrase)
