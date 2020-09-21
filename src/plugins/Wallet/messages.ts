@@ -38,4 +38,4 @@ export interface MaskbookWalletMessages {
     selectERC20TokenDialogUpdated: SelectERC20TokenDialogEvent
 }
 
-export const MessageCenter = new BatchedMessageCenter<MaskbookWalletMessages>(true, 'maskbook-wallet-events')
+export const WalletMessageCenter = new BatchedMessageCenter<MaskbookWalletMessages>(true, 'maskbook-wallet-events')

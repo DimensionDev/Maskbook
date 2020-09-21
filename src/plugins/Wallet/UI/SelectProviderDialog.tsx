@@ -12,7 +12,7 @@ import { MaskbookIcon } from '../../../resources/MaskbookIcon'
 import { WalletConnectIcon } from '../../../resources/WalletConnectIcon'
 import Services from '../../../extension/service'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { MessageCenter, MaskbookWalletMessages } from '../messages'
+import { WalletMessageCenter, MaskbookWalletMessages } from '../messages'
 import { useBlurContext } from '../../../extension/options-page/DashboardContexts/BlurContext'
 import { GetContext } from '@holoflows/kit/es'
 import { DashboardRoute } from '../../../extension/options-page/Route'
@@ -62,7 +62,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
 
     //#region remote controlled dialog logic
     const [open, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
-        MessageCenter,
+        WalletMessageCenter,
         'selectProviderDialogUpdated',
     )
     const onClose = useCallback(() => {

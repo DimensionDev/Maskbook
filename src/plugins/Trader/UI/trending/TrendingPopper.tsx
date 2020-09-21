@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import type PopperJs from 'popper.js'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@material-ui/core'
 import { useLocation, useWindowScroll } from 'react-use'
-import { MessageCenter } from '../../messages'
-import { MessageCenter as MessageCenterWallet, MaskbookWalletMessages } from '../../../Wallet/messages'
+import { TraderMessageCenter } from '../../messages'
+import { WalletMessageCenter as MessageCenterWallet, MaskbookWalletMessages } from '../../../Wallet/messages'
 import type { DataProvider } from '../../types'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 
@@ -38,7 +38,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     // open popper from message center
     useEffect(
         () =>
-            MessageCenter.on('cashTagObserved', (ev) => {
+            TraderMessageCenter.on('cashTagObserved', (ev) => {
                 const update = () => {
                     setLocked(true)
                     setName(ev.name)
