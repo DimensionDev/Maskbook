@@ -100,6 +100,13 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(plugin_i
             const db = await createPluginDBAccess()
             const tx = db.transaction('PluginStore', usage === 'r' ? 'readonly' : 'readwrite')
             livingTransaction = tx
+            // Oops, workaround for https://bugs.webkit.org/show_bug.cgi?id=216769 or https://github.com/jakearchibald/idb/issues/201
+            try {
+                await tx.store.openCursor()
+            } catch {
+                livingTransaction = db.transaction('PluginStore', usage === 'r' ? 'readonly' : 'readwrite')
+                return livingTransaction
+            }
             return tx
         }
         return livingTransaction
