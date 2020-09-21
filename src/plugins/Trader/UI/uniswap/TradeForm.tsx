@@ -14,6 +14,7 @@ import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteCont
 import { MaskbookWalletMessages, WalletMessageCenter } from '../../../Wallet/messages'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { ApproveState } from '../../../../web3/hooks/useTokenApproveCallback'
+import { EthereumAccountChip } from '../../../../components/shared/EthereumAccountChip'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -24,6 +25,10 @@ const useStyles = makeStyles((theme: Theme) => {
         section: {
             textAlign: 'center',
             margin: `${theme.spacing(1)}px auto`,
+        },
+        account: {
+            textAlign: 'right',
+            margin: theme.spacing(0, 0, 2),
         },
         divider: {
             marginTop: theme.spacing(-0.5),
@@ -173,6 +178,9 @@ export function TradeForm(props: TradeFormProps) {
 
     return (
         <form className={classes.form} noValidate autoComplete="off">
+            <div className={classNames(classes.section, classes.account)}>
+                <EthereumAccountChip address={account} />
+            </div>
             {sections.map(({ key, children }) => (
                 <div className={classNames(classes.section, key === 'divider' ? classes.divider : '')} key={key}>
                     {children}
