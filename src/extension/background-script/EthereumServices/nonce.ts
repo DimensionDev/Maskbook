@@ -1,7 +1,4 @@
-import { OnlyRunInContext } from '@holoflows/kit/es'
-import { getTransactionCount } from './EthereumServices/network'
-
-OnlyRunInContext(['background', 'debugging'], 'NonceService')
+import { getTransactionCount } from './network'
 
 class NonceManager {
     constructor(private address: string) {}
