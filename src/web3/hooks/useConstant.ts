@@ -3,7 +3,7 @@ import { CONSTANTS, getConstant, getAllConstants } from '../constants'
 import { useChainId } from './useChainId'
 import type { ChainId } from '../types'
 
-export function useConstant(key: keyof typeof CONSTANTS, chainId?: ChainId) {
+export function useConstant<T extends keyof typeof CONSTANTS>(key: T, chainId?: ChainId) {
     const chainId_ = useChainId()
     return useMemo(() => getConstant(key, chainId ?? chainId_), [chainId ?? chainId_])
 }

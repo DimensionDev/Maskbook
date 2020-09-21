@@ -6,6 +6,7 @@ type SelectERC20TokenDialogEvent =
           open: true
           tabId?: string
           address?: string
+          lists?: string[]
           excludeTokens?: string[]
       }
     | {
