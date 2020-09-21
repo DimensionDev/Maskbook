@@ -276,7 +276,7 @@ export function TrendingView(props: TrendingViewProps) {
             </CardContent>
             <CardActions className={classes.footer}>
                 <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
-                    {'Created by '}
+                    {'Powered by '}
                     <Link
                         className={classes.footlink}
                         color="textSecondary"
@@ -314,7 +314,7 @@ export function TrendingView(props: TrendingViewProps) {
 
                 {tabIndex === 2 ? (
                     <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
-                        {'Base on '}
+                        {'Based on '}
                         <Link
                             className={classes.footlink}
                             color="textSecondary"
