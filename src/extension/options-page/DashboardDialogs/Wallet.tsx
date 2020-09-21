@@ -80,6 +80,7 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
     const classes = useERC20PredefinedTokenSelectorStyles()
 
     const TOKEN_LISTS = useConstant('TOKEN_LISTS')
+    const chainId = useChainId()
     const [address, setAddress] = useState('')
     const [keyword, setKeyword] = useState('')
     const searchedTokens = useTokenLists(TOKEN_LISTS, { keyword })
