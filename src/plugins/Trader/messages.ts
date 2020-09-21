@@ -25,4 +25,4 @@ export interface MaskbookTraderMessages {
     settingsUpdated: SettingsEvent
 }
 
-export const MessageCenter = new BatchedMessageCenter<MaskbookTraderMessages>(true, 'maskbook-trader-events')
+export const TraderMessageCenter = new BatchedMessageCenter<MaskbookTraderMessages>(true, 'maskbook-trader-events')

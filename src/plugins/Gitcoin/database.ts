@@ -25,7 +25,7 @@ function getProvider() {
 
 export async function donateGrant(donation: GitcoinDonationPayload) {
     const chainId = await getChainId()
-    const { GOTCOIN_MAINTAINER_ADDRESS, BULK_CHECKOUT_ADDRESS } = getAllConstants(chainId)
+    const { GITCOIN_MAINTAINER_ADDRESS, BULK_CHECKOUT_ADDRESS } = getAllConstants(chainId)
     const { donor_address, donation_address, donation_total, token, token_type } = donation
 
     let approved: _UnboxPromise<ReturnType<typeof erc20API.approve>> | undefined
@@ -43,7 +43,7 @@ export async function donateGrant(donation: GitcoinDonationPayload) {
     // donate
     const donated = await getProvider().donate(
         donor_address,
-        GOTCOIN_MAINTAINER_ADDRESS,
+        GITCOIN_MAINTAINER_ADDRESS,
         donation_address,
         donation_total,
         token?.address,

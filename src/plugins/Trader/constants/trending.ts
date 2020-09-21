@@ -1,5 +1,5 @@
-export const PLUGIN_IDENTIFIER = 'co.maskbook.trader'
-export const PLUGIN_METADATA_KEY = 'com.maskbook.trader:1'
+//#region plugin settings
+export const PLUGIN_IDENTIFIER = 'com.maskbook.trader'
 //#endregion
 
 //#region apis
