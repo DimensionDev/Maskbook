@@ -39,7 +39,7 @@ export function useTokenApproveCallback(token?: Token, amount?: string, spender?
         if (!account) return
         if (!spender) return
         if (!amount || new BigNumber(amount).isZero()) return
-        if (token?.type !== EthereumTokenType.ERC20) throw new Error('not supported')
+        if (token?.type !== EthereumTokenType.ERC20) return
 
         let useExact = false
         const estimatedGas = await erc20Contract.methods
