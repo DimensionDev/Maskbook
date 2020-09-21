@@ -24,12 +24,15 @@ import {
     useTwitterCloseButton,
 } from '../../../social-network-provider/twitter.com/utils/theme'
 import { getActivatedUI } from '../../../social-network/ui'
-import type { Token } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { getERC20Tokens } from '../../../web3/tokens'
-import { useChainId } from '../../../web3/hooks/useChainId'
 import { isSameAddress } from '../../../web3/helpers'
 import { useCapturedEvents } from '../../../utils/hooks/useCapturedEvents'
+import { useAsync } from 'react-use'
+import Services from '../../../extension/service'
+import { EthereumAddress } from 'wallet.ts'
+import { useToken } from '../../../web3/hooks/useToken'
+import { EthereumTokenType, Token } from '../../../web3/types'
+import { useChainId } from '../../../web3/hooks/useChainId'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -40,6 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginLeft: 6,
         },
         search: {
+            width: '100%',
             margin: theme.spacing(1, 0, 2),
         },
         list: {
@@ -47,6 +51,13 @@ const useStyles = makeStyles((theme: Theme) =>
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
+        },
+        placeholder: {
+            color: theme.palette.text.secondary,
+            textAlign: 'center',
+            height: 288,
+            paddingTop: theme.spacing(14),
+            boxSizing: 'border-box',
         },
     }),
 )
@@ -73,12 +84,18 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     const [, inputRef] = useCapturedEvents()
     //#endregion
 
-    //#region update tokens
+    //#region fetch from token lists
+    const [lists, setLists] = useState<string[]>([])
+    const { value: tokens = [], loading: loadingTokens } = useAsync(
+        () => Services.Ethereum.fetchTokensFromTokenLists(lists),
+        [lists.sort().join()],
+    )
+    //#endregion
+
+    //#region search tokens
     const [query, setQuery] = useState('')
     const [address, setAddress] = useState('')
-    const chainId = useChainId()
-    const [erc20Tokens, fuse] = useMemo(() => {
-        const tokens = getERC20Tokens(chainId)
+    const [trackedTokens, fuse] = useMemo(() => {
         const fuse = new Fuse(tokens, {
             shouldSort: true,
             threshold: 0.45,
@@ -89,45 +106,100 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
             ],
         })
         return [tokens, fuse] as const
-    }, [chainId])
-    const [tokens, setTokens] = useState<Token[]>([])
-    const [excludeTokens, setExcludeTokens] = useState<string[]>([])
-
-    useEffect(() => {
-        setTokens(
-            query
-                ? [
-                      ...erc20Tokens.filter((token) => token.address.toLowerCase() === query.toLowerCase()),
-                      ...fuse.search(query).map((x) => x.item),
-                  ]
-                : erc20Tokens,
-        )
-    }, [erc20Tokens, fuse, query])
+    }, [tokens])
+    const searchedTokens = useMemo(() => {
+        return query
+            ? [
+                  ...(EthereumAddress.isValid(query)
+                      ? trackedTokens.filter((token) => isSameAddress(token.address, query))
+                      : []),
+                  ...fuse.search(query).map((x) => x.item),
+              ]
+            : trackedTokens
+    }, [query, fuse, trackedTokens])
     //#endregion
 
-    //#region dialog
+    //#region add token by address
+    const chainId = useChainId()
+    const unsearchedToken = useMemo(() => {
+        if (!EthereumAddress.isValid(query)) return
+        if (searchedTokens.length) return
+        else
+            return {
+                chainId,
+                type: EthereumTokenType.ERC20,
+                address: query,
+            }
+    }, [query, chainId, searchedTokens.length])
+    const { value: searchedToken, loading: loadingSearchedToken } = useToken(unsearchedToken)
+    //#endregion
+
+    //#region the remote controlled dialog
+    const [excludeTokens, setExcludeTokens] = useState<string[]>([])
     const [open, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectERC20TokenDialogUpdated'>(
         MessageCenter,
         'selectERC20TokenDialogUpdated',
         useCallback((ev: MaskbookWalletMessages['selectERC20TokenDialogUpdated']) => {
             if (!ev.open) return
             setAddress(ev.address ?? '')
+            setLists(ev.lists ?? [])
             setExcludeTokens(ev.excludeTokens ?? [])
         }, []),
     )
 
     // submit token
-    const onSubmit = (address: string) =>
-        setOpen({
-            open: false,
-            token: address ? tokens.find((x) => x.address === address) : undefined,
-        })
+    const onSubmit = useCallback(
+        (token: Token) =>
+            setOpen({
+                open: false,
+                token,
+            }),
+        [],
+    )
 
     // close dialog with message center
-    const onClose = () =>
-        setOpen({
-            open: false,
-        })
+    const onClose = useCallback(
+        () =>
+            setOpen({
+                open: false,
+            }),
+        [],
+    )
+    //#endregion
+
+    //#region UI helpers
+    const renderList = useCallback(
+        (tokens: Token[]) => {
+            return (
+                <FixedSizeList
+                    className={classes.list}
+                    width="100%"
+                    height={288}
+                    overscanCount={4}
+                    itemSize={48}
+                    itemData={{
+                        tokens,
+                        excludeTokens,
+                        selected: address,
+                        onSelect(address: string) {
+                            const token = tokens.find((token) => isSameAddress(token.address, address))
+                            if (token) {
+                                setAddress(token.address)
+                                onSubmit(token)
+                            }
+                        },
+                    }}
+                    itemCount={tokens.length}>
+                    {TokenInList}
+                </FixedSizeList>
+            )
+        },
+        [address, excludeTokens, TokenInList, onSubmit],
+    )
+    const renderPlaceholder = useCallback(
+        (message: string) => <Typography className={classes.placeholder}>{message}</Typography>,
+        [],
+    )
     //#endregion
 
     return (
@@ -170,26 +242,13 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                         variant="outlined"
                         onChange={(e) => setQuery(e.target.value)}
                     />
-                    <FixedSizeList
-                        className={classes.list}
-                        key={tokens.length}
-                        width="100%"
-                        height={288}
-                        overscanCount={4}
-                        itemSize={48}
-                        itemData={{
-                            tokens,
-                            excludeTokens,
-                            selected: address,
-                            onSelect(address: string) {
-                                if (!tokens.some((token) => isSameAddress(token.address, address))) return
-                                setAddress(address)
-                                onSubmit(address)
-                            },
-                        }}
-                        itemCount={tokens.length}>
-                        {TokenInList}
-                    </FixedSizeList>
+                    {(() => {
+                        if (loadingTokens) return renderPlaceholder('Loading token lists...')
+                        if (searchedTokens.length) return renderList(searchedTokens)
+                        if (loadingSearchedToken) return renderPlaceholder('Loading token...')
+                        if (searchedToken) return renderList([searchedToken])
+                        return renderPlaceholder('No token found')
+                    })()}
                 </DialogContent>
             </ShadowRootDialog>
         </div>

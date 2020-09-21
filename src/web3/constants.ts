@@ -9,6 +9,20 @@ export const CONSTANTS = {
         [ChainId.Kovan]: '',
     },
 
+    // token lists
+    TOKEN_LISTS: {
+        [ChainId.Mainnet]: [
+            'http://tokens.1inch.eth.link/',
+            'http://defi.cmc.eth.link/',
+            'https://www.coingecko.com/tokens_list/uniswap/defi_100/v_0_0_0.json',
+            'https://gateway.ipfs.io/ipns/tokens.uniswap.org',
+            'http://tokenlist.dharma.eth.link',
+        ],
+        [ChainId.Ropsten]: [],
+        [ChainId.Rinkeby]: [],
+        [ChainId.Kovan]: [],
+    },
+
     // contracts
     SPLITTER_ADDRESS: {
         [ChainId.Mainnet]: '0xdf869FAD6dB91f437B59F1EdEFab319493D4C4cE',
@@ -94,19 +108,22 @@ export const CONSTANTS = {
     },
 }
 
-export function getConstant(key: keyof typeof CONSTANTS, chainId = ChainId.Mainnet) {
+export function getConstant<C extends typeof CONSTANTS, T extends keyof typeof CONSTANTS>(
+    key: T,
+    chainId = ChainId.Mainnet,
+): C[T][ChainId.Mainnet] {
     if (chainId === ChainId.Rinkeby) return CONSTANTS[key][ChainId.Rinkeby]
     return CONSTANTS[key][ChainId.Mainnet]
 }
 
-export function getAllConstants(chainId: ChainId) {
+export function getAllConstants<C extends typeof CONSTANTS, T extends keyof typeof CONSTANTS>(chainId: ChainId) {
     return Object.entries(CONSTANTS).reduce(
         (accumulate, [key, value]) => {
-            accumulate[key as keyof typeof CONSTANTS] = value[chainId]
+            accumulate[key as T] = value[chainId]
             return accumulate
         },
         {} as {
-            [K in keyof typeof CONSTANTS]: typeof CONSTANTS[K][ChainId.Mainnet]
+            [K in T]: C[K][ChainId.Mainnet]
         },
     )
 }

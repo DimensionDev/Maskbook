@@ -36,8 +36,10 @@ export interface TokenInListProps {
 }
 
 export function TokenInList({ data, index, style }: TokenInListProps) {
-    const { address, name, symbol } = data.tokens[index]
+    const token = data.tokens[index]
     const classes = useStyles()
+    if (!token) return null
+    const { address, name, symbol } = token
     return (
         <ListItem
             button
