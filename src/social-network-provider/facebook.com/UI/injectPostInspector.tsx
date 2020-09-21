@@ -2,8 +2,8 @@ import type { DOMProxy } from '@holoflows/kit'
 import { isMobileFacebook } from '../isMobile'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
-import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { Flags } from '../../../utils/flags'
+import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 
 const map = new WeakMap<HTMLElement, ShadowRoot>()
 function getShadowRoot(node: HTMLElement) {

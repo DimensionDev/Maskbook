@@ -22,6 +22,7 @@ import { merge, cloneDeep, noop } from 'lodash-es'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { getActivatedUI } from '../../social-network/ui'
 import { currentSetupGuideStatus, SetupGuideCrossContextStatus } from '../../settings/settings'
+import { MessageCenter } from '../../utils/messages'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
@@ -501,6 +502,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 _wallet_is_default: true,
             }),
         ])
+        MessageCenter.emit('identityUpdated', undefined)
     }
     const onCreate = async () => {
         const content = t('setup_guide_say_hello_content')
