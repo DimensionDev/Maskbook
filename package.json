@@ -8,7 +8,7 @@
     "build-ci": "node --max_old_space_size=4096 -r ts-node/register/transpile-only scripts/ci-build.ts",
     "build-storybook": "build-storybook -s public --quiet",
     "build:base": "webpack --mode production",
-    "build:beta": "webpack --mode production --beta",
+    "build:chromium-beta": "webpack --mode production --chromium --beta",
     "build:chromium": "webpack --mode production --chromium",
     "build:e2e": "webpack --mode production --e2e",
     "build:firefox": "webpack --mode production --firefox --reproducible-build",

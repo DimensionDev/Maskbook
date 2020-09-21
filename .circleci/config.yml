@@ -61,17 +61,17 @@ jobs:
                   path: Maskbook.gecko.zip
                   destination: /Maskbook.gecko.zip
             - store_artifacts:
-                  path: Maskbook.beta.zip
-                  destination: /Maskbook.beta.zip
+                  path: Maskbook.chromium-beta.zip
+                  destination: /Maskbook.chromium-beta.zip
             - persist_to_workspace:
                   root: ~/repo/
                   paths:
                       - Maskbook.base.zip
                       - Maskbook.iOS.zip
                       - Maskbook.chromium.zip
+                      - Maskbook.chromium-beta.zip
                       - Maskbook.firefox.zip
                       - Maskbook.gecko.zip
-                      - Maskbook.beta.zip
     publish-github-release:
         docker:
             - image: cibuilds/github:0.10

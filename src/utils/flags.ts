@@ -25,7 +25,7 @@ export const Flags = {
     requires_injected_script_run_directly: process.env.target === 'firefox',
     // TODO: document why it enabled on app
     support_eth_network_switch:
-        process.env.NODE_ENV === 'development' || process.env.architecture === 'app' || process.env.target === 'BETA',
+        process.env.NODE_ENV === 'development' || process.env.architecture === 'app' || process.env.build === 'beta',
     //#region Experimental features
     trader_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
     trader_all_api_cached_enabled: process.env.NODE_ENV === 'development',
