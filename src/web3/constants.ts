@@ -2,7 +2,7 @@ import { ChainId } from './types'
 
 export const CONSTANTS = {
     // accounts
-    GOTCOIN_MAINTAINER_ADDRESS: {
+    GITCOIN_MAINTAINER_ADDRESS: {
         [ChainId.Mainnet]: '0x00De4B13153673BCAE2616b67bf822500d325Fc3',
         [ChainId.Ropsten]: '0x00De4B13153673BCAE2616b67bf822500d325Fc3',
         [ChainId.Rinkeby]: '0x00De4B13153673BCAE2616b67bf822500d325Fc3',

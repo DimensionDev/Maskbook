@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { makeStyles, Theme, createStyles, CircularProgress } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { MessageCenter, MaskbookWalletMessages } from '../../../Wallet/messages'
+import { WalletMessageCenter, MaskbookWalletMessages } from '../../../Wallet/messages'
 import { useToken } from '../../../../web3/hooks/useToken'
 import { Token, EthereumTokenType } from '../../../../web3/types'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
@@ -88,7 +88,7 @@ export function Trader(props: TraderProps) {
 
     // select token in the remote controlled dialog
     const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectERC20TokenDialogUpdated'>(
-        MessageCenter,
+        WalletMessageCenter,
         'selectERC20TokenDialogUpdated',
         useCallback(
             (ev: MaskbookWalletMessages['selectERC20TokenDialogUpdated']) => {
@@ -124,30 +124,24 @@ export function Trader(props: TraderProps) {
         dispatchSwapState({
             type: SwapActionType.SWITCH_TOKEN,
         })
-    }, [dispatchSwapState])
+    }, [])
     //#endregion
 
     //#region the best trade
     const { inputAmount, outputAmount, strategy } = swapState
 
-    const onInputAmountChange = useCallback(
-        (amount: string) => {
-            dispatchSwapState({
-                type: SwapActionType.UPDATE_INPUT_AMOUNT,
-                amount,
-            })
-        },
-        [dispatchSwapState],
-    )
-    const onOutputAmountChange = useCallback(
-        (amount: string) => {
-            dispatchSwapState({
-                type: SwapActionType.UPDATE_OUTPUT_AMOUNT,
-                amount,
-            })
-        },
-        [dispatchSwapState],
-    )
+    const onInputAmountChange = useCallback((amount: string) => {
+        dispatchSwapState({
+            type: SwapActionType.UPDATE_INPUT_AMOUNT,
+            amount,
+        })
+    }, [])
+    const onOutputAmountChange = useCallback((amount: string) => {
+        dispatchSwapState({
+            type: SwapActionType.UPDATE_OUTPUT_AMOUNT,
+            amount,
+        })
+    }, [])
 
     const trade = useBestTrade(strategy, inputAmount, outputAmount, inputToken, outputToken)
 

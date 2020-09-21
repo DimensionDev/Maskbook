@@ -93,7 +93,7 @@ storiesOf('Plugin: Red Packets', module)
         const knobs = createRedPacketKnobs()
         // @ts-ignore
         const payload: RedPacketJSONPayload = {
-            ...createRecord({ ...knobs, type: EthereumTokenType.ETH }),
+            ...createRecord({ ...knobs, type: EthereumTokenType.Ether }),
             rpid: 'rpid',
             sender: { address: 'address', message: knobs.message, name: knobs.senderName },
             total: (knobs.total * 10 ** 18).toString(),

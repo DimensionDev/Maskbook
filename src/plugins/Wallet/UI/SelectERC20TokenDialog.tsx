@@ -15,7 +15,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
-import { MessageCenter, MaskbookWalletMessages } from '../messages'
+import { WalletMessageCenter, MaskbookWalletMessages } from '../messages'
 import { FixedSizeList } from 'react-window'
 import { TokenInList } from '../../../extension/options-page/DashboardComponents/TokenInList'
 import {
@@ -137,7 +137,7 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     //#region the remote controlled dialog
     const [excludeTokens, setExcludeTokens] = useState<string[]>([])
     const [open, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectERC20TokenDialogUpdated'>(
-        MessageCenter,
+        WalletMessageCenter,
         'selectERC20TokenDialogUpdated',
         useCallback((ev: MaskbookWalletMessages['selectERC20TokenDialogUpdated']) => {
             if (!ev.open) return

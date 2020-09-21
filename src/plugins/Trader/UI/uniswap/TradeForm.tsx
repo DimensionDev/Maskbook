@@ -11,7 +11,7 @@ import BigNumber from 'bignumber.js'
 import type { Token } from '../../../../web3/types'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
-import { MaskbookWalletMessages, MessageCenter } from '../../../Wallet/messages'
+import { MaskbookWalletMessages, WalletMessageCenter } from '../../../Wallet/messages'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { ApproveState } from '../../../../web3/hooks/useTokenApproveCallback'
 
@@ -84,7 +84,7 @@ export function TradeForm(props: TradeFormProps) {
 
     //#region remote controll select provider dialog
     const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
-        MessageCenter,
+        WalletMessageCenter,
         'selectProviderDialogUpdated',
     )
     const onConnect = useCallback(() => {
@@ -157,11 +157,7 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region UI logic
-    const approveRequired = useMemo(() => {
-        // TODO:
-        // support approve pending
-        return approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
-    }, [approveState])
+    const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
 
     // validate form return a message if an error exists
     const validationMessage = useMemo(() => {

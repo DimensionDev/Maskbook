@@ -17,7 +17,7 @@ import { getUrl } from '../../utils/utils'
 import { ChooseWallet } from '../../components/shared/ChooseWallet'
 import { EthereumChainChip } from '../../components/shared/EthereumChainChip'
 import { useChainId } from '../../web3/hooks/useChainId'
-import { MessageCenter, MaskbookWalletMessages } from '../../plugins/Wallet/messages'
+import { WalletMessageCenter, MaskbookWalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
 
@@ -97,7 +97,7 @@ function PopupUI() {
     }, [])
 
     const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
-        MessageCenter,
+        WalletMessageCenter,
         'selectProviderDialogUpdated',
     )
     const onConnect = useCallback(async () => {

@@ -38,7 +38,7 @@ import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import { Flags } from '../../../utils/flags'
-import { MessageCenter, MaskbookWalletMessages } from '../../../plugins/Wallet/messages'
+import { WalletMessageCenter, MaskbookWalletMessages } from '../../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ProviderType } from '../../../web3/types'
@@ -329,7 +329,7 @@ export default function DashboardWalletsRouter() {
 
     // show provider connect dialog
     const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
-        MessageCenter,
+        WalletMessageCenter,
         'selectProviderDialogUpdated',
     )
     const onConnect = useCallback(() => {
