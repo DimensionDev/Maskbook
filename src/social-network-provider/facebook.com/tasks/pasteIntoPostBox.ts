@@ -67,7 +67,7 @@ export async function pasteIntoPostBoxFacebook(
     const scrollBack = ((top) => () => scrolling.scroll({ top }))(scrolling.scrollTop)
 
     const activated = new LiveSelector().querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
-        isMobileFacebook ? 'form textarea' : '.notranslate',
+        isMobileFacebook ? 'form textarea' : '.notranslate:not([aria-label="Comment on post"])',
     )
     if (isMobileFacebook) activated.filter((x) => x.getClientRects().length > 0)
     // If page is just loaded
