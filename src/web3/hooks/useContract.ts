@@ -5,14 +5,14 @@ import type { TransactionConfig } from 'web3-core'
 import type { AbiItem, AbiOutput } from 'web3-utils'
 import Services, { ServicesWithProgress } from '../../extension/service'
 import { useAccount } from './useAccount'
-import { web3 } from '../web3'
+import { nonFunctionalWeb3 } from '../web3'
 import { iteratorToPromiEvent } from '../../utils/promiEvent'
 import type { EstimateGasOptions } from '../../contracts/types'
 
 const decodeHexString = (outputs: AbiOutput[], hex: string) => {
-    if (outputs.length === 1) return web3.eth.abi.decodeParameter(outputs[0].type, hex)
+    if (outputs.length === 1) return nonFunctionalWeb3.eth.abi.decodeParameter(outputs[0].type, hex)
     if (outputs.length > 1)
-        return web3.eth.abi.decodeParameters(
+        return nonFunctionalWeb3.eth.abi.decodeParameters(
             outputs.map((x) => x.type),
             hex,
         )
@@ -31,7 +31,7 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
         // no a valid contract address
         if (!EthereumAddress.isValid(address)) return null
 
-        const contract = new web3.eth.Contract(ABI, address) as T
+        const contract = new nonFunctionalWeb3.eth.Contract(ABI, address) as T
         return Object.assign(contract, {
             methods: new Proxy(contract.methods, {
                 get(target, name) {
