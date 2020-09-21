@@ -13,7 +13,6 @@ import { ProviderType } from '../../web3/types'
 OnlyRunInContext(['background', 'debugging'], 'web3')
 
 export const web3 = new Web3()
-web3.eth.transactionConfirmationBlocks = 6
 
 Object.assign(globalThis, { web3 })
 let currentProvider: WalletProvider

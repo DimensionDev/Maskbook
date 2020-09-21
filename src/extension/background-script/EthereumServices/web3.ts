@@ -6,8 +6,6 @@ OnlyRunInContext(['background', 'debugging'], 'web3')
 
 export const web3 = new Web3()
 
-web3.eth.transactionConfirmationBlocks = 6
-
 export function createWeb3(provider: Provider, privKeys: string[] = []) {
     web3.setProvider(provider)
     privKeys.forEach((k) => web3.eth.accounts.wallet.add(k))
