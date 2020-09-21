@@ -7,7 +7,7 @@ declare module NodeJS {
         /** test means Jest. Puppeteer test does not use "test".  */
         readonly NODE_ENV: 'development' | 'production' | 'test'
         readonly STORYBOOK?: boolean
-        readonly target: 'chromium' | 'firefox' | 'safari' | 'E2E'
+        readonly target: 'chromium' | 'firefox' | 'safari' | 'E2E' | 'BETA'
         readonly architecture: 'web' | 'app'
         /** fennec = stable firefox; geckoview = next generation firefox (used in Android App, in future it will become the default engine on Firefox for Android) */
         readonly firefoxVariant: 'fennec' | 'geckoview'

@@ -21,6 +21,7 @@ interface Services {
     Nonce: typeof import('./background-script/NonceService')
     Provider: typeof import('./background-script/ProviderService')
     Ethereum: typeof import('./background-script/EthereumService')
+    Transaction: typeof import('./background-script/TransactionService')
 }
 const Services = {} as Services
 export default Services
@@ -46,6 +47,7 @@ if (!('Services' in globalThis)) {
     register(createProxyToService('NonceService'), 'Nonce', {})
     register(createProxyToService('ProviderService'), 'Provider', {})
     register(createProxyToService('EthereumService'), 'Ethereum', {})
+    register(createProxyToService('TransactionService'), 'Transaction', {})
 }
 interface ServicesWithProgress {
     // Sorry you should add import at '../_background_loader.1.ts'

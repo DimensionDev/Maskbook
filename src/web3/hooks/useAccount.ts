@@ -1,13 +1,9 @@
-import { useMemo } from 'react'
-import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
+import { useDefaultWallet } from '../../plugins/Wallet/hooks/useWallet'
 
 /**
  * Get the address of the default wallet
  */
 export function useAccount() {
-    const { data: wallets = [] } = useWallets()
-    return useMemo(() => {
-        const defaultWallet = wallets.length ? wallets.find((x) => x._wallet_is_default) ?? wallets[0] : null
-        return defaultWallet?.address ?? ''
-    }, [wallets?.map((x) => x.address).join()])
+    const { data: wallet } = useDefaultWallet()
+    return wallet?.address
 }

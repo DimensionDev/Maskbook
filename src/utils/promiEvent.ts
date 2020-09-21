@@ -65,8 +65,18 @@ export function promiEventToIterator<T>(ev: PromiEventW3<T>, finishStage: StageT
  * Convert interator to PromiEvent
  * @param iterator
  */
-export function iteratorToPromiEvent(iterator: AsyncGenerator<Stage, void, unknown>) {
+export function iteratorToPromiEvent(
+    iterator: AsyncIterator<Stage, void, unknown> & {
+        [Symbol.asyncIterator](): AsyncIterator<Stage, void, unknown>
+    },
+) {
+    let resolve_: Function | undefined = undefined
+    let reject_: Function | undefined = undefined
     const PE = new PromiEvent<TransactionReceipt>(async (resolve, reject) => {
+        resolve_ = resolve
+        reject_ = reject
+    })
+    async function execute() {
         try {
             for await (const stage of iterator) {
                 switch (stage.type) {
@@ -75,20 +85,23 @@ export function iteratorToPromiEvent(iterator: AsyncGenerator<Stage, void, unkno
                         break
                     case StageType.RECEIPT:
                         PE.emit('receipt', stage.receipt)
-                        resolve(stage.receipt)
+                        resolve_?.(stage.receipt)
                         break
                     case StageType.CONFIRMATION:
                         PE.emit('confirmation', stage.no, stage.receipt)
                         break
                     default:
                         // skip unknown stage
+                        console.log('DEBUG: unknown stage')
+                        console.log(stage)
                         break
                 }
             }
         } catch (e) {
             PE.emit('error', e)
-            reject(e)
+            reject_?.(e)
         }
-    })
+    }
+    execute()
     return PE
 }

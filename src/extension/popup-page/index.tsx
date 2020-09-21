@@ -50,6 +50,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     header: {
         margin: theme.spacing(2, 0),
+        '&:first-child': {
+            marginTop: 0,
+        },
     },
     footer: {},
     logo: {

@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import type { provider as Provider } from 'web3-core'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
-OnlyRunInContext('background', 'web3')
+OnlyRunInContext(['background', 'debugging'], 'web3')
 
 export const web3 = new Web3()
 

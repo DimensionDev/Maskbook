@@ -1,5 +1,5 @@
 import { BatchedMessageCenter } from '../../utils/messages'
-import type { ERC20Token } from '../../web3/types'
+import type { Token } from '../../web3/types'
 
 type SelectERC20TokenDialogEvent =
     | {
@@ -11,7 +11,7 @@ type SelectERC20TokenDialogEvent =
     | {
           open: false
           tabId?: string
-          token?: ERC20Token
+          token?: Token
       }
 
 type SelectProviderDialogEvent =

@@ -32,15 +32,6 @@ export function useRemoteControlledDialog<T, N extends keyof T>(
                 // ignore the event from the same hook
                 if (ev_.hookId === HOOK_ID) return
 
-                console.log('DEBUG: onUpdateByRemote')
-                console.log({
-                    currentTabId: TAB_ID,
-                    currentHookId: HOOK_ID,
-                    activatedTab: TAB_ID === ev_.tabId,
-                    sameHook: HOOK_ID === ev_.hookId,
-                    ev,
-                })
-
                 setOpen(ev_.open)
                 onUpdateByRemote?.(ev)
             }),
@@ -56,13 +47,6 @@ export function useRemoteControlledDialog<T, N extends keyof T>(
             const ev_ = (ev as unknown) as RemoteControlledDialogEvent
             setOpen(ev_.open)
             setTimeout(() => {
-                console.log('DEBUG: onUpdateByLocal')
-                console.log({
-                    tabId: lastActivatedTabId,
-                    hookId: HOOK_ID,
-                    ev,
-                })
-
                 MC.emit(name, ({
                     tabId: lastActivatedTabId,
                     hookId: HOOK_ID,

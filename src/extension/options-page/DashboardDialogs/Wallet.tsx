@@ -52,7 +52,7 @@ import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { useManagedWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { getERC20Tokens } from '../../../web3/tokens'
 import { useChainId } from '../../../web3/hooks/useChainId'
-import type { ERC20Token } from '../../../web3/types'
+import { Token, EthereumTokenType } from '../../../web3/types'
 import { isSameAddress } from '../../../web3/helpers'
 
 //#region predefined token selector
@@ -72,7 +72,7 @@ const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
 
 interface ERC20PredefinedTokenSelectorProps {
     excludeTokens?: string[]
-    onTokenChange?: (next: ERC20Token | null) => void
+    onTokenChange?: (next: Token | null) => void
 }
 
 export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = [] }: ERC20PredefinedTokenSelectorProps) {
@@ -95,7 +95,7 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
     const classes = useERC20PredefinedTokenSelectorStyles()
     const [address, setAddress] = useState('')
     const [query, setQuery] = useState('')
-    const [tokens, setTokens] = useState<ERC20Token[]>([])
+    const [tokens, setTokens] = useState<Token[]>([])
     useEffect(() => {
         setTokens(
             query
@@ -131,12 +131,7 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
                         const token = tokens.find((token) => isSameAddress(token.address, address))
                         if (!token) return
                         setAddress(address)
-                        onTokenChange?.({
-                            address,
-                            name: token.name,
-                            symbol: token.symbol,
-                            decimals: token.decimals,
-                        })
+                        onTokenChange?.(token)
                     },
                 }}
                 itemCount={tokens.length}>
@@ -149,12 +144,13 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
 
 //#region ERC20 customized token selector
 export interface ERC20CustomizedTokenSelectorProps {
-    onTokenChange?: (next: ERC20Token | null) => void
+    onTokenChange?: (next: Token | null) => void
     excludeTokens?: string[]
 }
 
 export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20CustomizedTokenSelectorProps) {
     const { t } = useI18N()
+    const chainId = useChainId()
     const [address, setAddress] = useState('')
     const [decimals, setDecimals] = useState(0)
     const [name, setName] = useState('')
@@ -164,13 +160,15 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
     useEffect(() => {
         if (isValidAddress)
             onTokenChange?.({
+                type: EthereumTokenType.ERC20,
+                chainId,
                 address,
                 decimals,
                 name,
                 symbol,
             })
         else onTokenChange?.(null)
-    }, [address, decimals, isValidAddress, name, symbol, onTokenChange])
+    }, [chainId, address, decimals, isValidAddress, name, symbol, onTokenChange])
     return (
         <Box textAlign="left">
             <TextField
@@ -470,7 +468,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
         Array.from(wallet.erc20_token_blacklist.values()),
     )
     const chainId = useChainId()
-    const [token, setToken] = React.useState<ERC20Token | null>(null)
+    const [token, setToken] = React.useState<Token | null>(null)
 
     const [tabState, setTabState] = useState(0)
     const state = useMemo(

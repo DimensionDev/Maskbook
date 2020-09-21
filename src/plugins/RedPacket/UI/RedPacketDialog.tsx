@@ -97,12 +97,12 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     } = useSelectWalletResult
 
     const amountPreShareMaxBigint = selectedWallet
-        ? selectedTokenType === EthereumTokenType.ETH
+        ? selectedTokenType === EthereumTokenType.Ether
             ? selectedWallet.eth_balance
             : selectedToken?.amount
         : undefined
     const amountPreShareMaxNumber = BigNumber.isBigNumber(amountPreShareMaxBigint)
-        ? selectedTokenType === EthereumTokenType.ETH
+        ? selectedTokenType === EthereumTokenType.Ether
             ? formatBalance(amountPreShareMaxBigint, 18)
             : selectedToken && formatBalance(amountPreShareMaxBigint, selectedToken.decimals)
         : undefined
@@ -117,7 +117,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const isSendButtonDisabled = isDisabled.some((x) => x)
 
     const onCreate = async () => {
-        const power = selectedTokenType === EthereumTokenType.ETH ? 18 : selectedToken!.decimals
+        const power = selectedTokenType === EthereumTokenType.Ether ? 18 : selectedToken!.decimals
         props.onCreateNewPacket({
             duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
             is_random: Boolean(is_random),
@@ -127,8 +127,9 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
             sender_address: selectedWalletAddress!,
             sender_name: props.senderName ?? 'Unknown User',
             shares: new BigNumber(shares),
-            token_type: selectedTokenType === EthereumTokenType.ETH ? EthereumTokenType.ETH : EthereumTokenType.ERC20,
-            erc20_token: selectedTokenType === EthereumTokenType.ETH ? undefined : selectedTokenAddress,
+            token_type:
+                selectedTokenType === EthereumTokenType.Ether ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
+            erc20_token: selectedTokenType === EthereumTokenType.Ether ? undefined : selectedTokenAddress,
         })
     }
     return (
@@ -210,7 +211,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                         : t('plugin_red_packet_send', {
                               symbol: +send_total.toFixed(3) === +send_total.toFixed(9) ? '' : '~',
                               amount: +send_total.toFixed(3),
-                              type: selectedTokenType === EthereumTokenType.ETH ? 'ETH' : selectedToken?.symbol,
+                              type: selectedTokenType === EthereumTokenType.Ether ? 'ETH' : selectedToken?.symbol,
                           })}
                 </Button>
             </div>

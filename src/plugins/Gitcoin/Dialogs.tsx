@@ -55,7 +55,7 @@ export function DonateSuccessDialog(props: DonateSuccessDialogProps) {
         onClose()
         const text = [
             `I donated ${amount} ${
-                tokenType === EthereumTokenType.ETH ? 'ETH' : token?.symbol
+                tokenType === EthereumTokenType.Ether ? 'ETH' : token?.symbol
             } for the campaign "${title}" on Gitcoin through #Maskbook!`,
             url,
         ]
@@ -78,7 +78,7 @@ export function DonateSuccessDialog(props: DonateSuccessDialogProps) {
             <DialogTitle>{t('plugin_gitcoin_donated_successfully')}</DialogTitle>
             <DialogContent>
                 <DialogContentText className={classes.content}>{`You have donated "${title}" ${
-                    tokenType === EthereumTokenType.ETH ? 'ETH' : token?.symbol
+                    tokenType === EthereumTokenType.Ether ? 'ETH' : token?.symbol
                 } ${amount}.`}</DialogContentText>
             </DialogContent>
             <DialogActions>

@@ -43,11 +43,11 @@ export function TokenSelect({ useSelectWalletHooks, ...p }: TokenSelectProps) {
                 {...SelectProps}
                 onChange={(e) => {
                     const address = e.target.value as string
-                    setSelectedTokenType(isETH(address) ? EthereumTokenType.ETH : EthereumTokenType.ERC20)
+                    setSelectedTokenType(isETH(address) ? EthereumTokenType.Ether : EthereumTokenType.ERC20)
                     setSelectedTokenAddress(address)
                 }}
                 MenuProps={{ container: p.DialogProps?.container ?? PortalShadowRoot }}
-                value={selectedTokenType === EthereumTokenType.ETH ? ETH_ADDRESS : selectedTokenAddress}>
+                value={selectedTokenType === EthereumTokenType.Ether ? ETH_ADDRESS : selectedTokenAddress}>
                 <MenuItem key={ETH_ADDRESS} value={ETH_ADDRESS}>
                     ETH
                 </MenuItem>

@@ -197,7 +197,8 @@ export async function claimRedPacket(
     const rec = await getRedPacketByID(undefined, id.redPacketID)
     if (!rec) throw new Error('You should call discover first')
 
-    const claimWithWallet = _claimWithWallet ?? (await getDefaultWallet()).address
+    const claimWithWallet = _claimWithWallet ?? (await getDefaultWallet())?.address
+    if (!claimWithWallet) throw new Error('You should add wallet first')
     if (setAsDefault) setDefaultWallet(claimWithWallet)
 
     const passwords = rec.password

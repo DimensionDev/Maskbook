@@ -2,10 +2,10 @@
 /* tslint:disable */
 
 import BN from 'bn.js'
-import { EventLog } from 'web3-core/types'
+import { EventLog, TransactionReceipt } from 'web3-core/types'
 import { EventEmitter } from 'events'
 // @ts-ignore
-import PromiEvent from 'web3/promiEvent'
+import PromiEvent from 'promievent'
 
 interface EstimateGasOptions {
     from?: string
@@ -23,7 +23,10 @@ export type Callback<T> = (error: Error, result: T) => void
 export interface TransactionObject<T> {
     arguments: any[]
     call(options?: EstimateGasOptions): Promise<T>
-    send(options?: EstimateGasOptions): PromiEvent<T>
+    send(
+        options?: EstimateGasOptions,
+        callback: (error: Error | null, hash: string) => void,
+    ): PromiEvent<TransactionReceipt>
     estimateGas(options?: EstimateGasOptions): Promise<number>
     encodeABI(): string
 }
@@ -51,7 +54,7 @@ export interface Tx {
 export interface TransactionObject<T> {
     arguments: any[]
     call(tx?: Tx): Promise<T>
-    send(tx?: Tx): PromiEvent<T>
+    send(tx?: Tx, callback?: (error: Error | null, hash: string) => void): PromiEvent<TransactionReceipt>
     estimateGas(tx?: Tx): Promise<number>
     encodeABI(): string
 }

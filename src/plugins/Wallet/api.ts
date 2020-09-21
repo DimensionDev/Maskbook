@@ -14,6 +14,7 @@ import { getERC20Tokens } from '../../web3/tokens'
 import { getChainId } from '../../extension/background-script/EthereumService'
 import { getConstant } from '../../web3/constants'
 import { isUSDT } from '../../web3/helpers'
+import { EthereumTokenType } from '../../web3/types'
 
 const ETH_ADDRESS = getConstant('ETH_ADDRESS')
 
@@ -197,6 +198,7 @@ export const balanceCheckerAPI = (() => {
         const chainId = await getChainId()
         const tokens = [
             {
+                type: EthereumTokenType.Ether,
                 address: ETH_ADDRESS,
                 decimals: 18,
                 name: 'Ether',

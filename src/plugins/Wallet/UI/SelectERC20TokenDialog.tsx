@@ -24,11 +24,12 @@ import {
     useTwitterCloseButton,
 } from '../../../social-network-provider/twitter.com/utils/theme'
 import { getActivatedUI } from '../../../social-network/ui'
-import { ERC20Token, ChainId } from '../../../web3/types'
+import type { Token } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { getERC20Tokens } from '../../../web3/tokens'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { isSameAddress } from '../../../web3/helpers'
+import { useCapturedEvents } from '../../../utils/hooks/useCapturedEvents'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -68,12 +69,16 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
+    //#region capture event
+    const [, inputRef] = useCapturedEvents()
+    //#endregion
+
     //#region update tokens
     const [query, setQuery] = useState('')
     const [address, setAddress] = useState('')
     const chainId = useChainId()
     const [erc20Tokens, fuse] = useMemo(() => {
-        const tokens = getERC20Tokens(chainId ?? ChainId.Mainnet)
+        const tokens = getERC20Tokens(chainId)
         const fuse = new Fuse(tokens, {
             shouldSort: true,
             threshold: 0.45,
@@ -85,7 +90,7 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
         })
         return [tokens, fuse] as const
     }, [chainId])
-    const [tokens, setTokens] = useState<ERC20Token[]>([])
+    const [tokens, setTokens] = useState<Token[]>([])
     const [excludeTokens, setExcludeTokens] = useState<string[]>([])
 
     useEffect(() => {
@@ -150,7 +155,7 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                         <DialogDismissIconUI />
                     </IconButton>
                     <Typography className={classes.title} display="inline" variant="inherit">
-                        {t('plugin_trader_display_name')}
+                        Select a Token
                     </Typography>
                 </DialogTitle>
                 <Divider />
@@ -158,6 +163,7 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                     <TextField
                         className={classes.search}
                         label={t('add_token_search_hint')}
+                        ref={inputRef}
                         autoFocus
                         fullWidth
                         value={query}

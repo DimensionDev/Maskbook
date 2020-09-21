@@ -1,15 +1,13 @@
 import { useMemo } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import type { Contract } from 'web3-eth-contract'
+import type { TransactionConfig } from 'web3-core'
 import type { AbiItem, AbiOutput } from 'web3-utils'
-import ERC20ABI from '../../contracts/splitter/ERC20.json'
-import RouterV2ABI from '../../contracts/uniswap-v2-router/RouterV2.json'
-import type { Erc20 as ERC20 } from '../../contracts/splitter/ERC20'
-import type { RouterV2 } from '../../contracts/uniswap-v2-router/RouterV2'
-import Services from '../../extension/service'
+import Services, { ServicesWithProgress } from '../../extension/service'
 import { useAccount } from './useAccount'
 import { web3 } from '../web3'
 import { iteratorToPromiEvent } from '../../utils/promiEvent'
+import type { EstimateGasOptions } from '../../contracts/types'
 
 const decodeHexString = (outputs: AbiOutput[], hex: string) => {
     if (outputs.length === 1) return web3.eth.abi.decodeParameter(outputs[0].type, hex)
@@ -33,11 +31,7 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
         // no a valid contract address
         if (!EthereumAddress.isValid(address)) return null
 
-        // no account
-        if (!account) return null
-
         const contract = new web3.eth.Contract(ABI, address) as T
-
         return Object.assign(contract, {
             methods: new Proxy(contract.methods, {
                 get(target, name) {
@@ -45,49 +39,79 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                     const methodABI = contract.options.jsonInterface.find(
                         (x) => x.type === 'function' && x.name === name,
                     )
-                    return (...args: any[]) => {
-                        console.log('DEBUG: invoke')
-                        console.log(args)
-
+                    return (...args: string[]) => {
                         const cached = method(...args)
                         return {
-                            async call(config: Object) {
-                                console.log('DEBUG: call')
-                                console.log({
-                                    name,
-                                    config,
+                            ...cached,
+                            async call(config: TransactionConfig) {
+                                const result = await Services.Ethereum.callTransaction(account, {
+                                    from: account,
+                                    to: contract.options.address,
+                                    data: cached.encodeABI(),
+                                    ...config,
                                 })
-
-                                return decodeHexString(
-                                    methodABI ? methodABI.outputs ?? [] : [],
-                                    await Services.Ethereum.callTransaction(account, {
+                                console.log(
+                                    `call - ${JSON.stringify({
+                                        name,
+                                        from: account,
+                                        to: contract.options.address,
                                         ...config,
+                                    })}`,
+                                )
+
+                                return decodeHexString(methodABI ? methodABI.outputs ?? [] : [], result)
+                            },
+                            send(config: TransactionConfig) {
+                                if (!account) throw new Error('cannot find account')
+
+                                console.log(
+                                    `send - ${JSON.stringify({
+                                        from: account,
                                         to: contract.options.address,
                                         data: cached.encodeABI(),
-                                    }),
+                                        ...config,
+                                    })}`,
+                                )
+
+                                return iteratorToPromiEvent(
+                                    ServicesWithProgress.sendTransaction(
+                                        account,
+                                        {
+                                            from: account,
+                                            to: contract.options.address,
+                                            data: cached.encodeABI(),
+                                            ...config,
+                                        },
+                                        {
+                                            name: String(name),
+                                            args,
+                                        },
+                                    ),
                                 )
                             },
-                            send(config: Object) {
-                                return iteratorToPromiEvent(
-                                    Services.Ethereum.sendTransaction(account, {
-                                        ...config,
+                            async estimateGas(
+                                config?: EstimateGasOptions,
+                                callback?: (error: Error | null, gasEstimated?: number) => void,
+                            ) {
+                                try {
+                                    const estimated = await Services.Ethereum.estimateGas({
+                                        from: account,
                                         to: contract.options.address,
                                         data: cached.encodeABI(),
-                                    }),
-                                )
+                                        ...config,
+                                    })
+                                    if (callback) callback(null, estimated)
+                                    return estimated
+                                } catch (e) {
+                                    if (callback) callback(e)
+                                    else throw e
+                                    return 0
+                                }
                             },
                         }
                     }
                 },
             }),
-        })
+        }) as T
     }, [address, account, ABI])
-}
-
-export function useERC20TokenContract(address: string) {
-    return useContract<ERC20>(address, ERC20ABI as AbiItem[]) as ERC20
-}
-
-export function useRouterV2Contract(address: string) {
-    return useContract<RouterV2>(address, RouterV2ABI as AbiItem[]) as RouterV2
 }

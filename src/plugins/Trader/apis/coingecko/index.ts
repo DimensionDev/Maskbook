@@ -1,4 +1,5 @@
 import { COIN_GECKO_BASE_URL } from '../../constants'
+import { Flags } from '../../../../utils/flags'
 
 //#region get currency
 export async function getAllCurrenies() {
@@ -109,6 +110,7 @@ export interface CoinInfo {
 export async function getCoinInfo(coinId: string) {
     const response = await fetch(
         `${COIN_GECKO_BASE_URL}/coins/${coinId}?developer_data=false&community_data=false&tickers=true`,
+        { cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default' },
     )
     return response.json() as Promise<CoinInfo>
 }
@@ -122,7 +124,9 @@ export async function getPriceStats(coinId: string, currencyId: string, days: nu
     params.append('vs_currency', currencyId)
     params.append('days', String(days))
 
-    const response = await fetch(`${COIN_GECKO_BASE_URL}/coins/${coinId}/market_chart?${params.toString()}`)
+    const response = await fetch(`${COIN_GECKO_BASE_URL}/coins/${coinId}/market_chart?${params.toString()}`, {
+        cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
+    })
     return response.json() as Promise<{
         market_caps: Stat[]
         prices: Stat[]

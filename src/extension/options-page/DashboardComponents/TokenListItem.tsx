@@ -63,7 +63,7 @@ export function TokenListItem(props: TokenListItemProps) {
     return (
         <ListItem divider>
             <ListItemIcon>
-                <TokenIcon classes={{ coin: classes.coin }} name={token.name} address={token.address} />
+                <TokenIcon classes={{ icon: classes.coin }} name={token.name} address={token.address} />
             </ListItemIcon>
             <ListItemText
                 primary={token.name}

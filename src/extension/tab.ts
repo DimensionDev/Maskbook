@@ -1,10 +1,10 @@
 import { v4 as uuid } from 'uuid'
-import { OnlyRunInContext, GetContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@holoflows/kit/es'
 import { lastActivatedTabIdSettings } from '../settings/settings'
 import { sideEffect } from '../utils/side-effects'
 import { untilDocumentReady } from '../utils/dom'
 
-OnlyRunInContext(['content', 'options'], 'tab')
+OnlyRunInContext(['content', 'options', 'debugging'], 'tab')
 
 export const TAB_ID = uuid() // create a id for every tab
 
