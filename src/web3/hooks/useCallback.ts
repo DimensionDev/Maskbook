@@ -44,10 +44,10 @@ export function useSendTransactionCallback(address: string, config: TransactionC
             nonFunctionalWeb3.eth
                 .sendTransaction({
                     ...config,
-                    nonce: await Services.Nonce.getNonce(address),
+                    nonce: await Services.Ethereum.getNonce(address),
                 })
                 .on('transactionHash', (hash: string) => {
-                    Services.Nonce.commitNonce(address)
+                    Services.Ethereum.commitNonce(address)
                     listeners?.onTransactionHash?.(hash)
                 })
                 .on('receipt', (receipt: TransactionReceipt) => listeners?.onReceipt?.(receipt))
@@ -55,7 +55,7 @@ export function useSendTransactionCallback(address: string, config: TransactionC
                     listeners?.onConfirmation?.(no, receipt),
                 )
                 .on('error', (err: Error) => {
-                    if (err.message.includes('nonce too low')) Services.Nonce.resetNonce(address)
+                    if (err.message.includes('nonce too low')) Services.Ethereum.resetNonce(address)
                     listeners?.onTransactionError?.(err)
                 })
         },

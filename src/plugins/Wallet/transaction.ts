@@ -14,7 +14,7 @@ interface TxListeners {
 export async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx: Tx = {}, listeners: TxListeners = {}) {
     const address = tx.from
     if (!address) throw new Error('cannot find address')
-    return Promise.all([txObject.estimateGas(tx), web3.eth.getGasPrice(), Services.Nonce.getNonce(address)])
+    return Promise.all([txObject.estimateGas(tx), web3.eth.getGasPrice(), Services.Ethereum.getNonce(address)])
         .then(([gas, gasPrice, nonce]) => {
             const sent = txObject.send({
                 ...tx,
@@ -24,7 +24,7 @@ export async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx:
             })
             sent.catch((err: Error) => listeners.onTransactionError?.(err))
             sent.on('transactionHash', (hash: string) => {
-                Services.Nonce.commitNonce(address)
+                Services.Ethereum.commitNonce(address)
                 listeners.onTransactionHash?.(hash)
             })
                 .on('receipt', (receipt: TransactionReceipt) => listeners.onReceipt?.(receipt))
@@ -32,7 +32,7 @@ export async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx:
                     listeners.onConfirmation?.(no, receipt),
                 )
                 .on('error', (err: Error) => {
-                    if (err.message.includes('nonce too low')) Services.Nonce.resetNonce(address)
+                    if (err.message.includes('nonce too low')) Services.Ethereum.resetNonce(address)
                     listeners.onTransactionError?.(err)
                 })
         })
@@ -46,14 +46,14 @@ export async function sendTxConfigForTxHash(config: TransactionConfig & { from?:
         web3.eth.sendTransaction(
             {
                 ...config,
-                nonce: await Services.Nonce.getNonce(address),
+                nonce: await Services.Ethereum.getNonce(address),
             },
             (err, hash) => {
                 if (err) {
-                    if (err.message.includes('nonce too low')) Services.Nonce.resetNonce(address)
+                    if (err.message.includes('nonce too low')) Services.Ethereum.resetNonce(address)
                     reject(err)
                 } else {
-                    Services.Nonce.commitNonce(address)
+                    Services.Ethereum.commitNonce(address)
                     resolve(hash)
                 }
             },
