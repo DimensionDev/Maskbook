@@ -15,7 +15,6 @@ export function useToken(token?: PartialRequired<Token, 'address' | 'type'>) {
     const erc20Contract = useERC20TokenContract(token?.address ?? ETH_ADDRESS)
 
     return useAsync(async () => {
-        if (!token) return
         if (!token?.address) return
 
         // Ether
