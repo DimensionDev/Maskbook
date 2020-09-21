@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 import type { TransactionReceipt, TransactionConfig } from 'web3-core'
 import stringify from 'json-stable-stringify'
 import type { TransactionObject } from '../../contracts/types'
-import { getNonce, commitNonce, resetNonce } from '../../extension/background-script/NonceService'
-import { web3 } from '../web3'
+import { nonFunctionalWeb3 } from '../web3'
+import Services from '../../extension/service'
 
 interface TxListeners {
     onTransactionHash?: (hash: string) => void
@@ -41,13 +41,13 @@ export function useSendCallback<R, T extends TransactionObject<R>>(address: stri
 export function useSendTransactionCallback(address: string, config: TransactionConfig) {
     return useCallback(
         async (listeners?: TxListeners) => {
-            web3.eth
+            nonFunctionalWeb3.eth
                 .sendTransaction({
                     ...config,
-                    nonce: await getNonce(address),
+                    nonce: await Services.Nonce.getNonce(address),
                 })
                 .on('transactionHash', (hash: string) => {
-                    commitNonce(address)
+                    Services.Nonce.commitNonce(address)
                     listeners?.onTransactionHash?.(hash)
                 })
                 .on('receipt', (receipt: TransactionReceipt) => listeners?.onReceipt?.(receipt))
@@ -55,7 +55,7 @@ export function useSendTransactionCallback(address: string, config: TransactionC
                     listeners?.onConfirmation?.(no, receipt),
                 )
                 .on('error', (err: Error) => {
-                    if (err.message.includes('nonce too low')) resetNonce(address)
+                    if (err.message.includes('nonce too low')) Services.Nonce.resetNonce(address)
                     listeners?.onTransactionError?.(err)
                 })
         },
