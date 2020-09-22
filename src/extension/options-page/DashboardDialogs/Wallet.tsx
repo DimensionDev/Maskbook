@@ -100,7 +100,7 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
                 width="100%"
                 height={192}
                 overscanCount={2}
-                itemSize={48}
+                itemSize={52}
                 itemData={{
                     tokens: searchedTokens.tokens,
                     excludeTokens,
