@@ -82,8 +82,8 @@ function PopupUI() {
 
     const ui = getActivatedUI()
     const identities = useValueRef(ui.myIdentitiesRef)
-    const { data: wallets = [] } = useWallets()
     const chainId = useChainId()
+    const wallets = useWallets()
 
     const onEnter = useCallback((event: React.MouseEvent) => {
         if (event.shiftKey) {

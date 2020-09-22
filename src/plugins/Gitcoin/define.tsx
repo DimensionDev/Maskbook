@@ -55,8 +55,8 @@ function fetcher(key: string, url: string) {
 }
 function Gitcoin(props: { url: string }) {
     const [open, setOpen] = useState(false)
-    const { data: wallets } = useWallets()
-    const { data: tokens } = useTokens()
+    const wallets = useWallets()
+    const tokens = useTokens()
     const url = props.url
     const { data, isValidating } = useSWR(['co.gitcoin', url], { fetcher })
     const {

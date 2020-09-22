@@ -1,53 +1,59 @@
+import { ValueRef } from '@holoflows/kit/es'
 import { useState, useEffect } from 'react'
-import useSWR from 'swr'
 import { PluginMessageCenter } from '../../PluginMessages'
 import Services from '../../../extension/service'
-import { EthereumTokenType } from '../../../web3/types'
-import type { WalletRecord } from '../database/types'
+import { EthereumTokenType, ProviderType } from '../../../web3/types'
 import type { ERC20TokenDetails } from '../../../extension/background-script/PluginService'
 import { formatBalance } from '../formatter'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { CONSTANTS } from '../../../web3/constants'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import type { WalletRecord, ERC20TokenRecord } from '../database/types'
 
-const defaultWalletFetcher = () => Services.Plugin.invokePlugin('maskbook.wallet', 'getDefaultWallet')
-const walletsFetcher = () => Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
-const tokensFetcher = () => Services.Plugin.invokePlugin('maskbook.wallet', 'getTokens')
-const managedWalletFetcher = (address: string) =>
-    Services.Plugin.invokePlugin('maskbook.wallet', 'getManagedWallet', address)
-const managedWalletsFetcher = () => Services.Plugin.invokePlugin('maskbook.wallet', 'getManagedWallets')
+//#region cache service query result
+const defaultWalletRef = new ValueRef<WalletRecord | null>(null)
+const walletsRef = new ValueRef<WalletRecord[]>([])
+const tokensRef = new ValueRef<ERC20TokenRecord[]>([])
+const walletRefs = new Map<string, ValueRef<WalletRecord>>()
+
+async function revalidate() {
+    // wallets
+    const wallets = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
+    wallets.forEach((x) => {
+        const key = x.address.toLowerCase()
+        const walletRef = walletRefs.get(key)
+        if (walletRef) walletRef.value = x
+        else walletRefs.set(key, new ValueRef(x))
+    })
+    defaultWalletRef.value = wallets.find((x) => x._wallet_is_default) ?? wallets[0] ?? null
+
+    // tokens
+    const tokens = await Services.Plugin.invokePlugin('maskbook.wallet', 'getTokens')
+    tokensRef.value = tokens
+}
+PluginMessageCenter.on('maskbook.wallets.update', revalidate)
+revalidate()
+//#endregion
 
 export function useDefaultWallet() {
-    const swr = useSWR('com.maskbook.wallet.wallet.default', { fetcher: defaultWalletFetcher })
-    const { revalidate } = swr
-    useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
-    return swr
+    return useValueRef(defaultWalletRef)
 }
 
-export function useWallets() {
-    const swr = useSWR('com.maskbook.wallet.wallets', { fetcher: walletsFetcher })
-    const { revalidate } = swr
-    useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
-    return swr
+export function useWallet(address: string) {
+    return useValueRef(walletRefs.get(address) ?? new ValueRef(null))
 }
+
 export function useTokens() {
-    const swr = useSWR('com.maskbook.wallet.tokens', { fetcher: tokensFetcher })
-    const { revalidate } = swr
-    useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
-    return swr
+    return useValueRef(tokensRef)
 }
-export function useManagedWallet(address: string) {
-    const swr = useSWR(address, { fetcher: managedWalletFetcher })
-    const { revalidate } = swr
-    useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
-    return swr
+
+export function useWallets(provider?: ProviderType) {
+    const wallets = useValueRef(walletsRef)
+    if (wallets.length && typeof provider !== undefined) return wallets.filter((x) => x.provider === provider)
+    return wallets
 }
-export function useManagedWallets() {
-    const swr = useSWR('com.maskbook.wallet.wallets.managed', { fetcher: managedWalletsFetcher })
-    const { revalidate } = swr
-    useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
-    return swr
-}
+
 export function useSelectWallet(wallets: WalletRecord[] | undefined, tokens: ERC20TokenDetails[] | undefined) {
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 

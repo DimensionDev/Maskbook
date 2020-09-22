@@ -319,8 +319,8 @@ const useStyles = makeStyles({
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
-    const { data: wallets } = useWallets()
-    const { data: tokens } = useTokens()
+    const wallets = useWallets()
+    const tokens = useTokens()
     const [availableRedPackets, setAvailableRedPackets] = useState<RedPacketRecord[]>([])
     const [justCreatedRedPacket, setJustCreatedRedPacket] = useState<RedPacketRecord | undefined>(undefined)
 

@@ -18,8 +18,8 @@ import { GetContext } from '@holoflows/kit/es'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { ProviderType } from '../../../web3/types'
 import { useHistory } from 'react-router-dom'
-import { useManagedWallets } from '../hooks/useWallet'
 import { unreachable } from '../../../utils/utils'
+import { useWallets } from '../hooks/useWallet'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -75,7 +75,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     // render in dashboard
     useBlurContext(open)
 
-    const { data: { wallets } = {} } = useManagedWallets()
+    const wallets = useWallets(ProviderType.Maskbook)
     const onConnect = useCallback(
         async (providerType: ProviderType) => {
             onClose()

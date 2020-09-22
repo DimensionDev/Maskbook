@@ -7,7 +7,7 @@ import { MaskbookProvider } from '../../protocols/wallet-provider/maskbook'
 import { unreachable } from '../../utils/utils'
 import { PluginMessageCenter } from '../PluginMessages'
 import { lastActivatedWalletProvider } from '../../settings/settings'
-import { getManagedWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
+import { getWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
 import { ProviderType } from '../../web3/types'
 
 OnlyRunInContext(['background', 'debugging'], 'web3')
@@ -42,12 +42,12 @@ export function getWalletProvider(provider: ProviderType) {
 const importBuiltinWalletPrivateKey = async () => {
     web3.eth.accounts.wallet.clear()
 
-    const { wallets } = await getManagedWallets()
-    for await (const { mnemonic, passphrase, privateKey } of wallets) {
+    const wallets = await getWallets(ProviderType.Maskbook)
+    for await (const { mnemonic, passphrase, _private_key_ } of wallets) {
         const { privateKeyValid, privateKeyInHex } =
             mnemonic && passphrase
                 ? await recoverWallet(mnemonic, passphrase)
-                : await recoverWalletFromPrivateKey(privateKey)
+                : await recoverWalletFromPrivateKey(_private_key_)
         if (privateKeyValid) web3.eth.accounts.wallet.add(privateKeyInHex)
     }
 }

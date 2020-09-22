@@ -1,11 +1,11 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import type { HttpProviderOptions } from 'web3-core-helpers'
-import { getManagedWallets } from '../../plugins/Wallet/wallet'
+import { getWallets } from '../../plugins/Wallet/wallet'
 import { web3 } from '../../plugins/Wallet/web3'
 import { currentMaskbookChainIdSettings } from '../../settings/settings'
 import type { WalletProvider } from './index'
-import type { ChainId } from '../../web3/types'
+import { ChainId, ProviderType } from '../../web3/types'
 import { getConstant } from '../../web3/helpers'
 import { CONSTANTS } from '../../web3/constants'
 
@@ -41,8 +41,7 @@ let provider: ReturnType<typeof SwitchableProvider> | undefined = undefined
 export const MaskbookProvider: WalletProvider = {
     checkAvailability: () => Promise.resolve(true),
     async requestAccounts() {
-        const wallets = await getManagedWallets()
-        return wallets.wallets.map((x) => x.address)
+        return (await getWallets(ProviderType.Maskbook)).map((x) => x.address)
     },
     getWeb3Provider() {
         if (provider) return provider
