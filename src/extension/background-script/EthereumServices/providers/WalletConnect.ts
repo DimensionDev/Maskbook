@@ -1,7 +1,7 @@
 import { EthereumAddress } from 'wallet.ts'
 import WalletConnect from '@walletconnect/client'
 import { remove } from 'lodash-es'
-import { updateExoticWalletsFromSource } from '../../../../plugins/Wallet/wallet'
+import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/wallet'
 import { currentWalletConnectChainIdSettings } from '../../../../settings/settings'
 import { ChainId } from '../../../../web3/types'
 import { ProviderType } from '../../../../web3/types'
@@ -89,7 +89,7 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
     if (!!EthereumAddress.isValid(address)) throw new Error('Cannot found account or invalid account')
 
     // update wallet in the DB
-    await updateExoticWalletsFromSource(
+    await updateExoticWalletFromSource(
         ProviderType.WalletConnect,
         new Map([[address, { address, _wallet_is_default: setAsDefault }]]),
     )
