@@ -48,7 +48,6 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
         placeholder: {
-            color: theme.palette.text.secondary,
             textAlign: 'center',
             height: 288,
             paddingTop: theme.spacing(14),
@@ -151,7 +150,11 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
         [address, excludeTokens, TokenInList, onSubmit],
     )
     const renderPlaceholder = useCallback(
-        (message: string) => <Typography className={classes.placeholder}>{message}</Typography>,
+        (message: string) => (
+            <Typography className={classes.placeholder} color="textSecondary">
+                {message}
+            </Typography>
+        ),
         [],
     )
     //#endregion
