@@ -4,6 +4,7 @@ import { makeStyles, createStyles, Avatar, Theme, AvatarProps } from '@material-
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { isSameAddress } from '../../../web3/helpers'
 import { useConstant } from '../../../web3/hooks/useConstant'
+import { CONSTANTS } from '../../../web3/constants'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -22,7 +23,7 @@ export interface TokenIconProps extends withClasses<KeysInferFromUseStyles<typeo
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     const { address, name } = props
     const classes = useStylesExtends(useStyles(), props)

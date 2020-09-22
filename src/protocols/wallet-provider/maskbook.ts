@@ -6,7 +6,8 @@ import { web3 } from '../../plugins/Wallet/web3'
 import { currentMaskbookChainIdSettings } from '../../settings/settings'
 import type { WalletProvider } from './index'
 import type { ChainId } from '../../web3/types'
-import { getConstant } from '../../web3/constants'
+import { getConstant } from '../../web3/helpers'
+import { CONSTANTS } from '../../web3/constants'
 
 type SwitchableProvider = { switch(chainId: ChainId): void; disconnect(): void }
 function SwitchableProvider(opts?: HttpProviderOptions): SwitchableProvider & HttpProvider {
@@ -14,7 +15,7 @@ function SwitchableProvider(opts?: HttpProviderOptions): SwitchableProvider & Ht
     const pool = new Map<string, HttpProvider>()
     const extra: SwitchableProvider = {
         switch(chainId) {
-            const addr = getConstant('INFURA_ADDRESS', chainId)
+            const addr = getConstant(CONSTANTS, 'INFURA_ADDRESS', chainId)
             pool.get(addr)?.disconnect()
             activatingProvider = new Web3.providers.HttpProvider(addr, opts)
             pool.set(addr, activatingProvider)

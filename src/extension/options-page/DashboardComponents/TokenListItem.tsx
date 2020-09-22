@@ -22,6 +22,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { isSameAddress } from '../../../web3/helpers'
 import { useConstant } from '../../../web3/hooks/useConstant'
+import { CONSTANTS } from '../../../web3/constants'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -58,7 +59,7 @@ export function TokenListItem(props: TokenListItemProps) {
     const [menu, openMenu] = useMenu(
         <MenuItem onClick={() => openHideTokenConfirmDialog({ wallet, token })}>{t('hide')}</MenuItem>,
     )
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     return (
         <ListItem divider>

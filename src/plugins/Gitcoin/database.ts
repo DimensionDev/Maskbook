@@ -6,9 +6,10 @@ import { PluginMessageCenter } from '../PluginMessages'
 import type { _UnboxPromise } from 'async-call-rpc/full'
 import { omit } from 'lodash-es'
 import { createPluginWalletAccess } from '../../database/Plugin/wrap-wallet-for-plugin'
-import { getAllConstants } from '../../web3/constants'
 import { getChainId } from '../../extension/background-script/EthereumService'
 import { EthereumTokenType } from '../../web3/types'
+import { getAllConstants } from '../../web3/helpers'
+import { GITCOIN_CONSTANT } from './constants'
 
 const createTransaction = createPluginWalletAccess<GitcoinDonationRecordInDatabase, []>(
     'com.maskbook.provide.co.gitcoin',
@@ -25,7 +26,7 @@ function getProvider() {
 
 export async function donateGrant(donation: GitcoinDonationPayload) {
     const chainId = await getChainId()
-    const { GITCOIN_MAINTAINER_ADDRESS, BULK_CHECKOUT_ADDRESS } = getAllConstants(chainId)
+    const { GITCOIN_MAINTAINER_ADDRESS, BULK_CHECKOUT_ADDRESS } = getAllConstants(GITCOIN_CONSTANT, chainId)
     const { donor_address, donation_address, donation_total, token, token_type } = donation
 
     let approved: _UnboxPromise<ReturnType<typeof erc20API.approve>> | undefined

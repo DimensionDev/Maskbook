@@ -6,6 +6,7 @@ import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { Token, EthereumTokenType } from '../types'
 import { useTokenAllowance } from './useTokenAllowance'
 import { useTokenBalance } from './useTokenBalance'
+import { CONSTANTS } from '../constants'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
@@ -18,7 +19,7 @@ export enum ApproveState {
 }
 
 export function useTokenApproveCallback(token?: Token, amount?: string, spender?: string) {
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(token?.address ?? ETH_ADDRESS)
     const { value: balance } = useTokenBalance(token)

@@ -4,6 +4,7 @@ import { Pair as UniswapPair, Token as UniswapToken, Pair, TokenAmount } from '@
 import { usePairContract } from '../contracts/usePairContract'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useBlockNumber } from '../../../web3/hooks/useBlockNumber'
+import { CONSTANTS } from '../../../web3/constants'
 
 function resolvePairResult<T>(result: PromiseSettledResult<T>, fallback: T) {
     return result.status === 'fulfilled' ? result.value : fallback
@@ -18,7 +19,7 @@ export enum PairState {
 export type TokenPair = [UniswapToken, UniswapToken]
 
 export function useUniswapPairs(tokens: readonly TokenPair[]) {
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     const pairAddresses = useMemo(
         () =>

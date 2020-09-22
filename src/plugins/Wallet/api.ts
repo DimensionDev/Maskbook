@@ -12,11 +12,12 @@ import { sendTx, sendTxConfigForTxHash } from './transaction'
 import { onWalletBalancesUpdated, BalanceMetadata } from './wallet'
 import { getERC20Tokens } from '../../web3/tokens'
 import { getChainId } from '../../extension/background-script/EthereumService'
-import { getConstant } from '../../web3/constants'
-import { isUSDT } from '../../web3/helpers'
+import { isUSDT, getConstant } from '../../web3/helpers'
 import { EthereumTokenType } from '../../web3/types'
+import { CONSTANTS } from '../../web3/constants'
+import { WALLET_CONSTANTS } from './constants'
 
-const ETH_ADDRESS = getConstant('ETH_ADDRESS')
+const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS')
 
 function createERC20Contract(address: string) {
     return (new web3.eth.Contract(ERC20ABI as AbiItem[], address) as unknown) as ERC20
@@ -182,7 +183,9 @@ export const balanceCheckerAPI = (() => {
         if (!accounts.length || !tokens.length) return balances
         try {
             idle = false
-            balances = await createBalanceCheckerContract(getConstant('BALANCE_CHECKER_ADDRESS', await getChainId()))
+            balances = await createBalanceCheckerContract(
+                getConstant(WALLET_CONSTANTS, 'BALANCE_CHECKER_ADDRESS', await getChainId()),
+            )
                 .methods.balances(accounts, tokens)
                 .call()
         } catch (e) {
