@@ -1,16 +1,28 @@
 import React from 'react'
-import { Chip } from '@material-ui/core'
+import { Chip, createStyles, makeStyles, Theme, ChipProps } from '@material-ui/core'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import type { ChainId } from '../../web3/types'
 import { resolveChainName, resolveChainColor } from '../../web3/pipes'
+import { useStylesExtends } from '../custom-ui-helper'
 
-export interface EthereumChainChipProps {
+const useStyles = makeStyles((theme: Theme) => {
+    return createStyles({
+        root: {},
+    })
+})
+
+export interface EthereumChainChipProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     chainId: ChainId
+    ChipProps?: Partial<ChipProps>
 }
 
-export function EthereumChainChip({ chainId }: EthereumChainChipProps) {
+export function EthereumChainChip(props: EthereumChainChipProps) {
+    const { chainId, ChipProps } = props
+    const classes = useStylesExtends(useStyles(), props)
+
     return (
         <Chip
+            className={classes.root}
             size="small"
             label={resolveChainName(chainId)}
             icon={
@@ -20,6 +32,7 @@ export function EthereumChainChip({ chainId }: EthereumChainChipProps) {
                     }}
                 />
             }
+            {...ChipProps}
         />
     )
 }

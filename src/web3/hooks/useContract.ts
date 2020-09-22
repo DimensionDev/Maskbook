@@ -6,7 +6,7 @@ import type { AbiItem } from 'web3-utils'
 import Services, { ServicesWithProgress } from '../../extension/service'
 import { useAccount } from './useAccount'
 import { nonFunctionalWeb3 } from '../web3'
-import { iteratorToPromiEvent } from '../../utils/promiEvent'
+import { iteratorToPromiEvent, StageType } from '../../utils/promiEvent'
 import type { EstimateGasOptions } from '../../contracts/types'
 import { decodeOutputString } from '../helpers'
 
@@ -58,7 +58,10 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                     result,
                                 )
                             },
-                            send(config: TransactionConfig) {
+                            async send(
+                                config: TransactionConfig,
+                                callback?: (error: Error | null, hash?: string) => void,
+                            ) {
                                 if (!account) throw new Error('cannot find account')
 
                                 console.log(
@@ -70,21 +73,26 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                     })}`,
                                 )
 
-                                return iteratorToPromiEvent(
-                                    ServicesWithProgress.sendTransaction(
-                                        account,
-                                        {
-                                            from: account,
-                                            to: contract.options.address,
-                                            data: cached.encodeABI(),
-                                            ...config,
-                                        },
-                                        {
-                                            name: String(name),
-                                            args,
-                                        },
-                                    ),
-                                )
+                                const iterator = ServicesWithProgress.sendTransaction(account, {
+                                    from: account,
+                                    to: contract.options.address,
+                                    data: cached.encodeABI(),
+                                    ...config,
+                                })
+
+                                // feedback by PromiEvent
+                                if (typeof callback === 'undefined') return iteratorToPromiEvent(iterator)
+
+                                // feedback by callback
+                                try {
+                                    for await (const stage of iterator) {
+                                        if (stage.type === StageType.TRANSACTION_HASH) callback(null, stage.hash)
+                                        break
+                                    }
+                                } catch (e) {
+                                    callback(e)
+                                }
+                                return
                             },
                             async estimateGas(
                                 config?: EstimateGasOptions,

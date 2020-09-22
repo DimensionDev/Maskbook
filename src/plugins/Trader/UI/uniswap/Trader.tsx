@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles, CircularProgress } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
@@ -7,19 +7,21 @@ import { useToken } from '../../../../web3/hooks/useToken'
 import { Token, EthereumTokenType } from '../../../../web3/types'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { useConstant } from '../../../../web3/hooks/useConstant'
-import { useBestTrade } from '../../uniswap/useBestTrade'
+import { useTrade } from '../../uniswap/useTrade'
 import { TradeForm } from './TradeForm'
 import { TradeRoute } from './TradeRoute'
 import { TradeSummary } from './TradeSummary'
 import { ConfirmDialog } from './ConfirmDialog'
 import { useTokenApproveCallback, ApproveState } from '../../../../web3/hooks/useTokenApproveCallback'
 import { useComputedApprove } from '../../uniswap/useComputedApprove'
-import { useSwapCallback } from '../../uniswap/useSwapCallback'
+import { useSwapCallback, SwapStateType } from '../../uniswap/useSwapCallback'
 import { useSwapState, SwapActionType } from '../../uniswap/useSwapState'
 import { TradeStrategy } from '../../types'
 import { isSameAddress } from '../../../../web3/helpers'
 import { CONSTANTS } from '../../../../web3/constants'
 import { TRADE_CONSTANTS } from '../../constants'
+import { TransactionDialog } from './TransactionDialog'
+import { sleep } from '../../../../utils/utils'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -53,8 +55,8 @@ export function Trader(props: TraderProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     //#region swap state
-    const [swapState, dispatchSwapState] = useSwapState(undefined, undefined)
-    const { inputToken, outputToken } = swapState
+    const [swapStore, dispatchSwapStore] = useSwapState(undefined, undefined)
+    const { inputToken, outputToken } = swapStore
 
     const [inputTokenAddress, setInputTokenAddress] = useState(ETH_ADDRESS)
     const [outputTokenAddress, setOutputTokenAddress] = useState(address === ETH_ADDRESS ? '' : address)
@@ -74,11 +76,11 @@ export function Trader(props: TraderProps) {
     })
 
     useEffect(() => {
-        dispatchSwapState({
+        dispatchSwapStore({
             type: SwapActionType.UPDATE_INPUT_TOKEN,
             token: asyncInputToken.value,
         })
-        dispatchSwapState({
+        dispatchSwapStore({
             type: SwapActionType.UPDATE_OUTPUT_TOKEN,
             token: asyncOutputToken.value,
         })
@@ -123,29 +125,41 @@ export function Trader(props: TraderProps) {
 
     //#region switch tokens
     const onReverseClick = useCallback(() => {
-        dispatchSwapState({
+        dispatchSwapStore({
             type: SwapActionType.SWITCH_TOKEN,
         })
     }, [])
     //#endregion
 
     //#region the best trade
-    const { inputAmount, outputAmount, strategy } = swapState
+    const { inputAmount, outputAmount, strategy } = swapStore
 
     const onInputAmountChange = useCallback((amount: string) => {
-        dispatchSwapState({
+        dispatchSwapStore({
             type: SwapActionType.UPDATE_INPUT_AMOUNT,
             amount,
         })
     }, [])
     const onOutputAmountChange = useCallback((amount: string) => {
-        dispatchSwapState({
+        dispatchSwapStore({
             type: SwapActionType.UPDATE_OUTPUT_AMOUNT,
             amount,
         })
     }, [])
 
-    const trade = useBestTrade(strategy, inputAmount, outputAmount, inputToken, outputToken)
+    const trade_ = useTrade(strategy, inputAmount, outputAmount, inputToken, outputToken)
+
+    // the cached trade will freeze UI from updating when transaction was just confirmed
+    const [freezed, setFreezed] = useState(false)
+    const tradeCached_ = useRef<ReturnType<typeof useTrade>>({
+        v2Trade: null,
+    })
+    useEffect(() => {
+        if (freezed) tradeCached_.current = trade_
+    }, [freezed])
+
+    // the real tread for UI
+    const trade = freezed ? tradeCached_.current : trade_
 
     // only keeps 6 digits in the fraction part for the estimation amount
     const isExactIn = strategy === TradeStrategy.ExactIn
@@ -173,20 +187,40 @@ export function Trader(props: TraderProps) {
     //#endregion
 
     //#region swap
-    const swapCallback = useSwapCallback(trade.v2Trade)
-    const onConfirm = useCallback(async () => {
-        const hash = await swapCallback()
-
-        console.log('DEBUG: swap hash')
-        console.log(hash)
-    }, [swapCallback])
+    const [swapState, swapCallback] = useSwapCallback(trade.v2Trade)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
+    const [openTransactionDialog, setOpenTransactionDialog] = useState(false)
+    const onConfirmDialogConfirm = useCallback(async () => {
+        setOpenConfirmDialog(false)
+        await sleep(100)
+        setFreezed(true)
+        setOpenTransactionDialog(true)
+        await swapCallback()
+    }, [swapCallback, setOpenConfirmDialog, setOpenTransactionDialog])
+    const onConfirmDialogClose = useCallback(() => {
+        setOpenConfirmDialog(false)
+    }, [])
+    const onTransactionDialogClose = useCallback(() => {
+        setFreezed(false)
+        setOpenTransactionDialog(false)
+        if (swapState.type !== SwapStateType.SUCCEED) return
+        // clean the form
+        dispatchSwapStore({
+            type: SwapActionType.UPDATE_INPUT_AMOUNT,
+            amount: '0',
+        })
+        dispatchSwapStore({
+            type: SwapActionType.UPDATE_OUTPUT_AMOUNT,
+            amount: '0',
+        })
+    }, [swapState])
     //#endregion
 
     return (
         <div className={classes.root}>
             <TradeForm
                 approveState={approveState}
+                strategy={strategy}
                 trade={trade.v2Trade}
                 inputToken={inputToken}
                 outputToken={outputToken}
@@ -203,15 +237,23 @@ export function Trader(props: TraderProps) {
                 onApprove={onApprove}
                 onSwap={() => setOpenConfirmDialog(true)}
             />
-            <TradeSummary trade={trade.v2Trade} inputToken={inputToken} outputToken={outputToken} />
-            <TradeRoute classes={{ root: classes.router }} trade={trade.v2Trade} />
+            <TradeSummary trade={trade.v2Trade} strategy={strategy} inputToken={inputToken} outputToken={outputToken} />
+            <TradeRoute classes={{ root: classes.router }} trade={trade.v2Trade} strategy={strategy} />
             <ConfirmDialog
                 trade={trade.v2Trade}
+                strategy={strategy}
                 inputToken={inputToken}
                 outputToken={outputToken}
                 open={openConfirmDialog}
-                onConfirm={onConfirm}
-                onClose={() => setOpenConfirmDialog(false)}
+                onConfirm={onConfirmDialogConfirm}
+                onClose={onConfirmDialogClose}
+            />
+            <TransactionDialog
+                swapState={swapState}
+                trade={trade.v2Trade}
+                strategy={strategy}
+                open={openTransactionDialog}
+                onClose={onTransactionDialogClose}
             />
             {asyncInputToken.loading || asyncOutputToken.loading ? (
                 <CircularProgress className={classes.progress} size={15} />

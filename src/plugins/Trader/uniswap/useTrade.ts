@@ -7,7 +7,7 @@ import { TradeStrategy } from '../types'
 import type { Token } from '../../../web3/types'
 import { useAllCommonPairs } from './useAllCommonPairs'
 
-export function useBestTrade(
+export function useTrade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
