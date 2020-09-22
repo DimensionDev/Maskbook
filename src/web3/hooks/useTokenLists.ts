@@ -19,7 +19,7 @@ export function useTokenLists(
     lists: string[],
     { keyword = '', useEther = false }: { keyword?: string; chainId?: ChainId; useEther?: boolean },
 ) {
-    //#region fetch from token lists
+    //#region fetch token lists
     const chainId = useChainId()
     const { value: allTokens = [], loading: loadingAllTokens } = useAsync(async () => {
         const tokens = lists.length === 0 ? [] : await Services.Ethereum.fetchTokensFromTokenLists(lists, chainId)

@@ -39,6 +39,12 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0x7d655c57f71464B6f83811C55D84009Cd9f5221C',
         [ChainId.Kovan]: '',
     },
+    MULTICALL_ADDRESS: {
+        [ChainId.Mainnet]: '0xeefba1e63905ef1d7acba5a8513c70307c1ce441',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '0x42ad527de7d4e9d9d011ac45b31d8551f8fe9821',
+        [ChainId.Kovan]: '0x2cc8688c5f75e365aaeeb4ea8d6a480405a48d2a',
+    },
     HAPPY_RED_PACKET_ADDRESS: {
         [ChainId.Mainnet]: '0x26760783c12181efa3c435aee4ae686c53bdddbb',
         [ChainId.Ropsten]: '0x26760783c12181efa3c435aee4ae686c53bdddbb',

@@ -3,7 +3,6 @@ import { useAsync } from 'react-use'
 import type { Transaction, TransactionReceipt } from 'web3-core'
 import Services from '../../extension/service'
 import { useBlockNumber } from './useBlockNumber'
-import { Token, EthereumTokenType } from '../types'
 
 export function useTransaction(hash: string) {
     const [tx, setTx] = useState<Transaction | null>(null)
