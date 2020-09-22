@@ -15,7 +15,6 @@ import * as ProviderService from './extension/background-script/ProviderService'
 import { upload as pluginArweaveUpload } from './plugins/FileService/arweave/index'
 import { decryptFromText, decryptFromImageUrl } from './extension/background-script/CryptoServices/decryptFrom'
 import * as EthereumService from './extension/background-script/EthereumService'
-import * as TransactionService from './extension/background-script/TransactionService'
 import { sendTransaction } from './extension/background-script/EthereumServices/transaction'
 
 Object.assign(globalThis, {
@@ -28,7 +27,6 @@ Object.assign(globalThis, {
     HelperService,
     ProviderService,
     EthereumService,
-    TransactionService,
 })
 
 Object.assign(globalThis, {
