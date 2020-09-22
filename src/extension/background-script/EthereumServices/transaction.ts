@@ -150,7 +150,7 @@ export async function callTransaction(from: string | undefined, config: Transact
 
     // choose provider
     if (wallet.provider === ProviderType.Maskbook) return createWeb3(Maskbook.createProvider()).eth.call(config)
-    if (wallet.provider === ProviderType.MetaMask) return createWeb3(MetaMask.createProvider()).eth.call(config)
+    if (wallet.provider === ProviderType.MetaMask) return MetaMask.createWeb3().eth.call(config)
     if (wallet.provider === ProviderType.WalletConnect) {
         const connector = await WalletConnect.createConnector()
         return createWeb3(Maskbook.createProvider(connector.chainId as ChainId), []).eth.call(config)
