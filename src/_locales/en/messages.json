@@ -72,7 +72,7 @@
     "database_group_followers_name": "Followers of {{owner}}",
     "database_group_following_name": "Followed by {{owner}}",
     "database_group_friends_default_name": "Friends of {{owner}}",
-    "decrypted_postbox_add_recipients": "View / add recipients",
+    "decrypted_postbox_add_recipients": "Append recipients",
     "decrypted_postbox_decrypting": "Maskbook decrypting…",
     "decrypted_postbox_decoding": "Maskbook decoding…",
     "decrypted_postbox_decrypting_finding_person_key": "Maskbook is looking for the public key of the author…",
