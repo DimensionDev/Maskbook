@@ -14,7 +14,6 @@ import { getNonce, resetNonce, commitNonce } from './nonce'
 import type { ChainId } from '../../../web3/types'
 import { ProviderType } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
-import { createTransaction } from '../TransactionService'
 
 //#region tracking wallets
 let wallets: (WalletRecord & {
@@ -109,14 +108,8 @@ export async function* sendTransaction(
 
             if (stage.type === StageType.TRANSACTION_HASH) {
                 await commitNonce(from)
-                await createTransaction(
-                    stage.hash,
-                    {
-                        from,
-                        ...config,
-                    },
-                    meta,
-                ) // record every transaction in DB
+                // TODO:
+                // record every transaction in DB
                 yield stage
             }
             yield stage
