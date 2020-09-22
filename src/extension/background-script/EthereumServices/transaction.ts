@@ -17,7 +17,7 @@ import { unreachable } from '../../../utils/utils'
 
 //#region tracking wallets
 let wallets: WalletRecord[] = []
-const resetWallet = async () => (wallets = await getWallets(ProviderType.Maskbook))
+const resetWallet = async () => (wallets = await getWallets())
 PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
 //#endregion
 
@@ -148,6 +148,7 @@ export async function callTransaction(from: string | undefined, config: Transact
     const wallet = wallets.find((x) => isSameAddress(x.address, from))
     if (!wallet) throw new Error('the wallet does not exists')
 
+    // choose provider
     if (wallet.provider === ProviderType.Maskbook) return createWeb3(Maskbook.createProvider()).eth.call(config)
     if (wallet.provider === ProviderType.MetaMask) return createWeb3(MetaMask.createProvider()).eth.call(config)
     if (wallet.provider === ProviderType.WalletConnect) {
