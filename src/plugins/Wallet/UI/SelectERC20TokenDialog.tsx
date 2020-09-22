@@ -128,7 +128,7 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                 <FixedSizeList
                     className={classes.list}
                     width="100%"
-                    height={312}
+                    height={288}
                     overscanCount={4}
                     itemSize={52}
                     itemData={{

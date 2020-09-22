@@ -1,5 +1,5 @@
 import type { Trade, SwapParameters } from '@uniswap/sdk'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { DEFAULT_SLIPPAGE_TOLERANCE, DEFAULT_TRANSACTION_DEADLINE } from '../constants'
 import { useSwapParameters } from './useSwapParameters'
 import { useRouterV2Contract } from '../contracts/useRouterV2Contract'
@@ -16,11 +16,29 @@ interface FailedCall {
     error: Error
 }
 
-export enum SwapState {
+export enum SwapStateType {
     UNKNOWN,
-    PENDING,
-    DONE,
+    WAIT_FOR_CONFIRMING,
+    SUCCEED,
+    FAILED,
+    REJECTED,
 }
+
+export type SwapState =
+    | {
+          type: SwapStateType.UNKNOWN
+      }
+    | {
+          type: SwapStateType.WAIT_FOR_CONFIRMING
+      }
+    | {
+          type: SwapStateType.SUCCEED
+          hash: string
+      }
+    | {
+          type: SwapStateType.FAILED
+          error: Error
+      }
 
 export function useSwapCallback(
     trade: Trade | null,
@@ -29,9 +47,22 @@ export function useSwapCallback(
 ) {
     const routerV2Contract = useRouterV2Contract()
     const swapParameters = useSwapParameters(trade, allowedSlippage, ddl)
+    const [swapState, setSwapState] = useState<SwapState>({
+        type: SwapStateType.UNKNOWN,
+    })
 
-    return useCallback(async () => {
-        if (!routerV2Contract) return
+    const swapCallback = useCallback(async () => {
+        if (!routerV2Contract) {
+            setSwapState({
+                type: SwapStateType.UNKNOWN,
+            })
+            return
+        }
+
+        // pre-step: start waiting for provider to confirm tx
+        setSwapState({
+            type: SwapStateType.WAIT_FOR_CONFIRMING,
+        })
 
         // step 1: estimate each swap parameter
         const estimatedCalls = await Promise.all(
@@ -87,10 +118,25 @@ export function useSwapCallback(
                     ...config,
                 },
                 (error, hash) => {
-                    if (error) reject(error)
-                    else resolve(hash)
+                    console.log('DEBUG: swap result')
+                    console.log(error)
+                    if (error) {
+                        setSwapState({
+                            type: SwapStateType.FAILED,
+                            error,
+                        })
+                        reject(error)
+                    } else {
+                        setSwapState({
+                            type: SwapStateType.SUCCEED,
+                            hash,
+                        })
+                        resolve(hash)
+                    }
                 },
             )
         })
     }, [swapParameters, routerV2Contract])
+
+    return [swapState, swapCallback] as const
 }

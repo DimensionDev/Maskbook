@@ -59,20 +59,27 @@ export function getAllConstants<T extends Web3Constants, K extends keyof T>(cons
 }
 //#endregion
 
-//#region token
-export function resolveTokenLinkInEtherscan(token: Token) {
-    switch (token.chainId) {
+export function resolveLinkOnEtherscan(chainId: ChainId) {
+    switch (chainId) {
         case ChainId.Mainnet:
-            return `https://etherscan.io/token/${token.address}`
+            return 'https://etherscan.io'
         case ChainId.Ropsten:
-            return `https://ropsten.etherscan.io/token/${token.address}`
+            return 'https://ropsten.etherscan.io'
         case ChainId.Rinkeby:
-            return `https://rinkeby.etherscan.io/token/${token.address}`
+            return 'https://rinkeby.etherscan.io'
         case ChainId.Kovan:
-            return `https://kovan.etherscan.io/token/${token.address}`
+            return 'https://kovan.etherscan.io'
         default:
-            unreachable(token.chainId)
+            unreachable(chainId)
     }
+}
+
+export function resolveTransactionLinkOnEtherscan(chainId: ChainId, tx: string) {
+    return `${resolveLinkOnEtherscan(chainId)}/tx/${tx}`
+}
+
+export function resolveTokenLinkOnEtherscan(token: Token) {
+    return `${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`
 }
 
 export function createEetherToken(chainId: ChainId): Token {
@@ -102,7 +109,6 @@ export function createERC20Token(
         symbol,
     }
 }
-//#endregion
 
 export function decodeOutputString(web3: Web3, abi: AbiOutput[], output: string) {
     if (abi.length === 1) return web3.eth.abi.decodeParameter(abi[0].type, output)

@@ -4,6 +4,7 @@ import { Box, Breadcrumbs, Typography, makeStyles, createStyles, Theme, Paper } 
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import type { TradeStrategy } from '../../types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface TradeRouteProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     trade: Trade | null
+    strategy: TradeStrategy
 }
 
 export function TradeRoute(props: TradeRouteProps) {

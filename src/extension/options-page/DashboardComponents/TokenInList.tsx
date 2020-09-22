@@ -6,7 +6,7 @@ import type { Token } from '../../../web3/types'
 import { Address } from './Address'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../web3/constants'
-import { resolveTokenLinkInEtherscan } from '../../../web3/helpers'
+import { resolveTokenLinkOnEtherscan } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -73,7 +73,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
                     {token.address !== ETH_ADDRESS ? (
                         <Link
                             className={classes.address}
-                            href={resolveTokenLinkInEtherscan(token)}
+                            href={resolveTokenLinkOnEtherscan(token)}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={stop}>
