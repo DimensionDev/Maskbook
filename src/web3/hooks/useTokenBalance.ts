@@ -5,9 +5,11 @@ import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { useConstant } from './useConstant'
 import { CONSTANTS } from '../constants'
+import { useChainId } from './useChainId'
 
 export function useTokenBalance(token?: PartialRequired<Token, 'address'>) {
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
+    const chainId = useChainId()
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(token?.address ?? ETH_ADDRESS)
     return useAsync(async () => {
@@ -19,12 +21,12 @@ export function useTokenBalance(token?: PartialRequired<Token, 'address'>) {
 
         // ERC20
         if (token.type === EthereumTokenType.ERC20) {
-            if (!erc20Contract) return '0'
-            return erc20Contract.methods.balanceOf(account).call()
+            if (erc20Contract) return erc20Contract.methods.balanceOf(account).call()
+            return '0'
         }
 
         // TOOD:
         // ERC721
         return '0'
-    }, [account, token?.type, token?.address, erc20Contract])
+    }, [account, token?.type, token?.address, erc20Contract, chainId /* re-calc when switch the chain */])
 }
