@@ -4,7 +4,7 @@ import { EventEmitter } from 'events'
 import type { AbstractProvider } from 'web3-core'
 import type { EthereumAPI, WalletProvider } from './index'
 import { timeout } from '../../utils/utils'
-import { updateExoticWalletsFromSource } from '../../plugins/Wallet/wallet'
+import { updateExoticWalletFromSource } from '../../plugins/Wallet/wallet'
 import { Result } from 'ts-results'
 import type { WalletRecord } from '../../plugins/Wallet/database/types'
 import { ProviderType } from '../../web3/types'
@@ -45,7 +45,7 @@ export const MetaMaskProvider: WalletProvider = {
         const list = await MetamaskJSONRPC.eth_requestAccounts()
         const map = new Map<string, Partial<WalletRecord>>()
         for (const address of list) map.set(address, { address })
-        await updateExoticWalletsFromSource(ProviderType.MetaMask, map)
+        await updateExoticWalletFromSource(ProviderType.MetaMask, map)
         return list
     },
     getWeb3Provider() {

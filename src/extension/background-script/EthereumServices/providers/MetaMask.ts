@@ -3,7 +3,7 @@ import { ChainId } from '../../../../web3/types'
 import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import Web3 from 'web3'
 import { EthereumAddress } from 'wallet.ts'
-import { updateExoticWalletsFromSource, setDefaultWallet } from '../../../../plugins/Wallet/wallet'
+import { updateExoticWalletFromSource, setDefaultWallet } from '../../../../plugins/Wallet/wallet'
 import { ProviderType } from '../../../../web3/types'
 
 //#region tracking chain id
@@ -49,6 +49,6 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
     if (!EthereumAddress.isValid(address)) throw new Error('Cannot found account or invalid account')
 
     // update wallet in the DB
-    await updateExoticWalletsFromSource(ProviderType.MetaMask, new Map([[address, { address }]]))
+    await updateExoticWalletFromSource(ProviderType.MetaMask, new Map([[address, { address }]]))
     if (setDefaultWallet) await setDefaultWallet(address)
 }

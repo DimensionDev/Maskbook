@@ -79,7 +79,7 @@ export async function getTokens() {
     return uniqBy(tokens, (token) => token.address.toUpperCase()).map(ERC20TokenRecordOutDB)
 }
 
-export async function updateExoticWalletsFromSource(
+export async function updateExoticWalletFromSource(
     provider: ProviderType,
     updates: Map<string, Partial<WalletRecord>>,
 ): Promise<void> {
@@ -87,7 +87,7 @@ export async function updateExoticWalletsFromSource(
     let modified = false
     for await (const cursor of walletStore) {
         const wallet = cursor.value
-        if (wallet.provider !== ProviderType.Maskbook) continue
+        if (wallet.provider === ProviderType.Maskbook) continue
         if (wallet.provider !== provider) continue
 
         modified = true
