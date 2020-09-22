@@ -6,7 +6,7 @@ import { signing } from '../constants'
 export async function sign(transaction: Transaction) {
     const response = await fetch(signing, {
         method: 'POST',
-        body: await makeRequest(transaction),
+        body: (await makeRequest(transaction)).buffer,
     })
     transaction.setSignature(await response.json())
 }
