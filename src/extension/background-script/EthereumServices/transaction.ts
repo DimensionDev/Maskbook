@@ -17,8 +17,8 @@ import { unreachable } from '../../../utils/utils'
 
 //#region tracking wallets
 let wallets: WalletRecord[] = []
-const resetWallet = async () => (wallets = await getWallets())
-PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
+const resetWallets = async () => (wallets = await getWallets())
+PluginMessageCenter.on('maskbook.wallets.reset', resetWallets)
 //#endregion
 
 async function createTransactionSender(from: string, config: TransactionConfig) {
