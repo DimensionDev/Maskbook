@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo } from 'react'
-import { useMountedState } from 'react-use'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import { useMountedState, useAsyncRetry } from 'react-use'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 
-export interface TimesOptions {
+export interface AsyncTimesOptions {
     delay?: number
     times?: number
     timeout?: number
@@ -15,7 +15,7 @@ export interface TimesOptions {
  * @param callback
  * @param options
  */
-export function useAsyncTimes<R>(callback: () => Promise<R>, options?: TimesOptions) {
+export function useAsyncTimes<R>(callback: () => Promise<R>, options?: AsyncTimesOptions) {
     const {
         times = 30,
         delay = 30 /* seconds */ * 1000 /* milliseconds */,
@@ -24,15 +24,21 @@ export function useAsyncTimes<R>(callback: () => Promise<R>, options?: TimesOpti
         done = () => false,
     } = options ?? {}
 
-    const isMounted = useMountedState()
-    const [result, setResult] = useState<R | void>(undefined)
+    //#region only callback is reactive
+    const savedCallback = useRef<(() => Promise<R>) | null>(null)
+    useEffect(() => {
+        savedCallback.current = callback
+    })
+    //#endregion
 
     // create ticker
-    const ticker = useMemo(
-        () => async (rest: number) => {
+    const isMounted = useMountedState()
+    const [result, setResult] = useState<R | void>(undefined)
+    const ticker = useMemo(() => {
+        return async (rest: number) => {
             try {
                 const r = await Promise.race([
-                    callback(),
+                    savedCallback.current?.(),
                     new Promise<void>((_, reject) => {
                         setTimeout(() => reject(new Error('timeout')), timeout)
                     }),
@@ -45,11 +51,10 @@ export function useAsyncTimes<R>(callback: () => Promise<R>, options?: TimesOpti
                 await sleep(delay)
                 if (isMounted()) ticker(rest - 1)
             }
-        },
-        [delay, timeout, ignoreError, done],
-    )
+        }
+    }, [delay, timeout, ignoreError, done])
 
-    // invoke first ticker
+    // invoke ticker at the first time
     useEffect(() => {
         ticker(times)
     }, [])
