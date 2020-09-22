@@ -1,8 +1,9 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { getConstant } from '../../../../web3/constants'
 import { currentMaskbookChainIdSettings } from '../../../../settings/settings'
 import { ChainId } from '../../../../web3/types'
+import { getConstant } from '../../../../web3/helpers'
+import { CONSTANTS } from '../../../../web3/constants'
 
 //#region tracking chain id
 let currentChainId: ChainId = ChainId.Mainnet
@@ -12,7 +13,7 @@ currentMaskbookChainIdSettings.addListener((v) => (currentChainId = v))
 const pool = new Map<string, HttpProvider>()
 
 export function createProvider(chainId = currentChainId) {
-    const url = getConstant('INFURA_ADDRESS', chainId)
+    const url = getConstant(CONSTANTS, 'INFURA_ADDRESS', chainId)
     const provider = pool.has(url)
         ? pool.get(url)!
         : new Web3.providers.HttpProvider(url, {

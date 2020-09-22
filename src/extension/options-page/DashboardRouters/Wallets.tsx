@@ -46,6 +46,7 @@ import { useChainId } from '../../../web3/hooks/useChainId'
 import { useWallets, useTokens } from '../../../plugins/Wallet/hooks/useWallet'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { isDAI } from '../../../web3/helpers'
+import { CONSTANTS } from '../../../web3/constants'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -112,7 +113,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     { wallet, tokens }: WalletContentProps,
     ref,
 ) {
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const classes = useWalletContentStyles()
     const { t } = useI18N()
     const color = useColorStyles()

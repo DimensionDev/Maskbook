@@ -4,13 +4,14 @@ import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { Token, EthereumTokenType } from '../types'
 import { useChainId } from './useChainId'
 import { useConstant } from './useConstant'
+import { CONSTANTS } from '../constants'
 
 function resolveSettleResult<T>(result: PromiseSettledResult<T>, fallback: T) {
     return result.status === 'fulfilled' ? result.value : fallback
 }
 
 export function useToken(token?: PartialRequired<Token, 'address' | 'type'>) {
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const chainId = useChainId()
     const erc20Contract = useERC20TokenContract(token?.address ?? ETH_ADDRESS)
 

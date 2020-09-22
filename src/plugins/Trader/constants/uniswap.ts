@@ -1,43 +1,105 @@
 import { Percent, JSBI } from '@uniswap/sdk'
 import { ChainId, Token } from '../../../web3/types'
-import { getConstant } from '../../../web3/constants'
-import { createERC20Token } from '../helpers'
-import MAINNET_TOKENS from '../../../web3/erc20/mainnet.json'
-import RINKEBY_TOKENS from '../../../web3/erc20/rinkeby.json'
+import { CONSTANTS } from '../../../web3/constants'
+import { createERC20Token, getConstant } from '../../../web3/helpers'
 
 export const MIN_AMOUNT_LENGTH = 1
 export const MAX_AMOUNT_LENGTH = 79
 
-const DAI = createERC20Token(ChainId.Mainnet, getConstant('DAI_ADDRESS', ChainId.Mainnet), 18, 'Dai Stablecoin', 'DAI')
-const AMPL = createERC20Token(ChainId.Mainnet, getConstant('AMPL_ADDRESS', ChainId.Mainnet), 18, 'Ampleforth', 'AMPL')
+// Mainnet
+const DAI = createERC20Token(
+    ChainId.Mainnet,
+    getConstant(CONSTANTS, 'DAI_ADDRESS', ChainId.Mainnet),
+    18,
+    'Dai Stablecoin',
+    'DAI',
+)
+const USDC = createERC20Token(
+    ChainId.Mainnet,
+    getConstant(CONSTANTS, 'USDC_ADDRESS', ChainId.Mainnet),
+    6,
+    'USD Coin',
+    'USDC',
+)
+const USDT = createERC20Token(
+    ChainId.Mainnet,
+    getConstant(CONSTANTS, 'USDT_ADDRESS', ChainId.Mainnet),
+    6,
+    'Tether USD',
+    'USDT',
+)
+const COMP = createERC20Token(
+    ChainId.Mainnet,
+    getConstant(CONSTANTS, 'USDT_ADDRESS', ChainId.Mainnet),
+    18,
+    'Compound',
+    'COMP',
+)
+const MKR = createERC20Token(
+    ChainId.Mainnet,
+    getConstant(CONSTANTS, 'MKR_ADDRESS', ChainId.Mainnet),
+    18,
+    'Maker',
+    'MKR',
+)
+const AMPL = createERC20Token(
+    ChainId.Mainnet,
+    getConstant(CONSTANTS, 'AMPL_ADDRESS', ChainId.Mainnet),
+    18,
+    'Ampleforth',
+    'AMPL',
+)
+
+// Rinkeby
+const MSKA = createERC20Token(
+    ChainId.Rinkeby,
+    getConstant(CONSTANTS, 'MSKA_ADDRESS', ChainId.Rinkeby),
+    18,
+    'Maskbook A',
+    'MSKA',
+)
+const MSKB = createERC20Token(
+    ChainId.Rinkeby,
+    getConstant(CONSTANTS, 'MSKB_ADDRESS', ChainId.Rinkeby),
+    18,
+    'Maskbook B',
+    'MSKB',
+)
+const MSKC = createERC20Token(
+    ChainId.Rinkeby,
+    getConstant(CONSTANTS, 'MSKC_ADDRESS', ChainId.Rinkeby),
+    18,
+    'Maskbook C',
+    'MSKC',
+)
 
 export const WETH: {
     readonly [chainId in ChainId]: Token
 } = {
     [ChainId.Mainnet]: createERC20Token(
         ChainId.Mainnet,
-        getConstant('WETH_ADDRESS', ChainId.Mainnet),
+        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Mainnet),
         18,
         'Wrapped Ether',
         'WETH',
     ),
     [ChainId.Ropsten]: createERC20Token(
         ChainId.Ropsten,
-        getConstant('WETH_ADDRESS', ChainId.Ropsten),
+        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Ropsten),
         18,
         'Wrapped Ether',
         'WETH',
     ),
     [ChainId.Rinkeby]: createERC20Token(
         ChainId.Rinkeby,
-        getConstant('WETH_ADDRESS', ChainId.Rinkeby),
+        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Rinkeby),
         18,
         'Wrapped Ether',
         'WETH',
     ),
     [ChainId.Kovan]: createERC20Token(
         ChainId.Kovan,
-        getConstant('WETH_ADDRESS', ChainId.Kovan),
+        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Kovan),
         18,
         'Wrapped Ether',
         'WETH',
@@ -71,18 +133,8 @@ export const BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: Token[]
 } = {
     ...WETH_ONLY,
-    [ChainId.Mainnet]: [
-        ...WETH_ONLY[ChainId.Mainnet],
-        ...MAINNET_TOKENS.predefined_tokens
-            .filter((x) => ['DAI', 'USDC', 'USDT', 'COMP', 'MKR', 'AMPL'].includes(x.symbol))
-            .map((x) => createERC20Token(ChainId.Mainnet, x.address, x.decimals, x.name, x.symbol)),
-    ],
-    [ChainId.Rinkeby]: [
-        ...WETH_ONLY[ChainId.Rinkeby],
-        ...RINKEBY_TOKENS.predefined_tokens
-            .filter((x) => ['KANA', 'KANB'].includes(x.symbol))
-            .map((x) => createERC20Token(ChainId.Rinkeby, x.address, x.decimals, x.name, x.symbol)),
-    ],
+    [ChainId.Mainnet]: [...WETH_ONLY[ChainId.Mainnet], ...[DAI, USDC, USDT, COMP, MKR, AMPL]],
+    [ChainId.Rinkeby]: [...WETH_ONLY[ChainId.Rinkeby], ...[MSKA, MSKB, MSKC]],
 }
 
 export const BIPS_BASE = JSBI.BigInt(10000)

@@ -3,9 +3,10 @@ import { useConstant } from './useConstant'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { useAsync } from 'react-use'
 import { useAccount } from './useAccount'
+import { CONSTANTS } from '../constants'
 
 export function useTokenAllowance(token?: PartialRequired<Token, 'address'>, spender?: string) {
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(token?.address ?? ETH_ADDRESS)
     return useAsync(async () => {

@@ -11,9 +11,10 @@ import BigNumber from 'bignumber.js'
 import { createRedPacketTransaction, RedPacketPluginReificatedWalletDBReadOnly } from './database'
 import { assert, unreachable } from '../../utils/utils'
 import { ChainId, EthereumTokenType } from '../../web3/types'
-import { getConstant } from '../../web3/constants'
 import { getChainId } from '../../extension/background-script/EthereumService'
 import { parseChainName } from '../../web3/pipes'
+import { getConstant } from '../../web3/helpers'
+import { RED_PACKET_CONSTANTS } from './constants'
 
 function getProvider() {
     return redPacketAPI
@@ -89,7 +90,7 @@ export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedP
         if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
         const res = await getWalletProvider().approve(
             packet.sender_address,
-            getConstant('HAPPY_RED_PACKET_ADDRESS', await getChainId()),
+            getConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS', await getChainId()),
             packet.erc20_token,
             packet.send_total,
         )
@@ -113,7 +114,7 @@ export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedP
     const record: RedPacketRecord = {
         aes_version: 1,
         contract_version: 1,
-        contract_address: getConstant('HAPPY_RED_PACKET_ADDRESS', await getChainId()),
+        contract_address: getConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS', await getChainId()),
         id: uuid(),
         duration: packet.duration,
         is_random: packet.is_random,

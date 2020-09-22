@@ -54,6 +54,7 @@ import { Token, EthereumTokenType } from '../../../web3/types'
 import { isSameAddress } from '../../../web3/helpers'
 import { useTokenLists } from '../../../web3/hooks/useTokenLists'
 import { useConstant } from '../../../web3/hooks/useConstant'
+import { CONSTANTS } from '../../../web3/constants'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -79,7 +80,7 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
     const { t } = useI18N()
     const classes = useERC20PredefinedTokenSelectorStyles()
 
-    const TOKEN_LISTS = useConstant('TOKEN_LISTS')
+    const TOKEN_LISTS = useConstant(CONSTANTS, 'TOKEN_LISTS')
     const chainId = useChainId()
     const [address, setAddress] = useState('')
     const [keyword, setKeyword] = useState('')
