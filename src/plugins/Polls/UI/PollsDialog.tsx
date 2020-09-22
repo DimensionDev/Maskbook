@@ -17,7 +17,7 @@ import {
     CircularProgress,
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
-import { add } from 'date-fns'
+import { add as addDate } from 'date-fns'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
@@ -100,7 +100,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
 
     const sendPoll = async () => {
         const start_time = new Date()
-        const end_time = add(start_time, {
+        const end_time = addDate(start_time, {
             days,
             hours,
             minutes,

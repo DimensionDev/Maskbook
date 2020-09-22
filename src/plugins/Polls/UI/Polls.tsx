@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles, createStyles, Card, Typography, CircularProgress, List, ListItem } from '@material-ui/core'
-import { isValid, formatDistance, intervalToDuration } from 'date-fns'
+import { isValid, formatDistance } from 'date-fns'
 import { zhTW, enUS, ja } from 'date-fns/locale'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
