@@ -35,7 +35,6 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import type { ERC20TokenDetails } from '../../background-script/PluginService'
 import type { RedPacketRecord } from '../../../plugins/RedPacket/types'
 import { useHistory } from 'react-router-dom'
-import { useSnackbar } from 'notistack'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import { Flags } from '../../../utils/flags'
 import { WalletMessageCenter, MaskbookWalletMessages } from '../../../plugins/Wallet/messages'
@@ -272,8 +271,8 @@ export default function DashboardWalletsRouter() {
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
     const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
-    const { data: wallets } = useWallets()
-    const { data: tokens } = useTokens()
+    const wallets = useWallets()
+    const tokens = useTokens()
     const [current, setCurrent] = useState('')
     const currentWallet = wallets?.find((wallet) => wallet.address === current)
 

@@ -7,8 +7,9 @@ import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupF
 import { GroupRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
 import { ProfileIdentifier, PersonaIdentifier, Identifier } from '../../../database/type'
-import { getManagedWallets } from '../../../plugins/Wallet/wallet'
+import { getWallets } from '../../../plugins/Wallet/wallet'
 import { WalletRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
+import { ProviderType } from '../../../web3/types'
 
 export interface BackupOptions {
     noPosts: boolean
@@ -93,7 +94,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     }
 
     async function backupAllWallets() {
-        const wallets_ = (await getManagedWallets()).wallets.map(WalletRecordToJSONFormat)
+        const wallets_ = (await getWallets(ProviderType.Maskbook)).map(WalletRecordToJSONFormat)
         wallets.push(...wallets_)
     }
 }

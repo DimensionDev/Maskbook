@@ -1,6 +1,7 @@
 import type { Contract } from 'web3-eth-contract'
 import { useMulticallContract } from '../contracts/useMulticallContract'
 import { useConstant } from './useConstant'
+import { CONSTANTS } from '../constants'
 
 interface Call<T> {
     address: string
@@ -19,17 +20,17 @@ export function useSingleContractMultipleData<
     A extends Parameters<T['methods'][M]>,
     R extends ReturnType<T['methods'][M]>
 >(contract: T, name: string, calls: Call<A>[]): R[] {
-    const MULTICALL_ADDRESS = useConstant('MULTICALL_ADDRESS')
+    const MULTICALL_ADDRESS = useConstant(CONSTANTS, 'MULTICALL_ADDRESS')
     const multicallContract = useMulticallContract(MULTICALL_ADDRESS)
     return []
 }
 
 export function useMutlipleContractSingleData() {
-    const MULTICALL_ADDRESS = useConstant('MULTICALL_ADDRESS')
+    const MULTICALL_ADDRESS = useConstant(CONSTANTS, 'MULTICALL_ADDRESS')
     const multicallContract = useMulticallContract(MULTICALL_ADDRESS)
 }
 
 export function useMultipleContractMultipleData() {
-    const MULTICALL_ADDRESS = useConstant('MULTICALL_ADDRESS')
+    const MULTICALL_ADDRESS = useConstant(CONSTANTS, 'MULTICALL_ADDRESS')
     const multicallContract = useMulticallContract(MULTICALL_ADDRESS)
 }

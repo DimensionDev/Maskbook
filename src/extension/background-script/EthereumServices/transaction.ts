@@ -2,7 +2,7 @@ import type { TransactionConfig, PromiEvent, TransactionReceipt } from 'web3-cor
 import type { ITxData } from '@walletconnect/types'
 
 import { promiEventToIterator, StageType } from '../../../utils/promiEvent'
-import { getManagedWallets } from '../../../plugins/Wallet/wallet'
+import { getWallets } from '../../../plugins/Wallet/wallet'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import { createWeb3 } from './web3'
@@ -16,10 +16,8 @@ import { ProviderType } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
 
 //#region tracking wallets
-let wallets: (WalletRecord & {
-    privateKey: string
-})[] = []
-const resetWallet = async () => ({ wallets } = await getManagedWallets())
+let wallets: WalletRecord[] = []
+const resetWallet = async () => (wallets = await getWallets(ProviderType.Maskbook))
 PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
 //#endregion
 
@@ -39,7 +37,7 @@ async function createTransactionSender(from: string, config: TransactionConfig) 
     // Add the private key into eth accounts list is also required.
     if (wallet.provider === ProviderType.Maskbook) {
         const web3 = createWeb3(Maskbook.createProvider())
-        const privateKey = wallet.privateKey
+        const privateKey = wallet._private_key_
         if (!privateKey) throw new Error(`cannot find private key for wallet ${wallet.address}`)
         const [nonce, gas, gasPrice] = await Promise.all([
             config.nonce ?? getNonce(from),
