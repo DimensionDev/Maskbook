@@ -1,2 +1,2 @@
-export * from './uniswap'
 export * from './trending'
+export * from './uniswap'
