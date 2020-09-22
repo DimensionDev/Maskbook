@@ -41,12 +41,14 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                     data: cached.encodeABI(),
                                     ...config,
                                 })
+
                                 console.log(
                                     `call - ${JSON.stringify({
                                         name,
                                         from: account,
                                         to: contract.options.address,
                                         ...config,
+                                        result,
                                     })}`,
                                 )
 

@@ -12,12 +12,10 @@ currentMetaMaskChainIdSettings.addListener((v) => (currentChainId = v))
 //#endregion
 
 let provider: MetamaskInpageProvider | null = null
+let web3: Web3 | null = null
 
 export function createProvider() {
-    if (provider) {
-        console.log('DEBUG: create provider')
-        console.log(provider.connected)
-    }
+    if (provider) return provider
     provider = createMetaMaskProvider()
     provider.on('data', async (error: Error | null, event?: { method: string; result: string[] }) => {
         if (error) return
@@ -29,6 +27,12 @@ export function createProvider() {
         currentMetaMaskChainIdSettings.value = Number.parseInt(id) as ChainId
     })
     return provider
+}
+
+export function createWeb3() {
+    if (!provider) provider = createProvider()
+    if (!web3) web3 = new Web3(provider)
+    return web3
 }
 
 export async function requestAccounts() {

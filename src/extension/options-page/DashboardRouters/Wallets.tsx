@@ -271,12 +271,12 @@ export default function DashboardWalletsRouter() {
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
     const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
+    const chainid = useChainId()
     const wallets = useWallets()
     const tokens = useTokens()
     const [current, setCurrent] = useState('')
-    const currentWallet = wallets?.find((wallet) => wallet.address === current)
+    const currentWallet = wallets.find((wallet) => wallet.address === current)
 
-    const chainid = useChainId()
     const getTokensForWallet = (wallet?: WalletRecord) => {
         if (!wallet) return []
         return (tokens ?? [])

@@ -519,25 +519,18 @@ const useBackupDialogStyles = makeStyles((theme: Theme) =>
 
 export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
-    const { wallet } = props.ComponentProps!
+    const {
+        wallet: { address },
+    } = props.ComponentProps!
     const classes = useBackupDialogStyles()
-    const managedWallet = useWallet(wallet.address)
+    const wallet = useWallet(address)
     const { value: privateKeyInHex } = useAsync(async () => {
-        if (!managedWallet) return
-        const { privateKeyInHex } = managedWallet._private_key_
-            ? await Services.Plugin.invokePlugin(
-                  'maskbook.wallet',
-                  'recoverWalletFromPrivateKey',
-                  managedWallet._private_key_,
-              )
-            : await Services.Plugin.invokePlugin(
-                  'maskbook.wallet',
-                  'recoverWallet',
-                  managedWallet.mnemonic,
-                  managedWallet.passphrase,
-              )
+        if (!wallet) return
+        const { privateKeyInHex } = wallet._private_key_
+            ? await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', wallet._private_key_)
+            : await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWallet', wallet.mnemonic, wallet.passphrase)
         return privateKeyInHex
-    }, [managedWallet])
+    }, [wallet])
 
     return (
         <DashboardDialogCore {...props}>
@@ -549,11 +542,9 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
                 constraintSecondary={false}
                 content={
                     <>
-                        {managedWallet?.mnemonic.length ? (
+                        {wallet?.mnemonic.length ? (
                             <section className={classes.section}>
-                                <ShowcaseBox title={t('mnemonic_words')}>
-                                    {managedWallet.mnemonic.join(' ')}
-                                </ShowcaseBox>
+                                <ShowcaseBox title={t('mnemonic_words')}>{wallet.mnemonic.join(' ')}</ShowcaseBox>
                             </section>
                         ) : null}
                         <section className={classes.section}>
