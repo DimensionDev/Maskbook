@@ -146,7 +146,7 @@ export function DecryptPost(props: DecryptPostProps) {
     useEffect(() => {
         if (firstSucceedDecrypted?.progress.type !== 'success') return
         onDecrypted(firstSucceedDecrypted.progress.content, firstSucceedDecrypted.progress.rawContent)
-    }, [firstSucceedDecrypted])
+    }, [firstSucceedDecrypted, onDecrypted])
     //#endregion
 
     // it's not a secret post

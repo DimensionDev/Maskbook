@@ -11,26 +11,33 @@ import { debugModeSetting } from '../../../settings/settings'
 import { GetContext } from '@holoflows/kit'
 import { usePostInfoDetails } from '../../DataSource/usePostInfo'
 import { getActivatedUI } from '../../../social-network/ui'
-import { deconstructPayload } from '../../../utils/type-transform/Payload'
+import { deconstructPayload, PayloadAlpha38 } from '../../../utils/type-transform/Payload'
 
 interface DebugDisplayProps {
     whoAmI: ProfileIdentifier
     debugHash: string
     decryptedResult: SuccessDecryption | FailureDecryption | null
 }
-export const DecryptedPostDebug = React.memo(function DecryptedPostDebug(props: Partial<DebugDisplayProps>) {
+export function DecryptedPostDebug(props: Partial<DebugDisplayProps>) {
     const postBy = usePostInfoDetails('postBy')
     const postContent = usePostInfoDetails('postContent')
-    const deconstructedPayload = useMemo(() => deconstructPayload(postContent, getActivatedUI().payloadDecoder), [
-        postContent,
-    ])
+    const payloadResult = useMemo(() => deconstructPayload(postContent, getActivatedUI().payloadDecoder), [postContent])
     const setting = useValueRef(debugModeSetting)
     const isDebugging = GetContext() === 'options' ? true : setting
 
     const { debugHash, decryptedResult, whoAmI } = props
-    if (!isDebugging || !deconstructedPayload || !deconstructedPayload.ok || !postBy) return null
-    const payload = deconstructedPayload.unwrap()
+    if (!isDebugging) return null
     const postByMyself = <DebugModeUI_PostHashDialog network={postBy.network} post={postContent} />
+    if (payloadResult.err)
+        return (
+            <DebugList
+                items={[
+                    postBy.equals(whoAmI) ? postByMyself : (['Hash of this post', debugHash] as const),
+                    ['Payload Error', payloadResult.val.message],
+                ]}
+            />
+        )
+    const payload = payloadResult.val
     const ownersAESKeyEncrypted = payload.version === -38 ? payload.AESKeyEncrypted : payload.ownersAESKeyEncrypted
     return (
         <DebugList
@@ -40,12 +47,14 @@ export const DecryptedPostDebug = React.memo(function DecryptedPostDebug(props: 
                     'Decrypt reason',
                     decryptedResult && decryptedResult.type !== 'error' ? decryptedResult.through.join(',') : 'Unknown',
                 ],
-                ['Payload version', payload.version],
-                ['Payload ownersAESKeyEncrypted', ownersAESKeyEncrypted],
-                ['Payload iv', payload.iv],
-                ['Payload encryptedText', payload.encryptedText],
-                ['Payload signature', payload.signature],
+                ['Version', payload.version],
+                ['ownersAESKeyEncrypted', ownersAESKeyEncrypted],
+                ['IV', payload.iv],
+                ['EncryptedText', payload.encryptedText],
+                ['Signature', payload.signature],
+                ['sharedPublic (v38)', (payload as PayloadAlpha38).sharedPublic],
+                ['authorPublicKey (v38)', (payload as PayloadAlpha38).authorPublicKey],
             ]}
         />
     )
-})
+}
