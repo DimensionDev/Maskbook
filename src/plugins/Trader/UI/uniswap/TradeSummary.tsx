@@ -11,12 +11,13 @@ import {
     Typography,
     IconButton,
 } from '@material-ui/core'
-import { Trade, TradeType } from '@uniswap/sdk'
+import type { Trade } from '@uniswap/sdk'
 import LoopIcon from '@material-ui/icons/Loop'
 import { useComputedTrade } from '../../uniswap/useComputedTrade'
 import type { Token } from '../../../../web3/types'
 import { ONE_BIPS } from '../../constants'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { TradeStrategy } from '../../types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,12 +51,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface TradeSummaryProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     trade: Trade | null
+    strategy: TradeStrategy
     inputToken?: Token
     outputToken?: Token
 }
 
 export function TradeSummary(props: TradeSummaryProps) {
-    const { trade, inputToken, outputToken } = props
+    const { trade, strategy, inputToken, outputToken } = props
     const classes = useStylesExtends(useStyles(), props)
 
     const computedTrade = useComputedTrade(trade)
@@ -65,6 +67,7 @@ export function TradeSummary(props: TradeSummaryProps) {
     if (!computedTrade) return null
     if (!inputToken || !outputToken) return null
 
+    const isExactIn = strategy === TradeStrategy.ExactIn
     const records = [
         trade.inputAmount.greaterThan('0') && trade.outputAmount.greaterThan('0')
             ? {
@@ -95,22 +98,22 @@ export function TradeSummary(props: TradeSummaryProps) {
                   ),
               }
             : null,
-        trade.tradeType === TradeType.EXACT_INPUT
+        isExactIn
             ? {
                   title: 'Minimum received',
                   children: (
                       <Typography className={classes.title}>
-                          {computedTrade.minimumReceived?.toSignificant(4)} {inputToken.symbol}
+                          {computedTrade.minimumReceived?.toSignificant(4)} {outputToken.symbol}
                       </Typography>
                   ),
               }
             : null,
-        trade.tradeType === TradeType.EXACT_OUTPUT
+        isExactIn
             ? {
                   title: 'Maximum sold',
                   children: (
                       <Typography className={classes.title}>
-                          {computedTrade.maximumSold?.toSignificant(4)} {outputToken.symbol}
+                          {computedTrade.maximumSold?.toSignificant(4)} {inputToken.symbol}
                       </Typography>
                   ),
               }

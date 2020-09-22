@@ -17,8 +17,8 @@ import { unreachable } from '../../../utils/utils'
 
 //#region tracking wallets
 let wallets: WalletRecord[] = []
-const resetWallets = async () => (wallets = await getWallets())
-PluginMessageCenter.on('maskbook.wallets.reset', resetWallets)
+const updateWallets = async () => (wallets = await getWallets())
+PluginMessageCenter.on('maskbook.wallets.update', updateWallets)
 //#endregion
 
 async function createTransactionSender(from: string, config: TransactionConfig) {
@@ -90,14 +90,7 @@ async function createTransactionSender(from: string, config: TransactionConfig) 
  * @param from
  * @param config
  */
-export async function* sendTransaction(
-    from: string,
-    config: TransactionConfig,
-    meta?: {
-        name?: string
-        args?: string[]
-    },
-) {
+export async function* sendTransaction(from: string, config: TransactionConfig) {
     try {
         const sender = await createTransactionSender(from, config)
         for await (const stage of promiEventToIterator(sender())) {

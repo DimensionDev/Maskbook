@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
     Button,
     makeStyles,
@@ -26,13 +26,16 @@ import {
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
 import { TokenPanel } from './TokenPanel'
 import { useComputedTrade } from '../../uniswap/useComputedTrade'
-import BigNumber from 'bignumber.js'
 import { PriceStaleWarnning } from './PriceStaleWarnning'
+import type { TradeStrategy } from '../../types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         paper: {
             width: '370px !important',
+        },
+        title: {
+            marginLeft: 6,
         },
         reverseIcon: {
             width: 16,
@@ -70,6 +73,7 @@ export interface ConfirmDialogUIProps
         | 'button'
     > {
     trade: Trade | null
+    strategy: TradeStrategy
     inputToken?: Token
     outputToken?: Token
     open: boolean
@@ -82,35 +86,20 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { t } = useI18N()
 
     const classes = useStylesExtends(useStyles(), props)
-    const { trade, inputToken, outputToken, open, onConfirm, onClose, UniswapTradeSummaryProps } = props
+    const { trade, strategy, inputToken, outputToken, open, onConfirm, onClose, UniswapTradeSummaryProps } = props
 
-    //#region snapshot
-    const computedTrade = useComputedTrade(trade)
-    const [staled, setStaled] = useState(false)
-    const [retakeFlag, updateRetakeFlag] = useState(false)
-    const snapshot = useMemo(
-        () => ({
-            inputAmount: trade?.inputAmount.raw.toString() ?? '0',
-            outputAmount: trade?.outputAmount.raw.toString() ?? '0',
-            maximumSold: computedTrade?.maximumSold.toSignificant(9) ?? '0',
-            minimumReceived: computedTrade?.minimumReceived.toSignificant(9) ?? '0',
-        }),
-        [retakeFlag],
-    )
+    //#region detect price changing
+    const [executionPrice, setExecutionPrice] = useState(trade?.executionPrice)
     useEffect(() => {
-        updateRetakeFlag((x) => !x)
-        setStaled(false)
+        if (open) setExecutionPrice(undefined)
     }, [open])
     useEffect(() => {
-        if (Object.values(snapshot).some((x) => x === '0')) updateRetakeFlag((x) => !x)
-        else setStaled(true)
-    }, [
-        trade?.inputAmount.raw.toString() ?? '0',
-        trade?.outputAmount.raw.toString() ?? '0',
-        computedTrade?.maximumSold.toSignificant(9) ?? '0',
-        computedTrade?.minimumReceived.toSignificant(9) ?? '0',
-    ])
+        if (typeof executionPrice === 'undefined') setExecutionPrice(trade?.executionPrice)
+    }, [trade, executionPrice])
     //#endregion
+
+    const computedTrade = useComputedTrade(trade)
+    const staled = !!(trade && executionPrice && !executionPrice.equalTo(trade.executionPrice))
 
     return (
         <div className={classes.root}>
@@ -142,25 +131,27 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                 <DialogContent className={classes.content}>
                     {inputToken && outputToken ? (
                         <>
-                            <TokenPanel amount={snapshot.inputAmount} token={inputToken} />
+                            <TokenPanel amount={trade?.inputAmount.raw.toString() ?? '0'} token={inputToken} />
                             <ArrowDownwardIcon className={classes.reverseIcon} />
-                            <TokenPanel amount={snapshot.outputAmount} token={outputToken} />
+                            <TokenPanel amount={trade?.outputAmount.raw.toString() ?? '0'} token={outputToken} />
                         </>
                     ) : null}
                     {staled ? (
                         <PriceStaleWarnning
                             onAccept={() => {
-                                updateRetakeFlag((x) => !x)
-                                setStaled(false)
+                                setExecutionPrice(trade?.executionPrice)
                             }}
                         />
                     ) : null}
                     <Typography
                         className={classes.tip}
-                        color="textSecondary">{`Output is estimated. You will receive at least ${snapshot.minimumReceived} ${trade?.outputAmount.currency.symbol} or the transaction will revert.`}</Typography>
+                        color="textSecondary">{`Output is estimated. You will receive at least ${
+                        computedTrade?.minimumReceived.toSignificant(9) ?? '0'
+                    } ${trade?.outputAmount.currency.symbol} or the transaction will revert.`}</Typography>
                     <TradeSummary
                         classes={{ root: classes.summary }}
                         trade={trade}
+                        strategy={strategy}
                         inputToken={inputToken}
                         outputToken={outputToken}
                         {...UniswapTradeSummaryProps}

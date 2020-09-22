@@ -3,18 +3,21 @@ import classNames from 'classnames'
 import { noop } from 'lodash-es'
 import { makeStyles, Theme, createStyles, Typography, Grid } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
-import { Trade, TradeType } from '@uniswap/sdk'
+import type { Trade } from '@uniswap/sdk'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenAmountPanel } from './TokenAmountPanel'
 import BigNumber from 'bignumber.js'
-import type { Token } from '../../../../web3/types'
+import { Token, ChainId } from '../../../../web3/types'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { MaskbookWalletMessages, WalletMessageCenter } from '../../../Wallet/messages'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { ApproveState } from '../../../../web3/hooks/useTokenApproveCallback'
 import { EthereumAccountChip } from '../../../../components/shared/EthereumAccountChip'
+import { EthereumChainChip } from '../../../../components/shared/EthereumChainChip'
+import { useChainId } from '../../../../web3/hooks/useChainId'
+import { TradeStrategy } from '../../types'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -42,11 +45,19 @@ const useStyles = makeStyles((theme: Theme) => {
             paddingTop: 12,
             paddingBottom: 12,
         },
+        ethereumChainChip: {
+            borderRadius: 8,
+            marginRight: theme.spacing(1),
+        },
+        ethereumAccountChip: {
+            borderRadius: 12,
+        },
     })
 })
 
 export interface TradeFormProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     approveState: ApproveState
+    strategy: TradeStrategy
     trade: Trade | null
     inputToken?: Token
     outputToken?: Token
@@ -63,6 +74,7 @@ export interface TradeFormProps extends withClasses<KeysInferFromUseStyles<typeo
 export function TradeForm(props: TradeFormProps) {
     const {
         approveState,
+        strategy,
         trade,
         inputToken,
         outputToken,
@@ -77,8 +89,12 @@ export function TradeForm(props: TradeFormProps) {
     } = props
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region loading balance
+    //#region UI
     const account = useAccount()
+    const chainId = useChainId()
+    //#endregion
+
+    //#region loading balance
     const { value: inputTokenBalance, loading: loadingInputToken } = useTokenBalance(inputToken)
     const { value: outputTokenBalance, loading: loadingOutputToken } = useTokenBalance(outputToken)
     const inputTokenTradeAmount = new BigNumber(inputAmount)
@@ -100,7 +116,7 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region form controls
-    const isExactIn = trade?.tradeType === TradeType.EXACT_INPUT
+    const isExactIn = strategy === TradeStrategy.ExactIn
     const inputPanelLabel = 'From' + (!isExactIn && inputTokenTradeAmount.isGreaterThan(0) ? ' (estimated)' : '')
     const outputPanelLabel = 'To' + (isExactIn && outputTokenTradeAmount.isGreaterThan(0) ? ' (estimated)' : '')
     const sections = [
@@ -180,7 +196,18 @@ export function TradeForm(props: TradeFormProps) {
     return (
         <form className={classes.form} noValidate autoComplete="off">
             <div className={classNames(classes.section, classes.account)}>
-                <EthereumAccountChip address={account} />
+                {chainId === ChainId.Mainnet ? null : (
+                    <EthereumChainChip
+                        classes={{ root: classes.ethereumChainChip }}
+                        chainId={chainId}
+                        ChipProps={{ variant: 'outlined' }}
+                    />
+                )}
+                <EthereumAccountChip
+                    classes={{ root: classes.ethereumAccountChip }}
+                    address={account}
+                    ChipProps={{ size: 'medium', variant: 'outlined' }}
+                />
             </div>
             {sections.map(({ key, children }) => (
                 <div className={classNames(classes.section, key === 'divider' ? classes.divider : '')} key={key}>
