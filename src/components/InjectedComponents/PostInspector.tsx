@@ -69,19 +69,19 @@ export function PostInspector(props: PostInspectorProps) {
                 onDecrypted={props.onDecrypted}
                 requestAppendRecipients={
                     // So should not create new data on version -40
-                    encryptedPost.ok && encryptedPost.val.version === -40
-                        ? async (people) => {
+                    encryptedPost.ok && encryptedPost.val.version !== -40
+                        ? async (profile) => {
                               const { val } = encryptedPost
                               const { iv, version } = val
                               const ownersAESKeyEncrypted =
                                   val.version === -38 ? val.AESKeyEncrypted : val.ownersAESKeyEncrypted
 
-                              setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
+                              setAlreadySelectedPreviously(alreadySelectedPreviously.concat(profile))
                               return Services.Crypto.appendShareTarget(
                                   version,
                                   ownersAESKeyEncrypted,
                                   iv,
-                                  people.map((x) => x.identifier),
+                                  profile.map((x) => x.identifier),
                                   whoAmI!.identifier,
                                   { type: 'direct', at: new Date() },
                               )
