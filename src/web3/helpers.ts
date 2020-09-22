@@ -1,6 +1,9 @@
 import BigNumber from 'bignumber.js'
+import type { AbiOutput } from 'web3-utils'
 import { CONSTANTS } from './constants'
 import { ChainId, EthereumTokenType, Token } from './types'
+import type Web3 from 'web3'
+import { unreachable } from '../utils/utils'
 
 export function isSameAddress(addrA: string, addrB: string) {
     return addrA.toLowerCase() === addrB.toLowerCase()
@@ -54,6 +57,23 @@ export function getAllConstants<T extends Web3Constants, K extends keyof T>(cons
         },
     )
 }
+//#endregion
+
+//#region token
+export function resolveTokenLinkInEtherscan(token: Token) {
+    switch (token.chainId) {
+        case ChainId.Mainnet:
+            return `https://etherscan.io/token/${token.address}`
+        case ChainId.Ropsten:
+            return `https://ropsten.etherscan.io/token/${token.address}`
+        case ChainId.Rinkeby:
+            return `https://rinkeby.etherscan.io/token/${token.address}`
+        case ChainId.Kovan:
+            return `https://kovan.etherscan.io/token/${token.address}`
+        default:
+            unreachable(token.chainId)
+    }
+}
 
 export function createEetherToken(chainId: ChainId): Token {
     return {
@@ -81,4 +101,15 @@ export function createERC20Token(
         name,
         symbol,
     }
+}
+//#endregion
+
+export function decodeOutputString(web3: Web3, abi: AbiOutput[], output: string) {
+    if (abi.length === 1) return web3.eth.abi.decodeParameter(abi[0].type, output)
+    if (abi.length > 1)
+        return web3.eth.abi.decodeParameters(
+            abi.map((x) => x.type),
+            output,
+        )
+    return
 }
