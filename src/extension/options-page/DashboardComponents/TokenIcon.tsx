@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
         icon: {
             width: 16,
             height: 16,
+            backgroundColor: theme.palette.common.white,
         },
     }),
 )
