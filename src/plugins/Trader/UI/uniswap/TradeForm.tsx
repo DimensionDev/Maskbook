@@ -172,6 +172,7 @@ export function TradeForm(props: TradeFormProps) {
             return `Insufficient ${inputToken?.symbol} balance`
         if (!isExactIn && outputTokenBalanceAmount.isLessThan(outputTokenTradeAmount))
             return `Insufficient ${outputToken?.symbol} balance`
+        if (!trade) return 'Insufficient liquidity for this trade.'
         return ''
     }, [isExactIn, inputToken, outputToken, inputTokenTradeAmount, outputTokenTradeAmount])
     //#endregion

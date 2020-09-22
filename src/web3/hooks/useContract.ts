@@ -2,22 +2,13 @@ import { useMemo } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import type { Contract } from 'web3-eth-contract'
 import type { TransactionConfig } from 'web3-core'
-import type { AbiItem, AbiOutput } from 'web3-utils'
+import type { AbiItem } from 'web3-utils'
 import Services, { ServicesWithProgress } from '../../extension/service'
 import { useAccount } from './useAccount'
 import { nonFunctionalWeb3 } from '../web3'
 import { iteratorToPromiEvent } from '../../utils/promiEvent'
 import type { EstimateGasOptions } from '../../contracts/types'
-
-const decodeHexString = (outputs: AbiOutput[], hex: string) => {
-    if (outputs.length === 1) return nonFunctionalWeb3.eth.abi.decodeParameter(outputs[0].type, hex)
-    if (outputs.length > 1)
-        return nonFunctionalWeb3.eth.abi.decodeParameters(
-            outputs.map((x) => x.type),
-            hex,
-        )
-    return
-}
+import { decodeOutputString } from '../helpers'
 
 /**
  * Create a contract which will forward its all transactions to the
@@ -59,7 +50,11 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                     })}`,
                                 )
 
-                                return decodeHexString(methodABI ? methodABI.outputs ?? [] : [], result)
+                                return decodeOutputString(
+                                    nonFunctionalWeb3,
+                                    methodABI ? methodABI.outputs ?? [] : [],
+                                    result,
+                                )
                             },
                             send(config: TransactionConfig) {
                                 if (!account) throw new Error('cannot find account')

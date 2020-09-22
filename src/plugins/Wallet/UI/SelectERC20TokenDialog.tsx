@@ -130,7 +130,7 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                     width="100%"
                     height={288}
                     overscanCount={4}
-                    itemSize={48}
+                    itemSize={52}
                     itemData={{
                         tokens,
                         excludeTokens,
