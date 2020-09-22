@@ -86,7 +86,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
             .catch((e) => Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `error=${e.message}`))
             .finally(() => setLoading(false))
     }
-    const { data: wallets } = useWallets()
+    const wallets = useWallets()
     const onClick = async (state: RedPacketStatus, rpid: RedPacketRecord['red_packet_id']) => {
         if (!rpid) return
         if (state === 'incoming' || state === 'normal') {

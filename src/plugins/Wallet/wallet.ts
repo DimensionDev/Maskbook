@@ -50,47 +50,33 @@ export async function isEmptyWallets() {
     return count === 0
 }
 
-export async function getWallets() {
+export async function getWallets(provider?: ProviderType) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
-    const recs = await t.objectStore('Wallet').getAll()
-    return recs.map(WalletRecordOutDB).sort(sortWallet)
+    const records = await t.objectStore('Wallet').getAll()
+    const wallets = (
+        await Promise.all(
+            records.map(async (record) => {
+                const walletRecord = WalletRecordOutDB(record)
+                return {
+                    ...walletRecord,
+                    _private_key_: await makePrivateKey(walletRecord),
+                }
+            }),
+        )
+    ).sort(sortWallet)
+    return wallets.length && typeof provider !== 'undefined' ? wallets.filter((x) => x.provider === provider) : wallets
+    async function makePrivateKey(record: WalletRecord) {
+        if (record.provider !== ProviderType.Maskbook) return '0x'
+        const { privateKey } = record._private_key_
+            ? await recoverWalletFromPrivateKey(record._private_key_)
+            : await recoverWallet(record.mnemonic, record.passphrase)
+        return `0x${buf2hex(privateKey)}`
+    }
 }
 export async function getTokens() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token')
     const tokens = await t.objectStore('ERC20Token').getAll()
     return uniqBy(tokens, (token) => token.address.toUpperCase()).map(ERC20TokenRecordOutDB)
-}
-
-export async function getManagedWallet(address: string) {
-    const { wallets } = await getManagedWallets()
-    return wallets.find((x) => x.address === address)
-}
-
-export async function getManagedWallets(): Promise<{
-    wallets: (WalletRecord & { privateKey: string })[]
-    tokens: ERC20TokenRecord[]
-}> {
-    const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet', 'ERC20Token')
-    const wallets = await t.objectStore('Wallet').getAll()
-    const tokens = await t.objectStore('ERC20Token').getAll()
-    async function makeWallets() {
-        const records = wallets
-            .map(WalletRecordOutDB)
-            .filter((x) => [ProviderType.Maskbook, ProviderType.MetaMask].includes(x.provider))
-            .map(async (record) => ({ ...record, privateKey: await makePrivateKey(record) }))
-        return (await Promise.all(records)).sort(sortWallet)
-        async function makePrivateKey(record: WalletRecord) {
-            if (record.provider === ProviderType.MetaMask) return '0x'
-            const { privateKey } = record._private_key_
-                ? await recoverWalletFromPrivateKey(record._private_key_)
-                : await recoverWallet(record.mnemonic, record.passphrase)
-            return `0x${buf2hex(privateKey)}`
-        }
-    }
-    function makeTokens() {
-        return uniqBy(tokens, (token) => token.address.toUpperCase()).map(ERC20TokenRecordOutDB)
-    }
-    return { wallets: await makeWallets(), tokens: makeTokens() }
 }
 
 export async function updateExoticWalletsFromSource(
@@ -114,7 +100,7 @@ export async function updateExoticWalletsFromSource(
     for (const address of updates.keys()) {
         if (await walletStore.get(address)) continue
         modified = true
-        await walletStore.add(
+        await walletStore.put(
             WalletRecordIntoDB({
                 address,
                 createdAt: new Date(),

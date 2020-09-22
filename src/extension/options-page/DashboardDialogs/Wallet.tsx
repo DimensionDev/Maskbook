@@ -48,13 +48,13 @@ import { QRCode } from '../../../components/shared/qrcode'
 import { TokenInList } from '../DashboardComponents/TokenInList'
 import { FixedSizeList } from 'react-window'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { useManagedWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { Token, EthereumTokenType } from '../../../web3/types'
 import { isSameAddress } from '../../../web3/helpers'
 import { useTokenLists } from '../../../web3/hooks/useTokenLists'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../web3/constants'
+import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -521,14 +521,23 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
     const classes = useBackupDialogStyles()
-    const { data } = useManagedWallet(wallet.address)
+    const managedWallet = useWallet(wallet.address)
     const { value: privateKeyInHex } = useAsync(async () => {
-        if (!data) return
-        const { privateKeyInHex } = data.privateKey
-            ? await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', data.privateKey)
-            : await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWallet', data.mnemonic, data.passphrase)
+        if (!managedWallet) return
+        const { privateKeyInHex } = managedWallet._private_key_
+            ? await Services.Plugin.invokePlugin(
+                  'maskbook.wallet',
+                  'recoverWalletFromPrivateKey',
+                  managedWallet._private_key_,
+              )
+            : await Services.Plugin.invokePlugin(
+                  'maskbook.wallet',
+                  'recoverWallet',
+                  managedWallet.mnemonic,
+                  managedWallet.passphrase,
+              )
         return privateKeyInHex
-    }, [data])
+    }, [managedWallet])
 
     return (
         <DashboardDialogCore {...props}>
@@ -540,9 +549,11 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
                 constraintSecondary={false}
                 content={
                     <>
-                        {data?.mnemonic.length ? (
+                        {managedWallet?.mnemonic.length ? (
                             <section className={classes.section}>
-                                <ShowcaseBox title={t('mnemonic_words')}>{data.mnemonic.join(' ')}</ShowcaseBox>
+                                <ShowcaseBox title={t('mnemonic_words')}>
+                                    {managedWallet.mnemonic.join(' ')}
+                                </ShowcaseBox>
                             </section>
                         ) : null}
                         <section className={classes.section}>

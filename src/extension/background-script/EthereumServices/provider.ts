@@ -1,6 +1,7 @@
 import * as WalletConnect from './providers/WalletConnect'
 import * as MetaMask from './providers/MetaMask'
-import { getManagedWallets, setDefaultWallet } from '../../../plugins/Wallet/wallet'
+import { getWallets, setDefaultWallet } from '../../../plugins/Wallet/wallet'
+import { ProviderType } from '../../../web3/types'
 
 //#region connect WalletConnect
 // step 1:
@@ -23,7 +24,7 @@ export async function connectMetaMask() {
 }
 
 export async function connectMaskbook() {
-    const { wallets } = await getManagedWallets()
+    const wallets = await getWallets(ProviderType.Maskbook)
     // no wallet exists go to wallet panel in the dashboard
     if (wallets.length === 0) return
     // return the default wallet
