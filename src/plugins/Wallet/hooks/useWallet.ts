@@ -10,11 +10,12 @@ import { useChainId } from '../../../web3/hooks/useChainId'
 import { CONSTANTS } from '../../../web3/constants'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { WalletRecord, ERC20TokenRecord } from '../database/types'
+import { WalletArrayComparer, TokenComparer, WalletComparer, TokenArrayComparer } from '../helpers'
 
 //#region cache service query result
-const defaultWalletRef = new ValueRef<WalletRecord | null>(null)
-const walletsRef = new ValueRef<WalletRecord[]>([])
-const tokensRef = new ValueRef<ERC20TokenRecord[]>([])
+const defaultWalletRef = new ValueRef<WalletRecord | null>(null, WalletComparer)
+const walletsRef = new ValueRef<WalletRecord[]>([], WalletArrayComparer)
+const tokensRef = new ValueRef<ERC20TokenRecord[]>([], TokenArrayComparer)
 const walletRefs = new Map<string, ValueRef<WalletRecord>>()
 
 async function revalidate() {
@@ -24,9 +25,10 @@ async function revalidate() {
         const key = x.address.toLowerCase()
         const walletRef = walletRefs.get(key)
         if (walletRef) walletRef.value = x
-        else walletRefs.set(key, new ValueRef(x))
+        else walletRefs.set(key, new ValueRef(x, WalletComparer))
     })
     defaultWalletRef.value = wallets.find((x) => x._wallet_is_default) ?? wallets[0] ?? null
+    walletsRef.value = wallets
 
     // tokens
     const tokens = await Services.Plugin.invokePlugin('maskbook.wallet', 'getTokens')
@@ -50,8 +52,8 @@ export function useTokens() {
 
 export function useWallets(provider?: ProviderType) {
     const wallets = useValueRef(walletsRef)
-    if (wallets.length && typeof provider !== undefined) return wallets.filter((x) => x.provider === provider)
-    return wallets
+    if (typeof provider === 'undefined') return wallets
+    return wallets.filter((x) => x.provider === provider)
 }
 
 export function useSelectWallet(wallets: WalletRecord[] | undefined, tokens: ERC20TokenDetails[] | undefined) {
