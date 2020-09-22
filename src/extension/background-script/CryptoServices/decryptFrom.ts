@@ -23,6 +23,7 @@ import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/Crypt
 import { decodeImageUrl } from '../SteganographyService'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import stringify from 'json-stable-stringify'
+import { calculatePostKeyPartition } from '../../../network/gun/version.2'
 
 type Progress =
     | {
@@ -173,21 +174,14 @@ async function* decryptFromPayloadWithProgress_raw(
         if (!mine?.privateKey) return makeError(DecryptFailedReason.MyCryptoKeyNotFound)
 
         const { publicKey: minePublic, privateKey: minePrivate } = mine
-        if (cachedPostResult) {
-            if (!author.equals(whoAmI) && minePrivate && version !== -40) {
-                const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(
-                    version,
-                    iv,
-                    minePublic,
-                    getNetworkWorker(whoAmI).unwrap().gunNetworkHint,
-                )
-                yield { type: 'debug', debug: 'debug_finding_hash', hash: [postHash, keyHash] }
-            }
-            const signatureVerifyResult = authorPersona.publicKey
-                ? await cryptoProvider.verify(waitForVerifySignaturePayload, signature || '', authorPersona.publicKey)
-                : false
-            return makeSuccessResult(cachedPostResult, ['post_key_cached'], signatureVerifyResult)
-        }
+        const networkWorker = getNetworkWorker(whoAmI)
+        try {
+            if (version === -40) throw ''
+            const gunNetworkHint = networkWorker.unwrap().gunNetworkHint
+            const { keyHash, postHash } = await calculatePostKeyPartition(version, iv, minePublic, gunNetworkHint)
+            yield { type: 'debug', debug: 'debug_finding_hash', hash: [postHash, keyHash] }
+        } catch {}
+        if (cachedPostResult) return makeSuccessResult(cachedPostResult, ['post_key_cached'])
 
         let lastError: unknown
         /**
@@ -223,13 +217,7 @@ async function* decryptFromPayloadWithProgress_raw(
             if (result === undefined) return makeError(i18n.t('service_not_share_target'))
             aesKeyEncrypted.push(result)
         } else if (version === -39 || version === -38) {
-            const { keyHash, keys, postHash } = await Gun2.queryPostKeysOnGun2(
-                version,
-                iv,
-                minePublic,
-                authorNetworkWorker.val.gunNetworkHint,
-            )
-            yield { type: 'debug', debug: 'debug_finding_hash', hash: [postHash, keyHash] }
+            const keys = await Gun2.queryPostKeysOnGun2(version, iv, minePublic, authorNetworkWorker.val.gunNetworkHint)
             aesKeyEncrypted.push(...keys)
         }
         // If we can decrypt with current info, just do it.
