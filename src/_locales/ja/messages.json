@@ -73,7 +73,7 @@
     "database_group_followers_name": "{{owner}}のフォロワー",
     "database_group_following_name": "{{owner}}にフォローされている人",
     "database_group_friends_default_name": "{{owner}}の相互フォロー",
-    "decrypted_postbox_add_recipients": "受信者の表示/追加",
+    "decrypted_postbox_add_recipients": "受信者を追加",
     "decrypted_postbox_decrypting": "Maskbook が複号しています。",
     "decrypted_postbox_decoding": "Maskbook が解読しています。",
     "decrypted_postbox_decrypting_finding_person_key": "Maskbook は公開鍵を探しています…",
