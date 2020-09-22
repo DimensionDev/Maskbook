@@ -12,7 +12,7 @@ export function useTokenAllowance(token?: PartialRequired<Token, 'address'>, spe
         if (!account) return
         if (!spender) return
         if (!erc20Contract) return
-        if (token?.type !== EthereumTokenType.ERC20) return
+        if (token?.type !== EthereumTokenType.ERC20) return '0'
         return erc20Contract.methods.allowance(account, spender).call()
     }, [account, spender, token?.type, erc20Contract])
 }
