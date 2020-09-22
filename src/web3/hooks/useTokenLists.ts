@@ -3,11 +3,10 @@ import Fuse from 'fuse.js'
 import Services from '../../extension/service'
 import { useAsync } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
-import { isSameAddress } from '../helpers'
+import { isSameAddress, createEetherToken } from '../helpers'
 import { useChainId } from './useChainId'
 import { EthereumTokenType, ChainId } from '../types'
 import { useToken } from './useToken'
-import { createEetherToken } from '../../plugins/Trader/helpers'
 
 export enum TokenListsState {
     READY,
