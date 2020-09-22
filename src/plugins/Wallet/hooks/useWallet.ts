@@ -8,6 +8,7 @@ import type { ERC20TokenDetails } from '../../../extension/background-script/Plu
 import { formatBalance } from '../formatter'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useChainId } from '../../../web3/hooks/useChainId'
+import { CONSTANTS } from '../../../web3/constants'
 
 const defaultWalletFetcher = () => Services.Plugin.invokePlugin('maskbook.wallet', 'getDefaultWallet')
 const walletsFetcher = () => Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
@@ -48,7 +49,7 @@ export function useManagedWallets() {
     return swr
 }
 export function useSelectWallet(wallets: WalletRecord[] | undefined, tokens: ERC20TokenDetails[] | undefined) {
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     const chainId = useChainId()
     const [selectedWalletAddress, setSelectedWalletAddress] = useState<undefined | string>(undefined)

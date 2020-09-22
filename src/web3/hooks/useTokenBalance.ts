@@ -4,9 +4,10 @@ import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { useConstant } from './useConstant'
+import { CONSTANTS } from '../constants'
 
 export function useTokenBalance(token?: PartialRequired<Token, 'address'>) {
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(token?.address ?? ETH_ADDRESS)
     return useAsync(async () => {

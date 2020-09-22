@@ -42,6 +42,7 @@ import { Trader } from '../uniswap/Trader'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { MaskbookTextIcon } from '../../../../resources/MaskbookIcon'
+import { CONSTANTS } from '../../../../web3/constants'
 
 const useStyles = makeStyles((theme: Theme) => {
     const internalName = getActivatedUI()?.internalName
@@ -157,7 +158,7 @@ export interface TrendingViewProps extends withClasses<KeysInferFromUseStyles<ty
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     const { t } = useI18N()
     const classes = useStyles()

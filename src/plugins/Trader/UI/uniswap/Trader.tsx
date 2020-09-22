@@ -18,6 +18,8 @@ import { useSwapCallback } from '../../uniswap/useSwapCallback'
 import { useSwapState, SwapActionType } from '../../uniswap/useSwapState'
 import { TradeStrategy } from '../../types'
 import { isSameAddress } from '../../../../web3/helpers'
+import { CONSTANTS } from '../../../../web3/constants'
+import { TRADE_CONSTANTS } from '../../constants'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -45,7 +47,7 @@ export interface TraderProps extends withClasses<KeysInferFromUseStyles<typeof u
 }
 
 export function Trader(props: TraderProps) {
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     const { address, name, symbol } = props
     const classes = useStylesExtends(useStyles(), props)
@@ -104,7 +106,7 @@ export function Trader(props: TraderProps) {
     )
 
     // open select token dialog
-    const lists = useConstant('TOKEN_LISTS')
+    const lists = useConstant(CONSTANTS, 'TOKEN_LISTS')
     const onTokenChipClick = useCallback(
         (token: Token) => {
             setFocusedTokenAddress(token?.address ?? '')
@@ -156,7 +158,7 @@ export function Trader(props: TraderProps) {
     //#endregion
 
     //#region approve
-    const RouterV2Address = useConstant('ROUTER_V2_ADDRESS')
+    const RouterV2Address = useConstant(TRADE_CONSTANTS, 'ROUTER_V2_ADDRESS')
     const { approveToken, approveAmount } = useComputedApprove(trade.v2Trade)
     const [approveState, approveCallback] = useTokenApproveCallback(approveToken, approveAmount, RouterV2Address)
     const onApprove = useCallback(async () => {

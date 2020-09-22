@@ -15,6 +15,7 @@ import { EthereumTokenType } from '../../../web3/types'
 import { isETH } from '../../../web3/helpers'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { useConstant } from '../../../web3/hooks/useConstant'
+import { CONSTANTS } from '../../../web3/constants'
 
 interface TokenSelectProps {
     useSelectWalletHooks: ReturnType<typeof useSelectWallet>
@@ -24,7 +25,7 @@ interface TokenSelectProps {
     DialogProps?: Partial<DialogProps>
 }
 export function TokenSelect({ useSelectWalletHooks, ...p }: TokenSelectProps) {
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     const { t } = useI18N()
     const { SelectProps, className, FormControlProps } = p

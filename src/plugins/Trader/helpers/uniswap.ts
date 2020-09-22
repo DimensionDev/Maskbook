@@ -7,9 +7,10 @@ import {
     TokenAmount,
     Percent,
 } from '@uniswap/sdk'
-import { getConstant } from '../../../web3/constants'
 import { WETH } from '../constants'
 import { unreachable } from '../../../utils/utils'
+import { getConstant } from '../../../web3/helpers'
+import { CONSTANTS } from '../../../web3/constants'
 
 export function toUniswapChainId(chainId: ChainId): UniswapChainId {
     switch (chainId) {
@@ -31,12 +32,12 @@ export function toUniswapPercent(numerator: number, denominator: number) {
 }
 
 export function toUniswapToken(chainId: ChainId, token: Token): UniswapToken {
-    if (token.address === getConstant('ETH_ADDRESS')) return toUniswapToken(chainId, WETH[chainId])
+    if (token.address === getConstant(CONSTANTS, 'ETH_ADDRESS')) return toUniswapToken(chainId, WETH[chainId])
     return new UniswapToken(toUniswapChainId(chainId), token.address, token.decimals, token.symbol, token.name)
 }
 
 export function toUniswapCurrencyAmount(chainId: ChainId, token: Token, amount: string) {
-    return token.address === getConstant('ETH_ADDRESS')
+    return token.address === getConstant(CONSTANTS, 'ETH_ADDRESS')
         ? CurrencyAmount.ether(JSBI.BigInt(amount))
         : new TokenAmount(toUniswapToken(chainId, token), JSBI.BigInt(amount))
 }

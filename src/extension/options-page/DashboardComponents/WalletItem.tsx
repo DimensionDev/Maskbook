@@ -15,6 +15,7 @@ import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ProviderType } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { resolveProviderName } from '../../../web3/pipes'
+import { CONSTANTS } from '../../../web3/constants'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -111,7 +112,7 @@ interface WalletItemProps {
 }
 
 export function WalletItem(props: WalletItemProps) {
-    const ETH_ADDRESS = useConstant('ETH_ADDRESS')
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     const { t } = useI18N()
     const classes = useStyles()

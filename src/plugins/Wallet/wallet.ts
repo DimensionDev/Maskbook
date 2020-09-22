@@ -17,9 +17,10 @@ import { buf2hex, hex2buf, assert } from '../../utils/utils'
 import { ProviderType, EthereumTokenType } from '../../web3/types'
 import { resolveProviderName, parseChainName } from '../../web3/pipes'
 import { ChainId, Token } from '../../web3/types'
-import { getConstant } from '../../web3/constants'
+import { CONSTANTS } from '../../web3/constants'
+import { getConstant } from '../../web3/helpers'
 
-const ETH_ADDRESS = getConstant('ETH_ADDRESS')
+const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS')
 
 //#region predefined tokens
 import mainnet from '../../web3/erc20/mainnet.json'

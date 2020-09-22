@@ -10,17 +10,18 @@ import { asyncTimes, pollingTask } from '../../utils/utils'
 import { sendTx } from '../Wallet/transaction'
 import { createRedPacketTransaction } from './database'
 import type { TxHashID, DatabaseID } from '../Wallet/api'
-import { getConstant } from '../../web3/constants'
 import { getChainId } from '../../extension/background-script/EthereumService'
 import { EthereumTokenType } from '../../web3/types'
 import { resolveChainName } from '../../web3/pipes'
+import { getConstant } from '../../web3/helpers'
+import { RED_PACKET_CONSTANTS } from './constants'
 
 type RedPacketID = { redPacketID: string }
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
 }
 async function getRedPacketContract() {
-    return createRedPacketContract(getConstant('HAPPY_RED_PACKET_ADDRESS', await getChainId()))
+    return createRedPacketContract(getConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS', await getChainId()))
 }
 export const redPacketAPI = {
     async claimByServer(
