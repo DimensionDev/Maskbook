@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount } from './useAccount'
 import { useConstant } from './useConstant'
@@ -7,6 +7,8 @@ import { Token, EthereumTokenType } from '../types'
 import { useTokenAllowance } from './useTokenAllowance'
 import { useTokenBalance } from './useTokenBalance'
 import { CONSTANTS } from '../constants'
+import { useAsyncTimes } from '../../utils/hooks/useAsyncTimes'
+import { useTransactionReceipt } from './useTransaction'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
@@ -25,14 +27,17 @@ export function useTokenApproveCallback(token?: Token, amount?: string, spender?
     const { value: balance } = useTokenBalance(token)
     const { value: allowance } = useTokenAllowance(token, spender)
 
+    const [approveHash, setApproveHash] = useState('')
+    const receipt = useTransactionReceipt(approveHash)
+
     const approveState: ApproveState = useMemo(() => {
         if (token?.type === EthereumTokenType.Ether) return ApproveState.APPROVED
+        if (receipt?.blockHash) return ApproveState.APPROVED
         if (!amount || !spender || !allowance || !balance) return ApproveState.UNKNOWN
         if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) return ApproveState.INSUFFICIENT_BALANCE
-        // TODO:
-        // check pending approve
+        if (approveHash && !receipt?.blockHash) return ApproveState.PENDING
         return new BigNumber(allowance).isLessThan(amount) ? ApproveState.NOT_APPROVED : ApproveState.APPROVED
-    }, [amount, spender, allowance, balance, token?.type])
+    }, [amount, spender, allowance, balance, approveHash, receipt?.blockHash, token?.type])
 
     const approveCallback = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
@@ -67,7 +72,10 @@ export function useTokenApproveCallback(token?: Token, amount?: string, spender?
                 },
                 (error, hash) => {
                     if (error) reject(error)
-                    else resolve(hash)
+                    else {
+                        resolve(hash)
+                        setApproveHash(hash)
+                    }
                 },
             )
         })

@@ -8,17 +8,19 @@ export function useTransaction(hash: string) {
     const [tx, setTx] = useState<Transaction | null>(null)
     useAsync(async () => {
         if (tx) return
+        if (!hash) return
         setTx(await Services.Ethereum.getTransaction(hash))
     }, [hash, tx])
     return tx
 }
 
-export function useTransactionReceipt(id: string) {
+export function useTransactionReceipt(hash: string) {
     const [tx, setTx] = useState<TransactionReceipt | null>(null)
     const blockNumber = useBlockNumber()
     useAsync(async () => {
         if (tx) return
-        setTx(await Services.Ethereum.getTransactionReceipt(id))
-    }, [id, tx, blockNumber])
+        if (!hash) return
+        setTx(await Services.Ethereum.getTransactionReceipt(hash))
+    }, [hash, tx, blockNumber])
     return tx
 }
