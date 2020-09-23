@@ -108,7 +108,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                   ),
               }
             : null,
-        isExactIn
+        !isExactIn
             ? {
                   title: 'Maximum sold',
                   children: (
