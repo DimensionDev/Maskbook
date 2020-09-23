@@ -19,6 +19,7 @@ import { unreachable } from '../../../utils/utils'
 let wallets: WalletRecord[] = []
 const updateWallets = async () => (wallets = await getWallets())
 PluginMessageCenter.on('maskbook.wallets.update', updateWallets)
+updateWallets()
 //#endregion
 
 async function createTransactionSender(from: string, config: TransactionConfig) {

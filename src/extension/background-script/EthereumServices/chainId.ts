@@ -10,8 +10,9 @@ import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 
 //#region tracking default wallet
 let defaultWallet: WalletRecord | null = null
-const resetWallet = async () => (defaultWallet = await getDefaultWallet())
-PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
+const updateDefaultWallet = async () => (defaultWallet = await getDefaultWallet())
+PluginMessageCenter.on('maskbook.wallets.reset', updateDefaultWallet)
+updateDefaultWallet()
 //#endregion
 
 export async function getChainId() {
