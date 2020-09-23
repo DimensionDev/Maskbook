@@ -9,8 +9,9 @@ import BigNumber from 'bignumber.js'
 import { makeTypedMessageText } from '../protocols/typed-message'
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
 import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
-import { ChainId, EthereumTokenType } from '../web3/types'
-import { getConstant } from '../web3/constants'
+import { ChainId, EthereumTokenType, EthereumNetwork } from '../web3/types'
+import { getConstant } from '../web3/helpers'
+import { CONSTANTS } from '../web3/constants'
 
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacketWithStateUI', () => {
@@ -39,7 +40,7 @@ storiesOf('Plugin: Red Packets', module)
             type: EthereumTokenType.ERC20,
             total: total * 10 ** decimals,
             token: {
-                address: getConstant('DAI_ADDRESS'),
+                address: getConstant(CONSTANTS, 'DAI_ADDRESS'),
                 name: 'DAI',
                 decimals,
                 symbol: erc20symbol,
@@ -148,7 +149,7 @@ function createRecord(opts: {
         duration: 86400,
         id: 'id',
         is_random: false,
-        chainId: ChainId.Rinkeby,
+        network: EthereumNetwork.Rinkeby,
         password: 'password',
         received_time: new Date(),
         send_message: opts.message,
