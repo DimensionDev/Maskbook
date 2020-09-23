@@ -58,20 +58,27 @@ const coinNamespace = new Map<
     }
 >()
 
-export async function checkAvailabilityOnDataProvider(dataProvider: DataProvider, keyword: string) {
-    if (
-        // cache never built before
-        !coinNamespace.has(dataProvider) ||
-        // cache expired
+async function updateCache(dataProvider: DataProvider) {
+    const coins = await getCoins(dataProvider)
+    coinNamespace.set(dataProvider, {
+        supported: new Set<string>(coins.map((x) => x.symbol.toLowerCase())),
+        lastUpdated: new Date(),
+    })
+}
+
+function isCacheExipred(dataProvider: DataProvider) {
+    return (
+        coinNamespace.has(dataProvider) &&
         new Date().getTime() - (coinNamespace.get(dataProvider)?.lastUpdated.getTime() ?? 0) >
             CRYPTOCURRENCY_MAP_EXPIRES_AT
-    ) {
-        const coins = await getCoins(dataProvider)
-        coinNamespace.set(dataProvider, {
-            supported: new Set<string>(coins.map((x) => x.symbol.toLowerCase())),
-            lastUpdated: new Date(),
-        })
-    }
+    )
+}
+
+export async function checkAvailabilityOnDataProvider(dataProvider: DataProvider, keyword: string) {
+    // cache never built before update in blocking way
+    if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
+    // data fetched before update in nonblocking way
+    else if (isCacheExipred(dataProvider)) updateCache(dataProvider)
     return coinNamespace.get(dataProvider)?.supported.has(keyword.toLowerCase()) ?? false
 }
 
