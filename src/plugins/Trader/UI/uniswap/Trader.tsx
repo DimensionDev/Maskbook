@@ -16,12 +16,12 @@ import { useTokenApproveCallback, ApproveState } from '../../../../web3/hooks/us
 import { useComputedApprove } from '../../uniswap/useComputedApprove'
 import { useSwapCallback, SwapStateType } from '../../uniswap/useSwapCallback'
 import { useSwapState, SwapActionType } from '../../uniswap/useSwapState'
-import { TradeStrategy } from '../../types'
-import { isSameAddress } from '../../../../web3/helpers'
+import { TradeStrategy, TokenPanelType } from '../../types'
 import { CONSTANTS } from '../../../../web3/constants'
 import { TRADE_CONSTANTS } from '../../constants'
 import { TransactionDialog } from './TransactionDialog'
 import { sleep } from '../../../../utils/utils'
+import { SelectERC20TokenDialog } from './SelectERC20TokenDialog'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -87,42 +87,6 @@ export function Trader(props: TraderProps) {
     }, [asyncInputToken.value, asyncOutputToken.value])
     //#endregion
 
-    //#region select token
-    const [focusedTokenAddress, setFocusedTokenAddress] = useState<string>('')
-
-    // select token in the remote controlled dialog
-    const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectERC20TokenDialogUpdated'>(
-        WalletMessageCenter,
-        'selectERC20TokenDialogUpdated',
-        useCallback(
-            (ev: MaskbookWalletMessages['selectERC20TokenDialogUpdated']) => {
-                if (ev.open) return
-                const { address = '' } = ev.token ?? {}
-                if (!address) return
-                isSameAddress(inputTokenAddress, focusedTokenAddress)
-                    ? setInputTokenAddress(address)
-                    : setOutputTokenAddress(address)
-            },
-            [inputTokenAddress, focusedTokenAddress],
-        ),
-    )
-
-    // open select token dialog
-    const lists = useConstant(CONSTANTS, 'TOKEN_LISTS')
-    const onTokenChipClick = useCallback(
-        (token: Token) => {
-            setFocusedTokenAddress(token?.address ?? '')
-            setOpen({
-                open: true,
-                address: token?.address,
-                lists,
-                excludeTokens: [inputTokenAddress, outputTokenAddress].filter(Boolean),
-            })
-        },
-        [setOpen, inputTokenAddress, outputTokenAddress],
-    )
-    //#endregion
-
     //#region switch tokens
     const onReverseClick = useCallback(() => {
         dispatchSwapStore({
@@ -169,6 +133,33 @@ export function Trader(props: TraderProps) {
     const estimatedOutputAmount = new BigNumber(trade.v2Trade?.outputAmount.toSignificant(6) ?? '0')
         .multipliedBy(new BigNumber(10).pow(trade.v2Trade?.route.output.decimals ?? 0))
         .toFixed()
+    //#endregion
+
+    //#region select erc20 tokens
+    const tokenLists = useConstant(CONSTANTS, 'TOKEN_LISTS')
+    const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
+    const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
+    const [focusedTokenPanelType, setfocusedTokenPanelType] = useState(TokenPanelType.Input)
+    const onTokenChipClick = useCallback((type: TokenPanelType) => {
+        setOpenSelectERC20TokenDialog(true)
+        setfocusedTokenPanelType(type)
+    }, [])
+    const onSelectERC20TokenDialogClose = useCallback(() => {
+        setOpenSelectERC20TokenDialog(false)
+    }, [])
+    const onSelectERC20TokenDialogSubmit = useCallback(
+        (token: Token) => {
+            dispatchSwapStore({
+                type:
+                    focusedTokenPanelType === TokenPanelType.Input
+                        ? SwapActionType.UPDATE_INPUT_TOKEN
+                        : SwapActionType.UPDATE_OUTPUT_TOKEN,
+                token,
+            })
+            onSelectERC20TokenDialogClose()
+        },
+        [focusedTokenPanelType, onSelectERC20TokenDialogClose],
+    )
     //#endregion
 
     //#region approve
@@ -254,6 +245,13 @@ export function Trader(props: TraderProps) {
                 strategy={strategy}
                 open={openTransactionDialog}
                 onClose={onTransactionDialogClose}
+            />
+            <SelectERC20TokenDialog
+                open={openSelectERC20TokenDialog}
+                tokenLists={tokenLists}
+                excludeTokens={excludeTokens}
+                onSubmit={onSelectERC20TokenDialogSubmit}
+                onClose={onSelectERC20TokenDialogClose}
             />
             {asyncInputToken.loading || asyncOutputToken.loading ? (
                 <CircularProgress className={classes.progress} size={15} />

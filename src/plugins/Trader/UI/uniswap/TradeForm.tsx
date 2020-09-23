@@ -17,7 +17,7 @@ import { ApproveState } from '../../../../web3/hooks/useTokenApproveCallback'
 import { EthereumAccountChip } from '../../../../components/shared/EthereumAccountChip'
 import { EthereumChainChip } from '../../../../components/shared/EthereumChainChip'
 import { useChainId } from '../../../../web3/hooks/useChainId'
-import { TradeStrategy } from '../../types'
+import { TradeStrategy, TokenPanelType } from '../../types'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -66,7 +66,7 @@ export interface TradeFormProps extends withClasses<KeysInferFromUseStyles<typeo
     onInputAmountChange: (amount: string) => void
     onOutputAmountChange: (amount: string) => void
     onReverseClick?: () => void
-    onTokenChipClick?: (token: Token) => void
+    onTokenChipClick?: (token: TokenPanelType) => void
     onApprove: () => void
     onSwap: () => void
 }
@@ -135,7 +135,7 @@ export function TradeForm(props: TradeFormProps) {
                     SelectTokenChip={{
                         loading: loadingInputToken,
                         ChipProps: {
-                            onClick: () => onTokenChipClick(inputToken),
+                            onClick: () => onTokenChipClick(TokenPanelType.Input),
                         },
                     }}
                 />
@@ -165,7 +165,7 @@ export function TradeForm(props: TradeFormProps) {
                     SelectTokenChip={{
                         loading: loadingOutputToken,
                         ChipProps: {
-                            onClick: () => onTokenChipClick(outputToken),
+                            onClick: () => onTokenChipClick(TokenPanelType.Output),
                         },
                     }}
                 />

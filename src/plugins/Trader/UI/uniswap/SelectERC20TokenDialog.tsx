@@ -10,24 +10,22 @@ import {
     DialogContent,
     TextField,
 } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
-import { WalletMessageCenter, MaskbookWalletMessages } from '../messages'
+import { useI18N } from '../../../../utils/i18n-next-ui'
+import ShadowRootDialog from '../../../../utils/shadow-root/ShadowRootDialog'
+import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
 import { FixedSizeList } from 'react-window'
-import { TokenInList } from '../../../extension/options-page/DashboardComponents/TokenInList'
+import { TokenInList } from '../../../../extension/options-page/DashboardComponents/TokenInList'
 import {
     useTwitterDialog,
     useTwitterButton,
     useTwitterCloseButton,
-} from '../../../social-network-provider/twitter.com/utils/theme'
-import { getActivatedUI } from '../../../social-network/ui'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { isSameAddress } from '../../../web3/helpers'
-import { useCapturedEvents } from '../../../utils/hooks/useCapturedEvents'
-import type { Token } from '../../../web3/types'
-import { useTokenLists, TokenListsState } from '../../../web3/hooks/useTokenLists'
+} from '../../../../social-network-provider/twitter.com/utils/theme'
+import { getActivatedUI } from '../../../../social-network/ui'
+import { isSameAddress } from '../../../../web3/helpers'
+import { useCapturedEvents } from '../../../../utils/hooks/useCapturedEvents'
+import type { Token } from '../../../../web3/types'
+import { useTokenLists, TokenListsState } from '../../../../web3/hooks/useTokenLists'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -68,54 +66,28 @@ interface SelectERC20TokenDialogUIProps
         | 'header'
         | 'content'
         | 'close'
-    > {}
+    > {
+    open: boolean
+    tokenLists: string[]
+    excludeTokens: string[]
+    onSubmit(token: Token): void
+    onClose(): void
+}
 
 function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
+    const { open, excludeTokens, tokenLists, onSubmit, onClose } = props
+
     //#region capture event
     const [, inputRef] = useCapturedEvents()
-    //#endregion
-
-    //#region the remote controlled dialog
-    const [excludeTokens, setExcludeTokens] = useState<string[]>([])
-    const [open, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectERC20TokenDialogUpdated'>(
-        WalletMessageCenter,
-        'selectERC20TokenDialogUpdated',
-        useCallback((ev: MaskbookWalletMessages['selectERC20TokenDialogUpdated']) => {
-            if (!ev.open) return
-            setAddress(ev.address ?? '')
-            setLists(ev.lists ?? [])
-            setExcludeTokens(ev.excludeTokens ?? [])
-        }, []),
-    )
-
-    // submit token
-    const onSubmit = useCallback(
-        (token: Token) =>
-            setOpen({
-                open: false,
-                token,
-            }),
-        [],
-    )
-
-    // close dialog with message center
-    const onClose = useCallback(
-        () =>
-            setOpen({
-                open: false,
-            }),
-        [],
-    )
     //#endregion
 
     //#region search tokens
     const [keyword, setKeyword] = useState('')
     const [address, setAddress] = useState('')
-    const [lists, setLists] = useState<string[]>([])
-    const searchedTokens = useTokenLists(lists, {
+    const searchedTokens = useTokenLists(tokenLists, {
         keyword,
         useEther: true,
     })

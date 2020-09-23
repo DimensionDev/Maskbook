@@ -80,7 +80,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     //#region update amount by self
     const onAmountChangeDebounced = useMemo(
         () =>
-            debounce(onAmountChange, 150, {
+            debounce(onAmountChange, 50, {
                 leading: false,
                 trailing: true,
             }),
