@@ -14,18 +14,19 @@ currentMetaMaskChainIdSettings.addListener((v) => (currentChainId = v))
 let provider: MetamaskInpageProvider | null = null
 let web3: Web3 | null = null
 
-// create a new provider
-createProvider()
-
-const onData = async (error: Error | null, event?: { method: string; result: string[] }) => {
+async function onData(error: Error | null, event?: { method: string; result: string[] }) {
     if (error) return
     if (!event) return
     if (event.method !== 'wallet_accountsChanged') return
     await updateWalletInDB(event.result[0] ?? '', false)
 }
-const onNetworkChanged = (id: string) => {
+
+function onNetworkChanged(id: string) {
     currentMetaMaskChainIdSettings.value = Number.parseInt(id) as ChainId
 }
+
+// create a new provider
+createProvider()
 
 export function createProvider() {
     if (provider) {
