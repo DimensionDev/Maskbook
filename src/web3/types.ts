@@ -21,6 +21,14 @@ export enum ChainId {
     Kovan = 42,
 }
 
+// Please don't use this enum but use ChainId instead
+// this exists for back backward compatible
+export enum EthereumNetwork {
+    Mainnet = 'Mainnet',
+    Ropsten = 'Ropsten',
+    Rinkeby = 'Rinkeby',
+}
+
 export enum EthereumTokenType {
     Ether = 0,
     ERC20 = 1,

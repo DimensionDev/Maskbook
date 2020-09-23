@@ -10,7 +10,7 @@ import { sideEffect } from '../../utils/side-effects'
 import BigNumber from 'bignumber.js'
 import { createRedPacketTransaction, RedPacketPluginReificatedWalletDBReadOnly } from './database'
 import { assert, unreachable } from '../../utils/utils'
-import { ChainId, EthereumTokenType } from '../../web3/types'
+import { ChainId, EthereumTokenType, EthereumNetwork } from '../../web3/types'
 import { getChainId } from '../../extension/background-script/EthereumService'
 import { parseChainName } from '../../web3/pipes'
 import { getConstant } from '../../web3/helpers'
@@ -27,7 +27,7 @@ export type CreateRedPacketInit = Pick<
     | 'sender_name'
     | 'send_total'
     | 'send_message'
-    | 'chainId'
+    | 'network'
     | 'token_type'
     | 'erc20_token'
     | 'shares'
@@ -47,7 +47,7 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInUR
         duration: payload.duration,
         id: uuid(),
         is_random: payload.is_random,
-        chainId: payload.chainId ?? ChainId.Mainnet,
+        network: payload.network ?? EthereumNetwork.Mainnet,
         send_message: payload.sender.message,
         send_total: new BigNumber(payload.total),
         sender_address: payload.sender.address,
@@ -118,7 +118,7 @@ export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedP
         id: uuid(),
         duration: packet.duration,
         is_random: packet.is_random,
-        chainId: packet.chainId,
+        network: packet.network,
         send_message: packet.send_message,
         send_total: packet.send_total,
         sender_address: packet.sender_address,
@@ -180,7 +180,7 @@ export async function onCreationResult(id: { databaseID: string }, details: RedP
             },
             token_type: record.token_type,
             total: String(record.send_total),
-            chainId: record.chainId,
+            network: record.network,
             token,
             shares: new BigNumber(String(record.shares)).toNumber(),
         }
@@ -345,11 +345,6 @@ function RedPacketRecordOutDB(x: RedPacketRecordInDatabase): RedPacketRecord {
     for (const name of names) {
         const original = x[name]
         if (typeof original !== 'undefined') record[name] = new BigNumber(String(original))
-    }
-    {
-        // fix: network was renamed to chainId
-        const record_ = record as any
-        if (!record.chainId) record.chainId = parseChainName(record_.network)
     }
     return record
 }

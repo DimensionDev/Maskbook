@@ -121,7 +121,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
         props.onCreateNewPacket({
             duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
             is_random: Boolean(is_random),
-            chainId: await Services.Ethereum.getChainId(),
+            network: await Services.Ethereum.getLegacyEthereumNetwork(),
             send_message,
             send_total: new BigNumber(send_total).multipliedBy(new BigNumber(10).pow(power)),
             sender_address: selectedWalletAddress!,

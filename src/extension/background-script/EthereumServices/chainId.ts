@@ -1,4 +1,4 @@
-import { ChainId, ProviderType } from '../../../web3/types'
+import { ChainId, ProviderType, EthereumNetwork } from '../../../web3/types'
 import { getDefaultWallet } from '../../../plugins/Wallet/wallet'
 import {
     currentMaskbookChainIdSettings,
@@ -14,9 +14,21 @@ const resetWallet = async () => (defaultWallet = await getDefaultWallet())
 PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
 //#endregion
 
-export function getChainId() {
+export async function getChainId() {
     if (defaultWallet?.provider === ProviderType.Maskbook) return currentMaskbookChainIdSettings.value
     if (defaultWallet?.provider === ProviderType.MetaMask) return currentMetaMaskChainIdSettings.value
     if (defaultWallet?.provider === ProviderType.WalletConnect) return currentWalletConnectChainIdSettings.value
     return ChainId.Mainnet
+}
+
+export async function getLegacyEthereumNetwork() {
+    const chainId = await getChainId()
+    switch (chainId) {
+        case ChainId.Ropsten:
+            return EthereumNetwork.Ropsten
+        case ChainId.Rinkeby:
+            return EthereumNetwork.Rinkeby
+        default:
+            return EthereumNetwork.Mainnet
+    }
 }
