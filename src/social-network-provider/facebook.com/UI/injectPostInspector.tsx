@@ -13,7 +13,7 @@ function getShadowRoot(node: HTMLElement) {
     return dom
 }
 export function injectPostInspectorFacebook(current: PostInfo) {
-    clickSeeMore(current.rootNodeProxy)
+    clickSeeMore(current.rootNodeProxy.current.parentElement!)
     return injectPostInspectorDefault({
         zipPost(node) {
             zipEncryptedPostContent(node)
@@ -74,11 +74,12 @@ padding: 0px 10px;`,
         }
     }
 }
-function clickSeeMore(node: DOMProxy) {
-    const more = node.current.parentElement!.querySelector<HTMLDivElement | HTMLSpanElement>(
-        isMobileFacebook ? '[data-sigil="more"] a' : '.see_more_link_inner',
+export function clickSeeMore(node: HTMLElement) {
+    const more = node.querySelector<HTMLDivElement | HTMLSpanElement>(
+        isMobileFacebook ? '[data-sigil="more"] a' : '[role=article] span[dir="auto"] div[dir="auto"] [role="button"]',
     )
-    if (more && node.current.innerText.includes('🎼')) {
+
+    if (more && node.querySelector('img[alt="🎼"]')) {
         const trap = (e: Event) => {
             e.preventDefault()
         }
