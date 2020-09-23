@@ -73,6 +73,12 @@ export async function getWallets(provider?: ProviderType) {
         return `0x${buf2hex(privateKey)}`
     }
 }
+
+export async function getToken(addr: string) {
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token')
+    return t.objectStore('ERC20Token').get(addr)
+}
+
 export async function getTokens() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token')
     const tokens = await t.objectStore('ERC20Token').getAll()
