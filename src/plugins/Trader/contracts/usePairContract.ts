@@ -4,5 +4,5 @@ import type { Pair } from '../../../contracts/pair/Pair'
 import { useContract } from '../../../web3/hooks/useContract'
 
 export function usePairContract(address: string) {
-    return useContract<Pair>(address, PairABI as AbiItem[])
+    return useContract<Pair>(address, PairABI as AbiItem[]) as Pair
 }

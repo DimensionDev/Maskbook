@@ -3,15 +3,18 @@ import { Chip, ChipProps, makeStyles, Theme, createStyles } from '@material-ui/c
 import { useStylesExtends } from '../custom-ui-helper'
 import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
 import { isSameAddress } from '../../web3/helpers'
-import { ProviderType } from '../../web3/types'
-import { MaskbookIcon } from '../../resources/MaskbookIcon'
-import { MetaMaskIcon } from '../../resources/MetaMaskIcon'
-import { WalletConnectIcon } from '../../resources/WalletConnectIcon'
+import { ProviderIcon } from './ProviderIcon'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
         root: {
             lineHeight: 1,
+        },
+        icon: {
+            fontSize: 18,
+            width: 18,
+            height: 18,
+            marginLeft: theme.spacing(1),
         },
     })
 })
@@ -27,22 +30,7 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
 
     const wallets = useWallets()
     const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
-    console.log(currentWallet)
-    let avatar = null
-    switch (currentWallet?.provider) {
-        case ProviderType.Maskbook:
-            avatar = <MaskbookIcon viewBox="0 0 40 40" />
-            break
-        case ProviderType.MetaMask:
-            avatar = <MetaMaskIcon viewBox="0 0 40 40" />
-            break
-        case ProviderType.WalletConnect:
-            avatar = <WalletConnectIcon viewBox="0 0 40 40" />
-            break
-        default:
-            avatar = null
-            break
-    }
+    const avatar = <ProviderIcon classes={{ icon: classes.icon }} size={18} providerType={currentWallet?.provider} />
     const address_ = address.replace(/^0x/i, '')
     if (!address_) return null
     return avatar ? (

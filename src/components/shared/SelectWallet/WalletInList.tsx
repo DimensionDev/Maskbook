@@ -4,10 +4,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../custom-ui-helper'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { MaskbookIcon } from '../../../resources/MaskbookIcon'
-import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
-import { WalletConnectIcon } from '../../../resources/WalletConnectIcon'
-import { ProviderType } from '../../../web3/types'
+import { ProviderIcon } from '../ProviderIcon'
 
 const useStyle = makeStyles((theme: Theme) => ({
     root: {
@@ -18,9 +15,7 @@ const useStyle = makeStyles((theme: Theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
-    icon: {
-        fontSize: 40,
-    },
+    icon: {},
 }))
 
 export interface WalletInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
@@ -35,21 +30,7 @@ export function WalletInList(props: WalletInListProps) {
     const classes = useStylesExtends(useStyle(), props)
     const { wallet, disabled, onClick, ListItemProps } = props
 
-    let avatar = null
-    switch (wallet.provider) {
-        case ProviderType.Maskbook:
-            avatar = <MaskbookIcon className={classes.icon} viewBox="0 0 40 40" />
-            break
-        case ProviderType.MetaMask:
-            avatar = <MetaMaskIcon className={classes.icon} viewBox="0 0 40 40" />
-            break
-        case ProviderType.WalletConnect:
-            avatar = <WalletConnectIcon className={classes.icon} viewBox="0 0 40 40" />
-            break
-        default:
-            avatar = null
-            break
-    }
+    const avatar = <ProviderIcon classes={{ icon: classes.icon }} size={40} providerType={wallet.provider} />
 
     return (
         <ListItem button disabled={disabled} onClick={onClick} {...ListItemProps}>
