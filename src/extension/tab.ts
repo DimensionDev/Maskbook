@@ -6,7 +6,7 @@ import { untilDocumentReady } from '../utils/dom'
 
 OnlyRunInContext(['content', 'options', 'debugging'], 'tab')
 
-export const TAB_ID = uuid() // create a id for every tab
+export const TAB_ID = uuid() // create an id for every tab
 
 const setId = () => {
     if (document.visibilityState === 'visible') console.log(`set id to ${TAB_ID}`)
