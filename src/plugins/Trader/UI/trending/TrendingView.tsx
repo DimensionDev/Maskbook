@@ -103,7 +103,9 @@ const useStyles = makeStyles((theme: Theme) => {
                 marginRight: 0,
             },
         },
-        avatar: {},
+        avatar: {
+            backgroundColor: theme.palette.common.white,
+        },
         percentage: {
             marginLeft: theme.spacing(1),
         },
