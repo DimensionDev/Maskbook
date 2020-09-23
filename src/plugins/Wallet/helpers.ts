@@ -1,9 +1,10 @@
+import stringify from 'json-stable-stringify'
 import type { WalletRecord, ERC20TokenRecord } from './database/types'
 import { isSameAddress } from '../../web3/helpers'
 
 export function WalletComparer(a: WalletRecord | null, b: WalletRecord | null) {
     if (!a || !b) return false
-    return isSameAddress(a.address, b.address)
+    return stringify(a) === stringify(b)
 }
 
 export function WalletArrayComparer(a: WalletRecord[], b: WalletRecord[]) {
