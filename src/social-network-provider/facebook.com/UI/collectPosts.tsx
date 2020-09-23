@@ -11,12 +11,23 @@ import {
     makeTypedMessageCompound,
 } from '../../../protocols/typed-message'
 import { Flags } from '../../../utils/flags'
+import { clickSeeMore } from './injectPostInspector'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container ' : '[data-testid] [role=article] [data-ad-preview="message"]',
 )
 
 export function collectPostsFacebook(this: SocialNetworkUI) {
+    new MutationObserverWatcher(posts)
+        .useForeach((node, key, metadata) => {
+            clickSeeMore(node)
+        })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
+
     new MutationObserverWatcher(posts)
         .useForeach((node, key, metadata) => {
             const root = new LiveSelector()
