@@ -1,5 +1,5 @@
 import { omit } from 'lodash-es'
-import { RedPacketRecord, RedPacketStatus, RedPacketRecordInDatabase, RedPacketJSONPayload } from './types'
+import { RedPacketRecord, RedPacketStatus, RedPacketRecordInDatabase, RedPacketJSONPayload, History } from './types'
 import { v4 as uuid } from 'uuid'
 import type { RedPacketCreationResult, RedPacketClaimResult } from './types'
 import { getWalletProvider, getDefaultWallet, setDefaultWallet } from '../Wallet/wallet'
@@ -10,11 +10,11 @@ import { sideEffect } from '../../utils/side-effects'
 import BigNumber from 'bignumber.js'
 import { createRedPacketTransaction, RedPacketPluginReificatedWalletDBReadOnly } from './database'
 import { assert, unreachable } from '../../utils/utils'
-import { ChainId, EthereumTokenType, EthereumNetwork } from '../../web3/types'
+import { EthereumTokenType, EthereumNetwork } from '../../web3/types'
 import { getChainId } from '../../extension/background-script/EthereumService'
-import { parseChainName } from '../../web3/pipes'
 import { getConstant } from '../../web3/helpers'
 import { RED_PACKET_CONSTANTS } from './constants'
+import { RED_PACKET_HISTORY_URL } from './constants'
 
 function getProvider() {
     return redPacketAPI
@@ -75,6 +75,18 @@ export async function getRedPackets(owned?: boolean) {
     if (owned === false) return all.filter((x) => !x.create_transaction_hash)
     return all
 }
+
+// region HACK: THIS TEMPORARY CODE
+export async function getRedPacketHistory(from: string) {
+    const url = new URL(RED_PACKET_HISTORY_URL)
+    url.searchParams.set('from', from)
+    const response = await fetch(url.toString())
+    if (response.status !== 200) {
+        return undefined
+    }
+    return response.json() as Promise<History.RecordType[]>
+}
+// endregion
 
 export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedPacketRecord> {
     if (packet.send_total.isLessThan(packet.shares))

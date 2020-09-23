@@ -12,3 +12,4 @@ export const RED_PACKET_CONSTANTS = {
         [ChainId.Kovan]: '',
     },
 }
+export const RED_PACKET_HISTORY_URL = 'https://service.maskbook.com/red-packet-history'

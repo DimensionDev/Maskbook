@@ -732,7 +732,20 @@ export function DashboardWalletHistoryDialog(
 
     const [redPacketRecords, setRedPacketRecords] = useState<RedPacketRecord[]>([])
     const inboundRecords = redPacketRecords.filter((record) => record.claim_address === wallet.address)
-    const outboundRecords = redPacketRecords.filter((record) => record.sender_address === wallet.address)
+    // const outboundRecords = redPacketRecords.filter((record) => record.sender_address === wallet.address)
+
+    // region HACK: THIS TEMPORARY CODE
+    const { value: outboundRecords } = useAsync(async () => {
+        const records = await Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketHistory', wallet.address)
+        return records?.map((record): unknown => ({
+            id: record._hash,
+            send_message: record._message,
+            block_creation_time: new Date(record.txTimestamp),
+            send_total: record._number,
+            sender_name: record._name,
+        })) as RedPacketRecord[]
+    }, [tabState])
+    // endregion
 
     useEffect(() => {
         const updateHandler = () =>
@@ -779,7 +792,7 @@ export function DashboardWalletHistoryDialog(
                 label: t('activity_outbound'),
                 children: (
                     <List className={classes.list} disablePadding>
-                        {outboundRecords.map(RedPacketRecord)}
+                        {outboundRecords?.map(RedPacketRecord)}
                     </List>
                 ),
                 display: 'flex',
