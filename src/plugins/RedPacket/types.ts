@@ -155,3 +155,24 @@ export interface RedPacketJSONPayload {
     token_type: EthereumTokenType
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }
+
+export namespace History {
+    export type RecordType = CreateRedPacketRecord
+
+    export interface CreateRedPacketRecord {
+        method: 'create_red_packet'
+        txHash: string
+        txTimestamp: string
+        txBlockNumber: string
+        _hash: string
+        _number: string
+        _ifrandom: boolean
+        _duration: string
+        _seed: string
+        _message: string
+        _name: string
+        _token_type: string
+        _token_addr: string
+        _total_tokens: string
+    }
+}
