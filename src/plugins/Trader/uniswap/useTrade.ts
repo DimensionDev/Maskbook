@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Trade, Pair } from '@uniswap/sdk'
 import BigNumber from 'bignumber.js'
-import { toUniswapToken, toUniswapCurrencyAmount } from '../helpers'
+import { toUniswapCurrencyAmount, toUniswapCurrency } from '../helpers'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { TradeStrategy } from '../types'
 import type { Token } from '../../../web3/types'
@@ -33,7 +33,7 @@ export function useBestTradeExactIn(amount: string, inputToken?: Token, outputTo
                 Trade.bestTradeExactIn(
                     pairs,
                     toUniswapCurrencyAmount(chainId, inputToken, amount),
-                    toUniswapToken(chainId, outputToken),
+                    toUniswapCurrency(chainId, outputToken),
                     {
                         maxHops: 3,
                         maxNumResults: 1,
@@ -51,7 +51,7 @@ export function useBestTradeExactOut(amount: string, inputToken?: Token, outputT
             return (
                 Trade.bestTradeExactOut(
                     pairs,
-                    toUniswapToken(chainId, inputToken),
+                    toUniswapCurrency(chainId, inputToken),
                     toUniswapCurrencyAmount(chainId, outputToken, amount),
                     {
                         maxHops: 3,

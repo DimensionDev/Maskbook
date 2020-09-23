@@ -94,7 +94,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
         if (open) setExecutionPrice(undefined)
     }, [open])
     useEffect(() => {
-        if (typeof executionPrice === 'undefined') setExecutionPrice(trade?.executionPrice)
+        if (trade && typeof executionPrice === 'undefined') setExecutionPrice(trade.executionPrice)
     }, [trade, executionPrice])
     //#endregion
 

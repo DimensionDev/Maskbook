@@ -95,12 +95,16 @@ export function useSwapCallback(
         // step 2: validate estimation
         const successfulCall = estimatedCalls.find(
             (x, i, list): x is SuccessfulCall =>
-                ('gasEstimated' in x && i === list.length - 1) || 'gasEstimated' in list[i + 1],
+                ('gasEstimated' in x && i === list.length - 1) || (list[i + 1] && 'gasEstimated' in list[i + 1]),
         )
         if (!successfulCall) {
             const failedCalls = estimatedCalls.filter((x): x is FailedCall => 'error' in x)
-            if (failedCalls.length > 0) throw failedCalls[failedCalls.length - 1].error
-            throw new Error('Unexpected error')
+            setSwapState({
+                type: SwapStateType.FAILED,
+                error:
+                    failedCalls.length > 0 ? failedCalls[failedCalls.length - 1].error : new Error('Unexpected error'),
+            })
+            return
         }
 
         // step 3: blocking

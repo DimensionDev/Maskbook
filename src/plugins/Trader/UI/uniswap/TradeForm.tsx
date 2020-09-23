@@ -184,10 +184,8 @@ export function TradeForm(props: TradeFormProps) {
     const validationMessage = useMemo(() => {
         if (inputTokenTradeAmount.isZero() && outputTokenTradeAmount.isZero()) return 'Enter an amount'
         if (!inputToken || !outputToken) return 'Select a token'
-        if (isExactIn && inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount))
+        if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount))
             return `Insufficient ${inputToken?.symbol} balance`
-        if (!isExactIn && outputTokenBalanceAmount.isLessThan(outputTokenTradeAmount))
-            return `Insufficient ${outputToken?.symbol} balance`
         if (!trade) return 'Insufficient liquidity for this trade.'
         return ''
     }, [isExactIn, inputToken, outputToken, inputTokenTradeAmount, outputTokenTradeAmount])
@@ -223,6 +221,7 @@ export function TradeForm(props: TradeFormProps) {
                                 fullWidth
                                 variant="contained"
                                 size="large"
+                                disabled={approveState === ApproveState.PENDING}
                                 onClick={onApprove}>
                                 {approveState === ApproveState.NOT_APPROVED
                                     ? `Approve ${trade?.inputAmount.currency.symbol}`

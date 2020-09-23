@@ -43,7 +43,8 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: theme.spacing(6, 0),
+            textAlign: 'center',
+            padding: theme.spacing(6, 2),
         },
         icon: {
             fontSize: 64,
