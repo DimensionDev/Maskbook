@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { ListItem, ListItemText, makeStyles, Theme, ListTypeMap, ListItemAvatar } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../custom-ui-helper'
@@ -35,15 +35,21 @@ export function WalletInList(props: WalletInListProps) {
     const classes = useStylesExtends(useStyle(), props)
     const { wallet, disabled, onClick, ListItemProps } = props
 
-    const avatar = useMemo(() => {
-        if (wallet.provider === ProviderType.Maskbook)
-            return <MaskbookIcon className={classes.icon} viewBox="0 0 40 40" />
-        if (wallet.provider === ProviderType.MetaMask)
-            return <MetaMaskIcon className={classes.icon} viewBox="0 0 40 40" />
-        if (wallet.provider === ProviderType.WalletConnect)
-            return <WalletConnectIcon className={classes.icon} viewBox="0 0 40 40" />
-        return null
-    }, [])
+    let avatar = null
+    switch (wallet.provider) {
+        case ProviderType.Maskbook:
+            avatar = <MaskbookIcon className={classes.icon} viewBox="0 0 40 40" />
+            break
+        case ProviderType.MetaMask:
+            avatar = <MetaMaskIcon className={classes.icon} viewBox="0 0 40 40" />
+            break
+        case ProviderType.WalletConnect:
+            avatar = <WalletConnectIcon className={classes.icon} viewBox="0 0 40 40" />
+            break
+        default:
+            avatar = null
+            break
+    }
 
     return (
         <ListItem button disabled={disabled} onClick={onClick} {...ListItemProps}>
