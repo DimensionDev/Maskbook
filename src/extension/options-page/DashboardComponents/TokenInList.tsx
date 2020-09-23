@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { ListItem, ListItemText, Typography, ListItemIcon, Link } from '@material-ui/core'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { TokenIcon } from './TokenIcon'
 import type { Token } from '../../../web3/types'
 import { Address } from './Address'
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'space-between',
         },
         primary: {
+            flex: 1,
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
             overflow: 'hidden',
@@ -29,12 +31,32 @@ const useStyles = makeStyles((theme: Theme) =>
         name: {
             display: 'block',
         },
+        secondary: {
+            lineHeight: 1,
+            paddingRight: theme.spacing(3),
+            position: 'relative',
+        },
+        link: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 'auto',
+            margin: 'auto',
+            position: 'absolute',
+        },
+        openIcon: {
+            fontSize: 16,
+            width: 16,
+            height: 16,
+            marginLeft: theme.spacing(0.5),
+        },
         address: {
             color: theme.palette.text.disabled,
             fontSize: 12,
             display: 'block',
             marginTop: theme.spacing(0.25),
         },
+        symbol: {},
     }),
 )
 
@@ -70,19 +92,22 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
             <ListItemText classes={{ primary: classes.text }}>
                 <Typography className={classes.primary} color="textPrimary" component="span">
                     <span className={classes.name}>{name}</span>
+                    <span className={classes.address}>
+                        {token.address !== ETH_ADDRESS ? <Address address={address} /> : null}
+                    </span>
+                </Typography>
+                <Typography className={classes.secondary} color="textSecondary" component="span">
+                    <span className={classes.symbol}>{symbol}</span>
                     {token.address !== ETH_ADDRESS ? (
                         <Link
-                            className={classes.address}
+                            className={classes.link}
                             href={resolveTokenLinkOnEtherscan(token)}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={stop}>
-                            <Address address={address}></Address>
+                            <OpenInNewIcon className={classes.openIcon} />
                         </Link>
                     ) : null}
-                </Typography>
-                <Typography color="textSecondary" component="span">
-                    {symbol}
                 </Typography>
             </ListItemText>
         </ListItem>
