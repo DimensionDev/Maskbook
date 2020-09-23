@@ -194,7 +194,7 @@ const KEYWORK_ID_MAP: {
         UNI: '7083',
     },
     [DataProvider.COIN_GECKO]: {
-        UNI: 'Uniswap',
+        UNI: 'uniswap',
     },
 }
 function resolveCoinId(keyword: string, dataProvider: DataProvider) {
