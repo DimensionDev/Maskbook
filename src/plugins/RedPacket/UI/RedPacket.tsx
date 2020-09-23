@@ -111,12 +111,6 @@ export function RedPacketWithState(props: RedPacketProps) {
     React.useEffect(() => {
         if (!unknownRedPacket) return noop
         const updateRedPacket = () => {
-            {
-                // fix: network was renamed to chainId
-                const redPacket = unknownRedPacket as any
-                if (!unknownRedPacket.chainId && redPacket.network)
-                    unknownRedPacket.chainId = parseChainName(redPacket.network)
-            }
             Services.Plugin.invokePlugin('maskbook.red_packet', 'discoverRedPacket', unknownRedPacket, from ?? '').then(
                 (packet) => {
                     setRedPacket(packet)
