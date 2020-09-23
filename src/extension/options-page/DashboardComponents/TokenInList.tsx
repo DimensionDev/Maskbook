@@ -8,6 +8,7 @@ import { Address } from './Address'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../web3/constants'
 import { resolveTokenLinkOnEtherscan } from '../../../web3/helpers'
+import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -93,7 +94,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
                 <Typography className={classes.primary} color="textPrimary" component="span">
                     <span className={classes.name}>{name}</span>
                     <span className={classes.address}>
-                        {token.address !== ETH_ADDRESS ? <Address address={address} /> : null}
+                        {token.address !== ETH_ADDRESS ? formatEthereumAddress(token.address, 8) : null}
                     </span>
                 </Typography>
                 <Typography className={classes.secondary} color="textSecondary" component="span">

@@ -13,7 +13,7 @@ import {
     Typography,
 } from '@material-ui/core'
 import type { Ticker, DataProvider } from '../../types'
-import { formatCurrency, formatEthAddress } from '../../../Wallet/formatter'
+import { formatCurrency, formatEthereumAddress } from '../../../Wallet/formatter'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -65,7 +65,7 @@ export function TickersTable(props: TickersTableProps) {
             </TableCell>
             <TableCell className={classes.cell}>
                 {(() => {
-                    const formated = formatEthAddress(ticker.base_name)
+                    const formated = formatEthereumAddress(ticker.base_name)
                     return (
                         <Link color="primary" target="_blank" rel="noopener noreferrer" href={ticker.trade_url}>
                             <span title={formated !== ticker.base_name ? ticker.base_name : ''}>{formated}</span>

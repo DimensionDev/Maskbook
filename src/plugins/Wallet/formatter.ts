@@ -27,7 +27,7 @@ export function formatCurrency(balance: number, sign: string = '$') {
     return `${sign}${balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, `${sign}&,`)}`
 }
 
-export function formatEthAddress(address: string, size = 2) {
+export function formatEthereumAddress(address: string, size = 2) {
     if (!EthereumAddress.isValid(address)) return address
     const address_ = EthereumAddress.checksumAddress(address)
     return `${address_.substr(0, 2 + size)}...${address_.substr(-size)}`
