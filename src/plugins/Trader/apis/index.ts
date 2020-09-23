@@ -4,6 +4,7 @@ import * as coinMarketCapAPI from './coinmarketcap'
 import { Days } from '../UI/trending/PriceChartDaysControl'
 import { getEnumAsArray } from '../../../utils/enum'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../constants'
+import { unreachable } from '../../../utils/utils'
 
 export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
     if (dataProvider === DataProvider.COIN_GECKO) {
@@ -184,14 +185,23 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
 // FIXME:
 // this is hotfix for duplicate token name
 // we should support multiple-coins switing in the future
-const CMC_KEYWORKD_ID_MAP: {
-    [key: string]: string
+const KEYWORK_ID_MAP: {
+    [key in DataProvider]: {
+        [key: string]: string
+    }
 } = {
-    UNI: '7083',
+    [DataProvider.COIN_MARKET_CAP]: {
+        UNI: '7083',
+    },
+    [DataProvider.COIN_GECKO]: {
+        UNI: 'Uniswap',
+    },
 }
 function resolveCoinId(keyword: string, dataProvider: DataProvider) {
-    if (dataProvider === DataProvider.COIN_MARKET_CAP) return CMC_KEYWORKD_ID_MAP[keyword.toUpperCase()]
-    return undefined
+    if (dataProvider === DataProvider.COIN_MARKET_CAP)
+        return KEYWORK_ID_MAP[DataProvider.COIN_MARKET_CAP][keyword.toUpperCase()]
+    if (dataProvider === DataProvider.COIN_GECKO) return KEYWORK_ID_MAP[DataProvider.COIN_GECKO][keyword.toUpperCase()]
+    unreachable(dataProvider)
 }
 //#endregion
 
