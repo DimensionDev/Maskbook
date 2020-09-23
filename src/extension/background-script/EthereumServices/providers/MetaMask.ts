@@ -1,7 +1,7 @@
+import Web3 from 'web3'
 import createMetaMaskProvider, { MetamaskInpageProvider } from 'metamask-extension-provider'
 import { ChainId } from '../../../../web3/types'
 import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
-import Web3 from 'web3'
 import { EthereumAddress } from 'wallet.ts'
 import { updateExoticWalletFromSource, setDefaultWallet } from '../../../../plugins/Wallet/wallet'
 import { ProviderType } from '../../../../web3/types'
@@ -14,18 +14,27 @@ currentMetaMaskChainIdSettings.addListener((v) => (currentChainId = v))
 let provider: MetamaskInpageProvider | null = null
 let web3: Web3 | null = null
 
+// create a new provider
+createProvider()
+
+const onData = async (error: Error | null, event?: { method: string; result: string[] }) => {
+    if (error) return
+    if (!event) return
+    if (event.method !== 'wallet_accountsChanged') return
+    await updateWalletInDB(event.result[0] ?? '', false)
+}
+const onNetworkChanged = (id: string) => {
+    currentMetaMaskChainIdSettings.value = Number.parseInt(id) as ChainId
+}
+
 export function createProvider() {
-    if (provider) return provider
+    if (provider) {
+        provider.off('data', onData)
+        provider.off('networkChanged', onNetworkChanged)
+    }
     provider = createMetaMaskProvider()
-    provider.on('data', async (error: Error | null, event?: { method: string; result: string[] }) => {
-        if (error) return
-        if (!event) return
-        if (event.method !== 'wallet_accountsChanged') return
-        await updateWalletInDB(event.result[0] ?? '', false)
-    })
-    provider.on('networkChanged', (id: string) => {
-        currentMetaMaskChainIdSettings.value = Number.parseInt(id) as ChainId
-    })
+    provider.on('data', onData)
+    provider.on('networkChanged', onNetworkChanged)
     return provider
 }
 
