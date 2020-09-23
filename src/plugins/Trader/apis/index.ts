@@ -192,6 +192,7 @@ const KEYWORK_ID_MAP: {
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
         UNI: '7083',
+        CRU: '6747',
     },
     [DataProvider.COIN_GECKO]: {
         UNI: 'uniswap',
