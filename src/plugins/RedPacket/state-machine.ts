@@ -47,7 +47,7 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInUR
         duration: payload.duration,
         id: uuid(),
         is_random: payload.is_random,
-        network: payload.network ?? EthereumNetwork.Mainnet,
+        network: payload.network || EthereumNetwork.Mainnet,
         send_message: payload.sender.message,
         send_total: new BigNumber(payload.total),
         sender_address: payload.sender.address,

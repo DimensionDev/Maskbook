@@ -105,7 +105,7 @@ module.exports = (argvEnv, argv) => {
         }
     }
     const getCompilationInfo = () => {
-        /** @type {'chromium' | 'firefox' | 'safari' | 'E2E' | 'BETA'} */
+        /** @type {'chromium' | 'firefox' | 'safari' | 'E2E'} */
         let buildTarget = 'chromium'
         /** @type {'fennec' | 'geckoview'} */
         let firefoxVariant = undefined
