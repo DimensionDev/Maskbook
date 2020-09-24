@@ -1,31 +1,32 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import type { HttpProviderOptions } from 'web3-core-helpers'
-import type { EthereumNetwork } from '../../plugins/Wallet/database/types'
-import { getNetworkSettings } from '../../plugins/Wallet/UI/Developer/EthereumNetworkSettings'
-import { getManagedWallets } from '../../plugins/Wallet/wallet'
+import { getWallets } from '../../plugins/Wallet/wallet'
 import { web3 } from '../../plugins/Wallet/web3'
-import { currentLocalWalletEthereumNetworkSettings } from '../../settings/settings'
+import { currentMaskbookChainIdSettings } from '../../settings/settings'
 import type { WalletProvider } from './index'
+import { ChainId, ProviderType } from '../../web3/types'
+import { getConstant } from '../../web3/helpers'
+import { CONSTANTS } from '../../web3/constants'
 
-type SwitchableProvider = { switch(network: EthereumNetwork): void; disconnect(): void }
+type SwitchableProvider = { switch(chainId: ChainId): void; disconnect(): void }
 function SwitchableProvider(opts?: HttpProviderOptions): SwitchableProvider & HttpProvider {
     let activatingProvider: HttpProvider
     const pool = new Map<string, HttpProvider>()
     const extra: SwitchableProvider = {
-        switch(network) {
-            const addr = getNetworkSettings(network).middlewareAddress
+        switch(chainId) {
+            const addr = getConstant(CONSTANTS, 'INFURA_ADDRESS', chainId)
             pool.get(addr)?.disconnect()
             activatingProvider = new Web3.providers.HttpProvider(addr, opts)
             pool.set(addr, activatingProvider)
-            console.log('[Managed Web3] Switch', network)
+            console.log('[Managed Web3] Switch', chainId)
         },
         disconnect() {
             for (const each of pool.values()) each.disconnect()
         },
     }
-    extra.switch(currentLocalWalletEthereumNetworkSettings.value)
-    currentLocalWalletEthereumNetworkSettings.addListener((next) => extra.switch(next))
+    extra.switch(currentMaskbookChainIdSettings.value)
+    currentMaskbookChainIdSettings.addListener((next) => extra.switch(next))
     return new Proxy({} as HttpProvider & SwitchableProvider, {
         get(_, key) {
             const origProp = (activatingProvider as any)[key]
@@ -40,8 +41,7 @@ let provider: ReturnType<typeof SwitchableProvider> | undefined = undefined
 export const MaskbookProvider: WalletProvider = {
     checkAvailability: () => Promise.resolve(true),
     async requestAccounts() {
-        const wallets = await getManagedWallets()
-        return wallets.wallets.map((x) => x.address)
+        return (await getWallets(ProviderType.Maskbook)).map((x) => x.address)
     },
     getWeb3Provider() {
         if (provider) return provider

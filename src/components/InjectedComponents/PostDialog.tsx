@@ -40,8 +40,8 @@ import {
     makeTypedMessageText,
     isTypedMessageText,
 } from '../../protocols/typed-message'
-import { EthereumTokenType } from '../../plugins/Wallet/database/types'
-import { isDAI, isOKB } from '../../plugins/Wallet/token'
+import { EthereumTokenType } from '../../web3/types'
+import { isDAI, isOKB } from '../../web3/helpers'
 import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
@@ -198,7 +198,10 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 ChipProps={{
                                     label: '💰 Red Packet',
                                     onClick: async () => {
-                                        const wallets = await Services.Plugin.getWallets()
+                                        const wallets = await Services.Plugin.invokePlugin(
+                                            'maskbook.wallet',
+                                            'getWallets',
+                                        )
                                         if (wallets.length) setRedPacketDialogOpen(true)
                                         else Services.Provider.requestConnectWallet()
                                     },

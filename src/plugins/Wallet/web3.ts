@@ -1,25 +1,26 @@
 import Web3 from 'web3'
 import { sideEffect } from '../../utils/side-effects'
 import { OnlyRunInContext } from '@holoflows/kit/es'
-
-OnlyRunInContext('background', 'web3')
-import { WalletProviderType } from '../shared/findOutProvider'
 import { MetaMaskProvider } from '../../protocols/wallet-provider/metamask'
 import type { WalletProvider } from '../../protocols/wallet-provider'
 import { MaskbookProvider } from '../../protocols/wallet-provider/maskbook'
 import { unreachable } from '../../utils/utils'
 import { PluginMessageCenter } from '../PluginMessages'
 import { lastActivatedWalletProvider } from '../../settings/settings'
-import { getManagedWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
+import { getWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
+import { ProviderType } from '../../web3/types'
+
+OnlyRunInContext(['background', 'debugging'], 'web3')
 
 export const web3 = new Web3()
+
 Object.assign(globalThis, { web3 })
 let currentProvider: WalletProvider
 function resetProvider() {
     switchToProvider(lastActivatedWalletProvider.value)
 }
-sideEffect.then(resetProvider)
-export function switchToProvider(provider: WalletProviderType) {
+
+export function switchToProvider(provider: ProviderType) {
     console.log('[Web3] Switch to', provider)
     const nextProvider = getWalletProvider(provider)
     if (currentProvider === nextProvider) return
@@ -30,21 +31,22 @@ export function switchToProvider(provider: WalletProviderType) {
     PluginMessageCenter.emit('maskbook.wallets.reset', void 0)
     lastActivatedWalletProvider.value = provider
 }
-export function getWalletProvider(provider: WalletProviderType) {
-    if (provider === WalletProviderType.managed) return MaskbookProvider
-    if (provider === WalletProviderType.metamask) return MetaMaskProvider
+export function getWalletProvider(provider: ProviderType) {
+    if (provider === ProviderType.Maskbook) return MaskbookProvider
+    if (provider === ProviderType.MetaMask) return MetaMaskProvider
+    if (provider === ProviderType.WalletConnect) throw new Error('not supported')
     return unreachable(provider)
 }
 
 const importBuiltinWalletPrivateKey = async () => {
     web3.eth.accounts.wallet.clear()
 
-    const { wallets } = await getManagedWallets()
-    for await (const { mnemonic, passphrase, privateKey } of wallets) {
+    const wallets = await getWallets(ProviderType.Maskbook)
+    for await (const { mnemonic, passphrase, _private_key_ } of wallets) {
         const { privateKeyValid, privateKeyInHex } =
             mnemonic && passphrase
                 ? await recoverWallet(mnemonic, passphrase)
-                : await recoverWalletFromPrivateKey(privateKey)
+                : await recoverWalletFromPrivateKey(_private_key_)
         if (privateKeyValid) web3.eth.accounts.wallet.add(privateKeyInHex)
     }
 }

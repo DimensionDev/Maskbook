@@ -1,10 +1,17 @@
 import { createGlobalSettings, createInternalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
-import { EthereumNetwork } from '../plugins/Wallet/database/types'
 import type { SetupGuideStep } from '../components/InjectedComponents/SetupGuide'
-import { WalletProviderType } from '../plugins/shared/findOutProvider'
 import { Flags } from '../utils/flags'
+import { ChainId } from '../web3/types'
+import { ProviderType } from '../web3/types'
+
+/**
+ * The id of last activated tab
+ */
+export const lastActivatedTabIdSettings = createGlobalSettings<string>('lastActiveTabId', '', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
 
 /**
  * Does the debug mode on
@@ -52,19 +59,28 @@ export const appearanceSettings = createGlobalSettings<Appearance>('apperance', 
     primary: () => i18n.t('settings_appearance'),
 })
 
-export const currentLocalWalletEthereumNetworkSettings = createGlobalSettings<EthereumNetwork>(
-    'eth network',
-    EthereumNetwork.Mainnet,
+//#region provider chain id
+export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>('maskbook chain id', ChainId.Mainnet, {
+    primary: () => i18n.t('settings_choose_eth_network'),
+    secondary: () => 'This only effects the built-in wallet.',
+})
+
+export const currentMetaMaskChainIdSettings = createGlobalSettings<ChainId>('metamask chain id', ChainId.Mainnet, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>(
+    'walletconnect chain id',
+    ChainId.Mainnet,
     {
-        primary: () => i18n.t('settings_choose_eth_network'),
-        secondary: () =>
-            `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Ropsten}. This only effects the built-in wallet.`,
+        primary: () => 'DO NOT DISPLAY IT IN UI',
     },
 )
+//#endregion
 
-export const lastActivatedWalletProvider = createInternalSettings<WalletProviderType>(
+export const lastActivatedWalletProvider = createInternalSettings<ProviderType>(
     'last activated wallet provider',
-    WalletProviderType.managed,
+    ProviderType.Maskbook,
 )
 
 export enum Language {

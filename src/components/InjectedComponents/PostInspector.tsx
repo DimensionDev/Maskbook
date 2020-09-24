@@ -26,21 +26,20 @@ export interface PostInspectorProps {
 export function PostInspector(props: PostInspectorProps) {
     const postBy = usePostInfoDetails('postBy')
     const postContent = usePostInfoDetails('postContent')
+    const encryptedPost = usePostInfoDetails('postPayload')
     const postId = usePostInfoDetails('postIdentifier')
     const postImages = usePostInfoDetails('postMetadataImages')
     const isDebugging = useValueRef(debugModeSetting)
     const whoAmI = useCurrentIdentity()
     const friends = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
-
-    const encryptedPost = useMemo(() => deconstructPayload(postContent, getActivatedUI().payloadDecoder), [postContent])
     const provePost = useMemo(() => getActivatedUI().publicKeyDecoder(postContent), [postContent])
 
     const { value: sharedListOfPost } = useAsync(async () => {
         if (!whoAmI || !whoAmI.identifier.equals(postBy) || !encryptedPost.ok) return []
         const { iv, version } = encryptedPost.val
         return Services.Crypto.getSharedListOfPost(version, iv, postBy)
-    }, [postContent, postBy, whoAmI])
+    }, [postBy, whoAmI, encryptedPost])
     useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
 
     if (postBy.isUnknown) return null
@@ -69,19 +68,19 @@ export function PostInspector(props: PostInspectorProps) {
                 onDecrypted={props.onDecrypted}
                 requestAppendRecipients={
                     // So should not create new data on version -40
-                    encryptedPost.ok && encryptedPost.val.version === -40
-                        ? async (people) => {
+                    encryptedPost.ok && encryptedPost.val.version !== -40
+                        ? async (profile) => {
                               const { val } = encryptedPost
                               const { iv, version } = val
                               const ownersAESKeyEncrypted =
                                   val.version === -38 ? val.AESKeyEncrypted : val.ownersAESKeyEncrypted
 
-                              setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
+                              setAlreadySelectedPreviously(alreadySelectedPreviously.concat(profile))
                               return Services.Crypto.appendShareTarget(
                                   version,
                                   ownersAESKeyEncrypted,
                                   iv,
-                                  people.map((x) => x.identifier),
+                                  profile.map((x) => x.identifier),
                                   whoAmI!.identifier,
                                   { type: 'direct', at: new Date() },
                               )

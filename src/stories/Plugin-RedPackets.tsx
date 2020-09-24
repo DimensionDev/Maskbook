@@ -1,16 +1,17 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { RedPacketWithStateUI, RedPacket } from '../plugins/RedPacket/UI/RedPacket'
-import { EthereumNetwork, EthereumTokenType } from '../plugins/Wallet/database/types'
 import { RedPacketRecord, RedPacketStatus, RedPacketJSONPayload } from '../plugins/RedPacket/types'
 import { number, text, select, boolean } from '@storybook/addon-knobs'
 import { Typography, Paper } from '@material-ui/core'
 import { action } from '@storybook/addon-actions'
 import BigNumber from 'bignumber.js'
 import { makeTypedMessageText } from '../protocols/typed-message'
-import { DAI_ADDRESS } from '../plugins/Wallet/token'
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
 import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
+import { ChainId, EthereumTokenType, EthereumNetwork } from '../web3/types'
+import { getConstant } from '../web3/helpers'
+import { CONSTANTS } from '../web3/constants'
 
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacketWithStateUI', () => {
@@ -19,7 +20,7 @@ storiesOf('Plugin: Red Packets', module)
         const eth = createRecord({
             ...opts,
             total: total * 1000000000000000000,
-            type: EthereumTokenType.ETH,
+            type: EthereumTokenType.Ether,
             status: RedPacketStatus.incoming,
         })
         const erc20 = createRecord({
@@ -39,7 +40,7 @@ storiesOf('Plugin: Red Packets', module)
             type: EthereumTokenType.ERC20,
             total: total * 10 ** decimals,
             token: {
-                address: DAI_ADDRESS,
+                address: getConstant(CONSTANTS, 'DAI_ADDRESS'),
                 name: 'DAI',
                 decimals,
                 symbol: erc20symbol,
@@ -68,7 +69,7 @@ storiesOf('Plugin: Red Packets', module)
                     redPacket={createRecord({
                         ...opts,
                         total: total * 1000000000000000000,
-                        type: EthereumTokenType.ETH,
+                        type: EthereumTokenType.Ether,
                     })}
                 />
                 <hr />
@@ -93,7 +94,7 @@ storiesOf('Plugin: Red Packets', module)
         const knobs = createRedPacketKnobs()
         // @ts-ignore
         const payload: RedPacketJSONPayload = {
-            ...createRecord({ ...knobs, type: EthereumTokenType.ETH }),
+            ...createRecord({ ...knobs, type: EthereumTokenType.Ether }),
             rpid: 'rpid',
             sender: { address: 'address', message: knobs.message, name: knobs.senderName },
             total: (knobs.total * 10 ** 18).toString(),

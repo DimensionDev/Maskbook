@@ -127,6 +127,8 @@ export function exclusiveTasks(...args: Parameters<typeof realTasks>) {
 
 sideEffect.then(untilDocumentReady).then(() => {
     if (GetContext() !== 'content') return
+
+    //#region setup guide
     const network = getActivatedUI().networkIdentifier
     const id = currentSetupGuideStatus[network].value
     const onStatusUpdate = (id: string) => {
@@ -136,4 +138,5 @@ sideEffect.then(untilDocumentReady).then(() => {
     currentSetupGuideStatus[network].addListener(onStatusUpdate)
     currentSetupGuideStatus[network].readyPromise.then(onStatusUpdate)
     onStatusUpdate(id)
+    //#endregion
 })

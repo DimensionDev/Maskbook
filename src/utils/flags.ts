@@ -24,9 +24,12 @@ export const Flags = {
     /** Firefox has a special API that can inject to the document with a higher permission. */
     requires_injected_script_run_directly: process.env.target === 'firefox',
     // TODO: document why it enabled on app
-    support_eth_network_switch: process.env.NODE_ENV === 'development' || process.env.architecture === 'app',
+    support_eth_network_switch:
+        process.env.NODE_ENV === 'development' || process.env.architecture === 'app' || process.env.build === 'beta',
     //#region Experimental features
     trader_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
+    trader_all_api_cached_enabled: process.env.NODE_ENV === 'development',
+    trader_uniswap_auto_refresh_enabled: true,
     file_service_create_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
     matrix_based_service_enabled: process.env.NODE_ENV === 'development',
     metamask_support_enabled: process.env.architecture === 'web',

@@ -1,4 +1,5 @@
 import React from 'react'
+import { noop } from 'lodash-es'
 import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
 import classNames from 'classnames'
 import type { RedPacketRecord, RedPacketJSONPayload } from '../types'
@@ -7,8 +8,9 @@ import Services from '../../../extension/service'
 import { PluginMessageCenter } from '../../PluginMessages'
 import { formatBalance } from '../../Wallet/formatter'
 import { getUrl } from '../../../utils/utils'
-import { isDAI, isOKB } from '../../Wallet/token'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { isDAI, isOKB } from '../../../web3/helpers'
+import { parseChainName } from '../../../web3/pipes'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -107,20 +109,16 @@ export function RedPacketWithState(props: RedPacketProps) {
     const [redPacket, setRedPacket] = React.useState(() => knownRedPacket || undefined)
 
     React.useEffect(() => {
-        if (unknownRedPacket) {
-            const updateRedPacket = () => {
-                Services.Plugin.invokePlugin(
-                    'maskbook.red_packet',
-                    'discoverRedPacket',
-                    unknownRedPacket,
-                    from ?? '',
-                ).then((packet) => {
+        if (!unknownRedPacket) return noop
+        const updateRedPacket = () => {
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'discoverRedPacket', unknownRedPacket, from ?? '').then(
+                (packet) => {
                     setRedPacket(packet)
-                })
-            }
-            updateRedPacket()
-            return PluginMessageCenter.on('maskbook.red_packets.update', updateRedPacket)
-        } else return () => {}
+                },
+            )
+        }
+        updateRedPacket()
+        return PluginMessageCenter.on('maskbook.red_packets.update', updateRedPacket)
     }, [from, JSON.stringify(unknownRedPacket)])
 
     React.useEffect(() => {

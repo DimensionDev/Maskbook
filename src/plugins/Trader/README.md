@@ -4,11 +4,12 @@
 
 - [x] View trending info of a cryptocurrency with cash tag
 - [ ] \[TODO\] View trending info of a stock with cash tag
-- [ ] \[TODO\] Do trading between different cryptocurrencies
+- [x] Do trading between different ERC20 tokens
 
 ## Files
 
 - `./apis/` - data vendor APIs
+- `./graphs/` - hooks for drawing graphs and charts
 - `./hooks/` - customized hooks
 - `./messages/` - customized typed messags
 - `./UI/` - UI related stuff

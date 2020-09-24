@@ -1,5 +1,6 @@
 import '../../provider.worker'
 import '../../setup.ui'
+import '../tab'
 
 import React, { useState } from 'react'
 import { CssBaseline, useMediaQuery, NoSsr, CircularProgress, Box, Typography, Card } from '@material-ui/core'
@@ -42,6 +43,7 @@ import ActionButton from './DashboardComponents/ActionButton'
 import ShowcaseBox from './DashboardComponents/ShowcaseBox'
 import { Flags } from '../../utils/flags'
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
+import { PluginUI, PluginConfig } from '../../plugins/plugin'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.type === 'dark'
@@ -205,6 +207,24 @@ function DashboardUI() {
     )
 }
 
+//#region dashboard plugin UI
+function PluginDashboardInspectorForEach({ config }: { config: PluginConfig }) {
+    const F = config.dashboardInspector
+    if (typeof F === 'function') return <F />
+    return null
+}
+
+function DashboardPluginUI() {
+    return (
+        <>
+            {[...PluginUI.values()].map((x) => (
+                <PluginDashboardInspectorForEach key={x.identifier} config={x} />
+            ))}
+        </>
+    )
+}
+//#endregion
+
 export function Dashboard() {
     const preferDarkScheme = useMediaQuery('(prefers-color-scheme: dark)')
     const appearance = useValueRef(appearanceSettings)
@@ -222,6 +242,7 @@ export function Dashboard() {
                             <CssBaseline />
                             <DashboardBlurContextUI>
                                 <DashboardUI />
+                                <DashboardPluginUI />
                             </DashboardBlurContextUI>
                         </Router>
                     </NoSsr>

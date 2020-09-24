@@ -10,3 +10,15 @@ declare namespace Intl {
         format(str: string[]): string
     }
 }
+
+declare module '@ungap/promise-all-settled' {
+    const AllSettledPolyfill: typeof Promise.allSettled
+    export default AllSettledPolyfill
+}
+
+declare module 'string.prototype.matchall' {
+    const shimAPI: {
+        shim(): void
+    }
+    export default shimAPI
+}

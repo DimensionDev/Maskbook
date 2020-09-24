@@ -15,11 +15,11 @@ import { useStylesExtends } from '../../custom-ui-helper'
 import type { ListItemTypeMap } from '@material-ui/core/ListItem'
 
 export interface PersonOrGroupInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
-    onClick?: () => void
+    item: Group | Profile
     disabled?: boolean
     showAtNetwork?: boolean
+    onClick?: () => void
     ListItemProps?: Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>>
-    item: Group | Profile
 }
 const useStyle = makeStyles((theme: Theme) => ({
     // ? I want to let the children of this element have no change to

@@ -1,5 +1,5 @@
 import { bioCardSelector, selfInfoSelectors, postsContentSelector, postsImageSelector } from '../utils/selector'
-import { MutationObserverWatcher } from '@holoflows/kit'
+import { MutationObserverWatcher, ValueRef } from '@holoflows/kit'
 import { GroupIdentifier, ProfileIdentifier, PreDefinedVirtualGroupNames } from '../../../database/type'
 import type {
     SocialNetworkUI,
@@ -7,7 +7,7 @@ import type {
     SocialNetworkUIDefinition,
 } from '../../../social-network/ui'
 import { PostInfo } from '../../../social-network/PostInfo'
-import { deconstructPayload } from '../../../utils/type-transform/Payload'
+import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
 import { bioCardParser, postParser, postIdParser, postImagesParser } from '../utils/fetch'
 import { isNil, memoize } from 'lodash-es'
@@ -23,6 +23,7 @@ import {
     extractTextFromTypedMessage,
 } from '../../../protocols/typed-message'
 import { Flags } from '../../../utils/flags'
+import type { Result } from 'ts-results'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -129,9 +130,9 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 if (payload.err && info.postMetadataImages.size === 0) return
                 updateProfileInfo(info)
             })
-            info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
+            non_overlapping_assign(info.postPayload, deconstructPayload(info.postContent.value, self.payloadDecoder))
             info.postContent.addListener((newValue) => {
-                info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
+                non_overlapping_assign(info.postPayload, deconstructPayload(newValue, self.payloadDecoder))
             })
             injectMaskbookIconToPost(info)
             self.posts.set(proxy, info)
@@ -172,8 +173,14 @@ function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo) {
         Services.Helper.resolveTCOLink(x.href).then((val) => {
             if (!val) return
             info.postMetadataMentionedLinks.set(x, val)
+            const tryDecode = deconstructPayload(val, instanceOfTwitterUI.payloadDecoder)
+            non_overlapping_assign(info.postPayload, tryDecode)
         })
     }
+}
+function non_overlapping_assign(post: ValueRef<Result<Payload, Error>>, next: Result<Payload, Error>) {
+    if (post.value.ok && next.err) return // don't flush successful parse
+    post.value = next
 }
 function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self: Required<SocialNetworkUIDefinition>) {
     if (!tweetNode) return

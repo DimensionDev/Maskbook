@@ -10,7 +10,7 @@ executors:
         working_directory: ~/repo
 commands:
     restore_workspace:
-        description: "Restore the workspace"
+        description: 'Restore the workspace'
         steps:
             - attach_workspace:
                   at: ~/
@@ -60,12 +60,16 @@ jobs:
             - store_artifacts:
                   path: Maskbook.gecko.zip
                   destination: /Maskbook.gecko.zip
+            - store_artifacts:
+                  path: Maskbook.chromium-beta.zip
+                  destination: /Maskbook.chromium-beta.zip
             - persist_to_workspace:
                   root: ~/repo/
                   paths:
                       - Maskbook.base.zip
                       - Maskbook.iOS.zip
                       - Maskbook.chromium.zip
+                      - Maskbook.chromium-beta.zip
                       - Maskbook.firefox.zip
                       - Maskbook.gecko.zip
     publish-github-release:
@@ -74,7 +78,7 @@ jobs:
         steps:
             - restore_workspace
             - run:
-                  name: "Publish Release on GitHub"
+                  name: 'Publish Release on GitHub'
                   command: |
                       set -o nounset
                       mkdir ~/repo/release

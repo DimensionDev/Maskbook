@@ -37,7 +37,7 @@ storiesOf('Shared Components', module)
         )
     })
     .add('ChooseIdentity', () => {
-        return <ChooseIdentity />
+        return <ChooseIdentity identities={[]} />
     })
     .add('SettingsUI', () => {
         function D(props: { x: ValueRef<unknown> }) {

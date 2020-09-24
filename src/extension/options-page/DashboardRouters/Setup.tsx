@@ -373,7 +373,7 @@ export function ConnectNetwork() {
                         }}>
                         {t('set_up_button_finish')}
                     </ActionButton>
-                    <ActionButton variant="text" onClick={() => history.goBack()}>
+                    <ActionButton color="inherit" variant="text" onClick={() => history.goBack()}>
                         {t('set_up_button_cancel')}
                     </ActionButton>
                 </>
@@ -580,6 +580,7 @@ export function RestoreDatabaseAdvance() {
                             onChange={(e) => setNickname(e.target.value)}
                             value={nickname}
                             required
+                            autoFocus
                             label={t('name')}
                             inputProps={{
                                 'data-testid': 'username_input',
@@ -612,6 +613,7 @@ export function RestoreDatabaseAdvance() {
                     <TextField
                         multiline
                         rows={1}
+                        autoFocus
                         placeholder={t('dashboard_paste_database_base64_hint')}
                         onChange={(e) => setBase64Value(e.target.value)}
                         value={base64Value}
@@ -691,7 +693,11 @@ export function RestoreDatabaseAdvance() {
                         data-testid="import_button">
                         {t('set_up_button_import')}
                     </ActionButton>
-                    <ActionButton variant="text" onClick={() => history.goBack()} data-testid="cancel_button">
+                    <ActionButton
+                        color="inherit"
+                        variant="text"
+                        onClick={() => history.goBack()}
+                        data-testid="cancel_button">
                         {t('set_up_button_cancel')}
                     </ActionButton>
                 </>
@@ -818,7 +824,7 @@ export function RestoreDatabaseConfirmation() {
                             data-testid="confirm_button">
                             {t('set_up_button_confirm')}
                         </ActionButton>
-                        <ActionButton variant="text" onClick={() => history.goBack()}>
+                        <ActionButton color="inherit" variant="text" onClick={() => history.goBack()}>
                             {t('set_up_button_cancel')}
                         </ActionButton>
                     </>

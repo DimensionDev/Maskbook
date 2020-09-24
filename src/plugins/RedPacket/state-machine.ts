@@ -1,6 +1,5 @@
 import { omit } from 'lodash-es'
-import { EthereumTokenType, EthereumNetwork } from '../Wallet/database/types'
-import { RedPacketRecord, RedPacketStatus, RedPacketRecordInDatabase, RedPacketJSONPayload } from './types'
+import { RedPacketRecord, RedPacketStatus, RedPacketRecordInDatabase, RedPacketJSONPayload, History } from './types'
 import { v4 as uuid } from 'uuid'
 import type { RedPacketCreationResult, RedPacketClaimResult } from './types'
 import { getWalletProvider, getDefaultWallet, setDefaultWallet } from '../Wallet/wallet'
@@ -9,10 +8,13 @@ import Web3Utils from 'web3-utils'
 import { redPacketAPI } from './contracts'
 import { sideEffect } from '../../utils/side-effects'
 import BigNumber from 'bignumber.js'
-import { getNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
 import { createRedPacketTransaction, RedPacketPluginReificatedWalletDBReadOnly } from './database'
 import { assert, unreachable } from '../../utils/utils'
-import { getCurrentEthChain } from '../../extension/background-script/PluginService'
+import { EthereumTokenType, EthereumNetwork } from '../../web3/types'
+import { getChainId } from '../../extension/background-script/EthereumService'
+import { getConstant } from '../../web3/helpers'
+import { RED_PACKET_CONSTANTS } from './constants'
+import { RED_PACKET_HISTORY_URL } from './constants'
 
 function getProvider() {
     return redPacketAPI
@@ -74,6 +76,18 @@ export async function getRedPackets(owned?: boolean) {
     return all
 }
 
+// region HACK: THIS TEMPORARY CODE
+export async function getRedPacketHistory(from: string) {
+    const url = new URL(RED_PACKET_HISTORY_URL)
+    url.searchParams.set('from', from)
+    const response = await fetch(url.toString())
+    if (response.status !== 200) {
+        return undefined
+    }
+    return response.json() as Promise<History.RecordType[]>
+}
+// endregion
+
 export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedPacketRecord> {
     if (packet.send_total.isLessThan(packet.shares))
         throw new Error('At least [number of red packets] tokens to your red packet.')
@@ -88,7 +102,7 @@ export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedP
         if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
         const res = await getWalletProvider().approve(
             packet.sender_address,
-            getNetworkSettings(await getCurrentEthChain()).happyRedPacketContractAddress,
+            getConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS', await getChainId()),
             packet.erc20_token,
             packet.send_total,
         )
@@ -112,7 +126,7 @@ export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedP
     const record: RedPacketRecord = {
         aes_version: 1,
         contract_version: 1,
-        contract_address: getNetworkSettings(await getCurrentEthChain()).happyRedPacketContractAddress,
+        contract_address: getConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS', await getChainId()),
         id: uuid(),
         duration: packet.duration,
         is_random: packet.is_random,
@@ -196,7 +210,8 @@ export async function claimRedPacket(
     const rec = await getRedPacketByID(undefined, id.redPacketID)
     if (!rec) throw new Error('You should call discover first')
 
-    const claimWithWallet = _claimWithWallet ?? (await getDefaultWallet()).address
+    const claimWithWallet = _claimWithWallet ?? (await getDefaultWallet())?.address
+    if (!claimWithWallet) throw new Error('You should add wallet first')
     if (setAsDefault) setDefaultWallet(claimWithWallet)
 
     const passwords = rec.password
@@ -341,9 +356,7 @@ function RedPacketRecordOutDB(x: RedPacketRecordInDatabase): RedPacketRecord {
     const record = omit(x, names) as RedPacketRecord
     for (const name of names) {
         const original = x[name]
-        if (typeof original !== 'undefined') {
-            record[name] = new BigNumber(String(original))
-        }
+        if (typeof original !== 'undefined') record[name] = new BigNumber(String(original))
     }
     return record
 }

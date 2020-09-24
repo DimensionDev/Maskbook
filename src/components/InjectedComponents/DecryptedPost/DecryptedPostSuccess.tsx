@@ -1,19 +1,14 @@
 import React from 'react'
-import classNames from 'classnames'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
 import { useShareMenu } from '../SelectPeopleDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-import { Link, Typography, CircularProgress } from '@material-ui/core'
+import { Link } from '@material-ui/core'
 import type { Profile } from '../../../database'
 import { useStylesExtends } from '../../custom-ui-helper'
 import type { TypedMessage } from '../../../protocols/typed-message'
-import CheckIcon from '@material-ui/icons/Check'
-import ClearIcon from '@material-ui/icons/Clear'
 import { PluginUI, PluginConfig } from '../../../plugins/plugin'
-import type { SuccessDecryption } from '../../../extension/background-script/CryptoServices/decryptFrom'
 import { usePostInfo } from '../../DataSource/usePostInfo'
-import { useColorStyles } from '../../../utils/theme'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { content: TypedMessage }

@@ -53,7 +53,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
 
                 for (const x of data.wallets) {
                     const record = WalletRecordFromJSONFormat(x)
-                    if (record.type === 'managed') await importNewWallet(record)
+                    if (record.mnemonic || record._private_key_) await importNewWallet(record)
                 }
             })
         }

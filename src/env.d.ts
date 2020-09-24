@@ -8,6 +8,7 @@ declare module NodeJS {
         readonly NODE_ENV: 'development' | 'production' | 'test'
         readonly STORYBOOK?: boolean
         readonly target: 'chromium' | 'firefox' | 'safari' | 'E2E'
+        readonly build: 'stable' | 'beta' | 'insider'
         readonly architecture: 'web' | 'app'
         /** fennec = stable firefox; geckoview = next generation firefox (used in Android App, in future it will become the default engine on Firefox for Android) */
         readonly firefoxVariant: 'fennec' | 'geckoview'
