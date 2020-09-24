@@ -19,7 +19,6 @@ let currentProvider: WalletProvider
 function resetProvider() {
     switchToProvider(lastActivatedWalletProvider.value)
 }
-sideEffect.then(resetProvider)
 
 export function switchToProvider(provider: ProviderType) {
     console.log('[Web3] Switch to', provider)
