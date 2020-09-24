@@ -16,7 +16,7 @@ import { debounce } from 'lodash-es'
 import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../../constants'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { formatBalance } from '../../../Wallet/formatter'
-import { useCapturedEvents } from '../../../../utils/hooks/useCapturedEvents'
+import { useCapturedInput } from '../../../../utils/hooks/useCapturedEvents'
 import type { Token } from '../../../../web3/types'
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -60,7 +60,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const { amount, balance, token, onAmountChange, label } = props
 
     const classes = useStyles()
-    const [, inputRef] = useCapturedEvents()
+    const [, inputRef] = useCapturedInput()
 
     //#region update amount by parent
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_PARTIAL_AMOUNT } = useMemo(() => {

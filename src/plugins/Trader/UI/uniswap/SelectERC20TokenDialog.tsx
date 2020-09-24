@@ -20,7 +20,7 @@ import {
     useTwitterCloseButton,
 } from '../../../../social-network-provider/twitter.com/utils/theme'
 import { getActivatedUI } from '../../../../social-network/ui'
-import { useCapturedEvents } from '../../../../utils/hooks/useCapturedEvents'
+import { useCapturedInput } from '../../../../utils/hooks/useCapturedEvents'
 import type { Token } from '../../../../web3/types'
 import { FixedTokenList } from '../../../../extension/options-page/DashboardComponents/FixedTokenList'
 
@@ -77,7 +77,7 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     const { open, excludeTokens, onSubmit, onClose } = props
 
     //#region capture event
-    const [, inputRef] = useCapturedEvents()
+    const [, inputRef] = useCapturedInput()
     //#endregion
 
     //#region search tokens

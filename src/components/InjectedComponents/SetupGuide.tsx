@@ -265,7 +265,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
 
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
-    const [binder, inputRef] = useCapturedInput(onUsernameChange, [])
+    const [binder, inputRef] = useCapturedInput(onUsernameChange)
 
     useEffect(
         () =>
