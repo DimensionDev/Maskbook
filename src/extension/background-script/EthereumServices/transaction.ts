@@ -28,11 +28,13 @@ async function createTransactionSender(from: string, config: TransactionConfig) 
     const wallet = wallets.find((x) => isSameAddress(x.address, from))
     if (!wallet) throw new Error('the wallet does not exists')
 
-    console.log('DEBUG: send transaction')
-    console.log({
-        from,
-        config,
-    })
+    if (process.env.NODE_ENV === 'development') {
+        console.log('DEBUG: send transaction')
+        console.log({
+            from,
+            config,
+        })
+    }
 
     // Managed wallets need calc gas, gasPrice and nonce.
     // Add the private key into eth accounts list is also required.
@@ -95,8 +97,10 @@ export async function* sendTransaction(from: string, config: TransactionConfig) 
     try {
         const sender = await createTransactionSender(from, config)
         for await (const stage of promiEventToIterator(sender())) {
-            console.log('DEBUG: stage')
-            console.log(stage)
+            if (process.env.NODE_ENV === 'development') {
+                console.log('DEBUG: stage')
+                console.log(stage)
+            }
 
             if (stage.type === StageType.TRANSACTION_HASH) {
                 await commitNonce(from)
@@ -110,11 +114,7 @@ export async function* sendTransaction(from: string, config: TransactionConfig) 
         }
         return
     } catch (err) {
-        console.log('DEBUG: sendTransaction error')
-        console.log(err)
         if (err.message.includes('nonce too low')) resetNonce(from)
-        // TODO:
-        // nonce too high?
         throw err
     }
 }

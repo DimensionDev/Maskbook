@@ -4,6 +4,7 @@ import { useStylesExtends } from '../custom-ui-helper'
 import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
 import { isSameAddress } from '../../web3/helpers'
 import { ProviderIcon } from './ProviderIcon'
+import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -38,15 +39,10 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
             avatar={avatar}
             className={classes.root}
             size="small"
-            label={`0x${address_.slice(0, 4)}...${address_.slice(-4)}`}
+            label={formatEthereumAddress(address_, 4)}
             {...ChipProps}
         />
     ) : (
-        <Chip
-            className={classes.root}
-            size="small"
-            label={`0x${address_.slice(0, 4)}...${address_.slice(-4)}`}
-            {...ChipProps}
-        />
+        <Chip className={classes.root} size="small" label={formatEthereumAddress(address_, 4)} {...ChipProps} />
     )
 }
