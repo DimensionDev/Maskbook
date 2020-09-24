@@ -25,6 +25,7 @@ const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS')
 //#region predefined tokens
 import mainnet from '../../web3/erc20/mainnet.json'
 import rinkeby from '../../web3/erc20/rinkeby.json'
+import { checksumAddress } from './database/helpers'
 
 const sort = (x: Token, y: Token): 1 | -1 => ([x.name, y.name].sort()[0] === x.name ? -1 : 1)
 mainnet.built_in_tokens.map((x) => ({ type: EthereumTokenType.ERC20, chainId: ChainId.Mainnet, ...x })).sort(sort)
@@ -74,9 +75,9 @@ export async function getWallets(provider?: ProviderType) {
     }
 }
 
-export async function getToken(addr: string) {
+export async function getToken(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token')
-    return t.objectStore('ERC20Token').get(addr)
+    return t.objectStore('ERC20Token').get(address)
 }
 
 export async function getTokens() {
@@ -97,10 +98,10 @@ export async function updateExoticWalletFromSource(
         if (wallet.provider !== provider) continue
 
         modified = true
-        const addr = wallet.address
-        if (updates.has(addr)) {
+        const address = wallet.address
+        if (updates.has(address)) {
             const orig = WalletRecordOutDB(cursor.value) as WalletRecord
-            await cursor.update(WalletRecordIntoDB({ ...orig, ...updates.get(addr)!, updatedAt: new Date() }))
+            await cursor.update(WalletRecordIntoDB({ ...orig, ...updates.get(address)!, updatedAt: new Date() }))
         } else await cursor.delete()
     }
     for (const address of updates.keys()) {
@@ -429,6 +430,11 @@ async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], '
     return WalletRecordOutDB(record)
 }
 
+function ERC20TokenRecordIntoDB(x: ERC20TokenRecord) {
+    x.address = checksumAddress(x.address)
+    return x as ERC20TokenRecordInDatabase
+}
+
 function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
     const record = x as ERC20TokenRecord
     {
@@ -436,11 +442,18 @@ function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
         const record_ = record as any
         if (!record.chainId) record.chainId = parseChainName(record_.network)
     }
+    record.address = EthereumAddress.checksumAddress(record.address)
     return record
 }
 
-function ERC20TokenRecordIntoDB(x: ERC20TokenRecord) {
-    return x as ERC20TokenRecordInDatabase
+function WalletRecordIntoDB(x: WalletRecord) {
+    const record = (x as any) as WalletRecordInDatabase
+    record.address = checksumAddress(x.address)
+    record.eth_balance = x.eth_balance.toString()
+    for (const [name, value] of x.erc20_token_balance.entries()) {
+        record.erc20_token_balance.set(name, value.toString())
+    }
+    return record
 }
 
 function WalletRecordOutDB(x: WalletRecordInDatabase) {
@@ -450,15 +463,8 @@ function WalletRecordOutDB(x: WalletRecordInDatabase) {
     for (const [name, value] of x.erc20_token_balance.entries()) {
         record.erc20_token_balance.set(name, new BigNumber(String(value ?? 0)))
     }
+    record.address = EthereumAddress.checksumAddress(record.address)
     record.erc20_token_whitelist = x.erc20_token_whitelist || new Set()
     record.erc20_token_blacklist = x.erc20_token_blacklist || new Set()
-    return record
-}
-function WalletRecordIntoDB(x: WalletRecord) {
-    const record = (x as any) as WalletRecordInDatabase
-    record.eth_balance = x.eth_balance.toString()
-    for (const [name, value] of x.erc20_token_balance.entries()) {
-        record.erc20_token_balance.set(name, value.toString())
-    }
     return record
 }

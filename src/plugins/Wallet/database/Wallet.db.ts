@@ -1,15 +1,16 @@
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
-import { createDBAccess } from '../../../database/helpers/openDB'
+import { createDBAccess, createTransaction } from '../../../database/helpers/openDB'
 import type { ERC20TokenRecord, WalletRecordInDatabase } from './types'
 import type { GitcoinDonationRecordInDatabase } from '../../Gitcoin/types'
 import type { RedPacketRecordInDatabase } from '../../RedPacket/types'
 import { RedPacketPluginID } from '../../RedPacket/constants'
+import { checksumAddress } from './helpers'
 
 function path<T>(x: T) {
     return x
 }
 export const createWalletDBAccess = createDBAccess(() => {
-    return openDB<WalletDB>('maskbook-plugin-wallet', 3, {
+    return openDB<WalletDB>('maskbook-plugin-wallet', 4, {
         async upgrade(db, oldVersion, newVersion, tx) {
             function v0_v1() {
                 // @ts-expect-error
@@ -73,9 +74,42 @@ export const createWalletDBAccess = createDBAccess(() => {
                 // @ts-ignore
                 db.deleteObjectStore('RedPacket')
             }
+            /**
+             * Use checksummed address in DB
+             */
+            async function v3_v4() {
+                const t = createTransaction(db, 'readwrite')('Wallet', 'ERC20Token')
+                const wallets = t.objectStore('Wallet')
+                const tokens = t.objectStore('ERC20Token')
+                for await (const wallet of wallets) {
+                    // update address
+                    wallet.value.address = checksumAddress(wallet.value.address)
+
+                    // update erc20_token_balance map
+                    const entries = Array.from(wallet.value.erc20_token_balance.entries())
+                    wallet.value.erc20_token_balance.clear()
+                    for (const [key, value] of entries) {
+                        wallet.value.erc20_token_balance.set(checksumAddress(key), value)
+                    }
+
+                    // update token list sets
+                    ;[wallet.value.erc20_token_blacklist, wallet.value.erc20_token_whitelist].forEach((set) => {
+                        const values = Array.from(set.values())
+                        set.clear()
+                        values.forEach((value) => set.add(checksumAddress(value)))
+                    })
+                    await wallet.update(wallet.value)
+                }
+                for await (const token of tokens) {
+                    token.value.address = checksumAddress(token.value.address)
+                    await token.update(token.value)
+                }
+            }
+
             if (oldVersion < 1) v0_v1()
             if (oldVersion < 2) v1_v2()
             if (oldVersion < 3) await v2_v3()
+            if (oldVersion < 4) await v3_v4()
         },
     })
 })
