@@ -22,6 +22,7 @@ import { sleep } from '@holoflows/kit/es/util/sleep'
 import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 import { decodeImageUrl } from '../SteganographyService'
 import type { TypedMessage } from '../../../protocols/typed-message'
+import stringify from 'json-stable-stringify'
 
 type Progress =
     | {
@@ -117,28 +118,27 @@ function makeError(error: string | Error, internal: boolean = false): Failure {
  *      1. listen to future new keys on Gun
  *      2. try to decrypt with that key
  */
-async function* decryptFromTextWithProgress_raw(
-    post: string,
+async function* decryptFromPayloadWithProgress_raw(
+    post: Payload,
     author: ProfileIdentifier,
     whoAmI: ProfileIdentifier,
     publicShared?: boolean,
 ): ReturnOfDecryptPostContentWithProgress {
-    if (successDecryptionCache.has(post)) return successDecryptionCache.get(post)!
+    const cacheKey = stringify(post)
+    if (successDecryptionCache.has(cacheKey)) return successDecryptionCache.get(cacheKey)!
     yield makeProgress('init')
 
     const authorNetworkWorker = getNetworkWorker(author.network)
     if (authorNetworkWorker.err) return makeError(authorNetworkWorker.val)
-    const decodeResult = deconstructPayload(post, authorNetworkWorker.val.payloadDecoder)
 
-    if (decodeResult.err) return makeError(decodeResult.val)
-    const data = decodeResult.val
+    const data = post
     const { version } = data
     const sharePublic = publicShared ?? (data.version === -38 ? data.sharedPublic ?? false : false)
 
     if (version === -40 || version === -39 || version === -38) {
         const { encryptedText, iv, signature, version } = data
         const cryptoProvider = cryptoProviderTable[version]
-        const makeSuccessResult = makeSuccessResultF(post, cryptoProvider)
+        const makeSuccessResult = makeSuccessResultF(cacheKey, cryptoProvider)
         const ownersAESKeyEncrypted = data.version === -38 ? data.AESKeyEncrypted : data.ownersAESKeyEncrypted
         const waitForVerifySignaturePayload = getSignablePayload(data)
 
@@ -338,11 +338,15 @@ async function* decryptFromImageUrlWithProgress_raw(
     })
     if (post.indexOf('🎼') !== 0 && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
         return makeError(i18n.t('service_decode_image_payload_failed'), true)
-    return yield* decryptFromText(post, author, whoAmI, publicShared)
+    const worker = getNetworkWorker(author)
+    if (worker.err) return makeError(worker.val)
+    const payload = deconstructPayload(post, worker.val.payloadDecoder)
+    if (payload.err) return makeError(payload.val)
+    return yield* decryptFromText(payload.val, author, whoAmI, publicShared)
 }
 
 export const decryptFromText = memorizeAsyncGenerator(
-    decryptFromTextWithProgress_raw,
+    decryptFromPayloadWithProgress_raw,
     (encrypted, author, whoAmI, publicShared = undefined) =>
         JSON.stringify([encrypted, author.toText(), whoAmI.toText(), publicShared]),
     1000 * 30,

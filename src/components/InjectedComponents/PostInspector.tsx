@@ -26,21 +26,20 @@ export interface PostInspectorProps {
 export function PostInspector(props: PostInspectorProps) {
     const postBy = usePostInfoDetails('postBy')
     const postContent = usePostInfoDetails('postContent')
+    const encryptedPost = usePostInfoDetails('postPayload')
     const postId = usePostInfoDetails('postIdentifier')
     const postImages = usePostInfoDetails('postMetadataImages')
     const isDebugging = useValueRef(debugModeSetting)
     const whoAmI = useCurrentIdentity()
     const friends = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
-
-    const encryptedPost = useMemo(() => deconstructPayload(postContent, getActivatedUI().payloadDecoder), [postContent])
     const provePost = useMemo(() => getActivatedUI().publicKeyDecoder(postContent), [postContent])
 
     const { value: sharedListOfPost } = useAsync(async () => {
         if (!whoAmI || !whoAmI.identifier.equals(postBy) || !encryptedPost.ok) return []
         const { iv, version } = encryptedPost.val
         return Services.Crypto.getSharedListOfPost(version, iv, postBy)
-    }, [postContent, postBy, whoAmI])
+    }, [postBy, whoAmI, encryptedPost])
     useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
 
     if (postBy.isUnknown) return null
