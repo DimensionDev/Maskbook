@@ -5,6 +5,7 @@ import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { EthereumAddress } from 'wallet.ts'
 import { updateExoticWalletFromSource, setDefaultWallet } from '../../../../plugins/Wallet/wallet'
 import { ProviderType } from '../../../../web3/types'
+import { sideEffect } from '../../../../utils/side-effects'
 
 //#region tracking chain id
 let currentChainId: ChainId = ChainId.Mainnet
@@ -26,7 +27,7 @@ function onNetworkChanged(id: string) {
 }
 
 // create a new provider
-createProvider()
+sideEffect.then(createProvider)
 
 export function createProvider() {
     if (provider) {
