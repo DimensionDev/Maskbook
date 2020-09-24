@@ -77,7 +77,7 @@ export async function getWallets(provider?: ProviderType) {
 
 export async function getToken(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token')
-    return t.objectStore('ERC20Token').get(address)
+    return t.objectStore('ERC20Token').get(checksumAddress(address))
 }
 
 export async function getTokens() {
@@ -98,14 +98,13 @@ export async function updateExoticWalletFromSource(
         if (wallet.provider !== provider) continue
 
         modified = true
-        const address = wallet.address
-        if (updates.has(address)) {
+        if (updates.has(checksumAddress(wallet.address))) {
             const orig = WalletRecordOutDB(cursor.value) as WalletRecord
-            await cursor.update(WalletRecordIntoDB({ ...orig, ...updates.get(address)!, updatedAt: new Date() }))
+            await cursor.update(WalletRecordIntoDB({ ...orig, ...updates.get(wallet.address)!, updatedAt: new Date() }))
         } else await cursor.delete()
     }
     for (const address of updates.keys()) {
-        if (await walletStore.get(address)) continue
+        if (await walletStore.get(checksumAddress(address))) continue
         modified = true
         await walletStore.put(
             WalletRecordIntoDB({
@@ -146,13 +145,14 @@ export async function getDefaultWallet(): Promise<WalletRecord | null> {
     return null
 }
 
-export async function setDefaultWallet(address: WalletRecord['address']) {
+export async function setDefaultWallet(address: string) {
+    const walletAddressChecksummed = checksumAddress(address)
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallets = await t.objectStore('Wallet').getAll()
     wallets.forEach((wallet) => {
         if (wallet._wallet_is_default) wallet._wallet_is_default = false
-        if (wallet.address === address) wallet._wallet_is_default = true
-        if (wallet._wallet_is_default || wallet.address === address) wallet.updatedAt = new Date()
+        if (wallet.address === walletAddressChecksummed) wallet._wallet_is_default = true
+        if (wallet._wallet_is_default || wallet.address === walletAddressChecksummed) wallet.updatedAt = new Date()
         t.objectStore('Wallet').put(wallet)
     })
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
@@ -244,7 +244,7 @@ export async function importFirstWallet(rec: Parameters<typeof importNewWallet>[
 
 export async function renameWallet(address: string, name: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
-    const wallet = await getWalletByAddress(t, address)
+    const wallet = await getWalletByAddress(t, checksumAddress(address))
     wallet.name = name
     wallet.updatedAt = wallet.updatedAt ?? new Date()
     t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
@@ -253,7 +253,7 @@ export async function renameWallet(address: string, name: string) {
 
 export async function removeWallet(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
-    const wallet = await getWalletByAddress(t, address)
+    const wallet = await getWalletByAddress(t, checksumAddress(address))
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
         t.objectStore('Wallet')
@@ -271,9 +271,8 @@ export async function recoverWallet(mnemonic: string[], password: string) {
     const wallet = childKey.derive('')
     const walletPublicKey = wallet.publicKey
     const walletPrivateKey = wallet.privateKey!
-    const address = EthereumAddress.from(walletPublicKey).address
     return {
-        address,
+        address: EthereumAddress.from(walletPublicKey).address,
         privateKey: walletPrivateKey,
         privateKeyValid: true,
         privateKeyInHex: `0x${buf2hex(walletPrivateKey)}`,
@@ -285,9 +284,8 @@ export async function recoverWalletFromPrivateKey(privateKey: string) {
     const ec = new EC('secp256k1')
     const privateKey_ = privateKey.replace(/^0x/, '') // strip 0x
     const key = ec.keyFromPrivate(privateKey_)
-    const address = EthereumAddress.from(key.getPublic(false, 'array') as any).address
     return {
-        address,
+        address: EthereumAddress.from(key.getPublic(false, 'array') as any).address,
         privateKey: hex2buf(privateKey_),
         privateKeyValid: privateKeyVerify(privateKey_),
         privateKeyInHex: privateKey.startsWith('0x') ? privateKey : `0x${privateKey}`,
@@ -308,8 +306,8 @@ export async function walletAddERC20Token(
     user_defined: boolean,
 ) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
-    const wallet = await getWalletByAddress(t, walletAddress)
-    const erc20 = await getERC20TokenByAddress(t, token.address)
+    const wallet = await getWalletByAddress(t, checksumAddress(walletAddress))
+    const erc20 = await getERC20TokenByAddress(t, checksumAddress(token.address))
     if (!erc20) {
         const rec: ERC20TokenRecord = {
             address: token.address,
@@ -319,14 +317,15 @@ export async function walletAddERC20Token(
             chainId,
             symbol: token.symbol,
         }
-        await t.objectStore('ERC20Token').add(ERC20TokenRecordOutDB(rec))
+        await t.objectStore('ERC20Token').add(ERC20TokenRecordIntoDB(rec))
     }
-    if (!wallet.erc20_token_balance.has(token.address)) {
-        wallet.erc20_token_balance.set(token.address, new BigNumber(0))
+    const tokenAddressChecksummed = checksumAddress(token.address)
+    if (!wallet.erc20_token_balance.has(tokenAddressChecksummed)) {
+        wallet.erc20_token_balance.set(tokenAddressChecksummed, new BigNumber(0))
         wallet.updatedAt = new Date()
     }
-    if (wallet.erc20_token_blacklist.has(token.address)) {
-        wallet.erc20_token_blacklist.delete(token.address)
+    if (wallet.erc20_token_blacklist.has(tokenAddressChecksummed)) {
+        wallet.erc20_token_blacklist.delete(tokenAddressChecksummed)
         wallet.updatedAt = new Date()
     }
     await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
@@ -335,11 +334,11 @@ export async function walletAddERC20Token(
 
 export async function walletBlockERC20Token(walletAddress: string, tokenAddress: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
-    const wallet = await getWalletByAddress(t, walletAddress)
-    const erc20 = await getERC20TokenByAddress(t, tokenAddress)
+    const wallet = await getWalletByAddress(t, checksumAddress(walletAddress))
+    const erc20 = await getERC20TokenByAddress(t, checksumAddress(tokenAddress))
     if (!erc20) return
-    if (!wallet.erc20_token_blacklist.has(tokenAddress)) {
-        wallet.erc20_token_blacklist.add(tokenAddress)
+    if (!wallet.erc20_token_blacklist.has(erc20.address)) {
+        wallet.erc20_token_blacklist.add(erc20.address)
         wallet.updatedAt = new Date()
     }
     await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
@@ -369,6 +368,7 @@ export async function onWalletBalancesUpdated(data: BalanceMetadata) {
         token: Token
         chainId: ChainId
     }[] = []
+    unaddedTokens.forEach(({ token }) => (token.address = checksumAddress(token.address)))
     for (const [walletAddress, tokens] of Object.entries(data)) {
         const wallet = await getWalletByAddress(t, walletAddress)
         const lastModifiedAt = wallet.updatedAt
@@ -420,12 +420,12 @@ export async function onWalletBalancesUpdated(data: BalanceMetadata) {
 }
 
 async function getERC20TokenByAddress(t: IDBPSafeTransaction<WalletDB, ['ERC20Token'], 'readonly'>, address: string) {
-    const record = await t.objectStore('ERC20Token').get(address)
+    const record = await t.objectStore('ERC20Token').get(checksumAddress(address))
     return record ? ERC20TokenRecordOutDB(record) : null
 }
 
 async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
-    const record = await t.objectStore('Wallet').get(address)
+    const record = await t.objectStore('Wallet').get(checksumAddress(address))
     assert(record)
     return WalletRecordOutDB(record)
 }
