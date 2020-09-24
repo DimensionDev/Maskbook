@@ -159,7 +159,7 @@ export function TransactionDialogUI(props: TransactionDialogUIProps) {
                             <Typography className={classes.primary} color="textPrimary">
                                 {swapState.error.message.includes('User denied transaction signature.')
                                     ? 'Transaction was rejected!'
-                                    : 'Opps, Error!'}
+                                    : swapState.error.message}
                             </Typography>
                         </>
                     ) : null}
