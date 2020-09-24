@@ -364,25 +364,36 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         props.onConfirm(payload)
     }
     useEffect(() => {
-        const updateHandler = () => {
-            //#region @sept inovke your external api from here
-
-            // fetchFromRemote(chainId, account)
-
-            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets')
-                .then((packets) =>
-                    packets.filter(
-                        (p) =>
-                            p.create_transaction_hash &&
-                            (p.status === RedPacketStatus.normal ||
-                                p.status === RedPacketStatus.incoming ||
-                                p.status === RedPacketStatus.claimed ||
-                                p.status === RedPacketStatus.pending ||
-                                p.status === RedPacketStatus.claim_pending),
-                    ),
+        const updateHandler = async () => {
+            // region HACK: THIS TEMPORARY CODE
+            // temporary replace, use remote red packet history.
+            await Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketHistory', account)
+                .then((records) =>
+                    (records ?? []).map((record): unknown => ({
+                        id: record._hash,
+                        send_message: record._message,
+                        block_creation_time: new Date(record.txTimestamp),
+                        send_total: record._number,
+                        sender_name: record._name,
+                    })),
                 )
-                .then(setAvailableRedPackets)
-            //#endregion
+                .then((records) => {
+                    setAvailableRedPackets(records as RedPacketRecord[])
+                })
+            // await Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets')
+            //     .then((packets) =>
+            //         packets.filter(
+            //             (p) =>
+            //                 p.create_transaction_hash &&
+            //                 (p.status === RedPacketStatus.normal ||
+            //                     p.status === RedPacketStatus.incoming ||
+            //                     p.status === RedPacketStatus.claimed ||
+            //                     p.status === RedPacketStatus.pending ||
+            //                     p.status === RedPacketStatus.claim_pending),
+            //         ),
+            //     )
+            //     .then(setAvailableRedPackets)
+            // endregion
         }
         updateHandler()
         return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
