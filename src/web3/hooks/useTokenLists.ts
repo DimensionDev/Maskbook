@@ -16,7 +16,11 @@ export enum TokenListsState {
 
 export function useTokenLists(
     lists: string[],
-    { keyword = '', useEther = false }: { keyword?: string; chainId?: ChainId; useEther?: boolean },
+    {
+        keyword = '',
+        useEther = false,
+        useAddressOnly = false,
+    }: { keyword?: string; chainId?: ChainId; useEther?: boolean; useAddressOnly?: boolean } = {},
 ) {
     //#region fetch token lists
     const chainId = useChainId()

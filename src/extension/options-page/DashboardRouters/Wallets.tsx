@@ -46,6 +46,7 @@ import { useWallets, useTokens } from '../../../plugins/Wallet/hooks/useWallet'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { isDAI } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
+import { useTokensBalance } from '../../../web3/hooks/useTokensBalance'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -142,6 +143,10 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
             {t('delete')}
         </MenuItem>,
     )
+
+    // fetch tokens balance
+    const { value: listOfBalances = [] } = useTokensBalance(wallet.address, tokens?.map((x) => x.address) ?? [])
+
     if (!wallet) return null
     return (
         <div className={classes.root} ref={ref}>
@@ -180,10 +185,16 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                             decimals: 18,
                         }}
                     />
-                    {tokens?.map((token) => (
+                    {tokens?.map((token, idx) => (
                         <TokenListItem
                             key={token.address}
-                            balance={wallet.erc20_token_balance.get(token.address) ?? new BigNumber(0)}
+                            balance={
+                                new BigNumber(
+                                    listOfBalances[idx]
+                                        ? listOfBalances[idx]
+                                        : wallet.erc20_token_balance.get(token.address) ?? '0',
+                                )
+                            }
                             wallet={wallet}
                             token={token}
                         />
@@ -271,27 +282,11 @@ export default function DashboardWalletsRouter() {
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
     const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
-    const chainid = useChainId()
+    const chainId = useChainId()
     const wallets = useWallets()
     const tokens = useTokens()
     const [current, setCurrent] = useState('')
     const currentWallet = wallets.find((wallet) => wallet.address === current)
-
-    const getTokensForWallet = (wallet?: WalletRecord) => {
-        if (!wallet) return []
-        return tokens
-            .filter(
-                (token) =>
-                    token.chainId === chainid &&
-                    wallet.erc20_token_balance.has(token.address) &&
-                    !wallet.erc20_token_blacklist.has(token.address),
-            )
-            .sort((token, otherToken) => {
-                if (isDAI(token.address)) return -1
-                if (isDAI(otherToken.address)) return 1
-                return token.name < otherToken.name ? -1 : 1
-            })
-    }
 
     // tracking wallet balance
     useEffect(() => {
@@ -338,6 +333,21 @@ export default function DashboardWalletsRouter() {
         })
     }, [setOpen])
 
+    const getTokensForWallet = (wallet?: WalletRecord) => {
+        if (!wallet) return []
+        return tokens
+            .filter(
+                (token) =>
+                    token.chainId === chainId &&
+                    wallet.erc20_token_balance.has(token.address) &&
+                    !wallet.erc20_token_blacklist.has(token.address),
+            )
+            .sort((token, otherToken) => {
+                if (isDAI(token.address)) return -1
+                if (isDAI(otherToken.address)) return 1
+                return token.name < otherToken.name ? -1 : 1
+            })
+    }
     const walletContent = (
         <div className={classes.wrapper}>
             {currentWallet && <WalletContent wallet={currentWallet} tokens={getTokensForWallet(currentWallet)} />}
