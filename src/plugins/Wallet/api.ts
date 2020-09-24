@@ -86,7 +86,7 @@ export const erc20API = {
                 let txHash = ''
                 sendTx(
                     erc20Contract.methods.approve(spenderAddress, amount.toFixed()),
-                    { from: ownerAddress },
+                    { from: ownerAddress, to: erc20Contract.options.address },
                     {
                         onTransactionHash(hash) {
                             txHash = hash
@@ -133,6 +133,7 @@ export const erc20API = {
                     erc20Contract.methods.transfer(recipientAddress, amount.toFixed()),
                     {
                         from: ownerAddress,
+                        to: erc20Contract.options.address,
                     },
                     {
                         onTransactionHash(hash) {

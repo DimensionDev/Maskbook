@@ -102,6 +102,7 @@ export const redPacketAPI = {
                 ),
                 {
                     from: ____sender__addr,
+                    to: contract.options.address,
                     value: token_type === EthereumTokenType.Ether ? total_tokens.toFixed() : undefined,
                 },
                 {
@@ -150,6 +151,7 @@ export const redPacketAPI = {
                 contract.methods.claim(id.redPacketID, password, recipient, validation),
                 {
                     from: recipient,
+                    to: contract.options.address,
                 },
                 {
                     onTransactionHash(hash) {
@@ -194,6 +196,7 @@ export const redPacketAPI = {
                 contract.methods.refund(id.redPacketID),
                 {
                     from: packet!.sender_address,
+                    to: contract.options.address,
                 },
                 {
                     onTransactionHash(hash: string) {

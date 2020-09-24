@@ -13,6 +13,7 @@ import {
     Link,
     DialogActions,
     CircularProgress,
+    Box,
 } from '@material-ui/core'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
@@ -32,8 +33,11 @@ import type { ERC20TokenDetails } from '../../extension/background-script/Plugin
 import { Trans } from 'react-i18next'
 import { useSelectWallet } from '../Wallet/hooks/useWallet'
 import { TokenSelect } from '../Wallet/UI/TokenSelect'
-import { WalletSelect } from '../Wallet/UI/WalletSelect'
-import { EthereumTokenType } from '../../web3/types'
+import { EthereumTokenType, ChainId } from '../../web3/types'
+import { EthereumChainChip } from '../../components/shared/EthereumChainChip'
+import { EthereumAccountChip } from '../../components/shared/EthereumAccountChip'
+import { useAccount } from '../../web3/hooks/useAccount'
+import { useChainId } from '../../web3/hooks/useChainId'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,6 +59,12 @@ const useStyles = makeStyles((theme: Theme) =>
                 margin: 0,
             },
             '-moz-appearance': 'textfield',
+        },
+        acocunt: {
+            marginTop: theme.spacing(0.5),
+        },
+        ethereumChainChip: {
+            marginRight: theme.spacing(1),
         },
     }),
 )
@@ -96,6 +106,9 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const useSelectWalletResult = useSelectWallet(props.wallets, props.tokens)
     const { erc20Balance, ethBalance, selectedToken, selectedTokenType, selectedWallet } = useSelectWalletResult
+
+    const account = useAccount()
+    const chainId = useChainId()
 
     const [amount, setAmount] = useState(0.01)
     const [, amountInputRef] = useCapturedInput((x) => setAmount(parseFloat(x)))
@@ -153,11 +166,16 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                         {props.description}
                     </Typography>
                     <form className={classes.form}>
-                        <WalletSelect
-                            FormControlProps={{ fullWidth: true }}
-                            wallets={props.wallets}
-                            useSelectWalletHooks={useSelectWalletResult}
-                        />
+                        <Box className={classes.acocunt} display="flex" alignItems="center" justifyContent="flex-end">
+                            {chainId === ChainId.Mainnet ? null : (
+                                <EthereumChainChip
+                                    classes={{ root: classes.ethereumChainChip }}
+                                    chainId={chainId}
+                                    ChipProps={{ variant: 'default' }}
+                                />
+                            )}
+                            <EthereumAccountChip address={account} ChipProps={{ size: 'medium', variant: 'default' }} />
+                        </Box>
                         <TokenSelect
                             FormControlProps={{ fullWidth: true }}
                             useSelectWalletHooks={useSelectWalletResult}

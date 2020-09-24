@@ -14,6 +14,7 @@ import {
     MenuItem,
     DialogProps,
     CircularProgress,
+    Box,
 } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
@@ -37,9 +38,12 @@ import type { ERC20TokenDetails } from '../../../extension/background-script/Plu
 import { RedPacketMetaKey } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useSelectWallet, useWallets, useTokens } from '../../Wallet/hooks/useWallet'
-import { WalletSelect } from '../../Wallet/UI/WalletSelect'
 import { TokenSelect } from '../../Wallet/UI/TokenSelect'
-import { EthereumTokenType } from '../../../web3/types'
+import { EthereumTokenType, ChainId } from '../../../web3/types'
+import { EthereumAccountChip } from '../../../components/shared/EthereumAccountChip'
+import { useAccount } from '../../../web3/hooks/useAccount'
+import { EthereumChainChip } from '../../../components/shared/EthereumChainChip'
+import { useChainId } from '../../../web3/hooks/useChainId'
 
 //#region new red packet
 const useNewPacketStyles = makeStyles((theme) =>
@@ -58,6 +62,9 @@ const useNewPacketStyles = makeStyles((theme) =>
                 margin: 0,
             },
             '-moz-appearance': 'textfield',
+        },
+        ethereumChainChip: {
+            marginRight: theme.spacing(1),
         },
     }),
 )
@@ -84,6 +91,9 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
 
     const [shares, setShares] = useState(5)
     const [, sharesRef] = useCapturedInput((x) => setShares(parseInt(x)))
+
+    const account = useAccount()
+    const chainId = useChainId()
 
     const useSelectWalletResult = useSelectWallet(wallets, tokens)
     const {
@@ -134,14 +144,16 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     }
     return (
         <div>
-            <div className={classes.line}>
-                <WalletSelect
-                    {...props}
-                    className={classes.input}
-                    useSelectWalletHooks={useSelectWalletResult}
-                    wallets={wallets}
-                />
-            </div>
+            <Box className={classes.line} display="flex" alignItems="center" justifyContent="flex-end">
+                {chainId === ChainId.Mainnet ? null : (
+                    <EthereumChainChip
+                        classes={{ root: classes.ethereumChainChip }}
+                        chainId={chainId}
+                        ChipProps={{ variant: 'default' }}
+                    />
+                )}
+                <EthereumAccountChip address={account} ChipProps={{ size: 'medium', variant: 'default' }} />
+            </Box>
             <div className={classes.line}>
                 <TokenSelect {...props} className={classes.input} useSelectWalletHooks={useSelectWalletResult} />
                 <FormControl variant="filled" className={classes.input}>

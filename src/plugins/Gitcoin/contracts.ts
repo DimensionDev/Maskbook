@@ -67,6 +67,7 @@ export const gitcoinAPI = {
                 ),
                 {
                     from: donorAddress,
+                    to: contract.options.address,
                     value: donations
                         .reduce(
                             (accumulator: BigNumber, { token, amount }) =>
