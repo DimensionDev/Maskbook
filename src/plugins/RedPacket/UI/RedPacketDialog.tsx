@@ -37,7 +37,7 @@ import { FeedbackDialog } from './FeedbackDialog'
 import type { ERC20TokenDetails } from '../../../extension/background-script/PluginService'
 import { RedPacketMetaKey } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useSelectWallet, useWallets, useTokens } from '../../Wallet/hooks/useWallet'
+import { useSelectWallet, useWallets, useTokens, useDefaultWallet } from '../../Wallet/hooks/useWallet'
 import { TokenSelect } from '../../Wallet/UI/TokenSelect'
 import { EthereumTokenType, ChainId } from '../../../web3/types'
 import { EthereumAccountChip } from '../../../components/shared/EthereumAccountChip'
@@ -332,6 +332,8 @@ const useStyles = makeStyles({
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
+    const account = useAccount()
+    const chainId = useChainId()
     const wallets = useWallets()
     const tokens = useTokens()
     const [availableRedPackets, setAvailableRedPackets] = useState<RedPacketRecord[]>([])
@@ -363,6 +365,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }
     useEffect(() => {
         const updateHandler = () => {
+            //#region @sept inovke your external api from here
+
+            // fetchFromRemote(chainId, account)
+
             Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets')
                 .then((packets) =>
                     packets.filter(
@@ -376,10 +382,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     ),
                 )
                 .then(setAvailableRedPackets)
+            //#endregion
         }
         updateHandler()
         return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
-    }, [justCreatedRedPacket])
+    }, [account, chainId, justCreatedRedPacket])
 
     const classes = useStylesExtends(useStyles(), props)
     const state = useState(0)
