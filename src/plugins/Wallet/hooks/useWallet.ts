@@ -10,23 +10,17 @@ import { useChainId } from '../../../web3/hooks/useChainId'
 import { CONSTANTS } from '../../../web3/constants'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { WalletRecord, ERC20TokenRecord } from '../database/types'
-import { WalletArrayComparer, TokenComparer, WalletComparer, TokenArrayComparer } from '../helpers'
+import { WalletArrayComparer, WalletComparer, TokenArrayComparer } from '../helpers'
+import { isSameAddress } from '../../../web3/helpers'
 
 //#region cache service query result
 const defaultWalletRef = new ValueRef<WalletRecord | null>(null, WalletComparer)
 const walletsRef = new ValueRef<WalletRecord[]>([], WalletArrayComparer)
 const tokensRef = new ValueRef<ERC20TokenRecord[]>([], TokenArrayComparer)
-const walletRefs = new Map<string, ValueRef<WalletRecord>>()
 
 async function revalidate() {
     // wallets
     const wallets = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
-    wallets.forEach((x) => {
-        const key = x.address.toLowerCase()
-        const walletRef = walletRefs.get(key)
-        if (walletRef) walletRef.value = x
-        else walletRefs.set(key, new ValueRef(x, WalletComparer))
-    })
     defaultWalletRef.value = wallets.find((x) => x._wallet_is_default) ?? wallets[0] ?? null
     walletsRef.value = wallets
 
@@ -43,7 +37,8 @@ export function useDefaultWallet() {
 }
 
 export function useWallet(address: string) {
-    return useValueRef(walletRefs.get(address) ?? new ValueRef(null))
+    const wallets = useWallets()
+    return wallets.find((x) => isSameAddress(x.address, address))
 }
 
 export function useTokens() {
@@ -64,7 +59,7 @@ export function useSelectWallet(wallets: WalletRecord[] | undefined, tokens: ERC
 
     const [selectedTokenAddress, setSelectedTokenAddress] = useState(ETH_ADDRESS)
     const [selectedTokenType, setSelectedTokenType] = useState<EthereumTokenType>(EthereumTokenType.Ether)
-    const selectedWallet = wallets?.find((x) => x.address === selectedWalletAddress)
+    const selectedWallet = wallets?.find((x) => isSameAddress(x.address, selectedWalletAddress ?? ''))
 
     const availableTokens = (selectedWallet?.erc20_token_balance
         ? Array.from(selectedWallet.erc20_token_balance.entries())
