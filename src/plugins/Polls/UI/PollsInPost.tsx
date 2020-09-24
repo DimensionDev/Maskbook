@@ -32,8 +32,9 @@ export default function PollsInPost(props: PollsInPostProps) {
     }
 
     useEffect(() => {
-        const { key } = PollMetadataReader(props.message.meta).val as PollMetaData
-        if (key) {
+        const metadata = PollMetadataReader(props.message.meta)
+        if (metadata.ok) {
+            const key = metadata.val.key
             Services.Plugin.invokePlugin('maskbook.polls', 'getPollByKey', { key }).then((res) => {
                 setUpdatedPoll(res as PollMetaData)
             })
