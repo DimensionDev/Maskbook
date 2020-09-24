@@ -593,7 +593,6 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
     const { wallet } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
         async () => {
-            await Services.Plugin.invokePlugin('maskbook.wallet', 'unwatchWalletBalances', wallet.address)
             return Services.Plugin.invokePlugin('maskbook.wallet', 'removeWallet', wallet.address)
         },
         [wallet.address],

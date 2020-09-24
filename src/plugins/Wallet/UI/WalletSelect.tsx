@@ -32,7 +32,6 @@ export function WalletSelect({ useSelectWalletHooks, wallets, ...props }: Wallet
     // tracking wallet balance
     useEffect(() => {
         if (!selectedWalletAddress) return
-        Services.Plugin.invokePlugin('maskbook.wallet', 'watchWalletBalances', selectedWalletAddress)
         Services.Plugin.invokePlugin('maskbook.wallet', 'updateWalletBalances', [selectedWalletAddress])
     }, [selectedWalletAddress])
     useEffect(() => {

@@ -290,7 +290,6 @@ export default function DashboardWalletsRouter() {
 
     // tracking wallet balance
     useEffect(() => {
-        Services.Plugin.invokePlugin('maskbook.wallet', 'watchWalletBalances', current)
         Services.Plugin.invokePlugin('maskbook.wallet', 'updateWalletBalances', [current])
     }, [current])
 

@@ -349,13 +349,6 @@ export function updateWalletBalances(accounts?: string[]) {
     return getWalletProvider().updateBalances(accounts)
 }
 
-export function watchWalletBalances(address: string) {
-    return getWalletProvider().watchAccounts([address])
-}
-
-export function unwatchWalletBalances(address: string) {
-    return getWalletProvider().unwatchAccounts([address])
-}
 export { switchToProvider } from './web3'
 export interface BalanceMetadata {
     [key: string]: (Token & { balance: BigNumber })[]
