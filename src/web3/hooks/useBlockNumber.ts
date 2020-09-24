@@ -20,7 +20,7 @@ export function useBlockNumber() {
     // add listener on web3 provider
     useAsyncTimes(callback, {
         times: Number.MAX_SAFE_INTEGER,
-        delay: 15 /* seconds */ * 1000 /* milliseconds */,
+        delay: 10 /* seconds */ * 1000 /* milliseconds */,
     })
     return blockNumber
 }
