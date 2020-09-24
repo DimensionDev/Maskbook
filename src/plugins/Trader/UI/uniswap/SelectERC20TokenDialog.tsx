@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -14,18 +14,15 @@ import { useI18N } from '../../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../../utils/shadow-root/ShadowRootDialog'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
-import { FixedSizeList } from 'react-window'
-import { TokenInList } from '../../../../extension/options-page/DashboardComponents/TokenInList'
 import {
     useTwitterDialog,
     useTwitterButton,
     useTwitterCloseButton,
 } from '../../../../social-network-provider/twitter.com/utils/theme'
 import { getActivatedUI } from '../../../../social-network/ui'
-import { isSameAddress } from '../../../../web3/helpers'
 import { useCapturedEvents } from '../../../../utils/hooks/useCapturedEvents'
 import type { Token } from '../../../../web3/types'
-import { useTokenLists, TokenListsState } from '../../../../web3/hooks/useTokenLists'
+import { FixedTokenList } from '../../../../extension/options-page/DashboardComponents/FixedTokenList'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -68,7 +65,6 @@ interface SelectERC20TokenDialogUIProps
         | 'close'
     > {
     open: boolean
-    tokenLists: string[]
     excludeTokens: string[]
     onSubmit(token: Token): void
     onClose(): void
@@ -78,7 +74,7 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const { open, excludeTokens, tokenLists, onSubmit, onClose } = props
+    const { open, excludeTokens, onSubmit, onClose } = props
 
     //#region capture event
     const [, inputRef] = useCapturedEvents()
@@ -86,49 +82,6 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
 
     //#region search tokens
     const [keyword, setKeyword] = useState('')
-    const [address, setAddress] = useState('')
-    const searchedTokens = useTokenLists(tokenLists, {
-        keyword,
-        useEther: true,
-    })
-    //#endregion
-
-    //#region UI helpers
-    const renderList = useCallback(
-        (tokens: Token[]) => {
-            return (
-                <FixedSizeList
-                    className={classes.list}
-                    width="100%"
-                    height={288}
-                    overscanCount={4}
-                    itemSize={52}
-                    itemData={{
-                        tokens,
-                        excludeTokens,
-                        selected: address,
-                        onSelect(address: string) {
-                            const token = tokens.find((token) => isSameAddress(token.address, address))
-                            if (!token) return
-                            setAddress(token.address)
-                            onSubmit(token)
-                        },
-                    }}
-                    itemCount={tokens.length}>
-                    {TokenInList}
-                </FixedSizeList>
-            )
-        },
-        [address, excludeTokens, TokenInList, onSubmit],
-    )
-    const renderPlaceholder = useCallback(
-        (message: string) => (
-            <Typography className={classes.placeholder} color="textSecondary">
-                {message}
-            </Typography>
-        ),
-        [],
-    )
     //#endregion
 
     return (
@@ -171,14 +124,18 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                         variant="outlined"
                         onChange={(e) => setKeyword(e.target.value)}
                     />
-                    {(() => {
-                        if (searchedTokens.state === TokenListsState.LOADING_TOKEN_LISTS)
-                            return renderPlaceholder('Loading token lists...')
-                        if (searchedTokens.state === TokenListsState.LOADING_SEARCHED_TOKEN)
-                            return renderPlaceholder('Loading token...')
-                        if (searchedTokens.tokens.length) return renderList(searchedTokens.tokens)
-                        return renderPlaceholder('No token found')
-                    })()}
+                    <FixedTokenList
+                        classes={{ list: classes.list, placeholder: classes.placeholder }}
+                        useEther={true}
+                        keyword={keyword}
+                        excludeTokens={excludeTokens}
+                        onSubmit={onSubmit}
+                        FixedSizeListProps={{
+                            height: 288,
+                            itemSize: 52,
+                            overscanCount: 4,
+                        }}
+                    />
                 </DialogContent>
             </ShadowRootDialog>
         </div>

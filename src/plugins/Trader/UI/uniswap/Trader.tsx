@@ -136,7 +136,6 @@ export function Trader(props: TraderProps) {
     //#endregion
 
     //#region select erc20 tokens
-    const tokenLists = useConstant(CONSTANTS, 'TOKEN_LISTS')
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
     const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
     const [focusedTokenPanelType, setfocusedTokenPanelType] = useState(TokenPanelType.Input)
@@ -248,7 +247,6 @@ export function Trader(props: TraderProps) {
             />
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
-                tokenLists={tokenLists}
                 excludeTokens={excludeTokens}
                 onSubmit={onSelectERC20TokenDialogSubmit}
                 onClose={onSelectERC20TokenDialogClose}

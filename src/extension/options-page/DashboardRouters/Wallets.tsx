@@ -279,7 +279,7 @@ export default function DashboardWalletsRouter() {
 
     const getTokensForWallet = (wallet?: WalletRecord) => {
         if (!wallet) return []
-        return (tokens ?? [])
+        return tokens
             .filter(
                 (token) =>
                     token.chainId === chainid &&

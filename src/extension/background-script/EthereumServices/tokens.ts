@@ -1,5 +1,6 @@
 import { Token, EthereumTokenType, ChainId } from '../../../web3/types'
 import { flatMap, uniq } from 'lodash-es'
+import { EthereumAddress } from 'wallet.ts'
 
 interface TokenList {
     keywords: string[]
@@ -41,6 +42,9 @@ export async function fetchTokensFromTokenLists(urls: string[], chainId: ChainId
         x.status === 'fulfilled' ? x.value : [],
     )
     return tokens.filter((x) => {
+        // checksummed address in one loop
+        x.address = EthereumAddress.checksumAddress(x.address)
+
         const key = x.address.toLowerCase()
         if (uniqueSet.has(key)) return false
         else {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { useAsync, useCopyToClipboard } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
@@ -45,16 +45,11 @@ import type { ERC20TokenDetails } from '../../background-script/PluginService'
 import { difference } from 'lodash-es'
 import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
 import { QRCode } from '../../../components/shared/qrcode'
-import { TokenInList } from '../DashboardComponents/TokenInList'
-import { FixedSizeList } from 'react-window'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { Token, EthereumTokenType } from '../../../web3/types'
-import { isSameAddress } from '../../../web3/helpers'
-import { useTokenLists } from '../../../web3/hooks/useTokenLists'
-import { useConstant } from '../../../web3/hooks/useConstant'
-import { CONSTANTS } from '../../../web3/constants'
 import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
+import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -68,6 +63,10 @@ const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
         search: {
             marginBottom: theme.spacing(1),
         },
+        placeholder: {
+            textAlign: 'center',
+            paddingTop: theme.spacing(10),
+        },
     }),
 )
 
@@ -76,15 +75,12 @@ interface ERC20PredefinedTokenSelectorProps {
     onTokenChange?: (next: Token | null) => void
 }
 
-export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = [] }: ERC20PredefinedTokenSelectorProps) {
+export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelectorProps) {
     const { t } = useI18N()
     const classes = useERC20PredefinedTokenSelectorStyles()
 
-    const TOKEN_LISTS = useConstant(CONSTANTS, 'TOKEN_LISTS')
-    const chainId = useChainId()
-    const [address, setAddress] = useState('')
+    const { onTokenChange, excludeTokens = [] } = props
     const [keyword, setKeyword] = useState('')
-    const searchedTokens = useTokenLists(TOKEN_LISTS, { keyword })
 
     return (
         <Box textAlign="left">
@@ -95,26 +91,17 @@ export function ERC20PredefinedTokenSelector({ onTokenChange, excludeTokens = []
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
             />
-            <FixedSizeList
-                className={classes.list}
-                width="100%"
-                height={192}
-                overscanCount={2}
-                itemSize={52}
-                itemData={{
-                    tokens: searchedTokens.tokens,
-                    excludeTokens,
-                    selected: address,
-                    onSelect(address: string) {
-                        const token = searchedTokens.tokens.find((token) => isSameAddress(token.address, address))
-                        if (!token) return
-                        setAddress(address)
-                        onTokenChange?.(token)
-                    },
+            <FixedTokenList
+                classes={{ list: classes.list, placeholder: classes.placeholder }}
+                keyword={keyword}
+                excludeTokens={excludeTokens}
+                onSubmit={onTokenChange}
+                FixedSizeListProps={{
+                    height: 192,
+                    itemSize: 52,
+                    overscanCount: 2,
                 }}
-                itemCount={searchedTokens.tokens.length}>
-                {TokenInList}
-            </FixedSizeList>
+            />
         </Box>
     )
 }
