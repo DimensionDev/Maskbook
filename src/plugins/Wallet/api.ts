@@ -8,7 +8,7 @@ import BalanceCheckerABI from '../../contracts/balance-checker/BalanceChecker.js
 import type { Erc20 as ERC20 } from '../../contracts/splitter/ERC20'
 import type { BulkCheckout } from '../../contracts/bulk-checkout/BulkCheckout'
 import type { BalanceChecker } from '../../contracts/balance-checker/BalanceChecker'
-import { sendTx, sendTxConfigForTxHash } from './transaction'
+import { sendTx } from './transaction'
 import { onWalletBalancesUpdated, BalanceMetadata } from './wallet'
 import { getERC20Tokens } from '../../web3/tokens'
 import { getChainId } from '../../extension/background-script/EthereumService'
@@ -35,15 +35,6 @@ export const walletAPI = {
     async queryBalance(address: string): Promise<BigNumber> {
         const value = await web3.eth.getBalance(address)
         return new BigNumber(value)
-    },
-
-    transfer(ownerAddress: string, recipientAddress: string, amount: BigNumber) {
-        return sendTxConfigForTxHash({
-            from: ownerAddress,
-            to: recipientAddress,
-            gas: 21000,
-            value: amount.toFixed(),
-        })
     },
 }
 
