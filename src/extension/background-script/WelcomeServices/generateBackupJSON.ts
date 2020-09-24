@@ -1,6 +1,5 @@
 import type { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { queryPersonasDB, queryProfilesDB } from '../../../database/Persona/Persona.db'
-import { CryptoKeyToJsonWebKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 import { queryUserGroupsDatabase } from '../../../database/group'
 import { queryPostsDB } from '../../../database/post'
 import { PersonaRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
@@ -10,6 +9,7 @@ import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupForm
 import { ProfileIdentifier, PersonaIdentifier, Identifier } from '../../../database/type'
 import { getWallets } from '../../../plugins/Wallet/wallet'
 import { WalletRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
+import { ProviderType } from '../../../web3/types'
 
 export interface BackupOptions {
     noPosts: boolean
@@ -94,7 +94,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     }
 
     async function backupAllWallets() {
-        const wallets_ = (await getWallets()).map(WalletRecordToJSONFormat)
+        const wallets_ = (await getWallets(ProviderType.Maskbook)).map(WalletRecordToJSONFormat)
         wallets.push(...wallets_)
     }
 }

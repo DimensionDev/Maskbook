@@ -1,10 +1,12 @@
 import { BigNumber } from 'bignumber.js'
 import type { DonateResult } from './types'
 import { sendTx } from '../Wallet/transaction'
-import { getNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
-import { GITCOIN_ETH_ADDRESS } from '../Wallet/token'
-import { getCurrentEthChain } from '../../extension/background-script/PluginService'
 import { createBulkCheckoutContract } from '../Wallet/api'
+import { getChainId } from '../../extension/background-script/EthereumService'
+import { getConstant } from '../../web3/helpers'
+import { GITCOIN_CONSTANT } from './constants'
+
+const GITCOIN_ETH_ADDRESS = getConstant(GITCOIN_CONSTANT, 'GITCOIN_ETH_ADDRESS')
 
 export const gitcoinAPI = {
     /**
@@ -36,7 +38,7 @@ export const gitcoinAPI = {
         if (!grantAmount.isPositive()) throw new Error('Cannot have negative donation amounts')
 
         const contract = createBulkCheckoutContract(
-            getNetworkSettings(await getCurrentEthChain()).bulkCheckoutContractAddress,
+            getConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS', await getChainId()),
         )
         const donations: {
             token: string
@@ -65,6 +67,7 @@ export const gitcoinAPI = {
                 ),
                 {
                     from: donorAddress,
+                    to: contract.options.address,
                     value: donations
                         .reduce(
                             (accumulator: BigNumber, { token, amount }) =>

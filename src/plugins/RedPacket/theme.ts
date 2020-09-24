@@ -74,9 +74,6 @@ export const PluginRedPacketTheme = unstable_createMuiStrictModeTheme({
                 backgroundColor: 'white !important',
                 color: 'rgb(219,6,50) !important',
             },
-            colorInherit: {
-                color: 'rgb(219,6,50) !important',
-            },
         },
     },
 })

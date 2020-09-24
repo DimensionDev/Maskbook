@@ -3,6 +3,7 @@ import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
 import { InputBase } from '@material-ui/core'
+import { noop } from 'lodash-es'
 
 const useStyles = makeStyles(() => {
     return {
@@ -35,7 +36,7 @@ export interface CommentBoxProps {
 }
 export function CommentBox(props: CommentBoxProps) {
     const classes = useStyles()
-    const [binder, inputRef, node] = useCapturedInput(() => {})
+    const [binder, inputRef, node] = useCapturedInput(noop)
     const { t } = useI18N()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(

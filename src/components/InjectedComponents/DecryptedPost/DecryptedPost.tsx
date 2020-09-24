@@ -62,7 +62,7 @@ export interface DecryptPostProps {
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
     const postBy = usePostInfoDetails('postBy')
-    const postContent = usePostInfoDetails('postContent')
+    const deconstructedPayload = usePostInfoDetails('postPayload')
     const postMetadataImages = usePostInfoDetails('postMetadataImages')
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
@@ -76,9 +76,6 @@ export function DecryptPost(props: DecryptPostProps) {
             await sleep(1500)
         }
     }, [props.requestAppendRecipients, postBy, whoAmI])
-    const deconstructedPayload = useMemo(() => deconstructPayload(postContent, getActivatedUI().payloadDecoder), [
-        postContent,
-    ])
 
     //#region Debug info
     const [debugHash, setDebugHash] = useState<string>('Unknown')
@@ -107,11 +104,7 @@ export function DecryptPost(props: DecryptPostProps) {
                 })
             for await (const status of asyncIteratorWithResult(iter)) {
                 if (controller.signal.aborted) return iter.return?.()
-                if (status.done) {
-                    // HACK: this is patch, hidden NOT VERIFIED in everyone
-                    if (sharedPublic && status.value.type !== 'error') status.value.signatureVerifyResult = true
-                    return refreshProgress(status.value)
-                }
+                if (status.done) return refreshProgress(status.value)
                 if (status.value.type === 'debug') {
                     switch (status.value.debug) {
                         case 'debug_finding_hash':
@@ -127,22 +120,32 @@ export function DecryptPost(props: DecryptPostProps) {
         }
 
         if (deconstructedPayload.ok)
-            makeProgress(postContent, ServicesWithProgress.decryptFromText(postContent, postBy, whoAmI, sharedPublic))
+            makeProgress(
+                'post text',
+                ServicesWithProgress.decryptFromText(deconstructedPayload.val, postBy, whoAmI, sharedPublic),
+            )
         postMetadataImages.forEach((url) => {
             if (controller.signal.aborted) return
             makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI))
         })
         return () => controller.abort()
-    }, [postContent, postMetadataImages.join(), postBy.toText(), whoAmI.toText(), sharedPublic])
+    }, [
+        deconstructedPayload.ok,
+        (deconstructedPayload.val as any)?.encryptedText,
+        postBy.toText(),
+        postMetadataImages.join(),
+        sharedPublic,
+        whoAmI.toText(),
+    ])
 
     // pass 2:
     // decrypt rest attachments which depend on post content
-    const decryptedPostContent = progress.find((p) => p.key === postContent)
-    useEffect(() => {
-        if (decryptedPostContent?.progress.type !== 'success') return
-        // TODO:
-        // decrypt shuffled image here
-    }, [decryptedPostContent])
+    // const decryptedPostContent = progress.find((p) => p.key === postContent)
+    // useEffect(() => {
+    //     if (decryptedPostContent?.progress.type !== 'success') return
+    //     // TODO:
+    //     // decrypt shuffled image here
+    // }, [decryptedPostContent])
 
     // pass 3:
     // inovke callback
@@ -150,7 +153,7 @@ export function DecryptPost(props: DecryptPostProps) {
     useEffect(() => {
         if (firstSucceedDecrypted?.progress.type !== 'success') return
         onDecrypted(firstSucceedDecrypted.progress.content, firstSucceedDecrypted.progress.rawContent)
-    }, [firstSucceedDecrypted])
+    }, [firstSucceedDecrypted, onDecrypted])
     //#endregion
 
     // it's not a secret post

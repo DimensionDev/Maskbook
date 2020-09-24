@@ -265,7 +265,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
 
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
-    const [binder, inputRef] = useCapturedInput(onUsernameChange, [])
+    const [binder, inputRef] = useCapturedInput(onUsernameChange)
 
     useEffect(
         () =>
@@ -389,6 +389,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                     />
                     <ActionButton
                         className={classes.textButton}
+                        color="inherit"
                         variant="text"
                         onClick={onSkip}
                         data-testid="skip_button">

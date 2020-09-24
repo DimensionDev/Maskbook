@@ -4,7 +4,7 @@ import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSele
 import type { PostInfo } from '../../../social-network/PostInfo'
 import Services from '../../../extension/service'
 import { ProfileIdentifier } from '../../../database/type'
-import { MaskbookIcon } from '../../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
+import { MaskbookIcon } from '../../../resources/MaskbookIcon'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { memoizePromise } from '../../../utils/memoize'
 import { Flags } from '../../../utils/flags'

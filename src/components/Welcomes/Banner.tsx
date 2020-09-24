@@ -9,7 +9,7 @@ import { getActivatedUI } from '../../social-network/ui'
 import { setStorage } from '../../utils/browser.storage'
 import { useStylesExtends } from '../custom-ui-helper'
 import { ProfileIdentifier } from '../../database/type'
-import { MaskbookIcon } from '../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
+import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { DashboardRoute } from '../../extension/options-page/Route'
 
 interface BannerUIProps

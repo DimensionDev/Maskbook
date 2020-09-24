@@ -9,12 +9,12 @@ import {
     DialogActions,
     DialogContentText,
 } from '@material-ui/core'
-import { EthereumTokenType, ERC20TokenRecord } from '../Wallet/database/types'
 import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { getActivatedUI } from '../../social-network/ui'
 import type { ERC20TokenDetails } from '../../extension/background-script/PluginService'
 import { useI18N } from '../../utils/i18n-next-ui'
+import { EthereumTokenType } from '../../web3/types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,7 +55,7 @@ export function DonateSuccessDialog(props: DonateSuccessDialogProps) {
         onClose()
         const text = [
             `I donated ${amount} ${
-                tokenType === EthereumTokenType.ETH ? 'ETH' : token?.symbol
+                tokenType === EthereumTokenType.Ether ? 'ETH' : token?.symbol
             } for the campaign "${title}" on Gitcoin through #Maskbook!`,
             url,
         ]
@@ -78,7 +78,7 @@ export function DonateSuccessDialog(props: DonateSuccessDialogProps) {
             <DialogTitle>{t('plugin_gitcoin_donated_successfully')}</DialogTitle>
             <DialogContent>
                 <DialogContentText className={classes.content}>{`You have donated "${title}" ${
-                    tokenType === EthereumTokenType.ETH ? 'ETH' : token?.symbol
+                    tokenType === EthereumTokenType.Ether ? 'ETH' : token?.symbol
                 } ${amount}.`}</DialogContentText>
             </DialogContent>
             <DialogActions>

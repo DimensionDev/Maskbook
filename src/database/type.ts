@@ -182,10 +182,9 @@ export class PostIdentifier<T extends Identifier = Identifier> extends Identifie
 export class PostIVIdentifier extends Identifier {
     constructor(public readonly network: string, public readonly postIV: string) {
         super()
-        if (postIV) this.postIV = postIV.replace(/\//g, '|')
     }
     toText() {
-        return `post_iv:${this.network}/${this.postIV}`
+        return `post_iv:${this.network}/${this.postIV.replace(/\//g, '|')}`
     }
     static [$fromString](str: string) {
         const [network, iv] = str.split('/')
@@ -211,16 +210,14 @@ export class ECKeyIdentifier extends Identifier {
         return new ECKeyIdentifier('secp256k1', x)
     }
     public readonly type = 'ec_key'
-    constructor(public readonly curve: 'secp256k1', private encodedCompressedKey: string) {
+    constructor(public readonly curve: 'secp256k1', public readonly compressedPoint: string) {
         super()
-        if (encodedCompressedKey !== undefined) this.encodedCompressedKey = encodedCompressedKey.replace(/\//g, '|')
     }
-    // restore the / from |
-    get compressedPoint() {
-        return this.encodedCompressedKey.replace(/\|/g, '/')
-    }
+    /** This property might be filled with old data, which means you MUST NOT change the property name */
+    private declare readonly encodedCompressedKey: string
     toText() {
-        return `ec_key:${this.curve}/${this.encodedCompressedKey}`
+        const normalized = this.encodedCompressedKey ?? this.compressedPoint.replace(/\//g, '|')
+        return `ec_key:${this.curve}/${normalized}`
     }
     static [$fromString](str: string) {
         const [curve, point] = str.split('/')

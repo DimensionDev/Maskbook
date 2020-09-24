@@ -18,10 +18,17 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                 primary={t('feedback')}
                 content={
                     <form>
-                        <TextField required label={t('name')} value={name} onChange={(e) => setName(e.target.value)} />
+                        <TextField
+                            required
+                            autoFocus
+                            label={t('name')}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
                         <TextField
                             required
                             label={t('email')}
+                            type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
@@ -36,7 +43,10 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                     </form>
                 }
                 footer={
-                    <DebounceButton onClick={async () => {}} variant="contained">
+                    <DebounceButton
+                        variant="contained"
+                        disabled={Boolean(!name || !email || !message)}
+                        onClick={async () => {}}>
                         {t('submit')}
                     </DebounceButton>
                 }></DashboardDialogWrapper>

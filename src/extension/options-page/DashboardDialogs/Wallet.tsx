@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { useAsync, useCopyToClipboard } from 'react-use'
+import { EthereumAddress } from 'wallet.ts'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import {
     CreditCard as CreditCardIcon,
@@ -33,11 +34,6 @@ import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import Services from '../../service'
 import type { RedPacketRecord } from '../../../plugins/RedPacket/types'
-import {
-    ERC20PredefinedTokenSelector,
-    ERC20CustomizedTokenSelector,
-} from '../../../plugins/Wallet/UI/Dashboard/Dialogs/WalletAddTokenDialog'
-import type { ERC20Token } from '../../../plugins/Wallet/token'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import WalletLine from './WalletLine'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
@@ -45,117 +41,132 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useHistory } from 'react-router-dom'
 import { DashboardRoute } from '../Route'
 import { sleep } from '../../../utils/utils'
-import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
-import { useCurrentEthChain, useManagedWalletDetail } from '../../../plugins/shared/useWallet'
+import type { ERC20TokenDetails } from '../../background-script/PluginService'
 import { difference } from 'lodash-es'
 import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
 import { QRCode } from '../../../components/shared/qrcode'
+import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import { useChainId } from '../../../web3/hooks/useChainId'
+import { Token, EthereumTokenType } from '../../../web3/types'
+import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
+import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
 
-//#region wallet import dialog
-export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
-    const { t } = useI18N()
-    const state = useState(0)
-
-    const [name, setName] = useState('')
-    const [mnemonic, setMnemonic] = useState('')
-    const [privKey, setPrivKey] = useState('')
-
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            {
-                label: t('mnemonic_words'),
-                children: (
-                    <div>
-                        <TextField
-                            required
-                            label={t('wallet_name')}
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                        <TextField
-                            required
-                            label={t('mnemonic_words')}
-                            value={mnemonic}
-                            onChange={(e) => setMnemonic(e.target.value)}
-                        />
-                    </div>
-                ),
-                p: 0,
+//#region predefined token selector
+const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
+    createStyles({
+        list: {
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
             },
-            {
-                label: t('private_key'),
-                children: (
-                    <div>
-                        <TextField
-                            required
-                            label={t('wallet_name')}
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                        <TextField
-                            type="password"
-                            required
-                            label={t('private_key')}
-                            value={privKey}
-                            onChange={(e) => setPrivKey(e.target.value)}
-                        />
-                    </div>
-                ),
-                display: 'flex',
-                p: 0,
-            },
-        ],
-        state,
-        height: 112,
-    }
-
-    const onSubmit = useSnackbarCallback(
-        () => {
-            if (state[0] === 0)
-                return Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
-                    name,
-                    mnemonic: mnemonic.split(' '),
-                    passphrase: '',
-                })
-            return Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', privKey).then(
-                ({ address, privateKeyValid }) => {
-                    if (!privateKeyValid) throw new Error(t('import_failed'))
-                    return Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
-                        name,
-                        address,
-                        _private_key_: privKey,
-                    })
-                },
-            )
         },
-        [state[0], name, mnemonic, privKey],
-        props.onClose,
-    )
+        search: {
+            marginBottom: theme.spacing(1),
+        },
+        placeholder: {
+            textAlign: 'center',
+            paddingTop: theme.spacing(10),
+        },
+    }),
+)
+
+interface ERC20PredefinedTokenSelectorProps {
+    excludeTokens?: string[]
+    onTokenChange?: (next: Token | null) => void
+}
+
+export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelectorProps) {
+    const { t } = useI18N()
+    const classes = useERC20PredefinedTokenSelectorStyles()
+
+    const { onTokenChange, excludeTokens = [] } = props
+    const [keyword, setKeyword] = useState('')
 
     return (
-        <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper
-                icon={<CreditCardIcon />}
-                iconColor="#4EE0BC"
-                primary={t('import_wallet')}
-                content={<AbstractTab {...tabProps}></AbstractTab>}
-                footer={
-                    <DebounceButton
-                        variant="contained"
-                        onClick={onSubmit}
-                        disabled={!(state[0] === 0 && name && mnemonic) && !(state[0] === 1 && name && privKey)}>
-                        {t('import')}
-                    </DebounceButton>
-                }
+        <Box textAlign="left">
+            <TextField
+                className={classes.search}
+                label={t('add_token_search_hint')}
+                autoFocus
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
             />
-        </DashboardDialogCore>
+            <FixedTokenList
+                classes={{ list: classes.list, placeholder: classes.placeholder }}
+                keyword={keyword}
+                excludeTokens={excludeTokens}
+                onSubmit={onTokenChange}
+                FixedSizeListProps={{
+                    height: 192,
+                    itemSize: 52,
+                    overscanCount: 2,
+                }}
+            />
+        </Box>
     )
 }
 //#endregion
 
-//#region wallet create dialog
+//#region ERC20 customized token selector
+export interface ERC20CustomizedTokenSelectorProps {
+    onTokenChange?: (next: Token | null) => void
+    excludeTokens?: string[]
+}
+
+export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20CustomizedTokenSelectorProps) {
+    const { t } = useI18N()
+    const chainId = useChainId()
+    const [address, setAddress] = useState('')
+    const [decimals, setDecimals] = useState(0)
+    const [name, setName] = useState('')
+    const [symbol, setSymbol] = useState('')
+    const isValidAddress = EthereumAddress.isValid(address)
+
+    useEffect(() => {
+        if (isValidAddress)
+            onTokenChange?.({
+                type: EthereumTokenType.ERC20,
+                chainId,
+                address,
+                decimals,
+                name,
+                symbol,
+            })
+        else onTokenChange?.(null)
+    }, [chainId, address, decimals, isValidAddress, name, symbol, onTokenChange])
+    return (
+        <Box textAlign="left">
+            <TextField
+                required
+                autoFocus
+                label={t('add_token_contract_address')}
+                error={!isValidAddress && !!address}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+            />
+            <TextField
+                required
+                label={t('add_token_decimals')}
+                value={decimals === 0 ? '' : decimals}
+                type="number"
+                inputProps={{ min: 0 }}
+                onChange={(e) => setDecimals(parseInt(e.target.value))}
+            />
+            <TextField required label={t('add_token_name')} value={name} onChange={(e) => setName(e.target.value)} />
+            <TextField
+                required
+                label={t('add_token_symbol')}
+                value={symbol}
+                onChange={(e) => setSymbol(e.target.value)}
+            />
+        </Box>
+    )
+}
+//#endregion
+
+//#region wallet import dialog
 interface WalletProps {
-    wallet: WalletDetails
+    wallet: WalletRecord
 }
 
 const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
@@ -183,37 +194,32 @@ const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
             width: 16,
             height: 16,
             color: '#FF9138',
-            marginLeft: 5,
         },
     }),
 )
 
-export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
+export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
     const { t } = useI18N()
+    const state = useState(0)
     const classes = useWalletCreateDialogStyle()
 
     const [name, setName] = useState('')
     const [passphrase] = useState('')
+    const [mnemonic, setMnemonic] = useState('')
+    const [privKey, setPrivKey] = useState('')
     const [confirmed, setConfirmed] = useState(false)
     const [showNotification, setShowNotification] = useState(false)
 
-    const onSubmit = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', { name, passphrase }),
-        [name, passphrase],
-        props.onClose,
-    )
-
-    return (
-        <DashboardDialogCore fullScreen={false} {...props}>
-            <DashboardDialogWrapper
-                icon={<CreditCardIcon />}
-                iconColor="#4EE0BC"
-                primary={t('create_a_wallet')}
-                content={
+    const tabProps: AbstractTabProps = {
+        tabs: [
+            {
+                label: t('wallet_new'),
+                children: (
                     <>
                         <form>
                             <TextField
                                 required
+                                autoFocus
                                 label={t('wallet_name')}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
@@ -233,23 +239,118 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                                         <Typography className={classes.confirmation} variant="body2">
                                             {t('wallet_confirmation_hint')}
                                         </Typography>
-                                        <InfoOutlinedIcon
-                                            className={classes.notificationIcon}
-                                            cursor="pointer"
-                                            onClick={() => setShowNotification((t) => !t)}
-                                        />
                                     </Box>
                                 }
+                            />
+                            <InfoOutlinedIcon
+                                className={classes.notificationIcon}
+                                cursor="pointer"
+                                onClick={(ev) => {
+                                    ev.stopPropagation()
+                                    setShowNotification((t) => !t)
+                                }}
                             />
                         </Box>
                         {showNotification ? (
                             <Typography className={classes.notification}>{t('wallet_notification')}</Typography>
                         ) : null}
                     </>
-                }
+                ),
+            },
+            {
+                label: t('mnemonic_words'),
+                children: (
+                    <div>
+                        <TextField
+                            required
+                            autoFocus
+                            label={t('wallet_name')}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <TextField
+                            required
+                            label={t('mnemonic_words')}
+                            value={mnemonic}
+                            onChange={(e) => setMnemonic(e.target.value)}
+                        />
+                    </div>
+                ),
+                p: 0,
+            },
+            {
+                label: t('private_key'),
+                children: (
+                    <div>
+                        <TextField
+                            required
+                            autoFocus
+                            label={t('wallet_name')}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <TextField
+                            type="password"
+                            required
+                            label={t('private_key')}
+                            value={privKey}
+                            onChange={(e) => setPrivKey(e.target.value)}
+                        />
+                    </div>
+                ),
+                display: 'flex',
+                p: 0,
+            },
+        ],
+        state,
+        height: 112,
+    }
+
+    const onSubmit = useSnackbarCallback(
+        () => {
+            if (state[0] === 0)
+                return Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', {
+                    name,
+                    passphrase,
+                })
+            if (state[0] === 1)
+                return Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                    name,
+                    mnemonic: mnemonic.split(' '),
+                    passphrase: '',
+                })
+            return Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', privKey).then(
+                ({ address, privateKeyValid }) => {
+                    if (!privateKeyValid) throw new Error(t('import_failed'))
+                    return Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                        name,
+                        address,
+                        _private_key_: privKey,
+                    })
+                },
+            )
+        },
+        [state[0], name, passphrase, mnemonic, privKey],
+        props.onClose,
+    )
+
+    return (
+        <DashboardDialogCore {...props}>
+            <DashboardDialogWrapper
+                icon={<CreditCardIcon />}
+                iconColor="#4EE0BC"
+                primary={t(state[0] === 0 ? 'create_wallet' : 'import_wallet')}
+                content={<AbstractTab {...tabProps}></AbstractTab>}
                 footer={
-                    <DebounceButton variant="contained" onClick={onSubmit} disabled={!name || !confirmed}>
-                        {t('create')}
+                    <DebounceButton
+                        variant="contained"
+                        onClick={onSubmit}
+                        disabled={
+                            !(state[0] === 0 && name && confirmed) &&
+                            !(state[0] === 1 && name && mnemonic) &&
+                            !(state[0] === 2 && name && privKey)
+                        }>
+                        {t('import')}
                     </DebounceButton>
                 }
             />
@@ -331,8 +432,8 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
         Array.from(wallet.erc20_token_balance.keys()),
         Array.from(wallet.erc20_token_blacklist.values()),
     )
-    const network = useCurrentEthChain()
-    const [token, setToken] = React.useState<ERC20Token | null>(null)
+    const chainId = useChainId()
+    const [token, setToken] = React.useState<Token | null>(null)
 
     const [tabState, setTabState] = useState(0)
     const state = useMemo(
@@ -367,12 +468,12 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
                 'maskbook.wallet',
                 'walletAddERC20Token',
                 wallet.address,
-                network,
+                chainId,
                 token,
                 tabState === 1,
             )
         },
-        [token, network],
+        [token, chainId],
         props.onClose,
     )
 
@@ -405,16 +506,18 @@ const useBackupDialogStyles = makeStyles((theme: Theme) =>
 
 export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
-    const { wallet } = props.ComponentProps!
+    const {
+        wallet: { address },
+    } = props.ComponentProps!
     const classes = useBackupDialogStyles()
-    const { data } = useManagedWalletDetail(wallet.address)
+    const wallet = useWallet(address)
     const { value: privateKeyInHex } = useAsync(async () => {
-        if (!data) return
-        const { privateKeyInHex } = data.privateKey
-            ? await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', data.privateKey)
-            : await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWallet', data.mnemonic, data.passphrase)
+        if (!wallet) return
+        const { privateKeyInHex } = wallet._private_key_
+            ? await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', wallet._private_key_)
+            : await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWallet', wallet.mnemonic, wallet.passphrase)
         return privateKeyInHex
-    }, [data])
+    }, [wallet])
 
     return (
         <DashboardDialogCore {...props}>
@@ -426,9 +529,9 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
                 constraintSecondary={false}
                 content={
                     <>
-                        {data?.mnemonic.length ? (
+                        {wallet?.mnemonic.length ? (
                             <section className={classes.section}>
-                                <ShowcaseBox title={t('mnemonic_words')}>{data.mnemonic.join(' ')}</ShowcaseBox>
+                                <ShowcaseBox title={t('mnemonic_words')}>{wallet.mnemonic.join(' ')}</ShowcaseBox>
                             </section>
                         ) : null}
                         <section className={classes.section}>
@@ -456,14 +559,14 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
         <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
                 size="small"
-                primary={t('wallet_new_name')}
+                primary={t('wallet_rename')}
                 content={
                     <TextField
                         required
+                        autoFocus
                         label={t('wallet_name')}
                         variant="outlined"
                         value={name}
-                        autoFocus
                         onChange={(e) => setName(e.target.value)}
                         inputProps={{ onKeyPress: (e) => e.key === 'Enter' && renameWallet() }}
                     />
@@ -473,9 +576,9 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                         <DebounceButton variant="contained" onClick={renameWallet}>
                             {t('ok')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" onClick={props.onClose}>
+                        <Button variant="outlined" color="inherit" onClick={props.onClose}>
                             {t('cancel')}
-                        </DebounceButton>
+                        </Button>
                     </SpacedButtonGroup>
                 }
             />
@@ -490,7 +593,6 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
     const { wallet } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
         async () => {
-            await Services.Plugin.invokePlugin('maskbook.wallet', 'unwatchWalletBalances', wallet.address)
             return Services.Plugin.invokePlugin('maskbook.wallet', 'removeWallet', wallet.address)
         },
         [wallet.address],
@@ -513,9 +615,9 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
                             data-testid="confirm_button">
                             {t('confirm')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" onClick={props.onClose}>
+                        <Button variant="outlined" color="inherit" onClick={props.onClose}>
                             {t('cancel')}
-                        </DebounceButton>
+                        </Button>
                     </SpacedButtonGroup>
                 }
             />
@@ -548,9 +650,9 @@ export function DashboardWalletHideTokenConfirmDialog(
                         <DebounceButton variant="contained" color="danger" onClick={onConfirm}>
                             {t('confirm')}
                         </DebounceButton>
-                        <DebounceButton variant="outlined" onClick={props.onClose}>
+                        <Button variant="outlined" color="inherit" onClick={props.onClose}>
                             {t('cancel')}
-                        </DebounceButton>
+                        </Button>
                     </SpacedButtonGroup>
                 }
             />
@@ -629,7 +731,20 @@ export function DashboardWalletHistoryDialog(
 
     const [redPacketRecords, setRedPacketRecords] = useState<RedPacketRecord[]>([])
     const inboundRecords = redPacketRecords.filter((record) => record.claim_address === wallet.address)
-    const outboundRecords = redPacketRecords.filter((record) => record.sender_address === wallet.address)
+    // const outboundRecords = redPacketRecords.filter((record) => record.sender_address === wallet.address)
+
+    // region HACK: THIS TEMPORARY CODE
+    const { value: outboundRecords } = useAsync(async () => {
+        const records = await Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketHistory', wallet.address)
+        return records?.map((record): unknown => ({
+            id: record._hash,
+            send_message: record._message,
+            block_creation_time: new Date(record.txTimestamp),
+            send_total: record._number,
+            sender_name: record._name,
+        })) as RedPacketRecord[]
+    }, [tabState])
+    // endregion
 
     useEffect(() => {
         const updateHandler = () =>
@@ -676,7 +791,7 @@ export function DashboardWalletHistoryDialog(
                 label: t('activity_outbound'),
                 children: (
                     <List className={classes.list} disablePadding>
-                        {outboundRecords.map(RedPacketRecord)}
+                        {outboundRecords?.map(RedPacketRecord)}
                     </List>
                 ),
                 display: 'flex',

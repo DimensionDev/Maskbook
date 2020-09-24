@@ -54,6 +54,10 @@ const calcArgs = (argv) => ({
     /** @type {boolean} */
     E2E: argv.e2e,
     /** @type {boolean} */
+    Beta: argv.beta,
+    /** @type {boolean} */
+    Insider: argv.insider,
+    /** @type {boolean} */
     ReproducibleBuild: argv['reproducible-build'],
 })
 
@@ -107,8 +111,10 @@ module.exports = (argvEnv, argv) => {
         let firefoxVariant = undefined
         /** @type {'web' | 'app'} */
         let architecture = 'web'
-        /** @type { 'desktop' | 'mobile'} */
+        /** @type {'desktop' | 'mobile'} */
         let resolution = 'desktop'
+        /** @type {'stable' | 'beta' | 'insider'} */
+        let buildType = 'stable'
         if (target.Chromium) buildTarget = 'chromium'
         if (target.Firefox) buildTarget = 'firefox'
         if (target.FirefoxForAndroid) firefoxVariant = 'fennec'
@@ -122,11 +128,14 @@ module.exports = (argvEnv, argv) => {
         }
         if (architecture === 'app' || firefoxVariant === 'fennec') resolution = 'mobile'
         if (target.E2E) buildTarget = 'E2E'
+        if (target.Beta) buildType = 'beta'
+        if (target.Insider) buildType = 'insider'
 
         // build the envs
         const envs = {
             STORYBOOK: false,
             target: buildTarget,
+            build: buildType,
             architecture,
             resolution,
         }

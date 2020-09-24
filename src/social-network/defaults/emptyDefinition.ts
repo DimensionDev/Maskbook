@@ -1,10 +1,11 @@
 import { GetContext, ValueRef } from '@holoflows/kit/es'
 import { ProfileIdentifier } from '../../database/type'
 import type { SocialNetworkUIDefinition } from '../ui'
-import { nop, nopWithUnmount } from '../../utils/utils'
+import { nopWithUnmount } from '../../utils/utils'
 import type { Profile } from '../../database'
 import { ProfileArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 import { ObservableWeakMap } from '../../utils/ObservableMapSet'
+import { noop } from 'lodash-es'
 
 /**
  * DO NOT use this in content script
@@ -28,12 +29,12 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     collectPosts() {},
     ignoreSetupAccount() {},
     injectCommentBox: nopWithUnmount,
-    injectPostBox: nop,
+    injectPostBox: noop,
     injectPostComments: nopWithUnmount,
     injectPostReplacer: nopWithUnmount,
     injectPostInspector: nopWithUnmount,
     injectPageInspector: nopWithUnmount,
-    resolveLastRecognizedIdentity: nop,
+    resolveLastRecognizedIdentity: noop,
     posts: new ObservableWeakMap(),
     friendsRef: new ValueRef([], ProfileArrayComparer),
     isDangerousNetwork: false,

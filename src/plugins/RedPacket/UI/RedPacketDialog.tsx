@@ -14,6 +14,7 @@ import {
     MenuItem,
     DialogProps,
     CircularProgress,
+    Box,
 } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
@@ -21,7 +22,7 @@ import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/D
 import { RedPacketWithState } from './RedPacket'
 import Services from '../../../extension/service'
 import type { CreateRedPacketInit } from '../state-machine'
-import { EthereumTokenType } from '../../Wallet/database/types'
+import type { WalletRecord } from '../../Wallet/database/types'
 import type { RedPacketRecord, RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -32,13 +33,17 @@ import { formatBalance } from '../../Wallet/formatter'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import BigNumber from 'bignumber.js'
-import { useSelectWallet, useTokens, useWallets } from '../../shared/useWallet'
-import { WalletSelect } from '../../shared/WalletSelect'
-import { TokenSelect } from '../../shared/TokenSelect'
 import { FeedbackDialog } from './FeedbackDialog'
-import type { WalletDetails, ERC20TokenDetails } from '../../../extension/background-script/PluginService'
+import type { ERC20TokenDetails } from '../../../extension/background-script/PluginService'
 import { RedPacketMetaKey } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { useSelectWallet, useWallets, useTokens } from '../../Wallet/hooks/useWallet'
+import { TokenSelect } from '../../Wallet/UI/TokenSelect'
+import { EthereumTokenType, ChainId } from '../../../web3/types'
+import { EthereumAccountChip } from '../../../components/shared/EthereumAccountChip'
+import { useAccount } from '../../../web3/hooks/useAccount'
+import { EthereumChainChip } from '../../../components/shared/EthereumChainChip'
+import { useChainId } from '../../../web3/hooks/useChainId'
 
 //#region new red packet
 const useNewPacketStyles = makeStyles((theme) =>
@@ -58,13 +63,16 @@ const useNewPacketStyles = makeStyles((theme) =>
             },
             '-moz-appearance': 'textfield',
         },
+        ethereumChainChip: {
+            marginRight: theme.spacing(1),
+        },
     }),
 )
 
 interface NewPacketProps {
     senderName?: string
     loading: boolean
-    wallets: WalletDetails[] | undefined
+    wallets: WalletRecord[] | undefined
     tokens: ERC20TokenDetails[] | undefined
     onCreateNewPacket: (opt: CreateRedPacketInit) => void
 }
@@ -84,6 +92,9 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const [shares, setShares] = useState(5)
     const [, sharesRef] = useCapturedInput((x) => setShares(parseInt(x)))
 
+    const account = useAccount()
+    const chainId = useChainId()
+
     const useSelectWalletResult = useSelectWallet(wallets, tokens)
     const {
         erc20Balance,
@@ -96,12 +107,12 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     } = useSelectWalletResult
 
     const amountPreShareMaxBigint = selectedWallet
-        ? selectedTokenType === EthereumTokenType.ETH
+        ? selectedTokenType === EthereumTokenType.Ether
             ? selectedWallet.eth_balance
             : selectedToken?.amount
         : undefined
     const amountPreShareMaxNumber = BigNumber.isBigNumber(amountPreShareMaxBigint)
-        ? selectedTokenType === EthereumTokenType.ETH
+        ? selectedTokenType === EthereumTokenType.Ether
             ? formatBalance(amountPreShareMaxBigint, 18)
             : selectedToken && formatBalance(amountPreShareMaxBigint, selectedToken.decimals)
         : undefined
@@ -116,34 +127,35 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const isSendButtonDisabled = isDisabled.some((x) => x)
 
     const onCreate = async () => {
-        const power = selectedTokenType === EthereumTokenType.ETH ? 18 : selectedToken!.decimals
+        const power = selectedTokenType === EthereumTokenType.Ether ? 18 : selectedToken!.decimals
         props.onCreateNewPacket({
             duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
             is_random: Boolean(is_random),
-            network: await Services.Plugin.getCurrentEthChain(),
+            network: await Services.Ethereum.getLegacyEthereumNetwork(),
             send_message,
             send_total: new BigNumber(send_total).multipliedBy(new BigNumber(10).pow(power)),
             sender_address: selectedWalletAddress!,
             sender_name: props.senderName ?? 'Unknown User',
             shares: new BigNumber(shares),
-            token_type: selectedTokenType === EthereumTokenType.ETH ? EthereumTokenType.ETH : EthereumTokenType.ERC20,
-            erc20_token: selectedTokenType === EthereumTokenType.ETH ? undefined : selectedTokenAddress,
+            token_type:
+                selectedTokenType === EthereumTokenType.Ether ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
+            erc20_token: selectedTokenType === EthereumTokenType.Ether ? undefined : selectedTokenAddress,
         })
     }
     return (
         <div>
+            <Box className={classes.line} display="flex" alignItems="center" justifyContent="flex-end">
+                {chainId === ChainId.Mainnet ? null : (
+                    <EthereumChainChip
+                        classes={{ root: classes.ethereumChainChip }}
+                        chainId={chainId}
+                        ChipProps={{ variant: 'default' }}
+                    />
+                )}
+                <EthereumAccountChip address={account} ChipProps={{ size: 'medium', variant: 'default' }} />
+            </Box>
             <div className={classes.line}>
-                <WalletSelect
-                    {...props}
-                    className={classes.input}
-                    useSelectWalletHooks={useSelectWalletResult}
-                    wallets={wallets}></WalletSelect>
-            </div>
-            <div className={classes.line}>
-                <TokenSelect
-                    {...props}
-                    className={classes.input}
-                    useSelectWalletHooks={useSelectWalletResult}></TokenSelect>
+                <TokenSelect {...props} className={classes.input} useSelectWalletHooks={useSelectWalletResult} />
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>{t('plugin_red_packet_split_mode')}</InputLabel>
                     <Select
@@ -211,7 +223,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                         : t('plugin_red_packet_send', {
                               symbol: +send_total.toFixed(3) === +send_total.toFixed(9) ? '' : '~',
                               amount: +send_total.toFixed(3),
-                              type: selectedTokenType === EthereumTokenType.ETH ? 'ETH' : selectedToken?.symbol,
+                              type: selectedTokenType === EthereumTokenType.Ether ? 'ETH' : selectedToken?.symbol,
                           })}
                 </Button>
             </div>
@@ -252,9 +264,10 @@ function ExistingPacketUI(props: RedPacketDialogProps & ExistingPacketProps) {
     const insertRedPacket = (status?: RedPacketStatus | null, rpid?: RedPacketRecord['red_packet_id']) => {
         if (status === null) return onSelectExistingPacket(null)
         if (status === RedPacketStatus.pending || !rpid) return
-        Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, rpid).then((p) =>
-            onSelectExistingPacket(p.raw_payload),
-        )
+        Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, rpid).then((p) => {
+            if (p?.raw_payload?.token === undefined) delete p?.raw_payload?.token
+            onSelectExistingPacket(p.raw_payload)
+        })
     }
     return (
         <div className={classes.wrapper}>
@@ -319,8 +332,8 @@ const useStyles = makeStyles({
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
-    const { data: wallets } = useWallets()
-    const { data: tokens } = useTokens()
+    const wallets = useWallets()
+    const tokens = useTokens()
     const [availableRedPackets, setAvailableRedPackets] = useState<RedPacketRecord[]>([])
     const [justCreatedRedPacket, setJustCreatedRedPacket] = useState<RedPacketRecord | undefined>(undefined)
 

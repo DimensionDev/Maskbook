@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-## Inroduction and Background
+## Introduction and Background
 /* Describe the background of this task */
 
 ## Content

@@ -5,7 +5,7 @@
 import { CustomEventId } from './constants'
 import type { CustomEvents } from '../extension/injected-script/CustomEvents'
 
-import { flatten, isNull, random } from 'lodash-es'
+import { flatten, isNull, random, noop } from 'lodash-es'
 
 import { sleep } from '@holoflows/kit/es/util/sleep'
 export { sleep, timeout } from '@holoflows/kit/es/util/sleep'
@@ -71,9 +71,6 @@ export function selectElementContents(el: Node) {
     return sel
 }
 
-import { noop } from 'lodash-es'
-export { noop as nop } from 'lodash-es'
-export { identity as bypass } from 'lodash-es'
 export function nopWithUnmount(..._args: unknown[]) {
     return noop
 }

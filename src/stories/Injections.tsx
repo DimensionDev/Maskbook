@@ -1,6 +1,6 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { text, boolean, select, radios } from '@storybook/addon-knobs'
+import { text, boolean, select, radios, number } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
 import { AdditionalContent, AdditionalIcon } from '../components/InjectedComponents/AdditionalPostContent'
 import { DecryptPostFailed } from '../components/InjectedComponents/DecryptedPost/DecryptPostFailed'
@@ -16,7 +16,7 @@ import { CommentBox } from '../components/InjectedComponents/CommentBox'
 import type { DecryptionProgress } from '../extension/background-script/CryptoServices/decryptFrom'
 import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/SelectPeopleAndGroups'
 import { MaskbookLightTheme } from '../utils/theme'
-import { PostDialog } from '../components/InjectedComponents/PostDialog'
+import { CharLimitIndicator, PostDialog } from '../components/InjectedComponents/PostDialog'
 import { PostDialogHint } from '../components/InjectedComponents/PostDialogHint'
 import {
     makeTypedMessageText,
@@ -127,7 +127,6 @@ storiesOf('Injections', module)
 
         Hello world!`,
             )
-            const vr = boolean('Verified', true)
             enum ProgressType {
                 finding_person_public_key,
                 finding_post_key,
@@ -149,7 +148,6 @@ storiesOf('Injections', module)
                             type: 'progress',
                             data: {
                                 content: makeTypedMessageText(msg),
-                                signatureVerifyResult: vr,
                                 rawContent: '',
                                 through: [],
                                 type: 'success',
@@ -181,7 +179,7 @@ storiesOf('Injections', module)
                             alreadySelectedPreviously={[]}
                             requestAppendRecipients={async () => {}}
                             profiles={demoProfiles}
-                            data={{ content: makeTypedMessageText(msg), signatureVerifyResult: vr }}
+                            data={{ content: makeTypedMessageText(msg) }}
                         />
                     </FakePost>
                     <FakePost title="Decrypting:">
@@ -274,6 +272,7 @@ storiesOf('Injections', module)
             return <PostDialogHint classes={style} onHintButtonClicked={action('clicked')} />
         }
     })
+    .add('CharLimitIndicator', () => <CharLimitIndicator max={number('max', 560)} value={number('current', 530)} />)
 
 function FakePost(props: React.PropsWithChildren<{ title: string }>) {
     return (

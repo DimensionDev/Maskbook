@@ -7,6 +7,7 @@ import type {
     EC_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { Convert, combine } from 'pvtsutils'
+import { Buffer } from 'buffer'
 
 export function keyToJWK(key: string, type: 'public'): EC_Public_JsonWebKey
 export function keyToJWK(key: string, type: 'private'): EC_Private_JsonWebKey

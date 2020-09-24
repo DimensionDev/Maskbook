@@ -3,23 +3,25 @@ import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
 import { web3 } from '../Wallet/web3'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './state-machine'
-import HappyRedPacketABI from '../Wallet/contracts/happy-red-packet/HappyRedPacket.json'
-import type { HappyRedPacket } from '../Wallet/contracts/happy-red-packet/HappyRedPacket'
+import HappyRedPacketABI from '../../contracts/happy-red-packet/HappyRedPacket.json'
+import type { HappyRedPacket } from '../../contracts/happy-red-packet/HappyRedPacket'
 import type { CheckRedPacketAvailabilityResult, CreateRedPacketResult, RedPacketJSONPayload } from './types'
-import { EthereumTokenType } from '../Wallet/database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 import { sendTx } from '../Wallet/transaction'
-import { getNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
 import { createRedPacketTransaction } from './database'
-import { getCurrentEthChain } from '../../extension/background-script/PluginService'
 import type { TxHashID, DatabaseID } from '../Wallet/api'
+import { getChainId } from '../../extension/background-script/EthereumService'
+import { EthereumTokenType } from '../../web3/types'
+import { resolveChainName } from '../../web3/pipes'
+import { getConstant } from '../../web3/helpers'
+import { RED_PACKET_CONSTANTS } from './constants'
 
 type RedPacketID = { redPacketID: string }
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
 }
 async function getRedPacketContract() {
-    return createRedPacketContract(getNetworkSettings(await getCurrentEthChain()).happyRedPacketContractAddress)
+    return createRedPacketContract(getConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS', await getChainId()))
 }
 export const redPacketAPI = {
     async claimByServer(
@@ -29,8 +31,7 @@ export const redPacketAPI = {
         const host = 'https://redpacket.gives'
         const x = 'a3323cd1-fa42-44cd-b053-e474365ab3da'
 
-        const network = (await getCurrentEthChain()).toLowerCase()
-
+        const network = resolveChainName(await getChainId()).toLowerCase()
         const auth = await fetch(`${host}/hi?id=${claimWithWallet}&network=${network}`)
         if (!auth.ok) throw new Error('Auth failed')
         const verify = await auth.text()
@@ -101,7 +102,8 @@ export const redPacketAPI = {
                 ),
                 {
                     from: ____sender__addr,
-                    value: token_type === EthereumTokenType.ETH ? total_tokens.toFixed() : undefined,
+                    to: contract.options.address,
+                    value: token_type === EthereumTokenType.Ether ? total_tokens.toFixed() : undefined,
                 },
                 {
                     onTransactionHash(hash) {
@@ -149,6 +151,7 @@ export const redPacketAPI = {
                 contract.methods.claim(id.redPacketID, password, recipient, validation),
                 {
                     from: recipient,
+                    to: contract.options.address,
                 },
                 {
                     onTransactionHash(hash) {
@@ -193,6 +196,7 @@ export const redPacketAPI = {
                 contract.methods.refund(id.redPacketID),
                 {
                     from: packet!.sender_address,
+                    to: contract.options.address,
                 },
                 {
                     onTransactionHash(hash: string) {

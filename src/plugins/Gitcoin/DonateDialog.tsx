@@ -13,14 +13,12 @@ import {
     Link,
     DialogActions,
     CircularProgress,
+    Box,
 } from '@material-ui/core'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
-import { TokenSelect } from '../shared/TokenSelect'
-import { WalletSelect } from '../shared/WalletSelect'
-import { useSelectWallet } from '../shared/useWallet'
-import { EthereumTokenType } from '../Wallet/database/types'
+import type { WalletRecord } from '../Wallet/database/types'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { getActivatedUI } from '../../social-network/ui'
 import {
@@ -31,8 +29,15 @@ import {
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import BigNumber from 'bignumber.js'
 import { formatBalance } from '../Wallet/formatter'
-import type { ERC20TokenDetails, WalletDetails } from '../../extension/background-script/PluginService'
+import type { ERC20TokenDetails } from '../../extension/background-script/PluginService'
 import { Trans } from 'react-i18next'
+import { useSelectWallet } from '../Wallet/hooks/useWallet'
+import { TokenSelect } from '../Wallet/UI/TokenSelect'
+import { EthereumTokenType, ChainId } from '../../web3/types'
+import { EthereumChainChip } from '../../components/shared/EthereumChainChip'
+import { EthereumAccountChip } from '../../components/shared/EthereumAccountChip'
+import { useAccount } from '../../web3/hooks/useAccount'
+import { useChainId } from '../../web3/hooks/useChainId'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -54,6 +59,12 @@ const useStyles = makeStyles((theme: Theme) =>
                 margin: 0,
             },
             '-moz-appearance': 'textfield',
+        },
+        acocunt: {
+            marginTop: theme.spacing(0.5),
+        },
+        ethereumChainChip: {
+            marginRight: theme.spacing(1),
         },
     }),
 )
@@ -85,8 +96,8 @@ interface DonateDialogUIProps
     address?: string
     open: boolean
     onDonate(opt: DonatePayload): Promise<void> | void
-    onClose(): void
-    wallets: WalletDetails[] | undefined
+    onClose?: () => void
+    wallets: WalletRecord[] | undefined
     tokens: ERC20TokenDetails[] | undefined
 }
 
@@ -96,15 +107,18 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     const useSelectWalletResult = useSelectWallet(props.wallets, props.tokens)
     const { erc20Balance, ethBalance, selectedToken, selectedTokenType, selectedWallet } = useSelectWalletResult
 
+    const account = useAccount()
+    const chainId = useChainId()
+
     const [amount, setAmount] = useState(0.01)
     const [, amountInputRef] = useCapturedInput((x) => setAmount(parseFloat(x)))
     const amountMaxBigint = selectedWallet
-        ? selectedTokenType === EthereumTokenType.ETH
+        ? selectedTokenType === EthereumTokenType.Ether
             ? selectedWallet.eth_balance
             : selectedToken?.amount
         : undefined
     const amountMaxNumber = BigNumber.isBigNumber(amountMaxBigint)
-        ? selectedTokenType === EthereumTokenType.ETH
+        ? selectedTokenType === EthereumTokenType.Ether
             ? formatBalance(amountMaxBigint, 18)
             : selectedToken && formatBalance(amountMaxBigint, selectedToken.decimals)
         : undefined
@@ -152,13 +166,20 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                         {props.description}
                     </Typography>
                     <form className={classes.form}>
-                        <WalletSelect
-                            FormControlProps={{ fullWidth: true }}
-                            wallets={props.wallets}
-                            useSelectWalletHooks={useSelectWalletResult}></WalletSelect>
+                        <Box className={classes.acocunt} display="flex" alignItems="center" justifyContent="flex-end">
+                            {chainId === ChainId.Mainnet ? null : (
+                                <EthereumChainChip
+                                    classes={{ root: classes.ethereumChainChip }}
+                                    chainId={chainId}
+                                    ChipProps={{ variant: 'default' }}
+                                />
+                            )}
+                            <EthereumAccountChip address={account} ChipProps={{ size: 'medium', variant: 'default' }} />
+                        </Box>
                         <TokenSelect
                             FormControlProps={{ fullWidth: true }}
-                            useSelectWalletHooks={useSelectWalletResult}></TokenSelect>
+                            useSelectWalletHooks={useSelectWalletResult}
+                        />
                         <TextField
                             InputProps={{ inputRef: amountInputRef }}
                             inputProps={{
@@ -212,7 +233,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                             : t('plugin_gitcoin_donate', {
                                   symbol: +amount.toFixed(3) === +amount.toFixed(9) ? '' : '~',
                                   amount: +amount.toFixed(3),
-                                  type: selectedTokenType === EthereumTokenType.ETH ? 'ETH' : selectedToken?.symbol,
+                                  type: selectedTokenType === EthereumTokenType.Ether ? 'ETH' : selectedToken?.symbol,
                               })}
                     </Button>
                 </DialogActions>

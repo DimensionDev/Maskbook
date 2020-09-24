@@ -1,6 +1,7 @@
 {
     "typescript.tsdk": "node_modules/typescript/lib",
     "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "modifications",
     "editor.codeActionsOnSave": {
         "source.fixAll": true
     },

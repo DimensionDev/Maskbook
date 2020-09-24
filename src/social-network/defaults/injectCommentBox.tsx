@@ -4,10 +4,11 @@ import { MutationObserverWatcher } from '@holoflows/kit/es'
 import { CommentBox, CommentBoxProps } from '../../components/InjectedComponents/CommentBox'
 import Services from '../../extension/service'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
-import { dispatchCustomEvents, nop, selectElementContents, sleep } from '../../utils/utils'
+import { dispatchCustomEvents, selectElementContents, sleep } from '../../utils/utils'
 import { makeStyles } from '@material-ui/core'
 import { PostInfoContext, usePostInfoDetails, usePostInfo } from '../../components/DataSource/usePostInfo'
 import { Flags } from '../../utils/flags'
+import { noop } from 'lodash-es'
 
 const defHandler = async (encryptedComment: string, current: PostInfo, realCurrent: HTMLElement | null) => {
     const root = realCurrent || current.rootNode
@@ -48,7 +49,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         return <CommentBox onSubmit={onCallback} {...props} />
     })
     return (current: PostInfo) => {
-        if (!current.commentBoxSelector) return nop
+        if (!current.commentBoxSelector) return noop
         const commentBoxWatcher = new MutationObserverWatcher(current.commentBoxSelector.clone(), current.rootNode)
             .useForeach((node, key, meta) =>
                 renderInShadowRoot(

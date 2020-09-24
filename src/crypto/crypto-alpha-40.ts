@@ -275,21 +275,6 @@ export async function encryptWithAES(info: {
     return { content: encrypted, iv }
 }
 //#endregion
-//#region Sign & verify
-export async function sign(message: string | ArrayBuffer, privateKey: EC_Private_JsonWebKey): Promise<ArrayBuffer> {
-    if (typeof message === 'string') message = encodeText(message)
-    return CryptoWorker.sign_ecdsa_k256(privateKey, 'SHA-256', message)
-}
-export async function verify(
-    content: string | ArrayBuffer,
-    signature: string | ArrayBuffer,
-    publicKey: EC_Public_JsonWebKey,
-): Promise<boolean> {
-    if (typeof signature === 'string') signature = decodeArrayBuffer(signature)
-    if (typeof content === 'string') content = encodeText(content)
-    return CryptoWorker.verify_ecdsa_k256(publicKey, 'SHA-256', content, signature)
-}
-//#endregion
 
 //#region Comment
 function extractCommentPayload(text: string) {

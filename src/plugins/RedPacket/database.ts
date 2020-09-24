@@ -2,6 +2,7 @@ import type { RedPacketRecordInDatabase } from './types'
 import { createPluginWalletAccess } from '../../database/Plugin/wrap-wallet-for-plugin'
 import type { _UnboxPromise } from 'async-call-rpc/full'
 import { RedPacketPluginID } from './constants'
+
 export const createRedPacketTransaction = createPluginWalletAccess<RedPacketRecordInDatabase, [string]>(
     RedPacketPluginID,
 )({ red_packet_id: 0 }, 'id')

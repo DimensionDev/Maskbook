@@ -7,20 +7,35 @@ import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/inte
 OnlyRunInContext(['background', 'debugging'], 'gun')
 
 /**
+ * @param version current payload version
+ * @param postIV Post iv
+ * @param partitionByCryptoKey Public key of the current user (receiver)
+ * @param networkHint The network specific string
+ */
+export async function calculatePostKeyPartition(
+    version: -39 | -38,
+    postIV: string,
+    partitionByCryptoKey: EC_Public_JsonWebKey,
+    networkHint: string,
+) {
+    const postHash = await hashPostSalt(postIV, networkHint)
+    // In version > -39, we will use stable hash to prevent unstable result for key hashing
+    const keyHash = await (version <= -39 ? hashCryptoKeyUnstable : hashCryptoKey)(partitionByCryptoKey)
+    return { postHash, keyHash }
+}
+/**
  * Query all possible keys stored on the gun
  * @param version current payload version
- * @param postSalt Post iv
+ * @param postIV Post iv
  * @param partitionByCryptoKey Public key of the current user (receiver)
  */
 export async function queryPostKeysOnGun2(
     version: -39 | -38,
-    postSalt: string,
+    postIV: string,
     partitionByCryptoKey: EC_Public_JsonWebKey,
     networkHint: string,
-): Promise<{ keys: SharedAESKeyGun2[]; postHash: string; keyHash: string }> {
-    const postHash = await hashPostSalt(postSalt, networkHint)
-    // In version > -39, we will use stable hash to prevent unstable result for key hashing
-    const keyHash = await (version <= -39 ? hashCryptoKeyUnstable : hashCryptoKey)(partitionByCryptoKey)
+): Promise<SharedAESKeyGun2[]> {
+    const { postHash, keyHash } = await calculatePostKeyPartition(version, postIV, partitionByCryptoKey, networkHint)
 
     // ? here we get the internal node names of gun2[postHash][keyHash]
     // ? where gun2[postHash][keyHash] is a list
@@ -35,7 +50,7 @@ export async function queryPostKeysOnGun2(
     const resultPromise = internalKeys.map((key) => gun2.get(key).then!())
     const result = (await Promise.all(resultPromise)) as SharedAESKeyGun2[]
     console.info(`await gun2[${postHash}][${keyHash}]\n`, result)
-    return { keys: result, keyHash, postHash }
+    return result
 }
 
 /**
