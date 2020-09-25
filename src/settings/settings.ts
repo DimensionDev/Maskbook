@@ -94,6 +94,10 @@ export const languageSettings = createGlobalSettings<Language>(
     lang in Language ? (lang as Language) : Language.en,
     { primary: () => i18n.t('settings_language') },
 )
+export const enableGroupSharingSettings = createGlobalSettings<boolean>('experimental/group-sharing@sept2020', false, {
+    primary: () => 'Experimental: Enable group sharing',
+    secondary: () => '(Unstable) Automatically share posts to a group',
+})
 
 export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
 export const currentSelectedIdentity = createNetworkSettings('currentSelectedIdentity')
