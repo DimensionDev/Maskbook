@@ -10,19 +10,19 @@ import {
     DialogContent,
     TextField,
 } from '@material-ui/core'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../../../utils/shadow-root/ShadowRootDialog'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
 import {
     useTwitterDialog,
     useTwitterButton,
     useTwitterCloseButton,
-} from '../../../../social-network-provider/twitter.com/utils/theme'
-import { getActivatedUI } from '../../../../social-network/ui'
-import { useCapturedInput } from '../../../../utils/hooks/useCapturedEvents'
-import type { Token } from '../../../../web3/types'
-import { FixedTokenList } from '../../../../extension/options-page/DashboardComponents/FixedTokenList'
+} from '../../../social-network-provider/twitter.com/utils/theme'
+import { getActivatedUI } from '../../../social-network/ui'
+import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
+import type { Token } from '../../../web3/types'
+import { FixedTokenList } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

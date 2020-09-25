@@ -4,7 +4,7 @@ import type { ERC20TokenRecord, WalletRecordInDatabase } from './types'
 import type { GitcoinDonationRecordInDatabase } from '../../Gitcoin/types'
 import type { RedPacketRecordInDatabase } from '../../RedPacket/types'
 import { RedPacketPluginID } from '../../RedPacket/constants'
-import { checksumAddress } from './helpers'
+import { formatChecksumAddress } from '../formatter'
 
 function path<T>(x: T) {
     return x
@@ -83,25 +83,18 @@ export const createWalletDBAccess = createDBAccess(() => {
                 const tokens = t.objectStore('ERC20Token')
                 for await (const wallet of wallets) {
                     // update address
-                    wallet.value.address = checksumAddress(wallet.value.address)
-
-                    // update erc20_token_balance map
-                    const entries = Array.from(wallet.value.erc20_token_balance.entries())
-                    wallet.value.erc20_token_balance.clear()
-                    for (const [key, value] of entries) {
-                        wallet.value.erc20_token_balance.set(checksumAddress(key), value)
-                    }
+                    wallet.value.address = formatChecksumAddress(wallet.value.address)
 
                     // update token list sets
                     ;[wallet.value.erc20_token_blacklist, wallet.value.erc20_token_whitelist].forEach((set) => {
                         const values = Array.from(set.values())
                         set.clear()
-                        values.forEach((value) => set.add(checksumAddress(value)))
+                        values.forEach((value) => set.add(formatChecksumAddress(value)))
                     })
                     await wallet.update(wallet.value)
                 }
                 for await (const token of tokens) {
-                    token.value.address = checksumAddress(token.value.address)
+                    token.value.address = formatChecksumAddress(token.value.address)
                     await token.update(token.value)
                 }
             }

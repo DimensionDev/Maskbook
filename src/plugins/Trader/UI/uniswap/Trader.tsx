@@ -21,7 +21,7 @@ import { CONSTANTS } from '../../../../web3/constants'
 import { TRADE_CONSTANTS } from '../../constants'
 import { TransactionDialog } from './TransactionDialog'
 import { sleep } from '../../../../utils/utils'
-import { SelectERC20TokenDialog } from './SelectERC20TokenDialog'
+import { SelectERC20TokenDialog } from '../../../Wallet/UI/SelectERC20TokenDialog'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
