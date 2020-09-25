@@ -748,7 +748,7 @@ export function DashboardWalletHistoryDialog(
 
     useEffect(() => {
         const updateHandler = () =>
-            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets', undefined).then(setRedPacketRecords)
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets').then(setRedPacketRecords)
         updateHandler()
         return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
     }, [tabState])
