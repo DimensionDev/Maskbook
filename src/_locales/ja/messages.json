@@ -20,7 +20,7 @@
     "additional_post_box__encrypted_failed": "以下の文字列を自己紹介に追加してください。",
     "additional_post_box__encrypted_post_pre": "#Maskbook で復号しましょう！ {{encrypted}}",
     "additional_post_box__steganography_post_failed": "これから Maskbook は暗号化されたメッセージを含む画像を生成します。投稿に貼り付ければ閲覧可能な人は誰でも見ることができます。",
-    "additional_post_box__steganography_post_pre": "この投稿は限られた友だちにだけ表示されます。#Maskbook を入れて投稿を表示しましょう。 ([I:b]) {{random}}",
+    "additional_post_box__steganography_post_pre": "この投稿は #Maskbook によって暗号化されています。 📪🔑 maskbook.com で復号しましょう！ ([I:b]) {{random}}",
     "automation_pasted_into_bio_box": "[Maskbook] あなたの自己紹介に公開鍵を追加しました。お確かめの上保存してください。",
     "automation_request_click_post_button": "[公開]ボタンをクリックして編集ダイアログを開きます。",
     "automation_request_click_edit_bio_button": "「プロフィールを編集」を押すか、プロフィール文上のペンのアイコンを押してください。",
