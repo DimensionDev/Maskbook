@@ -60,15 +60,23 @@ export async function pasteIntoPostBoxFacebook(
     text: string,
     options: Parameters<SocialNetworkUI['taskPasteIntoPostBox']>[1],
 ) {
-    const { shouldOpenPostDialog, warningText } = options
+    const { shouldOpenPostDialog, warningText, commentElement } = options
     await untilDocumentReady()
     // Save the scrolling position
     const scrolling = document.scrollingElement || document.documentElement
     const scrollBack = ((top) => () => scrolling.scroll({ top }))(scrolling.scrollTop)
 
-    const activated = new LiveSelector().querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
-        isMobileFacebook ? 'form textarea' : '.notranslate[aria-describedby]',
-    )
+    let activated: LiveSelector<HTMLDivElement | HTMLTextAreaElement>
+    if (commentElement) {
+        activated = new LiveSelector([commentElement]).querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
+            '.notranslate',
+        )
+    } else {
+        activated = new LiveSelector().querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
+            isMobileFacebook ? 'form textarea' : '.notranslate[aria-describedby]',
+        )
+    }
+
     if (isMobileFacebook) activated.filter((x) => x.getClientRects().length > 0)
     // If page is just loaded
     if (shouldOpenPostDialog) {

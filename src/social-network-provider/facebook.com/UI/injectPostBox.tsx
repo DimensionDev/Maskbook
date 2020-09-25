@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { createHash } from 'crypto'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
@@ -7,19 +8,45 @@ import { PostDialogHint } from '../../../components/InjectedComponents/PostDialo
 import { MessageCenter } from '../../../utils/messages'
 import { Flags } from '../../../utils/flags'
 
-let composeBox: LiveSelector<Element>
+interface UIProps {
+    commentElement?: Element
+    commentId?: string
+}
+
+let postEditorInPopupSelector: LiveSelector<Element>
 if (isMobileFacebook) {
-    composeBox = new LiveSelector().querySelector('#structured_composer_form')
+    postEditorInPopupSelector = new LiveSelector().querySelector('#structured_composer_form')
 } else {
-    composeBox = new LiveSelector()
+    postEditorInPopupSelector = new LiveSelector()
         .querySelectorAll('form [role="button"][tabindex="-1"]')
         .map((x) => x.parentElement)
         // TODO: should be nth(-1), see https://github.com/DimensionDev/Holoflows-Kit/issues/270
         .reverse()
         .nth(0)
 }
+
+const postEditorInCommentSelector: LiveSelector<Element> = new LiveSelector()
+    .querySelectorAll('[role="article"] [role="presentation"]')
+    .map((x) => x.parentElement)
+    .reverse()
+
 export function injectPostBoxFacebook() {
-    const watcher = new MutationObserverWatcher(composeBox.clone())
+    new MutationObserverWatcher(postEditorInCommentSelector.clone())
+        .useForeach((element, key, metadata) => {
+            const commentId = createHash('md5').update(element.innerHTML).digest().toString('hex')
+            renderInShadowRoot(<UI commentId={commentId} commentElement={element} />, {
+                shadow: () => metadata.afterShadow,
+                normal: () => metadata.after,
+                rootProps: { style: { display: 'block', padding: '0 16px', marginTop: 16 } },
+            })
+        })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
+
+    const watcher = new MutationObserverWatcher(postEditorInPopupSelector.clone())
         .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         .startWatch({
             childList: true,
@@ -31,15 +58,15 @@ export function injectPostBoxFacebook() {
         rootProps: { style: { display: 'block', padding: '0 16px', marginTop: 16 } },
     })
 }
-function UI() {
+function UI({ commentId, commentElement }: UIProps) {
     const onHintButtonClicked = useCallback(
-        () => MessageCenter.emit('compositionUpdated', { reason: 'popup', open: true }),
-        [],
+        () => MessageCenter.emit('compositionUpdated', { reason: 'popup', open: true, commentId }),
+        [commentId],
     )
     return (
         <>
             <PostDialogHint onHintButtonClicked={onHintButtonClicked} />
-            <PostDialog reason="popup" />
+            <PostDialog reason="popup" commentId={commentId} commentElement={commentElement} />
         </>
     )
 }

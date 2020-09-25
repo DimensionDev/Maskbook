@@ -173,6 +173,7 @@ export interface SocialNetworkUITasks {
         text: string,
         options: {
             warningText?: string
+            commentElement?: Element
             shouldOpenPostDialog: boolean
         },
     ): void

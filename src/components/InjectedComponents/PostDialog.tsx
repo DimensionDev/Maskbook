@@ -309,12 +309,19 @@ export function PostDialogUI(props: PostDialogUIProps) {
 export interface PostDialogProps extends Omit<Partial<PostDialogUIProps>, 'open'> {
     open?: [boolean, (next: boolean) => void]
     reason?: 'timeline' | 'popup'
+    commentId?: string
+    commentElement?: Element
     identities?: Profile[]
     onRequestPost?: (target: (Profile | Group)[], content: TypedMessage) => void
     onRequestReset?: () => void
     typedMessageMetadata?: ReadonlyMap<string, any>
 }
-export function PostDialog({ reason: props_reason = 'timeline', ...props }: PostDialogProps) {
+export function PostDialog({
+    reason: props_reason = 'timeline',
+    commentId: props_comment_id,
+    commentElement,
+    ...props
+}: PostDialogProps) {
     const { t, i18n } = useI18N()
     const [onlyMyselfLocal, setOnlyMyself] = useState(false)
     const onlyMyself = props.onlyMyself ?? onlyMyselfLocal
@@ -376,7 +383,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
 
                     activeUI.taskPasteIntoPostBox(
                         t('additional_post_box__steganography_post_pre', { random: new Date().toLocaleString() }),
-                        { shouldOpenPostDialog: false },
+                        { shouldOpenPostDialog: false, commentElement },
                     )
                     activeUI.taskUploadToPostBox(encrypted, {
                         template: isRedPacket ? (isDai ? 'dai' : isOkb ? 'okb' : 'eth') : 'v2',
@@ -400,13 +407,22 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     activeUI.taskPasteIntoPostBox(text, {
                         warningText: t('additional_post_box__encrypted_failed'),
                         shouldOpenPostDialog: false,
+                        commentElement,
                     })
                 }
                 // This step write data on gun.
                 // there is nothing to write if it shared with public
                 if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayloadEnabled, t, i18n.language],
+            [
+                currentIdentity,
+                shareToEveryone,
+                typedMessageMetadata,
+                imagePayloadEnabled,
+                commentElement,
+                t,
+                i18n.language,
+            ],
         ),
     )
     const onRequestReset = or(
@@ -431,13 +447,21 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     //#region My Identity
     const identities = useMyIdentities()
     useEffect(() => {
-        return MessageCenter.on('compositionUpdated', ({ reason, open, content, options }: CompositionEvent) => {
-            if (reason !== props_reason || identities.length <= 0) return
-            setOpen(open)
-            if (content) setPostBoxContent(makeTypedMessageText(content))
-            if (options?.onlyMySelf) setOnlyMyself(true)
-            if (options?.shareToEveryOne) setShareToEveryone(true)
-        })
+        return MessageCenter.on(
+            'compositionUpdated',
+            ({ reason, commentId, open, content, options }: CompositionEvent) => {
+                if (
+                    ((commentId || props_comment_id) && props_comment_id !== commentId) ||
+                    reason !== props_reason ||
+                    identities.length <= 0
+                )
+                    return
+                setOpen(open)
+                if (content) setPostBoxContent(makeTypedMessageText(content))
+                if (options?.onlyMySelf) setOnlyMyself(true)
+                if (options?.shareToEveryOne) setShareToEveryone(true)
+            },
+        )
     }, [identities.length, props_reason, setOpen])
 
     const onOnlyMyselfChanged = or(

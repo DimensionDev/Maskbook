@@ -11,6 +11,7 @@ export interface UpdateEvent<Data> {
 export interface CompositionEvent {
     readonly reason: 'timeline' | 'popup'
     readonly open: boolean
+    readonly commentId?: string
     readonly content?: string
     readonly options?: {
         onlyMySelf?: boolean
