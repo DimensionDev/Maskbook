@@ -412,6 +412,9 @@ export default function DashboardWalletsRouter() {
                         {wallets.map((wallet) => (
                             <WalletItem
                                 key={wallet.address}
+                                wallet={wallet}
+                                tokens={getTokensForWallet(wallet)}
+                                selected={wallet.address === current}
                                 onClick={async () => {
                                     if (!xsMatched) {
                                         setCurrent('an_adsent_wallet_address')
@@ -420,9 +423,6 @@ export default function DashboardWalletsRouter() {
                                     }
                                     setCurrent(wallet.address)
                                 }}
-                                wallet={wallet}
-                                tokens={getTokensForWallet(wallet)}
-                                selected={wallet.address === current}
                             />
                         ))}
                     </div>

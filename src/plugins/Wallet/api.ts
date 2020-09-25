@@ -1,23 +1,12 @@
 import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
-import { EthereumAddress } from 'wallet.ts'
 import { web3 } from './web3'
 import ERC20ABI from '../../contracts/splitter/ERC20.json'
 import BulkCheckoutABI from '../../contracts/bulk-checkout/BulkCheckout.json'
-import BalanceCheckerABI from '../../contracts/balance-checker/BalanceChecker.json'
 import type { Erc20 as ERC20 } from '../../contracts/splitter/ERC20'
 import type { BulkCheckout } from '../../contracts/bulk-checkout/BulkCheckout'
-import type { BalanceChecker } from '../../contracts/balance-checker/BalanceChecker'
 import { sendTx } from './transaction'
-import { onWalletBalancesUpdated, BalanceMetadata } from './wallet'
-import { getERC20Tokens } from '../../web3/tokens'
-import { getChainId } from '../../extension/background-script/EthereumService'
-import { isUSDT, getConstant } from '../../web3/helpers'
-import { EthereumTokenType } from '../../web3/types'
-import { CONSTANTS } from '../../web3/constants'
-import { WALLET_CONSTANTS } from './constants'
-
-const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS')
+import { isUSDT } from '../../web3/helpers'
 
 function createERC20Contract(address: string) {
     return (new web3.eth.Contract(ERC20ABI as AbiItem[], address) as unknown) as ERC20
@@ -25,17 +14,6 @@ function createERC20Contract(address: string) {
 
 export function createBulkCheckoutContract(address: string) {
     return (new web3.eth.Contract(BulkCheckoutABI as AbiItem[], address) as unknown) as BulkCheckout
-}
-
-function createBalanceCheckerContract(address: string) {
-    return (new web3.eth.Contract(BalanceCheckerABI as AbiItem[], address) as unknown) as BalanceChecker
-}
-
-export const walletAPI = {
-    async queryBalance(address: string): Promise<BigNumber> {
-        const value = await web3.eth.getBalance(address)
-        return new BigNumber(value)
-    },
 }
 
 export const erc20API = {
@@ -161,78 +139,6 @@ export const erc20API = {
         )
     },
 }
-
-export const balanceCheckerAPI = (() => {
-    let idle = true
-
-    // TODO:
-    // polling the balance of those accounts in the background and update it silently
-    const watchedAccounts = new Set<string>()
-
-    async function getBalances(accounts: string[], tokens: string[]) {
-        let balances: string[] = []
-        if (!idle) return balances
-        if (!accounts.length || !tokens.length) return balances
-        try {
-            idle = false
-            balances = await createBalanceCheckerContract(
-                getConstant(WALLET_CONSTANTS, 'BALANCE_CHECKER_ADDRESS', await getChainId()),
-            )
-                .methods.balances(accounts, tokens)
-                .call()
-        } catch (e) {
-            balances = []
-        } finally {
-            idle = true
-        }
-        return balances
-    }
-    async function updateBalances(accounts: string[] = Array.from(watchedAccounts)) {
-        const validAccounts = accounts.filter(EthereumAddress.isValid)
-        if (!validAccounts.length) return
-        const chainId = await getChainId()
-        const tokens = [
-            {
-                type: EthereumTokenType.Ether,
-                address: ETH_ADDRESS,
-                decimals: 18,
-                name: 'Ether',
-                symbol: 'ETH',
-            },
-            ...getERC20Tokens(chainId),
-        ]
-        const balances = await getBalances(
-            validAccounts,
-            tokens.map((x) => x.address),
-        )
-        const metadata: BalanceMetadata = balances.reduce((accumulate, balance, index) => {
-            const accountAddress = validAccounts[Math.floor(index / tokens.length)]
-            accumulate[accountAddress] = accumulate[accountAddress] ?? []
-            const token = tokens[index % tokens.length]
-            if (token)
-                accumulate[accountAddress].push({
-                    ...token,
-                    chainId,
-                    balance: new BigNumber(balance),
-                })
-            return accumulate
-        }, {} as BalanceMetadata)
-        onWalletBalancesUpdated(metadata)
-    }
-
-    return {
-        getBalances,
-        updateBalances,
-        watchAccounts(accounts: string[]) {
-            accounts.forEach((address) => {
-                if (EthereumAddress.isValid(address)) watchedAccounts.add(address)
-            })
-        },
-        unwatchAccounts(accounts: string[]) {
-            accounts.forEach((address) => watchedAccounts.delete(address))
-        },
-    }
-})()
 
 export type TxHashID = { transactionHash: string }
 export type DatabaseID = { databaseID: string }

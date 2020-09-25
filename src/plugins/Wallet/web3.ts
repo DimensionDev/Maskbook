@@ -28,7 +28,6 @@ export function switchToProvider(provider: ProviderType) {
     currentProvider = nextProvider
     web3.setProvider(getWalletProvider(provider).getWeb3Provider())
     importBuiltinWalletPrivateKey()
-    PluginMessageCenter.emit('maskbook.wallets.reset', void 0)
     lastActivatedWalletProvider.value = provider
 }
 export function getWalletProvider(provider: ProviderType) {

@@ -20,8 +20,6 @@ export interface ERC20TokenRecord {
     decimals: number
     /** token symbol */
     symbol: string
-    /** Yes if user added token */
-    is_user_defined: boolean
 }
 //#endregion
 
@@ -31,10 +29,9 @@ export interface WalletRecordProperties {
     address: string
     /** User define wallet name. Default address.prefix(6) */
     name: string | null
-    /** Wallet ethereum balance */
-    eth_balance: BigNumber
-    erc20_token_balance: Map</** address of the erc20 token */ string, BigNumber>
+    /** A list of ERC20 token address which will be shown to the user  */
     erc20_token_whitelist: Set<string>
+    /** A list of ERC20 token address which will be hidden to the user */
     erc20_token_blacklist: Set<string>
     _wallet_is_default?: boolean
     createdAt: Date

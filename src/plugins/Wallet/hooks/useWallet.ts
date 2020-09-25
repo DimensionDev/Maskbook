@@ -2,7 +2,7 @@ import { ValueRef } from '@holoflows/kit/es'
 import { useState, useEffect } from 'react'
 import { PluginMessageCenter } from '../../PluginMessages'
 import Services from '../../../extension/service'
-import { EthereumTokenType, ProviderType } from '../../../web3/types'
+import { EthereumTokenType, ProviderType, Token } from '../../../web3/types'
 import type { ERC20TokenDetails } from '../../../extension/background-script/PluginService'
 import { formatBalance } from '../formatter'
 import { useConstant } from '../../../web3/hooks/useConstant'
@@ -25,7 +25,8 @@ async function revalidate() {
     walletsRef.value = wallets
 
     // tokens
-    const tokens = await Services.Plugin.invokePlugin('maskbook.wallet', 'getTokens')
+    // const tokens = await Services.Plugin.invokePlugin('maskbook.wallet', 'getTokens')
+    const tokens = [] as ERC20TokenRecord[]
     tokensRef.value = tokens
 }
 PluginMessageCenter.on('maskbook.wallets.update', revalidate)
