@@ -144,8 +144,13 @@ async function syncKey(locales = _.without(_locales, 'en')) {
 
 async function main() {
     const unusedKeys = await findAllUnusedKeys()
-    console.error('Scanned', unusedKeys.length, 'unused keys')
-    console.error('Unsynced', await findAllUnsyncedLocales(), 'locales')
+    const unsyncedLocales = await findAllUnsyncedLocales()
+    if (unusedKeys.length) {
+        console.error('::warning::Scanned', unusedKeys.length, 'unused keys')
+    }
+    if (unsyncedLocales.length) {
+        console.error('::warning::Unsynced', unsyncedLocales, 'locales')
+    }
     if (process.argv.includes('--remove-unused-keys')) {
         await removeAllUnusedKeys(unusedKeys)
         console.log('Unused keys removed')
