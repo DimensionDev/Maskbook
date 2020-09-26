@@ -37,13 +37,11 @@ import { FeedbackDialog } from './FeedbackDialog'
 import type { ERC20TokenDetails } from '../../../extension/background-script/PluginService'
 import { RedPacketMetaKey } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useSelectWallet, useWallets, useTokens } from '../../Wallet/hooks/useWallet'
-import { TokenSelect } from '../../Wallet/UI/TokenSelect'
-import { EthereumTokenType, ChainId } from '../../../web3/types'
-import { EthereumAccountChip } from '../../../components/shared/EthereumAccountChip'
+import { useWallets, useTokens } from '../../Wallet/hooks/useWallet'
+import { EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { EthereumChainChip } from '../../../components/shared/EthereumChainChip'
 import { useChainId } from '../../../web3/hooks/useChainId'
+import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 
 //#region new red packet
 const useNewPacketStyles = makeStyles((theme) =>
@@ -62,9 +60,6 @@ const useNewPacketStyles = makeStyles((theme) =>
                 margin: 0,
             },
             '-moz-appearance': 'textfield',
-        },
-        ethereumChainChip: {
-            marginRight: theme.spacing(1),
         },
     }),
 )
@@ -95,7 +90,6 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const account = useAccount()
     const chainId = useChainId()
 
-    const useSelectWalletResult = useSelectWallet(wallets, tokens)
     const {
         erc20Balance,
         ethBalance,
@@ -104,7 +98,15 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
         selectedTokenAddress,
         selectedWallet,
         selectedWalletAddress,
-    } = useSelectWalletResult
+    } = {
+        erc20Balance: '',
+        ethBalance: '',
+        selectedToken: '',
+        selectedTokenType: '',
+        selectedTokenAddress: '',
+        selectedWallet: '',
+        selectedWalletAddress: '',
+    } as any
 
     const amountPreShareMaxBigint = selectedWallet
         ? selectedTokenType === EthereumTokenType.Ether
@@ -144,18 +146,9 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     }
     return (
         <div>
-            <Box className={classes.line} display="flex" alignItems="center" justifyContent="flex-end">
-                {chainId === ChainId.Mainnet ? null : (
-                    <EthereumChainChip
-                        classes={{ root: classes.ethereumChainChip }}
-                        chainId={chainId}
-                        ChipProps={{ variant: 'default' }}
-                    />
-                )}
-                <EthereumAccountChip address={account} ChipProps={{ size: 'medium', variant: 'default' }} />
-            </Box>
+            <EthereumStatusBar />
             <div className={classes.line}>
-                <TokenSelect {...props} className={classes.input} useSelectWalletHooks={useSelectWalletResult} />
+                {/* <TokenSelect {...props} className={classes.input} useSelectWalletHooks={useSelectWalletResult} /> */}
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>{t('plugin_red_packet_split_mode')}</InputLabel>
                     <Select

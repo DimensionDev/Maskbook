@@ -175,7 +175,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                 </Box>
                 <List className={classes.tokenList} disablePadding>
                     <TokenListItem
-                        balance={wallet.eth_balance}
+                        balance={new BigNumber('0')}
                         wallet={wallet}
                         token={{
                             address: ETH_ADDRESS,
@@ -188,13 +188,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                     {tokens?.map((token, idx) => (
                         <TokenListItem
                             key={token.address}
-                            balance={
-                                new BigNumber(
-                                    listOfBalances[idx]
-                                        ? listOfBalances[idx]
-                                        : wallet.erc20_token_balance.get(token.address) ?? '0',
-                                )
-                            }
+                            balance={new BigNumber(listOfBalances[idx] ? listOfBalances[idx] : '0')}
                             wallet={wallet}
                             token={token}
                         />
@@ -288,11 +282,6 @@ export default function DashboardWalletsRouter() {
     const [current, setCurrent] = useState('')
     const currentWallet = wallets.find((wallet) => wallet.address === current)
 
-    // tracking wallet balance
-    useEffect(() => {
-        Services.Plugin.invokePlugin('maskbook.wallet', 'updateWalletBalances', [current])
-    }, [current])
-
     // auto select first wallet
     useEffect(() => {
         if (current) return
@@ -335,12 +324,7 @@ export default function DashboardWalletsRouter() {
     const getTokensForWallet = (wallet?: WalletRecord) => {
         if (!wallet) return []
         return tokens
-            .filter(
-                (token) =>
-                    token.chainId === chainId &&
-                    wallet.erc20_token_balance.has(token.address) &&
-                    !wallet.erc20_token_blacklist.has(token.address),
-            )
+            .filter((token) => token.chainId === chainId && !wallet.erc20_token_blacklist.has(token.address))
             .sort((token, otherToken) => {
                 if (isDAI(token.address)) return -1
                 if (isDAI(otherToken.address)) return 1

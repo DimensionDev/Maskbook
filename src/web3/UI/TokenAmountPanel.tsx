@@ -13,11 +13,11 @@ import {
 } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { debounce } from 'lodash-es'
-import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../../constants'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
-import { formatBalance } from '../../../Wallet/formatter'
-import { useCapturedInput } from '../../../../utils/hooks/useCapturedEvents'
-import type { Token } from '../../../../web3/types'
+import { formatBalance } from '../../plugins/Wallet/formatter'
+import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
+import type { Token } from '../types'
+import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../constants'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({

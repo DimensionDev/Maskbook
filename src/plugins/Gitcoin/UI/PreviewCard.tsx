@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles, createStyles, Theme, Typography, SnackbarContent, Button, Box, Paper } from '@material-ui/core'
-import { useI18N } from '../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const border = '1.5px solid rgb(0, 154, 87)'
 const useStyles = makeStyles((theme: Theme) =>
@@ -90,31 +90,14 @@ interface PreviewCardProps {
     line2: string
     line3: string
     line4: string
-    hasPermission?: boolean
-    requestPermission(): void
     onRequestGrant(): void
     loading?: boolean
     address?: string
-    originalURL: string
+    originalURL?: string
 }
 export function PreviewCard(props: PreviewCardProps) {
     const { t } = useI18N()
     const classes = useStyles()
-    if (!props.hasPermission) {
-        return (
-            <SnackbarContent
-                message="This post links to the Gitcoin. To preview it or donate this Gitcoin grant, Maskbook needs permission to Gitcoin.co"
-                action={
-                    <Button
-                        onClick={props.requestPermission}
-                        children="Allow access to gitcoin.co"
-                        color="secondary"
-                        size="small"
-                    />
-                }
-            />
-        )
-    }
     return (
         <>
             <Paper className={classes.container}>

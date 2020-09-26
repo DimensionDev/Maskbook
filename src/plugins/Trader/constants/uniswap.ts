@@ -3,9 +3,6 @@ import { ChainId, Token } from '../../../web3/types'
 import { CONSTANTS } from '../../../web3/constants'
 import { createERC20Token, getConstant } from '../../../web3/helpers'
 
-export const MIN_AMOUNT_LENGTH = 1
-export const MAX_AMOUNT_LENGTH = 79
-
 // Mainnet
 const DAI = createERC20Token(
     ChainId.Mainnet,

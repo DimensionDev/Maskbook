@@ -428,10 +428,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
 
-    const addedTokens = difference(
-        Array.from(wallet.erc20_token_balance.keys()),
-        Array.from(wallet.erc20_token_blacklist.values()),
-    )
+    const addedTokens = []
     const chainId = useChainId()
     const [token, setToken] = React.useState<Token | null>(null)
 
@@ -451,11 +448,11 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
         tabs: [
             {
                 label: t('add_token_well_known'),
-                children: <ERC20PredefinedTokenSelector excludeTokens={addedTokens} onTokenChange={setToken} />,
+                children: <ERC20PredefinedTokenSelector excludeTokens={[]} onTokenChange={setToken} />,
             },
             {
                 label: t('add_token_your_own'),
-                children: <ERC20CustomizedTokenSelector excludeTokens={addedTokens} onTokenChange={setToken} />,
+                children: <ERC20CustomizedTokenSelector excludeTokens={[]} onTokenChange={setToken} />,
             },
         ],
         state,
@@ -464,14 +461,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
     const onSubmit = useSnackbarCallback(
         async () => {
             if (!token) return
-            return Services.Plugin.invokePlugin(
-                'maskbook.wallet',
-                'walletAddERC20Token',
-                wallet.address,
-                chainId,
-                token,
-                tabState === 1,
-            )
+            return Services.Plugin.invokePlugin('maskbook.wallet', 'walletTrustERC20Token', wallet.address, token)
         },
         [token, chainId],
         props.onClose,
@@ -633,7 +623,7 @@ export function DashboardWalletHideTokenConfirmDialog(
     const { t } = useI18N()
     const { wallet, token } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'walletBlockERC20Token', wallet.address, token.address),
+        () => Services.Plugin.invokePlugin('maskbook.wallet', 'walletBlockERC20Token', wallet.address, token),
         [wallet.address],
         props.onClose,
     )

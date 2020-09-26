@@ -300,7 +300,7 @@
     "plugin_red_packet_description_empty": "You came too late",
     "plugin_red_packet_description_failover": "Total: {{total}} {{name}} / {{shares}} Shares",
     "plugin_gitcoin_display_name": "Plugin: Gitcoin Grant",
-    "plugin_gitcoin_readme": "By using this service, you will also be contributing 5% of your contribution to the <fund>Gitcoin grants development fund</fund>",
+    "plugin_gitcoin_readme": "By using this service, you will also be contributing 5% of your contribution to the <fund>Gitcoin grants development fund</fund>.",
     "plugin_gitcoin_readme_fund_link": "https://gitcoin.co/grants/86/gitcoin-sustainability-fund",
     "plugin_gitcoin_not_valid": "Not valid",
     "plugin_gitcoin_donate": "Donate {{symbol}}{{amount}} {{type}}",

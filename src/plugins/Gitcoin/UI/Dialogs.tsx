@@ -9,12 +9,12 @@ import {
     DialogActions,
     DialogContentText,
 } from '@material-ui/core'
-import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
-import { useStylesExtends } from '../../components/custom-ui-helper'
-import { getActivatedUI } from '../../social-network/ui'
-import type { ERC20TokenDetails } from '../../extension/background-script/PluginService'
-import { useI18N } from '../../utils/i18n-next-ui'
-import { EthereumTokenType } from '../../web3/types'
+import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { getActivatedUI } from '../../../social-network/ui'
+import type { ERC20TokenDetails } from '../../../extension/background-script/PluginService'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { EthereumTokenType } from '../../../web3/types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,7 +39,7 @@ interface GitcoinDialogProps extends withClasses<KeysInferFromUseStyles<typeof u
 //#region donate success dialog
 export interface DonateSuccessDialogProps extends GitcoinDialogProps {
     title: string
-    url: string
+    url?: string
     amount: number
     token: ERC20TokenDetails | null
     tokenType: EthereumTokenType

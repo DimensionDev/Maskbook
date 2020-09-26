@@ -2,10 +2,9 @@ import { omit } from 'lodash-es'
 import { RedPacketRecord, RedPacketStatus, RedPacketRecordInDatabase, RedPacketJSONPayload, History } from './types'
 import { v4 as uuid } from 'uuid'
 import type { RedPacketCreationResult, RedPacketClaimResult } from './types'
-import { getWalletProvider, getDefaultWallet, setDefaultWallet } from '../Wallet/wallet'
+import { getDefaultWallet, setDefaultWallet } from '../Wallet/wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import Web3Utils from 'web3-utils'
-import { redPacketAPI } from './contracts'
 import { sideEffect } from '../../utils/side-effects'
 import BigNumber from 'bignumber.js'
 import { createRedPacketTransaction, RedPacketPluginReificatedWalletDBReadOnly } from './database'
@@ -17,7 +16,7 @@ import { RED_PACKET_CONSTANTS } from './constants'
 import { RED_PACKET_HISTORY_URL } from './constants'
 
 function getProvider() {
-    return redPacketAPI
+    return {} as any
 }
 export type CreateRedPacketInit = Pick<
     RedPacketRecord,
@@ -100,12 +99,13 @@ export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedP
     if (packet.token_type === EthereumTokenType.ERC721) throw new Error('Not supported')
     if (packet.token_type === EthereumTokenType.ERC20) {
         if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
-        const res = await getWalletProvider().approve(
-            packet.sender_address,
-            getConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS', await getChainId()),
-            packet.erc20_token,
-            packet.send_total,
-        )
+        const res = {} as any
+        // const res = await getWalletProvider().approve(
+        //     packet.sender_address,
+        //     getConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS', await getChainId()),
+        //     packet.erc20_token,
+        //     packet.send_total,
+        // )
         erc20_token_address = packet.erc20_token
         erc20_approve_transaction_hash = res.erc20_approve_transaction_hash
         erc20_approve_value = res.erc20_approve_value
@@ -232,7 +232,7 @@ export async function claimRedPacket(
 
     const { claim_transaction_hash } = await getProvider()
         .claim(id, passwords, claimWithWallet, Web3Utils.sha3(claimWithWallet)!)
-        .catch(async (e) => {
+        .catch(async (e: Error) => {
             if ((e.message as string).includes('insufficient funds for gas')) {
                 return getProvider().claimByServer(claimWithWallet, rec.raw_payload!)
             }
