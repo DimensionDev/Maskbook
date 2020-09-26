@@ -5,8 +5,9 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
 import BigNumber from 'bignumber.js'
 import { addGasMargin } from '../../../web3/helpers'
-import { TransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
+import { TransactionState, TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useAccount } from '../../../web3/hooks/useAccount'
+import type { Tx } from '../../../contracts/types'
 
 export function useDonateCallback(address: string, amount: string, token: Token) {
     const GITCOIN_ETH_ADDRESS = useConstant(GITCOIN_CONSTANT, 'GITCOIN_ETH_ADDRESS')
@@ -14,9 +15,7 @@ export function useDonateCallback(address: string, amount: string, token: Token)
     const bulkCheckoutContract = useBulkCheckoutContract()
 
     const account = useAccount()
-    const [donateState, setDonateState] = useState<TransactionState>({
-        type: TransactionStateType.UNKNOWN,
-    })
+    const [donateState, setDonateState] = useTransactionState()
 
     const donations = useMemo(() => {
         const tipAmount = new BigNumber(GITCOIN_TIP_PERCENTAGE / 100).multipliedBy(amount)
@@ -50,20 +49,28 @@ export function useDonateCallback(address: string, amount: string, token: Token)
         })
 
         // step 1: estimate gas
-        const estimatedGas = await bulkCheckoutContract.methods.donate(donations).estimateGas({
+        const config: Tx = {
             from: account,
             to: bulkCheckoutContract.options.address,
             value: new BigNumber(token.type === EthereumTokenType.Ether ? amount : 0).toFixed(),
-        })
+        }
+        const estimatedGas = await bulkCheckoutContract.methods
+            .donate(donations)
+            .estimateGas(config)
+            .catch((error) => {
+                setDonateState({
+                    type: TransactionStateType.FAILED,
+                    error,
+                })
+                throw error
+            })
 
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
             bulkCheckoutContract.methods.donate(donations).send(
                 {
                     gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
-                    from: account,
-                    to: bulkCheckoutContract.options.address,
-                    value: new BigNumber(token.type === EthereumTokenType.Ether ? amount : 0).toFixed(),
+                    ...config,
                 },
                 (error, hash) => {
                     if (error) {

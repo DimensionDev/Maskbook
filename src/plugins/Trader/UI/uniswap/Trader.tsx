@@ -207,11 +207,7 @@ export function Trader(props: TraderProps) {
 
     return (
         <div className={classes.root}>
-            <EthereumStatusBar
-                classes={{ root: classes.bar }}
-                AccountChipProps={{ variant: 'outlined' }}
-                ChainChipProps={{ variant: 'outlined' }}
-            />
+            <EthereumStatusBar classes={{ root: classes.bar }} />
             <TradeForm
                 approveState={approveState}
                 strategy={strategy}

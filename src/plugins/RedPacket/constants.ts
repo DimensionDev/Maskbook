@@ -12,4 +12,8 @@ export const RED_PACKET_CONSTANTS = {
         [ChainId.Kovan]: '',
     },
 }
+
+export const RED_PACKET_MIN_SHARES = 1
+export const RED_PACKET_MAX_SHARES = 1
+
 export const RED_PACKET_HISTORY_URL = 'https://service.maskbook.com/red-packet-history'

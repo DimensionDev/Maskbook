@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useMemo, ChangeEvent } from 'react'
 import {
     makeStyles,
     DialogTitle,
     IconButton,
-    Button,
     DialogContent,
     Typography,
     FormControl,
@@ -13,7 +12,6 @@ import {
     Select,
     MenuItem,
     DialogProps,
-    CircularProgress,
     Box,
 } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -21,8 +19,6 @@ import { DialogDismissIconUI } from '../../../components/InjectedComponents/Dial
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
 import { RedPacketWithState } from './RedPacket'
 import Services from '../../../extension/service'
-import type { CreateRedPacketInit } from '../state-machine'
-import type { WalletRecord } from '../../Wallet/database/types'
 import type { RedPacketRecord, RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -33,15 +29,22 @@ import { formatBalance } from '../../Wallet/formatter'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import BigNumber from 'bignumber.js'
-import { FeedbackDialog } from './FeedbackDialog'
-import type { ERC20TokenDetails } from '../../../extension/background-script/PluginService'
-import { RedPacketMetaKey } from '../constants'
+import { RedPacketMetaKey, RED_PACKET_MIN_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_CONSTANTS } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useWallets, useTokens } from '../../Wallet/hooks/useWallet'
-import { EthereumTokenType } from '../../../web3/types'
+import type { Token } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { createEetherToken } from '../../../web3/helpers'
+import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
+import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
+import { useConstant } from '../../../web3/hooks/useConstant'
+import { useTokenApproveCallback, ApproveState } from '../../../web3/hooks/useTokenApproveCallback'
+import { useCreateRedPacketCallback } from '../hooks/useCreateRedPacketCallback'
+import { TransactionDialog } from '../../../web3/UI/TransactionDialog'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 
 //#region new red packet
 const useNewPacketStyles = makeStyles((theme) =>
@@ -50,177 +53,222 @@ const useNewPacketStyles = makeStyles((theme) =>
             display: 'flex',
             margin: theme.spacing(1),
         },
+        bar: {
+            padding: theme.spacing(0, 2, 2),
+        },
         input: {
             flex: 1,
             padding: theme.spacing(1),
         },
-        nativeInput: {
-            '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
-                margin: 0,
-            },
-            '-moz-appearance': 'textfield',
+        tip: {
+            fontSize: 12,
+            color: theme.palette.text.secondary,
         },
     }),
 )
 
 interface NewPacketProps {
-    senderName?: string
-    loading: boolean
-    wallets: WalletRecord[] | undefined
-    tokens: ERC20TokenDetails[] | undefined
-    onCreateNewPacket: (opt: CreateRedPacketInit) => void
+    onCreate?(): void
 }
 
 function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useNewPacketStyles(), props)
-    const { loading, wallets, tokens } = props
-    const [is_random, setIsRandom] = useState(0)
 
-    const [send_message, setMsg] = useState('Best Wishes!')
-    const [, msgRef] = useCapturedInput(setMsg)
+    const { onCreate } = props
 
-    const [send_per_share, setSendPerShare] = useState(0.01)
-    const [, perShareRef] = useCapturedInput((x) => setSendPerShare(parseFloat(x)))
-
-    const [shares, setShares] = useState(5)
-    const [, sharesRef] = useCapturedInput((x) => setShares(parseInt(x)))
-
+    // context
     const account = useAccount()
     const chainId = useChainId()
 
-    const {
-        erc20Balance,
-        ethBalance,
-        selectedToken,
-        selectedTokenType,
-        selectedTokenAddress,
-        selectedWallet,
-        selectedWalletAddress,
-    } = {
-        erc20Balance: '',
-        ethBalance: '',
-        selectedToken: '',
-        selectedTokenType: '',
-        selectedTokenAddress: '',
-        selectedWallet: '',
-        selectedWalletAddress: '',
-    } as any
+    //#region select token
+    const [token, setToken] = useState<Token>(createEetherToken(chainId))
+    const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
+    const onTokenChipClick = useCallback(() => {
+        setOpenSelectERC20TokenDialog(true)
+    }, [])
+    const onSelectERC20TokenDialogClose = useCallback(() => {
+        setOpenSelectERC20TokenDialog(false)
+    }, [])
+    const onSelectERC20TokenDialogSubmit = useCallback(
+        (token: Token) => {
+            setToken(token)
+            onSelectERC20TokenDialogClose()
+        },
+        [onSelectERC20TokenDialogClose],
+    )
+    //#endregion
 
-    const amountPreShareMaxBigint = selectedWallet
-        ? selectedTokenType === EthereumTokenType.Ether
-            ? selectedWallet.eth_balance
-            : selectedToken?.amount
-        : undefined
-    const amountPreShareMaxNumber = BigNumber.isBigNumber(amountPreShareMaxBigint)
-        ? selectedTokenType === EthereumTokenType.Ether
-            ? formatBalance(amountPreShareMaxBigint, 18)
-            : selectedToken && formatBalance(amountPreShareMaxBigint, selectedToken.decimals)
-        : undefined
+    //#region packet settings
+    // is random
+    const [isRandom, setIsRandom] = useState(0)
 
-    const send_total = (is_random ? 1 : shares) * send_per_share
-    const isDisabled = [
-        Number.isNaN(send_total),
-        send_total <= 0,
-        selectedWallet === undefined,
-        send_total > (amountPreShareMaxNumber || 0),
-    ]
-    const isSendButtonDisabled = isDisabled.some((x) => x)
+    // message
+    const [message, setMessage] = useState('Best Wishes!')
+    const [, messageRef] = useCapturedInput(setMessage)
 
-    const onCreate = async () => {
-        const power = selectedTokenType === EthereumTokenType.Ether ? 18 : selectedToken!.decimals
-        props.onCreateNewPacket({
-            duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
-            is_random: Boolean(is_random),
-            network: await Services.Ethereum.getLegacyEthereumNetwork(),
-            send_message,
-            send_total: new BigNumber(send_total).multipliedBy(new BigNumber(10).pow(power)),
-            sender_address: selectedWalletAddress!,
-            sender_name: props.senderName ?? 'Unknown User',
-            shares: new BigNumber(shares),
-            token_type:
-                selectedTokenType === EthereumTokenType.Ether ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
-            erc20_token: selectedTokenType === EthereumTokenType.Ether ? undefined : selectedTokenAddress,
-        })
-    }
+    // sender name
+    const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
+
+    // shares
+    const [shares, setShares] = useState<number | ''>(5)
+    const [, sharesRef] = useCapturedInput()
+    const onShareChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
+        const shares_ = ev.currentTarget.value.replace(/[,\.]/g, '')
+        if (shares_ === '') setShares('')
+        else if (/^[1-9]+\d*$/.test(shares_)) setShares(Number.parseInt(shares_))
+    }, [])
+
+    // amount
+    const [amount, setAmount] = useState('0')
+    const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares || '0')
+
+    // balance
+    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(token)
+    //#endregion
+
+    //#region approve ERC20
+    const HappyRedPacketContractAddress = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
+    const [approveState, approveCallback] = useTokenApproveCallback(token, amount, HappyRedPacketContractAddress)
+    const onApprove = useCallback(async () => {
+        if (approveState !== ApproveState.NOT_APPROVED) return
+        await approveCallback()
+    }, [approveState])
+    const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
+    //#endregion
+
+    //#region blocking
+    const [createRedPacketState, createRedPacketCallback] = useCreateRedPacketCallback({
+        duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
+        isRandom: Boolean(isRandom),
+        name: senderName,
+        message,
+        shares: shares || 0,
+        token,
+        total: totalAmount.toFixed(),
+    })
+    const [openTransactionDialog, setOpenTransactionDialog] = useState(false)
+    const onSubmit = useCallback(async () => {
+        setOpenTransactionDialog(true)
+        await createRedPacketCallback()
+    }, [createRedPacketCallback])
+    const onTransactionDialogClose = useCallback(() => {
+        setOpenTransactionDialog(false)
+        if (createRedPacketState.type !== TransactionStateType.SUCCEED) return
+        setAmount('0')
+        onCreate?.()
+    }, [createRedPacketState, onCreate])
+    //#endregion
+
+    const validationMessage = useMemo(() => {
+        if (!account) return 'Connect a Wallet'
+        if (!token.address) return 'Select a token'
+        if (new BigNumber(shares || '0').isZero()) return 'Enter shares'
+        if (new BigNumber(amount).isZero()) return 'Enter an amount'
+        if (new BigNumber(amount).isGreaterThan(new BigNumber(tokenBalance)))
+            return `Insufficient ${token.symbol} balance`
+        return ''
+    }, [account, amount, shares, token, tokenBalance])
+
     return (
-        <div>
-            <EthereumStatusBar />
+        <>
+            <EthereumStatusBar classes={{ root: classes.bar }} />
             <div className={classes.line}>
-                {/* <TokenSelect {...props} className={classes.input} useSelectWalletHooks={useSelectWalletResult} /> */}
-                <FormControl variant="filled" className={classes.input}>
+                <FormControl className={classes.input} variant="outlined">
                     <InputLabel>{t('plugin_red_packet_split_mode')}</InputLabel>
                     <Select
-                        MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}
-                        value={is_random ? 1 : 0}
-                        onChange={(e) => setIsRandom(e.target.value as number)}>
+                        value={isRandom ? 1 : 0}
+                        onChange={(e) => setIsRandom(e.target.value as number)}
+                        MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}>
                         <MenuItem value={0}>{t('plugin_red_packet_average')}</MenuItem>
                         <MenuItem value={1}>{t('plugin_red_packet_random')}</MenuItem>
                     </Select>
                 </FormControl>
-            </div>
-            <div className={classes.line}>
                 <TextField
                     className={classes.input}
-                    InputProps={{ inputRef: perShareRef }}
-                    inputProps={{
-                        min: 0,
-                        max: amountPreShareMaxNumber,
-                        className: classes.nativeInput,
+                    InputProps={{
+                        inputRef: sharesRef,
+                        inputProps: {
+                            autoComplete: 'off',
+                            autoCorrect: 'off',
+                            inputMode: 'decimal',
+                            min: RED_PACKET_MIN_SHARES,
+                            max: RED_PACKET_MAX_SHARES,
+                            placeholder: '0',
+                            pattern: '^[0-9]$',
+                            spellCheck: false,
+                        },
                     }}
-                    label={is_random ? t('plugin_red_packet_total_amount') : t('plugin_red_packet_amount_per_share')}
-                    variant="filled"
-                    type="number"
-                    defaultValue={send_per_share}
-                />
-                <TextField
-                    className={classes.input}
-                    InputProps={{ inputRef: sharesRef }}
-                    inputProps={{ min: 1 }}
+                    InputLabelProps={{ shrink: true }}
                     label={t('plugin_red_packet_shares')}
-                    variant="filled"
-                    type="number"
-                    defaultValue={shares}
+                    value={shares}
+                    variant="outlined"
+                    onChange={onShareChange}
+                />
+            </div>
+            <div className={classes.line}>
+                <TokenAmountPanel
+                    classes={{ root: classes.input }}
+                    label={isRandom ? 'Total Amount' : 'Amount per Share'}
+                    amount={amount}
+                    balance={tokenBalance}
+                    token={token}
+                    onAmountChange={setAmount}
+                    SelectTokenChip={{
+                        loading: loadingTokenBalance,
+                        ChipProps: {
+                            onClick: onTokenChipClick,
+                        },
+                    }}
                 />
             </div>
             <div className={classes.line}>
                 <TextField
                     className={classes.input}
-                    InputProps={{ inputRef: msgRef }}
+                    InputProps={{ inputRef: messageRef }}
+                    InputLabelProps={{ shrink: true }}
+                    inputProps={{ placeholder: t('plugin_red_packet_best_wishes') }}
                     label={t('plugin_red_packet_attached_message')}
-                    variant="filled"
+                    variant="outlined"
                     defaultValue={t('plugin_red_packet_best_wishes')}
                 />
             </div>
-            <div className={classes.line}>
-                <Typography variant="body2">
-                    {selectedWallet
-                        ? t(erc20Balance ? 'wallet_balance_with_erc20' : 'wallet_balance', {
-                              erc20Balance,
-                              ethBalance,
-                          })
-                        : null}
-                    <br />
-                    {t('wallet_balance_notice')}
-                </Typography>
-                <Button
-                    className={classes.button}
-                    style={{ marginLeft: 'auto', minWidth: 140, whiteSpace: 'nowrap' }}
-                    variant="contained"
-                    startIcon={props.loading ? <CircularProgress size={24} /> : null}
-                    disabled={loading || isSendButtonDisabled}
-                    onClick={onCreate}>
-                    {isSendButtonDisabled
-                        ? t('plugin_red_packet_not_valid')
-                        : t('plugin_red_packet_send', {
-                              symbol: +send_total.toFixed(3) === +send_total.toFixed(9) ? '' : '~',
-                              amount: +send_total.toFixed(3),
-                              type: selectedTokenType === EthereumTokenType.Ether ? 'ETH' : selectedToken?.symbol,
-                          })}
-                </Button>
-            </div>
-        </div>
+            <Box className={classes.line} display="flex" alignItems="center">
+                {approveRequired ? (
+                    <ActionButton
+                        className={classes.button}
+                        fullWidth
+                        variant="contained"
+                        size="large"
+                        disabled={approveState === ApproveState.PENDING}
+                        onClick={onApprove}>
+                        {approveState === ApproveState.NOT_APPROVED ? `Approve ${token.symbol}` : ''}
+                        {approveState === ApproveState.PENDING ? `Approve... ${token.symbol}` : ''}
+                    </ActionButton>
+                ) : (
+                    <ActionButton
+                        className={classes.button}
+                        style={{ marginLeft: 'auto', minWidth: 140, whiteSpace: 'nowrap' }}
+                        variant="contained"
+                        disabled={Boolean(validationMessage)}
+                        onClick={onSubmit}>
+                        {validationMessage || `Send ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`}
+                    </ActionButton>
+                )}
+            </Box>
+            <SelectERC20TokenDialog
+                open={openSelectERC20TokenDialog}
+                excludeTokens={[token.address]}
+                onSubmit={onSelectERC20TokenDialogSubmit}
+                onClose={onSelectERC20TokenDialogClose}
+            />
+            <TransactionDialog
+                state={createRedPacketState}
+                summary={`Creating ${formatBalance(new BigNumber(amount), token.decimals)} ${token.symbol}`}
+                open={openTransactionDialog}
+                onClose={onTransactionDialogClose}
+            />
+        </>
     )
 }
 //#endregion
@@ -246,32 +294,54 @@ const useExistingPacketStyles = makeStyles((theme) =>
 )
 
 interface ExistingPacketProps {
-    onSelectExistingPacket(opt?: RedPacketJSONPayload | null): void
-    redPackets: RedPacketRecord[]
+    onSelect?: (payload: RedPacketJSONPayload | null) => void
 }
 
 function ExistingPacketUI(props: RedPacketDialogProps & ExistingPacketProps) {
-    const { onSelectExistingPacket, redPackets } = props
     const classes = useStylesExtends(useExistingPacketStyles(), props)
+    const { onSelect } = props
 
-    const insertRedPacket = (status?: RedPacketStatus | null, rpid?: RedPacketRecord['red_packet_id']) => {
-        if (status === null) return onSelectExistingPacket(null)
+    // context
+    const account = useAccount()
+
+    //#region fetch red packets
+    const [availableRedPackets, setAvailableRedPackets] = useState<RedPacketRecord[]>([])
+    useEffect(() => {
+        const updateHandler = () => {
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketHistory', account)
+                .then((records) =>
+                    (records ?? []).map((record): unknown => ({
+                        id: record._hash,
+                        send_message: record._message,
+                        block_creation_time: new Date(record.txTimestamp),
+                        send_total: record._number,
+                        sender_name: record._name,
+                    })),
+                )
+                .then(setAvailableRedPackets as any)
+        }
+        updateHandler()
+        return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
+    }, [])
+    //#endregion
+
+    const onClick = useCallback(async (status?: RedPacketStatus | null, rpid?: RedPacketRecord['red_packet_id']) => {
+        if (status === null) return onSelect?.(null)
         if (status === RedPacketStatus.pending || !rpid) return
-        Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, rpid).then((p) => {
-            if (p?.raw_payload?.token === undefined) delete p?.raw_payload?.token
-            onSelectExistingPacket(p.raw_payload)
-        })
-    }
+        const redPacket = await Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, rpid)
+        if (typeof redPacket.raw_payload?.token === 'undefined') delete redPacket.raw_payload?.token
+        onSelect?.(redPacket.raw_payload ?? null)
+    }, [])
     return (
         <div className={classes.wrapper}>
-            {redPackets
+            {availableRedPackets
                 .sort((a, b) => {
                     if (!a.create_nonce) return -1
                     if (!b.create_nonce) return 1
                     return b.create_nonce - a.create_nonce
                 })
                 .map((p) => (
-                    <RedPacketWithState onClick={insertRedPacket} key={p.id} redPacket={p} />
+                    <RedPacketWithState onClick={onClick} key={p.id} redPacket={p} />
                 ))}
         </div>
     )
@@ -321,82 +391,37 @@ const useStyles = makeStyles({
     container: {
         width: '100%',
     },
+    paper: {
+        width: '500px !important',
+    },
 })
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
-    const wallets = useWallets()
-    const tokens = useTokens()
-    const [availableRedPackets, setAvailableRedPackets] = useState<RedPacketRecord[]>([])
-    const [justCreatedRedPacket, setJustCreatedRedPacket] = useState<RedPacketRecord | undefined>(undefined)
-
-    const [status, setStatus] = useState<'succeed' | 'failed' | 'undetermined' | 'initial'>('initial')
-    const loading = status === 'undetermined'
-    const [createError, setCreateError] = useState<Error | null>(null)
-    const onCreate = async (opt: CreateRedPacketInit) => {
-        try {
-            setStatus('undetermined')
-            const { id } = await Services.Plugin.invokePlugin('maskbook.red_packet', 'createRedPacket', opt)
-            const redPackets = await Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets')
-            const redPacket = redPackets.find((x) => x.id === id)
-            setJustCreatedRedPacket(redPacket)
-            setStatus('succeed')
-            setTabState(1)
-        } catch (e) {
-            setCreateError(e)
-            setStatus('failed')
-        }
-    }
-    const onSelect = (payload?: RedPacketJSONPayload | null) => {
-        const ref = getActivatedUI().typedMessageMetadata
-        const next = new Map(ref.value.entries())
-        payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey)
-        ref.value = next
-        props.onConfirm(payload)
-    }
-    useEffect(() => {
-        const updateHandler = () => {
-            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets')
-                .then((packets) =>
-                    packets.filter(
-                        (p) =>
-                            p.create_transaction_hash &&
-                            (p.status === RedPacketStatus.normal ||
-                                p.status === RedPacketStatus.incoming ||
-                                p.status === RedPacketStatus.claimed ||
-                                p.status === RedPacketStatus.pending ||
-                                p.status === RedPacketStatus.claim_pending),
-                    ),
-                )
-                .then(setAvailableRedPackets)
-        }
-        updateHandler()
-        return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
-    }, [justCreatedRedPacket])
-
     const classes = useStylesExtends(useStyles(), props)
+
     const state = useState(0)
     const [, setTabState] = state
     const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: t('plugin_red_packet_create_new'),
-                children: (
-                    <NewPacketUI
-                        {...props}
-                        loading={loading}
-                        senderName={useCurrentIdentity()?.linkedPersona?.nickname}
-                        wallets={wallets}
-                        tokens={tokens}
-                        onCreateNewPacket={onCreate}
-                    />
-                ),
+                children: <NewPacketUI {...props} onCreate={() => setTabState(1)} />,
                 p: 0,
             },
             {
                 label: t('plugin_red_packet_select_existing'),
                 children: (
-                    <ExistingPacketUI {...props} redPackets={availableRedPackets} onSelectExistingPacket={onSelect} />
+                    <ExistingPacketUI
+                        {...props}
+                        onSelect={(payload: RedPacketJSONPayload | null) => {
+                            const ref = getActivatedUI().typedMessageMetadata
+                            const next = new Map(ref.value.entries())
+                            payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey)
+                            ref.value = next
+                            props.onConfirm(payload)
+                        }}
+                    />
                 ),
                 p: 0,
             },
@@ -405,37 +430,29 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }
 
     return (
-        <>
-            <ShadowRootDialog
-                className={classes.dialog}
-                classes={{ container: classes.container, paper: classes.paper }}
-                open={props.open}
-                scroll="paper"
-                fullWidth
-                maxWidth="sm"
-                disableAutoFocus
-                disableEnforceFocus
-                BackdropProps={{ className: classes.backdrop }}
-                {...props.DialogProps}>
-                <DialogTitle className={classes.header}>
-                    <IconButton classes={{ root: classes.close }} onClick={props.onDecline}>
-                        <DialogDismissIconUI />
-                    </IconButton>
-                    <Typography className={classes.title} display="inline" variant="inherit">
-                        {t('plugin_red_packet_display_name')}
-                    </Typography>
-                </DialogTitle>
-                <DialogContent className={classes.content}>
-                    <AbstractTab height={400} {...tabProps}></AbstractTab>
-                </DialogContent>
-            </ShadowRootDialog>
-            <FeedbackDialog
-                title={t('plugin_red_packet_create_failed')}
-                message={createError?.message}
-                open={status === 'failed'}
-                onClose={() => setStatus('initial')}
-            />
-        </>
+        <ShadowRootDialog
+            className={classes.dialog}
+            classes={{ container: classes.container, paper: classes.paper }}
+            open={props.open}
+            scroll="paper"
+            fullWidth
+            maxWidth="sm"
+            disableAutoFocus
+            disableEnforceFocus
+            BackdropProps={{ className: classes.backdrop }}
+            {...props.DialogProps}>
+            <DialogTitle className={classes.header}>
+                <IconButton classes={{ root: classes.close }} onClick={props.onDecline}>
+                    <DialogDismissIconUI />
+                </IconButton>
+                <Typography className={classes.title} display="inline" variant="inherit">
+                    {t('plugin_red_packet_display_name')}
+                </Typography>
+            </DialogTitle>
+            <DialogContent className={classes.content}>
+                <AbstractTab height={340} {...tabProps}></AbstractTab>
+            </DialogContent>
+        </ShadowRootDialog>
     )
 }
 //#endregion

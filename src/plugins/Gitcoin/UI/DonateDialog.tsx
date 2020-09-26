@@ -6,7 +6,6 @@ import {
     DialogTitle,
     IconButton,
     Typography,
-    Button,
     DialogContent,
     Divider,
     Link,
@@ -40,6 +39,7 @@ import { TransactionDialog } from '../../../web3/UI/TransactionDialog'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { formatBalance } from '../../Wallet/formatter'
+import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -105,7 +105,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     const account = useAccount()
     const chainId = useChainId()
 
-    //#region select erc20 tokens
+    //#region select token
     const [token, setToken] = useState<Token>(createEetherToken(chainId))
     const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
     const onTokenChipClick = useCallback(() => {
@@ -125,9 +125,6 @@ function DonateDialogUI(props: DonateDialogUIProps) {
 
     //#region amount
     const [amount, setAmount] = useState('0')
-    //#endregion
-
-    //#region token balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(token)
     //#endregion
 
@@ -143,13 +140,14 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     }, [address, account, amount, token, tokenBalance])
     //#endregion
 
-    //#region approve
+    //#region approve ERC20
     const BulkCheckoutAddress = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
     const [approveState, approveCallback] = useTokenApproveCallback(token, amount, BulkCheckoutAddress)
     const onApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback()
     }, [approveState])
+    const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
     //#endregion
 
     //#region blocking
@@ -160,13 +158,10 @@ function DonateDialogUI(props: DonateDialogUIProps) {
         await donateCallback()
     }, [donateCallback])
     const onTransactionDialogClose = useCallback(() => {
-        setAmount('0')
         setOpenTransactionDialog(false)
+        if (donateState.type !== TransactionStateType.SUCCEED) return
+        setAmount('0')
     }, [donateState])
-    //#endregion
-
-    //#region UI
-    const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
     //#endregion
 
     if (!props.address) return null
@@ -199,11 +194,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                 </DialogTitle>
                 <Divider />
                 <DialogContent className={classes.content}>
-                    <EthereumStatusBar
-                        classes={{ root: classes.root }}
-                        AccountChipProps={{ variant: 'outlined' }}
-                        ChainChipProps={{ variant: 'outlined' }}
-                    />
+                    <EthereumStatusBar classes={{ root: classes.root }} />
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel
                             label="Amount"

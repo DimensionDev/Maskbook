@@ -35,13 +35,13 @@ export function EthereumStatusBar(props: EthereumStatusBarProps) {
                 <EthereumChainChip
                     classes={{ root: classes.chainChip }}
                     chainId={chainId}
-                    ChipProps={{ variant: 'default', ...props.ChainChipProps }}
+                    ChipProps={{ variant: 'outlined', ...ChainChipProps }}
                 />
             )}
             <EthereumAccountChip
                 classes={{ root: classes.accountChip }}
                 address={account}
-                ChipProps={{ size: 'medium', variant: 'default', ...props.AccountChipProps }}
+                ChipProps={{ size: 'medium', variant: 'outlined', ...AccountChipProps }}
             />
         </Box>
     )
