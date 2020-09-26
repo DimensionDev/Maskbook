@@ -10,7 +10,7 @@
 
 ## Related projects
 
-- <https://github.com/1999-XiChi/Maskbook-Poll-Contract>
+- <https://github.com/DimensionDev/maskbook-poll-contract>
 
 ## Related discussion
 

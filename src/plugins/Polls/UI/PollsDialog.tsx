@@ -218,7 +218,7 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
                     myPolls.push(poll)
                 }
             })
-            setPolls(polls.reverse())
+            setPolls(myPolls.reverse())
         })
     }, [props.senderFingerprint])
 
