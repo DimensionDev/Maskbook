@@ -38,8 +38,8 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             // ? inject after comments
             const commentSelectorPC = root
                 .clone()
-                .querySelectorAll('[role=article] span[dir="auto"] div[dir="auto"]')
-                .closest<HTMLElement>(2)
+                .querySelectorAll('[role=article] span[dir="auto"]')
+                .closest<HTMLElement>(3)
             const commentSelectorMobile = root
                 .clone()
                 .map((x) => x.parentElement)
@@ -48,7 +48,10 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             const commentSelector = isMobileFacebook ? commentSelectorMobile : commentSelectorPC
 
             // ? inject comment text field
-            const commentBoxSelectorPC = root.clone().querySelectorAll<HTMLFormElement>('form form')
+            const commentBoxSelectorPC = root
+                .clone()
+                .querySelectorAll<HTMLFormElement>('[role="article"] [role="presentation"]')
+                .map((x) => x.parentElement)
 
             const commentBoxSelectorMobile = root
                 .clone()
