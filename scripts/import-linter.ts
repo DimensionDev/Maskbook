@@ -48,7 +48,7 @@ function checkReferenceRecursive(
 ): boolean {
     if (checkedSourceFiles.has(file)) return hasDiagnostics
     checkedSourceFiles.add(file)
-    console.log('Checking ', file.getFilePath())
+    console.log('Checking', file.getFilePath())
     const ls = project.getLanguageService()
 
     const esModuleStyleImport: string[] = []
@@ -124,7 +124,7 @@ function checkReferenceRecursive(
 
         const nextRefChain: string[] = referenceChain.concat([sf ? sf.getFilePath() : path])
         if (diag) {
-            console.error(`${diag}
+            console.error(`::warning::${diag}
 Import chain:
 ${nextRefChain.map((x) => '  => ' + x).join('\n')}
 `)
