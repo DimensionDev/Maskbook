@@ -6,6 +6,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { updateExoticWalletFromSource, setDefaultWallet } from '../../../../plugins/Wallet/wallet'
 import { ProviderType } from '../../../../web3/types'
 import { sideEffect } from '../../../../utils/side-effects'
+import { MessageCenter } from '../../../../utils/messages'
 
 //#region tracking chain id
 let currentChainId: ChainId = ChainId.Mainnet
@@ -20,6 +21,14 @@ async function onData(error: Error | null, event?: { method: string; result: str
     if (!event) return
     if (event.method !== 'wallet_accountsChanged') return
     await updateWalletInDB(event.result[0] ?? '', false)
+}
+
+function onError(error: any) {
+    console.log(error);
+    if (error === 'MetamaskInpageProvider - lost connection to MetaMask') {
+        MessageCenter.emit('metamaskMessage', 'metamask_not_install')
+        updateExoticWalletFromSource(ProviderType.MetaMask, new Map())
+    }
 }
 
 function onNetworkChanged(id: string) {
@@ -37,6 +46,9 @@ export function createProvider() {
     provider = createMetaMaskProvider()
     provider.on('data', onData)
     provider.on('networkChanged', onNetworkChanged)
+    provider.on('error', (error) => {
+        onError(error);
+    })
     return provider
 }
 
