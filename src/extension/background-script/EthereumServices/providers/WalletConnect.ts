@@ -1,7 +1,7 @@
 import { EthereumAddress } from 'wallet.ts'
 import WalletConnect from '@walletconnect/client'
 import { remove } from 'lodash-es'
-import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/wallet'
+import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import { currentWalletConnectChainIdSettings } from '../../../../settings/settings'
 import { ChainId } from '../../../../web3/types'
 import { ProviderType } from '../../../../web3/types'

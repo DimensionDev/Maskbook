@@ -1,5 +1,5 @@
 import { ChainId, ProviderType, EthereumNetwork } from '../../../web3/types'
-import { getDefaultWallet } from '../../../plugins/Wallet/wallet'
+import { getDefaultWallet } from '../../../plugins/Wallet/services'
 import {
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,

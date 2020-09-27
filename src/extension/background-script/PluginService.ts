@@ -1,5 +1,5 @@
 import * as RedPacket from '../../plugins/RedPacket/state-machine'
-import * as Wallet from '../../plugins/Wallet/wallet'
+import * as Wallet from '../../plugins/Wallet/services'
 import * as Gitcoin from '../../plugins/Gitcoin/service'
 import * as FileService from '../../plugins/FileService/service'
 import * as Trader from '../../plugins/Trader/services'

@@ -3,25 +3,19 @@ import { PluginMessageCenter } from '../../PluginMessages'
 import Services from '../../../extension/service'
 import type { ProviderType } from '../../../web3/types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import type { WalletRecord, ERC20TokenRecord } from '../database/types'
-import { WalletArrayComparer, WalletComparer, TokenArrayComparer } from '../helpers'
+import type { WalletRecord } from '../database/types'
+import { WalletArrayComparer, WalletComparer } from '../helpers'
 import { isSameAddress } from '../../../web3/helpers'
 
 //#region cache service query result
 const defaultWalletRef = new ValueRef<WalletRecord | null>(null, WalletComparer)
 const walletsRef = new ValueRef<WalletRecord[]>([], WalletArrayComparer)
-const tokensRef = new ValueRef<ERC20TokenRecord[]>([], TokenArrayComparer)
 
 async function revalidate() {
     // wallets
     const wallets = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
     defaultWalletRef.value = wallets.find((x) => x._wallet_is_default) ?? wallets[0] ?? null
     walletsRef.value = wallets
-
-    // tokens
-    // const tokens = await Services.Plugin.invokePlugin('maskbook.wallet', 'getTokens')
-    const tokens = [] as ERC20TokenRecord[]
-    tokensRef.value = tokens
 }
 PluginMessageCenter.on('maskbook.wallets.update', revalidate)
 revalidate()
@@ -34,10 +28,6 @@ export function useDefaultWallet() {
 export function useWallet(address: string) {
     const wallets = useWallets()
     return wallets.find((x) => isSameAddress(x.address, address))
-}
-
-export function useTokens() {
-    return useValueRef(tokensRef)
 }
 
 export function useWallets(provider?: ProviderType) {

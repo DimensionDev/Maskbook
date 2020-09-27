@@ -3,7 +3,7 @@ import createMetaMaskProvider, { MetamaskInpageProvider } from 'metamask-extensi
 import { ChainId } from '../../../../web3/types'
 import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { EthereumAddress } from 'wallet.ts'
-import { updateExoticWalletFromSource, setDefaultWallet } from '../../../../plugins/Wallet/wallet'
+import { updateExoticWalletFromSource, setDefaultWallet } from '../../../../plugins/Wallet/services'
 import { ProviderType } from '../../../../web3/types'
 import { sideEffect } from '../../../../utils/side-effects'
 

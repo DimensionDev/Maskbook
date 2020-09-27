@@ -14,11 +14,13 @@ export enum TokenListsState {
     LOADING_SEARCHED_TOKEN,
 }
 
-export function useTokenLists(
+export function useTokensFromLists(
     lists: string[],
     {
         keyword = '',
         useEther = false,
+        // TOOD:
+        // to be implemented
         useAddressOnly = false,
     }: { keyword?: string; chainId?: ChainId; useEther?: boolean; useAddressOnly?: boolean } = {},
 ) {

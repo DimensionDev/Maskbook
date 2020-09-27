@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import type { HttpProviderOptions } from 'web3-core-helpers'
-import { getWallets } from '../../plugins/Wallet/wallet'
+import { getWallets } from '../../plugins/Wallet/services'
 import { web3 } from '../../plugins/Wallet/web3'
 import { currentMaskbookChainIdSettings } from '../../settings/settings'
 import type { WalletProvider } from './index'

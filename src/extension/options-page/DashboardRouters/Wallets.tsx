@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import DashboardRouterContainer from './Container'
 import { Button, Typography, Box, IconButton, List, MenuItem, Fade, useMediaQuery } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
@@ -28,7 +28,7 @@ import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorStyles } from '../../../utils/theme'
 import Services from '../../service'
-import { merge, cloneDeep } from 'lodash-es'
+import { merge, cloneDeep, uniqBy } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { sleep } from '../../../utils/utils'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
@@ -40,13 +40,16 @@ import { Flags } from '../../../utils/flags'
 import { WalletMessageCenter, MaskbookWalletMessages } from '../../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { ProviderType } from '../../../web3/types'
+import { ProviderType, Token } from '../../../web3/types'
 import { useChainId } from '../../../web3/hooks/useChainId'
-import { useWallets, useTokens } from '../../../plugins/Wallet/hooks/useWallet'
+import { useWallets } from '../../../plugins/Wallet/hooks/useWallet'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { isDAI } from '../../../web3/helpers'
+import { isDAI, isSameAddress } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
 import { useTokensBalance } from '../../../web3/hooks/useTokensBalance'
+import { useTokensFromLists } from '../../../web3/hooks/useTokensFromLists'
+import { useTokens } from '../../../plugins/Wallet/hooks/useToken'
+import { useTokensSortedByBalance } from '../../../web3/hooks/useTokensSortedByBalance'
 
 const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
@@ -106,11 +109,10 @@ const walletTheme = (theme: Theme): Theme =>
 
 interface WalletContentProps {
     wallet: WalletRecord
-    tokens?: ERC20TokenDetails[]
 }
 
 const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(function WalletContent(
-    { wallet, tokens }: WalletContentProps,
+    { wallet }: WalletContentProps,
     ref,
 ) {
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
@@ -145,9 +147,25 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     )
 
     // fetch tokens balance
-    const { value: listOfBalances = [] } = useTokensBalance(wallet.address, tokens?.map((x) => x.address) ?? [])
+    const TOKEN_LISTS = useConstant(CONSTANTS, 'TOKEN_LISTS')
+    const addedTokens = useTokens()
+    const { tokens: watchedTokens } = useTokensFromLists(
+        TOKEN_LISTS.filter((x) => x.includes('Maskbook-Token-List')),
+        {
+            useEther: false,
+        },
+    )
+    const totalTokens = useMemo(() => {
+        if (!watchedTokens.length) return []
+        return uniqBy([...addedTokens, ...watchedTokens], (x) => x.address)
+    }, [addedTokens, watchedTokens])
+    const tokensSorted = useTokensSortedByBalance(wallet.address, totalTokens as Token[])
 
-    if (!wallet) return null
+    console.log('DEBUG: wallets')
+    console.log({
+        tokensSorted,
+    })
+
     return (
         <div className={classes.root} ref={ref}>
             <ThemeProvider theme={walletTheme}>
@@ -185,10 +203,10 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                             decimals: 18,
                         }}
                     />
-                    {tokens?.map((token, idx) => (
+                    {tokensSorted?.map(({ token, balance }, idx) => (
                         <TokenListItem
                             key={token.address}
-                            balance={new BigNumber(listOfBalances[idx] ? listOfBalances[idx] : '0')}
+                            balance={new BigNumber(balance)}
                             wallet={wallet}
                             token={token}
                         />
@@ -276,9 +294,7 @@ export default function DashboardWalletsRouter() {
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
     const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
-    const chainId = useChainId()
     const wallets = useWallets()
-    const tokens = useTokens()
     const [current, setCurrent] = useState('')
     const currentWallet = wallets.find((wallet) => wallet.address === current)
 
@@ -320,22 +336,6 @@ export default function DashboardWalletsRouter() {
             open: true,
         })
     }, [setOpen])
-
-    const getTokensForWallet = (wallet?: WalletRecord) => {
-        if (!wallet) return []
-        return tokens
-            .filter((token) => token.chainId === chainId && !wallet.erc20_token_blacklist.has(token.address))
-            .sort((token, otherToken) => {
-                if (isDAI(token.address)) return -1
-                if (isDAI(otherToken.address)) return 1
-                return token.name < otherToken.name ? -1 : 1
-            })
-    }
-    const walletContent = (
-        <div className={classes.wrapper}>
-            {currentWallet && <WalletContent wallet={currentWallet} tokens={getTokensForWallet(currentWallet)} />}
-        </div>
-    )
 
     return (
         <DashboardRouterContainer
@@ -397,7 +397,6 @@ export default function DashboardWalletsRouter() {
                             <WalletItem
                                 key={wallet.address}
                                 wallet={wallet}
-                                tokens={getTokensForWallet(wallet)}
                                 selected={wallet.address === current}
                                 onClick={async () => {
                                     if (!xsMatched) {
@@ -412,7 +411,17 @@ export default function DashboardWalletsRouter() {
                     </div>
                 ) : null}
                 <div className={classes.content}>
-                    {xsMatched ? walletContent : <Fade in={Boolean(current)}>{walletContent}</Fade>}
+                    <div className={classes.wrapper}>
+                        {currentWallet ? (
+                            xsMatched ? (
+                                <WalletContent wallet={currentWallet} />
+                            ) : (
+                                <Fade in={Boolean(current)}>
+                                    <WalletContent wallet={currentWallet} />
+                                </Fade>
+                            )
+                        ) : null}
+                    </div>
                 </div>
             </div>
             {addToken}

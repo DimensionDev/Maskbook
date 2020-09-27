@@ -1,20 +1,16 @@
 import * as bip39 from 'bip39'
-import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
-import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
-import type {
-    WalletRecord,
-    ERC20TokenRecord,
-    WalletRecordInDatabase,
-    ERC20TokenRecordInDatabase,
-} from './database/types'
-import { PluginMessageCenter } from '../PluginMessages'
+import { createTransaction } from '../../../database/helpers/openDB'
+import { createWalletDBAccess } from '../database/Wallet.db'
+import type { WalletRecord } from '../database/types'
+import { PluginMessageCenter } from '../../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
-import { buf2hex, hex2buf, assert } from '../../utils/utils'
-import { ProviderType, Token } from '../../web3/types'
-import { resolveProviderName, parseChainName } from '../../web3/pipes'
-import { formatChecksumAddress } from './formatter'
+import { buf2hex, hex2buf, assert } from '../../../utils/utils'
+import { ProviderType } from '../../../web3/types'
+import { resolveProviderName } from '../../../web3/pipes'
+import { formatChecksumAddress } from '../formatter'
+import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -241,86 +237,4 @@ export async function recoverWalletFromPrivateKey(privateKey: string) {
         const n = new BigNumber('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141', 16)
         return !k.isZero() && k.isLessThan(n)
     }
-}
-
-export async function walletTrustERC20Token(address: string, token: Token) {
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
-    const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
-    assert(wallet)
-    const erc20 = await getERC20TokenByAddress(t, formatChecksumAddress(token.address))
-    if (!erc20) await t.objectStore('ERC20Token').add(ERC20TokenRecordIntoDB(token))
-    const tokenAddressChecksummed = formatChecksumAddress(token.address)
-    let updated = false
-    if (!wallet.erc20_token_whitelist.has(tokenAddressChecksummed)) {
-        wallet.erc20_token_whitelist.add(tokenAddressChecksummed)
-        updated = true
-    }
-    if (wallet.erc20_token_blacklist.has(tokenAddressChecksummed)) {
-        wallet.erc20_token_blacklist.delete(tokenAddressChecksummed)
-        updated = true
-    }
-    if (!updated) return
-    await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
-    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
-}
-
-export async function walletBlockERC20Token(address: string, token: PartialRequired<Token, 'address'>) {
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
-    const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
-    assert(wallet)
-    const erc20 = await getERC20TokenByAddress(t, formatChecksumAddress(token.address))
-    if (!erc20) return
-    let updated = false
-    const tokenAddressChecksummed = formatChecksumAddress(token.address)
-    if (wallet.erc20_token_whitelist.has(tokenAddressChecksummed)) {
-        wallet.erc20_token_whitelist.delete(tokenAddressChecksummed)
-        updated = true
-    }
-    if (!wallet.erc20_token_blacklist.has(erc20.address)) {
-        wallet.erc20_token_blacklist.add(erc20.address)
-        updated = true
-    }
-    if (!updated) return
-    await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
-    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
-}
-
-async function getERC20TokenByAddress(t: IDBPSafeTransaction<WalletDB, ['ERC20Token'], 'readonly'>, address: string) {
-    const record = await t.objectStore('ERC20Token').get(formatChecksumAddress(address))
-    return record ? ERC20TokenRecordOutDB(record) : null
-}
-
-async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
-    const record = await t.objectStore('Wallet').get(formatChecksumAddress(address))
-    return record ? WalletRecordOutDB(record) : null
-}
-
-function ERC20TokenRecordIntoDB(x: ERC20TokenRecord) {
-    x.address = formatChecksumAddress(x.address)
-    return x as ERC20TokenRecordInDatabase
-}
-
-function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
-    const record = x as ERC20TokenRecord
-    {
-        // fix: network has been renamed to chainId
-        const record_ = record as any
-        if (!record.chainId) record.chainId = parseChainName(record_.network)
-    }
-    record.address = EthereumAddress.checksumAddress(record.address)
-    return record
-}
-
-function WalletRecordIntoDB(x: WalletRecord) {
-    const record = x as WalletRecordInDatabase
-    record.address = formatChecksumAddress(x.address)
-    return record
-}
-
-function WalletRecordOutDB(x: WalletRecordInDatabase) {
-    const record = x as WalletRecord
-    record.address = EthereumAddress.checksumAddress(record.address)
-    record.erc20_token_whitelist = x.erc20_token_whitelist || new Set()
-    record.erc20_token_blacklist = x.erc20_token_blacklist || new Set()
-    return record
 }

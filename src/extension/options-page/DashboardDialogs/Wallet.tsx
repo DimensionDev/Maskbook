@@ -461,7 +461,10 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
     const onSubmit = useSnackbarCallback(
         async () => {
             if (!token) return
-            return Services.Plugin.invokePlugin('maskbook.wallet', 'walletTrustERC20Token', wallet.address, token)
+            await Promise.all([
+                Services.Plugin.invokePlugin('maskbook.wallet', 'addERC20Token', token),
+                Services.Plugin.invokePlugin('maskbook.wallet', 'trustERC20Token', wallet.address, token),
+            ])
         },
         [token, chainId],
         props.onClose,
@@ -623,7 +626,7 @@ export function DashboardWalletHideTokenConfirmDialog(
     const { t } = useI18N()
     const { wallet, token } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'walletBlockERC20Token', wallet.address, token),
+        () => Services.Plugin.invokePlugin('maskbook.wallet', 'blockERC20Token', wallet.address, token),
         [wallet.address],
         props.onClose,
     )
