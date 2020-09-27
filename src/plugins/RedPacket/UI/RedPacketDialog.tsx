@@ -45,6 +45,7 @@ import { useCreateRedPacketCallback } from '../hooks/useCreateRedPacketCallback'
 import { TransactionDialog } from '../../../web3/UI/TransactionDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
+import { useBlockNumber } from '../../../web3/hooks/useBlockNumber'
 
 //#region new red packet
 const useNewPacketStyles = makeStyles((theme) =>
@@ -305,6 +306,7 @@ function ExistingPacketUI(props: RedPacketDialogProps & ExistingPacketProps) {
     const account = useAccount()
 
     //#region fetch red packets
+    const blockNumber = useBlockNumber()
     const [availableRedPackets, setAvailableRedPackets] = useState<RedPacketRecord[]>([])
     useEffect(() => {
         const updateHandler = () => {
@@ -322,7 +324,7 @@ function ExistingPacketUI(props: RedPacketDialogProps & ExistingPacketProps) {
         }
         updateHandler()
         return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
-    }, [])
+    }, [blockNumber])
     //#endregion
 
     const onClick = useCallback(async (status?: RedPacketStatus | null, rpid?: RedPacketRecord['red_packet_id']) => {
