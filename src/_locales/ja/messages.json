@@ -343,7 +343,7 @@
     "plugin_trader_table_price": "価格",
     "plugin_trader_table_volume": "取引高（24時間）",
     "plugin_trader_settings_data_source_primary": "データーのソース",
-    "plugin_trader_settings_data_source_secondary": "異なるプラットフォームからトレンドデーターを取得"
+    "plugin_trader_settings_data_source_secondary": "異なるプラットフォームからトレンドデーターを取得",
     "plugin_poll_display_name": "プラグイン: 投票",
     "plugin_poll_question_hint": "質問を入力してください...",
     "plugin_poll_options_hint": "オプション",
