@@ -344,4 +344,19 @@
     "plugin_trader_table_volume": "取引高（24時間）",
     "plugin_trader_settings_data_source_primary": "データーのソース",
     "plugin_trader_settings_data_source_secondary": "異なるプラットフォームからトレンドデーターを取得"
+    "plugin_poll_display_name": "プラグイン: 投票",
+    "plugin_poll_question_hint": "質問を入力してください...",
+    "plugin_poll_options_hint": "オプション",
+    "plugin_poll_length": "投票期限",
+    "plugin_poll_length_days": "日",
+    "plugin_poll_length_hours": "時間",
+    "plugin_poll_length_minutes": "分",
+    "plugin_poll_length_unknown": "不明",
+    "plugin_poll_create_new": "新しい投票を作成",
+    "plugin_poll_select_existing": "既存の投票を選択",
+    "plugin_poll_send_poll": "投票を作成",
+    "plugin_poll_status_closed": "投票は終了しました",
+    "plugin_poll_status_voting": "投票しています",
+    "plugin_poll_status_voted": "投票しました",
+    "plugin_poll_deadline": "{{time}}で投票は終了します"
 }
