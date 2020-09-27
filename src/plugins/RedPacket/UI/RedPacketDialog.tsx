@@ -125,7 +125,12 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares || '0')
 
     // balance
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(token)
+    const { value: tokenBalance = '0', error, loading: loadingTokenBalance } = useTokenBalance(token)
+
+    if (error) {
+        console.log('DEBUG: token balance error')
+        console.log(error)
+    }
     //#endregion
 
     //#region approve ERC20

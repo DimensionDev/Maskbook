@@ -16,7 +16,13 @@ export async function getBlockNumber() {
 }
 
 export async function getBalance(address: string) {
-    return (await createWeb3Instance()).eth.getBalance(address)
+    try {
+        return (await createWeb3Instance()).eth.getBalance(address)
+    } catch (e) {
+        console.log('DEBUG: get balance error')
+        console.log(e)
+        throw e
+    }
 }
 
 export async function getTransaction(id: string) {
