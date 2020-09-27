@@ -284,7 +284,7 @@
     "plugin_red_packet_best_wishes": "Best Wishes!",
     "plugin_red_packet_not_valid": "Not valid",
     "plugin_red_packet_send": "Send {{symbol}}{{amount}} {{type}}",
-    "plugin_red_packet_create_new": "Create new",
+    "plugin_red_packet_create_new": "Create New",
     "plugin_red_packet_select_existing": "Select Existing",
     "plugin_red_packet_create_failed": "Create failed",
     "plugin_red_packet_attached_message": "Attached Message",
