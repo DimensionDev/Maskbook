@@ -9,22 +9,22 @@ const useStyles = makeStyles(() => {
     return {
         root: {
             fontSize: 13,
-            background: '#f2f3f5',
-            border: '1px solid #ccd0d5',
+            background: '#3a3b3c',
             width: '100%',
             height: 34,
             borderRadius: 20,
             padding: '2px 1em',
             boxSizing: 'border-box',
             marginTop: 6,
+            color: '#e4e6eb',
         },
         input: {
             '&::placeholder': {
-                color: '#8d949e',
+                color: '#b0b3b8',
                 opacity: 1,
             },
             '&:focus::placeholder': {
-                color: '#bec3c9',
+                color: '#d0d2d6',
             },
         },
     }
