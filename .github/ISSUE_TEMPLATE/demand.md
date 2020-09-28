@@ -1,10 +1,9 @@
 ---
 name: Demand
 about: PRD for new demand
-title: "[Demand] "
+title: '[Demand] '
 labels: 'Demand: Draft'
 assignees: neruthes
-
 ---
 
 ## Catalogue
@@ -14,7 +13,7 @@ assignees: neruthes
 - [ ] Maskbook Plugin Feature
 - [ ] Security/Cryptography Feature
 - [ ] Other
-    - /* List it here */
+  - /_List it here_/
 
 ## Part 1: Introduction and Background
 
