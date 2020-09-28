@@ -4,8 +4,6 @@ import { text, boolean } from '@storybook/addon-knobs'
 import { DonateDialog } from '../plugins/Gitcoin/UI/DonateDialog'
 import { figmaLink } from './utils'
 import { action } from '@storybook/addon-actions'
-import BigNumber from 'bignumber.js'
-import { ProviderType } from '../web3/types'
 import { PreviewCard } from '../plugins/Gitcoin/UI/PreviewCard'
 
 storiesOf('Plugin: Gitcoin', module)
@@ -38,11 +36,9 @@ storiesOf('Plugin: Gitcoin', module)
         () => (
             <div style={{ padding: 16, background: 'white' }}>
                 <DonateDialog
-                    loading={false}
                     open
                     address="fake"
                     title={text('Title', 'Mask + Test Kit Mutual Aid Fund')}
-                    onDonate={action('onDonate')}
                     onClose={action('onClose')}
                 />
             </div>
