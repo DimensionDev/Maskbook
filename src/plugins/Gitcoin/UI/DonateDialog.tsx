@@ -9,7 +9,6 @@ import {
     DialogContent,
     Divider,
     Link,
-    CircularProgress,
 } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
@@ -89,10 +88,8 @@ interface DonateDialogUIProps
         | 'button'
     > {
     title: string
-    loading: boolean
     address?: string
     open: boolean
-    onDonate(opt: DonatePayload): Promise<void> | void
     onClose?: () => void
 }
 
@@ -233,7 +230,6 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                     ) : (
                         <ActionButton
                             className={classes.button}
-                            startIcon={props.loading ? <CircularProgress size={24} /> : null}
                             fullWidth
                             variant="contained"
                             size="large"

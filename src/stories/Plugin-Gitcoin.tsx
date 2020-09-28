@@ -23,8 +23,6 @@ storiesOf('Plugin: Gitcoin', module)
                 <PreviewCard
                     originalURL={text('originalURL', '')}
                     onRequestGrant={action('Request grant')}
-                    hasPermission={boolean('Has permission', false)}
-                    requestPermission={action('Request permission')}
                     loading={boolean('Loading', false)}
                     title={text('Title', `This is a really long long long long long title`)}
                     line1={text('Line 1', `12,345 DAI`)}
@@ -42,25 +40,8 @@ storiesOf('Plugin: Gitcoin', module)
                 <DonateDialog
                     loading={false}
                     open
-                    tokens={[]}
-                    wallets={[
-                        {
-                            mnemonic: [],
-                            provider: ProviderType.Maskbook,
-                            passphrase: '',
-                            address: '0x23333',
-                            name: 'Wallet Name',
-                            erc20_token_balance: new Map(),
-                            erc20_token_blacklist: new Set(),
-                            erc20_token_whitelist: new Set(),
-                            eth_balance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
-                            createdAt: new Date(),
-                            updatedAt: new Date(),
-                        },
-                    ]}
                     address="fake"
                     title={text('Title', 'Mask + Test Kit Mutual Aid Fund')}
-                    description={text('Description', 'It is accepting contributions in any token.')}
                     onDonate={action('onDonate')}
                     onClose={action('onClose')}
                 />

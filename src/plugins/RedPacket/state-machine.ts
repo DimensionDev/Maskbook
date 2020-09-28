@@ -9,10 +9,7 @@ import { sideEffect } from '../../utils/side-effects'
 import BigNumber from 'bignumber.js'
 import { createRedPacketTransaction, RedPacketPluginReificatedWalletDBReadOnly } from './database'
 import { assert, unreachable } from '../../utils/utils'
-import { EthereumTokenType, EthereumNetwork } from '../../web3/types'
-import { getChainId } from '../../extension/background-script/EthereumService'
-import { getConstant } from '../../web3/helpers'
-import { RED_PACKET_CONSTANTS } from './constants'
+import { EthereumNetwork } from '../../web3/types'
 import { RED_PACKET_HISTORY_URL } from './constants'
 
 function getProvider() {
@@ -86,75 +83,6 @@ export async function getRedPacketHistory(from: string) {
     return response.json() as Promise<History.RecordType[]>
 }
 // endregion
-
-export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedPacketRecord> {
-    if (packet.send_total.isLessThan(packet.shares))
-        throw new Error('At least [number of red packets] tokens to your red packet.')
-    if (packet.shares.isNegative() /* packet.shares < 0n */)
-        throw new Error('At least 1 person should be able to claim the red packet.')
-    const password = uuid()
-    let erc20_approve_transaction_hash: string | undefined = undefined
-    let erc20_approve_value: BigNumber | undefined = undefined
-    let erc20_token_address: string | undefined = undefined
-    if (packet.token_type === EthereumTokenType.ERC721) throw new Error('Not supported')
-    if (packet.token_type === EthereumTokenType.ERC20) {
-        if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
-        const res = {} as any
-        // const res = await getWalletProvider().approve(
-        //     packet.sender_address,
-        //     getConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS', await getChainId()),
-        //     packet.erc20_token,
-        //     packet.send_total,
-        // )
-        erc20_token_address = packet.erc20_token
-        erc20_approve_transaction_hash = res.erc20_approve_transaction_hash
-        erc20_approve_value = res.erc20_approve_value
-    }
-    const { create_transaction_hash, create_nonce } = await getProvider().create(
-        packet.sender_address,
-        Web3Utils.sha3(password)!,
-        packet.shares.toNumber(),
-        packet.is_random,
-        packet.duration,
-        Web3Utils.sha3(Math.random().toString())!,
-        packet.send_message,
-        packet.sender_name,
-        packet.token_type,
-        erc20_token_address || /** this param must be a valid address */ packet.sender_address,
-        packet.send_total,
-    )
-    const record: RedPacketRecord = {
-        aes_version: 1,
-        contract_version: 1,
-        contract_address: getConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS', await getChainId()),
-        id: uuid(),
-        duration: packet.duration,
-        is_random: packet.is_random,
-        network: packet.network,
-        send_message: packet.send_message,
-        send_total: packet.send_total,
-        sender_address: packet.sender_address,
-        sender_name: packet.sender_name,
-        status: RedPacketStatus.pending,
-        token_type: packet.token_type,
-        password: password,
-        block_creation_time: new Date(),
-        create_nonce,
-        create_transaction_hash,
-        erc20_approve_transaction_hash,
-        erc20_approve_value,
-        erc20_token: erc20_token_address,
-        received_time: new Date(),
-        shares: packet.shares,
-    }
-    {
-        const transaction = await createRedPacketTransaction('readwrite')
-        transaction.add(RedPacketRecordIntoDB(record))
-    }
-    getProvider().watchCreateResult({ databaseID: record.id, transactionHash: create_transaction_hash })
-    PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
-    return record
-}
 
 export async function onCreationResult(id: { databaseID: string }, details: RedPacketCreationResult) {
     const t = await createRedPacketTransaction('readwrite')

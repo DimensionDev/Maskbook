@@ -12,9 +12,6 @@ const defaultWalletRef = new ValueRef<WalletRecord | null>(null, WalletComparer)
 const walletsRef = new ValueRef<WalletRecord[]>([], WalletArrayComparer)
 
 async function revalidate() {
-    console.log('DEBUG: revalidate wallets')
-
-    // wallets
     const wallets = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
     walletsRef.value = wallets
     defaultWalletRef.value = wallets.find((x) => x._wallet_is_default) ?? wallets[0] ?? null

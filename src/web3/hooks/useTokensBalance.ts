@@ -9,7 +9,7 @@ export function useTokensBalance(account: string, listOfAddress: string[]) {
     return useAsync(async () => {
         if (!account || !listOfAddress.length) return [] as string[]
         return balanceCheckerContract.methods.balances([account], listOfAddress).call({
-            // cann't check the sender's balance in same contract
+            // cannot check the sender's balance in the same contract
             from: ETH_ADDRESS,
         })
     }, [account, listOfAddress.join()])
