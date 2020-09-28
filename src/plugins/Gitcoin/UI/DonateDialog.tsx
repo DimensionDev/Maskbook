@@ -22,7 +22,6 @@ import {
     useTwitterCloseButton,
 } from '../../../social-network-provider/twitter.com/utils/theme'
 import BigNumber from 'bignumber.js'
-import type { ERC20TokenDetails } from '../../../extension/background-script/PluginService'
 import { Trans } from 'react-i18next'
 import type { EthereumTokenType, Token } from '../../../web3/types'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
@@ -40,6 +39,7 @@ import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
+import type { ERC20TokenRecord } from '../../Wallet/database/types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface DonatePayload {
     amount: number
     address: string
-    token: ERC20TokenDetails
+    token: ERC20TokenRecord
     tokenType: EthereumTokenType
 }
 

@@ -41,11 +41,10 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useHistory } from 'react-router-dom'
 import { DashboardRoute } from '../Route'
 import { sleep } from '../../../utils/utils'
-import type { ERC20TokenDetails } from '../../background-script/PluginService'
 import { difference } from 'lodash-es'
 import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
 import { QRCode } from '../../../components/shared/qrcode'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { Token, EthereumTokenType } from '../../../web3/types'
 import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
@@ -427,9 +426,6 @@ export function DashboardWalletShareDialog(props: WrappedDialogProps<WalletProps
 export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
-
-    const addedTokens = []
-    const chainId = useChainId()
     const [token, setToken] = React.useState<Token | null>(null)
 
     const [tabState, setTabState] = useState(0)
@@ -448,11 +444,21 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
         tabs: [
             {
                 label: t('add_token_well_known'),
-                children: <ERC20PredefinedTokenSelector excludeTokens={[]} onTokenChange={setToken} />,
+                children: (
+                    <ERC20PredefinedTokenSelector
+                        excludeTokens={Array.from(wallet.erc20_token_whitelist)}
+                        onTokenChange={setToken}
+                    />
+                ),
             },
             {
                 label: t('add_token_your_own'),
-                children: <ERC20CustomizedTokenSelector excludeTokens={[]} onTokenChange={setToken} />,
+                children: (
+                    <ERC20CustomizedTokenSelector
+                        excludeTokens={Array.from(wallet.erc20_token_whitelist)}
+                        onTokenChange={setToken}
+                    />
+                ),
             },
         ],
         state,
@@ -466,7 +472,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
                 Services.Plugin.invokePlugin('maskbook.wallet', 'trustERC20Token', wallet.address, token),
             ])
         },
-        [token, chainId],
+        [token],
         props.onClose,
     )
 
@@ -621,7 +627,7 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
 
 //#region hide wallet token
 export function DashboardWalletHideTokenConfirmDialog(
-    props: WrappedDialogProps<WalletProps & { token: ERC20TokenDetails }>,
+    props: WrappedDialogProps<WalletProps & { token: ERC20TokenRecord }>,
 ) {
     const { t } = useI18N()
     const { wallet, token } = props.ComponentProps!

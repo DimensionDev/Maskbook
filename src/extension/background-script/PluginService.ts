@@ -21,5 +21,3 @@ export async function invokePlugin<K extends keyof Plugins, M extends keyof Plug
     // @ts-ignore
     return Plugins[key][method](...args)
 }
-
-export type ERC20TokenDetails = Pick<ERC20TokenRecord, 'address' | 'decimals' | 'name' | 'chainId' | 'symbol'>

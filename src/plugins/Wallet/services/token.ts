@@ -13,12 +13,14 @@ export async function getTokens() {
 
 export async function addERC20Token(token: Token) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
-    await t.objectStore('ERC20Token').add(ERC20TokenRecordIntoDB(token))
+    await t.objectStore('ERC20Token').put(ERC20TokenRecordIntoDB(token))
+    PluginMessageCenter.emit('maskbook.tokens.update', undefined)
 }
 
 export async function removeERC20Token(token: PartialRequired<Token, 'address'>) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
     await t.objectStore('ERC20Token').delete(formatChecksumAddress(token.address))
+    PluginMessageCenter.emit('maskbook.tokens.update', undefined)
 }
 
 export async function trustERC20Token(address: string, token: Token) {
@@ -37,7 +39,7 @@ export async function trustERC20Token(address: string, token: Token) {
     }
     if (!updated) return
     await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
-    PluginMessageCenter.emit('maskbook.tokens.update', undefined)
+    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
 export async function blockERC20Token(address: string, token: PartialRequired<Token, 'address'>) {
@@ -56,5 +58,5 @@ export async function blockERC20Token(address: string, token: PartialRequired<To
     }
     if (!updated) return
     await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
-    PluginMessageCenter.emit('maskbook.tokens.update', undefined)
+    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }

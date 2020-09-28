@@ -49,6 +49,7 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                         to: contract.options.address,
                                         ...config,
                                         result,
+                                        outputs: methodABI ? methodABI.outputs ?? [] : [],
                                     })}`,
                                 )
 

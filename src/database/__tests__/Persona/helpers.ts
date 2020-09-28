@@ -1,5 +1,4 @@
 import { v4 as uuid } from 'uuid'
-import { web3 } from '../../../plugins/Wallet/web3'
 import {
     createPersonaByMnemonic,
     queryPersona,
@@ -20,6 +19,7 @@ import {
 import { queryPersonaDB, createProfileDB, createPersonaDB, queryProfileDB } from '../../Persona/Persona.db'
 import { createPersonaRecord, createProfileRecord, personaDBWriteAccess } from './Persona.db'
 import { storeAvatarDB } from '../../avatar'
+import { nonFunctionalWeb3 } from '../../../web3/web3'
 
 beforeAll(() => {
     // MessageCenter will dispatch events on each tab
@@ -189,7 +189,7 @@ test('queryPrivateKey', async () => {
 
 test('createPersonaByMnemonic & createPersonaByJsonWebKey', async () => {
     // getBalance will be called in the event chain reaction
-    web3.eth.getBalance = async () => '0'
+    nonFunctionalWeb3.eth.getBalance = async () => '0'
 
     const identifier = await createPersonaByMnemonic('test', 'test')
     const persona = await queryPersonaDB(identifier)

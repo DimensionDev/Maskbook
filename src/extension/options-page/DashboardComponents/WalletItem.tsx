@@ -9,9 +9,8 @@ import { useSnackbarCallback } from '../DashboardDialogs/Base'
 import ActionButton from './ActionButton'
 import { TokenIcon } from './TokenIcon'
 import { Address } from './Address'
-import type { ERC20TokenDetails } from '../../background-script/PluginService'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import { ProviderType } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { resolveProviderName } from '../../../web3/pipes'
@@ -107,7 +106,7 @@ const useStyles = makeStyles((theme) =>
 interface WalletItemProps {
     wallet: WalletRecord
     selected?: boolean
-    tokens?: ERC20TokenDetails[]
+    tokens?: ERC20TokenRecord[]
     onClick?(): void
 }
 

@@ -12,9 +12,9 @@ import {
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { getActivatedUI } from '../../../social-network/ui'
-import type { ERC20TokenDetails } from '../../../extension/background-script/PluginService'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumTokenType } from '../../../web3/types'
+import type { ERC20TokenRecord } from '../../Wallet/database/types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -41,7 +41,7 @@ export interface DonateSuccessDialogProps extends GitcoinDialogProps {
     title: string
     url?: string
     amount: number
-    token: ERC20TokenDetails | null
+    token: ERC20TokenRecord | null
     tokenType: EthereumTokenType
 }
 

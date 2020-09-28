@@ -1,12 +1,12 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { PreviewCard } from '../plugins/Gitcoin/PreviewCard'
 import { text, boolean } from '@storybook/addon-knobs'
 import { DonateDialog } from '../plugins/Gitcoin/UI/DonateDialog'
 import { figmaLink } from './utils'
 import { action } from '@storybook/addon-actions'
 import BigNumber from 'bignumber.js'
 import { ProviderType } from '../web3/types'
+import { PreviewCard } from '../plugins/Gitcoin/UI/PreviewCard'
 
 storiesOf('Plugin: Gitcoin', module)
     .add(
