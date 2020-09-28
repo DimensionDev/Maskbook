@@ -37,6 +37,8 @@ function safari(manifest) {
  */
 function development(manifest, target) {
     manifest.name = 'Maskbook (development)'
+    // Required by eval-source-map in development
+    manifest.content_security_policy = "script-src 'self' blob: filesystem: 'unsafe-eval';"
     manifest.key = // ID：jkoeaghipilijlahjplgbfiocjhldnap
         'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoz51rhO1w+wD' +
         '0EKZJEFJaSMkIcIj0qRadfi0tqcl5nbpuJAsafvLe3MaTbW9LhbixTg9' +
