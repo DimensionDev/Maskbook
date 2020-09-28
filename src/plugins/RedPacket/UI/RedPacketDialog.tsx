@@ -256,7 +256,8 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                         className={classes.button}
                         style={{ marginLeft: 'auto', minWidth: 140, whiteSpace: 'nowrap' }}
                         variant="contained"
-                        disabled={Boolean(validationMessage)}
+                        // disabled={Boolean(validationMessage)}
+                        disabled
                         onClick={onSubmit}>
                         {validationMessage || `Send ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`}
                     </ActionButton>
