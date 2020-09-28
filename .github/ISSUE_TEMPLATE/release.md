@@ -1,11 +1,10 @@
 ---
 name: Release
 about: Create a new Release
-title: "release"
-
+title: 'release'
 ---
 
-<!-- 
+<!--
 
 If you want to bump the major version, e.g. `1.x.y` to `2.0.0`, set title as "release major"
 

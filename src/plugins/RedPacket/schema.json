@@ -39,11 +39,7 @@
                     "title": "message"
                 }
             },
-            "required": [
-                "address",
-                "message",
-                "name"
-            ],
+            "required": ["address", "message", "name"],
             "title": "sender"
         },
         "is_random": {
@@ -63,20 +59,12 @@
             "title": "duration"
         },
         "network": {
-            "enum": [
-                "Mainnet",
-                "Rinkeby",
-                "Ropsten"
-            ],
+            "enum": ["Mainnet", "Rinkeby", "Ropsten"],
             "type": "string",
             "title": "network"
         },
         "token_type": {
-            "enum": [
-                0,
-                1,
-                2
-            ],
+            "enum": [0, 1, 2],
             "type": "number",
             "title": "token_type"
         },
@@ -105,12 +93,7 @@
                     "title": "symbol"
                 }
             },
-            "required": [
-                "address",
-                "decimals",
-                "name",
-                "symbol"
-            ],
+            "required": ["address", "decimals", "name", "symbol"],
             "title": "token"
         }
     },

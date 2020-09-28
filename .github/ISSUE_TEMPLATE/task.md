@@ -1,15 +1,15 @@
 ---
 name: Task
 about: Non-coding task
-title: "[Task] "
+title: '[Task] '
 labels: Non-Coding Task
 assignees: ''
-
 ---
 
 ## Introduction and Background
-/* Describe the background of this task */
+
+/_Describe the background of this task_/
 
 ## Content
 
-/* Actual content here... */
+/_Actual content here..._/
