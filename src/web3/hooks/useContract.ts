@@ -54,7 +54,11 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                     })}`,
                                 )
 
-                                return decodeOutputString(methodABI ? methodABI.outputs ?? [] : [], result)
+                                return decodeOutputString(
+                                    nonFunctionalWeb3,
+                                    methodABI ? methodABI.outputs ?? [] : [],
+                                    result,
+                                )
                             },
                             // don't add async keyword for this method because a PromiEvent was returned
                             send(config: TransactionConfig, callback?: (error: Error | null, hash?: string) => void) {
@@ -79,10 +83,18 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                 const processor = (stage: Stage) => {
                                     switch (stage.type) {
                                         case StageType.RECEIPT:
-                                            stage.receipt.events = decodeEvents(eventABIs, stage.receipt)
+                                            stage.receipt.events = decodeEvents(
+                                                nonFunctionalWeb3,
+                                                eventABIs,
+                                                stage.receipt,
+                                            )
                                             break
                                         case StageType.CONFIRMATION:
-                                            stage.receipt.events = decodeEvents(eventABIs, stage.receipt)
+                                            stage.receipt.events = decodeEvents(
+                                                nonFunctionalWeb3,
+                                                eventABIs,
+                                                stage.receipt,
+                                            )
                                             break
                                     }
                                     return stage

@@ -90,29 +90,12 @@ function createRecord(opts: {
     claimedAmount: number
     senderName: string
     type: EthereumTokenType
-    token?: NonNullable<RedPacketRecord['raw_payload']>['token']
+    token?: NonNullable<RedPacketRecord['payload']>['token']
 }): RedPacketRecord {
     const x: RedPacketRecord = {
-        aes_version: 1,
-        contract_address: 'contract_address',
-        contract_version: 1,
-        duration: 86400,
-        id: 'id',
-        is_random: false,
-        network: EthereumNetwork.Rinkeby,
-        password: 'password',
-        received_time: new Date(),
-        send_message: opts.message,
-        send_total: new BigNumber(opts.total),
-        sender_address: 'sender_address',
-        sender_name: opts.senderName,
-        shares: new BigNumber(opts.shares),
-        status: opts.status,
-        token_type: opts.type,
-        _found_in_url_: 'https://g.cn/',
-        claim_amount: new BigNumber(opts.claimedAmount),
-        raw_payload: { token: opts.token } as RedPacketJSONPayload,
-        erc20_token: opts.token ? 'aefwf' : undefined,
+        from: 'https://g.cn/',
+        rpid: 'id',
+        payload: { token: opts.token } as RedPacketJSONPayload,
     }
     // @ts-ignore
     if (opts.total === 0) delete x.send_total

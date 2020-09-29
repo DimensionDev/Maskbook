@@ -124,7 +124,7 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     useEffect(() => {
         if (!payload) return noop
         const updateRedPacket = () =>
-            Services.Plugin.invokePlugin('maskbook.red_packet', 'discoverRedPacket', from ?? '', payload)
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'addRedPacket', from ?? '', payload)
         updateRedPacket()
         return PluginMessageCenter.on('maskbook.red_packets.update', updateRedPacket)
     }, [from, JSON.stringify(payload)])
@@ -229,7 +229,7 @@ export function RedPacketInList(props: { redPacket?: RedPacketRecord }) {
 
     const formatted = {
         claim_amount: '',
-        send_total: redPacket?.send_total ? formatBalance(new BigNumber(redPacket.send_total), 0) : 'Unknown',
+        send_total: redPacket?.payload.total ? formatBalance(new BigNumber(redPacket.payload.total), 0) : 'Unknown',
         name: info.name ?? '(unknown)',
     }
 
@@ -238,15 +238,16 @@ export function RedPacketInList(props: { redPacket?: RedPacketRecord }) {
             <div className={classes.header}>
                 <Typography variant="h5">{formatted.claim_amount}</Typography>
                 <Typography className={classes.label} variant="body2">
-                    {redPacket?.status ?? 'Unknown'}
+                    {'Unknown'}
                 </Typography>
             </div>
             <div className={classes.content}>
                 <Typography className={classes.words} variant="h6">
-                    {redPacket?.send_message}
+                    {redPacket?.payload.sender.message}
                 </Typography>
                 <Typography variant="body1">
-                    {formatted.send_total} {formatted.name} / {redPacket?.shares?.toString() ?? 'Unknown'} shares
+                    {formatted.send_total} {formatted.name} / {redPacket?.payload.shares?.toString() ?? 'Unknown'}{' '}
+                    shares
                 </Typography>
             </div>
             <div className={classes.packet}></div>

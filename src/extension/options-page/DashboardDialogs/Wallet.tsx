@@ -721,54 +721,13 @@ export function DashboardWalletHistoryDialog(
     const { t } = useI18N()
     const classes = useHistoryDialogStyles()
     const state = useState(0)
-    const [tabState] = state
 
     const { wallet, onClickRedPacketRecord } = props.ComponentProps!
 
-    const [redPacketRecords, setRedPacketRecords] = useState<RedPacketRecord[]>([])
-    // const inboundRecords = redPacketRecords.filter((record) => record.claim_address === wallet.address)
     const inboundRecords = [] as any
     const outboundRecords = [] as any
-    // const outboundRecords = redPacketRecords.filter((record) => record.sender_address === wallet.address)
 
-    // region HACK: THIS TEMPORARY CODE
-    // const chainId = useChainId()
-    // const { value: outboundRecords } = useAsync(
-    //     () => Services.Plugin.invokePlugin('maskbook.red_packet', 'getOutboundRedPackets', chainId, wallet.address),
-    //     [tabState, chainId, wallet.address],
-    // )
-    // endregion
-
-    // useEffect(() => {
-    //     const updateHandler = () =>
-    //         Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets', undefined).then(setRedPacketRecords)
-    //     updateHandler()
-    //     return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
-    // }, [tabState])
-
-    const RedPacketRecord = (record: RedPacketRecord) => (
-        <WalletLine
-            key={record.red_packet_id}
-            line1={record.send_message}
-            line2={`from ${record.sender_name}`}
-            onClick={() => {
-                props.onClose()
-                onClickRedPacketRecord(record)
-            }}
-            invert
-            // action={
-            //     <Typography variant="h6">
-            //         {(tabState === 0 && record.claim_amount) || (tabState === 1 && record.send_total)
-            //             ? formatBalance(
-            //                 tabState === 0 ? record.claim_amount! : record.send_total,
-            //                 record.raw_payload?.token?.decimals ?? 18,
-            //             )
-            //             : '0'}{' '}
-            //         {record.raw_payload?.token?.name || 'ETH'}
-            //     </Typography>
-            // }
-        />
-    )
+    const RedPacketRecord = (record: RedPacketRecord) => null
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -835,14 +794,14 @@ export function DashboardWalletRedPacketDetailDialog(props: WrappedDialogProps<R
 
     const classes = useRedPacketDetailStyles()
     const sayThanks = () => {
-        if (!redPacket._found_in_url_!.includes('twitter.com/')) {
-            window.open(redPacket._found_in_url_, '_blank', 'noopener noreferrer')
+        if (!redPacket.from!.includes('twitter.com/')) {
+            window.open(redPacket.from, '_blank', 'noopener noreferrer')
         } else {
-            const user = redPacket._found_in_url_!.match(/(?!\/)[\d\w]+(?=\/status)/)
+            const user = redPacket.from!.match(/(?!\/)[\d\w]+(?=\/status)/)
             const userText = user ? ` from @${user}` : ''
             const text = [
                 `I just received a Red Packet${userText}. Follow @realMaskbook (maskbook.com) to get your first Twitter #RedPacket.`,
-                `#maskbook ${redPacket._found_in_url_}`,
+                `#maskbook ${redPacket.from}`,
             ].join('\n')
             window.open(
                 `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
@@ -859,7 +818,7 @@ export function DashboardWalletRedPacketDetailDialog(props: WrappedDialogProps<R
                 content={
                     <>
                         <RedPacketInList redPacket={redPacket} />
-                        {redPacket._found_in_url_ && (
+                        {redPacket.from && (
                             <ActionButton
                                 onClick={sayThanks}
                                 style={{ display: 'block', margin: 'auto', width: 200 }}
@@ -867,13 +826,13 @@ export function DashboardWalletRedPacketDetailDialog(props: WrappedDialogProps<R
                                 Say Thanks
                             </ActionButton>
                         )}
-                        {redPacket._found_in_url_ && (
+                        {redPacket.from && (
                             <WalletLine
-                                onClick={() => window.open(redPacket._found_in_url_, '_blank', 'noopener noreferrer')}
+                                onClick={() => window.open(redPacket.from, '_blank', 'noopener noreferrer')}
                                 line1="Source"
                                 line2={
                                     <Typography className={classes.link} color="primary">
-                                        {redPacket._found_in_url_ || 'Unknown'}
+                                        {redPacket.from || 'Unknown'}
                                     </Typography>
                                 }
                             />
@@ -882,17 +841,17 @@ export function DashboardWalletRedPacketDetailDialog(props: WrappedDialogProps<R
                             line1="From"
                             line2={
                                 <>
-                                    {redPacket.sender_name}{' '}
+                                    {redPacket.payload.sender.name}{' '}
                                     {/* {redPacket.create_transaction_hash && (
                                         <Chip label="Me" variant="outlined" color="secondary" size="small" />
                                     )} */}
                                 </>
                             }
                         />
-                        <WalletLine line1="Message" line2={redPacket.send_message} />
+                        <WalletLine line1="Message" line2={redPacket.payload.sender.message} />
                         <Box p={1} display="flex" justifyContent="center">
                             <Typography variant="caption" color="textSecondary">
-                                Created at {new Date(redPacket.block_creation_time).toLocaleString()}
+                                Created at {new Date(redPacket.payload.creation_time).toLocaleString()}
                             </Typography>
                         </Box>
                     </>

@@ -41,31 +41,12 @@ export interface CreateRedPacketResult {
  */
 
 export interface RedPacketRecord {
-    status: RedPacketStatus
-    /** password that used to receive the red packet */
-    password: string
-    /** true if 'Random Mode'. false if 'Average Mode' */
-    is_random: boolean
-    /** Available time after block_creation_time. In seconds. Default 86400 (24hrs) */
-    duration: number
-    /** Read from create transaction result */
-    red_packet_id?: string
-    /** Red packet sender address */
-    sender_address: string
-    /** Trimmed not empty single line string. Max 30 chars */
-    sender_name: string
-    /** Red packet total value in Wei if ETH. In minimal unit if ERC20 token */
-    send_total: string
-    /** Trimmed single line string. Allow empty input. Max 140 chars. Replace inline break with space */
-    send_message: string
-    /** web3 network tag enum. Mainnet or Rinkeby */
-    chainId: ChainId
-    /** token type tag for red packet */
-    token: Token
-    /** Number of red packet shares */
-    shares: string
-    block_creation_time: string
-    _found_in_url_: string
+    /** The red packet ID */
+    rpid: string
+    /** From url */
+    from: string
+    /** The JSON payload */
+    payload: RedPacketJSONPayload
 }
 export interface RedPacketRecordInDatabase extends RedPacketRecord {}
 

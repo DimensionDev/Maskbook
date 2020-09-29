@@ -5,7 +5,7 @@ import { RedPacketPluginID } from './constants'
 
 export const createRedPacketTransaction = createPluginWalletAccess<RedPacketRecordInDatabase, [string]>(
     RedPacketPluginID,
-)({ red_packet_id: 0 }, 'id')
+)({ rpid: 0 }, 'rpid')
 export type RedPacketPluginReificatedWalletDBReadOnly = _UnboxPromise<ReturnType<typeof ro>>
 export type RedPacketPluginReificatedWalletDBReadWrite = _UnboxPromise<ReturnType<typeof rw>>
 function ro() {
