@@ -115,6 +115,13 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                 callback?: (error: Error | null, gasEstimated?: number) => void,
                             ) {
                                 try {
+                                    console.log('DEBUG: estimate')
+                                    console.log({
+                                        from: account,
+                                        to: contract.options.address,
+                                        data: cached.encodeABI(),
+                                        ...config,
+                                    })
                                     const estimated = await Services.Ethereum.estimateGas({
                                         from: account,
                                         to: contract.options.address,
