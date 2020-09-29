@@ -108,7 +108,6 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                 disableAutoFocus
                 disableEnforceFocus
                 onEscapeKeyDown={onClose}
-                onExit={onClose}
                 BackdropProps={{
                     className: classes.backdrop,
                 }}>
