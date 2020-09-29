@@ -81,8 +81,6 @@ export function TrendingPopper(props: TrendingPopperProps) {
     return (
         <ClickAwayListener
             onClickAway={() => {
-                console.log('DEBUG: ClickAwayListener')
-                console.log(freezed)
                 if (!freezed) setAnchorEl(null)
             }}>
             <Popper

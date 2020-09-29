@@ -10,8 +10,6 @@ export function useBlockNumber() {
     const [blockNumber, setBlockNumber] = useState(0)
     const isWindowVisible = useIsWindowVisible()
     const callback = useCallback(async () => {
-        console.log('DEBUG: isWindowVisible')
-        console.log(isWindowVisible)
         if (!isWindowVisible) return
         setBlockNumber(await Services.Ethereum.getBlockNumber())
     }, [isWindowVisible])
