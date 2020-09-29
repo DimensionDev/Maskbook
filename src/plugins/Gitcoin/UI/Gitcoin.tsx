@@ -20,8 +20,6 @@ export interface GitcoinProps {
 }
 
 export function Gitcoin(props: GitcoinProps) {
-    const [open, setOpen] = useState(false)
-
     const url = props.url
     const { data } = useSWR(['co.gitcoin', url], { fetcher })
     const { transactions, daiAmount, estimatedAmount, title, image, address: donationAddress } = data?.ok
@@ -29,8 +27,9 @@ export function Gitcoin(props: GitcoinProps) {
         : ({} as GitcoinGrantMetadata)
     const grantTitle = title ?? 'A Gitcoin Grant'
 
+    //#region the donate dialog
     const account = useAccount()
-
+    const [open, setOpen] = useState(false)
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog<
         MaskbookWalletMessages,
         'selectProviderDialogUpdated'
@@ -44,6 +43,7 @@ export function Gitcoin(props: GitcoinProps) {
             open: true,
         })
     }, [account, setOpen, setSelectProviderDialogOpen])
+    //#endregion
 
     return (
         <>
