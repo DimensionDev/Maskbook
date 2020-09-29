@@ -134,7 +134,7 @@ export namespace History {
 
     export interface CreateRedPacketRecord {
         id: string
-        status: 'refunded' | 'expired' | 'claimed' | 'empty'
+        status: 'refunded' | 'expired' | 'claimed' | 'empty' | null
         availability: {
             balance: string
             claimed: boolean

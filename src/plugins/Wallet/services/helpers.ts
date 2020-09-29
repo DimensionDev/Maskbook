@@ -24,8 +24,8 @@ export function WalletRecordIntoDB(x: WalletRecord) {
 export function WalletRecordOutDB(x: WalletRecordInDatabase) {
     const record = x as WalletRecord
     record.address = EthereumAddress.checksumAddress(record.address)
-    record.erc20_token_whitelist = x.erc20_token_whitelist || new Set()
-    record.erc20_token_blacklist = x.erc20_token_blacklist || new Set()
+    record.erc20_token_whitelist = x.erc20_token_whitelist ?? new Set()
+    record.erc20_token_blacklist = x.erc20_token_blacklist ?? new Set()
     return record
 }
 
