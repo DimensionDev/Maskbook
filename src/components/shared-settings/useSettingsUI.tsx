@@ -75,6 +75,7 @@ function SharedListItem(
 export function SettingsUI<T>(props: SettingsUIProps<T>) {
     const { value } = withDefaultText(props)
     const currentValue = useValueRef(value)
+    console.log(currentValue)
     switch (typeof currentValue) {
         case 'boolean':
             const [ui, change] = getBooleanSettingsUI(value as any, currentValue)
@@ -90,7 +91,7 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
                 />
             )
         default:
-            return <SharedListItem {...props} primary={'Not implemented for type' + typeof currentValue} />
+            return <SharedListItem {...props} primary={'Not implemented for type ' + typeof currentValue} />
     }
 }
 

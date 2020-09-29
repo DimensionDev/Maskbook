@@ -13,6 +13,7 @@ import {
     appearanceSettings,
     Appearance,
     currentMaskbookChainIdSettings,
+    enableGroupSharingSettings,
 } from '../../../settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 
@@ -22,6 +23,7 @@ import NoEncryptionIcon from '@material-ui/icons/NoEncryption'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined'
+import ShareIcon from '@material-ui/icons/ShareOutlined'
 import FlipToFrontIcon from '@material-ui/icons/FlipToFront'
 import TabIcon from '@material-ui/icons/Tab'
 import PaletteIcon from '@material-ui/icons/Palette'
@@ -120,14 +122,13 @@ const settingsTheme = (theme: Theme): Theme =>
 export default function DashboardSettingsRouter() {
     const { t } = useI18N()
     const currentLang = useValueRef(languageSettings)
-    const currentApperance = useValueRef(appearanceSettings)
     const langMapper = React.useRef((x: Language) => {
         if (x === Language.en) return t('language_en')
         if (x === Language.zh) return t('language_zh')
         if (x === Language.ja) return t('language_ja')
         return x
     }).current
-    const apperanceMapper = React.useRef((x: Appearance) => {
+    const appearanceMapper = React.useRef((x: Appearance) => {
         if (x === Appearance.dark) return t('settings_appearance_dark')
         if (x === Appearance.light) return t('settings_appearance_light')
         return t('settings_appearance_default')
@@ -158,7 +159,6 @@ export default function DashboardSettingsRouter() {
                             <List className={classes.list} disablePadding>
                                 <SettingsUIEnum
                                     classes={listStyle}
-                                    secondary={langMapper(currentLang)}
                                     enumObject={Language}
                                     getText={langMapper}
                                     icon={<LanguageIcon />}
@@ -166,9 +166,8 @@ export default function DashboardSettingsRouter() {
                                 />
                                 <SettingsUIEnum
                                     classes={listStyle}
-                                    secondary={apperanceMapper(currentApperance)}
                                     enumObject={Appearance}
-                                    getText={apperanceMapper}
+                                    getText={appearanceMapper}
                                     icon={<PaletteIcon />}
                                     value={appearanceSettings}
                                 />
@@ -180,7 +179,11 @@ export default function DashboardSettingsRouter() {
                                         value={currentMaskbookChainIdSettings}
                                     />
                                 ) : null}
-
+                                <SettingsUI
+                                    classes={listStyle}
+                                    icon={<ShareIcon />}
+                                    value={enableGroupSharingSettings}
+                                />
                                 {/* TODO: A singe 'Plugins' tab should be added for listing plugin bio and settings. */}
                                 <SettingsUIEnum
                                     classes={listStyle}

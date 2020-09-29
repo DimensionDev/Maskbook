@@ -6,14 +6,16 @@ import { GroupIdentifier, PreDefinedVirtualGroupNames, ProfileIdentifier } from 
 import { createDataWithIdentifierChangedListener } from './createDataWithIdentifierChangedListener'
 import { MessageCenter } from '../../utils/messages'
 import { debounce } from 'lodash-es'
+import { enableGroupSharingSettings } from '../../settings/settings'
 
 // TODO:
 // groupIDs can be a part of network definitions
-export function InitGroupsValueRef(
+export async function InitGroupsValueRef(
     self: SocialNetworkUI,
     network: string,
     groupIDs: string[] = [PreDefinedVirtualGroupNames.friends],
 ) {
+    if (!(await enableGroupSharingSettings.readyPromise)) return
     const debouncedCreate = debounce(create, 1000, {
         trailing: true,
     })
