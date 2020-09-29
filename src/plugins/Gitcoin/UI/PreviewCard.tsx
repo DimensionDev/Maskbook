@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, createStyles, Theme, Typography, SnackbarContent, Button, Box, Paper } from '@material-ui/core'
+import { makeStyles, createStyles, Theme, Typography, Button, Box, Paper } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 const border = '1.5px solid rgb(0, 154, 87)'
@@ -90,10 +90,9 @@ interface PreviewCardProps {
     line2: string
     line3: string
     line4: string
-    onRequestGrant(): void
-    loading?: boolean
     address?: string
     originalURL?: string
+    onRequestGrant(): void
 }
 export function PreviewCard(props: PreviewCardProps) {
     const { t } = useI18N()

@@ -1,16 +1,21 @@
-import React from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import { noop } from 'lodash-es'
-import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
+import { makeStyles, createStyles, Card, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import type { RedPacketRecord, RedPacketJSONPayload } from '../types'
-import { RedPacketStatus } from '../types'
+import type { RedPacketStatus } from '../types'
 import Services from '../../../extension/service'
 import { PluginMessageCenter } from '../../PluginMessages'
 import { formatBalance } from '../../Wallet/formatter'
 import { getUrl } from '../../../utils/utils'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { isDAI, isOKB } from '../../../web3/helpers'
-import { parseChainName } from '../../../web3/pipes'
+import BigNumber from 'bignumber.js'
+import { useAvailabilityRetry } from '../hooks/useAvailability'
+import { useAccount } from '../../../web3/hooks/useAccount'
+import { useClaimCallback } from '../hooks/useClaimCallback'
+import { useRefundCallback } from '../hooks/useRefundCallback'
+import { TransactionDialog } from '../../../web3/UI/TransactionDialog'
+import { isSameAddress, isDAI, isOKB } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -95,128 +100,138 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-interface RedPacketProps {
-    onClick?(state: RedPacketStatus | undefined, red_packet_id: RedPacketRecord['red_packet_id']): void
-    state?: RedPacketStatus
-    loading?: boolean
-    redPacket?: RedPacketRecord
-    unknownRedPacket?: RedPacketJSONPayload
+interface RedPacketInPostProps {
     from?: string
+    state?: RedPacketStatus
+    payload?: RedPacketJSONPayload
 }
 
-export function RedPacketWithState(props: RedPacketProps) {
-    const { onClick, redPacket: knownRedPacket, unknownRedPacket, loading, from } = props
-    const [redPacket, setRedPacket] = React.useState(() => knownRedPacket || undefined)
+export function RedPacketInPost(props: RedPacketInPostProps) {
+    const { t } = useI18N()
 
-    React.useEffect(() => {
-        if (!unknownRedPacket) return noop
-        const updateRedPacket = () => {
-            Services.Plugin.invokePlugin('maskbook.red_packet', 'discoverRedPacket', unknownRedPacket, from ?? '').then(
-                (packet) => {
-                    setRedPacket(packet)
-                },
-            )
-        }
+    const classes = useStyles()
+    const { from, payload } = props
+
+    const account = useAccount()
+    const { value: availability, loading, retry } = useAvailabilityRetry(account, payload?.rpid)
+
+    console.log('DEBUG: red packet')
+    console.log({
+        ...props,
+        availability,
+    })
+
+    useEffect(() => {
+        if (!payload) return noop
+        const updateRedPacket = () =>
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'discoverRedPacket', from ?? '', payload)
         updateRedPacket()
         return PluginMessageCenter.on('maskbook.red_packets.update', updateRedPacket)
-    }, [from, JSON.stringify(unknownRedPacket)])
+    }, [from, JSON.stringify(payload)])
 
-    React.useEffect(() => {
-        if (knownRedPacket) setRedPacket(knownRedPacket)
-    }, [knownRedPacket])
+    //#region blocking
+    const couldClaim = !availability?.expired && availability?.balance !== '0' && !availability?.ifclaimed
+    const couldRefund =
+        availability?.expired && availability.balance !== '0' && isSameAddress(payload?.sender.address ?? '', account)
+    const [openTransactionDialog, setOpenTransactionDialog] = useState(false)
+    const [claimState, claimCallback] = useClaimCallback(payload?.rpid, payload?.password)
+    const [refundState, refundCallback] = useRefundCallback(payload?.rpid)
+
+    const onClaimOrRefund = useCallback(async () => {
+        setOpenTransactionDialog(true)
+        if (couldClaim) await claimCallback()
+        else if (couldRefund) await refundCallback()
+    }, [couldClaim, couldRefund, availability, claimCallback, refundCallback])
+
+    const onTransactionDialogClose = useCallback(() => {
+        setOpenTransactionDialog(false)
+        retry()
+    }, [claimState])
+    //#endregion
+
+    // TODO:
+    // add loading UI
+    if (!payload) return null
+    if (loading || !availability) return null
 
     return (
-        <RedPacketWithStateUI
-            onClick={() => !loading && redPacket && onClick?.(redPacket.status, redPacket.red_packet_id)}
-            loading={loading}
-            redPacket={redPacket}
-        />
+        <>
+            <Card
+                elevation={0}
+                className={classNames(classes.box, {
+                    [classes.cursor]: couldClaim || couldRefund,
+                })}
+                component="article"
+                onClick={onClaimOrRefund}>
+                <div>
+                    {availability.ifclaimed ? null : (
+                        <Typography variant="body1" color="inherit">
+                            {t('plugin_red_packet_from', { from: payload.sender.name ?? '-' })}
+                        </Typography>
+                    )}
+                </div>
+                <div className={classNames(classes.content)}>
+                    <Typography className={classes.words} variant="h6">
+                        {payload.sender.message}
+                    </Typography>
+                    <Typography variant="body2">
+                        {(() => {
+                            if (availability.ifclaimed) return t('plugin_red_packet_description_claimed')
+                            if (availability.expired)
+                                return t(
+                                    couldRefund
+                                        ? 'plugin_red_packet_description_refund'
+                                        : 'plugin_red_packet_description_expired',
+                                )
+                            if (availability.balance === '0') return t('plugin_red_packet_description_empty')
+                            return t('plugin_red_packet_description_failover', {
+                                total: payload.total
+                                    ? formatBalance(new BigNumber(payload.total), payload.token?.decimals ?? 18)
+                                    : '-',
+                                name: payload.sender.name ?? '-',
+                                shares: payload.shares ?? '-',
+                            })
+                        })()}
+                    </Typography>
+                </div>
+                <div
+                    className={classNames(classes.packet, {
+                        [classes.dai]: payload.token?.name === 'DAI' || isDAI(payload.token?.address ?? ''),
+                        [classes.okb]: payload.token?.name === 'OKB' || isOKB(payload.token?.address ?? ''),
+                    })}
+                />
+                <div
+                    className={classNames(classes.loader, {
+                        [classes.dimmer]: !couldClaim && !couldRefund,
+                    })}
+                />
+            </Card>
+
+            {couldClaim || couldRefund ? (
+                <TransactionDialog
+                    state={couldClaim ? claimState : refundState}
+                    summary={`Claiming red packet from ${payload.sender.name}`}
+                    open={openTransactionDialog}
+                    onClose={onTransactionDialogClose}
+                />
+            ) : null}
+        </>
     )
 }
 
-export function RedPacketWithStateUI(props: {
-    onClick?(): void
-    redPacket?: Partial<RedPacketRecord>
-    loading?: boolean
-}) {
-    const { t } = useI18N()
-    const classes = useStyles()
-    const { onClick, redPacket, loading } = props
-    const info = getInfo(redPacket)
-    const status = redPacket?.status ?? RedPacketStatus.pending
-    return (
-        <Card
-            elevation={0}
-            className={classNames(classes.box, {
-                [classes.cursor]: onClick,
-            })}
-            component="article"
-            onClick={() => onClick?.()}>
-            <div className={classNames(classes.header, { [classes.flex1]: status === 'incoming' })}>
-                {status === RedPacketStatus.claimed ? (
-                    <Typography variant="h5" color="inherit">
-                        {redPacket?.claim_amount ? formatBalance(redPacket.claim_amount, info?.decimals ?? 0) : '?'}{' '}
-                        {info?.name ?? '(unknown)'}
-                    </Typography>
-                ) : (
-                    <Typography variant="body1" color="inherit">
-                        {t('plugin_red_packet_from', { from: redPacket?.sender_name ?? '(unknown)' })}
-                    </Typography>
-                )}
-                {status !== RedPacketStatus.incoming && status !== RedPacketStatus.normal && (
-                    <Typography className={classes.label} variant="body2">
-                        {status === RedPacketStatus.claim_pending
-                            ? t('plugin_red_packet_user_status_opening')
-                            : status ?? t('plugin_red_packet_user_status_pending')}
-                    </Typography>
-                )}
-            </div>
-            <div className={classNames(classes.content)}>
-                <Typography className={classes.words} variant="h6">
-                    {redPacket?.send_message}
-                </Typography>
-                <Typography variant="body2">
-                    <Description redPacket={redPacket} />
-                </Typography>
-            </div>
-            <div
-                className={classNames(classes.packet, {
-                    [classes.dai]: info.name === 'DAI' || isDAI(info.address ?? ''),
-                    [classes.okb]: info.name === 'OKB' || isOKB(info.address ?? ''),
-                })}></div>
-            <div
-                className={classNames(classes.loader, {
-                    [classes.dimmer]:
-                        status === RedPacketStatus.refunded ||
-                        status === RedPacketStatus.expired ||
-                        status === RedPacketStatus.pending ||
-                        status === RedPacketStatus.claimed ||
-                        loading,
-                })}>
-                {(loading || status === RedPacketStatus.pending) && <CircularProgress color="secondary" />}
-            </div>
-        </Card>
-    )
-}
-
-/**
- * A red packet card.
- * Pure component.
- */
-export function RedPacket(props: { redPacket?: RedPacketRecord }) {
+export function RedPacketInList(props: { redPacket?: RedPacketRecord }) {
     const classes = useStyles()
     const { redPacket } = props
 
-    const info = getInfo(redPacket)
+    const info = {
+        name: 'xxx',
+    }
 
     const formatted = {
         claim_amount: '',
-        send_total: redPacket?.send_total ? formatBalance(redPacket.send_total, info?.decimals ?? 0) : 'Unknown',
+        send_total: redPacket?.send_total ? formatBalance(new BigNumber(redPacket.send_total), 0) : 'Unknown',
         name: info.name ?? '(unknown)',
     }
-
-    const amount = redPacket?.claim_amount
-    formatted.claim_amount = amount ? `${formatBalance(amount, info.decimals ?? 0)} ${formatted.name}` : 'Not Claimed'
 
     return (
         <Card elevation={0} className={classes.box} component="article">
@@ -237,42 +252,4 @@ export function RedPacket(props: { redPacket?: RedPacketRecord }) {
             <div className={classes.packet}></div>
         </Card>
     )
-}
-
-function Description(props: { redPacket?: Partial<RedPacketRecord> }) {
-    const { redPacket } = props
-    const { t } = useI18N()
-    const info = getInfo(redPacket)
-    const getDescription = () => {
-        switch (redPacket?.status) {
-            case RedPacketStatus.pending:
-                return t('plugin_red_packet_description_pending')
-            case RedPacketStatus.incoming:
-                return t('plugin_red_packet_description_incoming')
-            case RedPacketStatus.fail:
-                return t('plugin_red_packet_description_fail')
-            case RedPacketStatus.claimed:
-                return t('plugin_red_packet_description_claimed')
-            case RedPacketStatus.expired:
-                return t('plugin_red_packet_description_expired')
-            case RedPacketStatus.claim_pending:
-                return t('plugin_red_packet_description_claim_pending')
-            case RedPacketStatus.empty:
-                return t('plugin_red_packet_description_empty')
-        }
-        return t('plugin_red_packet_description_failover', {
-            total: redPacket?.send_total ? formatBalance(redPacket.send_total, info?.decimals ?? 0) : '?',
-            name: info?.name ?? '(unknown)',
-            shares: redPacket?.shares?.toString() ?? '?',
-        })
-    }
-    return <span>{getDescription()}</span>
-}
-
-function getInfo(
-    redPacket?: Partial<RedPacketRecord>,
-): { name?: string; decimals?: number; address?: string; symbol?: string } {
-    if (!redPacket) return { name: undefined }
-    if (!redPacket.erc20_token) return { name: 'ETH', decimals: 18 }
-    else return redPacket.raw_payload?.token ?? {}
 }

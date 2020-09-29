@@ -1,6 +1,5 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -8,8 +7,10 @@ import { Token, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
+import type { TransactionReceipt } from 'web3-core'
 
 export interface RedPacketSettings {
+    password: string
     shares: number
     duration: number
     isRandom: boolean
@@ -19,37 +20,37 @@ export interface RedPacketSettings {
     message: string
 }
 
-export function useCreateRedPacketCallback(redPacketSettings: RedPacketSettings) {
+export function useCreateCallback(redPacketSettings: RedPacketSettings) {
     const account = useAccount()
-    const [createRedPacketState, setCreateRedPacketState] = useTransactionState()
+    const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract()
 
-    const createRedPacketCallback = useCallback(async () => {
+    const createCallback = useCallback(async () => {
         if (!redPacketContract) {
-            setCreateRedPacketState({
+            setCreateState({
                 type: TransactionStateType.UNKNOWN,
             })
             return
         }
-        const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
+        const { password, duration, isRandom, message, name, shares, total, token } = redPacketSettings
 
         // error handling
         if (new BigNumber(total).isLessThan(shares)) {
-            setCreateRedPacketState({
+            setCreateState({
                 type: TransactionStateType.FAILED,
                 error: new Error('At least [number of red packets] tokens to your red packet.'),
             })
             return
         }
         if (shares <= 0) {
-            setCreateRedPacketState({
+            setCreateState({
                 type: TransactionStateType.FAILED,
                 error: Error('At least 1 person should be able to claim the red packet.'),
             })
             return
         }
         if (token.type !== EthereumTokenType.Ether && token.type !== EthereumTokenType.ERC20) {
-            setCreateRedPacketState({
+            setCreateState({
                 type: TransactionStateType.FAILED,
                 error: Error('Token not supported'),
             })
@@ -57,12 +58,10 @@ export function useCreateRedPacketCallback(redPacketSettings: RedPacketSettings)
         }
 
         // pre-step: start waiting for provider to confirm tx
-        setCreateRedPacketState({
+        setCreateState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        // step 1: estimate gas
-        const password = uuid()
         const seed = Math.random().toString()
         const config: Tx = {
             from: account,
@@ -81,11 +80,13 @@ export function useCreateRedPacketCallback(redPacketSettings: RedPacketSettings)
             token.type === EthereumTokenType.Ether ? account : token.address, // this field must be a valid address
             total,
         ]
+
+        // step 1: estimate gas
         const estimatedGas = await redPacketContract.methods
             .create_red_packet(...params)
             .estimateGas(config)
             .catch((error) => {
-                setCreateRedPacketState({
+                setCreateState({
                     type: TransactionStateType.FAILED,
                     error,
                 })
@@ -93,30 +94,28 @@ export function useCreateRedPacketCallback(redPacketSettings: RedPacketSettings)
             })
 
         // step 2: blocking
-        return new Promise<string>((resolve, reject) => {
-            redPacketContract.methods.create_red_packet(...params).send(
-                {
-                    gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
-                    ...config,
-                },
-                (error, hash) => {
-                    if (error) {
-                        setCreateRedPacketState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
-                        reject(error)
-                    } else {
-                        setCreateRedPacketState({
-                            type: TransactionStateType.SUCCEED,
-                            hash,
-                        })
-                        resolve(hash)
-                    }
-                },
-            )
+        return new Promise<string>(async (resolve, reject) => {
+            const promiEvent = redPacketContract.methods.create_red_packet(...params).send({
+                gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                ...config,
+            })
+            promiEvent.on('receipt', (receipt: TransactionReceipt) => {
+                setCreateState({
+                    type: TransactionStateType.RECEIPT,
+                    receipt,
+                })
+            })
+            promiEvent.on('confirmation', (no: number, receipt: TransactionReceipt) => {
+                setCreateState({
+                    type: TransactionStateType.CONFIRMED,
+                    no,
+                    receipt,
+                })
+                resolve()
+            })
+            promiEvent.on('error', reject)
         })
     }, [account, redPacketContract, redPacketSettings])
 
-    return [createRedPacketState, createRedPacketCallback] as const
+    return [createState, createCallback] as const
 }

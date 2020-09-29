@@ -110,7 +110,7 @@ export function useSwapCallback(
                         reject(error)
                     } else {
                         setSwapState({
-                            type: TransactionStateType.SUCCEED,
+                            type: TransactionStateType.HASH,
                             hash,
                         })
                         resolve(hash)

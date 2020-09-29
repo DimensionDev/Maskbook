@@ -48,18 +48,6 @@ export const createWalletDBAccess = createDBAccess(() => {
                 os.createIndex('2', 'index2')
                 os.createIndex('plugin_id', 'plugin_id')
                 // @ts-expect-error
-                const redPacket: RedPacketRecordInDatabase[] = await db.getAll('RedPacket')
-                for (const each of redPacket) {
-                    const id = RedPacketPluginID
-                    os.add({
-                        plugin_id: id,
-                        record_id: `${id}:${each.id}`,
-                        value: each,
-                        // @ts-ignore
-                        0: each.red_packet_id,
-                    })
-                }
-                // @ts-expect-error
                 const gitcoin: GitcoinDonationRecordInDatabase[] = await db.getAll('GitcoinDonation')
                 for (const each of gitcoin) {
                     const id = 'com.maskbook.provide.co.gitcoin'

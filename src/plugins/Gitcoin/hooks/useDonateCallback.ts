@@ -81,7 +81,7 @@ export function useDonateCallback(address: string, amount: string, token: Token)
                         reject(error)
                     } else {
                         setDonateState({
-                            type: TransactionStateType.SUCCEED,
+                            type: TransactionStateType.HASH,
                             hash,
                         })
                         resolve(hash)

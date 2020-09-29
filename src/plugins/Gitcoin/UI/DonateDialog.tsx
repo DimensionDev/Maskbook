@@ -99,6 +99,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
 
     const { title, address } = props
 
+    // context
     const account = useAccount()
     const chainId = useChainId()
 
@@ -125,18 +126,6 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(token)
     //#endregion
 
-    //#region submit button
-    const validationMessage = useMemo(() => {
-        if (!address) return 'Grant not available'
-        if (!account) return 'Connect a Wallet'
-        if (!token.address) return 'Select a token'
-        if (new BigNumber(amount).isZero()) return 'Enter an amount'
-        if (new BigNumber(amount).isGreaterThan(new BigNumber(tokenBalance)))
-            return `Insufficient ${token.symbol} balance`
-        return ''
-    }, [address, account, amount, token, tokenBalance])
-    //#endregion
-
     //#region approve ERC20
     const BulkCheckoutAddress = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
     const [approveState, approveCallback] = useTokenApproveCallback(token, amount, BulkCheckoutAddress)
@@ -156,9 +145,21 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     }, [donateCallback])
     const onTransactionDialogClose = useCallback(() => {
         setOpenTransactionDialog(false)
-        if (donateState.type !== TransactionStateType.SUCCEED) return
+        if (donateState.type !== TransactionStateType.HASH) return
         setAmount('0')
     }, [donateState])
+    //#endregion
+
+    //#region submit button
+    const validationMessage = useMemo(() => {
+        if (!address) return 'Grant not available'
+        if (!account) return 'Connect a Wallet'
+        if (!token.address) return 'Select a token'
+        if (new BigNumber(amount).isZero()) return 'Enter an amount'
+        if (new BigNumber(amount).isGreaterThan(new BigNumber(tokenBalance)))
+            return `Insufficient ${token.symbol} balance`
+        return ''
+    }, [address, account, amount, token, tokenBalance])
     //#endregion
 
     if (!props.address) return null

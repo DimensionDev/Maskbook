@@ -80,9 +80,9 @@ interface TransactionDialogUIProps
         | 'close'
         | 'button'
     > {
-    summary: React.ReactNode
-    state: TransactionState
     open: boolean
+    state: TransactionState
+    summary: React.ReactNode
     onClose?: () => void
 }
 
@@ -129,7 +129,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                             </Typography>
                         </>
                     ) : null}
-                    {state.type === TransactionStateType.SUCCEED ? (
+                    {state.type === TransactionStateType.HASH ? (
                         <>
                             <DoneIcon className={classes.icon} />
                             <Typography className={classes.primary} color="textPrimary">
@@ -139,6 +139,23 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                                 <Link
                                     className={classes.link}
                                     href={resolveTransactionLinkOnEtherscan(chainId, state.hash)}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    View on Etherscan
+                                </Link>
+                            </Typography>
+                        </>
+                    ) : null}
+                    {state.type === TransactionStateType.CONFIRMED ? (
+                        <>
+                            <DoneIcon className={classes.icon} />
+                            <Typography className={classes.primary} color="textPrimary">
+                                Your transaction was confirmed!
+                            </Typography>
+                            <Typography>
+                                <Link
+                                    className={classes.link}
+                                    href={resolveTransactionLinkOnEtherscan(chainId, state.receipt.transactionHash)}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     View on Etherscan

@@ -23,8 +23,8 @@ export function Gitcoin(props: GitcoinProps) {
     const [open, setOpen] = useState(false)
 
     const url = props.url
-    const { data, isValidating } = useSWR(['co.gitcoin', url], { fetcher })
-    const { transactions, daiAmount, estimatedAmount, title, permalink, image, address: donationAddress } = data?.ok
+    const { data } = useSWR(['co.gitcoin', url], { fetcher })
+    const { transactions, daiAmount, estimatedAmount, title, image, address: donationAddress } = data?.ok
         ? data.val
         : ({} as GitcoinGrantMetadata)
     const grantTitle = title ?? 'A Gitcoin Grant'
@@ -48,8 +48,6 @@ export function Gitcoin(props: GitcoinProps) {
     return (
         <>
             <PreviewCard
-                onRequestGrant={onRequest}
-                loading={isValidating}
                 logo={image}
                 title={grantTitle}
                 line1={BigNumber.isBigNumber(estimatedAmount) ? `${estimatedAmount.toFixed(2)} USD` : ''}
@@ -58,11 +56,12 @@ export function Gitcoin(props: GitcoinProps) {
                 line4={isNumber(transactions) ? `${transactions} transactions` : ''}
                 address={donationAddress}
                 originalURL={url}
+                onRequestGrant={onRequest}
             />
             <DonateDialog
                 address={donationAddress}
-                open={!!(open && donationAddress?.length)}
                 title={grantTitle}
+                open={!!(open && donationAddress?.length)}
                 onClose={() => setOpen(false)}
             />
         </>

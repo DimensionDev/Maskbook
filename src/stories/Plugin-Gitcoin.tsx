@@ -19,14 +19,13 @@ storiesOf('Plugin: Gitcoin', module)
         }`}
                 </style>
                 <PreviewCard
-                    originalURL={text('originalURL', '')}
-                    onRequestGrant={action('Request grant')}
-                    loading={boolean('Loading', false)}
                     title={text('Title', `This is a really long long long long long title`)}
                     line1={text('Line 1', `12,345 DAI`)}
                     line2={text('Line 2', `ESTIMATED`)}
                     line3={text('Line 3', `2,345 DAI`)}
                     line4={text('Line 4', `233 contributors`)}></PreviewCard>
+                originalURL={text('originalURL', '')}
+                onRequestGrant={action('Request grant')}
             </div>
         ),
         figmaLink('https://www.figma.com/file/6YeqA0eCTz67I1HVFXOd4X/Plugin%3A-Gitcoin'),

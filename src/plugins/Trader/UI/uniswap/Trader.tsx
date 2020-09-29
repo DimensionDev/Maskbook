@@ -192,7 +192,7 @@ export function Trader(props: TraderProps) {
     const onTransactionDialogClose = useCallback(() => {
         setFreezed(false)
         setOpenTransactionDialog(false)
-        if (swapState.type !== TransactionStateType.SUCCEED) return
+        if (swapState.type !== TransactionStateType.HASH) return
         // clean the form
         dispatchSwapStore({
             type: SwapActionType.UPDATE_INPUT_AMOUNT,

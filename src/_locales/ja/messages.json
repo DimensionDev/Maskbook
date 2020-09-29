@@ -296,6 +296,7 @@
     "plugin_red_packet_description_fail": "制作失敗",
     "plugin_red_packet_description_claimed": "もう先に受領した",
     "plugin_red_packet_description_expired": "もう期限切れた",
+    "plugin_red_packet_description_refund": "",
     "plugin_red_packet_description_claim_pending": "開くて",
     "plugin_red_packet_description_empty": "もう期限切れた",
     "plugin_red_packet_description_failover": "総数：{{total}} {{name}} / {{shares}} 株",

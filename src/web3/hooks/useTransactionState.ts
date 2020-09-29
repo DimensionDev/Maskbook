@@ -1,10 +1,19 @@
 import { useState } from 'react'
+import type { TransactionReceipt } from 'web3-core'
 
 export enum TransactionStateType {
     UNKNOWN,
+    /** Wait for external provider */
     WAIT_FOR_CONFIRMING,
-    SUCCEED,
+    /** Hash is available */
+    HASH,
+    /** Receipt is available */
+    RECEIPT,
+    /** Confirmed */
+    CONFIRMED,
+    /** Fail to send */
     FAILED,
+    /** Reject by external provider */
     REJECTED,
 }
 
@@ -16,8 +25,17 @@ export type TransactionState =
           type: TransactionStateType.WAIT_FOR_CONFIRMING
       }
     | {
-          type: TransactionStateType.SUCCEED
+          type: TransactionStateType.HASH
           hash: string
+      }
+    | {
+          type: TransactionStateType.RECEIPT
+          receipt: TransactionReceipt
+      }
+    | {
+          type: TransactionStateType.CONFIRMED
+          no: number
+          receipt: TransactionReceipt
       }
     | {
           type: TransactionStateType.FAILED

@@ -293,14 +293,14 @@ export default function DashboardWalletsRouter() {
     }, [error, openWalletError])
 
     // show red packet detail dialog
-    useEffect(() => {
-        if (!rpid) return
-        Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, rpid).then((redPacket) =>
-            openWalletRedPacketDetail({
-                redPacket,
-            }),
-        )
-    }, [rpid, openWalletRedPacketDetail])
+    // useEffect(() => {
+    //     if (!rpid) return
+    //     Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, rpid).then((redPacket) =>
+    //         openWalletRedPacketDetail({
+    //             redPacket,
+    //         }),
+    //     )
+    // }, [rpid, openWalletRedPacketDetail])
 
     // show provider connect dialog
     const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(

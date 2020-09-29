@@ -69,6 +69,7 @@ export function iteratorToPromiEvent(
     iterator: AsyncIterator<Stage, void, unknown> & {
         [Symbol.asyncIterator](): AsyncIterator<Stage, void, unknown>
     },
+    processor: (stage: Stage) => Stage,
 ) {
     let resolve_: Function | undefined = undefined
     let reject_: Function | undefined = undefined
@@ -79,16 +80,24 @@ export function iteratorToPromiEvent(
     async function execute() {
         try {
             for await (const stage of iterator) {
-                switch (stage.type) {
+                const stage_ = processor(stage)
+
+                console.log('DEBUG: new stage')
+                console.log({
+                    stage,
+                    stage_,
+                })
+
+                switch (stage_.type) {
                     case StageType.TRANSACTION_HASH:
-                        PE.emit('transactionHash', stage.hash)
+                        PE.emit('transactionHash', stage_.hash)
                         break
                     case StageType.RECEIPT:
-                        PE.emit('receipt', stage.receipt)
-                        resolve_?.(stage.receipt)
+                        PE.emit('receipt', stage_.receipt)
+                        resolve_?.(stage_.receipt)
                         break
                     case StageType.CONFIRMATION:
-                        PE.emit('confirmation', stage.no, stage.receipt)
+                        PE.emit('confirmation', stage_.no, stage_.receipt)
                         break
                     default:
                         // skip unknown stage
