@@ -9,7 +9,7 @@ import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { RedPacketMetaKey } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CreateRedPacketForm } from './CreateRedPacketForm'
-import { RedPacketOutboundList } from './RedPacketInOutboundList'
+import { RedPacketOutboundList } from './RedPacketOutboundList'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 
 interface RedPacketDialogProps

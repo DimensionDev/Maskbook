@@ -24,10 +24,9 @@ storiesOf('Plugin: Gitcoin', module)
                     line2={text('Line 2', `ESTIMATED`)}
                     line3={text('Line 3', `2,345 DAI`)}
                     line4={text('Line 4', `233 contributors`)}
+                    originalURL={text('originalURL', '')}
                     onRequestGrant={action('Request Grant')}
                 />
-                originalURL={text('originalURL', '')}
-                onRequestGrant={action('Request grant')}
             </div>
         ),
         figmaLink('https://www.figma.com/file/6YeqA0eCTz67I1HVFXOd4X/Plugin%3A-Gitcoin'),
