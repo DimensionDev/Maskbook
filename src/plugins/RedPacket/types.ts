@@ -41,6 +41,8 @@ export interface CreateRedPacketResult {
  */
 
 export interface RedPacketRecord {
+    /** Internal ID */
+    id: string
     /** The red packet ID */
     rpid: string
     /** From url */
@@ -49,7 +51,10 @@ export interface RedPacketRecord {
     payload: RedPacketJSONPayload
 }
 
-export interface RedPacketRecordInDatabase extends RedPacketRecord {}
+export interface RedPacketRecordInDatabase extends RedPacketRecord {
+    /** A unique record type */
+    type: 'red-packet'
+}
 
 export enum RedPacketStatus {
     initial = 'initial',

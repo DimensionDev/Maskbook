@@ -1,16 +1,6 @@
 import type { RedPacketRecordInDatabase } from './types'
-import { createPluginWalletAccess } from '../../database/Plugin/wrap-wallet-for-plugin'
 import type { _UnboxPromise } from 'async-call-rpc/full'
 import { RedPacketPluginID } from './constants'
+import { createPluginDatabase } from '../../database/Plugin/wrap-plugin-database'
 
-export const createRedPacketTransaction = createPluginWalletAccess<RedPacketRecordInDatabase, [string]>(
-    RedPacketPluginID,
-)({ rpid: 0 }, 'rpid')
-export type RedPacketPluginReificatedWalletDBReadOnly = _UnboxPromise<ReturnType<typeof ro>>
-export type RedPacketPluginReificatedWalletDBReadWrite = _UnboxPromise<ReturnType<typeof rw>>
-function ro() {
-    return createRedPacketTransaction('readonly')
-}
-function rw() {
-    return createRedPacketTransaction('readwrite')
-}
+export const RedPacketDatabase = createPluginDatabase<RedPacketRecordInDatabase>(RedPacketPluginID)

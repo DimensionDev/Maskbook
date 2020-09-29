@@ -1,6 +1,6 @@
 import { createTransaction } from '../../../database/helpers/openDB'
 import { RedPacketPluginID } from '../../RedPacket/constants'
-import { RedPacketDatabase } from '../../RedPacket/state-machine'
+import { RedPacketDatabase } from '../../RedPacket/database'
 import type { RedPacketRecordInDatabase } from '../../RedPacket/types'
 import { createWalletDBAccess } from './Wallet.db'
 export async function migratePluginDatabase() {

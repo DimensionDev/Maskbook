@@ -93,8 +93,9 @@ function createRecord(opts: {
     token?: NonNullable<RedPacketRecord['payload']>['token']
 }): RedPacketRecord {
     const x: RedPacketRecord = {
+        id: 'id',
         from: 'https://g.cn/',
-        rpid: 'id',
+        rpid: 'rpid',
         payload: { token: opts.token } as RedPacketJSONPayload,
     }
     // @ts-ignore
