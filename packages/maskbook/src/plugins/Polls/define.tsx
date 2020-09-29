@@ -25,7 +25,7 @@ export const PollsPluginDefine: PluginConfig = {
         return <PollsInPost {...props} />
     },
     postDialogMetadataBadge: new Map([
-        [POLL_META_KEY_1, (meta: PollMetaData) => `a poll of '${meta.question}' from ${meta.sender}`],
+        [POLL_META_KEY_1, (meta: PollMetaData) => `a poll of '${meta.question}' from ${meta.sender_name}`],
     ]),
     pageInspector: PollCompositionUI,
     postDialogEntries: [PollCompositionEntry],

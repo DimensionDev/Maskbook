@@ -1,12 +1,14 @@
-import React from 'react'
-import { makeStyles, createStyles, Card, Typography, CircularProgress, List, ListItem } from '@material-ui/core'
+import React, { useState, useEffect } from 'react'
+import { makeStyles, createStyles, Card, Typography, CircularProgress, List, ListItem, Button } from '@material-ui/core'
 import { isValid, formatDistance } from 'date-fns'
 import { zhTW, enUS, ja } from 'date-fns/locale'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { languageSettings } from '../../../settings/settings'
 import type { PollGunDB } from '../Services'
 import { PollStatus } from '../types'
+import VotingHistory from './VotingHistory'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -18,6 +20,7 @@ const useStyles = makeStyles((theme) =>
         line: {
             display: 'flex',
             justifyContent: 'space-between',
+            alignItems: 'center',
         },
         status: {
             display: 'flex',
@@ -55,22 +58,31 @@ const useStyles = makeStyles((theme) =>
         deadline: {
             color: '#657786',
         },
+        history: {
+            color: theme.palette.primary.main,
+        },
     }),
 )
 
-interface PollCardProps {
+interface PollCardProps extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'button'> {
     poll: PollGunDB
     onClick?(): void
+    onOpenHistoryDialog?(opt: boolean): void
     vote?(poll: PollGunDB, index: number): void
     status?: PollStatus
 }
 
 export function PollCardUI(props: PollCardProps) {
-    const { poll, onClick, vote, status } = props
-    const classes = useStyles()
+    const { poll, onClick, onOpenHistoryDialog, vote, status } = props
+    const classes = useStylesExtends(useStyles(), props)
+    const [historyOpen, setHistoryOpen] = useState(false)
     const isClosed = Date.now() > poll.end_time ? true : false
     const { t } = useI18N()
     const lang = useValueRef(languageSettings)
+
+    useEffect(() => {
+        onOpenHistoryDialog?.(historyOpen)
+    }, [historyOpen])
 
     const totalVotes = poll.results.reduce(
         (accumulator: number, currentValue: number): number => accumulator + currentValue,
@@ -112,7 +124,12 @@ export function PollCardUI(props: PollCardProps) {
     }
 
     return (
-        <Card className={classes.card} onClick={() => onClick?.()}>
+        <Card
+            className={classes.card}
+            onClick={() => {
+                setHistoryOpen(false)
+                onClick?.()
+            }}>
             <Typography variant="h5" className={classes.line}>
                 <div style={{ fontSize: '16px' }}>{poll.question}</div>
                 {!status || status === PollStatus.Inactive ? null : (
@@ -145,9 +162,28 @@ export function PollCardUI(props: PollCardProps) {
                     </ListItem>
                 ))}
             </List>
-            <Typography variant="body2" classes={{ root: classes.deadline }}>
-                {isClosed ? `${t('plugin_poll_status_closed')}` : `${getDeadline(poll.end_time)}`}
+            <Typography variant="body2" className={classes.line}>
+                <Typography component="span" className={classes.deadline}>
+                    {isClosed ? `${t('plugin_poll_status_closed')}` : `${getDeadline(poll.end_time)}`}
+                </Typography>
+                <Button
+                    className={classes.button}
+                    color="primary"
+                    variant="contained"
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        setHistoryOpen(true)
+                    }}>
+                    Voting History
+                </Button>
             </Typography>
+            <VotingHistory
+                poll={poll}
+                open={historyOpen}
+                onDecline={() => {
+                    setHistoryOpen(false)
+                }}
+            />
         </Card>
     )
 }

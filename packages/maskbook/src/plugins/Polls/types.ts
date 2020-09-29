@@ -5,8 +5,16 @@ export interface PollMetaData {
     end_time: number
     options: string[]
     results: number[]
-    sender?: string
-    id?: string
+    sender_name?: string
+    sender_id?: string
+    voting_history?: VotingDetail[]
+}
+
+export interface VotingDetail {
+    voter_id: string
+    voter_name: string
+    option_index: number
+    voting_time: number
 }
 
 export enum PollStatus {

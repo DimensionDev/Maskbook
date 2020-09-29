@@ -2,7 +2,7 @@ import Gun from 'gun'
 import 'gun/lib/then.js'
 import { first } from 'lodash-es'
 import { gun2 } from '../../network/gun/version.2'
-import type { PollMetaData } from './types'
+import type { PollMetaData, VotingDetail } from './types'
 import { PollGunServer } from './constants'
 import { PluginMessageCenter } from '../PluginMessages'
 
@@ -11,7 +11,7 @@ const PollGun = gun.get(PollGunServer)
 
 const defaultPoll: PollGunDB = {
     key: '',
-    sender: '',
+    sender_name: '',
     question: '',
     start_time: Date.now(),
     end_time: Date.now(),
@@ -20,8 +20,8 @@ const defaultPoll: PollGunDB = {
 }
 
 interface NewPollProps {
-    sender?: string | undefined
-    id?: string | undefined
+    sender_name?: string | undefined
+    sender_id?: string | undefined
     question: string
     options: string[]
     start_time: Date
@@ -29,7 +29,7 @@ interface NewPollProps {
 }
 
 export async function createNewPoll(poll: NewPollProps) {
-    const { id, options, start_time, end_time } = poll
+    const { sender_id, options, start_time, end_time } = poll
 
     const results = new Array<number>(options.length).fill(0)
     const resultsObj = { ...results }
@@ -44,7 +44,7 @@ export async function createNewPoll(poll: NewPollProps) {
     }
 
     // @ts-ignore
-    const key = `${id}_${Gun.time.is()}_${Gun.text.random(4)}`
+    const key = `${sender_id}_${Gun.time.is()}_${Gun.text.random(4)}`
 
     await PollGun
         // @ts-ignore
@@ -59,38 +59,85 @@ export type PollGunDB = PollMetaData
 
 interface voteProps {
     poll: PollGunDB
-    index: number
+    option_index: number
+    voter_id?: string
+    voter_name?: string
+    voting_time?: Date
 }
 
-export async function vote(props: voteProps) {
-    const { poll, index } = props
-    let results = [0, 0]
-    PollGun
+export async function getVotingHistory(props: { key: string }) {
+    const PollHistoryGun = PollGun
         // @ts-ignore
-        .get(poll.key)
-        .get('results')
-        .on((item) => {
-            // @ts-ignore
-            delete item._
-            results = Object.values(item)
-        })
-    const count = results[index] + 1
-    const newResults = {
-        ...results,
-        [index]: count,
+        .get(props.key)
+        .get('history')
+    const history: VotingDetail[] = []
+    PollHistoryGun.map().on((item) => {
+        // @ts-ignore
+        delete item._
+        const detail = item
+        history.push(detail)
+    })
+    return history
+}
+
+export async function updateVotingHistory(props: voteProps) {
+    const { poll, option_index, voter_id, voter_name, voting_time } = props
+    // @ts-ignore
+    const voting_key = `${voter_id}_${Gun.time.is()}_${Gun.text.random(4)}`
+    const vote_detail = {
+        option_index,
+        voter_id,
+        voter_name,
+        voting_time: voting_time?.getTime(),
     }
 
     PollGun
         // @ts-ignore
         .get(poll.key)
+        .get('history')
+        .get(voting_key)
+        // @ts-ignore
+        .put(vote_detail)
+}
+
+export async function updateVotingResults(props: voteProps) {
+    const { poll, option_index } = props
+    const PollResultsGun = PollGun
+        // @ts-ignore
+        .get(poll.key)
         .get('results')
+
+    let results = [0, 0]
+    PollResultsGun.on((item) => {
+        // @ts-ignore
+        delete item._
+        results = Object.values(item)
+    })
+
+    const count = results[option_index] + 1
+    const newResults = {
+        ...results,
+        [option_index]: count,
+    }
+    PollResultsGun
         // @ts-ignore
         .put(newResults)
+
+    return newResults
+}
+
+export async function vote(props: voteProps) {
+    const { poll } = props
+
+    const newResults = await updateVotingResults(props)
+    await updateVotingHistory(props)
+    const history = await getVotingHistory({ key: poll.key })
 
     PluginMessageCenter.emit('maskbook.polls.update', undefined)
 
     return {
         ...poll,
+        voting_history: history,
         results: Object.values(newResults),
     }
 }
@@ -100,7 +147,7 @@ export async function getPollByKey(props: { key: string }) {
     let poll: PollGunDB = {
         ...defaultPoll,
         key: props.key,
-        id: first(keys),
+        sender_id: first(keys),
     }
 
     PollGun
@@ -109,7 +156,7 @@ export async function getPollByKey(props: { key: string }) {
         .on((data: PollGunDB) => {
             poll = {
                 ...poll,
-                sender: data.sender,
+                sender_name: data.sender_name,
                 question: data.question,
                 start_time: data.start_time,
                 end_time: data.end_time,
@@ -137,7 +184,13 @@ export async function getPollByKey(props: { key: string }) {
                     })
             }
         })
-    return poll
+
+    const history = await getVotingHistory({ key: poll.key })
+
+    return {
+        ...poll,
+        voting_history: history,
+    }
 }
 
 export async function getAllExistingPolls() {

@@ -3,6 +3,7 @@ import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import { renderWithPollMetadata, PollMetadataReader } from '../utils'
 import Services from '../../../extension/service'
+import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
 import { PollMetaData, PollStatus } from '../types'
@@ -16,12 +17,18 @@ export default function PollsInPost(props: PollsInPostProps) {
     const [status, setStatus] = useState<PollStatus>(PollStatus.Inactive)
     const [updatedPoll, setUpdatedPoll] = useState<PollMetaData | undefined>(undefined)
 
+    const voter_name = useCurrentIdentity()?.linkedPersona?.nickname
+    const voter_id = useCurrentIdentity()?.linkedPersona?.fingerprint
+
     const vote = (poll: PollGunDB, index: number) => {
         if (new Date().getTime() <= poll.end_time) {
             setStatus(PollStatus.Voting)
             Services.Plugin.invokePlugin('maskbook.polls', 'vote', {
                 poll,
-                index,
+                option_index: index,
+                voter_name,
+                voter_id,
+                voting_time: new Date(),
             }).then((res) => {
                 setStatus(PollStatus.Voted)
                 setUpdatedPoll(res as PollMetaData)

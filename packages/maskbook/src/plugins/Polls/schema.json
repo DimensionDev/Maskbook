@@ -26,14 +26,23 @@
             "type": "array",
             "title": "results"
         },
-        "sender": {
+        "sender_name": {
             "type": "string",
             "title": "sender"
         },
-        "id": {
+        "sender_id": {
             "type": "string",
             "title": "id"
         }
     },
-    "required": ["question", "key", "start_time", "end_time", "options", "results", "sender", "id"]
+    "required": [
+        "question",
+        "key",
+        "start_time",
+        "end_time",
+        "options",
+        "results",
+        "sender_name",
+        "sender_id"
+    ]
 }

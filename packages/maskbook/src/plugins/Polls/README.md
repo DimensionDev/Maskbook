@@ -6,7 +6,7 @@
 - [x] Show all polls user initiated
 - [x] Save voting data into gunDB
 - [ ] \[TODO\] Save voting data into Blockchain
-- [ ] \[TODO\] Show voting history of a poll
+- [x] Show voting history of a poll
 
 ## Related projects
 

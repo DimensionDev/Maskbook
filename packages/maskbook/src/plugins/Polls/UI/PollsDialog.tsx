@@ -109,8 +109,8 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
             options,
             start_time,
             end_time,
-            sender: props.senderName,
-            id: props.senderFingerprint,
+            sender_name: props.senderName,
+            sender_id: props.senderFingerprint,
         }).then((res) => {
             setLoading(false)
             props.switchToCreateNewPoll()
@@ -196,6 +196,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
 }
 
 interface ExistingPollsProps {
+    onOpenHistoryDialog: (opt: boolean) => void
     onSelectExistingPoll(poll?: PollMetaData | null): void
     senderFingerprint: string | undefined
 }
@@ -211,7 +212,7 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
             setLoading(false)
             const myPolls: PollGunDB[] = []
             polls.map((poll) => {
-                if (poll.id === props.senderFingerprint) {
+                if (poll.sender_id === props.senderFingerprint) {
                     myPolls.push(poll)
                 }
             })
@@ -228,7 +229,14 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
             {loading ? (
                 <CircularProgress size={35} classes={{ root: classes.loading }} />
             ) : (
-                polls.map((p) => <PollCardUI onClick={() => insertPoll(p)} poll={p} key={p.key as string} />)
+                polls.map((p) => (
+                    <PollCardUI
+                        onClick={() => insertPoll(p)}
+                        onOpenHistoryDialog={props.onOpenHistoryDialog}
+                        poll={p}
+                        key={p.key as string}
+                    />
+                ))
             )}
         </div>
     )
@@ -257,6 +265,7 @@ export default function PollsDialog(props: PollsDialogProps) {
     const state = useState(0)
     const [, setTabState] = state
     const loading = useState(false)
+    const [historyDialogOpen, setHistoryDialogOpen] = useState(false)
 
     const { t } = useI18N()
 
@@ -265,11 +274,16 @@ export default function PollsDialog(props: PollsDialogProps) {
     }
 
     const insertPoll = (data?: PollMetaData | null) => {
+        if (historyDialogOpen) return
         const ref = getActivatedUI().typedMessageMetadata
         const next = new Map(ref.value)
         data ? next.set(POLL_META_KEY_1, data) : next.delete(POLL_META_KEY_1)
         ref.value = next
         props.onConfirm()
+    }
+
+    const handleHistoryDialogOpen = (isOpen: boolean) => {
+        setHistoryDialogOpen(isOpen)
     }
 
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname
@@ -296,6 +310,7 @@ export default function PollsDialog(props: PollsDialogProps) {
                     <ExistingPollsUI
                         {...props}
                         onSelectExistingPoll={insertPoll}
+                        onOpenHistoryDialog={handleHistoryDialogOpen}
                         senderFingerprint={senderFingerprint}
                     />
                 ),
