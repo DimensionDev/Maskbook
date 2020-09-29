@@ -1,40 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import type { ERC20TokenRecord } from '../Wallet/database/types'
 import type { EthereumTokenType, EthereumNetwork, Token, ChainId } from '../../web3/types'
-export type RedPacketCreationResult =
-    | {
-          type: 'success'
-          block_creation_time: Date
-          red_packet_id: string
-          total: BigNumber
-          creator: string
-      }
-    | { type: 'failed'; reason?: string }
-export type RedPacketClaimResult =
-    | {
-          type: 'success'
-          red_packet_id: string
-          /** receiver's address */
-          claimer: string
-          /** claimed money amount */
-          claimed_value: BigNumber
-      }
-    | { type: 'failed'; reason?: string }
-
-export interface CheckRedPacketAvailabilityResult {
-    token_address: string
-    balance: BigNumber
-    totalCount: number
-    claimedCount: number
-    expired: boolean
-    is_claimed: boolean
-}
-
-export interface CreateRedPacketResult {
-    /** The transaction hash */
-    create_transaction_hash: string
-    create_nonce: number
-}
 
 /**
  * @see https://github.com/DimensionDev/Tessercube-iOS/wiki/Red-Packet-Data-Dictionary
@@ -48,6 +14,7 @@ export interface RedPacketRecord {
     /** The JSON payload */
     payload: RedPacketJSONPayload
 }
+
 export interface RedPacketRecordInDatabase extends RedPacketRecord {}
 
 export enum RedPacketStatus {
@@ -56,6 +23,15 @@ export enum RedPacketStatus {
     expired = 'expired',
     empty = 'empty',
     refunded = 'refunded',
+}
+
+export interface RedPacketAvailability {
+    token_address: string
+    balance: string
+    total: string
+    claimed: string
+    expired: boolean
+    ifclaimed: boolean
 }
 
 export interface RedPacketJSONPayload {

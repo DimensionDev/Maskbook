@@ -149,20 +149,16 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
     //#endregion
 
     //#region blocking
-    const settings = useMemo(
-        () => ({
-            password: uuid(),
-            duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
-            isRandom: Boolean(isRandom),
-            name: senderName,
-            message,
-            shares: shares || 0,
-            token,
-            total: totalAmount.toFixed(),
-        }),
-        [isRandom, senderName, shares, totalAmount],
-    )
-    const [createState, createCallback] = useCreateCallback(settings)
+    const [createSettings, createState, createCallback] = useCreateCallback({
+        password: uuid(),
+        duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
+        isRandom: Boolean(isRandom),
+        name: senderName,
+        message,
+        shares: shares || 0,
+        token,
+        total: totalAmount.toFixed(),
+    })
     const [openTransactionDialog, setOpenTransactionDialog] = useState(false)
     const onSubmit = useCallback(async () => {
         setOpenTransactionDialog(true)
@@ -171,21 +167,13 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
     const onTransactionDialogClose = useCallback(async () => {
         setOpenTransactionDialog(false)
 
-        // reset form if transaction submitted
-        if (
-            [TransactionStateType.HASH, TransactionStateType.RECEIPT, TransactionStateType.CONFIRMED].includes(
-                createState.type,
-            )
-        )
-            setAmount('0')
+        // the settings is not available
+        if (!createSettings) return
 
         // TODO:
         // earily return happended
         // we should guide user to select the red packet in the existing list
         if (createState.type !== TransactionStateType.CONFIRMED) return
-
-        console.log('DEBUG: create done')
-        console.log(createState)
 
         const { receipt } = createState
         const CreationSuccess = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
@@ -196,35 +184,34 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
             total: string
         }
 
-        console.log('DEBUG: create payload')
-        console.log({
-            CreationSuccess,
-            settings,
-        })
-
+        // assemble JSON payload
         const payload: RedPacketJSONPayload = {
             contract_version: 1,
             contract_address: HAPPY_RED_PACKET_ADDRESS,
             rpid: CreationSuccess.id,
-            password: settings.password,
-            shares: settings.shares,
+            password: createSettings.password,
+            shares: createSettings.shares,
             sender: {
                 address: account,
-                name: settings.name,
-                message: settings.message,
+                name: createSettings.name,
+                message: createSettings.message,
             },
-            is_random: settings.isRandom,
+            is_random: createSettings.isRandom,
             total: CreationSuccess.total,
             creation_time: Number.parseInt(CreationSuccess.creation_time),
-            duration: settings.duration,
+            duration: createSettings.duration,
             network: resolveChainName(chainId) as EthereumNetwork,
-            token_type: settings.token.type,
+            token_type: createSettings.token.type,
         }
-        if (settings.token.type === EthereumTokenType.ERC20) payload.token = omit(settings.token, ['type', 'chainId'])
+        if (createSettings.token.type === EthereumTokenType.ERC20)
+            payload.token = omit(createSettings.token, ['type', 'chainId'])
 
         // output the redpacket as JSON payload
         onCreate?.(payload)
-    }, [account, chainId, settings, createState, onCreate])
+
+        // always reset amount
+        setAmount('0')
+    }, [account, chainId, createSettings, createState, onCreate])
     //#endregion
 
     const validationMessage = useMemo(() => {

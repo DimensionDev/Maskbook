@@ -15,8 +15,8 @@ export function useAvailability(account: string, id?: string) {
 export function useAvailabilityRetry(account: string, id?: string) {
     const redPacketContract = useRedPacketContract()
     return useAsyncRetry(async () => {
-        if (!id) return null
-        if (!redPacketContract) return null
+        if (!id) return
+        if (!redPacketContract) return
         return redPacketContract.methods.check_availability(id).call({
             from: account,
         })

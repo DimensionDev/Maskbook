@@ -48,13 +48,6 @@ export function useClaimCallback(id?: string, password?: string) {
                 throw error
             })
 
-        console.log('DEBUG: claimCallback')
-        console.log({
-            config,
-            params,
-            estimatedGas,
-        })
-
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
             redPacketContract.methods.claim(...params).send(
