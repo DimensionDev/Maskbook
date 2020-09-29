@@ -159,7 +159,7 @@ async function diagnosis() {
     }
     const unsyncedLocales = await findAllUnsyncedLocales()
     if (!_.isEmpty(unsyncedLocales)) {
-        console.log('::warning::Run `yarn locale-kit --remove-sync-key` to solve this problem')
+        console.log('::warning::Run `yarn locale-kit --sync-key` to solve this problem')
         for (const [locale, names] of _.toPairs(unsyncedLocales)) {
             const filePath = `src/_locales/${locale}/messages.json`
             for (const name of names) {
