@@ -14,6 +14,7 @@ import { format } from 'date-fns'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import type { PollMetaData } from '../types'
 
 const useStyles = makeStyles(() =>
@@ -45,6 +46,7 @@ export default function VotingHistory(props: VotingHistoryProps) {
     const { poll } = props
     const { voting_history, options } = poll
     const classes = useStylesExtends(useStyles(), props)
+    const { t } = useI18N()
 
     return (
         <>
@@ -67,7 +69,7 @@ export default function VotingHistory(props: VotingHistoryProps) {
                         <DialogDismissIconUI />
                     </IconButton>
                     <Typography style={{ marginLeft: '6px' }} display="inline" variant="inherit">
-                        Voting History
+                        {t('plugin_poll_voting_history')}
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
@@ -80,9 +82,9 @@ export default function VotingHistory(props: VotingHistoryProps) {
                                         secondary={
                                             <React.Fragment>
                                                 <Typography component="span" variant="body2" color="textPrimary">
-                                                    {`Vote For Option ${item.option_index + 1}: "${
-                                                        options[item.option_index]
-                                                    }" — `}
+                                                    {`${t('plugin_poll_vote_for_option', {
+                                                        index: item.option_index + 1,
+                                                    })}: "${options[item.option_index]}" — `}
                                                 </Typography>
                                                 <Typography component="span" variant="body2" color="textSecondary">
                                                     {format(item.voting_time, 'MM/dd/yyyy')}
@@ -94,7 +96,7 @@ export default function VotingHistory(props: VotingHistoryProps) {
                             ))
                         ) : (
                             <Typography variant="body2" color="textPrimary">
-                                No Vote.
+                                {t('plugin_poll_no_vote')}
                             </Typography>
                         )}
                     </List>

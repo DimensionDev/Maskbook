@@ -355,5 +355,8 @@
     "plugin_poll_status_closed": "Closed",
     "plugin_poll_status_voting": "Voting",
     "plugin_poll_status_voted": "Voted.",
-    "plugin_poll_deadline": "{{time}} left until vote ends"
+    "plugin_poll_deadline": "{{time}} left until vote ends",
+    "plugin_poll_voting_history": "Voting History",
+    "plugin_poll_no_vote": "No Vote.",
+    "plugin_poll_vote_for_option": "Vote For Option {{index}}"
 }

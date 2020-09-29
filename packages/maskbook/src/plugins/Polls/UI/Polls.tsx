@@ -174,7 +174,7 @@ export function PollCardUI(props: PollCardProps) {
                         e.stopPropagation()
                         setHistoryOpen(true)
                     }}>
-                    Voting History
+                    {t('plugin_poll_voting_history')}
                 </Button>
             </Typography>
             <VotingHistory

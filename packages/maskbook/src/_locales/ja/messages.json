@@ -355,5 +355,8 @@
     "plugin_poll_status_closed": "投票は終了しました",
     "plugin_poll_status_voting": "投票しています",
     "plugin_poll_status_voted": "投票した.",
-    "plugin_poll_deadline": "{{time}}で終了"
+    "plugin_poll_deadline": "{{time}}で終了",
+    "plugin_poll_voting_history": "投票記録",
+    "plugin_poll_no_vote": "投票記録なし",
+    "plugin_poll_vote_for_option": "オプション{{index}}に投票する"
 }
