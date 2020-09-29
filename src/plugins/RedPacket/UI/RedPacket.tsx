@@ -1,9 +1,9 @@
 import React, { useEffect, useCallback, useState } from 'react'
 import { noop } from 'lodash-es'
-import { makeStyles, createStyles, Card, Typography } from '@material-ui/core'
+import { makeStyles, createStyles, Card, Typography, Box } from '@material-ui/core'
 import classNames from 'classnames'
 import type { RedPacketRecord, RedPacketJSONPayload } from '../types'
-import type { RedPacketStatus } from '../types'
+import { RedPacketStatus } from '../types'
 import Services from '../../../extension/service'
 import { PluginMessageCenter } from '../../PluginMessages'
 import { formatBalance } from '../../Wallet/formatter'
@@ -15,8 +15,10 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
 import { TransactionDialog } from '../../../web3/UI/TransactionDialog'
-import { isSameAddress, isDAI, isOKB } from '../../../web3/helpers'
+import { isDAI, isOKB } from '../../../web3/helpers'
 import { EthereumTokenType } from '../../../web3/types'
+import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
+import { resolveRedPacketStatus } from '../pipes'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -38,7 +40,7 @@ const useStyles = makeStyles((theme) =>
             justifyContent: 'space-between',
             alignItems: 'flex-start',
         },
-        flex1: {
+        from: {
             flex: '1',
         },
         label: {
@@ -130,10 +132,9 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
         return PluginMessageCenter.on('maskbook.red_packets.update', updateRedPacket)
     }, [from, JSON.stringify(payload)])
 
+    const { canClaim, canRefund, status } = useAvailabilityComputed(account, availability, payload)
+
     //#region blocking
-    const couldClaim = !availability?.expired && availability?.balance !== '0' && !availability?.ifclaimed
-    const couldRefund =
-        availability?.expired && availability.balance !== '0' && isSameAddress(payload?.sender.address ?? '', account)
     const [openTransactionDialog, setOpenTransactionDialog] = useState(false)
     const [claimState, claimCallback] = useClaimCallback(payload?.rpid, payload?.password)
     const [refundState, refundCallback] = useRefundCallback(payload?.rpid)
@@ -141,13 +142,13 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     const onClaimOrRefund = useCallback(async () => {
         console.log('DEUBG: claim or refund')
         console.log({
-            couldClaim,
-            couldRefund,
+            canClaim,
+            canRefund,
         })
         setOpenTransactionDialog(true)
-        if (couldClaim) await claimCallback()
-        else if (couldRefund) await refundCallback()
-    }, [couldClaim, couldRefund, availability, claimCallback, refundCallback])
+        if (canClaim) await claimCallback()
+        else if (canRefund) await refundCallback()
+    }, [canClaim, canRefund, availability, claimCallback, refundCallback])
 
     const onTransactionDialogClose = useCallback(() => {
         setOpenTransactionDialog(false)
@@ -165,36 +166,35 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
             <Card
                 elevation={0}
                 className={classNames(classes.box, {
-                    [classes.cursor]: couldClaim || couldRefund,
+                    [classes.cursor]: canClaim || canRefund,
                 })}
                 component="article"
                 onClick={onClaimOrRefund}>
-                <div>
-                    {availability.ifclaimed ? null : (
-                        <Typography variant="body1" color="inherit">
-                            {t('plugin_red_packet_from', { from: payload.sender.name ?? '-' })}
+                <Box display="flex">
+                    <Typography className={classes.from} variant="body1" color="inherit">
+                        {t('plugin_red_packet_from', { from: payload.sender.name ?? '-' })}
+                    </Typography>
+                    {status !== RedPacketStatus.initial ? (
+                        <Typography className={classes.label} variant="body2">
+                            {resolveRedPacketStatus(status)}
                         </Typography>
-                    )}
-                </div>
+                    ) : null}
+                </Box>
                 <div className={classNames(classes.content)}>
                     <Typography className={classes.words} variant="h6">
                         {payload.sender.message}
                     </Typography>
                     <Typography variant="body2">
                         {(() => {
-                            if (availability.ifclaimed) return t('plugin_red_packet_description_claimed')
-                            if (
-                                Number.parseInt(availability.total) > Number.parseInt(availability.claimed) &&
-                                availability.balance === '0'
-                            )
-                                return t('plugin_red_packet_description_refunded')
-                            if (availability.expired)
+                            if (status === RedPacketStatus.claimed) return t('plugin_red_packet_description_claimed')
+                            if (status === RedPacketStatus.refunded) return t('plugin_red_packet_description_refunded')
+                            if (status === RedPacketStatus.expired)
                                 return t(
-                                    couldRefund
+                                    canRefund
                                         ? 'plugin_red_packet_description_refund'
                                         : 'plugin_red_packet_description_expired',
                                 )
-                            if (availability.balance === '0') return t('plugin_red_packet_description_empty')
+                            if (status === RedPacketStatus.empty) return t('plugin_red_packet_description_empty')
                             return t('plugin_red_packet_description_failover', {
                                 total: payload.total
                                     ? `${formatBalance(new BigNumber(payload.total), payload.token?.decimals ?? 18)} ${
@@ -217,14 +217,14 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
                 />
                 <div
                     className={classNames(classes.loader, {
-                        [classes.dimmer]: !couldClaim && !couldRefund,
+                        [classes.dimmer]: !canClaim && !canRefund,
                     })}
                 />
             </Card>
 
-            {couldClaim || couldRefund ? (
+            {canClaim || canRefund ? (
                 <TransactionDialog
-                    state={couldClaim ? claimState : refundState}
+                    state={canClaim ? claimState : refundState}
                     summary={`Claiming red packet from ${payload.sender.name}`}
                     open={openTransactionDialog}
                     onClose={onTransactionDialogClose}

@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
@@ -24,6 +24,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
     const account = useAccount()
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract()
+    const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
 
     const createCallback = useCallback(async () => {
         if (!redPacketContract) {
@@ -106,6 +107,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                 })
             })
             promiEvent.on('confirmation', (no: number, receipt: TransactionReceipt) => {
+                setCreateSettings(redPacketSettings)
                 setCreateState({
                     type: TransactionStateType.CONFIRMED,
                     no,
@@ -117,5 +119,5 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
         })
     }, [account, redPacketContract, redPacketSettings])
 
-    return [createState, createCallback] as const
+    return [createSettings, createState, createCallback] as const
 }
