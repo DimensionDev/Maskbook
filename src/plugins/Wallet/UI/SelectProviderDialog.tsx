@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { MoreHorizontal } from 'react-feather'
 import { makeStyles, Theme, createStyles, DialogContent, GridList, GridListTile } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -100,12 +100,23 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
         },
         [wallets?.length, onClose, history],
     )
-    MessageCenter.on('metamaskMessage', async (payload: string) => {
-        // console.log(payload);
-        if (payload === 'metamask_not_install') {
-            enqueueSnackbar(t(payload), { key: 'metamask_not_install', variant: 'error', preventDuplicate: true })
-        }
-    })
+
+    // TODO:
+    // Show error message when click metamask would be better
+    useEffect(
+        () =>
+            MessageCenter.on('metamaskMessage', async (payload: string) => {
+                if (payload === 'metamask_not_install') {
+                    enqueueSnackbar(t(payload), {
+                        key: 'metamask_not_install',
+                        variant: 'error',
+                        preventDuplicate: true,
+                    })
+                }
+            }),
+        [],
+    )
+
     return (
         <div className={classes.root}>
             <ShadowRootDialog

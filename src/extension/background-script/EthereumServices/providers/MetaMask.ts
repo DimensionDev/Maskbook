@@ -23,16 +23,15 @@ async function onData(error: Error | null, event?: { method: string; result: str
     await updateWalletInDB(event.result[0] ?? '', false)
 }
 
-function onError(error: any) {
-    console.log(error);
+function onNetworkChanged(id: string) {
+    currentMetaMaskChainIdSettings.value = Number.parseInt(id) as ChainId
+}
+
+function onNetworkError(error: any) {
     if (error === 'MetamaskInpageProvider - lost connection to MetaMask') {
         MessageCenter.emit('metamaskMessage', 'metamask_not_install')
         updateExoticWalletFromSource(ProviderType.MetaMask, new Map())
     }
-}
-
-function onNetworkChanged(id: string) {
-    currentMetaMaskChainIdSettings.value = Number.parseInt(id) as ChainId
 }
 
 // create a new provider
@@ -42,13 +41,12 @@ export function createProvider() {
     if (provider) {
         provider.off('data', onData)
         provider.off('networkChanged', onNetworkChanged)
+        provider.off('error', onNetworkError)
     }
     provider = createMetaMaskProvider()
     provider.on('data', onData)
     provider.on('networkChanged', onNetworkChanged)
-    provider.on('error', (error) => {
-        onError(error);
-    })
+    provider.on('error', onNetworkError)
     return provider
 }
 
