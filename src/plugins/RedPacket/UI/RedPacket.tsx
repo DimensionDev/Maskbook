@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState } from 'react'
 import { noop } from 'lodash-es'
-import { makeStyles, createStyles, Card, Typography, Box } from '@material-ui/core'
+import { makeStyles, createStyles, Card, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import type { RedPacketRecord, RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
@@ -16,9 +16,9 @@ import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
 import { TransactionDialog } from '../../../web3/UI/TransactionDialog'
 import { isDAI, isOKB } from '../../../web3/helpers'
-import { EthereumTokenType } from '../../../web3/types'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { resolveRedPacketStatus } from '../pipes'
+import { Skeleton } from '@material-ui/lab'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -118,12 +118,6 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     const account = useAccount()
     const { value: availability, loading, retry } = useAvailabilityRetry(account, payload?.rpid)
 
-    console.log('DEBUG: red packet')
-    console.log({
-        ...props,
-        availability,
-    })
-
     useEffect(() => {
         if (!payload) return noop
         const updateRedPacket = () =>
@@ -132,7 +126,11 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
         return PluginMessageCenter.on('maskbook.red_packets.update', updateRedPacket)
     }, [from, JSON.stringify(payload)])
 
-    const { canClaim, canRefund, status } = useAvailabilityComputed(account, availability, payload)
+    const { canClaim, canRefund, status, tokenAmount, tokenSymbol } = useAvailabilityComputed(
+        account,
+        availability,
+        payload,
+    )
 
     //#region blocking
     const [openTransactionDialog, setOpenTransactionDialog] = useState(false)
@@ -158,8 +156,14 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
 
     // TODO:
     // add loading UI
-    if (!payload) return null
-    if (loading || !availability) return null
+    if (!payload || !availability || loading)
+        return (
+            <Card className={classes.box} component="article" elevation={0}>
+                <Skeleton animation="wave" variant="rect" width={'30%'} height={12} style={{ marginTop: 16 }} />
+                <Skeleton animation="wave" variant="rect" width={'40%'} height={12} style={{ marginTop: 16 }} />
+                <Skeleton animation="wave" variant="rect" width={'70%'} height={12} style={{ marginBottom: 16 }} />
+            </Card>
+        )
 
     return (
         <>
@@ -170,7 +174,7 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
                 })}
                 component="article"
                 onClick={onClaimOrRefund}>
-                <Box display="flex">
+                <div className={classes.header}>
                     <Typography className={classes.from} variant="body1" color="inherit">
                         {t('plugin_red_packet_from', { from: payload.sender.name ?? '-' })}
                     </Typography>
@@ -179,7 +183,7 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
                             {resolveRedPacketStatus(status)}
                         </Typography>
                     ) : null}
-                </Box>
+                </div>
                 <div className={classNames(classes.content)}>
                     <Typography className={classes.words} variant="h6">
                         {payload.sender.message}
@@ -188,21 +192,17 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
                         {(() => {
                             if (status === RedPacketStatus.claimed) return t('plugin_red_packet_description_claimed')
                             if (status === RedPacketStatus.refunded) return t('plugin_red_packet_description_refunded')
-                            if (status === RedPacketStatus.expired)
-                                return t(
-                                    canRefund
-                                        ? 'plugin_red_packet_description_refund'
-                                        : 'plugin_red_packet_description_expired',
-                                )
+                            if (status === RedPacketStatus.expired) {
+                                if (canRefund)
+                                    return t('plugin_red_packet_description_refund', {
+                                        balance: tokenAmount,
+                                        symbol: tokenSymbol,
+                                    })
+                                else return t('plugin_red_packet_description_expired')
+                            }
                             if (status === RedPacketStatus.empty) return t('plugin_red_packet_description_empty')
                             return t('plugin_red_packet_description_failover', {
-                                total: payload.total
-                                    ? `${formatBalance(new BigNumber(payload.total), payload.token?.decimals ?? 18)} ${
-                                          payload.token_type === EthereumTokenType.Ether
-                                              ? 'ETH'
-                                              : payload.token?.symbol ?? ''
-                                      }`
-                                    : '-',
+                                total: payload.total ? `${tokenAmount} ${tokenSymbol}` : '-',
                                 name: payload.sender.name ?? '-',
                                 shares: payload.shares ?? '-',
                             })
@@ -225,7 +225,11 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
             {canClaim || canRefund ? (
                 <TransactionDialog
                     state={canClaim ? claimState : refundState}
-                    summary={`Claiming red packet from ${payload.sender.name}`}
+                    summary={
+                        canClaim
+                            ? `Claiming red packet from ${payload.sender.name}`
+                            : `Refunding red packet for ${tokenAmount} ${tokenSymbol}`
+                    }
                     open={openTransactionDialog}
                     onClose={onTransactionDialogClose}
                 />

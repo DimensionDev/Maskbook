@@ -303,7 +303,8 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
                     variant="contained"
                     disabled={Boolean(validationMessage)}
                     onClick={onSubmit}>
-                    {validationMessage || `Send ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`}
+                    {validationMessage ||
+                        `Send ${formatBalance(totalAmount, token.decimals, token.decimals)} ${token.symbol}`}
                 </ActionButton>
             )}
             <SelectERC20TokenDialog
@@ -314,7 +315,11 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
             />
             <TransactionDialog
                 state={createState}
-                summary={`Creating ${formatBalance(new BigNumber(amount), token.decimals)} ${token.symbol}`}
+                summary={`Creating red packet with ${formatBalance(
+                    new BigNumber(amount),
+                    token.decimals,
+                    token.decimals,
+                )} ${token.symbol}`}
                 open={openTransactionDialog}
                 onClose={onTransactionDialogClose}
             />

@@ -83,10 +83,7 @@ export function iteratorToPromiEvent(
                 const stage_ = processor(stage)
 
                 console.log('DEBUG: new stage')
-                console.log({
-                    stage,
-                    stage_,
-                })
+                console.log(stage_)
 
                 switch (stage_.type) {
                     case StageType.TRANSACTION_HASH:
