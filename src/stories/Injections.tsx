@@ -28,7 +28,6 @@ import { DefaultTypedMessageRenderer } from '../components/InjectedComponents/Ty
 import { useTwitterThemedPostDialogHint } from '../social-network-provider/twitter.com/ui/injectPostDialogHint'
 import { useTwitterButton } from '../social-network-provider/twitter.com/utils/theme'
 import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
-import { PersonKnownSelf } from '../components/InjectedComponents/PersonKnown'
 import { figmaLink } from './utils'
 import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
 import type { RedPacketJSONPayload } from '../plugins/RedPacket/types'
@@ -213,10 +212,6 @@ storiesOf('Injections', module)
     })
     .add('Comment box', () => {
         return <CommentBox onSubmit={action('submit')} />
-    })
-    .add('Person Known', () => {
-        const bio = text('Bio', '__bio__content__')
-        return <PersonKnownSelf bio={bio} />
     })
     .add(
         'Post Dialog',

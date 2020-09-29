@@ -1,5 +1,4 @@
 import type { SocialNetworkUIInjections } from '../../../social-network/ui'
-import { injectKnownIdentityAtTwitter } from './injectKnownIdentity'
 import { injectPostDialogAtTwitter } from './injectPostDialog'
 import { injectPostDialogHintAtTwitter } from './injectPostDialogHint'
 import { injectPostInspectorAtTwitter } from './injectPostInspector'
@@ -18,5 +17,4 @@ export const twitterUIInjections: SocialNetworkUIInjections = {
     injectPostReplacer: injectPostReplacerAtTwitter,
     injectPostInspector: injectPostInspectorAtTwitter,
     injectPageInspector: injectPageInspectorAtTwitter,
-    injectKnownIdentity: injectKnownIdentityAtTwitter,
 }
