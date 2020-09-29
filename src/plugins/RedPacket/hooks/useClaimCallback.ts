@@ -6,6 +6,7 @@ import { useTransactionState, TransactionStateType } from '../../../web3/hooks/u
 import { useAccount } from '../../../web3/hooks/useAccount'
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
+import Services from '../../../extension/service'
 
 export function useClaimCallback(id?: string, password?: string) {
     const account = useAccount()
@@ -48,27 +49,35 @@ export function useClaimCallback(id?: string, password?: string) {
                 throw error
             })
 
-        // step 2: blocking
+        // step 2-1: blocking
         return new Promise<string>((resolve, reject) => {
+            const onSucceed = (hash: string) => {
+                setClaimState({
+                    type: TransactionStateType.HASH,
+                    hash,
+                })
+                resolve(hash)
+            }
+            const onFailed = (error: Error) => {
+                setClaimState({
+                    type: TransactionStateType.FAILED,
+                    error,
+                })
+                reject(error)
+            }
             redPacketContract.methods.claim(...params).send(
                 {
                     gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                     ...config,
                 },
-                (error, hash) => {
-                    if (error) {
-                        setClaimState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
-                        reject(error)
-                    } else {
-                        setClaimState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
-                    }
+                async (error, hash) => {
+                    if (hash) onSucceed(hash)
+                    // claim by server
+                    else if (error?.message.includes('insufficient funds for gas')) {
+                        Services.Plugin.invokePlugin('maskbook.red_packet', 'claimByServer', account, id, password)
+                            .then(({ claim_transaction_hash }) => onSucceed(claim_transaction_hash))
+                            .catch(onFailed)
+                    } else if (error) onFailed(error)
                 },
             )
         })
