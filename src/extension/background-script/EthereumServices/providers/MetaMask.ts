@@ -3,9 +3,10 @@ import createMetaMaskProvider, { MetamaskInpageProvider } from 'metamask-extensi
 import { ChainId } from '../../../../web3/types'
 import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { EthereumAddress } from 'wallet.ts'
-import { updateExoticWalletFromSource, setDefaultWallet } from '../../../../plugins/Wallet/wallet'
+import { updateExoticWalletFromSource, setDefaultWallet } from '../../../../plugins/Wallet/services'
 import { ProviderType } from '../../../../web3/types'
 import { sideEffect } from '../../../../utils/side-effects'
+import { MessageCenter } from '../../../../utils/messages'
 
 //#region tracking chain id
 let currentChainId: ChainId = ChainId.Mainnet
@@ -26,6 +27,13 @@ function onNetworkChanged(id: string) {
     currentMetaMaskChainIdSettings.value = Number.parseInt(id) as ChainId
 }
 
+function onNetworkError(error: any) {
+    if (error === 'MetamaskInpageProvider - lost connection to MetaMask') {
+        MessageCenter.emit('metamaskMessage', 'metamask_not_install')
+        updateExoticWalletFromSource(ProviderType.MetaMask, new Map())
+    }
+}
+
 // create a new provider
 sideEffect.then(createProvider)
 
@@ -33,10 +41,12 @@ export function createProvider() {
     if (provider) {
         provider.off('data', onData)
         provider.off('networkChanged', onNetworkChanged)
+        provider.off('error', onNetworkError)
     }
     provider = createMetaMaskProvider()
     provider.on('data', onData)
     provider.on('networkChanged', onNetworkChanged)
+    provider.on('error', onNetworkError)
     return provider
 }
 

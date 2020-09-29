@@ -7,7 +7,7 @@ import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupF
 import { GroupRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
 import { ProfileIdentifier, PersonaIdentifier, Identifier } from '../../../database/type'
-import { getWallets } from '../../../plugins/Wallet/wallet'
+import { getWallets } from '../../../plugins/Wallet/services'
 import { WalletRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { ProviderType } from '../../../web3/types'
 

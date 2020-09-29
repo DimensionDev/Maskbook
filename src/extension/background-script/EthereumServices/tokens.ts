@@ -1,6 +1,5 @@
-import { Token, EthereumTokenType, ChainId } from '../../../web3/types'
-import { flatMap, uniq } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
+import { Token, EthereumTokenType, ChainId } from '../../../web3/types'
 
 interface TokenList {
     keywords: string[]

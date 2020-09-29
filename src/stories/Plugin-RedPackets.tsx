@@ -1,71 +1,22 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { RedPacketWithStateUI, RedPacket } from '../plugins/RedPacket/UI/RedPacket'
+import { RedPacketInList } from '../plugins/RedPacket/UI/RedPacket'
 import { RedPacketRecord, RedPacketStatus, RedPacketJSONPayload } from '../plugins/RedPacket/types'
-import { number, text, select, boolean } from '@storybook/addon-knobs'
+import { number, text, select } from '@storybook/addon-knobs'
 import { Typography, Paper } from '@material-ui/core'
-import { action } from '@storybook/addon-actions'
 import BigNumber from 'bignumber.js'
 import { makeTypedMessageText } from '../protocols/typed-message'
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
 import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
-import { ChainId, EthereumTokenType, EthereumNetwork } from '../web3/types'
-import { getConstant } from '../web3/helpers'
-import { CONSTANTS } from '../web3/constants'
+import { EthereumTokenType, EthereumNetwork } from '../web3/types'
 
 storiesOf('Plugin: Red Packets', module)
-    .add('RedPacketWithStateUI', () => {
-        const { decimals, erc20name, erc20symbol, total, ...opts } = createRedPacketKnobs()
-        const loading = boolean('Loading', false)
-        const eth = createRecord({
-            ...opts,
-            total: total * 1000000000000000000,
-            type: EthereumTokenType.Ether,
-            status: RedPacketStatus.incoming,
-        })
-        const erc20 = createRecord({
-            ...opts,
-            type: EthereumTokenType.ERC20,
-            total: total * 10 ** decimals,
-            token: {
-                address: 'addr',
-                name: erc20name,
-                decimals,
-                symbol: erc20symbol,
-            },
-            status: RedPacketStatus.claimed,
-        })
-        const dai = createRecord({
-            ...opts,
-            type: EthereumTokenType.ERC20,
-            total: total * 10 ** decimals,
-            token: {
-                address: getConstant(CONSTANTS, 'DAI_ADDRESS'),
-                name: 'DAI',
-                decimals,
-                symbol: erc20symbol,
-            },
-            status: RedPacketStatus.empty,
-        })
-        return (
-            <>
-                <Typography>ETH</Typography>
-                <RedPacketWithStateUI redPacket={eth} loading={loading} onClick={action('onClick')} />
-                <hr />
-                <Typography>ERC20</Typography>
-                <RedPacketWithStateUI onClick={action('onClick')} loading={loading} redPacket={erc20} />
-                <hr />
-                <Typography>DAI</Typography>
-                <RedPacketWithStateUI onClick={action('onClick')} loading={loading} redPacket={dai} />
-            </>
-        )
-    })
     .add('RedPacket', () => {
         const { decimals, erc20name, erc20symbol, total, ...opts } = createRedPacketKnobs()
         return (
             <>
                 <Typography>ETH</Typography>
-                <RedPacket
+                <RedPacketInList
                     redPacket={createRecord({
                         ...opts,
                         total: total * 1000000000000000000,
@@ -74,7 +25,7 @@ storiesOf('Plugin: Red Packets', module)
                 />
                 <hr />
                 <Typography>ERC20</Typography>
-                <RedPacket
+                <RedPacketInList
                     redPacket={createRecord({
                         ...opts,
                         type: EthereumTokenType.ERC20,
@@ -139,29 +90,12 @@ function createRecord(opts: {
     claimedAmount: number
     senderName: string
     type: EthereumTokenType
-    token?: NonNullable<RedPacketRecord['raw_payload']>['token']
+    token?: NonNullable<RedPacketRecord['payload']>['token']
 }): RedPacketRecord {
     const x: RedPacketRecord = {
-        aes_version: 1,
-        contract_address: 'contract_address',
-        contract_version: 1,
-        duration: 86400,
-        id: 'id',
-        is_random: false,
-        network: EthereumNetwork.Rinkeby,
-        password: 'password',
-        received_time: new Date(),
-        send_message: opts.message,
-        send_total: new BigNumber(opts.total),
-        sender_address: 'sender_address',
-        sender_name: opts.senderName,
-        shares: new BigNumber(opts.shares),
-        status: opts.status,
-        token_type: opts.type,
-        _found_in_url_: 'https://g.cn/',
-        claim_amount: new BigNumber(opts.claimedAmount),
-        raw_payload: { token: opts.token } as RedPacketJSONPayload,
-        erc20_token: opts.token ? 'aefwf' : undefined,
+        from: 'https://g.cn/',
+        rpid: 'id',
+        payload: { token: opts.token } as RedPacketJSONPayload,
     }
     // @ts-ignore
     if (opts.total === 0) delete x.send_total

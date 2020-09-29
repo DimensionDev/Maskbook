@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useEffect } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount } from './useAccount'
 import { useConstant } from './useConstant'
@@ -7,7 +7,6 @@ import { Token, EthereumTokenType } from '../types'
 import { useTokenAllowance } from './useTokenAllowance'
 import { useTokenBalance } from './useTokenBalance'
 import { CONSTANTS } from '../constants'
-import { useAsyncTimes } from '../../utils/hooks/useAsyncTimes'
 import { useTransactionReceipt } from './useTransaction'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()

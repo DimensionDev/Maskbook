@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
-import { TokenListsState, useTokenLists } from '../../../web3/hooks/useTokenLists'
+import { TokenListsState, useTokensFromLists } from '../../../web3/hooks/useTokensFromLists'
 import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../web3/constants'
@@ -31,7 +31,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     //#region search tokens
     const TOKEN_LISTS = useConstant(CONSTANTS, 'TOKEN_LISTS')
     const [address, setAddress] = useState('')
-    const searchedTokens = useTokenLists(TOKEN_LISTS, {
+    const searchedTokens = useTokensFromLists(TOKEN_LISTS, {
         keyword,
         useEther,
     })

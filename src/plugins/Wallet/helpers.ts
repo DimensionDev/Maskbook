@@ -2,9 +2,17 @@ import stringify from 'json-stable-stringify'
 import type { WalletRecord, ERC20TokenRecord } from './database/types'
 import { isSameAddress } from '../../web3/helpers'
 
+function serializeWalletRecord(record: WalletRecord) {
+    return stringify({
+        ...record,
+        erc20_token_whitelist: Array.from(record.erc20_token_whitelist.values()),
+        erc20_token_blacklist: Array.from(record.erc20_token_blacklist.values()),
+    })
+}
+
 export function WalletComparer(a: WalletRecord | null, b: WalletRecord | null) {
     if (!a || !b) return false
-    return stringify(a) === stringify(b)
+    return serializeWalletRecord(a) === serializeWalletRecord(b)
 }
 
 export function WalletArrayComparer(a: WalletRecord[], b: WalletRecord[]) {

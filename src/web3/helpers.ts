@@ -1,8 +1,9 @@
+import type Web3 from 'web3'
+import type { EventLog, TransactionReceipt } from 'web3-core'
+import Web3Utils, { AbiItem, AbiOutput } from 'web3-utils'
 import BigNumber from 'bignumber.js'
-import type { AbiOutput } from 'web3-utils'
 import { CONSTANTS } from './constants'
 import { ChainId, EthereumTokenType, Token } from './types'
-import type Web3 from 'web3'
 import { unreachable } from '../utils/utils'
 
 export function isSameAddress(addrA: string, addrB: string) {
@@ -110,12 +111,41 @@ export function createERC20Token(
     }
 }
 
-export function decodeOutputString(web3: Web3, abi: AbiOutput[], output: string) {
-    if (abi.length === 1) return web3.eth.abi.decodeParameter(abi[0].type, output)
-    if (abi.length > 1)
-        return web3.eth.abi.decodeParameters(
-            abi.map((x) => x.type),
-            output,
-        )
+export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
+    if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)
+    if (abis.length > 1) return web3.eth.abi.decodeParameters(abis, output)
     return
+}
+
+export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionReceipt) {
+    // the topic0 for identifying which abi to be used for decoding the event
+    const listOfTopic0 = abis.map((abi) => Web3Utils.keccak256(`${abi.name}(${abi.inputs?.map((x) => x.type).join()})`))
+
+    // decode events
+    const events = receipt.logs.map((log) => {
+        const idx = listOfTopic0.indexOf(log.topics[0])
+        if (idx === -1) return
+        const abis_ = abis[idx]?.inputs ?? []
+        return {
+            returnValues: web3.eth.abi.decodeLog(abis_ ?? [], log.data, log.topics),
+            raw: {
+                data: log.data,
+                topics: log.topics,
+            },
+            event: abis[idx].name,
+            signature: listOfTopic0[idx],
+            ...log,
+        } as EventLog
+    })
+
+    console.log('DEBUG: decode events')
+    console.log({
+        listOfTopic0,
+        receipt,
+    })
+
+    return events.reduce((accumulate, event) => {
+        if (event) accumulate[event.event] = event
+        return accumulate
+    }, {} as { [eventName: string]: EventLog })
 }

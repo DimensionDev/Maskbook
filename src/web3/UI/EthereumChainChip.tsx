@@ -1,9 +1,9 @@
 import React from 'react'
 import { Chip, createStyles, makeStyles, Theme, ChipProps } from '@material-ui/core'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-import type { ChainId } from '../../web3/types'
-import { resolveChainName, resolveChainColor } from '../../web3/pipes'
-import { useStylesExtends } from '../custom-ui-helper'
+import type { ChainId } from '../types'
+import { resolveChainName, resolveChainColor } from '../pipes'
+import { useStylesExtends } from '../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({

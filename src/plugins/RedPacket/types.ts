@@ -1,6 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import type { ERC20TokenRecord } from '../Wallet/database/types'
-import type { EthereumTokenType, EthereumNetwork } from '../../web3/types'
+import type { EthereumTokenType, EthereumNetwork, Token, ChainId } from '../../web3/types'
 export type RedPacketCreationResult =
     | {
           type: 'success'
@@ -41,100 +41,21 @@ export interface CreateRedPacketResult {
  */
 
 export interface RedPacketRecord {
-    /** UUID PRIMARY KEY */
-    id: string
-    /** Start from 1 */
-    aes_version: number
-    /** Start from 1 */
-    contract_version: number
-    contract_address: string
-    /** password that used to receive the red packet */
-    password: string
-    /**
-     * true if 'Random Mode'. false if 'Average Mode'
-     */
-    is_random: boolean
-    /** create transaction nonce when send */
-    create_nonce?: number
-    /** create transaction hash */
-    create_transaction_hash?: string
-    /** Read from create transaction result */
-    block_creation_time?: Date
-    /** Available time after block_creation_time. In seconds. Default 86400 (24hrs) */
-    duration: number
-    /** Read from create transaction result */
-    red_packet_id?: string
-    /** JSON payload. See raw_payload below */
-    raw_payload?: RedPacketJSONPayload
-    enc_payload?: string
-    /** Red packet sender address */
-    sender_address: string
-    /** Trimmed not empty single line string. Max 30 chars */
-    sender_name: string
-    /** Red packet total value in Wei if ETH. In minimal unit if ERC20 token */
-    send_total: BigNumber
-    /** Trimmed single line string. Allow empty input. Max 140 chars. Replace inline break with space */
-    send_message: string
-    /** Last in-app share action time */
-    last_share_time?: Date
-    /** Address for the wallet to claim */
-    claim_address?: string
-    /** claim transaction hash */
-    claim_transaction_hash?: string
-    /** Read from claim result */
-    claim_amount?: BigNumber
-    refund_transaction_hash?: string
-    refund_amount?: BigNumber
-    /** Red packet status machine marker. See RedPacketStatus below */
-    status: RedPacketStatus
-    /** web3 network tag enum. Mainnet or Rinkeby */
-    network: EthereumNetwork
-    /** token type tag for red packet */
-    token_type: EthereumTokenType
-    /** ERC20Token contract address if erc20 token type */
-    erc20_token?: string
-    /** ERC20 approve transaction hash */
-    erc20_approve_transaction_hash?: string
-    /** ERC20 approve transaction event value */
-    erc20_approve_value?: BigNumber
-    /** incoming red packet time */
-    received_time: Date
-    /** Number of red packet shares */
-    shares: BigNumber
-    _found_in_url_?: string
+    /** The red packet ID */
+    rpid: string
+    /** From url */
+    from: string
+    /** The JSON payload */
+    payload: RedPacketJSONPayload
 }
-export interface RedPacketRecordInDatabase
-    extends Omit<RedPacketRecord, 'send_total' | 'claim_amount' | 'refund_amount' | 'erc20_approve_value' | 'shares'> {
-    send_total: string | bigint
-    claim_amount?: string | bigint
-    refund_amount?: string | bigint
-    erc20_approve_value?: string | bigint
-    shares: string | bigint
-    type: 'red-packet'
-}
-export enum RedPacketTokenType {
-    eth = 0,
-    erc20 = 1,
-    erc721 = 2,
-}
+
+export interface RedPacketRecordInDatabase extends RedPacketRecord {}
+
 export enum RedPacketStatus {
-    /** Red packet ready to send */
     initial = 'initial',
-    /** After read create transaction hash */
-    pending = 'pending',
-    /** Fail to send. [END] */
-    fail = 'fail',
-    normal = 'normal',
-    incoming = 'incoming',
-    /** After read claim transaction hash */
-    claim_pending = 'claim_pending',
-    /** After read claim success result */
     claimed = 'claimed',
     expired = 'expired',
-    /** [END] */
     empty = 'empty',
-    refund_pending = 'refund_pending',
-    /** [END] */
     refunded = 'refunded',
 }
 
@@ -161,11 +82,8 @@ export interface RedPacketJSONPayload {
 export namespace History {
     export type RecordType = CreateRedPacketRecord
 
-    export interface CreateRedPacketRecord {
-        method: 'create_red_packet'
-        txHash: string
-        txTimestamp: string
-        txBlockNumber: string
+    export interface CreateInputLog {
+        $name: 'create_red_packet'
         _hash: string
         _number: string
         _ifrandom: boolean
@@ -176,5 +94,66 @@ export namespace History {
         _token_type: string
         _token_addr: string
         _total_tokens: string
+    }
+
+    export interface CreateOutputLog {
+        $name: string
+        total: string
+        id: string
+        creator: string
+        creation_time: string
+        token_address: string
+    }
+
+    export interface ClaimInputLog {
+        $name: string
+        id: string
+        password: string
+        _recipient: string
+        validation: string
+    }
+
+    export interface ClaimOutputLog {
+        $name: string
+        id: string
+        claimer: string
+        claimed_value: string
+        token_address: string
+    }
+
+    export interface RefundInputLog {
+        $name: string
+        id: string
+    }
+
+    export interface RefundOutputLog {
+        $name: string
+        id: string
+        token_address: string
+        remaining_balance: string
+    }
+
+    export interface CreateRedPacketRecord {
+        id: string
+        status: 'refunded' | 'expired' | 'claimed' | 'empty' | null
+        availability: {
+            balance: string
+            claimed: boolean
+            claimedCount: number
+            expired: boolean
+            tokenAddress: string
+            totalCount: number
+        }
+        transactions: {
+            timestamp: string
+            records: (
+                | CreateInputLog
+                | CreateOutputLog
+                | ClaimInputLog
+                | ClaimOutputLog
+                | RefundInputLog
+                | RefundOutputLog
+            )[]
+        }[]
     }
 }

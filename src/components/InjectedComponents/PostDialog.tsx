@@ -474,6 +474,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
         }, []),
     )
     //#endregion
+
     //#region Red Packet
     // TODO: move into the plugin system
     const hasRedPacket = RedPacketMetadataReader(postBoxContent.meta).ok

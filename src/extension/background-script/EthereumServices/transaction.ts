@@ -2,7 +2,7 @@ import type { TransactionConfig, PromiEvent, TransactionReceipt } from 'web3-cor
 import type { ITxData } from '@walletconnect/types'
 
 import { promiEventToIterator, StageType } from '../../../utils/promiEvent'
-import { getWallets } from '../../../plugins/Wallet/wallet'
+import { getWallets } from '../../../plugins/Wallet/services'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import { createWeb3 } from './web3'

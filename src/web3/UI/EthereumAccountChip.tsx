@@ -1,9 +1,9 @@
 import React from 'react'
 import { Chip, ChipProps, makeStyles, Theme, createStyles } from '@material-ui/core'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
-import { isSameAddress } from '../../web3/helpers'
-import { ProviderIcon } from './ProviderIcon'
+import { isSameAddress } from '../helpers'
+import { ProviderIcon } from '../../components/shared/ProviderIcon'
 import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
 
 const useStyles = makeStyles((theme: Theme) => {

@@ -1,5 +1,5 @@
 import { ChainId, ProviderType, EthereumNetwork } from '../../../web3/types'
-import { getDefaultWallet } from '../../../plugins/Wallet/wallet'
+import { getDefaultWallet } from '../../../plugins/Wallet/services'
 import {
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
@@ -11,7 +11,7 @@ import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 //#region tracking default wallet
 let defaultWallet: WalletRecord | null = null
 const updateDefaultWallet = async () => (defaultWallet = await getDefaultWallet())
-PluginMessageCenter.on('maskbook.wallets.reset', updateDefaultWallet)
+PluginMessageCenter.on('maskbook.wallets.update', updateDefaultWallet)
 updateDefaultWallet()
 //#endregion
 

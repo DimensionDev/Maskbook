@@ -1,7 +1,7 @@
 import React from 'react'
 import type { PluginConfig } from '../plugin'
-import { SelectProviderDialog } from './UI/SelectProviderDialog'
 import { PLUGIN_IDENTIFIER } from './constants'
+import { SelectProviderDialog } from './UI/SelectProviderDialog'
 
 export const WalletPluginDefine: PluginConfig = {
     pluginName: 'Wallet',

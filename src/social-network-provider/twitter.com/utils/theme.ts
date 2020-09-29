@@ -76,6 +76,12 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
             alignItems: 'center',
             padding: '10px 15px',
             borderBottom: `1px solid ${theme.palette.type === 'dark' ? '#2f3336' : '#ccd6dd'}`,
+            '& > h2': {
+                display: 'inline-block',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+            },
             [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
                 '&': {
                     display: 'flex',
@@ -112,6 +118,7 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
         },
         title: {
             verticalAlign: 'middle',
+            marginLeft: 6,
         },
     }
 })

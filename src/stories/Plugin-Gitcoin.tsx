@@ -1,12 +1,10 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { PreviewCard } from '../plugins/Gitcoin/PreviewCard'
 import { text, boolean } from '@storybook/addon-knobs'
-import { DonateDialog } from '../plugins/Gitcoin/DonateDialog'
+import { DonateDialog } from '../plugins/Gitcoin/UI/DonateDialog'
 import { figmaLink } from './utils'
 import { action } from '@storybook/addon-actions'
-import BigNumber from 'bignumber.js'
-import { ProviderType } from '../web3/types'
+import { PreviewCard } from '../plugins/Gitcoin/UI/PreviewCard'
 
 storiesOf('Plugin: Gitcoin', module)
     .add(
@@ -21,16 +19,14 @@ storiesOf('Plugin: Gitcoin', module)
         }`}
                 </style>
                 <PreviewCard
-                    originalURL={text('originalURL', '')}
-                    onRequestGrant={action('Request grant')}
-                    hasPermission={boolean('Has permission', false)}
-                    requestPermission={action('Request permission')}
-                    loading={boolean('Loading', false)}
                     title={text('Title', `This is a really long long long long long title`)}
                     line1={text('Line 1', `12,345 DAI`)}
                     line2={text('Line 2', `ESTIMATED`)}
                     line3={text('Line 3', `2,345 DAI`)}
-                    line4={text('Line 4', `233 contributors`)}></PreviewCard>
+                    line4={text('Line 4', `233 contributors`)}
+                    originalURL={text('originalURL', '')}
+                    onRequestGrant={action('Request Grant')}
+                />
             </div>
         ),
         figmaLink('https://www.figma.com/file/6YeqA0eCTz67I1HVFXOd4X/Plugin%3A-Gitcoin'),
@@ -40,28 +36,9 @@ storiesOf('Plugin: Gitcoin', module)
         () => (
             <div style={{ padding: 16, background: 'white' }}>
                 <DonateDialog
-                    loading={false}
                     open
-                    tokens={[]}
-                    wallets={[
-                        {
-                            mnemonic: [],
-                            provider: ProviderType.Maskbook,
-                            passphrase: '',
-                            address: '0x23333',
-                            name: 'Wallet Name',
-                            erc20_token_balance: new Map(),
-                            erc20_token_blacklist: new Set(),
-                            erc20_token_whitelist: new Set(),
-                            eth_balance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
-                            createdAt: new Date(),
-                            updatedAt: new Date(),
-                        },
-                    ]}
                     address="fake"
                     title={text('Title', 'Mask + Test Kit Mutual Aid Fund')}
-                    description={text('Description', 'It is accepting contributions in any token.')}
-                    onDonate={action('onDonate')}
                     onClose={action('onClose')}
                 />
             </div>
