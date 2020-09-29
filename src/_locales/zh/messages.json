@@ -297,6 +297,7 @@
     "plugin_red_packet_description_fail": "創建失敗",
     "plugin_red_packet_description_claimed": "已經領取過",
     "plugin_red_packet_description_expired": "已全部被別人領取",
+    "plugin_red_packet_description_refunded": "",
     "plugin_red_packet_description_refund": "",
     "plugin_red_packet_description_claim_pending": "領取中",
     "plugin_red_packet_description_empty": "已全部被別人領取",

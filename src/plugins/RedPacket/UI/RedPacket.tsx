@@ -177,6 +177,8 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
                     <Typography variant="body2">
                         {(() => {
                             if (availability.ifclaimed) return t('plugin_red_packet_description_claimed')
+                            if (availability.total > availability.claimed && availability.balance === '0')
+                                return t('plugin_red_packet_description_refunded')
                             if (availability.expired)
                                 return t(
                                     couldRefund
