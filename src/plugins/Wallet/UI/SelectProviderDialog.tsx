@@ -107,7 +107,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
         () =>
             MessageCenter.on('metamaskMessage', async (payload: string) => {
                 if (payload === 'metamask_not_install') {
-                    enqueueSnackbar(t(payload), {
+                    enqueueSnackbar(t('metamask_not_install'), {
                         key: 'metamask_not_install',
                         variant: 'error',
                         preventDuplicate: true,
