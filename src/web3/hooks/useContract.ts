@@ -6,9 +6,9 @@ import type { AbiItem } from 'web3-utils'
 import Services, { ServicesWithProgress } from '../../extension/service'
 import { useAccount } from './useAccount'
 import { nonFunctionalWeb3 } from '../web3'
-import { iteratorToPromiEvent, StageType } from '../../utils/promiEvent'
+import { iteratorToPromiEvent, Stage, StageType } from '../../utils/promiEvent'
 import type { EstimateGasOptions } from '../../contracts/types'
-import { decodeOutputString } from '../helpers'
+import { decodeOutputString, decodeEvents } from '../helpers'
 
 /**
  * Create a contract which will forward its all transactions to the
@@ -30,6 +30,7 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                     const methodABI = contract.options.jsonInterface.find(
                         (x) => x.type === 'function' && x.name === name,
                     )
+                    const eventABIs = contract.options.jsonInterface.filter((x) => x.type === 'event')
                     return (...args: string[]) => {
                         const cached = method(...args)
                         return {
@@ -49,6 +50,7 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                         to: contract.options.address,
                                         ...config,
                                         result,
+                                        outputs: methodABI ? methodABI.outputs ?? [] : [],
                                     })}`,
                                 )
 
@@ -58,10 +60,8 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                     result,
                                 )
                             },
-                            async send(
-                                config: TransactionConfig,
-                                callback?: (error: Error | null, hash?: string) => void,
-                            ) {
+                            // don't add async keyword for this method because a PromiEvent was returned
+                            send(config: TransactionConfig, callback?: (error: Error | null, hash?: string) => void) {
                                 if (!account) throw new Error('cannot find account')
 
                                 console.log(
@@ -80,19 +80,35 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                     ...config,
                                 })
 
+                                const processor = (stage: Stage) => {
+                                    switch (stage.type) {
+                                        case StageType.RECEIPT:
+                                            stage.receipt.events = decodeEvents(
+                                                nonFunctionalWeb3,
+                                                eventABIs,
+                                                stage.receipt,
+                                            )
+                                            break
+                                        case StageType.CONFIRMATION:
+                                            stage.receipt.events = decodeEvents(
+                                                nonFunctionalWeb3,
+                                                eventABIs,
+                                                stage.receipt,
+                                            )
+                                            break
+                                    }
+                                    return stage
+                                }
+
+                                const promiEvent = iteratorToPromiEvent(iterator, processor)
+
                                 // feedback by PromiEvent
-                                if (typeof callback === 'undefined') return iteratorToPromiEvent(iterator)
+                                if (typeof callback === 'undefined') return promiEvent
 
                                 // feedback by callback
-                                try {
-                                    for await (const stage of iterator) {
-                                        if (stage.type === StageType.TRANSACTION_HASH) callback(null, stage.hash)
-                                        break
-                                    }
-                                } catch (e) {
-                                    callback(e)
-                                }
-                                return
+                                return promiEvent.on('transaction', (hash) => {
+                                    callback(null, hash)
+                                })
                             },
                             async estimateGas(
                                 config?: EstimateGasOptions,
@@ -108,9 +124,11 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                     if (callback) callback(null, estimated)
                                     return estimated
                                 } catch (e) {
-                                    if (callback) callback(e)
-                                    else throw e
-                                    return 0
+                                    if (callback) {
+                                        callback(e)
+                                        return 0
+                                    }
+                                    throw e
                                 }
                             },
                         }

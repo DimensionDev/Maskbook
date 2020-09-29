@@ -1,5 +1,8 @@
 import { ChainId } from '../types'
 
+export const MIN_AMOUNT_LENGTH = 1
+export const MAX_AMOUNT_LENGTH = 79
+
 export const CONSTANTS = {
     // token lists
     TOKEN_LISTS: {

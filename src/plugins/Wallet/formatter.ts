@@ -32,3 +32,7 @@ export function formatEthereumAddress(address: string, size = 2) {
     const address_ = EthereumAddress.checksumAddress(address)
     return `${address_.substr(0, 2 + size)}...${address_.substr(-size)}`
 }
+
+export function formatChecksumAddress(address: string) {
+    return address && EthereumAddress.isValid(address) ? EthereumAddress.checksumAddress(address) : address
+}

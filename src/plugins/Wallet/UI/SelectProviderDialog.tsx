@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { MoreHorizontal } from 'react-feather'
 import { makeStyles, Theme, createStyles, DialogContent, GridList, GridListTile } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -20,6 +20,8 @@ import { ProviderType } from '../../../web3/types'
 import { useHistory } from 'react-router-dom'
 import { unreachable } from '../../../utils/utils'
 import { useWallets } from '../hooks/useWallet'
+import { MessageCenter } from '../../../utils/messages'
+import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -57,6 +59,7 @@ interface SelectProviderDialogUIProps
 
 function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const { t } = useI18N()
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const classes = useStylesExtends(useStyles(), props)
     const history = useHistory()
 
@@ -96,6 +99,22 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
             }
         },
         [wallets?.length, onClose, history],
+    )
+
+    // TODO:
+    // Show error message when click metamask would be better
+    useEffect(
+        () =>
+            MessageCenter.on('metamaskMessage', async (payload: string) => {
+                if (payload === 'metamask_not_install') {
+                    enqueueSnackbar(t(payload), {
+                        key: 'metamask_not_install',
+                        variant: 'error',
+                        preventDuplicate: true,
+                    })
+                }
+            }),
+        [],
     )
 
     return (

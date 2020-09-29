@@ -16,7 +16,7 @@ import { i18n } from '../../../utils/i18n-next'
 import { MessageCenter } from '../../../utils/messages'
 import { currentImportingBackup } from '../../../settings/settings'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
-import { importNewWallet } from '../../../plugins/Wallet/wallet'
+import { importNewWallet } from '../../../plugins/Wallet/services'
 
 /**
  * Restore the backup

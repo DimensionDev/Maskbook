@@ -1,6 +1,6 @@
 import * as WalletConnect from './providers/WalletConnect'
 import * as MetaMask from './providers/MetaMask'
-import { getWallets, setDefaultWallet } from '../../../plugins/Wallet/wallet'
+import { getWallets, setDefaultWallet } from '../../../plugins/Wallet/services'
 import { ProviderType } from '../../../web3/types'
 
 //#region connect WalletConnect

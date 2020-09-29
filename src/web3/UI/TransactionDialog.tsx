@@ -12,24 +12,21 @@ import {
     CircularProgress,
     Link,
 } from '@material-ui/core'
-import type { Trade } from '@uniswap/sdk'
 import WarningIcon from '@material-ui/icons/Warning'
 import DoneIcon from '@material-ui/icons/Done'
-import type { Token } from '../../../../web3/types'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../../../utils/shadow-root/ShadowRootDialog'
-import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
-import { SwapState, SwapStateType } from '../../uniswap/useSwapCallback'
-import { getActivatedUI } from '../../../../social-network/ui'
+import { useStylesExtends } from '../../components/custom-ui-helper'
+import { useI18N } from '../../utils/i18n-next-ui'
+import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
+import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
+import { getActivatedUI } from '../../social-network/ui'
 import {
     useTwitterButton,
     useTwitterCloseButton,
     useTwitterDialog,
-} from '../../../../social-network-provider/twitter.com/utils/theme'
-import { resolveTransactionLinkOnEtherscan } from '../../../../web3/helpers'
-import { useChainId } from '../../../../web3/hooks/useChainId'
-import type { TradeStrategy } from '../../types'
+} from '../../social-network-provider/twitter.com/utils/theme'
+import { resolveTransactionLinkOnEtherscan } from '../helpers'
+import { useChainId } from '../hooks/useChainId'
+import { TransactionState, TransactionStateType } from '../hooks/useTransactionState'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -68,7 +65,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-export interface TransactionDialogUIProps
+interface TransactionDialogUIProps
     extends withClasses<
         | KeysInferFromUseStyles<typeof useStyles>
         | 'root'
@@ -83,19 +80,16 @@ export interface TransactionDialogUIProps
         | 'close'
         | 'button'
     > {
-    swapState: SwapState
-    trade: Trade | null
-    strategy: TradeStrategy
-    inputToken?: Token
-    outputToken?: Token
     open: boolean
+    state: TransactionState
+    summary: React.ReactNode
     onClose?: () => void
 }
 
-export function TransactionDialogUI(props: TransactionDialogUIProps) {
+function TransactionDialogUI(props: TransactionDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const { swapState, trade, strategy, inputToken, outputToken, open, onClose } = props
+    const { state, summary, open, onClose } = props
 
     const chainId = useChainId()
 
@@ -124,19 +118,18 @@ export function TransactionDialogUI(props: TransactionDialogUIProps) {
                     </IconButton>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
-                    {swapState.type === SwapStateType.WAIT_FOR_CONFIRMING ? (
+                    {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ? (
                         <>
                             <CircularProgress size={64} color="primary" />
                             <Typography className={classes.primary} color="textPrimary" variant="subtitle1">
                                 Waiting For Confirmation
                             </Typography>
                             <Typography className={classes.secondary} color="textSecondary">
-                                Swapping {trade?.inputAmount.toSignificant(6)} {trade?.inputAmount.currency.symbol} for{' '}
-                                {trade?.outputAmount.toSignificant(6)} {trade?.outputAmount.currency.symbol}
+                                {summary}
                             </Typography>
                         </>
                     ) : null}
-                    {swapState.type === SwapStateType.SUCCEED ? (
+                    {state.type === TransactionStateType.HASH ? (
                         <>
                             <DoneIcon className={classes.icon} />
                             <Typography className={classes.primary} color="textPrimary">
@@ -145,7 +138,7 @@ export function TransactionDialogUI(props: TransactionDialogUIProps) {
                             <Typography>
                                 <Link
                                     className={classes.link}
-                                    href={resolveTransactionLinkOnEtherscan(chainId, swapState.hash)}
+                                    href={resolveTransactionLinkOnEtherscan(chainId, state.hash)}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     View on Etherscan
@@ -153,18 +146,36 @@ export function TransactionDialogUI(props: TransactionDialogUIProps) {
                             </Typography>
                         </>
                     ) : null}
-                    {swapState.type === SwapStateType.FAILED ? (
+                    {state.type === TransactionStateType.CONFIRMED ? (
+                        <>
+                            <DoneIcon className={classes.icon} />
+                            <Typography className={classes.primary} color="textPrimary">
+                                Your transaction was confirmed!
+                            </Typography>
+                            <Typography>
+                                <Link
+                                    className={classes.link}
+                                    href={resolveTransactionLinkOnEtherscan(chainId, state.receipt.transactionHash)}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    View on Etherscan
+                                </Link>
+                            </Typography>
+                        </>
+                    ) : null}
+                    {state.type === TransactionStateType.FAILED ? (
                         <>
                             <WarningIcon className={classes.icon} />
                             <Typography className={classes.primary} color="textPrimary">
-                                {swapState.error.message.includes('User denied transaction signature.')
+                                {state.error.message.includes('User denied transaction signature.')
                                     ? 'Transaction was rejected!'
-                                    : swapState.error.message}
+                                    : state.error.message}
                             </Typography>
                         </>
                     ) : null}
                 </DialogContent>
-                {swapState.type !== SwapStateType.UNKNOWN && swapState.type !== SwapStateType.WAIT_FOR_CONFIRMING ? (
+                {state.type !== TransactionStateType.UNKNOWN &&
+                state.type !== TransactionStateType.WAIT_FOR_CONFIRMING ? (
                     <DialogActions className={classes.actions}>
                         <Button
                             className={classes.button}
@@ -173,7 +184,7 @@ export function TransactionDialogUI(props: TransactionDialogUIProps) {
                             variant="contained"
                             fullWidth
                             onClick={onClose}>
-                            {swapState.type === SwapStateType.FAILED ? 'Dismiss' : 'Close'}
+                            {state.type === TransactionStateType.FAILED ? 'Dismiss' : 'Close'}
                         </Button>
                     </DialogActions>
                 ) : null}

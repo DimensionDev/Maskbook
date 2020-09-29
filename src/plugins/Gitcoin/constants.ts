@@ -24,4 +24,12 @@ export const GITCOIN_CONSTANT = {
         [ChainId.Rinkeby]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         [ChainId.Kovan]: '',
     },
+
+    // settings
+    GITCOIN_TIP_PERCENTAGE: {
+        [ChainId.Mainnet]: 5,
+        [ChainId.Ropsten]: 5,
+        [ChainId.Rinkeby]: 5,
+        [ChainId.Kovan]: 5,
+    },
 }

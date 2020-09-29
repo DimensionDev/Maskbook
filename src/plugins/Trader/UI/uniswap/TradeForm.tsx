@@ -6,18 +6,16 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import type { Trade } from '@uniswap/sdk'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenAmountPanel } from './TokenAmountPanel'
 import BigNumber from 'bignumber.js'
-import { Token, ChainId } from '../../../../web3/types'
+import type { Token } from '../../../../web3/types'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { MaskbookWalletMessages, WalletMessageCenter } from '../../../Wallet/messages'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { ApproveState } from '../../../../web3/hooks/useTokenApproveCallback'
-import { EthereumAccountChip } from '../../../../components/shared/EthereumAccountChip'
-import { EthereumChainChip } from '../../../../components/shared/EthereumChainChip'
 import { useChainId } from '../../../../web3/hooks/useChainId'
 import { TradeStrategy, TokenPanelType } from '../../types'
+import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -193,20 +191,6 @@ export function TradeForm(props: TradeFormProps) {
 
     return (
         <form className={classes.form} noValidate autoComplete="off">
-            <div className={classNames(classes.section, classes.account)}>
-                {chainId === ChainId.Mainnet ? null : (
-                    <EthereumChainChip
-                        classes={{ root: classes.ethereumChainChip }}
-                        chainId={chainId}
-                        ChipProps={{ variant: 'outlined' }}
-                    />
-                )}
-                <EthereumAccountChip
-                    classes={{ root: classes.ethereumAccountChip }}
-                    address={account}
-                    ChipProps={{ size: 'medium', variant: 'outlined' }}
-                />
-            </div>
             {sections.map(({ key, children }) => (
                 <div className={classNames(classes.section, key === 'divider' ? classes.divider : '')} key={key}>
                     {children}

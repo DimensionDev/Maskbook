@@ -2,10 +2,8 @@ import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles, CircularProgress } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { WalletMessageCenter, MaskbookWalletMessages } from '../../../Wallet/messages'
 import { useToken } from '../../../../web3/hooks/useToken'
 import { Token, EthereumTokenType } from '../../../../web3/types'
-import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import { useTrade } from '../../uniswap/useTrade'
 import { TradeForm } from './TradeForm'
@@ -14,14 +12,16 @@ import { TradeSummary } from './TradeSummary'
 import { ConfirmDialog } from './ConfirmDialog'
 import { useTokenApproveCallback, ApproveState } from '../../../../web3/hooks/useTokenApproveCallback'
 import { useComputedApprove } from '../../uniswap/useComputedApprove'
-import { useSwapCallback, SwapStateType } from '../../uniswap/useSwapCallback'
+import { useSwapCallback } from '../../uniswap/useSwapCallback'
 import { useSwapState, SwapActionType } from '../../uniswap/useSwapState'
 import { TradeStrategy, TokenPanelType } from '../../types'
 import { CONSTANTS } from '../../../../web3/constants'
 import { TRADE_CONSTANTS } from '../../constants'
-import { TransactionDialog } from './TransactionDialog'
+import { TransactionDialog } from '../../../../web3/UI/TransactionDialog'
 import { sleep } from '../../../../utils/utils'
-import { SelectERC20TokenDialog } from './SelectERC20TokenDialog'
+import { EthereumStatusBar } from '../../../../web3/UI/EthereumStatusBar'
+import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
+import { SelectERC20TokenDialog } from '../../../../web3/UI/SelectERC20TokenDialog'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -30,6 +30,10 @@ const useStyles = makeStyles((theme: Theme) => {
             flexDirection: 'column',
             minHeight: 266,
             position: 'relative',
+        },
+        bar: {
+            width: 350,
+            margin: `${theme.spacing(2)}px auto 0`,
         },
         progress: {
             bottom: theme.spacing(1),
@@ -65,14 +69,14 @@ export function Trader(props: TraderProps) {
     const isEtherOutput = outputTokenAddress === ETH_ADDRESS
 
     const asyncInputToken = useToken({
+        ...inputToken,
         type: isEtherInput ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
         address: isEtherInput ? ETH_ADDRESS : inputTokenAddress,
     })
     const asyncOutputToken = useToken({
+        ...outputToken,
         type: isEtherOutput ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
         address: isEtherOutput ? ETH_ADDRESS : outputTokenAddress,
-        name,
-        symbol,
     })
 
     useEffect(() => {
@@ -167,12 +171,7 @@ export function Trader(props: TraderProps) {
     const [approveState, approveCallback] = useTokenApproveCallback(approveToken, approveAmount, RouterV2Address)
     const onApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
-        const hash = await approveCallback()
-
-        console.log('DEBUG: approve hash')
-        console.log(hash)
-
-        // submit to queue
+        await approveCallback()
     }, [approveState])
     //#endregion
 
@@ -193,7 +192,7 @@ export function Trader(props: TraderProps) {
     const onTransactionDialogClose = useCallback(() => {
         setFreezed(false)
         setOpenTransactionDialog(false)
-        if (swapState.type !== SwapStateType.SUCCEED) return
+        if (swapState.type !== TransactionStateType.HASH) return
         // clean the form
         dispatchSwapStore({
             type: SwapActionType.UPDATE_INPUT_AMOUNT,
@@ -208,6 +207,7 @@ export function Trader(props: TraderProps) {
 
     return (
         <div className={classes.root}>
+            <EthereumStatusBar classes={{ root: classes.bar }} />
             <TradeForm
                 approveState={approveState}
                 strategy={strategy}
@@ -239,9 +239,10 @@ export function Trader(props: TraderProps) {
                 onClose={onConfirmDialogClose}
             />
             <TransactionDialog
-                swapState={swapState}
-                trade={trade.v2Trade}
-                strategy={strategy}
+                state={swapState}
+                summary={`Swapping ${trade.v2Trade?.inputAmount.toSignificant(6)} ${
+                    trade.v2Trade?.inputAmount.currency.symbol
+                } for ${trade.v2Trade?.outputAmount.toSignificant(6)} ${trade.v2Trade?.outputAmount.currency.symbol}`}
                 open={openTransactionDialog}
                 onClose={onTransactionDialogClose}
             />

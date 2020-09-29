@@ -3,8 +3,8 @@ import classNames from 'classnames'
 import { makeStyles, Theme, createStyles, Chip, ChipProps, CircularProgress } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { noop } from 'lodash-es'
-import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
-import type { Token } from '../../../../web3/types'
+import { TokenIcon } from '../../extension/options-page/DashboardComponents/TokenIcon'
+import type { Token } from '../types'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({

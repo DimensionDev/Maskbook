@@ -2,8 +2,6 @@ import { Result, Err, Ok } from 'ts-results'
 import { GitcoinGrantFailedReason as Reason } from './types'
 import BigNumber from 'bignumber.js'
 
-export * from './database'
-
 export interface GitcoinGrantMetadata {
     title?: string
     description?: string
@@ -15,6 +13,7 @@ export interface GitcoinGrantMetadata {
     permalink?: string
 }
 const domain = 'https://gitcoin.co/'
+
 export async function fetchMetadata(url: string): Promise<Result<GitcoinGrantMetadata, readonly [Reason, Error?]>> {
     if (!url.startsWith(domain)) return Err([Reason.InvalidURL] as const)
     const id = url.match(/\d+/)?.[0]
@@ -64,11 +63,6 @@ async function fetchData(id: string) {
     } catch (e) {
         return Err<Error>(e)
     }
-}
-
-function parse(x: string | null | undefined) {
-    if (typeof x !== 'string') return NaN
-    return parseFloat(x.replace(/,/g, ''))
 }
 
 interface GitcoinGrant {

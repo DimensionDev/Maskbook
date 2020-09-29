@@ -145,9 +145,7 @@ module.exports = (argvEnv, argv) => {
     /** @type {import('webpack').Configuration} */
     const config = {
         mode: env,
-        // CSP bans eval
-        // And non-inline source-map not working
-        devtool: env === 'development' ? 'inline-source-map' : false,
+        devtool: env === 'development' ? 'eval-source-map' : false,
         entry: {},
         resolve: {
             extensions: ['.js', '.ts', '.tsx'],

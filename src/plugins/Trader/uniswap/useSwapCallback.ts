@@ -5,6 +5,7 @@ import { useSwapParameters } from './useSwapParameters'
 import { useRouterV2Contract } from '../contracts/useRouterV2Contract'
 import { addGasMargin } from '../../../web3/helpers'
 import BigNumber from 'bignumber.js'
+import { TransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
 
 interface SuccessfulCall {
     parameters: SwapParameters
@@ -16,30 +17,6 @@ interface FailedCall {
     error: Error
 }
 
-export enum SwapStateType {
-    UNKNOWN,
-    WAIT_FOR_CONFIRMING,
-    SUCCEED,
-    FAILED,
-    REJECTED,
-}
-
-export type SwapState =
-    | {
-          type: SwapStateType.UNKNOWN
-      }
-    | {
-          type: SwapStateType.WAIT_FOR_CONFIRMING
-      }
-    | {
-          type: SwapStateType.SUCCEED
-          hash: string
-      }
-    | {
-          type: SwapStateType.FAILED
-          error: Error
-      }
-
 export function useSwapCallback(
     trade: Trade | null,
     allowedSlippage: number = DEFAULT_SLIPPAGE_TOLERANCE,
@@ -47,21 +24,22 @@ export function useSwapCallback(
 ) {
     const routerV2Contract = useRouterV2Contract()
     const swapParameters = useSwapParameters(trade, allowedSlippage, ddl)
-    const [swapState, setSwapState] = useState<SwapState>({
-        type: SwapStateType.UNKNOWN,
+
+    const [swapState, setSwapState] = useState<TransactionState>({
+        type: TransactionStateType.UNKNOWN,
     })
 
     const swapCallback = useCallback(async () => {
         if (!routerV2Contract) {
             setSwapState({
-                type: SwapStateType.UNKNOWN,
+                type: TransactionStateType.UNKNOWN,
             })
             return
         }
 
         // pre-step: start waiting for provider to confirm tx
         setSwapState({
-            type: SwapStateType.WAIT_FOR_CONFIRMING,
+            type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
         // step 1: estimate each swap parameter
@@ -100,7 +78,7 @@ export function useSwapCallback(
         if (!successfulCall) {
             const failedCalls = estimatedCalls.filter((x): x is FailedCall => 'error' in x)
             setSwapState({
-                type: SwapStateType.FAILED,
+                type: TransactionStateType.FAILED,
                 error:
                     failedCalls.length > 0 ? failedCalls[failedCalls.length - 1].error : new Error('Unexpected error'),
             })
@@ -126,13 +104,13 @@ export function useSwapCallback(
                     console.log(error)
                     if (error) {
                         setSwapState({
-                            type: SwapStateType.FAILED,
+                            type: TransactionStateType.FAILED,
                             error,
                         })
                         reject(error)
                     } else {
                         setSwapState({
-                            type: SwapStateType.SUCCEED,
+                            type: TransactionStateType.HASH,
                             hash,
                         })
                         resolve(hash)

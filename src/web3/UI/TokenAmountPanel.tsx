@@ -13,15 +13,16 @@ import {
 } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { debounce } from 'lodash-es'
-import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../../constants'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
-import { formatBalance } from '../../../Wallet/formatter'
-import { useCapturedInput } from '../../../../utils/hooks/useCapturedEvents'
-import type { Token } from '../../../../web3/types'
+import { formatBalance } from '../../plugins/Wallet/formatter'
+import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
+import type { Token } from '../types'
+import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../constants'
+import { useStylesExtends } from '../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
-        textfield: {},
+        root: {},
         input: {
             '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
                 '-webkit-appearance': 'none',
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) => {
     })
 })
 
-export interface TokenAmountPanelProps {
+export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     amount: string
     balance: string
     onAmountChange: (amount: string) => void
@@ -59,7 +60,7 @@ export interface TokenAmountPanelProps {
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const { amount, balance, token, onAmountChange, label } = props
 
-    const classes = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
     const [, inputRef] = useCapturedInput()
 
     //#region update amount by parent
@@ -107,7 +108,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
 
     return (
         <TextField
-            className={classes.textfield}
+            className={classes.root}
             label={label}
             fullWidth
             required
