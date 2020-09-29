@@ -39,7 +39,7 @@ export function useClaimCallback(id?: string, password?: string) {
         // step 1: estimate gas
         const estimatedGas = await redPacketContract.methods
             .claim(...params)
-            .estimateGas(config)
+            .estimateGas()
             .catch((error) => {
                 setClaimState({
                     type: TransactionStateType.FAILED,
@@ -47,6 +47,13 @@ export function useClaimCallback(id?: string, password?: string) {
                 })
                 throw error
             })
+
+        console.log('DEBUG: claimCallback')
+        console.log({
+            config,
+            params,
+            estimatedGas,
+        })
 
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {

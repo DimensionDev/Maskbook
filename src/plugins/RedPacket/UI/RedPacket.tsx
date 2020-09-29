@@ -16,6 +16,7 @@ import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
 import { TransactionDialog } from '../../../web3/UI/TransactionDialog'
 import { isSameAddress, isDAI, isOKB } from '../../../web3/helpers'
+import { EthereumTokenType } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -138,6 +139,11 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     const [refundState, refundCallback] = useRefundCallback(payload?.rpid)
 
     const onClaimOrRefund = useCallback(async () => {
+        console.log('DEUBG: claim or refund')
+        console.log({
+            couldClaim,
+            couldRefund,
+        })
         setOpenTransactionDialog(true)
         if (couldClaim) await claimCallback()
         else if (couldRefund) await refundCallback()
@@ -177,7 +183,10 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
                     <Typography variant="body2">
                         {(() => {
                             if (availability.ifclaimed) return t('plugin_red_packet_description_claimed')
-                            if (availability.total > availability.claimed && availability.balance === '0')
+                            if (
+                                Number.parseInt(availability.total) > Number.parseInt(availability.claimed) &&
+                                availability.balance === '0'
+                            )
                                 return t('plugin_red_packet_description_refunded')
                             if (availability.expired)
                                 return t(
@@ -188,7 +197,11 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
                             if (availability.balance === '0') return t('plugin_red_packet_description_empty')
                             return t('plugin_red_packet_description_failover', {
                                 total: payload.total
-                                    ? formatBalance(new BigNumber(payload.total), payload.token?.decimals ?? 18)
+                                    ? `${formatBalance(new BigNumber(payload.total), payload.token?.decimals ?? 18)} ${
+                                          payload.token_type === EthereumTokenType.Ether
+                                              ? 'ETH'
+                                              : payload.token?.symbol ?? ''
+                                      }`
                                     : '-',
                                 name: payload.sender.name ?? '-',
                                 shares: payload.shares ?? '-',

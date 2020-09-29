@@ -27,6 +27,7 @@ export enum EthereumNetwork {
     Mainnet = 'Mainnet',
     Ropsten = 'Ropsten',
     Rinkeby = 'Rinkeby',
+    Kovan = 'Kovan',
 }
 
 export enum EthereumTokenType {

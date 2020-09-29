@@ -22,7 +22,7 @@ import {
     RED_PACKET_DEFAULT_SHARES,
 } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { Token, EthereumTokenType } from '../../../web3/types'
+import { Token, EthereumTokenType, EthereumNetwork } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
@@ -202,8 +202,7 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
             settings,
         })
 
-        // output the redpacket as JSON payload
-        onCreate?.({
+        const payload: RedPacketJSONPayload = {
             contract_version: 1,
             contract_address: HAPPY_RED_PACKET_ADDRESS,
             rpid: CreationSuccess.id,
@@ -218,11 +217,13 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
             total: CreationSuccess.total,
             creation_time: Number.parseInt(CreationSuccess.creation_time),
             duration: settings.duration,
-            network: resolveChainName(chainId),
+            network: resolveChainName(chainId) as EthereumNetwork,
             token_type: settings.token.type,
-            token:
-                settings.token.type === EthereumTokenType.ERC20 ? omit(settings.token, ['type', 'chainId']) : undefined,
-        } as RedPacketJSONPayload)
+        }
+        if (settings.token.type === EthereumTokenType.ERC20) payload.token = omit(settings.token, ['type', 'chainId'])
+
+        // output the redpacket as JSON payload
+        onCreate?.(payload)
     }, [account, chainId, settings, createState, onCreate])
     //#endregion
 
