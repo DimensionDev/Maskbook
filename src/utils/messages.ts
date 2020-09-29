@@ -74,6 +74,7 @@ interface MaskbookMessages {
     }
     /** Permission updated */
     permissionUpdated: void
+    metamaskMessage: string
 }
 
 export class BatchedMessageCenter<T> extends MC<T> {

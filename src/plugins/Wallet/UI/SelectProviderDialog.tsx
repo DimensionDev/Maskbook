@@ -20,6 +20,8 @@ import { ProviderType } from '../../../web3/types'
 import { useHistory } from 'react-router-dom'
 import { unreachable } from '../../../utils/utils'
 import { useWallets } from '../hooks/useWallet'
+import { MessageCenter } from '../../../utils/messages'
+import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -57,6 +59,7 @@ interface SelectProviderDialogUIProps
 
 function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const { t } = useI18N()
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const classes = useStylesExtends(useStyles(), props)
     const history = useHistory()
 
@@ -97,7 +100,12 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
         },
         [wallets?.length, onClose, history],
     )
-
+    MessageCenter.on('metamaskMessage', async (payload: string) => {
+        // console.log(payload);
+        if (payload === 'metamask_not_install') {
+            enqueueSnackbar(t(payload), { key: 'metamask_not_install', variant: 'error', preventDuplicate: true })
+        }
+    })
     return (
         <div className={classes.root}>
             <ShadowRootDialog
