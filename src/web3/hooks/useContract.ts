@@ -106,9 +106,13 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                 if (typeof callback === 'undefined') return promiEvent
 
                                 // feedback by callback
-                                return promiEvent.on('transactionHash', (hash) => {
-                                    callback(null, hash)
-                                })
+                                return promiEvent
+                                    .on('transactionHash', (hash) => {
+                                        callback(null, hash)
+                                    })
+                                    .on('error', (error) => {
+                                        callback(error)
+                                    })
                             },
                             async estimateGas(
                                 config?: EstimateGasOptions,
