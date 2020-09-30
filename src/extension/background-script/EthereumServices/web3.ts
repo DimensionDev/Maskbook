@@ -8,7 +8,7 @@ OnlyRunInContext(['background', 'debugging'], 'web3')
 export const web3 = new Web3()
 
 // 24 confirmation blocks is not necessary
-web3.eth.transactionConfirmationBlocks = 6
+web3.eth.transactionConfirmationBlocks = 0
 
 export function createWeb3(provider: Provider, privKeys: string[] = []) {
     if (web3.currentProvider !== provider) web3.setProvider(provider)

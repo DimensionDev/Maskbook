@@ -97,17 +97,7 @@ export async function* sendTransaction(from: string, config: TransactionConfig) 
     try {
         const sender = await createTransactionSender(from, config)
         for await (const stage of promiEventToIterator(sender())) {
-            if (process.env.NODE_ENV === 'development') {
-                console.log('DEBUG: stage')
-                console.log(stage)
-            }
-
-            if (stage.type === StageType.TRANSACTION_HASH) {
-                await commitNonce(from)
-                // TODO:
-                // record every transaction in DB
-                yield stage
-            }
+            if (stage.type === StageType.TRANSACTION_HASH) await commitNonce(from)
             yield stage
             // stop if confirmed
             if (stage.type === StageType.CONFIRMATION) break

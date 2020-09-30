@@ -137,13 +137,6 @@ export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionRe
             ...log,
         } as EventLog
     })
-
-    console.log('DEBUG: decode events')
-    console.log({
-        listOfTopic0,
-        receipt,
-    })
-
     return events.reduce((accumulate, event) => {
         if (event) accumulate[event.event] = event
         return accumulate

@@ -81,13 +81,6 @@ export function iteratorToPromiEvent(
         try {
             for await (const stage of iterator) {
                 const stage_ = processor(stage)
-
-                console.log('DEBUG: new stage')
-                console.log({
-                    stage,
-                    stage_,
-                })
-
                 switch (stage_.type) {
                     case StageType.TRANSACTION_HASH:
                         PE.emit('transactionHash', stage_.hash)

@@ -278,6 +278,7 @@
     "plugin_red_packet_from": "送信者: {{from}}",
     "plugin_red_packet_description_claimed": "既に受け取り済みです",
     "plugin_red_packet_description_expired": "期限切れです",
+    "plugin_red_packet_description_refunded": "",
     "plugin_red_packet_description_refund": "",
     "plugin_red_packet_description_empty": "期限切れです",
     "plugin_red_packet_description_failover": "合計：{{total}} {{name}} / {{shares}} 株",
