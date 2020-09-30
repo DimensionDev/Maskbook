@@ -31,7 +31,7 @@ export const Flags = {
     trader_all_api_cached_enabled: process.env.NODE_ENV === 'development',
     trader_uniswap_auto_refresh_enabled: true,
     poll_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
-    file_service_create_enabled: true,
+    file_service_create_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
     matrix_based_service_enabled: process.env.NODE_ENV === 'development',
     metamask_support_enabled: process.env.architecture === 'web',
     //#endregion
