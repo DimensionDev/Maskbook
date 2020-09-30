@@ -1,15 +1,14 @@
 import type { ERC20TokenRecord } from '../Wallet/database/types'
 import type { EthereumTokenType, EthereumNetwork } from '../../web3/types'
+import type { Transaction } from 'web3-core'
 
 /**
  * @see https://github.com/DimensionDev/Tessercube-iOS/wiki/Red-Packet-Data-Dictionary
  */
 
 export interface RedPacketRecord {
-    /** Internal ID */
-    id: string
     /** The red packet ID */
-    rpid: string
+    id: string
     /** From url */
     from: string
     /** The JSON payload */
@@ -17,7 +16,7 @@ export interface RedPacketRecord {
 }
 
 export interface RedPacketRecordInDatabase extends RedPacketRecord {
-    /** A unique record type */
+    /** An unique record type in DB */
     type: 'red-packet'
 }
 
@@ -58,8 +57,6 @@ export interface RedPacketJSONPayload {
 }
 
 export namespace History {
-    export type RecordType = CreateRedPacketRecord
-
     export interface CreateInputLog {
         $name: 'create_red_packet'
         _hash: string
@@ -75,7 +72,7 @@ export namespace History {
     }
 
     export interface CreateOutputLog {
-        $name: string
+        $name: 'CreationSuccess'
         total: string
         id: string
         creator: string
@@ -84,7 +81,7 @@ export namespace History {
     }
 
     export interface ClaimInputLog {
-        $name: string
+        $name: 'claim'
         id: string
         password: string
         _recipient: string
@@ -92,7 +89,7 @@ export namespace History {
     }
 
     export interface ClaimOutputLog {
-        $name: string
+        $name: 'ClaimSuccess'
         id: string
         claimer: string
         claimed_value: string
@@ -100,18 +97,26 @@ export namespace History {
     }
 
     export interface RefundInputLog {
-        $name: string
+        $name: 'refund'
         id: string
     }
 
     export interface RefundOutputLog {
-        $name: string
+        $name: 'RefundSuccess'
         id: string
         token_address: string
         remaining_balance: string
     }
 
-    export interface CreateRedPacketRecord {
+    export type Log =
+        | CreateInputLog
+        | CreateOutputLog
+        | ClaimInputLog
+        | ClaimOutputLog
+        | RefundInputLog
+        | RefundOutputLog
+
+    export interface RedPacketRecord {
         id: string
         status: 'refunded' | 'expired' | 'claimed' | 'empty' | null
         availability: {
@@ -124,14 +129,8 @@ export namespace History {
         }
         transactions: {
             timestamp: string
-            records: (
-                | CreateInputLog
-                | CreateOutputLog
-                | ClaimInputLog
-                | ClaimOutputLog
-                | RefundInputLog
-                | RefundOutputLog
-            )[]
+            transaction: Transaction
+            records: Log[]
         }[]
     }
 }

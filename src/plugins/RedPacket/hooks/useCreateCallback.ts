@@ -115,7 +115,13 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                 })
                 resolve()
             })
-            promiEvent.on('error', reject)
+            promiEvent.on('error', (error) => {
+                setCreateState({
+                    type: TransactionStateType.FAILED,
+                    error,
+                })
+                reject(error)
+            })
         })
     }, [account, redPacketContract, redPacketSettings])
 

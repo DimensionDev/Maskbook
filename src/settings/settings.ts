@@ -63,7 +63,7 @@ export const appearanceSettings = createGlobalSettings<Appearance>('apperance', 
 //#region provider chain id
 export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>('maskbook chain id', ChainId.Mainnet, {
     primary: () => i18n.t('settings_choose_eth_network'),
-    secondary: () => 'This only effects the built-in wallet.',
+    secondary: () => 'This only affects the built-in wallet.',
 })
 
 export const currentMetaMaskChainIdSettings = createGlobalSettings<ChainId>('metamask chain id', ChainId.Mainnet, {

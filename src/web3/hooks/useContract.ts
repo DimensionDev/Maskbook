@@ -20,7 +20,7 @@ import { decodeOutputString, decodeEvents } from '../helpers'
 export function useContract<T extends Contract>(address: string, ABI: AbiItem[]) {
     const account = useAccount()
     return useMemo(() => {
-        // no a valid contract address
+        // not a valid contract address
         if (!EthereumAddress.isValid(address)) return null
 
         const contract = new nonFunctionalWeb3.eth.Contract(ABI, address) as T
@@ -119,7 +119,7 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                 // feedback by callback
                                 return promiEvent
                                     .on('transactionHash', (hash) => callback(null, hash))
-                                    .on('error', (error) => callback(error))
+                                    .on('error', callback)
                             },
                             async estimateGas(
                                 config?: EstimateGasOptions,

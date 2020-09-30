@@ -8,9 +8,10 @@ import { getActivatedUI } from '../../../social-network/ui'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { RedPacketMetaKey } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { CreateRedPacketForm } from './CreateRedPacketForm'
-import { RedPacketOutboundList } from './RedPacketOutboundList'
+import { RedPacketForm } from './RedPacketForm'
+import { RedPacketBacklogList, RedPacketOutboundList } from './RedPacketList'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
+import { useAccount } from '../../../web3/hooks/useAccount'
 
 interface RedPacketDialogProps
     extends withClasses<
@@ -63,7 +64,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
+    const account = useAccount()
     const onCreateOrSelect = useCallback((payload: RedPacketJSONPayload) => {
+        console.log('DEBUG: onCreateOrSelect')
+        console.log(payload)
+
         const ref = getActivatedUI().typedMessageMetadata
         const next = new Map(ref.value.entries())
         payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey)
@@ -77,7 +82,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             {
                 label: t('plugin_red_packet_create_new'),
                 children: (
-                    <CreateRedPacketForm
+                    <RedPacketForm
                         onCreate={onCreateOrSelect}
                         SelectMenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}
                     />
@@ -86,7 +91,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             },
             {
                 label: t('plugin_red_packet_select_existing'),
-                children: <RedPacketOutboundList onSelect={onCreateOrSelect} />,
+                children: <RedPacketBacklogList from={account} onSelect={onCreateOrSelect} />,
                 p: 0,
             },
         ],

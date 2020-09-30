@@ -87,7 +87,7 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
                 from,
                 nonce,
                 gas,
-                gasPrice: new BigNumber(gasPrice as string).dividedToIntegerBy(2).toFixed(),
+                gasPrice: new BigNumber(gasPrice as string).toFixed(),
                 ...config,
             })
     }
@@ -113,9 +113,10 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
             })
 
             // only trasnaction hash available
-            promise.then((hash) =>
-                listeners.filter((x) => x.name === 'transactionHash').forEach((y) => y.listener(hash)),
-            )
+            promise
+                .then((hash) => listeners.filter((x) => x.name === 'transactionHash').forEach((y) => y.listener(hash)))
+                .catch((e) => listeners.filter((x) => x.name === 'error').forEach((y) => y.listener(e)))
+
             return (promise as unknown) as PromiEvent<string>
         }
     }

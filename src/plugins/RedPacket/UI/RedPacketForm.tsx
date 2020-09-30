@@ -64,12 +64,12 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface CreateRedPacketProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RedPacketFormProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     onCreate?(payload: RedPacketJSONPayload): void
     SelectMenuProps?: Partial<MenuProps>
 }
 
-export function CreateRedPacketForm(props: CreateRedPacketProps) {
+export function RedPacketForm(props: RedPacketFormProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 

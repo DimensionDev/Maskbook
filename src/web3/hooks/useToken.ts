@@ -1,4 +1,4 @@
-import { useAsync } from 'react-use'
+import { useAsync, useAsyncRetry } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { Token, EthereumTokenType } from '../types'
@@ -20,7 +20,7 @@ export function useToken(token?: PartialRequired<Token, 'address' | 'type'>) {
     const chainId = useChainId()
     const erc20Contract = useERC20TokenContract(token?.address ?? ETH_ADDRESS)
 
-    return useAsync(async () => {
+    return useAsyncRetry(async () => {
         if (!token?.address) return
 
         // Ether
@@ -40,6 +40,9 @@ export function useToken(token?: PartialRequired<Token, 'address' | 'type'>) {
         // ERC20
         if (token.type === EthereumTokenType.ERC20) {
             if (!erc20Contract) return
+
+            // TODO:
+            // fetch token info with multicall
             const [name_, symbol_, decimals_] = await Promise.allSettled([
                 erc20Contract.methods.name().call(),
                 erc20Contract.methods.symbol().call(),

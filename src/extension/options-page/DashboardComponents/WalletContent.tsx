@@ -23,7 +23,7 @@ import { useColorStyles } from '../../../utils/theme'
 import Services from '../../service'
 import { merge, cloneDeep } from 'lodash-es'
 import BigNumber from 'bignumber.js'
-import type { RedPacketRecord } from '../../../plugins/RedPacket/types'
+import type { RedPacketJSONPayload, RedPacketRecord } from '../../../plugins/RedPacket/types'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ProviderType, TokenDetailed } from '../../../web3/types'
@@ -166,9 +166,9 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                         onClick={() =>
                             openWalletHistory({
                                 wallet,
-                                onClickRedPacketRecord: (record: RedPacketRecord) => {
+                                onRedPacketClicked(payload) {
                                     openWalletRedPacket({
-                                        redPacket: record,
+                                        payload,
                                     })
                                 },
                             })

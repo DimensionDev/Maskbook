@@ -1,9 +1,9 @@
 import type { PluginConfig } from '../plugin'
-import RedPacketInDecryptedPost from './UI/RedPacketInDecryptedPost'
+import { RedPacketInspector } from './UI/RedPacketInspector'
 import React from 'react'
 import { formatBalance } from '../Wallet/formatter'
 import BigNumber from 'bignumber.js'
-import { RedPacketMetadataReader } from '../RedPacket/utils'
+import { RedPacketMetadataReader } from './helpers'
 import { RedPacketMetaKey, RedPacketPluginID } from './constants'
 import type { RedPacketJSONPayload } from './types'
 
@@ -12,7 +12,7 @@ export const RedPacketPluginDefine: PluginConfig = {
     identifier: RedPacketPluginID,
     successDecryptionInspector: function Comp(props) {
         if (!RedPacketMetadataReader(props.message.meta).ok) return null
-        return <RedPacketInDecryptedPost {...props} />
+        return <RedPacketInspector {...props} />
     },
     postDialogMetadataBadge: new Map([
         [

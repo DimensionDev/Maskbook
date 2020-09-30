@@ -62,13 +62,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface TokenInListProps {
     index: number
-    // styles required by FixedSizeList
     style: any
     data: {
         tokens: Token[]
         excludeTokens: string[]
         selected: string
-        onSelect: (address: string) => void
+        onSelect(address: string): void
     }
 }
 

@@ -74,7 +74,7 @@ export function useClaimCallback(id?: string, password?: string) {
                     if (hash) onSucceed(hash)
                     // claim by server
                     else if (error?.message.includes('insufficient funds for gas')) {
-                        Services.Plugin.invokePlugin('maskbook.red_packet', 'claimByServer', account, id, password)
+                        Services.Plugin.invokePlugin('maskbook.red_packet', 'claimRedPacket', account, id, password)
                             .then(({ claim_transaction_hash }) => onSucceed(claim_transaction_hash))
                             .catch(onFailed)
                     } else if (error) onFailed(error)
