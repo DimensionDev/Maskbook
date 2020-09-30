@@ -219,10 +219,10 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
         if (!token.address) return 'Select a token'
         if (new BigNumber(shares || '0').isZero()) return 'Enter shares'
         if (new BigNumber(amount).isZero()) return 'Enter an amount'
-        if (new BigNumber(amount).isGreaterThan(new BigNumber(tokenBalance)))
+        if (new BigNumber(totalAmount).isGreaterThan(new BigNumber(tokenBalance)))
             return `Insufficient ${token.symbol} balance`
         return ''
-    }, [account, amount, shares, token, tokenBalance])
+    }, [account, amount, totalAmount, shares, token, tokenBalance])
 
     return (
         <>
