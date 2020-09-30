@@ -24,9 +24,9 @@ import {
     useTwitterCloseButton,
     useTwitterDialog,
 } from '../../social-network-provider/twitter.com/utils/theme'
-import { resolveTransactionLinkOnEtherscan } from '../helpers'
 import { useChainId } from '../hooks/useChainId'
 import { TransactionState, TransactionStateType } from '../hooks/useTransactionState'
+import { resolveTransactionLinkOnEtherscan } from '../pipes'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
