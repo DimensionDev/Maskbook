@@ -147,7 +147,6 @@ export default function (_argvEnv, argv: any) {
         'injected-script': src('./src/extension/injected-script/index.ts'),
         popup: withReactDevTools(src('./src/extension/popup-page/index.tsx')),
         qrcode: src('./src/web-workers/QRCode.ts'),
-        'crypto-worker': src('./src/modules/CryptoAlgorithm/EllipticBackend/worker.ts'),
         debug: src('./src/extension/debug-page'),
     }
     for (const entry in config.entry) {

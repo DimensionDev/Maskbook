@@ -1,4 +1,3 @@
-import './elliptic-loader'
 import { WebCryptoNotSupportedMethods, WebCryptoSupportedMethods, WebCryptoMethods } from '../WebCrypto'
 import {
     getKeyParameter,
@@ -13,7 +12,7 @@ import {
 import type { MnemonicWordDetail } from '../interfaces/interface.blockchain'
 
 if (process.env.NODE_ENV !== 'test' && !process.env.STORYBOOK) {
-    require('webcrypto-liner')
+    import('webcrypto-liner')
 }
 
 const ECDH = getKeyParameter('ecdh')[0]

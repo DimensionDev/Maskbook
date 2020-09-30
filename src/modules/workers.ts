@@ -1,1 +1,1 @@
-export { default as CryptoWorker } from './CryptoAlgorithm/EllipticBackend/worker'
+export { default as CryptoWorker } from './CryptoAlgorithm/EllipticBackend/methods'
