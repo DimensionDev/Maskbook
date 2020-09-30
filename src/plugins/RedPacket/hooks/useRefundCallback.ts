@@ -50,12 +50,6 @@ export function useRefundCallback(id?: string) {
                     ...config,
                 },
                 (error, hash) => {
-                    console.log('DEBUG: hash')
-                    console.log({
-                        error,
-                        hash,
-                    })
-
                     if (error) {
                         setRefundState({
                             type: TransactionStateType.FAILED,

@@ -100,8 +100,6 @@ export function useSwapCallback(
                     ...config,
                 },
                 (error, hash) => {
-                    console.log('DEBUG: swap result')
-                    console.log(error)
                     if (error) {
                         setSwapState({
                             type: TransactionStateType.FAILED,

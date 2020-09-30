@@ -69,13 +69,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey)
         ref.value = next
         props.onConfirm(payload)
-
-        console.log('DEBUG: onCreateOrSelect')
-        console.log({
-            payload,
-            ref,
-            next,
-        })
     }, [])
 
     const state = useState(0)

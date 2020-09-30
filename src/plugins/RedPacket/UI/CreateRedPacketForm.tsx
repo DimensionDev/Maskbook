@@ -22,7 +22,7 @@ import {
     RED_PACKET_DEFAULT_SHARES,
 } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { Token, EthereumTokenType } from '../../../web3/types'
+import { Token, EthereumTokenType, EthereumNetwork } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
@@ -149,20 +149,16 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
     //#endregion
 
     //#region blocking
-    const settings = useMemo(
-        () => ({
-            password: uuid(),
-            duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
-            isRandom: Boolean(isRandom),
-            name: senderName,
-            message,
-            shares: shares || 0,
-            token,
-            total: totalAmount.toFixed(),
-        }),
-        [isRandom, senderName, shares, totalAmount],
-    )
-    const [createState, createCallback] = useCreateCallback(settings)
+    const [createSettings, createState, createCallback] = useCreateCallback({
+        password: uuid(),
+        duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
+        isRandom: Boolean(isRandom),
+        name: senderName,
+        message,
+        shares: shares || 0,
+        token,
+        total: totalAmount.toFixed(),
+    })
     const [openTransactionDialog, setOpenTransactionDialog] = useState(false)
     const onSubmit = useCallback(async () => {
         setOpenTransactionDialog(true)
@@ -171,21 +167,13 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
     const onTransactionDialogClose = useCallback(async () => {
         setOpenTransactionDialog(false)
 
-        // reset form if transaction submitted
-        if (
-            [TransactionStateType.HASH, TransactionStateType.RECEIPT, TransactionStateType.CONFIRMED].includes(
-                createState.type,
-            )
-        )
-            setAmount('0')
+        // the settings is not available
+        if (!createSettings) return
 
         // TODO:
         // earily return happended
         // we should guide user to select the red packet in the existing list
         if (createState.type !== TransactionStateType.CONFIRMED) return
-
-        console.log('DEBUG: create done')
-        console.log(createState)
 
         const { receipt } = createState
         const CreationSuccess = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
@@ -196,34 +184,34 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
             total: string
         }
 
-        console.log('DEBUG: create payload')
-        console.log({
-            CreationSuccess,
-            settings,
-        })
-
-        // output the redpacket as JSON payload
-        onCreate?.({
+        // assemble JSON payload
+        const payload: RedPacketJSONPayload = {
             contract_version: 1,
             contract_address: HAPPY_RED_PACKET_ADDRESS,
             rpid: CreationSuccess.id,
-            password: settings.password,
-            shares: settings.shares,
+            password: createSettings.password,
+            shares: createSettings.shares,
             sender: {
                 address: account,
-                name: settings.name,
-                message: settings.message,
+                name: createSettings.name,
+                message: createSettings.message,
             },
-            is_random: settings.isRandom,
+            is_random: createSettings.isRandom,
             total: CreationSuccess.total,
             creation_time: Number.parseInt(CreationSuccess.creation_time),
-            duration: settings.duration,
-            network: resolveChainName(chainId),
-            token_type: settings.token.type,
-            token:
-                settings.token.type === EthereumTokenType.ERC20 ? omit(settings.token, ['type', 'chainId']) : undefined,
-        } as RedPacketJSONPayload)
-    }, [account, chainId, settings, createState, onCreate])
+            duration: createSettings.duration,
+            network: resolveChainName(chainId) as EthereumNetwork,
+            token_type: createSettings.token.type,
+        }
+        if (createSettings.token.type === EthereumTokenType.ERC20)
+            payload.token = omit(createSettings.token, ['type', 'chainId'])
+
+        // output the redpacket as JSON payload
+        onCreate?.(payload)
+
+        // always reset amount
+        setAmount('0')
+    }, [account, chainId, createSettings, createState, onCreate])
     //#endregion
 
     const validationMessage = useMemo(() => {
@@ -315,7 +303,8 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
                     variant="contained"
                     disabled={Boolean(validationMessage)}
                     onClick={onSubmit}>
-                    {validationMessage || `Send ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`}
+                    {validationMessage ||
+                        `Send ${formatBalance(totalAmount, token.decimals, token.decimals)} ${token.symbol}`}
                 </ActionButton>
             )}
             <SelectERC20TokenDialog
@@ -326,7 +315,11 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
             />
             <TransactionDialog
                 state={createState}
-                summary={`Creating ${formatBalance(new BigNumber(amount), token.decimals)} ${token.symbol}`}
+                summary={`Creating red packet with ${formatBalance(
+                    new BigNumber(amount),
+                    token.decimals,
+                    token.decimals,
+                )} ${token.symbol}`}
                 open={openTransactionDialog}
                 onClose={onTransactionDialogClose}
             />
