@@ -74,12 +74,14 @@
   "ts-node": {
     "compilerOptions": {
       "module": "CommonJS",
-      "plugins": [{
-        // Support import.meta syntax in commonjs
-        "transform": "@magic-works/commonjs-import.meta"
-      }]
+      "plugins": [
+        {
+          // Support import.meta syntax in commonjs
+          "transform": "@magic-works/commonjs-import.meta"
+        }
+      ]
     },
     "transpileOnly": true,
-    "compiler": "ttypescript",
+    "compiler": "ttypescript"
   }
 }
