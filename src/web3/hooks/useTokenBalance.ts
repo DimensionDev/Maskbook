@@ -7,6 +7,10 @@ import { useConstant } from './useConstant'
 import { CONSTANTS } from '../constants'
 import { useChainId } from './useChainId'
 
+/**
+ * Fetch token balance from chain
+ * @param token
+ */
 export function useTokenBalance(token?: PartialRequired<Token, 'address'>) {
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const chainId = useChainId()

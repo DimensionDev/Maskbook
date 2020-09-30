@@ -4,15 +4,16 @@ import { makeStyles, createStyles, Avatar, Theme, AvatarProps } from '@material-
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { isSameAddress, getConstant } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
+import { formatChecksumAddress } from '../../../plugins/Wallet/formatter'
 
 const ICON_MAP = {
-    [EthereumAddress.checksumAddress(
+    [formatChecksumAddress(
         '0x32a7c02e79c4ea1008dd6564b35f131428673c41',
     )]: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6747.png',
 }
 
 function resolveTokenIconURL(address: string) {
-    const checksummedAddress = EthereumAddress.checksumAddress(address)
+    const checksummedAddress = formatChecksumAddress(address)
     if (isSameAddress(checksummedAddress, getConstant(CONSTANTS, 'ETH_ADDRESS')))
         return 'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png'
     if (ICON_MAP[checksummedAddress]) return ICON_MAP[checksummedAddress]
