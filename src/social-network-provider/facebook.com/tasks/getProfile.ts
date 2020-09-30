@@ -8,4 +8,3 @@ export async function getProfileFacebook(identifier: ProfileIdentifier): Promise
     const [data] = await timeout(new MutationObserverWatcher(bioCard), 10000)
     return { bioContent: data.innerText }
 }
-// document.querySelector('[role=main] h1').parentElement.parentElement.parentElement.parentElement.parentElement.nextElementSibling
