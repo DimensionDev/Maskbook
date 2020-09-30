@@ -23,6 +23,17 @@ i18nNextInstance.init({
 })
 i18nNextInstance.languages = ['en', 'zh', 'ja']
 
+if (module.hot) {
+    module.hot.accept(
+        ['../_locales/en/messages.json', '../_locales/zh/messages.json', '../_locales/ja/messages.json'],
+        () => {
+            i18nNextInstance.addResources('zh', 'translation', zh)
+            i18nNextInstance.addResources('en', 'translation', en)
+            i18nNextInstance.addResources('ja', 'translation', ja)
+        },
+    )
+}
+
 export default i18nNextInstance
 export const i18n = {
     t: ((key, options) => {

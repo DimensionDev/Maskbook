@@ -1,10 +1,5 @@
 import { GetContext } from '@holoflows/kit/es'
 
-export function safeReact() {
-    if (GetContext() === 'background') throw new Error('Illegal context')
-    return require('react') as typeof import('react')
-}
-
 export function safeMUI() {
     if (GetContext() === 'background') throw new Error('Illegal context')
     return require('@material-ui/core') as typeof import('@material-ui/core')
