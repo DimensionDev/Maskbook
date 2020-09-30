@@ -1,11 +1,13 @@
-import { exec } from 'child_process'
+import { execFile } from 'child_process'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import { promisify } from 'util'
+
+const ssrPath = require.resolve('../src/setup.ssr.js')
 
 export class SSRPlugin {
     constructor(public htmlFileName: string, public pathName: string) {}
     async renderSSR(): Promise<string> {
-        return (await promisify(exec)(`node ./src/setup.ssr.js ${this.pathName}`)).stdout
+        return (await promisify(execFile)('node', [ssrPath, this.pathName])).stdout
     }
     appendAfterBody(original: string, text: string) {
         return original.replace('</body>', text + '</body>')
