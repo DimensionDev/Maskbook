@@ -45,9 +45,13 @@ export default function (_argvEnv, argv: any) {
     // Wait for https://github.com/facebook/react/pull/19914
     const enableHMRWithReactRefresh = enableHMR && false
 
+    /**
+     * On Firefox, CSP settings does not work. On iOS, eval is async.
+     */
+    const sourceMapKind: Configuration['devtool'] = target.Safari || target.Firefox ? false : 'eval-source-map'
     const config: Configuration = {
         mode: env,
-        devtool: env === 'development' ? 'eval-source-map' : false,
+        devtool: env === 'development' ? sourceMapKind : false,
         entry: {}, // ? Defined later
         resolve: {
             extensions: ['.js', '.ts', '.tsx'],
