@@ -5,7 +5,7 @@ import { promisify } from 'util'
 export class SSRPlugin {
     constructor(public htmlFileName: string, public pathName: string) {}
     async renderSSR(): Promise<string> {
-        return (await promisify(exec)('node ./src/setup.ssr.js ' + this.pathName)).stdout
+        return (await promisify(exec)(`node ./src/setup.ssr.js ${this.pathName}`)).stdout
     }
     appendAfterBody(original: string, text: string) {
         return original.replace('</body>', text + '</body>')
@@ -84,12 +84,12 @@ untilDocumentReady().then(() => {
         return regeneratedHTML
     }
 }
-function appendScript(html: string, src: string, position: string, position2: string) {
-    if (position2 === 'before') {
-        const [before, after] = html.split(`<${position}>`)
-        return [before, `<${position}><script defer src="${src}"></script>`, after].join('')
+function appendScript(html: string, src: string, tagName: string, position: string) {
+    if (position === 'before') {
+        const [before, after] = html.split(`<${tagName}>`)
+        return [before, `<${tagName}><script defer src="${src}"></script>`, after].join('')
     } else {
-        const [before, after] = html.split(`</${position}>`)
-        return [before, `<script defer src="${src}"></script></${position}>`, after].join('')
+        const [before, after] = html.split(`</${tagName}>`)
+        return [before, `<script defer src="${src}"></script></${tagName}>`, after].join('')
     }
 }
