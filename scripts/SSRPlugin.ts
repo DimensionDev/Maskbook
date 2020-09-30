@@ -1,54 +1,32 @@
-const { exec } = require('child_process')
-const { appendScript } = require('./utils')
+import { exec } from 'child_process'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-
-class SSRPlugin {
-    /**
-     * @param {string} htmlFileName
-     * @param {string} pathName
-     */
-    constructor(htmlFileName, pathName) {
-        this.htmlFileName = htmlFileName
-        this.pathName = pathName
-    }
-    /**
-     * @returns {Promise<string>}
-     */
-    renderSSR() {
-        return new Promise((resolve, reject) => {
+export class SSRPlugin {
+    constructor(public htmlFileName: string, public pathName: string) {}
+    renderSSR(): Promise<string> {
+        return new Promise<string>((resolve, reject) => {
             exec('node ./src/setup.ssr.js ' + this.pathName, (err, stdout) => (err ? reject(err) : resolve(stdout)))
         })
     }
-    /**
-     * @param {string} original
-     * @param {string} string
-     */
-    appendAfterBody(original, string) {
+    appendAfterBody(original: string, string: string) {
         return original.replace('</body>', string + '</body>')
     }
-    /**
-     * @param {string} string
-     */
-    removeScripts(string) {
+    removeScripts(string: string) {
         return string.replace(/<script src="(.+?)"><\/script>/g, '')
     }
-    /**
-     * @param {import('webpack').Compiler} compiler
-     */
-    apply(compiler) {
+    apply(compiler: import('webpack').Compiler) {
         compiler.hooks.compilation.tap('SSRPlugin', (compilation) => {
             /**
              * @see https://github.com/jantimon/html-webpack-plugin#options
-             * @type {import('webpack').compilation.CompilerHooks
-             * & {
-             *      beforeEmit: import('tapable').SyncHook<{
-             *          html: string
-             *          outputName: string
-             *          plugin: HtmlWebpackPlugin
-             *  }>}}
              */
-            const htmlWebpackPluginHook = HtmlWebpackPlugin.getHooks(compilation)
+            // @ts-ignore
+            const htmlWebpackPluginHook: import('webpack').compilation.CompilerHooks & {
+                beforeEmit: import('tapable').SyncHook<{
+                    html: string
+                    outputName: string
+                    plugin: HtmlWebpackPlugin
+                }>
+            } = HtmlWebpackPlugin.getHooks(compilation)
             htmlWebpackPluginHook.beforeEmit.tapPromise('SSRPlugin', async (args) => {
                 const { html: originalHTML, outputName, plugin } = args
                 if (outputName !== this.htmlFileName) return args
@@ -57,10 +35,7 @@ class SSRPlugin {
             })
         })
     }
-    /**
-     * @param {import('webpack').compilation.Compilation} compilation
-     */
-    async generateSSRHTMLFile(compilation, originalHTML) {
+    async generateSSRHTMLFile(compilation: import('webpack').compilation.Compilation, originalHTML: string) {
         const ssrString = await this.renderSSR()
         const allScripts = []
         {
@@ -110,5 +85,12 @@ untilDocumentReady().then(() => {
         return regeneratedHTML
     }
 }
-
-module.exports = SSRPlugin
+function appendScript(html: string, src: string, position: string, position2: string) {
+    if (position2 === 'before') {
+        const [before, after] = html.split(`<${position}>`)
+        return [before, `<${position}><script defer src="${src}"></script>`, after].join('')
+    } else {
+        const [before, after] = html.split(`</${position}>`)
+        return [before, `<script defer src="${src}"></script></${position}>`, after].join('')
+    }
+}

@@ -73,7 +73,13 @@
   "include": ["./src/", "./e2e/"],
   "ts-node": {
     "compilerOptions": {
-      "module": "CommonJS"
-    }
+      "module": "CommonJS",
+      "plugins": [{
+        // Support import.meta syntax in commonjs
+        "transform": "@magic-works/commonjs-import.meta"
+      }]
+    },
+    "transpileOnly": true,
+    "compiler": "ttypescript",
   }
 }

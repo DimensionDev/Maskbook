@@ -1,18 +1,13 @@
-const base = require('../src/manifest.json')
-/**
- * @param {typeof base} manifest
- */
-function firefox(manifest) {
+import base from '../src/manifest.json'
+type Manifest = typeof base & { [key: string]: any }
+export function firefox(manifest: Manifest) {
     // TODO: To make `browser.tabs.executeScript` run on Firefox,
     // we need an extra permission "tabs".
     // Switch to browser.userScripts (Firefox only) API can resolve the problem.
     manifest.permissions.push('tabs')
 }
-/**
- * Geckoview is firefox with some quirks.
- * @param {typeof base} manifest
- */
-function geckoview(manifest) {
+/** Geckoview is firefox with some quirks. */
+export function geckoview(manifest: Manifest) {
     firefox(manifest)
     manifest.permissions.push('<all_urls>')
     manifest.application = {
@@ -21,22 +16,15 @@ function geckoview(manifest) {
         },
     }
 }
-/**
- * @param {typeof base} manifest
- */
-function chromium(manifest) {}
-/**
- * @param {typeof base} manifest
- */
-function safari(manifest) {
+export function chromium(manifest: Manifest) {}
+export function safari(manifest: Manifest) {
     manifest['iOS-injected-scripts'] = ['js/injected-script.js']
     manifest.permissions.push('<all_urls>')
 }
-/**
- * @param {typeof base} manifest
- */
-function development(manifest, target) {
+export function development(manifest: Manifest) {
     manifest.name = 'Maskbook (development)'
+    // required by Webpack HMR
+    manifest.web_accessible_resources.push('*.json', '*.js')
     // Required by eval-source-map in development
     manifest.content_security_policy = "script-src 'self' blob: filesystem: 'unsafe-eval';"
     manifest.key = // ID：jkoeaghipilijlahjplgbfiocjhldnap
@@ -48,15 +36,12 @@ function development(manifest, target) {
         'TDEYcqr0OMZvVrKz7IkJasER1uJyoGj4gFJeXNGE8y4Sqb150wBju70l' +
         'KNKlNevWDRJKasG9CjagAD2+BAfqNyltn7KwK7jAyL1w6d6mOwIDAQAB'
 }
-/**
- * @param {typeof base} manifest
- */
-function E2E(manifest) {
-    // can not capture premission dialog in pptr
+export function E2E(manifest: Manifest) {
+    development(manifest)
+    // can not capture permission dialog in pptr
     manifest.permissions = Array.from(
         new Set([...manifest.permissions, ...manifest.optional_permissions, ...['<all_urls>']]),
     )
     manifest.optional_permissions = []
 }
-function production(manifest, target) {}
-module.exports = { firefox, geckoview, chromium, safari, development, production, E2E }
+export function production(manifest: Manifest) {}

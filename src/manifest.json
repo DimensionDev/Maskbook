@@ -9,5 +9,6 @@
     "icons": { "16": "16x16.png", "48": "48x48.png", "128": "128x128.png", "256": "256x256.png" },
     "browser_action": { "default_popup": "popup.html" },
     "homepage_url": "https://maskbook.com",
-    "description": "Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt."
+    "description": "Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt.",
+    "web_accessible_resources": ["js/*"]
 }

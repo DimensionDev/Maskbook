@@ -1,3 +1,4 @@
+import 'webpack-target-webextension/lib/background'
 import './polyfill'
 import { GetContext } from '@holoflows/kit/es'
 import { MessageCenter } from './utils/messages'

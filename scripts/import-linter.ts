@@ -29,10 +29,6 @@ function getChecker(): (path: string) => string | null {
             return `@material-ui appears in the import chain!
 To write a cross context file, use safeMUI() inside the function to import them conditionally.
 `
-        } else if (x === 'react') {
-            return `React appears in the import chain!
-To write a cross context file, use safeReact() inside the function to import them conditionally.
-`
         }
         return null
     }
