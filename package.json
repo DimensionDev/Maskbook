@@ -91,6 +91,7 @@
     "classnames": "^2.2.6",
     "clipboard-polyfill": "^3.0.1",
     "d3": "^5.16.0",
+    "date-fns": "^2.16.1",
     "elliptic": "^6.5.3",
     "eth-contract-metadata": "^1.15.0",
     "event-iterator": "^2.0.0",
