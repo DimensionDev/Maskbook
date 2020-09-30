@@ -5,6 +5,7 @@ import { Days } from '../UI/trending/PriceChartDaysControl'
 import { getEnumAsArray } from '../../../utils/enum'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../constants'
 import { unreachable } from '../../../utils/utils'
+import { resolveCoinId, resolveCoinAddress } from './hotfix'
 
 export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
     if (dataProvider === DataProvider.COIN_GECKO) {
@@ -111,7 +112,9 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
                 market_cap_rank: info.market_cap_rank,
                 image_url: info.image.small,
                 home_url: info.links.homepage.filter(Boolean)[0],
-                eth_address: info.asset_platform_id === 'ethereum' ? info.contract_address : undefined,
+                eth_address:
+                    resolveCoinAddress(id, DataProvider.COIN_GECKO) ??
+                    (info.asset_platform_id === 'ethereum' ? info.contract_address : undefined),
             },
             market: Object.entries(info.market_data).reduce((accumulated, [key, value]) => {
                 if (value && typeof value === 'object') accumulated[key] = value[currency.id]
@@ -146,7 +149,9 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
             image_url: `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`,
             market_cap_rank: quotesInfo.rank,
             description: coinInfo.description,
-            eth_address: coinInfo.platform?.name === 'Ethereum' ? coinInfo.platform?.token_address : undefined,
+            eth_address:
+                resolveCoinAddress(id, DataProvider.COIN_MARKET_CAP) ??
+                (coinInfo.platform?.name === 'Ethereum' ? coinInfo.platform?.token_address : undefined),
             home_url: coinInfo.urls.website[0],
         },
         currency,
@@ -180,31 +185,6 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
             }),
     }
 }
-
-//#region hotfix
-// FIXME:
-// this is hotfix for duplicate token name
-// we should support multiple-coins switing in the future
-const KEYWORK_ID_MAP: {
-    [key in DataProvider]: {
-        [key: string]: string
-    }
-} = {
-    [DataProvider.COIN_MARKET_CAP]: {
-        UNI: '7083',
-        CRU: '6747',
-    },
-    [DataProvider.COIN_GECKO]: {
-        UNI: 'uniswap',
-    },
-}
-function resolveCoinId(keyword: string, dataProvider: DataProvider) {
-    if (dataProvider === DataProvider.COIN_MARKET_CAP)
-        return KEYWORK_ID_MAP[DataProvider.COIN_MARKET_CAP][keyword.toUpperCase()]
-    if (dataProvider === DataProvider.COIN_GECKO) return KEYWORK_ID_MAP[DataProvider.COIN_GECKO][keyword.toUpperCase()]
-    unreachable(dataProvider)
-}
-//#endregion
 
 export async function getCoinTrendingByKeyword(keyword: string, dataProvider: DataProvider, currency: Currency) {
     const coins = await getCoins(dataProvider)

@@ -112,7 +112,6 @@ const useStyles = makeStyles((theme: Theme) => {
         maskbook: {
             width: 60,
             height: 9,
-            verticalAlign: 'middle',
         },
         cmc: {
             width: 96,
@@ -279,7 +278,7 @@ export function TrendingView(props: TrendingViewProps) {
             </CardContent>
             <CardActions className={classes.footer}>
                 <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
-                    {'Powered by '}
+                    <span>Powered by </span>
                     <Link
                         className={classes.footlink}
                         color="textSecondary"
@@ -293,7 +292,7 @@ export function TrendingView(props: TrendingViewProps) {
 
                 {tabIndex === 0 || tabIndex === 1 ? (
                     <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
-                        {'Data source '}
+                        <span>Data source: </span>
                         <Link
                             className={classes.footlink}
                             color="textSecondary"
