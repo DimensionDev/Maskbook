@@ -10,7 +10,7 @@ export function firefox(manifest: Manifest) {
 export function geckoview(manifest: Manifest) {
     firefox(manifest)
     manifest.permissions.push('<all_urls>')
-    manifest.application = {
+    manifest.applications = {
         gecko: {
             id: 'info@dimension.com',
         },
