@@ -46,12 +46,12 @@ if (GetContext() === 'background') {
         })
     browser.webNavigation.onCommitted.addListener(async (arg) => {
         if (arg.url === 'about:blank') return
+        const contains = await browser.permissions.contains({ origins: [arg.url] })
         /**
          * For iOS App, there is a special way to do it in the manifest.json
-         *
          * A `iOS-injected-scripts` field is used to add extra scripts
          */
-        if (!Flags.support_native_injected_script_declaration)
+        if (!Flags.support_native_injected_script_declaration && contains) {
             browser.tabs
                 .executeScript(arg.tabId, {
                     runAt: 'document_start',
@@ -60,7 +60,8 @@ if (GetContext() === 'background') {
                     code: process.env.NODE_ENV === 'development' ? await getInjectedScript() : await injectedScript,
                 })
                 .catch(IgnoreError(arg))
-        if (Flags.requires_injected_script_run_directly) {
+        }
+        if (Flags.requires_injected_script_run_directly && contains) {
             browser.tabs.executeScript(arg.tabId, {
                 runAt: 'document_start',
                 frameId: arg.frameId,
@@ -116,13 +117,9 @@ async function getInjectedScript() {
 }
 function IgnoreError(arg: unknown): (reason: Error) => void {
     return (e) => {
-        if (e.message.includes('non-structured-clonable data')) {
+        const ignoredErrorMessages = ['non-structured-clonable data']
+        if (ignoredErrorMessages.some((x) => e.message.includes(x))) {
             // It's okay we don't need the result, happened on Firefox
-        } else if (e.message.includes('Frame not found, or missing host permission')) {
-            // It's okay, we inject to the wrong site and browser rejected it.
-        } else if (e.message.includes('must request permission')) {
-        } else if (e.message.includes('Cannot access a chrome')) {
-        } else if (e.message.includes('extension:// URL of different extension')) {
         } else console.error('Inject error', e, arg, Object.entries(e))
     }
 }
