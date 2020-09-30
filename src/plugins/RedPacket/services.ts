@@ -1,11 +1,12 @@
 import * as jwt from 'jsonwebtoken'
-import type { RedPacketRecord, RedPacketRecordInDatabase, RedPacketJSONPayload } from './types'
+import type { RedPacketRecord, RedPacketRecordInDatabase, RedPacketJSONPayload, History } from './types'
 import { RED_PACKET_HISTORY_URL } from './constants'
 import { createRedPacketTransaction } from './database'
 import { PluginMessageCenter } from '../PluginMessages'
 import { resolveChainName } from '../../web3/pipes'
 import { getChainId } from '../../extension/background-script/EthereumService'
 import { web3 } from '../../extension/background-script/EthereumServices/web3'
+import type { ChainId } from '../../web3/types'
 
 export async function claimByServer(
     from: string,
@@ -66,15 +67,15 @@ export async function getInboundRedPackets() {
     return []
 }
 
-export async function getOutboundRedPackets(from: string) {
+export async function getOutboundRedPackets(chainId: ChainId, from: string, startBlock: number) {
     const url = new URL(RED_PACKET_HISTORY_URL)
+    url.searchParams.set('chainId', String(chainId))
     url.searchParams.set('from', from)
+    url.searchParams.set('startBlock', String(startBlock))
+    url.searchParams.set('endBlock', '9'.repeat(18))
     const response = await fetch(url.toString())
-    if (response.status !== 200) {
-        return undefined
-    }
-    // return response.json() as Promise<History.RecordType[]>
-    return response.json() as any
+    if (response.status !== 200) return []
+    return response.json() as Promise<History.RedPacketRecord[]>
 }
 
 function RedPacketRecordOutDB(x: RedPacketRecordInDatabase): RedPacketRecord {

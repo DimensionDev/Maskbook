@@ -3,7 +3,7 @@ import { noop } from 'lodash-es'
 import { makeStyles, createStyles, Card, Typography } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import classNames from 'classnames'
-import type { RedPacketRecord, RedPacketJSONPayload } from '../types'
+import type { RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
 import Services from '../../../extension/service'
 import { PluginMessageCenter } from '../../PluginMessages'
@@ -58,8 +58,9 @@ const useStyles = makeStyles((theme) =>
         },
         content: {
             display: 'flex',
-            flexDirection: 'column',
             flex: 1,
+            flexDirection: 'column',
+            alignItems: 'flex-start',
             justifyContent: 'center',
         },
         packet: {
@@ -109,7 +110,6 @@ const useStyles = makeStyles((theme) =>
 
 interface RedPacketInPostProps {
     from?: string
-    state?: RedPacketStatus
     payload?: RedPacketJSONPayload
 }
 
@@ -274,38 +274,39 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     )
 }
 
-export function RedPacketInList(props: { redPacket?: RedPacketRecord }) {
-    const classes = useStyles()
-    const { redPacket } = props
+export interface RedPacketInListProps {
+    payload: RedPacketJSONPayload
+}
 
-    const info = {
-        name: 'xxx',
-    }
+export function RedPacketInList(props: RedPacketInListProps) {
+    const classes = useStyles()
+    const { payload } = props
 
     const formatted = {
         claim_amount: '',
-        send_total: redPacket?.payload.total ? formatBalance(new BigNumber(redPacket.payload.total), 0) : 'Unknown',
-        name: info.name ?? '(unknown)',
+        send_total: payload.total
+            ? formatBalance(new BigNumber(payload.total), payload.token?.decimals ?? 0, payload.token?.decimals ?? 0)
+            : '-',
+        name: payload.sender.name ?? '-',
     }
 
     return (
         <Card elevation={0} className={classes.box} component="article">
             <div className={classes.header}>
                 <Typography variant="h5">{formatted.claim_amount}</Typography>
-                <Typography className={classes.label} variant="body2">
+                {/* <Typography className={classes.label} variant="body2">
                     {'Unknown'}
-                </Typography>
+                </Typography> */}
             </div>
             <div className={classes.content}>
                 <Typography className={classes.words} variant="h6">
-                    {redPacket?.payload.sender.message}
+                    {payload.sender.message}
                 </Typography>
                 <Typography variant="body1">
-                    {formatted.send_total} {formatted.name} / {redPacket?.payload.shares?.toString() ?? 'Unknown'}{' '}
-                    shares
+                    {formatted.send_total} {formatted.name} / {payload.shares.toString() ?? '-'} shares
                 </Typography>
             </div>
-            <div className={classes.packet}></div>
+            <div className={classes.packet} />
         </Card>
     )
 }

@@ -11,6 +11,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { CreateRedPacketForm } from './CreateRedPacketForm'
 import { RedPacketOutboundList } from './RedPacketOutboundList'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
+import { useAccount } from '../../../web3/hooks/useAccount'
 
 interface RedPacketDialogProps
     extends withClasses<
@@ -63,6 +64,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
+    const account = useAccount()
     const onCreateOrSelect = useCallback((payload: RedPacketJSONPayload) => {
         const ref = getActivatedUI().typedMessageMetadata
         const next = new Map(ref.value.entries())
@@ -86,7 +88,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             },
             {
                 label: t('plugin_red_packet_select_existing'),
-                children: <RedPacketOutboundList onSelect={onCreateOrSelect} />,
+                children: <RedPacketOutboundList from={account} onSelect={onCreateOrSelect} />,
                 p: 0,
             },
         ],

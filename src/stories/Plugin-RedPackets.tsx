@@ -12,31 +12,23 @@ import { EthereumTokenType } from '../web3/types'
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacket', () => {
         const { decimals, erc20name, erc20symbol, total, ...opts } = createRedPacketKnobs()
+        const knobs = createRedPacketKnobs()
+        // @ts-ignore
+        const payload: RedPacketJSONPayload = {
+            ...createRecord({ ...knobs, type: EthereumTokenType.Ether }),
+            rpid: 'rpid',
+            sender: { address: 'address', message: knobs.message, name: knobs.senderName },
+            total: (knobs.total * 10 ** 18).toString(),
+            creation_time: Date.now(),
+        }
+
         return (
             <>
                 <Typography>ETH</Typography>
-                <RedPacketInList
-                    redPacket={createRecord({
-                        ...opts,
-                        total: total * 1000000000000000000,
-                        type: EthereumTokenType.Ether,
-                    })}
-                />
+                <RedPacketInList payload={payload} />
                 <hr />
                 <Typography>ERC20</Typography>
-                <RedPacketInList
-                    redPacket={createRecord({
-                        ...opts,
-                        type: EthereumTokenType.ERC20,
-                        total: total * 10 ** decimals,
-                        token: {
-                            address: 'addr',
-                            name: erc20name,
-                            decimals,
-                            symbol: erc20symbol,
-                        },
-                    })}
-                />
+                <RedPacketInList payload={payload} />
             </>
         )
     })
