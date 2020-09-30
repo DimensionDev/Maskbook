@@ -174,4 +174,4 @@ function Popup() {
     )
 }
 
-SSRRenderer(<Popup />)
+export default SSRRenderer(<Popup />)

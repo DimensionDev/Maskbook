@@ -1,18 +1,17 @@
 import { exec } from 'child_process'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import { promisify } from 'util'
 
 export class SSRPlugin {
     constructor(public htmlFileName: string, public pathName: string) {}
-    renderSSR(): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
-            exec('node ./src/setup.ssr.js ' + this.pathName, (err, stdout) => (err ? reject(err) : resolve(stdout)))
-        })
+    async renderSSR(): Promise<string> {
+        return (await promisify(exec)('node ./src/setup.ssr.js ' + this.pathName)).stdout
     }
-    appendAfterBody(original: string, string: string) {
-        return original.replace('</body>', string + '</body>')
+    appendAfterBody(original: string, text: string) {
+        return original.replace('</body>', text + '</body>')
     }
-    removeScripts(string: string) {
-        return string.replace(/<script src="(.+?)"><\/script>/g, '')
+    removeScripts(text: string) {
+        return text.replace(/<script src="(.+?)"><\/script>/g, '')
     }
     apply(compiler: import('webpack').Compiler) {
         compiler.hooks.compilation.tap('SSRPlugin', (compilation) => {

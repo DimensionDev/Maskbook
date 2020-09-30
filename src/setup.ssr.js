@@ -15,6 +15,7 @@ globalThis.document = {
     documentElement: {
         onmouseenter() {},
     },
+    readyState: 'loading',
 }
 globalThis.CSSStyleSheet = { name: 'CSSStyleSheet' }
 globalThis.ShadowRoot = class {}

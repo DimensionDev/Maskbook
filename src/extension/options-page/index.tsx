@@ -252,4 +252,4 @@ export function Dashboard() {
     )
 }
 
-SSRRenderer(<Dashboard />)
+export default SSRRenderer(<Dashboard />)

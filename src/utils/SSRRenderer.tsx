@@ -11,6 +11,7 @@ export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
         const oldChildren = [...container.children]
         ReactDOM.unstable_createRoot(container).render(<React.StrictMode children={jsx} />)
         oldChildren.forEach((x) => x.remove())
+        return ''
     } else {
         async function render() {
             const Server = await import('react-dom/server')
@@ -20,8 +21,6 @@ export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
             const styles = sheets.toString()
             return `<style>${styles}</style><div id="root">${html}</div>`
         }
-        render()
-            .then(console.log)
-            .then(() => process.exit())
+        return render()
     }
 }
