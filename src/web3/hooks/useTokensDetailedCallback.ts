@@ -14,10 +14,10 @@ export function useTokensDetailedCallback(tokens: Token[]) {
     const debankDetailedTokens = useTokensDetailedDebank(address)
     const detailedTokens = useTokensDetailedMerged(chainDetailedTokens, debankDetailedTokens)
 
-    const fetchDetailedTokens = useCallback((address: string) => {
+    const detailedTokensCallback = useCallback((address: string) => {
         if (!EthereumAddress.isValid(address)) return
         setAddress(address)
     }, [])
 
-    return [detailedTokens, fetchDetailedTokens] as const
+    return [detailedTokens, detailedTokensCallback] as const
 }

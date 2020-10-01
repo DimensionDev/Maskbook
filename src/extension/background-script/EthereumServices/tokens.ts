@@ -28,7 +28,10 @@ export async function fetchTokenList(url: string) {
 export async function fetchTokensFromTokenList(url: string, chainId: ChainId = ChainId.Mainnet): Promise<Token[]> {
     const { tokens } = await fetchTokenList(url)
     return tokens
-        .filter((x) => x.chainId === chainId)
+        .filter(
+            (x) =>
+                x.chainId === chainId && (process.env.NODE_ENV === 'production' ? chainId === ChainId.Mainnet : true),
+        )
         .map((x) => ({
             type: EthereumTokenType.ERC20,
             ...x,
