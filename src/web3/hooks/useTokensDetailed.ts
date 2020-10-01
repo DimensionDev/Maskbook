@@ -1,30 +1,27 @@
-import type { Token } from '../types'
+import type { Token, TokenDetailed } from '../types'
 import { useTokensBalance } from './useTokensBalance'
-import { useConstant } from './useConstant'
-import { CONSTANTS } from '../constants'
-import { useChainId } from './useChainId'
+import { useTokensDetailedMerged } from './useTokensDetailedMerged'
 
-export function useTokensDetailed(account: string, tokens: Token[]) {
-    const chainId = useChainId()
-    const ETH_ADDRSS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-    const { value: listOfBalance } = useTokensBalance(
-        account,
+/**
+ * Fetch tokens detailed (balance only) from chain
+ * @param address
+ * @param tokens
+ */
+export function useTokensDetailed(address: string, tokens: Token[]) {
+    const { value: listOfBalance = [] } = useTokensBalance(
+        address,
         tokens.map((x) => x.address),
     )
-    if ((listOfBalance ?? []).length !== tokens.length) return []
-    return listOfBalance
-        ?.map((balance, idx) => ({
-            token: tokens[idx],
-            balance,
-        }))
-        .filter((x) => x.token.chainId === chainId)
-        .sort((a, z) => {
-            if (a.token.address === ETH_ADDRSS) return 1
-            if (z.token.address === ETH_ADDRSS) return 1
-            if (a.balance.length < z.balance.length) return 1
-            if (a.balance.length > z.balance.length) return -1
-            if (a.balance < z.balance) return 1
-            if (a.balance > z.balance) return -1
-            return 0
-        })
+    return useTokensDetailedMerged(
+        // The length not matched if error happened
+        listOfBalance.length === tokens.length
+            ? listOfBalance.map(
+                  (balance, idx) =>
+                      ({
+                          token: tokens[idx],
+                          balance,
+                      } as TokenDetailed),
+              )
+            : [],
+    )
 }

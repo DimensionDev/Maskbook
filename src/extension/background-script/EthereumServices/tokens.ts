@@ -1,4 +1,4 @@
-import { EthereumAddress } from 'wallet.ts'
+import { formatChecksumAddress } from '../../../plugins/Wallet/formatter'
 import { Token, EthereumTokenType, ChainId } from '../../../web3/types'
 
 interface TokenList {
@@ -28,7 +28,10 @@ export async function fetchTokenList(url: string) {
 export async function fetchTokensFromTokenList(url: string, chainId: ChainId = ChainId.Mainnet): Promise<Token[]> {
     const { tokens } = await fetchTokenList(url)
     return tokens
-        .filter((x) => x.chainId === chainId)
+        .filter(
+            (x) =>
+                x.chainId === chainId && (process.env.NODE_ENV === 'production' ? chainId === ChainId.Mainnet : true),
+        )
         .map((x) => ({
             type: EthereumTokenType.ERC20,
             ...x,
@@ -42,7 +45,7 @@ export async function fetchTokensFromTokenLists(urls: string[], chainId: ChainId
     )
     return tokens.filter((x) => {
         // checksummed address in one loop
-        x.address = EthereumAddress.checksumAddress(x.address)
+        x.address = formatChecksumAddress(x.address)
 
         const key = x.address.toLowerCase()
         if (uniqueSet.has(key)) return false

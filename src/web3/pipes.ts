@@ -1,4 +1,4 @@
-import { ChainId, ProviderType } from './types'
+import { ChainId, ProviderType, Token } from './types'
 import { unreachable } from '../utils/utils'
 
 export function resolveProviderName(providerType: ProviderType) {
@@ -55,4 +55,27 @@ export function resolveChainColor(chainId: ChainId) {
         default:
             return 'silver'
     }
+}
+
+export function resolveLinkOnEtherscan(chainId: ChainId) {
+    switch (chainId) {
+        case ChainId.Mainnet:
+            return 'https://etherscan.io'
+        case ChainId.Ropsten:
+            return 'https://ropsten.etherscan.io'
+        case ChainId.Rinkeby:
+            return 'https://rinkeby.etherscan.io'
+        case ChainId.Kovan:
+            return 'https://kovan.etherscan.io'
+        default:
+            unreachable(chainId)
+    }
+}
+
+export function resolveTransactionLinkOnEtherscan(chainId: ChainId, tx: string) {
+    return `${resolveLinkOnEtherscan(chainId)}/tx/${tx}`
+}
+
+export function resolveTokenLinkOnEtherscan(token: Token) {
+    return `${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`
 }

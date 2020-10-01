@@ -2,9 +2,23 @@ import React from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { makeStyles, createStyles, Avatar, Theme, AvatarProps } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { isSameAddress } from '../../../web3/helpers'
-import { useConstant } from '../../../web3/hooks/useConstant'
+import { isSameAddress, getConstant } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
+import { formatChecksumAddress } from '../../../plugins/Wallet/formatter'
+
+const ICON_MAP = {
+    [formatChecksumAddress(
+        '0x32a7c02e79c4ea1008dd6564b35f131428673c41',
+    )]: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6747.png',
+}
+
+function resolveTokenIconURL(address: string) {
+    const checksummedAddress = formatChecksumAddress(address)
+    if (isSameAddress(checksummedAddress, getConstant(CONSTANTS, 'ETH_ADDRESS')))
+        return 'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png'
+    if (ICON_MAP[checksummedAddress]) return ICON_MAP[checksummedAddress]
+    return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${checksummedAddress}/logo.png`
+}
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,21 +37,10 @@ export interface TokenIconProps extends withClasses<KeysInferFromUseStyles<typeo
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-
     const { address, name } = props
     const classes = useStylesExtends(useStyles(), props)
-
-    const checksumAddress = EthereumAddress.checksumAddress(address)
     return (
-        <Avatar
-            className={classes.icon}
-            src={
-                isSameAddress(ETH_ADDRESS, checksumAddress)
-                    ? 'https://rawcdn.githack.com/trustwallet/assets/257c82b25e6f27ede7a2b309aadc0ed17bca45ae/blockchains/ethereum/info/logo.png'
-                    : `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${checksumAddress}/logo.png`
-            }
-            {...props.AvatarProps}>
+        <Avatar className={classes.icon} src={resolveTokenIconURL(address)} {...props.AvatarProps}>
             {name?.substr(0, 1).toLocaleUpperCase()}
         </Avatar>
     )

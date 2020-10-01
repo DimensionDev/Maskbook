@@ -7,20 +7,17 @@ import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useSnackbarCallback } from '../DashboardDialogs/Base'
 import ActionButton from './ActionButton'
-import { TokenIcon } from './TokenIcon'
 import { Address } from './Address'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
-import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
+import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ProviderType } from '../../../web3/types'
-import { useConstant } from '../../../web3/hooks/useConstant'
 import { resolveProviderName } from '../../../web3/pipes'
-import { CONSTANTS } from '../../../web3/constants'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         container: {
             opacity: 0.75,
-            padding: theme.spacing(3, 2, 2, 3),
+            padding: theme.spacing(3, 2, 3, 3),
             borderBottom: `1px solid ${theme.palette.divider}`,
             position: 'relative',
             display: 'flex',
@@ -106,18 +103,15 @@ const useStyles = makeStyles((theme) =>
 interface WalletItemProps {
     wallet: WalletRecord
     selected?: boolean
-    tokens?: ERC20TokenRecord[]
     onClick?(): void
 }
 
 export function WalletItem(props: WalletItemProps) {
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-
     const { t } = useI18N()
     const classes = useStyles()
     const xsMatched = useMatchXS()
 
-    const { wallet, selected, onClick, tokens } = props
+    const { wallet, selected, onClick } = props
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
     return (
@@ -159,18 +153,6 @@ export function WalletItem(props: WalletItemProps) {
                     {t('copy')}
                 </ActionButton>
             )}
-            <Box py={xsMatched ? 0 : 1} display="flex" flexWrap="wrap">
-                <TokenIcon classes={{ icon: classes.coin }} address={ETH_ADDRESS} name="ETH" />
-                {tokens &&
-                    tokens.map((token) => (
-                        <TokenIcon
-                            classes={{ icon: classes.coin }}
-                            key={token.address}
-                            address={token.address}
-                            name={token.name}
-                        />
-                    ))}
-            </Box>
             {xsMatched ? <ChevronRightIcon className={classes.chevron} color="action" /> : null}
         </ButtonBase>
     )
