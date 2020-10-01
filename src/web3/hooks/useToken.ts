@@ -5,11 +5,16 @@ import { Token, EthereumTokenType } from '../types'
 import { useChainId } from './useChainId'
 import { useConstant } from './useConstant'
 import { CONSTANTS } from '../constants'
+import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
 
 function resolveSettleResult<T>(result: PromiseSettledResult<T>, fallback: T) {
     return result.status === 'fulfilled' ? result.value : fallback
 }
 
+/**
+ * Fetch token info from chain
+ * @param token
+ */
 export function useToken(token?: PartialRequired<Token, 'address' | 'type'>) {
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const chainId = useChainId()
@@ -43,7 +48,7 @@ export function useToken(token?: PartialRequired<Token, 'address' | 'type'>) {
             return {
                 type: EthereumTokenType.ERC20,
                 chainId: token.chainId ?? chainId,
-                address: EthereumAddress.checksumAddress(token.address),
+                address: formatChecksumAddress(token.address),
                 name: resolveSettleResult(name_, token.name ?? ''),
                 symbol: resolveSettleResult(symbol_, token.symbol ?? ''),
                 decimals: Number.parseInt(resolveSettleResult(decimals_, String(token.decimals ?? 0))),

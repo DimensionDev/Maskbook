@@ -4,11 +4,10 @@ import { ListItem, ListItemText, Typography, ListItemIcon, Link } from '@materia
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { TokenIcon } from './TokenIcon'
 import type { Token } from '../../../web3/types'
-import { Address } from './Address'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../web3/constants'
-import { resolveTokenLinkOnEtherscan } from '../../../web3/helpers'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
+import { resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

@@ -6,7 +6,6 @@ import type {
     WalletRecordInDatabase,
     ERC20TokenRecordInDatabase,
 } from '../database/types'
-import { EthereumAddress } from 'wallet.ts'
 import { parseChainName } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
 
@@ -23,7 +22,7 @@ export function WalletRecordIntoDB(x: WalletRecord) {
 
 export function WalletRecordOutDB(x: WalletRecordInDatabase) {
     const record = x as WalletRecord
-    record.address = EthereumAddress.checksumAddress(record.address)
+    record.address = formatChecksumAddress(record.address)
     record.erc20_token_whitelist = x.erc20_token_whitelist ?? new Set()
     record.erc20_token_blacklist = x.erc20_token_blacklist ?? new Set()
     return record
@@ -41,6 +40,6 @@ export function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
         const record_ = record as any
         if (!record.chainId) record.chainId = parseChainName(record_.network)
     }
-    record.address = EthereumAddress.checksumAddress(record.address)
+    record.address = formatChecksumAddress(record.address)
     return record
 }

@@ -10,20 +10,12 @@ export function isSameAddress(addrA: string, addrB: string) {
     return addrA.toLowerCase() === addrB.toLowerCase()
 }
 
-export function isETH(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'ETH_ADDRESS'))
-}
-
 export function isDAI(address: string) {
     return isSameAddress(address, getConstant(CONSTANTS, 'DAI_ADDRESS'))
 }
 
 export function isOKB(address: string) {
     return isSameAddress(address, getConstant(CONSTANTS, 'OBK_ADDRESS'))
-}
-
-export function isUSDT(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'USDT_ADDRESS'))
 }
 
 export function addGasMargin(value: BigNumber) {
@@ -59,29 +51,6 @@ export function getAllConstants<T extends Web3Constants, K extends keyof T>(cons
     )
 }
 //#endregion
-
-export function resolveLinkOnEtherscan(chainId: ChainId) {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return 'https://etherscan.io'
-        case ChainId.Ropsten:
-            return 'https://ropsten.etherscan.io'
-        case ChainId.Rinkeby:
-            return 'https://rinkeby.etherscan.io'
-        case ChainId.Kovan:
-            return 'https://kovan.etherscan.io'
-        default:
-            unreachable(chainId)
-    }
-}
-
-export function resolveTransactionLinkOnEtherscan(chainId: ChainId, tx: string) {
-    return `${resolveLinkOnEtherscan(chainId)}/tx/${tx}`
-}
-
-export function resolveTokenLinkOnEtherscan(token: Token) {
-    return `${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`
-}
 
 export function createEetherToken(chainId: ChainId): Token {
     return {

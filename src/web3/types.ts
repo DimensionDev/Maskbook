@@ -4,6 +4,10 @@ export enum ProviderType {
     WalletConnect = 'WalletConnect',
 }
 
+export enum CurrencyType {
+    USD = 'usd',
+}
+
 export interface Token {
     type: EthereumTokenType
     chainId: ChainId
@@ -11,6 +15,15 @@ export interface Token {
     name: string
     symbol: string
     decimals: number
+}
+
+export interface TokenDetailed {
+    token: Token
+    balance: string
+    estimated?: {
+        [key in CurrencyType]: string
+    }
+    logoURL?: string
 }
 
 // A list of chain IDs https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
