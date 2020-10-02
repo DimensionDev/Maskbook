@@ -39,7 +39,7 @@ export default function (_argvEnv, argv: any) {
 
     const enableHMR =
         env === 'development' &&
-        !process.env.NO_HMR
+        !Boolean(process.env.NO_HMR)
     // Wait for https://github.com/facebook/react/pull/19914
     const enableHMRWithReactRefresh = enableHMR && false
 
