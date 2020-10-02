@@ -5,12 +5,13 @@ import type { GitcoinDonationRecordInDatabase } from '../../Gitcoin/types'
 import type { RedPacketRecordInDatabase } from '../../RedPacket/types'
 import { RedPacketPluginID } from '../../RedPacket/constants'
 import { formatChecksumAddress } from '../formatter'
+import { ProviderType } from '../../../web3/types'
 
 function path<T>(x: T) {
     return x
 }
 export const createWalletDBAccess = createDBAccess(() => {
-    return openDB<WalletDB>('maskbook-plugin-wallet', 4, {
+    return openDB<WalletDB>('maskbook-plugin-wallet', 5, {
         async upgrade(db, oldVersion, newVersion, tx) {
             function v0_v1() {
                 // @ts-expect-error
@@ -86,11 +87,26 @@ export const createWalletDBAccess = createDBAccess(() => {
                     await token.update(token.value)
                 }
             }
+            /**
+             * Fix providerType does not exist in legacy wallet
+             */
+            async function v4_v5() {
+                const t = createTransaction(db, 'readwrite')('Wallet', 'ERC20Token')
+                const wallets = t.objectStore('Wallet')
+                for await (const wallet of wallets) {
+                    const wallet_ = wallet as any
+                    if (wallet_.value.provider) continue
+                    if (wallet_.value.type === 'managed') wallet_.value.provider = ProviderType.Maskbook
+                    else if (wallet_.value.type === 'exotic') wallet_.value.provider = ProviderType.MetaMask
+                    await wallet.update(wallet_.value)
+                }
+            }
 
             if (oldVersion < 1) v0_v1()
             if (oldVersion < 2) v1_v2()
             if (oldVersion < 3) await v2_v3()
             if (oldVersion < 4) await v3_v4()
+            if (oldVersion < 5) await v4_v5()
         },
     })
 })
