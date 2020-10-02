@@ -51,14 +51,14 @@ const useStyles = makeStyles((theme) =>
             fontWeight: 'normal',
             lineHeight: '30px',
             marginBottom: theme.spacing(1.5),
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 marginBottom: 0,
             },
         },
         section: {
             padding: '26px 40px',
             margin: theme.spacing(3, 0),
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 padding: theme.spacing(2),
             },
         },
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) =>
             paddingRight: 90,
         },
         list: {
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 marginLeft: theme.spacing(-2),
                 marginRight: theme.spacing(-2),
             },
@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) =>
             minWidth: 'unset',
             marginLeft: 0,
             marginRight: theme.spacing(3),
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 display: 'none',
             },
         },

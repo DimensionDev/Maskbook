@@ -63,7 +63,7 @@ const useSetupFormStyles = makeStyles((theme) =>
             fontSize: 39,
             lineHeight: 1,
             marginBottom: theme.spacing(2),
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 fontSize: 18,
                 margin: theme.spacing(3, 0, 1),
             },
@@ -73,7 +73,7 @@ const useSetupFormStyles = makeStyles((theme) =>
             fontSize: 20,
             lineHeight: 1.5,
             marginBottom: theme.spacing(5),
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 fontSize: 14,
                 marginBottom: theme.spacing(2),
             },
@@ -81,7 +81,7 @@ const useSetupFormStyles = makeStyles((theme) =>
         form: {
             width: 368,
             minHeight: 200,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 width: '100%',
             },
         },
@@ -91,7 +91,7 @@ const useSetupFormStyles = makeStyles((theme) =>
         or: {
             marginTop: 28,
             marginBottom: 10,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 margin: 0,
             },
         },
@@ -400,7 +400,7 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
                 overflow: 'auto !important',
                 height: '100% !important',
             },
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 padding: theme.spacing(2),
             },
         },
@@ -718,7 +718,7 @@ const useRestoreDatabaseConfirmationStyles = makeStyles((theme: Theme) =>
             marginTop: 0,
             marginLeft: -32,
             marginBottom: 38,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 width: '100%',
                 marginLeft: 0,
             },

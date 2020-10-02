@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) =>
         title: {
             margin: theme.spacing(3, 0),
             color: theme.palette.text.secondary,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 margin: theme.spacing(2, 0),
             },
         },
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) =>
         },
         list: {
             flex: 1,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 marginLeft: theme.spacing(-2),
                 marginRight: theme.spacing(-2),
             },

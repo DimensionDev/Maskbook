@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) =>
         provider: {
             color: theme.palette.text.secondary,
             marginRight: theme.spacing(2),
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 flex: 1,
             },
         },

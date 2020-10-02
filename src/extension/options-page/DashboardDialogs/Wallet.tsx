@@ -170,7 +170,7 @@ const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
         confirmation: {
             fontSize: 16,
             lineHeight: 1.75,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 fontSize: 14,
             },
         },
@@ -182,7 +182,7 @@ const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
             color: 'black',
             padding: '8px 22px',
             margin: '24px -36px 0',
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 margin: '24px -16px 0',
             },
         },
