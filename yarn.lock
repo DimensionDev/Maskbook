@@ -23120,10 +23120,10 @@ webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1, webpack-
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack-target-webextension@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/webpack-target-webextension/-/webpack-target-webextension-0.1.3.tgz#30331832e3cfb309ff7ae7cb02206c63f93c9702"
-  integrity sha512-Up6bIpgSIl6K6XnyBJfRgdAWeJROaXEbIRq0wabAza2hHirxTE63wp2LBilxEJyLJ9v9Zh7OF0HVFCNhzpvf6g==
+webpack-target-webextension@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/webpack-target-webextension/-/webpack-target-webextension-0.2.0.tgz#0cdc6c789075ef377bf70849df3565dfb929ae70"
+  integrity sha512-OUMTivc5taobCz60sNjRGktrlGSSz0kFy/CsrBbwD51Ea4gLYz/hSRwRWLpgxkbtiL9SRkwOc4R8TJrJHp4S5g==
 
 webpack-virtual-modules@^0.2.0:
   version "0.2.1"
