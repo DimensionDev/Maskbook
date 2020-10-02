@@ -75,7 +75,7 @@ export default function FooterLine() {
     return (
         <>
             <Breadcrumbs className={classes.footerButtons} separator=" " aria-label="breadcrumb">
-                <FooterLink href="https://mask.io/">Mask.io</FooterLink>
+                <FooterLink href="https://mask.io">Mask.io</FooterLink>
                 <FooterLink onClick={openAboutDialog}>{t('about')}</FooterLink>
                 <FooterLink href={versionLink} title={process.env.VERSION}>
                     {t('version')}{' '}
