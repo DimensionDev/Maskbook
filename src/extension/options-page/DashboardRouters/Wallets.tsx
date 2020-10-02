@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) =>
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 width: '100%',
                 borderRight: 'none',
             },

@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => {
             '--drawerHeader': dark ? '#121212' : theme.palette.primary.main,
             '--drawerBody': dark ? '#121212' : theme.palette.primary.main,
 
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 '--drawerBody': 'transparent',
             },
 
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => {
             height: '100vh',
             position: 'absolute',
 
-            [theme.breakpoints.up('sm')]: {
+            [theme.breakpoints.up('md')]: {
                 display: 'grid',
                 gridTemplateColumns: '1fr [content-start] 1110px [content-end] 1fr',
                 gridTemplateRows: '32px [content-start] auto [content-end] 50px',
@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => {
             gridRow: 'content-start / content-end',
             gridColumn: 'content-start / content-end',
             display: 'flex',
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 borderRadius: 0,
             },
         },
