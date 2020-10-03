@@ -316,7 +316,7 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
             <TransactionDialog
                 state={createState}
                 summary={`Creating red packet with ${formatBalance(
-                    new BigNumber(amount),
+                    new BigNumber(totalAmount),
                     token.decimals,
                     token.decimals,
                 )} ${token.symbol}`}
