@@ -125,7 +125,7 @@ export async function sendSignedTransaction(from: string, config: TransactionCon
  * @param config
  */
 export async function callTransaction(from: string | undefined, config: TransactionConfig) {
-    // use can use callTransaction without account
+    // user can use callTransaction without account
     if (!from) return createWeb3(Maskbook.createProvider()).eth.call(config)
 
     // select specific provider with given wallet address

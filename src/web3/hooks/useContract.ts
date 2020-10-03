@@ -3,6 +3,7 @@ import { EthereumAddress } from 'wallet.ts'
 import type { Contract } from 'web3-eth-contract'
 import type { TransactionConfig } from 'web3-core'
 import type { AbiItem } from 'web3-utils'
+import { pickBy } from 'lodash-es'
 import Services, { ServicesWithProgress } from '../../extension/service'
 import { useAccount } from './useAccount'
 import { nonFunctionalWeb3 } from '../web3'
@@ -36,23 +37,25 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                         return {
                             ...cached,
                             async call(config: TransactionConfig) {
-                                const result = await Services.Ethereum.callTransaction(account, {
-                                    from: account,
-                                    to: contract.options.address,
-                                    data: cached.encodeABI(),
-                                    ...config,
-                                })
-
-                                console.log(
-                                    `call - ${JSON.stringify({
-                                        name,
+                                const result = await Services.Ethereum.callTransaction(
+                                    account,
+                                    pickBy({
                                         from: account,
                                         to: contract.options.address,
+                                        data: cached.encodeABI(),
                                         ...config,
-                                        result,
-                                        outputs: methodABI ? methodABI.outputs ?? [] : [],
-                                    })}`,
+                                    }),
                                 )
+
+                                if (process.env.NODE_ENV === 'development')
+                                    console.log(
+                                        `call - ${JSON.stringify({
+                                            name,
+                                            ...pickBy(config),
+                                            result,
+                                            outputs: methodABI ? methodABI.outputs ?? [] : [],
+                                        })}`,
+                                    )
 
                                 return decodeOutputString(
                                     nonFunctionalWeb3,
@@ -64,14 +67,15 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                             send(config: TransactionConfig, callback?: (error: Error | null, hash?: string) => void) {
                                 if (!account) throw new Error('cannot find account')
 
-                                console.log(
-                                    `send - ${JSON.stringify({
-                                        from: account,
-                                        to: contract.options.address,
-                                        data: cached.encodeABI(),
-                                        ...config,
-                                    })}`,
-                                )
+                                if (process.env.NODE_ENV === 'development')
+                                    console.log(
+                                        `send - ${JSON.stringify({
+                                            from: account,
+                                            to: contract.options.address,
+                                            data: cached.encodeABI(),
+                                            ...config,
+                                        })}`,
+                                    )
 
                                 const iterator = ServicesWithProgress.sendTransaction(account, {
                                     from: account,
