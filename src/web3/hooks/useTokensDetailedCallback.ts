@@ -12,7 +12,10 @@ export function useTokensDetailedCallback(tokens: Token[]) {
     const [address, setAddress] = useState('')
     const chainDetailedTokens = useTokensDetailed(address, [createEetherToken(chainId), ...tokens])
     const debankDetailedTokens = useTokensDetailedDebank(address)
-    const detailedTokens = useTokensDetailedMerged(chainDetailedTokens, debankDetailedTokens)
+
+    // should place debank detailed tokens at the first place
+    // it prevents them from removing by uniq algorithm
+    const detailedTokens = useTokensDetailedMerged(debankDetailedTokens, chainDetailedTokens)
 
     const detailedTokensCallback = useCallback((address: string) => {
         if (!EthereumAddress.isValid(address)) return
