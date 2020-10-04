@@ -1,5 +1,6 @@
 import type { TransactionConfig, PromiEvent, TransactionReceipt } from 'web3-core'
 import type { ITxData } from '@walletconnect/types'
+import BigNumber from 'bignumber.js'
 
 import { promiEventToIterator, StageType } from '../../../utils/promiEvent'
 import { getWallets } from '../../../plugins/Wallet/services'
@@ -28,14 +29,6 @@ async function createTransactionSender(from: string, config: TransactionConfig) 
     const wallet = wallets.find((x) => isSameAddress(x.address, from))
     if (!wallet) throw new Error('the wallet does not exists')
 
-    if (process.env.NODE_ENV === 'development') {
-        console.log('DEBUG: send transaction')
-        console.log({
-            from,
-            config,
-        })
-    }
-
     // Managed wallets need calc gas, gasPrice and nonce.
     // Add the private key into eth accounts list is also required.
     if (wallet.provider === ProviderType.Maskbook) {
@@ -50,13 +43,13 @@ async function createTransactionSender(from: string, config: TransactionConfig) 
                     ...config,
                 }),
             config.gasPrice ?? web3.eth.getGasPrice(),
-        ])
+        ] as const)
         return () =>
             createWeb3(Maskbook.createProvider(), [privateKey]).eth.sendTransaction({
                 from,
                 nonce,
                 gas,
-                gasPrice,
+                gasPrice: new BigNumber(gasPrice as string).dividedToIntegerBy(2).toFixed(),
                 ...config,
             })
     }
