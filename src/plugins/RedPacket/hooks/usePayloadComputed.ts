@@ -1,7 +1,9 @@
 import BigNumber from 'bignumber.js'
 import { compact } from 'lodash-es'
-import { useEffect } from 'react'
 import { isSameAddress } from '../../../web3/helpers'
+import { useChainId } from '../../../web3/hooks/useChainId'
+import { parseChainName } from '../../../web3/pipes'
+import { ChainId } from '../../../web3/types'
 import { formatBalance } from '../../Wallet/formatter'
 import { RedPacketJSONPayload, RedPacketStatus } from '../types'
 import { useAvailabilityRetry } from './useAvailability'
@@ -11,6 +13,7 @@ import { useAvailabilityRetry } from './useAvailability'
  * @param payload
  */
 export function usePayloadComputed(account: string, payload?: RedPacketJSONPayload) {
+    const chainId = useChainId()
     const { value: availability, error, loading, retry } = useAvailabilityRetry(account, payload?.rpid)
 
     if (!availability || !payload)
@@ -23,12 +26,13 @@ export function usePayloadComputed(account: string, payload?: RedPacketJSONPaylo
                 listOfStatus: [] as RedPacketStatus[],
             },
         }
+
     const isEmpty = availability.balance === '0'
     const isExpired = availability.expired
     const isClaimed = availability.ifclaimed
     const isRefunded = isEmpty && Number.parseInt(availability.claimed) < Number.parseInt(availability.total)
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
-
+    const parsedChainId = parseChainName(payload.network ?? '') ?? ChainId.Mainnet
     return {
         availability,
         payload,
@@ -39,8 +43,9 @@ export function usePayloadComputed(account: string, payload?: RedPacketJSONPaylo
                 payload.token?.decimals ?? 18,
             )}`,
             tokenSymbol: `${payload.token?.symbol ?? 'ETH'}`,
-            canClaim: !isExpired && !isEmpty && !isClaimed,
-            canRefund: isExpired && !isEmpty && isCreator,
+            canFetch: parsedChainId === chainId,
+            canClaim: !isExpired && !isEmpty && !isClaimed && parsedChainId === chainId,
+            canRefund: isExpired && !isEmpty && isCreator && parsedChainId === chainId,
             listOfStatus: compact([
                 isClaimed ? RedPacketStatus.claimed : undefined,
                 isEmpty ? RedPacketStatus.empty : undefined,

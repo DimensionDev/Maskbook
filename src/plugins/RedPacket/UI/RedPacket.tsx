@@ -53,6 +53,9 @@ const useStyles = makeStyles((theme) =>
         words: {
             color: '#FAF2BF',
         },
+        button: {
+            color: theme.palette.common.white,
+        },
         content: {
             display: 'flex',
             flexDirection: 'column',
@@ -127,7 +130,7 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     }, [from, JSON.stringify(payload)])
 
     const { availability, computed } = usePayloadComputed(account, payload)
-    const { canClaim, canRefund, listOfStatus, tokenAmount, tokenSymbol } = computed
+    const { canFetch, canClaim, canRefund, listOfStatus, tokenAmount, tokenSymbol } = computed
 
     //#region remote controll select provider dialog
     const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
@@ -147,6 +150,7 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     const [refundState, refundCallback] = useRefundCallback(payload?.rpid)
 
     const onClaimOrRefund = useCallback(async () => {
+        setOpenTransactionDialog(true)
         if (canClaim) await claimCallback()
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
@@ -156,6 +160,7 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     }, [claimState])
     //#endregion
 
+    // the red packet can fetch without account
     if (!payload || !availability)
         return (
             <Card className={classes.box} component="article" elevation={0}>
@@ -165,20 +170,44 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
             </Card>
         )
 
-    return (
-        <>
+    // the red packet cannot claim or refund without account
+    if (!account)
+        return (
             <Card
-                elevation={0}
                 className={classNames(classes.box, {
-                    [classes.cursor]: canClaim || canRefund,
+                    [classes.cursor]: true,
                 })}
                 component="article"
-                onClick={account ? onClaimOrRefund : onConnect}>
+                elevation={0}
+                onClick={onConnect}>
                 <div className={classes.header}>
                     <Typography className={classes.from} variant="body1" color="inherit">
                         {t('plugin_red_packet_from', { from: payload.sender.name ?? '-' })}
                     </Typography>
-                    {listOfStatus.length ? (
+                </div>
+                <div className={classNames(classes.content)}>
+                    <Typography className={classes.words} variant="h6">
+                        {payload.sender.message}
+                    </Typography>
+                    <Typography variant="body2">Click to connect a wallet.</Typography>
+                </div>
+            </Card>
+        )
+
+    return (
+        <>
+            <Card
+                className={classNames(classes.box, {
+                    [classes.cursor]: canClaim || canRefund,
+                })}
+                component="article"
+                elevation={0}
+                onClick={onClaimOrRefund}>
+                <div className={classes.header}>
+                    <Typography className={classes.from} variant="body1" color="inherit">
+                        {t('plugin_red_packet_from', { from: payload.sender.name ?? '-' })}
+                    </Typography>
+                    {canFetch && listOfStatus.length ? (
                         <Typography className={classes.label} variant="body2">
                             {resolveRedPacketStatus(listOfStatus)}
                         </Typography>
@@ -188,28 +217,33 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
                     <Typography className={classes.words} variant="h6">
                         {payload.sender.message}
                     </Typography>
-                    <Typography variant="body2">
-                        {(() => {
-                            if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
-                                return t('plugin_red_packet_description_refund', {
-                                    balance: tokenAmount,
-                                    symbol: tokenSymbol,
+                    {canFetch ? (
+                        <Typography variant="body2">
+                            {(() => {
+                                if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
+                                    return t('plugin_red_packet_description_refund', {
+                                        balance: tokenAmount,
+                                        symbol: tokenSymbol,
+                                    })
+                                if (listOfStatus.includes(RedPacketStatus.claimed))
+                                    return t('plugin_red_packet_description_claimed')
+                                if (listOfStatus.includes(RedPacketStatus.refunded))
+                                    return t('plugin_red_packet_description_refunded')
+                                if (listOfStatus.includes(RedPacketStatus.expired))
+                                    return t('plugin_red_packet_description_expired')
+                                if (listOfStatus.includes(RedPacketStatus.empty))
+                                    return t('plugin_red_packet_description_empty')
+                                return t('plugin_red_packet_description_failover', {
+                                    total: payload.total ? `${tokenAmount} ${tokenSymbol}` : '-',
+                                    name: payload.sender.name ?? '-',
+                                    shares: payload.shares ?? '-',
                                 })
-                            if (listOfStatus.includes(RedPacketStatus.claimed))
-                                return t('plugin_red_packet_description_claimed')
-                            if (listOfStatus.includes(RedPacketStatus.refunded))
-                                return t('plugin_red_packet_description_refunded')
-                            if (listOfStatus.includes(RedPacketStatus.expired))
-                                return t('plugin_red_packet_description_expired')
-                            if (listOfStatus.includes(RedPacketStatus.empty))
-                                return t('plugin_red_packet_description_empty')
-                            return t('plugin_red_packet_description_failover', {
-                                total: payload.total ? `${tokenAmount} ${tokenSymbol}` : '-',
-                                name: payload.sender.name ?? '-',
-                                shares: payload.shares ?? '-',
-                            })
-                        })()}
-                    </Typography>
+                            })()}
+                        </Typography>
+                    ) : null}
+                    {!canFetch && payload.network ? (
+                        <Typography variant="body2">Only available on {payload.network} network.</Typography>
+                    ) : null}
                 </div>
                 <div
                     className={classNames(classes.packet, {

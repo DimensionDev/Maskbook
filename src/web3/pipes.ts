@@ -16,6 +16,8 @@ export function resolveProviderName(providerType: ProviderType) {
 
 export function parseChainName(name: string) {
     switch (name.toLowerCase()) {
+        case 'main':
+            return ChainId.Mainnet
         case 'ropsten':
             return ChainId.Ropsten
         case 'rinkeby':
@@ -23,7 +25,7 @@ export function parseChainName(name: string) {
         case 'kovan':
             return ChainId.Kovan
         default:
-            return ChainId.Mainnet
+            return
     }
 }
 
