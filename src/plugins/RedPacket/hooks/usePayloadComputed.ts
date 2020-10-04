@@ -3,13 +3,13 @@ import { compact } from 'lodash-es'
 import { isSameAddress } from '../../../web3/helpers'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { parseChainName } from '../../../web3/pipes'
-import { ChainId } from '../../../web3/types'
+import { ChainId, EthereumTokenType } from '../../../web3/types'
 import { formatBalance } from '../../Wallet/formatter'
 import { RedPacketJSONPayload, RedPacketStatus } from '../types'
 import { useAvailabilityRetry } from './useAvailability'
 
 /**
- * Fetch red packet info on the chain
+ * Fetch the red packet info on the chain
  * @param payload
  */
 export function usePayloadComputed(account: string, payload?: RedPacketJSONPayload) {
@@ -37,12 +37,13 @@ export function usePayloadComputed(account: string, payload?: RedPacketJSONPaylo
         availability,
         payload,
         computed: {
-            tokenAmount: `${formatBalance(
-                new BigNumber(availability.balance),
-                payload.token?.decimals ?? 18,
-                payload.token?.decimals ?? 18,
-            )}`,
-            tokenSymbol: `${payload.token?.symbol ?? 'ETH'}`,
+            tokenAmount:
+                payload.token_type === EthereumTokenType.Ether
+                    ? formatBalance(new BigNumber(availability.balance), 18, 18)
+                    : payload.token
+                    ? formatBalance(new BigNumber(availability.balance), payload.token.decimals, payload.token.decimals)
+                    : '-',
+            tokenSymbol: payload.token_type === EthereumTokenType.Ether ? 'ETH' : payload.token?.symbol ?? '-',
             canFetch: parsedChainId === chainId,
             canClaim: !isExpired && !isEmpty && !isClaimed && parsedChainId === chainId,
             canRefund: isExpired && !isEmpty && isCreator && parsedChainId === chainId,
