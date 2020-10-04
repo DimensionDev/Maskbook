@@ -14,7 +14,7 @@ export function useTokensDetailedCallback(tokens: Token[]) {
     const debankDetailedTokens = useTokensDetailedDebank(address)
 
     // should place debank detailed tokens at the first place
-    // it prevents them from removing by uniq algorithm
+    // it prevents them from replacing by previous detailed tokens because the uniq algorithm
     const detailedTokens = useTokensDetailedMerged(debankDetailedTokens, chainDetailedTokens)
 
     const detailedTokensCallback = useCallback((address: string) => {
