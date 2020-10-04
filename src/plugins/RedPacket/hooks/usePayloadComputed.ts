@@ -11,7 +11,7 @@ import { useAvailabilityRetry } from './useAvailability'
  * @param payload
  */
 export function usePayloadComputed(account: string, payload?: RedPacketJSONPayload) {
-    const { value: availability, loading, retry } = useAvailabilityRetry(account, payload?.rpid)
+    const { value: availability, error, loading, retry } = useAvailabilityRetry(account, payload?.rpid)
 
     if (!availability || !payload)
         return {

@@ -18,6 +18,8 @@ import { TransactionDialog } from '../../../web3/UI/TransactionDialog'
 import { isDAI, isOKB } from '../../../web3/helpers'
 import { resolveRedPacketStatus } from '../pipes'
 import { usePayloadComputed } from '../hooks/usePayloadComputed'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { MaskbookWalletMessages, WalletMessageCenter } from '../../Wallet/messages'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -127,13 +129,24 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     const { availability, computed } = usePayloadComputed(account, payload)
     const { canClaim, canRefund, listOfStatus, tokenAmount, tokenSymbol } = computed
 
+    //#region remote controll select provider dialog
+    const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
+        WalletMessageCenter,
+        'selectProviderDialogUpdated',
+    )
+    const onConnect = useCallback(() => {
+        setOpen({
+            open: true,
+        })
+    }, [setOpen])
+    //#endregion
+
     //#region blocking
     const [openTransactionDialog, setOpenTransactionDialog] = useState(false)
     const [claimState, claimCallback] = useClaimCallback(payload?.rpid, payload?.password)
     const [refundState, refundCallback] = useRefundCallback(payload?.rpid)
 
     const onClaimOrRefund = useCallback(async () => {
-        setOpenTransactionDialog(true)
         if (canClaim) await claimCallback()
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
@@ -160,7 +173,7 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
                     [classes.cursor]: canClaim || canRefund,
                 })}
                 component="article"
-                onClick={onClaimOrRefund}>
+                onClick={account ? onClaimOrRefund : onConnect}>
                 <div className={classes.header}>
                     <Typography className={classes.from} variant="body1" color="inherit">
                         {t('plugin_red_packet_from', { from: payload.sender.name ?? '-' })}

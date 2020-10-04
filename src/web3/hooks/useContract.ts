@@ -51,9 +51,16 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                     console.log(
                                         `call - ${JSON.stringify({
                                             name,
-                                            ...pickBy(config),
-                                            result,
-                                            outputs: methodABI ? methodABI.outputs ?? [] : [],
+                                            ...pickBy({
+                                                from: account,
+                                                to: contract.options.address,
+                                                data: cached.encodeABI(),
+                                                ...config,
+
+                                                args,
+                                                result,
+                                                outputs: methodABI ? methodABI.outputs ?? [] : [],
+                                            }),
                                         })}`,
                                     )
 
