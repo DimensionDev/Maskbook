@@ -8,6 +8,7 @@ import type {
 } from '../database/types'
 import { parseChainName } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
+import { ChainId } from '../../../web3/types'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatChecksumAddress(address))
@@ -38,7 +39,7 @@ export function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
     {
         // fix: network has been renamed to chainId
         const record_ = record as any
-        if (!record.chainId) record.chainId = parseChainName(record_.network)
+        if (!record.chainId) record.chainId = parseChainName(record_.network) ?? ChainId.Mainnet
     }
     record.address = formatChecksumAddress(record.address)
     return record

@@ -22,7 +22,6 @@ export interface RedPacketRecordInDatabase extends RedPacketRecord {
 }
 
 export enum RedPacketStatus {
-    initial = 'initial',
     claimed = 'claimed',
     expired = 'expired',
     empty = 'empty',

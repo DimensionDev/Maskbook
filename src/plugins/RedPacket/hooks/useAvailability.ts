@@ -1,5 +1,5 @@
-import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useAsync, useAsyncRetry } from 'react-use'
+import { useRedPacketContract } from '../contracts/useRedPacketContract'
 
 export function useAvailability(account: string, id?: string) {
     const redPacketContract = useRedPacketContract()
@@ -9,7 +9,7 @@ export function useAvailability(account: string, id?: string) {
         return redPacketContract.methods.check_availability(id).call({
             from: account,
         })
-    }, [redPacketContract])
+    }, [id, account, redPacketContract])
 }
 
 export function useAvailabilityRetry(account: string, id?: string) {
@@ -20,5 +20,5 @@ export function useAvailabilityRetry(account: string, id?: string) {
         return redPacketContract.methods.check_availability(id).call({
             from: account,
         })
-    }, [redPacketContract])
+    }, [id, account, redPacketContract])
 }
