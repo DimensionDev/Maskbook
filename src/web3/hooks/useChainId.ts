@@ -5,12 +5,12 @@ import {
     currentWalletConnectChainIdSettings,
 } from '../../settings/settings'
 import { ProviderType } from '../types'
-import { ChainId } from '../types'
 import type { WalletRecord } from '../../plugins/Wallet/database/types'
 import { ValueRef } from '@holoflows/kit/es'
 import { PluginMessageCenter } from '../../plugins/PluginMessages'
 import Services from '../../extension/service'
 import { WalletComparer } from '../../plugins/Wallet/helpers'
+import { unreachable } from '../../utils/utils'
 
 //#region cache service query result
 const defaultWalletRef = new ValueRef<WalletRecord | null>(null, WalletComparer)
@@ -30,8 +30,9 @@ export function useChainId() {
     const maskbookChainId = useValueRef(currentMaskbookChainIdSettings)
     const metamaskChainId = useValueRef(currentMetaMaskChainIdSettings)
     const walletconnectChainId = useValueRef(currentWalletConnectChainIdSettings)
-    if (wallet?.provider === ProviderType.Maskbook) return maskbookChainId
-    if (wallet?.provider === ProviderType.MetaMask) return metamaskChainId
-    if (wallet?.provider === ProviderType.WalletConnect) return walletconnectChainId
-    return ChainId.Mainnet
+    if (!wallet) return maskbookChainId
+    if (wallet.provider === ProviderType.Maskbook) return maskbookChainId
+    if (wallet.provider === ProviderType.MetaMask) return metamaskChainId
+    if (wallet.provider === ProviderType.WalletConnect) return walletconnectChainId
+    unreachable(wallet.provider)
 }

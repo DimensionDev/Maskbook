@@ -15,6 +15,8 @@ const KEYWORK_ID_MAP: {
     },
     [DataProvider.COIN_GECKO]: {
         UNI: 'uniswap',
+        CRU: 'crust-network',
+        CRUST: 'crust-network',
     },
 }
 
@@ -26,7 +28,9 @@ const ID_ADDRESS_MAP: {
     [DataProvider.COIN_MARKET_CAP]: {
         '6747': '0x32a7c02e79c4ea1008dd6564b35f131428673c41',
     },
-    [DataProvider.COIN_GECKO]: {},
+    [DataProvider.COIN_GECKO]: {
+        'crust-network': '0x32a7c02e79c4ea1008dd6564b35f131428673c41',
+    },
 }
 
 export function resolveCoinId(keyword: string, dataProvider: DataProvider) {

@@ -23,7 +23,6 @@ import { i18n } from '../../utils/i18n-next'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
 import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
-import { injectKnownIdentityAtFacebook } from './UI/injectKnownIdentity'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
 import { notifyPermissionUpdate } from '../../utils/permissions'
@@ -64,7 +63,6 @@ export const facebookUISelf = defineSocialNetworkUI({
     injectPostBox: injectPostBoxFacebook,
     injectPostComments: injectPostCommentsDefault(),
     injectOptionsPageLink: injectOptionsPageLinkAtFacebook,
-    injectKnownIdentity: injectKnownIdentityAtFacebook,
     injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
         encryptedComment,
         current,

@@ -141,7 +141,6 @@
     "person_or_group_in_list_many": "{{people}} 等，共 {{count}} 人",
     "person_or_group_in_list_many_no_preview": "共 {{count}} 人",
     "personas": "角色",
-    "please_include_proof_your_bio": "請在您的個人簡介中包含引号内的内容 \"{{bio}}\"，否則您可能沒法正常使用 Maskbook",
     "popup_current_persona": "當前角色",
     "popup_current_wallet": "",
     "popup_enter_dashboard": "進入儀表盘",

@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react'
 import { noop } from 'lodash-es'
 import { makeStyles, createStyles, Card, Typography } from '@material-ui/core'
+import { Skeleton } from '@material-ui/lab'
 import classNames from 'classnames'
 import type { RedPacketRecord, RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
@@ -10,15 +11,15 @@ import { formatBalance } from '../../Wallet/formatter'
 import { getUrl } from '../../../utils/utils'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import BigNumber from 'bignumber.js'
-import { useAvailabilityRetry } from '../hooks/useAvailability'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
 import { TransactionDialog } from '../../../web3/UI/TransactionDialog'
 import { isDAI, isOKB } from '../../../web3/helpers'
-import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { resolveRedPacketStatus } from '../pipes'
-import { Skeleton } from '@material-ui/lab'
+import { usePayloadComputed } from '../hooks/usePayloadComputed'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { MaskbookWalletMessages, WalletMessageCenter } from '../../Wallet/messages'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -51,6 +52,9 @@ const useStyles = makeStyles((theme) =>
         },
         words: {
             color: '#FAF2BF',
+        },
+        button: {
+            color: theme.palette.common.white,
         },
         content: {
             display: 'flex',
@@ -116,7 +120,6 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     const { from, payload } = props
 
     const account = useAccount()
-    const { value: availability, loading, retry } = useAvailabilityRetry(account, payload?.rpid)
 
     useEffect(() => {
         if (!payload) return noop
@@ -126,11 +129,20 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
         return PluginMessageCenter.on('maskbook.red_packets.update', updateRedPacket)
     }, [from, JSON.stringify(payload)])
 
-    const { canClaim, canRefund, status, tokenAmount, tokenSymbol } = useAvailabilityComputed(
-        account,
-        availability,
-        payload,
+    const { availability, computed } = usePayloadComputed(account, payload)
+    const { canFetch, canClaim, canRefund, listOfStatus, tokenAmount, tokenSymbol } = computed
+
+    //#region remote controll select provider dialog
+    const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
+        WalletMessageCenter,
+        'selectProviderDialogUpdated',
     )
+    const onConnect = useCallback(() => {
+        setOpen({
+            open: true,
+        })
+    }, [setOpen])
+    //#endregion
 
     //#region blocking
     const [openTransactionDialog, setOpenTransactionDialog] = useState(false)
@@ -138,25 +150,18 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     const [refundState, refundCallback] = useRefundCallback(payload?.rpid)
 
     const onClaimOrRefund = useCallback(async () => {
-        console.log('DEUBG: claim or refund')
-        console.log({
-            canClaim,
-            canRefund,
-        })
         setOpenTransactionDialog(true)
         if (canClaim) await claimCallback()
         else if (canRefund) await refundCallback()
-    }, [canClaim, canRefund, availability, claimCallback, refundCallback])
+    }, [canClaim, canRefund, claimCallback, refundCallback])
 
     const onTransactionDialogClose = useCallback(() => {
         setOpenTransactionDialog(false)
-        retry()
     }, [claimState])
     //#endregion
 
-    // TODO:
-    // add loading UI
-    if (!payload || !availability || loading)
+    // the red packet can fetch without account
+    if (!payload || !availability)
         return (
             <Card className={classes.box} component="article" elevation={0}>
                 <Skeleton animation="wave" variant="rect" width={'30%'} height={12} style={{ marginTop: 16 }} />
@@ -165,22 +170,46 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
             </Card>
         )
 
+    // the red packet cannot claim or refund without account
+    if (!account)
+        return (
+            <Card
+                className={classNames(classes.box, {
+                    [classes.cursor]: true,
+                })}
+                component="article"
+                elevation={0}
+                onClick={onConnect}>
+                <div className={classes.header}>
+                    <Typography className={classes.from} variant="body1" color="inherit">
+                        {t('plugin_red_packet_from', { from: payload.sender.name ?? '-' })}
+                    </Typography>
+                </div>
+                <div className={classNames(classes.content)}>
+                    <Typography className={classes.words} variant="h6">
+                        {payload.sender.message}
+                    </Typography>
+                    <Typography variant="body2">Click to connect a wallet.</Typography>
+                </div>
+            </Card>
+        )
+
     return (
         <>
             <Card
-                elevation={0}
                 className={classNames(classes.box, {
                     [classes.cursor]: canClaim || canRefund,
                 })}
                 component="article"
+                elevation={0}
                 onClick={onClaimOrRefund}>
                 <div className={classes.header}>
                     <Typography className={classes.from} variant="body1" color="inherit">
                         {t('plugin_red_packet_from', { from: payload.sender.name ?? '-' })}
                     </Typography>
-                    {status !== RedPacketStatus.initial ? (
+                    {canFetch && listOfStatus.length ? (
                         <Typography className={classes.label} variant="body2">
-                            {resolveRedPacketStatus(status)}
+                            {resolveRedPacketStatus(listOfStatus)}
                         </Typography>
                     ) : null}
                 </div>
@@ -188,26 +217,33 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
                     <Typography className={classes.words} variant="h6">
                         {payload.sender.message}
                     </Typography>
-                    <Typography variant="body2">
-                        {(() => {
-                            if (status === RedPacketStatus.claimed) return t('plugin_red_packet_description_claimed')
-                            if (status === RedPacketStatus.refunded) return t('plugin_red_packet_description_refunded')
-                            if (status === RedPacketStatus.expired) {
-                                if (canRefund)
+                    {canFetch ? (
+                        <Typography variant="body2">
+                            {(() => {
+                                if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
                                     return t('plugin_red_packet_description_refund', {
                                         balance: tokenAmount,
                                         symbol: tokenSymbol,
                                     })
-                                else return t('plugin_red_packet_description_expired')
-                            }
-                            if (status === RedPacketStatus.empty) return t('plugin_red_packet_description_empty')
-                            return t('plugin_red_packet_description_failover', {
-                                total: payload.total ? `${tokenAmount} ${tokenSymbol}` : '-',
-                                name: payload.sender.name ?? '-',
-                                shares: payload.shares ?? '-',
-                            })
-                        })()}
-                    </Typography>
+                                if (listOfStatus.includes(RedPacketStatus.claimed))
+                                    return t('plugin_red_packet_description_claimed')
+                                if (listOfStatus.includes(RedPacketStatus.refunded))
+                                    return t('plugin_red_packet_description_refunded')
+                                if (listOfStatus.includes(RedPacketStatus.expired))
+                                    return t('plugin_red_packet_description_expired')
+                                if (listOfStatus.includes(RedPacketStatus.empty))
+                                    return t('plugin_red_packet_description_empty')
+                                return t('plugin_red_packet_description_failover', {
+                                    total: payload.total ? `${tokenAmount} ${tokenSymbol}` : '-',
+                                    name: payload.sender.name ?? '-',
+                                    shares: payload.shares ?? '-',
+                                })
+                            })()}
+                        </Typography>
+                    ) : null}
+                    {!canFetch && payload.network ? (
+                        <Typography variant="body2">Only available on {payload.network} network.</Typography>
+                    ) : null}
                 </div>
                 <div
                     className={classNames(classes.packet, {

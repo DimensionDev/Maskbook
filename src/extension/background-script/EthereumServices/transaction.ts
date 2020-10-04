@@ -1,7 +1,9 @@
-import type { TransactionConfig, PromiEvent, TransactionReceipt } from 'web3-core'
+import type { TransactionConfig, PromiEvent as PromiEventW3, TransactionReceipt } from 'web3-core'
 import type { ITxData } from '@walletconnect/types'
+import type PromiEvent from 'promievent'
+import BigNumber from 'bignumber.js'
 
-import { promiEventToIterator, StageType } from '../../../utils/promiEvent'
+import { enhancePromiEvent, promiEventToIterator, StageType } from '../../../utils/promiEvent'
 import { getWallets } from '../../../plugins/Wallet/services'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
@@ -13,7 +15,8 @@ import { isSameAddress } from '../../../web3/helpers'
 import { getNonce, resetNonce, commitNonce } from './nonce'
 import type { ChainId } from '../../../web3/types'
 import { ProviderType } from '../../../web3/types'
-import { unreachable } from '../../../utils/utils'
+import { sleep, unreachable } from '../../../utils/utils'
+import { getTransactionReceipt } from './network'
 
 //#region tracking wallets
 let wallets: WalletRecord[] = []
@@ -22,21 +25,49 @@ PluginMessageCenter.on('maskbook.wallets.update', updateWallets)
 updateWallets()
 //#endregion
 
-async function createTransactionSender(from: string, config: TransactionConfig) {
+/**
+ * For some providers which didn't emit 'receipt' event
+ * we polling receipt on the chain and emit the event manually
+ * @param event
+ */
+function watchTransactionEvent(event: PromiEventW3<TransactionReceipt | string>) {
+    // add emit method
+    const enhancedEvent = enhancePromiEvent(event)
+    const controller = new AbortController()
+    async function watchTransactionHash(hash: string) {
+        // retry 30 times
+        for await (const _ of new Array(30).fill(0)) {
+            const receipt = await getTransactionReceipt(hash)
+            // the 'receipt' event was emitted
+            if (controller.signal.aborted) break
+            // emit receipt manually
+            if (receipt) {
+                enhancedEvent.emit('receipt', receipt)
+                controller.abort()
+                break
+            }
+            // wait for next block
+            await sleep(15 /* seconds */ * 1000 /* milliseconds */)
+        }
+        // timeout
+        if (!controller.signal.aborted) enhancedEvent.emit('error', new Error('timeout'))
+    }
+    function unwatchTransactionHash() {
+        controller.abort()
+    }
+    enhancedEvent.on('transactionHash', watchTransactionHash)
+    enhancedEvent.on('receipt', unwatchTransactionHash)
+    enhancedEvent.on('confirmation', unwatchTransactionHash)
+    return enhancedEvent
+}
+
+async function createTransactionEventCreator(from: string, config: TransactionConfig) {
     // Adding the wallet address into DB is required before sending transaction.
     // It helps to determine which provider to be used for sending the transaction.
     const wallet = wallets.find((x) => isSameAddress(x.address, from))
     if (!wallet) throw new Error('the wallet does not exists')
 
-    if (process.env.NODE_ENV === 'development') {
-        console.log('DEBUG: send transaction')
-        console.log({
-            from,
-            config,
-        })
-    }
-
-    // Managed wallets need calc gas, gasPrice and nonce.
+    // For managed wallets need gas, gasPrice and nonce to be calculated.
     // Add the private key into eth accounts list is also required.
     if (wallet.provider === ProviderType.Maskbook) {
         const web3 = createWeb3(Maskbook.createProvider())
@@ -50,13 +81,13 @@ async function createTransactionSender(from: string, config: TransactionConfig) 
                     ...config,
                 }),
             config.gasPrice ?? web3.eth.getGasPrice(),
-        ])
+        ] as const)
         return () =>
             createWeb3(Maskbook.createProvider(), [privateKey]).eth.sendTransaction({
                 from,
                 nonce,
                 gas,
-                gasPrice,
+                gasPrice: new BigNumber(gasPrice as string).dividedToIntegerBy(2).toFixed(),
                 ...config,
             })
     }
@@ -72,16 +103,20 @@ async function createTransactionSender(from: string, config: TransactionConfig) 
         const connector = await WalletConnect.createConnector()
         return () => {
             const listeners: { name: string; listener: Function }[] = []
-            const promise = connector.sendTransaction(config as ITxData)
+            const promise = connector.sendTransaction(config as ITxData) as Promise<string>
+
+            // mimic PromiEvent API
             Object.assign(promise, {
                 on(name: string, listener: Function) {
                     listeners.push({ name, listener })
                 },
             })
+
+            // only trasnaction hash available
             promise.then((hash) =>
                 listeners.filter((x) => x.name === 'transactionHash').forEach((y) => y.listener(hash)),
             )
-            return promise as PromiEvent<TransactionReceipt>
+            return (promise as unknown) as PromiEvent<string>
         }
     }
     throw new Error(`cannot send transaction for wallet ${wallet.address}`)
@@ -95,11 +130,13 @@ async function createTransactionSender(from: string, config: TransactionConfig) 
  */
 export async function* sendTransaction(from: string, config: TransactionConfig) {
     try {
-        const sender = await createTransactionSender(from, config)
-        for await (const stage of promiEventToIterator(sender())) {
+        const createTransactionEvent = await createTransactionEventCreator(from, config)
+        const transactionEvent = enhancePromiEvent(createTransactionEvent())
+        for await (const stage of promiEventToIterator(transactionEvent)) {
+            // advance the nonce if tx comes out
             if (stage.type === StageType.TRANSACTION_HASH) await commitNonce(from)
             yield stage
-            // stop if confirmed
+            // stop if the tx was confirmed
             if (stage.type === StageType.CONFIRMATION) break
         }
         return
@@ -125,7 +162,7 @@ export async function sendSignedTransaction(from: string, config: TransactionCon
  * @param config
  */
 export async function callTransaction(from: string | undefined, config: TransactionConfig) {
-    // use can use callTransaction without account
+    // user can use callTransaction without account
     if (!from) return createWeb3(Maskbook.createProvider()).eth.call(config)
 
     // select specific provider with given wallet address

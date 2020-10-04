@@ -24,13 +24,47 @@ export type Stage =
       }
 
 /**
+ * The original Web3 PromiEvent hasn't got `emit` method
+ * @param ev
+ */
+export function enhancePromiEvent(ev: PromiEventW3<TransactionReceipt | string>) {
+    let resolve_: Function | undefined = undefined
+    let reject_: Function | undefined = undefined
+    const PE = new PromiEvent<TransactionReceipt>(async (resolve, reject) => {
+        resolve_ = resolve
+        reject_ = reject
+    })
+    ev.on('transactionHash', (hash) => PE.emit('transactionHash', hash))
+    ev.on('receipt', (receipt) => {
+        PE.emit('receipt', receipt)
+        resolve_?.(receipt)
+    })
+    ev.on('confirmation', (no, receipt) => PE.emit('confirmation', no, receipt))
+    ev.on('error', (error) => {
+        PE.emit('error', error)
+        reject_?.(error)
+    })
+    ev.then((hashOrReceipt) => {
+        if (typeof hashOrReceipt === 'string') PE.emit('transactionHash', hashOrReceipt)
+        else if (typeof hashOrReceipt === 'object') {
+            PE.emit('receipt', hashOrReceipt)
+            resolve_?.(hashOrReceipt)
+        }
+    }).catch((error) => {
+        PE.emit('error', error)
+        reject_?.(error)
+    })
+    return PE
+}
+
+/**
  * Convert PromiEvent to iterator
  * the full list of events were supported by web3js
  * https://web3js.readthedocs.io/en/v1.2.7/callbacks-promises-events.html
  * @param ev the promise event object
  * @param finishStage the iterator will be stopped at given stage
  */
-export function promiEventToIterator<T>(ev: PromiEventW3<T>, finishStage: StageType = StageType.CONFIRMATION) {
+export function promiEventToIterator<T>(ev: PromiEvent<T>, finishStage: StageType = StageType.CONFIRMATION) {
     return new EventIterator<Stage>(function (queue) {
         const stopIfNeeded = (currentStage: StageType) => {
             if (currentStage >= finishStage) queue.stop()

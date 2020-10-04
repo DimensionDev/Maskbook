@@ -298,8 +298,8 @@ export function TrendingView(props: TrendingViewProps) {
                             color="textSecondary"
                             target="_blank"
                             rel="noopener noreferrer"
-                            title={resolveDataProviderName(DataProvider.COIN_MARKET_CAP)}
-                            href={resolveDataProviderLink(DataProvider.COIN_MARKET_CAP)}>
+                            title={resolveDataProviderName(dataProvider)}
+                            href={resolveDataProviderLink(dataProvider)}>
                             {dataProvider === DataProvider.COIN_MARKET_CAP ? (
                                 <CoinMarketCapIcon
                                     classes={{
