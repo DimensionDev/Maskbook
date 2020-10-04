@@ -100,11 +100,6 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                 gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                 ...config,
             })
-            promiEvent.on('transactionHash', (hash: string) => {
-                // FIXME: speed up in metamask did not response
-                console.log('DEBUG: promiEvent transactionHash')
-                console.log(hash)
-            })
             promiEvent.on('receipt', (receipt: TransactionReceipt) => {
                 setCreateState({
                     type: TransactionStateType.RECEIPT,
