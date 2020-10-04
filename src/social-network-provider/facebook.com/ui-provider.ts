@@ -10,7 +10,6 @@ import { uploadToPostBoxFacebook } from './tasks/uploadToPostBox'
 import { getPostContentFacebook } from './tasks/getPostContent'
 import { resolveLastRecognizedIdentityFacebook } from './UI/resolveLastRecognizedIdentity'
 import { getProfileFacebook } from './tasks/getProfile'
-import { pasteIntoBioFacebook } from './tasks/pasteIntoBio'
 import { injectPostCommentsDefault } from '../../social-network/defaults/injectComments'
 import { dispatchCustomEvents, selectElementContents, sleep } from '../../utils/utils'
 import { collectPostsFacebook } from './UI/collectPosts'
@@ -27,6 +26,10 @@ import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/
 import { getProfilePageUrlAtFacebook } from './parse-username'
 import { notifyPermissionUpdate } from '../../utils/permissions'
 import { Flags } from '../../utils/flags'
+import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
+import { isDarkTheme } from '../../utils/theme-tools'
+import { useState } from 'react'
+import { useInterval } from 'react-use'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
@@ -97,7 +100,6 @@ export const facebookUISelf = defineSocialNetworkUI({
     injectPageInspector: injectPageInspectorFacebook,
     collectPeople: collectPeopleFacebook,
     collectPosts: collectPostsFacebook,
-    taskPasteIntoBio: pasteIntoBioFacebook,
     taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
     taskOpenComposeBox: taskOpenComposeBoxFacebook,
     taskUploadToPostBox: uploadToPostBoxFacebook,
@@ -119,4 +121,15 @@ export const facebookUISelf = defineSocialNetworkUI({
         if (homeLink) homeLink.click()
         else if (location.pathname !== '/') location.pathname = '/'
     },
+    useTheme() {
+        const [theme, setTheme] = useState(getTheme())
+        const updateTheme = () => setTheme(getTheme())
+        // TODO: it's buggy.
+        useInterval(updateTheme, 2000)
+        return theme
+    },
 })
+function getTheme() {
+    if (isDarkTheme()) return MaskbookDarkTheme
+    return MaskbookLightTheme
+}

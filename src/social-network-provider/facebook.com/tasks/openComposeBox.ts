@@ -2,14 +2,13 @@ import { LiveSelector } from '@holoflows/kit/es'
 import { MessageCenter } from '../../../utils/messages'
 import { i18n } from '../../../utils/i18n-next'
 import { sleep } from '../../../utils/utils'
-import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
-import { isMobileFacebook } from '../isMobile'
+import { untilDocumentReady } from '../../../utils/dom'
 
 const nativeComposeButtonSelector = () =>
     new LiveSelector()
         .querySelector<HTMLDivElement>(
             [
-                '#pagelet_composer [contenteditable]', // PC - the editor focused at least one time
+                '[role="region"] [role="link"]+[role="button"]', // PC
                 '#MComposer [role="button"]', // mobile
             ].join(','),
         )
@@ -19,8 +18,7 @@ const nativeComposeTextareaSelector = () =>
     new LiveSelector()
         .querySelector<HTMLTextAreaElement>(
             [
-                '#pagelet_composer textarea', // PC - the editor haven't foucsed before
-                '#structured_composer_form .mentions textarea',
+                '#structured_composer_form .mentions textarea', // mobile
             ].join(','),
         )
         .enableSingleMode()
@@ -28,19 +26,11 @@ const nativeComposeTextareaSelector = () =>
 const nativeComposeDialogIndicatorSelector = () =>
     new LiveSelector().querySelector<HTMLDivElement>(
         [
-            // PC -  the close button of native compose dialog
-            '#pagelet_composer [role="dialog"] [role="button"][tabindex="0"]',
+            // PC -  the form of compose dialog
+            '[role="dialog"] form[method="post"]',
 
             // mobile - the submit button
             '#composer-main-view-id button[type="submit"]',
-        ].join(','),
-    )
-
-const nativeComposeDialogLoadedIndiatorSelector = () =>
-    new LiveSelector().querySelector<HTMLAnchorElement>(
-        [
-            // PC - the insert emoji button of native compose dialog
-            '#feedx_sprouts_container [role="presentation"] [role="button"][data-hover="tooltip"]',
         ].join(','),
     )
 
@@ -67,10 +57,6 @@ export async function taskOpenComposeBoxFacebook(
         alert(i18n.t('automation_request_click_post_button'))
         return
     }
-
-    // PC only
-    // we need wait for compose dialog to be fully loaded
-    if (!isMobileFacebook) await untilElementAvailable(nativeComposeDialogLoadedIndiatorSelector())
 
     await sleep(800)
     MessageCenter.emit('compositionUpdated', {

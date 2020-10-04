@@ -33,12 +33,6 @@ export interface SocialNetworkWorkerDefinition extends SocialNetworkWorkerAndUID
      */
     fetchProfile(identifier: ProfileIdentifier): Promise<ProfileUI>
     /**
-     * This function should open a new page, then automatically input provePost to bio
-     *
-     * If this function is not provided, autoVerifyBio in Welcome will be unavailable
-     */
-    autoVerifyBio: ((user: ProfileIdentifier, provePost: string) => void) | null
-    /**
      * This function should open a new page, then automatically input provePost to the post box
      *
      * If this function is not provided, autoVerifyPost in Welcome will be unavailable

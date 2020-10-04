@@ -192,11 +192,6 @@ export interface SocialNetworkUITasks {
         },
     ): void
     /**
-     * This function should paste `text` into the bio box.
-     * If failed, warning user to do it by themselves with automation_request_click_edit_bio_button
-     */
-    taskPasteIntoBio(text: string): void
-    /**
      * Jump to profile page
      * This task should go to the profile page. The PWA way (no page refreshing) is preferred.
      */
@@ -295,7 +290,8 @@ let activatedSocialNetworkUI = ({
 export function activateSocialNetworkUI(): void {
     for (const ui of definedSocialNetworkUIs)
         if (ui.shouldActivate()) {
-            console.log('Activating UI provider', ui.networkIdentifier, ui)
+            console.log('Activating UI provider', ui.networkIdentifier, ui, 'access it by globalThis.ui')
+            Object.assign(globalThis, { ui })
             {
                 // Do i18nOverwrite
                 for (const lng in ui.i18nOverwrite) {
