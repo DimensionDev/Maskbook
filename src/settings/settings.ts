@@ -57,6 +57,7 @@ export enum Appearance {
 const appearance = Appearance.default
 export const appearanceSettings = createGlobalSettings<Appearance>('apperance', appearance, {
     primary: () => i18n.t('settings_appearance'),
+    secondary: () => i18n.t('settings_appearance_secondary'),
 })
 
 //#region provider chain id
@@ -92,7 +93,7 @@ const lang: string = i18nNextInstance.language
 export const languageSettings = createGlobalSettings<Language>(
     'language',
     lang in Language ? (lang as Language) : Language.en,
-    { primary: () => i18n.t('settings_language') },
+    { primary: () => i18n.t('settings_language'), secondary: () => i18n.t('settings_language_secondary') },
 )
 export const enableGroupSharingSettings = createGlobalSettings<boolean>('experimental/group-sharing@sept2020', false, {
     primary: () => 'Experimental: Enable group sharing',
