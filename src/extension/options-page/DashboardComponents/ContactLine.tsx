@@ -10,6 +10,8 @@ import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
+import type { MutatedContact } from '../DashboardDialogs/Contact'
+import type { ProfileIdentifier } from '../../../database/type'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -55,8 +57,8 @@ const useStyles = makeStyles((theme) =>
 
 interface ContactLineProps extends Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>> {
     contact: Profile
-    onUpdated: () => void
-    onDeleted: () => void
+    onUpdated: (mutatedContact: MutatedContact) => void
+    onDeleted: (identifier: ProfileIdentifier) => void
 }
 
 export function ContactLine(props: ContactLineProps) {

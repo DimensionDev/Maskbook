@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback, useModal } from './Base'
 import { TextField, makeStyles, createStyles, Button } from '@material-ui/core'
 import type { Profile } from '../../../database'
+import type { ProfileIdentifier } from '../../../database/type'
 import { Avatar } from '../../../utils/components/Avatar'
 import Services from '../../service'
 import ActionButton, { DebounceButton } from '../DashboardComponents/ActionButton'
@@ -11,6 +12,12 @@ import { UserMinus, Search } from 'react-feather'
 
 interface ContactProps {
     contact: Profile
+}
+
+export interface MutatedContact {
+    identifier: ProfileIdentifier
+    nickname: string | undefined
+    avatarURL: string | undefined
 }
 
 const useStyles = makeStyles((theme) =>
@@ -23,21 +30,19 @@ const useStyles = makeStyles((theme) =>
 )
 
 export function DashboardContactDeleteConfirmDialog(
-    props: WrappedDialogProps<ContactProps & { onDeleted: () => void }>,
+    props: WrappedDialogProps<ContactProps & { onDeleted: (identifier: ProfileIdentifier) => void }>,
 ) {
     const { contact, onDeleted } = props.ComponentProps!
     const { t } = useI18N()
 
     // TODO!: delete profile breaks database
-    const onDelete = useSnackbarCallback(
-        // ! directly destroy parent dialog is NG so close self first
-        () => Services.Identity.removeProfile(contact.identifier).then(props.onClose),
-        [contact],
-        () => {
-            props.onClose()
-            onDeleted()
-        },
-    )
+    const deleteProfile = useSnackbarCallback(() => Services.Identity.removeProfile(contact.identifier), [contact])
+
+    const onDelete = () => {
+        deleteProfile()
+        props.onClose()
+        setTimeout(() => onDeleted(contact.identifier), 0)
+    }
     return (
         <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
@@ -60,22 +65,34 @@ export function DashboardContactDeleteConfirmDialog(
     )
 }
 
-export function DashboardContactDialog(props: WrappedDialogProps<ContactProps & { onUpdated: () => void }>) {
+export function DashboardContactDialog(
+    props: WrappedDialogProps<
+        ContactProps & {
+            onUpdated: (mutatedContact: MutatedContact) => void
+        }
+    >,
+) {
     const { t } = useI18N()
     const classes = useStyles()
     const { contact, onUpdated } = props.ComponentProps!
     const [nickname, setNickname] = useState(contact.nickname)
     const [avatarURL, setAvatarURL] = useState(contact.avatar)
-
-    // TODO: revalidate SWR after this change
-    const onSubmit = useSnackbarCallback(
-        () => Services.Identity.updateProfileInfo(contact.identifier, { nickname, avatarURL, forceUpdateAvatar: true }),
+    const updateProfileInfo = useSnackbarCallback(
+        () =>
+            Services.Identity.updateProfileInfo(contact.identifier, {
+                nickname,
+                avatarURL,
+                forceUpdateAvatar: true,
+            }),
         [nickname, avatarURL],
-        () => {
-            props.onClose()
-            onUpdated()
-        },
     )
+
+    const onSubmit = () => {
+        updateProfileInfo()
+        props.onClose()
+        setTimeout(() => onUpdated({ identifier: contact.identifier, nickname: nickname, avatarURL }), 0)
+    }
+
     return (
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper

@@ -11,9 +11,10 @@ import { FixedSizeList } from 'react-window'
 import { useSWRInfinite } from 'swr'
 import Services from '../../service'
 import type { Profile } from '../../../database'
-import { last } from 'lodash-es'
+import { last, isEqual } from 'lodash-es'
 import { useModal } from '../DashboardDialogs/Base'
-import { DashboardContactSearchDialog } from '../DashboardDialogs/Contact'
+import { DashboardContactSearchDialog, MutatedContact } from '../DashboardDialogs/Contact'
+import type { ProfileIdentifier } from '../../../database/type'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -80,6 +81,7 @@ export default function DashboardContactsRouter() {
         ],
         [search, searchUI, startSearchTransition],
     )
+
     const swr = useSWRInfinite<Profile[]>(
         (_size, previousPageData) => [
             search || undefined, // undefined means fetch from start
@@ -88,7 +90,7 @@ export default function DashboardContactsRouter() {
         fetcher,
     )
 
-    const { data, size, setSize, revalidate } = swr
+    const { data, size, setSize, mutate, revalidate } = swr
     const isEmpty = data?.[0]?.length === 0
     const isReachingEnd = data && data[data.length - 1]?.length < 20
     const items = data ? ([] as Profile[]).concat(...data) : []
@@ -101,6 +103,28 @@ export default function DashboardContactsRouter() {
             }),
         [size, setSize],
     )
+
+    const contactUpdateHandler = (mutatedContact: MutatedContact) => {
+        const mutatedData = data?.map((contacts) =>
+            contacts.map((contact) => {
+                return isEqual(contact.identifier, mutatedContact.identifier)
+                    ? { ...contact, ...mutatedContact }
+                    : contact
+            }),
+        )
+
+        mutate(mutatedData, false)
+        revalidate()
+    }
+
+    const contactDeleteHandler = (identifier: ProfileIdentifier) => {
+        const mutatedData = data?.map((contacts) =>
+            contacts.filter((contact) => !isEqual(contact.identifier, identifier)),
+        )
+
+        mutate(mutatedData, false)
+        revalidate()
+    }
 
     return (
         <DashboardRouterContainer
@@ -134,8 +158,8 @@ export default function DashboardContactsRouter() {
                                         style={style as any}
                                         key={index}
                                         contact={items[index]}
-                                        onUpdated={revalidate}
-                                        onDeleted={revalidate}
+                                        onUpdated={contactUpdateHandler}
+                                        onDeleted={contactDeleteHandler}
                                     />
                                 ) : null
                             }
