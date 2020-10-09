@@ -3,7 +3,6 @@ import { GetContext, OnlyRunInContext } from '@holoflows/kit/es'
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
 import { ProfileIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier, ECKeyIdentifier } from '../database/type'
-import { getCurrentNetworkWorkerService } from './background-script/WorkerService'
 
 import { MessageCenter } from '@holoflows/kit/es'
 import { IdentifierMap } from '../database/IdentifierMap'
@@ -86,7 +85,6 @@ Object.assign(globalThis, {
     GroupIdentifier,
     PostIdentifier,
     PostIVIdentifier,
-    getCurrentNetworkWorkerService,
     ECKeyIdentifier,
     IdentifierMap,
     BigNumber,

@@ -155,24 +155,23 @@ export interface SocialNetworkUIInjections {
 export interface SocialNetworkUITasks {
     /**
      * This function should encode `text` into the base image and upload it to the post box.
-     * If failed, warning user to do it by themselves with `warningText`
      */
     taskUploadToPostBox(
         text: string,
         options: {
             template?: 'v1' | 'v2' | 'eth' | 'dai' | 'okb'
-            warningText: string
+            autoPasteFailedRecover: boolean
+            relatedText: string
         },
     ): void
 
     /**
      * This function should paste `text` into the post box.
-     * If failed, warning user to do it by themselves with `warningText`
      */
     taskPasteIntoPostBox(
         text: string,
         options: {
-            warningText?: string
+            autoPasteFailedRecover: boolean
             shouldOpenPostDialog: boolean
         },
     ): void

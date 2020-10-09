@@ -89,7 +89,3 @@ export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImag
 export async function decodeImageUrl(url: string, options: DecodeImageOptions) {
     return decodeImage(await (await downloadUrl(url)).arrayBuffer(), options)
 }
-
-export function downloadImage({ buffer }: Uint8Array) {
-    return saveAsFile(buffer, 'image/png', 'maskbook.png')
-}

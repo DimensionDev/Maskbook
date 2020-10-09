@@ -62,7 +62,7 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
     }
 
     const fail = (e: Error) => {
-        if (opt.warningText) prompt(opt.warningText, text)
+        if (opt.autoPasteFailedRecover) MessageCenter.emit('autoPasteFailed', { text })
         throw e
     }
 
@@ -74,7 +74,7 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
 }
 
 const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text, options) => {
-    const { warningText, template = 'v2' } = options
+    const { template = 'v2', autoPasteFailedRecover, relatedText } = options
     const { lastRecognizedIdentity } = getActivatedUI()
     const blankImage = await downloadUrl(
         getUrl(`${template === 'v2' ? '/image-payload' : '/wallet'}/payload-${template}.png`),
@@ -98,9 +98,11 @@ const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text,
     }
 
     async function uploadFail() {
-        console.warn('Image not uploaded to the post box')
-        if (confirm(warningText)) {
-            await Services.Steganography.downloadImage(secretImage)
+        if (autoPasteFailedRecover) {
+            MessageCenter.emit('autoPasteFailed', {
+                text: relatedText,
+                image: new Blob([secretImage], { type: 'image/png' }),
+            })
         }
     }
 }

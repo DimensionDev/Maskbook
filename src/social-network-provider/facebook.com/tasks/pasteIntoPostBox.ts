@@ -3,6 +3,7 @@ import { dispatchCustomEvents, sleep, timeout } from '../../../utils/utils'
 import { isMobileFacebook } from '../isMobile'
 import type { SocialNetworkUI } from '../../../social-network/ui'
 import { untilDocumentReady } from '../../../utils/dom'
+import { MessageCenter } from '../../../utils/messages'
 
 export async function openPostDialogFacebook() {
     await untilDocumentReady()
@@ -60,7 +61,7 @@ export async function pasteIntoPostBoxFacebook(
     text: string,
     options: Parameters<SocialNetworkUI['taskPasteIntoPostBox']>[1],
 ) {
-    const { shouldOpenPostDialog, warningText } = options
+    const { shouldOpenPostDialog, autoPasteFailedRecover } = options
     await untilDocumentReady()
     // Save the scrolling position
     const scrolling = document.scrollingElement || document.documentElement
@@ -88,15 +89,14 @@ export async function pasteIntoPostBoxFacebook(
             if (e) e.style.display = 'none'
         }
         // Prevent Custom Paste failed, this will cause service not available to user.
-        if (element.innerText.indexOf(text) === -1 && 'value' in element && element.value.indexOf(text) === -1) {
-            copyFailed()
-        }
-    } catch {
-        copyFailed()
+        if (element.innerText.indexOf(text) === -1 && 'value' in element && element.value.indexOf(text) === -1)
+            copyFailed('Not detected')
+    } catch (e) {
+        copyFailed(e)
     }
     scrollBack()
-    function copyFailed() {
-        console.warn('Text not pasted to the text area')
-        if (warningText) prompt(warningText, text)
+    function copyFailed(e: any) {
+        console.warn('Text not pasted to the text area', e)
+        if (autoPasteFailedRecover) MessageCenter.emit('autoPasteFailed', { text })
     }
 }

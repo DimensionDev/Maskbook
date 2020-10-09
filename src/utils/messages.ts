@@ -18,7 +18,7 @@ export interface CompositionEvent {
     }
 }
 
-interface MaskbookMessages {
+export interface MaskbookMessages {
     /** Used to polyfill window.close. */
     closeActiveTab: undefined
     /**
@@ -75,6 +75,10 @@ interface MaskbookMessages {
     /** Permission updated */
     permissionUpdated: void
     metamaskMessage: string
+    autoPasteFailed: {
+        text: string
+        image?: Blob
+    }
 }
 
 export class BatchedMessageCenter<T> extends MC<T> {

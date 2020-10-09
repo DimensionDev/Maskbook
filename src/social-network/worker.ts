@@ -1,8 +1,6 @@
 import { env, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { GetContext } from '@holoflows/kit/es'
 import type { ProfileIdentifier, PostIdentifier } from '../database/type'
-import { startWorkerService } from '../extension/background-script/WorkerService'
-import { defaultSocialNetworkWorker } from './defaults/worker'
 import { defaultSharedSettings } from './defaults/shared'
 import getCurrentNetworkWorker from './utils/getCurrentNetworkWorker'
 
@@ -32,18 +30,6 @@ export interface SocialNetworkWorkerDefinition extends SocialNetworkWorkerAndUID
      * @param identifier The post id
      */
     fetchProfile(identifier: ProfileIdentifier): Promise<ProfileUI>
-    /**
-     * This function should open a new page, then automatically input provePost to the post box
-     *
-     * If this function is not provided, autoVerifyPost in Welcome will be unavailable
-     */
-    autoVerifyPost: ((user: ProfileIdentifier, provePost: string) => void) | null
-    /**
-     * This function should open a new page, then let user add it by themselves
-     *
-     * If this function is not provided, manualVerifyPost in Welcome will be unavailable
-     */
-    manualVerifyPost: ((user: ProfileIdentifier, provePost: string) => void) | null
 }
 
 export type SocialNetworkWorker = Required<SocialNetworkWorkerDefinition>
@@ -60,7 +46,6 @@ export function defineSocialNetworkWorker(worker: SocialNetworkWorkerDefinition)
 
     const res: SocialNetworkWorker = {
         ...defaultSharedSettings,
-        ...defaultSocialNetworkWorker,
         ...worker,
     }
 
@@ -72,7 +57,6 @@ export function defineSocialNetworkWorker(worker: SocialNetworkWorkerDefinition)
     if (GetContext() === 'background') {
         console.log('Activating social network provider', res.networkIdentifier, worker)
         res.init(env, {})
-        startWorkerService(res)
     }
     return res
 }
