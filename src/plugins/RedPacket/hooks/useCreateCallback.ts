@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { Token, EthereumTokenType } from '../../../web3/types'
+import { Token, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
@@ -100,13 +100,13 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                 gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                 ...config,
             })
-            promiEvent.on('receipt', (receipt: TransactionReceipt) => {
+            promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                 setCreateState({
                     type: TransactionStateType.RECEIPT,
                     receipt,
                 })
             })
-            promiEvent.on('confirmation', (no: number, receipt: TransactionReceipt) => {
+            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
                 setCreateSettings(redPacketSettings)
                 setCreateState({
                     type: TransactionStateType.CONFIRMED,
@@ -115,7 +115,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                 })
                 resolve()
             })
-            promiEvent.on('error', (error) => {
+            promiEvent.on(TransactionEventType.ERROR, (error) => {
                 setCreateState({
                     type: TransactionStateType.FAILED,
                     error,

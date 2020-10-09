@@ -48,3 +48,10 @@ export enum EthereumTokenType {
     ERC20 = 1,
     ERC721 = 2,
 }
+
+export enum TransactionEventType {
+    TRANSACTION_HASH = 'transactionHash',
+    RECEIPT = 'receipt',
+    CONFIRMATION = 'confirmation',
+    ERROR = 'error',
+}

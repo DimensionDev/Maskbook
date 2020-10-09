@@ -10,6 +10,7 @@ import { nonFunctionalWeb3 } from '../web3'
 import { iteratorToPromiEvent, Stage, StageType } from '../../utils/promiEvent'
 import type { EstimateGasOptions } from '../../contracts/types'
 import { decodeOutputString, decodeEvents } from '../helpers'
+import { TransactionEventType } from '../types'
 
 /**
  * Create a contract which will forward its all transactions to the
@@ -118,8 +119,8 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
 
                                 // feedback by callback
                                 return promiEvent
-                                    .on('transactionHash', (hash) => callback(null, hash))
-                                    .on('error', callback)
+                                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => callback(null, hash))
+                                    .on(TransactionEventType.ERROR, callback)
                             },
                             async estimateGas(
                                 config?: EstimateGasOptions,
