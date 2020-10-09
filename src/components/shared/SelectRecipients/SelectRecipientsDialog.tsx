@@ -1,13 +1,13 @@
 import * as React from 'react'
-import { useRef } from 'react'
 import {
     List,
+    ListItem,
+    ListItemText,
     makeStyles,
     Typography,
     Button,
     IconButton,
-    withMobileDialog,
-    Dialog,
+    InputBase,
     DialogTitle,
     DialogContent,
     DialogActions,
@@ -18,6 +18,7 @@ import { ProfileInList } from './ProfileInList'
 import type { Profile } from '../../../database'
 import { DialogDismissIconUI } from '../../InjectedComponents/DialogDismissIcon'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
+import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
     title: {
         marginLeft: 6,
     },
+    input: { flex: 1, minWidth: '10em', marginLeft: 20, marginTop: theme.spacing(1) },
 }))
 
 export interface SelectRecipientsDialogUIProps
@@ -55,7 +57,22 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const { items, disabledItems } = props
-
+    const [search, setSearch] = React.useState('')
+    const [, inputRef] = useCapturedInput((newText) => {
+        setSearch(newText)
+    }, [])
+    const searchFilter = React.useCallback(
+        (item: Profile) => {
+            if (search === '') return true
+            return (
+                !!item.identifier.userId.toLowerCase().match(search.toLowerCase()) ||
+                !!item.linkedPersona?.fingerprint.toLowerCase().match(search.toLowerCase()) ||
+                !!(item.nickname || '').toLowerCase().match(search.toLowerCase())
+            )
+        },
+        [search],
+    )
+    const itemsAfterSearch = items.filter(searchFilter)
     return (
         <ShadowRootDialog
             className={classes.dialog}
@@ -84,26 +101,38 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     {t('select_specific_friends_dialog__title')}
                 </Typography>
             </DialogTitle>
+            <InputBase
+                value={search}
+                inputRef={inputRef}
+                className={classes.input}
+                placeholder={t('search_box_placeholder')}
+            />
             <DialogContent className={classes.content}>
                 <List dense>
-                    {items.map((item) => (
-                        <ProfileInList
-                            key={item.identifier.toText()}
-                            item={item}
-                            checked={
-                                props.selected.some((x) => x.identifier.equals(item.identifier)) ||
-                                disabledItems?.includes(item)
-                            }
-                            disabled={props.disabled || disabledItems?.includes(item)}
-                            onChange={(_, checked) => {
-                                if (checked) {
-                                    props.onSelect(item)
-                                } else {
-                                    props.onDeselect(item)
+                    {itemsAfterSearch.length === 0 ? (
+                        <ListItem>
+                            <ListItemText primary={t('no_search_result')} />
+                        </ListItem>
+                    ) : (
+                        itemsAfterSearch.map((item) => (
+                            <ProfileInList
+                                key={item.identifier.toText()}
+                                item={item}
+                                checked={
+                                    props.selected.some((x) => x.identifier.equals(item.identifier)) ||
+                                    disabledItems?.includes(item)
                                 }
-                            }}
-                        />
-                    ))}
+                                disabled={props.disabled || disabledItems?.includes(item)}
+                                onChange={(_, checked) => {
+                                    if (checked) {
+                                        props.onSelect(item)
+                                    } else {
+                                        props.onDeselect(item)
+                                    }
+                                }}
+                            />
+                        ))
+                    )}
                 </List>
             </DialogContent>
             <DialogActions className={classes.actions}>
