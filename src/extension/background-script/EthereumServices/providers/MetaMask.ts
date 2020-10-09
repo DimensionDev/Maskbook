@@ -25,7 +25,7 @@ async function onData(error: Error | null, event?: { method: string; result: str
 }
 
 function onNetworkChanged(id: string) {
-    currentMetaMaskChainIdSettings.value = Number.parseInt(id) as ChainId
+    currentMetaMaskChainIdSettings.value = Number.parseInt(id, 10) as ChainId
 }
 
 function onNetworkError(error: any) {

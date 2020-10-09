@@ -7,7 +7,7 @@ export const renderWithRedPacketMetadata = createRenderWithMetadata(RedPacketMet
 
 export function RedPacketComparer(a: RedPacketRecord | null, b: RedPacketRecord | null) {
     if (!a || !b) return false
-    return a.id === b.id
+    return a.id === b.id && a.from === b.from
 }
 
 export function RedPacketArrayComparer(a: RedPacketRecord[], b: RedPacketRecord[]) {

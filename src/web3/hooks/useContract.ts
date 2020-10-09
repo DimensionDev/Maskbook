@@ -73,7 +73,7 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                             },
                             // don't add async keyword for this method because a PromiEvent was returned
                             send(config: TransactionConfig, callback?: (error: Error | null, hash?: string) => void) {
-                                if (!account) throw new Error('cannot find account')
+                                if (!config.from && !account) throw new Error('cannot find account')
 
                                 if (process.env.NODE_ENV === 'development')
                                     console.log(
@@ -85,12 +85,15 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                         })}`,
                                     )
 
-                                const iterator = ServicesWithProgress.sendTransaction(account, {
-                                    from: account,
-                                    to: contract.options.address,
-                                    data: cached.encodeABI(),
-                                    ...config,
-                                })
+                                const iterator = ServicesWithProgress.sendTransaction(
+                                    (config.from ?? account) as string,
+                                    {
+                                        from: account,
+                                        to: contract.options.address,
+                                        data: cached.encodeABI(),
+                                        ...config,
+                                    },
+                                )
 
                                 const processor = (stage: Stage) => {
                                     switch (stage.type) {

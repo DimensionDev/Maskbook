@@ -12,6 +12,7 @@ import { RedPacketForm } from './RedPacketForm'
 import { RedPacketBacklogList, RedPacketOutboundList } from './RedPacketList'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { useAccount } from '../../../web3/hooks/useAccount'
+import Services from '../../../extension/service'
 
 interface RedPacketDialogProps
     extends withClasses<
@@ -66,14 +67,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const account = useAccount()
     const onCreateOrSelect = useCallback((payload: RedPacketJSONPayload) => {
-        console.log('DEBUG: onCreateOrSelect')
-        console.log(payload)
-
         const ref = getActivatedUI().typedMessageMetadata
         const next = new Map(ref.value.entries())
         payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey)
         ref.value = next
         props.onConfirm(payload)
+        // storing the created red packet in DB, it helps retrieve red packet password later
+        Services.Plugin.invokePlugin('maskbook.red_packet', 'discoverRedPacket', '', payload)
     }, [])
 
     const state = useState(0)

@@ -8,6 +8,7 @@ import { useChainId } from '../../../web3/hooks/useChainState'
 import { resolveChainId } from '../../../web3/pipes'
 import { useBlockNumberOnce } from '../../../web3/hooks/useChainState'
 import { RED_PACKET_HISTROY_MAX_BLOCK_SIZE } from '../constants'
+import { PluginMessageCenter } from '../../PluginMessages'
 
 //#region tracking red packets in the DB
 const redPacketsRef = new ValueRef<RedPacketRecord[]>([], RedPacketArrayComparer)
@@ -15,6 +16,7 @@ const revalidate = async () => {
     redPacketsRef.value = await Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketsFromDB')
 }
 revalidate()
+PluginMessageCenter.on('maskbook.red_packets.update', revalidate)
 //#endregion
 
 export function useRedPacketFromDB(rpid: string) {
@@ -30,6 +32,13 @@ export function useRedPacketsFromDB() {
 
 export function useRedPacketsFromChain(from: string) {
     const blockNumber = useBlockNumberOnce()
+
+    console.log('DEBUG: useRedPacketsFromChain')
+    console.log({
+        from,
+        blockNumber,
+    })
+
     return useAsync(
         async () =>
             blockNumber

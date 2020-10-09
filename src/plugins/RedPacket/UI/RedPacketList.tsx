@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface RedPacketListProps {
+    from: string
     loading?: boolean
     payloads: RedPacketJSONPayload[]
     FixedSizeListProps?: Partial<FixedSizeListProps>
@@ -35,7 +36,7 @@ interface RedPacketListProps {
 }
 
 function RedPacketList(props: RedPacketListProps) {
-    const { loading = false, payloads, FixedSizeListProps, onSelect } = props
+    const { from, loading = false, payloads, FixedSizeListProps, onSelect } = props
     const classes = useStyles()
     return (
         <div className={classes.root}>
@@ -49,6 +50,7 @@ function RedPacketList(props: RedPacketListProps) {
                     overscanCount={4}
                     itemSize={60}
                     itemData={{
+                        from,
                         payloads,
                         onClick: onSelect,
                     }}
@@ -71,18 +73,14 @@ export interface RedPacketBacklogListProps extends withClasses<KeysInferFromUseS
 export function RedPacketBacklogList(props: RedPacketBacklogListProps) {
     const { from, onSelect } = props
     const { value: records = [], loading } = useRedPacketsFromChain(from)
-    const payloads = usePayloadsComputed(
+    const payloads_ = usePayloadsComputed(
         'create',
         records.filter((x) => x.availability.balance !== '0' && !x.availability.expired),
     )
 
-    console.log('DEBUG: RedPacketBacklogList')
-    console.log({
-        payloads,
-        records: records.filter((x) => x.availability.balance !== '0' && !x.availability.expired),
-    })
-
-    return <RedPacketList loading={loading} payloads={payloads} onSelect={onSelect} />
+    // the payloads from the chain has got empty password
+    const payloads = payloads_.filter((x) => x.password)
+    return <RedPacketList from={from} loading={loading} payloads={payloads} onSelect={onSelect} />
 }
 //#endregion
 
@@ -103,7 +101,7 @@ export function RedPacketInboundList(props: RedPacketInboundListProps) {
         payloads,
     })
 
-    return <RedPacketList loading={loading} payloads={payloads} onSelect={onSelect} />
+    return <RedPacketList from={from} loading={loading} payloads={payloads} onSelect={onSelect} />
 }
 //#endregion
 
@@ -119,8 +117,11 @@ export function RedPacketOutboundList(props: RedPacketOutboundListProps) {
     const payloads = usePayloadsComputed('create', records)
 
     console.log('DEBUG: RedPacketOutboundList')
-    console.log(payloads)
+    console.log({
+        records,
+        payloads,
+    })
 
-    return <RedPacketList loading={loading} payloads={payloads} onSelect={onSelect} />
+    return <RedPacketList from={from} loading={loading} payloads={payloads} onSelect={onSelect} />
 }
 //#endregion

@@ -47,7 +47,7 @@ export function useMulticallCallback(calls: Call[]) {
         type: MulticalStateType.UNKNOWN,
     })
     const multicallCallback = useCallback(async () => {
-        if (!multicallState) {
+        if (!multicallState || !multicallContract) {
             setMulticallState({
                 type: MulticalStateType.UNKNOWN,
             })

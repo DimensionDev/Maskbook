@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { useAsync, useCopyToClipboard } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
@@ -44,7 +44,7 @@ import { Token, EthereumTokenType } from '../../../web3/types'
 import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
 import { RedPacketInboundList, RedPacketOutboundList } from '../../../plugins/RedPacket/UI/RedPacketList'
-import { RedPacketInPost } from '../../../plugins/RedPacket/UI/RedPacketInPost'
+import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
 import { useRedPacketFromDB } from '../../../plugins/RedPacket/hooks/useRedPacket'
 import WalletLine from './WalletLine'
 import { isSameAddress } from '../../../web3/helpers'
@@ -764,7 +764,7 @@ const useRedPacketDetailStyles = makeStyles((theme: Theme) =>
         sayThanks: {
             display: 'block',
             width: 200,
-            margin: `${theme.spacing(2)} auto`,
+            margin: `${theme.spacing(2)}px auto`,
         },
         link: {
             display: 'block',
@@ -777,39 +777,41 @@ const useRedPacketDetailStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-interface RedPacketProps {
-    payload: RedPacketJSONPayload
-}
-
-export function DashboardWalletRedPacketDetailDialog(props: WrappedDialogProps<RedPacketProps>) {
+export function DashboardWalletRedPacketDetailDialog(
+    props: WrappedDialogProps<WalletProps & { payload: RedPacketJSONPayload }>,
+) {
     const { t } = useI18N()
-    const { payload } = props.ComponentProps!
+    const { wallet, payload } = props.ComponentProps!
 
     const classes = useRedPacketDetailStyles()
 
     const account = useAccount()
     const redPacket = useRedPacketFromDB(payload.rpid)
 
-    console.log('DEBUG: DashboardWalletRedPacketDetailDialog')
-    console.log(props)
+    const sayThanks = useCallback(() => {
+        if (!redPacket?.from) return
+        if (!redPacket.from!.includes('twitter.com/')) {
+            window.open(redPacket.from, '_blank', 'noopener noreferrer')
+        } else {
+            const user = redPacket.from!.match(/(?!\/)[\d\w]+(?=\/status)/)
+            const userText = user ? ` from @${user}` : ''
+            const text = [
+                `I just received a Red Packet${userText}. Follow @realMaskbook (mask.io) to get your first Twitter #payload.`,
+                `#maskbook ${redPacket.from}`,
+            ].join('\n')
+            window.open(
+                `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+                '_blank',
+                'noopener noreferrer',
+            )
+        }
+    }, [redPacket])
 
-    const sayThanks = () => {
-        // if (!payload.from!.includes('twitter.com/')) {
-        //     window.open(payload.from, '_blank', 'noopener noreferrer')
-        // } else {
-        //     const user = payload.from!.match(/(?!\/)[\d\w]+(?=\/status)/)
-        //     const userText = user ? ` from @${user}` : ''
-        //     const text = [
-        //         `I just received a Red Packet${userText}. Follow @realMaskbook (maskbook.com) to get your first Twitter #payload.`,
-        //         `#maskbook ${payload.from}`,
-        //     ].join('\n')
-        //     window.open(
-        //         `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
-        //         '_blank',
-        //         'noopener noreferrer',
-        //     )
-        // }
-    }
+    console.log('DEBUG: red packet detail dialog')
+    console.log({
+        account,
+        redPacket,
+    })
 
     return (
         <DashboardDialogCore {...props}>
@@ -817,8 +819,8 @@ export function DashboardWalletRedPacketDetailDialog(props: WrappedDialogProps<R
                 primary="Red Packet Detail"
                 content={
                     <>
-                        <RedPacketInPost payload={payload} />
-                        {redPacket?.from && !isSameAddress(redPacket.payload.sender.address, account) && (
+                        <RedPacket from={wallet.address} payload={payload} />
+                        {redPacket?.from && !isSameAddress(redPacket.payload.sender.address, wallet.address) && (
                             <ActionButton className={classes.sayThanks} onClick={sayThanks} variant="contained">
                                 Say Thanks
                             </ActionButton>
@@ -848,7 +850,7 @@ export function DashboardWalletRedPacketDetailDialog(props: WrappedDialogProps<R
                         <WalletLine line1="Message" line2={payload.sender.message} />
                         <Box p={1} display="flex" justifyContent="center">
                             <Typography variant="caption" color="textSecondary">
-                                Created at {new Date(payload.creation_time * 1000).toLocaleString()}
+                                Created at {new Date(payload.creation_time).toLocaleString()}
                             </Typography>
                         </Box>
                     </>

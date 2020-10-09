@@ -7,6 +7,7 @@ export function useAvailability(account: string, id?: string) {
         if (!id) return null
         if (!redPacketContract) return null
         return redPacketContract.methods.check_availability(id).call({
+            // check availability is ok w/o account
             from: account,
         })
     }, [id, account, redPacketContract])

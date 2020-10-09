@@ -54,7 +54,7 @@ export function useToken(token?: PartialRequired<Token, 'address' | 'type'>) {
                 address: formatChecksumAddress(token.address),
                 name: resolveSettleResult(name_, token.name ?? ''),
                 symbol: resolveSettleResult(symbol_, token.symbol ?? ''),
-                decimals: Number.parseInt(resolveSettleResult(decimals_, String(token.decimals ?? 0))),
+                decimals: Number.parseInt(resolveSettleResult(decimals_, String(token.decimals ?? 0)), 10),
             } as Token
         }
 

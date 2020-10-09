@@ -78,7 +78,6 @@ export default function DashboardWalletsRouter() {
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
-    const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const wallets = useWallets()
     const [current, setCurrent] = useState('')
@@ -160,7 +159,8 @@ export default function DashboardWalletsRouter() {
                         openWalletHistory({
                             wallet: currentWallet,
                             onRedPacketClicked(payload) {
-                                openWalletRedPacket({
+                                openWalletRedPacketDetail({
+                                    wallet: currentWallet,
                                     payload,
                                 })
                             },
@@ -207,7 +207,6 @@ export default function DashboardWalletsRouter() {
             {walletHistory}
             {walletCreate}
             {walletError}
-            {walletRedPacket}
             {walletRedPacketDetail}
         </DashboardRouterContainer>
     )

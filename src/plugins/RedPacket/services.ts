@@ -6,7 +6,6 @@ import * as database from './database'
 import { resolveChainName } from '../../web3/pipes'
 import { getChainId } from '../../extension/background-script/EthereumService'
 import { web3 } from '../../extension/background-script/EthereumServices/web3'
-import type { ChainId } from '../../web3/types'
 
 export async function claimRedPacket(
     from: string,
@@ -44,12 +43,12 @@ export async function claimRedPacket(
 
 export async function discoverRedPacket(from: string, payload: RedPacketJSONPayload) {
     if (!payload.rpid) return
-    const original = await database.getRedPacket(payload.rpid)
-    if (original) return
+    if (!payload.password) return
+    const record_ = await database.getRedPacket(payload.rpid)
     const record: RedPacketRecord = {
         id: payload.rpid,
-        from,
-        payload,
+        from: record_?.from || from,
+        payload: record_?.payload ?? payload,
     }
     database.addRedPacket(record)
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)

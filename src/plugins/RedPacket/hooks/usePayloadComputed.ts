@@ -12,23 +12,23 @@ function getTransactionLog(name: History.Log['$name'], transactions: History.Red
 
 function getPayload(chainId: ChainId, record: History.RedPacketRecord, overrides?: Partial<RedPacketJSONPayload>) {
     const createLog = getTransactionLog('create_red_packet', record.transactions) as History.CreateInputLog
-    const creationSuccessLog = getTransactionLog('CreationSuccess', record.transactions) as History.CreateOutputLog
-    const tokenType = Number.parseInt(createLog._token_type) as EthereumTokenType
+    const CreationSuccessLog = getTransactionLog('CreationSuccess', record.transactions) as History.CreateOutputLog
+    const tokenType = Number.parseInt(createLog._token_type, 10) as EthereumTokenType
     const payload: RedPacketJSONPayload = {
         contract_address: RED_PACKET_CONSTANTS.HAPPY_RED_PACKET_ADDRESS[chainId],
         contract_version: RED_PACKET_CONTRACT_VERSION,
-        rpid: creationSuccessLog.id,
+        rpid: CreationSuccessLog.id,
         password: '',
-        shares: Number.parseInt(createLog._number),
+        shares: Number.parseInt(createLog._number, 10),
         sender: {
-            address: creationSuccessLog.creator,
+            address: CreationSuccessLog.creator,
             name: createLog._name,
             message: createLog._message,
         },
         is_random: createLog._ifrandom,
         total: createLog._total_tokens,
-        creation_time: Number.parseInt(creationSuccessLog?.creation_time),
-        duration: Number.parseInt(createLog._duration),
+        creation_time: Number.parseInt(CreationSuccessLog?.creation_time, 10) * 1000,
+        duration: Number.parseInt(createLog._duration, 10),
         network: resolveChainName(chainId) as EthereumNetwork,
         token_type: tokenType,
         ...overrides,
@@ -56,18 +56,18 @@ export function usePayloadsComputed(type: 'create' | 'claim' | 'refund', records
     const chainRecords = records.filter((x) => {
         if (type === 'create') {
             const createLog = getTransactionLog('create_red_packet', x.transactions) as History.CreateInputLog
-            const creationSuccessLog = getTransactionLog('CreationSuccess', x.transactions) as History.CreateOutputLog
-            if (!createLog || !creationSuccessLog) return false
+            const CreationSuccessLog = getTransactionLog('CreationSuccess', x.transactions) as History.CreateOutputLog
+            if (!createLog || !CreationSuccessLog) return false
         }
         if (type === 'claim') {
             const claimLog = getTransactionLog('claim', x.transactions) as History.ClaimInputLog
-            const claimSuccessLog = getTransactionLog('ClaimSuccess', x.transactions) as History.ClaimOutputLog
-            if (!claimLog || !claimSuccessLog) return false
+            const ClaimSuccessLog = getTransactionLog('ClaimSuccess', x.transactions) as History.ClaimOutputLog
+            if (!claimLog || !ClaimSuccessLog) return false
         }
         if (type === 'refund') {
             const refundLog = getTransactionLog('refund', x.transactions) as History.RefundInputLog
-            const refundSuccessLog = getTransactionLog('RefundSuccess', x.transactions) as History.RefundOutputLog
-            if (!refundLog || !refundSuccessLog) return false
+            const RefundSuccessLog = getTransactionLog('RefundSuccess', x.transactions) as History.RefundOutputLog
+            if (!refundLog || !RefundSuccessLog) return false
         }
         return true
     })
@@ -82,9 +82,13 @@ export function usePayloadsComputed(type: 'create' | 'claim' | 'refund', records
                 const dbRecord = dbRecords.find((y) => x.rpid === y.id)?.payload
                 return dbRecord ?? x
             })
+            .sort((a, z) => z.creation_time - a.creation_time)
 
     // for claimed red packets fetch them from the DB
     // because it's too hard to fetch the red packet info which created by others
     const lookUpSet = new Set(chainRecords.map((x) => x.id))
-    return dbRecords.filter((x) => lookUpSet.has(x.id)).map((y) => y.payload)
+    return dbRecords
+        .filter((x) => lookUpSet.has(x.id))
+        .map((y) => y.payload)
+        .sort((a, z) => z.creation_time - a.creation_time)
 }
