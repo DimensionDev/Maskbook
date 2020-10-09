@@ -4,9 +4,9 @@ import Services from '../../../extension/service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { RedPacketRecord } from '../types'
 import { RedPacketArrayComparer } from '../helpers'
-import { useChainId } from '../../../web3/hooks/useBlockState'
+import { useChainId } from '../../../web3/hooks/useChainState'
 import { resolveChainId } from '../../../web3/pipes'
-import { useBlockNumberOnce } from '../../../web3/hooks/useBlockState'
+import { useBlockNumberOnce } from '../../../web3/hooks/useChainState'
 import { RED_PACKET_HISTROY_MAX_BLOCK_SIZE } from '../constants'
 
 //#region tracking red packets in the DB

@@ -24,7 +24,7 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { Token, EthereumTokenType, EthereumNetwork } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useBlockState'
+import { useChainId } from '../../../web3/hooks/useChainState'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { createEetherToken } from '../../../web3/helpers'

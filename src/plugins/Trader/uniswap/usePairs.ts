@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import { Pair as UniswapPair, Token as UniswapToken, Pair, TokenAmount } from '@uniswap/sdk'
 import { usePairContract } from '../contracts/usePairContract'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { useBlockNumber } from '../../../web3/hooks/useBlockState'
+import { useBlockNumber } from '../../../web3/hooks/useChainState'
 import { CONSTANTS } from '../../../web3/constants'
 
 function resolvePairResult<T>(result: PromiseSettledResult<T>, fallback: T) {

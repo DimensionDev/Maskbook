@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { createEetherToken } from '../helpers'
-import { useChainId } from './useBlockState'
+import { useChainId } from './useChainState'
 import { useTokensDetailedDebank } from './useTokensDetailedDebank'
 import { useTokensDetailed } from './useTokensDetailed'
 import { useTokensDetailedMerged } from './useTokensDetailedMerged'
@@ -21,14 +21,6 @@ export function useTokensDetailedCallback(tokens: Token[]) {
         if (!EthereumAddress.isValid(address)) return
         setAddress(address)
     }, [])
-
-    console.log('DEBUG: useTokensDetailedCallback')
-    console.log({
-        chainId,
-        detailedTokens,
-        chainDetailedTokens,
-        debankDetailedTokens,
-    })
 
     return [detailedTokens, detailedTokensCallback] as const
 }

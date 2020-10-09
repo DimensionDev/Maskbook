@@ -5,7 +5,7 @@ import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { useConstant } from './useConstant'
 import { CONSTANTS } from '../constants'
-import { useChainId } from './useBlockState'
+import { useChainId } from './useChainState'
 
 /**
  * Fetch token balance from chain

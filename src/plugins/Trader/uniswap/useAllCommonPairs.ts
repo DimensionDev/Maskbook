@@ -1,4 +1,4 @@
-import { useChainId } from '../../../web3/hooks/useBlockState'
+import { useChainId } from '../../../web3/hooks/useChainState'
 import { BASE_AGAINST_TOKENS, CUSTOM_BASES } from '../constants'
 import type { Token } from '../../../web3/types'
 import { useMemo } from 'react'

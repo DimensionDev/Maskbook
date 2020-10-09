@@ -1,6 +1,6 @@
 import { compact } from 'lodash-es'
 import { isSameAddress } from '../../../web3/helpers'
-import { useChainId } from '../../../web3/hooks/useBlockState'
+import { useChainId } from '../../../web3/hooks/useChainState'
 import { resolveChainId } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'
 import { RedPacketJSONPayload, RedPacketStatus } from '../types'

@@ -13,13 +13,13 @@ import {
 import { PluginMessageCenter } from '../../plugins/PluginMessages'
 
 //#region tracking block state
-const blockStateRef = new ValueRef({
+const chainStateRef = new ValueRef({
     chainId: ChainId.Mainnet,
     blockNumber: 0,
 })
 const revalidate = debounce(
     async () => {
-        blockStateRef.value = {
+        chainStateRef.value = {
             chainId: await Services.Ethereum.getChainId(),
             blockNumber: await Services.Ethereum.getBlockNumber(),
         }
@@ -49,34 +49,34 @@ PluginMessageCenter.on('maskbook.wallets.update', revalidate)
  * Get the chain id which is using by the current wallet
  */
 export function useChainId() {
-    return useValueRef(blockStateRef).chainId
+    return useValueRef(chainStateRef).chainId
 }
 
 /**
  * Get the current block number
  */
 export function useBlockNumber() {
-    return useValueRef(blockStateRef).blockNumber
+    return useValueRef(chainStateRef).blockNumber
 }
 
 /**
  * Get the current block number for once
  */
 export function useBlockNumberOnce() {
-    const blockState_ = useValueRef(blockStateRef)
-    const [blockState, setBlockState] = useState({
+    const chainState_ = useValueRef(chainStateRef)
+    const [chainState, setChainState] = useState({
         chainId: ChainId.Mainnet,
         blockNumber: 0,
     })
     useEffect(() => {
-        if (blockState.blockNumber === 0 || blockState.chainId !== blockState_.chainId) setBlockState(blockState_)
-    }, [blockState_])
-    return blockState.blockNumber
+        if (chainState.blockNumber === 0 || chainState.chainId !== chainState_.chainId) setChainState(chainState_)
+    }, [chainState_])
+    return chainState.blockNumber
 }
 
 /**
  * Get the newest block state
  */
-export function useBlockState() {
-    return useValueRef(blockStateRef)
+export function useChainState() {
+    return useValueRef(chainStateRef)
 }

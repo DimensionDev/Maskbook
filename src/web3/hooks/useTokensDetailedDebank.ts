@@ -4,7 +4,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
 import { createEetherToken } from '../helpers'
 import { ChainId, CurrencyType, EthereumTokenType, TokenDetailed } from '../types'
-import { useChainId } from './useBlockState'
+import { useChainId } from './useChainState'
 
 namespace Debank {
     export interface BalanceRecord {

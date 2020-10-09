@@ -2,7 +2,7 @@ import { uniqBy } from 'lodash-es'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
 import { CONSTANTS } from '../constants'
 import type { TokenDetailed } from '../types'
-import { useChainId } from './useBlockState'
+import { useChainId } from './useChainState'
 import { useConstant } from './useConstant'
 
 /**

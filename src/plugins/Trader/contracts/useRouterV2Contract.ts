@@ -7,5 +7,5 @@ import { TRADE_CONSTANTS } from '../constants'
 
 export function useRouterV2Contract() {
     const address = useConstant(TRADE_CONSTANTS, 'ROUTER_V2_ADDRESS')
-    return useContract<RouterV2>(address, RouterV2ABI as AbiItem[]) as RouterV2
+    return useContract<RouterV2>(address, RouterV2ABI as AbiItem[])
 }

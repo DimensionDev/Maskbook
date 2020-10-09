@@ -64,7 +64,7 @@ export async function getRedPacketsFromChain(from: string, startBlock: number) {
     url.searchParams.set('chainId', String(await getChainId()))
     url.searchParams.set('from', from)
     url.searchParams.set('startBlock', String(startBlock))
-    url.searchParams.set('endBlock', '9'.repeat(18))
+    url.searchParams.set('endBlock', 'latest')
     const response = await fetch(url.toString())
     if (response.status !== 200) return []
     return response.json() as Promise<History.RedPacketRecord[]>
