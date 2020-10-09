@@ -12,14 +12,6 @@ import { noop } from 'lodash-es'
 
 const defHandler = async (encryptedComment: string, current: PostInfo, realCurrent: HTMLElement | null) => {
     const root = realCurrent || current.rootNode
-    /**
-     * TODO:
-     *  Yeah I see but I think root.querySelector('[contenteditable]')
-     *  (some website may use textarea or input) and
-     *  dispatchCustomEvents('paste', encryptedComment)
-     *  (not every website are using React and listened from document)
-     *  is not a good default.
-     */
     selectElementContents(root.querySelector('[contenteditable]')!)
     dispatchCustomEvents('paste', encryptedComment)
     await sleep(200)

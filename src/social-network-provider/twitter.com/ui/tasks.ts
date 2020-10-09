@@ -7,14 +7,11 @@ import {
     pasteImageToActiveElements,
 } from '../../../utils/utils'
 import {
-    profileEditorButtonSelector,
-    profileEditorTextareaSelector,
     postEditorDraftContentSelector,
     newPostButtonSelector,
     postsSelector,
     bioCardSelector,
 } from '../utils/selector'
-import { i18n } from '../../../utils/i18n-next'
 import { SocialNetworkUI, SocialNetworkUITasks, getActivatedUI } from '../../../social-network/ui'
 import { bioCardParser, postContentParser } from '../utils/fetch'
 import { getEditorContent, hasFocus, isCompose, hasEditor } from '../utils/postBox'
@@ -60,8 +57,7 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
         isMobileTwitter ? dispatchCustomEvents('input', text) : dispatchCustomEvents('paste', text)
         await sleep(interval)
         if (!getEditorContent().replace(/\n/g, '').includes(text.replace(/\n/g, ''))) {
-            prompt(opt.warningText, text)
-            throw new Error('Unable to paste text automatically')
+            fail(new Error('Unable to paste text automatically'))
         }
     }
 
@@ -106,33 +102,6 @@ const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text,
         if (confirm(warningText)) {
             await Services.Steganography.downloadImage(secretImage)
         }
-    }
-}
-
-const taskPasteIntoBio = async (text: string) => {
-    const getValue = () => profileEditorTextareaSelector().evaluate()!.value
-    await untilDocumentReady()
-    await sleep(800)
-    try {
-        profileEditorButtonSelector().evaluate()!.click()
-    } catch {
-        alert(i18n.t('automation_request_click_edit_bio_button'))
-    }
-    await sleep(800)
-    try {
-        const i = profileEditorTextareaSelector().evaluate()!
-        i.focus()
-        await sleep(200)
-        dispatchCustomEvents('input', i.value + text)
-    } catch {
-        console.warn('Text not pasted to the text area')
-        prompt(i18n.t('automation_request_paste_into_bio_box'), text)
-    }
-    if (getValue().indexOf(text) === -1) {
-        console.warn('Text pasting failed')
-        prompt(i18n.t('automation_request_paste_into_bio_box'), text)
-    } else {
-        setTimeout(() => alert(i18n.t('automation_pasted_into_bio_box')))
     }
 }
 
