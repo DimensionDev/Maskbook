@@ -15,7 +15,7 @@ export function PageInspector(props: PageInspectorProps) {
     const { t } = useI18N()
     const [autoPasteFailed, JSX] = useAutoPasteFailedDialog()
     useMessage(MessageCenter, 'autoPasteFailed', (data) => {
-        const key = Math.random()
+        const key = data.image ? Math.random() : data.text
         const close = () => prompt.closeSnackbar(key)
         prompt.enqueueSnackbar(t('auto_paste_failed_snackbar'), {
             variant: 'warning',

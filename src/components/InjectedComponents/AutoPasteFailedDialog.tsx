@@ -32,7 +32,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
 
     return (
         <DraggableDiv>
-            <Paper>
+            <Paper elevation={2}>
                 <nav>
                     <DialogTitle>
                         <IconButton size="small" onClick={onClose}>

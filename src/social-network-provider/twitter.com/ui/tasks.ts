@@ -90,12 +90,8 @@ const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text,
     )
     pasteImageToActiveElements(secretImage)
     await untilDocumentReady()
-    try {
-        // Need a better way to find whether the image is pasted into
-        // throw new Error('auto uploading is undefined')
-    } catch {
-        uploadFail()
-    }
+    // TODO: Need a better way to find whether the image is pasted into
+    uploadFail()
 
     async function uploadFail() {
         if (autoPasteFailedRecover) {
