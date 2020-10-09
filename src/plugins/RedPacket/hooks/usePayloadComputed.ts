@@ -1,4 +1,4 @@
-import { useChainId } from '../../../web3/hooks/useChainId'
+import { useChainId } from '../../../web3/hooks/useBlockState'
 import { resolveChainName } from '../../../web3/pipes'
 import { ChainId, EthereumNetwork, EthereumTokenType } from '../../../web3/types'
 import { RED_PACKET_CONSTANTS, RED_PACKET_CONTRACT_VERSION } from '../constants'
@@ -77,14 +77,14 @@ export function usePayloadsComputed(type: 'create' | 'claim' | 'refund', records
     if (type === 'create' || type === 'refund')
         return chainRecords
             .map((x) => getPayload(chainId, x))
-            .map((y) => {
-                // prefer the record from the DB because there is no token info stored on the chain
-                const dbRecord = dbRecords.find((z) => y.rpid.toLowerCase() === z.id.toLowerCase())?.payload
-                return dbRecord ?? y
+            .map((x) => {
+                // but prefer the record from the DB because there is no token info stored on the chain
+                const dbRecord = dbRecords.find((y) => x.rpid === y.id)?.payload
+                return dbRecord ?? x
             })
 
     // for claimed red packets fetch them from the DB
     // because it's too hard to fetch the red packet info which created by others
-    const lookUpSet = new Set(chainRecords.map((x) => x.id.toLowerCase()))
-    return dbRecords.filter((x) => lookUpSet.has(x.id.toLowerCase())).map((y) => y.payload)
+    const lookUpSet = new Set(chainRecords.map((x) => x.id))
+    return dbRecords.filter((x) => lookUpSet.has(x.id)).map((y) => y.payload)
 }

@@ -2,7 +2,7 @@ import { uniqBy } from 'lodash-es'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
 import { CONSTANTS } from '../constants'
 import type { TokenDetailed } from '../types'
-import { useChainId } from './useChainId'
+import { useChainId } from './useBlockState'
 import { useConstant } from './useConstant'
 
 /**
@@ -13,7 +13,6 @@ import { useConstant } from './useConstant'
 export function useTokensDetailedMerged(...listOfTokens: TokenDetailed[][]) {
     const chainId = useChainId()
     const ETH_ADDRSS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-
     return uniqBy(
         listOfTokens.flatMap((x) => x),
         (x) => formatChecksumAddress(x.token.address),

@@ -59,9 +59,9 @@ export function getRedPacketsFromDB() {
     return database.getRedPackets()
 }
 
-export async function getRedPacketsFromChain(chainId: ChainId, from: string, startBlock: number) {
+export async function getRedPacketsFromChain(from: string, startBlock: number) {
     const url = new URL(RED_PACKET_HISTORY_URL)
-    url.searchParams.set('chainId', String(chainId))
+    url.searchParams.set('chainId', String(await getChainId()))
     url.searchParams.set('from', from)
     url.searchParams.set('startBlock', String(startBlock))
     url.searchParams.set('endBlock', '9'.repeat(18))

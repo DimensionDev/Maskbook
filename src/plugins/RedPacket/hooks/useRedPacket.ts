@@ -1,12 +1,12 @@
+import { useAsync } from 'react-use'
 import { ValueRef } from '@holoflows/kit/es'
 import Services from '../../../extension/service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { RedPacketRecord } from '../types'
 import { RedPacketArrayComparer } from '../helpers'
-import { useChainId } from '../../../web3/hooks/useChainId'
+import { useChainId } from '../../../web3/hooks/useBlockState'
 import { resolveChainId } from '../../../web3/pipes'
-import { useBlockNumberOnce } from '../../../web3/hooks/useBlockNumber'
-import { useAsync } from 'react-use'
+import { useBlockNumberOnce } from '../../../web3/hooks/useBlockState'
 import { RED_PACKET_HISTROY_MAX_BLOCK_SIZE } from '../constants'
 
 //#region tracking red packets in the DB
@@ -29,7 +29,6 @@ export function useRedPacketsFromDB() {
 }
 
 export function useRedPacketsFromChain(from: string) {
-    const chainId = useChainId()
     const blockNumber = useBlockNumberOnce()
     return useAsync(
         async () =>
@@ -37,11 +36,10 @@ export function useRedPacketsFromChain(from: string) {
                 ? Services.Plugin.invokePlugin(
                       'maskbook.red_packet',
                       'getRedPacketsFromChain',
-                      chainId,
                       from,
                       blockNumber - RED_PACKET_HISTROY_MAX_BLOCK_SIZE,
                   )
                 : [],
-        [blockNumber, chainId, from],
+        [blockNumber, from],
     )
 }

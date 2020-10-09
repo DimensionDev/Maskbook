@@ -24,7 +24,7 @@ import {
     useTwitterCloseButton,
     useTwitterDialog,
 } from '../../social-network-provider/twitter.com/utils/theme'
-import { useChainId } from '../hooks/useChainId'
+import { useChainId } from '../hooks/useBlockState'
 import { TransactionState, TransactionStateType } from '../hooks/useTransactionState'
 import { resolveTransactionLinkOnEtherscan } from '../pipes'
 

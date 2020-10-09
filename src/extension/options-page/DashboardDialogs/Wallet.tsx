@@ -39,7 +39,7 @@ import { DashboardRoute } from '../Route'
 import { sleep } from '../../../utils/utils'
 import { QRCode } from '../../../components/shared/qrcode'
 import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
-import { useChainId } from '../../../web3/hooks/useChainId'
+import { useChainId } from '../../../web3/hooks/useBlockState'
 import { Token, EthereumTokenType } from '../../../web3/types'
 import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
@@ -761,8 +761,10 @@ export function DashboardWalletHistoryDialog(
 //#region red packet detail dialog
 const useRedPacketDetailStyles = makeStyles((theme: Theme) =>
     createStyles({
-        openBy: {
-            margin: theme.spacing(2, 0, 0.5),
+        sayThanks: {
+            display: 'block',
+            width: 200,
+            margin: `${theme.spacing(2)} auto`,
         },
         link: {
             display: 'block',
@@ -816,11 +818,8 @@ export function DashboardWalletRedPacketDetailDialog(props: WrappedDialogProps<R
                 content={
                     <>
                         <RedPacketInPost payload={payload} />
-                        {redPacket?.from && (
-                            <ActionButton
-                                onClick={sayThanks}
-                                style={{ display: 'block', margin: 'auto', width: 200 }}
-                                variant="contained">
+                        {redPacket?.from && !isSameAddress(redPacket.payload.sender.address, account) && (
+                            <ActionButton className={classes.sayThanks} onClick={sayThanks} variant="contained">
                                 Say Thanks
                             </ActionButton>
                         )}

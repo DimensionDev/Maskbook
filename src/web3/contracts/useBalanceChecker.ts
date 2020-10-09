@@ -7,5 +7,5 @@ import BalanceCheckerABI from '../../contracts/balance-checker/BalanceChecker.js
 
 export function useBalanceCheckerContract() {
     const address = useConstant(CONSTANTS, 'BALANCE_CHECKER_ADDRESS')
-    return useContract<BalanceChecker>(address, BalanceCheckerABI as AbiItem[]) as BalanceChecker
+    return useContract<BalanceChecker>(address, BalanceCheckerABI as AbiItem[])
 }
