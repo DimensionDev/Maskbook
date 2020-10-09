@@ -9,15 +9,15 @@ import {
     TextField,
     Box,
     IconButton,
+    Paper,
 } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
-import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import type { MaskbookMessages } from '../../utils/messages'
 import { DialogDismissIconUI } from './DialogDismissIcon'
 import { Image } from '../shared/Image'
+import { DraggableDiv } from '../shared/DraggableDiv'
 
 export interface AutoPasteFailedDialogProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    open: boolean
     onClose: () => void
     data: MaskbookMessages['autoPasteFailed']
 }
@@ -28,35 +28,44 @@ const useStyles = makeStyles({
 export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const { onClose } = props
+    const { onClose, data } = props
 
     return (
-        <ShadowRootDialog disableEnforceFocus onClose={onClose} open={props.open} scroll="paper" disableAutoFocus>
-            <DialogTitle>
-                <IconButton size="small" onClick={props.onClose}>
-                    <DialogDismissIconUI />
-                </IconButton>
-                <span className={classes.title}>{t('auto_paste_failed_dialog_title')}</span>
-            </DialogTitle>
-            <DialogContent>
-                <DialogContentText>{t('auto_paste_failed_dialog_content')}</DialogContentText>
-                {props.data.text ? (
-                    <TextField
-                        multiline
-                        fullWidth
-                        variant="outlined"
-                        value={props.data.text}
-                        InputProps={{ readOnly: true }}
-                    />
-                ) : null}
-                <Box marginBottom={1}></Box>
-                <div style={{ textAlign: 'center' }}>
-                    {props.data.image ? <Image src={props.data.image} width={360} height={260}></Image> : null}
-                </div>
-            </DialogContent>
-            {/* To leave some bottom padding */}
-            <DialogActions></DialogActions>
-        </ShadowRootDialog>
+        <DraggableDiv>
+            <Paper>
+                <nav>
+                    <DialogTitle>
+                        <IconButton size="small" onClick={onClose}>
+                            <DialogDismissIconUI />
+                        </IconButton>
+                        <span className={classes.title}>{t('auto_paste_failed_dialog_title')}</span>
+                    </DialogTitle>
+                </nav>
+                <DialogContent>
+                    <DialogContentText>{t('auto_paste_failed_dialog_content')}</DialogContentText>
+                    {props.data.text ? (
+                        <TextField
+                            multiline
+                            fullWidth
+                            variant="outlined"
+                            value={data.text}
+                            InputProps={{ readOnly: true }}
+                        />
+                    ) : null}
+                    <Box marginBottom={1}></Box>
+                    <div style={{ textAlign: 'center' }}>
+                        {data.image ? (
+                            // Set component to undefined if the following bug has been resolved:
+                            // https://bugs.chromium.org/p/chromium/issues/detail?id=1136804
+                            // https://bugzilla.mozilla.org/show_bug.cgi?id=1670200
+                            <Image component="canvas" src={data.image} width={360} height={260}></Image>
+                        ) : null}
+                    </div>
+                </DialogContent>
+                {/* To leave some bottom padding */}
+                <DialogActions></DialogActions>
+            </Paper>
+        </DraggableDiv>
     )
 }
 export function useAutoPasteFailedDialog() {
@@ -67,6 +76,6 @@ export function useAutoPasteFailedDialog() {
             setData(data)
             setOpen(true)
         },
-        <AutoPasteFailedDialog onClose={() => setOpen(false)} open={open} data={data} />,
+        open ? <AutoPasteFailedDialog onClose={() => setOpen(false)} data={data} /> : null,
     ] as const
 }
