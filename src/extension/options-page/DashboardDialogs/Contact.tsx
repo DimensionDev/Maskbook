@@ -80,7 +80,7 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactProps & 
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
                 icon={<Avatar className={classes.avatar} person={contact} />}
-                primary={contact.nickname || '<Unnamed>'}
+                primary={contact.nickname || contact.identifier.userId}
                 content={
                     <form>
                         <TextField
