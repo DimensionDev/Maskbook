@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
                 display: 'none',
             },
         },
+        placeholder: {
+            textAlign: 'center',
+        },
     }),
 )
 
@@ -41,7 +44,13 @@ function RedPacketList(props: RedPacketListProps) {
     return (
         <div className={classes.root}>
             {loading ? (
-                <Typography color="textSecondary">Loading...</Typography>
+                <Typography className={classes.placeholder} color="textSecondary">
+                    Loading...
+                </Typography>
+            ) : payloads.length === 0 ? (
+                <Typography className={classes.placeholder} color="textSecondary">
+                    No Data
+                </Typography>
             ) : (
                 <FixedSizeList
                     className={classes.list}

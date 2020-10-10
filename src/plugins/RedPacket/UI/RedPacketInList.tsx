@@ -6,6 +6,7 @@ import { resolveElapsedTime } from '../pipes'
 import { useTokenComputed } from '../hooks/useTokenComputed'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
+import { Skeleton } from '@material-ui/lab'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -49,13 +50,18 @@ export function RedPacketInList(props: RedPacketInListProps) {
 
     const payload = payloads[index]
 
-    // TODO:
-    // loading skeleton
-    if (!token || !payload) return null
-
+    if (!token || !payload)
+        return (
+            <ListItem style={style}>
+                <ListItemText>
+                    <Skeleton animation="wave" variant="rect" width="30%" height={10} />
+                    <Skeleton animation="wave" variant="rect" width="70%" height={10} style={{ marginTop: 8 }} />
+                </ListItemText>
+            </ListItem>
+        )
     return (
         <ListItem button style={style} onClick={() => onClick?.(payload)}>
-            <ListItemText classes={{}}>
+            <ListItemText>
                 <Typography className={classes.primary} color="inherit" variant="body1">
                     <span className={classes.message}>{payload.sender.message}</span>
                     <span className={classes.time}>{resolveElapsedTime(payload.creation_time)}</span>
