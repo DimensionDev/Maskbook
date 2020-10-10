@@ -1,6 +1,5 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { RedPacketProps } from '../plugins/RedPacket/UI/RedPacket'
 import { RedPacketRecord, RedPacketStatus, RedPacketJSONPayload } from '../plugins/RedPacket/types'
 import { number, text, select } from '@storybook/addon-knobs'
 import { Typography, Paper } from '@material-ui/core'
@@ -8,6 +7,7 @@ import { makeTypedMessageText } from '../protocols/typed-message'
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
 import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
 import { EthereumTokenType } from '../web3/types'
+import { RedPacket } from '../plugins/RedPacket/UI/RedPacket'
 
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacket', () => {
@@ -25,10 +25,10 @@ storiesOf('Plugin: Red Packets', module)
         return (
             <>
                 <Typography>ETH</Typography>
-                <RedPacket payload={payload} />
+                <RedPacket from="" payload={payload} />
                 <hr />
                 <Typography>ERC20</Typography>
-                <RedPacket payload={payload} />
+                <RedPacket from="" payload={payload} />
             </>
         )
     })
@@ -84,9 +84,8 @@ function createRecord(opts: {
     token?: NonNullable<RedPacketRecord['payload']>['token']
 }): RedPacketRecord {
     const x: RedPacketRecord = {
-        id: 'id',
+        id: 'rpid',
         from: 'https://g.cn/',
-        rpid: 'rpid',
         payload: { token: opts.token } as RedPacketJSONPayload,
     }
     // @ts-ignore
