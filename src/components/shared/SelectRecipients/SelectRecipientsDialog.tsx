@@ -1,4 +1,5 @@
 import * as React from 'react'
+import Fuse from 'fuse.js'
 import {
     List,
     ListItem,
@@ -61,18 +62,17 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const [, inputRef] = useCapturedInput((newText) => {
         setSearch(newText)
     }, [])
-    const searchFilter = React.useCallback(
-        (item: Profile) => {
-            if (search === '') return true
-            return (
-                !!item.identifier.userId.toLowerCase().match(search.toLowerCase()) ||
-                !!item.linkedPersona?.fingerprint.toLowerCase().match(search.toLowerCase()) ||
-                !!(item.nickname || '').toLowerCase().match(search.toLowerCase())
-            )
-        },
-        [search],
-    )
-    const itemsAfterSearch = items.filter(searchFilter)
+    const itemsAfterSearch = React.useMemo(() => {
+        const fuse = new Fuse(items, {
+            keys: ['identifier.userId', 'linkedPersona.fingerprint', 'nickname'],
+            isCaseSensitive: false,
+            threshold: 0,
+        })
+
+        return search === '' ? items : fuse.search(search).map((item) => item.item)
+    }, [search, items])
+    const LIST_ITEM_HEIGHT = 56
+
     return (
         <ShadowRootDialog
             className={classes.dialog}
@@ -108,7 +108,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 placeholder={t('search_box_placeholder')}
             />
             <DialogContent className={classes.content}>
-                <List dense>
+                <List style={{ height: items.length * LIST_ITEM_HEIGHT }} dense>
                     {itemsAfterSearch.length === 0 ? (
                         <ListItem>
                             <ListItemText primary={t('no_search_result')} />
