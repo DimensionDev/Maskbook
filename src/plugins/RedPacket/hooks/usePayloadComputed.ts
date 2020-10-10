@@ -84,7 +84,7 @@ export function usePayloadsComputed(type: 'create' | 'claim' | 'refund', records
             })
             .sort((a, z) => z.creation_time - a.creation_time)
 
-    // for claimed red packets fetch them from the DB
+    // for claimed red packets must be found in the DB
     // because it's too hard to fetch the red packet info which created by others
     const lookUpSet = new Set(chainRecords.map((x) => x.id))
     return dbRecords

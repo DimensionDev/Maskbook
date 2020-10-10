@@ -131,11 +131,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     // balance
     const { value: tokenBalance = '0', error, loading: loadingTokenBalance } = useTokenBalance(token)
-
-    if (error) {
-        console.log('DEBUG: token balance error')
-        console.log(error)
-    }
     //#endregion
 
     //#region approve ERC20

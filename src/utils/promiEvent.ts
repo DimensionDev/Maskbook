@@ -159,9 +159,6 @@ export function iteratorToPromiEvent(
                         PE.emit(TransactionEventType.CONFIRMATION, stage_.no, stage_.receipt)
                         break
                     default:
-                        // skip unknown stage
-                        console.log('DEBUG: unknown stage')
-                        console.log(stage)
                         break
                 }
             }

@@ -94,13 +94,6 @@ export function RedPacketInboundList(props: RedPacketInboundListProps) {
     const { from, onSelect } = props
     const { value: records = [], loading } = useRedPacketsFromChain(from)
     const payloads = usePayloadsComputed('claim', records)
-
-    console.log('DEBUG: RedPacketInboundList')
-    console.log({
-        records,
-        payloads,
-    })
-
     return <RedPacketList from={from} loading={loading} payloads={payloads} onSelect={onSelect} />
 }
 //#endregion
@@ -115,13 +108,6 @@ export function RedPacketOutboundList(props: RedPacketOutboundListProps) {
     const { from, onSelect } = props
     const { value: records = [], loading } = useRedPacketsFromChain(from)
     const payloads = usePayloadsComputed('create', records)
-
-    console.log('DEBUG: RedPacketOutboundList')
-    console.log({
-        records,
-        payloads,
-    })
-
     return <RedPacketList from={from} loading={loading} payloads={payloads} onSelect={onSelect} />
 }
 //#endregion

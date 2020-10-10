@@ -183,13 +183,6 @@ export function RedPacket(props: RedPacketProps) {
             </Card>
         )
 
-    console.log('DEBUG: Red Packet')
-    console.log({
-        payload,
-        availability,
-        token,
-    })
-
     return (
         <>
             <Card

@@ -807,12 +807,6 @@ export function DashboardWalletRedPacketDetailDialog(
         }
     }, [redPacket])
 
-    console.log('DEBUG: red packet detail dialog')
-    console.log({
-        account,
-        redPacket,
-    })
-
     return (
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
