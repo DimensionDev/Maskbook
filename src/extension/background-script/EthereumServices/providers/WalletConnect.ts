@@ -25,56 +25,68 @@ export async function createConnector() {
     return connector
 }
 
+/**
+ * Request accounts from WalletConnect
+ * @param timeout
+ */
 export async function requestAccounts(timeout: number = 3 * 60) {
     const connector = await createConnector()
     if (connector.accounts.length) return connector.accounts[0]
     return new Promise(async (resolve, reject) => {
         const onConnect = async () => {
             clearTimeout(timeoutTimer)
-            mimicEventRemover(connector, [onConnect])
+            removeEventListener_mimic(connector, [onConnect])
             await updateWalletInDB(connector.accounts[0], false)
             resolve(connector.accounts[0])
         }
         const timeoutTimer = setTimeout(() => {
-            mimicEventRemover(connector, [onConnect])
+            removeEventListener_mimic(connector, [onConnect])
             reject(new Error('timeout'))
         }, timeout)
         connector.on('connect', onConnect)
         connector.on('session_update', onConnect)
         connector.on('error', (err) => {
             clearTimeout(timeoutTimer)
-            mimicEventRemover(connector, [onConnect])
+            removeEventListener_mimic(connector, [onConnect])
             reject(err)
         })
     })
 }
 
-const onUpdate = () => {
-    return async (
-        err: Error | null,
-        payload: {
-            params: {
-                chainId: number
-                accounts: string[]
-            }[]
-        },
-    ) => {
-        if (err) return
-        const { chainId, accounts } = payload.params[0]
+const onUpdate = async (
+    error: Error | null,
+    payload: {
+        params: {
+            chainId: number
+            accounts: string[]
+        }[]
+    },
+) => {
+    console.log('DEBUG: WC - on update')
+    console.log({
+        error,
+        payload,
+    })
 
-        // update chain id settings
-        currentWalletConnectChainIdSettings.value = chainId
+    if (error) return
+    const { chainId, accounts } = payload.params[0]
 
-        // update wallet in the DB
-        await updateWalletInDB(accounts[0], false)
-    }
+    // update chain id settings
+    currentWalletConnectChainIdSettings.value = chainId
+
+    // update wallet in the DB
+    await updateWalletInDB(accounts[0], false)
 }
-const onDisconnect = (err: Error | null) => {
-    if (connector) mimicEventRemover(connector)
+
+const onDisconnect = (error: Error | null) => {
+    console.log('DEBUG: WC - on disconnect')
+    console.log(error)
+
+    if (connector) removeEventListener_mimic(connector)
     connector = null
 }
 
-function mimicEventRemover(connector: WalletConnect, callbacks: Function[] = [onUpdate, onDisconnect]) {
+function removeEventListener_mimic(connector: WalletConnect, callbacks: Function[] = [onUpdate, onDisconnect]) {
     try {
         // FIXME:
         // there is no event remover API
@@ -86,7 +98,7 @@ function mimicEventRemover(connector: WalletConnect, callbacks: Function[] = [on
 
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {
     // validate address
-    if (!!EthereumAddress.isValid(address)) throw new Error('Cannot found account or invalid account')
+    if (!EthereumAddress.isValid(address)) throw new Error('Cannot found account or invalid account')
 
     // update wallet in the DB
     await updateExoticWalletFromSource(

@@ -26,7 +26,23 @@ type SelectProviderDialogEvent =
           address?: string
       }
 
+type WalletConnectQRCodeEvent =
+    | {
+          open: true
+          tabId?: string
+          uri: string
+      }
+    | {
+          open: false
+          tabId?: string
+      }
+
 export interface MaskbookWalletMessages {
+    /**
+     * WalletConnect QR Code dialog
+     */
+    walletConnectQRCodeUpdated: WalletConnectQRCodeEvent
+
     /**
      * Select provider dialog
      */
