@@ -3,7 +3,6 @@ import type { ERC20TokenRecord } from '../Wallet/database/types'
 import type { ChainId, EthereumTokenType } from '../../web3/types'
 
 export enum GitcoinGrantFailedReason {
-    NoPermission,
     InvalidURL,
     FetchFailed,
 }
@@ -44,14 +43,6 @@ export interface GitcoinDonationRecord {
     erc20_approve_value?: BigNumber
     /** ERC20 approve transaction hash */
     erc20_approve_transaction_hash?: string
-}
-
-export interface GitcoinDonationRecordInDatabase
-    extends Omit<GitcoinDonationRecord, 'donation_total' | 'donation_value' | 'tip_value' | 'erc20_approve_value'> {
-    donation_total: string | bigint
-    donation_value: string | bigint
-    tip_value?: string | bigint
-    erc20_approve_value?: string | bigint
 }
 
 export interface DonateResult {

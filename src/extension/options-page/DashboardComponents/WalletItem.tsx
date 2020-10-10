@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) =>
                 width: '4px',
                 backgroundColor: theme.palette.primary.main,
             },
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 opacity: 'unset',
                 padding: theme.spacing(2, 6, 2, 2),
                 '&::after': {
@@ -72,14 +72,14 @@ const useStyles = makeStyles((theme) =>
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 fontSize: 20,
             },
         },
         label: {
             color: theme.palette.text.secondary,
             fontWeight: 500,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 display: 'none',
             },
         },

@@ -14,7 +14,8 @@ export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSc
         OnlyRunInContext(['background', 'debugging'], 'Database')
         if (db) return db
         db = await opener()
-        db.addEventListener('close', (e) => (db = undefined))
+        db.addEventListener('close', () => (db = undefined))
+        db.addEventListener('error', () => (db = undefined))
         return db
     }
 }

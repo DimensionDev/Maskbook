@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) =>
         title: {
             margin: theme.spacing(3, 0),
             color: theme.palette.text.secondary,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 margin: theme.spacing(2, 0),
             },
         },
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) =>
         },
         list: {
             flex: 1,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 marginLeft: theme.spacing(-2),
                 marginRight: theme.spacing(-2),
             },
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-const fetcher = (key: number, size: number, search: string, offset?: Profile) =>
+const fetcher = (search: string, offset?: Profile) =>
     Services.Identity.queryProfilePaged(
         {
             // undefined will fetch the first page
@@ -81,11 +81,9 @@ export default function DashboardContactsRouter() {
         [search, searchUI, startSearchTransition],
     )
     const swr = useSWRInfinite<Profile[]>(
-        (size, previosuPageData) => [
-            search ? `profile:${search}:${size}` : `profile:${size}`,
-            size,
+        (_size, previousPageData) => [
             search || undefined, // undefined means fetch from start
-            last(previosuPageData),
+            last(previousPageData),
         ],
         fetcher,
     )

@@ -101,15 +101,15 @@ async function findAllUnusedKeys() {
 
 async function findAllUnsyncedLocales(locales = _.without(_locales, 'en')) {
     const keys = _.keys(await readMessages('en'))
-    const names: string[] = []
+    const record: Record<string, string[]> = {}
     for (const name of locales) {
         const nextKeys = _.keys(await readMessages(name))
         const diffKeys = _.difference(keys, nextKeys)
         if (diffKeys.length) {
-            names.push(name)
+            record[name] = diffKeys
         }
     }
-    return names
+    return record
 }
 
 async function removeAllUnusedKeys(keys: string[], locales = _locales) {
@@ -142,10 +142,37 @@ async function syncKey(locales = _.without(_locales, 'en')) {
     }
 }
 
+async function diagnosis() {
+    const unusedKeys = await findAllUnusedKeys()
+    if (unusedKeys.length) {
+        console.log('::warning::Run `yarn locale-kit --remove-unused-keys` to solve this problem')
+        for (const locale of _locales) {
+            const filePath = `src/_locales/${locale}/messages.json`
+            const messages = _.keys(await readMessages(locale))
+            for (const key of unusedKeys) {
+                const index = messages.indexOf(key)
+                if (index !== -1) {
+                    console.log(`::warning file=${filePath},line=${index + 2}::Please remove the line`)
+                }
+            }
+        }
+    }
+    const unsyncedLocales = await findAllUnsyncedLocales()
+    if (!_.isEmpty(unsyncedLocales)) {
+        console.log('::warning::Run `yarn locale-kit --sync-key` to solve this problem')
+        for (const [locale, names] of _.toPairs(unsyncedLocales)) {
+            const filePath = `src/_locales/${locale}/messages.json`
+            for (const name of names) {
+                console.log(`::warning file=${filePath}::The ${JSON.stringify(name)} is unsynced`)
+            }
+        }
+    }
+}
+
 async function main() {
     const unusedKeys = await findAllUnusedKeys()
     console.error('Scanned', unusedKeys.length, 'unused keys')
-    console.error('Unsynced', await findAllUnsyncedLocales(), 'locales')
+    console.error('Unsynced', _.keys(await findAllUnsyncedLocales()), 'locales')
     if (process.argv.includes('--remove-unused-keys')) {
         await removeAllUnusedKeys(unusedKeys)
         console.log('Unused keys removed')
@@ -156,6 +183,10 @@ async function main() {
     }
 }
 
-main().then(() => {
-    run(undefined, 'git', 'add', 'src/_locales')
-})
+if (process.env.CI) {
+    diagnosis()
+} else {
+    main().then(() => {
+        run(undefined, 'git', 'add', 'src/_locales')
+    })
+}

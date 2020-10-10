@@ -15,6 +15,7 @@ globalThis.document = {
     documentElement: {
         onmouseenter() {},
     },
+    readyState: 'loading',
 }
 globalThis.CSSStyleSheet = { name: 'CSSStyleSheet' }
 globalThis.ShadowRoot = class {}
@@ -22,7 +23,6 @@ globalThis.Event = class {
     get target() {}
 }
 globalThis.Worker = class {}
-globalThis.webpackEnv = {}
 globalThis.sessionStorage = {}
 
 const { join } = require('path')

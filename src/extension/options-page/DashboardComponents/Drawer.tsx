@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         color: 'white',
         overflow: 'visible',
         position: 'relative',
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             color: theme.palette.text.primary,
             width: '100%',
         },
@@ -43,13 +43,13 @@ const useStyles = makeStyles((theme) => ({
         borderLeft: 'solid 5px var(--drawerBody)',
         paddingTop: 16,
         paddingBottom: 16,
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             borderLeft: 'none',
             padding: theme.spacing(3, 0),
         },
     },
     drawerItemIcon: {
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             color: theme.palette.type === 'light' ? theme.palette.primary.main : theme.palette.text.primary,
         },
     },
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 500,
     },
     drawerItemTextPrimary: {
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             fontSize: 16,
         },
     },

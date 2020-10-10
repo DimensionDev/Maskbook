@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) =>
                     ? 'none'
                     : '0px 2px 4px rgba(96, 97, 112, 0.16), 0px 0px 1px rgba(40, 41, 61, 0.04)',
 
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 width: '100%',
                 marginRight: 0,
             },

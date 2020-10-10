@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => {
             backgroundImage: `url(${getUrl(
                 theme.palette.type === 'light' ? 'dashboard-placeholder.png' : 'dashboard-placeholder-dark.png',
             )})`,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 backgroundSize: '100px 70px',
             },
         },
@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) => {
             alignItems: 'center',
             height: 129,
             padding: '40px 24px 40px 34px',
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 height: 'auto',
                 padding: theme.spacing(1, 2),
                 backgroundColor: theme.palette.type === 'light' ? theme.palette.primary.main : 'transparent',
@@ -103,7 +103,7 @@ const useStyles = makeStyles((theme) => {
             fontWeight: 500,
             fontSize: 40,
             lineHeight: 1.2,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 color: theme.palette.type === 'light' ? theme.palette.common.white : theme.palette.text.primary,
                 left: 0,
                 right: 0,
@@ -140,7 +140,7 @@ const useStyles = makeStyles((theme) => {
                 '&::-webkit-scrollbar': {
                     display: 'none',
                 },
-                [theme.breakpoints.down('xs')]: {
+                [theme.breakpoints.down('sm')]: {
                     paddingLeft: theme.spacing(2),
                     paddingRight: theme.spacing(2),
                 },
@@ -148,18 +148,18 @@ const useStyles = makeStyles((theme) => {
         },
         divider: {
             borderColor: theme.palette.divider,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 display: theme.palette.type === 'light' ? 'none' : 'block',
             },
         },
         dividerPadded: {
             padding: '0 24px 0 34px',
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 padding: theme.spacing(0, 2),
             },
         },
         dividerCompact: {
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 padding: '0 !important',
             },
         },

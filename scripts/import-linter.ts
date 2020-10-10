@@ -29,10 +29,6 @@ function getChecker(): (path: string) => string | null {
             return `@material-ui appears in the import chain!
 To write a cross context file, use safeMUI() inside the function to import them conditionally.
 `
-        } else if (x === 'react') {
-            return `React appears in the import chain!
-To write a cross context file, use safeReact() inside the function to import them conditionally.
-`
         }
         return null
     }
@@ -48,7 +44,7 @@ function checkReferenceRecursive(
 ): boolean {
     if (checkedSourceFiles.has(file)) return hasDiagnostics
     checkedSourceFiles.add(file)
-    console.log('Checking ', file.getFilePath())
+    console.log('Checking', file.getFilePath())
     const ls = project.getLanguageService()
 
     const esModuleStyleImport: string[] = []
@@ -124,7 +120,7 @@ function checkReferenceRecursive(
 
         const nextRefChain: string[] = referenceChain.concat([sf ? sf.getFilePath() : path])
         if (diag) {
-            console.error(`${diag}
+            console.error(`::warning::${diag}
 Import chain:
 ${nextRefChain.map((x) => '  => ' + x).join('\n')}
 `)

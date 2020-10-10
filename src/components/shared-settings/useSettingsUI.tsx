@@ -90,7 +90,7 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
                 />
             )
         default:
-            return <SharedListItem {...props} primary={'Not implemented for type' + typeof currentValue} />
+            return <SharedListItem {...props} primary={'Not implemented for type ' + typeof currentValue} />
     }
 }
 

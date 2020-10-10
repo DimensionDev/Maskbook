@@ -30,14 +30,15 @@ export const Flags = {
     trader_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
     trader_all_api_cached_enabled: process.env.NODE_ENV === 'development',
     trader_uniswap_auto_refresh_enabled: true,
+    poll_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
     file_service_create_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
     matrix_based_service_enabled: process.env.NODE_ENV === 'development',
+    wallet_connect_support_enabled: process.env.architecture === 'web',
     metamask_support_enabled: process.env.architecture === 'web',
     //#endregion
 
     //#region Functionality missing / broken
     must_not_start_web_worker: process.env.NODE_ENV === 'test' || process.env.STORYBOOK,
-    no_auto_verify_bio: process.env.architecture === 'app',
     /**
      * - iOS: WebExtension polyfill didn't implemented the dynamic permission API
      * - E2E: Cannot click the "allow" button (maybe a Puppeteer bug) in the Puppeteer (maybe a bug)

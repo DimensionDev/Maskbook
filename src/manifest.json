@@ -1,6 +1,6 @@
 {
     "name": "Maskbook",
-    "version": "1.16.5",
+    "version": "1.17.0",
     "manifest_version": 2,
     "permissions": ["storage", "downloads", "webNavigation", "activeTab"],
     "optional_permissions": ["<all_urls>", "notifications"],
@@ -9,5 +9,6 @@
     "icons": { "16": "16x16.png", "48": "48x48.png", "128": "128x128.png", "256": "256x256.png" },
     "browser_action": { "default_popup": "popup.html" },
     "homepage_url": "https://maskbook.com",
-    "description": "Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt."
+    "description": "The portal to the new & open Internet. Send encrypted message and decentralized Apps right on top of social networks.",
+    "web_accessible_resources": ["js/*"]
 }

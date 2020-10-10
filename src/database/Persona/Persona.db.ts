@@ -477,7 +477,6 @@ export async function attachProfileDB(
 
     await updatePersonaDB(persona, { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' }, t)
     await updateProfileDB(profile, t)
-    MessageCenter.emit('identityUpdated', undefined)
 }
 
 /**

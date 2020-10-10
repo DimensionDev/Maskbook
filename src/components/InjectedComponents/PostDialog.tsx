@@ -46,9 +46,10 @@ import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
-import { RedPacketMetadataReader } from '../../plugins/RedPacket/utils'
+import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/plugin'
 import { Flags } from '../../utils/flags'
+import PollsDialog from '../../plugins/Polls/UI/PollsDialog'
 
 const defaultTheme = {}
 
@@ -122,6 +123,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     )
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
     const [fileServiceDialogOpen, setFileServiceDialogOpen] = useState(false)
+    const [pollsDialogOpen, setPollsDialogOpen] = useState(false)
 
     if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
     const metadataBadge = [...PluginUI].flatMap((plugin) => {
@@ -222,6 +224,14 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     }}
                                 />
                             )}
+                            <ClickableChip
+                                ChipProps={{
+                                    label: '🗳️ Poll',
+                                    onClick: () => {
+                                        setPollsDialogOpen(true)
+                                    },
+                                }}
+                            />
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
@@ -236,6 +246,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 <ClickableChip
                                     checked={props.shareToEveryone}
                                     ChipProps={{
+                                        'data-testid': '_everyone_group_',
                                         disabled: props.onlyMyself,
                                         label: t('post_dialog__select_recipients_share_to_everyone'),
                                         onClick: () => props.onShareToEveryoneChanged(!props.shareToEveryone),
@@ -244,6 +255,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 <ClickableChip
                                     checked={props.onlyMyself}
                                     ChipProps={{
+                                        'data-testid': '_only_myself_group_',
                                         disabled: props.shareToEveryone,
                                         label: t('post_dialog__select_recipients_only_myself'),
                                         onClick: () => props.onOnlyMyselfChanged(!props.onlyMyself),
@@ -299,6 +311,15 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     open={props.open && fileServiceDialogOpen}
                     onConfirm={() => setFileServiceDialogOpen(false)}
                     onDecline={() => setFileServiceDialogOpen(false)}
+                    DialogProps={props.DialogProps}
+                />
+            )}
+            {!process.env.STORYBOOK && (
+                <PollsDialog
+                    classes={classes}
+                    open={props.open && pollsDialogOpen}
+                    onConfirm={() => setPollsDialogOpen(false)}
+                    onDecline={() => setPollsDialogOpen(false)}
                     DialogProps={props.DialogProps}
                 />
             )}

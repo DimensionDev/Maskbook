@@ -24,7 +24,7 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { Token, EthereumTokenType, EthereumNetwork } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useChainId'
+import { useChainId } from '../../../web3/hooks/useChainState'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { createEetherToken } from '../../../web3/helpers'
@@ -64,12 +64,12 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface CreateRedPacketProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RedPacketFormProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     onCreate?(payload: RedPacketJSONPayload): void
     SelectMenuProps?: Partial<MenuProps>
 }
 
-export function CreateRedPacketForm(props: CreateRedPacketProps) {
+export function RedPacketForm(props: RedPacketFormProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -117,9 +117,9 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
             const shares_ = ev.currentTarget.value.replace(/[,\.]/g, '')
             if (shares_ === '') setShares('')
             else if (/^[1-9]+\d*$/.test(shares_)) {
-                const parsed = Number.parseInt(shares_)
+                const parsed = Number.parseInt(shares_, 10)
                 if (parsed >= RED_PACKET_MIN_SHARES && parsed <= RED_PACKET_MAX_SHARES)
-                    setShares(Number.parseInt(shares_))
+                    setShares(Number.parseInt(shares_, 10))
             }
         },
         [RED_PACKET_MIN_SHARES, RED_PACKET_MAX_SHARES],
@@ -131,11 +131,6 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
 
     // balance
     const { value: tokenBalance = '0', error, loading: loadingTokenBalance } = useTokenBalance(token)
-
-    if (error) {
-        console.log('DEBUG: token balance error')
-        console.log(error)
-    }
     //#endregion
 
     //#region approve ERC20
@@ -198,7 +193,7 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
             },
             is_random: createSettings.isRandom,
             total: CreationSuccess.total,
-            creation_time: Number.parseInt(CreationSuccess.creation_time),
+            creation_time: Number.parseInt(CreationSuccess.creation_time, 10) * 1000,
             duration: createSettings.duration,
             network: resolveChainName(chainId) as EthereumNetwork,
             token_type: createSettings.token.type,
@@ -316,7 +311,7 @@ export function CreateRedPacketForm(props: CreateRedPacketProps) {
             <TransactionDialog
                 state={createState}
                 summary={`Creating red packet with ${formatBalance(
-                    new BigNumber(amount),
+                    new BigNumber(totalAmount),
                     token.decimals,
                     token.decimals,
                 )} ${token.symbol}`}

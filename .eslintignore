@@ -3,8 +3,8 @@ package.json
 package-lock.json
 build/
 dist/
-public/polyfill
 scripts/
 src/polyfill
 e2e
 src/plugins/Wallet/contracts
+webpack.config.ts

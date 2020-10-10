@@ -10,6 +10,7 @@ import { nonFunctionalWeb3 } from '../web3'
 import { iteratorToPromiEvent, Stage, StageType } from '../../utils/promiEvent'
 import type { EstimateGasOptions } from '../../contracts/types'
 import { decodeOutputString, decodeEvents } from '../helpers'
+import { TransactionEventType } from '../types'
 
 /**
  * Create a contract which will forward its all transactions to the
@@ -20,7 +21,7 @@ import { decodeOutputString, decodeEvents } from '../helpers'
 export function useContract<T extends Contract>(address: string, ABI: AbiItem[]) {
     const account = useAccount()
     return useMemo(() => {
-        // no a valid contract address
+        // not a valid contract address
         if (!EthereumAddress.isValid(address)) return null
 
         const contract = new nonFunctionalWeb3.eth.Contract(ABI, address) as T
@@ -72,7 +73,7 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                             },
                             // don't add async keyword for this method because a PromiEvent was returned
                             send(config: TransactionConfig, callback?: (error: Error | null, hash?: string) => void) {
-                                if (!account) throw new Error('cannot find account')
+                                if (!config.from && !account) throw new Error('cannot find account')
 
                                 if (process.env.NODE_ENV === 'development')
                                     console.log(
@@ -84,12 +85,15 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                         })}`,
                                     )
 
-                                const iterator = ServicesWithProgress.sendTransaction(account, {
-                                    from: account,
-                                    to: contract.options.address,
-                                    data: cached.encodeABI(),
-                                    ...config,
-                                })
+                                const iterator = ServicesWithProgress.sendTransaction(
+                                    (config.from ?? account) as string,
+                                    {
+                                        from: account,
+                                        to: contract.options.address,
+                                        data: cached.encodeABI(),
+                                        ...config,
+                                    },
+                                )
 
                                 const processor = (stage: Stage) => {
                                     switch (stage.type) {
@@ -118,8 +122,8 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
 
                                 // feedback by callback
                                 return promiEvent
-                                    .on('transactionHash', (hash) => callback(null, hash))
-                                    .on('error', (error) => callback(error))
+                                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => callback(null, hash))
+                                    .on(TransactionEventType.ERROR, callback)
                             },
                             async estimateGas(
                                 config?: EstimateGasOptions,

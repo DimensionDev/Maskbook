@@ -83,10 +83,10 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                 await snsFeedPage.waitFor(500)
 
                 // designates recipients
-                const defaultGroupChip = await snsFeedPage.waitForFunction(
-                    `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="_default_friends_group_"]')`,
+                const everyoneGroupChip = await snsFeedPage.waitForFunction(
+                    `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="_everyone_group_"]')`,
                 )
-                await (defaultGroupChip as any).click()
+                await (everyoneGroupChip as any).click()
                 await snsFeedPage.waitFor(500)
 
                 // trun on/off image-based payload switch

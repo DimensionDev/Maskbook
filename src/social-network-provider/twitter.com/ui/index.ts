@@ -51,7 +51,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     shouldActivate(location: Location | URL = globalThis.location) {
         return location.hostname.endsWith(twitterUrl.hostIdentifier)
     },
-    friendlyName: 'Twitter (Insider Preview)',
+    friendlyName: 'Twitter',
     requestPermission() {
         // TODO: wait for webextension-shim to support <all_urls> in permission.
         if (Flags.no_web_extension_dynamic_permission_request) return Promise.resolve(true)

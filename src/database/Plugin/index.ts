@@ -4,8 +4,6 @@ import { createDBAccess } from '../helpers/openDB'
 
 type InStore = {
     plugin_id: string
-    type: string | number
-    record_id: string | number
     value: unknown
 }
 
@@ -15,8 +13,7 @@ export interface PluginDatabase extends DBSchema {
     PluginStore: {
         value: InStore
         indexes: {
-            plugin_id: string
-            type: string | number
+            type: [string, string]
         }
         key: string
     }
@@ -24,37 +21,41 @@ export interface PluginDatabase extends DBSchema {
 //#endregion
 
 const db = createDBAccess(() => {
-    return openDB<PluginDatabase>('maskbook-plugin-data', 1, {
-        upgrade(db, oldVersion, newVersion, transaction) {
-            // Out line keys
-            const os = db.createObjectStore('PluginStore')
+    return openDB<PluginDatabase>('maskbook-plugin-data', 2, {
+        async upgrade(db, oldVersion, newVersion, transaction) {
+            if (oldVersion < 1) db.createObjectStore('PluginStore')
+            if (oldVersion < 2) {
+                const data = await transaction.objectStore('PluginStore').getAll()
+                db.deleteObjectStore('PluginStore')
+                const os = db.createObjectStore('PluginStore', { keyPath: ['plugin_id', 'value.type', 'value.id'] })
+
+                // a compound index by "rec.plugin_id" + "rec.value.type"
+                os.createIndex('type', ['plugin_id', 'value.type'])
+                for (const each of data) {
+                    if (!each.plugin_id) continue
+                    if (!pluginDataHasValidKeyPath(each.value)) continue
+                    Reflect.deleteProperty(each, 'type')
+                    Reflect.deleteProperty(each, 'record_id')
+                    await os.add(each)
+                }
+            }
         },
     })
 })
-export const createPluginDBAccess = db
-export function calculateKey(pluginID: string, data: unknown) {
-    const type = getType(data)
-    const id = getID(data)
-    return `${pluginID}/${type}/${id}`
-}
-export function toStore(plugin_id: string, data: unknown): InStore {
-    return {
-        plugin_id,
-        record_id: getID(data),
-        type: getType(data),
-        value: data,
+// cause key path error in "add" will cause transaction fail, we need to check them first
+export function pluginDataHasValidKeyPath(value: unknown): value is InStore {
+    try {
+        if (typeof value !== 'object' || value === null) return false
+        const id = Reflect.get(value, 'id')
+        const type = Reflect.get(value, 'type')
+        if (typeof id !== 'string' && typeof id !== 'number') return false
+        if (typeof type !== 'string' && typeof type !== 'number') return false
+        return true
+    } catch {
+        return false
     }
 }
-function getID(data: unknown) {
-    if (typeof data !== 'object' || data === null) throw new Error('You must store a tagged union object')
-    const id = Reflect.get(data, 'id')
-    if (typeof id !== 'number' && typeof id !== 'string') throw new Error('id must be a string or a number')
-    return id
-}
-function getType(data: unknown) {
-    if (typeof data !== 'object' || data === null) throw new Error('You must store a tagged union object')
-    const type = Reflect.get(data, 'type')
-    if (typeof type !== 'number' && typeof type !== 'string') throw new Error('type must be a string or a number')
-    if (String(type).includes('/')) throw new Error('type cannot contain "/"')
-    return type
+export const createPluginDBAccess = db
+export function toStore(plugin_id: string, value: unknown): InStore {
+    return { plugin_id, value }
 }

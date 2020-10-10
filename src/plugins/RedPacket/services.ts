@@ -1,13 +1,13 @@
 import * as jwt from 'jsonwebtoken'
-import type { RedPacketRecord, RedPacketRecordInDatabase, RedPacketJSONPayload } from './types'
+import type { RedPacketRecord, RedPacketJSONPayload, History } from './types'
 import { RED_PACKET_HISTORY_URL } from './constants'
-import { createRedPacketTransaction } from './database'
 import { PluginMessageCenter } from '../PluginMessages'
+import * as database from './database'
 import { resolveChainName } from '../../web3/pipes'
 import { getChainId } from '../../extension/background-script/EthereumService'
 import { web3 } from '../../extension/background-script/EthereumServices/web3'
 
-export async function claimByServer(
+export async function claimRedPacket(
     from: string,
     rpid: string,
     password: string,
@@ -41,45 +41,30 @@ export async function claimByServer(
     return { claim_transaction_hash: await pay.text() }
 }
 
-export async function addRedPacket(from: string, payload: RedPacketJSONPayload) {
+export async function discoverRedPacket(from: string, payload: RedPacketJSONPayload) {
     if (!payload.rpid) return
-    const t = await createRedPacketTransaction('readwrite')
-    const original = await t.getByIndex('rpid', payload.rpid)
-    if (original) return RedPacketRecordOutDB(original)
+    if (!payload.password) return
+    const record_ = await database.getRedPacket(payload.rpid)
     const record: RedPacketRecord = {
-        rpid: payload.rpid,
-        from,
-        payload,
+        id: payload.rpid,
+        from: record_?.from || from,
+        payload: record_?.payload ?? payload,
     }
-    await t.add(RedPacketRecordIntoDB(record))
-    PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
-    return record
-}
-
-export async function removeRedPacket(rpid: string) {
-    const t = await createRedPacketTransaction('readwrite')
-    // TODO
+    database.addRedPacket(record)
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
-export async function getInboundRedPackets() {
-    return []
+export function getRedPacketsFromDB() {
+    return database.getRedPackets()
 }
 
-export async function getOutboundRedPackets(from: string) {
+export async function getRedPacketsFromChain(from: string, startBlock: number) {
     const url = new URL(RED_PACKET_HISTORY_URL)
+    url.searchParams.set('chainId', String(await getChainId()))
     url.searchParams.set('from', from)
+    url.searchParams.set('startBlock', String(startBlock))
+    url.searchParams.set('endBlock', 'latest')
     const response = await fetch(url.toString())
-    if (response.status !== 200) {
-        return undefined
-    }
-    // return response.json() as Promise<History.RecordType[]>
-    return response.json() as any
-}
-
-function RedPacketRecordOutDB(x: RedPacketRecordInDatabase): RedPacketRecord {
-    return x as RedPacketRecord
-}
-function RedPacketRecordIntoDB(x: RedPacketRecord): RedPacketRecordInDatabase {
-    return x as RedPacketRecordInDatabase
+    if (response.status !== 200) return []
+    return response.json() as Promise<History.RedPacketRecord[]>
 }

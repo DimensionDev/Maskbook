@@ -32,7 +32,7 @@ export function injectPostInspectorDefault<T extends string>(
     const { zipPost } = config
     const zipPostF = zipPost || noop
     return function injectPostInspector(current: PostInfo) {
-        return renderInShadowRoot(
+        const jsx = (
             <PostInfoContext.Provider value={current}>
                 <PostInspectorDefault
                     onDecrypted={(typed, raw) => {
@@ -42,17 +42,19 @@ export function injectPostInspectorDefault<T extends string>(
                     zipPost={() => zipPostF(current.rootNodeProxy)}
                     {...current}
                 />
-            </PostInfoContext.Provider>,
-            {
-                shadow: () => current.rootNodeProxy.afterShadow,
-                normal: () => current.rootNodeProxy.after,
-                concurrent: true,
-                keyBy: 'post-inspector',
-            },
+            </PostInfoContext.Provider>
         )
+        if (config.render) return config.render(jsx, current)
+        return renderInShadowRoot(jsx, {
+            shadow: () => current.rootNodeProxy.afterShadow,
+            normal: () => current.rootNodeProxy.after,
+            concurrent: true,
+            keyBy: 'post-inspector',
+        })
     }
 }
 
 interface InjectPostInspectorDefaultConfig {
     zipPost?(node: DOMProxy): void
+    render?(node: React.ReactNode, postInfo: PostInfo): () => void
 }

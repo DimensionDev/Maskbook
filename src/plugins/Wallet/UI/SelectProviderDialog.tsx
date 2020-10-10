@@ -78,14 +78,12 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     // render in dashboard
     useBlurContext(open)
 
-    const wallets = useWallets(ProviderType.Maskbook)
     const onConnect = useCallback(
         async (providerType: ProviderType) => {
             onClose()
             switch (providerType) {
                 case ProviderType.Maskbook:
-                    if (wallets?.length) await Services.Ethereum.connectMaskbook()
-                    else if (GetContext() === 'options') history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
+                    if (GetContext() === 'options') history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
                     else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
                     break
                 case ProviderType.MetaMask:
@@ -98,7 +96,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     unreachable(providerType)
             }
         },
-        [wallets?.length, onClose, history],
+        [history, onClose],
     )
 
     // TODO:
@@ -107,7 +105,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
         () =>
             MessageCenter.on('metamaskMessage', async (payload: string) => {
                 if (payload === 'metamask_not_install') {
-                    enqueueSnackbar(t(payload), {
+                    enqueueSnackbar(t('metamask_not_install'), {
                         key: 'metamask_not_install',
                         variant: 'error',
                         preventDuplicate: true,

@@ -10,3 +10,6 @@ indent_style = space
 
 [{.*rc,ts*.json,package.json}]
 indent_size = 2
+
+[*.{yaml,yml,md}]
+indent_size = 2

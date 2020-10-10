@@ -8,8 +8,7 @@ import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
 import Services from '../../../extension/service'
 
-export function useClaimCallback(id?: string, password?: string) {
-    const account = useAccount()
+export function useClaimCallback(from: string, id?: string, password?: string) {
     const [claimState, setClaimState] = useTransactionState()
     const redPacketContract = useRedPacketContract()
 
@@ -27,14 +26,14 @@ export function useClaimCallback(id?: string, password?: string) {
         })
 
         const config: Tx = {
-            from: account,
+            from,
             to: redPacketContract.options.address,
         }
         const params: Parameters<typeof redPacketContract['methods']['claim']> = [
             id,
             password,
-            account,
-            Web3Utils.sha3(account)!,
+            from,
+            Web3Utils.sha3(from)!,
         ]
 
         // step 1: estimate gas
@@ -74,14 +73,14 @@ export function useClaimCallback(id?: string, password?: string) {
                     if (hash) onSucceed(hash)
                     // claim by server
                     else if (error?.message.includes('insufficient funds for gas')) {
-                        Services.Plugin.invokePlugin('maskbook.red_packet', 'claimByServer', account, id, password)
+                        Services.Plugin.invokePlugin('maskbook.red_packet', 'claimRedPacket', from, id, password)
                             .then(({ claim_transaction_hash }) => onSucceed(claim_transaction_hash))
                             .catch(onFailed)
                     } else if (error) onFailed(error)
                 },
             )
         })
-    }, [id, password, account, redPacketContract])
+    }, [id, password, from, redPacketContract])
 
     return [claimState, claimCallback] as const
 }

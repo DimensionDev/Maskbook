@@ -7,7 +7,7 @@ import Serialization from '../../utils/type-transform/Serialization'
 import { memoize } from 'lodash-es'
 
 type Required<T> = { [P in keyof T]-?: NonNullable<T[P]> }
-type ServiceType = Required<Pick<SocialNetworkWorker, 'autoVerifyBio' | 'autoVerifyPost' | 'manualVerifyPost'>>
+type ServiceType = Required<Pick<SocialNetworkWorker, 'autoVerifyPost' | 'manualVerifyPost'>>
 
 const workerChannel = new MessageCenter(false, 'worker-service').eventBasedChannel
 const getServiceFromNetworkWorker = memoize((worker: SocialNetworkWorker) => {
@@ -29,7 +29,6 @@ export function getCurrentNetworkWorkerService(network: string | Identifier) {
 export function startWorkerService(e: SocialNetworkWorker) {
     OnlyRunInContext('background', 'defineWorkerService')
     const impl: ServiceType = {
-        autoVerifyBio: e.autoVerifyBio!,
         autoVerifyPost: e.autoVerifyPost!,
         manualVerifyPost: e.manualVerifyPost!,
     }

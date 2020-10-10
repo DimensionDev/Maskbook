@@ -20,7 +20,7 @@ type link = HTMLAnchorElement | null | undefined
  */
 export function getProfileIdentifierAtFacebook(
     links: link[] | link,
-    allowCollectInfo: boolean,
+    allowCollectInfo?: boolean,
 ): Pick<Profile, 'identifier' | 'nickname' | 'avatar'> {
     const unknown = { identifier: ProfileIdentifier.unknown, avatar: undefined, nickname: undefined }
     try {
@@ -32,22 +32,28 @@ export function getProfileIdentifierAtFacebook(
         const { dom, id, nickname } = result[0] || {}
         if (id) {
             const result = new ProfileIdentifier('facebook.com', id)
-            let avatar: HTMLImageElement | undefined = undefined
+            let avatar: string | null = null
             try {
-                avatar = dom!.closest('.clearfix')!.parentElement!.querySelector('img')!
-                if (allowCollectInfo && avatar.getAttribute('aria-label') === nickname && nickname) {
-                    Services.Identity.updateProfileInfo(result, { nickname, avatarURL: avatar.src })
+                const image = dom!.closest('.clearfix')!.parentElement!.querySelector('img')!
+                avatar = image.src
+                if (allowCollectInfo && image.getAttribute('aria-label') === nickname && nickname) {
+                    Services.Identity.updateProfileInfo(result, { nickname, avatarURL: image.src })
                 }
             } catch {}
             try {
-                avatar = dom!.querySelector('img')!
+                const image = dom!.querySelector('img')!
+                avatar = image.src
                 if (allowCollectInfo && avatar) {
-                    Services.Identity.updateProfileInfo(result, { nickname, avatarURL: avatar.src })
+                    Services.Identity.updateProfileInfo(result, { nickname, avatarURL: image.src })
                 }
+            } catch {}
+            try {
+                const image = dom!.querySelector('image')!
+                avatar = image.getAttribute('xlink:href')
             } catch {}
             return {
                 identifier: result,
-                avatar: avatar ? avatar.src : '',
+                avatar: avatar ?? undefined,
                 nickname: nickname,
             }
         }
@@ -57,7 +63,8 @@ export function getProfileIdentifierAtFacebook(
     }
     return unknown
 }
-function getUserID(x: string) {
+Object.assign(globalThis, { getProfileIdentifierAtFacebook })
+export function getUserID(x: string) {
     if (!x) return null
     const relative = !x.startsWith('https://') && !x.startsWith('http://')
     const url = relative ? new URL(x, location.host) : new URL(x)
@@ -68,5 +75,7 @@ function getUserID(x: string) {
         const search = new URLSearchParams(url.search)
         return search.get('id')
     }
-    return url.pathname.replace(/^\//, '').replace(/\/$/, '').split('/')[0]
+    const val = url.pathname.replace(/^\//, '').replace(/\/$/, '').split('/')[0]
+    if (val === 'me') return null
+    return val
 }

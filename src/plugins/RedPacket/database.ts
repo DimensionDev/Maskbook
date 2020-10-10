@@ -1,16 +1,35 @@
-import type { RedPacketRecordInDatabase } from './types'
-import { createPluginWalletAccess } from '../../database/Plugin/wrap-wallet-for-plugin'
-import type { _UnboxPromise } from 'async-call-rpc/full'
+import type { RedPacketRecord, RedPacketRecordInDatabase } from './types'
 import { RedPacketPluginID } from './constants'
+import { createPluginDatabase } from '../../database/Plugin/wrap-plugin-database'
+import { asyncIteratorToArray } from '../../utils/type-transform/asyncIteratorHelpers'
+import { omit } from 'lodash-es'
 
-export const createRedPacketTransaction = createPluginWalletAccess<RedPacketRecordInDatabase, [string]>(
-    RedPacketPluginID,
-)({ rpid: 0 }, 'rpid')
-export type RedPacketPluginReificatedWalletDBReadOnly = _UnboxPromise<ReturnType<typeof ro>>
-export type RedPacketPluginReificatedWalletDBReadWrite = _UnboxPromise<ReturnType<typeof rw>>
-function ro() {
-    return createRedPacketTransaction('readonly')
+export const RedPacketDatabase = createPluginDatabase<RedPacketRecordInDatabase>(RedPacketPluginID)
+
+export function getRedPackets() {
+    return asyncIteratorToArray(RedPacketDatabase.iterate('red-packet'))
 }
-function rw() {
-    return createRedPacketTransaction('readwrite')
+
+export async function getRedPacket(rpid: string) {
+    const record = await RedPacketDatabase.get('red-packet', rpid)
+    return record ? RedPacketRecordOutDB(record) : undefined
+}
+
+export function addRedPacket(record: RedPacketRecord) {
+    return RedPacketDatabase.add(RedPacketRecordIntoDB(record))
+}
+
+export function removeRedPacket(rpid: string) {
+    return RedPacketDatabase.remove('red-packet', rpid)
+}
+
+function RedPacketRecordIntoDB(x: RedPacketRecord) {
+    const record = x as RedPacketRecordInDatabase
+    record.type = 'red-packet'
+    return record
+}
+
+function RedPacketRecordOutDB(x: RedPacketRecordInDatabase): RedPacketRecord {
+    const record = x
+    return omit(record, ['type'])
 }

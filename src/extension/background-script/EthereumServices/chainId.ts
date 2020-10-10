@@ -7,19 +7,21 @@ import {
 } from '../../../settings/settings'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
+import { unreachable } from '../../../utils/utils'
 
 //#region tracking default wallet
 let defaultWallet: WalletRecord | null = null
-const updateDefaultWallet = async () => (defaultWallet = await getDefaultWallet())
-PluginMessageCenter.on('maskbook.wallets.update', updateDefaultWallet)
-updateDefaultWallet()
+const revalidate = async () => (defaultWallet = await getDefaultWallet())
+PluginMessageCenter.on('maskbook.wallets.update', revalidate)
+revalidate()
 //#endregion
 
 export async function getChainId() {
-    if (defaultWallet?.provider === ProviderType.Maskbook) return currentMaskbookChainIdSettings.value
-    if (defaultWallet?.provider === ProviderType.MetaMask) return currentMetaMaskChainIdSettings.value
-    if (defaultWallet?.provider === ProviderType.WalletConnect) return currentWalletConnectChainIdSettings.value
-    return ChainId.Mainnet
+    if (!defaultWallet) return currentMaskbookChainIdSettings.value
+    if (defaultWallet.provider === ProviderType.Maskbook) return currentMaskbookChainIdSettings.value
+    if (defaultWallet.provider === ProviderType.MetaMask) return currentMetaMaskChainIdSettings.value
+    if (defaultWallet.provider === ProviderType.WalletConnect) return currentWalletConnectChainIdSettings.value
+    unreachable(defaultWallet.provider)
 }
 
 export async function getLegacyEthereumNetwork() {
