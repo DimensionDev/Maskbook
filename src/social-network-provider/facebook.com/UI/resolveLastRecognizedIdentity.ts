@@ -32,7 +32,9 @@ export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
 //#region LS
 // Try to resolve my identities
 const myUsernameLiveSelectorPC = new LiveSelector()
-    .querySelectorAll<HTMLAnchorElement>(`[role="banner"] [role="navigation"] [role="link"]`)
+    .querySelectorAll<HTMLAnchorElement>(
+        `[data-pagelet="LeftRail"] > [data-visualcompletion="ignore-dynamic"]:first-child > div:first-child > ul [role="link"]`,
+    )
 
     .filter((x) => x.innerText)
 const myUsernameLiveSelectorMobile = new LiveSelector().querySelector<HTMLAnchorElement>(
