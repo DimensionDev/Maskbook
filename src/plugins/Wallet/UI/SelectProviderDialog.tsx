@@ -22,6 +22,7 @@ import { unreachable } from '../../../utils/utils'
 import { useWallets } from '../hooks/useWallet'
 import { MessageCenter } from '../../../utils/messages'
 import { useSnackbar } from 'notistack'
+import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -144,16 +145,17 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                 onClick={() => onConnect(ProviderType.Maskbook)}
                             />
                         </GridListTile>
-                        <GridListTile>
-                            <Provider
-                                logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                name="MetaMask"
-                                description="Connect to your MetaMask Wallet"
-                                onClick={() => onConnect(ProviderType.MetaMask)}
-                            />
-                        </GridListTile>
-                        {/* TODO: support wallet connect */}
-                        {process.env.NODE_ENV === 'development' ? (
+                        {Flags.metamask_support_enabled ? (
+                            <GridListTile>
+                                <Provider
+                                    logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
+                                    name="MetaMask"
+                                    description="Connect to your MetaMask Wallet"
+                                    onClick={() => onConnect(ProviderType.MetaMask)}
+                                />
+                            </GridListTile>
+                        ) : null}
+                        {Flags.wallet_connect_support_enabled ? (
                             <GridListTile>
                                 <Provider
                                     logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
