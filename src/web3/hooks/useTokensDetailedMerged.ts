@@ -20,12 +20,12 @@ export function useTokensDetailedMerged(...listOfTokens: TokenDetailed[][]) {
         .filter((x) => x.token.chainId === chainId)
         .sort((a, z) => {
             // ether goes first place
-            if (a.token.address === ETH_ADDRSS) return 1
+            if (a.token.address === ETH_ADDRSS) return -1
             if (z.token.address === ETH_ADDRSS) return 1
-            if (a.balance.length < z.balance.length) return 1
             if (a.balance.length > z.balance.length) return -1
-            if (a.balance < z.balance) return 1
+            if (a.balance.length < z.balance.length) return 1
             if (a.balance > z.balance) return -1
+            if (a.balance < z.balance) return 1
             return 0
         })
 }
