@@ -34,7 +34,6 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
 
     const onConnect = async (provider: typeof providers[0]) => {
         if (!persona) return
-        if (!(await getCurrentNetworkUI(provider.network).requestPermission())) return
 
         // FIXME:
         // setting storage race condition here

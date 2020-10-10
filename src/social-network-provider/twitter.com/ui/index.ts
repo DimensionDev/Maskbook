@@ -10,10 +10,8 @@ import { InitGroupsValueRef } from '../../../social-network/defaults/GroupsValue
 import { twitterUrl } from '../utils/url'
 import { PreDefinedVirtualGroupNames } from '../../../database/type'
 import { twitterUICustomUI, startWatchThemeColor } from './custom'
-import { notifyPermissionUpdate } from '../../../utils/permissions'
 import { injectMaskbookIconToProfile, injectMaskbookIconIntoFloatingProfileCard } from './injectMaskbookIcon'
 import { injectDashboardEntryInMobileTwitter } from './injectDashboardEntryInMobile'
-import { Flags } from '../../../utils/flags'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -52,22 +50,9 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         return location.hostname.endsWith(twitterUrl.hostIdentifier)
     },
     friendlyName: 'Twitter',
-    requestPermission() {
-        // TODO: wait for webextension-shim to support <all_urls> in permission.
-        if (Flags.no_web_extension_dynamic_permission_request) return Promise.resolve(true)
-        return browser.permissions
-            .request({
-                origins: [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`],
-            })
-            .then(notifyPermissionUpdate)
-    },
     setupAccount: () => {
-        instanceOfTwitterUI.requestPermission().then((granted) => {
-            if (granted) {
-                setStorage(twitterUrl.hostIdentifier, { forceDisplayWelcome: true }).then()
-                location.href = twitterUrl.hostLeadingUrl
-            }
-        })
+        setStorage(twitterUrl.hostIdentifier, { forceDisplayWelcome: true }).then()
+        location.href = twitterUrl.hostLeadingUrl
     },
     ignoreSetupAccount() {
         setStorage(twitterUrl.hostIdentifier, { userIgnoredWelcome: true, forceDisplayWelcome: false }).then()

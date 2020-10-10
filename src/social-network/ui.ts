@@ -35,11 +35,6 @@ export interface SocialNetworkUIDefinition
     friendlyName: string
     /**
      * This function should
-     * 0. Request the permission to the site by `browser.permissions.request()`
-     */
-    requestPermission(): Promise<boolean>
-    /**
-     * This function should
      * 1. Jump to a new page
      * 2. On that page, shouldDisplayWelcome should return true
      *

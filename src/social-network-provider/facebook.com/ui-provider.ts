@@ -24,7 +24,6 @@ import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
-import { notifyPermissionUpdate } from '../../utils/permissions'
 import { Flags } from '../../utils/flags'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
 import { isDarkTheme } from '../../utils/theme-tools'
@@ -44,20 +43,9 @@ export const facebookUISelf = defineSocialNetworkUI({
         return location.hostname.endsWith('facebook.com')
     },
     friendlyName: 'Facebook',
-    requestPermission() {
-        // TODO: wait for webextension-shim to support <all_urls> in permission.
-        if (Flags.no_web_extension_dynamic_permission_request) return Promise.resolve(true)
-        return browser.permissions
-            .request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
-            .then(notifyPermissionUpdate)
-    },
     setupAccount() {
-        facebookUISelf.requestPermission().then((granted) => {
-            if (granted) {
-                setStorage('facebook.com', { forceDisplayWelcome: true })
-                location.href = 'https://facebook.com/'
-            }
-        })
+        setStorage('facebook.com', { forceDisplayWelcome: true })
+        location.href = 'https://facebook.com/'
     },
     ignoreSetupAccount() {
         setStorage('facebook.com', { userIgnoredWelcome: true, forceDisplayWelcome: false })

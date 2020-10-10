@@ -1,5 +1,4 @@
 import { getWelcomePageURL } from '../extension/options-page/Welcome/getWelcomePageURL'
-import { notifyPermissionUpdate } from './permissions'
 
 interface Props {
     title?: string
@@ -11,8 +10,6 @@ interface Props {
 
 export async function requestNotification(props: Props) {
     const { title, icon, body, onClick } = props
-    const granted = await browser.permissions.request({ permissions: ['notifications'] }).then(notifyPermissionUpdate)
-    if (!granted) return false
     const notification = new Notification(title || 'Maskbook', {
         icon: icon || '128x128.png',
         body,

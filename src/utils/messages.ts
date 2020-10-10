@@ -72,8 +72,6 @@ interface MaskbookMessages {
         before: PersonaIdentifier | undefined
         after: PersonaIdentifier | undefined
     }
-    /** Permission updated */
-    permissionUpdated: void
     metamaskMessage: string
 }
 
