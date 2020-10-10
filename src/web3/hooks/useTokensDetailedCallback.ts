@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { createEetherToken } from '../helpers'
-import { useChainId } from './useChainId'
+import { useChainId } from './useChainState'
 import { useTokensDetailedDebank } from './useTokensDetailedDebank'
 import { useTokensDetailed } from './useTokensDetailed'
 import { useTokensDetailedMerged } from './useTokensDetailedMerged'

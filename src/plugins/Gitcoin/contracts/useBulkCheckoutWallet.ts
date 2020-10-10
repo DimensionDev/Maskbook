@@ -7,5 +7,5 @@ import type { BulkCheckout } from '../../../contracts/bulk-checkout/BulkCheckout
 
 export function useBulkCheckoutContract() {
     const address = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
-    return useContract<BulkCheckout>(address, BulkCheckoutABI as AbiItem[]) as BulkCheckout
+    return useContract<BulkCheckout>(address, BulkCheckoutABI as AbiItem[])
 }

@@ -13,7 +13,7 @@ import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteCont
 import { MaskbookWalletMessages, WalletMessageCenter } from '../../../Wallet/messages'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { ApproveState } from '../../../../web3/hooks/useTokenApproveCallback'
-import { useChainId } from '../../../../web3/hooks/useChainId'
+import { useChainId } from '../../../../web3/hooks/useChainState'
 import { TradeStrategy, TokenPanelType } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 

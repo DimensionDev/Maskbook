@@ -49,7 +49,7 @@ const serializeToText = (node: ChildNode): string => {
         } else if (childNode.nodeName === 'IMG') {
             const img = childNode as HTMLImageElement
             const matched = (img.getAttribute('src') ?? '').match(/emoji\/v2\/svg\/([\d\w]+)\.svg/) ?? []
-            if (matched[1]) snippets.push(String.fromCodePoint(Number.parseInt(`0x${matched[1]}`)))
+            if (matched[1]) snippets.push(String.fromCodePoint(Number.parseInt(`0x${matched[1]}`, 16)))
         } else if (childNode.childNodes.length) snippets.push(serializeToText(childNode))
     }
     return snippets.join('')
@@ -207,7 +207,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const src = image.getAttribute('src')
             const matched = src?.match(/emoji\/v2\/svg\/([\d\w]+)\.svg/)
             if (matched && matched[1])
-                return makeTypedMessageText(String.fromCodePoint(Number.parseInt(`0x${matched[1]}`)))
+                return makeTypedMessageText(String.fromCodePoint(Number.parseInt(`0x${matched[1]}`, 16)))
             return makeTypedMessageEmpty()
         } else if (node.childNodes.length) {
             const flattened = flattenDeep(Array.from(node.childNodes).map(make))

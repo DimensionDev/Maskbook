@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, makeStyles, createStyles, Theme, ChipProps } from '@material-ui/core'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import { useChainId } from '../hooks/useChainId'
+import { useChainId } from '../hooks/useChainState'
 import { EthereumAccountChip } from './EthereumAccountChip'
 import { EthereumChainChip } from './EthereumChainChip'
 import { ChainId } from '../types'

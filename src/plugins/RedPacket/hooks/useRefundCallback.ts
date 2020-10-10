@@ -6,8 +6,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
 
-export function useRefundCallback(id?: string) {
-    const account = useAccount()
+export function useRefundCallback(from: string, id?: string) {
     const [refundState, setRefundState] = useTransactionState()
     const redPacketContract = useRedPacketContract()
 
@@ -25,7 +24,7 @@ export function useRefundCallback(id?: string) {
         })
 
         const config: Tx = {
-            from: account,
+            from,
             to: redPacketContract.options.address,
         }
         const params: Parameters<typeof redPacketContract['methods']['refund']> = [id]

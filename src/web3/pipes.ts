@@ -14,9 +14,9 @@ export function resolveProviderName(providerType: ProviderType) {
     }
 }
 
-export function parseChainName(name: string) {
+export function resolveChainId(name: string) {
     switch (name.toLowerCase()) {
-        case 'main':
+        case 'mainnet':
             return ChainId.Mainnet
         case 'ropsten':
             return ChainId.Ropsten

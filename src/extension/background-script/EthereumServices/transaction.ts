@@ -13,7 +13,7 @@ import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import { isSameAddress } from '../../../web3/helpers'
 import { getNonce, resetNonce, commitNonce } from './nonce'
-import type { ChainId } from '../../../web3/types'
+import { ChainId, TransactionEventType } from '../../../web3/types'
 import { ProviderType } from '../../../web3/types'
 import { sleep, unreachable } from '../../../utils/utils'
 import { getTransactionReceipt } from './network'
@@ -42,7 +42,7 @@ function watchTransactionEvent(event: PromiEventW3<TransactionReceipt | string>)
             if (controller.signal.aborted) break
             // emit receipt manually
             if (receipt) {
-                enhancedEvent.emit('receipt', receipt)
+                enhancedEvent.emit(TransactionEventType.RECEIPT, receipt)
                 controller.abort()
                 break
             }
@@ -55,9 +55,10 @@ function watchTransactionEvent(event: PromiEventW3<TransactionReceipt | string>)
     function unwatchTransactionHash() {
         controller.abort()
     }
-    enhancedEvent.on('transactionHash', watchTransactionHash)
-    enhancedEvent.on('receipt', unwatchTransactionHash)
-    enhancedEvent.on('confirmation', unwatchTransactionHash)
+    enhancedEvent.on(TransactionEventType.TRANSACTION_HASH, watchTransactionHash)
+    enhancedEvent.on(TransactionEventType.RECEIPT, unwatchTransactionHash)
+    enhancedEvent.on(TransactionEventType.CONFIRMATION, unwatchTransactionHash)
+    enhancedEvent.on(TransactionEventType.ERROR, unwatchTransactionHash)
     return enhancedEvent
 }
 
@@ -87,7 +88,7 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
                 from,
                 nonce,
                 gas,
-                gasPrice: new BigNumber(gasPrice as string).dividedToIntegerBy(2).toFixed(),
+                gasPrice: new BigNumber(gasPrice as string).toFixed(),
                 ...config,
             })
     }
@@ -113,9 +114,16 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
             })
 
             // only trasnaction hash available
-            promise.then((hash) =>
-                listeners.filter((x) => x.name === 'transactionHash').forEach((y) => y.listener(hash)),
-            )
+            promise
+                .then((hash) =>
+                    listeners
+                        .filter((x) => x.name === TransactionEventType.TRANSACTION_HASH)
+                        .forEach((y) => y.listener(hash)),
+                )
+                .catch((e) =>
+                    listeners.filter((x) => x.name === TransactionEventType.ERROR).forEach((y) => y.listener(e)),
+                )
+
             return (promise as unknown) as PromiEvent<string>
         }
     }

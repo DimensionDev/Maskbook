@@ -4,6 +4,7 @@ import stringify from 'json-stable-stringify'
 import type { TransactionObject } from '../../contracts/types'
 import { nonFunctionalWeb3 } from '../web3'
 import Services from '../../extension/service'
+import { TransactionEventType } from '../types'
 
 interface TxListeners {
     onTransactionHash?: (hash: string) => void
@@ -46,15 +47,15 @@ export function useSendTransactionCallback(address: string, config: TransactionC
                     ...config,
                     nonce: await Services.Ethereum.getNonce(address),
                 })
-                .on('transactionHash', (hash: string) => {
+                .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
                     Services.Ethereum.commitNonce(address)
                     listeners?.onTransactionHash?.(hash)
                 })
-                .on('receipt', (receipt: TransactionReceipt) => listeners?.onReceipt?.(receipt))
-                .on('confirmation', (no: number, receipt: TransactionReceipt) =>
+                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => listeners?.onReceipt?.(receipt))
+                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) =>
                     listeners?.onConfirmation?.(no, receipt),
                 )
-                .on('error', (err: Error) => {
+                .on(TransactionEventType.ERROR, (err: Error) => {
                     if (err.message.includes('nonce too low')) Services.Ethereum.resetNonce(address)
                     listeners?.onTransactionError?.(err)
                 })
