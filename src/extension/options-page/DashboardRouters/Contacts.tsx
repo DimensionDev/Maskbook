@@ -88,7 +88,7 @@ export default function DashboardContactsRouter() {
         fetcher,
     )
 
-    const { data, size, setSize, revalidate } = swr
+    const { data, size, setSize, mutate } = swr
     const isEmpty = data?.[0]?.length === 0
     const isReachingEnd = data && data[data.length - 1]?.length < 20
     const items = data ? ([] as Profile[]).concat(...data) : []
@@ -134,8 +134,8 @@ export default function DashboardContactsRouter() {
                                         style={style as any}
                                         key={index}
                                         contact={items[index]}
-                                        onUpdated={revalidate}
-                                        onDeleted={revalidate}
+                                        onUpdated={mutate}
+                                        onDeleted={mutate}
                                     />
                                 ) : null
                             }
