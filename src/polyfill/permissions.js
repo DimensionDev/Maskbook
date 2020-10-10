@@ -19,7 +19,9 @@
                     return Promise.resolve({ origins: JSON.parse(item) || [] })
                 }
             } else if (prop === 'contains') {
-                return Promise.resolve(true)
+                return () => {
+                    return Promise.resolve(true)
+                }
             } else {
                 return Reflect.get(target, prop, receiver)
             }
