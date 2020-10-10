@@ -76,6 +76,13 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     }, [setOpen])
     //#endregion
 
+    //#region wallet connect QR code dialog
+    const [_, setWalletConnectDialogOpen] = useRemoteControlledDialog<
+        MaskbookWalletMessages,
+        'walletConnectQRCodeUpdated'
+    >(WalletMessageCenter, 'walletConnectQRCodeUpdated')
+    //#endregion
+
     // render in dashboard
     useBlurContext(open)
 
@@ -91,7 +98,10 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     await Services.Ethereum.connectMetaMask()
                     break
                 case ProviderType.WalletConnect:
-                    await Services.Ethereum.connectWalletConnect()
+                    setWalletConnectDialogOpen({
+                        open: true,
+                        uri: await Services.Ethereum.createConnectionURI(),
+                    })
                     break
                 default:
                     unreachable(providerType)
