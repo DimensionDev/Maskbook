@@ -76,7 +76,7 @@ export const createWalletDBAccess = createDBAccess(() => {
              * Fix providerType does not exist in legacy wallet
              */
             async function v4_v5() {
-                const t = createTransaction(db, 'readwrite')('Wallet', 'ERC20Token')
+                const t = createTransaction(db, 'readwrite')('Wallet')
                 const wallets = t.objectStore('Wallet')
                 for await (const wallet of wallets) {
                     const wallet_ = wallet as any
