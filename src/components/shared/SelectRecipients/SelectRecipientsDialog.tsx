@@ -66,6 +66,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         const fuse = new Fuse(items, {
             keys: ['identifier.userId', 'linkedPersona.fingerprint', 'nickname'],
             isCaseSensitive: false,
+            ignoreLocation: true,
             threshold: 0,
         })
 
@@ -118,6 +119,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                             <ProfileInList
                                 key={item.identifier.toText()}
                                 item={item}
+                                search={search}
                                 checked={
                                     props.selected.some((x) => x.identifier.equals(item.identifier)) ||
                                     disabledItems?.includes(item)
