@@ -22,9 +22,9 @@ export interface AutoPasteFailedDialogProps extends withClasses<KeysInferFromUse
     onClose: () => void
     data: MaskbookMessages['autoPasteFailed']
 }
-const useStyles = makeStyles({
-    title: { marginLeft: 8 },
-})
+const useStyles = makeStyles((theme) => ({
+    title: { marginLeft: theme.spacing(1) },
+}))
 
 export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { t } = useI18N()
