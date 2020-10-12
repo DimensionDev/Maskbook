@@ -15,6 +15,7 @@ import {
     Tab,
     Tabs,
 } from '@material-ui/core'
+import { last } from 'lodash-es'
 import { DataProvider, SwapProvider } from '../../types'
 import {
     resolveDataProviderName,
@@ -32,7 +33,7 @@ import { PriceChart } from './PriceChart'
 import { Linking } from './Linking'
 import { usePriceStats } from '../../trending/usePriceStats'
 import { Skeleton } from '@material-ui/lab'
-import { PriceChartDaysControl } from './PriceChartDaysControl'
+import { Days, PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
 import { useCurrentSwapProvider } from '../../trending/useCurrentSwapProvider'
 import { useCurrentCurrency } from '../../trending/useCurrentCurrency'
@@ -176,7 +177,7 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region stats
-    const [days, setDays] = useState(365)
+    const [days, setDays] = useState(Days.ONE_YEAR)
     const { value: stats = [], loading: loadingStats } = usePriceStats({
         coinId: trending?.coin.id,
         dataProvider: trending?.dataProvider,
@@ -234,7 +235,9 @@ export function TrendingView(props: TrendingViewProps) {
                     <>
                         <Typography component="p" variant="body1">
                             <span>{`${`${currency.name} `}${formatCurrency(
-                                market.current_price,
+                                dataProvider === DataProvider.COIN_MARKET_CAP
+                                    ? last(stats)?.[1] ?? market.current_price
+                                    : market.current_price,
                                 currency.symbol,
                             )}`}</span>
                             {typeof market.price_change_percentage_24h === 'number' ? (
