@@ -33,7 +33,7 @@ storiesOf('Welcome', module)
             scanning={boolean('start scanning?', false)}
             height={number('width', 500)}
             width={number('height', 500)}
-            onResult={action('scan')}
+            onScan={action('scan')}
             onError={action('error')}
         />
     ))
