@@ -52,6 +52,7 @@ export const Flags = {
      * TODO: We're no longer storing a CryptoKey in the database. Maybe we can remove this flag now.
      */
     has_Safari_IndexedDB_bug: process.env.target === 'safari',
+    has_no_WebRTC: process.env.target === 'safari' || !globalThis?.navigator?.permissions?.request,
     //#endregion
 } as const
 
