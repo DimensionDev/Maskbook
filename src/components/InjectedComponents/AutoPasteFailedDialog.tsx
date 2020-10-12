@@ -11,12 +11,17 @@ import {
     IconButton,
     Paper,
     Link,
+    Button,
 } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
 import type { MaskbookMessages } from '../../utils/messages'
-import { DialogDismissIconUI } from './DialogDismissIcon'
 import { Image } from '../shared/Image'
 import { DraggableDiv } from '../shared/DraggableDiv'
+import { useMatchXS } from '../../utils/hooks/useMatchXS'
+import Download from '@material-ui/icons/CloudDownload'
+import CloseIcon from '@material-ui/icons/Close'
+import OpenInBrowser from '@material-ui/icons/OpenInBrowser'
+import { formatDateTime } from '../../plugins/FileService/utils'
 
 export interface AutoPasteFailedDialogProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     onClose: () => void
@@ -24,6 +29,7 @@ export interface AutoPasteFailedDialogProps extends withClasses<KeysInferFromUse
 }
 const useStyles = makeStyles((theme) => ({
     title: { marginLeft: theme.spacing(1) },
+    paper: { border: '1px solid white' },
 }))
 
 export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
@@ -31,14 +37,15 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { onClose, data } = props
     const [url, setURL] = useState('')
+    const isMobile = useMatchXS()
 
     return (
         <DraggableDiv>
-            <Paper elevation={2}>
+            <Paper elevation={2} className={classes.paper} style={isMobile ? { width: '100vw' } : undefined}>
                 <nav>
                     <DialogTitle>
                         <IconButton size="small" onClick={onClose}>
-                            <DialogDismissIconUI />
+                            <CloseIcon />
                         </IconButton>
                         <span className={classes.title}>{t('auto_paste_failed_dialog_title')}</span>
                     </DialogTitle>
@@ -58,13 +65,28 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     <div style={{ textAlign: 'center' }}>
                         {data.image ? (
                             // It must be img
-                            <Image component="img" onURL={setURL} src={data.image} width={360} height={260} />
+                            <Image component="img" onURL={setURL} src={data.image} width={260} height={180} />
                         ) : null}
                         <br />
                         {url ? (
-                            <Link variant="caption" color="textPrimary" href={url} target="_blank">
-                                {t('auto_paste_failed_dialog_image_caption')}
-                            </Link>
+                            <>
+                                <Button
+                                    variant="text"
+                                    component={Link}
+                                    download={`maskbook-encrypted-${formatDateTime(new Date()).replace(/:/g, '-')}.png`}
+                                    href={url}
+                                    startIcon={<Download />}>
+                                    {t('download')}
+                                </Button>
+                                <Button
+                                    variant="text"
+                                    component={Link}
+                                    href={url}
+                                    target="_blank"
+                                    startIcon={<OpenInBrowser />}>
+                                    {t('auto_paste_failed_dialog_image_caption')}
+                                </Button>
+                            </>
                         ) : null}
                     </div>
                 </DialogContent>
