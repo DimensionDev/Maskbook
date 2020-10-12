@@ -179,11 +179,6 @@ export default function DashboardSettingsRouter() {
                                         value={currentMaskbookChainIdSettings}
                                     />
                                 ) : null}
-                                <SettingsUI
-                                    classes={listStyle}
-                                    icon={<ShareIcon />}
-                                    value={enableGroupSharingSettings}
-                                />
                                 {/* TODO: A singe 'Plugins' tab should be added for listing plugin bio and settings. */}
                                 <SettingsUIEnum
                                     classes={listStyle}
@@ -223,6 +218,11 @@ export default function DashboardSettingsRouter() {
                                     classes={listStyle}
                                     icon={<FlipToFrontIcon />}
                                     value={allPostReplacementSettings}
+                                />
+                                <SettingsUI
+                                    classes={listStyle}
+                                    icon={<ShareIcon />}
+                                    value={enableGroupSharingSettings}
                                 />
                             </List>
                         </Card>

@@ -46,7 +46,7 @@ import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
-import { RedPacketMetadataReader } from '../../plugins/RedPacket/utils'
+import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/plugin'
 import { Flags } from '../../utils/flags'
 import PollsDialog from '../../plugins/Polls/UI/PollsDialog'
@@ -246,6 +246,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 <ClickableChip
                                     checked={props.shareToEveryone}
                                     ChipProps={{
+                                        'data-testid': '_everyone_group_',
                                         disabled: props.onlyMyself,
                                         label: t('post_dialog__select_recipients_share_to_everyone'),
                                         onClick: () => props.onShareToEveryoneChanged(!props.shareToEveryone),
@@ -254,6 +255,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 <ClickableChip
                                     checked={props.onlyMyself}
                                     ChipProps={{
+                                        'data-testid': '_only_myself_group_',
                                         disabled: props.shareToEveryone,
                                         label: t('post_dialog__select_recipients_only_myself'),
                                         onClick: () => props.onOnlyMyselfChanged(!props.onlyMyself),

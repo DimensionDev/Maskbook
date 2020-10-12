@@ -22,6 +22,7 @@ import { unreachable } from '../../../utils/utils'
 import { useWallets } from '../hooks/useWallet'
 import { MessageCenter } from '../../../utils/messages'
 import { useSnackbar } from 'notistack'
+import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -78,14 +79,12 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     // render in dashboard
     useBlurContext(open)
 
-    const wallets = useWallets(ProviderType.Maskbook)
     const onConnect = useCallback(
         async (providerType: ProviderType) => {
             onClose()
             switch (providerType) {
                 case ProviderType.Maskbook:
-                    if (wallets?.length) await Services.Ethereum.connectMaskbook()
-                    else if (GetContext() === 'options') history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
+                    if (GetContext() === 'options') history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
                     else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
                     break
                 case ProviderType.MetaMask:
@@ -98,7 +97,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     unreachable(providerType)
             }
         },
-        [wallets?.length, onClose, history],
+        [history, onClose],
     )
 
     // TODO:
@@ -146,16 +145,17 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                 onClick={() => onConnect(ProviderType.Maskbook)}
                             />
                         </GridListTile>
-                        <GridListTile>
-                            <Provider
-                                logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                name="MetaMask"
-                                description="Connect to your MetaMask Wallet"
-                                onClick={() => onConnect(ProviderType.MetaMask)}
-                            />
-                        </GridListTile>
-                        {/* TODO: support wallet connect */}
-                        {process.env.NODE_ENV === 'development' ? (
+                        {Flags.metamask_support_enabled ? (
+                            <GridListTile>
+                                <Provider
+                                    logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
+                                    name="MetaMask"
+                                    description="Connect to your MetaMask Wallet"
+                                    onClick={() => onConnect(ProviderType.MetaMask)}
+                                />
+                            </GridListTile>
+                        ) : null}
+                        {Flags.wallet_connect_support_enabled ? (
                             <GridListTile>
                                 <Provider
                                     logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}

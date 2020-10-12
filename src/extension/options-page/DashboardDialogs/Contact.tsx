@@ -67,7 +67,6 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactProps & 
     const [nickname, setNickname] = useState(contact.nickname)
     const [avatarURL, setAvatarURL] = useState(contact.avatar)
 
-    // TODO: revalidate SWR after this change
     const onSubmit = useSnackbarCallback(
         () => Services.Identity.updateProfileInfo(contact.identifier, { nickname, avatarURL, forceUpdateAvatar: true }),
         [nickname, avatarURL],
@@ -80,7 +79,7 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactProps & 
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
                 icon={<Avatar className={classes.avatar} person={contact} />}
-                primary={contact.nickname || '<Unnamed>'}
+                primary={contact.nickname || contact.identifier.userId}
                 content={
                     <form>
                         <TextField

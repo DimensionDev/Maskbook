@@ -57,12 +57,13 @@ export enum Appearance {
 const appearance = Appearance.default
 export const appearanceSettings = createGlobalSettings<Appearance>('apperance', appearance, {
     primary: () => i18n.t('settings_appearance'),
+    secondary: () => i18n.t('settings_appearance_secondary'),
 })
 
 //#region provider chain id
 export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>('maskbook chain id', ChainId.Mainnet, {
     primary: () => i18n.t('settings_choose_eth_network'),
-    secondary: () => 'This only effects the built-in wallet.',
+    secondary: () => 'This only affects the built-in wallet.',
 })
 
 export const currentMetaMaskChainIdSettings = createGlobalSettings<ChainId>('metamask chain id', ChainId.Mainnet, {
@@ -92,7 +93,7 @@ const lang: string = i18nNextInstance.language
 export const languageSettings = createGlobalSettings<Language>(
     'language',
     lang in Language ? (lang as Language) : Language.en,
-    { primary: () => i18n.t('settings_language') },
+    { primary: () => i18n.t('settings_language'), secondary: () => i18n.t('settings_language_secondary') },
 )
 export const enableGroupSharingSettings = createGlobalSettings<boolean>('experimental/group-sharing@sept2020', false, {
     primary: () => 'Experimental: Enable group sharing',

@@ -7,5 +7,5 @@ import HappyRedPacketABI from '../../../contracts/happy-red-packet/HappyRedPacke
 
 export function useRedPacketContract() {
     const address = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
-    return useContract<HappyRedPacket>(address, HappyRedPacketABI as AbiItem[]) as HappyRedPacket
+    return useContract<HappyRedPacket>(address, HappyRedPacketABI as AbiItem[])
 }

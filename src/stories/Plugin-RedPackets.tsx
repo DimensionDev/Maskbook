@@ -1,6 +1,5 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { RedPacketInList } from '../plugins/RedPacket/UI/RedPacket'
 import { RedPacketRecord, RedPacketStatus, RedPacketJSONPayload } from '../plugins/RedPacket/types'
 import { number, text, select } from '@storybook/addon-knobs'
 import { Typography, Paper } from '@material-ui/core'
@@ -8,35 +7,28 @@ import { makeTypedMessageText } from '../protocols/typed-message'
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
 import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
 import { EthereumTokenType } from '../web3/types'
+import { RedPacket } from '../plugins/RedPacket/UI/RedPacket'
 
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacket', () => {
         const { decimals, erc20name, erc20symbol, total, ...opts } = createRedPacketKnobs()
+        const knobs = createRedPacketKnobs()
+        // @ts-ignore
+        const payload: RedPacketJSONPayload = {
+            ...createRecord({ ...knobs, type: EthereumTokenType.Ether }),
+            rpid: 'rpid',
+            sender: { address: 'address', message: knobs.message, name: knobs.senderName },
+            total: (knobs.total * 10 ** 18).toString(),
+            creation_time: Date.now(),
+        }
+
         return (
             <>
                 <Typography>ETH</Typography>
-                <RedPacketInList
-                    redPacket={createRecord({
-                        ...opts,
-                        total: total * 1000000000000000000,
-                        type: EthereumTokenType.Ether,
-                    })}
-                />
+                <RedPacket from="" payload={payload} />
                 <hr />
                 <Typography>ERC20</Typography>
-                <RedPacketInList
-                    redPacket={createRecord({
-                        ...opts,
-                        type: EthereumTokenType.ERC20,
-                        total: total * 10 ** decimals,
-                        token: {
-                            address: 'addr',
-                            name: erc20name,
-                            decimals,
-                            symbol: erc20symbol,
-                        },
-                    })}
-                />
+                <RedPacket from="" payload={payload} />
             </>
         )
     })
@@ -92,9 +84,8 @@ function createRecord(opts: {
     token?: NonNullable<RedPacketRecord['payload']>['token']
 }): RedPacketRecord {
     const x: RedPacketRecord = {
-        id: 'id',
+        id: 'rpid',
         from: 'https://g.cn/',
-        rpid: 'rpid',
         payload: { token: opts.token } as RedPacketJSONPayload,
     }
     // @ts-ignore

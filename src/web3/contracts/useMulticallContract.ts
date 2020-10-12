@@ -7,5 +7,5 @@ import { useConstant } from '../hooks/useConstant'
 
 export function useMulticallContract() {
     const address = useConstant(CONSTANTS, 'MULTICALL_ADDRESS')
-    return useContract<Multicall>(address, MulticallABI as AbiItem[]) as Multicall
+    return useContract<Multicall>(address, MulticallABI as AbiItem[])
 }

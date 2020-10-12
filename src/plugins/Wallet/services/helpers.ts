@@ -6,9 +6,16 @@ import type {
     WalletRecordInDatabase,
     ERC20TokenRecordInDatabase,
 } from '../database/types'
-import { parseChainName } from '../../../web3/pipes'
+import { resolveChainId } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
-import { ChainId } from '../../../web3/types'
+import { ChainId, ProviderType } from '../../../web3/types'
+
+function fixWalletRecordProviderType(record: WalletRecord | WalletRecordInDatabase) {
+    const record_ = (record as unknown) as { type?: 'managed' | 'exotic' }
+    if (record_.type === 'managed') record.provider = ProviderType.Maskbook
+    else if (record_.type === 'exotic') record.provider = ProviderType.MetaMask
+    delete record_.type
+}
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatChecksumAddress(address))
@@ -17,12 +24,14 @@ export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wall
 
 export function WalletRecordIntoDB(x: WalletRecord) {
     const record = x as WalletRecordInDatabase
+    fixWalletRecordProviderType(record)
     record.address = formatChecksumAddress(x.address)
     return record
 }
 
 export function WalletRecordOutDB(x: WalletRecordInDatabase) {
     const record = x as WalletRecord
+    fixWalletRecordProviderType(record)
     record.address = formatChecksumAddress(record.address)
     record.erc20_token_whitelist = x.erc20_token_whitelist ?? new Set()
     record.erc20_token_blacklist = x.erc20_token_blacklist ?? new Set()
@@ -39,7 +48,7 @@ export function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
     {
         // fix: network has been renamed to chainId
         const record_ = record as any
-        if (!record.chainId) record.chainId = parseChainName(record_.network) ?? ChainId.Mainnet
+        if (!record.chainId) record.chainId = resolveChainId(record_.network) ?? ChainId.Mainnet
     }
     record.address = formatChecksumAddress(record.address)
     return record

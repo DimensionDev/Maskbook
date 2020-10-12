@@ -1,6 +1,7 @@
 import { EventIterator } from 'event-iterator'
 import PromiEvent from 'promievent'
 import type { PromiEvent as PromiEventW3, TransactionReceipt } from 'web3-core'
+import { TransactionEventType } from '../web3/types'
 
 export enum StageType {
     TRANSACTION_HASH = 0,
@@ -34,24 +35,32 @@ export function enhancePromiEvent(ev: PromiEventW3<TransactionReceipt | string>)
         resolve_ = resolve
         reject_ = reject
     })
-    ev.on('transactionHash', (hash) => PE.emit('transactionHash', hash))
-    ev.on('receipt', (receipt) => {
-        PE.emit('receipt', receipt)
+
+    // event emitter
+    ev.on(TransactionEventType.TRANSACTION_HASH, (hash) => PE.emit(TransactionEventType.TRANSACTION_HASH, hash))
+    ev.on(TransactionEventType.RECEIPT, (receipt) => {
+        PE.emit(TransactionEventType.RECEIPT, receipt)
         resolve_?.(receipt)
     })
-    ev.on('confirmation', (no, receipt) => PE.emit('confirmation', no, receipt))
-    ev.on('error', (error) => {
-        PE.emit('error', error)
+    ev.on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+        PE.emit(TransactionEventType.CONFIRMATION, no, receipt)
+        resolve_?.(receipt)
+    })
+    ev.on(TransactionEventType.ERROR, (error) => {
+        PE.emit(TransactionEventType.ERROR, error)
         reject_?.(error)
     })
+
+    // promise
     ev.then((hashOrReceipt) => {
-        if (typeof hashOrReceipt === 'string') PE.emit('transactionHash', hashOrReceipt)
-        else if (typeof hashOrReceipt === 'object') {
-            PE.emit('receipt', hashOrReceipt)
+        if (typeof hashOrReceipt === 'string') PE.emit(TransactionEventType.TRANSACTION_HASH, hashOrReceipt)
+        else {
+            PE.emit(TransactionEventType.RECEIPT, hashOrReceipt)
             resolve_?.(hashOrReceipt)
         }
-    }).catch((error) => {
-        PE.emit('error', error)
+    })
+    ev.catch((error) => {
+        PE.emit(TransactionEventType.ERROR, error)
         reject_?.(error)
     })
     return PE
@@ -64,26 +73,31 @@ export function enhancePromiEvent(ev: PromiEventW3<TransactionReceipt | string>)
  * @param ev the promise event object
  * @param finishStage the iterator will be stopped at given stage
  */
-export function promiEventToIterator<T>(ev: PromiEvent<T>, finishStage: StageType = StageType.CONFIRMATION) {
+export function promiEventToIterator<T extends string | TransactionReceipt>(
+    ev: PromiEvent<T>,
+    finishStage: StageType = StageType.CONFIRMATION,
+) {
     return new EventIterator<Stage>(function (queue) {
         const stopIfNeeded = (currentStage: StageType) => {
             if (currentStage >= finishStage) queue.stop()
         }
-        ev.on('transactionHash', (hash: string) => {
+
+        // event emitter
+        ev.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
             queue.push({
                 type: StageType.TRANSACTION_HASH,
                 hash,
             })
             stopIfNeeded(StageType.TRANSACTION_HASH)
         })
-        ev.on('receipt', (receipt: TransactionReceipt) => {
+        ev.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
             queue.push({
                 type: StageType.RECEIPT,
                 receipt,
             })
             stopIfNeeded(StageType.RECEIPT)
         })
-        ev.on('confirmation', (no: number, receipt: TransactionReceipt) => {
+        ev.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
             queue.push({
                 type: StageType.CONFIRMATION,
                 no,
@@ -91,7 +105,25 @@ export function promiEventToIterator<T>(ev: PromiEvent<T>, finishStage: StageTyp
             })
             stopIfNeeded(StageType.CONFIRMATION)
         })
-        ev.on('error', queue.fail)
+        ev.on(TransactionEventType.ERROR, queue.fail)
+
+        // promise
+        ev.then((hashOrReceipt: T) => {
+            if (typeof hashOrReceipt === 'string') {
+                queue.push({
+                    type: StageType.TRANSACTION_HASH,
+                    hash: hashOrReceipt,
+                })
+                stopIfNeeded(StageType.TRANSACTION_HASH)
+            } else {
+                queue.push({
+                    type: StageType.RECEIPT,
+                    receipt: hashOrReceipt as TransactionReceipt,
+                })
+                stopIfNeeded(StageType.RECEIPT)
+            }
+        })
+        ev.catch(queue.fail)
     })
 }
 
@@ -117,24 +149,21 @@ export function iteratorToPromiEvent(
                 const stage_ = processor(stage)
                 switch (stage_.type) {
                     case StageType.TRANSACTION_HASH:
-                        PE.emit('transactionHash', stage_.hash)
+                        PE.emit(TransactionEventType.TRANSACTION_HASH, stage_.hash)
                         break
                     case StageType.RECEIPT:
-                        PE.emit('receipt', stage_.receipt)
+                        PE.emit(TransactionEventType.RECEIPT, stage_.receipt)
                         resolve_?.(stage_.receipt)
                         break
                     case StageType.CONFIRMATION:
-                        PE.emit('confirmation', stage_.no, stage_.receipt)
+                        PE.emit(TransactionEventType.CONFIRMATION, stage_.no, stage_.receipt)
                         break
                     default:
-                        // skip unknown stage
-                        console.log('DEBUG: unknown stage')
-                        console.log(stage)
                         break
                 }
             }
         } catch (e) {
-            PE.emit('error', e)
+            PE.emit(TransactionEventType.ERROR, e)
             reject_?.(e)
         }
     }

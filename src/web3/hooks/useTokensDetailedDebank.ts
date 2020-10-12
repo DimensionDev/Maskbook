@@ -4,7 +4,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
 import { createEetherToken } from '../helpers'
 import { ChainId, CurrencyType, EthereumTokenType, TokenDetailed } from '../types'
-import { useChainId } from './useChainId'
+import { useChainId } from './useChainState'
 
 namespace Debank {
     export interface BalanceRecord {
@@ -48,7 +48,6 @@ export function useTokensDetailedDebank(address: string) {
     const { data = [] } = useSWR([chainId, address], {
         fetcher,
     })
-
     return data.map(
         (x) =>
             ({

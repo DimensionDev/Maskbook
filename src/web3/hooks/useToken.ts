@@ -1,8 +1,8 @@
-import { useAsync } from 'react-use'
+import { useAsync, useAsyncRetry } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { Token, EthereumTokenType } from '../types'
-import { useChainId } from './useChainId'
+import { useChainId } from './useChainState'
 import { useConstant } from './useConstant'
 import { CONSTANTS } from '../constants'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
@@ -20,7 +20,7 @@ export function useToken(token?: PartialRequired<Token, 'address' | 'type'>) {
     const chainId = useChainId()
     const erc20Contract = useERC20TokenContract(token?.address ?? ETH_ADDRESS)
 
-    return useAsync(async () => {
+    return useAsyncRetry(async () => {
         if (!token?.address) return
 
         // Ether
@@ -40,6 +40,9 @@ export function useToken(token?: PartialRequired<Token, 'address' | 'type'>) {
         // ERC20
         if (token.type === EthereumTokenType.ERC20) {
             if (!erc20Contract) return
+
+            // TODO:
+            // fetch token info with multicall
             const [name_, symbol_, decimals_] = await Promise.allSettled([
                 erc20Contract.methods.name().call(),
                 erc20Contract.methods.symbol().call(),
@@ -51,7 +54,7 @@ export function useToken(token?: PartialRequired<Token, 'address' | 'type'>) {
                 address: formatChecksumAddress(token.address),
                 name: resolveSettleResult(name_, token.name ?? ''),
                 symbol: resolveSettleResult(symbol_, token.symbol ?? ''),
-                decimals: Number.parseInt(resolveSettleResult(decimals_, String(token.decimals ?? 0))),
+                decimals: Number.parseInt(resolveSettleResult(decimals_, String(token.decimals ?? 0)), 10),
             } as Token
         }
 

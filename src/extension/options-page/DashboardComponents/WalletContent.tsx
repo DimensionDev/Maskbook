@@ -1,11 +1,11 @@
 import React from 'react'
-import { Button, Typography, Box, IconButton, List, MenuItem, Fade } from '@material-ui/core'
+import { Button, Typography, Box, IconButton, List, MenuItem } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
-
+import { merge, cloneDeep } from 'lodash-es'
+import BigNumber from 'bignumber.js'
 import AddIcon from '@material-ui/icons/Add'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import HistoryIcon from '@material-ui/icons/History'
-
 import { TokenListItem } from '../DashboardComponents/TokenListItem'
 import { useModal, useSnackbarCallback } from '../DashboardDialogs/Base'
 import {
@@ -21,9 +21,6 @@ import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorStyles } from '../../../utils/theme'
 import Services from '../../service'
-import { merge, cloneDeep } from 'lodash-es'
-import BigNumber from 'bignumber.js'
-import type { RedPacketRecord } from '../../../plugins/RedPacket/types'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ProviderType, TokenDetailed } from '../../../web3/types'
@@ -160,15 +157,16 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                         ))}
                 </List>
             </ThemeProvider>
-            {wallet.provider === ProviderType.Maskbook && !xsMatched ? (
+            {!xsMatched ? (
                 <div className={classes.footer}>
                     <Button
                         onClick={() =>
                             openWalletHistory({
                                 wallet,
-                                onClickRedPacketRecord: (record: RedPacketRecord) => {
+                                onRedPacketClicked(payload) {
                                     openWalletRedPacket({
-                                        redPacket: record,
+                                        wallet,
+                                        payload,
                                     })
                                 },
                             })

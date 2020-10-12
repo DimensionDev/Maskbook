@@ -18,9 +18,7 @@ import {
     DashboardWalletRedPacketDetailDialog,
 } from '../DashboardDialogs/Wallet'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { sleep } from '../../../utils/utils'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
-import type { RedPacketRecord } from '../../../plugins/RedPacket/types'
 import { useHistory } from 'react-router-dom'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import { Flags } from '../../../utils/flags'
@@ -80,7 +78,6 @@ export default function DashboardWalletsRouter() {
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
-    const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const wallets = useWallets()
     const [current, setCurrent] = useState('')
@@ -161,9 +158,10 @@ export default function DashboardWalletsRouter() {
                         if (!currentWallet) return
                         openWalletHistory({
                             wallet: currentWallet,
-                            onClickRedPacketRecord: (record: RedPacketRecord) => {
-                                openWalletRedPacket({
-                                    redPacket: record,
+                            onRedPacketClicked(payload) {
+                                openWalletRedPacketDetail({
+                                    wallet: currentWallet,
+                                    payload,
                                 })
                             },
                         })
@@ -209,7 +207,6 @@ export default function DashboardWalletsRouter() {
             {walletHistory}
             {walletCreate}
             {walletError}
-            {walletRedPacket}
             {walletRedPacketDetail}
         </DashboardRouterContainer>
     )
