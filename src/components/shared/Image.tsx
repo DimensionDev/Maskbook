@@ -36,9 +36,10 @@ export interface ImageProps {
     className?: string
     style?: React.CSSProperties
     onClick?: React.MouseEventHandler<HTMLElement>
+    onURL?(url: string): void
 }
 
-type ForwardingRef = {
+export type ImageRef = {
     img?: HTMLImageElement | null
     canvas?: HTMLCanvasElement | null
 }
@@ -47,8 +48,8 @@ type ForwardingRef = {
 /**
  * This React Component is used to render images in the content script to bypass the CSP restriction.
  */
-export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props, outgoingRef) {
-    const { src, loading: propsLoading, canvasProps, imgProps, style, className, SkeletonProps, onClick } = props
+export const Image = forwardRef<ImageRef, ImageProps>(function Image(props, outgoingRef) {
+    const { src, loading: propsLoading, canvasProps, imgProps, style, className, SkeletonProps, onClick, onURL } = props
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas#Maximum_canvas_size
     const [height, width] = [Math.min(32767, props.height || 500), Math.min(32767, props.width || 500)]
     const [hasCSPBan, setHasCSPBan] = useState(false)
@@ -64,6 +65,8 @@ export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props,
         return () => URL.revokeObjectURL(blob)
     }, [src])
 
+    const url: string | undefined = blobURL || (typeof src === 'string' ? src : undefined)
+    useEffect(() => void (url && onURL?.(url)), [onURL, url])
     useImperativeHandle(outgoingRef, () => ({ canvas: canvasRef.current, img: imgRef.current }), [])
 
     // TODO: handle image loading error
@@ -109,7 +112,7 @@ export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props,
     if (component === 'img' && (typeof src === 'string' || blobURL)) {
         return (
             <img
-                src={blobURL ? blobURL : (src as string)}
+                src={url}
                 onError={blobURL ? () => setHasCSPBan(true) : undefined}
                 width={width}
                 height={height}

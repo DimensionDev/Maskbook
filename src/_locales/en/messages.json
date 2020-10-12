@@ -23,6 +23,7 @@
     "additional_post_box__steganography_post_pre": "This image is encrypted with #Maskbook. 📪🔑 Install maskbook.com to decrypt it. {{random}}",
     "auto_paste_failed_dialog_title": "Paste manually",
     "auto_paste_failed_dialog_content": "Please copy the following text and image (if there is any) and publish it",
+    "auto_paste_failed_dialog_image_caption": "Cannot see the image?",
     "auto_paste_failed_snackbar": "It seems like Maskbook didn't post the encrypted post automatically, if so, you need to paste it manually.",
     "auto_paste_failed_snackbar_action": "Show me how",
     "automation_pasted_into_bio_box": "[Maskbook] We helped you append the public key to your bio. Please review and publish it!",

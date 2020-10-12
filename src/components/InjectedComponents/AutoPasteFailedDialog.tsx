@@ -10,6 +10,7 @@ import {
     Box,
     IconButton,
     Paper,
+    Link,
 } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
 import type { MaskbookMessages } from '../../utils/messages'
@@ -29,6 +30,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const { onClose, data } = props
+    const [url, setURL] = useState('')
 
     return (
         <DraggableDiv>
@@ -55,10 +57,14 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     <Box marginBottom={1}></Box>
                     <div style={{ textAlign: 'center' }}>
                         {data.image ? (
-                            // Set component to undefined if the following bug has been resolved:
-                            // https://bugs.chromium.org/p/chromium/issues/detail?id=1136804
-                            // https://bugzilla.mozilla.org/show_bug.cgi?id=1670200
-                            <Image component="canvas" src={data.image} width={360} height={260}></Image>
+                            // It must be img
+                            <Image component="img" onURL={setURL} src={data.image} width={360} height={260} />
+                        ) : null}
+                        <br />
+                        {url ? (
+                            <Link variant="caption" color="textPrimary" href={url} target="_blank">
+                                {t('auto_paste_failed_dialog_image_caption')}
+                            </Link>
                         ) : null}
                     </div>
                 </DialogContent>
