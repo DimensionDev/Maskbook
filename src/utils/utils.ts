@@ -43,6 +43,9 @@ export async function downloadUrl(url: string) {
  * Dispatch a fake event.
  * @param event Event name
  * @param x parameters
+ *
+ * !! TODO: React 17 no longer watch events on document. Please dispatch it on the element itself.
+ * !! Also check injected script also updated.
  */
 export function dispatchCustomEvents<T extends keyof CustomEvents>(event: T, ...x: CustomEvents[T]) {
     document.dispatchEvent(new CustomEvent(CustomEventId, { detail: JSON.stringify([event, x]) }))

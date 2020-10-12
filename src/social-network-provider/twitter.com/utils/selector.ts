@@ -1,6 +1,6 @@
 import { LiveSelector } from '@holoflows/kit'
 import { regexMatch } from '../../../utils/utils'
-import { isCompose, isMobile } from './postBox'
+import { isCompose } from './postBox'
 
 type E = HTMLElement
 
@@ -41,11 +41,6 @@ export const posteditorToolbarSeelctor: () => LiveSelector<E, true> = () =>
 
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
-export const profileEditorButtonSelector = () =>
-    querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
-export const profileEditorTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[name="description"]')
-
-export const bioSelector = () => querySelector<HTMLDivElement>(['[data-testid="UserProfileHeader_Items"]'].join())
 export const bioPageUserNickNameSelector = () =>
     querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
         .map((x) => x.parentElement?.parentElement?.previousElementSibling)

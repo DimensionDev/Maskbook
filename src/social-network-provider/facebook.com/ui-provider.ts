@@ -15,10 +15,8 @@ import { dispatchCustomEvents, selectElementContents, sleep } from '../../utils/
 import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostReplacerFacebook } from './UI/injectPostReplacer'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
-import { injectPageInspectorFacebook } from './UI/injectPageInspector'
 import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
-import { i18n } from '../../utils/i18n-next'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
 import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
@@ -30,6 +28,8 @@ import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
 import { isDarkTheme } from '../../utils/theme-tools'
 import { useState } from 'react'
 import { useInterval } from 'react-use'
+import { MessageCenter } from '../../utils/messages'
+import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
@@ -72,7 +72,7 @@ export const facebookUISelf = defineSocialNetworkUI({
         realCurrent,
     ) {
         const fail = () => {
-            prompt(i18n.t('comment_box__paste_failed'), encryptedComment)
+            MessageCenter.emit('autoPasteFailed', { text: encryptedComment })
         }
         if (isMobileFacebook) {
             const root = realCurrent || current.commentBoxSelector!.evaluate()[0]
@@ -97,7 +97,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     }),
     injectPostReplacer: injectPostReplacerFacebook,
     injectPostInspector: injectPostInspectorFacebook,
-    injectPageInspector: injectPageInspectorFacebook,
+    injectPageInspector: injectPageInspectorDefault(),
     collectPeople: collectPeopleFacebook,
     collectPosts: collectPostsFacebook,
     taskPasteIntoPostBox: pasteIntoPostBoxFacebook,

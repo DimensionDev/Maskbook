@@ -395,13 +395,17 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     const isDai = isErc20 && metadata.ok && isDAI(metadata.val.token?.address ?? '')
                     const isOkb = isErc20 && metadata.ok && isOKB(metadata.val.token?.address ?? '')
 
-                    activeUI.taskPasteIntoPostBox(
-                        t('additional_post_box__steganography_post_pre', { random: new Date().toLocaleString() }),
-                        { shouldOpenPostDialog: false },
-                    )
+                    const relatedText = t('additional_post_box__steganography_post_pre', {
+                        random: new Date().toLocaleString(),
+                    })
+                    activeUI.taskPasteIntoPostBox(relatedText, {
+                        shouldOpenPostDialog: false,
+                        autoPasteFailedRecover: false,
+                    })
                     activeUI.taskUploadToPostBox(encrypted, {
                         template: isRedPacket ? (isDai ? 'dai' : isOkb ? 'okb' : 'eth') : 'v2',
-                        warningText: t('additional_post_box__steganography_post_failed'),
+                        autoPasteFailedRecover: true,
+                        relatedText,
                     })
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
@@ -419,7 +423,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                         }
                     }
                     activeUI.taskPasteIntoPostBox(text, {
-                        warningText: t('additional_post_box__encrypted_failed'),
+                        autoPasteFailedRecover: true,
                         shouldOpenPostDialog: false,
                     })
                 }

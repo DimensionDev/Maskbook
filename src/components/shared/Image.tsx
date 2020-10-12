@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useRef, useEffect, forwardRef, useImperativeHandle } from 'react'
+import { useRef, useEffect, forwardRef, useImperativeHandle, useState } from 'react'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { Skeleton, SkeletonProps } from '@material-ui/lab'
@@ -36,9 +36,10 @@ export interface ImageProps {
     className?: string
     style?: React.CSSProperties
     onClick?: React.MouseEventHandler<HTMLElement>
+    onURL?(url: string): void
 }
 
-type ForwardingRef = {
+export type ImageRef = {
     img?: HTMLImageElement | null
     canvas?: HTMLCanvasElement | null
 }
@@ -47,17 +48,26 @@ type ForwardingRef = {
 /**
  * This React Component is used to render images in the content script to bypass the CSP restriction.
  */
-export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props, outgoingRef) {
-    const { src, loading: propsLoading, canvasProps, imgProps, style, className, SkeletonProps, onClick } = props
+export const Image = forwardRef<ImageRef, ImageProps>(function Image(props, outgoingRef) {
+    const { src, loading: propsLoading, canvasProps, imgProps, style, className, SkeletonProps, onClick, onURL } = props
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas#Maximum_canvas_size
     const [height, width] = [Math.min(32767, props.height || 500), Math.min(32767, props.width || 500)]
-    const [origin, component] = resolveMode(props)
+    const [hasCSPBan, setHasCSPBan] = useState(false)
+    const [origin, component] = resolveMode(props, hasCSPBan)
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const imgRef = useRef<HTMLImageElement>(null)
-    useImperativeHandle(outgoingRef, () => ({ canvas: canvasRef.current, img: imgRef.current }), [
-        canvasRef.current,
-        imgRef.current,
-    ])
+    const [blobURL, setBlob] = useState('')
+
+    useEffect(() => {
+        if (!(src instanceof Blob)) return
+        const blob = URL.createObjectURL(src)
+        setBlob(blob)
+        return () => URL.revokeObjectURL(blob)
+    }, [src])
+
+    const url: string | undefined = blobURL || (typeof src === 'string' ? src : undefined)
+    useEffect(() => void (url && onURL?.(url)), [onURL, url])
+    useImperativeHandle(outgoingRef, () => ({ canvas: canvasRef.current, img: imgRef.current }), [])
 
     // TODO: handle image loading error
     const { loading, error, value } = useAsync(
@@ -84,7 +94,7 @@ export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props,
             const ctx = e.getContext('2d')!
             ctx.drawImage(data, 0, 0, width * window.devicePixelRatio, height * window.devicePixelRatio)
         })
-    }, [canvasRef.current, propsLoading, loading, value, component, width, height, src])
+    }, [propsLoading, loading, value, component, width, height, src])
 
     if (propsLoading || loading) {
         return (
@@ -99,10 +109,11 @@ export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props,
             />
         )
     }
-    if (component === 'img' && typeof src === 'string') {
+    if (component === 'img' && (typeof src === 'string' || blobURL)) {
         return (
             <img
-                src={src}
+                src={url}
+                onError={blobURL ? () => setHasCSPBan(true) : undefined}
                 width={width}
                 height={height}
                 className={className}
@@ -127,8 +138,10 @@ export const Image = forwardRef<ForwardingRef, ImageProps>(function Image(props,
 })
 function resolveMode(
     props: ImageProps,
+    hasCSPBan: boolean,
 ): [Exclude<NonNullable<ImageProps['origin']>, 'auto'>, NonNullable<ImageProps['component']>] {
     const { src, component = 'img', origin = 'auto' } = props
+    if (!hasCSPBan) return ['current', component]
     if (typeof src !== 'string') return ['current', 'canvas']
     if (origin === 'extension') return ['extension', 'canvas']
     if (origin === 'auto') {
