@@ -16,6 +16,7 @@ import {
     Tabs,
 } from '@material-ui/core'
 import { last } from 'lodash-es'
+import { AlertCircle } from 'react-feather'
 import { DataProvider, SwapProvider } from '../../types'
 import {
     resolveDataProviderName,
@@ -151,6 +152,51 @@ function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
 }
 //#endregion
 
+//#region error
+const useErrorStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        placeholder: {
+            padding: theme.spacing(18, 4),
+        },
+        icon: {
+            width: theme.spacing(8),
+            height: theme.spacing(8),
+            marginBottom: theme.spacing(2),
+            color: theme.palette.text.secondary,
+        },
+        message: {
+            fontSize: 16,
+        },
+    }),
+)
+interface TrendingViewErrorProps {
+    message: React.ReactNode
+}
+
+function TrendingViewError(props: TrendingViewErrorProps) {
+    const classes = useStyles()
+    const errorClasses = useErrorStyles()
+    const { message } = props
+    return (
+        <Card className={classes.root} elevation={0} component="article">
+            <CardContent className={classes.content}>
+                <Box
+                    className={errorClasses.placeholder}
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center"
+                    alignItems="center">
+                    <AlertCircle className={errorClasses.icon} />
+                    <Typography className={errorClasses.message} color="textSecondary">
+                        {message}
+                    </Typography>
+                </Box>
+            </CardContent>
+        </Card>
+    )
+}
+//#endregion
+
 //#region trending view
 export interface TrendingViewProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     name: string
@@ -195,15 +241,33 @@ export function TrendingView(props: TrendingViewProps) {
     //#region display loading skeleton
     if (loadingCurrency || loadingTrending) return <TrendingViewSkeleton />
     //#endregion
+
     //#region error handling
     // error: no available platform
     if (props.dataProviders.length === 0) return null
 
     // error: fail to load currency
-    if (!currency) return null
+    if (!currency) return <TrendingViewError message="Fail to load currency info." />
 
     // error: unknown coin or api error
-    if (!trending) return null
+    if (!trending)
+        return (
+            <TrendingViewError
+                message={
+                    <span>
+                        Fail to load trending info from{' '}
+                        <Link
+                            color="primary"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={resolveDataProviderLink(dataProvider)}>
+                            {resolveDataProviderName(dataProvider)}
+                        </Link>
+                        .
+                    </span>
+                }
+            />
+        )
     //#endregion
 
     const { coin, market, tickers } = trending
