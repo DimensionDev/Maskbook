@@ -147,6 +147,7 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
         wrapper: {
             display: 'flex',
             flexDirection: 'column',
+            maxWidth: '100%',
             width: (props) => (props.size === 'small' ? 280 : 440),
             padding: (props) => (props.size === 'small' ? '40px 24px !important' : '40px 36px !important'),
             margin: '0 auto',
