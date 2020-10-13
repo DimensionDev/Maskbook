@@ -108,6 +108,9 @@ const useStyles = makeStyles((theme: Theme) => {
         avatar: {
             backgroundColor: theme.palette.common.white,
         },
+        currency: {
+            marginRight: theme.spacing(1),
+        },
         percentage: {
             marginLeft: theme.spacing(1),
         },
@@ -298,13 +301,22 @@ export function TrendingView(props: TrendingViewProps) {
                 subheader={
                     <>
                         <Typography component="p" variant="body1">
-                            <span>{`${`${currency.name} `}${formatCurrency(
-                                dataProvider === DataProvider.COIN_MARKET_CAP
-                                    ? last(stats)?.[1] ?? market.current_price
-                                    : market.current_price,
-                                currency.symbol,
-                            )}`}</span>
-                            {typeof market.price_change_percentage_24h === 'number' ? (
+                            {market ? (
+                                <>
+                                    <span className={classes.currency}>{currency.name}</span>
+                                    <span>
+                                        {formatCurrency(
+                                            dataProvider === DataProvider.COIN_MARKET_CAP
+                                                ? last(stats)?.[1] ?? market.current_price
+                                                : market.current_price,
+                                            currency.symbol,
+                                        )}
+                                    </span>
+                                </>
+                            ) : (
+                                <span>{t('plugin_trader_no_data')}</span>
+                            )}
+                            {typeof market?.price_change_percentage_24h === 'number' ? (
                                 <PriceChanged amount={market.price_change_percentage_24h} />
                             ) : null}
                         </Typography>
@@ -331,7 +343,7 @@ export function TrendingView(props: TrendingViewProps) {
                     </Tabs>
                     {tabIndex === 0 ? (
                         <>
-                            <PriceChangedTable market={market} />
+                            {market ? <PriceChangedTable market={market} /> : null}
                             <PriceChart stats={stats} loading={loadingStats}>
                                 <PriceChartDaysControl days={days} onDaysChange={setDays} />
                             </PriceChart>
