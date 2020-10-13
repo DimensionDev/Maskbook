@@ -78,8 +78,8 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     //#region wallet connect QR code dialog
     const [_, setWalletConnectDialogOpen] = useRemoteControlledDialog<
         MaskbookWalletMessages,
-        'walletConnectQRCodeUpdated'
-    >(WalletMessageCenter, 'walletConnectQRCodeUpdated')
+        'walletConnectQRCodeDialogUpdated'
+    >(WalletMessageCenter, 'walletConnectQRCodeDialogUpdated')
     //#endregion
 
     // render in dashboard

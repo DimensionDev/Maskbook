@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { createStyles, DialogContent, makeStyles, Typography, useTheme } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { QRCode } from '../../../components/shared/qrcode'
@@ -6,6 +6,7 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { useI18N } from '../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { MaskbookWalletMessages, WalletMessageCenter } from '../messages'
+import Services from '../../../extension/service'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -37,9 +38,9 @@ export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps)
     const theme = useTheme()
 
     //#region remote controlled dialog logic
-    const [open, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'walletConnectQRCodeUpdated'>(
+    const [open, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'walletConnectQRCodeDialogUpdated'>(
         WalletMessageCenter,
-        'walletConnectQRCodeUpdated',
+        'walletConnectQRCodeDialogUpdated',
         (ev) => {
             if (ev.open) setURI(ev.uri)
         },
@@ -50,6 +51,13 @@ export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps)
         })
     }, [setOpen])
     //#endregion
+
+    // connected
+    useEffect(() => {
+        if (!URI) return
+        if (!open) return
+        Services.Ethereum.connectWalletConnect().then(onClose)
+    }, [open, URI, onClose])
 
     console.log('DEBUG: wallet connect')
     console.log({
@@ -78,7 +86,7 @@ export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps)
                 }}>
                 <DialogContent className={classes.content}>
                     <Typography className={classes.tip} color="textSecondary">
-                        Scan QR code with a WalletConnect-compatible wallet
+                        Scan QR code with a WalletConnect-compatible wallet.
                     </Typography>
                     <QRCode
                         text={URI}
