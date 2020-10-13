@@ -24,12 +24,13 @@ import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/
 import { getProfilePageUrlAtFacebook } from './parse-username'
 import { notifyPermissionUpdate } from '../../utils/permissions'
 import { Flags } from '../../utils/flags'
-import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
-import { isDarkTheme } from '../../utils/theme-tools'
+import { getMaskbookTheme } from '../../utils/theme'
+import { isDark, isDarkTheme } from '../../utils/theme-tools'
 import { useState } from 'react'
 import { useInterval } from 'react-use'
 import { MessageCenter } from '../../utils/messages'
 import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
+import { Appearance } from '../../settings/settings'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
@@ -130,8 +131,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     },
 })
 function getTheme() {
-    if (isDarkTheme()) return MaskbookDarkTheme
-    return MaskbookLightTheme
+    return getMaskbookTheme({ theme: isDarkTheme() ? Appearance.dark : Appearance.light })
 }
 if (module.hot) {
     module.hot.accept('./tasks/pasteIntoPostBox.ts', () => {

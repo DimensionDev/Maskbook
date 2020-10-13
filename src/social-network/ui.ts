@@ -8,7 +8,7 @@ import { defaultSharedSettings } from './defaults/shared'
 import { defaultSocialNetworkUI } from './defaults/ui'
 import { nopWithUnmount } from '../utils/utils'
 import type { Theme } from '@material-ui/core'
-import { MaskbookLightTheme } from '../utils/theme'
+import { useMaskbookTheme } from '../utils/theme'
 import { untilDomLoaded } from '../utils/dom'
 import type { I18NStrings } from '../utils/i18n-next'
 import i18nNextInstance from '../utils/i18n-next'
@@ -284,7 +284,7 @@ let activatedSocialNetworkUI = ({
     lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
     myIdentitiesRef: new ValueRef([]),
-    useTheme: () => MaskbookLightTheme,
+    useTheme: useMaskbookTheme,
 } as Partial<SocialNetworkUI>) as SocialNetworkUI
 export function activateSocialNetworkUI(): void {
     for (const ui of definedSocialNetworkUIs)
