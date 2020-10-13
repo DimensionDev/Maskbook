@@ -19,7 +19,6 @@ import { ProfileInList } from './ProfileInList'
 import type { Profile } from '../../../database'
 import { DialogDismissIconUI } from '../../InjectedComponents/DialogDismissIcon'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
-import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -59,9 +58,6 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { items, disabledItems } = props
     const [search, setSearch] = React.useState('')
-    const [, inputRef] = useCapturedInput((newText) => {
-        setSearch(newText)
-    }, [])
     const itemsAfterSearch = React.useMemo(() => {
         const fuse = new Fuse(items, {
             keys: ['identifier.userId', 'linkedPersona.fingerprint', 'nickname'],
@@ -104,7 +100,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             </DialogTitle>
             <InputBase
                 value={search}
-                inputRef={inputRef}
+                onChange={(e) => setSearch(e.target.value)}
                 className={classes.input}
                 placeholder={t('search_box_placeholder')}
             />

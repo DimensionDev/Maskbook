@@ -19,7 +19,6 @@ import {
     CircularProgress,
 } from '@material-ui/core'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
-import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
 import { useFriendsList, useCurrentGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
@@ -113,14 +112,12 @@ export interface PostDialogUIProps
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
-    const [, inputRef] = useCapturedInput(
-        (newText) => {
-            const msg = props.postContent
-            if (isTypedMessageText(msg)) props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
-            else throw new Error('Not impled yet')
-        },
-        [props.open, props.postContent],
-    )
+    const onPostContentChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
+        const newText = e.target.value
+        const msg = props.postContent
+        if (isTypedMessageText(msg)) props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
+        else throw new Error('Not impled yet')
+    }
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
     const [fileServiceDialogOpen, setFileServiceDialogOpen] = useState(false)
     const [pollsDialogOpen, setPollsDialogOpen] = useState(false)
@@ -187,7 +184,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             }}
                             autoFocus
                             value={props.postContent.content}
-                            inputRef={inputRef}
+                            onChange={onPostContentChange}
                             fullWidth
                             multiline
                             placeholder={t('post_dialog__placeholder')}

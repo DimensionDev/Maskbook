@@ -24,7 +24,6 @@ import { getActivatedUI } from '../../social-network/ui'
 import { currentSetupGuideStatus, SetupGuideCrossContextStatus } from '../../settings/settings'
 import { MessageCenter } from '../../utils/messages'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
 
@@ -266,19 +265,12 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
 
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
-    const [binder, inputRef] = useCapturedInput(onUsernameChange)
-
-    useEffect(
-        () =>
-            binder(['keydown'], (e) => {
-                e.stopPropagation()
-                if (e.key === 'Enter') {
-                    e.preventDefault()
-                    ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, username))
-                }
-            })(),
-        [onConnect, binder],
-    )
+    const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
+        if (e.key === 'Enter') {
+            e.preventDefault()
+            ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, username))
+        }
+    }
     return (
         <WizardDialog
             completion={33.33}
@@ -301,7 +293,8 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                                 </InputAdornment>
                             ),
                         }}
-                        inputRef={inputRef}
+                        onChange={(e) => onUsernameChange(e.target.value)}
+                        onKeyDown={onKeyDown}
                         inputProps={{ 'data-testid': 'username_input' }}></TextField>
                     <Typography
                         className={classes.tip}

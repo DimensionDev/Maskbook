@@ -12,6 +12,25 @@ import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
 import '../../components/InjectedComponents/ShadowRootSwitchNotifier'
 
+const captureEvents: (keyof HTMLElementEventMap)[] = [
+    'paste',
+    'keydown',
+    'keypress',
+    'keyup',
+    'drag',
+    'dragend',
+    'dragenter',
+    'dragexit',
+    'dragleave',
+    'dragover',
+    'dragstart',
+    'change',
+]
+try {
+    for (const each of captureEvents) {
+        portalShadowRoot.addEventListener(each, (e) => e.stopPropagation())
+    }
+} catch {}
 const previousShadowedElement = new Set<HTMLElement>()
 /**
  * Render the Node in the ShadowRoot
@@ -82,14 +101,17 @@ export function renderInShadowRoot(
     return () => rendered && unmount()
 }
 
-function mount(e: ({} | ShadowRoot) & HTMLElement, _: JSX.Element, keyBy = 'app', concurrent?: boolean) {
+function mount(host: ({} | ShadowRoot) & HTMLElement, _: JSX.Element, keyBy = 'app', concurrent?: boolean) {
     const container =
-        e.querySelector<HTMLElement>(`main.${keyBy}`) ||
+        host.querySelector<HTMLElement>(`main.${keyBy}`) ||
         (() => {
-            const dom = (e as ShadowRoot).appendChild(document.createElement('main'))
+            const dom = host.appendChild(document.createElement('main'))
             dom.className = keyBy
             return dom
         })()
+    for (const each of captureEvents) {
+        host.addEventListener(each, (e) => e.stopPropagation())
+    }
     if (concurrent) {
         const root = ReactDOM.unstable_createRoot(container)
         root.render(_)
