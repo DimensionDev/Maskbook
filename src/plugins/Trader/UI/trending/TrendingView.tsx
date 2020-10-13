@@ -371,7 +371,7 @@ export function TrendingView(props: TrendingViewProps) {
 
                 {tabIndex === 0 || tabIndex === 1 ? (
                     <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
-                        <span>Data source: </span>
+                        <span>Data source </span>
                         <Link
                             className={classes.footlink}
                             color="textSecondary"
@@ -395,7 +395,7 @@ export function TrendingView(props: TrendingViewProps) {
 
                 {tabIndex === 2 ? (
                     <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
-                        {'Based on '}
+                        <span>Based on </span>
                         <Link
                             className={classes.footlink}
                             color="textSecondary"
