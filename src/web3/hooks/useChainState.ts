@@ -33,7 +33,7 @@ const revalidate = debounce(
 
 // polling the newest block state from the chain
 pollingTask(revalidate, {
-    delay: 100 /* seconds */ * 1000 /* milliseconds */,
+    delay: 15 /* seconds */ * 1000 /* milliseconds */,
 })
 
 // revalidate if the chainId of current provider was changed
