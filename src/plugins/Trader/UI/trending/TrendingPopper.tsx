@@ -32,6 +32,11 @@ export function TrendingPopper(props: TrendingPopperProps) {
         'selectProviderDialogUpdated',
         onFreezed,
     )
+    useRemoteControlledDialog<MaskbookWalletMessages, 'walletConnectQRCodeDialogUpdated'>(
+        MessageCenterWallet,
+        'walletConnectQRCodeDialogUpdated',
+        onFreezed,
+    )
     //#endregion
 
     //#region open or close popper

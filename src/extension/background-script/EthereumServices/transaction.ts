@@ -27,7 +27,7 @@ updateWallets()
 
 /**
  * For some providers which didn't emit 'receipt' event
- * we polling receipt on the chain and emit the event manually
+ * we polling receipt from the chain and emit the event manually
  * @param event
  */
 function watchTransactionEvent(event: PromiEventW3<TransactionReceipt | string>) {
@@ -38,6 +38,10 @@ function watchTransactionEvent(event: PromiEventW3<TransactionReceipt | string>)
         // retry 30 times
         for await (const _ of new Array(30).fill(0)) {
             const receipt = await getTransactionReceipt(hash)
+
+            console.log('DEBUG: watch tx')
+            console.log(receipt)
+
             // the 'receipt' event was emitted
             if (controller.signal.aborted) break
             // emit receipt manually
@@ -50,7 +54,7 @@ function watchTransactionEvent(event: PromiEventW3<TransactionReceipt | string>)
             await sleep(15 /* seconds */ * 1000 /* milliseconds */)
         }
         // timeout
-        if (!controller.signal.aborted) enhancedEvent.emit('error', new Error('timeout'))
+        if (!controller.signal.aborted) enhancedEvent.emit(TransactionEventType.ERROR, new Error('timeout'))
     }
     function unwatchTransactionHash() {
         controller.abort()
@@ -101,8 +105,11 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
     // Wrap promise as PromiEvent because WalletConnect returns transaction hash only
     // docs: https://docs.walletconnect.org/client-api
     if (wallet.provider === ProviderType.WalletConnect) {
-        const connector = await WalletConnect.createConnector()
+        const connector = await WalletConnect.createConnectorIfNeeded()
         return () => {
+            console.log('DEBUG: wallet connect send transaction')
+            console.log(config)
+
             const listeners: { name: string; listener: Function }[] = []
             const promise = connector.sendTransaction(config as ITxData) as Promise<string>
 
@@ -115,16 +122,22 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
 
             // only trasnaction hash available
             promise
-                .then((hash) =>
+                .then((hash) => {
+                    console.log('DEBUG: wallet connect hash')
+                    console.log(hash)
+
                     listeners
                         .filter((x) => x.name === TransactionEventType.TRANSACTION_HASH)
-                        .forEach((y) => y.listener(hash)),
-                )
-                .catch((e) =>
-                    listeners.filter((x) => x.name === TransactionEventType.ERROR).forEach((y) => y.listener(e)),
-                )
+                        .forEach((y) => y.listener(hash))
+                })
+                .catch((e) => {
+                    console.log('DEBUG: wallet connect error')
+                    console.log(e)
 
-            return (promise as unknown) as PromiEvent<string>
+                    listeners.filter((x) => x.name === TransactionEventType.ERROR).forEach((y) => y.listener(e))
+                })
+
+            return (promise as unknown) as PromiEventW3<string>
         }
     }
     throw new Error(`cannot send transaction for wallet ${wallet.address}`)
@@ -139,8 +152,8 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
 export async function* sendTransaction(from: string, config: TransactionConfig) {
     try {
         const createTransactionEvent = await createTransactionEventCreator(from, config)
-        const transactionEvent = enhancePromiEvent(createTransactionEvent())
-        for await (const stage of promiEventToIterator(transactionEvent)) {
+        const watchedTransactionEvent = watchTransactionEvent(createTransactionEvent())
+        for await (const stage of promiEventToIterator(watchedTransactionEvent)) {
             // advance the nonce if tx comes out
             if (stage.type === StageType.TRANSACTION_HASH) await commitNonce(from)
             yield stage
@@ -181,8 +194,8 @@ export async function callTransaction(from: string | undefined, config: Transact
     if (wallet.provider === ProviderType.Maskbook) return createWeb3(Maskbook.createProvider()).eth.call(config)
     if (wallet.provider === ProviderType.MetaMask) return MetaMask.createWeb3().eth.call(config)
     if (wallet.provider === ProviderType.WalletConnect) {
-        const connector = await WalletConnect.createConnector()
-        return createWeb3(Maskbook.createProvider(connector.chainId as ChainId), []).eth.call(config)
+        const connector = await WalletConnect.createConnectorIfNeeded()
+        return createWeb3(Maskbook.createProvider(connector.chainId as ChainId)).eth.call(config)
     }
     unreachable(wallet.provider)
 }

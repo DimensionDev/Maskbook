@@ -11,6 +11,7 @@ export const WalletPluginDefine: PluginConfig = {
         return (
             <>
                 <SelectProviderDialog />
+                <WalletConnectQRCodeDialog />
             </>
         )
     },

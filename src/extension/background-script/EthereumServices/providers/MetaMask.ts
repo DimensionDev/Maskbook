@@ -62,8 +62,8 @@ export async function requestAccounts() {
     const web3 = new Web3()
     web3.setProvider(provider)
     const accounts = await web3.eth.requestAccounts()
-    await updateWalletInDB(accounts[0] ?? '', true)
-    return accounts[0]
+    for (const account of accounts) await updateWalletInDB(account, true)
+    return accounts
 }
 
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {
@@ -72,5 +72,5 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
 
     // update wallet in the DB
     await updateExoticWalletFromSource(ProviderType.MetaMask, new Map([[address, { address }]]))
-    if (setDefaultWallet) await setDefaultWallet(address)
+    if (setAsDefault) await setDefaultWallet(address)
 }

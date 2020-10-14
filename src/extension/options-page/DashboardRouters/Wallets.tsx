@@ -86,6 +86,9 @@ export default function DashboardWalletsRouter() {
     const tokens = useTokens(current)
     const [detailedTokens, detailedTokensCallback] = useTokensDetailedCallback(tokens)
 
+    console.log('DEBUG: DashboardWalletsRouter')
+    console.log(detailedTokens)
+
     // auto select first wallet
     useEffect(() => {
         if (current) return
@@ -107,6 +110,10 @@ export default function DashboardWalletsRouter() {
     // auto fetch tokens detailed
     useEffect(() => {
         if (!current) return
+
+        console.log('DEBUG: detailedTokensCallback')
+        console.log(current)
+
         detailedTokensCallback(current)
     }, [current])
 
