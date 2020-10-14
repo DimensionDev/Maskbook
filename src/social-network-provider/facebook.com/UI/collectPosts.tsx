@@ -117,7 +117,7 @@ export function collectNodeText(node: HTMLElement | undefined): string {
             if (each instanceof HTMLAnchorElement) {
                 const href = each.getAttribute('href')
                 if (!href) return each.innerText
-                return '\n' + href.includes('l.facebook.com') ? new URL(href).searchParams.get('u') : each.innerText
+                return '\n' + (href.includes('l.facebook.com') ? new URL(href).searchParams.get('u') : each.innerText)
             }
             if (each instanceof HTMLImageElement) return each.alt
             if (each instanceof HTMLElement) return collectNodeText(each)
