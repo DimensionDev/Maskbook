@@ -35,8 +35,10 @@ function watchTransactionEvent(event: PromiEventW3<TransactionReceipt | string>)
     const enhancedEvent = enhancePromiEvent(event)
     const controller = new AbortController()
     async function watchTransactionHash(hash: string) {
+        console.log('DEBUG: start watchTransactionEvent')
+
         // retry 30 times
-        for await (const _ of new Array(30).fill(0)) {
+        for (const _ of new Array(30).fill(0)) {
             const receipt = await getTransactionReceipt(hash)
 
             console.log('DEBUG: watch tx')
