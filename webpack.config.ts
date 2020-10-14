@@ -8,6 +8,7 @@ import type {} from 'webpack-dev-server'
 //#region Development plugins
 import WebExtensionHotLoadPlugin from '@dimensiondev/webpack-web-ext-plugin'
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
+import ReactRefreshTypeScriptTransformer from 'react-refresh-typescript'
 import WatchMissingModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin'
 import NotifierPlugin from 'webpack-notifier'
 import ForkTSCheckerPlugin from 'fork-ts-checker-webpack-plugin'
@@ -38,8 +39,6 @@ export default function (_argvEnv, argv: any) {
     const dist = env === 'production' ? src('./build') : src('./dist')
 
     const enableHMR = env === 'development' && !Boolean(process.env.NO_HMR)
-    // Wait for https://github.com/facebook/react/pull/19914
-    const enableHMRWithReactRefresh = enableHMR && false
 
     /**
      * On Firefox, CSP settings does not work. On iOS, eval is async.
@@ -188,7 +187,7 @@ export default function (_argvEnv, argv: any) {
                     importsNotUsedAsValues: 'remove',
                 },
                 getCustomTransformers: () => ({
-                    before: enableHMRWithReactRefresh ? [require('react-refresh/typescript').default()] : undefined,
+                    before: enableHMR ? [ReactRefreshTypeScriptTransformer()] : undefined,
                 }),
             },
         }
@@ -243,7 +242,6 @@ export default function (_argvEnv, argv: any) {
     function getHotModuleReloadPlugin() {
         if (!enableHMR) return []
         // overlay is not working in our environment
-        if (!enableHMRWithReactRefresh) return [new HotModuleReplacementPlugin()]
         return [new HotModuleReplacementPlugin(), new ReactRefreshWebpackPlugin({ overlay: false })]
     }
 
