@@ -1,0 +1,128 @@
+{
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+        "contract_version": {
+            "type": "number",
+            "title": "contract_version"
+        },
+        "contract_address": {
+            "type": "string",
+            "title": "contract_address"
+        },
+        "lyid": {
+            "type": "string",
+            "title": "lyid"
+        },
+        "password": {
+            "type": "string",
+            "title": "password"
+        },
+        "prize_class": {
+            "type": "array",
+            "title": "prize_class"
+        },
+        "if_draw_at_time": {
+            "type": "boolean",
+            "title": "if_draw_at_time"
+        },
+        "draw_at_time": {
+            "type": "number",
+            "title": "draw_at_time"
+        },
+        "draw_at_number": {
+            "type": "number",
+            "title": "draw_at_number"
+        },
+        "total_token": {
+            "type": "string",
+            "title": "total_token"
+        },
+        "total_winner": {
+            "type": "number",
+            "title": "total_winner"
+        },
+        "creation_time": {
+            "type": "number",
+            "title": "creation_time"
+        },
+        "duration": {
+            "type": "number",
+            "title": "duration"
+        },
+        "sender": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "title": "address"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "name"
+                },
+                "message": {
+                    "type": "string",
+                    "title": "message"
+                }
+            },
+            "required": ["address", "message", "name"],
+            "title": "sender"
+        },
+        "network": {
+            "enum": ["Mainnet", "Rinkeby", "Ropsten"],
+            "type": "string",
+            "title": "network"
+        },
+        "token_type": {
+            "enum": [0, 1, 2],
+            "type": "number",
+            "title": "token_type"
+        },
+        "token": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "address": {
+                    "description": "token address",
+                    "type": "string",
+                    "title": "address"
+                },
+                "name": {
+                    "description": "token name",
+                    "type": "string",
+                    "title": "name"
+                },
+                "decimals": {
+                    "description": "token decimal",
+                    "type": "number",
+                    "title": "decimals"
+                },
+                "symbol": {
+                    "description": "token symbol",
+                    "type": "string",
+                    "title": "symbol"
+                }
+            },
+            "required": ["address", "decimals", "name", "symbol"],
+            "title": "token"
+        }
+    },
+    "required": [
+        "contract_address",
+        "contract_version",
+        "password",
+        "lyid",
+        "prize_class",
+        "if_draw_at_time",
+        "draw_at_time",
+        "draw_at_number",
+        "total_token",
+        "total_winner",
+        "creation_time",
+        "duration",
+        "sender",
+        "token_type"
+    ]
+}

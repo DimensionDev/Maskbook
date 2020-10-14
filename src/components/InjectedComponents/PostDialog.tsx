@@ -49,6 +49,7 @@ import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/plugin'
 import { Flags } from '../../utils/flags'
 import PollsDialog from '../../plugins/Polls/UI/PollsDialog'
+import LotteryDialog from '../../plugins/Lottery/UI/LotteryDialog'
 
 const defaultTheme = {}
 
@@ -121,6 +122,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
     const [fileServiceDialogOpen, setFileServiceDialogOpen] = useState(false)
     const [pollsDialogOpen, setPollsDialogOpen] = useState(false)
+    const [lotteryDialogOpen, setLotteryDialogOpen] = useState(false)
 
     if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
     const metadataBadge = [...PluginUI].flatMap((plugin) => {
@@ -229,6 +231,19 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     },
                                 }}
                             />
+                            <ClickableChip
+                                ChipProps={{
+                                    label: '🎉 Lottery',
+                                    onClick: async () => {
+                                        const wallets = await Services.Plugin.invokePlugin(
+                                            'maskbook.wallet',
+                                            'getWallets',
+                                        )
+                                        if (wallets.length) setLotteryDialogOpen(true)
+                                        else Services.Provider.requestConnectWallet()
+                                    },
+                                }}
+                            />
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
@@ -317,6 +332,15 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     open={props.open && pollsDialogOpen}
                     onConfirm={() => setPollsDialogOpen(false)}
                     onDecline={() => setPollsDialogOpen(false)}
+                    DialogProps={props.DialogProps}
+                />
+            )}
+            {!process.env.STORYBOOK && (
+                <LotteryDialog
+                    classes={classes}
+                    open={props.open && lotteryDialogOpen}
+                    onConfirm={() => setLotteryDialogOpen(false)}
+                    onDecline={() => setLotteryDialogOpen(false)}
                     DialogProps={props.DialogProps}
                 />
             )}

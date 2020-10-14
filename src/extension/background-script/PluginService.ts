@@ -4,6 +4,7 @@ import * as Gitcoin from '../../plugins/Gitcoin/service'
 import * as Poll from '../../plugins/Polls/Services'
 import * as FileService from '../../plugins/FileService/service'
 import * as Trader from '../../plugins/Trader/services'
+import * as Lottery from '../../plugins/Lottery/services'
 
 const Plugins = {
     'maskbook.red_packet': RedPacket,
@@ -11,6 +12,7 @@ const Plugins = {
     'maskbook.fileservice': FileService,
     'maskbook.trader': Trader,
     'maskbook.polls': Poll,
+    'maskbook.lottery': Lottery,
     'co.gitcoin': Gitcoin,
 } as const
 type Plugins = typeof Plugins

@@ -1,0 +1,696 @@
+[
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "total_token",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "id",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "creator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "creation_time",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "token_address",
+          "type": "address"
+        }
+      ],
+      "name": "CreationSuccess",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "id",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "remaining_tokens",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "claimed_winner",
+          "type": "uint256"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint8",
+              "name": "prize_id",
+              "type": "uint8"
+            },
+            {
+              "internalType": "address",
+              "name": "winner_addrs",
+              "type": "address"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct LuckyLottery.Winner[]",
+          "name": "winner",
+          "type": "tuple[]"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint8",
+              "name": "id",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "token_number",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "winner_number",
+              "type": "uint256"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct LuckyLottery.PrizeClass[]",
+          "name": "prize_class",
+          "type": "tuple[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "token_address",
+          "type": "address"
+        }
+      ],
+      "name": "DrawSuccess",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "id",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "participator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "token_address",
+          "type": "address"
+        }
+      ],
+      "name": "ParticipateSuccess",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "id",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "token_address",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "remaining_balance",
+          "type": "uint256"
+        }
+      ],
+      "name": "RefundSuccess",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "contract_creator",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[2][]",
+          "name": "_prize_class",
+          "type": "uint256[2][]"
+        }
+      ],
+      "name": "create_prize_class",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint8",
+              "name": "id",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "token_number",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "winner_number",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct LuckyLottery.PrizeClass[20]",
+          "name": "p_class",
+          "type": "tuple[20]"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint8",
+              "name": "id",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "token_number",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "winner_number",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct LuckyLottery.PrizeClass[20]",
+          "name": "pc",
+          "type": "tuple[20]"
+        }
+      ],
+      "name": "get_total_token",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "total_token",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint8",
+              "name": "id",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "token_number",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "winner_number",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct LuckyLottery.PrizeClass[20]",
+          "name": "pc",
+          "type": "tuple[20]"
+        }
+      ],
+      "name": "get_total_winner",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "total_winner",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "id",
+          "type": "bytes32"
+        }
+      ],
+      "name": "if_can_draw",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "is_start",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_hash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_duration",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "_if_draw_at_time",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_draw_at_time",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_draw_at_number",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_seed",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "string",
+          "name": "_message",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint8",
+          "name": "_token_type",
+          "type": "uint8"
+        },
+        {
+          "internalType": "address",
+          "name": "_token_addr",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256[2][]",
+          "name": "_prize_class",
+          "type": "uint256[2][]"
+        }
+      ],
+      "name": "create_lottery",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function",
+      "payable": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "token_type",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "token_address",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "sender_address",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "recipient_address",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "transfer_token",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function",
+      "payable": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "a",
+          "type": "address"
+        }
+      ],
+      "name": "toBytes",
+      "outputs": [
+        {
+          "internalType": "bytes",
+          "name": "b",
+          "type": "bytes"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "id",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "string",
+          "name": "password",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "_recipient",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "validation",
+          "type": "bytes32"
+        }
+      ],
+      "name": "participate",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "id",
+          "type": "bytes32"
+        }
+      ],
+      "name": "draw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_id",
+          "type": "bytes32"
+        }
+      ],
+      "name": "check_my_lottery",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "is_participated",
+          "type": "bool"
+        },
+        {
+          "internalType": "bool",
+          "name": "is_win",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_id",
+          "type": "bytes32"
+        }
+      ],
+      "name": "check_prize_class",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint8",
+              "name": "id",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "token_number",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "winner_number",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct LuckyLottery.PrizeClass[]",
+          "name": "pc",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_id",
+          "type": "bytes32"
+        }
+      ],
+      "name": "check_participator",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "participator",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_id",
+          "type": "bytes32"
+        }
+      ],
+      "name": "check_lottery_basic_info",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "total_token",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "total_winner",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "draw_at_time",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "draw_at_number",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "remaining_tokens",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "claimed_winner",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_id",
+          "type": "bytes32"
+        }
+      ],
+      "name": "check_lottery_state",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "is_finished",
+          "type": "bool"
+        },
+        {
+          "internalType": "bool",
+          "name": "if_draw_at_time",
+          "type": "bool"
+        },
+        {
+          "internalType": "bool",
+          "name": "is_expired",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_id",
+          "type": "bytes32"
+        }
+      ],
+      "name": "check_winner_list",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint8",
+              "name": "prize_id",
+              "type": "uint8"
+            },
+            {
+              "internalType": "address",
+              "name": "winner_addrs",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct LuckyLottery.Winner[]",
+          "name": "winner",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "id",
+          "type": "bytes32"
+        }
+      ],
+      "name": "refund",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint8",
+          "name": "_token_type",
+          "type": "uint8"
+        },
+        {
+          "internalType": "address",
+          "name": "_token_addr",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_total_token",
+          "type": "uint256"
+        }
+      ],
+      "name": "_transfer_prize_pool",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function",
+      "payable": true
+    }
+  ]

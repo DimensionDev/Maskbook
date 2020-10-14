@@ -7,6 +7,7 @@ interface PluginMessages {
     'maskbook.red_packets.update': void
     'maskbook.gitcoin.update': void
     'maskbook.polls.update': void
+    'maskbook.lottery.update': void
 }
 export const PluginMessageCenter = new MC<PluginMessages>(true, 'maskbook-plugin-events')
 PluginMessageCenter.serialization = Serialization
