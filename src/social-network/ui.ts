@@ -36,7 +36,12 @@ export interface SocialNetworkUIDefinition
     friendlyName: string
     /**
      * This function should
-     * 0. Request the permission to the site by `browser.permissions.request()`
+     * - Check if Maskbook has the permission to the site
+     */
+    hasPermission(): Promise<boolean>
+    /**
+     * This function should
+     * - Request the permission to the site by `browser.permissions.request()`
      */
     requestPermission(): Promise<boolean>
     /**
