@@ -11,9 +11,12 @@ import { formatChecksumAddress } from '../formatter'
 import { ChainId, ProviderType } from '../../../web3/types'
 
 function fixWalletRecordProviderType(record: WalletRecord | WalletRecordInDatabase) {
-    const record_ = (record as unknown) as { type?: 'managed' | 'exotic' }
-    if (record_.type === 'managed') record.provider = ProviderType.Maskbook
-    else if (record_.type === 'exotic') record.provider = ProviderType.MetaMask
+    if (record.provider) return
+    const record_ = record as { type?: 'managed' | 'exotic' } & WalletRecord
+    record.provider =
+        record_.type === 'managed' || record_._private_key_ || record_.mnemonic.length
+            ? ProviderType.Maskbook
+            : ProviderType.MetaMask
     delete record_.type
 }
 
