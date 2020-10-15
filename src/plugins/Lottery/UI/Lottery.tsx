@@ -1,6 +1,8 @@
 import { noop } from 'lodash-es'
 import React, { useState, useCallback, useEffect } from 'react'
-import { makeStyles, createStyles, Button, Card, Typography } from '@material-ui/core'
+import { makeStyles, createStyles, Button, Card, Typography, DialogTitle, IconButton } from '@material-ui/core'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
 import Services from '../../../extension/service'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { EthereumTokenType } from '../../../web3/types'
@@ -149,12 +151,22 @@ const useStyles = makeStyles((theme) =>
         dailogPanel: {
             padding: theme.spacing(1),
             margin: theme.spacing(1),
-            textAlign: 'center',
+            textAlign: 'left',
         },
         dailogLiItem: {
             listStyle: 'none',
             margin: theme.spacing(1),
             padding: theme.spacing(1),
+        },
+        header: {
+            borderBottom: '1px solid #ccd6dd',
+            display: 'flex',
+            padding: '10px 15px',
+        },
+        close: {},
+        dialogTitle: {
+            textAlign: 'center',
+            margin: theme.spacing(1),
         },
     }),
 )
@@ -165,6 +177,7 @@ interface LotteryCardProps {
 }
 
 export function LotteryCard(props: LotteryCardProps) {
+    const { t } = useI18N()
     const { payload, from } = props
 
     const classes = useStyles()
@@ -228,7 +241,12 @@ export function LotteryCard(props: LotteryCardProps) {
         prize_li = prize_class.map((pc: (string | number)[], index: number) => (
             <li key={index} className={classes.prize_li}>
                 <Typography className={classes.from}>
-                    {index + 1} 等奖：{token_amount(pc[0])} {tokenSymbol} x {pc[1]} 份
+                    {t('plugin_lottery_prize_class', {
+                        index: index + 1,
+                        token_number: token_amount(pc[0]),
+                        token_symbol: tokenSymbol,
+                        winner_number: pc[1],
+                    })}
                 </Typography>
             </li>
         ))
@@ -265,7 +283,7 @@ export function LotteryCard(props: LotteryCardProps) {
         <ul className={classes.participator_ul}>
             <div key={index} className={classes.winner_title}>
                 {' '}
-                奖品：{w.prize} {tokenSymbol}
+                {t('plugin_lottery_description_prize')}：{w.prize} {tokenSymbol}
             </div>
             <div className={classes.winner_addr}>{w.addr}</div>
         </ul>
@@ -273,7 +291,7 @@ export function LotteryCard(props: LotteryCardProps) {
 
     var participator_li: JSX.Element[] = []
     if (participator) {
-        participator_li = participator.map((addr: string, index: number) => (
+        participator_li = participator.slice(0, 5).map((addr: string, index: number) => (
             <li className={classes.participator_li} key={index}>
                 {addr.substr(0, 8)}..
             </li>
@@ -293,7 +311,7 @@ export function LotteryCard(props: LotteryCardProps) {
         setOpenParticipateTransactionDialog(true)
         if (canParticipate) await participateCallback()
         else console.log('can not participate!!!!')
-    }, [canParticipate, participateCallback])
+    }, [canParticipate, participateState, participateCallback])
 
     const onParticipateTransactionDialogClose = useCallback(() => {
         setOpenParticipateTransactionDialog(false)
@@ -304,7 +322,7 @@ export function LotteryCard(props: LotteryCardProps) {
         setOpenDrawTransactionDialog(true)
         if (canDraw) await drawCallback()
         else console.log('can not draw!!!!')
-    }, [canDraw, drawCallback])
+    }, [canDraw, drawState, drawCallback])
 
     const onDrawTransactionDialogClose = useCallback(() => {
         setOpenDrawTransactionDialog(false)
@@ -315,7 +333,7 @@ export function LotteryCard(props: LotteryCardProps) {
         setOpenRefundTransactionDialog(true)
         if (canRefund) await refundCallback()
         else console.log('can not refund!!!!')
-    }, [canRefund, refundCallback])
+    }, [canRefund, refundState, refundCallback])
 
     const onRefundTransactionDialogClose = useCallback(() => {
         setOpenRefundTransactionDialog(false)
@@ -323,17 +341,22 @@ export function LotteryCard(props: LotteryCardProps) {
     //#endregion
 
     //show-lottery-info click-event
-    const onClickShowLotteryInfo = () => {}
+    const showLotteryInfo = () => {
+        setShowLottoInfoDialogOpen(true)
+    }
+    const [isShowLottoInfoDialogOpen, setShowLottoInfoDialogOpen] = useState(false)
+    const closeShowLotteryInfo = () => {
+        setShowLottoInfoDialogOpen(false)
+    }
 
     //show-whole-participators click-event
     const [isShowPartiDialogOpen, setShowPartiDialogOpen] = useState(false)
-    const onClickShowAllParticipators = () => {
+    const showAllParticipators = () => {
         setShowPartiDialogOpen(true)
     }
     const closeShowPartiDialog = () => {
         setShowPartiDialogOpen(false)
     }
-    const handlePartiListItemClick = () => {}
 
     return (
         <Card className={classes.card}>
@@ -345,36 +368,44 @@ export function LotteryCard(props: LotteryCardProps) {
             {canFetch ? (
                 <Typography className={classes.statusLabel}>
                     {(() => {
-                        if (canRefund) return `you could refund ${tokenAmount} ${tokenSymbol}`
-                        if (listOfStatus.includes(LotteryStatus.won))
-                            return `you have won the lottery! Congratulationss!🎉`
+                        if (canRefund) return t('plugin_lottery_status_can_refund')
+                        if (listOfStatus.includes(LotteryStatus.won)) return t('plugin_lottery_status_won')
                         if (
                             listOfStatus.includes(LotteryStatus.notWon) &&
                             listOfStatus.includes(LotteryStatus.participated)
                         )
-                            return `sorry, you not wining any reward, good luck next time!`
-                        if (listOfStatus.includes(LotteryStatus.participated)) return `you have already participated.`
-                        if (listOfStatus.includes(LotteryStatus.refunded)) return `you came too late. already refunded.`
-                        if (listOfStatus.includes(LotteryStatus.expired)) return `you came too late. time expired.`
-                        if (listOfStatus.includes(LotteryStatus.drew)) return `you came too late. already drew.`
+                            return t('plugin_lottery_status_notwon')
+                        if (listOfStatus.includes(LotteryStatus.participated))
+                            return t('plugin_lottery_status_participated')
+                        if (listOfStatus.includes(LotteryStatus.refunded)) return t('plugin_lottery_status_refunded')
+                        if (listOfStatus.includes(LotteryStatus.drew)) return t('plugin_lottery_status_drew')
+                        if (listOfStatus.includes(LotteryStatus.expired)) return t('plugin_lottery_status_expired')
 
-                        return `正在开放参与`
+                        return t('plugin_lottery_status_ready_to_participate')
                     })()}
                 </Typography>
             ) : null}
             {!canFetch && payload?.network ? (
-                <Typography className={classes.statusLabel}>Only available on {payload.network} network.</Typography>
+                <Typography className={classes.statusLabel}>
+                    {t('plugin_lottery_wrong_network', { network: payload.network })}
+                </Typography>
             ) : null}
 
             {prize_li}
             <Typography className={classes.from}>
-                {if_draw_at_time ? `${draw_at_time} 开奖` : `参加满【 ${draw_at_number} 人】开奖`}
+                {if_draw_at_time
+                    ? t('plugin_lottery_time_to_draw', { time: draw_at_time })
+                    : t('plugin_lottery_number_to_draw', { number: draw_at_number })}
             </Typography>
-            {!if_draw_at_time && <Typography className={classes.from}>截止 {expired_time} 过期</Typography>}
+            {!if_draw_at_time && (
+                <Typography className={classes.from}>
+                    {t('plugin_lottery_time_to_expired', { time: expired_time })}
+                </Typography>
+            )}
             <div className={classes.btnPanel}>
                 {canParticipate && (
                     <Button className={classes.roundbtn} onClick={onClickParticipate}>
-                        参与抽奖
+                        {t('plugin_lottery_description_participate')}
                     </Button>
                 )}
                 {canParticipate && (
@@ -386,27 +417,30 @@ export function LotteryCard(props: LotteryCardProps) {
                     />
                 )}
                 <div className={classes.participator_list_hint}>
-                    已有 {participator?.length ?? 0} 人参与，
-                    <a className={classes.LinkPointer} onClick={onClickShowAllParticipators}>
-                        查看全部 》
+                    {t('plugin_lottery_description_already_x_people_participated', {
+                        number: participator?.length ?? 0,
+                    })}
+                    , &#12288;
+                    <a className={classes.LinkPointer} onClick={showAllParticipators}>
+                        {t('plugin_lottery_description_check_all_participator')} 》
                     </a>
                 </div>
             </div>
             <div className={classes.btnlistPanel}>
-                <ul className={classes.participator_ul}> {participator_li} </ul>
+                <ul className={classes.participator_ul}>{participator_li}</ul>
             </div>
 
             <div>
                 <hr></hr>
                 <div className={classes.btnlistPanel}>
                     <Button disabled={!canDraw} onClick={onClickDraw} className={classes.minbtn}>
-                        开奖
+                        {t('plugin_lottery_description_drawing')}
                     </Button>
-                    <Button onClick={onClickShowLotteryInfo} className={classes.minbtn}>
-                        查看
+                    <Button onClick={showLotteryInfo} className={classes.minbtn}>
+                        {t('plugin_lottery_description_show_all_info')}
                     </Button>
                     <Button disabled={!canRefund} onClick={onClickRefund} className={classes.minbtn}>
-                        refund
+                        {t('plugin_lottery_description_refund')}
                     </Button>
                     {canDraw && (
                         <TransactionDialog
@@ -431,23 +465,53 @@ export function LotteryCard(props: LotteryCardProps) {
                     <hr></hr>
                     <div className={classes.btnlistPanel}>
                         <Typography className={classes.title} variant="h6">
-                            中奖名单
+                            {t('plugin_lottery_description_list_of_winner')}
                         </Typography>
                     </div>
                     <div className={classes.winnerlist}>{winner_li}</div>
                 </div>
             )}
-
+            <ShadowRootDialog open={isShowLottoInfoDialogOpen}>
+                <DialogTitle className={classes.header}>
+                    <IconButton classes={{ root: classes.close }} onClick={closeShowLotteryInfo}>
+                        <DialogDismissIconUI />
+                    </IconButton>
+                    <Typography className={classes.dialogTitle} display="inline" variant="h6">
+                        {t('plugin_lottery_description_lottery_json_info')}
+                    </Typography>
+                </DialogTitle>
+                <div className={classes.dailogPanel}>
+                    <pre>
+                        {JSON.stringify(
+                            payload,
+                            (key, value) => {
+                                if (key === 'password') return undefined
+                                else return value
+                            },
+                            2,
+                        )}
+                    </pre>
+                </div>
+            </ShadowRootDialog>
             <ShadowRootDialog open={isShowPartiDialogOpen}>
+                <DialogTitle className={classes.header}>
+                    <IconButton classes={{ root: classes.close }} onClick={closeShowPartiDialog}>
+                        <DialogDismissIconUI />
+                    </IconButton>
+                    <Typography className={classes.dialogTitle} display="inline" variant="h6">
+                        {t('plugin_lottery_description_list_of_participators')}
+                    </Typography>
+                </DialogTitle>
                 <div className={classes.dailogPanel}>
                     {participator?.map((p: string, index: number) => (
-                        <li className={classes.dailogLiItem} onClick={handlePartiListItemClick} key={index}>
-                            <a target="new_tab" href={`https://rinkeby.etherscan.io/address/${p}`}>
+                        <li className={classes.dailogLiItem} key={index}>
+                            <a
+                                target="new_tab"
+                                href={`https://${payload?.network ?? 'mainnet'}.etherscan.io/address/${p}`}>
                                 {p}
                             </a>
                         </li>
                     ))}
-                    <button onClick={closeShowPartiDialog}>关闭</button>
                 </div>
             </ShadowRootDialog>
         </Card>

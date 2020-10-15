@@ -8,7 +8,7 @@ import {
     Typography,
     IconButton,
 } from '@material-ui/core'
-
+import { useI18N } from '../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
@@ -83,6 +83,7 @@ interface LotteryDialogProps
 export default function LotteryDialog(props: LotteryDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
     const state = useState(0)
+    const { t } = useI18N()
 
     const onCreateOrSelect = useCallback((payload: LotteryJSONPayload) => {
         const ref = getActivatedUI().typedMessageMetadata
@@ -105,7 +106,7 @@ export default function LotteryDialog(props: LotteryDialogProps) {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: 'Create New',
+                label: t('plugin_lottery_create_new'),
                 children: (
                     <CreateLotteryForm
                         onCreate={onCreateOrSelect}
@@ -115,7 +116,7 @@ export default function LotteryDialog(props: LotteryDialogProps) {
                 p: 0,
             },
             {
-                label: 'Select Existing',
+                label: t('plugin_lottery_select_existing'),
                 children: (
                     <ExistingLotteryUI
                         {...props}
@@ -151,7 +152,7 @@ export default function LotteryDialog(props: LotteryDialogProps) {
                     <DialogDismissIconUI />
                 </IconButton>
                 <Typography className={classes.title} display="inline" variant="inherit">
-                    Plugin: Lottery
+                    {t('plugin_lottery_display_name')}
                 </Typography>
             </DialogTitle>
             <DialogContent className={classes.content}>

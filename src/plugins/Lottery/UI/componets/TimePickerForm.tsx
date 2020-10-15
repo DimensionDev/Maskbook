@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => {
     }
 })
 
-interface TimePickerProp
+interface TimePickerFormProp
     extends withClasses<
         | KeysInferFromUseStyles<typeof useStyles>
         | 'dialog'
@@ -83,7 +83,7 @@ interface TimePickerProp
     DialogProps?: Partial<DialogProps>
 }
 
-export function TimePicker(props: TimePickerProp) {
+export function TimePickerForm(props: TimePickerFormProp) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const theme = getActivatedUI().useTheme()
@@ -126,7 +126,7 @@ export function TimePicker(props: TimePickerProp) {
     return (
         <ThemeProvider theme={theme}>
             <Button className={classes.card} onClick={handleClickOpen}>
-                {label}: {days} 天 / {hours} 时 / {minutes} 分 后
+                {t('plugin_lottery_decription_timepicker', { label, days, hours, minutes })}
             </Button>
             <ShadowRootDialog
                 className={classes.dialog}
@@ -147,21 +147,21 @@ export function TimePicker(props: TimePickerProp) {
                             <DialogDismissIconUI />
                         </IconButton>
                         <Typography className={classes.title} display="inline" variant="inherit">
-                            {label} （抽奖上链后开始计时）
+                            {label} {t('plugin_lottery_timepicker_hint')}
                         </Typography>
                     </DialogTitle>
                     <DialogContent className={classes.content}>
                         <form className={classes.container}>
                             <FormControl className={classes.formControl}>
-                                <InputLabel>{t('plugin_poll_length_days')}</InputLabel>
+                                <InputLabel>{t('plugin_lottery_timepicker_days')}</InputLabel>
                                 {renderSelect(32, setDays, days)}
                             </FormControl>
                             <FormControl className={classes.formControl}>
-                                <InputLabel>{t('plugin_poll_length_hours')}</InputLabel>
+                                <InputLabel>{t('plugin_lottery_timepicker_hours')}</InputLabel>
                                 {renderSelect(25, setHours, hours)}
                             </FormControl>
                             <FormControl className={classes.formControl}>
-                                <InputLabel>{t('plugin_poll_length_minutes')}</InputLabel>
+                                <InputLabel>{t('plugin_lottery_timepicker_minutes')}</InputLabel>
                                 {renderSelect(61, setMinutes, minutes)}
                             </FormControl>
                         </form>

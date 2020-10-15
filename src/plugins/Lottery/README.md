@@ -3,10 +3,10 @@
 ## Feature Set
 
 - [x] send, participate, draw, refund Lottery
+- [ ] store lottery info on local indexDB, reduce onchain request
 - [ ] suport list of lottery history
-- [ ] support mutiple token as prize
-- [ ] support lottery activate function
-- [ ] support more draw mode, eg: instantly draw
+- [ ] support mutiple-type token as prize option/add activate function
+- [ ] support more draw-mode, eg: instantly draw
 
 ## Related projects
 
@@ -21,9 +21,3 @@
 ### bug
 
 - [ ] fix token selcet prize-option-input default decimal ui change
-- [ ] fix load all participator
-- [ ] fix 查看 function
-
-### imporve
-
-- [ ] use indexdb, reduce onchain info request

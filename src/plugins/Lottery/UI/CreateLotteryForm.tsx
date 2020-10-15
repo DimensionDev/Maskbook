@@ -44,7 +44,7 @@ import type { LotteryJSONPayload } from '../types'
 import { omit } from 'lodash-es'
 import { resolveChainName } from '../../../web3/pipes'
 import { createPrizeClass, getTotalToken, getTotalWinner } from '../utils'
-import { TimePicker } from './componets/TimePickerForm'
+import { TimePickerForm } from './componets/TimePickerForm'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) =>
         inputMinWidth: {
             flex: 1,
             padding: theme.spacing(1),
-            minWidth: '45%',
+            minWidth: '30%',
         },
         tip: {
             fontSize: 12,
@@ -136,7 +136,7 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
 
     //#region lotto settings
     const [if_draw_at_time, setDrawMode] = useState(0)
-    const [message, setMessage] = useState('超级大奖等你来拿')
+    const [message, setMessage] = useState(t('plugin_lottery_default_message')) //('超级大奖等你来拿')
     const [draw_at_time, setDrawAtTime] = useState(DEFAULT_DRAW_AT_TIME)
     const [draw_at_number, setDrawAtNumber] = useState(DEFAULT_DRAW_AT_NUMBER)
     const [duration, setDuration] = useState(DEFAULT_DURATION)
@@ -167,7 +167,6 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
     const handleOptionsTokenInput = (index: number, e: any) => {
         var _token_number: string = ''
         var val = parseFloat((e.target as HTMLInputElement)?.value)
-        //_token_number = new BigNumber(val).multipliedBy(new BigNumber(10).pow(token.decimals)).toFixed()
         _token_number = new BigNumber(val).toFixed()
         const new_op = { token_number: _token_number, winner_number: optionsInput[index].winner_number }
         setOptionsInput({
@@ -239,7 +238,6 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
     })
     const [openTransactionDialog, setOpenTransactionDialog] = useState(false)
     const onSubmit = useCallback(async () => {
-        console.log(prize_class, total_token, total_winner)
         setOpenTransactionDialog(true)
         await createCallback()
     }, [createCallback])
@@ -289,7 +287,7 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
 
         // output the Lottery as JSON payload
         onCreate?.(payload)
-    }, [account, chainId, createSettings, createState, onCreate])
+    }, [account, chainId, createSettings, createState, onCreate, LUCKY_LOTTERY_ADDRESS])
     //#endregion
 
     const validationMessage = useMemo(() => {
@@ -301,7 +299,7 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
         if (new BigNumber(total).isGreaterThan(new BigNumber(tokenBalance)))
             return `Insufficient ${token.symbol} balance`
         return ''
-    }, [account, optionsInput, token, tokenBalance])
+    }, [account, optionsInput, total_token, total_winner, token, tokenBalance])
 
     return (
         <>
@@ -309,7 +307,7 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
             <div className={classes.line}>
                 <FormControl className={classes.input} variant="outlined">
                     <TextField
-                        label="抽奖附言"
+                        label={t('plugin_lottery_description_message')}
                         variant="outlined"
                         onChange={(e) => {
                             setMessage((e.target as HTMLInputElement)?.value)
@@ -321,16 +319,18 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
 
             <div className={classes.line}>
                 <FormControl className={classes.inputMinWidth} variant="outlined">
-                    <InputLabel>开奖条件</InputLabel>
+                    <InputLabel>{t('plugin_lottery_draw_mode')}</InputLabel>
                     <Select
                         value={if_draw_at_time ? 1 : 0}
                         onChange={(e) => setDrawMode(e.target.value as number)}
                         MenuProps={props.SelectMenuProps}>
-                        <MenuItem value={1}>按时间开奖</MenuItem>
-                        <MenuItem value={0}>按人数开奖</MenuItem>
+                        <MenuItem value={1}>{t('plugin_lottery_draw_at_time')}</MenuItem>
+                        <MenuItem value={0}>{t('plugin_lottery_draw_at_number')}</MenuItem>
                     </Select>
                 </FormControl>
-                {!!if_draw_at_time && <TimePicker label={'开奖时间'} callback={setDrawAtTime} />}
+                {!!if_draw_at_time && (
+                    <TimePickerForm label={t('plugin_lottery_decription_draw_time')} callback={setDrawAtTime} />
+                )}
                 {!if_draw_at_time && (
                     <TextField
                         className={classes.input}
@@ -342,7 +342,7 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
                         onChange={(e) => {
                             setDrawAtNumber(+(e.target as HTMLInputElement)?.value)
                         }}
-                        label={'开奖人数'}
+                        label={t('plugin_lottery_decription_draw_number')}
                         variant="outlined"
                         type="number"
                         defaultValue={DEFAULT_DRAW_AT_NUMBER}
@@ -350,13 +350,13 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
                 )}
             </div>
             <div className={classes.line}>
-                {!if_draw_at_time && <TimePicker label={'截止时间'} callback={setDuration} />}
+                {!if_draw_at_time && (
+                    <TimePickerForm label={t('plugin_lottery_decription_duration_time')} callback={setDuration} />
+                )}
             </div>
             <div className={classes.prizeOptionWrap}>
                 <FormControl className={classes.line}>
                     <SetTokenPanel
-                        classes={{ root: classes.input }}
-                        label={'选择代币'}
                         balance={tokenBalance}
                         token={token}
                         SelectTokenChip={{
@@ -372,7 +372,7 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
                     {options.map((option, index) => (
                         <FormControl className={classes.input} key={index}>
                             <TextField
-                                label={`Prize${index + 1} - Token Number `}
+                                label={t('plugin_lottery_prize_option_token_number', { index: index + 1 })}
                                 type="number"
                                 variant="outlined"
                                 onChange={(e) => {
@@ -386,7 +386,7 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
                             />
                             <br />
                             <TextField
-                                label={`Prize${index + 1} - Winner Number`}
+                                label={t('plugin_lottery_prize_option_winner_number', { index: index + 1 })}
                                 type="number"
                                 variant="outlined"
                                 onChange={(e) => {

@@ -9,21 +9,8 @@ import { useStylesExtends } from '../../../../components/custom-ui-helper'
 /***
  * TO-DO: move to public shared UI components
  * */
-
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
-        root: {},
-        input: {
-            '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
-                margin: 0,
-            },
-            '-moz-appearance': 'textfield',
-        },
-        max: {
-            marginRight: theme.spacing(0.5),
-            borderRadius: 8,
-        },
         token: {
             whiteSpace: 'pre',
             maxWidth: 300,
@@ -38,13 +25,13 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export interface SetTokenPanelProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     balance: string
-    label: string
+    label?: string
     token?: Token | null
     SelectTokenChip?: Partial<SelectTokenChipProps>
 }
 
 export function SetTokenPanel(props: SetTokenPanelProps) {
-    const { balance, token, label } = props
+    const { balance, token } = props
 
     const classes = useStylesExtends(useStyles(), props)
     return token ? (
