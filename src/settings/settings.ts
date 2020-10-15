@@ -1,3 +1,4 @@
+import stringify from 'json-stable-stringify'
 import { createGlobalSettings, createInternalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
@@ -59,6 +60,23 @@ export const appearanceSettings = createGlobalSettings<Appearance>('apperance', 
     primary: () => i18n.t('settings_appearance'),
     secondary: () => i18n.t('settings_appearance_secondary'),
 })
+
+//#region chain state settings
+export interface ChainState {
+    chainId: ChainId
+    blockNumber: number
+}
+export const currentChainStateSettings = createGlobalSettings<string>(
+    'chain state',
+    stringify({
+        chainId: ChainId.Mainnet,
+        blockNumber: 0,
+    }),
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+//#endregion
 
 //#region provider chain id
 export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>('maskbook chain id', ChainId.Mainnet, {
