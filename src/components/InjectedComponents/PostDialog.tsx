@@ -221,14 +221,16 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     }}
                                 />
                             )}
-                            <ClickableChip
-                                ChipProps={{
-                                    label: '🗳️ Poll',
-                                    onClick: () => {
-                                        setPollsDialogOpen(true)
-                                    },
-                                }}
-                            />
+                            {Flags.poll_enabled && (
+                                <ClickableChip
+                                    ChipProps={{
+                                        label: '🗳️ Poll',
+                                        onClick: () => {
+                                            setPollsDialogOpen(true)
+                                        },
+                                    }}
+                                />
+                            )}
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
