@@ -4,6 +4,7 @@ import { GITCOIN_CONSTANT } from '../constants'
 import { useContract } from '../../../web3/hooks/useContract'
 import BulkCheckoutABI from '../../../contracts/bulk-checkout/BulkCheckout.json'
 import type { BulkCheckout } from '../../../contracts/bulk-checkout/BulkCheckout'
+import { useChainId } from '../../../web3/hooks/useChainState'
 
 export function useBulkCheckoutContract() {
     const address = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')

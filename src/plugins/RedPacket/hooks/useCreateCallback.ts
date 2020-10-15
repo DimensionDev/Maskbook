@@ -23,7 +23,7 @@ export interface RedPacketSettings {
 export function useCreateCallback(redPacketSettings: RedPacketSettings) {
     const account = useAccount()
     const [createState, setCreateState] = useTransactionState()
-    const redPacketContract = useRedPacketContract()
+    const redPacketContract = useRedPacketContract(account)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
 
     const createCallback = useCallback(async () => {

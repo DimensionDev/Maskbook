@@ -1,14 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import DashboardRouterContainer from './Container'
-import { Button, IconButton, Fade } from '@material-ui/core'
+import React, { useEffect, useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
+import { Button, IconButton } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import AddIcon from '@material-ui/icons/Add'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import RestoreIcon from '@material-ui/icons/Restore'
 
-import { WalletItem } from '../DashboardComponents/WalletItem'
+import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletCreateDialog,
@@ -19,37 +18,25 @@ import {
 } from '../DashboardDialogs/Wallet'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
-import { useHistory } from 'react-router-dom'
-import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import { Flags } from '../../../utils/flags'
 import { WalletMessageCenter, MaskbookWalletMessages } from '../../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { useWallets } from '../../../plugins/Wallet/hooks/useWallet'
+import { useDefaultWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { useTokens } from '../../../plugins/Wallet/hooks/useToken'
 import { useTokensDetailedCallback } from '../../../web3/hooks/useTokensDetailedCallback'
 import { WalletContent } from '../DashboardComponents/WalletContent'
+import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             display: 'flex',
+            flexDirection: 'column',
             flex: '0 0 100%',
             height: '100%',
         },
-        scroller: {
-            width: 224,
-            height: '100%',
-            flex: '0 0 auto',
-            borderRight: `1px solid ${theme.palette.divider}`,
-            overflowY: 'auto',
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-                borderRight: 'none',
-            },
+        header: {
+            padding: theme.spacing(3, 2, 0, 2),
         },
         content: {
             width: '100%',
@@ -71,7 +58,6 @@ export default function DashboardWalletsRouter() {
     const { t } = useI18N()
     const history = useHistory()
     const { create, error, rpid } = useQueryParams(['create', 'error', 'rpid'])
-    const xsMatched = useMatchXS()
 
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
     const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)
@@ -79,23 +65,13 @@ export default function DashboardWalletsRouter() {
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
 
-    const wallets = useWallets()
-    const [current, setCurrent] = useState('')
-    const currentWallet = wallets.find((wallet) => wallet.address === current)
+    const defaultWallet = useDefaultWallet()
+    const tokens = useTokens(defaultWallet?.address ?? '')
 
-    const tokens = useTokens(current)
     const [detailedTokens, detailedTokensCallback] = useTokensDetailedCallback(tokens)
 
     console.log('DEBUG: DashboardWalletsRouter')
     console.log(detailedTokens)
-
-    // auto select first wallet
-    useEffect(() => {
-        if (current) return
-        if (xsMatched) return
-        const first = wallets?.[0]?.address
-        if (first) setCurrent(first)
-    }, [xsMatched, current, wallets])
 
     // show create dialog
     useEffect(() => {
@@ -109,13 +85,13 @@ export default function DashboardWalletsRouter() {
 
     // auto fetch tokens detailed
     useEffect(() => {
-        if (!current) return
+        if (!defaultWallet) return
 
         console.log('DEBUG: detailedTokensCallback')
-        console.log(current)
+        console.log(defaultWallet)
 
-        detailedTokensCallback(current)
-    }, [current])
+        detailedTokensCallback(defaultWallet.address)
+    }, [defaultWallet])
 
     // show provider connect dialog
     const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
@@ -131,8 +107,7 @@ export default function DashboardWalletsRouter() {
 
     return (
         <DashboardRouterContainer
-            padded={false}
-            empty={!wallets?.length}
+            empty={!defaultWallet}
             title={t('my_wallets')}
             actions={[
                 Flags.metamask_support_enabled ? (
@@ -151,23 +126,19 @@ export default function DashboardWalletsRouter() {
                 </Button>,
             ]}
             leftIcons={[
-                <IconButton
-                    onClick={() => {
-                        if (current) setCurrent('')
-                        else history.goBack()
-                    }}>
+                <IconButton onClick={() => history.goBack()}>
                     <ArrowBackIosIcon />
                 </IconButton>,
             ]}
             rightIcons={[
                 <IconButton
                     onClick={() => {
-                        if (!currentWallet) return
+                        if (!defaultWallet) return
                         openWalletHistory({
-                            wallet: currentWallet,
+                            wallet: defaultWallet,
                             onRedPacketClicked(payload) {
                                 openWalletRedPacketDetail({
-                                    wallet: currentWallet,
+                                    wallet: defaultWallet,
                                     payload,
                                 })
                             },
@@ -177,35 +148,22 @@ export default function DashboardWalletsRouter() {
                 </IconButton>,
                 <IconButton
                     onClick={() => {
-                        if (currentWallet) openAddToken({ wallet: currentWallet })
+                        if (defaultWallet) openAddToken({ wallet: defaultWallet })
                         else openWalletCreate()
                     }}>
                     <AddIcon />
                 </IconButton>,
             ]}>
             <div className={classes.root}>
-                {wallets?.length && !(xsMatched && current) ? (
-                    <div className={classes.scroller}>
-                        {wallets.map((wallet) => (
-                            <WalletItem
-                                key={wallet.address}
-                                selected={wallet.address === current}
-                                wallet={wallet}
-                                onClick={() => setCurrent(wallet.address)}
-                            />
-                        ))}
-                    </div>
-                ) : null}
+                <div className={classes.header}>
+                    <EthereumStatusBar
+                        BoxProps={{ justifyContent: 'flex-end', flexWrap: 'reverse', flexDirection: 'row-reverse' }}
+                    />
+                </div>
                 <div className={classes.content}>
                     <div className={classes.wrapper}>
-                        {currentWallet ? (
-                            xsMatched ? (
-                                <WalletContent wallet={currentWallet} detailedTokens={detailedTokens} />
-                            ) : (
-                                <Fade in={Boolean(current)}>
-                                    <WalletContent wallet={currentWallet} detailedTokens={detailedTokens} />
-                                </Fade>
-                            )
+                        {defaultWallet ? (
+                            <WalletContent wallet={defaultWallet} detailedTokens={detailedTokens} />
                         ) : null}
                     </div>
                 </div>

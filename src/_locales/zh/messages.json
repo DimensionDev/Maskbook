@@ -51,6 +51,7 @@
     "create_a_persona": "創建角色",
     "create_persona": "創建角色",
     "create_wallet": "創建錢包",
+    "connect_wallet": "",
     "creating": "創建中…",
     "dashboard_backup_database_confirmation": "好，現在備份",
     "dashboard_backup_database_hint": "創建資料庫備份文件。要經常做。",

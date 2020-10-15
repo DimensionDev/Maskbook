@@ -21,7 +21,8 @@ export function useTokenBalance(token?: PartialRequired<Token, 'address'>) {
         if (!token?.address) return '0'
 
         // Ether
-        if (token.type === EthereumTokenType.Ether) return Services.Ethereum.getBalance(account)
+        if (token.type === EthereumTokenType.Ether)
+            return Services.Ethereum.getBalance(account, await Services.Ethereum.getChainId(account))
 
         // ERC20
         if (token.type === EthereumTokenType.ERC20) {

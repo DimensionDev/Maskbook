@@ -66,16 +66,9 @@ export interface ChainState {
     chainId: ChainId
     blockNumber: number
 }
-export const currentChainStateSettings = createGlobalSettings<string>(
-    'chain state',
-    stringify({
-        chainId: ChainId.Mainnet,
-        blockNumber: 0,
-    }),
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
+export const currentChainStateSettings = createGlobalSettings<string>('chain state', stringify([]), {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
 //#endregion
 
 //#region provider chain id

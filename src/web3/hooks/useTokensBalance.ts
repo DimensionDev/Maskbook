@@ -1,24 +1,21 @@
 import { useAsync } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { useBalanceCheckerContract } from '../contracts/useBalanceChecker'
-import { useConstant } from './useConstant'
-import { CONSTANTS } from '../constants'
 
 /**
  * Fetch tokens balance from chain
- * @param address
+ * @param from
  * @param listOfAddress
  */
-export function useTokensBalance(address: string, listOfAddress: string[]) {
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-    const balanceCheckerContract = useBalanceCheckerContract()
+export function useTokensBalance(from: string, listOfAddress: string[]) {
+    const balanceCheckerContract = useBalanceCheckerContract(from)
     return useAsync(async () => {
-        if (!EthereumAddress.isValid(address)) return []
+        if (!EthereumAddress.isValid(from)) return []
         if (!listOfAddress.length) return []
         if (!balanceCheckerContract) return []
-        return balanceCheckerContract.methods.balances([address], listOfAddress).call({
+        return balanceCheckerContract.methods.balances([from], listOfAddress).call({
             // cannot check the sender's balance in the same contract
-            from: ETH_ADDRESS,
+            from: undefined,
         })
-    }, [address, listOfAddress.join(), balanceCheckerContract])
+    }, [from, listOfAddress.join(), balanceCheckerContract])
 }

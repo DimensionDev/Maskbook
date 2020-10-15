@@ -1,27 +1,46 @@
 import { useEffect, useState } from 'react'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { ChainId } from '../types'
-import { ChainState, currentChainStateSettings } from '../../settings/settings'
+import { ChainId, ProviderType } from '../types'
+import {
+    ChainState,
+    currentChainStateSettings,
+    currentMaskbookChainIdSettings,
+    currentMetaMaskChainIdSettings,
+    currentWalletConnectChainIdSettings,
+} from '../../settings/settings'
+import { useDefaultWallet, useWallet } from '../../plugins/Wallet/hooks/useWallet'
 
 /**
- * Get the chain id which is using by the current wallet
+ * Get the chain id which is using by the given (or default) wallet
  */
-export function useChainId() {
-    return useChainState().chainId
+export function useChainId(address?: string) {
+    const wallet_ = useWallet(address ?? '')
+    const defaultWallet_ = useDefaultWallet()
+
+    const MaskbookChainId = useValueRef(currentMaskbookChainIdSettings)
+    const MetaMaskChainId = useValueRef(currentMetaMaskChainIdSettings)
+    const WalletConnectChainId = useValueRef(currentWalletConnectChainIdSettings)
+
+    const wallet = wallet_ ?? defaultWallet_
+    if (!wallet) return MaskbookChainId
+    if (wallet.provider === ProviderType.Maskbook) return MaskbookChainId
+    if (wallet.provider === ProviderType.MetaMask) return MetaMaskChainId
+    if (wallet.provider === ProviderType.WalletConnect) return WalletConnectChainId
+    return MaskbookChainId
 }
 
 /**
  * Get the current block number
  */
-export function useBlockNumber() {
-    return useChainState().blockNumber
+export function useBlockNumber(chainId: ChainId) {
+    return useChainState(chainId).blockNumber
 }
 
 /**
  * Get the current block number for once
  */
-export function useBlockNumberOnce() {
-    const chainState_ = useChainState()
+export function useBlockNumberOnce(chainId: ChainId) {
+    const chainState_ = useChainState(chainId)
     const [chainState, setChainState] = useState({
         chainId: ChainId.Mainnet,
         blockNumber: 0,
@@ -33,16 +52,19 @@ export function useBlockNumberOnce() {
 }
 
 /**
- * Get the newest block state
+ * Get the newest chain state
  */
-export function useChainState() {
-    const state = useValueRef(currentChainStateSettings)
+const DEFAULT_CHAIN_STATE = {
+    chainId: ChainId.Mainnet,
+    blockNumber: 0,
+}
+
+export function useChainState(chainId: ChainId) {
+    const chainState = useValueRef(currentChainStateSettings)
     try {
-        return JSON.parse(state) as ChainState
+        const parsedChainState = JSON.parse(chainState) as ChainState[]
+        return parsedChainState.find((x) => x.chainId === chainId) ?? DEFAULT_CHAIN_STATE
     } catch (e) {
-        return {
-            chainId: ChainId.Mainnet,
-            blockNumber: 0,
-        }
+        return DEFAULT_CHAIN_STATE
     }
 }

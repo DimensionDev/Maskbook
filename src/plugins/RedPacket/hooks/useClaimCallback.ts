@@ -3,14 +3,13 @@ import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { useAccount } from '../../../web3/hooks/useAccount'
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
 import Services from '../../../extension/service'
 
 export function useClaimCallback(from: string, id?: string, password?: string) {
     const [claimState, setClaimState] = useTransactionState()
-    const redPacketContract = useRedPacketContract()
+    const redPacketContract = useRedPacketContract(from)
 
     const claimCallback = useCallback(async () => {
         if (!redPacketContract || !id || !password) {

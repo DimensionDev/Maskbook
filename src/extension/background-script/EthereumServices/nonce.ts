@@ -1,3 +1,4 @@
+import { getChainId } from './chainState'
 import { getTransactionCount } from './network'
 
 class NonceManager {
@@ -26,7 +27,7 @@ class NonceManager {
             const run = async () => {
                 try {
                     this.lock()
-                    callback(null, await getTransactionCount(this.address))
+                    callback(null, await getTransactionCount(this.address, await getChainId(this.address)))
                 } catch (e) {
                     callback(e)
                 }

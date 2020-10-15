@@ -1,8 +1,12 @@
+import Web3 from 'web3'
 import { EthereumAddress } from 'wallet.ts'
+import type { provider as Provider, PromiEvent as PromiEventW3 } from 'web3-core'
 import WalletConnect from '@walletconnect/client'
+import type { ITxData } from '@walletconnect/types'
+import * as Maskbook from '../providers/Maskbook'
 import { setDefaultWallet, updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import { currentWalletConnectChainIdSettings } from '../../../../settings/settings'
-import { ChainId } from '../../../../web3/types'
+import { ChainId, TransactionEventType } from '../../../../web3/types'
 import { ProviderType } from '../../../../web3/types'
 
 //#region tracking chain id
@@ -10,6 +14,8 @@ let currentChainId: ChainId = ChainId.Mainnet
 currentWalletConnectChainIdSettings.addListener((v) => (currentChainId = v))
 //#endregion
 
+let web3: Web3 | null = null
+let provider: Provider | null = null
 let connector: WalletConnect | null = null
 
 /**
@@ -35,6 +41,62 @@ export async function createConnector() {
 export async function createConnectorIfNeeded() {
     if (connector) return connector
     return createConnector()
+}
+
+export function createProvider() {
+    if (!connector) throw new Error('cannot find connetor')
+    const provider = Maskbook.createProvider(currentChainId)
+    return new Proxy(provider, {
+        get(target, name) {
+            switch (name) {
+                case 'sendTransaction':
+                    return (txData: ITxData) => {
+                        const listeners: { name: string; listener: Function }[] = []
+                        const promise = connector?.sendTransaction(txData) as Promise<string>
+
+                        // mimic PromiEvent API
+                        Object.assign(promise, {
+                            on(name: string, listener: Function) {
+                                listeners.push({ name, listener })
+                            },
+                        })
+
+                        // only trasnaction hash available
+                        promise
+                            .then((hash) => {
+                                console.log('DEBUG: wallet connect hash')
+                                console.log(hash)
+
+                                listeners
+                                    .filter((x) => x.name === TransactionEventType.TRANSACTION_HASH)
+                                    .forEach((y) => y.listener(hash))
+                            })
+                            .catch((e) => {
+                                console.log('DEBUG: wallet connect error')
+                                console.log(e)
+
+                                listeners
+                                    .filter((x) => x.name === TransactionEventType.ERROR)
+                                    .forEach((y) => y.listener(e))
+                            })
+
+                        return (promise as unknown) as PromiEventW3<string>
+                    }
+                case 'sendRawTransaction':
+                    throw new Error('TO BE IMPLEMENT')
+                default:
+                    return Reflect.get(target, name)
+            }
+        },
+    })
+}
+
+// Wrap promise as PromiEvent because WalletConnect returns transaction hash only
+// docs: https://docs.walletconnect.org/client-api
+export function createWeb3() {
+    if (!provider) provider = createProvider()
+    if (!web3) web3 = new Web3(provider)
+    return web3
 }
 
 /**

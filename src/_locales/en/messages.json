@@ -51,6 +51,7 @@
     "create_a_persona": "Create a Persona",
     "create_persona": "Create Persona",
     "create_wallet": "Create Wallet",
+    "connect_wallet": "Connect Wallet",
     "creating": "Creating…",
     "dashboard_backup_database_confirmation": "Ok, Back it up",
     "dashboard_backup_database_hint": "Create a database backup file. Do it regularly.",

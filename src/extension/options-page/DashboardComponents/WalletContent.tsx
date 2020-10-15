@@ -23,7 +23,9 @@ import { useColorStyles } from '../../../utils/theme'
 import Services from '../../service'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { ProviderType, TokenDetailed } from '../../../web3/types'
+import { ChainId, ProviderType, TokenDetailed } from '../../../web3/types'
+import { EthereumChainChip } from '../../../web3/UI/EthereumChainChip'
+import { useChainId } from '../../../web3/hooks/useChainState'
 
 const walletContentTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
@@ -119,12 +121,14 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
         </MenuItem>,
     )
 
+    const chainId = useChainId(wallet.address)
+
     return (
         <div className={classes.root} ref={ref}>
             <ThemeProvider theme={walletContentTheme}>
                 <Box pt={3} pb={2} pl={3} pr={2} display="flex" alignItems="center">
                     <Typography className={classes.title} variant="h5">
-                        {xsMatched ? wallet.name ?? wallet.address : t('details')}
+                        {wallet.name ?? wallet.address}
                     </Typography>
                     {xsMatched ? null : (
                         <Button
@@ -158,7 +162,7 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                 </List>
             </ThemeProvider>
             {!xsMatched ? (
-                <div className={classes.footer}>
+                <Box className={classes.footer} display="flex" alignItems="center" justifyContent="space-between">
                     <Button
                         onClick={() =>
                             openWalletHistory({
@@ -175,7 +179,7 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                         variant="text">
                         {t('activity')}
                     </Button>
-                </div>
+                </Box>
             ) : null}
             {addToken}
             {walletShare}

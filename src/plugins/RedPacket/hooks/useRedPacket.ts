@@ -31,7 +31,8 @@ export function useRedPacketsFromDB() {
 }
 
 export function useRedPacketsFromChain(from: string) {
-    const blockNumber = useBlockNumberOnce()
+    const chainId = useChainId(from)
+    const blockNumber = useBlockNumberOnce(chainId)
     return useAsync(
         async () =>
             blockNumber

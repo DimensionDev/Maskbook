@@ -2,13 +2,12 @@ import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { useAccount } from '../../../web3/hooks/useAccount'
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
 
 export function useRefundCallback(from: string, id?: string) {
     const [refundState, setRefundState] = useTransactionState()
-    const redPacketContract = useRedPacketContract()
+    const redPacketContract = useRedPacketContract(from)
 
     const refundCallback = useCallback(async () => {
         if (!redPacketContract || !id) {

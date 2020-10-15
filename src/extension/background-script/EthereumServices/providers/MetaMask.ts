@@ -51,6 +51,8 @@ export function createProvider() {
     return provider
 }
 
+// MetaMask provider can be wrapped into web3 lib directly.
+// https://github.com/MetaMask/extension-provider
 export function createWeb3() {
     if (!provider) provider = createProvider()
     if (!web3) web3 = new Web3(provider)
@@ -58,9 +60,7 @@ export function createWeb3() {
 }
 
 export async function requestAccounts() {
-    const provider = createProvider()
-    const web3 = new Web3()
-    web3.setProvider(provider)
+    const web3 = createWeb3()
     const accounts = await web3.eth.requestAccounts()
     for (const account of accounts) await updateWalletInDB(account, true)
     return accounts

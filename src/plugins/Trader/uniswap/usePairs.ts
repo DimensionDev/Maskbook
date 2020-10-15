@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import { Pair as UniswapPair, Token as UniswapToken, Pair, TokenAmount } from '@uniswap/sdk'
 import { usePairContract } from '../contracts/usePairContract'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { useBlockNumber } from '../../../web3/hooks/useChainState'
+import { useBlockNumber, useChainId } from '../../../web3/hooks/useChainState'
 import { CONSTANTS } from '../../../web3/constants'
 
 function resolvePairResult<T>(result: PromiseSettledResult<T>, fallback: T) {
@@ -33,7 +33,8 @@ export function useUniswapPairs(tokens: readonly TokenPair[]) {
     const pairContract = usePairContract(ETH_ADDRESS)
 
     // auto refresh pair reserves for each block
-    const blockNumber = useBlockNumber()
+    const chainId = useChainId()
+    const blockNumber = useBlockNumber(chainId)
 
     // get reserves for each pair
     const { value: results = [] } = useAsync(async () => {

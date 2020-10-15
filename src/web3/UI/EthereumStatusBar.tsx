@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, makeStyles, createStyles, Theme, ChipProps } from '@material-ui/core'
+import { Box, makeStyles, createStyles, Theme, ChipProps, BoxProps } from '@material-ui/core'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useChainId } from '../hooks/useChainState'
 import { EthereumAccountChip } from './EthereumAccountChip'
@@ -13,24 +13,27 @@ const useStyles = makeStyles((theme: Theme) =>
         chainChip: {
             marginRight: theme.spacing(1),
         },
-        accountChip: {},
+        accountChip: {
+            marginRight: theme.spacing(1),
+        },
     }),
 )
 
 export interface EthereumStatusBarProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+    BoxProps?: Partial<BoxProps>
     ChainChipProps?: Partial<ChipProps>
     AccountChipProps?: Partial<ChipProps>
 }
 
 export function EthereumStatusBar(props: EthereumStatusBarProps) {
-    const { AccountChipProps, ChainChipProps } = props
+    const { BoxProps, AccountChipProps, ChainChipProps } = props
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
     const chainId = useChainId()
 
     return (
-        <Box className={classes.root} display="flex" alignItems="center" justifyContent="flex-end">
+        <Box className={classes.root} display="flex" alignItems="center" justifyContent="flex-end" {...BoxProps}>
             {chainId === ChainId.Mainnet ? null : (
                 <EthereumChainChip
                     classes={{ root: classes.chainChip }}
@@ -41,7 +44,7 @@ export function EthereumStatusBar(props: EthereumStatusBarProps) {
             <EthereumAccountChip
                 classes={{ root: classes.accountChip }}
                 address={account}
-                ChipProps={{ size: 'medium', variant: 'outlined', ...AccountChipProps }}
+                ChipProps={{ size: 'medium', variant: 'outlined', clickable: true, ...AccountChipProps }}
             />
         </Box>
     )
