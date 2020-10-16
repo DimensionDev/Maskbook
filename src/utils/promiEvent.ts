@@ -52,17 +52,8 @@ export function enhancePromiEvent(ev: PromiEventW3<TransactionReceipt | string>)
     })
 
     // promise
-    ev.then((hashOrReceipt) => {
-        if (typeof hashOrReceipt === 'string') PE.emit(TransactionEventType.TRANSACTION_HASH, hashOrReceipt)
-        else {
-            PE.emit(TransactionEventType.RECEIPT, hashOrReceipt)
-            resolve_?.(hashOrReceipt)
-        }
-    })
-    ev.catch((error) => {
-        PE.emit(TransactionEventType.ERROR, error)
-        reject_?.(error)
-    })
+    ev.then(resolve_)
+    ev.catch(reject_)
     return PE
 }
 

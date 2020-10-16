@@ -101,8 +101,10 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                 ...config,
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                setCreateSettings(redPacketSettings)
                 setCreateState({
-                    type: TransactionStateType.RECEIPT,
+                    type: TransactionStateType.CONFIRMED,
+                    no: 0,
                     receipt,
                 })
             })

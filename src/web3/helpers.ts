@@ -94,14 +94,16 @@ export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionRe
     const events = receipt.logs.map((log) => {
         const idx = listOfTopic0.indexOf(log.topics[0])
         if (idx === -1) return
-        const abis_ = abis[idx]?.inputs ?? []
+        const abi = abis[idx]
+        const inputs = abi?.inputs ?? []
         return {
-            returnValues: web3.eth.abi.decodeLog(abis_ ?? [], log.data, log.topics),
+            // more: https://web3js.readthedocs.io/en/v1.2.11/web3-eth-abi.html?highlight=decodeLog#decodelog
+            returnValues: web3.eth.abi.decodeLog(inputs, log.data, abi.anonymous ? log.topics : log.topics.slice(1)),
             raw: {
                 data: log.data,
                 topics: log.topics,
             },
-            event: abis[idx].name,
+            event: abi.name,
             signature: listOfTopic0[idx],
             ...log,
         } as EventLog

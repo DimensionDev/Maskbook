@@ -59,7 +59,7 @@ export interface Trending {
     currency: Currency
     dataProvider: DataProvider
     coin: Coin
-    market: Market
+    market?: Market
     tickers: Ticker[]
     lastUpdated: string
 }

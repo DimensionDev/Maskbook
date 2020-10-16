@@ -4,7 +4,7 @@ import { SvgIcon, SvgIconProps } from '@material-ui/core'
 export function WalletConnectIcon(props: SvgIconProps) {
     return (
         <SvgIcon {...props}>
-            <svg width="45" height="45" viewBox="0 0 512 512">
+            <svg viewBox="0 0 512 512">
                 <radialGradient id="a" cx="0%" cy="50%" r="100%">
                     <stop offset="0" stopColor="#5d9df6" />
                     <stop offset="1" stopColor="#006fff" />

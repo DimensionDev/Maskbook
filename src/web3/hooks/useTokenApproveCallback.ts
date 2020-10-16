@@ -27,7 +27,7 @@ export function useTokenApproveCallback(token?: Token, amount?: string, spender?
     const { value: allowance } = useTokenAllowance(token, spender)
 
     const [approveHash, setApproveHash] = useState('')
-    const receipt = useTransactionReceipt(approveHash)
+    const receipt = useTransactionReceipt(account, approveHash)
 
     const approveState: ApproveState = useMemo(() => {
         if (token?.type === EthereumTokenType.Ether) return ApproveState.APPROVED

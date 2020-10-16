@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect } from 'react'
 import { MoreHorizontal } from 'react-feather'
 import { makeStyles, Theme, createStyles, DialogContent, GridList, GridListTile } from '@material-ui/core'
+import { GetContext } from '@holoflows/kit/es'
+import { useHistory } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
@@ -14,14 +17,10 @@ import Services from '../../../extension/service'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessageCenter, MaskbookWalletMessages } from '../messages'
 import { useBlurContext } from '../../../extension/options-page/DashboardContexts/BlurContext'
-import { GetContext } from '@holoflows/kit/es'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { ProviderType } from '../../../web3/types'
-import { useHistory } from 'react-router-dom'
 import { unreachable } from '../../../utils/utils'
-import { useWallets } from '../hooks/useWallet'
 import { MessageCenter } from '../../../utils/messages'
-import { useSnackbar } from 'notistack'
 import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -76,6 +75,13 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     }, [setOpen])
     //#endregion
 
+    //#region wallet connect QR code dialog
+    const [_, setWalletConnectDialogOpen] = useRemoteControlledDialog<
+        MaskbookWalletMessages,
+        'walletConnectQRCodeDialogUpdated'
+    >(WalletMessageCenter, 'walletConnectQRCodeDialogUpdated')
+    //#endregion
+
     // render in dashboard
     useBlurContext(open)
 
@@ -91,7 +97,10 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     await Services.Ethereum.connectMetaMask()
                     break
                 case ProviderType.WalletConnect:
-                    await Services.Ethereum.connectWalletConnect()
+                    setWalletConnectDialogOpen({
+                        open: true,
+                        uri: await Services.Ethereum.createConnectionURI(),
+                    })
                     break
                 default:
                     unreachable(providerType)
@@ -115,7 +124,6 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
             }),
         [],
     )
-
     return (
         <div className={classes.root}>
             <ShadowRootDialog
