@@ -41,13 +41,15 @@ export async function downloadUrl(url: string) {
 
 /**
  * Dispatch a fake event.
+ * @param element The event target
  * @param event Event name
  * @param x parameters
- *
- * !! TODO: React 17 no longer watch events on document. Please dispatch it on the element itself.
- * !! Also check injected script also updated.
  */
-export function dispatchCustomEvents<T extends keyof CustomEvents>(event: T, ...x: CustomEvents[T]) {
+export function dispatchCustomEvents<T extends keyof CustomEvents>(
+    element: Element | Document | null = document,
+    event: T,
+    ...x: CustomEvents[T]
+) {
     document.dispatchEvent(new CustomEvent(CustomEventId, { detail: JSON.stringify([event, x]) }))
 }
 
@@ -56,7 +58,7 @@ export function dispatchCustomEvents<T extends keyof CustomEvents>(event: T, ...
  * @param bytes
  */
 export function pasteImageToActiveElements(bytes: Uint8Array) {
-    return dispatchCustomEvents('paste', { type: 'image', value: Array.from(bytes) })
+    return dispatchCustomEvents(document.activeElement, 'paste', { type: 'image', value: Array.from(bytes) })
 }
 
 Object.assign(globalThis, { dispatchCustomEvents })
