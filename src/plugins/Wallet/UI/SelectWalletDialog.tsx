@@ -81,6 +81,8 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     //#region create new wallet
     const history = useHistory()
     const onCreate = useCallback(async () => {
+        onClose()
+        await sleep(100)
         if (GetContext() === 'options') history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
         else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
     }, [history])
