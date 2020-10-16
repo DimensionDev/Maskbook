@@ -80,7 +80,7 @@ export const facebookUISelf = defineSocialNetworkUI({
             const textarea = root.querySelector('textarea')
             if (!textarea) return fail()
             textarea.focus()
-            dispatchCustomEvents('input', encryptedComment)
+            dispatchCustomEvents(textarea, 'input', encryptedComment)
             textarea.dispatchEvent(new CustomEvent('input', { bubbles: true, cancelable: false, composed: true }))
             await sleep(200)
             if (!root.innerText.includes(encryptedComment)) return fail()
@@ -90,7 +90,7 @@ export const facebookUISelf = defineSocialNetworkUI({
             const input = root.querySelector('[contenteditable]')
             if (!input) return fail()
             selectElementContents(input)
-            dispatchCustomEvents('paste', encryptedComment)
+            dispatchCustomEvents(input, 'paste', encryptedComment)
             await sleep(200)
             if (!root.innerText.includes(encryptedComment)) return fail()
         }
@@ -132,4 +132,9 @@ export const facebookUISelf = defineSocialNetworkUI({
 function getTheme() {
     if (isDarkTheme()) return MaskbookDarkTheme
     return MaskbookLightTheme
+}
+if (module.hot) {
+    module.hot.accept('./tasks/pasteIntoPostBox.ts', () => {
+        facebookUISelf.taskPasteIntoPostBox = pasteIntoPostBoxFacebook
+    })
 }

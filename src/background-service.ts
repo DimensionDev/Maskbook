@@ -46,6 +46,7 @@ if (GetContext() === 'background') {
         })
     browser.webNavigation.onCommitted.addListener(async (arg) => {
         if (arg.url === 'about:blank') return
+        if (!arg.url.startsWith('http')) return
         const contains = await browser.permissions.contains({ origins: [arg.url] })
         /**
          * For iOS App, there is a special way to do it in the manifest.json
@@ -120,7 +121,7 @@ function IgnoreError(arg: unknown): (reason: Error) => void {
         const ignoredErrorMessages = ['non-structured-clonable data']
         if (ignoredErrorMessages.some((x) => e.message.includes(x))) {
             // It's okay we don't need the result, happened on Firefox
-        } else console.error('Inject error', e, arg, Object.entries(e))
+        } else console.error('Inject error', e.message, arg, Object.entries(e))
     }
 }
 
