@@ -223,27 +223,31 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     }}
                                 />
                             )}
-                            <ClickableChip
-                                ChipProps={{
-                                    label: '🗳️ Poll',
-                                    onClick: () => {
-                                        setPollsDialogOpen(true)
-                                    },
-                                }}
-                            />
-                            <ClickableChip
-                                ChipProps={{
-                                    label: '🎉 Lottery',
-                                    onClick: async () => {
-                                        const wallets = await Services.Plugin.invokePlugin(
-                                            'maskbook.wallet',
-                                            'getWallets',
-                                        )
-                                        if (wallets.length) setLotteryDialogOpen(true)
-                                        else Services.Provider.requestConnectWallet()
-                                    },
-                                }}
-                            />
+                            {Flags.poll_enabled && (
+                                <ClickableChip
+                                    ChipProps={{
+                                        label: '🗳️ Poll',
+                                        onClick: () => {
+                                            setPollsDialogOpen(true)
+                                        },
+                                    }}
+                                />
+                            )}
+                            {Flags.lottery_enabled && (
+                                <ClickableChip
+                                    ChipProps={{
+                                        label: '🎉 Lottery',
+                                        onClick: async () => {
+                                            const wallets = await Services.Plugin.invokePlugin(
+                                                'maskbook.wallet',
+                                                'getWallets',
+                                            )
+                                            if (wallets.length) setLotteryDialogOpen(true)
+                                            else Services.Provider.requestConnectWallet()
+                                        },
+                                    }}
+                                />
+                            )}
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}

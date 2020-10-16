@@ -30,6 +30,7 @@ if (module.hot) {
             i18nNextInstance.addResources('zh', 'translation', zh)
             i18nNextInstance.addResources('en', 'translation', en)
             i18nNextInstance.addResources('ja', 'translation', ja)
+            document.dispatchEvent(new Event('i18n-hmr'))
         },
     )
 }
