@@ -32,14 +32,6 @@ export function createProvider(chainId = currentChainId) {
             },
         })
     providerPool.set(url, provider)
-
-    console.log('DEBUG: createProvider')
-    console.log({
-        url,
-        chainId,
-        provider,
-    })
-
     return provider
 }
 //#endregion
@@ -56,8 +48,8 @@ function createWeb3Instance(provider: HttpProvider) {
     return web3
 }
 
-export function createWeb3(privKeys: string[] = []) {
-    const provider = createProvider(currentChainId)
+export function createWeb3(chainId: ChainId = currentChainId, privKeys: string[] = []) {
+    const provider = createProvider(chainId)
     const web3 = createWeb3Instance(provider)
     if (privKeys.length) {
         web3.eth.accounts.wallet.clear()

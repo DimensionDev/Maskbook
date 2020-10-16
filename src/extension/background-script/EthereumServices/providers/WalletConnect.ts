@@ -64,17 +64,11 @@ export function createProvider() {
                         // only trasnaction hash available
                         promise
                             .then((hash) => {
-                                console.log('DEBUG: wallet connect hash')
-                                console.log(hash)
-
                                 listeners
                                     .filter((x) => x.name === TransactionEventType.TRANSACTION_HASH)
                                     .forEach((y) => y.listener(hash))
                             })
                             .catch((e) => {
-                                console.log('DEBUG: wallet connect error')
-                                console.log(e)
-
                                 listeners
                                     .filter((x) => x.name === TransactionEventType.ERROR)
                                     .forEach((y) => y.listener(e))
@@ -105,10 +99,6 @@ export function createWeb3() {
  */
 export async function requestAccounts() {
     const connector_ = await createConnectorIfNeeded()
-
-    console.log('DEBUG: request accounts')
-    console.log(connector_)
-
     return new Promise<string[]>(async (resolve, reject) => {
         if (connector_.accounts.length) {
             resolve(connector_.accounts)
@@ -147,13 +137,6 @@ const onDisconnect = async (error: Error | null) => {
 }
 
 async function updateWalletInDB(address: string, name: string = 'WalletConnect', setAsDefault: boolean = false) {
-    console.log('DEBUG: updateWalletInDB')
-    console.log({
-        address,
-        name,
-        setAsDefault,
-    })
-
     // validate address
     if (!EthereumAddress.isValid(address)) throw new Error('Cannot found account or invalid account')
 

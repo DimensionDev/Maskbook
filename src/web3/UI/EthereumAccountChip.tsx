@@ -1,5 +1,15 @@
 import React, { useCallback } from 'react'
-import { Chip, ChipProps, makeStyles, Theme, createStyles, IconButton, Typography, Box } from '@material-ui/core'
+import {
+    Chip,
+    ChipProps,
+    makeStyles,
+    Theme,
+    createStyles,
+    IconButton,
+    Typography,
+    Box,
+    Divider,
+} from '@material-ui/core'
 import { ChevronDown, Copy } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import { useStylesExtends } from '../../components/custom-ui-helper'
@@ -24,8 +34,10 @@ const useStyles = makeStyles((theme: Theme) => {
         label: {
             paddingRight: theme.spacing(1),
         },
-        pipe: {
-            padding: theme.spacing(0, 0.5),
+        divider: {
+            height: 20,
+            margin: theme.spacing(0, 1),
+            backgroundColor: theme.palette.divider,
         },
         dropButton: {
             width: 24,
@@ -90,7 +102,7 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
             <IconButton className={classes.dropButton} size="small">
                 <ChevronDown size={14} />
             </IconButton>
-            <span className={classes.pipe}>|</span>
+            <Divider className={classes.divider} orientation="vertical" />
             <IconButton className={classes.copyButton} size="small" onClick={onCopy}>
                 <Copy size={14} />
             </IconButton>

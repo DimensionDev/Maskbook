@@ -34,14 +34,9 @@ function watchTransactionEvent(from: string, event: PromiEventW3<TransactionRece
     const enhancedEvent = enhancePromiEvent(event)
     const controller = new AbortController()
     async function watchTransactionHash(hash: string) {
-        console.log('DEBUG: start watchTransactionEvent')
-
         // retry 30 times
         for (const _ of new Array(30).fill(0)) {
             const receipt = await getTransactionReceipt(hash, await getChainId(from))
-
-            console.log('DEBUG: watch tx')
-            console.log(receipt)
 
             // the 'receipt' event was emitted
             if (controller.signal.aborted) break
@@ -78,7 +73,7 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
     if (wallet.provider === ProviderType.Maskbook) {
         const privateKey = wallet._private_key_
         if (!privateKey) throw new Error(`cannot find private key for wallet ${wallet.address}`)
-        const web3 = Maskbook.createWeb3([privateKey])
+        const web3 = Maskbook.createWeb3(await getChainId(from), [privateKey])
         const [nonce, gas, gasPrice] = await Promise.all([
             config.nonce ?? getNonce(from),
             config.gas ??
@@ -145,12 +140,6 @@ export async function sendSignedTransaction(from: string, config: TransactionCon
  */
 
 export async function callTransaction(from: string | undefined, config: TransactionConfig) {
-    console.log('DEBUG: call tx')
-    console.log({
-        from,
-        config,
-    })
-
     // user can use callTransaction without account
     if (!from) return Maskbook.createWeb3().eth.call(config)
 

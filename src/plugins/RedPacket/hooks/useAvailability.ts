@@ -2,7 +2,7 @@ import { useAsyncRetry } from 'react-use'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 
 export function useAvailability(from: string, id?: string) {
-    const redPacketContract = useRedPacketContract(from)
+    const redPacketContract = useRedPacketContract()
     return useAsyncRetry(async () => {
         if (!id) return null
         if (!redPacketContract) return null

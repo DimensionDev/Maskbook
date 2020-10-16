@@ -19,13 +19,6 @@ const revalidateChainState = debounce(
     async () => {
         const wallets = await getWallets()
         const chainIds = uniq(await Promise.all(wallets.map((x) => getChainId(x.address))))
-
-        console.log('DEBUG: revalidateChainState chain')
-        console.log({
-            wallets,
-            chainIds,
-        })
-
         currentChainStateSettings.value = stringify(
             await Promise.all(
                 chainIds.map(async (chainId) => ({

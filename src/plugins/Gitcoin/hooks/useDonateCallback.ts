@@ -7,7 +7,6 @@ import BigNumber from 'bignumber.js'
 import { addGasMargin } from '../../../web3/helpers'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import type { Tx } from '../../../contracts/types'
-import { useChainId } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 
 /**
@@ -17,12 +16,11 @@ import { useAccount } from '../../../web3/hooks/useAccount'
  * @param token
  */
 export function useDonateCallback(address: string, amount: string, token: Token) {
-    const chainId = useChainId()
-    const account = useAccount()
-    const GITCOIN_ETH_ADDRESS = useConstant(GITCOIN_CONSTANT, 'GITCOIN_ETH_ADDRESS', chainId)
-    const GITCOIN_TIP_PERCENTAGE = useConstant(GITCOIN_CONSTANT, 'GITCOIN_TIP_PERCENTAGE', chainId)
+    const GITCOIN_ETH_ADDRESS = useConstant(GITCOIN_CONSTANT, 'GITCOIN_ETH_ADDRESS')
+    const GITCOIN_TIP_PERCENTAGE = useConstant(GITCOIN_CONSTANT, 'GITCOIN_TIP_PERCENTAGE')
     const bulkCheckoutContract = useBulkCheckoutContract()
 
+    const account = useAccount()
     const [donateState, setDonateState] = useTransactionState()
 
     const donations = useMemo(() => {

@@ -7,7 +7,7 @@ import { addGasMargin } from '../../../web3/helpers'
 
 export function useRefundCallback(from: string, id?: string) {
     const [refundState, setRefundState] = useTransactionState()
-    const redPacketContract = useRedPacketContract(from)
+    const redPacketContract = useRedPacketContract()
 
     const refundCallback = useCallback(async () => {
         if (!redPacketContract || !id) {

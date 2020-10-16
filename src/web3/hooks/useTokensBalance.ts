@@ -8,7 +8,7 @@ import { useBalanceCheckerContract } from '../contracts/useBalanceChecker'
  * @param listOfAddress
  */
 export function useTokensBalance(from: string, listOfAddress: string[]) {
-    const balanceCheckerContract = useBalanceCheckerContract(from)
+    const balanceCheckerContract = useBalanceCheckerContract()
     return useAsync(async () => {
         if (!EthereumAddress.isValid(from)) return []
         if (!listOfAddress.length) return []

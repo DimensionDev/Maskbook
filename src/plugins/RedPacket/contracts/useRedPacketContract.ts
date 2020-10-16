@@ -4,9 +4,8 @@ import { RED_PACKET_CONSTANTS } from '../constants'
 import { useContract } from '../../../web3/hooks/useContract'
 import type { HappyRedPacket } from '../../../contracts/happy-red-packet/HappyRedPacket'
 import HappyRedPacketABI from '../../../contracts/happy-red-packet/HappyRedPacket.json'
-import { useChainId } from '../../../web3/hooks/useChainState'
 
-export function useRedPacketContract(from: string) {
-    const address = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS', useChainId(from))
+export function useRedPacketContract() {
+    const address = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
     return useContract<HappyRedPacket>(address, HappyRedPacketABI as AbiItem[])
 }

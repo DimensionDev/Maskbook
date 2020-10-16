@@ -17,7 +17,7 @@ export function injectPageInspectorDefault<T extends string>(
     })
 
     return function injectPageInspector() {
-        const watcher = new MutationObserverWatcher(new LiveSelector().querySelector('#react-root'))
+        const watcher = new MutationObserverWatcher(new LiveSelector().querySelector('body'))
             .setDOMProxyOption({
                 afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
             })

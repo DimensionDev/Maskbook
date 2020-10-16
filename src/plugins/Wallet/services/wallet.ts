@@ -42,7 +42,7 @@ export async function getWallets(provider?: ProviderType) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     const records = await t.objectStore('Wallet').getAll()
     const wallets = (
-        await Promise.all(
+        await Promise.all<WalletRecord>(
             records.map(async (record) => {
                 const walletRecord = WalletRecordOutDB(record)
                 return {

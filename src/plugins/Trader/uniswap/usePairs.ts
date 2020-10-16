@@ -19,8 +19,6 @@ export enum PairState {
 export type TokenPair = [UniswapToken, UniswapToken]
 
 export function useUniswapPairs(tokens: readonly TokenPair[]) {
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-
     const pairAddresses = useMemo(
         () =>
             tokens.map(([tokenA, tokenB]) =>
@@ -30,6 +28,7 @@ export function useUniswapPairs(tokens: readonly TokenPair[]) {
     )
 
     // this initial address is fake we use the real address in the call() method
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const pairContract = usePairContract(ETH_ADDRESS)
 
     // auto refresh pair reserves for each block

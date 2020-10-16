@@ -11,12 +11,13 @@ import {
     LinearProgress,
     unstable_createMuiStrictModeTheme,
     IconButton,
+    Box,
 } from '@material-ui/core'
 import classNames from 'classnames'
+import { ArrowRight } from 'react-feather'
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
 import CloseIcon from '@material-ui/icons/Close'
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import stringify from 'json-stable-stringify'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { merge, cloneDeep, noop } from 'lodash-es'
@@ -28,7 +29,6 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
-import { ArrowRightSharp } from '@material-ui/icons'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -249,8 +249,11 @@ const useFindUsernameStyles = makeStyles((theme) =>
                 color: theme.palette.primary.main,
             },
         },
+        button: {
+            marginLeft: theme.spacing(1),
+        },
         icon: {
-            color: theme.palette.text.secondary,
+            color: 'inherit',
         },
     }),
 )
@@ -297,32 +300,31 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
             title={t('setup_guide_find_username_title')}
             content={
                 <form>
-                    <TextField
-                        className={findUsernameClasses.input}
-                        variant="outlined"
-                        label={t('username')}
-                        value={username}
-                        InputProps={{
-                            classes: {
-                                focused: findUsernameClasses.inputFocus,
-                            },
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <AlternateEmailIcon className={findUsernameClasses.icon} />
-                                </InputAdornment>
-                            ),
-                            endAdornment: username ? (
-                                <InputAdornment position="end">
-                                    <ArrowForwardIosIcon
-                                        className={findUsernameClasses.icon}
-                                        cursor="pinter"
-                                        onClick={onJump}
-                                    />
-                                </InputAdornment>
-                            ) : null,
-                        }}
-                        inputRef={inputRef}
-                        inputProps={{ 'data-testid': 'username_input' }}></TextField>
+                    <Box className={findUsernameClasses.input} display="flex" alignItems="center">
+                        <TextField
+                            variant="outlined"
+                            label={t('username')}
+                            value={username}
+                            InputProps={{
+                                classes: {
+                                    focused: findUsernameClasses.inputFocus,
+                                },
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <AlternateEmailIcon className={findUsernameClasses.icon} />
+                                    </InputAdornment>
+                                ),
+                            }}
+                            inputRef={inputRef}
+                            inputProps={{ 'data-testid': 'username_input' }}></TextField>
+                        <IconButton
+                            className={findUsernameClasses.button}
+                            color={username ? 'primary' : 'default'}
+                            disabled={!username}>
+                            <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
+                        </IconButton>
+                    </Box>
+
                     <Typography
                         className={classes.tip}
                         variant="body2"

@@ -69,10 +69,6 @@ export default function DashboardWalletsRouter() {
     const tokens = useTokens(defaultWallet?.address ?? '')
 
     const [detailedTokens, detailedTokensCallback] = useTokensDetailedCallback(tokens)
-
-    console.log('DEBUG: DashboardWalletsRouter')
-    console.log(detailedTokens)
-
     // show create dialog
     useEffect(() => {
         if (create) openWalletCreate()
@@ -86,10 +82,6 @@ export default function DashboardWalletsRouter() {
     // auto fetch tokens detailed
     useEffect(() => {
         if (!defaultWallet) return
-
-        console.log('DEBUG: detailedTokensCallback')
-        console.log(defaultWallet)
-
         detailedTokensCallback(defaultWallet.address)
     }, [defaultWallet])
 

@@ -81,12 +81,6 @@ export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps)
         Services.Ethereum.connectWalletConnect().then(onClose).catch(onClose)
     }, [open, URI, onClose])
 
-    console.log('DEBUG: wallet connect qrcode')
-    console.log({
-        open,
-        URI,
-    })
-
     return (
         <div className={classes.root}>
             <ShadowRootDialog

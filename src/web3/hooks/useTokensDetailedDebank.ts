@@ -44,7 +44,7 @@ async function fetcher(chainId: ChainId, address: string) {
  * @param address
  */
 export function useTokensDetailedDebank(address: string) {
-    const chainId = useChainId(address)
+    const chainId = useChainId()
     const { data = [] } = useSWR([chainId, address], {
         fetcher,
     })

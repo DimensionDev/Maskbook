@@ -9,7 +9,7 @@ import Services from '../../../extension/service'
 
 export function useClaimCallback(from: string, id?: string, password?: string) {
     const [claimState, setClaimState] = useTransactionState()
-    const redPacketContract = useRedPacketContract(from)
+    const redPacketContract = useRedPacketContract()
 
     const claimCallback = useCallback(async () => {
         if (!redPacketContract || !id || !password) {
