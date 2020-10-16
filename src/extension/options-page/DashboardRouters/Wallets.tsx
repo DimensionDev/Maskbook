@@ -85,6 +85,33 @@ export default function DashboardWalletsRouter() {
 
     const tokens = useTokens(current)
     const [detailedTokens, detailedTokensCallback] = useTokensDetailedCallback(tokens)
+    const rightIcons = [
+        <IconButton
+            onClick={() => {
+                if (currentWallet) openAddToken({ wallet: currentWallet })
+                else openWalletCreate()
+            }}>
+            <AddIcon />
+        </IconButton>,
+    ]
+    currentWallet &&
+        rightIcons.unshift(
+            <IconButton
+                onClick={() => {
+                    if (!currentWallet) return
+                    openWalletHistory({
+                        wallet: currentWallet,
+                        onRedPacketClicked(payload) {
+                            openWalletRedPacketDetail({
+                                wallet: currentWallet,
+                                payload,
+                            })
+                        },
+                    })
+                }}>
+                <RestoreIcon />
+            </IconButton>,
+        )
 
     // auto select first wallet
     useEffect(() => {
@@ -152,30 +179,7 @@ export default function DashboardWalletsRouter() {
                     <ArrowBackIosIcon />
                 </IconButton>,
             ]}
-            rightIcons={[
-                <IconButton
-                    onClick={() => {
-                        if (!currentWallet) return
-                        openWalletHistory({
-                            wallet: currentWallet,
-                            onRedPacketClicked(payload) {
-                                openWalletRedPacketDetail({
-                                    wallet: currentWallet,
-                                    payload,
-                                })
-                            },
-                        })
-                    }}>
-                    <RestoreIcon />
-                </IconButton>,
-                <IconButton
-                    onClick={() => {
-                        if (currentWallet) openAddToken({ wallet: currentWallet })
-                        else openWalletCreate()
-                    }}>
-                    <AddIcon />
-                </IconButton>,
-            ]}>
+            rightIcons={rightIcons}>
             <div className={classes.root}>
                 {wallets?.length && !(xsMatched && current) ? (
                     <div className={classes.scroller}>
