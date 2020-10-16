@@ -5,9 +5,7 @@ import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { EthereumAddress } from 'wallet.ts'
 import { updateExoticWalletFromSource, setDefaultWallet } from '../../../../plugins/Wallet/services'
 import { ProviderType } from '../../../../web3/types'
-import { sideEffect } from '../../../../utils/side-effects'
 import { MessageCenter } from '../../../../utils/messages'
-import { Flags } from '../../../../utils/flags'
 
 //#region tracking chain id
 let currentChainId: ChainId = ChainId.Mainnet
@@ -34,9 +32,6 @@ function onNetworkError(error: any) {
         updateExoticWalletFromSource(ProviderType.MetaMask, new Map())
     }
 }
-
-// create a new provider
-if (Flags.metamask_support_enabled) sideEffect.then(createProvider)
 
 export function createProvider() {
     if (provider) {
