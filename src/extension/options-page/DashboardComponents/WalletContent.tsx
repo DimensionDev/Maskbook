@@ -59,6 +59,9 @@ const useStyles = makeStyles((theme) =>
             color: theme.palette.text.primary,
             flex: 1,
         },
+        box: {
+            borderBottom: `1px solid ${theme.palette.divider}`,
+        },
         addButton: {
             color: theme.palette.primary.main,
         },
@@ -122,7 +125,14 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
     return (
         <div className={classes.root} ref={ref}>
             <ThemeProvider theme={walletContentTheme}>
-                <Box pt={3} pb={2} pl={3} pr={2} display="flex" alignItems="center">
+                <Box
+                    pt={xsMatched ? 2 : 3}
+                    pb={2}
+                    pl={3}
+                    pr={2}
+                    display="flex"
+                    alignItems="center"
+                    className={xsMatched ? classes.box : ''}>
                     <Typography className={classes.title} variant="h5">
                         {xsMatched ? wallet.name ?? wallet.address : t('details')}
                     </Typography>
