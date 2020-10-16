@@ -44,53 +44,56 @@ export async function createConnectorIfNeeded() {
 }
 
 export function createProvider() {
-    if (!connector) throw new Error('cannot find connetor')
-    const provider = Maskbook.createProvider(currentChainId)
-    return new Proxy(provider, {
-        get(target, name) {
-            switch (name) {
-                case 'sendTransaction':
-                    return (txData: ITxData) => {
-                        const listeners: { name: string; listener: Function }[] = []
-                        const promise = connector?.sendTransaction(txData) as Promise<string>
-
-                        // mimic PromiEvent API
-                        Object.assign(promise, {
-                            on(name: string, listener: Function) {
-                                listeners.push({ name, listener })
-                            },
-                        })
-
-                        // only trasnaction hash available
-                        promise
-                            .then((hash) => {
-                                listeners
-                                    .filter((x) => x.name === TransactionEventType.TRANSACTION_HASH)
-                                    .forEach((y) => y.listener(hash))
-                            })
-                            .catch((e) => {
-                                listeners
-                                    .filter((x) => x.name === TransactionEventType.ERROR)
-                                    .forEach((y) => y.listener(e))
-                            })
-
-                        return (promise as unknown) as PromiEventW3<string>
-                    }
-                case 'sendRawTransaction':
-                    throw new Error('TO BE IMPLEMENT')
-                default:
-                    return Reflect.get(target, name)
-            }
-        },
-    })
+    if (!connector?.connected) throw new Error('The connection is lost, please reconnect.')
+    return Maskbook.createProvider(currentChainId)
 }
 
 // Wrap promise as PromiEvent because WalletConnect returns transaction hash only
 // docs: https://docs.walletconnect.org/client-api
 export function createWeb3() {
-    if (!provider) provider = createProvider()
+    provider = createProvider()
     if (!web3) web3 = new Web3(provider)
-    return web3
+    else web3.setProvider(provider)
+
+    return Object.assign(web3, {
+        eth: new Proxy(web3.eth, {
+            get(target, name) {
+                switch (name) {
+                    case 'sendTransaction':
+                        return (txData: ITxData) => {
+                            const listeners: { name: string; listener: Function }[] = []
+                            const promise = connector?.sendTransaction(txData) as Promise<string>
+
+                            // mimic PromiEvent API
+                            Object.assign(promise, {
+                                on(name: string, listener: Function) {
+                                    listeners.push({ name, listener })
+                                },
+                            })
+
+                            // only trasnaction hash available
+                            promise
+                                .then((hash) => {
+                                    listeners
+                                        .filter((x) => x.name === TransactionEventType.TRANSACTION_HASH)
+                                        .forEach((y) => y.listener(hash))
+                                })
+                                .catch((e) => {
+                                    listeners
+                                        .filter((x) => x.name === TransactionEventType.ERROR)
+                                        .forEach((y) => y.listener(e))
+                                })
+
+                            return (promise as unknown) as PromiEventW3<string>
+                        }
+                    case 'sendRawTransaction':
+                        throw new Error('TO BE IMPLEMENT')
+                    default:
+                        return Reflect.get(target, name)
+                }
+            },
+        }),
+    })
 }
 
 /**
