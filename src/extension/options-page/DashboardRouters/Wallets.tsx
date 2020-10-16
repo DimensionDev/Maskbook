@@ -102,7 +102,7 @@ export default function DashboardWalletsRouter() {
             empty={!defaultWallet}
             title={t('my_wallets')}
             actions={[
-                Flags.metamask_support_enabled ? (
+                Flags.metamask_support_enabled || Flags.wallet_connect_support_enabled ? (
                     <Button variant="outlined" onClick={onConnect}>
                         {t('connect')}
                     </Button>

@@ -4,7 +4,6 @@ import { makeStyles, Theme, createStyles, DialogContent, GridList, GridListTile 
 import { GetContext } from '@holoflows/kit/es'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-import { noop } from 'lodash-es'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
@@ -22,6 +21,7 @@ import { DashboardRoute } from '../../../extension/options-page/Route'
 import { ProviderType } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
 import { MessageCenter } from '../../../utils/messages'
+import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -153,16 +153,17 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                 onClick={() => onConnect(ProviderType.Maskbook)}
                             />
                         </GridListTile>
-                        <GridListTile>
-                            <Provider
-                                logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                name="MetaMask"
-                                description="Connect to your MetaMask Wallet"
-                                onClick={() => onConnect(ProviderType.MetaMask)}
-                            />
-                        </GridListTile>
-                        {/* TODO: support wallet connect */}
-                        {process.env.NODE_ENV === 'development' ? (
+                        {Flags.metamask_support_enabled ? (
+                            <GridListTile>
+                                <Provider
+                                    logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
+                                    name="MetaMask"
+                                    description="Connect to your MetaMask Wallet"
+                                    onClick={() => onConnect(ProviderType.MetaMask)}
+                                />
+                            </GridListTile>
+                        ) : null}
+                        {Flags.wallet_connect_support_enabled ? (
                             <GridListTile>
                                 <Provider
                                     logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
