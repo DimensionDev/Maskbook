@@ -52,7 +52,7 @@ if (GetContext() === 'background') {
          * For iOS App, there is a special way to do it in the manifest.json
          * A `iOS-injected-scripts` field is used to add extra scripts
          */
-        if (!Flags.support_native_injected_script_declaration && contains) {
+        if (!Flags.support_native_injected_script_declaration && !Flags.requires_injected_script_run_directly) {
             browser.tabs
                 .executeScript(arg.tabId, {
                     runAt: 'document_start',
