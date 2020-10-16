@@ -29,8 +29,9 @@ function isNodeConnected(x: unknown) {
 function dispatchEventRaw<T extends Event>(target: Node | Document | null, eventBase: T, overwrites: Partial<T> = {}) {
     let currentTarget: null | Node | Document = target
     const event = getMockedEvent(eventBase, () => currentTarget!, overwrites)
-    const type = event.type
-    if (!CapturingEvents.has(type)) warn("!!!! You're capturing a event that didn't captured. !!!!")
+    // Note: in firefox, "event" is "Opaque". Displayed as an empty object.
+    const type = eventBase.type
+    if (!CapturingEvents.has(type)) return warn("!!!! You're capturing a event that didn't captured. !!!!")
 
     const bubblingNode = bubble()
     for (const Node of bubblingNode) {
@@ -57,6 +58,8 @@ function dispatchEventRaw<T extends Event>(target: Node | Document | null, event
             yield currentTarget
             currentTarget = currentTarget.parentNode
         }
+        yield document
+        yield (window as unknown) as Node
     }
     function getMockedEvent<T extends Event>(event: T, currentTarget: () => EventTarget, overwrites: Partial<T> = {}) {
         const target = un_xray(currentTarget())

@@ -178,7 +178,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
                 port: 35938,
                 overlay: false,
             },
-            optimization: { splitChunks: false },
+            optimization: { splitChunks: false, minimize: false },
             plugins: [
                 new EnvironmentPlugin({ NODE_ENV: env }),
                 env === 'production' && new CleanWebpackPlugin({}),
