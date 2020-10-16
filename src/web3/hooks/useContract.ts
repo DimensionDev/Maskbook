@@ -37,9 +37,9 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                         const cached = method(...args)
                         return {
                             ...cached,
-                            async call(config: TransactionConfig) {
+                            async call(config?: TransactionConfig) {
                                 const result = await Services.Ethereum.callTransaction(
-                                    (config.from ?? account) as string,
+                                    (config?.from ?? account) as string,
                                     pickBy({
                                         from: account,
                                         to: contract.options.address,

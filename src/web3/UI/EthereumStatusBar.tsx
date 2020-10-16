@@ -11,11 +11,9 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {},
         chainChip: {
-            marginRight: theme.spacing(1),
+            margin: theme.spacing(0, 1),
         },
-        accountChip: {
-            marginRight: theme.spacing(1),
-        },
+        accountChip: {},
     }),
 )
 
