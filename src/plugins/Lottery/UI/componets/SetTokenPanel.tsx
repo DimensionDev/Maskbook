@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, ChangeEvent, useState, useMemo } from 'react'
+import React from 'react'
 import { makeStyles, Theme, createStyles, Typography, Box } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { SelectTokenChip, SelectTokenChipProps } from '../../../../web3/UI/SelectTokenChip'

@@ -20,10 +20,13 @@ import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { getActivatedUI } from '../../../../social-network/ui'
 
+/***
+ * TO-DO: move to public shared UI components
+ * */
 const useStyles = makeStyles((theme) => {
     const network = getActivatedUI()?.networkIdentifier
     return {
-        card: {
+        timeLabel: {
             marginTop: theme.spacing(1),
             marginBottom: theme.spacing(1),
             width: '100%',
@@ -47,10 +50,6 @@ const useStyles = makeStyles((theme) => {
             margin: theme.spacing(1),
             minWidth: 120,
         },
-        button: {
-            margin: theme.spacing(2, 0),
-            padding: 12,
-        },
         header: {
             borderBottom: '1px solid #ccd6dd',
             display: 'flex',
@@ -67,16 +66,12 @@ interface TimePickerFormProp
     extends withClasses<
         | KeysInferFromUseStyles<typeof useStyles>
         | 'dialog'
-        | 'wrapper'
-        | 'backdrop'
         | 'container'
         | 'close'
         | 'header'
         | 'content'
         | 'paper'
         | 'title'
-        | 'label'
-        | 'button'
     > {
     label?: string
     callback: (ts: number) => void
@@ -125,7 +120,7 @@ export function TimePickerForm(props: TimePickerFormProp) {
 
     return (
         <ThemeProvider theme={theme}>
-            <Button className={classes.card} onClick={handleClickOpen}>
+            <Button className={classes.timeLabel} onClick={handleClickOpen}>
                 {t('plugin_lottery_decription_timepicker', { label, days, hours, minutes })}
             </Button>
             <ShadowRootDialog

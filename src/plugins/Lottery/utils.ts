@@ -29,3 +29,8 @@ export function getTotalWinner(prize_class: (string | number)[][]): number {
     prize_class.forEach((pc) => (total_winner += Number(pc[1])))
     return total_winner
 }
+
+export function getEndTime(start_secs: number, duration_secs: number): Date {
+    const ts = (start_secs + duration_secs) * 1000
+    return new Date(ts)
+}

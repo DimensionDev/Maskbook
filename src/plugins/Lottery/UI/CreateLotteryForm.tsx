@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, ChangeEvent, useEffect } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import {
     makeStyles,
     FormControl,
@@ -136,7 +136,7 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
 
     //#region lotto settings
     const [if_draw_at_time, setDrawMode] = useState(0)
-    const [message, setMessage] = useState(t('plugin_lottery_default_message')) //('超级大奖等你来拿')
+    const [message, setMessage] = useState(t('plugin_lottery_default_message'))
     const [draw_at_time, setDrawAtTime] = useState(DEFAULT_DRAW_AT_TIME)
     const [draw_at_number, setDrawAtNumber] = useState(DEFAULT_DRAW_AT_NUMBER)
     const [duration, setDuration] = useState(DEFAULT_DURATION)
@@ -150,7 +150,7 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
     }
     const [optionsInput, setOptionsInput] = useState<opt>({
         0: {
-            token_number: DEFAULT_PRIZE_TOKEN_NUMBER.toString(), //new BigNumber(DEFAULT_PRIZE_TOKEN_NUMBER).multipliedBy(new BigNumber(10).pow(token.decimals)).toFixed(),
+            token_number: DEFAULT_PRIZE_TOKEN_NUMBER.toString(),
             winner_number: 0,
         },
     })
@@ -177,7 +177,7 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
     const handleOptionsWinnerInput = (index: number, e: any) => {
         const new_op = {
             token_number: optionsInput[index].token_number,
-            winner_number: +(e.target as HTMLInputElement)?.value,
+            winner_number: parseInt((e.target as HTMLInputElement)?.value),
         }
         setOptionsInput({
             ...optionsInput,
@@ -189,7 +189,7 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
         setOptionsInput({
             ...optionsInput,
             [length]: {
-                token_number: DEFAULT_PRIZE_TOKEN_NUMBER.toString() /* new BigNumber(DEFAULT_PRIZE_TOKEN_NUMBER).multipliedBy(new BigNumber(10).pow(token.decimals)).toFixed()*/,
+                token_number: DEFAULT_PRIZE_TOKEN_NUMBER.toString(),
                 winner_number: 0,
             },
         })
@@ -202,7 +202,6 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
 
     // balance
     const { value: tokenBalance = '0', error, loading: loadingTokenBalance } = useTokenBalance(token)
-
     if (error) {
         console.log('DEBUG: token balance error')
         console.log(error)
@@ -230,11 +229,11 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
         if_draw_at_time: Boolean(if_draw_at_time),
         draw_at_time: draw_at_time,
         draw_at_number: draw_at_number,
-        prize_class: prize_class || [], //createPrizeClass(options),
+        prize_class: prize_class || [],
         token,
         name: senderName,
         message,
-        total: total_token.toFixed(), //getTotalToken(createPrizeClass(options)),
+        total: total_token.toFixed(),
     })
     const [openTransactionDialog, setOpenTransactionDialog] = useState(false)
     const onSubmit = useCallback(async () => {
@@ -340,7 +339,7 @@ export function CreateLotteryForm(props: CreateLotteryProps) {
                             className: classes.nativeInput,
                         }}
                         onChange={(e) => {
-                            setDrawAtNumber(+(e.target as HTMLInputElement)?.value)
+                            setDrawAtNumber(parseInt((e.target as HTMLInputElement)?.value))
                         }}
                         label={t('plugin_lottery_decription_draw_number')}
                         variant="outlined"

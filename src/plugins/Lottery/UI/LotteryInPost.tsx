@@ -40,8 +40,6 @@ export default function LotteryInDecryptedPost(props: LotteryInDecryptedPostProp
     const { message } = props
     const postIdentifier = usePostInfoDetails('postIdentifier')
     const storybookDebugging: boolean = !!process.env.STORYBOOK
-    /* without Lottery */
-    /* TO-DO: use db */
     const jsx = message
         ? renderWithLotteryMetadata(message.meta, (r) => (
               <MaskbookPluginWrapper pluginName="Lottery">

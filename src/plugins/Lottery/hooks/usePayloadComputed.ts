@@ -85,7 +85,7 @@ export function usePayloadComputed(account: string, payload?: LotteryJSONPayload
             canParticipate:
                 !isDrew && !isExpired && !isEmpty && !isParticipated && payload.network === resolveChainName(chainId),
             canDraw:
-                (!isDrew && availability.if_draw_at_time && isExpired) ||
+                (!isDrew && isExpired) ||
                 (!isDrew &&
                     !availability.if_draw_at_time &&
                     participators.length >= Number.parseInt(basic_info.draw_at_number)),

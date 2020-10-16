@@ -115,7 +115,7 @@ export const CONSTANTS = {
             ? {
                   [ChainId.Mainnet]: 'https://mainnet.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
                   [ChainId.Ropsten]: 'https://ropsten.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
-                  [ChainId.Rinkeby]: 'https://rinkeby.infura.io/v3/7294565eccad4e4cac2ba64605fca0ba', //'https://rinkeby.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
+                  [ChainId.Rinkeby]: 'https://rinkeby.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
                   [ChainId.Kovan]: 'https://kovan.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
               }
             : {

@@ -1,23 +1,23 @@
-import { noop } from 'lodash-es'
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { makeStyles, createStyles, Button, Card, Typography, DialogTitle, IconButton } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
-import Services from '../../../extension/service'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { EthereumTokenType } from '../../../web3/types'
 import { formatBalance } from '../../Wallet/formatter'
 import { TransactionDialog } from '../../../web3/UI/TransactionDialog'
-import { LotteryRecord, LotteryStatus } from '../types'
+import { LotteryStatus } from '../types'
 import { BigNumber } from 'bignumber.js'
 import type { LotteryJSONPayload } from '../types'
-import { PluginMessageCenter } from '../../PluginMessages'
 import { usePayloadComputed } from '../hooks/usePayloadComputed'
 import { useParticipateCallback } from '../hooks/useParticipateCallback'
 import { useDrawCallback } from '../hooks/useDrawCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
-import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
+import { getEndTime } from '../utils'
+import type { Winner } from '../types'
+import { resolveChainId } from '../../../web3/pipes'
+import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -47,8 +47,7 @@ const useStyles = makeStyles((theme) =>
             display: 'block',
             textAlign: 'center',
         },
-        btnlistPanel: {
-            display: 'block',
+        centerPanel: {
             textAlign: 'center',
         },
         roundbtn: {
@@ -72,16 +71,16 @@ const useStyles = makeStyles((theme) =>
             fontSize: '10px',
             color: 'gray',
         },
-        participator_li: {
+        address_li: {
             color: 'gray',
             fontSize: '10px',
-            padding: '5px',
+            padding: theme.spacing(0.5),
             listStyle: 'none',
             display: 'inline',
-            marginRight: '5px',
+            marginRight: theme.spacing(0.5),
             border: '1px solid black',
         },
-        participator_ul: {
+        address_ul: {
             paddingLeft: '0px',
         },
         prize_li: {
@@ -94,11 +93,11 @@ const useStyles = makeStyles((theme) =>
             border: '1px solid gray',
         },
         winner_title: {
-            margin: '15px',
+            margin: theme.spacing(1),
             fontSize: '12px',
         },
         winner_addr: {
-            marginBottom: '10px',
+            marginBottom: theme.spacing(1),
         },
         option: {
             position: 'relative',
@@ -184,12 +183,11 @@ export function LotteryCard(props: LotteryCardProps) {
     const account = useAccount()
 
     /*
-    * TO-DO: use db
-
+    * TO-DO: use db. Store Lottery in local indexDB to reduce on-chain request
     useEffect(() => {
         if (!payload) return noop
         const updateLottery = () => {
-            Services.Plugin.invokePlugin('maskbook.lottery', 'addLottery', from ?? '', payload)
+            Services.Plugin.invokePlugin('maskbook.lottery', 'discoverLottery', from ?? '', payload)
         }
         updateLottery()
         console.log('add lottery in DB!')
@@ -197,36 +195,18 @@ export function LotteryCard(props: LotteryCardProps) {
     }, [from, JSON.stringify(payload)])
     */
 
-    const { availability, computed } = usePayloadComputed(account, payload)
-    const {
-        canFetch,
-        canParticipate,
-        canDraw,
-        canRefund,
-        listOfStatus,
-        tokenAmount,
-        tokenSymbol,
-        participator,
-        winner,
-    } = computed
+    const { computed } = usePayloadComputed(account, payload)
+    const { canFetch, canParticipate, canDraw, canRefund, listOfStatus, tokenSymbol, participator, winner } = computed
 
-    const total_token = payload?.total_token
-    const total_winner = payload?.total_winner
+    // basic info
     const prize_class = payload?.prize_class
-
     const message = payload?.sender.message
     const sender_name = payload?.sender.name
     const token_type = payload?.token_type
-
     const if_draw_at_time = payload?.if_draw_at_time
     const draw_at_number = payload?.draw_at_number
-
-    const start_time = payload?.creation_time ?? 0
-    const draw_time_ts = 1000 * (payload?.draw_at_time ?? 0)
-    const ts = start_time * 1000 + draw_time_ts
-    const draw_at_time = new Date(ts).toLocaleString()
-    const duration = payload?.duration ?? 0
-    const expired_time = new Date(start_time * 1000 + duration * 1000).toLocaleString()
+    const draw_at_time = getEndTime(payload?.creation_time ?? 0, payload?.draw_at_time ?? 0)
+    const expired_time = getEndTime(payload?.creation_time ?? 0, payload?.duration ?? 0)
 
     const token_amount = (origin_token: string | number) => {
         return token_type === EthereumTokenType.Ether
@@ -236,6 +216,7 @@ export function LotteryCard(props: LotteryCardProps) {
             : '-'
     }
 
+    // prize class list
     var prize_li: JSX.Element[] = []
     if (prize_class) {
         prize_li = prize_class.map((pc: (string | number)[], index: number) => (
@@ -252,26 +233,40 @@ export function LotteryCard(props: LotteryCardProps) {
         ))
     }
 
-    const winnerlist = winner
-    const produce_winner: { prize?: string; addr: JSX.Element[] }[] = []
-    var winner_li: JSX.Element[] = []
-    if (winnerlist && prize_class) {
-        winnerlist.map((winner: object, index: number) => {
-            const prize_id = Object.values(winner)[0]
-            const address = Object.values(winner)[1].substr(0, 8)
-            const prize = token_amount(prize_class[prize_id][0])
+    // participator list
+    var participator_li: JSX.Element[] = []
+    if (participator) {
+        participator_li = participator
+            .slice(0, 5) // only show 5 participators at most
+            .map((addr: string, index: number) => (
+                <li className={classes.address_li} key={index}>
+                    {addr.substr(0, 8)}..
+                </li>
+            ))
+    }
 
-            if (produce_winner[prize_id]) {
-                produce_winner[prize_id].addr.push(
-                    <li className={classes.participator_li} key={index}>
+    // winner list
+    var winner_li: JSX.Element[] = []
+    const winner_by_class: { prize?: string; addrlist: JSX.Element[] }[] = []
+    if (winner && prize_class) {
+        //convert winner data to winner_by_class UI
+        winner.map((winner: Winner, index: number) => {
+            const prize_id = winner.prize_id
+            const address = winner.winner_addrs.substr(0, 8)
+            const prize = token_amount(prize_class[prize_id][0])
+            if (winner_by_class[prize_id]) {
+                // prize class exits, just append
+                winner_by_class[prize_id].addrlist.push(
+                    <li className={classes.address_li} key={index}>
                         {address}..
                     </li>,
                 )
             } else {
-                produce_winner[prize_id] = {
+                // prize class not exits, create first
+                winner_by_class[prize_id] = {
                     prize: prize,
-                    addr: [
-                        <li className={classes.participator_li} key={index}>
+                    addrlist: [
+                        <li className={classes.address_li} key={index}>
                             {address}..
                         </li>,
                     ],
@@ -279,24 +274,14 @@ export function LotteryCard(props: LotteryCardProps) {
             }
         })
     }
-    winner_li = produce_winner.map((w, index) => (
-        <ul className={classes.participator_ul}>
+    winner_li = winner_by_class.map((w, index) => (
+        <ul className={classes.address_ul}>
             <div key={index} className={classes.winner_title}>
-                {' '}
                 {t('plugin_lottery_description_prize')}：{w.prize} {tokenSymbol}
             </div>
-            <div className={classes.winner_addr}>{w.addr}</div>
+            <div className={classes.winner_addr}>{w.addrlist}</div>
         </ul>
     ))
-
-    var participator_li: JSX.Element[] = []
-    if (participator) {
-        participator_li = participator.slice(0, 5).map((addr: string, index: number) => (
-            <li className={classes.participator_li} key={index}>
-                {addr.substr(0, 8)}..
-            </li>
-        ))
-    }
 
     //#region blocking
     const [openParticipateTransactionDialog, setOpenParticipateTransactionDialog] = useState(false)
@@ -327,6 +312,7 @@ export function LotteryCard(props: LotteryCardProps) {
     const onDrawTransactionDialogClose = useCallback(() => {
         setOpenDrawTransactionDialog(false)
     }, [drawState])
+    //#endregion
 
     //refund click-event
     const onClickRefund = useCallback(async () => {
@@ -338,9 +324,8 @@ export function LotteryCard(props: LotteryCardProps) {
     const onRefundTransactionDialogClose = useCallback(() => {
         setOpenRefundTransactionDialog(false)
     }, [refundState])
-    //#endregion
 
-    //show-lottery-info click-event
+    //show-lottery-JSON-info click-event
     const showLotteryInfo = () => {
         setShowLottoInfoDialogOpen(true)
     }
@@ -349,7 +334,7 @@ export function LotteryCard(props: LotteryCardProps) {
         setShowLottoInfoDialogOpen(false)
     }
 
-    //show-whole-participators click-event
+    //show-all-participators click-event
     const [isShowPartiDialogOpen, setShowPartiDialogOpen] = useState(false)
     const showAllParticipators = () => {
         setShowPartiDialogOpen(true)
@@ -394,12 +379,12 @@ export function LotteryCard(props: LotteryCardProps) {
             {prize_li}
             <Typography className={classes.from}>
                 {if_draw_at_time
-                    ? t('plugin_lottery_time_to_draw', { time: draw_at_time })
+                    ? t('plugin_lottery_time_to_draw', { time: draw_at_time.toLocaleString() })
                     : t('plugin_lottery_number_to_draw', { number: draw_at_number })}
             </Typography>
             {!if_draw_at_time && (
                 <Typography className={classes.from}>
-                    {t('plugin_lottery_time_to_expired', { time: expired_time })}
+                    {t('plugin_lottery_time_to_expired', { time: expired_time.toLocaleString() })}
                 </Typography>
             )}
             <div className={classes.btnPanel}>
@@ -426,13 +411,13 @@ export function LotteryCard(props: LotteryCardProps) {
                     </a>
                 </div>
             </div>
-            <div className={classes.btnlistPanel}>
-                <ul className={classes.participator_ul}>{participator_li}</ul>
+            <div className={classes.centerPanel}>
+                <ul className={classes.address_ul}>{participator_li}</ul>
             </div>
 
             <div>
                 <hr></hr>
-                <div className={classes.btnlistPanel}>
+                <div className={classes.centerPanel}>
                     <Button disabled={!canDraw} onClick={onClickDraw} className={classes.minbtn}>
                         {t('plugin_lottery_description_drawing')}
                     </Button>
@@ -461,9 +446,9 @@ export function LotteryCard(props: LotteryCardProps) {
                 </div>
             </div>
             {(listOfStatus.includes(LotteryStatus.drew) || listOfStatus.includes(LotteryStatus.refunded)) && (
-                <div className={classes.btnlistPanel}>
+                <div className={classes.centerPanel}>
                     <hr></hr>
-                    <div className={classes.btnlistPanel}>
+                    <div className={classes.centerPanel}>
                         <Typography className={classes.title} variant="h6">
                             {t('plugin_lottery_description_list_of_winner')}
                         </Typography>
@@ -507,7 +492,10 @@ export function LotteryCard(props: LotteryCardProps) {
                         <li className={classes.dailogLiItem} key={index}>
                             <a
                                 target="new_tab"
-                                href={`https://${payload?.network ?? 'mainnet'}.etherscan.io/address/${p}`}>
+                                href={resolveTransactionLinkOnEtherscan(
+                                    resolveChainId(payload?.network ?? 'mainnet') ?? 1,
+                                    p,
+                                )}>
                                 {p}
                             </a>
                         </li>

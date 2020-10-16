@@ -46,4 +46,9 @@ export enum LotteryStatus {
     won = 'won',
     notWon = 'notWon',
 }
+
+export interface Winner {
+    prize_id: number
+    winner_addrs: string
+}
 //#endregion

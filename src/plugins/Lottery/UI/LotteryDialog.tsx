@@ -44,6 +44,9 @@ interface ExistingLotteryProps {
     lotterys: LotteryRecord[]
 }
 function ExistingLotteryUI(props: LotteryDialogProps & ExistingLotteryProps) {
+    /**
+     * TODO: complete this function
+     */
     return <div>to-do...</div>
 }
 //#endregion
