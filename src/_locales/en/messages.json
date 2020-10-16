@@ -102,6 +102,7 @@
     "activity": "Activity",
     "activity_inbound": "Inbound",
     "activity_outbound": "Outbound",
+    "buy_now": "Buy Now",
     "setup_guide_optional": "[Optional]",
     "setup_guide_find_username_title": "Find your username",
     "setup_guide_find_username_text": "Maskbook needs the username to connect your Profile to your Persona.<br /> Make sure it is correct.",
