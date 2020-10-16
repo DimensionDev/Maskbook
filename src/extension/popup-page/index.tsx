@@ -1,7 +1,8 @@
 import '../../social-network-provider/popup-page/index'
 import '../../setup.ui'
-import React, { useMemo, useCallback } from 'react'
 
+import React, { useMemo, useCallback } from 'react'
+import { noop } from 'lodash-es'
 import { ThemeProvider, makeStyles, Theme, withStyles } from '@material-ui/core/styles'
 import { Button, useMediaQuery, Paper, Divider, Typography, Box } from '@material-ui/core'
 import { MaskbookLightTheme, MaskbookDarkTheme } from '../../utils/theme'
@@ -99,6 +100,8 @@ function PopupUI() {
     const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
         WalletMessageCenter,
         'selectProviderDialogUpdated',
+        noop,
+        'activated',
     )
     const onConnect = useCallback(async () => {
         setOpen({

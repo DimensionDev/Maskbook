@@ -13,14 +13,16 @@ export async function createConnectionURI() {
 // step2:
 // If user confirmed the request we will receive the 'connect' event
 export async function connectWalletConnect() {
-    const connector = await WalletConnect.createConnector()
+    const connector = await WalletConnect.createConnectorIfNeeded()
     if (connector.connected) return connector.accounts[0]
-    return WalletConnect.requestAccounts()
+    const accounts = await WalletConnect.requestAccounts()
+    return accounts[0]
 }
 //#endregion
 
 export async function connectMetaMask() {
-    return MetaMask.requestAccounts()
+    const accounts = await MetaMask.requestAccounts()
+    return accounts[0]
 }
 
 export async function connectMaskbook() {

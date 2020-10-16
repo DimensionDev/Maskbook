@@ -15,6 +15,8 @@ import {
     Tab,
     Tabs,
 } from '@material-ui/core'
+import { last } from 'lodash-es'
+import { AlertCircle } from 'react-feather'
 import { DataProvider, SwapProvider } from '../../types'
 import {
     resolveDataProviderName,
@@ -32,7 +34,7 @@ import { PriceChart } from './PriceChart'
 import { Linking } from './Linking'
 import { usePriceStats } from '../../trending/usePriceStats'
 import { Skeleton } from '@material-ui/lab'
-import { PriceChartDaysControl } from './PriceChartDaysControl'
+import { Days, PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
 import { useCurrentSwapProvider } from '../../trending/useCurrentSwapProvider'
 import { useCurrentCurrency } from '../../trending/useCurrentCurrency'
@@ -106,6 +108,9 @@ const useStyles = makeStyles((theme: Theme) => {
         avatar: {
             backgroundColor: theme.palette.common.white,
         },
+        currency: {
+            marginRight: theme.spacing(1),
+        },
         percentage: {
             marginLeft: theme.spacing(1),
         },
@@ -150,6 +155,51 @@ function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
 }
 //#endregion
 
+//#region error
+const useErrorStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        placeholder: {
+            padding: theme.spacing(18, 4),
+        },
+        icon: {
+            width: theme.spacing(8),
+            height: theme.spacing(8),
+            marginBottom: theme.spacing(2),
+            color: theme.palette.text.secondary,
+        },
+        message: {
+            fontSize: 16,
+        },
+    }),
+)
+interface TrendingViewErrorProps {
+    message: React.ReactNode
+}
+
+function TrendingViewError(props: TrendingViewErrorProps) {
+    const classes = useStyles()
+    const errorClasses = useErrorStyles()
+    const { message } = props
+    return (
+        <Card className={classes.root} elevation={0} component="article">
+            <CardContent className={classes.content}>
+                <Box
+                    className={errorClasses.placeholder}
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center"
+                    alignItems="center">
+                    <AlertCircle className={errorClasses.icon} />
+                    <Typography className={errorClasses.message} color="textSecondary">
+                        {message}
+                    </Typography>
+                </Box>
+            </CardContent>
+        </Card>
+    )
+}
+//#endregion
+
 //#region trending view
 export interface TrendingViewProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     name: string
@@ -176,7 +226,7 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region stats
-    const [days, setDays] = useState(365)
+    const [days, setDays] = useState(Days.ONE_YEAR)
     const { value: stats = [], loading: loadingStats } = usePriceStats({
         coinId: trending?.coin.id,
         dataProvider: trending?.dataProvider,
@@ -194,15 +244,33 @@ export function TrendingView(props: TrendingViewProps) {
     //#region display loading skeleton
     if (loadingCurrency || loadingTrending) return <TrendingViewSkeleton />
     //#endregion
+
     //#region error handling
     // error: no available platform
     if (props.dataProviders.length === 0) return null
 
     // error: fail to load currency
-    if (!currency) return null
+    if (!currency) return <TrendingViewError message="Fail to load currency info." />
 
     // error: unknown coin or api error
-    if (!trending) return null
+    if (!trending)
+        return (
+            <TrendingViewError
+                message={
+                    <span>
+                        Fail to load trending info from{' '}
+                        <Link
+                            color="primary"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={resolveDataProviderLink(dataProvider)}>
+                            {resolveDataProviderName(dataProvider)}
+                        </Link>
+                        .
+                    </span>
+                }
+            />
+        )
     //#endregion
 
     const { coin, market, tickers } = trending
@@ -233,11 +301,22 @@ export function TrendingView(props: TrendingViewProps) {
                 subheader={
                     <>
                         <Typography component="p" variant="body1">
-                            <span>{`${`${currency.name} `}${formatCurrency(
-                                market.current_price,
-                                currency.symbol,
-                            )}`}</span>
-                            {typeof market.price_change_percentage_24h === 'number' ? (
+                            {market ? (
+                                <>
+                                    <span className={classes.currency}>{currency.name}</span>
+                                    <span>
+                                        {formatCurrency(
+                                            dataProvider === DataProvider.COIN_MARKET_CAP
+                                                ? last(stats)?.[1] ?? market.current_price
+                                                : market.current_price,
+                                            currency.symbol,
+                                        )}
+                                    </span>
+                                </>
+                            ) : (
+                                <span>{t('plugin_trader_no_data')}</span>
+                            )}
+                            {typeof market?.price_change_percentage_24h === 'number' ? (
                                 <PriceChanged amount={market.price_change_percentage_24h} />
                             ) : null}
                         </Typography>
@@ -264,7 +343,7 @@ export function TrendingView(props: TrendingViewProps) {
                     </Tabs>
                     {tabIndex === 0 ? (
                         <>
-                            <PriceChangedTable market={market} />
+                            {market ? <PriceChangedTable market={market} /> : null}
                             <PriceChart stats={stats} loading={loadingStats}>
                                 <PriceChartDaysControl days={days} onDaysChange={setDays} />
                             </PriceChart>
@@ -292,7 +371,7 @@ export function TrendingView(props: TrendingViewProps) {
 
                 {tabIndex === 0 || tabIndex === 1 ? (
                     <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
-                        <span>Data source: </span>
+                        <span>Data source </span>
                         <Link
                             className={classes.footlink}
                             color="textSecondary"
@@ -316,7 +395,7 @@ export function TrendingView(props: TrendingViewProps) {
 
                 {tabIndex === 2 ? (
                     <Typography className={classes.footnote} color="textSecondary" variant="subtitle2">
-                        {'Based on '}
+                        <span>Based on </span>
                         <Link
                             className={classes.footlink}
                             color="textSecondary"

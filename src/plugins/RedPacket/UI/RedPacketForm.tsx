@@ -9,6 +9,7 @@ import {
     MenuItem,
     MenuProps,
 } from '@material-ui/core'
+import { omit } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -37,7 +38,6 @@ import { TransactionDialog } from '../../../web3/UI/TransactionDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { RedPacketJSONPayload } from '../types'
-import { omit } from 'lodash-es'
 import { resolveChainName } from '../../../web3/pipes'
 
 const useStyles = makeStyles((theme) =>

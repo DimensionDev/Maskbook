@@ -11,6 +11,7 @@ import { ProviderType } from '../../../web3/types'
 import { resolveProviderName } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
+import { isSameAddress } from '../../../web3/helpers'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -32,11 +33,16 @@ export async function isEmptyWallets() {
     return count === 0
 }
 
+export async function getWallet(address: string) {
+    const wallets = await getWallets()
+    return wallets.find((x) => isSameAddress(x.address, address))
+}
+
 export async function getWallets(provider?: ProviderType) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     const records = await t.objectStore('Wallet').getAll()
     const wallets = (
-        await Promise.all(
+        await Promise.all<WalletRecord>(
             records.map(async (record) => {
                 const walletRecord = WalletRecordOutDB(record)
                 return {

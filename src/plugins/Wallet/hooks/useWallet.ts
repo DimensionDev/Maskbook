@@ -7,7 +7,7 @@ import type { WalletRecord } from '../database/types'
 import { WalletArrayComparer, WalletComparer } from '../helpers'
 import { isSameAddress } from '../../../web3/helpers'
 
-//#region cache service query result
+//#region tracking wallets
 const defaultWalletRef = new ValueRef<WalletRecord | null>(null, WalletComparer)
 const walletsRef = new ValueRef<WalletRecord[]>([], WalletArrayComparer)
 
@@ -32,5 +32,5 @@ export function useWallet(address: string) {
 export function useWallets(provider?: ProviderType) {
     const wallets = useValueRef(walletsRef)
     if (typeof provider === 'undefined') return wallets
-    return wallets.filter((x) => x.provider === provider)
+    return wallets.filter((x) => x.provider === provider).sort((a, z) => a.updatedAt.getTime() - z.updatedAt.getTime())
 }

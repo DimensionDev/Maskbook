@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState, useEffect, useCallback } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -11,8 +11,10 @@ import {
     LinearProgress,
     unstable_createMuiStrictModeTheme,
     IconButton,
+    Box,
 } from '@material-ui/core'
 import classNames from 'classnames'
+import { ArrowRight } from 'react-feather'
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
 import CloseIcon from '@material-ui/icons/Close'
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
@@ -247,8 +249,11 @@ const useFindUsernameStyles = makeStyles((theme) =>
                 color: theme.palette.primary.main,
             },
         },
+        button: {
+            marginLeft: theme.spacing(1),
+        },
         icon: {
-            color: theme.palette.text.secondary,
+            color: 'inherit',
         },
     }),
 )
@@ -268,17 +273,26 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
     const findUsernameClasses = useFindUsernameStyles()
     const [binder, inputRef] = useCapturedInput(onUsernameChange)
 
+    // disable enter
     useEffect(
         () =>
             binder(['keydown'], (e) => {
                 e.stopPropagation()
-                if (e.key === 'Enter') {
-                    e.preventDefault()
-                    ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, username))
-                }
+                if (e.key !== 'Enter') return
+                e.preventDefault()
+                onConnect()
             })(),
         [onConnect, binder],
     )
+
+    const onJump = useCallback(
+        (ev: React.MouseEvent<SVGElement>) => {
+            ev.preventDefault()
+            ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, username))
+        },
+        [username],
+    )
+
     return (
         <WizardDialog
             completion={33.33}
@@ -286,23 +300,31 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
             title={t('setup_guide_find_username_title')}
             content={
                 <form>
-                    <TextField
-                        className={findUsernameClasses.input}
-                        variant="outlined"
-                        label={t('username')}
-                        value={username}
-                        InputProps={{
-                            classes: {
-                                focused: findUsernameClasses.inputFocus,
-                            },
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <AlternateEmailIcon className={findUsernameClasses.icon} />
-                                </InputAdornment>
-                            ),
-                        }}
-                        inputRef={inputRef}
-                        inputProps={{ 'data-testid': 'username_input' }}></TextField>
+                    <Box className={findUsernameClasses.input} display="flex" alignItems="center">
+                        <TextField
+                            variant="outlined"
+                            label={t('username')}
+                            value={username}
+                            InputProps={{
+                                classes: {
+                                    focused: findUsernameClasses.inputFocus,
+                                },
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <AlternateEmailIcon className={findUsernameClasses.icon} />
+                                    </InputAdornment>
+                                ),
+                            }}
+                            inputRef={inputRef}
+                            inputProps={{ 'data-testid': 'username_input' }}></TextField>
+                        <IconButton
+                            className={findUsernameClasses.button}
+                            color={username ? 'primary' : 'default'}
+                            disabled={!username}>
+                            <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
+                        </IconButton>
+                    </Box>
+
                     <Typography
                         className={classes.tip}
                         variant="body2"

@@ -79,13 +79,19 @@ export async function getQuotesInfo(id: string, currency: string) {
     const params = new URLSearchParams('ref=widget')
     params.append('convert', currency)
 
-    const response = await fetch(`${CMC_V2_BASE_URL}/ticker/${id}/?${params.toString()}`, {
-        cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
-    })
-    return response.json() as Promise<{
-        data: QuotesInfo
-        status: Status
-    }>
+    try {
+        const response = await fetch(`${CMC_V2_BASE_URL}/ticker/${id}/?${params.toString()}`, {
+            cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
+        })
+        return response.json() as Promise<{
+            data: QuotesInfo
+            status: Status
+        }>
+    } catch (e) {
+        return {
+            data: null,
+        }
+    }
 }
 //#endregion
 
@@ -224,18 +230,28 @@ export async function getLatestMarketPairs(id: string, currency: string) {
     params.append('convert', currency)
     params.append('id', id)
 
-    const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/market-pairs/latest?${params.toString()}`, {
-        cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
-    })
-    return response.json() as Promise<{
-        data: {
-            id: number
-            market_pairs: Pair[]
-            name: string
-            num_market_pairs: number
-            symbol: string
+    try {
+        const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/market-pairs/latest?${params.toString()}`, {
+            cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
+        })
+        return response.json() as Promise<{
+            data: {
+                id: number
+                market_pairs: Pair[]
+                name: string
+                num_market_pairs: number
+                symbol: string
+            }
+            status: Status
+        }>
+    } catch (e) {
+        return {
+            data: {
+                id,
+                market_pairs: [] as Pair[],
+                num_market_pairs: 0,
+            },
         }
-        status: Status
-    }>
+    }
 }
 //#endregion

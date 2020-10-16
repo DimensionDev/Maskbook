@@ -18408,6 +18408,11 @@ react-popper@^1.3.3:
     typed-styles "^0.0.7"
     warning "^4.0.2"
 
+react-refresh-typescript@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-refresh-typescript/-/react-refresh-typescript-1.0.1.tgz#652a21805dad4196e5379d539f06df0d49579821"
+  integrity sha512-mnV48qEUMujksfdF8PpeUWkTntEq78Z5zAp8TYx9Uq7PJ63R/9+vFLowylNKYqSgKxxh2VsDwpQXham9mC4MYg==
+
 react-refresh@^0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"

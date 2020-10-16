@@ -1,14 +1,20 @@
 import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Token, EthereumTokenType } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
 import BigNumber from 'bignumber.js'
 import { addGasMargin } from '../../../web3/helpers'
-import { TransactionState, TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { useAccount } from '../../../web3/hooks/useAccount'
+import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import type { Tx } from '../../../contracts/types'
+import { useAccount } from '../../../web3/hooks/useAccount'
 
+/**
+ * A callback for donate gitcoin grant
+ * @param address the donor address
+ * @param amount
+ * @param token
+ */
 export function useDonateCallback(address: string, amount: string, token: Token) {
     const GITCOIN_ETH_ADDRESS = useConstant(GITCOIN_CONSTANT, 'GITCOIN_ETH_ADDRESS')
     const GITCOIN_TIP_PERCENTAGE = useConstant(GITCOIN_CONSTANT, 'GITCOIN_TIP_PERCENTAGE')

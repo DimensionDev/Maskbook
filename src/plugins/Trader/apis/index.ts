@@ -4,7 +4,6 @@ import * as coinMarketCapAPI from './coinmarketcap'
 import { Days } from '../UI/trending/PriceChartDaysControl'
 import { getEnumAsArray } from '../../../utils/enum'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../constants'
-import { unreachable } from '../../../utils/utils'
 import { resolveCoinId, resolveCoinAddress } from './hotfix'
 
 export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
@@ -135,19 +134,19 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
     }
 
     const currencyName = currency.name.toUpperCase()
-    const [{ data: quotesInfo }, { data: coinInfo }, { data: market, status }] = await Promise.all([
-        coinMarketCapAPI.getQuotesInfo(id, currencyName),
+    const [{ data: coinInfo, status }, { data: quotesInfo }, { data: market }] = await Promise.all([
         coinMarketCapAPI.getCoinInfo(id),
+        coinMarketCapAPI.getQuotesInfo(id, currencyName),
         coinMarketCapAPI.getLatestMarketPairs(id, currencyName),
     ])
-    return {
+    const trending: Trending = {
         lastUpdated: status.timestamp,
         coin: {
             id,
             name: coinInfo.name,
             symbol: coinInfo.symbol,
             image_url: `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`,
-            market_cap_rank: quotesInfo.rank,
+            market_cap_rank: quotesInfo?.rank,
             description: coinInfo.description,
             eth_address:
                 resolveCoinAddress(id, DataProvider.COIN_MARKET_CAP) ??
@@ -156,13 +155,6 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
         },
         currency,
         dataProvider,
-        market: {
-            current_price: quotesInfo.quotes[currencyName].price,
-            total_volume: quotesInfo.quotes[currencyName].volume_24h,
-            price_change_percentage_1h_in_currency: quotesInfo.quotes[currencyName].percent_change_1h,
-            price_change_percentage_24h_in_currency: quotesInfo.quotes[currencyName].percent_change_24h,
-            price_change_percentage_7d_in_currency: quotesInfo.quotes[currencyName].percent_change_7d,
-        },
         tickers: market.market_pairs
             .map((pair) => ({
                 logo_url: `https://s2.coinmarketcap.com/static/img/exchanges/32x32/${pair.exchange.id}.png`,
@@ -184,6 +176,15 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
                 return z.volume - a.volume // volumn from high to low
             }),
     }
+    if (quotesInfo)
+        trending.market = {
+            current_price: quotesInfo.quotes[currencyName].price,
+            total_volume: quotesInfo.quotes[currencyName].volume_24h,
+            price_change_percentage_1h_in_currency: quotesInfo.quotes[currencyName].percent_change_1h,
+            price_change_percentage_24h_in_currency: quotesInfo.quotes[currencyName].percent_change_24h,
+            price_change_percentage_7d_in_currency: quotesInfo.quotes[currencyName].percent_change_7d,
+        }
+    return trending
 }
 
 export async function getCoinTrendingByKeyword(keyword: string, dataProvider: DataProvider, currency: Currency) {

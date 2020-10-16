@@ -1,6 +1,6 @@
 {
   "name": "maskbook",
-  "version": "1.17.1",
+  "version": "1.17.2",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -195,6 +195,7 @@
     "react-devtools": "^4.8.2",
     "react-docgen-typescript-loader": "^3.7.2",
     "react-refresh": "^0.8.3",
+    "react-refresh-typescript": "^1.0.1",
     "react-test-renderer": "^16.13.1",
     "source-map-loader": "^1.1.0",
     "storybook-addon-designs": "^5.4.1",
