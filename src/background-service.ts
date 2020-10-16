@@ -108,13 +108,18 @@ if (GetContext() === 'background') {
     })
 }
 async function getInjectedScript() {
-    return `{
+    try {
+        return `{
         const script = document.createElement('script')
         script.innerHTML = ${await fetch('js/injected-script.js')
             .then((x) => x.text())
             .then(JSON.stringify)}
         document.documentElement.appendChild(script)
     }`
+    } catch (e) {
+        console.error(e)
+        return `console.log('Injected script failed to load.')`
+    }
 }
 function IgnoreError(arg: unknown): (reason: Error) => void {
     return (e) => {
