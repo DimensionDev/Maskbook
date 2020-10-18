@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
         root: {
             position: 'relative',
+            cursor: ({ stats }: PriceChartProps) => (stats.length ? 'pointer' : 'default'),
         },
         svg: {},
         progress: {
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export interface PriceChartProps {
     stats: Stat[]
+    cmcCurrencyURL: string
     loading?: boolean
     width?: number
     height?: number
@@ -42,7 +44,7 @@ export interface PriceChartProps {
 
 export function PriceChart(props: PriceChartProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const classes = useStyles(props)
     const svgRef = useRef<SVGSVGElement>(null)
 
     useDimension(svgRef, DEFAULT_DIMENSION)
@@ -56,7 +58,12 @@ export function PriceChart(props: PriceChartProps) {
         'x-trader-price-line-chart',
     )
     return (
-        <div className={classes.root} style={{ width: DEFAULT_DIMENSION.width, height: DEFAULT_DIMENSION.height }}>
+        <div
+            className={classes.root}
+            style={{ width: DEFAULT_DIMENSION.width, height: DEFAULT_DIMENSION.height }}
+            onClick={() => {
+                props.stats.length && window.open(props.cmcCurrencyURL, '_blank', 'noopener noreferrer')
+            }}>
             {props.loading ? <CircularProgress className={classes.progress} color="primary" size={15} /> : null}
             {props.stats.length ? (
                 <>
