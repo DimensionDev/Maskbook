@@ -45,6 +45,7 @@ import { useConstant } from '../../../../web3/hooks/useConstant'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { MaskbookTextIcon } from '../../../../resources/MaskbookIcon'
 import { CONSTANTS } from '../../../../web3/constants'
+import { CMC_CURRENCIES_URL } from '../../constants'
 
 const useStyles = makeStyles((theme: Theme) => {
     const internalName = getActivatedUI()?.internalName
@@ -275,6 +276,7 @@ export function TrendingView(props: TrendingViewProps) {
 
     const { coin, market, tickers } = trending
     const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
+    const cmcCurrencyURL = `${CMC_CURRENCIES_URL}/${coin.name.toLowerCase()}`
 
     return (
         <Card className={classes.root} elevation={0} component="article">
@@ -344,7 +346,7 @@ export function TrendingView(props: TrendingViewProps) {
                     {tabIndex === 0 ? (
                         <>
                             {market ? <PriceChangedTable market={market} /> : null}
-                            <PriceChart stats={stats} loading={loadingStats}>
+                            <PriceChart stats={stats} loading={loadingStats} cmcCurrencyURL={cmcCurrencyURL}>
                                 <PriceChartDaysControl days={days} onDaysChange={setDays} />
                             </PriceChart>
                         </>
