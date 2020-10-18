@@ -25,7 +25,9 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
+                        {/* Todo: fix the whole feedback loop asap, now just mailto info@dimension.im */}
                         <TextField
+                            style={{ display: 'none' }}
                             required
                             label={t('email')}
                             type="email"
@@ -45,8 +47,13 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                 footer={
                     <DebounceButton
                         variant="contained"
-                        disabled={Boolean(!name || !email || !message)}
-                        onClick={async () => {}}>
+                        disabled={Boolean(!name || !message)}
+                        onClick={async () => {
+                            const url = new URL(`mailto:${t('dashboard_email_address')}`)
+                            url.searchParams.set('subject', name)
+                            url.searchParams.set('body', message)
+                            window.open(url.toString())
+                        }}>
                         {t('submit')}
                     </DebounceButton>
                 }></DashboardDialogWrapper>
