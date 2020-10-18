@@ -270,6 +270,7 @@
     "wallets": "Wallets",
     "untitled_wallet": "Untitled Wallet",
     "your_message": "Your message…",
+    "input_length_exceed_prompt": "The length of {{name}} should be less than {{length}}.",
     "plugin_red_packet_display_name": "Plugin: Red Packet",
     "plugin_red_packet_split_mode": "Split Mode",
     "plugin_red_packet_average": "Average",

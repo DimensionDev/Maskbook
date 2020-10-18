@@ -270,6 +270,7 @@
     "wallets": "仮想通貨ウォレット",
     "untitled_wallet": "無題の仮想通貨ウォレット",
     "your_message": "あなたのメッセージ...",
+    "input_length_exceed_prompt": "",
     "plugin_red_packet_display_name": "プラグイン: Red Packet",
     "plugin_red_packet_split_mode": "分割モード",
     "plugin_red_packet_average": "平均",

@@ -270,6 +270,7 @@
     "wallets": "錢包",
     "untitled_wallet": "未命名錢包",
     "your_message": "您的留言……",
+    "input_length_exceed_prompt": "{{name}}的長度不應超過{{length}}。",
     "plugin_red_packet_display_name": "插件：紅包",
     "plugin_red_packet_split_mode": "分配模式",
     "plugin_red_packet_average": "平均",
