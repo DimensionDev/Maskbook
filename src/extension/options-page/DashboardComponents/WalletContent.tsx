@@ -1,7 +1,8 @@
 import React from 'react'
 import { Button, Typography, Box, IconButton, List, MenuItem } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
-import { merge, cloneDeep } from 'lodash-es'
+import { merge, cloneDeep, truncate } from 'lodash-es'
+import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import AddIcon from '@material-ui/icons/Add'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import HistoryIcon from '@material-ui/icons/History'
@@ -127,7 +128,9 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                     alignItems="center"
                     className={xsMatched ? classes.box : ''}>
                     <Typography className={classes.title} variant="h5">
-                        {wallet.name ?? wallet.address}
+                        {wallet.name
+                            ? truncate(wallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN })
+                            : wallet.address}
                     </Typography>
                     {xsMatched ? null : (
                         <Button

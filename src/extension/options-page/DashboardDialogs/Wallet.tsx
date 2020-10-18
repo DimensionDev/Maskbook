@@ -36,7 +36,8 @@ import type { RedPacketJSONPayload } from '../../../plugins/RedPacket/types'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useHistory } from 'react-router-dom'
 import { DashboardRoute } from '../Route'
-import { sleep } from '../../../utils/utils'
+import { sleep, checkInputLengthExceed } from '../../../utils/utils'
+import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import { QRCode } from '../../../components/shared/qrcode'
 import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../web3/hooks/useChainState'
@@ -217,6 +218,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                     <>
                         <form>
                             <TextField
+                                helperText={
+                                    checkInputLengthExceed(name)
+                                        ? t('input_length_exceed_prompt', {
+                                              name: t('wallet_name').toLowerCase(),
+                                              length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                          })
+                                        : undefined
+                                }
                                 required
                                 autoFocus
                                 label={t('wallet_name')}
@@ -261,6 +270,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                 children: (
                     <div>
                         <TextField
+                            helperText={
+                                checkInputLengthExceed(name)
+                                    ? t('input_length_exceed_prompt', {
+                                          name: t('wallet_name').toLowerCase(),
+                                          length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                      })
+                                    : undefined
+                            }
                             required
                             autoFocus
                             label={t('wallet_name')}
@@ -282,6 +299,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                 children: (
                     <div>
                         <TextField
+                            helperText={
+                                checkInputLengthExceed(name)
+                                    ? t('input_length_exceed_prompt', {
+                                          name: t('wallet_name').toLowerCase(),
+                                          length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                      })
+                                    : undefined
+                            }
                             required
                             autoFocus
                             label={t('wallet_name')}
@@ -345,9 +370,10 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                         variant="contained"
                         onClick={onSubmit}
                         disabled={
-                            !(state[0] === 0 && name && confirmed) &&
-                            !(state[0] === 1 && name && mnemonic) &&
-                            !(state[0] === 2 && name && privKey)
+                            (!(state[0] === 0 && name && confirmed) &&
+                                !(state[0] === 1 && name && mnemonic) &&
+                                !(state[0] === 2 && name && privKey)) ||
+                            checkInputLengthExceed(name)
                         }>
                         {t('import')}
                     </DebounceButton>
@@ -561,6 +587,14 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                 primary={t('wallet_rename')}
                 content={
                     <TextField
+                        helperText={
+                            checkInputLengthExceed(name)
+                                ? t('input_length_exceed_prompt', {
+                                      name: t('wallet_name').toLowerCase(),
+                                      length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                  })
+                                : undefined
+                        }
                         required
                         autoFocus
                         label={t('wallet_name')}
@@ -572,7 +606,10 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                 }
                 footer={
                     <SpacedButtonGroup>
-                        <DebounceButton variant="contained" onClick={renameWallet}>
+                        <DebounceButton
+                            variant="contained"
+                            onClick={renameWallet}
+                            disabled={name.length === 0 || checkInputLengthExceed(name)}>
                             {t('ok')}
                         </DebounceButton>
                         <Button variant="outlined" color="inherit" onClick={props.onClose}>
