@@ -67,7 +67,8 @@ export function DecryptPost(props: DecryptPostProps) {
     const authorInPayload = deconstructedPayload
         .andThen((x) => (x.version === -38 ? Ok(x.authorUserID) : Err.EMPTY))
         .unwrapOr(undefined)
-    const postBy = or(authorInPayload, usePostInfoDetails('postBy'))
+    const currentPostBy = usePostInfoDetails('postBy')
+    const postBy = or(authorInPayload, currentPostBy)
     const postMetadataImages = usePostInfoDetails('postMetadataImages')
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
