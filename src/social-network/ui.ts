@@ -14,6 +14,7 @@ import type { I18NStrings } from '../utils/i18n-next'
 import i18nNextInstance from '../utils/i18n-next'
 import type { ObservableWeakMap } from '../utils/ObservableMapSet'
 import type { PostInfo } from './PostInfo'
+import { Flags } from '../utils/flags'
 
 if (!process.env.STORYBOOK) {
     OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
@@ -104,18 +105,17 @@ export interface SocialNetworkUIInjections {
     /**
      * This is an optional function.
      *
-     * This function should inject a link to open the options page.
-     *
-     * This function should only active when the Maskbook start as a standalone app.
-     * (Mobile device).
-     */
-    injectOptionsPageLink?: (() => void) | 'disabled'
-    /**
-     * This is an optional function.
-     *
      * This function should inject a hint at their bio if they are known by Maskbook
      */
     injectKnownIdentity?: (() => void) | 'disabled'
+    /**
+     * This is an optional function.
+     *
+     * This function should inject a link to open the options page.
+     *
+     * This function should only active when the Maskbook start as a standalone app.
+     */
+    injectDashboardEntrance?: (() => void) | 'disabled'
     /**
      * This function should inject the comment
      * @param current The current post
@@ -140,10 +140,6 @@ export interface SocialNetworkUIInjections {
      * @returns unmount the injected components
      */
     injectPostInspector(current: PostInfo): () => void
-    /**
-     * Inject Maskbook dashboard entry on Mobile
-     */
-    injectDashboardEntryInMobile?(): void
 }
 //#endregion
 //#region SocialNetworkUITasks
@@ -306,13 +302,12 @@ export function activateSocialNetworkUI(): void {
                 ui.injectPageInspector()
                 ui.collectPeople()
                 ui.collectPosts()
-                ui.injectDashboardEntryInMobile()
                 ui.myIdentitiesRef.addListener((val) => {
                     if (val.length === 1) ui.currentIdentity.value = val[0]
                 })
                 {
-                    const mountSettingsLink = ui.injectOptionsPageLink
-                    if (typeof mountSettingsLink === 'function') mountSettingsLink()
+                    const mountSettingsLink = ui.injectDashboardEntrance
+                    if (Flags.inject_dashboard_entrance && typeof mountSettingsLink === 'function') mountSettingsLink()
                 }
                 {
                     const mountKnownIdentity = ui.injectKnownIdentity
