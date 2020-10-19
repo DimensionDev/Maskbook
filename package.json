@@ -148,7 +148,7 @@
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "@dimensiondev/webextension-shim": "0.0.3-20201010073139-5139920",
+    "@dimensiondev/webextension-shim": "0.0.3-20201015034210-3b97196",
     "@dimensiondev/webpack-web-ext-plugin": "^0.0.3-20200731084410-7de6117",
     "@magic-works/commonjs-import.meta": "^1.0.0",
     "@nice-labs/git-rev": "^3.5.0",
