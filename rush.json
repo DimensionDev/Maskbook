@@ -50,7 +50,7 @@
          *
          * The default value is "local".
          */
-        // "pnpmStore": "local",
+        "pnpmStore": "global",
         /**
          * If true, then Rush will add the "--strict-peer-dependencies" option when invoking PNPM.
          * This causes "rush install" to fail if there are unsatisfied peer dependencies, which is
@@ -371,7 +371,7 @@
     "projects": [
         {
             "packageName": "maskbook",
-            "projectFolder": "src"
+            "projectFolder": "packages/maskbook-extension"
         }
         // {
         //   /**
