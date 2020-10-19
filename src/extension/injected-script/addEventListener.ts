@@ -31,7 +31,7 @@ function dispatchEventRaw<T extends Event>(target: Node | Document | null, event
     const event = getMockedEvent(eventBase, () => currentTarget!, overwrites)
     // Note: in firefox, "event" is "Opaque". Displayed as an empty object.
     const type = eventBase.type
-    if (!CapturingEvents.has(type)) return warn("!!!! You're capturing a event that didn't captured. !!!!")
+    if (!CapturingEvents.has(type)) return warn("!!!! You're capturing an event that didn't captured. !!!!")
 
     const bubblingNode = bubble()
     for (const Node of bubblingNode) {
