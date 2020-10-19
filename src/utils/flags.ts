@@ -9,6 +9,8 @@ export const Flags = {
     },
     /** There is no "tabs" to navigate to. We must be careful with this. */
     has_no_browser_tab_ui: process.env.architecture === 'app',
+
+    inject_dashboard_entrance: process.env.architecture === 'app',
     /**
      * - In iOS, the ShadowDOM mode is not really safe.
      * - In test(Jest) mode, there is no ShadowDOM support.

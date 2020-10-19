@@ -34,5 +34,5 @@ export const defaultSocialNetworkUI = cloneDeep({
     useTheme: useMaskbookTheme,
     i18nOverwrite: { zh: {}, en: {} },
     injectKnownIdentity: 'disabled',
-    injectDashboardEntryInMobile: () => {},
+    injectDashboardEntrance: () => {},
 } as const)
