@@ -1,4 +1,4 @@
-import { OnlyRunInContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import { gun2, SharedAESKeyGun2 } from '.'
 import { hashPostSalt, hashCryptoKey, hashCryptoKeyUnstable } from './hash'
 import type { PublishedAESKeyRecordV39OrV38 } from '../../../crypto/crypto-alpha-38'

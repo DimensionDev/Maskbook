@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ValueRef, MutationObserverWatcher } from '@holoflows/kit'
+import { ValueRef, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Theme, unstable_createMuiStrictModeTheme, ThemeProvider } from '@material-ui/core'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../../../utils/theme'
 import type { SocialNetworkUICustomUI } from '../../../social-network/ui'

@@ -1,7 +1,7 @@
 import { defineSocialNetworkUI, definedSocialNetworkUIs, SocialNetworkUI } from '../../social-network/ui'
 import '../../provider.ui'
 import { emptyDefinition } from '../../social-network/defaults/emptyDefinition'
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdentitiesRef'
 
 const popupPageUISelf = defineSocialNetworkUI({

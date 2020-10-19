@@ -1,5 +1,5 @@
 import { env, Env, Preference, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
-import { ValueRef, OnlyRunInContext } from '@holoflows/kit/es'
+import { ValueRef, OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import type { Group, Profile, Persona } from '../database'
 import { ProfileIdentifier, PersonaIdentifier } from '../database/type'
 import { defaultTo, isNull } from 'lodash-es'
@@ -150,7 +150,7 @@ export interface SocialNetworkUIInjections {
 /**
  * SocialNetworkUITasks defines the "tasks" this UI provider should execute
  *
- * These tasks may be called directly or call through @holoflows/kit/AutomatedTabTask
+ * These tasks may be called directly or call through @dimensiondev/holoflows-kit/AutomatedTabTask
  */
 export interface SocialNetworkUITasks {
     /**

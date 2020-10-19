@@ -1,5 +1,5 @@
 import React from 'react'
-import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
+import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { makeStyles, Box } from '@material-ui/core'
 import Services from '../../../extension/service'

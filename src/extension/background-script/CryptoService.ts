@@ -1,4 +1,4 @@
-import { OnlyRunInContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 OnlyRunInContext('background', 'EncryptService')
 
 export { encryptComment, decryptComment } from '../../crypto/crypto-alpha-40'

@@ -1,5 +1,5 @@
 import React from 'react'
-import type { DOMProxy } from '@holoflows/kit'
+import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '../PostInfo'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
 import { PostInspector, PostInspectorProps } from '../../components/InjectedComponents/PostInspector'

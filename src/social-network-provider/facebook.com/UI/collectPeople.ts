@@ -1,4 +1,4 @@
-import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
+import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit/es'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import Services from '../../../extension/service'
 import { GroupIdentifier } from '../../../database/type'

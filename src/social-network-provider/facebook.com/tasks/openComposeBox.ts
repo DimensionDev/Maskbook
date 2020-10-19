@@ -1,4 +1,4 @@
-import { LiveSelector } from '@holoflows/kit/es'
+import { LiveSelector } from '@dimensiondev/holoflows-kit/es'
 import { MessageCenter } from '../../../utils/messages'
 import { i18n } from '../../../utils/i18n-next'
 import { sleep } from '../../../utils/utils'

@@ -7,8 +7,8 @@ import type { CustomEvents } from '../extension/injected-script/CustomEvents'
 
 import { flatten, isNull, random, noop } from 'lodash-es'
 
-import { sleep } from '@holoflows/kit/es/util/sleep'
-export { sleep, timeout } from '@holoflows/kit/es/util/sleep'
+import { sleep } from '@dimensiondev/holoflows-kit/es/util/sleep'
+export { sleep, timeout } from '@dimensiondev/holoflows-kit/es/util/sleep'
 
 export function randomElement(arr: unknown[]) {
     const e = flatten(arr)

@@ -29,7 +29,7 @@ const { join } = require('path')
 const { writeFileSync, readFileSync, unlinkSync } = require('fs')
 
 const restoreLodash = modifyPackage('lodash-es', (x) => (x.main = '../lodash'))
-const restoreKit = modifyPackage('@holoflows/kit', (x) => {
+const restoreKit = modifyPackage('@dimensiondev/holoflows-kit', (x) => {
     x.exports = {
         '.': './umd/index.js',
         './es/util/sleep': './umd/index.js',

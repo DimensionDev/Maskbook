@@ -1,7 +1,7 @@
 /// <reference path="./matrix.type.d.ts" />
 import sdk, { MatrixClient, Room, EventTimelineSet, MatrixEvent } from 'matrix-js-sdk'
 import { Emitter } from '@servie/events'
-import { OnlyRunInContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import { getLogger } from 'loglevel'
 OnlyRunInContext('background', 'Matrix')
 export const endpoint = 'https://matrix.vampire.rip'

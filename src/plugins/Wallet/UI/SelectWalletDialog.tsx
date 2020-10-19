@@ -14,7 +14,7 @@ import type { WalletRecord } from '../database/types'
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { sleep } from '../../../utils/utils'
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext } from '@dimensiondev/holoflows-kit/es'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

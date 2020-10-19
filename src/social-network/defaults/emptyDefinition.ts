@@ -1,4 +1,4 @@
-import { GetContext, ValueRef } from '@holoflows/kit/es'
+import { GetContext, ValueRef } from '@dimensiondev/holoflows-kit/es'
 import { ProfileIdentifier } from '../../database/type'
 import type { SocialNetworkUIDefinition } from '../ui'
 import { nopWithUnmount } from '../../utils/utils'

@@ -1,7 +1,7 @@
 /* eslint import/no-deprecated: 0 */
 import Gun from 'gun'
 import 'gun/lib/then'
-import { OnlyRunInContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import type { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
 import { gun2 } from '../version.2'
 

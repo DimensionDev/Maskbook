@@ -1,5 +1,5 @@
 /* eslint import/no-deprecated: 0 */
-import { OnlyRunInContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import { gun1 } from '.'
 
 OnlyRunInContext('background', 'gun')

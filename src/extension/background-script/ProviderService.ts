@@ -1,4 +1,4 @@
-import { OnlyRunInContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import { openOptionsPage } from './WelcomeService'
 import { DashboardRoute } from '../options-page/Route'
 
