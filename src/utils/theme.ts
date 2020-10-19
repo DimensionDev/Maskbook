@@ -1,8 +1,14 @@
-import { unstable_createMuiStrictModeTheme } from '@material-ui/core'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@material-ui/core'
+import { makeStyles, createStyles } from '@material-ui/core/styles'
 import { orange, green, red, blue, grey } from '@material-ui/core/colors'
 import type { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
 import { merge, cloneDeep } from 'lodash-es'
+import { Appearance, appearanceSettings, Language, languageSettings } from '../settings/settings'
+import { useValueRef } from './hooks/useValueRef'
+import { useMemo } from 'react'
+import { zhTW, jaJP } from '@material-ui/core/locale/index'
+import { safeUnreachable } from './utils'
+import { or } from '../components/custom-ui-helper'
 
 function getFontFamily(monospace?: boolean) {
     // We want to look native.
@@ -78,8 +84,38 @@ const baseTheme = (theme: 'dark' | 'light') => {
 }
 
 // Theme
-export const MaskbookLightTheme = unstable_createMuiStrictModeTheme(baseTheme('light'))
-export const MaskbookDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))
+const MaskbookLightTheme = unstable_createMuiStrictModeTheme(baseTheme('light'))
+const MaskbookDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))
+
+export function getMaskbookTheme(opt?: { language?: Language; theme?: Appearance }) {
+    const language = opt?.language ?? languageSettings.value
+    const preference = opt?.theme ?? appearanceSettings.value
+    const appearance = matchMedia('(prefers-color-scheme: dark)').matches
+
+    const isDark = (appearance && preference === Appearance.default) || preference === Appearance.dark
+    const baseTheme = isDark ? MaskbookDarkTheme : MaskbookLightTheme
+    switch (language) {
+        case Language.en:
+            return baseTheme
+        case Language.ja:
+            return unstable_createMuiStrictModeTheme(baseTheme, jaJP)
+        case Language.zh:
+            return unstable_createMuiStrictModeTheme(baseTheme, zhTW)
+        default:
+            safeUnreachable(language)
+            return baseTheme
+    }
+}
+
+export function useMaskbookTheme(opt?: { language?: Language; theme?: Appearance }) {
+    const language = or(opt?.language, useValueRef(languageSettings))
+    const preference = or(opt?.theme, useValueRef(appearanceSettings))
+    const appearance = useMediaQuery('(prefers-color-scheme: dark)')
+
+    const isDark = (appearance && preference === Appearance.default) || preference === Appearance.dark
+    const finalTheme = isDark ? Appearance.dark : Appearance.light
+    return useMemo(() => getMaskbookTheme({ language, theme: finalTheme }), [finalTheme, language])
+}
 
 export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
     const dark = theme.palette.type === 'dark'

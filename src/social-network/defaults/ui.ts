@@ -5,7 +5,7 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier } from '../../database/type'
 import { cloneDeep } from 'lodash-es'
 import type { Profile } from '../../database'
-import { MaskbookLightTheme } from '../../utils/theme'
+import { useMaskbookTheme } from '../../utils/theme'
 import { ProfileArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 import { ObservableWeakMap } from '../../utils/ObservableMapSet'
 
@@ -31,7 +31,7 @@ export const defaultSocialNetworkUI = cloneDeep({
     injectCommentBox: injectCommentBoxDefaultFactory(),
     injectPostComments: injectPostCommentsDefault(),
     injectOptionsPageLink: 'disabled',
-    useTheme: () => MaskbookLightTheme,
+    useTheme: useMaskbookTheme,
     i18nOverwrite: { zh: {}, en: {} },
     injectKnownIdentity: 'disabled',
     injectDashboardEntryInMobile: () => {},
