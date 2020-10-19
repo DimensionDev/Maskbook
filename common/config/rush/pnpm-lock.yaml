@@ -3,7 +3,7 @@ dependencies:
   '@commitlint/config-conventional': 11.0.0
   '@dimensiondev/common-protocols': 1.6.0-20200814034327-52d7428
   '@dimensiondev/holoflows-kit': 0.7.0-20201010005010-0cf4f14_webextension-polyfill@0.6.0
-  '@dimensiondev/kit': 0.0.0-20200805092405-83b3a99_fc458f6276d17d0be4a88eed069ecb3d
+  '@dimensiondev/kit': 0.0.0-20200805092405-83b3a99_396a7a67fcf1a463f4c3753f6ecfe65a
   '@dimensiondev/matrix-js-sdk-type': 1.0.0-20200731085604-dc2de92
   '@dimensiondev/stego-js': 0.11.1-20200731084631-79ec32a
   '@dimensiondev/webextension-shim': 0.0.3-20201010073139-5139920_typescript@4.0.3
@@ -111,7 +111,7 @@ dependencies:
   jss: 10.0.4
   jsx-jsonml-devtools-renderer: 1.4.3
   lint-staged: 10.4.2
-  lodash-es: 4.17.15
+  lodash-es: /lodash/4.17.20
   loglevel: 1.7.0
   matrix-js-sdk: 8.5.0
   metamask-extension-provider: 1.1.1
@@ -2355,9 +2355,9 @@ packages:
     resolution:
       integrity: sha512-5ZH20POG6qCGUSHAewQSCcdfNspbtTlwtwjhmQwKVShV5HtjMLI07qWWZv14uA/jh5/uvWKIRrPc+ogxsIPmZA==
       tarball: download/@dimensiondev/holoflows-kit/0.7.0-20201010005010-0cf4f14/4534c38f9b640339de6c3129c03a0aead4e7f4b3e9b92a8d1276fb42d3d0d677
-  /@dimensiondev/kit/0.0.0-20200805092405-83b3a99_fc458f6276d17d0be4a88eed069ecb3d:
+  /@dimensiondev/kit/0.0.0-20200805092405-83b3a99_396a7a67fcf1a463f4c3753f6ecfe65a:
     dependencies:
-      lodash-es: 4.17.15
+      lodash-es: /lodash/4.17.20
       react: 0.0.0-experimental-94c0244ba
       react-router: 5.2.0_1e33bf8dad188aed5d95229096d11519
       react-use: 15.3.4_aee71e629c1e3ebfaaa90e750af82ab3
@@ -2382,6 +2382,7 @@ packages:
     dependencies:
       meow: 7.1.1
     dev: false
+    hasBin: true
     peerDependencies:
       canvas: ^2.6.0
     resolution:
@@ -2394,6 +2395,7 @@ packages:
       typescript: 4.0.3
       web-ext-types: 3.2.1
     dev: false
+    hasBin: true
     peerDependencies:
       typescript: ^3.8.3
     resolution:
@@ -2404,6 +2406,8 @@ packages:
       inquirer: 7.3.3
       web-ext: 5.2.0
     dev: false
+    engines:
+      node: '>=12.0.0'
     peerDependencies:
       web-ext: '*'
     resolution:
@@ -24252,7 +24256,7 @@ packages:
       '@commitlint/config-conventional': 11.0.0
       '@dimensiondev/common-protocols': 1.6.0-20200814034327-52d7428
       '@dimensiondev/holoflows-kit': 0.7.0-20201010005010-0cf4f14_webextension-polyfill@0.6.0
-      '@dimensiondev/kit': 0.0.0-20200805092405-83b3a99_fc458f6276d17d0be4a88eed069ecb3d
+      '@dimensiondev/kit': 0.0.0-20200805092405-83b3a99_396a7a67fcf1a463f4c3753f6ecfe65a
       '@dimensiondev/matrix-js-sdk-type': 1.0.0-20200731085604-dc2de92
       '@dimensiondev/stego-js': 0.11.1-20200731084631-79ec32a
       '@dimensiondev/webextension-shim': 0.0.3-20201010073139-5139920_typescript@4.0.3
@@ -24357,7 +24361,7 @@ packages:
       jss: 10.0.4
       jsx-jsonml-devtools-renderer: 1.4.3
       lint-staged: 10.4.2
-      lodash-es: 4.17.15
+      lodash-es: /lodash/4.17.20
       loglevel: 1.7.0
       matrix-js-sdk: 8.5.0
       metamask-extension-provider: 1.1.1
@@ -24431,9 +24435,10 @@ packages:
       jest-puppeteer: 4.4.0_puppeteer@3.3.0
       puppeteer: 3.3.0
     resolution:
-      integrity: sha512-0k+feF50yBeA+N59NrGh1AFMKOS+GVn7aSA35U3C6Y1rTbl4osgXdHfO4i+WUdC7vYw5Gp8bbMzSyYA5C/2rVA==
+      integrity: sha512-+NHK2hap+YLI4Xkq8cqUOwBRsb+IYSsHJytpllZnPA/ynxNDGgOXBXImcD94y0tuHyoHNxiFUAPN61cqrJ01og==
       tarball: 'file:projects/maskbook.tgz'
     version: 0.0.0
+registry: ''
 specifiers:
   '@commitlint/cli': ^11.0.0
   '@commitlint/config-conventional': ^11.0.0
@@ -24547,7 +24552,7 @@ specifiers:
   jss: 10.0.4
   jsx-jsonml-devtools-renderer: ^1.4.3
   lint-staged: ^10.3.0
-  lodash-es: ^4.17.11
+  lodash-es: 'npm:lodash@^4.17.11'
   loglevel: ^1.7.0
   matrix-js-sdk: ^8.3.0
   metamask-extension-provider: ^1.1.1

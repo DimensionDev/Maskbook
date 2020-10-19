@@ -32,7 +32,6 @@ globalThis.matchMedia = () => {
 const { join } = require('path')
 const { writeFileSync, readFileSync, unlinkSync } = require('fs')
 
-const restoreLodash = modifyPackage('lodash-es', (x) => (x.main = '../lodash'))
 const restoreKit = modifyPackage('@dimensiondev/holoflows-kit', (x) => {
     x.exports = {
         '.': './umd/index.js',
@@ -50,7 +49,6 @@ process.on('unhandledRejection', (err) => {
     throw err
 })
 function cleanup() {
-    restoreLodash()
     restoreKit()
 }
 try {

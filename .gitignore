@@ -10,9 +10,9 @@
 /junit.xml
 
 # Build out
-/build
-/storybook-static
-/Maskbook.*.zip
+**/build/**
+**/storybook-static/**
+**/Maskbook.*.zip
 
 # Environment files
 .env.local
