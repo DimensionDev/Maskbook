@@ -1,4 +1,4 @@
-import { ValueRef, GetContext } from '@holoflows/kit'
+import { ValueRef, GetContext } from '@dimensiondev/holoflows-kit'
 import { MessageCenter } from '../utils/messages'
 import { defer } from '../utils/utils'
 import { getStorage, setStorage } from '../extension/background-script/StorageService'

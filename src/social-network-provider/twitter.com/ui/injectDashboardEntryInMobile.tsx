@@ -1,4 +1,4 @@
-import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
+import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit/es'
 import React from 'react'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import Services from '../../../extension/service'

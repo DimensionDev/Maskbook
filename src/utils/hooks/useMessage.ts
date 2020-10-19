@@ -1,4 +1,4 @@
-import type { MessageCenter } from '@holoflows/kit/es'
+import type { MessageCenter } from '@dimensiondev/holoflows-kit/es'
 import { useEffect } from 'react'
 import type { BatchedMessageCenter } from '../messages'
 

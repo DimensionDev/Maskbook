@@ -1,7 +1,7 @@
 import { injectCommentBoxDefaultFactory } from './injectCommentBox'
 import { injectPostCommentsDefault } from './injectComments'
 import type { SocialNetworkUIDataSources } from '../ui'
-import { ValueRef } from '@holoflows/kit'
+import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier } from '../../database/type'
 import { cloneDeep } from 'lodash-es'
 import type { Profile } from '../../database'

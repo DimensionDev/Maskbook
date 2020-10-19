@@ -1,4 +1,4 @@
-import { ValueRef } from '@holoflows/kit/es'
+import { ValueRef } from '@dimensiondev/holoflows-kit/es'
 import Services from '../../extension/service'
 import { PersonaArrayComparer } from '../../utils/comparer'
 import { MessageCenter } from '../../utils/messages'

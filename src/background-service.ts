@@ -1,6 +1,6 @@
 import 'webpack-target-webextension/lib/background'
 import './polyfill'
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import { MessageCenter } from './utils/messages'
 import 'webcrypto-liner'
 import './_background_loader.0'

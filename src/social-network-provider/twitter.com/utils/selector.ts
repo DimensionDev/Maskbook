@@ -1,4 +1,4 @@
-import { LiveSelector } from '@holoflows/kit'
+import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { regexMatch } from '../../../utils/utils'
 import { isCompose } from './postBox'
 

@@ -73,7 +73,7 @@ Help us by donating us:
 
 #### Other libraries we are using
 
-- `@holoflows/kit` - A toolkit for extension developing
+- `@dimensiondev/holoflows-kit` - A toolkit for extension developing
 - `anchorme` - Use it to detect links in the text
 - `elliptic` - A crypto library, we use it to encrypt and decrypt
 - `gun` - A decentralized graph database we use it to sync user's shared crypto key

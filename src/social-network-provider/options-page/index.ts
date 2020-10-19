@@ -1,6 +1,6 @@
 import { defineSocialNetworkUI } from '../../social-network/ui'
 import { emptyDefinition } from '../../social-network/defaults/emptyDefinition'
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import type { Profile } from '../../database'
 
 function hasFingerprint(x: Profile) {

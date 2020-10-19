@@ -1,5 +1,5 @@
 import { untilDomLoaded, untilDocumentReady, isDocument, nthChild, untilElementAvailable } from '../dom'
-import { LiveSelector } from '@holoflows/kit'
+import { LiveSelector } from '@dimensiondev/holoflows-kit'
 
 test('is document', () => {
     expect(isDocument(document)).toBeTruthy()
