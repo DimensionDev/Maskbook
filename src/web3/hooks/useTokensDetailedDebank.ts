@@ -43,32 +43,32 @@ async function fetcher(chainId: ChainId, address: string) {
  * Fetch tokens detailed info from debank API
  * @param address
  */
-export function useTokensDetailedDebank(address: string) {
+export function useTokensDetailedDebank(address: string): TokenDetailed[] {
     const chainId = useChainId()
     const { data = [] } = useSWR([chainId, address], {
         fetcher,
     })
-    return data.map(
-        (x) =>
-            ({
-                token:
-                    x.id === 'eth'
-                        ? createEetherToken(chainId)
-                        : {
-                              // distinguish token type
-                              type: EthereumTokenType.ERC20,
-                              address: formatChecksumAddress(x.id),
-                              chainId: ChainId.Mainnet,
-                              name: x.name,
-                              symbol: x.symbol,
-                              decimals: x.decimals,
-                          },
-                balance: new BigNumber(x.balance).toFixed(),
-                estimated: {
-                    [CurrencyType.USD]: new BigNumber(x.price)
-                        .multipliedBy(new BigNumber(x.balance).dividedBy(new BigNumber(10).pow(x.decimals)))
-                        .toFixed(),
-                },
-            } as TokenDetailed),
-    )
+    return data.map((x) => ({
+        token:
+            x.id === 'eth'
+                ? createEetherToken(chainId)
+                : {
+                      // distinguish token type
+                      type: EthereumTokenType.ERC20,
+                      address: formatChecksumAddress(x.id),
+                      chainId: ChainId.Mainnet,
+                      name: x.name,
+                      symbol: x.symbol,
+                      decimals: x.decimals,
+                  },
+        balance: new BigNumber(x.balance).toFixed(),
+        price: {
+            [CurrencyType.USD]: new BigNumber(x.price).toFixed(),
+        },
+        value: {
+            [CurrencyType.USD]: new BigNumber(x.price)
+                .multipliedBy(new BigNumber(x.balance).dividedBy(new BigNumber(10).pow(x.decimals)))
+                .toFixed(),
+        },
+    }))
 }

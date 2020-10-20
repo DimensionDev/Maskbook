@@ -86,6 +86,7 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
         'selectWalletDialogUpdated',
     )
     const onOpen = useCallback(() => {
+        console.log('DEBUG: on open')
         setSelectWalletOpen({
             open: true,
         })
@@ -95,7 +96,7 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
     if (!address_) return null
 
     const content = (
-        <Box display="inline-flex" component="span" alignItems="center" onClick={onOpen}>
+        <Box display="inline-flex" component="span" alignItems="center">
             <Typography className={classes.address} color="textPrimary">
                 {formatEthereumAddress(address_, 4)}
             </Typography>
@@ -118,6 +119,8 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
                     classes={{ label: classes.label }}
                     size="small"
                     label={content}
+                    clickable
+                    onClick={onOpen}
                     {...ChipProps}
                 />
             ) : (

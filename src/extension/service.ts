@@ -1,10 +1,10 @@
 import { AsyncCall, AsyncGeneratorCall, AsyncCallOptions } from 'async-call-rpc/full'
-import { GetContext, OnlyRunInContext } from '@holoflows/kit/es'
+import { GetContext, OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
 import { ProfileIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier, ECKeyIdentifier } from '../database/type'
 
-import { MessageCenter } from '@holoflows/kit/es'
+import { MessageCenter } from '@dimensiondev/holoflows-kit/es'
 import { IdentifierMap } from '../database/IdentifierMap'
 import type { upload as pluginArweaveUpload } from '../plugins/FileService/arweave/index'
 import BigNumber from 'bignumber.js'

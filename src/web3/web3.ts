@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-import { OnlyRunInContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 
 OnlyRunInContext(['content', 'options', 'debugging'], 'web3')
 

@@ -15,7 +15,7 @@ import { PostCommentDecrypted } from '../components/InjectedComponents/PostComme
 import { CommentBox } from '../components/InjectedComponents/CommentBox'
 import type { DecryptionProgress } from '../extension/background-script/CryptoServices/decryptFrom'
 import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/SelectPeopleAndGroups'
-import { MaskbookLightTheme } from '../utils/theme'
+import { useMaskbookTheme } from '../utils/theme'
 import { CharLimitIndicator, PostDialog } from '../components/InjectedComponents/PostDialog'
 import { PostDialogHint } from '../components/InjectedComponents/PostDialogHint'
 import {
@@ -271,7 +271,7 @@ storiesOf('Injections', module)
 
 function FakePost(props: React.PropsWithChildren<{ title: string }>) {
     return (
-        <MuiThemeProvider theme={MaskbookLightTheme}>
+        <MuiThemeProvider theme={useMaskbookTheme()}>
             {props.title}
             <div style={{ marginBottom: '2em', maxWidth: 500 }}>
                 <img width={500} src={require('./post-a.jpg')} style={{ marginBottom: -12 }} />

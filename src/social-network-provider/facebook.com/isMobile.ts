@@ -1,4 +1,4 @@
-import { OnlyRunInContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 
 export const isMobileFacebook = OnlyRunInContext('content', false)
     ? location.hostname === 'm.facebook.com'

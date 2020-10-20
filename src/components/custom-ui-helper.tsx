@@ -15,8 +15,8 @@ export function useStylesExtends<InternalKeys extends string, OverwrittenKeys ex
 }
 
 /**
- * In case of y is a react hooks call, we should always call the hooks. So we can't use x || y directly.
+ * In case of y is a react hooks call, we should always call the hooks. So we can't use x ?? y directly.
  */
 export function or<T>(x: T | undefined, y: T) {
-    return x || y
+    return x ?? y
 }

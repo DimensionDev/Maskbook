@@ -1,9 +1,10 @@
 import 'webpack-target-webextension/lib/background'
 import './polyfill'
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import { MessageCenter } from './utils/messages'
-import 'webcrypto-liner'
-import './_background_loader.0'
+// @ts-ignore
+import { crypto } from 'webcrypto-liner/build/index.es'
+Object.defineProperty(globalThis, 'crypto', { configurable: true, enumerable: true, get: () => crypto })
 import './_background_loader.1'
 import './_background_loader.2'
 import './extension/service'

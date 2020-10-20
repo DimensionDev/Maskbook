@@ -1,4 +1,4 @@
-import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
+import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { dispatchCustomEvents, sleep, timeout } from '../../../utils/utils'
 import { isMobileFacebook } from '../isMobile'
 import type { SocialNetworkUI } from '../../../social-network/ui'

@@ -6,7 +6,7 @@ import type {
     IDBPObjectStore,
     IDBPCursorWithValueIteratorValue,
 } from 'idb/with-async-ittr-cjs'
-import { OnlyRunInContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined

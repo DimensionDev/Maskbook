@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import { OnlyRunInContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import { lastActivatedTabIdSettings } from '../settings/settings'
 import { sideEffect } from '../utils/side-effects'
 import { untilDocumentReady } from '../utils/dom'

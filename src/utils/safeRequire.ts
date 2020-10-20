@@ -1,4 +1,4 @@
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext } from '@dimensiondev/holoflows-kit/es'
 
 export function safeMUI() {
     if (GetContext() === 'background') throw new Error('Illegal context')

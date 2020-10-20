@@ -1,5 +1,5 @@
 import { env, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import type { ProfileIdentifier, PostIdentifier } from '../database/type'
 import { defaultSharedSettings } from './defaults/shared'
 import getCurrentNetworkWorker from './utils/getCurrentNetworkWorker'

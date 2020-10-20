@@ -2,13 +2,13 @@
  * Prefer function declaration than const f = () => ...
  * in this file please.
  */
-import { CustomEventId } from './constants'
+import { CustomEventId, WALLET_OR_PERSONA_NAME_MAX_LEN } from './constants'
 import type { CustomEvents } from '../extension/injected-script/CustomEvents'
 
 import { flatten, isNull, random, noop } from 'lodash-es'
 
-import { sleep } from '@holoflows/kit/es/util/sleep'
-export { sleep, timeout } from '@holoflows/kit/es/util/sleep'
+import { sleep } from '@dimensiondev/holoflows-kit/es/util/sleep'
+export { sleep, timeout } from '@dimensiondev/holoflows-kit/es/util/sleep'
 
 export function randomElement(arr: unknown[]) {
     const e = flatten(arr)
@@ -241,4 +241,8 @@ export function hex2buf(hex: string) {
 export function assert(x: any, ...args: any): asserts x {
     console.assert(x, ...args)
     if (!x) throw new Error('Assert failed!')
+}
+
+export function checkInputLengthExceed(name: string) {
+    return Array.from(name).length >= WALLET_OR_PERSONA_NAME_MAX_LEN
 }

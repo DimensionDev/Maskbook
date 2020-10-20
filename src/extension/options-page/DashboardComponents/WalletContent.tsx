@@ -1,12 +1,11 @@
 import React from 'react'
 import { Button, Typography, Box, IconButton, List, MenuItem } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
-import { merge, cloneDeep } from 'lodash-es'
-import BigNumber from 'bignumber.js'
+import { merge, cloneDeep, truncate } from 'lodash-es'
+import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import AddIcon from '@material-ui/icons/Add'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import HistoryIcon from '@material-ui/icons/History'
-import { TokenListItem } from '../DashboardComponents/TokenListItem'
 import { useModal, useSnackbarCallback } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddTokenDialog,
@@ -23,9 +22,8 @@ import { useColorStyles } from '../../../utils/theme'
 import Services from '../../service'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { ChainId, ProviderType, TokenDetailed } from '../../../web3/types'
-import { EthereumChainChip } from '../../../web3/UI/EthereumChainChip'
-import { useChainId } from '../../../web3/hooks/useChainState'
+import { ProviderType, TokenDetailed } from '../../../web3/types'
+import { WalletAssetsTable } from './WalletAssetsTable'
 
 const walletContentTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
@@ -70,14 +68,8 @@ const useStyles = makeStyles((theme) =>
         moreButton: {
             color: theme.palette.text.primary,
         },
-        tokenList: {
+        assetsTable: {
             flex: 1,
-            overflow: 'auto',
-            scrollbarWidth: 'none',
-            margin: theme.spacing(0, 3),
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
         },
         footer: {
             flex: 0,
@@ -124,8 +116,6 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
         </MenuItem>,
     )
 
-    const chainId = useChainId(wallet.address)
-
     return (
         <div className={classes.root} ref={ref}>
             <ThemeProvider theme={walletContentTheme}>
@@ -138,7 +128,9 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                     alignItems="center"
                     className={xsMatched ? classes.box : ''}>
                     <Typography className={classes.title} variant="h5">
-                        {wallet.name ?? wallet.address}
+                        {wallet.name
+                            ? truncate(wallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN })
+                            : wallet.address}
                     </Typography>
                     {xsMatched ? null : (
                         <Button
@@ -158,18 +150,11 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                     </IconButton>
                     {menu}
                 </Box>
-                <List className={classes.tokenList} disablePadding>
-                    {detailedTokens
-                        .filter((x) => !wallet.erc20_token_blacklist.has(x.token.address))
-                        .map(({ token, balance }) => (
-                            <TokenListItem
-                                key={token.address}
-                                balance={new BigNumber(balance)}
-                                wallet={wallet}
-                                token={token}
-                            />
-                        ))}
-                </List>
+                <WalletAssetsTable
+                    classes={{ container: classes.assetsTable }}
+                    wallet={wallet}
+                    detailedTokens={detailedTokens}
+                />
             </ThemeProvider>
             {!xsMatched ? (
                 <Box className={classes.footer} display="flex" alignItems="center" justifyContent="space-between">

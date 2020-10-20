@@ -1,4 +1,4 @@
-import { AutomatedTabTask, GetContext, AutomatedTabTaskRuntimeOptions } from '@holoflows/kit'
+import { AutomatedTabTask, GetContext, AutomatedTabTaskRuntimeOptions } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier, ECKeyIdentifier, Identifier } from '../../database/type'
 import {
     disableOpenNewTabInBackgroundSettings,
