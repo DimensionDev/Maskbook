@@ -1868,10 +1868,10 @@
   dependencies:
     meow "^7.0.1"
 
-"@dimensiondev/webextension-shim@0.0.3-20201010073139-5139920":
-  version "0.0.3-20201010073139-5139920"
-  resolved "https://npm.dimension.im/download/@dimensiondev/webextension-shim/0.0.3-20201010073139-5139920/b13ddbbbd4de5f4e48415b42cbe079a11f928fee1f6359846745fb284186f12b#84b258791760a87937b2f63bfc915953c7ea6969"
-  integrity sha512-et0W3z3drB+Tz6/FRpRBjM1dmw9PPvNZXH5obDPSvaGBtRwU06ERFxqvhyMvXRmaQutlTPc3b24eL11rvzyvsQ==
+"@dimensiondev/webextension-shim@0.0.3-20201020064055-2c3874a":
+  version "0.0.3-20201020064055-2c3874a"
+  resolved "https://npm.dimension.im/download/@dimensiondev/webextension-shim/0.0.3-20201020064055-2c3874a/35bcd680a910bbeb41ec3882da01e6b8afd6a749c5349ca7dc164d539fad1f43#c2aa3c7010c7b1be9b6ac76b7cc3660337832706"
+  integrity sha512-ufUjM0P3dcEZzh8TWNAe0gjnBP7JSCDk0P1MFsPVuMhUmX6vEgl5UgDb9joKm3XLOwJNB0dwf0z9A2D4g+x6DA==
   dependencies:
     async-call-rpc "^1.0.4"
     systemjs "^6.3.2"
