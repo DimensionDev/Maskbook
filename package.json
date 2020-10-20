@@ -95,6 +95,7 @@
     "date-fns": "^2.16.1",
     "elliptic": "^6.5.3",
     "eth-contract-metadata": "^1.15.0",
+    "ethereum-blockies": "^0.1.1",
     "event-iterator": "^2.0.0",
     "fuse.js": "^6.4.1",
     "gun": "0.2020.520",
