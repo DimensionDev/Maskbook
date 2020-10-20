@@ -39,6 +39,8 @@
     "cancel": "取り消す",
     "comment_box__placeholder": "コメントを暗号化するには…",
     "confirm": "確認する",
+    "copy_text": "",
+    "copy_success": "",
     "connect_to": "次に接続します:",
     "connecting": "接続中…",
     "contacts": "連絡先",

@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import Draggable, { DraggableProps } from 'react-draggable'
+import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import { makeStyles, Theme } from '@material-ui/core'
 
 const useStyle = makeStyles((theme: Theme) => ({
@@ -12,12 +13,14 @@ const useStyle = makeStyles((theme: Theme) => ({
         zIndex: 9999,
         pointerEvents: 'none',
     },
-    paper: {
-        maxWidth: 550,
-        position: 'fixed',
-        top: '2em',
-        right: '2em',
-        pointerEvents: 'initial',
+    paper: (xsMatched: boolean) => {
+        const cssProps = xsMatched ? { bottom: '2em' } : { top: '2em', right: '2em' }
+        return {
+            maxWidth: 550,
+            position: 'fixed',
+            pointerEvents: 'initial',
+            ...cssProps,
+        }
     },
 }))
 
@@ -25,7 +28,8 @@ export function DraggableDiv({
     DraggableProps,
     ...props
 }: React.HTMLAttributes<HTMLDivElement> & { DraggableProps?: Partial<DraggableProps> }) {
-    const classes = useStyle()
+    const xsMatched = useMatchXS()
+    const classes = useStyle(xsMatched)
     const ref = useRef<HTMLDivElement>(null)
     return (
         <div className={classes.root}>

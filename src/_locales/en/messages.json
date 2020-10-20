@@ -39,6 +39,8 @@
     "cancel": "Cancel",
     "comment_box__placeholder": "Add an encrypted comment…",
     "confirm": "Confirm",
+    "copy_text": "Copy text",
+    "copy_success": "Copy successfully!",
     "connect_to": "Connect to",
     "connecting": "Connecting…",
     "contacts": "Contacts",
