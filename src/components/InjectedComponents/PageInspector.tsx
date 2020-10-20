@@ -8,12 +8,14 @@ import Close from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog'
+import { useMatchXS } from '../../utils/hooks/useMatchXS'
 
 export interface PageInspectorProps {}
 export function PageInspector(props: PageInspectorProps) {
     const prompt = useSnackbar()
     const { t } = useI18N()
     const [autoPasteFailed, JSX] = useAutoPasteFailedDialog()
+    const xsMatched = useMatchXS()
     useMessage(MessageCenter, 'autoPasteFailed', (data) => {
         const key = data.image ? Math.random() : data.text
         const close = () => prompt.closeSnackbar(key)
@@ -21,6 +23,12 @@ export function PageInspector(props: PageInspectorProps) {
             variant: 'warning',
             preventDuplicate: true,
             persist: true,
+            anchorOrigin: xsMatched
+                ? {
+                      vertical: 'bottom',
+                      horizontal: 'center',
+                  }
+                : { horizontal: 'left', vertical: 'bottom' },
             key,
             action: (
                 <>
