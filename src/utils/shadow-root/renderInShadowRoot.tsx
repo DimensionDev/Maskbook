@@ -10,7 +10,9 @@ import { I18nextProvider } from 'react-i18next'
 import i18nNextInstance from '../i18n-next'
 import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
+import { SnackbarProvider } from 'notistack'
 import '../../components/InjectedComponents/ShadowRootSwitchNotifier'
+import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 
 const captureEvents: (keyof HTMLElementEventMap)[] = [
     'paste',
@@ -213,19 +215,6 @@ function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{
     )
 }
 
-class ErrorBoundary extends React.Component {
-    state: { error?: Error } = { error: undefined }
-    render() {
-        if (this.state.error) return <pre style={{ whiteSpace: 'break-spaces' }}>{this.state.error.message}</pre>
-        return this.props.children
-    }
-    componentDidCatch(error: Error) {
-        console.error(error)
-        this.setState({ error })
-    }
-}
-
-import { SnackbarProvider } from 'notistack'
 type MaskbookProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
 
 function Maskbook(_props: MaskbookProps) {

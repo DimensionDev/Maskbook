@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom'
 import React from 'react'
+import { ErrorBoundary } from '../components/shared/ErrorBoundary'
 
 export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
     if (typeof window === 'object') {
@@ -9,7 +10,11 @@ export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
             document.body.appendChild(container)
         }
         const oldChildren = [...container.children]
-        ReactDOM.unstable_createRoot(container).render(<React.StrictMode children={jsx} />)
+        ReactDOM.unstable_createRoot(container).render(
+            <React.StrictMode>
+                <ErrorBoundary>{jsx}</ErrorBoundary>
+            </React.StrictMode>,
+        )
         oldChildren.forEach((x) => x.remove())
         return ''
     } else {

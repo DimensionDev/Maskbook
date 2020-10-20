@@ -42,6 +42,7 @@ import ShowcaseBox from './DashboardComponents/ShowcaseBox'
 import { Flags } from '../../utils/flags'
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import { PluginUI, PluginConfig } from '../../plugins/plugin'
+import { withErrorBoundary } from '../../components/shared/ErrorBoundary'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.type === 'dark'
@@ -192,13 +193,13 @@ function DashboardUI() {
                 {Flags.has_no_browser_tab_ui ? (
                     <Route path={DashboardRoute.Nav} component={() => <DashboardNavRouter children={drawer} />} />
                 ) : null}
-                <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
-                <Route path={DashboardRoute.Wallets} component={DashboardWalletsRouter} />
-                <Route path={DashboardRoute.Contacts} component={DashboardContactsRouter} />
-                <Route path={DashboardRoute.Settings} component={DashboardSettingsRouter} />
-                <Route path={DashboardRoute.Setup} component={DashboardSetupRouter} />
+                <Route path={DashboardRoute.Personas} component={withErrorBoundary(DashboardPersonasRouter)} />
+                <Route path={DashboardRoute.Wallets} component={withErrorBoundary(DashboardWalletsRouter)} />
+                <Route path={DashboardRoute.Contacts} component={withErrorBoundary(DashboardContactsRouter)} />
+                <Route path={DashboardRoute.Settings} component={withErrorBoundary(DashboardSettingsRouter)} />
+                <Route path={DashboardRoute.Setup} component={withErrorBoundary(DashboardSetupRouter)} />
                 {/* // TODO: this page should be boardless */}
-                <Route path={DashboardRoute.RequestPermission} component={RequestPermissionPage} />
+                <Route path={DashboardRoute.RequestPermission} component={withErrorBoundary(RequestPermissionPage)} />
                 <Redirect path="*" to={Flags.has_no_browser_tab_ui ? DashboardRoute.Nav : DashboardRoute.Personas} />
             </Switch>
         </>,
