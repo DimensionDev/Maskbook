@@ -5,6 +5,7 @@ import { PortalShadowRoot } from '../../utils/shadow-root/ShadowRootPortal'
 import { useSheetsRegistryStyles } from './renderInShadowRoot'
 import { useValueRef } from '../hooks/useValueRef'
 import { renderInShadowRootSettings } from '../../settings/settings'
+import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
@@ -21,10 +22,12 @@ export default function ShadowRootDialog(_props: DialogProps) {
     const { children, container, ...props } = _props
     return (
         <div ref={ref}>
-            <ResponsiveDialog {...props} container={container ?? PortalShadowRoot}>
-                <style>{styles}</style>
-                {children}
-            </ResponsiveDialog>
+            <ErrorBoundary>
+                <ResponsiveDialog {...props} container={container ?? PortalShadowRoot}>
+                    <style>{styles}</style>
+                    {children}
+                </ResponsiveDialog>
+            </ErrorBoundary>
         </div>
     )
 }
