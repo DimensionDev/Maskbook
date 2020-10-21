@@ -15,6 +15,7 @@ import { injectMaskbookIconToProfile, injectMaskbookIconIntoFloatingProfileCard 
 import { injectDashboardEntranceAtTwitter } from './injectDashboardEntrance'
 import { Flags } from '../../../utils/flags'
 
+const origins = [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`]
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
     ...twitterUITasks,
@@ -52,14 +53,13 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         return location.hostname.endsWith(twitterUrl.hostIdentifier)
     },
     friendlyName: 'Twitter',
+    hasPermission() {
+        return browser.permissions.contains({ origins })
+    },
     requestPermission() {
         // TODO: wait for webextension-shim to support <all_urls> in permission.
         if (Flags.no_web_extension_dynamic_permission_request) return Promise.resolve(true)
-        return browser.permissions
-            .request({
-                origins: [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`],
-            })
-            .then(notifyPermissionUpdate)
+        return browser.permissions.request({ origins }).then(notifyPermissionUpdate)
     },
     setupAccount: () => {
         instanceOfTwitterUI.requestPermission().then((granted) => {
