@@ -21,7 +21,7 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { Flags } from '../../../utils/flags'
 import { WalletMessageCenter, MaskbookWalletMessages } from '../../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { useDefaultWallet } from '../../../plugins/Wallet/hooks/useWallet'
+import { useSelectedWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { useTokens } from '../../../plugins/Wallet/hooks/useToken'
 import { useTokensDetailedCallback } from '../../../web3/hooks/useTokensDetailedCallback'
 import { WalletContent } from '../DashboardComponents/WalletContent'
@@ -65,8 +65,8 @@ export default function DashboardWalletsRouter() {
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
 
-    const defaultWallet = useDefaultWallet()
-    const tokens = useTokens(defaultWallet?.address ?? '')
+    const selectedWallet = useSelectedWallet()
+    const tokens = useTokens(selectedWallet?.address ?? '')
 
     const [detailedTokens, detailedTokensCallback] = useTokensDetailedCallback(tokens)
 
@@ -82,9 +82,9 @@ export default function DashboardWalletsRouter() {
 
     // auto fetch tokens detailed
     useEffect(() => {
-        if (!defaultWallet) return
-        detailedTokensCallback(defaultWallet.address)
-    }, [defaultWallet])
+        if (!selectedWallet) return
+        detailedTokensCallback(selectedWallet.address)
+    }, [selectedWallet])
 
     // show provider connect dialog
     const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
@@ -102,23 +102,23 @@ export default function DashboardWalletsRouter() {
     const rightIcons = [
         <IconButton
             onClick={() => {
-                if (defaultWallet) openAddToken({ wallet: defaultWallet })
+                if (selectedWallet) openAddToken({ wallet: selectedWallet })
                 else openWalletCreate()
             }}>
             <AddIcon />
         </IconButton>,
     ]
 
-    if (defaultWallet)
+    if (selectedWallet)
         rightIcons.unshift(
             <IconButton
                 onClick={() => {
-                    if (!defaultWallet) return
+                    if (!selectedWallet) return
                     openWalletHistory({
-                        wallet: defaultWallet,
+                        wallet: selectedWallet,
                         onRedPacketClicked(payload) {
                             openWalletRedPacketDetail({
-                                wallet: defaultWallet,
+                                wallet: selectedWallet,
                                 payload,
                             })
                         },
@@ -131,7 +131,7 @@ export default function DashboardWalletsRouter() {
 
     return (
         <DashboardRouterContainer
-            empty={!defaultWallet}
+            empty={!selectedWallet}
             title={t('my_wallets')}
             actions={[
                 Flags.metamask_support_enabled || Flags.wallet_connect_support_enabled ? (
@@ -163,8 +163,8 @@ export default function DashboardWalletsRouter() {
                 </div>
                 <div className={classes.content}>
                     <div className={classes.wrapper}>
-                        {defaultWallet ? (
-                            <WalletContent wallet={defaultWallet} detailedTokens={detailedTokens} />
+                        {selectedWallet ? (
+                            <WalletContent wallet={selectedWallet} detailedTokens={detailedTokens} />
                         ) : null}
                     </div>
                 </div>

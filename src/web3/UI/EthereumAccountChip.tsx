@@ -95,7 +95,6 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
         'selectWalletDialogUpdated',
     )
     const onOpen = useCallback(() => {
-        console.log('DEBUG: on open')
         setSelectWalletOpen({
             open: true,
         })

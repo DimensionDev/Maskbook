@@ -1,12 +1,12 @@
 import React from 'react'
-import { Button, Typography, Box, IconButton, List, MenuItem } from '@material-ui/core'
+import { Button, Typography, Box, IconButton, MenuItem } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
 import { merge, cloneDeep, truncate } from 'lodash-es'
 import AddIcon from '@material-ui/icons/Add'
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import HistoryIcon from '@material-ui/icons/History'
-import { useModal, useSnackbarCallback } from '../DashboardDialogs/Base'
+import { useModal } from '../DashboardDialogs/Base'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import {
     DashboardWalletAddTokenDialog,
@@ -20,7 +20,6 @@ import {
 import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorStyles } from '../../../utils/theme'
-import Services from '../../service'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ProviderType, TokenDetailed } from '../../../web3/types'
@@ -102,13 +101,7 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
     const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
-    const setAsDefault = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet!.address),
-        [wallet?.address],
-    )
-
     const [menu, openMenu] = useMenu(
-        <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
         <MenuItem onClick={() => openWalletShare({ wallet })}>{t('share')}</MenuItem>,
         <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
         wallet.provider === ProviderType.Maskbook ? (

@@ -30,7 +30,6 @@ export interface WalletRecord {
     _public_key_?: string
     /** Wallet recover from private key */
     _private_key_?: string
-    _wallet_is_default?: boolean
     createdAt: Date
     updatedAt: Date
 }

@@ -3,9 +3,10 @@ import createMetaMaskProvider, { MetamaskInpageProvider } from 'metamask-extensi
 import { ChainId } from '../../../../web3/types'
 import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { EthereumAddress } from 'wallet.ts'
-import { updateExoticWalletFromSource, setDefaultWallet } from '../../../../plugins/Wallet/services'
+import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import { ProviderType } from '../../../../web3/types'
 import { MessageCenter } from '../../../../utils/messages'
+import { currentSelectedWalletAddressSettings } from '../../../../plugins/Wallet/settings'
 
 //#region tracking chain id
 let currentChainId: ChainId = ChainId.Mainnet
@@ -68,5 +69,7 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
 
     // update wallet in the DB
     await updateExoticWalletFromSource(ProviderType.MetaMask, new Map([[address, { address }]]))
-    if (setAsDefault) await setDefaultWallet(address)
+
+    // update the selected wallet address
+    if (setAsDefault) currentSelectedWalletAddressSettings.value = address
 }
