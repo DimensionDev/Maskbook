@@ -200,12 +200,12 @@ const RenderText = React.memo(function RenderText(props: { text: string }) {
 })
 
 function parseText(string: string) {
-    const links: { raw: string; protocol: string; encoded: string }[] = anchorme(string, { list: true })
+    const links = anchorme.list(string)
     let current = string
     const result = []
     while (current.length) {
         const search1 = current.search('\n')
-        const search2 = links[0] ? current.search(links[0].raw) : -1
+        const search2 = links[0] ? current.search(links[0].string) : -1
         // ? if rest is normal
         if (search1 === -1 && search2 === -1) {
             result.push(current)
@@ -218,14 +218,15 @@ function parseText(string: string) {
         }
         // ? if rest have links but no \n
         if ((search2 < search1 && search2 !== -1) || search1 === -1) {
-            const link = links[0].protocol + links[0].encoded
+            let link = links[0].string
+            if (!links[0].protocol) link = 'http://' + link
             result.push(
                 current.substring(0, search2),
                 <Link color="textPrimary" target="_blank" rel="noopener noreferrer" href={link} key={link}>
-                    {links[0].raw}
+                    {links[0].string}
                 </Link>,
             )
-            current = current.substring(search2 + links[0].raw.length)
+            current = current.substring(search2 + links[0].string.length)
             links.shift()
         }
     }

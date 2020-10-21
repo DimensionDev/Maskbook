@@ -208,9 +208,7 @@ export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
 import anchorme from 'anchorme'
 import Services from '../extension/service'
 export function parseURL(string: string) {
-    // TODO: upgrade to anchorme 2
-    const links: { raw: string; protocol: string; encoded: string }[] = anchorme(string, { list: true })
-    return links.map((x) => x.raw)
+    return anchorme.list(string).map((x) => x.string)
 }
 /**
  * !!!! Please use the Promise constructor if possible
