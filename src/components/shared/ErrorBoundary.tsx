@@ -1,6 +1,7 @@
-import { Button, Typography } from '@material-ui/core'
+import { Button, makeStyles, Typography } from '@material-ui/core'
 import { Alert, AlertTitle } from '@material-ui/lab'
 import React from 'react'
+import { useI18N } from '../../utils/i18n-next-ui'
 
 export class ErrorBoundary extends React.Component {
     static getDerivedStateFromError(error: unknown) {
@@ -10,26 +11,7 @@ export class ErrorBoundary extends React.Component {
     render() {
         if (!this.state.error) return <>{this.props.children}</>
         const error = this.normalizedError
-        return (
-            <div style={{ overflowX: 'auto', flex: 1, width: '100%', contain: 'strict', marginTop: 16 }}>
-                <Alert
-                    severity="error"
-                    variant="outlined"
-                    action={
-                        <Button color="inherit" size="large" onClick={() => this.setState({ error: null })}>
-                            Retry
-                        </Button>
-                    }>
-                    <AlertTitle>Maskbook has an error:</AlertTitle>
-                    <span style={{ userSelect: 'text' }}>
-                        {error.type}: {error.message}
-                    </span>
-                </Alert>
-                <Typography component="pre" style={{ maxWidth: '100%', overflowX: 'auto' }}>
-                    <code style={{ fontSize: 15, userSelect: 'text' }}>{error.stack}</code>
-                </Typography>
-            </div>
-        )
+        return <CrashUI {...error} onRetry={() => this.setState({ error: null })} />
     }
     get normalizedError() {
         let stack = '<stack not available>'
@@ -48,6 +30,35 @@ export class ErrorBoundary extends React.Component {
         } catch {}
         return { stack, type, message }
     }
+}
+const useStyle = makeStyles({
+    root: { overflowX: 'auto', flex: 1, width: '100%', contain: 'strict', marginTop: 16 },
+    title: { userSelect: 'text' },
+    stack: { fontSize: 15, userSelect: 'text' },
+})
+function CrashUI(error: { onRetry: () => void; type: string; message: string; stack: string }) {
+    const classes = useStyle()
+    const { t } = useI18N()
+    return (
+        <div className={classes.root}>
+            <Alert
+                severity="error"
+                variant="outlined"
+                action={
+                    <Button color="inherit" size="large" onClick={error.onRetry}>
+                        {t('crash_retry')}
+                    </Button>
+                }>
+                <AlertTitle>{t('crash_title')}</AlertTitle>
+                <span className={classes.title}>
+                    {error.type}: {error.message}
+                </span>
+            </Alert>
+            <Typography component="pre" style={{ maxWidth: '100%', overflowX: 'auto' }}>
+                <code className={classes.stack}>{error.stack}</code>
+            </Typography>
+        </div>
+    )
 }
 
 const map = new WeakMap<React.ComponentType<any>, React.ComponentType<any>>()
