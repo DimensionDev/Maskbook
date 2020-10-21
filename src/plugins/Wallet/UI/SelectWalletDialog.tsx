@@ -8,13 +8,14 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { MaskbookWalletMessages, WalletMessageCenter } from '../messages'
-import { useDefaultWallet, useWallets } from '../hooks/useWallet'
+import { useSelectedWallet, useWallets } from '../hooks/useWallet'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import type { WalletRecord } from '../database/types'
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { sleep } from '../../../utils/utils'
 import { GetContext } from '@dimensiondev/holoflows-kit/es'
+import { currentSelectedWalletAddressSettings } from '../settings'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -59,7 +60,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const wallets = useWallets()
-    const defaultWallet = useDefaultWallet()
+    const selectedWallet = useSelectedWallet()
 
     //#region remote controlled dialog logic
     const [open, setSelectWalletDialogOpen] = useRemoteControlledDialog<
@@ -74,7 +75,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     //#endregion
 
     const onSelect = useCallback((wallet: WalletRecord) => {
-        Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet.address)
+        currentSelectedWalletAddressSettings.value = wallet.address
         onClose()
     }, [])
 
@@ -126,7 +127,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
                     {wallets.map((wallet) => (
                         <WalletInList
                             key={wallet.address}
-                            disabled={wallet.address === defaultWallet?.address}
+                            disabled={wallet.address === selectedWallet?.address}
                             wallet={wallet}
                             onClick={() => onSelect(wallet)}></WalletInList>
                     ))}

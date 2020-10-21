@@ -13,8 +13,6 @@ import { useI18N } from '../../utils/i18n-next-ui'
 import i18nNextInstance from '../../utils/i18n-next'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getUrl } from '../../utils/utils'
-import { ChooseWallet } from '../../components/shared/ChooseWallet'
-import { EthereumChainChip } from '../../web3/UI/EthereumChainChip'
 import { useChainId } from '../../web3/hooks/useChainState'
 import { WalletMessageCenter, MaskbookWalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
@@ -134,15 +132,6 @@ function PopupUI() {
                         <Typography className={classes.title}>{t('popup_current_persona')}</Typography>
                     </Box>
                     <ChooseIdentity identities={identities} />
-                </>
-            )}
-            {ui.networkIdentifier === 'localhost' || wallets.length === 0 ? null : (
-                <>
-                    <Box className={classes.header} display="flex" justifyContent="space-between">
-                        <Typography className={classes.title}>{t('popup_current_wallet')}</Typography>
-                        {chainId ? <EthereumChainChip chainId={chainId} /> : null}
-                    </Box>
-                    <ChooseWallet wallets={wallets} />
                 </>
             )}
             <Divider className={classes.divider} />

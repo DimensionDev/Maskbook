@@ -1,6 +1,7 @@
+import { first } from 'lodash-es'
 import * as WalletConnect from './providers/WalletConnect'
 import * as MetaMask from './providers/MetaMask'
-import { getWallets, setDefaultWallet } from '../../../plugins/Wallet/services'
+import { getWallets } from '../../../plugins/Wallet/services'
 import { ProviderType } from '../../../web3/types'
 
 //#region connect WalletConnect
@@ -27,12 +28,6 @@ export async function connectMetaMask() {
 
 export async function connectMaskbook() {
     const wallets = await getWallets(ProviderType.Maskbook)
-    // no wallet exists go to wallet panel in the dashboard
-    if (wallets.length === 0) return
-    // return the default wallet
-    const defaultWallet = wallets.find((x) => x._wallet_is_default)
-    if (defaultWallet) return defaultWallet.address
-    // set first managed wallet as the default wallet
-    await setDefaultWallet(wallets[0].address)
-    return wallets[0].address
+    // return the first managed wallet
+    return first(wallets)
 }

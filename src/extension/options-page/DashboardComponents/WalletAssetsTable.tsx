@@ -114,7 +114,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                     <Typography className={classes.price} color="textPrimary" component="span">
                                         {x.value?.[CurrencyType.USD]
                                             ? formatCurrency(Number.parseFloat(x.value[CurrencyType.USD]), '$')
-                                            : '-'}
+                                            : formatCurrency(0, '$')}
                                     </Typography>
                                 </Box>,
                                 <Box display="flex" justifyContent="flex-end">
