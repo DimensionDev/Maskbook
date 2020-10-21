@@ -40,6 +40,7 @@
     "comment_box__placeholder": "コメントを暗号化するには…",
     "confirm": "確認する",
     "copy_text": "",
+    "copy_wallet_addr_success": "",
     "copy_success": "",
     "connect_to": "次に接続します:",
     "connecting": "接続中…",
