@@ -16,7 +16,7 @@ export function checkPermissionApiUsability(type?: typeof q[number]) {
     return r as Required<typeof r>
 }
 
-export function useRequestCamera(needRequest: boolean): PermissionState {
+export function useQueryNavigatorPermission(needRequest: boolean, name: PermissionNameWithClipboard): PermissionState {
     const [permission, updatePermission] = useState<PermissionState>('prompt')
 
     useEffect(() => {
@@ -25,7 +25,7 @@ export function useRequestCamera(needRequest: boolean): PermissionState {
 
         if (checkPermissionApiUsability('query')) {
             navigator.permissions
-                .query({ name: 'camera' })
+                .query({ name })
                 .then((p) => {
                     permissionStatus = p
                     permissionStatus.onchange = () => {
@@ -40,7 +40,7 @@ export function useRequestCamera(needRequest: boolean): PermissionState {
                 })
         } else if (checkPermissionApiUsability('request')) {
             navigator.permissions
-                .request({ name: 'camera' })
+                .request({ name })
                 .then((p) => {
                     updatePermission(p.state)
                 })

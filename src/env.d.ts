@@ -34,8 +34,23 @@ declare module NodeJS {
     }
 }
 
+interface Clipboard extends EventTarget {
+    write(data: ClipboardItem[]): Promise<void>
+}
+
+declare class ClipboardItem {
+    constructor(data: { [mimeType: string]: Blob })
+}
+
+type PermissionNameWithClipboard = PermissionName | 'clipboard-read' | 'clipboard-write'
+
+interface PermissionWithClipboardDescriptor {
+    name: PermissionNameWithClipboard
+}
+
 interface Permissions {
     request(permission: { name: string }): Promise<PermissionStatus>
+    query(permissionDesc: PermissionWithClipboardDescriptor): Promise<PermissionStatus>
 }
 
 declare module 'typeson' {

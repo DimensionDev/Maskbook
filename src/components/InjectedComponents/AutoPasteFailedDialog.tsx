@@ -20,6 +20,7 @@ import { Image } from '../shared/Image'
 import { useSnackbar } from 'notistack'
 import { DraggableDiv } from '../shared/DraggableDiv'
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
+import { useQueryNavigatorPermission } from '../../utils/hooks/useQueryNavigatorPermission'
 import Download from '@material-ui/icons/CloudDownload'
 import CloseIcon from '@material-ui/icons/Close'
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser'
@@ -36,12 +37,13 @@ const useStyles = makeStyles((theme) => ({
 
 export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { t } = useI18N()
+    const [url, setURL] = useState('')
     const classes = useStylesExtends(useStyles(), props)
     const { onClose, data } = props
-    const [url, setURL] = useState('')
     const { enqueueSnackbar } = useSnackbar()
     const [, copy] = useCopyToClipboard()
     const isMobile = useMatchXS()
+    const permission = useQueryNavigatorPermission(true, 'clipboard-write')
 
     return (
         <DraggableDiv>
@@ -70,7 +72,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 variant="contained"
                                 onClick={() => {
                                     copy(data.text)
-                                    enqueueSnackbar(t('copy_success'), {
+                                    enqueueSnackbar(t('copy_success_of_text'), {
                                         variant: 'success',
                                         preventDuplicate: true,
                                         anchorOrigin: {
@@ -85,13 +87,33 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                         </>
                     ) : null}
                     <Box marginBottom={1}></Box>
-                    <div style={{ textAlign: 'center' }}>
+                    <div style={{ textAlign: permission === 'granted' ? 'left' : 'center' }}>
                         {data.image ? (
                             // It must be img
                             <Image component="img" onURL={setURL} src={data.image} width={260} height={180} />
                         ) : null}
-                        <br />
-                        {url ? (
+                        <Box marginBottom={1}></Box>
+                        {permission === 'granted' ? (
+                            <Button
+                                variant="contained"
+                                onClick={async () => {
+                                    if (!data.image) return
+                                    await navigator.clipboard.write([
+                                        new ClipboardItem({ [data.image.type]: data.image }),
+                                    ])
+                                    enqueueSnackbar(t('copy_success_of_image'), {
+                                        variant: 'success',
+                                        preventDuplicate: true,
+                                        anchorOrigin: {
+                                            vertical: 'top',
+                                            horizontal: 'center',
+                                        },
+                                    })
+                                }}>
+                                {t('copy_image')}
+                            </Button>
+                        ) : null}
+                        {url && permission !== 'granted' ? (
                             <>
                                 <Button
                                     variant="text"
