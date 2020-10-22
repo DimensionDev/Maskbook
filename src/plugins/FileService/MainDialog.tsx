@@ -41,7 +41,7 @@ const useStyles = makeStyles({
     content: { padding: 12 },
 })
 
-const MainDialog: React.FC<Props> = (props) => {
+const FileServiceDialog: React.FC<Props> = (props) => {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const snackbar = useSnackbar()
@@ -107,4 +107,4 @@ const MainDialog: React.FC<Props> = (props) => {
     )
 }
 
-export default MainDialog
+export default FileServiceDialog

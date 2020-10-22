@@ -1,0 +1,27 @@
+import { ValueRef } from '@dimensiondev/holoflows-kit/es'
+import React from 'react'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+import type { PluginConfig } from '../plugin'
+
+export function createCompositionDialog(
+    label: string | React.ReactNode,
+    DialogComponent: React.ComponentType<{ open: boolean; onClose(): void }>,
+    /** If return false, the dialog is not opened. */
+    onClick?: () => Promise<boolean | undefined>,
+): [NonNullable<PluginConfig['postDialogEntries']>[0], React.ComponentType<{}>] {
+    const open = new ValueRef(false)
+    return [
+        {
+            label,
+            onClick: async () => {
+                const result = await onClick?.()
+                if (result === false) return
+                open.value = true
+            },
+        },
+        () => {
+            const opening = useValueRef(open)
+            return <DialogComponent open={opening} onClose={() => (open.value = false)}></DialogComponent>
+        },
+    ]
+}
