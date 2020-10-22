@@ -6,6 +6,7 @@ import { makeTypedMessageCompound, isTypedMessageSuspended, isTypedMessageKnown 
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { allPostReplacementSettings } from '../../settings/settings'
 import { makeStyles, Theme } from '@material-ui/core'
+import { Result } from 'ts-results'
 
 const useStlyes = makeStyles((theme: Theme) => ({
     root: {
@@ -20,14 +21,17 @@ export interface PostReplacerProps {
 
 export function PostReplacer(props: PostReplacerProps) {
     const classes = useStlyes()
-    const postContent = usePostInfoDetails('postContent')
     const postMessage = usePostInfoDetails('postMessage')
     const postPayload = usePostInfoDetails('postPayload')
     const allPostReplacement = useValueRef(allPostReplacementSettings)
 
     const plugins = [...PluginUI.values()]
     const processedPostMessage = useMemo(
-        () => plugins.reduce((x, plugin) => plugin.messageProcessor?.(x) ?? x, postMessage),
+        () =>
+            plugins.reduce(
+                (x, plugin) => Result.wrap(() => plugin.messageProcessor?.(x) ?? x).unwrapOr(x),
+                postMessage,
+            ),
         [plugins.map((x) => x.identifier).join(), postMessage],
     )
     const shouldReplacePost =

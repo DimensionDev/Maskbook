@@ -42,7 +42,7 @@ import ShowcaseBox from './DashboardComponents/ShowcaseBox'
 import { Flags } from '../../utils/flags'
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import { PluginUI, PluginConfig } from '../../plugins/plugin'
-import { withErrorBoundary } from '../../components/shared/ErrorBoundary'
+import { ErrorBoundary, withErrorBoundary } from '../../components/shared/ErrorBoundary'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.type === 'dark'
@@ -217,7 +217,9 @@ function DashboardPluginUI() {
     return (
         <>
             {[...PluginUI.values()].map((x) => (
-                <PluginDashboardInspectorForEach key={x.identifier} config={x} />
+                <ErrorBoundary>
+                    <PluginDashboardInspectorForEach key={x.identifier} config={x} />
+                </ErrorBoundary>
             ))}
         </>
     )
