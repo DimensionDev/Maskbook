@@ -8,6 +8,7 @@ import { composeAnchorSelector } from '../utils/selector'
 import React from 'react'
 import { toRGB, getBackgroundColor, fromRGB, shade, isDark } from '../../../utils/theme-tools'
 import { Appearance } from '../../../settings/settings'
+import produce from 'immer'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
@@ -40,46 +41,36 @@ function useTheme() {
     })
     return useMemo(() => {
         const primaryColorRGB = fromRGB(primaryColor)!
-        return unstable_createMuiStrictModeTheme({
-            ...MaskbookTheme,
-            palette: {
-                ...MaskbookTheme.palette,
-                background: {
-                    ...MaskbookTheme.palette.background,
-                    paper: backgroundColor,
+        const TwitterTheme = produce(MaskbookTheme, (theme) => {
+            theme.palette.background.paper = backgroundColor
+            theme.palette.primary = {
+                light: toRGB(shade(primaryColorRGB, 10)),
+                main: toRGB(primaryColorRGB),
+                dark: toRGB(shade(primaryColorRGB, -10)),
+                contrastText: theme.palette.getContrastText(backgroundColor),
+            }
+            theme.shape.borderRadius = 15
+            theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
+            theme.overrides = theme.overrides || {}
+            theme.overrides!.MuiButton = {
+                root: {
+                    borderRadius: 500,
+                    textTransform: 'none',
                 },
-                primary: {
-                    ...MaskbookTheme.palette.primary,
-                    light: toRGB(shade(primaryColorRGB, 10)),
-                    main: toRGB(primaryColorRGB),
-                    dark: toRGB(shade(primaryColorRGB, -10)),
+            }
+            theme.overrides!.MuiTab = {
+                root: {
+                    textTransform: 'none',
                 },
-            },
-            shape: {
-                borderRadius: 15,
-            },
-            breakpoints: {
-                values: { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 },
-            },
-            overrides: {
-                MuiButton: {
-                    root: {
-                        borderRadius: 500,
-                        textTransform: 'none',
-                    },
-                },
-                MuiTab: {
-                    root: {
-                        textTransform: 'none',
-                    },
-                },
-            },
+            }
         })
+        return unstable_createMuiStrictModeTheme(TwitterTheme)
     }, [MaskbookTheme, backgroundColor, primaryColor])
 }
 
 export function TwitterThemeProvider(props: Required<React.PropsWithChildren<{}>>) {
-    return React.createElement(ThemeProvider, { theme: useTheme(), children: props.children })
+    if (!process.env.STORYBOOK) throw new Error('This API is only for Storybook!')
+    return React.createElement(ThemeProvider, { theme: useTheme(), ...props })
 }
 
 export const twitterUICustomUI: SocialNetworkUICustomUI = {
