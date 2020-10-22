@@ -11,6 +11,7 @@ import { PluginUI, PluginConfig } from '../../../plugins/plugin'
 import { usePostInfo } from '../../DataSource/usePostInfo'
 import type { ProfileIdentifier } from '../../../database/type'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
+import { ErrorBoundary } from '../../shared/ErrorBoundary'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { content: TypedMessage }
@@ -70,7 +71,9 @@ function SuccessDecryptionPlugin(props: PluginSuccessDecryptionComponentProps) {
     return (
         <>
             {[...PluginUI.values()].map((x) => (
-                <PluginSuccessDecryptionPostInspectorForEach key={x.identifier} pluginConfig={x} {...props} />
+                <ErrorBoundary>
+                    <PluginSuccessDecryptionPostInspectorForEach key={x.identifier} pluginConfig={x} {...props} />
+                </ErrorBoundary>
             ))}
         </>
     )

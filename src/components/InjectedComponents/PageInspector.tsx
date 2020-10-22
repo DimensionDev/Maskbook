@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog'
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
+import { ErrorBoundary } from '../shared/ErrorBoundary'
 
 export interface PageInspectorProps {}
 export function PageInspector(props: PageInspectorProps) {
@@ -46,7 +47,9 @@ export function PageInspector(props: PageInspectorProps) {
         <>
             {JSX}
             {[...PluginUI.values()].map((x) => (
-                <PluginPageInspectorForEach key={x.identifier} config={x} />
+                <ErrorBoundary>
+                    <PluginPageInspectorForEach key={x.identifier} config={x} />
+                </ErrorBoundary>
             ))}
         </>
     )

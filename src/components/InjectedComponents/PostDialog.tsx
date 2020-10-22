@@ -49,6 +49,7 @@ import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/plugin'
 import { Flags } from '../../utils/flags'
 import PollsDialog from '../../plugins/Polls/UI/PollsDialog'
+import { Result } from 'ts-results'
 
 const defaultTheme = {}
 
@@ -123,27 +124,29 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const [pollsDialogOpen, setPollsDialogOpen] = useState(false)
 
     if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
-    const metadataBadge = [...PluginUI].flatMap((plugin) => {
-        const knownMeta = plugin.postDialogMetadataBadge
-        if (!knownMeta) return undefined
-        return [...knownMeta.entries()].map(([metadataKey, tag]) => {
-            return renderWithMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
-                <Box key={metadataKey} marginRight={1} marginTop={1} display="inline-block">
-                    <Tooltip title={`Provided by plugin "${plugin.pluginName}"`}>
-                        <Chip
-                            onDelete={() => {
-                                const ref = getActivatedUI().typedMessageMetadata
-                                const next = new Map(ref.value.entries())
-                                next.delete(metadataKey)
-                                ref.value = next
-                            }}
-                            label={tag(r)}
-                        />
-                    </Tooltip>
-                </Box>
-            ))
-        })
-    })
+    const metadataBadge = [...PluginUI].flatMap((plugin) =>
+        Result.wrap(() => {
+            const knownMeta = plugin.postDialogMetadataBadge
+            if (!knownMeta) return undefined
+            return [...knownMeta.entries()].map(([metadataKey, tag]) => {
+                return renderWithMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
+                    <Box key={metadataKey} marginRight={1} marginTop={1} display="inline-block">
+                        <Tooltip title={`Provided by plugin "${plugin.pluginName}"`}>
+                            <Chip
+                                onDelete={() => {
+                                    const ref = getActivatedUI().typedMessageMetadata
+                                    const next = new Map(ref.value.entries())
+                                    next.delete(metadataKey)
+                                    ref.value = next
+                                }}
+                                label={tag(r)}
+                            />
+                        </Tooltip>
+                    </Box>
+                ))
+            })
+        }).unwrapOr(null),
+    )
     return (
         <div className={classes.root}>
             <ThemeProvider theme={props.theme ?? defaultTheme}>
