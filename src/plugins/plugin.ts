@@ -16,6 +16,10 @@ export interface PluginConfig {
     postInspector?: PluginInjectFunction<{}>
     dashboardInspector?: PluginInjectFunction<{}>
     postDialogMetadataBadge?: Map<string, (metadata: any) => string>
+    postDialogEntries?: {
+        label: string | React.ReactNode
+        onClick(): void
+    }[]
     messageProcessor?: (message: TypedMessageCompound) => TypedMessageCompound
 }
 

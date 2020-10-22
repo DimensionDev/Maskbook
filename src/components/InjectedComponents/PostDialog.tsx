@@ -29,9 +29,6 @@ import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
 import { DialogDismissIconUI } from './DialogDismissIcon'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
-import RedPacketDialog from '../../plugins/RedPacket/UI/RedPacketDialog'
-import FileServiceDialog from '../../plugins/FileService/MainDialog'
-import FileServiceEntryIcon from './FileServiceEntryIcon'
 import {
     TypedMessage,
     extractTextFromTypedMessage,
@@ -48,8 +45,8 @@ import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/plugin'
 import { Flags } from '../../utils/flags'
-import PollsDialog from '../../plugins/Polls/UI/PollsDialog'
 import { Result } from 'ts-results'
+import { ErrorBoundary } from '../shared/ErrorBoundary'
 
 const defaultTheme = {}
 
@@ -119,9 +116,6 @@ export function PostDialogUI(props: PostDialogUIProps) {
         if (isTypedMessageText(msg)) props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
         else throw new Error('Not impled yet')
     }
-    const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
-    const [fileServiceDialogOpen, setFileServiceDialogOpen] = useState(false)
-    const [pollsDialogOpen, setPollsDialogOpen] = useState(false)
 
     if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
     const metadataBadge = [...PluginUI].flatMap((plugin) =>
@@ -144,6 +138,22 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         </Tooltip>
                     </Box>
                 ))
+            })
+        }).unwrapOr(null),
+    )
+    const pluginEntries = [...PluginUI].flatMap((plugin) =>
+        Result.wrap(() => {
+            const entries = plugin.postDialogEntries
+            if (!entries) return null
+            return entries.map((opt, index) => {
+                return (
+                    <ErrorBoundary>
+                        <ClickableChip
+                            key={plugin.identifier + ' ' + index}
+                            ChipProps={{ label: opt.label, onClick: opt.onClick }}
+                        />
+                    </ErrorBoundary>
+                )
             })
         }).unwrapOr(null),
     )
@@ -195,46 +205,11 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         />
 
                         <Typography style={{ marginBottom: 10 }}>Plugins (Experimental)</Typography>
-                        <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
-                            <ClickableChip
-                                ChipProps={{
-                                    label: '💰 Red Packet',
-                                    onClick: async () => {
-                                        const wallets = await Services.Plugin.invokePlugin(
-                                            'maskbook.wallet',
-                                            'getWallets',
-                                        )
-                                        if (wallets.length) setRedPacketDialogOpen(true)
-                                        else Services.Provider.requestConnectWallet()
-                                    },
-                                }}
-                            />
-                            {Flags.file_service_create_enabled && (
-                                <ClickableChip
-                                    ChipProps={{
-                                        label: (
-                                            <>
-                                                <FileServiceEntryIcon width={16} height={16} />
-                                                &nbsp;File Service
-                                            </>
-                                        ),
-                                        onClick() {
-                                            setFileServiceDialogOpen(true)
-                                        },
-                                    }}
-                                />
-                            )}
-                            {Flags.poll_enabled && (
-                                <ClickableChip
-                                    ChipProps={{
-                                        label: '🗳️ Poll',
-                                        onClick: () => {
-                                            setPollsDialogOpen(true)
-                                        },
-                                    }}
-                                />
-                            )}
-                        </Box>
+                        <ErrorBoundary>
+                            <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                                {pluginEntries}
+                            </Box>
+                        </ErrorBoundary>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
                         </Typography>
@@ -295,33 +270,6 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     </DialogActions>
                 </ShadowRootDialog>
             </ThemeProvider>
-            {!process.env.STORYBOOK && (
-                <RedPacketDialog
-                    classes={classes}
-                    open={props.open && redPacketDialogOpen}
-                    onConfirm={() => setRedPacketDialogOpen(false)}
-                    onDecline={() => setRedPacketDialogOpen(false)}
-                    DialogProps={props.DialogProps}
-                />
-            )}
-            {Flags.file_service_create_enabled && (
-                <FileServiceDialog
-                    classes={classes}
-                    open={props.open && fileServiceDialogOpen}
-                    onConfirm={() => setFileServiceDialogOpen(false)}
-                    onDecline={() => setFileServiceDialogOpen(false)}
-                    DialogProps={props.DialogProps}
-                />
-            )}
-            {!process.env.STORYBOOK && (
-                <PollsDialog
-                    classes={classes}
-                    open={props.open && pollsDialogOpen}
-                    onConfirm={() => setPollsDialogOpen(false)}
-                    onDecline={() => setPollsDialogOpen(false)}
-                    DialogProps={props.DialogProps}
-                />
-            )}
         </div>
     )
 }
@@ -517,7 +465,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             onCloseButtonClicked={onCloseButtonClicked}
             {...props}
             open={open}
-            classes={{ ...props.classes }}
         />
     )
 }
