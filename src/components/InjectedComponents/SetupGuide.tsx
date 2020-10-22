@@ -28,6 +28,7 @@ import { MessageCenter } from '../../utils/messages'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
+import { useCopyToClipboard } from 'react-use'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -465,6 +466,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const [createStatus, setCreateStatus] = useState<boolean | 'undetermined'>('undetermined')
     //#endregion
 
+    const copyToClipboard = useCopyToClipboard()[1]
+
     const onNext = async () => {
         switch (step) {
             case SetupGuideStep.FindUsername:
@@ -520,7 +523,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }
     const onCreate = async () => {
         const content = t('setup_guide_say_hello_content')
-        await navigator.clipboard.writeText(content)
+        copyToClipboard(content)
         ui.taskOpenComposeBox(content, {
             shareToEveryOne: true,
         })
