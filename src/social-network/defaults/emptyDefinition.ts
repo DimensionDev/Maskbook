@@ -1,4 +1,4 @@
-import { GetContext, ValueRef } from '@holoflows/kit/es'
+import { GetContext, ValueRef } from '@dimensiondev/holoflows-kit/es'
 import { ProfileIdentifier } from '../../database/type'
 import type { SocialNetworkUIDefinition } from '../ui'
 import { nopWithUnmount } from '../../utils/utils'
@@ -13,7 +13,8 @@ import { noop } from 'lodash-es'
 export const emptyDefinition: SocialNetworkUIDefinition = {
     acceptablePayload: ['latest'],
     friendlyName: '',
-    requestPermission: () => Promise.resolve(true),
+    hasPermission: async () => true,
+    requestPermission: async () => true,
     setupAccount: '',
     shouldActivate() {
         return false

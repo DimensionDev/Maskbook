@@ -69,6 +69,7 @@ export default function DashboardWalletsRouter() {
     const tokens = useTokens(defaultWallet?.address ?? '')
 
     const [detailedTokens, detailedTokensCallback] = useTokensDetailedCallback(tokens)
+
     // show create dialog
     useEffect(() => {
         if (create) openWalletCreate()
@@ -97,6 +98,37 @@ export default function DashboardWalletsRouter() {
         })
     }, [setOpen])
 
+    //#region right icons from mobile devices
+    const rightIcons = [
+        <IconButton
+            onClick={() => {
+                if (defaultWallet) openAddToken({ wallet: defaultWallet })
+                else openWalletCreate()
+            }}>
+            <AddIcon />
+        </IconButton>,
+    ]
+
+    if (defaultWallet)
+        rightIcons.unshift(
+            <IconButton
+                onClick={() => {
+                    if (!defaultWallet) return
+                    openWalletHistory({
+                        wallet: defaultWallet,
+                        onRedPacketClicked(payload) {
+                            openWalletRedPacketDetail({
+                                wallet: defaultWallet,
+                                payload,
+                            })
+                        },
+                    })
+                }}>
+                <RestoreIcon />
+            </IconButton>,
+        )
+    //#endregion
+
     return (
         <DashboardRouterContainer
             empty={!defaultWallet}
@@ -122,30 +154,7 @@ export default function DashboardWalletsRouter() {
                     <ArrowBackIosIcon />
                 </IconButton>,
             ]}
-            rightIcons={[
-                <IconButton
-                    onClick={() => {
-                        if (!defaultWallet) return
-                        openWalletHistory({
-                            wallet: defaultWallet,
-                            onRedPacketClicked(payload) {
-                                openWalletRedPacketDetail({
-                                    wallet: defaultWallet,
-                                    payload,
-                                })
-                            },
-                        })
-                    }}>
-                    <RestoreIcon />
-                </IconButton>,
-                <IconButton
-                    onClick={() => {
-                        if (defaultWallet) openAddToken({ wallet: defaultWallet })
-                        else openWalletCreate()
-                    }}>
-                    <AddIcon />
-                </IconButton>,
-            ]}>
+            rightIcons={rightIcons}>
             <div className={classes.root}>
                 <div className={classes.header}>
                     <EthereumStatusBar

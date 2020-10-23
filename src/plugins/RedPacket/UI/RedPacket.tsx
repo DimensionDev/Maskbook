@@ -121,7 +121,7 @@ export function RedPacket(props: RedPacketProps) {
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
 
-    //#region remote controll select provider dialog
+    //#region remote controlled select provider dialog
     const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
         WalletMessageCenter,
         'selectProviderDialogUpdated',

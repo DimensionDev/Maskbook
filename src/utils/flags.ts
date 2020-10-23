@@ -9,6 +9,8 @@ export const Flags = {
     },
     /** There is no "tabs" to navigate to. We must be careful with this. */
     has_no_browser_tab_ui: process.env.architecture === 'app',
+
+    inject_dashboard_entrance: process.env.architecture === 'app',
     /**
      * - In iOS, the ShadowDOM mode is not really safe.
      * - In test(Jest) mode, there is no ShadowDOM support.
@@ -28,10 +30,11 @@ export const Flags = {
         process.env.NODE_ENV === 'development' || process.env.architecture === 'app' || process.env.build === 'beta',
     //#region Experimental features
     trader_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
+    transak_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
     trader_all_api_cached_enabled: process.env.NODE_ENV === 'development',
     trader_uniswap_auto_refresh_enabled: true,
     poll_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
-    file_service_create_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
+    file_service_create_enabled: true,
     matrix_based_service_enabled: process.env.NODE_ENV === 'development',
     wallet_connect_support_enabled: process.env.architecture === 'web',
     metamask_support_enabled: process.env.architecture === 'web',
@@ -52,6 +55,7 @@ export const Flags = {
      * TODO: We're no longer storing a CryptoKey in the database. Maybe we can remove this flag now.
      */
     has_Safari_IndexedDB_bug: process.env.target === 'safari',
+    has_no_WebRTC: process.env.target === 'safari' || !globalThis?.navigator?.permissions?.query,
     //#endregion
 } as const
 

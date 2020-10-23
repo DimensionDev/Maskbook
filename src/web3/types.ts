@@ -19,8 +19,20 @@ export interface Token {
 
 export interface TokenDetailed {
     token: Token
+    /**
+     * The total balance of token
+     */
     balance: string
-    estimated?: {
+    /**
+     * The estimated price
+     */
+    price?: {
+        [key in CurrencyType]: string
+    }
+    /**
+     * The estimated value
+     */
+    value?: {
         [key in CurrencyType]: string
     }
     logoURL?: string

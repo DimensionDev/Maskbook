@@ -15,7 +15,7 @@ import { PostCommentDecrypted } from '../components/InjectedComponents/PostComme
 import { CommentBox } from '../components/InjectedComponents/CommentBox'
 import type { DecryptionProgress } from '../extension/background-script/CryptoServices/decryptFrom'
 import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/SelectPeopleAndGroups'
-import { MaskbookLightTheme } from '../utils/theme'
+import { useMaskbookTheme } from '../utils/theme'
 import { CharLimitIndicator, PostDialog } from '../components/InjectedComponents/PostDialog'
 import { PostDialogHint } from '../components/InjectedComponents/PostDialogHint'
 import {
@@ -32,6 +32,7 @@ import { figmaLink } from './utils'
 import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
 import type { RedPacketJSONPayload } from '../plugins/RedPacket/types'
 import type { TypedMessageStorybookTest } from '../plugins/Storybook/define'
+import { ProfileIdentifier } from '../database/type'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
@@ -171,6 +172,9 @@ storiesOf('Injections', module)
                     ProgressType.undefined,
                 ),
             )
+            const displayAuthorMismatchTip = boolean('Author mismatch', true)
+            const author = displayAuthorMismatchTip ? new ProfileIdentifier('test', '$username') : void 0
+            const postBy = displayAuthorMismatchTip ? new ProfileIdentifier('test', 'id2') : void 0
             return (
                 <>
                     <FakePost title="Decrypted:">
@@ -179,13 +183,15 @@ storiesOf('Injections', module)
                             requestAppendRecipients={async () => {}}
                             profiles={demoProfiles}
                             data={{ content: makeTypedMessageText(msg) }}
+                            author={author}
+                            postedBy={postBy}
                         />
                     </FakePost>
                     <FakePost title="Decrypting:">
-                        <DecryptPostAwaiting type={progress} />
+                        <DecryptPostAwaiting type={progress} author={author} postedBy={postBy} />
                     </FakePost>
                     <FakePost title="Failed:">
-                        <DecryptPostFailed error={new Error('Error message')} />
+                        <DecryptPostFailed error={new Error('Error message')} author={author} postedBy={postBy} />
                     </FakePost>
                 </>
             )
@@ -271,7 +277,7 @@ storiesOf('Injections', module)
 
 function FakePost(props: React.PropsWithChildren<{ title: string }>) {
     return (
-        <MuiThemeProvider theme={MaskbookLightTheme}>
+        <MuiThemeProvider theme={useMaskbookTheme()}>
             {props.title}
             <div style={{ marginBottom: '2em', maxWidth: 500 }}>
                 <img width={500} src={require('./post-a.jpg')} style={{ marginBottom: -12 }} />

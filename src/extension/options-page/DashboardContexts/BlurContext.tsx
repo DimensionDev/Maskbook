@@ -3,7 +3,7 @@ import { makeStyles, createStyles, useTheme, useMediaQuery, Theme } from '@mater
 import { useLocation } from 'react-router-dom'
 import { noop } from 'lodash-es'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext } from '@dimensiondev/holoflows-kit/es'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

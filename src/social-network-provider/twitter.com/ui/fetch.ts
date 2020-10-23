@@ -1,5 +1,5 @@
 import { bioCardSelector, selfInfoSelectors, postsContentSelector, postsImageSelector } from '../utils/selector'
-import { MutationObserverWatcher, ValueRef } from '@holoflows/kit'
+import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { GroupIdentifier, ProfileIdentifier, PreDefinedVirtualGroupNames } from '../../../database/type'
 import type {
     SocialNetworkUI,

@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { Menu } from '@material-ui/core'
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import { PortalShadowRoot } from '../shadow-root/ShadowRootPortal'
 
 /**

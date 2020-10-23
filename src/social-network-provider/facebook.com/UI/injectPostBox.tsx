@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
+import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { isMobileFacebook } from '../isMobile'
@@ -12,7 +12,8 @@ if (isMobileFacebook) {
     composeBox = new LiveSelector().querySelector('#structured_composer_form')
 } else {
     composeBox = new LiveSelector()
-        .querySelectorAll('form [role="button"][tabindex="-1"]')
+        .querySelector('[role="dialog"] form')
+        .querySelectorAll('[role="button"][tabindex="0"], [role="button"][tabindex="-1"]')
         .map((x) => x.parentElement)
         // TODO: should be nth(-1), see https://github.com/DimensionDev/Holoflows-Kit/issues/270
         .reverse()

@@ -3,7 +3,7 @@ import { dispatchCustomEvents, pasteImageToActiveElements } from '../utils'
 
 test('dispatch input event', () => {
     const dispatchEventSpy = spyOn(document, 'dispatchEvent')
-    dispatchCustomEvents('input', 'value')
+    dispatchCustomEvents(document, 'input', 'value')
     expect(dispatchEventSpy).toHaveBeenCalled()
 
     const event: CustomEvent = dispatchEventSpy.calls.first().args[0]
@@ -14,7 +14,7 @@ test('dispatch input event', () => {
 test('dispatch paste image event', () => {
     const dispatchEventSpy = spyOn(document, 'dispatchEvent')
     const payload: { type: 'image'; value: number[] } = { type: 'image', value: [] }
-    dispatchCustomEvents('paste', payload)
+    dispatchCustomEvents(document, 'paste', payload)
     expect(dispatchEventSpy).toHaveBeenCalled()
 
     const event: CustomEvent = dispatchEventSpy.calls.first().args[0]

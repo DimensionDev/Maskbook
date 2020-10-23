@@ -19,7 +19,6 @@ import {
     CircularProgress,
 } from '@material-ui/core'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
-import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
 import { useFriendsList, useCurrentGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
@@ -50,6 +49,7 @@ import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/plugin'
 import { Flags } from '../../utils/flags'
 import PollsDialog from '../../plugins/Polls/UI/PollsDialog'
+import { Result } from 'ts-results'
 
 const defaultTheme = {}
 
@@ -113,40 +113,40 @@ export interface PostDialogUIProps
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
-    const [, inputRef] = useCapturedInput(
-        (newText) => {
-            const msg = props.postContent
-            if (isTypedMessageText(msg)) props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
-            else throw new Error('Not impled yet')
-        },
-        [props.open, props.postContent],
-    )
+    const onPostContentChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
+        const newText = e.target.value
+        const msg = props.postContent
+        if (isTypedMessageText(msg)) props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
+        else throw new Error('Not impled yet')
+    }
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
     const [fileServiceDialogOpen, setFileServiceDialogOpen] = useState(false)
     const [pollsDialogOpen, setPollsDialogOpen] = useState(false)
 
     if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
-    const metadataBadge = [...PluginUI].flatMap((plugin) => {
-        const knownMeta = plugin.postDialogMetadataBadge
-        if (!knownMeta) return undefined
-        return [...knownMeta.entries()].map(([metadataKey, tag]) => {
-            return renderWithMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
-                <Box key={metadataKey} marginRight={1} marginTop={1} display="inline-block">
-                    <Tooltip title={`Provided by plugin "${plugin.pluginName}"`}>
-                        <Chip
-                            onDelete={() => {
-                                const ref = getActivatedUI().typedMessageMetadata
-                                const next = new Map(ref.value.entries())
-                                next.delete(metadataKey)
-                                ref.value = next
-                            }}
-                            label={tag(r)}
-                        />
-                    </Tooltip>
-                </Box>
-            ))
-        })
-    })
+    const metadataBadge = [...PluginUI].flatMap((plugin) =>
+        Result.wrap(() => {
+            const knownMeta = plugin.postDialogMetadataBadge
+            if (!knownMeta) return undefined
+            return [...knownMeta.entries()].map(([metadataKey, tag]) => {
+                return renderWithMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
+                    <Box key={metadataKey} marginRight={1} marginTop={1} display="inline-block">
+                        <Tooltip title={`Provided by plugin "${plugin.pluginName}"`}>
+                            <Chip
+                                onDelete={() => {
+                                    const ref = getActivatedUI().typedMessageMetadata
+                                    const next = new Map(ref.value.entries())
+                                    next.delete(metadataKey)
+                                    ref.value = next
+                                }}
+                                label={tag(r)}
+                            />
+                        </Tooltip>
+                    </Box>
+                ))
+            })
+        }).unwrapOr(null),
+    )
     return (
         <div className={classes.root}>
             <ThemeProvider theme={props.theme ?? defaultTheme}>
@@ -187,7 +187,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             }}
                             autoFocus
                             value={props.postContent.content}
-                            inputRef={inputRef}
+                            onChange={onPostContentChange}
                             fullWidth
                             multiline
                             placeholder={t('post_dialog__placeholder')}
@@ -224,14 +224,16 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     }}
                                 />
                             )}
-                            <ClickableChip
-                                ChipProps={{
-                                    label: '🗳️ Poll',
-                                    onClick: () => {
-                                        setPollsDialogOpen(true)
-                                    },
-                                }}
-                            />
+                            {Flags.poll_enabled && (
+                                <ClickableChip
+                                    ChipProps={{
+                                        label: '🗳️ Poll',
+                                        onClick: () => {
+                                            setPollsDialogOpen(true)
+                                        },
+                                    }}
+                                />
+                            )}
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
@@ -263,23 +265,20 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 />
                             </SelectRecipientsUI>
                         </Box>
-                        {Flags.no_post_image_payload_support ? null : (
-                            <>
-                                <Typography style={{ marginBottom: 10 }}>
-                                    {t('post_dialog__more_options_title')}
-                                </Typography>
-                                <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
-                                    <ClickableChip
-                                        checked={props.imagePayload}
-                                        ChipProps={{
-                                            label: t('post_dialog__image_payload'),
-                                            onClick: () => props.onImagePayloadSwitchChanged(!props.imagePayload),
-                                            'data-testid': 'image_chip',
-                                        }}
-                                    />
-                                </Box>
-                            </>
-                        )}
+
+                        <>
+                            <Typography style={{ marginBottom: 10 }}>{t('post_dialog__more_options_title')}</Typography>
+                            <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                                <ClickableChip
+                                    checked={props.imagePayload}
+                                    ChipProps={{
+                                        label: t('post_dialog__image_payload'),
+                                        onClick: () => props.onImagePayloadSwitchChanged(!props.imagePayload),
+                                        'data-testid': 'image_chip',
+                                    }}
+                                />
+                            </Box>
+                        </>
                     </DialogContent>
                     <DialogActions className={classes.actions}>
                         {isTypedMessageText(props.postContent) && props.maxLength ? (
@@ -339,7 +338,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     const { t, i18n } = useI18N()
     const [onlyMyselfLocal, setOnlyMyself] = useState(false)
     const onlyMyself = props.onlyMyself ?? onlyMyselfLocal
-    const [shareToEveryoneLocal, setShareToEveryone] = useState(false)
+    const [shareToEveryoneLocal, setShareToEveryone] = useState(true)
     const shareToEveryone = props.shareToEveryone ?? shareToEveryoneLocal
     const typedMessageMetadata = or(props.typedMessageMetadata, useValueRef(getActivatedUI().typedMessageMetadata))
     const [open, setOpen] = or(props.open, useState<boolean>(false)) as NonNullable<PostDialogProps['open']>
@@ -395,13 +394,17 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     const isDai = isErc20 && metadata.ok && isDAI(metadata.val.token?.address ?? '')
                     const isOkb = isErc20 && metadata.ok && isOKB(metadata.val.token?.address ?? '')
 
-                    activeUI.taskPasteIntoPostBox(
-                        t('additional_post_box__steganography_post_pre', { random: new Date().toLocaleString() }),
-                        { shouldOpenPostDialog: false },
-                    )
+                    const relatedText = t('additional_post_box__steganography_post_pre', {
+                        random: new Date().toLocaleString(),
+                    })
+                    activeUI.taskPasteIntoPostBox(relatedText, {
+                        shouldOpenPostDialog: false,
+                        autoPasteFailedRecover: false,
+                    })
                     activeUI.taskUploadToPostBox(encrypted, {
                         template: isRedPacket ? (isDai ? 'dai' : isOkb ? 'okb' : 'eth') : 'v2',
-                        warningText: t('additional_post_box__steganography_post_failed'),
+                        autoPasteFailedRecover: true,
+                        relatedText,
                     })
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
@@ -419,7 +422,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                         }
                     }
                     activeUI.taskPasteIntoPostBox(text, {
-                        warningText: t('additional_post_box__encrypted_failed'),
+                        autoPasteFailedRecover: true,
                         shouldOpenPostDialog: false,
                     })
                 }

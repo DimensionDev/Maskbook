@@ -13,7 +13,6 @@ import { omit } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import {
@@ -104,14 +103,12 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     // message
     const [message, setMessage] = useState('Best Wishes!')
-    const [, messageRef] = useCapturedInput(setMessage)
 
     // sender name
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
 
     // shares
     const [shares, setShares] = useState<number | ''>(RED_PACKET_DEFAULT_SHARES)
-    const [, sharesRef] = useCapturedInput()
     const onShareChange = useCallback(
         (ev: ChangeEvent<HTMLInputElement>) => {
             const shares_ = ev.currentTarget.value.replace(/[,\.]/g, '')
@@ -236,7 +233,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 <TextField
                     className={classes.input}
                     InputProps={{
-                        inputRef: sharesRef,
                         inputProps: {
                             autoComplete: 'off',
                             autoCorrect: 'off',
@@ -272,7 +268,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
             <div className={classes.line}>
                 <TextField
                     className={classes.input}
-                    InputProps={{ inputRef: messageRef }}
+                    onChange={(e) => setMessage(e.target.value)}
                     InputLabelProps={{ shrink: true }}
                     inputProps={{ placeholder: t('plugin_red_packet_best_wishes') }}
                     label={t('plugin_red_packet_attached_message')}

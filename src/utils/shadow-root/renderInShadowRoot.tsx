@@ -10,8 +10,29 @@ import { I18nextProvider } from 'react-i18next'
 import i18nNextInstance from '../i18n-next'
 import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
+import { SnackbarProvider } from 'notistack'
 import '../../components/InjectedComponents/ShadowRootSwitchNotifier'
+import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 
+const captureEvents: (keyof HTMLElementEventMap)[] = [
+    'paste',
+    'keydown',
+    'keypress',
+    'keyup',
+    'drag',
+    'dragend',
+    'dragenter',
+    'dragexit',
+    'dragleave',
+    'dragover',
+    'dragstart',
+    'change',
+]
+try {
+    for (const each of captureEvents) {
+        portalShadowRoot.addEventListener(each, (e) => e.stopPropagation())
+    }
+} catch {}
 const previousShadowedElement = new Set<HTMLElement>()
 /**
  * Render the Node in the ShadowRoot
@@ -82,14 +103,17 @@ export function renderInShadowRoot(
     return () => rendered && unmount()
 }
 
-function mount(e: ({} | ShadowRoot) & HTMLElement, _: JSX.Element, keyBy = 'app', concurrent?: boolean) {
+function mount(host: ({} | ShadowRoot) & HTMLElement, _: JSX.Element, keyBy = 'app', concurrent?: boolean) {
     const container =
-        e.querySelector<HTMLElement>(`main.${keyBy}`) ||
+        host.querySelector<HTMLElement>(`main.${keyBy}`) ||
         (() => {
-            const dom = (e as ShadowRoot).appendChild(document.createElement('main'))
+            const dom = host.appendChild(document.createElement('main'))
             dom.className = keyBy
             return dom
         })()
+    for (const each of captureEvents) {
+        host.addEventListener(each, (e) => e.stopPropagation())
+    }
     if (concurrent) {
         const root = ReactDOM.unstable_createRoot(container)
         root.render(_)
@@ -191,19 +215,6 @@ function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{
     )
 }
 
-class ErrorBoundary extends React.Component {
-    state: { error?: Error } = { error: undefined }
-    render() {
-        if (this.state.error) return <pre style={{ whiteSpace: 'break-spaces' }}>{this.state.error.message}</pre>
-        return this.props.children
-    }
-    componentDidCatch(error: Error) {
-        console.error(error)
-        this.setState({ error })
-    }
-}
-
-import { SnackbarProvider } from 'notistack'
 type MaskbookProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
 
 function Maskbook(_props: MaskbookProps) {

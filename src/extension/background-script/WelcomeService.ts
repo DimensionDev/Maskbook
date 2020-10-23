@@ -1,4 +1,4 @@
-import { OnlyRunInContext } from '@holoflows/kit'
+import { OnlyRunInContext } from '@dimensiondev/holoflows-kit'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep, getUrl } from '../../utils/utils'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'

@@ -15,7 +15,6 @@ import BigNumber from 'bignumber.js'
 import { debounce } from 'lodash-es'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { formatBalance } from '../../plugins/Wallet/formatter'
-import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import type { Token } from '../types'
 import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../constants'
 import { useStylesExtends } from '../../components/custom-ui-helper'
@@ -61,7 +60,6 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const { amount, balance, token, onAmountChange, label } = props
 
     const classes = useStylesExtends(useStyles(), props)
-    const [, inputRef] = useCapturedInput()
 
     //#region update amount by parent
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_PARTIAL_AMOUNT } = useMemo(() => {
@@ -123,7 +121,6 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
             variant="outlined"
             onChange={onChange}
             InputProps={{
-                inputRef,
                 inputProps: {
                     autoComplete: 'off',
                     autoCorrect: 'off',

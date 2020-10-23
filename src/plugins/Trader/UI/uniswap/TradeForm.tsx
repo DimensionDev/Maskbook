@@ -101,7 +101,7 @@ export function TradeForm(props: TradeFormProps) {
     const outputTokenBalanceAmount = new BigNumber(outputTokenBalance ?? '0')
     //#endregion
 
-    //#region remote controll select provider dialog
+    //#region remote controlled select provider dialog
     const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
         WalletMessageCenter,
         'selectProviderDialogUpdated',

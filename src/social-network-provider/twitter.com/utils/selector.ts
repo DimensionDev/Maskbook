@@ -1,6 +1,6 @@
-import { LiveSelector } from '@holoflows/kit'
+import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { regexMatch } from '../../../utils/utils'
-import { isCompose, isMobile } from './postBox'
+import { isCompose } from './postBox'
 
 type E = HTMLElement
 
@@ -30,7 +30,9 @@ export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
 export const postEditorDraftContentSelector = () => {
     if (location.pathname === '/compose/tweet') {
-        return querySelector<HTMLDivElement>(`[contenteditable][aria-label][spellcheck]`)
+        return querySelector<HTMLDivElement>(
+            `[contenteditable][aria-label][spellcheck],textarea[aria-label][spellcheck]`,
+        )
     }
     return (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
         '.public-DraftEditor-content, [contenteditable][aria-label][spellcheck]',
@@ -41,20 +43,16 @@ export const posteditorToolbarSeelctor: () => LiveSelector<E, true> = () =>
 
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
-export const profileEditorButtonSelector = () =>
-    querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
-export const profileEditorTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[name="description"]')
-
-export const bioSelector = () => querySelector<HTMLDivElement>(['[data-testid="UserProfileHeader_Items"]'].join())
 export const bioPageUserNickNameSelector = () =>
     querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
         .map((x) => x.parentElement?.parentElement?.previousElementSibling)
         .querySelector<HTMLDivElement>('div[dir]')
 export const bioPageUserIDSelector = (selector: () => LiveSelector<HTMLSpanElement, true>) =>
-    selector().map((x) =>
-        (x.parentElement?.parentElement?.nextElementSibling as HTMLElement).innerText.replace('@', ''),
+    selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement).innerText.replace('@', ''))
+export const floatingBioCardSelector = () =>
+    querySelector<HTMLSpanElement>(
+        `[style~="left:"] a[role=link] > div:first-child > div:first-child > div:first-child[dir="auto"]`,
     )
-export const floatingBioCardSelector = () => querySelector<HTMLSpanElement>(`[style^="left:"] a[role=link] span`)
 export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
     querySelector<HTMLDivElement, SingleMode>(
         [

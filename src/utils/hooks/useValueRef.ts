@@ -1,4 +1,4 @@
-import { ValueRef, GetContext } from '@holoflows/kit/es'
+import { ValueRef, GetContext } from '@dimensiondev/holoflows-kit/es'
 import { Subscription, useSubscription } from 'use-subscription'
 import { useMemo } from 'react'
 export function useValueRef<T>(ref: ValueRef<T>) {

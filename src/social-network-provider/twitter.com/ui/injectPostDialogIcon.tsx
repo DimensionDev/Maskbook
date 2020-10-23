@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useCallback } from 'react'
 import { twitterUrl } from '../utils/url'
-import { MutationObserverWatcher, LiveSelector } from '@holoflows/kit/es'
+import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit/es'
 import { posteditorToolbarSeelctor } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogIcon } from '../../../components/InjectedComponents/PostDialogIcon'

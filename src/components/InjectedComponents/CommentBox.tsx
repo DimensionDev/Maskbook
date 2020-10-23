@@ -1,9 +1,7 @@
-import React, { useEffect, useRef } from 'react'
-import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
+import React from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
 import { InputBase } from '@material-ui/core'
-import { noop } from 'lodash-es'
 
 const useStyles = makeStyles(() => {
     return {
@@ -36,23 +34,21 @@ export interface CommentBoxProps {
 }
 export function CommentBox(props: CommentBoxProps) {
     const classes = useStyles()
-    const [binder, inputRef, node] = useCapturedInput(noop)
     const { t } = useI18N()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(
-        binder(['keypress'], (e) => {
-            if (!node || !node.value) return
-            if (e.key === 'Enter') {
-                props.onSubmit(node.value)
-                node.value = ''
-            }
-        }),
-    )
     return (
         <InputBase
             className={classes.root}
-            inputProps={{ className: classes.input, ref: inputRef, 'data-testid': 'comment_input' }}
+            inputProps={{ className: classes.input, 'data-testid': 'comment_input' }}
             placeholder={t('comment_box__placeholder')}
+            onKeyDownCapture={(e) => {
+                const node = e.target as HTMLInputElement
+                console.log(e.currentTarget)
+                if (!node.value) return
+                if (e.key === 'Enter') {
+                    props.onSubmit(node.value)
+                    node.value = ''
+                }
+            }}
             {...props.inputProps}
         />
     )

@@ -1,4 +1,4 @@
-import { OnlyRunInContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import { twitterUrl } from './url'
 
 export const isMobileTwitter = OnlyRunInContext('content', false)

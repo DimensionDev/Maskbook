@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
-import type { ValueRef } from '@holoflows/kit/es'
+import type { ValueRef } from '@dimensiondev/holoflows-kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
+import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import { texts } from '../../settings/createSettings'
 import {
     ListItem,
@@ -27,6 +28,9 @@ const useStyles = makeStyles((theme) =>
         },
         listItemIcon: {
             marginLeft: 0,
+        },
+        listItemActionMobile: {
+            maxWidth: '60%',
         },
         arrowIcon: {
             color: theme.palette.text.primary,
@@ -117,13 +121,21 @@ export function SettingsUIEnum<T extends object>(
     } & SettingsUIProps<T[keyof T]>,
 ) {
     const { primary, secondary } = withDefaultText(props)
+    const xsMatched = useMatchXS()
+    const classes = useStyles()
     const [ui] = useEnumSettings(props.value, props.enumObject, props.getText, props.SelectProps)
     return (
         <SharedListItem
             {...props}
             primary={primary}
             secondary={secondary}
-            action={<ListItemSecondaryAction>{ui}</ListItemSecondaryAction>}
+            action={
+                xsMatched ? (
+                    <div className={classes.listItemActionMobile}>{ui}</div>
+                ) : (
+                    <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
+                )
+            }
         />
     )
 }

@@ -20,8 +20,9 @@ import { AlertCircle } from 'react-feather'
 import { DataProvider, SwapProvider } from '../../types'
 import {
     resolveDataProviderName,
-    resolveSwapProviderName,
     resolveDataProviderLink,
+    resolveDataProviderCoinLink,
+    resolveSwapProviderName,
     resolveSwapProviderLink,
 } from '../../pipes'
 import { getActivatedUI } from '../../../../social-network/ui'
@@ -344,7 +345,10 @@ export function TrendingView(props: TrendingViewProps) {
                     {tabIndex === 0 ? (
                         <>
                             {market ? <PriceChangedTable market={market} /> : null}
-                            <PriceChart stats={stats} loading={loadingStats}>
+                            <PriceChart
+                                stats={stats}
+                                loading={loadingStats}
+                                coinURL={resolveDataProviderCoinLink(dataProvider, coin)}>
                                 <PriceChartDaysControl days={days} onDaysChange={setDays} />
                             </PriceChart>
                         </>

@@ -24,7 +24,7 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
         // not a valid contract address
         if (!EthereumAddress.isValid(address)) return null
 
-        const contract = new nonFunctionalWeb3.eth.Contract(ABI, address) as T
+        const contract = (new nonFunctionalWeb3.eth.Contract(ABI, address) as unknown) as T
         return Object.assign(contract, {
             methods: new Proxy(contract.methods, {
                 get(target, name) {

@@ -26,9 +26,9 @@ import { getActivatedUI } from '../../social-network/ui'
 import { currentSetupGuideStatus, SetupGuideCrossContextStatus } from '../../settings/settings'
 import { MessageCenter } from '../../utils/messages'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
+import { useCopyToClipboard } from 'react-use'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -271,19 +271,12 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
 
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
-    const [binder, inputRef] = useCapturedInput(onUsernameChange)
-
-    // disable enter
-    useEffect(
-        () =>
-            binder(['keydown'], (e) => {
-                e.stopPropagation()
-                if (e.key !== 'Enter') return
-                e.preventDefault()
-                onConnect()
-            })(),
-        [onConnect, binder],
-    )
+    const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
+        e.stopPropagation()
+        if (e.key !== 'Enter') return
+        e.preventDefault()
+        onConnect()
+    }
 
     const onJump = useCallback(
         (ev: React.MouseEvent<SVGElement>) => {
@@ -292,7 +285,6 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
         },
         [username],
     )
-
     return (
         <WizardDialog
             completion={33.33}
@@ -315,7 +307,8 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                                     </InputAdornment>
                                 ),
                             }}
-                            inputRef={inputRef}
+                            onChange={(e) => onUsernameChange(e.target.value)}
+                            onKeyDown={onKeyDown}
                             inputProps={{ 'data-testid': 'username_input' }}></TextField>
                         <IconButton
                             className={findUsernameClasses.button}
@@ -473,6 +466,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const [createStatus, setCreateStatus] = useState<boolean | 'undetermined'>('undetermined')
     //#endregion
 
+    const copyToClipboard = useCopyToClipboard()[1]
+
     const onNext = async () => {
         switch (step) {
             case SetupGuideStep.FindUsername:
@@ -528,7 +523,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }
     const onCreate = async () => {
         const content = t('setup_guide_say_hello_content')
-        await navigator.clipboard.writeText(content)
+        copyToClipboard(content)
         ui.taskOpenComposeBox(content, {
             shareToEveryOne: true,
         })

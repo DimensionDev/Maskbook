@@ -19,6 +19,7 @@ import { ProviderIcon } from '../../components/shared/ProviderIcon'
 import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
 import { useSnackbarCallback } from '../../extension/options-page/DashboardDialogs/Base'
 import { MaskbookWalletMessages, WalletMessageCenter } from '../../plugins/Wallet/messages'
+import { useI18N } from '../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -62,6 +63,7 @@ export interface EthereumAccountChipProps extends withClasses<KeysInferFromUseSt
 }
 
 export function EthereumAccountChip(props: EthereumAccountChipProps) {
+    const { t } = useI18N()
     const { address = '', ChipProps } = props
     const classes = useStylesExtends(useStyles(), props)
 
@@ -74,10 +76,17 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
 
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
-    const onCopy = useSnackbarCallback(async (ev: React.MouseEvent<HTMLDivElement>) => {
-        ev.stopPropagation()
-        copyToClipboard(address_)
-    }, [])
+    const onCopy = useSnackbarCallback(
+        async (ev: React.MouseEvent<HTMLDivElement>) => {
+            ev.stopPropagation()
+            copyToClipboard(address_)
+        },
+        [],
+        undefined,
+        undefined,
+        undefined,
+        t('copy_success_of_wallet_addr'),
+    )
     //#endregion
 
     //#region select wallet dialog
@@ -86,6 +95,7 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
         'selectWalletDialogUpdated',
     )
     const onOpen = useCallback(() => {
+        console.log('DEBUG: on open')
         setSelectWalletOpen({
             open: true,
         })
@@ -95,7 +105,7 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
     if (!address_) return null
 
     const content = (
-        <Box display="inline-flex" component="span" alignItems="center" onClick={onOpen}>
+        <Box display="inline-flex" component="span" alignItems="center">
             <Typography className={classes.address} color="textPrimary">
                 {formatEthereumAddress(address_, 4)}
             </Typography>
@@ -118,6 +128,8 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
                     classes={{ label: classes.label }}
                     size="small"
                     label={content}
+                    clickable
+                    onClick={onOpen}
                     {...ChipProps}
                 />
             ) : (

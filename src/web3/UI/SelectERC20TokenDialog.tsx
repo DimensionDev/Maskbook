@@ -20,7 +20,6 @@ import {
     useTwitterCloseButton,
 } from '../../social-network-provider/twitter.com/utils/theme'
 import { getActivatedUI } from '../../social-network/ui'
-import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import type { Token } from '../types'
 import { FixedTokenList } from '../../extension/options-page/DashboardComponents/FixedTokenList'
 
@@ -76,10 +75,6 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
 
     const { open, excludeTokens, onSubmit, onClose } = props
 
-    //#region capture event
-    const [, inputRef] = useCapturedInput()
-    //#endregion
-
     //#region search tokens
     const [keyword, setKeyword] = useState('')
     //#endregion
@@ -117,7 +112,6 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                     <TextField
                         className={classes.search}
                         label={t('add_token_search_hint')}
-                        ref={inputRef}
                         autoFocus
                         fullWidth
                         value={keyword}

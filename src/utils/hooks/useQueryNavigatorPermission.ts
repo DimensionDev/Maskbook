@@ -1,6 +1,7 @@
 /** This file is published under MIT License */
 import { useEffect, useState } from 'react'
 import { hasIn } from 'lodash-es'
+import { Flags } from '../flags'
 
 const q = <const>['query', 'request', 'revoke']
 
@@ -15,16 +16,16 @@ export function checkPermissionApiUsability(type?: typeof q[number]) {
     return r as Required<typeof r>
 }
 
-export function useRequestCamera(needRequest: boolean) {
+export function useQueryNavigatorPermission(needRequest: boolean, name: PermissionNameWithClipboard): PermissionState {
     const [permission, updatePermission] = useState<PermissionState>('prompt')
 
     useEffect(() => {
-        if (!needRequest || permission !== 'prompt') return
+        if (!needRequest || permission !== 'prompt' || Flags.has_no_WebRTC) return
         let permissionStatus: PermissionStatus
 
         if (checkPermissionApiUsability('query')) {
             navigator.permissions
-                .query({ name: 'camera' })
+                .query({ name })
                 .then((p) => {
                     permissionStatus = p
                     permissionStatus.onchange = () => {
@@ -39,7 +40,7 @@ export function useRequestCamera(needRequest: boolean) {
                 })
         } else if (checkPermissionApiUsability('request')) {
             navigator.permissions
-                .request({ name: 'camera' })
+                .request({ name })
                 .then((p) => {
                     updatePermission(p.state)
                 })

@@ -21,9 +21,7 @@ import { useBlurContext } from '../DashboardContexts/BlurContext'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { appearanceSettings, Appearance } from '../../../settings/settings'
-import { MaskbookLightTheme, MaskbookDarkTheme } from '../../../utils/theme'
+import { useMaskbookTheme } from '../../../utils/theme'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 const Transition = React.forwardRef<unknown, TransitionProps & Pick<FadeProps, 'children'>>(function Transition(
@@ -119,22 +117,16 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
     const compositeProps =
         ComponentProps || props ? { ComponentProps: { ...ComponentProps, ...props } as DialogProps } : {}
 
-    const preferDarkScheme = useMediaQuery('(prefers-color-scheme: dark)')
-    const appearance = useValueRef(appearanceSettings)
     const modalProps = {
         ...compositeProps,
         open: state === DialogState.Opened,
         onClose,
         onExited,
     }
+    const theme = useMaskbookTheme()
     const renderedComponent =
         state === DialogState.Destroyed ? null : (
-            <ThemeProvider
-                theme={
-                    (preferDarkScheme && appearance === Appearance.default) || appearance === Appearance.dark
-                        ? MaskbookDarkTheme
-                        : MaskbookLightTheme
-                }>
+            <ThemeProvider theme={theme}>
                 <Modal {...modalProps} />
             </ThemeProvider>
         )
@@ -147,6 +139,7 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
         wrapper: {
             display: 'flex',
             flexDirection: 'column',
+            maxWidth: '100%',
             width: (props) => (props.size === 'small' ? 280 : 440),
             padding: (props) => (props.size === 'small' ? '40px 24px !important' : '40px 36px !important'),
             margin: '0 auto',
@@ -302,6 +295,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
     onSuccess?: (ret: T) => void,
     onError?: (err: Error) => void,
     key?: string,
+    successText?: string,
 ) {
     const { t } = useI18N()
     const { enqueueSnackbar } = useSnackbar()
@@ -309,7 +303,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
         (...args) =>
             executor(...args).then(
                 (res) => {
-                    enqueueSnackbar(t('done'), { key, variant: 'success', preventDuplicate: true })
+                    enqueueSnackbar(successText ?? t('done'), { key, variant: 'success', preventDuplicate: true })
                     onSuccess?.(res)
                     return res
                 },

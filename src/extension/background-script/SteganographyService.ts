@@ -1,7 +1,7 @@
 import { encode, decode } from '@dimensiondev/stego-js/cjs/dom'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'
 import { TransformAlgorithm } from '@dimensiondev/stego-js/cjs/transform'
-import { OnlyRunInContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import type { EncodeOptions, DecodeOptions } from '@dimensiondev/stego-js/cjs/stego'
 import { getUrl, downloadUrl } from '../../utils/utils'
 import { memoizePromise } from '../../utils/memoize'
@@ -88,8 +88,4 @@ export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImag
 
 export async function decodeImageUrl(url: string, options: DecodeImageOptions) {
     return decodeImage(await (await downloadUrl(url)).arrayBuffer(), options)
-}
-
-export function downloadImage({ buffer }: Uint8Array) {
-    return saveAsFile(buffer, 'image/png', 'maskbook.png')
 }

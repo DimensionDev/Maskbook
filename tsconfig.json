@@ -68,7 +68,8 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "useDefineForClassFields": true
   },
   "include": ["./src/", "./e2e/"],
   "ts-node": {

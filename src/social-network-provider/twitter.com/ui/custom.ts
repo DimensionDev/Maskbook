@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react'
-import { ValueRef, MutationObserverWatcher } from '@holoflows/kit'
-import { Theme, unstable_createMuiStrictModeTheme, ThemeProvider } from '@material-ui/core'
-import { MaskbookDarkTheme, MaskbookLightTheme } from '../../../utils/theme'
+import { useMemo } from 'react'
+import { ValueRef, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { unstable_createMuiStrictModeTheme, ThemeProvider } from '@material-ui/core'
+import { useMaskbookTheme } from '../../../utils/theme'
 import type { SocialNetworkUICustomUI } from '../../../social-network/ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { composeAnchorSelector } from '../utils/selector'
 import React from 'react'
-import { toRGB, getBackgroundColor, isDark, fromRGB, shade } from '../../../utils/theme-tools'
+import { toRGB, getBackgroundColor, fromRGB, shade, isDark } from '../../../utils/theme-tools'
+import { Appearance } from '../../../settings/settings'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
@@ -32,52 +33,49 @@ export function startWatchThemeColor() {
         })
 }
 function useTheme() {
-    const [theme, setTheme] = useState<Theme>(MaskbookLightTheme)
-    const primaryColor = useValueRef(primaryColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
-
-    useEffect(() => {
-        const MaskbookTheme = isDark(fromRGB(backgroundColor)!) ? MaskbookDarkTheme : MaskbookLightTheme
+    const primaryColor = useValueRef(primaryColorRef)
+    const MaskbookTheme = useMaskbookTheme({
+        theme: isDark(fromRGB(backgroundColor)!) ? Appearance.dark : Appearance.light,
+    })
+    return useMemo(() => {
         const primaryColorRGB = fromRGB(primaryColor)!
-        setTheme(
-            unstable_createMuiStrictModeTheme({
-                ...MaskbookTheme,
-                palette: {
-                    ...MaskbookTheme.palette,
-                    background: {
-                        ...MaskbookTheme.palette.background,
-                        paper: backgroundColor,
-                    },
-                    primary: {
-                        ...MaskbookTheme.palette.primary,
-                        light: toRGB(shade(primaryColorRGB, 10)),
-                        main: toRGB(primaryColorRGB),
-                        dark: toRGB(shade(primaryColorRGB, -10)),
-                    },
+        return unstable_createMuiStrictModeTheme({
+            ...MaskbookTheme,
+            palette: {
+                ...MaskbookTheme.palette,
+                background: {
+                    ...MaskbookTheme.palette.background,
+                    paper: backgroundColor,
                 },
-                shape: {
-                    borderRadius: 15,
+                primary: {
+                    ...MaskbookTheme.palette.primary,
+                    light: toRGB(shade(primaryColorRGB, 10)),
+                    main: toRGB(primaryColorRGB),
+                    dark: toRGB(shade(primaryColorRGB, -10)),
                 },
-                breakpoints: {
-                    values: { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 },
-                },
-                overrides: {
-                    MuiButton: {
-                        root: {
-                            borderRadius: 500,
-                            textTransform: 'none',
-                        },
-                    },
-                    MuiTab: {
-                        root: {
-                            textTransform: 'none',
-                        },
+            },
+            shape: {
+                borderRadius: 15,
+            },
+            breakpoints: {
+                values: { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 },
+            },
+            overrides: {
+                MuiButton: {
+                    root: {
+                        borderRadius: 500,
+                        textTransform: 'none',
                     },
                 },
-            }),
-        )
-    }, [primaryColor, backgroundColor])
-    return theme
+                MuiTab: {
+                    root: {
+                        textTransform: 'none',
+                    },
+                },
+            },
+        })
+    }, [MaskbookTheme, backgroundColor, primaryColor])
 }
 
 export function TwitterThemeProvider(props: Required<React.PropsWithChildren<{}>>) {

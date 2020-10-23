@@ -1,13 +1,8 @@
 import { defineSocialNetworkUI } from '../../social-network/ui'
 import { emptyDefinition } from '../../social-network/defaults/emptyDefinition'
-import { GetContext } from '@holoflows/kit/es'
-import type { Profile } from '../../database'
+import { GetContext } from '@dimensiondev/holoflows-kit/es'
 
-function hasFingerprint(x: Profile) {
-    return !!x.linkedPersona?.fingerprint
-}
-
-const optionsPageUISelf = defineSocialNetworkUI({
+defineSocialNetworkUI({
     ...emptyDefinition,
     internalName: 'Options page data source',
     async init(e, p) {

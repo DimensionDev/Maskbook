@@ -3,7 +3,7 @@ import '../../setup.ui'
 import '../tab'
 
 import React, { useState } from 'react'
-import { CssBaseline, useMediaQuery, NoSsr, CircularProgress, Box, Typography, Card } from '@material-ui/core'
+import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card } from '@material-ui/core'
 import { ThemeProvider, makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
@@ -16,7 +16,7 @@ import { I18nextProvider } from 'react-i18next'
 
 import { useI18N } from '../../utils/i18n-next-ui'
 import i18nNextInstance from '../../utils/i18n-next'
-import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
+import { useMaskbookTheme } from '../../utils/theme'
 
 import FooterLine from './DashboardComponents/FooterLine'
 import Drawer from './DashboardComponents/Drawer'
@@ -25,12 +25,10 @@ import DashboardPersonasRouter from './DashboardRouters/Personas'
 import DashboardWalletsRouter from './DashboardRouters/Wallets'
 import DashboardContactsRouter from './DashboardRouters/Contacts'
 import DashboardSettingsRouter from './DashboardRouters/Settings'
-import { appearanceSettings, Appearance } from '../../settings/settings'
 import { DashboardSetupRouter } from './DashboardRouters/Setup'
 import { DashboardBlurContextUI } from './DashboardContexts/BlurContext'
 import { DashboardRoute } from './Route'
 import { SSRRenderer } from '../../utils/SSRRenderer'
-import { useValueRef } from '../../utils/hooks/useValueRef'
 
 import { useAsync } from 'react-use'
 import Services from '../service'
@@ -44,6 +42,7 @@ import ShowcaseBox from './DashboardComponents/ShowcaseBox'
 import { Flags } from '../../utils/flags'
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import { PluginUI, PluginConfig } from '../../plugins/plugin'
+import { ErrorBoundary, withErrorBoundary } from '../../components/shared/ErrorBoundary'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.type === 'dark'
@@ -194,13 +193,13 @@ function DashboardUI() {
                 {Flags.has_no_browser_tab_ui ? (
                     <Route path={DashboardRoute.Nav} component={() => <DashboardNavRouter children={drawer} />} />
                 ) : null}
-                <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
-                <Route path={DashboardRoute.Wallets} component={DashboardWalletsRouter} />
-                <Route path={DashboardRoute.Contacts} component={DashboardContactsRouter} />
-                <Route path={DashboardRoute.Settings} component={DashboardSettingsRouter} />
-                <Route path={DashboardRoute.Setup} component={DashboardSetupRouter} />
+                <Route path={DashboardRoute.Personas} component={withErrorBoundary(DashboardPersonasRouter)} />
+                <Route path={DashboardRoute.Wallets} component={withErrorBoundary(DashboardWalletsRouter)} />
+                <Route path={DashboardRoute.Contacts} component={withErrorBoundary(DashboardContactsRouter)} />
+                <Route path={DashboardRoute.Settings} component={withErrorBoundary(DashboardSettingsRouter)} />
+                <Route path={DashboardRoute.Setup} component={withErrorBoundary(DashboardSetupRouter)} />
                 {/* // TODO: this page should be boardless */}
-                <Route path={DashboardRoute.RequestPermission} component={RequestPermissionPage} />
+                <Route path={DashboardRoute.RequestPermission} component={withErrorBoundary(RequestPermissionPage)} />
                 <Redirect path="*" to={Flags.has_no_browser_tab_ui ? DashboardRoute.Nav : DashboardRoute.Personas} />
             </Switch>
         </>,
@@ -218,7 +217,9 @@ function DashboardPluginUI() {
     return (
         <>
             {[...PluginUI.values()].map((x) => (
-                <PluginDashboardInspectorForEach key={x.identifier} config={x} />
+                <ErrorBoundary>
+                    <PluginDashboardInspectorForEach key={x.identifier} config={x} />
+                </ErrorBoundary>
             ))}
         </>
     )
@@ -226,16 +227,9 @@ function DashboardPluginUI() {
 //#endregion
 
 export function Dashboard() {
-    const preferDarkScheme = useMediaQuery('(prefers-color-scheme: dark)')
-    const appearance = useValueRef(appearanceSettings)
     return (
         <I18nextProvider i18n={i18nNextInstance}>
-            <ThemeProvider
-                theme={
-                    (preferDarkScheme && appearance === Appearance.default) || appearance === Appearance.dark
-                        ? MaskbookDarkTheme
-                        : MaskbookLightTheme
-                }>
+            <ThemeProvider theme={useMaskbookTheme()}>
                 <DashboardSnackbarProvider>
                     <NoSsr>
                         <Router>

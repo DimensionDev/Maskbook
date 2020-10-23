@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 import { MoreHorizontal } from 'react-feather'
 import { makeStyles, Theme, createStyles, DialogContent, GridList, GridListTile } from '@material-ui/core'
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'

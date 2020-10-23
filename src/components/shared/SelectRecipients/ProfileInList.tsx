@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useCallback } from 'react'
 import classNames from 'classnames'
 import { makeStyles, Theme, ListItem, ListItemText, Checkbox, ListItemAvatar } from '@material-ui/core'
+import Highlighter from 'react-highlight-words'
 import { useStylesExtends } from '../../custom-ui-helper'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import type { Profile } from '../../../database'
@@ -18,10 +19,16 @@ const useStyle = makeStyles((theme: Theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
+    hightlighted: {
+        backgroundColor: 'inherit',
+        color: 'inherit',
+        fontWeight: 'bold',
+    },
 }))
 
 export interface ProfileInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
     item: Profile
+    search?: string
     checked?: boolean
     disabled?: boolean
     onChange: (ev: ChangeEvent<HTMLInputElement>, checked: boolean) => void
@@ -32,7 +39,7 @@ export function ProfileInList(props: ProfileInListProps) {
     const classes = useStylesExtends(useStyle(), props)
     const profile = props.item
     const name = profile.nickname || profile.identifier.userId
-    const secondary = profile.linkedPersona?.fingerprint ? profile.linkedPersona?.fingerprint.toLowerCase() : undefined
+    const secondary = profile.linkedPersona?.fingerprint ? profile.linkedPersona?.fingerprint.toLowerCase() : ''
     const onClick = useCallback((ev) => props.onChange(ev, !props.checked), [props])
     return (
         <ListItem
@@ -50,8 +57,22 @@ export function ProfileInList(props: ProfileInListProps) {
                     primary: classes.overflow,
                     secondary: classes.overflow,
                 }}
-                primary={name}
-                secondary={secondary}
+                primary={
+                    <Highlighter
+                        highlightClassName={classes.hightlighted}
+                        searchWords={[props.search ?? '']}
+                        autoEscape={true}
+                        textToHighlight={name}
+                    />
+                }
+                secondary={
+                    <Highlighter
+                        highlightClassName={classes.hightlighted}
+                        searchWords={[props.search ?? '']}
+                        autoEscape={true}
+                        textToHighlight={secondary}
+                    />
+                }
             />
         </ListItem>
     )

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import Fuse from 'fuse.js'
 import {
     List,
     ListItem,
@@ -18,7 +19,6 @@ import { ProfileInList } from './ProfileInList'
 import type { Profile } from '../../../database'
 import { DialogDismissIconUI } from '../../InjectedComponents/DialogDismissIcon'
 import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
-import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -58,21 +58,18 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { items, disabledItems } = props
     const [search, setSearch] = React.useState('')
-    const [, inputRef] = useCapturedInput((newText) => {
-        setSearch(newText)
-    }, [])
-    const searchFilter = React.useCallback(
-        (item: Profile) => {
-            if (search === '') return true
-            return (
-                !!item.identifier.userId.toLowerCase().match(search.toLowerCase()) ||
-                !!item.linkedPersona?.fingerprint.toLowerCase().match(search.toLowerCase()) ||
-                !!(item.nickname || '').toLowerCase().match(search.toLowerCase())
-            )
-        },
-        [search],
-    )
-    const itemsAfterSearch = items.filter(searchFilter)
+    const itemsAfterSearch = React.useMemo(() => {
+        const fuse = new Fuse(items, {
+            keys: ['identifier.userId', 'linkedPersona.fingerprint', 'nickname'],
+            isCaseSensitive: false,
+            ignoreLocation: true,
+            threshold: 0,
+        })
+
+        return search === '' ? items : fuse.search(search).map((item) => item.item)
+    }, [search, items])
+    const LIST_ITEM_HEIGHT = 56
+
     return (
         <ShadowRootDialog
             className={classes.dialog}
@@ -103,12 +100,12 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             </DialogTitle>
             <InputBase
                 value={search}
-                inputRef={inputRef}
+                onChange={(e) => setSearch(e.target.value)}
                 className={classes.input}
                 placeholder={t('search_box_placeholder')}
             />
             <DialogContent className={classes.content}>
-                <List dense>
+                <List style={{ height: items.length * LIST_ITEM_HEIGHT }} dense>
                     {itemsAfterSearch.length === 0 ? (
                         <ListItem>
                             <ListItemText primary={t('no_search_result')} />
@@ -118,6 +115,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                             <ProfileInList
                                 key={item.identifier.toText()}
                                 item={item}
+                                search={search}
                                 checked={
                                     props.selected.some((x) => x.identifier.equals(item.identifier)) ||
                                     disabledItems?.includes(item)
