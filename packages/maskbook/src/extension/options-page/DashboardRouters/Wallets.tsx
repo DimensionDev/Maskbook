@@ -113,10 +113,7 @@ export default function DashboardWalletsRouter() {
     }, [selectedWallet])
 
     // show provider connect dialog
-    const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
-        WalletMessageCenter,
-        'selectProviderDialogUpdated',
-    )
+    const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
 
     const onConnect = useCallback(() => {
         setOpen({

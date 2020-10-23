@@ -36,13 +36,9 @@ export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps)
     const [URI, setURI] = useState('')
 
     //#region remote controlled dialog logic
-    const [open, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'walletConnectQRCodeDialogUpdated'>(
-        WalletMessageCenter,
-        'walletConnectQRCodeDialogUpdated',
-        (ev) => {
-            if (ev.open) setURI(ev.uri)
-        },
-    )
+    const [open, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'walletConnectQRCodeDialogUpdated', (ev) => {
+        if (ev.open) setURI(ev.uri)
+    })
     const onClose = useCallback(() => {
         setOpen({
             open: false,
