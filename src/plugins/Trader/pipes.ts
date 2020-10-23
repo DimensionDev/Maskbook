@@ -1,4 +1,4 @@
-import { Currency, DataProvider, SwapProvider } from './types'
+import { Coin, Currency, DataProvider, SwapProvider } from './types'
 import { unreachable } from '../../utils/utils'
 
 export function resolveCurrencyName(currency: Currency) {
@@ -28,6 +28,19 @@ export function resolveDataProviderLink(dataProvider: DataProvider) {
             return 'https://coinmarketcap.com/'
         default:
             unreachable(dataProvider)
+    }
+}
+
+export function resolveDataProviderCoinLink(dataProvider: DataProvider, coin: Coin) {
+    switch (dataProvider) {
+        case DataProvider.COIN_MARKET_CAP:
+            return `https://coinmarketcap.com/currencies/${coin.name.toLowerCase()}`
+        case DataProvider.COIN_GECKO:
+            // TODO:
+            // `https://www.coingecko.com/en/coins/${coin.name.toLowerCase()}`
+            return ''
+        default:
+            return ''
     }
 }
 
