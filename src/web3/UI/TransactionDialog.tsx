@@ -19,11 +19,7 @@ import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
 import { getActivatedUI } from '../../social-network/ui'
-import {
-    useTwitterButton,
-    useTwitterCloseButton,
-    useTwitterDialog,
-} from '../../social-network-provider/twitter.com/utils/theme'
+import { useTwitterCloseButton, useTwitterDialog } from '../../social-network-provider/twitter.com/utils/theme'
 import { useChainId } from '../hooks/useChainState'
 import { TransactionState, TransactionStateType } from '../hooks/useTransactionState'
 import { resolveTransactionLinkOnEtherscan } from '../pipes'
@@ -198,7 +194,6 @@ export function TransactionDialog(props: TransactionDialogProps) {
     const ui = getActivatedUI()
     const twitterClasses = {
         ...useTwitterDialog(),
-        ...useTwitterButton(),
         ...useTwitterCloseButton(),
     }
 
