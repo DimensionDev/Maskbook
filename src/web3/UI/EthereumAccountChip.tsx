@@ -85,7 +85,7 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
         undefined,
         undefined,
         undefined,
-        t('copy_wallet_addr_success'),
+        t('copy_success_of_wallet_addr'),
     )
     //#endregion
 

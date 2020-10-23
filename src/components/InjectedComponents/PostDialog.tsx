@@ -265,23 +265,20 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 />
                             </SelectRecipientsUI>
                         </Box>
-                        {Flags.no_post_image_payload_support ? null : (
-                            <>
-                                <Typography style={{ marginBottom: 10 }}>
-                                    {t('post_dialog__more_options_title')}
-                                </Typography>
-                                <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
-                                    <ClickableChip
-                                        checked={props.imagePayload}
-                                        ChipProps={{
-                                            label: t('post_dialog__image_payload'),
-                                            onClick: () => props.onImagePayloadSwitchChanged(!props.imagePayload),
-                                            'data-testid': 'image_chip',
-                                        }}
-                                    />
-                                </Box>
-                            </>
-                        )}
+
+                        <>
+                            <Typography style={{ marginBottom: 10 }}>{t('post_dialog__more_options_title')}</Typography>
+                            <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                                <ClickableChip
+                                    checked={props.imagePayload}
+                                    ChipProps={{
+                                        label: t('post_dialog__image_payload'),
+                                        onClick: () => props.onImagePayloadSwitchChanged(!props.imagePayload),
+                                        'data-testid': 'image_chip',
+                                    }}
+                                />
+                            </Box>
+                        </>
                     </DialogContent>
                     <DialogActions className={classes.actions}>
                         {isTypedMessageText(props.postContent) && props.maxLength ? (
