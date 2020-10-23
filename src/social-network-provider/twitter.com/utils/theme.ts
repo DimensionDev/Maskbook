@@ -1,34 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles'
 import { Theme, fade } from '@material-ui/core'
 
-export const useTwitterButton = makeStyles((theme: Theme) => ({
-    button: {
-        fontWeight: 'bold',
-        minHeight: 39,
-        borderRadius: 9999,
-        boxShadow: 'none',
-        textTransform: 'initial',
-        backgroundColor: theme.palette.primary.main,
-        '&:hover': {
-            boxShadow: 'none',
-            backgroundColor: theme.palette.primary.dark,
-        },
-        '&[disabled]': {
-            boxShadow: 'none',
-            opacity: 0.5,
-            color: 'rgb(255, 255, 255)',
-            backgroundColor: theme.palette.primary.light,
-        },
-        [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
-            '&': {
-                height: '28px !important',
-                minHeight: 'auto !important',
-                padding: '0 14px !important',
-            },
-        },
-    },
-}))
-
 export const useTwitterCloseButton = makeStyles((theme: Theme) => ({
     close: {
         color: theme.palette.primary.main,

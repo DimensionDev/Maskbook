@@ -18,11 +18,7 @@ import ShadowRootDialog from '../../../../utils/shadow-root/ShadowRootDialog'
 import { TradeSummary, TradeSummaryProps } from './TradeSummary'
 import type { Token } from '../../../../web3/types'
 import { getActivatedUI } from '../../../../social-network/ui'
-import {
-    useTwitterDialog,
-    useTwitterButton,
-    useTwitterCloseButton,
-} from '../../../../social-network-provider/twitter.com/utils/theme'
+import { useTwitterDialog, useTwitterCloseButton } from '../../../../social-network-provider/twitter.com/utils/theme'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
 import { TokenPanel } from './TokenPanel'
 import { useComputedTrade } from '../../uniswap/useComputedTrade'
@@ -180,7 +176,6 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const ui = getActivatedUI()
     const twitterClasses = {
         ...useTwitterDialog(),
-        ...useTwitterButton(),
         ...useTwitterCloseButton(),
     }
 

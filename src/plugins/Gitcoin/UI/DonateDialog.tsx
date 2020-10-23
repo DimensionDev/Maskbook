@@ -15,11 +15,7 @@ import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { getActivatedUI } from '../../../social-network/ui'
-import {
-    useTwitterDialog,
-    useTwitterButton,
-    useTwitterCloseButton,
-} from '../../../social-network-provider/twitter.com/utils/theme'
+import { useTwitterDialog, useTwitterCloseButton } from '../../../social-network-provider/twitter.com/utils/theme'
 import BigNumber from 'bignumber.js'
 import { Trans } from 'react-i18next'
 import type { EthereumTokenType, Token } from '../../../web3/types'
@@ -265,7 +261,6 @@ export function DonateDialog(props: DonateDialogProps) {
     const ui = getActivatedUI()
     const twitterClasses = {
         ...useTwitterDialog(),
-        ...useTwitterButton(),
         ...useTwitterCloseButton(),
     }
 

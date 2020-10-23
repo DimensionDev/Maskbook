@@ -14,11 +14,7 @@ import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
-import {
-    useTwitterDialog,
-    useTwitterButton,
-    useTwitterCloseButton,
-} from '../../social-network-provider/twitter.com/utils/theme'
+import { useTwitterDialog, useTwitterCloseButton } from '../../social-network-provider/twitter.com/utils/theme'
 import { getActivatedUI } from '../../social-network/ui'
 import type { Token } from '../types'
 import { FixedTokenList } from '../../extension/options-page/DashboardComponents/FixedTokenList'
@@ -142,7 +138,6 @@ export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
     const ui = getActivatedUI()
     const twitterClasses = {
         ...useTwitterDialog(),
-        ...useTwitterButton(),
         ...useTwitterCloseButton(),
     }
 
