@@ -103,9 +103,3 @@ export const useTwitterMaskbookIcon = makeStyles((theme: Theme) => ({
         padding: theme.spacing(1),
     },
 }))
-
-export const useTwitterLabel = makeStyles({
-    label: {
-        fontSize: 12,
-    },
-})
