@@ -69,7 +69,11 @@ const FileServiceDialog: React.FC<Props> = (props) => {
                 </Exchange>
             </DialogContent>
             <DialogActions classes={{ root: classes.actions }}>
-                <Button classes={{ root: classes.button }} onClick={onInsert} disabled={isNil(selectedFileInfo)}>
+                <Button
+                    variant="contained"
+                    classes={{ root: classes.button }}
+                    onClick={onInsert}
+                    disabled={isNil(selectedFileInfo)}>
                     {t('plugin_file_service_on_insert')}
                 </Button>
             </DialogActions>

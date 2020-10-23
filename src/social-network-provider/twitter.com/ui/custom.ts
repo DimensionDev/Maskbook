@@ -62,17 +62,6 @@ function useTheme() {
                     fontWeight: 'bold',
                     minHeight: 39,
                     boxShadow: 'none',
-                    backgroundColor: theme.palette.primary.main,
-                    '&:hover': {
-                        boxShadow: 'none',
-                        backgroundColor: theme.palette.primary.dark,
-                    },
-                    '&$disabled': {
-                        boxShadow: 'none',
-                        opacity: 0.5,
-                        color: 'rgb(255, 255, 255)',
-                        backgroundColor: theme.palette.primary.light,
-                    },
                     [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
                         '&': {
                             height: '28px !important',

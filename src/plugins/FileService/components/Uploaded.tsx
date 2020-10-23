@@ -42,9 +42,6 @@ const useStyles = makeStyles({
     info: {
         margin: 0,
     },
-    back: {
-        color: '#2CA4EF',
-    },
 })
 
 export const Uploaded: React.FC = () => {
@@ -83,7 +80,7 @@ export const Uploaded: React.FC = () => {
                         <span>{'  '}</span>
                         <span>{formatDateTime(state.createdAt)}</span>
                     </p>
-                    <Button className={classes.back} onClick={onBack}>
+                    <Button onClick={onBack} variant="contained">
                         {t('plugin_file_service_on_change_file')}
                     </Button>
                 </Typography>

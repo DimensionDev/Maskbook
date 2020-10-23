@@ -1,6 +1,7 @@
 const is_iOSApp = process.env.target === 'safari' && process.env.architecture === 'app'
 const isAndroidApp = process.env.architecture === 'app' && process.env.target === 'firefox'
 
+const webOnly = process.env.architecture === 'web' || process.env.NODE_ENV === 'development'
 // TODO: In future, we can turn this object into a Proxy to receive flags from remote
 export const Flags = {
     __raw__: {
@@ -29,15 +30,14 @@ export const Flags = {
     support_eth_network_switch:
         process.env.NODE_ENV === 'development' || process.env.architecture === 'app' || process.env.build === 'beta',
     //#region Experimental features
-    trader_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
-    transak_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
+    trader_enabled: webOnly,
     trader_all_api_cached_enabled: process.env.NODE_ENV === 'development',
     trader_uniswap_auto_refresh_enabled: true,
-    poll_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
+    poll_enabled: webOnly,
     file_service_create_enabled: true,
     matrix_based_service_enabled: process.env.NODE_ENV === 'development',
-    wallet_connect_support_enabled: process.env.architecture === 'web',
-    metamask_support_enabled: process.env.architecture === 'web',
+    wallet_connect_support_enabled: webOnly,
+    metamask_support_enabled: webOnly,
     //#endregion
 
     //#region Functionality missing / broken
