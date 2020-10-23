@@ -2,7 +2,6 @@ import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeArrayBuffer } from '@dimensiondev/kit'
 import { Checkbox, FormControlLabel, makeStyles, Typography, Link } from '@material-ui/core'
 import { isNil } from 'lodash-es'
-import { useSnackbar } from 'notistack'
 import React from 'react'
 import { Trans } from 'react-i18next'
 import { useHistory } from 'react-router'
@@ -35,16 +34,14 @@ const useStyles = makeStyles((theme) => ({
         '& span': {
             fontSize: 12,
             lineHeight: 1.75,
-            color: theme.palette.grey[600],
         },
     },
     legalText: {
         userSelect: 'none',
         fontSize: 12,
         lineHeight: 1.75,
-        color: theme.palette.grey[600],
+        color: theme.palette.text.hint,
         '& a': {
-            color: '#2CA4EF',
             textDecoration: 'none',
         },
     },
@@ -53,19 +50,18 @@ const useStyles = makeStyles((theme) => ({
 export const Upload: React.FC = () => {
     const { t } = useI18N()
     const classes = useStyles()
-    const snackbar = useSnackbar()
     const history = useHistory()
     const [encrypted, setEncrypted] = React.useState(true)
-    const recents = useAsync(() => Services.Plugin.invokePlugin(pluginId, 'getRecentFiles'), [])
+    const recent = useAsync(() => Services.Plugin.invokePlugin(pluginId, 'getRecentFiles'), [])
     const onFile = async (file: File) => {
-        let key
+        let key: string | undefined = undefined
         if (encrypted) {
             key = makeFileKey()
         }
         const block = new Uint8Array(await file.arrayBuffer())
         const checksum = encodeArrayBuffer(await Attachment.checksum(block))
         const item = await Services.Plugin.invokePlugin(pluginId, 'getFileInfo', checksum)
-        if (isNil(item)) {
+        if (isNil(item) && key) {
             history.replace(FileRouter.uploading, {
                 key,
                 name: file.name,
@@ -78,17 +74,11 @@ export const Upload: React.FC = () => {
             history.replace(FileRouter.uploaded, item)
         }
     }
-    const onMore = () => {
-        // TODO: open new tab
-        // show a selectable list
-        // not started any designed
-        snackbar.enqueueSnackbar(t('plugin_file_service_on_show_more'))
-    }
     return (
         <section className={classes.container}>
             <section className={classes.upload}>
                 <UploadDropArea maxFileSize={MAX_FILE_SIZE} onFile={onFile} />
-                <RecentFiles files={recents.value ?? []} onMore={onMore} />
+                <RecentFiles files={recent.value ?? []} />
             </section>
             <section className={classes.legal}>
                 <FormControlLabel
