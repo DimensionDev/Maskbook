@@ -5,10 +5,6 @@ import {
     InputBase,
     Button,
     Typography,
-    IconButton,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
     Box,
     Chip,
     ThemeProvider,
@@ -17,6 +13,8 @@ import {
     Tooltip,
     CircularProgressProps,
     CircularProgress,
+    DialogContent,
+    DialogActions,
 } from '@material-ui/core'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useStylesExtends, or } from '../custom-ui-helper'
@@ -27,7 +25,6 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
-import { DialogDismissIconUI } from './DialogDismissIcon'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import {
     TypedMessage,
@@ -40,13 +37,13 @@ import { EthereumTokenType } from '../../web3/types'
 import { isDAI, isOKB } from '../../web3/helpers'
 import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/plugin'
 import { Flags } from '../../utils/flags'
 import { Result } from 'ts-results'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
+import { InjectedDialog } from '../shared/InjectedDialog'
 
 const defaultTheme = {}
 
@@ -61,31 +58,9 @@ const useStyles = makeStyles({
         fontSize: 18,
         minHeight: '8em',
     },
-    title: {
-        marginLeft: 6,
-    },
-    actions: {
-        paddingLeft: 26,
-    },
 })
 
-export interface PostDialogUIProps
-    extends withClasses<
-        | KeysInferFromUseStyles<typeof useStyles>
-        | 'root'
-        | 'dialog'
-        | 'backdrop'
-        | 'container'
-        | 'paper'
-        | 'input'
-        | 'header'
-        | 'content'
-        | 'actions'
-        | 'close'
-        | 'button'
-        | 'label'
-        | 'switch'
-    > {
+export interface PostDialogUIProps extends withClasses<never> {
     theme?: Theme
     open: boolean
     onlyMyself: boolean
@@ -147,7 +122,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
             if (!entries) return null
             return entries.map((opt, index) => {
                 return (
-                    <ErrorBoundary>
+                    <ErrorBoundary key={plugin.identifier + ' ' + index}>
                         <ClickableChip
                             key={plugin.identifier + ' ' + index}
                             ChipProps={{ label: opt.label, onClick: opt.onClick }}
@@ -158,37 +133,10 @@ export function PostDialogUI(props: PostDialogUIProps) {
         }).unwrapOr(null),
     )
     return (
-        <div className={classes.root}>
+        <>
             <ThemeProvider theme={props.theme ?? defaultTheme}>
-                <ShadowRootDialog
-                    className={classes.dialog}
-                    classes={{
-                        container: classes.container,
-                        paper: classes.paper,
-                    }}
-                    open={props.open}
-                    scroll="paper"
-                    fullWidth
-                    maxWidth="sm"
-                    disableAutoFocus
-                    disableEnforceFocus
-                    onEscapeKeyDown={props.onCloseButtonClicked}
-                    BackdropProps={{
-                        className: classes.backdrop,
-                    }}
-                    {...props.DialogProps}>
-                    <DialogTitle className={classes.header}>
-                        <IconButton
-                            classes={{ root: classes.close }}
-                            aria-label={t('post_dialog__dismiss_aria')}
-                            onClick={props.onCloseButtonClicked}>
-                            <DialogDismissIconUI />
-                        </IconButton>
-                        <Typography className={classes.title} display="inline" variant="inherit">
-                            {t('post_dialog__title')}
-                        </Typography>
-                    </DialogTitle>
-                    <DialogContent className={classes.content}>
+                <InjectedDialog open={props.open} onExit={props.onCloseButtonClicked} title={t('post_dialog__title')}>
+                    <DialogContent>
                         {metadataBadge}
                         <InputBase
                             classes={{
@@ -201,7 +149,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             fullWidth
                             multiline
                             placeholder={t('post_dialog__placeholder')}
-                            inputProps={{ className: classes.input, 'data-testid': 'text_textarea' }}
+                            inputProps={{ 'data-testid': 'text_textarea' }}
                         />
 
                         <Typography style={{ marginBottom: 10 }}>Plugins (Experimental)</Typography>
@@ -255,12 +203,11 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             </Box>
                         </>
                     </DialogContent>
-                    <DialogActions className={classes.actions}>
+                    <DialogActions>
                         {isTypedMessageText(props.postContent) && props.maxLength ? (
                             <CharLimitIndicator value={props.postContent.content.length} max={props.maxLength} />
                         ) : null}
                         <Button
-                            className={classes.button}
                             variant="contained"
                             disabled={props.postBoxButtonDisabled}
                             onClick={props.onFinishButtonClicked}
@@ -268,9 +215,9 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             {t('post_dialog__button')}
                         </Button>
                     </DialogActions>
-                </ShadowRootDialog>
+                </InjectedDialog>
             </ThemeProvider>
-        </div>
+        </>
     )
 }
 

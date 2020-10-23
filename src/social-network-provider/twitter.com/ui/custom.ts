@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { ValueRef, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { unstable_createMuiStrictModeTheme, ThemeProvider } from '@material-ui/core'
+import { unstable_createMuiStrictModeTheme, ThemeProvider, makeStyles } from '@material-ui/core'
 import { useMaskbookTheme } from '../../../utils/theme'
 import type { SocialNetworkUICustomUI } from '../../../social-network/ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
@@ -8,7 +8,9 @@ import { composeAnchorSelector } from '../utils/selector'
 import React from 'react'
 import { toRGB, getBackgroundColor, fromRGB, shade, isDark } from '../../../utils/theme-tools'
 import { Appearance } from '../../../settings/settings'
-import produce from 'immer'
+import produce, { setAutoFreeze } from 'immer'
+import type { InjectedDialogClassKey } from '../../../components/shared/InjectedDialog'
+import type { StyleRules } from '@material-ui/core'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
@@ -41,6 +43,7 @@ function useTheme() {
     })
     return useMemo(() => {
         const primaryColorRGB = fromRGB(primaryColor)!
+        setAutoFreeze(false)
         const TwitterTheme = produce(MaskbookTheme, (theme) => {
             theme.palette.background.paper = backgroundColor
             theme.palette.primary = {
@@ -64,6 +67,12 @@ function useTheme() {
                         boxShadow: 'none',
                         backgroundColor: theme.palette.primary.dark,
                     },
+                    '&$disabled': {
+                        boxShadow: 'none',
+                        opacity: 0.5,
+                        color: 'rgb(255, 255, 255)',
+                        backgroundColor: theme.palette.primary.light,
+                    },
                     [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
                         '&': {
                             height: '28px !important',
@@ -72,12 +81,6 @@ function useTheme() {
                         },
                     },
                 },
-                disabled: {
-                    boxShadow: 'none',
-                    opacity: 0.5,
-                    color: 'rgb(255, 255, 255)',
-                    backgroundColor: theme.palette.primary.light,
-                },
             }
             theme.overrides!.MuiTab = {
                 root: {
@@ -85,6 +88,7 @@ function useTheme() {
                 },
             }
         })
+        setAutoFreeze(true)
         return unstable_createMuiStrictModeTheme(TwitterTheme)
     }, [MaskbookTheme, backgroundColor, primaryColor])
 }
@@ -93,7 +97,84 @@ export function TwitterThemeProvider(props: Required<React.PropsWithChildren<{}>
     if (!process.env.STORYBOOK) throw new Error('This API is only for Storybook!')
     return React.createElement(ThemeProvider, { theme: useTheme(), ...props })
 }
-
+const useInjectedDialogClassesOverwrite = makeStyles((theme) =>
+    createStyles<InjectedDialogClassKey>({
+        root: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                display: 'block !important',
+            },
+        },
+        container: {
+            alignItems: 'center',
+        },
+        paper: {
+            width: '600px !important',
+            boxShadow: 'none',
+            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                '&': {
+                    display: 'block !important',
+                    borderRadius: '0 !important',
+                },
+            },
+        },
+        dialogTitle: {
+            display: 'flex',
+            alignItems: 'center',
+            padding: '10px 15px',
+            borderBottom: `1px solid ${theme.palette.type === 'dark' ? '#2f3336' : '#ccd6dd'}`,
+            '& > h2': {
+                display: 'inline-block',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+            },
+            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                '&': {
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    maxWidth: 600,
+                    margin: '0 auto',
+                    padding: '7px 14px 6px 11px !important',
+                },
+            },
+        },
+        dialogContent: {
+            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                display: 'flex',
+                flexDirection: 'column',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px !important',
+            },
+        },
+        dialogActions: {
+            padding: '10px 15px',
+            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px !important',
+            },
+        },
+        dialogTitleTypography: {
+            verticalAlign: 'middle',
+            marginLeft: 6,
+        },
+    }),
+)
 export const twitterUICustomUI: SocialNetworkUICustomUI = {
     useTheme,
+    componentOverwrite: {
+        InjectedDialog: {
+            classes: useInjectedDialogClassesOverwrite,
+        },
+    },
+}
+function createStyles<ClassKey extends string>(styles: Partial<StyleRules<ClassKey, {}>>): StyleRules<ClassKey> {
+    return styles as any
 }

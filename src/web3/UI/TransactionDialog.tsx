@@ -3,8 +3,6 @@ import {
     makeStyles,
     Theme,
     createStyles,
-    DialogTitle,
-    IconButton,
     Typography,
     DialogContent,
     DialogActions,
@@ -16,29 +14,13 @@ import WarningIcon from '@material-ui/icons/Warning'
 import DoneIcon from '@material-ui/icons/Done'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useI18N } from '../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
-import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
-import { getActivatedUI } from '../../social-network/ui'
-import { useTwitterCloseButton, useTwitterDialog } from '../../social-network-provider/twitter.com/utils/theme'
 import { useChainId } from '../hooks/useChainState'
 import { TransactionState, TransactionStateType } from '../hooks/useTransactionState'
 import { resolveTransactionLinkOnEtherscan } from '../pipes'
+import { InjectedDialog } from '../../components/shared/InjectedDialog'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        paper: {
-            width: '370px !important',
-        },
-        header: {
-            borderBottom: 'none',
-        },
-        content: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            padding: theme.spacing(6, 2),
-        },
         icon: {
             fontSize: 64,
             width: 64,
@@ -54,28 +36,10 @@ const useStyles = makeStyles((theme: Theme) =>
         secondary: {
             fontSize: 14,
         },
-        button: {
-            paddingTop: 12,
-            paddingBottom: 12,
-        },
     }),
 )
 
-interface TransactionDialogUIProps
-    extends withClasses<
-        | KeysInferFromUseStyles<typeof useStyles>
-        | 'root'
-        | 'dialog'
-        | 'backdrop'
-        | 'container'
-        | 'paper'
-        | 'header'
-        | 'title'
-        | 'content'
-        | 'actions'
-        | 'close'
-        | 'button'
-    > {
+interface TransactionDialogUIProps extends withClasses<never> {
     open: boolean
     state: TransactionState
     summary: React.ReactNode
@@ -90,29 +54,9 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
     const chainId = useChainId()
 
     return (
-        <div className={classes.root}>
-            <ShadowRootDialog
-                className={classes.dialog}
-                classes={{
-                    container: classes.container,
-                    paper: classes.paper,
-                }}
-                open={open}
-                scroll="body"
-                fullWidth
-                maxWidth="sm"
-                disableAutoFocus
-                disableEnforceFocus
-                onEscapeKeyDown={onClose}
-                BackdropProps={{
-                    className: classes.backdrop,
-                }}>
-                <DialogTitle className={classes.header}>
-                    <IconButton classes={{ root: classes.close }} onClick={onClose}>
-                        <DialogDismissIconUI />
-                    </IconButton>
-                </DialogTitle>
-                <DialogContent className={classes.content}>
+        <>
+            <InjectedDialog open={open} onExit={onClose} title="Transaction">
+                <DialogContent>
                     {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ? (
                         <>
                             <CircularProgress size={64} color="primary" />
@@ -171,35 +115,19 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                 </DialogContent>
                 {state.type !== TransactionStateType.UNKNOWN &&
                 state.type !== TransactionStateType.WAIT_FOR_CONFIRMING ? (
-                    <DialogActions className={classes.actions}>
-                        <Button
-                            className={classes.button}
-                            color="primary"
-                            size="large"
-                            variant="contained"
-                            fullWidth
-                            onClick={onClose}>
+                    <DialogActions>
+                        <Button color="primary" size="large" variant="contained" fullWidth onClick={onClose}>
                             {state.type === TransactionStateType.FAILED ? 'Dismiss' : 'Close'}
                         </Button>
                     </DialogActions>
                 ) : null}
-            </ShadowRootDialog>
-        </div>
+            </InjectedDialog>
+        </>
     )
 }
 
 export interface TransactionDialogProps extends TransactionDialogUIProps {}
 
 export function TransactionDialog(props: TransactionDialogProps) {
-    const ui = getActivatedUI()
-    const twitterClasses = {
-        ...useTwitterDialog(),
-        ...useTwitterCloseButton(),
-    }
-
-    return ui.internalName === 'twitter' ? (
-        <TransactionDialogUI classes={twitterClasses} {...props} />
-    ) : (
-        <TransactionDialogUI {...props} />
-    )
+    return <TransactionDialogUI {...props} />
 }

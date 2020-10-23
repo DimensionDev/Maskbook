@@ -3,12 +3,12 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from '@material-ui/core'
 import type { Profile, Group } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
-import { PersonOrGroupInList, PersonOrGroupInListProps } from './PersonOrGroupInList'
-import { PersonOrGroupInChip, PersonOrGroupInChipProps } from './PersonOrGroupInChip'
+import { ProfileOrGroupInList, ProfileOrGroupInListProps } from './PersonOrGroupInList'
+import { ProfileOrGroupInChip, ProfileOrGroupInChipProps } from './PersonOrGroupInChip'
 import { ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import { useStylesExtends } from '../../custom-ui-helper'
-type PersonOrGroup = Group | Profile
-export interface SelectPeopleAndGroupsUIProps<ServeType extends Group | Profile = Group | Profile>
+type ProfileOrGroup = Group | Profile
+export interface SelectProfileAndGroupsUIProps<ServeType extends Group | Profile = Group | Profile>
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root'> {
     /** Omit myself in the UI and the selected result */
     ignoreMyself?: boolean
@@ -21,8 +21,8 @@ export interface SelectPeopleAndGroupsUIProps<ServeType extends Group | Profile 
     hideSelectNone?: boolean
     showAtNetwork?: boolean
     maxSelection?: number
-    PersonOrGroupInChipProps?: Partial<PersonOrGroupInChipProps>
-    PersonOrGroupInListProps?: Partial<PersonOrGroupInListProps>
+    ProfileOrGroupInChipProps?: Partial<ProfileOrGroupInChipProps>
+    ProfileOrGroupInListProps?: Partial<ProfileOrGroupInListProps>
 }
 const useStyles = makeStyles({
     selectedArea: {
@@ -34,15 +34,15 @@ const useStyles = makeStyles({
     input: { flex: 1, minWidth: '10em' },
     buttons: { marginLeft: 8, padding: '2px 6px' },
 })
-export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = PersonOrGroup>(
-    props: SelectPeopleAndGroupsUIProps<ServeType>,
+export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = ProfileOrGroup>(
+    props: SelectProfileAndGroupsUIProps<ServeType>,
 ) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const myself = useCurrentIdentity()
 
-    const items: PersonOrGroup[] = props.items
-    const selected: PersonOrGroup[] = props.selected
+    const items: ProfileOrGroup[] = props.items
+    const selected: ProfileOrGroup[] = props.selected
     const { frozenSelected, onSetSelected, disabled, ignoreMyself } = props
     const { hideSelectAll, hideSelectNone, showAtNetwork, maxSelection } = props
 
@@ -89,11 +89,11 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = Pers
     return (
         <div className={classes.root}>
             <Box display="flex" className={classes.selectedArea}>
-                {frozenSelected.map((x) => FrozenChip(x, props.PersonOrGroupInChipProps))}
+                {frozenSelected.map((x) => FrozenChip(x, props.ProfileOrGroupInChipProps))}
                 {selected
                     .filter((item) => !frozenSelected.includes(item as ServeType))
                     .map((item) => (
-                        <PersonOrGroupInChip
+                        <ProfileOrGroupInChip
                             disabled={disabled}
                             key={item.identifier.toText()}
                             item={item}
@@ -102,7 +102,7 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = Pers
                                     selected.filter((x) => !x.identifier.equals(item.identifier)) as ServeType[],
                                 )
                             }
-                            {...props.PersonOrGroupInChipProps}
+                            {...props.ProfileOrGroupInChipProps}
                         />
                     ))}
                 <InputBase
@@ -134,10 +134,10 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = Pers
             </Box>
         </div>
     )
-    function PeopleListItem(item: PersonOrGroup) {
+    function PeopleListItem(item: ProfileOrGroup) {
         if (ignoreMyself && myself && item.identifier.equals(myself.identifier)) return null
         return (
-            <PersonOrGroupInList
+            <ProfileOrGroupInList
                 showAtNetwork={showAtNetwork}
                 key={item.identifier.toText()}
                 item={item}
@@ -152,21 +152,21 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = Pers
                     else onSetSelected(selected.concat(item) as ServeType[])
                     setSearch('')
                 }}
-                {...props.PersonOrGroupInListProps}
+                {...props.ProfileOrGroupInListProps}
             />
         )
     }
 }
-SelectPeopleAndGroupsUI.defaultProps = {
+SelectProfileAndGroupsUI.defaultProps = {
     frozenSelected: [],
 }
-function FrozenChip(item: PersonOrGroup, additionalProps?: Partial<PersonOrGroupInChipProps>) {
-    return <PersonOrGroupInChip disabled key={item.identifier.toText()} item={item} {...additionalProps} />
+function FrozenChip(item: ProfileOrGroup, additionalProps?: Partial<ProfileOrGroupInChipProps>) {
+    return <ProfileOrGroupInChip disabled key={item.identifier.toText()} item={item} {...additionalProps} />
 }
 
-export function isPerson(x: PersonOrGroup): x is Profile {
+export function isPerson(x: ProfileOrGroup): x is Profile {
     return x.identifier instanceof ProfileIdentifier
 }
-export function isGroup(x: PersonOrGroup): x is Group {
+export function isGroup(x: ProfileOrGroup): x is Group {
     return x.identifier instanceof GroupIdentifier
 }

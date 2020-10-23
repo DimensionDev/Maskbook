@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { DecryptPost, DecryptPostProps } from './DecryptedPost/DecryptedPost'
 import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
-import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
 import { ProfileIdentifier } from '../../database/type'
 import type { Profile } from '../../database'
@@ -117,8 +116,8 @@ function PluginPostInspector() {
     return (
         <>
             {[...PluginUI.values()].map((x) => (
-                <ErrorBoundary>
-                    <PluginPostInspectorForEach key={x.identifier} config={x} />
+                <ErrorBoundary key={x.identifier}>
+                    <PluginPostInspectorForEach config={x} />
                 </ErrorBoundary>
             ))}
         </>

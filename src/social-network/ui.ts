@@ -15,6 +15,7 @@ import i18nNextInstance from '../utils/i18n-next'
 import type { ObservableWeakMap } from '../utils/ObservableMapSet'
 import type { PostInfo } from './PostInfo'
 import { Flags } from '../utils/flags'
+import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 
 if (!process.env.STORYBOOK) {
     OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
@@ -257,13 +258,15 @@ export interface SocialNetworkUIDataSources {
 }
 //#endregion
 //#region SocialNetworkUICustomUI
+export interface ComponentOverwriteConfig<Props extends withClasses<any>> {
+    classes?: () => Props extends withClasses<infer T> ? Partial<Record<T, string>> : never
+    props?: (props: Props) => Props
+}
 export interface SocialNetworkUICustomUI {
     /**
      * This is a React hook.
      *
      * Should follow the color scheme of the website.
-     *
-     * // Note: useMediaQuery('(prefers-color-scheme: dark)')
      */
     useTheme?(): Theme
     i18nOverwrite?: {
@@ -272,6 +275,9 @@ export interface SocialNetworkUICustomUI {
                 [P in keyof I18NStrings]: string
             }
         >
+    }
+    componentOverwrite?: {
+        InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps>
     }
 }
 //#endregion

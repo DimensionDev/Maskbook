@@ -1,14 +1,11 @@
 import React, { useCallback } from 'react'
-import { Button, createStyles, makeStyles } from '@material-ui/core'
+import { Button, createStyles, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
-import { useTwitterDialog } from '../../../social-network-provider/twitter.com/utils/theme'
-import { getActivatedUI } from '../../../social-network/ui'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { MaskbookWalletMessages, WalletMessageCenter } from '../messages'
-import { useSelectedWallet, useWallets } from '../hooks/useWallet'
+import { useWallets } from '../hooks/useWallet'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import type { WalletRecord } from '../database/types'
 import Services from '../../../extension/service'
@@ -16,51 +13,17 @@ import { DashboardRoute } from '../../../extension/options-page/Route'
 import { sleep } from '../../../utils/utils'
 import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import { currentSelectedWalletAddressSettings } from '../settings'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        paper: {
-            width: '450px !important',
-            padding: theme.spacing(2),
-        },
-        header: {
-            display: 'none',
-        },
-        content: {
-            overflow: 'auto',
-            maxHeight: 500,
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        footer: {
-            paddingTop: theme.spacing(1),
-            display: 'flex',
-            justifyContent: 'flex-end',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => createStyles({}))
 
-interface SelectWalletDialogUIProps
-    extends withClasses<
-        | KeysInferFromUseStyles<typeof useStyles>
-        | 'root'
-        | 'dialog'
-        | 'backdrop'
-        | 'container'
-        | 'paper'
-        | 'header'
-        | 'content'
-        | 'footer'
-    > {}
+interface SelectWalletDialogUIProps extends withClasses<never> {}
 
 function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const wallets = useWallets()
-    const selectedWallet = useSelectedWallet()
 
     //#region remote controlled dialog logic
     const [open, setSelectWalletDialogOpen] = useRemoteControlledDialog<
@@ -74,10 +37,13 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     }, [setSelectWalletDialogOpen])
     //#endregion
 
-    const onSelect = useCallback((wallet: WalletRecord) => {
-        currentSelectedWalletAddressSettings.value = wallet.address
-        onClose()
-    }, [])
+    const onSelect = useCallback(
+        (wallet: WalletRecord) => {
+            currentSelectedWalletAddressSettings.value = wallet.address
+            onClose()
+        },
+        [onClose],
+    )
 
     //#region create new wallet
     const history = useHistory()
@@ -86,7 +52,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
         await sleep(100)
         if (GetContext() === 'options') history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
         else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
-    }, [history])
+    }, [history, onClose])
     //#endregion
 
     //#region connect wallet
@@ -104,57 +70,28 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     //#endregion
 
     return (
-        <div className={classes.root}>
-            <ShadowRootDialog
-                className={classes.dialog}
-                classes={{
-                    container: classes.container,
-                    paper: classes.paper,
-                }}
-                open={open}
-                scroll="body"
-                fullWidth
-                maxWidth="sm"
-                disableAutoFocus
-                disableEnforceFocus
-                onEscapeKeyDown={onClose}
-                onBackdropClick={onClose}
-                BackdropProps={{
-                    className: classes.backdrop,
-                }}>
-                <div className={classes.header}></div>
-                <div className={classes.content}>
+        <>
+            <InjectedDialog open={open} onExit={onClose} title="Select Wallet">
+                <DialogContent>
                     {wallets.map((wallet) => (
-                        <WalletInList
-                            key={wallet.address}
-                            disabled={wallet.address === selectedWallet?.address}
-                            wallet={wallet}
-                            onClick={() => onSelect(wallet)}></WalletInList>
+                        <WalletInList key={wallet.address} wallet={wallet} onClick={() => onSelect(wallet)} />
                     ))}
-                </div>
-                <div className={classes.footer}>
+                </DialogContent>
+                <DialogActions>
                     <Button variant="text" onClick={onCreate}>
                         {t('create_wallet')}
                     </Button>
                     <Button variant="text" onClick={onConnect}>
                         {t('connect_wallet')}
                     </Button>
-                </div>
-            </ShadowRootDialog>
-        </div>
+                </DialogActions>
+            </InjectedDialog>
+        </>
     )
 }
 
 export interface SelectWalletDialogProps extends SelectWalletDialogUIProps {}
 
 export function SelectWalletDialog(props: SelectWalletDialogProps) {
-    const ui = getActivatedUI()
-    const twitterClasses = {
-        ...useTwitterDialog(),
-    }
-    return ui.internalName === 'twitter' ? (
-        <SelectWalletDialogUI classes={twitterClasses} {...props} />
-    ) : (
-        <SelectWalletDialogUI {...props} />
-    )
+    return <SelectWalletDialogUI {...props} />
 }

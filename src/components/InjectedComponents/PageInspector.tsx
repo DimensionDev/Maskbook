@@ -47,8 +47,8 @@ export function PageInspector(props: PageInspectorProps) {
         <>
             {JSX}
             {[...PluginUI.values()].map((x) => (
-                <ErrorBoundary>
-                    <PluginPageInspectorForEach key={x.identifier} config={x} />
+                <ErrorBoundary key={x.identifier}>
+                    <PluginPageInspectorForEach config={x} />
                 </ErrorBoundary>
             ))}
         </>

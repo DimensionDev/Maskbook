@@ -217,8 +217,8 @@ function DashboardPluginUI() {
     return (
         <>
             {[...PluginUI.values()].map((x) => (
-                <ErrorBoundary>
-                    <PluginDashboardInspectorForEach key={x.identifier} config={x} />
+                <ErrorBoundary key={x.identifier}>
+                    <PluginDashboardInspectorForEach config={x} />
                 </ErrorBoundary>
             ))}
         </>
