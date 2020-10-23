@@ -67,21 +67,27 @@ const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
 export default function FooterLine() {
     const { t } = useI18N()
     const classes = useStyles()
-    const { version } = globalThis.browser?.runtime.getManifest() ?? {}
-    const versionLink = t('version_link', { tag: process.env.VERSION })
-
     const [aboutDialog, openAboutDialog] = useModal(DashboardAboutDialog)
-
+    const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
+    const openVersionLink = (event: React.MouseEvent) => {
+        // `MouseEvent.prototype.metaKey` on macOS (<kbd>Command</kbd>), Windows (<kbd>Windows</kbd>)
+        if (process.env.build === 'stable' && event.metaKey === false) {
+            open(t('version_of_release', { tag: `v${version}` }))
+        } else {
+            open(t('version_of_hash', { hash: process.env.COMMIT_HASH }))
+        }
+    }
     return (
         <>
-            <Breadcrumbs className={classes.footerButtons} separator=" " aria-label="breadcrumb">
+            <Breadcrumbs className={classes.footerButtons} separator="-" aria-label="breadcrumb">
                 <FooterLink href="https://mask.io">Mask.io</FooterLink>
                 <FooterLink onClick={openAboutDialog}>{t('about')}</FooterLink>
-                <FooterLink href={versionLink} title={process.env.VERSION}>
-                    {t('version')}{' '}
-                    {process.env.build === 'stable'
-                        ? version
-                        : `${version}-${process.env.build}-${process.env.COMMIT_HASH.slice(0, 6)}`}
+                <FooterLink onClick={openVersionLink} title={process.env.VERSION}>
+                    {t(process.env.build === 'stable' ? 'version_of_stable' : 'version_of_unstable', {
+                        version,
+                        build: process.env.build,
+                        hash: process.env.COMMIT_HASH,
+                    })}
                 </FooterLink>
                 <FooterLink href={t('dashboard_mobile_test_link')}>{t('dashboard_mobile_test')}</FooterLink>
                 <FooterLink href={t('dashboard_source_code_link')}>{t('dashboard_source_code')}</FooterLink>
