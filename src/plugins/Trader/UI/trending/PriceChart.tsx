@@ -18,7 +18,8 @@ const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
         root: {
             position: 'relative',
-            cursor: ({ stats }: PriceChartProps) => (stats.length ? 'pointer' : 'default'),
+            cursor: ({ stats, cmcCurrencyURL }: PriceChartProps) =>
+                stats.length && cmcCurrencyURL ? 'pointer' : 'default',
         },
         svg: {},
         progress: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export interface PriceChartProps {
     stats: Stat[]
-    cmcCurrencyURL: string
+    cmcCurrencyURL?: string
     loading?: boolean
     width?: number
     height?: number
@@ -62,7 +63,9 @@ export function PriceChart(props: PriceChartProps) {
             className={classes.root}
             style={{ width: DEFAULT_DIMENSION.width, height: DEFAULT_DIMENSION.height }}
             onClick={() => {
-                props.stats.length && window.open(props.cmcCurrencyURL, '_blank', 'noopener noreferrer')
+                props.stats.length &&
+                    props.cmcCurrencyURL &&
+                    window.open(props.cmcCurrencyURL, '_blank', 'noopener noreferrer')
             }}>
             {props.loading ? <CircularProgress className={classes.progress} color="primary" size={15} /> : null}
             {props.stats.length ? (

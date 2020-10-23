@@ -276,7 +276,8 @@ export function TrendingView(props: TrendingViewProps) {
 
     const { coin, market, tickers } = trending
     const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
-    const cmcCurrencyURL = `${CMC_CURRENCIES_URL}/${coin.name.toLowerCase()}`
+    const cmcCurrencyURL =
+        dataProvider === DataProvider.COIN_MARKET_CAP ? `${CMC_CURRENCIES_URL}/${coin.name.toLowerCase()}` : undefined
 
     return (
         <Card className={classes.root} elevation={0} component="article">
