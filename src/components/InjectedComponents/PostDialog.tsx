@@ -301,6 +301,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
             {!process.env.STORYBOOK && (
                 <RedPacketDialog
                     classes={classes}
+                    theme={props.theme}
                     open={props.open && redPacketDialogOpen}
                     onConfirm={() => setRedPacketDialogOpen(false)}
                     onDecline={() => setRedPacketDialogOpen(false)}

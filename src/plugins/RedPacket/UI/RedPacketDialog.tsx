@@ -1,5 +1,14 @@
 import React, { useState, useCallback } from 'react'
-import { makeStyles, DialogTitle, IconButton, DialogContent, Typography, DialogProps } from '@material-ui/core'
+import {
+    makeStyles,
+    DialogTitle,
+    IconButton,
+    DialogContent,
+    Typography,
+    DialogProps,
+    Theme,
+    ThemeProvider,
+} from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
@@ -9,7 +18,7 @@ import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { RedPacketMetaKey } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { RedPacketForm } from './RedPacketForm'
-import { RedPacketBacklogList, RedPacketOutboundList } from './RedPacketList'
+import { RedPacketBacklogList } from './RedPacketList'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import Services from '../../../extension/service'
@@ -31,10 +40,13 @@ interface RedPacketDialogProps
         | 'switch'
     > {
     open: boolean
+    theme?: Theme
     onConfirm: (opt?: RedPacketJSONPayload | null) => void
     onDecline: () => void
     DialogProps?: Partial<DialogProps>
 }
+
+const defaultTheme = {}
 
 const useStyles = makeStyles({
     MUIInputRoot: {
@@ -99,28 +111,30 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }
 
     return (
-        <ShadowRootDialog
-            className={classes.dialog}
-            classes={{ container: classes.container, paper: classes.paper }}
-            open={props.open}
-            scroll="paper"
-            fullWidth
-            maxWidth="sm"
-            disableAutoFocus
-            disableEnforceFocus
-            BackdropProps={{ className: classes.backdrop }}
-            {...props.DialogProps}>
-            <DialogTitle className={classes.header}>
-                <IconButton classes={{ root: classes.close }} onClick={props.onDecline}>
-                    <DialogDismissIconUI />
-                </IconButton>
-                <Typography className={classes.title} display="inline" variant="inherit">
-                    {t('plugin_red_packet_display_name')}
-                </Typography>
-            </DialogTitle>
-            <DialogContent className={classes.content}>
-                <AbstractTab height={362} {...tabProps}></AbstractTab>
-            </DialogContent>
-        </ShadowRootDialog>
+        <ThemeProvider theme={props.theme ?? defaultTheme}>
+            <ShadowRootDialog
+                className={classes.dialog}
+                classes={{ container: classes.container, paper: classes.paper }}
+                open={props.open}
+                scroll="paper"
+                fullWidth
+                maxWidth="sm"
+                disableAutoFocus
+                disableEnforceFocus
+                BackdropProps={{ className: classes.backdrop }}
+                {...props.DialogProps}>
+                <DialogTitle className={classes.header}>
+                    <IconButton classes={{ root: classes.close }} onClick={props.onDecline}>
+                        <DialogDismissIconUI />
+                    </IconButton>
+                    <Typography className={classes.title} display="inline" variant="inherit">
+                        {t('plugin_red_packet_display_name')}
+                    </Typography>
+                </DialogTitle>
+                <DialogContent className={classes.content}>
+                    <AbstractTab height={362} {...tabProps}></AbstractTab>
+                </DialogContent>
+            </ShadowRootDialog>
+        </ThemeProvider>
     )
 }
