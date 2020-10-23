@@ -1,21 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react'
-import {
-    makeStyles,
-    createStyles,
-    Theme,
-    DialogTitle,
-    IconButton,
-    Typography,
-    DialogContent,
-    Divider,
-    Link,
-} from '@material-ui/core'
+import { makeStyles, createStyles, Theme, Typography, DialogContent, Link } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
-import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { getActivatedUI } from '../../../social-network/ui'
-import { useTwitterDialog, useTwitterCloseButton } from '../../../social-network-provider/twitter.com/utils/theme'
 import BigNumber from 'bignumber.js'
 import { Trans } from 'react-i18next'
 import type { EthereumTokenType, Token } from '../../../web3/types'
@@ -35,6 +21,7 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { ERC20TokenRecord } from '../../Wallet/database/types'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -68,21 +55,7 @@ export interface DonatePayload {
     tokenType: EthereumTokenType
 }
 
-interface DonateDialogUIProps
-    extends withClasses<
-        | KeysInferFromUseStyles<typeof useStyles>
-        | 'root'
-        | 'dialog'
-        | 'backdrop'
-        | 'container'
-        | 'paper'
-        | 'header'
-        | 'content'
-        | 'actions'
-        | 'title'
-        | 'close'
-        | 'button'
-    > {
+interface DonateDialogUIProps extends withClasses<never> {
     title: string
     address?: string
     open: boolean
@@ -128,7 +101,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     const onApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback()
-    }, [approveState])
+    }, [approveCallback, approveState])
     const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
     //#endregion
 
@@ -161,33 +134,8 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     if (!props.address) return null
     return (
         <div className={classes.root}>
-            <ShadowRootDialog
-                className={classes.dialog}
-                classes={{
-                    container: classes.container,
-                    paper: classes.paper,
-                }}
-                open={props.open}
-                scroll="body"
-                fullWidth
-                maxWidth="sm"
-                disableAutoFocus
-                disableEnforceFocus
-                onEscapeKeyDown={props.onClose}
-                onExit={props.onClose}
-                BackdropProps={{
-                    className: classes.backdrop,
-                }}>
-                <DialogTitle className={classes.header}>
-                    <IconButton classes={{ root: classes.close }} onClick={props.onClose}>
-                        <DialogDismissIconUI />
-                    </IconButton>
-                    <Typography className={classes.title} display="inline" variant="inherit">
-                        {title}
-                    </Typography>
-                </DialogTitle>
-                <Divider />
-                <DialogContent className={classes.content}>
+            <InjectedDialog open={props.open} onExit={props.onClose} title={title}>
+                <DialogContent>
                     <EthereumStatusBar classes={{ root: classes.root }} />
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel
@@ -236,7 +184,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                         </ActionButton>
                     )}
                 </DialogContent>
-            </ShadowRootDialog>
+            </InjectedDialog>
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
                 excludeTokens={[token.address]}
@@ -258,15 +206,5 @@ function DonateDialogUI(props: DonateDialogUIProps) {
 export interface DonateDialogProps extends DonateDialogUIProps {}
 
 export function DonateDialog(props: DonateDialogProps) {
-    const ui = getActivatedUI()
-    const twitterClasses = {
-        ...useTwitterDialog(),
-        ...useTwitterCloseButton(),
-    }
-
-    return ui.internalName === 'twitter' ? (
-        <DonateDialogUI classes={twitterClasses} {...props} />
-    ) : (
-        <DonateDialogUI {...props} />
-    )
+    return <DonateDialogUI {...props} />
 }

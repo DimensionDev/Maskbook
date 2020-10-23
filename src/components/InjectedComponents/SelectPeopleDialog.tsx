@@ -1,20 +1,19 @@
 import React, { useCallback, useState } from 'react'
-import { SelectPeopleAndGroupsUI, SelectPeopleAndGroupsUIProps } from '../shared/SelectPeopleAndGroups'
+import { SelectProfileAndGroupsUI, SelectProfileAndGroupsUIProps } from '../shared/SelectPeopleAndGroups'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
-import { Button, CircularProgress, DialogActions, DialogContent, DialogTitle } from '@material-ui/core'
+import { Button, CircularProgress, DialogActions, DialogContent } from '@material-ui/core'
 import type { Profile } from '../../database'
 import { useStylesExtends } from '../custom-ui-helper'
-import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
+import { InjectedDialog } from '../shared/InjectedDialog'
 
-export interface SelectPeopleDialogProps
-    extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'content'> | 'button'> {
+export interface SelectProfileDialogProps extends withClasses<never> {
     open: boolean
-    people: Profile[]
+    profiles: Profile[]
     alreadySelectedPreviously: Profile[]
     onClose: () => void
     onSelect: (people: Profile[]) => Promise<void>
-    SelectPeopleAndGroupsUIProps?: SelectPeopleAndGroupsUIProps<Profile>
+    SelectPeopleAndGroupsUIProps?: SelectProfileAndGroupsUIProps<Profile>
 }
 const useStyles = makeStyles({
     title: { paddingBottom: 0 },
@@ -22,7 +21,7 @@ const useStyles = makeStyles({
     progress: { marginRight: 6 },
 })
 
-export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
+export function SelectProfileDialog(props: SelectProfileDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const [people, select] = useState<Profile[]>([])
@@ -41,19 +40,12 @@ export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
     const canClose = !rejection && committed
     const canCommit = committed || people.length === 0
     return (
-        <ShadowRootDialog
-            disableEnforceFocus
-            onClose={canClose ? onClose : void 0}
-            open={props.open}
-            scroll="paper"
-            fullWidth
-            maxWidth="sm">
-            <DialogTitle className={classes.title}>{t('share_to')}</DialogTitle>
-            <DialogContent className={classes.content}>
-                <SelectPeopleAndGroupsUI<Profile>
+        <InjectedDialog onExit={canClose ? onClose : undefined} open={props.open} title={t('share_to')}>
+            <DialogContent>
+                <SelectProfileAndGroupsUI<Profile>
                     frozenSelected={props.alreadySelectedPreviously}
                     disabled={committed}
-                    items={props.people}
+                    items={props.profiles}
                     selected={people}
                     onSetSelected={select}
                     {...props.SelectPeopleAndGroupsUIProps}
@@ -65,17 +57,17 @@ export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
                 </DialogContent>
             )}
             <DialogActions>
-                <Button className={classes.button} size="large" disabled={canClose} onClick={onClose}>
+                <Button size="large" disabled={canClose} onClick={onClose}>
                     {t('cancel')}
                 </Button>
-                <Button className={classes.button} size="large" color="inherit" disabled={canCommit} onClick={share}>
+                <Button size="large" color="inherit" disabled={canCommit} onClick={share}>
                     {committed && (
                         <CircularProgress aria-busy className={classes.progress} size={16} variant="indeterminate" />
                     )}
                     {t(committed ? 'sharing' : 'share')}
                 </Button>
             </DialogActions>
-        </ShadowRootDialog>
+        </InjectedDialog>
     )
 }
 
@@ -83,7 +75,7 @@ export function useShareMenu(
     people: Profile[],
     onSelect: (people: Profile[]) => Promise<void>,
     alreadySelectedPreviously: Profile[],
-    SelectPeopleDialogProps?: Partial<SelectPeopleDialogProps>,
+    SelectPeopleDialogProps?: Partial<SelectProfileDialogProps>,
 ) {
     const [show, setShow] = useState(false)
     const showShare = useCallback(() => setShow(true), [])
@@ -92,9 +84,9 @@ export function useShareMenu(
     return {
         showShare,
         ShareMenu: (
-            <SelectPeopleDialog
+            <SelectProfileDialog
                 alreadySelectedPreviously={alreadySelectedPreviously}
-                people={people}
+                profiles={people}
                 open={show}
                 onClose={hideShare}
                 onSelect={onSelect}

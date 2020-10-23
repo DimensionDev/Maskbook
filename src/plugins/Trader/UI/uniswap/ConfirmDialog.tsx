@@ -1,38 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react'
-import {
-    Button,
-    makeStyles,
-    Theme,
-    createStyles,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    IconButton,
-    Typography,
-} from '@material-ui/core'
+import React, { useState, useEffect } from 'react'
+import { Button, makeStyles, Theme, createStyles, DialogActions, DialogContent, Typography } from '@material-ui/core'
 import type { Trade } from '@uniswap/sdk'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../../../utils/shadow-root/ShadowRootDialog'
 import { TradeSummary, TradeSummaryProps } from './TradeSummary'
 import type { Token } from '../../../../web3/types'
-import { getActivatedUI } from '../../../../social-network/ui'
-import { useTwitterDialog, useTwitterCloseButton } from '../../../../social-network-provider/twitter.com/utils/theme'
-import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
 import { TokenPanel } from './TokenPanel'
 import { useComputedTrade } from '../../uniswap/useComputedTrade'
 import { PriceStaleWarnning } from './PriceStaleWarnning'
 import type { TradeStrategy } from '../../types'
+import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        paper: {
-            width: '370px !important',
-        },
-        title: {
-            marginLeft: 6,
-        },
         reverseIcon: {
             width: 16,
             height: 16,
@@ -53,21 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-export interface ConfirmDialogUIProps
-    extends withClasses<
-        | KeysInferFromUseStyles<typeof useStyles>
-        | 'root'
-        | 'dialog'
-        | 'backdrop'
-        | 'container'
-        | 'paper'
-        | 'header'
-        | 'title'
-        | 'content'
-        | 'actions'
-        | 'close'
-        | 'button'
-    > {
+export interface ConfirmDialogUIProps extends withClasses<never> {
     trade: Trade | null
     strategy: TradeStrategy
     inputToken?: Token
@@ -98,33 +65,9 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const staled = !!(trade && executionPrice && !executionPrice.equalTo(trade.executionPrice))
 
     return (
-        <div className={classes.root}>
-            <ShadowRootDialog
-                className={classes.dialog}
-                classes={{
-                    container: classes.container,
-                    paper: classes.paper,
-                }}
-                open={open}
-                scroll="body"
-                fullWidth
-                maxWidth="sm"
-                disableAutoFocus
-                disableEnforceFocus
-                onEscapeKeyDown={onClose}
-                onExit={onClose}
-                BackdropProps={{
-                    className: classes.backdrop,
-                }}>
-                <DialogTitle className={classes.header}>
-                    <IconButton classes={{ root: classes.close }} onClick={onClose}>
-                        <DialogDismissIconUI />
-                    </IconButton>
-                    <Typography className={classes.title} display="inline" variant="inherit">
-                        Confirm Swap
-                    </Typography>
-                </DialogTitle>
-                <DialogContent className={classes.content}>
+        <>
+            <InjectedDialog open={open} onExit={onClose} title="Confirm Swap">
+                <DialogContent>
                     {inputToken && outputToken ? (
                         <>
                             <TokenPanel amount={trade?.inputAmount.raw.toString() ?? '0'} token={inputToken} />
@@ -153,9 +96,9 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                         {...UniswapTradeSummaryProps}
                     />
                 </DialogContent>
-                <DialogActions className={classes.actions}>
+                <DialogActions>
                     <Button
-                        className={classes.button}
+                        classes={{ root: classes.button }}
                         color="primary"
                         size="large"
                         variant="contained"
@@ -165,23 +108,13 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                         Confirm Swap
                     </Button>
                 </DialogActions>
-            </ShadowRootDialog>
-        </div>
+            </InjectedDialog>
+        </>
     )
 }
 
 export interface ConfirmDialogProps extends ConfirmDialogUIProps {}
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
-    const ui = getActivatedUI()
-    const twitterClasses = {
-        ...useTwitterDialog(),
-        ...useTwitterCloseButton(),
-    }
-
-    return ui.internalName === 'twitter' ? (
-        <ConfirmDialogUI classes={twitterClasses} {...props} />
-    ) : (
-        <ConfirmDialogUI {...props} />
-    )
+    return <ConfirmDialogUI {...props} />
 }

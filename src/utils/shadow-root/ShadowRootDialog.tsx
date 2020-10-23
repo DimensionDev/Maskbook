@@ -9,6 +9,10 @@ import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
+/**
+ * This is the low-level API to rendering a dialog.
+ * Please use InjectedDialog if possible.
+ */
 export default function ShadowRootDialog(_props: DialogProps) {
     const ref = React.useRef<HTMLDivElement>(null)
     const styles = useSheetsRegistryStyles(ref.current)

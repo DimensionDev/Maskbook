@@ -1,30 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { Box, Button, createStyles, DialogContent, DialogTitle, makeStyles, Typography } from '@material-ui/core'
+import { Box, Button, createStyles, DialogContent, makeStyles, Typography } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { QRCode } from '../../../components/shared/qrcode'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { MaskbookWalletMessages, WalletMessageCenter } from '../messages'
 import Services from '../../../extension/service'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 import { WalletConnectIcon } from '../../../resources/WalletConnectIcon'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
-        paper: {
-            width: 448,
-        },
-        header: {
-            padding: theme.spacing(2, 2, 0, 2),
-        },
-        content: {
-            paddingTop: theme.spacing(2),
-            paddingBottom: theme.spacing(2),
-            textAlign: 'center',
-        },
-        logo: {},
         title: {
             fontWeight: 700,
             marginLeft: theme.spacing(1),
@@ -34,16 +22,12 @@ const useStyles = makeStyles((theme) =>
             marginBottom: theme.spacing(2),
         },
         copyButton: {
-            color: theme.palette.text.secondary,
             marginTop: theme.spacing(1),
         },
     }),
 )
 
-export interface WalletConnectQRCodeDialogProps
-    extends withClasses<
-        KeysInferFromUseStyles<typeof useStyles> | 'root' | 'dialog' | 'backdrop' | 'container' | 'paper' | 'content'
-    > {}
+export interface WalletConnectQRCodeDialogProps extends withClasses<never> {}
 
 export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps) {
     const { t } = useI18N()
@@ -82,31 +66,17 @@ export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps)
     }, [open, URI, onClose])
 
     return (
-        <div className={classes.root}>
-            <ShadowRootDialog
-                className={classes.dialog}
-                classes={{
-                    container: classes.container,
-                    paper: classes.paper,
-                }}
+        <>
+            <InjectedDialog
                 open={open}
-                scroll="body"
-                fullWidth
-                maxWidth="sm"
-                disableAutoFocus
-                disableEnforceFocus
-                onEscapeKeyDown={onClose}
-                onBackdropClick={onClose}
-                BackdropProps={{
-                    className: classes.backdrop,
-                }}>
-                <DialogTitle className={classes.header}>
+                onExit={onClose}
+                title={
                     <Box display="flex" alignItems="center">
-                        <WalletConnectIcon className={classes.logo} />
+                        <WalletConnectIcon />
                         <Typography className={classes.title}>WalletConnect</Typography>
                     </Box>
-                </DialogTitle>
-                <DialogContent className={classes.content}>
+                }>
+                <DialogContent>
                     <Typography className={classes.tip} color="textSecondary">
                         Scan QR code with a WalletConnect-compatible wallet.
                     </Typography>
@@ -130,7 +100,7 @@ export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps)
                         Copy to clipboard
                     </Button>
                 </DialogContent>
-            </ShadowRootDialog>
-        </div>
+            </InjectedDialog>
+        </>
     )
 }

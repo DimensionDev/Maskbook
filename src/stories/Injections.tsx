@@ -14,7 +14,7 @@ import { demoPeople as demoProfiles, demoGroup } from './demoPeopleOrGroups'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
 import { CommentBox } from '../components/InjectedComponents/CommentBox'
 import type { DecryptionProgress } from '../extension/background-script/CryptoServices/decryptFrom'
-import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/SelectPeopleAndGroups'
+import { ProfileOrGroupInChip, ProfileOrGroupInList } from '../components/shared/SelectPeopleAndGroups'
 import { useMaskbookTheme } from '../utils/theme'
 import { CharLimitIndicator, PostDialog } from '../components/InjectedComponents/PostDialog'
 import { PostDialogHint } from '../components/InjectedComponents/PostDialogHint'
@@ -37,14 +37,14 @@ storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
         <>
             {demoGroup.map((g) => (
-                <PersonOrGroupInChip item={g} />
+                <ProfileOrGroupInChip item={g} />
             ))}
         </>
     ))
     .add('PersonOrGroupInList', () => (
         <Paper>
             {demoGroup.map((g) => (
-                <PersonOrGroupInList onClick={action('click')} item={g} />
+                <ProfileOrGroupInList onClick={action('click')} item={g} />
             ))}
         </Paper>
     ))

@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import type { Profile } from '../../database'
 import { List, Accordion, AccordionSummary } from '@material-ui/core'
-import { PersonOrGroupInList, PersonOrGroupInListProps } from './SelectPeopleAndGroups'
+import { ProfileOrGroupInList, ProfileOrGroupInListProps } from './SelectPeopleAndGroups'
 import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { ProfileIdentifier } from '../../database/type'
@@ -68,7 +68,7 @@ export interface ChooseIdentityProps extends withClasses<KeysInferFromUseStyles<
      *  @defaultValue will change the global selected identity
      */
     onChangeIdentity?(person: Profile): void
-    PersonOrGroupInListProps?: PersonOrGroupInListProps
+    PersonOrGroupInListProps?: ProfileOrGroupInListProps
 }
 /**
  * Choose the current using identity.
@@ -93,7 +93,7 @@ export function ChooseIdentity(props: ChooseIdentityProps) {
                 <AccordionSummary
                     classes={expansionPanelSummaryClasses}
                     expandIcon={identities.length > 1 ? <ExpandMoreIcon /> : null}>
-                    <PersonOrGroupInList
+                    <ProfileOrGroupInList
                         item={current}
                         ListItemProps={{ dense: true, classes: { root: classes.listItemRoot } }}
                         {...props.PersonOrGroupInListProps}
@@ -103,7 +103,7 @@ export function ChooseIdentity(props: ChooseIdentityProps) {
                     <List classes={{ root: classes.list }}>
                         {identities.map((person) =>
                             person.identifier.equals(current.identifier) ? null : (
-                                <PersonOrGroupInList
+                                <ProfileOrGroupInList
                                     key={person.identifier.toText()}
                                     item={person}
                                     ListItemProps={{ dense: true, classes: { root: classes.listItemRoot } }}
