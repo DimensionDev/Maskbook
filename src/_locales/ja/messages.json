@@ -104,6 +104,7 @@
     "activity": "履歴",
     "activity_inbound": "インバウンド",
     "activity_outbound": "アウトバウンド",
+    "buy_now": "",
     "setup_guide_optional": "[選択肢]",
     "setup_guide_find_username_title": "ユーザー名を探す",
     "setup_guide_find_username_text": "Maskbook の人格と接続するためにユーザー名が必要です。<br /> 正しいものを入力してください。",

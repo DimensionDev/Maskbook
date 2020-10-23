@@ -30,6 +30,7 @@ export const Flags = {
         process.env.NODE_ENV === 'development' || process.env.architecture === 'app' || process.env.build === 'beta',
     //#region Experimental features
     trader_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
+    transak_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
     trader_all_api_cached_enabled: process.env.NODE_ENV === 'development',
     trader_uniswap_auto_refresh_enabled: true,
     poll_enabled: process.env.architecture === 'web' || process.env.NODE_ENV === 'development',
