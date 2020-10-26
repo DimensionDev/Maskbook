@@ -55,7 +55,7 @@ function cleanup() {
 }
 try {
     require('ts-node').register({
-        project: require.resolve(__dirname + '/../tsconfig.json'),
+        project: require.resolve(__dirname + '/../../../tsconfig.json'),
         transpileOnly: true,
         // ignore: [],
     })
@@ -68,7 +68,7 @@ try {
 }
 
 function modifyPackage(packageName, modifier) {
-    const path = join(__dirname, `../node_modules/${packageName}/package.json`)
+    const path = join(require.resolve(packageName + '/package.json'))
     const [x, orig] = [readJSON(path), readJSON(path)]
     modifier(x)
     writeJSON(path, x)
@@ -82,20 +82,5 @@ function modifyPackage(packageName, modifier) {
 
     function writeJSON(path, object) {
         return writeFileSync(path, JSON.stringify(object, undefined, 4))
-    }
-}
-
-function compileToCJS(filePath, outPath) {
-    const ts = require('typescript')
-    const options = {
-        compilerOptions: { target: ts.ScriptTarget.ES2017, module: ts.ModuleKind.CommonJS },
-    }
-
-    const cjs = join(__dirname, outPath)
-    writeFileSync(cjs, ts.transpileModule(readFileSync(join(__dirname, filePath), 'utf-8'), options).outputText)
-    return () => {
-        try {
-            unlinkSync(cjs)
-        } catch {}
     }
 }
