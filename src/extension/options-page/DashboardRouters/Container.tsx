@@ -1,14 +1,5 @@
 import React from 'react'
-import {
-    makeStyles,
-    createStyles,
-    Typography,
-    Divider,
-    Fade,
-    IconButton,
-    useMediaQuery,
-    Theme,
-} from '@material-ui/core'
+import { makeStyles, createStyles, Typography, Divider, Fade, IconButton } from '@material-ui/core'
 import classNames from 'classnames'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { getUrl } from '../../../utils/utils'

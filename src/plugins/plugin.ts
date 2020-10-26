@@ -12,9 +12,9 @@ export interface PluginConfig {
     pluginName: string
     identifier: string
     successDecryptionInspector?: PluginInjectFunction<{ message: TypedMessage }>
-    pageInspector?: React.ComponentType<{}>
     postInspector?: PluginInjectFunction<{}>
-    dashboardInspector?: PluginInjectFunction<{}>
+    PageComponent?: React.ComponentType<{}>
+    DashboardComponent?: React.ComponentType<{}>
     postDialogMetadataBadge?: Map<string, (metadata: any) => string>
     messageProcessor?: (message: TypedMessageCompound) => TypedMessageCompound
 }

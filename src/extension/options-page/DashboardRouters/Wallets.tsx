@@ -1,11 +1,12 @@
 import React, { useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, IconButton } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import AddIcon from '@material-ui/icons/Add'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import RestoreIcon from '@material-ui/icons/Restore'
+import { cloneDeep, merge } from 'lodash-es'
 
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
@@ -26,6 +27,31 @@ import { useTokens } from '../../../plugins/Wallet/hooks/useToken'
 import { useTokensDetailedCallback } from '../../../web3/hooks/useTokensDetailedCallback'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
+
+//#region theme
+const walletsTheme = (theme: Theme) =>
+    merge(cloneDeep(theme), {
+        overrides: {
+            MuiIconButton: {
+                root: {
+                    color: theme.palette.text,
+                },
+            },
+            MuiListItemIcon: {
+                root: {
+                    justifyContent: 'center',
+                    minWidth: 'unset',
+                    marginRight: theme.spacing(2),
+                },
+            },
+            MuiListItemSecondaryAction: {
+                root: {
+                    ...theme.typography.body1,
+                },
+            },
+        },
+    })
+//#endregion
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -155,20 +181,22 @@ export default function DashboardWalletsRouter() {
                 </IconButton>,
             ]}
             rightIcons={rightIcons}>
-            <div className={classes.root}>
-                <div className={classes.header}>
-                    <EthereumStatusBar
-                        BoxProps={{ justifyContent: 'flex-end', flexWrap: 'reverse', flexDirection: 'row-reverse' }}
-                    />
-                </div>
-                <div className={classes.content}>
-                    <div className={classes.wrapper}>
-                        {defaultWallet ? (
-                            <WalletContent wallet={defaultWallet} detailedTokens={detailedTokens} />
-                        ) : null}
+            <ThemeProvider theme={walletsTheme}>
+                <div className={classes.root}>
+                    <div className={classes.header}>
+                        <EthereumStatusBar
+                            BoxProps={{ justifyContent: 'flex-end', flexWrap: 'reverse', flexDirection: 'row-reverse' }}
+                        />
+                    </div>
+                    <div className={classes.content}>
+                        <div className={classes.wrapper}>
+                            {defaultWallet ? (
+                                <WalletContent wallet={defaultWallet} detailedTokens={detailedTokens} />
+                            ) : null}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </ThemeProvider>
             {addToken}
             {walletHistory}
             {walletCreate}

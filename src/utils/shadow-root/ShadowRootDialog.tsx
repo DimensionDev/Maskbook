@@ -21,13 +21,13 @@ export default function ShadowRootDialog(_props: DialogProps) {
     // ? can style be transported to shadowroot directly instead of with dialog children?
     const { children, container, ...props } = _props
     return (
-        <div ref={ref}>
-            <ErrorBoundary>
+        <ErrorBoundary>
+            <div ref={ref}>
                 <ResponsiveDialog {...props} container={container ?? PortalShadowRoot}>
                     <style>{styles}</style>
                     {children}
                 </ResponsiveDialog>
-            </ErrorBoundary>
-        </div>
+            </div>
+        </ErrorBoundary>
     )
 }

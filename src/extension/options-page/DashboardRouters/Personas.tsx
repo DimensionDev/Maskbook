@@ -103,9 +103,9 @@ export default function DashboardPersonasRouter() {
                             <PersonaCard key={persona.identifier.toText()} persona={persona} />
                         ))}
                 </section>
-                {createPersona}
-                {importPersona}
             </ThemeProvider>
+            {createPersona}
+            {importPersona}
         </DashboardRouterContainer>
     )
 }

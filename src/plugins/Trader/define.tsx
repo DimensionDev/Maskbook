@@ -21,7 +21,7 @@ export const TraderPluginDefine: PluginConfig = {
             items: message.items.map((m: TypedMessage) => (isCashTagMessage(m) ? makeTypedMessageCashTrending(m) : m)),
         }
     },
-    pageInspector() {
+    PageComponent() {
         return <PageInspector />
     },
 }
