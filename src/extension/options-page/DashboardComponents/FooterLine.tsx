@@ -70,7 +70,7 @@ export default function FooterLine() {
     const [aboutDialog, openAboutDialog] = useModal(DashboardAboutDialog)
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
     const openVersionLink = (event: React.MouseEvent) => {
-        // `MouseEvent.prototype.metaKey` on macOS (<kbd>Command</kbd>), Windows (<kbd>Windows</kbd>)
+        // `MouseEvent.prototype.metaKey` on macOS (`Command` key), Windows (`Windows` key), Linux (`Super` key)
         if (process.env.build === 'stable' && event.metaKey === false) {
             open(t('version_of_release', { tag: `v${version}` }))
         } else {
