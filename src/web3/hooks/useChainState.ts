@@ -1,69 +1,46 @@
 import { useEffect, useState } from 'react'
-import Services from '../../extension/service'
-import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { ChainId } from '../types'
-import { pollingTask } from '../../utils/utils'
-import { debounce } from 'lodash-es'
+import { ChainId, ProviderType } from '../types'
 import {
+    ChainState,
+    currentChainStateSettings,
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
     currentWalletConnectChainIdSettings,
 } from '../../settings/settings'
-import { PluginMessageCenter } from '../../plugins/PluginMessages'
-
-//#region tracking block state
-const chainStateRef = new ValueRef({
-    chainId: ChainId.Mainnet,
-    blockNumber: 0,
-})
-const revalidate = debounce(
-    async () => {
-        chainStateRef.value = {
-            chainId: await Services.Ethereum.getChainId(),
-            blockNumber: await Services.Ethereum.getBlockNumber(),
-        }
-        return false // never stop
-    },
-    300,
-    {
-        trailing: true,
-    },
-)
-
-// polling the newest block state from the chain
-pollingTask(revalidate, {
-    delay: 10 /* seconds */ * 1000 /* milliseconds */,
-})
-
-// revalidate if the chainId of current provider was changed
-currentMaskbookChainIdSettings.addListener(revalidate)
-currentMetaMaskChainIdSettings.addListener(revalidate)
-currentWalletConnectChainIdSettings.addListener(revalidate)
-
-// revaldiate if the current wallet was changed
-PluginMessageCenter.on('maskbook.wallets.update', revalidate)
-//#endregion
+import { useSelectedWallet, useWallet } from '../../plugins/Wallet/hooks/useWallet'
 
 /**
- * Get the chain id which is using by the current wallet
+ * Get the chain id which is using by the given (or default) wallet
  */
-export function useChainId() {
-    return useValueRef(chainStateRef).chainId
+export function useChainId(address?: string) {
+    const wallet_ = useWallet(address ?? '')
+    const selectedWallet_ = useSelectedWallet()
+
+    const MaskbookChainId = useValueRef(currentMaskbookChainIdSettings)
+    const MetaMaskChainId = useValueRef(currentMetaMaskChainIdSettings)
+    const WalletConnectChainId = useValueRef(currentWalletConnectChainIdSettings)
+
+    const wallet = wallet_ ?? selectedWallet_
+    if (!wallet) return MaskbookChainId
+    if (wallet.provider === ProviderType.Maskbook) return MaskbookChainId
+    if (wallet.provider === ProviderType.MetaMask) return MetaMaskChainId
+    if (wallet.provider === ProviderType.WalletConnect) return WalletConnectChainId
+    return MaskbookChainId
 }
 
 /**
  * Get the current block number
  */
-export function useBlockNumber() {
-    return useValueRef(chainStateRef).blockNumber
+export function useBlockNumber(chainId: ChainId) {
+    return useChainState(chainId).blockNumber
 }
 
 /**
  * Get the current block number for once
  */
-export function useBlockNumberOnce() {
-    const chainState_ = useValueRef(chainStateRef)
+export function useBlockNumberOnce(chainId: ChainId) {
+    const chainState_ = useChainState(chainId)
     const [chainState, setChainState] = useState({
         chainId: ChainId.Mainnet,
         blockNumber: 0,
@@ -75,8 +52,19 @@ export function useBlockNumberOnce() {
 }
 
 /**
- * Get the newest block state
+ * Get the newest chain state
  */
-export function useChainState() {
-    return useValueRef(chainStateRef)
+const DEFAULT_CHAIN_STATE = {
+    chainId: ChainId.Mainnet,
+    blockNumber: 0,
+}
+
+export function useChainState(chainId: ChainId) {
+    const chainState = useValueRef(currentChainStateSettings)
+    try {
+        const parsedChainState = JSON.parse(chainState) as ChainState[]
+        return parsedChainState.find((x) => x.chainId === chainId) ?? DEFAULT_CHAIN_STATE
+    } catch (e) {
+        return DEFAULT_CHAIN_STATE
+    }
 }

@@ -18,19 +18,21 @@ import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
-import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
+import { injectDashboardEntranceAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
 import { notifyPermissionUpdate } from '../../utils/permissions'
 import { Flags } from '../../utils/flags'
-import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
-import { isDarkTheme } from '../../utils/theme-tools'
+import { getMaskbookTheme } from '../../utils/theme'
+import { isDark, isDarkTheme } from '../../utils/theme-tools'
 import { useState } from 'react'
 import { useInterval } from 'react-use'
 import { MessageCenter } from '../../utils/messages'
 import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
+import { Appearance } from '../../settings/settings'
 
+const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
     init(env, pref) {
@@ -44,12 +46,13 @@ export const facebookUISelf = defineSocialNetworkUI({
         return location.hostname.endsWith('facebook.com')
     },
     friendlyName: 'Facebook',
+    hasPermission() {
+        return browser.permissions.contains({ origins })
+    },
     requestPermission() {
         // TODO: wait for webextension-shim to support <all_urls> in permission.
         if (Flags.no_web_extension_dynamic_permission_request) return Promise.resolve(true)
-        return browser.permissions
-            .request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
-            .then(notifyPermissionUpdate)
+        return browser.permissions.request({ origins }).then(notifyPermissionUpdate)
     },
     setupAccount() {
         facebookUISelf.requestPermission().then((granted) => {
@@ -65,7 +68,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
     injectPostBox: injectPostBoxFacebook,
     injectPostComments: injectPostCommentsDefault(),
-    injectOptionsPageLink: injectOptionsPageLinkAtFacebook,
+    injectDashboardEntrance: injectDashboardEntranceAtFacebook,
     injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
         encryptedComment,
         current,
@@ -80,7 +83,7 @@ export const facebookUISelf = defineSocialNetworkUI({
             const textarea = root.querySelector('textarea')
             if (!textarea) return fail()
             textarea.focus()
-            dispatchCustomEvents('input', encryptedComment)
+            dispatchCustomEvents(textarea, 'input', encryptedComment)
             textarea.dispatchEvent(new CustomEvent('input', { bubbles: true, cancelable: false, composed: true }))
             await sleep(200)
             if (!root.innerText.includes(encryptedComment)) return fail()
@@ -90,7 +93,7 @@ export const facebookUISelf = defineSocialNetworkUI({
             const input = root.querySelector('[contenteditable]')
             if (!input) return fail()
             selectElementContents(input)
-            dispatchCustomEvents('paste', encryptedComment)
+            dispatchCustomEvents(input, 'paste', encryptedComment)
             await sleep(200)
             if (!root.innerText.includes(encryptedComment)) return fail()
         }
@@ -130,6 +133,10 @@ export const facebookUISelf = defineSocialNetworkUI({
     },
 })
 function getTheme() {
-    if (isDarkTheme()) return MaskbookDarkTheme
-    return MaskbookLightTheme
+    return getMaskbookTheme({ theme: isDarkTheme() ? Appearance.dark : Appearance.light })
+}
+if (module.hot) {
+    module.hot.accept('./tasks/pasteIntoPostBox.ts', () => {
+        facebookUISelf.taskPasteIntoPostBox = pasteIntoPostBoxFacebook
+    })
 }

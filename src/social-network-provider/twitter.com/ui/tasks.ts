@@ -15,7 +15,7 @@ import {
 import { SocialNetworkUI, SocialNetworkUITasks, getActivatedUI } from '../../../social-network/ui'
 import { bioCardParser, postContentParser } from '../utils/fetch'
 import { getEditorContent, hasFocus, isCompose, hasEditor } from '../utils/postBox'
-import { MutationObserverWatcher } from '@holoflows/kit'
+import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
 import Services from '../../../extension/service'
 import { twitterEncoding } from '../encoding'
@@ -54,7 +54,9 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
             await sleep(interval)
         }
         // paste
-        isMobileTwitter ? dispatchCustomEvents('input', text) : dispatchCustomEvents('paste', text)
+        isMobileTwitter
+            ? dispatchCustomEvents(i.evaluate()!, 'input', text)
+            : dispatchCustomEvents(i.evaluate()!, 'paste', text)
         await sleep(interval)
         if (!getEditorContent().replace(/\n/g, '').includes(text.replace(/\n/g, ''))) {
             fail(new Error('Unable to paste text automatically'))

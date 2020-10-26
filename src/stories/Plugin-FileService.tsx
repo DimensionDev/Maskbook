@@ -1,7 +1,7 @@
 import { action } from '@storybook/addon-actions'
 import { storiesOf } from '@storybook/react'
 import React from 'react'
-import MainDialog from '../plugins/FileService/MainDialog'
+import FileServiceDialog from '../plugins/FileService/MainDialog'
 import { figmaLink } from './utils'
 import { Preview } from '../plugins/FileService/Preview'
 import { text, boolean, number } from '@storybook/addon-knobs'
@@ -11,7 +11,7 @@ import { Paper } from '@material-ui/core'
 storiesOf('Plugin: File Service', module)
     .add(
         'Main Dialog',
-        () => <MainDialog open onConfirm={action('onConfirm')} onDecline={action('onDecline')} />,
+        () => <FileServiceDialog open onConfirm={action('onConfirm')} onDecline={action('onDecline')} />,
         figmaLink('https://www.figma.com/file/jcrvENZmip6PUR66Jz6ENb/Plugin%3A-File-Service'),
     )
     .add('Preview', () => {

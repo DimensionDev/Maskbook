@@ -14,8 +14,8 @@ import { demoPeople as demoProfiles, demoGroup } from './demoPeopleOrGroups'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
 import { CommentBox } from '../components/InjectedComponents/CommentBox'
 import type { DecryptionProgress } from '../extension/background-script/CryptoServices/decryptFrom'
-import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/SelectPeopleAndGroups'
-import { MaskbookLightTheme } from '../utils/theme'
+import { ProfileOrGroupInChip, ProfileOrGroupInList } from '../components/shared/SelectPeopleAndGroups'
+import { useMaskbookTheme } from '../utils/theme'
 import { CharLimitIndicator, PostDialog } from '../components/InjectedComponents/PostDialog'
 import { PostDialogHint } from '../components/InjectedComponents/PostDialogHint'
 import {
@@ -26,25 +26,25 @@ import {
 } from '../protocols/typed-message'
 import { DefaultTypedMessageRenderer } from '../components/InjectedComponents/TypedMessageRenderer'
 import { useTwitterThemedPostDialogHint } from '../social-network-provider/twitter.com/ui/injectPostDialogHint'
-import { useTwitterButton } from '../social-network-provider/twitter.com/utils/theme'
 import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
 import { figmaLink } from './utils'
 import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
 import type { RedPacketJSONPayload } from '../plugins/RedPacket/types'
 import type { TypedMessageStorybookTest } from '../plugins/Storybook/define'
+import { ProfileIdentifier } from '../database/type'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
         <>
             {demoGroup.map((g) => (
-                <PersonOrGroupInChip item={g} />
+                <ProfileOrGroupInChip item={g} />
             ))}
         </>
     ))
     .add('PersonOrGroupInList', () => (
         <Paper>
             {demoGroup.map((g) => (
-                <PersonOrGroupInList onClick={action('click')} item={g} />
+                <ProfileOrGroupInList onClick={action('click')} item={g} />
             ))}
         </Paper>
     ))
@@ -171,6 +171,9 @@ storiesOf('Injections', module)
                     ProgressType.undefined,
                 ),
             )
+            const displayAuthorMismatchTip = boolean('Author mismatch', true)
+            const author = displayAuthorMismatchTip ? new ProfileIdentifier('test', '$username') : void 0
+            const postBy = displayAuthorMismatchTip ? new ProfileIdentifier('test', 'id2') : void 0
             return (
                 <>
                     <FakePost title="Decrypted:">
@@ -179,13 +182,15 @@ storiesOf('Injections', module)
                             requestAppendRecipients={async () => {}}
                             profiles={demoProfiles}
                             data={{ content: makeTypedMessageText(msg) }}
+                            author={author}
+                            postedBy={postBy}
                         />
                     </FakePost>
                     <FakePost title="Decrypting:">
-                        <DecryptPostAwaiting type={progress} />
+                        <DecryptPostAwaiting type={progress} author={author} postedBy={postBy} />
                     </FakePost>
                     <FakePost title="Failed:">
-                        <DecryptPostFailed error={new Error('Error message')} />
+                        <DecryptPostFailed error={new Error('Error message')} author={author} postedBy={postBy} />
                     </FakePost>
                 </>
             )
@@ -263,7 +268,7 @@ storiesOf('Injections', module)
             </>
         )
         function TwitterFlavorPostDialogHint() {
-            const style = { ...useTwitterThemedPostDialogHint(), ...useTwitterButton() }
+            const style = { ...useTwitterThemedPostDialogHint() }
             return <PostDialogHint classes={style} onHintButtonClicked={action('clicked')} />
         }
     })
@@ -271,7 +276,7 @@ storiesOf('Injections', module)
 
 function FakePost(props: React.PropsWithChildren<{ title: string }>) {
     return (
-        <MuiThemeProvider theme={MaskbookLightTheme}>
+        <MuiThemeProvider theme={useMaskbookTheme()}>
             {props.title}
             <div style={{ marginBottom: '2em', maxWidth: 500 }}>
                 <img width={500} src={require('./post-a.jpg')} style={{ marginBottom: -12 }} />

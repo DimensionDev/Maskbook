@@ -1,14 +1,13 @@
 import * as React from 'react'
-import { useCallback } from 'react'
 import { twitterUrl } from '../utils/url'
-import { MutationObserverWatcher, LiveSelector } from '@holoflows/kit/es'
+import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit/es'
 import { posteditorToolbarSeelctor } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogIcon } from '../../../components/InjectedComponents/PostDialogIcon'
 import { MessageCenter } from '../../../utils/messages'
 import { isCompose, isMobile } from '../utils/postBox'
-import { useTwitterMaskbookIcon } from '../utils/theme'
 import { Flags } from '../../../utils/flags'
+import { makeStyles, Theme } from '@material-ui/core'
 
 export function injectPostDialogIconAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
@@ -32,13 +31,17 @@ function renderPostDialogIconTo<T>(ls: LiveSelector<T, true>) {
     })
 }
 
+const useTwitterMaskbookIcon = makeStyles((theme: Theme) => ({
+    root: {
+        width: 38,
+        height: 38,
+        boxSizing: 'border-box',
+        padding: theme.spacing(1),
+    },
+}))
+
 function PostDialogIconAtTwitter() {
-    const classes = {
-        ...useTwitterMaskbookIcon(),
-    }
-    const onIconClicked = useCallback(
-        () => MessageCenter.emit('compositionUpdated', { reason: 'timeline', open: true }),
-        [],
-    )
+    const classes = useTwitterMaskbookIcon()
+    const onIconClicked = () => MessageCenter.emit('compositionUpdated', { reason: 'timeline', open: true })
     return <PostDialogIcon classes={classes} onClick={onIconClicked} />
 }

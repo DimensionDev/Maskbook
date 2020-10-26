@@ -1,4 +1,4 @@
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import { untilDomLoaded } from '../dom'
 import { renderInShadowRootSettings } from '../../settings/settings'
 import { Flags } from '../flags'

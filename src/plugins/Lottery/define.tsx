@@ -6,7 +6,30 @@ import BigNumber from 'bignumber.js'
 import { LotteryMetadataReader } from '../Lottery/utils'
 import { LotteryMetaKey, LotteryPluginID } from './constants'
 import type { LotteryJSONPayload } from './types'
+import LotteryDialog from './UI/LotteryDialog'
+import { createCompositionDialog } from '../utils/createCompositionDialog'
+import Services from '../../extension/service'
 
+const [LotteryCompositionEntry, LotteryCompositionUI] = createCompositionDialog(
+    '🎉 Lottery',
+    (props) => (
+        <LotteryDialog
+            // classes={classes}
+            // DialogProps={props.DialogProps}
+            open={props.open}
+            onConfirm={props.onClose}
+            onDecline={props.onClose}
+        />
+    ),
+    async () => {
+        const wallets = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
+        if (wallets.length) return true
+        else {
+            Services.Provider.requestConnectWallet()
+            return false
+        }
+    },
+)
 export const LotteryPluginDefine: PluginConfig = {
     pluginName: 'Lottery',
     identifier: LotteryPluginID,
@@ -25,4 +48,6 @@ export const LotteryPluginDefine: PluginConfig = {
             },
         ],
     ]),
+    pageInspector: LotteryCompositionUI,
+    postDialogEntries: [LotteryCompositionEntry],
 }

@@ -1,14 +1,11 @@
-import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
+import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit/es'
 import React from 'react'
-import { DashboardRoute } from '../../../extension/options-page/Route'
 import Services from '../../../extension/service'
 import { MaskbookIcon } from '../../../resources/MaskbookIcon'
 import { Flags } from '../../../utils/flags'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
-import { isMobileTwitter } from '../utils/isMobile'
 
-export function injectDashboardEntryInMobileTwitter() {
-    if (!isMobileTwitter) return
+export function injectDashboardEntranceAtTwitter() {
     const ls = new LiveSelector().querySelector('nav[role="navigation"] a:last-of-type').enableSingleMode()
     new MutationObserverWatcher(ls)
         .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })

@@ -1,6 +1,6 @@
 import { emptyPostInfo, PostInfo } from '../../social-network/PostInfo'
 import { createContext, useContext } from 'react'
-import { ValueRef } from '@holoflows/kit/es'
+import { ValueRef } from '@dimensiondev/holoflows-kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { ObservableMap, ObservableSet } from '../../utils/ObservableMapSet'
 import { useObservableValues } from '../../utils/hooks/useObservableMapSet'

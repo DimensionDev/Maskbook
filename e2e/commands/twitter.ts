@@ -56,10 +56,10 @@ class Twitter implements SNS {
 
         // logined
         if ((await page.evaluate(() => location.href)).includes('/settings/account')) {
-            const screenNameLink = await page.waitFor('[href="/settings/screen_name"]')
+            const accountSwitcher = await page.waitFor('[data-testid="SideNav_AccountSwitcher_Button"]')
 
             // user already login
-            if ((await screenNameLink.evaluate((e) => e.textContent))?.includes(this.username)) return
+            if ((await accountSwitcher.evaluate((e) => e.textContent))?.includes(this.username)) return
 
             // logout old account
             await this.logout(page)

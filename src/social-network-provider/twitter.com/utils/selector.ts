@@ -1,4 +1,4 @@
-import { LiveSelector } from '@holoflows/kit'
+import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { regexMatch } from '../../../utils/utils'
 import { isCompose } from './postBox'
 
@@ -30,7 +30,9 @@ export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
 export const postEditorDraftContentSelector = () => {
     if (location.pathname === '/compose/tweet') {
-        return querySelector<HTMLDivElement>(`[contenteditable][aria-label][spellcheck]`)
+        return querySelector<HTMLDivElement>(
+            `[contenteditable][aria-label][spellcheck],textarea[aria-label][spellcheck]`,
+        )
     }
     return (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
         '.public-DraftEditor-content, [contenteditable][aria-label][spellcheck]',
@@ -46,10 +48,11 @@ export const bioPageUserNickNameSelector = () =>
         .map((x) => x.parentElement?.parentElement?.previousElementSibling)
         .querySelector<HTMLDivElement>('div[dir]')
 export const bioPageUserIDSelector = (selector: () => LiveSelector<HTMLSpanElement, true>) =>
-    selector().map((x) =>
-        (x.parentElement?.parentElement?.nextElementSibling as HTMLElement).innerText.replace('@', ''),
+    selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement).innerText.replace('@', ''))
+export const floatingBioCardSelector = () =>
+    querySelector<HTMLSpanElement>(
+        `[style~="left:"] a[role=link] > div:first-child > div:first-child > div:first-child[dir="auto"]`,
     )
-export const floatingBioCardSelector = () => querySelector<HTMLSpanElement>(`[style^="left:"] a[role=link] span`)
 export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
     querySelector<HTMLDivElement, SingleMode>(
         [

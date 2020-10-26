@@ -1,9 +1,10 @@
 import { defineSocialNetworkUI, definedSocialNetworkUIs, SocialNetworkUI } from '../../social-network/ui'
 import '../../provider.ui'
 import { emptyDefinition } from '../../social-network/defaults/emptyDefinition'
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext, ValueRef } from '@dimensiondev/holoflows-kit/es'
 import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdentitiesRef'
 
+export const hasPermissionCheckAtPopupPage = new ValueRef(true)
 const popupPageUISelf = defineSocialNetworkUI({
     ...emptyDefinition,
     internalName: 'Popup page data source',
@@ -15,6 +16,8 @@ const popupPageUISelf = defineSocialNetworkUI({
         for (const ui of definedSocialNetworkUIs) {
             if (ui.shouldActivate(location) && ui.networkIdentifier !== 'localhost') {
                 popupPageUISelf.networkIdentifier = ui.networkIdentifier
+                popupPageUISelf.hasPermission = ui.hasPermission.bind(ui)
+                popupPageUISelf.requestPermission = ui.requestPermission.bind(ui)
                 InitMyIdentitiesValueRef(popupPageUISelf, ui.networkIdentifier)
                 return
             }

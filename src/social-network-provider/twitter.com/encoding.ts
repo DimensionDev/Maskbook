@@ -1,4 +1,4 @@
-import { batchReplace, regexMatchAll } from '../../utils/utils'
+import { batchReplace, parseURL, regexMatchAll } from '../../utils/utils'
 import { isNull } from 'lodash-es'
 import anchorme from 'anchorme'
 
@@ -60,13 +60,9 @@ export const twitterEncoding = {
     payloadDecoder: (text: string) => {
         if (!text) return null
         if (!text.includes('%20') || !text.includes('%40')) return null
-        const links: { raw: string; protocol: string; encoded: string }[] = anchorme(text, { list: true })
-        const payloadLink = links
-            .map((l) => ({
-                ...l,
-                raw: l.raw.replace(/…$/, ''),
-            }))
-            .filter((x) => x.raw.endsWith('%40'))[0]?.raw
+        const payloadLink = parseURL(text)
+            .map((x) => x.replace(/…$/, ''))
+            .filter((x) => x.endsWith('%40'))[0]
         try {
             const { search, pathname } = new URL(payloadLink)
             const payload = search ? search.slice(1) : pathname.slice(1)

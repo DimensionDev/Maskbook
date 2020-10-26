@@ -3,11 +3,10 @@ import createMetaMaskProvider, { MetamaskInpageProvider } from 'metamask-extensi
 import { ChainId } from '../../../../web3/types'
 import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { EthereumAddress } from 'wallet.ts'
-import { updateExoticWalletFromSource, setDefaultWallet } from '../../../../plugins/Wallet/services'
+import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import { ProviderType } from '../../../../web3/types'
-import { sideEffect } from '../../../../utils/side-effects'
 import { MessageCenter } from '../../../../utils/messages'
-import { Flags } from '../../../../utils/flags'
+import { currentSelectedWalletAddressSettings } from '../../../../plugins/Wallet/settings'
 
 //#region tracking chain id
 let currentChainId: ChainId = ChainId.Mainnet
@@ -35,9 +34,6 @@ function onNetworkError(error: any) {
     }
 }
 
-// create a new provider
-if (Flags.metamask_support_enabled) sideEffect.then(createProvider)
-
 export function createProvider() {
     if (provider) {
         provider.off('data', onData)
@@ -51,19 +47,20 @@ export function createProvider() {
     return provider
 }
 
+// MetaMask provider can be wrapped into web3 lib directly.
+// https://github.com/MetaMask/extension-provider
 export function createWeb3() {
-    if (!provider) provider = createProvider()
+    provider = createProvider()
     if (!web3) web3 = new Web3(provider)
+    else web3.setProvider(provider)
     return web3
 }
 
 export async function requestAccounts() {
-    const provider = createProvider()
-    const web3 = new Web3()
-    web3.setProvider(provider)
+    const web3 = createWeb3()
     const accounts = await web3.eth.requestAccounts()
-    await updateWalletInDB(accounts[0] ?? '', true)
-    return accounts[0]
+    for (const account of accounts) await updateWalletInDB(account, true)
+    return accounts
 }
 
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {
@@ -72,5 +69,7 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
 
     // update wallet in the DB
     await updateExoticWalletFromSource(ProviderType.MetaMask, new Map([[address, { address }]]))
-    if (setDefaultWallet) await setDefaultWallet(address)
+
+    // update the selected wallet address
+    if (setAsDefault) currentSelectedWalletAddressSettings.value = address
 }

@@ -1,4 +1,4 @@
-import { ValueRef } from '@holoflows/kit/es'
+import { ValueRef } from '@dimensiondev/holoflows-kit/es'
 import { renderHook, act } from '@testing-library/react-hooks'
 import { useValueRef } from '../../hooks/useValueRef'
 

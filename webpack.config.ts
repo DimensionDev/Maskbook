@@ -3,7 +3,7 @@ import fs, { promises } from 'fs'
 
 import { Configuration, HotModuleReplacementPlugin, EnvironmentPlugin, ProvidePlugin, RuleSetRule } from 'webpack'
 // Merge declaration of Configuration defined in webpack
-import type {} from 'webpack-dev-server'
+import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 
 //#region Development plugins
 import WebExtensionHotLoadPlugin from '@dimensiondev/webpack-web-ext-plugin'
@@ -33,9 +33,9 @@ import * as modifiers from './scripts/manifest-modifiers'
 const src = (file: string) => path.join(__dirname, file)
 const publicDir = src('./public')
 
-export default function (_argvEnv, argv: any) {
-    const target = getBuildPresets(argv)
-    const env: 'production' | 'development' = argv.mode
+export default function (cli_env: Record<string, boolean> = {}, argv: any) {
+    const target = getBuildPresets(cli_env)
+    const env: 'production' | 'development' = argv.mode ?? 'production'
     const dist = env === 'production' ? src('./build') : src('./dist')
 
     const enableHMR = env === 'development' && !Boolean(process.env.NO_HMR)
@@ -45,6 +45,7 @@ export default function (_argvEnv, argv: any) {
      */
     const sourceMapKind: Configuration['devtool'] = target.Safari || target.Firefox ? false : 'eval-source-map'
     const config: Configuration = {
+        name: 'main',
         mode: env,
         devtool: env === 'development' ? sourceMapKind : false,
         entry: {}, // ? Defined later
@@ -87,7 +88,6 @@ export default function (_argvEnv, argv: any) {
             ...getWebExtensionReloadPlugin(),
             ...getSSRPlugin(),
             ...getHotModuleReloadPlugin(),
-            env === 'production' && new CleanWebpackPlugin({}),
         ].filter(Boolean),
         optimization: {
             minimize: false,
@@ -116,6 +116,8 @@ export default function (_argvEnv, argv: any) {
             globalObject: 'globalThis',
         },
         target: WebExtensionTarget(nodeConfig), // See https://github.com/crimx/webpack-target-webextension,
+        // @ts-ignore sometimes ts don't merge declaration for unknown reason and report
+        // Object literal may only specify known properties, and 'devServer' does not exist in type 'Configuration'.ts(2322)
         devServer: {
             // Have to write disk cause plugin cannot be loaded over network
             writeToDisk: true,
@@ -124,15 +126,16 @@ export default function (_argvEnv, argv: any) {
             hotOnly: enableHMR,
             // WDS does not support chrome-extension:// browser-extension://
             disableHostCheck: true,
-            injectClient: enableHMR,
-            injectHot: enableHMR,
+            // Workaround of https://github.com/webpack/webpack-cli/issues/1955
+            injectClient: (config) => enableHMR && config.name !== 'injected-script',
+            injectHot: (config) => enableHMR && config.name !== 'injected-script',
             headers: {
                 // We're doing CORS request for HMR
                 'Access-Control-Allow-Origin': '*',
             },
             // If the content script runs in https, webpack will connect https://localhost:HMR_PORT
             https: true,
-        },
+        } as DevServerConfiguration,
     }
     //#region Define entries
     if (!(target.Firefox || target.Safari)) {
@@ -143,14 +146,12 @@ export default function (_argvEnv, argv: any) {
         'options-page': withReactDevTools(src('./src/extension/options-page/index.tsx')),
         'content-script': withReactDevTools(src('./src/content-script.ts')),
         'background-service': src('./src/background-service.ts'),
-        'injected-script': src('./src/extension/injected-script/index.ts'),
         popup: withReactDevTools(src('./src/extension/popup-page/index.tsx')),
         qrcode: src('./src/web-workers/QRCode.ts'),
         debug: src('./src/extension/debug-page'),
     }
     for (const entry in config.entry) {
         config.entry[entry] = iOSWebExtensionShimHack(...toArray(config.entry[entry]))
-        config.entry[entry] = toArray(config.entry[entry])
     }
     config.plugins.push(
         // @ts-ignore
@@ -163,7 +164,31 @@ export default function (_argvEnv, argv: any) {
     //#endregion
 
     if (argv.profile) config.plugins.push(new BundleAnalyzerPlugin())
-    return config
+    return [
+        config,
+        {
+            name: 'injected-script',
+            entry: { 'injected-script': src('./src/extension/injected-script/index.ts') },
+            devtool: false,
+            output: config.output,
+            module: { rules: [getTypeScriptLoader(false)] },
+            resolve: config.resolve,
+            // We're not using this server, only need it write to disk.
+            devServer: {
+                writeToDisk: true,
+                hot: false,
+                injectClient: false,
+                injectHot: false,
+                port: 35938,
+                overlay: false,
+            },
+            optimization: { splitChunks: false, minimize: false },
+            plugins: [
+                new EnvironmentPlugin({ NODE_ENV: env }),
+                env === 'production' && new CleanWebpackPlugin({}),
+            ].filter(Boolean),
+        } as Configuration,
+    ]
 
     /** If you are using Firefox and want to use React devtools, use Firefox nightly or start without the flag --firefox, then open about:config and switch network.websocket.allowInsecureFromHTTPS to true */
     function withReactDevTools(...src: string[]) {
@@ -175,7 +200,7 @@ export default function (_argvEnv, argv: any) {
         if (!(target.Safari || target.StandaloneGeckoView)) return path
         return [...path, src('./src/polyfill/permissions.js')]
     }
-    function getTypeScriptLoader(): RuleSetRule {
+    function getTypeScriptLoader(hmr = enableHMR): RuleSetRule {
         return {
             test: /\.(ts|tsx)$/,
             include: src('./src'),
@@ -187,7 +212,7 @@ export default function (_argvEnv, argv: any) {
                     importsNotUsedAsValues: 'remove',
                 },
                 getCustomTransformers: () => ({
-                    before: enableHMR ? [ReactRefreshTypeScriptTransformer()] : undefined,
+                    before: hmr ? [ReactRefreshTypeScriptTransformer()] : undefined,
                 }),
             },
         }
@@ -285,7 +310,7 @@ export default function (_argvEnv, argv: any) {
     }
 }
 
-/** All targets available: --firefox --firefox=nightly --firefox-android --firefox-gecko --chromium --wk-webview --e2e */
+/** All targets available: --firefox --firefox-android --firefox-gecko --chromium --wk-webview --e2e */
 function getBuildPresets(argv: any) {
     return {
         Firefox: (argv.firefox || argv['firefox-android'] || argv['firefox-gecko']) as 'nightly' | boolean,
@@ -307,7 +332,7 @@ function getGitInfo() {
             BUILD_DATE: new Date().toISOString(),
             VERSION: git.describe('--dirty'),
             TAG_NAME: git.tag(),
-            COMMIT_HASH: git.commitHash(),
+            COMMIT_HASH: git.commitHash(true),
             COMMIT_DATE: git.commitDate().toISOString(),
             REMOTE_URL: git.remoteURL(),
             BRANCH_NAME: git.branchName(),

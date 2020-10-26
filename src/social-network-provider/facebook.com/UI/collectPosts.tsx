@@ -1,4 +1,4 @@
-import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
+import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import type { SocialNetworkUI } from '../../../social-network/ui'
 import { PostInfo } from '../../../social-network/PostInfo'

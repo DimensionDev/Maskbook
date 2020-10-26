@@ -1,3 +1,4 @@
+const EventTarget = { addEventListener() {} }
 globalThis.location = { hostname: 'localhost' }
 globalThis.navigator = { appVersion: '', userAgent: '', language: '', platform: 'ssr' }
 globalThis.document = {
@@ -6,12 +7,12 @@ globalThis.document = {
     createElement() {
         return {
             attachShadow() {
-                return { addEventListener() {} }
+                return EventTarget
             },
         }
     },
     body: { appendChild() {} },
-    addEventListener() {},
+    ...EventTarget,
     documentElement: {
         onmouseenter() {},
     },
@@ -24,12 +25,15 @@ globalThis.Event = class {
 }
 globalThis.Worker = class {}
 globalThis.sessionStorage = {}
+globalThis.matchMedia = () => {
+    return { matches: false, ...EventTarget }
+}
 
 const { join } = require('path')
 const { writeFileSync, readFileSync, unlinkSync } = require('fs')
 
 const restoreLodash = modifyPackage('lodash-es', (x) => (x.main = '../lodash'))
-const restoreKit = modifyPackage('@holoflows/kit', (x) => {
+const restoreKit = modifyPackage('@dimensiondev/holoflows-kit', (x) => {
     x.exports = {
         '.': './umd/index.js',
         './es/util/sleep': './umd/index.js',

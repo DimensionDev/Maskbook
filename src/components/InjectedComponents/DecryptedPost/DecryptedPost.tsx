@@ -17,6 +17,8 @@ import { DecryptedPostDebug } from './DecryptedPostDebug'
 import { usePostInfoDetails } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
 import { getActivatedUI } from '../../../social-network/ui'
+import { Err, Ok } from 'ts-results'
+import { or } from '../../custom-ui-helper'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
@@ -61,8 +63,12 @@ export interface DecryptPostProps {
 }
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
-    const postBy = usePostInfoDetails('postBy')
     const deconstructedPayload = usePostInfoDetails('postPayload')
+    const authorInPayload = deconstructedPayload
+        .andThen((x) => (x.version === -38 ? Ok(x.authorUserID) : Err.EMPTY))
+        .unwrapOr(undefined)
+    const currentPostBy = usePostInfoDetails('postBy')
+    const postBy = or(authorInPayload, currentPostBy)
     const postMetadataImages = usePostInfoDetails('postMetadataImages')
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
@@ -89,10 +95,9 @@ export function DecryptPost(props: DecryptPostProps) {
 
     // pass 1:
     // decrypt post content and image attachments
-    const sharedPublic =
-        deconstructedPayload.ok && deconstructedPayload.val.version === -38
-            ? !!deconstructedPayload.val.sharedPublic
-            : false
+    const sharedPublic = deconstructedPayload
+        .andThen((x) => (x.version === -38 ? Ok(!!x.sharedPublic) : Err.EMPTY))
+        .unwrapOr(false)
     useEffect(() => {
         const controller = new AbortController()
         async function makeProgress(key: string, iter: ReturnType<typeof ServicesWithProgress.decryptFromText>) {
@@ -180,13 +185,29 @@ export function DecryptPost(props: DecryptPostProps) {
                             requestAppendRecipients={requestAppendRecipientsWrapped}
                             profiles={profiles}
                             sharedPublic={sharedPublic}
+                            author={authorInPayload}
+                            postedBy={currentPostBy}
                             {...props.successComponentProps}
                         />
                     )
                 case 'error':
-                    return <Failed error={new Error(progress.error)} {...props.failedComponentProps} />
+                    return (
+                        <Failed
+                            error={new Error(progress.error)}
+                            author={authorInPayload}
+                            postedBy={currentPostBy}
+                            {...props.failedComponentProps}
+                        />
+                    )
                 case 'progress':
-                    return <Awaiting type={progress} {...props.waitingComponentProps} />
+                    return (
+                        <Awaiting
+                            type={progress}
+                            author={authorInPayload}
+                            postedBy={currentPostBy}
+                            {...props.waitingComponentProps}
+                        />
+                    )
                 default:
                     return null
             }

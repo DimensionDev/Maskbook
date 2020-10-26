@@ -1,9 +1,10 @@
 import 'webpack-target-webextension/lib/background'
 import './polyfill'
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import { MessageCenter } from './utils/messages'
-import 'webcrypto-liner'
-import './_background_loader.0'
+// @ts-ignore
+import { crypto } from 'webcrypto-liner/build/index.es'
+Object.defineProperty(globalThis, 'crypto', { configurable: true, enumerable: true, get: () => crypto })
 import './_background_loader.1'
 import './_background_loader.2'
 import './extension/service'
@@ -26,8 +27,8 @@ import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePa
 import { exclusiveTasks } from './extension/content-script/tasks'
 import { Flags } from './utils/flags'
 
-if (process.env.NODE_ENV === 'development') {
-    require('./network/matrix/instance')
+if (process.env.NODE_ENV === 'development' && Flags.matrix_based_service_enabled) {
+    import('./network/matrix/instance')
 }
 
 if (GetContext() === 'background') {
@@ -46,12 +47,13 @@ if (GetContext() === 'background') {
         })
     browser.webNavigation.onCommitted.addListener(async (arg) => {
         if (arg.url === 'about:blank') return
+        if (!arg.url.startsWith('http')) return
         const contains = await browser.permissions.contains({ origins: [arg.url] })
         /**
          * For iOS App, there is a special way to do it in the manifest.json
          * A `iOS-injected-scripts` field is used to add extra scripts
          */
-        if (!Flags.support_native_injected_script_declaration && contains) {
+        if (!Flags.support_native_injected_script_declaration && !Flags.requires_injected_script_run_directly) {
             browser.tabs
                 .executeScript(arg.tabId, {
                     runAt: 'document_start',
@@ -107,20 +109,25 @@ if (GetContext() === 'background') {
     })
 }
 async function getInjectedScript() {
-    return `{
+    try {
+        return `{
         const script = document.createElement('script')
         script.innerHTML = ${await fetch('js/injected-script.js')
             .then((x) => x.text())
             .then(JSON.stringify)}
         document.documentElement.appendChild(script)
     }`
+    } catch (e) {
+        console.error(e)
+        return `console.log('Injected script failed to load.')`
+    }
 }
 function IgnoreError(arg: unknown): (reason: Error) => void {
     return (e) => {
         const ignoredErrorMessages = ['non-structured-clonable data']
         if (ignoredErrorMessages.some((x) => e.message.includes(x))) {
             // It's okay we don't need the result, happened on Firefox
-        } else console.error('Inject error', e, arg, Object.entries(e))
+        } else console.error('Inject error', e.message, arg, Object.entries(e))
     }
 }
 

@@ -1,4 +1,4 @@
-import { ValueRef } from '@holoflows/kit/es'
+import { ValueRef } from '@dimensiondev/holoflows-kit/es'
 import { PluginMessageCenter } from '../../PluginMessages'
 import Services from '../../../extension/service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'

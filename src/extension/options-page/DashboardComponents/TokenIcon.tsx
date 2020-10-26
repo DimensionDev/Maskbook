@@ -1,9 +1,9 @@
 import React from 'react'
-import { EthereumAddress } from 'wallet.ts'
 import { makeStyles, createStyles, Avatar, Theme, AvatarProps } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { isSameAddress, getConstant } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
+import { useBlockie } from '../../../web3/hooks/useBlockie'
 import { formatChecksumAddress } from '../../../plugins/Wallet/formatter'
 
 const ICON_MAP = {
@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: 16,
             height: 16,
             backgroundColor: theme.palette.common.white,
+            margin: 0,
         },
     }),
 )
@@ -39,9 +40,13 @@ export interface TokenIconProps extends withClasses<KeysInferFromUseStyles<typeo
 export function TokenIcon(props: TokenIconProps) {
     const { address, name } = props
     const classes = useStylesExtends(useStyles(), props)
+    const tokenBlockie = useBlockie(props.address)
+
     return (
         <Avatar className={classes.icon} src={resolveTokenIconURL(address)} {...props.AvatarProps}>
-            {name?.substr(0, 1).toLocaleUpperCase()}
+            <Avatar className={classes.icon} src={tokenBlockie}>
+                {name?.substr(0, 1).toLocaleUpperCase()}
+            </Avatar>
         </Avatar>
     )
 }

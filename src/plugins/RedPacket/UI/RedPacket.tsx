@@ -121,7 +121,7 @@ export function RedPacket(props: RedPacketProps) {
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
 
-    //#region remote controll select provider dialog
+    //#region remote controlled select provider dialog
     const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
         WalletMessageCenter,
         'selectProviderDialogUpdated',
@@ -196,6 +196,7 @@ export function RedPacket(props: RedPacketProps) {
                     <Typography className={classes.from} variant="body1" color="inherit">
                         {t('plugin_red_packet_from', { name: payload.sender.name ?? '-' })}
                     </Typography>
+                    {/* it might be fontSize: 12 on twitter based on theme? */}
                     {canFetch && listOfStatus.length ? (
                         <Typography className={classes.label} variant="body2">
                             {resolveRedPacketStatus(listOfStatus)}

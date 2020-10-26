@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import {
     makeStyles,
     createStyles,
-    DialogTitle,
     DialogContent,
     DialogProps,
     Typography,
@@ -18,10 +17,8 @@ import {
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import { add as addDate } from 'date-fns'
-import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
-import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
-import { useStylesExtends, or } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
 import Services from '../../../extension/service'
 import { getActivatedUI } from '../../../social-network/ui'
@@ -31,6 +28,7 @@ import { PollCardUI } from './Polls'
 import type { PollMetaData } from '../types'
 import { POLL_META_KEY_1 } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
 const useNewPollStyles = makeStyles((theme) =>
     createStyles({
@@ -185,7 +183,6 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
             </div>
             <div className={classes.line} style={{ justifyContent: 'flex-end' }}>
                 <Button
-                    className={classes.button}
                     color="primary"
                     variant="contained"
                     startIcon={loading ? <CircularProgress classes={{ root: classes.whiteColor }} size={24} /> : null}
@@ -248,21 +245,7 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-interface PollsDialogProps
-    extends withClasses<
-        | KeysInferFromUseStyles<typeof useStyles>
-        | 'dialog'
-        | 'wrapper'
-        | 'backdrop'
-        | 'container'
-        | 'close'
-        | 'header'
-        | 'content'
-        | 'paper'
-        | 'title'
-        | 'label'
-        | 'button'
-    > {
+interface PollsDialogProps extends withClasses<'wrapper'> {
     open: boolean
     onConfirm: (opt?: any) => void
     onDecline: () => void
@@ -324,34 +307,11 @@ export default function PollsDialog(props: PollsDialogProps) {
 
     return (
         <>
-            <ShadowRootDialog
-                className={classes.dialog}
-                classes={{
-                    container: classes.container,
-                    paper: classes.paper,
-                }}
-                open={props.open}
-                scroll="paper"
-                fullWidth
-                maxWidth="sm"
-                disableAutoFocus
-                disableEnforceFocus
-                BackdropProps={{
-                    className: classes.backdrop,
-                }}
-                {...props.DialogProps}>
-                <DialogTitle className={classes.header}>
-                    <IconButton classes={{ root: classes.close }} onClick={props.onDecline}>
-                        <DialogDismissIconUI />
-                    </IconButton>
-                    <Typography className={classes.title} display="inline" variant="inherit">
-                        {t('plugin_poll_display_name')}
-                    </Typography>
-                </DialogTitle>
-                <DialogContent className={classes.content}>
-                    <AbstractTab height={450} {...tabProps}></AbstractTab>
+            <InjectedDialog open={props.open} onExit={props.onDecline} title={t('plugin_poll_display_name')}>
+                <DialogContent>
+                    <AbstractTab height={450} {...tabProps} />
                 </DialogContent>
-            </ShadowRootDialog>
+            </InjectedDialog>
         </>
     )
 }

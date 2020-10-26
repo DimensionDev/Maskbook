@@ -34,8 +34,23 @@ declare module NodeJS {
     }
 }
 
+interface Clipboard extends EventTarget {
+    write(data: ClipboardItem[]): Promise<void>
+}
+
+declare class ClipboardItem {
+    constructor(data: { [mimeType: string]: Blob })
+}
+
+type PermissionNameWithClipboard = PermissionName | 'clipboard-read' | 'clipboard-write'
+
+interface PermissionWithClipboardDescriptor {
+    name: PermissionNameWithClipboard
+}
+
 interface Permissions {
     request(permission: { name: string }): Promise<PermissionStatus>
+    query(permissionDesc: PermissionWithClipboardDescriptor): Promise<PermissionStatus>
 }
 
 declare module 'typeson' {
@@ -86,4 +101,61 @@ declare module 'react-middle-ellipsis' {
     }
     const component: (props: ComponentProps) => JSX.Element
     export default component
+}
+
+declare module 'ethereum-blockies' {
+    export interface BlockieOptions {
+        seed?: string // seed used to generate icon data, default: random
+        color?: string // to manually specify the icon color, default: random
+        bgcolor?: string // choose a different background color, default: white
+        size?: number // width/height of the icon in blocks, default: 10
+        scale?: number // width/height of each block in pixels, default: 5
+    }
+
+    export function create(options?: BlockieOptions): HTMLCanvasElement
+}
+
+declare module '@transak/transak-sdk' {
+    enum EVENTS {
+        ALL_EVENTS = '*',
+        TRANSAK_WIDGET_INITIALISED = 'TRANSAK_WIDGET_INITIALISED',
+        TRANSAK_WIDGET_OPEN = 'TRANSAK_WIDGET_OPEN',
+        TRANSAK_WIDGET_CLOSE_REQUEST = 'TRANSAK_WIDGET_CLOSE_REQUEST',
+        TRANSAK_WIDGET_CLOSE = 'TRANSAK_WIDGET_CLOSE',
+        TRANSAK_ORDER_CREATED = 'TRANSAK_ORDER_CREATED',
+        TRANSAK_ORDER_CANCELLED = 'TRANSAK_ORDER_CANCELLED',
+        TRANSAK_ORDER_FAILED = 'TRANSAK_ORDER_FAILED',
+        TRANSAK_ORDER_SUCCESSFUL = 'TRANSAK_ORDER_SUCCESSFUL',
+        TRANSAK_ERROR = 'TRANSAK_ERROR',
+    }
+
+    class TransakSDK {
+        constructor(config: TransakSDKConfig) {}
+
+        public on(name: string, callback: Function): void
+        public init(): void
+        public close(): void
+        public closeRequest(): void
+        public modal(): void
+
+        public ALL_EVENTS_EVENTS = EVENTS.ALL
+        public ERROR = EVENTS.TRANSAK_ERROR
+        public EVENTS = EVENTS
+    }
+
+    export interface TransakSDKConfig {
+        apiKey: string
+        environment: 'STAGING' | 'PRODUCTION'
+        defaultCryptoCurrency?: string
+        walletAddress?: string
+        themeColor?: string
+        fiatCurrency?: string
+        email?: string
+        redirectURL: string
+        hostURL: string
+        widgetHeight?: string
+        widgetWidth?: string
+    }
+
+    export default TransakSDK
 }

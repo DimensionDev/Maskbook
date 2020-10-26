@@ -5,10 +5,6 @@ import {
     InputBase,
     Button,
     Typography,
-    IconButton,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
     Box,
     Chip,
     ThemeProvider,
@@ -17,6 +13,8 @@ import {
     Tooltip,
     CircularProgressProps,
     CircularProgress,
+    DialogContent,
+    DialogActions,
 } from '@material-ui/core'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useStylesExtends, or } from '../custom-ui-helper'
@@ -27,11 +25,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
-import { DialogDismissIconUI } from './DialogDismissIcon'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
-import RedPacketDialog from '../../plugins/RedPacket/UI/RedPacketDialog'
-import FileServiceDialog from '../../plugins/FileService/MainDialog'
-import FileServiceEntryIcon from './FileServiceEntryIcon'
 import {
     TypedMessage,
     extractTextFromTypedMessage,
@@ -43,13 +37,13 @@ import { EthereumTokenType } from '../../web3/types'
 import { isDAI, isOKB } from '../../web3/helpers'
 import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/plugin'
 import { Flags } from '../../utils/flags'
-import PollsDialog from '../../plugins/Polls/UI/PollsDialog'
-import LotteryDialog from '../../plugins/Lottery/UI/LotteryDialog'
+import { Result } from 'ts-results'
+import { ErrorBoundary } from '../shared/ErrorBoundary'
+import { InjectedDialog } from '../shared/InjectedDialog'
 
 const defaultTheme = {}
 
@@ -64,31 +58,9 @@ const useStyles = makeStyles({
         fontSize: 18,
         minHeight: '8em',
     },
-    title: {
-        marginLeft: 6,
-    },
-    actions: {
-        paddingLeft: 26,
-    },
 })
 
-export interface PostDialogUIProps
-    extends withClasses<
-        | KeysInferFromUseStyles<typeof useStyles>
-        | 'root'
-        | 'dialog'
-        | 'backdrop'
-        | 'container'
-        | 'paper'
-        | 'input'
-        | 'header'
-        | 'content'
-        | 'actions'
-        | 'close'
-        | 'button'
-        | 'label'
-        | 'switch'
-    > {
+export interface PostDialogUIProps extends withClasses<never> {
     theme?: Theme
     open: boolean
     onlyMyself: boolean
@@ -119,65 +91,52 @@ export function PostDialogUI(props: PostDialogUIProps) {
         if (isTypedMessageText(msg)) props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
         else throw new Error('Not impled yet')
     }
-    const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
-    const [fileServiceDialogOpen, setFileServiceDialogOpen] = useState(false)
-    const [pollsDialogOpen, setPollsDialogOpen] = useState(false)
-    const [lotteryDialogOpen, setLotteryDialogOpen] = useState(false)
 
     if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
-    const metadataBadge = [...PluginUI].flatMap((plugin) => {
-        const knownMeta = plugin.postDialogMetadataBadge
-        if (!knownMeta) return undefined
-        return [...knownMeta.entries()].map(([metadataKey, tag]) => {
-            return renderWithMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
-                <Box key={metadataKey} marginRight={1} marginTop={1} display="inline-block">
-                    <Tooltip title={`Provided by plugin "${plugin.pluginName}"`}>
-                        <Chip
-                            onDelete={() => {
-                                const ref = getActivatedUI().typedMessageMetadata
-                                const next = new Map(ref.value.entries())
-                                next.delete(metadataKey)
-                                ref.value = next
-                            }}
-                            label={tag(r)}
+    const metadataBadge = [...PluginUI].flatMap((plugin) =>
+        Result.wrap(() => {
+            const knownMeta = plugin.postDialogMetadataBadge
+            if (!knownMeta) return undefined
+            return [...knownMeta.entries()].map(([metadataKey, tag]) => {
+                return renderWithMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
+                    <Box key={metadataKey} marginRight={1} marginTop={1} display="inline-block">
+                        <Tooltip title={`Provided by plugin "${plugin.pluginName}"`}>
+                            <Chip
+                                onDelete={() => {
+                                    const ref = getActivatedUI().typedMessageMetadata
+                                    const next = new Map(ref.value.entries())
+                                    next.delete(metadataKey)
+                                    ref.value = next
+                                }}
+                                label={tag(r)}
+                            />
+                        </Tooltip>
+                    </Box>
+                ))
+            })
+        }).unwrapOr(null),
+    )
+    const pluginEntries = [...PluginUI].flatMap((plugin) =>
+        Result.wrap(() => {
+            const entries = plugin.postDialogEntries
+            if (!entries) return null
+            return entries.map((opt, index) => {
+                return (
+                    <ErrorBoundary key={plugin.identifier + ' ' + index}>
+                        <ClickableChip
+                            key={plugin.identifier + ' ' + index}
+                            ChipProps={{ label: opt.label, onClick: opt.onClick }}
                         />
-                    </Tooltip>
-                </Box>
-            ))
-        })
-    })
+                    </ErrorBoundary>
+                )
+            })
+        }).unwrapOr(null),
+    )
     return (
-        <div className={classes.root}>
+        <>
             <ThemeProvider theme={props.theme ?? defaultTheme}>
-                <ShadowRootDialog
-                    className={classes.dialog}
-                    classes={{
-                        container: classes.container,
-                        paper: classes.paper,
-                    }}
-                    open={props.open}
-                    scroll="paper"
-                    fullWidth
-                    maxWidth="sm"
-                    disableAutoFocus
-                    disableEnforceFocus
-                    onEscapeKeyDown={props.onCloseButtonClicked}
-                    BackdropProps={{
-                        className: classes.backdrop,
-                    }}
-                    {...props.DialogProps}>
-                    <DialogTitle className={classes.header}>
-                        <IconButton
-                            classes={{ root: classes.close }}
-                            aria-label={t('post_dialog__dismiss_aria')}
-                            onClick={props.onCloseButtonClicked}>
-                            <DialogDismissIconUI />
-                        </IconButton>
-                        <Typography className={classes.title} display="inline" variant="inherit">
-                            {t('post_dialog__title')}
-                        </Typography>
-                    </DialogTitle>
-                    <DialogContent className={classes.content}>
+                <InjectedDialog open={props.open} onExit={props.onCloseButtonClicked} title={t('post_dialog__title')}>
+                    <DialogContent>
                         {metadataBadge}
                         <InputBase
                             classes={{
@@ -190,65 +149,15 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             fullWidth
                             multiline
                             placeholder={t('post_dialog__placeholder')}
-                            inputProps={{ className: classes.input, 'data-testid': 'text_textarea' }}
+                            inputProps={{ 'data-testid': 'text_textarea' }}
                         />
 
                         <Typography style={{ marginBottom: 10 }}>Plugins (Experimental)</Typography>
-                        <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
-                            <ClickableChip
-                                ChipProps={{
-                                    label: '💰 Red Packet',
-                                    onClick: async () => {
-                                        const wallets = await Services.Plugin.invokePlugin(
-                                            'maskbook.wallet',
-                                            'getWallets',
-                                        )
-                                        if (wallets.length) setRedPacketDialogOpen(true)
-                                        else Services.Provider.requestConnectWallet()
-                                    },
-                                }}
-                            />
-                            {Flags.file_service_create_enabled && (
-                                <ClickableChip
-                                    ChipProps={{
-                                        label: (
-                                            <>
-                                                <FileServiceEntryIcon width={16} height={16} />
-                                                &nbsp;File Service
-                                            </>
-                                        ),
-                                        onClick() {
-                                            setFileServiceDialogOpen(true)
-                                        },
-                                    }}
-                                />
-                            )}
-                            {Flags.poll_enabled && (
-                                <ClickableChip
-                                    ChipProps={{
-                                        label: '🗳️ Poll',
-                                        onClick: () => {
-                                            setPollsDialogOpen(true)
-                                        },
-                                    }}
-                                />
-                            )}
-                            {Flags.lottery_enabled && (
-                                <ClickableChip
-                                    ChipProps={{
-                                        label: '🎉 Lottery',
-                                        onClick: async () => {
-                                            const wallets = await Services.Plugin.invokePlugin(
-                                                'maskbook.wallet',
-                                                'getWallets',
-                                            )
-                                            if (wallets.length) setLotteryDialogOpen(true)
-                                            else Services.Provider.requestConnectWallet()
-                                        },
-                                    }}
-                                />
-                            )}
-                        </Box>
+                        <ErrorBoundary>
+                            <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                                {pluginEntries}
+                            </Box>
+                        </ErrorBoundary>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
                         </Typography>
@@ -279,30 +188,26 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 />
                             </SelectRecipientsUI>
                         </Box>
-                        {Flags.no_post_image_payload_support ? null : (
-                            <>
-                                <Typography style={{ marginBottom: 10 }}>
-                                    {t('post_dialog__more_options_title')}
-                                </Typography>
-                                <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
-                                    <ClickableChip
-                                        checked={props.imagePayload}
-                                        ChipProps={{
-                                            label: t('post_dialog__image_payload'),
-                                            onClick: () => props.onImagePayloadSwitchChanged(!props.imagePayload),
-                                            'data-testid': 'image_chip',
-                                        }}
-                                    />
-                                </Box>
-                            </>
-                        )}
+
+                        <>
+                            <Typography style={{ marginBottom: 10 }}>{t('post_dialog__more_options_title')}</Typography>
+                            <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                                <ClickableChip
+                                    checked={props.imagePayload}
+                                    ChipProps={{
+                                        label: t('post_dialog__image_payload'),
+                                        onClick: () => props.onImagePayloadSwitchChanged(!props.imagePayload),
+                                        'data-testid': 'image_chip',
+                                    }}
+                                />
+                            </Box>
+                        </>
                     </DialogContent>
-                    <DialogActions className={classes.actions}>
+                    <DialogActions>
                         {isTypedMessageText(props.postContent) && props.maxLength ? (
                             <CharLimitIndicator value={props.postContent.content.length} max={props.maxLength} />
                         ) : null}
                         <Button
-                            className={classes.button}
                             variant="contained"
                             disabled={props.postBoxButtonDisabled}
                             onClick={props.onFinishButtonClicked}
@@ -310,45 +215,9 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             {t('post_dialog__button')}
                         </Button>
                     </DialogActions>
-                </ShadowRootDialog>
+                </InjectedDialog>
             </ThemeProvider>
-            {!process.env.STORYBOOK && (
-                <RedPacketDialog
-                    classes={classes}
-                    open={props.open && redPacketDialogOpen}
-                    onConfirm={() => setRedPacketDialogOpen(false)}
-                    onDecline={() => setRedPacketDialogOpen(false)}
-                    DialogProps={props.DialogProps}
-                />
-            )}
-            {Flags.file_service_create_enabled && (
-                <FileServiceDialog
-                    classes={classes}
-                    open={props.open && fileServiceDialogOpen}
-                    onConfirm={() => setFileServiceDialogOpen(false)}
-                    onDecline={() => setFileServiceDialogOpen(false)}
-                    DialogProps={props.DialogProps}
-                />
-            )}
-            {!process.env.STORYBOOK && (
-                <PollsDialog
-                    classes={classes}
-                    open={props.open && pollsDialogOpen}
-                    onConfirm={() => setPollsDialogOpen(false)}
-                    onDecline={() => setPollsDialogOpen(false)}
-                    DialogProps={props.DialogProps}
-                />
-            )}
-            {!process.env.STORYBOOK && (
-                <LotteryDialog
-                    classes={classes}
-                    open={props.open && lotteryDialogOpen}
-                    onConfirm={() => setLotteryDialogOpen(false)}
-                    onDecline={() => setLotteryDialogOpen(false)}
-                    DialogProps={props.DialogProps}
-                />
-            )}
-        </div>
+        </>
     )
 }
 
@@ -543,7 +412,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             onCloseButtonClicked={onCloseButtonClicked}
             {...props}
             open={open}
-            classes={{ ...props.classes }}
         />
     )
 }

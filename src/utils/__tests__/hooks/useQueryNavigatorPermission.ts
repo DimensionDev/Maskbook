@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks'
-import { useRequestCamera, checkPermissionApiUsability } from '../../hooks/useRequestCamera'
+import { useQueryNavigatorPermission, checkPermissionApiUsability } from '../../hooks/useQueryNavigatorPermission'
 
 const q = <const>['query', 'request', 'revoke']
 
@@ -30,7 +30,7 @@ test('check permission api usability', () => {
 })
 
 test('request camera permission without permissions api', () => {
-    expect(renderHook(() => useRequestCamera(true)).result.current).toEqual('granted')
+    expect(renderHook(() => useQueryNavigatorPermission(true, 'camera')).result.current).toEqual('granted')
 })
 
 for (const api of q) {
@@ -46,7 +46,7 @@ for (const api of q) {
             },
         })
 
-        const hook = renderHook(() => useRequestCamera(true))
+        const hook = renderHook(() => useQueryNavigatorPermission(true, 'camera'))
         expect(hook.result.current).toEqual('prompt')
         await hook.waitForNextUpdate()
         expect(hook.result.current).toEqual('granted')
@@ -59,7 +59,7 @@ for (const api of q) {
             },
         })
 
-        const hook = renderHook(() => useRequestCamera(true))
+        const hook = renderHook(() => useQueryNavigatorPermission(true, 'camera'))
         expect(hook.result.current).toEqual('prompt')
         await hook.waitForNextUpdate()
         expect(hook.result.current).toEqual('granted')
@@ -67,7 +67,7 @@ for (const api of q) {
 }
 
 test('permission api not available', async () => {
-    const hook = renderHook(() => useRequestCamera(true))
+    const hook = renderHook(() => useQueryNavigatorPermission(true, 'camera'))
     expect(hook.result.current).toEqual('granted')
 })
 
@@ -92,7 +92,7 @@ test('remove onchange listener', async () => {
         },
     })
 
-    const hook = renderHook(() => useRequestCamera(true))
+    const hook = renderHook(() => useQueryNavigatorPermission(true, 'camera'))
     await hook.waitForNextUpdate()
     hook.unmount()
 

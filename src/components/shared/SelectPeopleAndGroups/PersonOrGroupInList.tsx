@@ -14,7 +14,7 @@ import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
 import { useStylesExtends } from '../../custom-ui-helper'
 import type { ListItemTypeMap } from '@material-ui/core/ListItem'
 
-export interface PersonOrGroupInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
+export interface ProfileOrGroupInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
     item: Group | Profile
     disabled?: boolean
     showAtNetwork?: boolean
@@ -38,7 +38,7 @@ const useStyle = makeStyles((theme: Theme) => ({
 /**
  * Item in the list
  */
-export function PersonOrGroupInList(props: PersonOrGroupInListProps) {
+export function ProfileOrGroupInList(props: ProfileOrGroupInListProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyle(), props)
     const nicknamePreviewsForGroup = useNickNamesFromList(isGroup(props.item) ? props.item.members : [])
@@ -98,8 +98,8 @@ export function PersonOrGroupInList(props: PersonOrGroupInListProps) {
 }
 
 function useNickNamesFromList(preview: readonly ProfileIdentifier[]) {
-    const people = useFriendsList()
-    const userWithNames = React.useMemo(() => people.filter((x) => x.nickname), [people])
+    const profile = useFriendsList()
+    const userWithNames = React.useMemo(() => profile.filter((x) => x.nickname), [profile])
 
     const [x, y, z] = preview
     const [a] = React.useMemo(() => x && userWithNames.filter((w) => w.identifier.equals(x)), [userWithNames, x]) || []

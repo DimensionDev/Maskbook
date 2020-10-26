@@ -3,7 +3,7 @@ name: Demand
 about: PRD for new demand
 title: '[Demand] '
 labels: 'Demand: Draft'
-assignees: neruthes
+assignees:
 ---
 
 ## Catalogue

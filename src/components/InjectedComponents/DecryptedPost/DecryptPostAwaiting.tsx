@@ -2,11 +2,18 @@ import React from 'react'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { DecryptionProgress } from '../../../extension/background-script/CryptoServices/decryptFrom'
+import type { ProfileIdentifier } from '../../../database/type'
+import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 export interface DecryptPostAwaitingProps {
     type?: DecryptionProgress
     AdditionalContentProps?: Partial<AdditionalContentProps>
+    /** The author in the payload */
+    author?: ProfileIdentifier
+    /** The author of the encrypted post */
+    postedBy?: ProfileIdentifier
 }
 export const DecryptPostAwaiting = React.memo(function DecryptPostAwaiting(props: DecryptPostAwaitingProps) {
+    const { AdditionalContentProps, author, postedBy, type } = props
     const { t } = useI18N()
     const key = {
         finding_post_key: t('decrypted_postbox_decrypting_finding_post_key'),
@@ -18,9 +25,10 @@ export const DecryptPostAwaiting = React.memo(function DecryptPostAwaiting(props
     } as const
     return (
         <AdditionalContent
-            title={key[(props.type && props.type.progress) || 'undefined']}
+            title={key[type?.progress || 'undefined']}
             progress
-            {...props.AdditionalContentProps}
+            headerActions={wrapAuthorDifferentMessage(author, postedBy, void 0)}
+            {...AdditionalContentProps}
         />
     )
 })

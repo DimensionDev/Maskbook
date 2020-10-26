@@ -26,6 +26,7 @@ import {
 } from '@material-ui/core'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
+import { useHistory } from 'react-router-dom'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton, { DebounceButton } from '../DashboardComponents/ActionButton'
@@ -34,9 +35,9 @@ import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import Services from '../../service'
 import type { RedPacketJSONPayload } from '../../../plugins/RedPacket/types'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
-import { useHistory } from 'react-router-dom'
 import { DashboardRoute } from '../Route'
-import { sleep } from '../../../utils/utils'
+import { sleep, checkInputLengthExceed } from '../../../utils/utils'
+import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import { QRCode } from '../../../components/shared/qrcode'
 import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../web3/hooks/useChainState'
@@ -49,6 +50,7 @@ import { useRedPacketFromDB } from '../../../plugins/RedPacket/hooks/useRedPacke
 import WalletLine from './WalletLine'
 import { isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
+import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -217,6 +219,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                     <>
                         <form>
                             <TextField
+                                helperText={
+                                    checkInputLengthExceed(name)
+                                        ? t('input_length_exceed_prompt', {
+                                              name: t('wallet_name').toLowerCase(),
+                                              length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                          })
+                                        : undefined
+                                }
                                 required
                                 autoFocus
                                 label={t('wallet_name')}
@@ -261,6 +271,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                 children: (
                     <div>
                         <TextField
+                            helperText={
+                                checkInputLengthExceed(name)
+                                    ? t('input_length_exceed_prompt', {
+                                          name: t('wallet_name').toLowerCase(),
+                                          length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                      })
+                                    : undefined
+                            }
                             required
                             autoFocus
                             label={t('wallet_name')}
@@ -282,6 +300,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                 children: (
                     <div>
                         <TextField
+                            helperText={
+                                checkInputLengthExceed(name)
+                                    ? t('input_length_exceed_prompt', {
+                                          name: t('wallet_name').toLowerCase(),
+                                          length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                      })
+                                    : undefined
+                            }
                             required
                             autoFocus
                             label={t('wallet_name')}
@@ -306,28 +332,40 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
     }
 
     const onSubmit = useSnackbarCallback(
-        () => {
-            if (state[0] === 0)
-                return Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', {
+        async () => {
+            if (state[0] === 0) {
+                const address = await Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', {
                     name,
                     passphrase,
                 })
-            if (state[0] === 1)
-                return Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                setAsSelectedWallet(address)
+            }
+            if (state[0] === 1) {
+                const address = await Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
                     name,
                     mnemonic: mnemonic.split(' '),
                     passphrase: '',
                 })
-            return Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', privKey).then(
-                ({ address, privateKeyValid }) => {
-                    if (!privateKeyValid) throw new Error(t('import_failed'))
-                    return Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
-                        name,
-                        address,
-                        _private_key_: privKey,
-                    })
-                },
-            )
+                setAsSelectedWallet(address)
+            }
+            if (state[0] === 2) {
+                const { address, privateKeyValid } = await Services.Plugin.invokePlugin(
+                    'maskbook.wallet',
+                    'recoverWalletFromPrivateKey',
+                    privKey,
+                )
+                setAsSelectedWallet(address)
+                if (!privateKeyValid) throw new Error(t('import_failed'))
+                await Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                    name,
+                    address,
+                    _private_key_: privKey,
+                })
+            }
+            function setAsSelectedWallet(address: string) {
+                if (!address) return
+                currentSelectedWalletAddressSettings.value = address
+            }
         },
         [state[0], name, passphrase, mnemonic, privKey],
         props.onClose,
@@ -345,9 +383,10 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                         variant="contained"
                         onClick={onSubmit}
                         disabled={
-                            !(state[0] === 0 && name && confirmed) &&
-                            !(state[0] === 1 && name && mnemonic) &&
-                            !(state[0] === 2 && name && privKey)
+                            (!(state[0] === 0 && name && confirmed) &&
+                                !(state[0] === 1 && name && mnemonic) &&
+                                !(state[0] === 2 && name && privKey)) ||
+                            checkInputLengthExceed(name)
                         }>
                         {t('import')}
                     </DebounceButton>
@@ -561,6 +600,14 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                 primary={t('wallet_rename')}
                 content={
                     <TextField
+                        helperText={
+                            checkInputLengthExceed(name)
+                                ? t('input_length_exceed_prompt', {
+                                      name: t('wallet_name').toLowerCase(),
+                                      length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                  })
+                                : undefined
+                        }
                         required
                         autoFocus
                         label={t('wallet_name')}
@@ -572,7 +619,10 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                 }
                 footer={
                     <SpacedButtonGroup>
-                        <DebounceButton variant="contained" onClick={renameWallet}>
+                        <DebounceButton
+                            variant="contained"
+                            onClick={renameWallet}
+                            disabled={name.length === 0 || checkInputLengthExceed(name)}>
                             {t('ok')}
                         </DebounceButton>
                         <Button variant="outlined" color="inherit" onClick={props.onClose}>

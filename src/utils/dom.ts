@@ -1,4 +1,4 @@
-import { IntervalWatcher, LiveSelector } from '@holoflows/kit'
+import { IntervalWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { isUndefined } from 'lodash-es'
 
 export const isDocument = (node: Node): node is Document => node.nodeType === Node.DOCUMENT_NODE

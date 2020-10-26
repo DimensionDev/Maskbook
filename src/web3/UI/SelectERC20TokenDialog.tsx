@@ -1,36 +1,13 @@
 import React, { useState } from 'react'
-import {
-    makeStyles,
-    createStyles,
-    Theme,
-    DialogTitle,
-    IconButton,
-    Typography,
-    Divider,
-    DialogContent,
-    TextField,
-} from '@material-ui/core'
+import { makeStyles, createStyles, Theme, DialogContent, TextField } from '@material-ui/core'
 import { useI18N } from '../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
-import {
-    useTwitterDialog,
-    useTwitterButton,
-    useTwitterCloseButton,
-} from '../../social-network-provider/twitter.com/utils/theme'
-import { getActivatedUI } from '../../social-network/ui'
 import type { Token } from '../types'
 import { FixedTokenList } from '../../extension/options-page/DashboardComponents/FixedTokenList'
+import { InjectedDialog } from '../../components/shared/InjectedDialog'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        paper: {
-            width: '400px !important',
-        },
-        title: {
-            marginLeft: 6,
-        },
         search: {
             width: '100%',
             margin: theme.spacing(1, 0, 2),
@@ -50,19 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-interface SelectERC20TokenDialogUIProps
-    extends withClasses<
-        | KeysInferFromUseStyles<typeof useStyles>
-        | 'root'
-        | 'title'
-        | 'dialog'
-        | 'backdrop'
-        | 'container'
-        | 'paper'
-        | 'header'
-        | 'content'
-        | 'close'
-    > {
+interface SelectERC20TokenDialogUIProps extends withClasses<never> {
     open: boolean
     excludeTokens: string[]
     onSubmit(token: Token): void
@@ -80,35 +45,9 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     //#endregion
 
     return (
-        <div className={classes.root}>
-            <ShadowRootDialog
-                className={classes.dialog}
-                classes={{
-                    container: classes.container,
-                    paper: classes.paper,
-                }}
-                open={open}
-                scroll="body"
-                fullWidth
-                maxWidth="sm"
-                disableAutoFocus
-                disableEnforceFocus
-                onEscapeKeyDown={onClose}
-                onBackdropClick={onClose}
-                onExit={onClose}
-                BackdropProps={{
-                    className: classes.backdrop,
-                }}>
-                <DialogTitle className={classes.header}>
-                    <IconButton classes={{ root: classes.close }} onClick={onClose}>
-                        <DialogDismissIconUI />
-                    </IconButton>
-                    <Typography className={classes.title} display="inline" variant="inherit">
-                        Select a Token
-                    </Typography>
-                </DialogTitle>
-                <Divider />
-                <DialogContent className={classes.content}>
+        <>
+            <InjectedDialog open={open} onExit={onClose} title="Select a Token">
+                <DialogContent>
                     <TextField
                         className={classes.search}
                         label={t('add_token_search_hint')}
@@ -131,24 +70,13 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                         }}
                     />
                 </DialogContent>
-            </ShadowRootDialog>
-        </div>
+            </InjectedDialog>
+        </>
     )
 }
 
 export interface SelectERC20TokenDialogProps extends SelectERC20TokenDialogUIProps {}
 
 export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
-    const ui = getActivatedUI()
-    const twitterClasses = {
-        ...useTwitterDialog(),
-        ...useTwitterButton(),
-        ...useTwitterCloseButton(),
-    }
-
-    return ui.internalName === 'twitter' ? (
-        <SelectERC20TokenDialogUI classes={twitterClasses} {...props} />
-    ) : (
-        <SelectERC20TokenDialogUI {...props} />
-    )
+    return <SelectERC20TokenDialogUI {...props} />
 }

@@ -5,6 +5,7 @@ import { useStylesExtends } from '../../custom-ui-helper'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ProviderIcon } from '../ProviderIcon'
+import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 
 const useStyle = makeStyles((theme: Theme) => ({
     root: {
@@ -42,7 +43,7 @@ export function WalletInList(props: WalletInListProps) {
                     secondary: classes.overflow,
                 }}
                 primary={wallet.name}
-                secondary={wallet.address}
+                secondary={formatEthereumAddress(wallet.address, 16)}
                 secondaryTypographyProps={{
                     component: 'div',
                 }}

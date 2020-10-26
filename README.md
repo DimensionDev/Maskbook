@@ -64,6 +64,12 @@ Help us by donating us:
 - `yarn storybook` to start StoryBook. Used for UI only developing.
 - `yarn build` build a production version. Output files in `./build/`
 
+#### HMR notice
+
+Your browser need to allow invalid SSL certificate on https://localhost (generally port 8080) to use HMR during the development.
+
+You can use an environment variable NO_HMR to close HMR totally.
+
 #### Conditional compilation
 
 - If branch name contains `full`, CI will build for all targets
@@ -73,7 +79,7 @@ Help us by donating us:
 
 #### Other libraries we are using
 
-- `@holoflows/kit` - A toolkit for extension developing
+- `@dimensiondev/holoflows-kit` - A toolkit for extension developing
 - `anchorme` - Use it to detect links in the text
 - `elliptic` - A crypto library, we use it to encrypt and decrypt
 - `gun` - A decentralized graph database we use it to sync user's shared crypto key

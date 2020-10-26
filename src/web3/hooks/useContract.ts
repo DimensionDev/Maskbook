@@ -24,7 +24,7 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
         // not a valid contract address
         if (!EthereumAddress.isValid(address)) return null
 
-        const contract = new nonFunctionalWeb3.eth.Contract(ABI, address) as T
+        const contract = (new nonFunctionalWeb3.eth.Contract(ABI, address) as unknown) as T
         return Object.assign(contract, {
             methods: new Proxy(contract.methods, {
                 get(target, name) {
@@ -37,9 +37,9 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                         const cached = method(...args)
                         return {
                             ...cached,
-                            async call(config: TransactionConfig) {
+                            async call(config?: TransactionConfig) {
                                 const result = await Services.Ethereum.callTransaction(
-                                    account,
+                                    (config?.from ?? account) as string,
                                     pickBy({
                                         from: account,
                                         to: contract.options.address,
@@ -130,12 +130,15 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
                                 callback?: (error: Error | null, gasEstimated?: number) => void,
                             ) {
                                 try {
-                                    const estimated = await Services.Ethereum.estimateGas({
-                                        from: account,
-                                        to: contract.options.address,
-                                        data: cached.encodeABI(),
-                                        ...config,
-                                    })
+                                    const estimated = await Services.Ethereum.estimateGas(
+                                        {
+                                            from: account,
+                                            to: contract.options.address,
+                                            data: cached.encodeABI(),
+                                            ...config,
+                                        },
+                                        await Services.Ethereum.getChainId(account),
+                                    )
                                     if (callback) callback(null, estimated)
                                     return estimated
                                 } catch (e) {

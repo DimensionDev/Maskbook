@@ -1,6 +1,7 @@
-import React, { useRef } from 'react'
-import type { ValueRef } from '@holoflows/kit/es'
+import React, { unstable_useTransition } from 'react'
+import type { ValueRef } from '@dimensiondev/holoflows-kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
+import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import { texts } from '../../settings/createSettings'
 import {
     ListItem,
@@ -27,6 +28,9 @@ const useStyles = makeStyles((theme) =>
         },
         listItemIcon: {
             marginLeft: 0,
+        },
+        listItemActionMobile: {
+            maxWidth: '60%',
         },
         arrowIcon: {
             color: theme.palette.text.primary,
@@ -75,9 +79,12 @@ function SharedListItem(
 export function SettingsUI<T>(props: SettingsUIProps<T>) {
     const { value } = withDefaultText(props)
     const currentValue = useValueRef(value)
+    const [startTransition] = unstable_useTransition()
     switch (typeof currentValue) {
-        case 'boolean':
-            const [ui, change] = getBooleanSettingsUI(value as any, currentValue)
+        case 'boolean': {
+            const ref = (value as unknown) as ValueRef<boolean>
+            const change = () => startTransition(() => void (ref.value = !ref.value))
+            const ui = <Switch color="primary" edge="end" checked={currentValue} onClick={change} />
             const { primary, secondary } = withDefaultText(props)
             return (
                 <SharedListItem
@@ -89,8 +96,11 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
                     action={<ListItemSecondaryAction>{ui}</ListItemSecondaryAction>}
                 />
             )
+        }
+        case 'number':
+        case 'string':
         default:
-            return <SharedListItem {...props} primary={'Not implemented for type ' + typeof currentValue} />
+            return <SharedListItem {...props} primary={'Unknown settings type ' + typeof currentValue} />
     }
 }
 
@@ -117,31 +127,27 @@ export function SettingsUIEnum<T extends object>(
     } & SettingsUIProps<T[keyof T]>,
 ) {
     const { primary, secondary } = withDefaultText(props)
-    const [ui] = useEnumSettings(props.value, props.enumObject, props.getText, props.SelectProps)
+    const xsMatched = useMatchXS()
+    const classes = useStyles()
+    const { value, enumObject, getText, SelectProps } = props
+    const [startTransition] = unstable_useTransition()
+    const ui = useEnumSettings(startTransition, value, enumObject, getText, SelectProps)
     return (
         <SharedListItem
             {...props}
             primary={primary}
             secondary={secondary}
-            action={<ListItemSecondaryAction>{ui}</ListItemSecondaryAction>}
+            action={
+                xsMatched ? (
+                    <div className={classes.listItemActionMobile}>{ui}</div>
+                ) : (
+                    <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
+                )
+            }
         />
     )
 }
-type HookedUI<T> = [/** UI */ React.ReactNode, /** Changer */ T extends void ? () => void : (value: T) => void]
-/**
- * Convert a ValueRef<boolean> into a Switch element.
- * This must not be a React hook because it need to run in a switch stmt
- */
-function getBooleanSettingsUI(ref: ValueRef<boolean>, currentValue: boolean): HookedUI<void> {
-    const change = () => (ref.value = !ref.value)
-    const ui = <Switch color="primary" edge="end" checked={currentValue} onClick={change} />
-    return [ui, change]
-}
-// TODO: should become generic in future
-export function useSettingsUI(ref: ValueRef<boolean>) {
-    const currentValue = useValueRef(ref)
-    return getBooleanSettingsUI(ref, currentValue)
-}
+
 /**
  * Convert a ValueRef<Enum> into a Select element.
  * @param ref - The value ref
@@ -151,19 +157,22 @@ export function useSettingsUI(ref: ValueRef<boolean>) {
  * ? because the limit on the type system, I can't type it as an object which key is enum and value is string
  */
 function useEnumSettings<Q extends object>(
+    startTransition: React.TransitionStartFunction,
     ...[ref, enumObject, getText, selectProps]: useEnumSettingsParams<Q>
-): HookedUI<Q[keyof Q]> {
+) {
     const enum_ = getEnumAsArray(enumObject)
     const change = (value: any) => {
-        if (!Number.isNaN(parseInt(value))) {
-            value = parseInt(value)
-        }
-        if (!enum_.some((x) => x.value === value)) {
-            throw new Error('Invalid state')
-        }
-        ref.value = value
+        startTransition(() => {
+            if (!Number.isNaN(parseInt(value))) {
+                value = parseInt(value)
+            }
+            if (!enum_.some((x) => x.value === value)) {
+                throw new Error('Invalid state')
+            }
+            ref.value = value
+        })
     }
-    const ui = (
+    return (
         <Select
             fullWidth
             variant="outlined"
@@ -177,11 +186,10 @@ function useEnumSettings<Q extends object>(
             ))}
         </Select>
     )
-    return [ui, change as any]
 }
 type useEnumSettingsParams<Q extends object> = [
-    ValueRef<Q[keyof Q]>,
-    Q,
-    ((x: Q[keyof Q]) => string) | undefined,
-    SelectProps | undefined,
+    ref: ValueRef<Q[keyof Q]>,
+    enumObject: Q,
+    getText: ((x: Q[keyof Q]) => string) | undefined,
+    selectProps: SelectProps | undefined,
 ]

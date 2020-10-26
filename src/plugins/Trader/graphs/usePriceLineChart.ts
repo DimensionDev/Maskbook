@@ -75,10 +75,11 @@ export function usePriceLineChart(
             .attr('stroke-width', 1.5)
             .attr(
                 'd',
+                // @ts-ignore
                 d3
                     .line()
                     .x((d) => x((d as any).date))
-                    .y((d) => y((d as any).value)) as any,
+                    .y((d) => y((d as any).value)),
             )
     }, [svgRef, data.length, stringify(dimension), sign])
 }

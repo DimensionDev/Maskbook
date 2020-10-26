@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { DecryptPost, DecryptPostProps } from './DecryptedPost/DecryptedPost'
 import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
-import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
 import { ProfileIdentifier } from '../../database/type'
 import type { Profile } from '../../database'
@@ -14,6 +13,7 @@ import { DebugList } from '../DebugModeUI/DebugList'
 import type { TypedMessage } from '../../protocols/typed-message'
 import { PluginUI, PluginConfig } from '../../plugins/plugin'
 import { usePostInfoDetails, usePostInfo } from '../DataSource/usePostInfo'
+import { ErrorBoundary } from '../shared/ErrorBoundary'
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessage, raw: string): void
@@ -116,7 +116,9 @@ function PluginPostInspector() {
     return (
         <>
             {[...PluginUI.values()].map((x) => (
-                <PluginPostInspectorForEach key={x.identifier} config={x} />
+                <ErrorBoundary key={x.identifier}>
+                    <PluginPostInspectorForEach config={x} />
+                </ErrorBoundary>
             ))}
         </>
     )

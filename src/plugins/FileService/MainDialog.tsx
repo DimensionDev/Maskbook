@@ -1,34 +1,18 @@
-import { DialogContent, DialogProps, DialogTitle, Grid, IconButton, makeStyles, Typography } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, DialogProps, makeStyles } from '@material-ui/core'
 import { isNil } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import React from 'react'
 import { useBeforeUnload } from 'react-use'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
+import { InjectedDialog } from '../../components/shared/InjectedDialog'
 import { getActivatedUI } from '../../social-network/ui'
 import { useI18N } from '../../utils/i18n-next-ui'
-import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { Entry } from './components'
-import { InsertButton } from './components/InsertButton'
 import { META_KEY_1 } from './constants'
 import { Exchange } from './hooks/Exchange'
 import type { FileInfo } from './types'
 
-interface Props
-    extends withClasses<
-        | KeysInferFromUseStyles<typeof useStyles>
-        | 'dialog'
-        | 'backdrop'
-        | 'container'
-        | 'paper'
-        | 'input'
-        | 'header'
-        | 'content'
-        | 'close'
-        | 'button'
-        | 'label'
-        | 'switch'
-    > {
+interface Props extends withClasses<never> {
     open: boolean
     onConfirm: (file: FileInfo | undefined) => void
     onDecline: () => void
@@ -36,12 +20,19 @@ interface Props
 }
 
 const useStyles = makeStyles({
-    title: { marginLeft: 6 },
-    container: { width: '100%' },
-    content: { padding: 12 },
+    actions: {
+        alignSelf: 'center',
+    },
+    button: {
+        borderRadius: 26,
+        marginTop: 24,
+        fontSize: 16,
+        lineHeight: 2.5,
+        paddingLeft: 35,
+        paddingRight: 35,
+    },
 })
-
-const MainDialog: React.FC<Props> = (props) => {
+const FileServiceDialog: React.FC<Props> = (props) => {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const snackbar = useSnackbar()
@@ -71,40 +62,23 @@ const MainDialog: React.FC<Props> = (props) => {
         snackbar.enqueueSnackbar(t('plugin_file_service_uploading_on_cancal'))
     }
     return (
-        <ShadowRootDialog
-            className={classes.dialog}
-            classes={{ container: classes.container, paper: classes.paper }}
-            open={props.open}
-            scroll="paper"
-            fullWidth
-            maxWidth="sm"
-            disableAutoFocus
-            disableEnforceFocus
-            BackdropProps={{ className: classes.backdrop }}
-            {...props.DialogProps}>
-            <DialogTitle className={classes.header}>
-                <IconButton classes={{ root: classes.close }} onClick={onDecline}>
-                    <DialogDismissIconUI />
-                </IconButton>
-                <Typography
-                    className={classes.title}
-                    display="inline"
-                    variant="inherit"
-                    children={t('plugin_file_service_display_name')}
-                />
-            </DialogTitle>
-            <DialogContent className={classes.content}>
+        <InjectedDialog open={props.open} title={t('plugin_file_service_display_name')} onExit={onDecline}>
+            <DialogContent>
                 <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
                     <Entry />
-                    <Grid container justifyContent="center">
-                        <InsertButton onClick={onInsert} disabled={isNil(selectedFileInfo)}>
-                            {t('plugin_file_service_on_insert')}
-                        </InsertButton>
-                    </Grid>
                 </Exchange>
             </DialogContent>
-        </ShadowRootDialog>
+            <DialogActions classes={{ root: classes.actions }}>
+                <Button
+                    variant="contained"
+                    classes={{ root: classes.button }}
+                    onClick={onInsert}
+                    disabled={isNil(selectedFileInfo)}>
+                    {t('plugin_file_service_on_insert')}
+                </Button>
+            </DialogActions>
+        </InjectedDialog>
     )
 }
 
-export default MainDialog
+export default FileServiceDialog

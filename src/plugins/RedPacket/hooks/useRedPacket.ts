@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { ValueRef } from '@holoflows/kit/es'
+import { ValueRef } from '@dimensiondev/holoflows-kit/es'
 import Services from '../../../extension/service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { RedPacketRecord } from '../types'
@@ -31,7 +31,8 @@ export function useRedPacketsFromDB() {
 }
 
 export function useRedPacketsFromChain(from: string) {
-    const blockNumber = useBlockNumberOnce()
+    const chainId = useChainId(from)
+    const blockNumber = useBlockNumberOnce(chainId)
     return useAsync(
         async () =>
             blockNumber

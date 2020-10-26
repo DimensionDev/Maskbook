@@ -1,4 +1,4 @@
-import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
+import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { dispatchCustomEvents, sleep, timeout } from '../../../utils/utils'
 import { isMobileFacebook } from '../isMobile'
 import type { SocialNetworkUI } from '../../../social-network/ui'
@@ -80,9 +80,8 @@ export async function pasteIntoPostBoxFacebook(
         const [element] = activated.evaluate()
         element.focus()
         await sleep(100)
-        if ('value' in document.activeElement!) dispatchCustomEvents('input', text)
-        else dispatchCustomEvents('paste', text)
-        element.dispatchEvent(new CustomEvent('input', { bubbles: true, cancelable: false, composed: true }))
+        if ('value' in document.activeElement!) dispatchCustomEvents(element, 'input', text)
+        else dispatchCustomEvents(element, 'paste', text)
         await sleep(400)
         if (isMobileFacebook) {
             const e = document.querySelector<HTMLDivElement | HTMLTextAreaElement>('.mentions-placeholder')

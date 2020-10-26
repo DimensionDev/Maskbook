@@ -1,24 +1,28 @@
 import * as bip39 from 'bip39'
+import { first } from 'lodash-es'
+import { HDKey, EthereumAddress } from 'wallet.ts'
+import { BigNumber } from 'bignumber.js'
+import { ec as EC } from 'elliptic'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import type { WalletRecord } from '../database/types'
 import { PluginMessageCenter } from '../../PluginMessages'
-import { HDKey, EthereumAddress } from 'wallet.ts'
-import { BigNumber } from 'bignumber.js'
-import { ec as EC } from 'elliptic'
 import { buf2hex, hex2buf, assert } from '../../../utils/utils'
 import { ProviderType } from '../../../web3/types'
 import { resolveProviderName } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
+import { isSameAddress } from '../../../web3/helpers'
+import { currentSelectedWalletAddressSettings } from '../settings'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
 const path = "m/44'/60'/0'/0/0"
 
 function sortWallet(a: WalletRecord, b: WalletRecord) {
-    if (a._wallet_is_default) return -1
-    if (b._wallet_is_default) return 1
+    const address = currentSelectedWalletAddressSettings.value
+    if (a.address === address) return -1
+    if (b.address === address) return 1
     if (a.updatedAt > b.updatedAt) return -1
     if (a.updatedAt < b.updatedAt) return 1
     if (a.createdAt > b.createdAt) return -1
@@ -32,11 +36,22 @@ export async function isEmptyWallets() {
     return count === 0
 }
 
+export async function getWallet(address: string) {
+    const wallets = await getWallets()
+    return wallets.find((x) => isSameAddress(x.address, address))
+}
+
+export async function getSelectedWallet() {
+    const wallets = await getWallets()
+    const address = currentSelectedWalletAddressSettings.value
+    return (address ? wallets.find((x) => x.address === address) : undefined) ?? first(wallets)
+}
+
 export async function getWallets(provider?: ProviderType) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     const records = await t.objectStore('Wallet').getAll()
     const wallets = (
-        await Promise.all(
+        await Promise.all<WalletRecord>(
             records.map(async (record) => {
                 const walletRecord = WalletRecordOutDB(record)
                 return {
@@ -100,29 +115,7 @@ export async function updateExoticWalletFromSource(
     if (modified) PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
-export async function getDefaultWallet(): Promise<WalletRecord | null> {
-    const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
-    const wallets = await t.objectStore('Wallet').getAll()
-    const wallet = wallets.find((wallet) => wallet._wallet_is_default)
-    if (wallet) return WalletRecordOutDB(wallet)
-    if (wallets.length) return WalletRecordOutDB(wallets[0])
-    return null
-}
-
-export async function setDefaultWallet(address: string) {
-    const walletAddressChecksummed = formatChecksumAddress(address)
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
-    const wallets = await t.objectStore('Wallet').getAll()
-    wallets.forEach((wallet) => {
-        if (wallet._wallet_is_default) wallet._wallet_is_default = false
-        if (wallet.address === walletAddressChecksummed) wallet._wallet_is_default = true
-        if (wallet._wallet_is_default || wallet.address === walletAddressChecksummed) wallet.updatedAt = new Date()
-        t.objectStore('Wallet').put(wallet)
-    })
-    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
-}
-
-export async function createNewWallet(
+export function createNewWallet(
     rec: Omit<
         WalletRecord,
         | 'id'
@@ -139,7 +132,7 @@ export async function createNewWallet(
     >,
 ) {
     const mnemonic = bip39.generateMnemonic().split(' ')
-    await importNewWallet({ mnemonic, ...rec })
+    return importNewWallet({ mnemonic, ...rec })
 }
 
 export async function importNewWallet(
@@ -163,14 +156,13 @@ export async function importNewWallet(
         createdAt: new Date(),
         updatedAt: new Date(),
     }
-
-    /** Wallet recover from private key */
     if (rec._private_key_) record._private_key_ = rec._private_key_
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet', 'ERC20Token')
         t.objectStore('Wallet').add(WalletRecordIntoDB(record))
     }
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+    return address
     async function getWalletAddress() {
         if (rec.address) return rec.address
         if (rec._private_key_) {
@@ -182,7 +174,8 @@ export async function importNewWallet(
 }
 
 export async function importFirstWallet(rec: Parameters<typeof importNewWallet>[0]) {
-    if (await isEmptyWallets()) await importNewWallet(rec)
+    if (await isEmptyWallets()) return importNewWallet(rec)
+    return
 }
 
 export async function renameWallet(address: string, name: string) {

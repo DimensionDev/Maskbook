@@ -8,13 +8,13 @@ import { isGroup, isPerson } from './SelectPeopleAndGroupsUI'
 import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
 import type { ChipProps } from '@material-ui/core/Chip'
 
-export interface PersonOrGroupInChipProps {
+export interface ProfileOrGroupInChipProps {
     onDelete?(): void
     disabled?: boolean
     item: Profile | Group
     ChipProps?: ChipProps
 }
-export function PersonOrGroupInChip(props: PersonOrGroupInChipProps) {
+export function ProfileOrGroupInChip(props: ProfileOrGroupInChipProps) {
     const { disabled, onDelete } = props
     const { t } = useI18N()
     let avatar: ReturnType<typeof Avatar> | undefined = undefined

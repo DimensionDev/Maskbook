@@ -1,13 +1,13 @@
 import React from 'react'
-import { Button, Typography, Box, IconButton, List, MenuItem } from '@material-ui/core'
+import { Button, Typography, Box, IconButton, MenuItem } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
-import { merge, cloneDeep } from 'lodash-es'
-import BigNumber from 'bignumber.js'
+import { merge, cloneDeep, truncate } from 'lodash-es'
 import AddIcon from '@material-ui/icons/Add'
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import HistoryIcon from '@material-ui/icons/History'
-import { TokenListItem } from '../DashboardComponents/TokenListItem'
-import { useModal, useSnackbarCallback } from '../DashboardDialogs/Base'
+import { useModal } from '../DashboardDialogs/Base'
+import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import {
     DashboardWalletAddTokenDialog,
     DashboardWalletHistoryDialog,
@@ -20,10 +20,12 @@ import {
 import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorStyles } from '../../../utils/theme'
-import Services from '../../service'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ProviderType, TokenDetailed } from '../../../web3/types'
+import { WalletAssetsTable } from './WalletAssetsTable'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { TransakMessageCenter } from '../../../plugins/Transak/messages'
 
 const walletContentTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
@@ -59,20 +61,17 @@ const useStyles = makeStyles((theme) =>
             color: theme.palette.text.primary,
             flex: 1,
         },
+        box: {
+            borderBottom: `1px solid ${theme.palette.divider}`,
+        },
         addButton: {
             color: theme.palette.primary.main,
         },
         moreButton: {
             color: theme.palette.text.primary,
         },
-        tokenList: {
+        assetsTable: {
             flex: 1,
-            overflow: 'auto',
-            scrollbarWidth: 'none',
-            margin: theme.spacing(0, 3),
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
         },
         footer: {
             flex: 0,
@@ -102,13 +101,7 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
     const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
-    const setAsDefault = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet!.address),
-        [wallet?.address],
-    )
-
     const [menu, openMenu] = useMenu(
-        <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
         <MenuItem onClick={() => openWalletShare({ wallet })}>{t('share')}</MenuItem>,
         <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
         wallet.provider === ProviderType.Maskbook ? (
@@ -119,22 +112,47 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
         </MenuItem>,
     )
 
+    //#region remote controlled buy dialog
+    const [, setBuyDialogOpen] = useRemoteControlledDialog(TransakMessageCenter, 'buyTokenDialogUpdated')
+    //#endregion
+
     return (
         <div className={classes.root} ref={ref}>
             <ThemeProvider theme={walletContentTheme}>
-                <Box pt={3} pb={2} pl={3} pr={2} display="flex" alignItems="center">
+                <Box
+                    pt={xsMatched ? 2 : 3}
+                    pb={2}
+                    pl={3}
+                    pr={2}
+                    display="flex"
+                    alignItems="center"
+                    className={xsMatched ? classes.box : ''}>
                     <Typography className={classes.title} variant="h5">
-                        {xsMatched ? wallet.name ?? wallet.address : t('details')}
+                        {wallet.name
+                            ? truncate(wallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN })
+                            : wallet.address}
                     </Typography>
-                    {xsMatched ? null : (
-                        <Button
-                            className={classes.addButton}
-                            variant="text"
-                            onClick={() => openAddToken({ wallet })}
-                            startIcon={<AddIcon />}>
-                            {t('add_token')}
-                        </Button>
-                    )}
+                    {!xsMatched ? (
+                        <Box className={classes.footer} display="flex" alignItems="center" justifyContent="flex-end">
+                            <Button
+                                className={classes.addButton}
+                                variant="text"
+                                onClick={() => openAddToken({ wallet })}
+                                startIcon={<AddIcon />}>
+                                {t('add_token')}
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    setBuyDialogOpen({
+                                        open: true,
+                                        address: wallet.address,
+                                    })
+                                }}
+                                startIcon={<ShoppingCartOutlinedIcon />}>
+                                {t('buy_now')}
+                            </Button>
+                        </Box>
+                    ) : null}
                     <IconButton
                         className={classes.moreButton}
                         size="small"
@@ -144,39 +162,32 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                     </IconButton>
                     {menu}
                 </Box>
-                <List className={classes.tokenList} disablePadding>
-                    {detailedTokens
-                        .filter((x) => !wallet.erc20_token_blacklist.has(x.token.address))
-                        .map(({ token, balance }) => (
-                            <TokenListItem
-                                key={token.address}
-                                balance={new BigNumber(balance)}
-                                wallet={wallet}
-                                token={token}
-                            />
-                        ))}
-                </List>
+                <WalletAssetsTable
+                    classes={{ container: classes.assetsTable }}
+                    wallet={wallet}
+                    detailedTokens={detailedTokens}
+                />
+                {!xsMatched ? (
+                    <Box className={classes.footer} display="flex" alignItems="center">
+                        <Button
+                            onClick={() =>
+                                openWalletHistory({
+                                    wallet,
+                                    onRedPacketClicked(payload) {
+                                        openWalletRedPacket({
+                                            wallet,
+                                            payload,
+                                        })
+                                    },
+                                })
+                            }
+                            startIcon={<HistoryIcon />}
+                            variant="text">
+                            {t('activity')}
+                        </Button>
+                    </Box>
+                ) : null}
             </ThemeProvider>
-            {!xsMatched ? (
-                <div className={classes.footer}>
-                    <Button
-                        onClick={() =>
-                            openWalletHistory({
-                                wallet,
-                                onRedPacketClicked(payload) {
-                                    openWalletRedPacket({
-                                        wallet,
-                                        payload,
-                                    })
-                                },
-                            })
-                        }
-                        startIcon={<HistoryIcon />}
-                        variant="text">
-                        {t('activity')}
-                    </Button>
-                </div>
-            ) : null}
             {addToken}
             {walletShare}
             {walletHistory}

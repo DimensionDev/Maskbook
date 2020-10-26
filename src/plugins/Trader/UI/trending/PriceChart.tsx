@@ -10,7 +10,7 @@ const DEFAULT_DIMENSION: Dimension = {
     right: 16,
     bottom: 32,
     left: 16,
-    width: 410,
+    width: 416,
     height: 200,
 }
 
@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
         root: {
             position: 'relative',
+            cursor: ({ stats, coinURL }: PriceChartProps) => (stats.length && coinURL ? 'pointer' : 'default'),
         },
         svg: {},
         progress: {
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export interface PriceChartProps {
     stats: Stat[]
+    coinURL?: string
     loading?: boolean
     width?: number
     height?: number
@@ -42,7 +44,7 @@ export interface PriceChartProps {
 
 export function PriceChart(props: PriceChartProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const classes = useStyles(props)
     const svgRef = useRef<SVGSVGElement>(null)
 
     useDimension(svgRef, DEFAULT_DIMENSION)
@@ -66,6 +68,11 @@ export function PriceChart(props: PriceChartProps) {
                         ref={svgRef}
                         width={DEFAULT_DIMENSION.width}
                         height={DEFAULT_DIMENSION.height}
+                        onClick={() => {
+                            props.stats.length &&
+                                props.coinURL &&
+                                window.open(props.coinURL, '_blank', 'noopener noreferrer')
+                        }}
                     />
                 </>
             ) : (

@@ -18,6 +18,7 @@ export function useRemoteControlledDialog<T, N extends keyof T>(
     MC: BatchedMessageCenter<T>,
     name: T[N] extends RemoteControlledDialogEvent ? N : never,
     onUpdateByRemote?: (ev: T[N]) => void,
+    tabType: 'self' | 'activated' = 'self',
 ) {
     const [HOOK_ID] = useState(uuid()) // create a id for every hook
     const [open, setOpen] = useState(false)
@@ -48,13 +49,13 @@ export function useRemoteControlledDialog<T, N extends keyof T>(
             setOpen(ev_.open)
             setTimeout(() => {
                 MC.emit(name, ({
-                    tabId: lastActivatedTabId,
+                    tabId: tabType === 'self' ? TAB_ID : lastActivatedTabId,
                     hookId: HOOK_ID,
                     ...ev,
                 } as unknown) as T[N])
             }, 100)
         },
-        [lastActivatedTabId],
+        [tabType, lastActivatedTabId],
     )
     return [open, onUpdateByLocal] as const
 }

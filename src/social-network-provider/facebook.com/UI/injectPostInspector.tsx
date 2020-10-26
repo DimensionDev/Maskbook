@@ -1,4 +1,4 @@
-import type { DOMProxy } from '@holoflows/kit'
+import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { isMobileFacebook } from '../isMobile'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'

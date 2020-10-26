@@ -119,7 +119,8 @@ export const CONSTANTS = {
                   [ChainId.Kovan]: 'https://kovan.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
               }
             : {
-                  [ChainId.Mainnet]: 'https://mainnet.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
+                  [ChainId.Mainnet]:
+                      'https://throbbing-blue-bird.quiknode.io/73e66978-1a45-4f91-97f3-25d59b51a00e/YScEAjYfzZqNphokjzn-Zt3sZsOd0Nav5sauA3j03se0LOseR8PQFyBfINzhYStWrg44VfLLfCFE34FR2CA_kQ==/',
                   [ChainId.Ropsten]: 'https://ropsten.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
                   [ChainId.Rinkeby]: 'https://rinkeby.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
                   [ChainId.Kovan]: 'https://kovan.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
