@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react'
+import { useCopyToClipboard } from 'react-use'
 import {
     makeStyles,
     createStyles,
@@ -28,6 +29,7 @@ import { MessageCenter } from '../../utils/messages'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
+import { currentSelectedWalletAddressSettings } from '../../plugins/Wallet/settings'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -465,6 +467,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const [createStatus, setCreateStatus] = useState<boolean | 'undetermined'>('undetermined')
     //#endregion
 
+    const copyToClipboard = useCopyToClipboard()[1]
+
     const onNext = async () => {
         switch (step) {
             case SetupGuideStep.FindUsername:
@@ -507,20 +511,20 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap(),
         )
         if (!persona_.hasPrivateKey) throw new Error('invalid persona')
-        await Promise.all([
+        const [_, address] = await Promise.all([
             Services.Identity.setupPersona(persona_.identifier),
             Services.Plugin.invokePlugin('maskbook.wallet', 'importFirstWallet', {
                 name: persona_.nickname ?? t('untitled_wallet'),
                 mnemonic: persona_.mnemonic?.words.split(' '),
                 passphrase: '',
-                _wallet_is_default: true,
             }),
         ])
+        if (address) currentSelectedWalletAddressSettings.value = address
         MessageCenter.emit('identityUpdated', undefined)
     }
     const onCreate = async () => {
         const content = t('setup_guide_say_hello_content')
-        await navigator.clipboard.writeText(content)
+        copyToClipboard(content)
         ui.taskOpenComposeBox(content, {
             shareToEveryOne: true,
         })

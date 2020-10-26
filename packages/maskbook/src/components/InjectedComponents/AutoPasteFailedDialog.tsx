@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
 import {
@@ -16,8 +17,10 @@ import {
 import { useStylesExtends } from '../custom-ui-helper'
 import type { MaskbookMessages } from '../../utils/messages'
 import { Image } from '../shared/Image'
+import { useSnackbar } from 'notistack'
 import { DraggableDiv } from '../shared/DraggableDiv'
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
+import { useQueryNavigatorPermission } from '../../utils/hooks/useQueryNavigatorPermission'
 import Download from '@material-ui/icons/CloudDownload'
 import CloseIcon from '@material-ui/icons/Close'
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser'
@@ -34,10 +37,13 @@ const useStyles = makeStyles((theme) => ({
 
 export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { t } = useI18N()
+    const [url, setURL] = useState('')
     const classes = useStylesExtends(useStyles(), props)
     const { onClose, data } = props
-    const [url, setURL] = useState('')
+    const { enqueueSnackbar } = useSnackbar()
+    const [, copy] = useCopyToClipboard()
     const isMobile = useMatchXS()
+    const permission = useQueryNavigatorPermission(true, 'clipboard-write')
 
     return (
         <DraggableDiv>
@@ -53,22 +59,61 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                 <DialogContent>
                     <DialogContentText>{t('auto_paste_failed_dialog_content')}</DialogContentText>
                     {props.data.text ? (
-                        <TextField
-                            multiline
-                            fullWidth
-                            variant="outlined"
-                            value={data.text}
-                            InputProps={{ readOnly: true }}
-                        />
+                        <>
+                            <TextField
+                                multiline
+                                fullWidth
+                                variant="outlined"
+                                value={data.text}
+                                InputProps={{ readOnly: true }}
+                            />
+                            <Box marginBottom={1}></Box>
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    copy(data.text)
+                                    enqueueSnackbar(t('copy_success_of_text'), {
+                                        variant: 'success',
+                                        preventDuplicate: true,
+                                        anchorOrigin: {
+                                            vertical: 'top',
+                                            horizontal: 'center',
+                                        },
+                                    })
+                                    data.image ?? onClose()
+                                }}>
+                                {t('copy_text')}
+                            </Button>
+                        </>
                     ) : null}
                     <Box marginBottom={1}></Box>
-                    <div style={{ textAlign: 'center' }}>
+                    <div style={{ textAlign: permission === 'granted' ? 'left' : 'center' }}>
                         {data.image ? (
                             // It must be img
                             <Image component="img" onURL={setURL} src={data.image} width={260} height={180} />
                         ) : null}
-                        <br />
-                        {url ? (
+                        <Box marginBottom={1}></Box>
+                        {permission === 'granted' ? (
+                            <Button
+                                variant="contained"
+                                onClick={async () => {
+                                    if (!data.image) return
+                                    await navigator.clipboard.write([
+                                        new ClipboardItem({ [data.image.type]: data.image }),
+                                    ])
+                                    enqueueSnackbar(t('copy_success_of_image'), {
+                                        variant: 'success',
+                                        preventDuplicate: true,
+                                        anchorOrigin: {
+                                            vertical: 'top',
+                                            horizontal: 'center',
+                                        },
+                                    })
+                                }}>
+                                {t('copy_image')}
+                            </Button>
+                        ) : null}
+                        {url && permission !== 'granted' ? (
                             <>
                                 <Button
                                     variant="text"

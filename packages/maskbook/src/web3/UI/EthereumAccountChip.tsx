@@ -19,6 +19,7 @@ import { ProviderIcon } from '../../components/shared/ProviderIcon'
 import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
 import { useSnackbarCallback } from '../../extension/options-page/DashboardDialogs/Base'
 import { MaskbookWalletMessages, WalletMessageCenter } from '../../plugins/Wallet/messages'
+import { useI18N } from '../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -62,6 +63,7 @@ export interface EthereumAccountChipProps extends withClasses<KeysInferFromUseSt
 }
 
 export function EthereumAccountChip(props: EthereumAccountChipProps) {
+    const { t } = useI18N()
     const { address = '', ChipProps } = props
     const classes = useStylesExtends(useStyles(), props)
 
@@ -74,10 +76,17 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
 
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
-    const onCopy = useSnackbarCallback(async (ev: React.MouseEvent<HTMLDivElement>) => {
-        ev.stopPropagation()
-        copyToClipboard(address_)
-    }, [])
+    const onCopy = useSnackbarCallback(
+        async (ev: React.MouseEvent<HTMLDivElement>) => {
+            ev.stopPropagation()
+            copyToClipboard(address_)
+        },
+        [],
+        undefined,
+        undefined,
+        undefined,
+        t('copy_success_of_wallet_addr'),
+    )
     //#endregion
 
     //#region select wallet dialog
@@ -86,7 +95,6 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
         'selectWalletDialogUpdated',
     )
     const onOpen = useCallback(() => {
-        console.log('DEBUG: on open')
         setSelectWalletOpen({
             open: true,
         })

@@ -16,7 +16,7 @@ export function DecryptPostDeveloperMode() {
         disabled: postByMyself,
     })
     const [encryptedText, encryptedTextInput] = useTextField('Encrypted post', {
-        placeholder: '🎼3/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||',
+        placeholder: '🎼3/4|ownersAESKeyEncrypted|iv|encryptedText|signature|publicShared|author:||',
         required: true,
     })
     const network = whoAmI ? whoAmI.identifier.network : 'localhost'

@@ -180,11 +180,7 @@ export async function queryUserGroupsDatabase(
             if (query(identifier.val, value)) result.push(value)
         }
     } else {
-        result.push(
-            ...(Flags.has_Safari_IndexedDB_bug
-                ? (await t.objectStore('groups').getAll()).filter((obj) => obj.network === query.network)
-                : await t.objectStore('groups').index('network').getAll(IDBKeyRange.only(query.network))),
-        )
+        result.push(...(await t.objectStore('groups').index('network').getAll(IDBKeyRange.only(query.network))))
     }
     return result.map(GroupRecordOutDB)
 }

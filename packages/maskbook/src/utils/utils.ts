@@ -2,13 +2,39 @@
  * Prefer function declaration than const f = () => ...
  * in this file please.
  */
-import { CustomEventId } from './constants'
+import { CustomEventId, WALLET_OR_PERSONA_NAME_MAX_LEN } from './constants'
 import type { CustomEvents } from '../extension/injected-script/CustomEvents'
 
 import { flatten, isNull, random, noop } from 'lodash-es'
 
-import { sleep } from '@dimensiondev/holoflows-kit/es/util/sleep'
-export { sleep, timeout } from '@dimensiondev/holoflows-kit/es/util/sleep'
+/**
+ * Return a promise that resolved after `time` ms.
+ * If `time` is `Infinity`, it will never resolve.
+ * @param time - Time to sleep. In `ms`.
+ * TODO: rename to delay
+ */
+export function sleep(time: number) {
+    return new Promise<void>((resolve) => (Number.isFinite(time) ? setTimeout(resolve, time) : void 0))
+}
+
+/**
+ * Accept a promise and then set a timeout on it. After `time` ms, it will reject.
+ * @param promise - The promise that you want to set time limit on.
+ * @param time - Time before timeout. In `ms`.
+ * @param rejectReason - When reject, show a reason. Defaults to `"timeout"`
+ */
+export function timeout<T>(promise: PromiseLike<T>, time: number, rejectReason?: string): Promise<T> {
+    if (!Number.isFinite(time)) return (async () => promise)()
+    let timer: any
+    const race = Promise.race([
+        promise,
+        new Promise<T>((r, reject) => {
+            timer = setTimeout(() => reject(new Error(rejectReason ?? 'timeout')), time)
+        }),
+    ])
+    race.finally(() => clearTimeout(timer))
+    return race
+}
 
 export function randomElement(arr: unknown[]) {
     const e = flatten(arr)
@@ -208,9 +234,7 @@ export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
 import anchorme from 'anchorme'
 import Services from '../extension/service'
 export function parseURL(string: string) {
-    // TODO: upgrade to anchorme 2
-    const links: { raw: string; protocol: string; encoded: string }[] = anchorme(string, { list: true })
-    return links.map((x) => x.raw)
+    return anchorme.list(string).map((x) => x.string)
 }
 /**
  * !!!! Please use the Promise constructor if possible
@@ -241,4 +265,8 @@ export function hex2buf(hex: string) {
 export function assert(x: any, ...args: any): asserts x {
     console.assert(x, ...args)
     if (!x) throw new Error('Assert failed!')
+}
+
+export function checkInputLengthExceed(name: string) {
+    return Array.from(name).length >= WALLET_OR_PERSONA_NAME_MAX_LEN
 }

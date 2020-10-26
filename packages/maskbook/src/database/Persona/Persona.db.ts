@@ -194,10 +194,9 @@ export async function queryPersonasWithPrivateKey(
     t = t || createTransaction(await db(), 'readonly')('personas', 'profiles')
     const records: PersonaRecord[] = []
     records.push(
-        ...(Flags.has_Safari_IndexedDB_bug
-            ? (await t.objectStore('personas').getAll()).filter((obj) => obj.hasPrivateKey === 'yes')
-            : await t.objectStore('personas').index('hasPrivateKey').getAll(IDBKeyRange.only('yes'))
-        ).map(personaRecordOutDB),
+        ...(await t.objectStore('personas').index('hasPrivateKey').getAll(IDBKeyRange.only('yes'))).map(
+            personaRecordOutDB,
+        ),
     )
     return records as PersonaRecordWithPrivateKey[]
 }
@@ -332,10 +331,7 @@ export async function queryProfilesDB(
     const result: ProfileRecord[] = []
     if (typeof network === 'string') {
         result.push(
-            ...(Flags.has_Safari_IndexedDB_bug
-                ? (await t.objectStore('profiles').getAll()).filter((obj) => obj.network === network)
-                : await t.objectStore('profiles').index('network').getAll(IDBKeyRange.only(network))
-            ).map(profileOutDB),
+            ...(await t.objectStore('profiles').index('network').getAll(IDBKeyRange.only(network))).map(profileOutDB),
         )
     } else {
         for await (const each of t.objectStore('profiles').iterate()) {

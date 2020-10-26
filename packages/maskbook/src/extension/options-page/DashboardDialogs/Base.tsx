@@ -295,6 +295,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
     onSuccess?: (ret: T) => void,
     onError?: (err: Error) => void,
     key?: string,
+    successText?: string,
 ) {
     const { t } = useI18N()
     const { enqueueSnackbar } = useSnackbar()
@@ -302,7 +303,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
         (...args) =>
             executor(...args).then(
                 (res) => {
-                    enqueueSnackbar(t('done'), { key, variant: 'success', preventDuplicate: true })
+                    enqueueSnackbar(successText ?? t('done'), { key, variant: 'success', preventDuplicate: true })
                     onSuccess?.(res)
                     return res
                 },

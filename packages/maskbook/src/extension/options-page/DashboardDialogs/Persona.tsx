@@ -4,6 +4,8 @@ import { TextField, Button } from '@material-ui/core'
 import { UserPlus, UserCheck, User, UserMinus } from 'react-feather'
 
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { checkInputLengthExceed } from '../../../utils/utils'
+import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import Services from '../../service'
 import { encodeArrayBuffer, encodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { compressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
@@ -46,6 +48,14 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                     <>
                         <form>
                             <TextField
+                                helperText={
+                                    checkInputLengthExceed(name)
+                                        ? t('input_length_exceed_prompt', {
+                                              name: t('persona_name').toLowerCase(),
+                                              length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                          })
+                                        : undefined
+                                }
                                 style={{ marginBottom: 20 }}
                                 autoFocus
                                 required
@@ -63,7 +73,11 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                     </>
                 }
                 footer={
-                    <DebounceButton type="submit" variant="contained" onClick={createPersonaAndNext} disabled={!name}>
+                    <DebounceButton
+                        type="submit"
+                        variant="contained"
+                        onClick={createPersonaAndNext}
+                        disabled={name.length === 0 || checkInputLengthExceed(name)}>
                         {t('create')}
                     </DebounceButton>
                 }></DashboardDialogWrapper>
@@ -252,6 +266,14 @@ export function DashboardPersonaRenameDialog(props: WrappedDialogProps<PersonaPr
                 primary={t('persona_rename')}
                 content={
                     <TextField
+                        helperText={
+                            checkInputLengthExceed(name)
+                                ? t('input_length_exceed_prompt', {
+                                      name: t('persona_name').toLowerCase(),
+                                      length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                  })
+                                : undefined
+                        }
                         required
                         label={t('persona_name')}
                         variant="outlined"
@@ -263,7 +285,10 @@ export function DashboardPersonaRenameDialog(props: WrappedDialogProps<PersonaPr
                 }
                 footer={
                     <SpacedButtonGroup>
-                        <DebounceButton variant="contained" onClick={renamePersona}>
+                        <DebounceButton
+                            variant="contained"
+                            onClick={renamePersona}
+                            disabled={name.length === 0 || checkInputLengthExceed(name)}>
                             {t('ok')}
                         </DebounceButton>
                         <Button variant="outlined" color="inherit" onClick={props.onClose}>

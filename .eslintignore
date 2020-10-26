@@ -4,7 +4,7 @@ package-lock.json
 build/
 dist/
 scripts/
-src/polyfill
+packages/maskbook/src/polyfill
 e2e
-src/plugins/Wallet/contracts
+packages/maskbook/src/plugins/Wallet/contracts
 webpack.config.ts

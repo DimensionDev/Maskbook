@@ -6,9 +6,6 @@ import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
-import { getActivatedUI } from '../../../social-network/ui'
-import { useTwitterDialog } from '../../../social-network-provider/twitter.com/utils/theme'
 import { Provider } from './Provider'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import { MaskbookIcon } from '../../../resources/MaskbookIcon'
@@ -22,19 +19,13 @@ import { ProviderType } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
 import { MessageCenter } from '../../../utils/messages'
 import { Flags } from '../../../utils/flags'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         paper: {
             width: '750px !important',
             maxWidth: 'unset',
-        },
-        backdrop: {
-            ...(GetContext() === 'options'
-                ? {
-                      backgroundColor: 'transparent',
-                  }
-                : null),
         },
         content: {
             display: 'flex',
@@ -52,10 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-interface SelectProviderDialogUIProps
-    extends withClasses<
-        KeysInferFromUseStyles<typeof useStyles> | 'root' | 'dialog' | 'backdrop' | 'container' | 'paper' | 'content'
-    > {}
+interface SelectProviderDialogUIProps extends withClasses<never> {}
 
 function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const { t } = useI18N()
@@ -106,7 +94,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     unreachable(providerType)
             }
         },
-        [history, onClose],
+        [history, onClose, setWalletConnectDialogOpen],
     )
 
     // TODO:
@@ -122,28 +110,12 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     })
                 }
             }),
-        [],
+        [enqueueSnackbar, t],
     )
     return (
-        <div className={classes.root}>
-            <ShadowRootDialog
-                className={classes.dialog}
-                classes={{
-                    container: classes.container,
-                    paper: classes.paper,
-                }}
-                open={open}
-                scroll="body"
-                fullWidth
-                maxWidth="sm"
-                disableAutoFocus
-                disableEnforceFocus
-                onEscapeKeyDown={onClose}
-                onBackdropClick={onClose}
-                BackdropProps={{
-                    className: classes.backdrop,
-                }}>
-                <DialogContent className={classes.content}>
+        <>
+            <InjectedDialog title="Connect wallet" open={open} onExit={onClose}>
+                <DialogContent>
                     <GridList className={classes.grid} spacing={16} cellHeight={183}>
                         <GridListTile>
                             <Provider
@@ -190,21 +162,13 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                         </GridListTile>
                     </GridList>
                 </DialogContent>
-            </ShadowRootDialog>
-        </div>
+            </InjectedDialog>
+        </>
     )
 }
 
 export interface SelectProviderDialogProps extends SelectProviderDialogUIProps {}
 
 export function SelectProviderDialog(props: SelectProviderDialogProps) {
-    const ui = getActivatedUI()
-    const twitterClasses = {
-        ...useTwitterDialog(),
-    }
-    return ui.internalName === 'twitter' ? (
-        <SelectProviderDialogUI classes={twitterClasses} {...props} />
-    ) : (
-        <SelectProviderDialogUI {...props} />
-    )
+    return <SelectProviderDialogUI {...props} />
 }

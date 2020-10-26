@@ -3,7 +3,7 @@
 import { filter, find, first } from 'lodash-es'
 import { useRef, useEffect, useState } from 'react'
 import { useInterval } from 'react-use'
-import { useRequestCamera } from './useRequestCamera'
+import { useQueryNavigatorPermission } from './useQueryNavigatorPermission'
 import '../../components/QRScanner/ShapeDetectionPolyfill'
 
 export async function getBackVideoDeviceId() {
@@ -22,7 +22,7 @@ export function useQRCodeVideoScan(
     // TODO!: ? not work See https://github.com/DimensionDev/Maskbook/issues/810
     // ? Get video stream
     {
-        const permission = useRequestCamera(isScanning)
+        const permission = useQueryNavigatorPermission(isScanning, 'camera')
         const [mediaStream, setMediaStream] = useState<MediaStream | null>(null)
 
         useEffect(() => {

@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme: Theme) =>
         icon: {
             width: 28,
             height: 28,
-            marginRight: theme.spacing(1),
         },
         text: {
             display: 'flex',

@@ -7,7 +7,6 @@ import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoo
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { makeStyles, Theme } from '@material-ui/core'
 import { MessageCenter } from '../../../utils/messages'
-import { useTwitterButton } from '../utils/theme'
 import { hasEditor, isCompose } from '../utils/postBox'
 import { Flags } from '../../../utils/flags'
 
@@ -66,20 +65,9 @@ export const useTwitterThemedPostDialogHint = makeStyles((theme: Theme) => ({
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const classes = {
         ...useTwitterThemedPostDialogHint(),
-        ...useTwitterButton(),
     }
     const onHintButtonClicked = useCallback(() => MessageCenter.emit('compositionUpdated', { reason, open: true }), [
         reason,
     ])
-    return (
-        <PostDialogHint
-            classes={classes}
-            NotSetupYetPromptProps={{
-                classes: {
-                    ...useTwitterButton(),
-                },
-            }}
-            onHintButtonClicked={onHintButtonClicked}
-        />
-    )
+    return <PostDialogHint classes={classes} onHintButtonClicked={onHintButtonClicked} />
 }

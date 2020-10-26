@@ -80,7 +80,7 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
                     <Avatar className={classes.maskface} src="/MB--CircleCanvas--WhiteOverBlue.svg"></Avatar>
                     <img className={classes.masktext} src="/maskbook-title-white.svg" />
                     <Typography className={classes.version} variant="body2" color="inherit">
-                        {t('version')} {version}
+                        {t('version_of_stable', { version })}
                     </Typography>
                 </header>
                 <main className={classes.main}>

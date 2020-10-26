@@ -6,7 +6,8 @@ import { signing } from '../constants'
 export async function sign(transaction: Transaction) {
     const response = await fetch(signing, {
         method: 'POST',
-        body: await makeRequest(transaction),
+        // Temporary workaround for https://github.com/msgpack/msgpack-javascript/issues/145
+        body: Uint8Array.from(await makeRequest(transaction)),
     })
     transaction.setSignature(await response.json())
 }

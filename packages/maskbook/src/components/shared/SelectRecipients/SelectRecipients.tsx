@@ -1,7 +1,7 @@
 import * as React from 'react'
 import type { Group, Profile } from '../../../database'
 import { makeStyles, Box } from '@material-ui/core'
-import type { PersonOrGroupInListProps } from '../SelectPeopleAndGroups'
+import type { ProfileOrGroupInListProps } from '../SelectPeopleAndGroups'
 import { GroupInChipProps, GroupInChip } from './GroupInChip'
 import { ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import AddIcon from '@material-ui/icons/Add'
@@ -31,7 +31,7 @@ export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Pro
     showAtNetwork?: boolean
     onSetSelected(selected: T[]): void
     GroupInChipProps?: Partial<GroupInChipProps>
-    PersonOrGroupInListProps?: Partial<PersonOrGroupInListProps>
+    PersonOrGroupInListProps?: Partial<ProfileOrGroupInListProps>
     SelectRecipientsDialogUIProps?: Partial<SelectRecipientsDialogUIProps>
     children?: React.ReactNode
 }

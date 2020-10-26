@@ -67,6 +67,7 @@ export async function encryptTo(
         signature: '',
         sharedPublic: publicShared,
         version: -38,
+        authorUserID: whoAmI,
     }
     try {
         const publicKey = (await queryPersonaByProfileDB(whoAmI))?.publicKey

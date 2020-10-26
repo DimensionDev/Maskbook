@@ -4,13 +4,11 @@ import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoo
 import { makeStyles, Box } from '@material-ui/core'
 import Services from '../../../extension/service'
 import { MaskbookIcon } from '../../../resources/MaskbookIcon'
-import { DashboardRoute } from '../../../extension/options-page/Route'
 import { Flags } from '../../../utils/flags'
 
-const settings = new LiveSelector().querySelector('.mSideMenu').enableSingleMode()
-export function injectOptionsPageLinkAtFacebook() {
-    if (location.hostname !== 'm.facebook.com') return
-    const watcher = new MutationObserverWatcher(settings)
+export function injectDashboardEntranceAtFacebook() {
+    const ls = new LiveSelector().querySelector('.mSideMenu').enableSingleMode()
+    const watcher = new MutationObserverWatcher(ls)
         .setDOMProxyOption({
             beforeShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
         })

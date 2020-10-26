@@ -1,8 +1,9 @@
 import stringify from 'json-stable-stringify'
-import { debounce, uniq } from 'lodash-es'
+import { debounce, first, uniq } from 'lodash-es'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { getWallets } from '../../../plugins/Wallet/services'
+import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
 import {
     currentChainStateSettings,
     currentMaskbookChainIdSettings,
@@ -50,11 +51,9 @@ PluginMessageCenter.on('maskbook.wallets.update', revalidateChainState)
 //#endregion
 
 //#region tracking wallets
-let defaultWallet: WalletRecord | null = null
 let wallets: WalletRecord[] = []
 const revalidateWallets = async () => {
     wallets = await getWallets()
-    defaultWallet = wallets.find((x) => x._wallet_is_default) ?? wallets[0] ?? null
 }
 PluginMessageCenter.on('maskbook.wallets.update', revalidateWallets)
 revalidateWallets()
@@ -65,7 +64,11 @@ revalidateWallets()
  * @param address
  */
 export async function getChainId(address?: string) {
-    const wallet = address ? wallets.find((x) => isSameAddress(x.address, address)) ?? defaultWallet : defaultWallet
+    const address_ = currentSelectedWalletAddressSettings.value
+    const wallet =
+        (address ? wallets.find((x) => isSameAddress(x.address, address)) : undefined) ??
+        (address_ ? wallets.find((x) => isSameAddress(x.address, address_)) : undefined) ??
+        first(wallets)
     if (!wallet) return currentMaskbookChainIdSettings.value
     if (wallet.provider === ProviderType.Maskbook) return currentMaskbookChainIdSettings.value
     if (wallet.provider === ProviderType.MetaMask) return currentMetaMaskChainIdSettings.value

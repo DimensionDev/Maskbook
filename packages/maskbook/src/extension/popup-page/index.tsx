@@ -1,12 +1,12 @@
+<<<<<<< HEAD
 import '../../social-network-provider/popup-page/index'
 import '../../setup.ui'
 
-import React, { useMemo, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { noop } from 'lodash-es'
 import { ThemeProvider, makeStyles, Theme, withStyles } from '@material-ui/core/styles'
 import { Button, Paper, Divider, Typography, Box } from '@material-ui/core'
 import { useMaskbookTheme } from '../../utils/theme'
-import { SSRRenderer } from '../../utils/SSRRenderer'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { getActivatedUI } from '../../social-network/ui'
 import { I18nextProvider } from 'react-i18next'
@@ -14,12 +14,12 @@ import { useI18N } from '../../utils/i18n-next-ui'
 import i18nNextInstance from '../../utils/i18n-next'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getUrl } from '../../utils/utils'
-import { ChooseWallet } from '../../components/shared/ChooseWallet'
-import { EthereumChainChip } from '../../web3/UI/EthereumChainChip'
 import { useChainId } from '../../web3/hooks/useChainState'
 import { WalletMessageCenter, MaskbookWalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
+import { Alert } from '@material-ui/lab'
+import { useAsyncRetry } from 'react-use'
 
 const GlobalCss = withStyles({
     '@global': {
@@ -54,7 +54,6 @@ const useStyles = makeStyles((theme: Theme) => ({
             marginTop: 0,
         },
     },
-    footer: {},
     logo: {
         display: 'block',
         width: 218,
@@ -85,6 +84,8 @@ function PopupUI() {
     const chainId = useChainId()
     const wallets = useWallets()
 
+    const { value: hasPermission = true, retry: checkPermission } = useAsyncRetry(ui.hasPermission)
+
     const onEnter = useCallback((event: React.MouseEvent) => {
         if (event.shiftKey) {
             browser.tabs.create({
@@ -114,6 +115,18 @@ function PopupUI() {
             {ui.networkIdentifier === 'localhost' ? (
                 <img className={classes.logo} src={getUrl('MB--ComboCircle--Blue.svg')} />
             ) : null}
+            {hasPermission === false ? (
+                <Alert severity="error" variant="outlined" action={null}>
+                    <Typography>{t('popup_missing_permission')}</Typography>
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        size="small"
+                        onClick={() => ui.requestPermission().then(checkPermission)}>
+                        {t('popup_request_permission')}
+                    </Button>
+                </Alert>
+            ) : null}
             {ui.networkIdentifier === 'localhost' || identities.length === 0 ? null : (
                 <>
                     <Box className={classes.header} display="flex" justifyContent="space-between">
@@ -122,20 +135,8 @@ function PopupUI() {
                     <ChooseIdentity identities={identities} />
                 </>
             )}
-
-            {ui.networkIdentifier === 'localhost' || wallets.length === 0 ? null : (
-                <>
-                    <Box className={classes.header} display="flex" justifyContent="space-between">
-                        <Typography className={classes.title}>{t('popup_current_wallet')}</Typography>
-                        {chainId ? <EthereumChainChip chainId={chainId} /> : null}
-                    </Box>
-                    <ChooseWallet wallets={wallets} />
-                </>
-            )}
-
             <Divider className={classes.divider} />
-
-            <Box className={classes.footer} display="flex">
+            <Box display="flex">
                 {ui.networkIdentifier !== 'localhost' && identities.length === 0 ? (
                     <Button className={classes.button} variant="text" onClick={onEnter}>
                         {t('popup_setup_first_persona')}
@@ -155,7 +156,7 @@ function PopupUI() {
     )
 }
 
-function Popup() {
+export function Popup() {
     const theme = useMaskbookTheme()
     return (
         <ThemeProvider theme={theme}>
@@ -166,5 +167,14 @@ function Popup() {
         </ThemeProvider>
     )
 }
+||||||| 45e4888e
+=======
+import '../../social-network-provider/popup-page/index'
+import '../../setup.ui'
+import React from 'react'
+
+import { SSRRenderer } from '../../utils/SSRRenderer'
+import { Popup } from './UI'
 
 export default SSRRenderer(<Popup />)
+>>>>>>> master

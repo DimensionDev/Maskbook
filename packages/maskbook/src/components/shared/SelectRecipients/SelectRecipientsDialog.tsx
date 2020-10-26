@@ -5,11 +5,8 @@ import {
     ListItem,
     ListItemText,
     makeStyles,
-    Typography,
     Button,
-    IconButton,
     InputBase,
-    DialogTitle,
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
@@ -17,8 +14,7 @@ import { useStylesExtends } from '../../custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ProfileInList } from './ProfileInList'
 import type { Profile } from '../../../database'
-import { DialogDismissIconUI } from '../../InjectedComponents/DialogDismissIcon'
-import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
+import { InjectedDialog } from '../InjectedDialog'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -30,18 +26,7 @@ const useStyles = makeStyles((theme) => ({
     input: { flex: 1, minWidth: '10em', marginLeft: 20, marginTop: theme.spacing(1) },
 }))
 
-export interface SelectRecipientsDialogUIProps
-    extends withClasses<
-        | KeysInferFromUseStyles<typeof useStyles>
-        | 'dialog'
-        | 'backdrop'
-        | 'container'
-        | 'paper'
-        | 'header'
-        | 'actions'
-        | 'close'
-        | 'button'
-    > {
+export interface SelectRecipientsDialogUIProps extends withClasses<never> {
     open: boolean
     items: Profile[]
     selected: Profile[]
@@ -71,40 +56,14 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const LIST_ITEM_HEIGHT = 56
 
     return (
-        <ShadowRootDialog
-            className={classes.dialog}
-            classes={{
-                container: classes.container,
-                paper: classes.paper,
-            }}
-            open={props.open}
-            scroll="paper"
-            fullWidth
-            maxWidth="sm"
-            disableAutoFocus
-            disableEnforceFocus
-            onEscapeKeyDown={props.onClose}
-            BackdropProps={{
-                className: classes.backdrop,
-            }}>
-            <DialogTitle className={classes.header}>
-                <IconButton
-                    classes={{ root: classes.close }}
-                    aria-label={t('select_specific_friends_dialog__dismiss_aria')}
-                    onClick={props.onClose}>
-                    <DialogDismissIconUI />
-                </IconButton>
-                <Typography className={classes.title} display="inline" variant="inherit">
-                    {t('select_specific_friends_dialog__title')}
-                </Typography>
-            </DialogTitle>
+        <InjectedDialog open={props.open} title={t('select_specific_friends_dialog__title')} onExit={props.onClose}>
             <InputBase
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className={classes.input}
                 placeholder={t('search_box_placeholder')}
             />
-            <DialogContent className={classes.content}>
+            <DialogContent>
                 <List style={{ height: items.length * LIST_ITEM_HEIGHT }} dense>
                     {itemsAfterSearch.length === 0 ? (
                         <ListItem>
@@ -133,9 +92,8 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     )}
                 </List>
             </DialogContent>
-            <DialogActions className={classes.actions}>
+            <DialogActions>
                 <Button
-                    className={classes.button}
                     style={{ marginLeft: 'auto' }}
                     variant="contained"
                     disabled={props.submitDisabled}
@@ -143,6 +101,6 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     {t('select_specific_friends_dialog__button')}
                 </Button>
             </DialogActions>
-        </ShadowRootDialog>
+        </InjectedDialog>
     )
 }

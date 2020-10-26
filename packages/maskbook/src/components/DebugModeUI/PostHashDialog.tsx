@@ -1,37 +1,27 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useAsync } from 'react-use'
-import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import { blue } from '@material-ui/core/colors'
 import { useFriendsList } from '../DataSource/useActivatedUI'
 import { Avatar } from '../../utils/components/Avatar'
 import type { Profile } from '../../database'
 import Services from '../../extension/service'
 import { PostIVIdentifier } from '../../database/type'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
-import { DialogContentText, DialogContent } from '@material-ui/core'
-import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
-
-const useStyles = makeStyles({
-    avatar: {
-        backgroundColor: blue[100],
-        color: blue[600],
-    },
-})
+import { DialogContent, DialogContentText } from '@material-ui/core'
+import { InjectedDialog } from '../shared/InjectedDialog'
 
 export interface SimpleDialogProps {
     open: boolean
-    onClose: (value: string) => void
+    onClose: () => void
     friends: Profile[]
     hashMap: [string, string, string][]
 }
 
-function SimpleDialog(props: SimpleDialogProps) {
+function PostHashDialog(props: SimpleDialogProps) {
     const { open } = props
 
     const map = new Map<string, [string, string]>()
@@ -40,8 +30,7 @@ function SimpleDialog(props: SimpleDialogProps) {
     }
 
     return (
-        <ShadowRootDialog disableEnforceFocus onClose={props.onClose} open={open}>
-            <DialogTitle>Troubleshoot</DialogTitle>
+        <InjectedDialog onExit={props.onClose} open={open} title="Troubleshoot">
             <DialogContent>
                 <DialogContentText>
                     Appear in this list is not related to if you have shared this post to someone or not.
@@ -60,7 +49,7 @@ function SimpleDialog(props: SimpleDialogProps) {
                     {props.friends.map((one) => {
                         const [magicCode, fingerprint] = map.get(one.identifier.toText()) || ['Unknown', 'Unknown']
                         return (
-                            <ListItem>
+                            <ListItem key={one.identifier.toText()}>
                                 <ListItemAvatar>
                                     <Avatar person={one} />
                                 </ListItemAvatar>
@@ -79,7 +68,7 @@ function SimpleDialog(props: SimpleDialogProps) {
                     })}
                 </List>
             </DialogContent>
-        </ShadowRootDialog>
+        </InjectedDialog>
     )
 }
 
@@ -97,7 +86,7 @@ export function DebugModeUI_PostHashDialog(props: { post: string; network: strin
             <Button variant="outlined" onClick={() => setOpen(true)}>
                 My friend can't see this post even I shared with them!
             </Button>
-            <SimpleDialog hashMap={hashMap} friends={friends} open={open} onClose={() => setOpen(false)} />
+            <PostHashDialog hashMap={hashMap} friends={friends} open={open} onClose={() => setOpen(false)} />
         </>
     )
 }

@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     heading: {
         fontSize: 14,
         lineHeight: 1.1,
-        color: theme.palette.primary.dark,
+        color: theme.palette.text.primary,
         marginTop: 0,
         marginBottom: 10,
     },
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     more: {
         fontSize: 14,
         lineHeight: 1.2,
-        color: '#2CA4EF',
+        color: theme.palette.primary.contrastText,
     },
 }))
 
@@ -55,7 +55,7 @@ const useItemTextStyles = makeStyles((theme) => ({
     primary: {
         fontSize: 12,
         lineHeight: 1.1,
-        color: theme.palette.primary.dark,
+        color: theme.palette.text.primary,
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
@@ -63,13 +63,13 @@ const useItemTextStyles = makeStyles((theme) => ({
     secondary: {
         fontSize: 10,
         lineHeight: 1.2,
-        color: theme.palette.secondary.dark,
+        color: theme.palette.text.secondary,
     },
 }))
 
 interface Props {
     files: FileInfo[]
-    onMore(): void
+    onMore?(): void
 }
 
 export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
@@ -98,9 +98,11 @@ export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
         <section className={classes.container}>
             <Typography className={classes.heading}>{t('plugin_file_service_recent_files')}</Typography>
             <List className={classes.listing}>{files.slice(0, 4).map(renderItem)}</List>
-            <Button className={classes.more} onClick={onMore}>
-                {t('plugin_file_service_show_more')}
-            </Button>
+            {onMore && (
+                <Button className={classes.more} onClick={onMore}>
+                    {t('plugin_file_service_show_more')}
+                </Button>
+            )}
         </section>
     )
 }

@@ -30,6 +30,7 @@ export function EthereumStatusBar(props: EthereumStatusBarProps) {
     const account = useAccount()
     const chainId = useChainId()
 
+    if (!account) return null
     return (
         <Box className={classes.root} display="flex" alignItems="center" justifyContent="flex-end" {...BoxProps}>
             {chainId === ChainId.Mainnet ? null : (

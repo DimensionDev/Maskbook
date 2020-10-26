@@ -13,7 +13,8 @@ import { noop } from 'lodash-es'
 export const emptyDefinition: SocialNetworkUIDefinition = {
     acceptablePayload: ['latest'],
     friendlyName: '',
-    requestPermission: () => Promise.resolve(true),
+    hasPermission: async () => true,
+    requestPermission: async () => true,
     setupAccount: '',
     shouldActivate() {
         return false

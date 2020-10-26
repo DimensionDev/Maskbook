@@ -42,6 +42,7 @@ import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQR
 import { sleep } from '../../../utils/utils'
 import { SetupStep } from '../SetupStep'
 import { Flags } from '../../../utils/flags'
+import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
 
 //#region setup form
 const useSetupFormStyles = makeStyles((theme) =>
@@ -359,15 +360,15 @@ export function ConnectNetwork() {
                         variant="contained"
                         disabled={persona?.linkedProfiles.size === 0}
                         onClick={async () => {
-                            await Promise.all([
+                            const [_, address] = await Promise.all([
                                 Services.Identity.setupPersona(persona.identifier),
                                 Services.Plugin.invokePlugin('maskbook.wallet', 'importFirstWallet', {
                                     name: persona.nickname ?? t('untitled_wallet'),
                                     mnemonic: persona.mnemonic?.words.split(' '),
                                     passphrase: '',
-                                    _wallet_is_default: true,
                                 }),
                             ])
+                            if (address) currentSelectedWalletAddressSettings.value = address
                             await sleep(300)
                             history.replace(Flags.has_no_browser_tab_ui ? DashboardRoute.Nav : DashboardRoute.Personas)
                         }}>

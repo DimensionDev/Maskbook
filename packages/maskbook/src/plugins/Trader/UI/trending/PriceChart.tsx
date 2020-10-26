@@ -10,7 +10,7 @@ const DEFAULT_DIMENSION: Dimension = {
     right: 16,
     bottom: 32,
     left: 16,
-    width: 410,
+    width: 416,
     height: 200,
 }
 
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
         root: {
             position: 'relative',
-            cursor: ({ stats }: PriceChartProps) => (stats.length ? 'pointer' : 'default'),
+            cursor: ({ stats, coinURL }: PriceChartProps) => (stats.length && coinURL ? 'pointer' : 'default'),
         },
         svg: {},
         progress: {
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export interface PriceChartProps {
     stats: Stat[]
-    cmcCurrencyURL: string
+    coinURL?: string
     loading?: boolean
     width?: number
     height?: number
@@ -58,12 +58,7 @@ export function PriceChart(props: PriceChartProps) {
         'x-trader-price-line-chart',
     )
     return (
-        <div
-            className={classes.root}
-            style={{ width: DEFAULT_DIMENSION.width, height: DEFAULT_DIMENSION.height }}
-            onClick={() => {
-                props.stats.length && window.open(props.cmcCurrencyURL, '_blank', 'noopener noreferrer')
-            }}>
+        <div className={classes.root} style={{ width: DEFAULT_DIMENSION.width, height: DEFAULT_DIMENSION.height }}>
             {props.loading ? <CircularProgress className={classes.progress} color="primary" size={15} /> : null}
             {props.stats.length ? (
                 <>
@@ -73,6 +68,11 @@ export function PriceChart(props: PriceChartProps) {
                         ref={svgRef}
                         width={DEFAULT_DIMENSION.width}
                         height={DEFAULT_DIMENSION.height}
+                        onClick={() => {
+                            props.stats.length &&
+                                props.coinURL &&
+                                window.open(props.coinURL, '_blank', 'noopener noreferrer')
+                        }}
                     />
                 </>
             ) : (

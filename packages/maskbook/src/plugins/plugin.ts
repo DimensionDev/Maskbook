@@ -16,6 +16,10 @@ export interface PluginConfig {
     postInspector?: PluginInjectFunction<{}>
     dashboardInspector?: PluginInjectFunction<{}>
     postDialogMetadataBadge?: Map<string, (metadata: any) => string>
+    postDialogEntries?: {
+        label: string | React.ReactNode
+        onClick(): void
+    }[]
     messageProcessor?: (message: TypedMessageCompound) => TypedMessageCompound
 }
 
@@ -30,10 +34,12 @@ import { StorybookPluginDefine } from './Storybook/define'
 import { FileServicePluginDefine } from './FileService/define'
 import { TraderPluginDefine } from './Trader/define'
 import { Flags } from '../utils/flags'
+import { TransakPluginDefine } from './Transak/define'
 plugins.add(WalletPluginDefine)
 plugins.add(GitcoinPluginDefine)
 plugins.add(RedPacketPluginDefine)
 plugins.add(FileServicePluginDefine)
 if (Flags.poll_enabled) plugins.add(PollsPluginDefine)
 if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
+if (Flags.transak_enabled) plugins.add(TransakPluginDefine)
 if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)

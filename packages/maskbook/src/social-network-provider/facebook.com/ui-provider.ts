@@ -18,7 +18,7 @@ import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
-import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
+import { injectDashboardEntranceAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
@@ -32,6 +32,7 @@ import { MessageCenter } from '../../utils/messages'
 import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
 import { Appearance } from '../../settings/settings'
 
+const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
     init(env, pref) {
@@ -45,12 +46,13 @@ export const facebookUISelf = defineSocialNetworkUI({
         return location.hostname.endsWith('facebook.com')
     },
     friendlyName: 'Facebook',
+    hasPermission() {
+        return browser.permissions.contains({ origins })
+    },
     requestPermission() {
         // TODO: wait for webextension-shim to support <all_urls> in permission.
         if (Flags.no_web_extension_dynamic_permission_request) return Promise.resolve(true)
-        return browser.permissions
-            .request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
-            .then(notifyPermissionUpdate)
+        return browser.permissions.request({ origins }).then(notifyPermissionUpdate)
     },
     setupAccount() {
         facebookUISelf.requestPermission().then((granted) => {
@@ -66,7 +68,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
     injectPostBox: injectPostBoxFacebook,
     injectPostComments: injectPostCommentsDefault(),
-    injectOptionsPageLink: injectOptionsPageLinkAtFacebook,
+    injectDashboardEntrance: injectDashboardEntranceAtFacebook,
     injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
         encryptedComment,
         current,
