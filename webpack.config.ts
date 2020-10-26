@@ -328,7 +328,7 @@ function getGitInfo() {
             BUILD_DATE: new Date().toISOString(),
             VERSION: git.describe('--dirty'),
             TAG_NAME: git.tag(),
-            COMMIT_HASH: git.commitHash(),
+            COMMIT_HASH: git.commitHash(true),
             COMMIT_DATE: git.commitDate().toISOString(),
             REMOTE_URL: git.remoteURL(),
             BRANCH_NAME: git.branchName(),
