@@ -3,7 +3,7 @@ import fs, { promises } from 'fs'
 
 import { Configuration, HotModuleReplacementPlugin, EnvironmentPlugin, ProvidePlugin, RuleSetRule } from 'webpack'
 // Merge declaration of Configuration defined in webpack
-import type {} from 'webpack-dev-server'
+import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 
 //#region Development plugins
 import WebExtensionHotLoadPlugin from '@dimensiondev/webpack-web-ext-plugin'
@@ -45,6 +45,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
      */
     const sourceMapKind: Configuration['devtool'] = target.Safari || target.Firefox ? false : 'eval-source-map'
     const config: Configuration = {
+        name: 'main',
         mode: env,
         devtool: env === 'development' ? sourceMapKind : false,
         entry: {}, // ? Defined later
@@ -115,6 +116,8 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
             globalObject: 'globalThis',
         },
         target: WebExtensionTarget(nodeConfig), // See https://github.com/crimx/webpack-target-webextension,
+        // @ts-ignore sometimes ts don't merge declaration for unknown reason and report
+        // Object literal may only specify known properties, and 'devServer' does not exist in type 'Configuration'.ts(2322)
         devServer: {
             // Have to write disk cause plugin cannot be loaded over network
             writeToDisk: true,
@@ -123,15 +126,16 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
             hotOnly: enableHMR,
             // WDS does not support chrome-extension:// browser-extension://
             disableHostCheck: true,
-            injectClient: enableHMR,
-            injectHot: enableHMR,
+            // Workaround of https://github.com/webpack/webpack-cli/issues/1955
+            injectClient: (config) => enableHMR && config.name !== 'injected-script',
+            injectHot: (config) => enableHMR && config.name !== 'injected-script',
             headers: {
                 // We're doing CORS request for HMR
                 'Access-Control-Allow-Origin': '*',
             },
             // If the content script runs in https, webpack will connect https://localhost:HMR_PORT
             https: true,
-        },
+        } as DevServerConfiguration,
     }
     //#region Define entries
     if (!(target.Firefox || target.Safari)) {
@@ -163,13 +167,13 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
     return [
         config,
         {
+            name: 'injected-script',
             entry: { 'injected-script': src('./src/extension/injected-script/index.ts') },
             devtool: false,
             output: config.output,
             module: { rules: [getTypeScriptLoader(false)] },
             resolve: config.resolve,
             // We're not using this server, only need it write to disk.
-            // wait https://github.com/webpack/webpack-cli/issues/1955
             devServer: {
                 writeToDisk: true,
                 hot: false,
