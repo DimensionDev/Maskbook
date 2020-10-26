@@ -371,7 +371,7 @@
     "projects": [
         {
             "packageName": "maskbook",
-            "projectFolder": "packages/maskbook-extension"
+            "projectFolder": "packages/maskbook"
         }
         // {
         //   /**
