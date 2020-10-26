@@ -143,12 +143,12 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
         config.plugins.push(new ProvidePlugin({ browser: 'webextension-polyfill' }))
     }
     config.entry = {
-        'options-page': withReactDevTools(src('./src/extension/options-page/index.tsx')),
-        'content-script': withReactDevTools(src('./src/content-script.ts')),
-        'background-service': src('./src/background-service.ts'),
-        popup: withReactDevTools(src('./src/extension/popup-page/index.tsx')),
-        qrcode: src('./src/web-workers/QRCode.ts'),
-        debug: src('./src/extension/debug-page'),
+        'options-page': withReactDevTools(src('./packages/maskbook/src/extension/options-page/index.tsx')),
+        'content-script': withReactDevTools(src('./packages/maskbook/src/content-script.ts')),
+        'background-service': src('./packages/maskbook/src/background-service.ts'),
+        popup: withReactDevTools(src('./packages/maskbook/src/extension/popup-page/index.tsx')),
+        qrcode: src('./packages/maskbook/src/web-workers/QRCode.ts'),
+        debug: src('./packages/maskbook/src/extension/debug-page'),
     }
     for (const entry in config.entry) {
         config.entry[entry] = iOSWebExtensionShimHack(...toArray(config.entry[entry]))
@@ -168,7 +168,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
         config,
         {
             name: 'injected-script',
-            entry: { 'injected-script': src('./src/extension/injected-script/index.ts') },
+            entry: { 'injected-script': src('./packages/maskbook/src/extension/injected-script/index.ts') },
             devtool: false,
             output: config.output,
             module: { rules: [getTypeScriptLoader(false)] },
@@ -198,12 +198,12 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
     }
     function iOSWebExtensionShimHack(...path: string[]) {
         if (!(target.Safari || target.StandaloneGeckoView)) return path
-        return [...path, src('./src/polyfill/permissions.js')]
+        return [...path, src('./packages/maskbook/src/polyfill/permissions.js')]
     }
     function getTypeScriptLoader(hmr = enableHMR): RuleSetRule {
         return {
             test: /\.(ts|tsx)$/,
-            include: src('./src'),
+            include: src('./packages/maskbook/src'),
             loader: require.resolve('ts-loader'),
             options: {
                 transpileOnly: true,
@@ -251,7 +251,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
         return []
     }
     function getManifestPlugin() {
-        const manifest = require('./src/manifest.json')
+        const manifest = require('./packages/maskbook/src/manifest.json')
         if (target.Chromium) modifiers.chromium(manifest)
         else if (target.FirefoxDesktop) modifiers.firefox(manifest)
         else if (target.FirefoxForAndroid) modifiers.firefox(manifest)
@@ -306,7 +306,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
     }
     function getSSRPlugin() {
         if (env === 'development') return []
-        return [new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx'))]
+        return [new SSRPlugin('popup.html', src('./packages/maskbook/src/extension/popup-page/index.tsx'))]
     }
 }
 

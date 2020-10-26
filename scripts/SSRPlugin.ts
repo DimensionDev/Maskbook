@@ -2,7 +2,7 @@ import { execFile } from 'child_process'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import { promisify } from 'util'
 
-const ssrPath = require.resolve('../src/setup.ssr.js')
+const ssrPath = require.resolve('../packages/maskbook/src/setup.ssr.js')
 
 export class SSRPlugin {
     constructor(public htmlFileName: string, public pathName: string) {}

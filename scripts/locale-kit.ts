@@ -4,7 +4,7 @@ import path from 'path'
 import ts from 'typescript'
 import { run } from './utils'
 
-const SOURCE_PATH = path.join(__dirname, '..', 'src')
+const SOURCE_PATH = path.join(__dirname, '../packages/maskbook/src')
 const LOCALE_PATH = path.join(SOURCE_PATH, '_locales')
 
 const _locales = readdirSync(LOCALE_PATH)
@@ -176,7 +176,7 @@ async function diagnosis() {
     const unusedKeys = await findAllUnusedKeys()
     if (unusedKeys.length) {
         for (const locale of _locales) {
-            const filePath = `src/_locales/${locale}/messages.json`
+            const filePath = `packages/maskbook/src/_locales/${locale}/messages.json`
             console.log(
                 `::warning file=${filePath}::Run \`yarn locale-kit --remove-unused-keys\` to solve this problem`,
             )
@@ -192,7 +192,7 @@ async function diagnosis() {
     const unsyncedLocales = await findAllUnsyncedLocales()
     if (!_.isEmpty(unsyncedLocales)) {
         for (const [locale, names] of _.toPairs(unsyncedLocales)) {
-            const filePath = `src/_locales/${locale}/messages.json`
+            const filePath = `packages/maskbook/src/_locales/${locale}/messages.json`
             console.log(`::warning file=${filePath}::Run \`yarn locale-kit --sync-key\` to solve this problem`)
             for (const name of names) {
                 console.log(`::warning file=${filePath}::The ${JSON.stringify(name)} is unsynced`)
@@ -223,6 +223,6 @@ if (process.env.CI) {
     diagnosis()
 } else {
     main().then(() => {
-        run(undefined, 'git', 'add', 'src/_locales')
+        run(undefined, 'git', 'add', 'packages/maskbook/src/_locales')
     })
 }
