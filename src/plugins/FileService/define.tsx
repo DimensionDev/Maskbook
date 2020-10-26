@@ -10,7 +10,6 @@ import schema from './schema.json'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import FileServiceEntryIcon from '../../components/InjectedComponents/FileServiceEntryIcon'
 import FileServiceDialog from './MainDialog'
-import { Flags } from '../../utils/flags'
 
 export const FileInfoMetadataReader = createTypedMessageMetadataReader<FileInfo>(META_KEY_1, schema)
 const [FileServiceCompositionEntry, FileServiceCompositionUI] = createCompositionDialog(
@@ -45,8 +44,6 @@ export const FileServicePluginDefine: PluginConfig = {
             },
         ],
     ]),
-}
-if (Flags.file_service_create_enabled) {
-    FileServicePluginDefine.pageInspector = FileServiceCompositionUI
-    FileServicePluginDefine.postDialogEntries = [FileServiceCompositionEntry]
+    pageInspector: FileServiceCompositionUI,
+    postDialogEntries: [FileServiceCompositionEntry],
 }
