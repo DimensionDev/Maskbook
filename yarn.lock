@@ -1866,10 +1866,10 @@
   dependencies:
     "@msgpack/msgpack" "^1.12.2"
 
-"@dimensiondev/holoflows-kit@^0.7.0-20200824145603-2bfe851":
-  version "0.7.0-20201010005010-0cf4f14"
-  resolved "https://npm.dimension.im/download/@dimensiondev/holoflows-kit/0.7.0-20201010005010-0cf4f14/4534c38f9b640339de6c3129c03a0aead4e7f4b3e9b92a8d1276fb42d3d0d677#288d80b8151f50fb0d3c25fda8e3b1f5bf162ec8"
-  integrity sha512-5ZH20POG6qCGUSHAewQSCcdfNspbtTlwtwjhmQwKVShV5HtjMLI07qWWZv14uA/jh5/uvWKIRrPc+ogxsIPmZA==
+"@dimensiondev/holoflows-kit@^0.8.0-20201026073104-400a4b2":
+  version "0.8.0-20201026073104-400a4b2"
+  resolved "https://npm.dimension.im/download/@dimensiondev/holoflows-kit/0.8.0-20201026073104-400a4b2/123640cc19bc92c593920a9561d94c1f3a24047e4b3d5d4aa900563de411c965#3bac22c96cbeee3f79e392d1afe58781e363bc21"
+  integrity sha512-gJsn8EtyUt6J73n108uUkcp947rUjLseYy2h6xVwKYyG2QV2uoQRtu4iRaNwL5lJid2vCBVRW1F+RswOtwCnEA==
   dependencies:
     "@servie/events" "^1.0.0"
     async-call-rpc "^4.1.0"
@@ -14975,10 +14975,16 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
-lodash-es@^4.17.11, lodash-es@^4.17.15:
+lodash-es@^4.17.15:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
   integrity sha512-rlrc3yU3+JNOpZ9zj5pQtxnx2THmvRykwL4Xlxoa8I9lHBlVbbyPhgyPMioxVZ4NqyxaVVtaJnzsyOidQIhyyQ==
+
+"lodash-es@npm:lodash@^4.17.11", lodash@^4.17.10:
+  name lodash-es
+  version "4.17.20"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
+  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
 lodash._reinterpolate@^3.0.0:
   version "3.0.0"
@@ -15104,11 +15110,6 @@ lodash@^4.0.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.11, lodash@^4.17.12,
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
   integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
-
-lodash@^4.17.10:
-  version "4.17.20"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
-  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
 log-symbols@^2.1.0:
   version "2.2.0"

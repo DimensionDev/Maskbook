@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useMountedState, useAsyncRetry } from 'react-use'
-import { sleep } from '@dimensiondev/holoflows-kit/es/util/sleep'
+import { sleep } from '../utils'
 
 export interface AsyncTimesOptions {
     delay?: number

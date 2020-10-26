@@ -1,4 +1,4 @@
-import base from '../src/manifest.json'
+import base from '../packages/maskbook/src/manifest.json'
 type Manifest = typeof base & { [key: string]: any }
 export function firefox(manifest: Manifest) {
     // TODO: To make `browser.tabs.executeScript` run on Firefox,
