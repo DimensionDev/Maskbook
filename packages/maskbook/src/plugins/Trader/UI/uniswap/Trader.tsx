@@ -10,7 +10,7 @@ import { TradeForm } from './TradeForm'
 import { TradeRoute } from './TradeRoute'
 import { TradeSummary } from './TradeSummary'
 import { ConfirmDialog } from './ConfirmDialog'
-import { useTokenApproveCallback, ApproveState } from '../../../../web3/hooks/useTokenApproveCallback'
+import { useERC20TokenApproveCallback, ApproveState } from '../../../../web3/hooks/useERC20TokenApproveCallback'
 import { useComputedApprove } from '../../uniswap/useComputedApprove'
 import { useSwapCallback } from '../../uniswap/useSwapCallback'
 import { useSwapState, SwapActionType } from '../../uniswap/useSwapState'
@@ -170,7 +170,7 @@ export function Trader(props: TraderProps) {
     //#region approve
     const RouterV2Address = useConstant(TRADE_CONSTANTS, 'ROUTER_V2_ADDRESS')
     const { approveToken, approveAmount } = useComputedApprove(trade.v2Trade)
-    const [approveState, approveCallback] = useTokenApproveCallback(approveToken, approveAmount, RouterV2Address)
+    const [approveState, approveCallback] = useERC20TokenApproveCallback(approveToken, approveAmount, RouterV2Address)
     const onApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback()
@@ -200,7 +200,7 @@ export function Trader(props: TraderProps) {
                   } for ${trade.v2Trade.outputAmount.toSignificant(6)} ${
                       trade.v2Trade.outputAmount.currency.symbol
                   }. Follow @realMaskbook (mask.io) to swap cryptocurrencies on Twitter.`,
-                  '#Maskbook',
+                  '#mask_io',
               ].join('\n')
             : '',
     )

@@ -53,7 +53,7 @@ export function createWeb3(chainId: ChainId = currentChainId, privKeys: string[]
     const web3 = createWeb3Instance(provider)
     if (privKeys.length) {
         web3.eth.accounts.wallet.clear()
-        privKeys.forEach((k) => web3.eth.accounts.wallet.add(k))
+        privKeys.forEach((k) => k && k !== '0x' && web3.eth.accounts.wallet.add(k))
     }
     return web3
 }

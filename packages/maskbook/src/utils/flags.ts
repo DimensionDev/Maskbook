@@ -32,6 +32,8 @@ export const Flags = {
     trader_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
     poll_enabled: webOnly,
+    election2020_enabled: webOnly,
+    election2020_composition_dialog_enabled: process.env.build === 'beta' || process.env.NODE_ENV === 'development',
     // Note: the server has closed
     matrix_based_service_enabled: false,
     wallet_connect_support_enabled: webOnly,

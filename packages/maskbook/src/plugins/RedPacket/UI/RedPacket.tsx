@@ -136,7 +136,7 @@ export function RedPacket(props: RedPacketProps) {
         canClaim
             ? [
                   `I just claimed a red packet from @${payload.sender.name}. Follow @realMaskbook (mask.io) to claim red packets.`,
-                  '#Maskbook #RedPacket',
+                  '#mask_io #RedPacket',
               ].join('\n')
             : '',
     )

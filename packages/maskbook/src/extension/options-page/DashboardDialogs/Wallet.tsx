@@ -847,7 +847,7 @@ export function DashboardWalletRedPacketDetailDialog(
             const userText = user ? ` from @${user}` : ''
             const text = [
                 `I just received a Red Packet${userText}. Follow @realMaskbook (mask.io) to get your first Twitter #payload.`,
-                `#maskbook ${redPacket.from}`,
+                `#mask_io ${redPacket.from}`,
             ].join('\n')
             window.open(
                 `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,

@@ -31,7 +31,7 @@ import { createEetherToken } from '../../../web3/helpers'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { useTokenApproveCallback, ApproveState } from '../../../web3/hooks/useTokenApproveCallback'
+import { useERC20TokenApproveCallback, ApproveState } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { useCreateCallback } from '../hooks/useCreateCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -128,7 +128,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     //#region approve ERC20
     const HappyRedPacketContractAddress = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
-    const [approveState, approveCallback] = useTokenApproveCallback(token, amount, HappyRedPacketContractAddress)
+    const [approveState, approveCallback] = useERC20TokenApproveCallback(token, amount, HappyRedPacketContractAddress)
     const onApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback()
@@ -223,7 +223,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#endregion
 
     const validationMessage = useMemo(() => {
-        if (!account) return 'Connect a Wallet'
+        if (!account) return t('connect_a_wallet')
         if (!token.address) return 'Select a token'
         if (new BigNumber(shares || '0').isZero()) return 'Enter shares'
         if (new BigNumber(amount).isZero()) return 'Enter an amount'
