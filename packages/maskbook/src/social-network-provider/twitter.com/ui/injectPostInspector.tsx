@@ -10,7 +10,7 @@ export function injectPostInspectorAtTwitter(current: PostInfo) {
             if (content) {
                 for (const a of content.querySelectorAll('a')) {
                     if (twitterEncoding.payloadDecoder(a.title)) hideDOM(a)
-                    if (a.title === 'http://maskbook.com') hideDOM(a)
+                    if (a.title === 'http://mask.io' || a.title === 'http://maskbook.com') hideDOM(a)
                 }
                 for (const span of content.querySelectorAll('span')) {
                     // match (.) (\n) (—§—) (any space) (/*)

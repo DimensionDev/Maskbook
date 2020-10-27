@@ -63,7 +63,7 @@
     "dashboard_import_database_hint": "前回のデータベースバックアップから",
     "dashboard_load_failed_title": "ダッシュボードの読み込みに失敗しました。",
     "dashboard_mobile_test": "スマホ版のテストに参加しませんか？",
-    "dashboard_mobile_test_link": "https://maskbook.com/download-links/#mobile",
+    "dashboard_mobile_test_link": "https://mask.io/download-links/#mobile",
     "dashboard_paste_database_base64_hint": "ここに Base64 を貼り付ける…",
     "dashboard_paste_database_backup_hint": "データベースのバックアップをテキストとしてここに貼り付けてくだい。",
     "dashboard_persona_import_dialog_hint": "以下の方法で人格インポートできます",

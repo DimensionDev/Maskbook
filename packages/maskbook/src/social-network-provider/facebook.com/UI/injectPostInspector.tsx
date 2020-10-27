@@ -32,7 +32,9 @@ function zipPostLinkPreview(node: DOMProxy) {
     const parentEle = node.current.parentElement!
     if (isMobileFacebook) {
         const img =
-            parentEle.querySelector('a[href*="maskbook.io"]') || parentEle.querySelector('a[href*="maskbook.com"]')
+            parentEle.querySelector('a[href*="maskbook.io"]') ||
+            parentEle.querySelector('a[href*="mask.io"]') ||
+            parentEle.querySelector('a[href*="maskbook.com"]')
         const parent = img && img.closest('section')
         if (img && parent) {
             parent.style.display = 'none'
@@ -40,6 +42,7 @@ function zipPostLinkPreview(node: DOMProxy) {
     } else {
         const img =
             parentEle.querySelector('a[href*="maskbook.io"] img') ||
+            parentEle.querySelector('a[href*="mask.io"] img') ||
             parentEle.querySelector('a[href*="maskbook.com"] img')
         const parent = img && img.closest('span')
         if (img && parent) {

@@ -9,13 +9,13 @@ import { Image } from '../components/shared/Image'
 import { number, radios, boolean, text } from '@storybook/addon-knobs'
 
 let blob: Blob = undefined!
-const data = fetch('https://maskbook.com/img/maskbook--logotype-black.png')
+const data = fetch('https://mask.io/img/maskbook--logotype-black.png')
     .then((x) => x.blob())
     .then((x) => (blob = x))
 
 storiesOf('Shared Components', module)
     .add('Image', () => {
-        const url = 'https://maskbook.com/img/maskbook--logotype-white.png'
+        const url = 'https://mask.io/img/maskbook--logotype-white.png'
         const _ = text('src', 'img')
         const src = _ === 'img' ? url : _ === 'blob' ? blob : _
         return (

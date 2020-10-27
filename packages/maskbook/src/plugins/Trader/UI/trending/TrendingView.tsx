@@ -363,8 +363,8 @@ export function TrendingView(props: TrendingViewProps) {
                         color="textSecondary"
                         target="_blank"
                         rel="noopener noreferrer"
-                        title="Maskbook"
-                        href="https://maskbook.com">
+                        title="Mask"
+                        href="https://mask.io">
                         <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 60 9" />
                     </Link>
                 </Typography>
