@@ -239,7 +239,7 @@
     "settings_ancient_post_compatibility_mode_desc": "Enable if you need to decrypt ancient posts (created before Jan 2020).",
     "settings_enable_debug": "Debug Mode",
     "settings_enable_debug_desc": "See additional information for debugging.",
-    "settings_appearance": "Apperance",
+    "settings_appearance": "Appearance",
     "settings_appearance_secondary": "Select the theme you would like to use.",
     "settings_appearance_default": "Follow system settings",
     "settings_appearance_dark": "Dark",

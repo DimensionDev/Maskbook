@@ -20,12 +20,8 @@ export function startWatchThemeColor() {
         const color = getBackgroundColor(composeAnchorSelector().evaluate()!)
         const backgroundColor = getBackgroundColor(document.body)
 
-        if (color) {
-            primaryColorRef.value = color
-        }
-        if (backgroundColor) {
-            backgroundColorRef.value = backgroundColor
-        }
+        if (color) primaryColorRef.value = color
+        if (backgroundColor) backgroundColorRef.value = backgroundColor
     }
     new MutationObserverWatcher(composeAnchorSelector())
         .addListener('onAdd', updateThemeColor)
@@ -39,7 +35,7 @@ function useTheme() {
     const backgroundColor = useValueRef(backgroundColorRef)
     const primaryColor = useValueRef(primaryColorRef)
     const MaskbookTheme = useMaskbookTheme({
-        theme: isDark(fromRGB(backgroundColor)!) ? Appearance.dark : Appearance.light,
+        appearance: isDark(fromRGB(backgroundColor)!) ? Appearance.dark : Appearance.light,
     })
     return useMemo(() => {
         const primaryColorRGB = fromRGB(primaryColor)!

@@ -149,8 +149,8 @@ export default function DashboardSettingsRouter() {
     }
     return (
         <DashboardRouterContainer title={t('settings')}>
-            <div className="wrapper">
-                <ThemeProvider theme={settingsTheme}>
+            <ThemeProvider theme={settingsTheme}>
+                <div className="wrapper">
                     <Paper component="section" className={classes.section} elevation={elevation}>
                         <Typography className={classes.title} variant="h6" color="textPrimary">
                             {t('settings_title_general')}
@@ -253,8 +253,8 @@ export default function DashboardSettingsRouter() {
                         {backupDialog}
                         {restoreDialog}
                     </Paper>
-                </ThemeProvider>
-            </div>
+                </div>
+            </ThemeProvider>
         </DashboardRouterContainer>
     )
 }

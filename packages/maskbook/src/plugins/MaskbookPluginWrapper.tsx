@@ -51,9 +51,8 @@ const useStyles = makeStyles((theme) => {
 export default function MaskbookPluginWrapper(props: PluginWrapperProps) {
     const classes = useStyles()
     const { pluginName, children } = props
-    const theme = getActivatedUI().useTheme()
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={getActivatedUI().useTheme()}>
             <div className={classes.card} onClick={(ev) => ev.stopPropagation()}>
                 <div className={classes.header}>
                     <MaskbookIcon className={classes.icon}></MaskbookIcon>

@@ -156,9 +156,8 @@ function PopupUI() {
 }
 
 export function Popup() {
-    const theme = useMaskbookTheme()
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={useMaskbookTheme()}>
             <I18nextProvider i18n={i18nNextInstance}>
                 <GlobalCss />
                 <PopupUI />
