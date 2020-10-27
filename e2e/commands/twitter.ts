@@ -10,7 +10,7 @@ class Twitter implements SNS {
     // selectors
     composeButtonSelector = '' // no compose button for twitter
     composeImageSelector = '[data-testid="primaryColumn"] [data-testid="attachments"] img'
-    composeEditorSelector = '[data-testid="primaryColumn"] .DraftEditor-root [contenteditable]'
+    composeEditorSelector = '[data-testid="primaryColumn"] .DraftEditor-root [data-testid="tweetTextarea_0"]'
     profileSelector = '[data-testid="primaryColumn"]'
     bioTextareaSelector = 'textarea[name="description"]'
     commentInputSelector = '' // no comment form for twitter
