@@ -42,13 +42,22 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                 <form>
                     <Autocomplete
                         autoComplete
-                        PopperComponent={ShadowRootPopper}
                         freeSolo
                         options={knownMetadata}
                         inputValue={field}
                         onInputChange={(_, newValue) => setField(newValue)}
+                        PopperComponent={ShadowRootPopper}
                         renderInput={(params) => (
-                            <TextField {...params} fullWidth label="Metadata Key" margin="normal" />
+                            <TextField
+                                {...params}
+                                spellCheck={false}
+                                autoCapitalize="off"
+                                autoComplete="off"
+                                autoCorrect="off"
+                                fullWidth
+                                label="Metadata Key"
+                                margin="normal"
+                            />
                         )}
                     />
                     <TextField
@@ -57,6 +66,10 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                         onChange={(e) => setContent(e.currentTarget.value)}
                         multiline
                         fullWidth
+                        spellCheck={false}
+                        autoCapitalize="off"
+                        autoComplete="off"
+                        autoCorrect="off"
                         error={isInvalid}
                         helperText={<span style={{ whiteSpace: 'pre-wrap' }}>{result}</span>}
                     />
