@@ -56,7 +56,7 @@ export function PageInspector(props: PageInspectorProps) {
 }
 
 function PluginPageInspectorForEach({ config }: { config: PluginConfig }) {
-    const F = config.pageInspector
+    const F = config.PageComponent
     if (typeof F === 'function') return <F />
     return null
 }

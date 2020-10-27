@@ -23,6 +23,7 @@ export interface Coin {
     id: string
     name: string
     symbol: string
+    platform_url?: string
     home_url?: string
     image_url?: string
     description?: string

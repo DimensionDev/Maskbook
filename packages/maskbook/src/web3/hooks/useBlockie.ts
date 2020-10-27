@@ -6,6 +6,8 @@ export function useBlockie(address: string) {
         try {
             return create({
                 seed: address,
+                color: '#dfe',
+                bgcolor: '#aaa',
             }).toDataURL()
         } catch (e) {
             return ''

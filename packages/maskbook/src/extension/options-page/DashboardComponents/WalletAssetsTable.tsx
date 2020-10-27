@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     table: {},
     head: {
-        backgroundColor: 'var(--drawerBody)',
+        backgroundColor: 'transparent',
     },
     cell: {
         paddingLeft: theme.spacing(1),
