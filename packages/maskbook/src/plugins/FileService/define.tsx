@@ -44,6 +44,6 @@ export const FileServicePluginDefine: PluginConfig = {
             },
         ],
     ]),
-    pageInspector: FileServiceCompositionUI,
+    PageComponent: FileServiceCompositionUI,
     postDialogEntries: [FileServiceCompositionEntry],
 }
