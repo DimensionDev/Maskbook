@@ -55,8 +55,7 @@ export enum Appearance {
     light = 'light',
     dark = 'dark',
 }
-const appearance = Appearance.default
-export const appearanceSettings = createGlobalSettings<Appearance>('apperance', appearance, {
+export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default, {
     primary: () => i18n.t('settings_appearance'),
     secondary: () => i18n.t('settings_appearance_secondary'),
 })

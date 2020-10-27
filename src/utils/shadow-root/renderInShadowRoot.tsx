@@ -218,9 +218,8 @@ function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{
 type MaskbookProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
 
 function Maskbook(_props: MaskbookProps) {
-    const theme = getActivatedUI().useTheme()
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={getActivatedUI().useTheme()}>
             <I18nextProvider i18n={i18nNextInstance}>
                 <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
                     <React.StrictMode>

@@ -227,21 +227,23 @@ function DashboardPluginUI() {
 
 export function Dashboard() {
     return (
-        <I18nextProvider i18n={i18nNextInstance}>
-            <ThemeProvider theme={useMaskbookTheme()}>
-                <DashboardSnackbarProvider>
-                    <NoSsr>
-                        <Router>
-                            <CssBaseline />
-                            <DashboardBlurContextUI>
-                                <DashboardUI />
-                                <DashboardPluginUI />
-                            </DashboardBlurContextUI>
-                        </Router>
-                    </NoSsr>
-                </DashboardSnackbarProvider>
-            </ThemeProvider>
-        </I18nextProvider>
+        <ErrorBoundary>
+            <I18nextProvider i18n={i18nNextInstance}>
+                <ThemeProvider theme={useMaskbookTheme()}>
+                    <DashboardSnackbarProvider>
+                        <NoSsr>
+                            <Router>
+                                <CssBaseline />
+                                <DashboardBlurContextUI>
+                                    <DashboardUI />
+                                    <DashboardPluginUI />
+                                </DashboardBlurContextUI>
+                            </Router>
+                        </NoSsr>
+                    </DashboardSnackbarProvider>
+                </ThemeProvider>
+            </I18nextProvider>
+        </ErrorBoundary>
     )
 }
 

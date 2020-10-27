@@ -87,9 +87,9 @@ const baseTheme = (theme: 'dark' | 'light') => {
 const MaskbookLightTheme = unstable_createMuiStrictModeTheme(baseTheme('light'))
 const MaskbookDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))
 
-export function getMaskbookTheme(opt?: { language?: Language; apperance?: Appearance }) {
+export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Language }) {
     const language = opt?.language ?? languageSettings.value
-    const preference = opt?.apperance ?? appearanceSettings.value
+    const preference = opt?.appearance ?? appearanceSettings.value
     const appearance = matchMedia('(prefers-color-scheme: dark)').matches
 
     const isDark = (appearance && preference === Appearance.default) || preference === Appearance.dark
@@ -107,14 +107,17 @@ export function getMaskbookTheme(opt?: { language?: Language; apperance?: Appear
     }
 }
 
-export function useMaskbookTheme(opt?: { language?: Language; theme?: Appearance }) {
+export function useMaskbookTheme(opt?: { appearance?: Appearance; language?: Language }) {
     const language = or(opt?.language, useValueRef(languageSettings))
-    const preference = or(opt?.theme, useValueRef(appearanceSettings))
-    const appearance = useMediaQuery('(prefers-color-scheme: dark)')
-
-    const isDark = (appearance && preference === Appearance.default) || preference === Appearance.dark
-    const apperance = isDark ? Appearance.dark : Appearance.light
-    return useMemo(getMaskbookTheme, [apperance, language])
+    const appPreference = or(opt?.appearance, useValueRef(appearanceSettings))
+    const systemPreference = useMediaQuery('(prefers-color-scheme: dark)')
+    return useMemo(() => getMaskbookTheme(opt), [
+        opt?.appearance,
+        opt?.language,
+        language,
+        appPreference,
+        systemPreference,
+    ])
 }
 
 export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {

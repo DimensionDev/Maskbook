@@ -29,9 +29,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: theme.spacing(0, 3),
     },
     table: {},
-    head: {
-        backgroundColor: 'transparent',
-    },
+    head: {},
     cell: {
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1.5),
