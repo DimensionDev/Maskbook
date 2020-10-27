@@ -1,5 +1,5 @@
 import React from 'react'
-import { Chip, makeStyles, Theme, Typography, Link } from '@material-ui/core'
+import { makeStyles, Theme, Typography, Link, useTheme } from '@material-ui/core'
 import { useI18N } from '../../utils/i18n-next-ui'
 
 const useStyle = makeStyles((theme: Theme) => ({
@@ -17,9 +17,17 @@ export interface PayloadReplacerProps {
 export function PayloadReplacer({ payload }: PayloadReplacerProps) {
     const { t } = useI18N()
     const classes = useStyle()
+    const theme = useTheme()
     return (
         <Typography className={classes.text} color="textPrimary" component="span" variant="body1">
-            <Link href={payload.startsWith('https://maskbook.com') ? payload : 'https://maskbook.com'}>
+            <Link
+                // HACK: !important inline style in react doesn't work, see stackoverflow.com/questions/23074748
+                ref={(node) => {
+                    if (node) {
+                        node.style.setProperty('color', theme.palette.primary.main, 'important')
+                    }
+                }}
+                href={payload.startsWith('https://maskbook.com') ? payload : 'https://maskbook.com'}>
                 {t('post_substitute_label')}
             </Link>
         </Typography>
