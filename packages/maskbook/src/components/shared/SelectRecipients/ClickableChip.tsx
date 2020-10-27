@@ -4,11 +4,8 @@ import { makeStyles } from '@material-ui/core'
 import DoneIcon from '@material-ui/icons/Done'
 import Chip, { ChipProps } from '@material-ui/core/Chip'
 
-export interface ClickableChipProps {
+export interface ClickableChipProps extends ChipProps {
     checked?: boolean
-    ChipProps?: ChipProps & {
-        'data-testid'?: string
-    }
 }
 
 const useStyles = makeStyles({
@@ -31,9 +28,12 @@ export function ClickableChip(props: ClickableChipProps) {
         <Chip
             avatar={props.checked ? <DoneIcon className={classes.icon} /> : undefined}
             color={props.checked ? 'primary' : 'default'}
-            {...props.ChipProps}
-            classes={classes}
-            className={props.ChipProps?.className}
+            {...props}
+            classes={{
+                ...props.classes,
+                root: classNames(classes.root, props.classes?.root),
+                label: classNames(classes.label, props.classes?.label),
+            }}
         />
     )
 }

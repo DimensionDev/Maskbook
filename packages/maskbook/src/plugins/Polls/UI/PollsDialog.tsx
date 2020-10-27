@@ -21,7 +21,7 @@ import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
 import Services from '../../../extension/service'
-import { getActivatedUI } from '../../../social-network/ui'
+import { editActivatedPostMetadata } from '../../../social-network/ui'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
@@ -265,10 +265,7 @@ export default function PollsDialog(props: PollsDialogProps) {
     }
 
     const insertPoll = (data?: PollMetaData | null) => {
-        const ref = getActivatedUI().typedMessageMetadata
-        const next = new Map(ref.value)
-        data ? next.set(POLL_META_KEY_1, data) : next.delete(POLL_META_KEY_1)
-        ref.value = next
+        editActivatedPostMetadata((next) => (data ? next.set(POLL_META_KEY_1, data) : next.delete(POLL_META_KEY_1)))
         props.onConfirm()
     }
 
