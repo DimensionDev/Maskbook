@@ -48,6 +48,6 @@ export const RedPacketPluginDefine: PluginConfig = {
             },
         ],
     ]),
-    pageInspector: RedPacketCompositionUI,
+    PageComponent: RedPacketCompositionUI,
     postDialogEntries: [RedPacketCompositionEntry],
 }
