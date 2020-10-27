@@ -21,7 +21,6 @@ import { DataProvider, SwapProvider } from '../../types'
 import {
     resolveDataProviderName,
     resolveDataProviderLink,
-    resolveDataProviderCoinLink,
     resolveSwapProviderName,
     resolveSwapProviderLink,
 } from '../../pipes'
@@ -345,10 +344,7 @@ export function TrendingView(props: TrendingViewProps) {
                     {tabIndex === 0 ? (
                         <>
                             {market ? <PriceChangedTable market={market} /> : null}
-                            <PriceChart
-                                stats={stats}
-                                loading={loadingStats}
-                                coinURL={resolveDataProviderCoinLink(dataProvider, coin)}>
+                            <PriceChart coin={coin} stats={stats} loading={loadingStats}>
                                 <PriceChartDaysControl days={days} onDaysChange={setDays} />
                             </PriceChart>
                         </>

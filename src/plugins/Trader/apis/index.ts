@@ -146,6 +146,7 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
             name: coinInfo.name,
             symbol: coinInfo.symbol,
             image_url: `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`,
+            platform_url: `https://coinmarketcap.com/currencies/${coinInfo.slug}/`,
             market_cap_rank: quotesInfo?.rank,
             description: coinInfo.description,
             eth_address:

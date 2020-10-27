@@ -8,7 +8,7 @@ import { WalletConnectQRCodeDialog } from './UI/WalletConnectQRCodeDialog'
 export const WalletPluginDefine: PluginConfig = {
     pluginName: 'Wallet',
     identifier: PLUGIN_IDENTIFIER,
-    pageInspector() {
+    PageComponent() {
         return (
             <>
                 <SelectWalletDialog />
@@ -17,7 +17,7 @@ export const WalletPluginDefine: PluginConfig = {
             </>
         )
     },
-    dashboardInspector() {
+    DashboardComponent() {
         return (
             <>
                 <SelectWalletDialog />

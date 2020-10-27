@@ -133,7 +133,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     },
 })
 function getTheme() {
-    return getMaskbookTheme({ theme: isDarkTheme() ? Appearance.dark : Appearance.light })
+    return getMaskbookTheme({ apperance: isDarkTheme() ? Appearance.dark : Appearance.light })
 }
 if (module.hot) {
     module.hot.accept('./tasks/pasteIntoPostBox.ts', () => {

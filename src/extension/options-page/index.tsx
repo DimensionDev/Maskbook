@@ -3,15 +3,15 @@ import '../../setup.ui'
 import '../tab'
 
 import React, { useState } from 'react'
+import { useAsync } from 'react-use'
 import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card } from '@material-ui/core'
-import { ThemeProvider, makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined'
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import { HashRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom'
-
 import { I18nextProvider } from 'react-i18next'
 
 import { useI18N } from '../../utils/i18n-next-ui'
@@ -30,7 +30,6 @@ import { DashboardBlurContextUI } from './DashboardContexts/BlurContext'
 import { DashboardRoute } from './Route'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 
-import { useAsync } from 'react-use'
 import Services from '../service'
 import { RequestPermissionPage } from '../../components/RequestPermission/RequestPermission'
 import { grey } from '@material-ui/core/colors'
@@ -208,20 +207,20 @@ function DashboardUI() {
 
 //#region dashboard plugin UI
 function PluginDashboardInspectorForEach({ config }: { config: PluginConfig }) {
-    const F = config.dashboardInspector
+    const F = config.DashboardComponent
     if (typeof F === 'function') return <F />
     return null
 }
 
 function DashboardPluginUI() {
     return (
-        <>
-            {[...PluginUI.values()].map((x) => (
-                <ErrorBoundary>
+        <ErrorBoundary>
+            <ThemeProvider theme={useMaskbookTheme()}>
+                {[...PluginUI.values()].map((x) => (
                     <PluginDashboardInspectorForEach key={x.identifier} config={x} />
-                </ErrorBoundary>
-            ))}
-        </>
+                ))}
+            </ThemeProvider>
+        </ErrorBoundary>
     )
 }
 //#endregion

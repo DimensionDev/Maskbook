@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import type { Stat } from '../../types'
+import type { Coin, Stat } from '../../types'
 import { makeStyles, Theme, createStyles, CircularProgress, Typography } from '@material-ui/core'
 import { useDimension, Dimension } from '../../graphs/useDimension'
 import { usePriceLineChart } from '../../graphs/usePriceLineChart'
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
         root: {
             position: 'relative',
-            cursor: ({ stats, coinURL }: PriceChartProps) => (stats.length && coinURL ? 'pointer' : 'default'),
+            cursor: ({ stats, coin }: PriceChartProps) => (stats.length && coin?.platform_url ? 'pointer' : 'default'),
         },
         svg: {},
         progress: {
@@ -34,8 +34,8 @@ const useStyles = makeStyles((theme: Theme) => {
 })
 
 export interface PriceChartProps {
+    coin?: Coin
     stats: Stat[]
-    coinURL?: string
     loading?: boolean
     width?: number
     height?: number
@@ -70,8 +70,8 @@ export function PriceChart(props: PriceChartProps) {
                         height={DEFAULT_DIMENSION.height}
                         onClick={() => {
                             props.stats.length &&
-                                props.coinURL &&
-                                window.open(props.coinURL, '_blank', 'noopener noreferrer')
+                                props.coin?.platform_url &&
+                                window.open(props.coin.platform_url, '_blank', 'noopener noreferrer')
                         }}
                     />
                 </>

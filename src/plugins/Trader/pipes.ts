@@ -31,19 +31,6 @@ export function resolveDataProviderLink(dataProvider: DataProvider) {
     }
 }
 
-export function resolveDataProviderCoinLink(dataProvider: DataProvider, coin: Coin) {
-    switch (dataProvider) {
-        case DataProvider.COIN_MARKET_CAP:
-            return `https://coinmarketcap.com/currencies/${coin.name.replace(/(\s+|\.)/g, '-').toLowerCase()}`
-        case DataProvider.COIN_GECKO:
-            // TODO:
-            // `https://www.coingecko.com/en/coins/${coin.name.toLowerCase()}`
-            return ''
-        default:
-            return ''
-    }
-}
-
 export function resolveSwapProviderName(swapProvider: SwapProvider) {
     switch (swapProvider) {
         case SwapProvider.UNISWAP:

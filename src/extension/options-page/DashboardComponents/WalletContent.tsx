@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button, Typography, Box, IconButton, List, MenuItem } from '@material-ui/core'
-import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
-import { merge, cloneDeep, truncate } from 'lodash-es'
+import { Button, Typography, Box, IconButton, MenuItem } from '@material-ui/core'
+import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { truncate } from 'lodash-es'
 import AddIcon from '@material-ui/icons/Add'
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
@@ -28,29 +28,6 @@ import { WalletAssetsTable } from './WalletAssetsTable'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransakMessageCenter } from '../../../plugins/Transak/messages'
 
-const walletContentTheme = (theme: Theme): Theme =>
-    merge(cloneDeep(theme), {
-        overrides: {
-            MuiIconButton: {
-                root: {
-                    color: theme.palette.text,
-                },
-            },
-            MuiListItemIcon: {
-                root: {
-                    justifyContent: 'center',
-                    minWidth: 'unset',
-                    marginRight: theme.spacing(2),
-                },
-            },
-            MuiListItemSecondaryAction: {
-                root: {
-                    ...theme.typography.body1,
-                },
-            },
-        },
-    })
-
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
@@ -59,7 +36,6 @@ const useStyles = makeStyles((theme) =>
             flexDirection: 'column',
         },
         title: {
-            color: theme.palette.text.primary,
             flex: 1,
         },
         box: {
@@ -125,76 +101,68 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
 
     return (
         <div className={classes.root} ref={ref}>
-            <ThemeProvider theme={walletContentTheme}>
-                <Box
-                    pt={xsMatched ? 2 : 3}
-                    pb={2}
-                    pl={3}
-                    pr={2}
-                    display="flex"
-                    alignItems="center"
-                    className={xsMatched ? classes.box : ''}>
-                    <Typography className={classes.title} variant="h5">
-                        {wallet.name
-                            ? truncate(wallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN })
-                            : wallet.address}
-                    </Typography>
-                    {!xsMatched ? (
-                        <Box className={classes.footer} display="flex" alignItems="center" justifyContent="flex-end">
-                            <Button
-                                className={classes.addButton}
-                                variant="text"
-                                onClick={() => openAddToken({ wallet })}
-                                startIcon={<AddIcon />}>
-                                {t('add_token')}
-                            </Button>
-                            <Button
-                                onClick={() => {
-                                    setBuyDialogOpen({
-                                        open: true,
-                                        address: wallet.address,
-                                    })
-                                }}
-                                startIcon={<ShoppingCartOutlinedIcon />}>
-                                {t('buy_now')}
-                            </Button>
-                        </Box>
-                    ) : null}
-                    <IconButton
-                        className={classes.moreButton}
-                        size="small"
-                        onClick={openMenu}
-                        data-testid="setting_icon">
-                        <MoreVertOutlinedIcon />
-                    </IconButton>
-                    {menu}
-                </Box>
-                <WalletAssetsTable
-                    classes={{ container: classes.assetsTable }}
-                    wallet={wallet}
-                    detailedTokens={detailedTokens}
-                />
+            <Box
+                pt={xsMatched ? 2 : 3}
+                pb={2}
+                pl={3}
+                pr={2}
+                display="flex"
+                alignItems="center"
+                className={xsMatched ? classes.box : ''}>
+                <Typography className={classes.title} variant="h5" color="textPrimary">
+                    {wallet.name ? truncate(wallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN }) : wallet.address}
+                </Typography>
                 {!xsMatched ? (
-                    <Box className={classes.footer} display="flex" alignItems="center">
+                    <Box className={classes.footer} display="flex" alignItems="center" justifyContent="flex-end">
                         <Button
-                            onClick={() =>
-                                openWalletHistory({
-                                    wallet,
-                                    onRedPacketClicked(payload) {
-                                        openWalletRedPacket({
-                                            wallet,
-                                            payload,
-                                        })
-                                    },
+                            className={classes.addButton}
+                            variant="text"
+                            onClick={() => openAddToken({ wallet })}
+                            startIcon={<AddIcon />}>
+                            {t('add_token')}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                setBuyDialogOpen({
+                                    open: true,
+                                    address: wallet.address,
                                 })
-                            }
-                            startIcon={<HistoryIcon />}
-                            variant="text">
-                            {t('activity')}
+                            }}
+                            startIcon={<ShoppingCartOutlinedIcon />}>
+                            {t('buy_now')}
                         </Button>
                     </Box>
                 ) : null}
-            </ThemeProvider>
+                <IconButton className={classes.moreButton} size="small" onClick={openMenu} data-testid="setting_icon">
+                    <MoreVertOutlinedIcon />
+                </IconButton>
+                {menu}
+            </Box>
+            <WalletAssetsTable
+                classes={{ container: classes.assetsTable }}
+                wallet={wallet}
+                detailedTokens={detailedTokens}
+            />
+            {!xsMatched ? (
+                <Box className={classes.footer} display="flex" alignItems="center">
+                    <Button
+                        onClick={() =>
+                            openWalletHistory({
+                                wallet,
+                                onRedPacketClicked(payload) {
+                                    openWalletRedPacket({
+                                        wallet,
+                                        payload,
+                                    })
+                                },
+                            })
+                        }
+                        startIcon={<HistoryIcon />}
+                        variant="text">
+                        {t('activity')}
+                    </Button>
+                </Box>
+            ) : null}
             {addToken}
             {walletShare}
             {walletHistory}
