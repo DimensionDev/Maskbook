@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, Link } from '@material-ui/core'
+import { Typography, Link, useTheme } from '@material-ui/core'
 import anchorme from 'anchorme'
 import {
     TypedMessage,
@@ -66,6 +66,7 @@ export const DefaultTypedMessageAnchorRenderer = React.memo(function DefaultType
 ) {
     const { content, href } = props.message
     const deconstructed = deconstructPayload(content, null)
+    const theme = useTheme()
     return renderWithMetadata(
         props,
         <Typography component="span" variant="body1" data-testid="anchor_payload">
@@ -74,7 +75,16 @@ export const DefaultTypedMessageAnchorRenderer = React.memo(function DefaultType
             ) : (
                 // TODO:
                 // shrink link size
-                <Link color="primary" target="_blank" rel="noopener noreferrer" href={href}>
+                <Link
+                    ref={(node) => {
+                        if (node) {
+                            node.style.setProperty('color', theme.palette.primary.main, 'important')
+                        }
+                    }}
+                    color="primary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={href}>
                     {content}
                 </Link>
             )}
