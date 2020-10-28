@@ -22,7 +22,6 @@ export function injectPostInspectorFacebook(current: PostInfo) {
         render(jsx, postInfo) {
             return renderInShadowRoot(jsx, {
                 shadow: () => getShadowRoot(postInfo.postContentNode!),
-                normal: () => getShadowRoot(postInfo.postContentNode!) as any,
                 concurrent: true,
             })
         },

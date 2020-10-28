@@ -26,10 +26,7 @@ export function injectPageInspectorDefault<T extends string>(
                 subtree: true,
             })
 
-        return renderInShadowRoot(<PageInspectorDefault />, {
-            shadow: () => watcher.firstDOMProxy.afterShadow,
-            normal: () => watcher.firstDOMProxy.after,
-        })
+        return renderInShadowRoot(<PageInspectorDefault />, { shadow: () => watcher.firstDOMProxy.afterShadow })
     }
 }
 

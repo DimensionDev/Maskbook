@@ -29,12 +29,9 @@ export function createTaskStartSetupGuideDefault(_: () => SocialNetworkUI, props
             />,
             {
                 shadow: () => {
-                    if (!shadowRoot) {
-                        shadowRoot = dom.attachShadow({ mode: Flags.using_ShadowDOM_attach_mode })
-                    }
+                    if (!shadowRoot) shadowRoot = dom.attachShadow({ mode: Flags.using_ShadowDOM_attach_mode })
                     return shadowRoot
                 },
-                normal: () => dom,
             },
         )
         Services.Crypto.getMyProveBio(for_, _().networkIdentifier)

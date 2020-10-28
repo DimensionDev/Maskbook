@@ -13,7 +13,6 @@ export function injectDashboardEntranceAtTwitter() {
             return renderInShadowRoot(
                 <MaskbookIcon onClick={() => Services.Welcome.openOptionsPage()} style={{ zoom: 1.25 }} />,
                 {
-                    normal: () => meta.after,
                     shadow: () => meta.afterShadow,
                     rootProps: {
                         style: {

@@ -5,13 +5,11 @@ import React from 'react'
 import type {} from 'react/experimental'
 import type {} from 'react-dom/experimental'
 import { getActivatedUI } from '../../social-network/ui'
-import { renderInShadowRootSettings } from '../../settings/settings'
 import { I18nextProvider } from 'react-i18next'
 import i18nNextInstance from '../i18n-next'
 import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
 import { SnackbarProvider } from 'notistack'
-import '../../components/InjectedComponents/ShadowRootSwitchNotifier'
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 
 const captureEvents: (keyof HTMLElementEventMap)[] = [
@@ -33,7 +31,6 @@ try {
         portalShadowRoot.addEventListener(each, (e) => e.stopPropagation())
     }
 } catch {}
-const previousShadowedElement = new Set<HTMLElement>()
 /**
  * Render the Node in the ShadowRoot
  * @param node React Node
@@ -44,66 +41,34 @@ export function renderInShadowRoot(
     config: {
         keyBy?: string
         shadow(): ShadowRoot
-        normal(): HTMLElement
         concurrent?: boolean
         rootProps?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
     },
 ) {
-    const get = (): HTMLElement => {
-        const dom = config.normal()
-        // ? Once it attached ShadowRoot, there is no way back
-        if (previousShadowedElement.has(dom)) return config.shadow() as any
-        if (renderInShadowRootSettings.value) {
-            const shadow = config.shadow()
-            previousShadowedElement.add(dom)
-            if (shadow instanceof ShadowRoot && shadow.mode === 'open')
-                console.warn('Do not render with open ShadowRoot!')
-            return shadow as any
-        }
-        return dom
-    }
     let rendered = false
     let unmount = () => {}
-    const tryRender = () => {
-        const element: HTMLElement = get()
-        if (!(element instanceof ShadowRoot)) {
+    const element: ShadowRoot = config.shadow()
+    setTimeout(function tryRender() {
+        // ! DOMRender requires the element inside document
+        if (element.host.parentNode === null) setTimeout(tryRender)
+        else {
             rendered = true
             unmount = mount(
                 element,
                 <ErrorBoundary>
-                    <Maskbook {...config.rootProps} children={node} />
+                    <ShadowRootStyleProvider shadow={element}>
+                        <Maskbook {...config.rootProps} children={node} />
+                    </ShadowRootStyleProvider>
                 </ErrorBoundary>,
                 config.keyBy,
                 config.concurrent,
             )
         }
-        setTimeout(() => {
-            if (!(element instanceof ShadowRoot)) {
-                console.log('Element = ', element)
-                throw new Error('Element not instance of ShadowRoot')
-            }
-            // ! DOMRender requires the element inside document
-            if (element.host.parentNode === null) tryRender()
-            else {
-                rendered = true
-                unmount = mount(
-                    element,
-                    <ErrorBoundary>
-                        <ShadowRootStyleProvider shadow={element}>
-                            <Maskbook {...config.rootProps} children={node} />
-                        </ShadowRootStyleProvider>
-                    </ErrorBoundary>,
-                    config.keyBy,
-                    config.concurrent,
-                )
-            }
-        })
-    }
-    renderInShadowRootSettings.readyPromise.then(tryRender)
+    })
     return () => rendered && unmount()
 }
 
-function mount(host: ({} | ShadowRoot) & HTMLElement, _: JSX.Element, keyBy = 'app', concurrent?: boolean) {
+function mount(host: ShadowRoot, _: JSX.Element, keyBy = 'app', concurrent?: boolean) {
     const container =
         host.querySelector<HTMLElement>(`main.${keyBy}`) ||
         (() => {

@@ -44,7 +44,7 @@ export function injectPostCommentsDefault<T extends string>(
                     <PostInfoContext.Provider value={current}>
                         <PostCommentDefault needZip={needZipF} comment={commentRef} {...current} />
                     </PostInfoContext.Provider>,
-                    { normal: () => meta.after, shadow: () => meta.afterShadow },
+                    { shadow: () => meta.afterShadow },
                 )
                 commentRef.addListener(console.log)
                 return {
