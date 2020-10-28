@@ -25,10 +25,7 @@ function renderPostDialogIconTo<T>(ls: LiveSelector<T, true>) {
             subtree: true,
         })
 
-    renderInShadowRoot(<PostDialogIconAtTwitter />, {
-        shadow: () => watcher.firstDOMProxy.afterShadow,
-        normal: () => watcher.firstDOMProxy.after,
-    })
+    renderInShadowRoot(<PostDialogIconAtTwitter />, { shadow: () => watcher.firstDOMProxy.afterShadow })
 }
 
 const useTwitterMaskbookIcon = makeStyles((theme: Theme) => ({

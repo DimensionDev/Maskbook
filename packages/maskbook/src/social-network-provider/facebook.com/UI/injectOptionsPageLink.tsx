@@ -13,10 +13,7 @@ export function injectDashboardEntranceAtFacebook() {
             beforeShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
         })
         .startWatch({ subtree: true, childList: true })
-    renderInShadowRoot(<Link></Link>, {
-        shadow: () => watcher.firstDOMProxy.beforeShadow,
-        normal: () => watcher.firstDOMProxy.before,
-    })
+    renderInShadowRoot(<Link></Link>, { shadow: () => watcher.firstDOMProxy.beforeShadow })
 }
 
 const useStyle = makeStyles({

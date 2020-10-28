@@ -33,10 +33,7 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
             subtree: true,
         })
 
-    renderInShadowRoot(<PostDialogHintAtTwitter reason={reason} />, {
-        shadow: () => watcher.firstDOMProxy.afterShadow,
-        normal: () => watcher.firstDOMProxy.after,
-    })
+    renderInShadowRoot(<PostDialogHintAtTwitter reason={reason} />, { shadow: () => watcher.firstDOMProxy.afterShadow })
 }
 
 export const useTwitterThemedPostDialogHint = makeStyles((theme: Theme) => ({

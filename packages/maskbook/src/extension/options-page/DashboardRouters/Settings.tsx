@@ -8,7 +8,6 @@ import {
     disableOpenNewTabInBackgroundSettings,
     languageSettings,
     Language,
-    renderInShadowRootSettings,
     allPostReplacementSettings,
     appearanceSettings,
     Appearance,
@@ -18,8 +17,6 @@ import {
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'
-import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption'
-import NoEncryptionIcon from '@material-ui/icons/NoEncryption'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined'
@@ -135,7 +132,6 @@ export default function DashboardSettingsRouter() {
     }).current
 
     const classes = useStyles()
-    const shadowRoot = useValueRef(renderInShadowRootSettings)
     const theme = useTheme()
     const elevation = theme.palette.type === 'dark' ? 1 : 0
 
@@ -202,13 +198,6 @@ export default function DashboardSettingsRouter() {
                                     icon={<TabIcon />}
                                     value={disableOpenNewTabInBackgroundSettings}
                                 />
-                                {Flags.no_ShadowDOM_support ? null : (
-                                    <SettingsUI
-                                        classes={listStyle}
-                                        icon={shadowRoot ? <EnhancedEncryptionIcon /> : <NoEncryptionIcon />}
-                                        value={renderInShadowRootSettings}
-                                    />
-                                )}
                                 <SettingsUI
                                     classes={listStyle}
                                     icon={<MemoryOutlinedIcon />}

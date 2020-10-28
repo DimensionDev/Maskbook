@@ -33,15 +33,6 @@ export const disableOpenNewTabInBackgroundSettings = createGlobalSettings<boolea
     },
 )
 
-export const renderInShadowRootSettings = createGlobalSettings<boolean>(
-    'render in shadow root',
-    !Flags.no_ShadowDOM_support,
-    {
-        primary: () => i18n.t('settings_advance_security'),
-        secondary: () => i18n.t('settings_advance_security_desc'),
-    },
-)
-
 /**
  * Whether if create substitute post for all posts
  */

@@ -203,7 +203,11 @@ async function diagnosis() {
 
 async function main() {
     const unusedKeys = await findAllUnusedKeys()
-    console.error('Scanned', unusedKeys.length, 'unused keys')
+    console.error(
+        'Scanned',
+        unusedKeys.length,
+        'unused keys, run `yarn locale-kit --remove-unused-keys` to remove them.',
+    )
     console.error('Unsynced', _.keys(await findAllUnsyncedLocales()), 'locales')
     if (process.argv.includes('--remove-unused-keys')) {
         await removeAllUnusedKeys(unusedKeys)

@@ -28,7 +28,6 @@ export function injectPostBoxFacebook() {
         })
     renderInShadowRoot(<UI />, {
         shadow: () => watcher.firstDOMProxy.afterShadow,
-        normal: () => watcher.firstDOMProxy.after,
         rootProps: { style: { display: 'block', padding: '0 16px', marginTop: 16 } },
     })
 }

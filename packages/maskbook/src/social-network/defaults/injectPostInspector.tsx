@@ -47,7 +47,6 @@ export function injectPostInspectorDefault<T extends string>(
         if (config.render) return config.render(jsx, current)
         return renderInShadowRoot(jsx, {
             shadow: () => current.rootNodeProxy.afterShadow,
-            normal: () => current.rootNodeProxy.after,
             concurrent: true,
             keyBy: 'post-inspector',
         })

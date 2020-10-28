@@ -34,10 +34,7 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number) {
                 ifUsingMaskbook(
                     new ProfileIdentifier('twitter.com', bioPageUserIDSelector(main).evaluate() || ''),
                 ).then(() => {
-                    remover = renderInShadowRoot(<Icon size={size} />, {
-                        normal: () => meta.current,
-                        shadow: () => meta.afterShadow,
-                    })
+                    remover = renderInShadowRoot(<Icon size={size} />, { shadow: () => meta.afterShadow })
                 }, remove)
             }
             check()
@@ -75,10 +72,7 @@ export function injectMaskbookIconToPost(post: PostInfo) {
         if (!node) return
         const proxy = DOMProxy(opt)
         proxy.realCurrent = node
-        remover = renderInShadowRoot(<Icon size={24} />, {
-            normal: () => node,
-            shadow: () => proxy.afterShadow,
-        })
+        remover = renderInShadowRoot(<Icon size={24} />, { shadow: () => proxy.afterShadow })
     }
     function remove() {
         remover()

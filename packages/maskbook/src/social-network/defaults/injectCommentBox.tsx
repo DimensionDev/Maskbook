@@ -48,10 +48,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
                     <PostInfoContext.Provider value={current}>
                         <CommentBoxUI {...{ ...current, dom: meta.realCurrent }} />
                     </PostInfoContext.Provider>,
-                    {
-                        shadow: () => meta.afterShadow,
-                        normal: () => meta.after,
-                    },
+                    { shadow: () => meta.afterShadow },
                 ),
             )
             .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })

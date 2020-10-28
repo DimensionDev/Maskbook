@@ -17,12 +17,6 @@ export const Flags = {
     has_no_browser_tab_ui: process.env.architecture === 'app',
 
     inject_dashboard_entrance: process.env.architecture === 'app',
-    /**
-     * - In iOS, the ShadowDOM mode is not really safe.
-     * - In test(Jest) mode, there is no ShadowDOM support.
-     * - In storybook, there is no need to use ShadowDOM.
-     */
-    no_ShadowDOM_support: is_iOSApp || process.env.NODE_ENV === 'test' || process.env.STORYBOOK,
     /** In E2E, prefer open shadow root so we can test it. */
     using_ShadowDOM_attach_mode: process.env.target === 'E2E' ? 'open' : 'closed',
     /** Don't inject injected script in this mode. Native side will do the job. */

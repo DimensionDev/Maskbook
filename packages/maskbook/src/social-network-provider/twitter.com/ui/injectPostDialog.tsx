@@ -22,10 +22,7 @@ function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T,
             subtree: true,
         })
 
-    renderInShadowRoot(<PostDialogAtTwitter reason={reason} />, {
-        shadow: () => watcher.firstDOMProxy.afterShadow,
-        normal: () => watcher.firstDOMProxy.after,
-    })
+    renderInShadowRoot(<PostDialogAtTwitter reason={reason} />, { shadow: () => watcher.firstDOMProxy.afterShadow })
 }
 
 function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {

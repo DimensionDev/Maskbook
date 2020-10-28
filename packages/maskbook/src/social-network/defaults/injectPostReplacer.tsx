@@ -35,7 +35,6 @@ export function injectPostReplacer<T extends string>(
             </PostInfoContext.Provider>,
             {
                 shadow: () => current.rootNodeProxy.afterShadow,
-                normal: () => current.rootNodeProxy.after,
                 concurrent: true,
                 keyBy: 'post-replacer',
             },
