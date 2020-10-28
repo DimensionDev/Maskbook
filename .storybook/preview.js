@@ -8,7 +8,7 @@ addParameters({
     options: {
         theme: create({
             base: 'dark',
-            brandTitle: 'Mask',
+            brandTitle: 'Mask Network',
             brandUrl: 'https://mask.io/',
             brandImage: 'https://mask.io/img/maskbook--logotype-white.png',
         }),
