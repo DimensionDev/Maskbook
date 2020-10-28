@@ -16,6 +16,7 @@ import type { ObservableWeakMap } from '../utils/ObservableMapSet'
 import type { PostInfo } from './PostInfo'
 import { Flags } from '../utils/flags'
 import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
+import { editMetadata } from '../protocols/typed-message'
 
 if (!process.env.STORYBOOK) {
     OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
@@ -286,6 +287,11 @@ export type SocialNetworkUI = Required<SocialNetworkUIDefinition>
 
 export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
 export const getActivatedUI = () => activatedSocialNetworkUI
+export function editActivatedPostMetadata(f: Parameters<typeof editMetadata>[1]) {
+    const ref = getActivatedUI().typedMessageMetadata
+    ref.value = editMetadata(ref.value, f)
+    return ref.value
+}
 
 let activatedSocialNetworkUI = ({
     lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),

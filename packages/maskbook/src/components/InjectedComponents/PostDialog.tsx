@@ -20,9 +20,9 @@ import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
 import { useFriendsList, useCurrentGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
-import { currentImagePayloadStatus } from '../../settings/settings'
+import { currentImagePayloadStatus, debugModeSetting } from '../../settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { getActivatedUI } from '../../social-network/ui'
+import { editActivatedPostMetadata, getActivatedUI } from '../../social-network/ui'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
@@ -40,10 +40,10 @@ import { useI18N } from '../../utils/i18n-next-ui'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/plugin'
-import { Flags } from '../../utils/flags'
 import { Result } from 'ts-results'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
 import { InjectedDialog } from '../shared/InjectedDialog'
+import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 
 const defaultTheme = {}
 
@@ -85,6 +85,8 @@ export interface PostDialogUIProps extends withClasses<never> {
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
+    const isDebug = useValueRef(debugModeSetting)
+    const [showPostMetadata, setShowPostMetadata] = useState(false)
     const onPostContentChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
         const newText = e.target.value
         const msg = props.postContent
@@ -102,12 +104,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     <Box key={metadataKey} marginRight={1} marginTop={1} display="inline-block">
                         <Tooltip title={`Provided by plugin "${plugin.pluginName}"`}>
                             <Chip
-                                onDelete={() => {
-                                    const ref = getActivatedUI().typedMessageMetadata
-                                    const next = new Map(ref.value.entries())
-                                    next.delete(metadataKey)
-                                    ref.value = next
-                                }}
+                                onDelete={() => editActivatedPostMetadata((meta) => meta.delete(metadataKey))}
                                 label={tag(r)}
                             />
                         </Tooltip>
@@ -123,10 +120,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
             return entries.map((opt, index) => {
                 return (
                     <ErrorBoundary key={plugin.identifier + ' ' + index}>
-                        <ClickableChip
-                            key={plugin.identifier + ' ' + index}
-                            ChipProps={{ label: opt.label, onClick: opt.onClick }}
-                        />
+                        <ClickableChip label={opt.label} onClick={opt.onClick} />
                     </ErrorBoundary>
                 )
             })
@@ -170,38 +164,40 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 {...props.SelectRecipientsUIProps}>
                                 <ClickableChip
                                     checked={props.shareToEveryone}
-                                    ChipProps={{
-                                        'data-testid': '_everyone_group_',
-                                        disabled: props.onlyMyself,
-                                        label: t('post_dialog__select_recipients_share_to_everyone'),
-                                        onClick: () => props.onShareToEveryoneChanged(!props.shareToEveryone),
-                                    }}
+                                    disabled={props.onlyMyself}
+                                    label={t('post_dialog__select_recipients_share_to_everyone')}
+                                    data-testid="_everyone_group_"
+                                    onClick={() => props.onShareToEveryoneChanged(!props.shareToEveryone)}
                                 />
                                 <ClickableChip
                                     checked={props.onlyMyself}
-                                    ChipProps={{
-                                        'data-testid': '_only_myself_group_',
-                                        disabled: props.shareToEveryone,
-                                        label: t('post_dialog__select_recipients_only_myself'),
-                                        onClick: () => props.onOnlyMyselfChanged(!props.onlyMyself),
-                                    }}
+                                    disabled={props.shareToEveryone}
+                                    label={t('post_dialog__select_recipients_only_myself')}
+                                    data-testid="_only_myself_group_"
+                                    onClick={() => props.onOnlyMyselfChanged(!props.onlyMyself)}
                                 />
                             </SelectRecipientsUI>
                         </Box>
 
-                        <>
-                            <Typography style={{ marginBottom: 10 }}>{t('post_dialog__more_options_title')}</Typography>
-                            <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
-                                <ClickableChip
-                                    checked={props.imagePayload}
-                                    ChipProps={{
-                                        label: t('post_dialog__image_payload'),
-                                        onClick: () => props.onImagePayloadSwitchChanged(!props.imagePayload),
-                                        'data-testid': 'image_chip',
-                                    }}
+                        <Typography style={{ marginBottom: 10 }}>{t('post_dialog__more_options_title')}</Typography>
+                        <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                            <ClickableChip
+                                checked={props.imagePayload}
+                                label={t('post_dialog__image_payload')}
+                                onClick={() => props.onImagePayloadSwitchChanged(!props.imagePayload)}
+                                data-testid="image_chip"
+                            />
+                            {isDebug && (
+                                <Chip label="Post metadata inspector" onClick={() => setShowPostMetadata((e) => !e)} />
+                            )}
+                            {showPostMetadata && (
+                                <DebugMetadataInspector
+                                    onNewMetadata={(meta) => (getActivatedUI().typedMessageMetadata.value = meta)}
+                                    onExit={() => setShowPostMetadata(false)}
+                                    meta={props.postContent.meta || new Map()}
                                 />
-                            </Box>
-                        </>
+                            )}
+                        </Box>
                     </DialogContent>
                     <DialogActions>
                         {isTypedMessageText(props.postContent) && props.maxLength ? (

@@ -1,8 +1,11 @@
 import { Result, Ok, Err } from 'ts-results'
 import type { TypedMessage } from './types'
 import z_schema from 'z-schema'
+import produce, { enableMapSet, Draft } from 'immer'
+enableMapSet()
 
 const metadataSchemaStore = new Map<string, object>()
+export const metadataSchemaStoreReadonly = metadataSchemaStore as ReadonlyMap<string, object>
 /**
  * Register your metadata with a JSON Schema so Maskbook can validate the schema for you.
  * @param key Metadata key
@@ -40,13 +43,19 @@ export function readTypedMessageMetadataUntyped<T>(
     const data = meta.get(key)! as T
     if (!jsonSchema) console.warn('You should add a JSON Schema to verify the metadata in the TypedMessage')
     else {
-        const validator = new z_schema({})
-        if (!validator.validate(data, jsonSchema)) {
-            console.warn('The problematic metadata is dropped', data, 'errors:', validator.getLastErrors())
+        const match = isDataMatchJSONSchema(data, jsonSchema)
+        if (match.err) {
+            console.warn('The problematic metadata is dropped', data, 'errors:', match.val)
             return Err.EMPTY
         }
     }
     return Ok(data)
+}
+
+export function isDataMatchJSONSchema(data: any, jsonSchema: object) {
+    const validator = new z_schema({})
+    if (!validator.validate(data, jsonSchema)) return Err(validator.getLastErrors())
+    return Ok.EMPTY
 }
 
 /**
@@ -59,6 +68,13 @@ export function createRenderWithMetadata<T>(metadataReader: (meta: TypedMessage[
         if (message.ok) return render(message.val)
         return null
     }
+}
+
+export function editMetadata(
+    metadata: TypedMessage['meta'],
+    edit: (meta: NonNullable<Draft<TypedMessage['meta']>>) => void,
+): NonNullable<TypedMessage['meta']> {
+    return produce(metadata || new Map(), (e) => void edit(e))
 }
 
 /**
