@@ -50,7 +50,7 @@ export const twitterEncoding = {
      * @link https://github.com/DimensionDev/Maskbook/issues/198
      */
     payloadEncoder: (text: string) =>
-        `https://maskbook.com/?PostData_v1=${batchReplace(text, [
+        `https://mask.io/?PostData_v1=${batchReplace(text, [
             ['🎼', '%20'],
             [':||', '%40'],
             ['+', '-'],

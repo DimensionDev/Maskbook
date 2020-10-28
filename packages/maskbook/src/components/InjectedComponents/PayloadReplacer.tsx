@@ -27,7 +27,7 @@ export function PayloadReplacer({ payload }: PayloadReplacerProps) {
                         node.style.setProperty('color', theme.palette.primary.main, 'important')
                     }
                 }}
-                href={payload.startsWith('https://maskbook.com') ? payload : 'https://maskbook.com'}>
+                href={/^https?:\/\/mask(\.io|book\.com)/i.test(payload) ? payload : 'https://mask.io'}>
                 {t('post_substitute_label')}
             </Link>
         </Typography>

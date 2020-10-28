@@ -199,7 +199,7 @@ export function ConsentDataCollection() {
                             <>
                                 {t('set_up_consent_data_collection_privacy_policy_1')}
                                 <MuiLink
-                                    href="https://maskbook.com/privacy-policy/"
+                                    href="https://mask.io/privacy-policy/"
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     {t('set_up_consent_data_collection_privacy_policy_2')}

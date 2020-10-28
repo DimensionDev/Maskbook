@@ -63,7 +63,7 @@
     "dashboard_import_database_hint": "導入以前的資料庫備份。",
     "dashboard_load_failed_title": "載入儀表板失敗。",
     "dashboard_mobile_test": "加入移動端測試",
-    "dashboard_mobile_test_link": "https://maskbook.com/download-links/#mobile",
+    "dashboard_mobile_test_link": "https://mask.io/download-links/#mobile",
     "dashboard_paste_database_base64_hint": "在此處粘貼 Base64 文本…",
     "dashboard_paste_database_backup_hint": "在此處粘貼資料庫備份文本…",
     "dashboard_persona_import_dialog_hint": "您可以通過以下任一方式導入角色備份。",
