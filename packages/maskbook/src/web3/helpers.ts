@@ -4,7 +4,6 @@ import Web3Utils, { AbiItem, AbiOutput } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { CONSTANTS } from './constants'
 import { ChainId, EthereumTokenType, Token } from './types'
-import { unreachable } from '../utils/utils'
 
 export function isSameAddress(addrA: string, addrB: string) {
     return addrA.toLowerCase() === addrB.toLowerCase()
@@ -16,6 +15,10 @@ export function isDAI(address: string) {
 
 export function isOKB(address: string) {
     return isSameAddress(address, getConstant(CONSTANTS, 'OBK_ADDRESS'))
+}
+
+export function isETH(address: string) {
+    return isSameAddress(address, getConstant(CONSTANTS, 'ETH_ADDRESS'))
 }
 
 export function addGasMargin(value: BigNumber) {
