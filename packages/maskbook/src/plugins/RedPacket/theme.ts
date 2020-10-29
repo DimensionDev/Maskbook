@@ -64,6 +64,7 @@ export const PluginRedPacketTheme = unstable_createMuiStrictModeTheme({
         },
         MuiInputBase: {
             input: {
+                color: 'white !important',
                 '&::placeholder': {
                     color: 'rgba(255, 255, 255, 0.7) !important',
                 },
