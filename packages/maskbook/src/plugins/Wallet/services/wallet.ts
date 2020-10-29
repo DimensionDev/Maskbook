@@ -95,7 +95,8 @@ export async function updateExoticWalletFromSource(
         }
     }
     for (const address of updates.keys()) {
-        if (await walletStore.get(formatChecksumAddress(address))) continue
+        const wallet = await walletStore.get(formatChecksumAddress(address))
+        if (wallet && wallet.provider === provider) continue
         await walletStore.put(
             WalletRecordIntoDB({
                 address,
