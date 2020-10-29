@@ -25,8 +25,6 @@ export function development(manifest: Manifest) {
     manifest.name = 'Maskbook (development)'
     // required by Webpack HMR
     manifest.web_accessible_resources.push('*.json', '*.js')
-    // Required by eval-source-map in development
-    manifest.content_security_policy = "script-src 'self' blob: filesystem: 'unsafe-eval';"
     manifest.key = // ID：jkoeaghipilijlahjplgbfiocjhldnap
         'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoz51rhO1w+wD' +
         '0EKZJEFJaSMkIcIj0qRadfi0tqcl5nbpuJAsafvLe3MaTbW9LhbixTg9' +

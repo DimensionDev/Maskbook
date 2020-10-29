@@ -80,8 +80,6 @@ function PopupUI() {
 
     const ui = getActivatedUI()
     const identities = useValueRef(ui.myIdentitiesRef)
-    const chainId = useChainId()
-    const wallets = useWallets()
 
     const { value: hasPermission = true, retry: checkPermission } = useAsyncRetry(ui.hasPermission)
 
