@@ -21,7 +21,7 @@ import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorStyles } from '../../../utils/theme'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import type { WalletRecordDetailed } from '../../../plugins/Wallet/database/types'
 import { ProviderType, TokenDetailed } from '../../../web3/types'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 interface WalletContentProps {
-    wallet: WalletRecord
+    wallet: WalletRecordDetailed
     detailedTokens: TokenDetailed[]
 }
 

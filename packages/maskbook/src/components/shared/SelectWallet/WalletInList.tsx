@@ -3,7 +3,7 @@ import { ListItem, ListItemText, makeStyles, Theme, ListTypeMap, ListItemAvatar 
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../custom-ui-helper'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import type { WalletRecordDetailed } from '../../../plugins/Wallet/database/types'
 import { ProviderIcon } from '../ProviderIcon'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 
@@ -20,7 +20,7 @@ const useStyle = makeStyles((theme: Theme) => ({
 }))
 
 export interface WalletInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
-    wallet: WalletRecord
+    wallet: WalletRecordDetailed
     disabled?: boolean
     onClick?: () => void
     ListItemProps?: Partial<DefaultComponentProps<ListTypeMap<{ button: true }, 'div'>>>

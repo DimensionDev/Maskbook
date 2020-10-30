@@ -24,7 +24,6 @@ export interface WalletRecord {
     erc20_token_whitelist: Set<string>
     /** A list of untrusted ERC20 token address */
     erc20_token_blacklist: Set<string>
-    provider: ProviderType
     mnemonic: string[]
     passphrase: string
     _public_key_?: string
@@ -32,6 +31,10 @@ export interface WalletRecord {
     _private_key_?: string
     createdAt: Date
     updatedAt: Date
+}
+
+export interface WalletRecordDetailed extends WalletRecord {
+    provider: ProviderType
 }
 
 export interface ERC20TokenRecordInDatabase extends ERC20TokenRecord {}

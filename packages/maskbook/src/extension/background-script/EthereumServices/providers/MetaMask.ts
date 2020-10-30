@@ -10,9 +10,10 @@ import {
     currentSelectedWalletProviderSettings,
     currentSelectedWalletAddressSettings,
 } from '../../../../plugins/Wallet/settings'
-import { updateExoticWallet } from '../../../../plugins/Wallet/services'
+import { updateWallets } from '../../../../plugins/Wallet/services'
 import { ProviderType } from '../../../../web3/types'
 import { MessageCenter } from '../../../../utils/messages'
+import { resolveProviderName } from '../../../../web3/pipes'
 
 //#region tracking chain id of metamask
 let currentChainId: ChainId = ChainId.Mainnet
@@ -36,7 +37,6 @@ function onNetworkChanged(id: string) {
 function onNetworkError(error: any) {
     if (error === 'MetamaskInpageProvider - lost connection to MetaMask') {
         MessageCenter.emit('metamaskMessage', 'metamask_not_install')
-        updateExoticWallet(ProviderType.MetaMask, new Map())
     }
 }
 
@@ -74,7 +74,7 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
     if (!EthereumAddress.isValid(address)) throw new Error('Cannot found account or invalid account')
 
     // update wallet in the DB
-    await updateExoticWallet(ProviderType.MetaMask, new Map([[address, { address }]]))
+    await updateWallets(new Map([[address, { address, name: resolveProviderName(ProviderType.MetaMask) }]]))
 
     // update trackers
     if (setAsDefault) {

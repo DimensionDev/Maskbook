@@ -63,7 +63,7 @@ export const currentMaskbookListOfWalletAddressSettings = createGlobalSettings<s
 )
 
 /**
- * A list of wallet address which using Metamask as the provider
+ * A list of wallet address which using MetaMask as the provider
  */
 export const currentMetaMaskListOfWalletAddressSettings = createGlobalSettings<string>(
     'metamask list of wallet address',
@@ -93,7 +93,7 @@ export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>('mas
 })
 
 /**
- * The chain id using by Metamask
+ * The chain id using by MetaMask
  */
 export const currentMetaMaskChainIdSettings = createGlobalSettings<ChainId>('metamask chain id', ChainId.Mainnet, {
     primary: () => 'DO NOT DISPLAY IT IN UI',

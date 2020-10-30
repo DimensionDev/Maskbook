@@ -1,7 +1,7 @@
 import stringify from 'json-stable-stringify'
 import { debounce, first, uniq } from 'lodash-es'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import type { WalletRecordDetailed } from '../../../plugins/Wallet/database/types'
 import { getWallets } from '../../../plugins/Wallet/services'
 import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
 import {
@@ -51,7 +51,7 @@ PluginMessageCenter.on('maskbook.wallets.update', revalidateChainState)
 //#endregion
 
 //#region tracking wallets
-let wallets: WalletRecord[] = []
+let wallets: WalletRecordDetailed[] = []
 const revalidateWallets = async () => {
     wallets = await getWallets()
 }

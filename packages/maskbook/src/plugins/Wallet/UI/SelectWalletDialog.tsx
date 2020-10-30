@@ -7,7 +7,7 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { MaskbookWalletMessages, WalletMessageCenter } from '../messages'
 import { useWallets } from '../hooks/useWallet'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
-import type { WalletRecord } from '../database/types'
+import type { WalletRecordDetailed } from '../database/types'
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { sleep } from '../../../utils/utils'
@@ -38,7 +38,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     //#endregion
 
     const onSelect = useCallback(
-        (wallet: WalletRecord) => {
+        (wallet: WalletRecordDetailed) => {
             currentSelectedWalletAddressSettings.value = wallet.address
             currentSelectedWalletProviderSettings.value = wallet.provider
             onClose()

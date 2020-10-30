@@ -4,7 +4,7 @@ import type { provider as Provider, PromiEvent as PromiEventW3 } from 'web3-core
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
 import * as Maskbook from '../providers/Maskbook'
-import { updateExoticWallet } from '../../../../plugins/Wallet/services'
+import { updateWallets } from '../../../../plugins/Wallet/services'
 import {
     currentSelectedWalletProviderSettings,
     currentSelectedWalletAddressSettings,
@@ -15,6 +15,7 @@ import {
 } from '../../../../settings/settings'
 import { ChainId, TransactionEventType } from '../../../../web3/types'
 import { ProviderType } from '../../../../web3/types'
+import { resolveProviderName } from '../../../../web3/pipes'
 //#region tracking chain id of wallet connect
 let currentChainId: ChainId = ChainId.Mainnet
 currentWalletConnectChainIdSettings.addListener((v) => (currentChainId = v))
@@ -145,12 +146,16 @@ const onDisconnect = async (error: Error | null) => {
     connector = null
 }
 
-async function updateWalletInDB(address: string, name: string = 'WalletConnect', setAsDefault: boolean = false) {
+async function updateWalletInDB(
+    address: string,
+    name: string = resolveProviderName(ProviderType.WalletConnect),
+    setAsDefault: boolean = false,
+) {
     // validate address
     if (!EthereumAddress.isValid(address)) throw new Error('Cannot found account or invalid account')
 
     // update wallet in the DB
-    await updateExoticWallet(ProviderType.WalletConnect, new Map([[address, { name, address }]]))
+    await updateWallets(new Map([[address, { name, address }]]))
 
     // update trackers
     if (setAsDefault) {

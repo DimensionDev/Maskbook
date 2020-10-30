@@ -4,13 +4,13 @@ import { PluginMessageCenter } from '../../PluginMessages'
 import Services from '../../../extension/service'
 import type { ProviderType } from '../../../web3/types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import type { WalletRecord } from '../database/types'
-import { WalletArrayComparer, WalletComparer } from '../helpers'
+import { WalletArrayComparer } from '../helpers'
 import { isSameAddress } from '../../../web3/helpers'
 import { currentSelectedWalletAddressSettings } from '../settings'
+import type { WalletRecordDetailed } from '../database/types'
 
 //#region tracking wallets
-const walletsRef = new ValueRef<WalletRecord[]>([], WalletArrayComparer)
+const walletsRef = new ValueRef<WalletRecordDetailed[]>([], WalletArrayComparer)
 async function revalidate() {
     walletsRef.value = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
 }

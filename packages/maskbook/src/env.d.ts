@@ -138,7 +138,7 @@ declare module '@transak/transak-sdk' {
         public closeRequest(): void
         public modal(): void
 
-        public ALL_EVENTS_EVENTS = EVENTS.ALL
+        public ALL_EVENTS_EVENTS = EVENTS.ALL_EVENTS
         public ERROR = EVENTS.TRANSAK_ERROR
         public EVENTS = EVENTS
     }
