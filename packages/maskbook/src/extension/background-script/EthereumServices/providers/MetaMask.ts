@@ -1,14 +1,20 @@
 import Web3 from 'web3'
 import createMetaMaskProvider, { MetamaskInpageProvider } from 'metamask-extension-provider'
-import { ChainId } from '../../../../web3/types'
-import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { EthereumAddress } from 'wallet.ts'
-import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
+import { ChainId } from '../../../../web3/types'
+import {
+    currentMetaMaskChainIdSettings,
+    currentMetaMaskListOfWalletAddressSettings,
+} from '../../../../settings/settings'
+import {
+    currentSelectedWalletProviderSettings,
+    currentSelectedWalletAddressSettings,
+} from '../../../../plugins/Wallet/settings'
+import { updateExoticWallet } from '../../../../plugins/Wallet/services'
 import { ProviderType } from '../../../../web3/types'
 import { MessageCenter } from '../../../../utils/messages'
-import { currentSelectedWalletAddressSettings } from '../../../../plugins/Wallet/settings'
 
-//#region tracking chain id
+//#region tracking chain id of metamask
 let currentChainId: ChainId = ChainId.Mainnet
 currentMetaMaskChainIdSettings.addListener((v) => (currentChainId = v))
 //#endregion
@@ -30,7 +36,7 @@ function onNetworkChanged(id: string) {
 function onNetworkError(error: any) {
     if (error === 'MetamaskInpageProvider - lost connection to MetaMask') {
         MessageCenter.emit('metamaskMessage', 'metamask_not_install')
-        updateExoticWalletFromSource(ProviderType.MetaMask, new Map())
+        updateExoticWallet(ProviderType.MetaMask, new Map())
     }
 }
 
@@ -68,8 +74,12 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
     if (!EthereumAddress.isValid(address)) throw new Error('Cannot found account or invalid account')
 
     // update wallet in the DB
-    await updateExoticWalletFromSource(ProviderType.MetaMask, new Map([[address, { address }]]))
+    await updateExoticWallet(ProviderType.MetaMask, new Map([[address, { address }]]))
 
-    // update the selected wallet address
-    if (setAsDefault) currentSelectedWalletAddressSettings.value = address
+    // update trackers
+    if (setAsDefault) {
+        currentSelectedWalletAddressSettings.value = address
+        currentSelectedWalletProviderSettings.value = ProviderType.MetaMask
+        currentMetaMaskListOfWalletAddressSettings.value = address
+    }
 }

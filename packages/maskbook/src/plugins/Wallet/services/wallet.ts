@@ -30,7 +30,7 @@ function sortWallet(a: WalletRecord, b: WalletRecord) {
     return 0
 }
 
-export async function isEmptyWallets() {
+async function isEmpty() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     const count = await t.objectStore('Wallet').count()
     return count === 0
@@ -39,12 +39,6 @@ export async function isEmptyWallets() {
 export async function getWallet(address: string) {
     const wallets = await getWallets()
     return wallets.find((x) => isSameAddress(x.address, address))
-}
-
-export async function getSelectedWallet() {
-    const wallets = await getWallets()
-    const address = currentSelectedWalletAddressSettings.value
-    return (address ? wallets.find((x) => x.address === address) : undefined) ?? first(wallets)
 }
 
 export async function getWallets(provider?: ProviderType) {
@@ -66,12 +60,12 @@ export async function getWallets(provider?: ProviderType) {
         if (record.provider !== ProviderType.Maskbook) return '0x'
         const { privateKey } = record._private_key_
             ? await recoverWalletFromPrivateKey(record._private_key_)
-            : await recoverWallet(record.mnemonic, record.passphrase)
+            : await recoverWalletFromMnemonic(record.mnemonic, record.passphrase)
         return `0x${buf2hex(privateKey)}`
     }
 }
 
-export async function updateExoticWalletFromSource(
+export async function updateExoticWallet(
     provider: ProviderType,
     updates: Map<string, Partial<WalletRecord>>,
 ): Promise<void> {
@@ -96,7 +90,8 @@ export async function updateExoticWalletFromSource(
     }
     for (const address of updates.keys()) {
         const wallet = await walletStore.get(formatChecksumAddress(address))
-        if (wallet && wallet.provider === provider) continue
+        // cannot update managed wallet as an exotic wallet
+        if (wallet && wallet.provider === ProviderType.Maskbook && provider !== ProviderType.Maskbook) continue
         await walletStore.put(
             WalletRecordIntoDB({
                 address,
@@ -116,7 +111,7 @@ export async function updateExoticWalletFromSource(
     if (modified) PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
-export function createNewWallet(
+export function createWallet(
     rec: Omit<
         WalletRecord,
         | 'id'
@@ -133,10 +128,10 @@ export function createNewWallet(
     >,
 ) {
     const mnemonic = bip39.generateMnemonic().split(' ')
-    return importNewWallet({ mnemonic, ...rec })
+    return importWallet({ mnemonic, ...rec })
 }
 
-export async function importNewWallet(
+export async function importWallet(
     rec: PartialRequired<
         Omit<WalletRecord, 'id' | 'eth_balance' | '_data_source_' | 'erc20_token_balance' | 'createdAt' | 'updatedAt'>,
         'name'
@@ -170,12 +165,12 @@ export async function importNewWallet(
             const recover = await recoverWalletFromPrivateKey(rec._private_key_)
             return recover.privateKeyValid ? recover.address : ''
         }
-        return (await recoverWallet(mnemonic, passphrase)).address
+        return (await recoverWalletFromMnemonic(mnemonic, passphrase)).address
     }
 }
 
-export async function importFirstWallet(rec: Parameters<typeof importNewWallet>[0]) {
-    if (await isEmptyWallets()) return importNewWallet(rec)
+export async function importFirstWallet(rec: Parameters<typeof importWallet>[0]) {
+    if (await isEmpty()) return importWallet(rec)
     return
 }
 
@@ -197,7 +192,7 @@ export async function removeWallet(address: string) {
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
-export async function recoverWallet(mnemonic: string[], password: string) {
+export async function recoverWalletFromMnemonic(mnemonic: string[], password: string) {
     const seed = await bip39.mnemonicToSeed(mnemonic.join(' '), password)
     const masterKey = HDKey.parseMasterSeed(seed)
     const extendedPrivateKey = masterKey.derive(path).extendedPrivateKey!

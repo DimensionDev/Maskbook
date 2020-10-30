@@ -29,7 +29,11 @@ import { MessageCenter } from '../../utils/messages'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
-import { currentSelectedWalletAddressSettings } from '../../plugins/Wallet/settings'
+import {
+    currentSelectedWalletProviderSettings,
+    currentSelectedWalletAddressSettings,
+} from '../../plugins/Wallet/settings'
+import { ProviderType } from '../../web3/types'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -519,7 +523,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 passphrase: '',
             }),
         ])
-        if (address) currentSelectedWalletAddressSettings.value = address
+        if (address) {
+            currentSelectedWalletAddressSettings.value = address
+            currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
+        }
         MessageCenter.emit('identityUpdated', undefined)
     }
     const onCreate = async () => {

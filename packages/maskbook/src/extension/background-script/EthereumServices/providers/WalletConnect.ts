@@ -4,13 +4,18 @@ import type { provider as Provider, PromiEvent as PromiEventW3 } from 'web3-core
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
 import * as Maskbook from '../providers/Maskbook'
-import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
-import { currentWalletConnectChainIdSettings } from '../../../../settings/settings'
+import { updateExoticWallet } from '../../../../plugins/Wallet/services'
+import {
+    currentSelectedWalletProviderSettings,
+    currentSelectedWalletAddressSettings,
+} from '../../../../plugins/Wallet/settings'
+import {
+    currentWalletConnectChainIdSettings,
+    currentWalletConnectListOfWalletAddressSettings,
+} from '../../../../settings/settings'
 import { ChainId, TransactionEventType } from '../../../../web3/types'
 import { ProviderType } from '../../../../web3/types'
-import { currentSelectedWalletAddressSettings } from '../../../../plugins/Wallet/settings'
-
-//#region tracking chain id
+//#region tracking chain id of wallet connect
 let currentChainId: ChainId = ChainId.Mainnet
 currentWalletConnectChainIdSettings.addListener((v) => (currentChainId = v))
 //#endregion
@@ -145,8 +150,12 @@ async function updateWalletInDB(address: string, name: string = 'WalletConnect',
     if (!EthereumAddress.isValid(address)) throw new Error('Cannot found account or invalid account')
 
     // update wallet in the DB
-    await updateExoticWalletFromSource(ProviderType.WalletConnect, new Map([[address, { name, address }]]))
+    await updateExoticWallet(ProviderType.WalletConnect, new Map([[address, { name, address }]]))
 
-    // update the selected wallet address
-    if (setAsDefault) currentSelectedWalletAddressSettings.value = address
+    // update trackers
+    if (setAsDefault) {
+        currentSelectedWalletAddressSettings.value = address
+        currentSelectedWalletProviderSettings.value = ProviderType.WalletConnect
+        currentWalletConnectListOfWalletAddressSettings.value = address
+    }
 }

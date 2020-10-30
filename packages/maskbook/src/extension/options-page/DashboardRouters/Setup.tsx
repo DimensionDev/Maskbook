@@ -42,7 +42,11 @@ import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQR
 import { sleep } from '../../../utils/utils'
 import { SetupStep } from '../SetupStep'
 import { Flags } from '../../../utils/flags'
-import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
+import {
+    currentSelectedWalletProviderSettings,
+    currentSelectedWalletAddressSettings,
+} from '../../../plugins/Wallet/settings'
+import { ProviderType } from '../../../web3/types'
 
 //#region setup form
 const useSetupFormStyles = makeStyles((theme) =>
@@ -368,7 +372,10 @@ export function ConnectNetwork() {
                                     passphrase: '',
                                 }),
                             ])
-                            if (address) currentSelectedWalletAddressSettings.value = address
+                            if (address) {
+                                currentSelectedWalletAddressSettings.value = address
+                                currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
+                            }
                             await sleep(300)
                             history.replace(Flags.has_no_browser_tab_ui ? DashboardRoute.Nav : DashboardRoute.Personas)
                         }}>

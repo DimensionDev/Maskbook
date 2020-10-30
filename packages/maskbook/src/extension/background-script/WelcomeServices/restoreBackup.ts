@@ -16,7 +16,7 @@ import { i18n } from '../../../utils/i18n-next'
 import { MessageCenter } from '../../../utils/messages'
 import { currentImportingBackup } from '../../../settings/settings'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
-import { importNewWallet } from '../../../plugins/Wallet/services'
+import { importWallet } from '../../../plugins/Wallet/services'
 
 /**
  * Restore the backup
@@ -53,7 +53,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
 
                 for (const x of data.wallets) {
                     const record = WalletRecordFromJSONFormat(x)
-                    if (record.mnemonic || record._private_key_) await importNewWallet(record)
+                    if (record.mnemonic || record._private_key_) await importWallet(record)
                 }
             })
         }

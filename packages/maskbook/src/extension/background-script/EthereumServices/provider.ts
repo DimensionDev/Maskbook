@@ -15,19 +15,16 @@ export async function createConnectionURI() {
 // If user confirmed the request we will receive the 'connect' event
 export async function connectWalletConnect() {
     const connector = await WalletConnect.createConnectorIfNeeded()
-    if (connector.connected) return connector.accounts[0]
-    const accounts = await WalletConnect.requestAccounts()
-    return accounts[0]
+    return first(connector.connected ? connector.accounts : await WalletConnect.requestAccounts())
 }
 //#endregion
 
 export async function connectMetaMask() {
     const accounts = await MetaMask.requestAccounts()
-    return accounts[0]
+    return first(accounts)
 }
 
 export async function connectMaskbook() {
     const wallets = await getWallets(ProviderType.Maskbook)
-    // return the first managed wallet
     return first(wallets)
 }

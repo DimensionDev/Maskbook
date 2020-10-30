@@ -51,6 +51,65 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
     secondary: () => i18n.t('settings_appearance_secondary'),
 })
 
+/**
+ * A list of wallet address which using Maskbook as the provider
+ */
+export const currentMaskbookListOfWalletAddressSettings = createGlobalSettings<string>(
+    'maskbook list of wallet address',
+    '',
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
+/**
+ * A list of wallet address which using Metamask as the provider
+ */
+export const currentMetaMaskListOfWalletAddressSettings = createGlobalSettings<string>(
+    'metamask list of wallet address',
+    '',
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
+/**
+ * A list of wallet address which using WalletConnect as the provider
+ */
+export const currentWalletConnectListOfWalletAddressSettings = createGlobalSettings<string>(
+    'walletconnect list of wallet address',
+    '',
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
+/**
+ * The chain id using by Maskbook
+ */
+export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>('maskbook chain id', ChainId.Mainnet, {
+    primary: () => i18n.t('settings_choose_eth_network'),
+    secondary: () => 'This only affects the built-in wallet.',
+})
+
+/**
+ * The chain id using by Metamask
+ */
+export const currentMetaMaskChainIdSettings = createGlobalSettings<ChainId>('metamask chain id', ChainId.Mainnet, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+/**
+ * The chain id using by WalletConnect
+ */
+export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>(
+    'walletconnect chain id',
+    ChainId.Mainnet,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
 //#region chain state settings
 export interface ChainState {
     chainId: ChainId
@@ -59,25 +118,6 @@ export interface ChainState {
 export const currentChainStateSettings = createGlobalSettings<string>('chain state', stringify([]), {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
-//#endregion
-
-//#region provider chain id
-export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>('maskbook chain id', ChainId.Mainnet, {
-    primary: () => i18n.t('settings_choose_eth_network'),
-    secondary: () => 'This only affects the built-in wallet.',
-})
-
-export const currentMetaMaskChainIdSettings = createGlobalSettings<ChainId>('metamask chain id', ChainId.Mainnet, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
-export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>(
-    'walletconnect chain id',
-    ChainId.Mainnet,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
 //#endregion
 
 export const lastActivatedWalletProvider = createInternalSettings<ProviderType>(

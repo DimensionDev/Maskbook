@@ -41,7 +41,7 @@ import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import { QRCode } from '../../../components/shared/qrcode'
 import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { Token, EthereumTokenType } from '../../../web3/types'
+import { Token, EthereumTokenType, ProviderType } from '../../../web3/types'
 import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
 import { RedPacketInboundList, RedPacketOutboundList } from '../../../plugins/RedPacket/UI/RedPacketList'
@@ -50,7 +50,10 @@ import { useRedPacketFromDB } from '../../../plugins/RedPacket/hooks/useRedPacke
 import WalletLine from './WalletLine'
 import { isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
+import {
+    currentSelectedWalletProviderSettings,
+    currentSelectedWalletAddressSettings,
+} from '../../../plugins/Wallet/settings'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -334,14 +337,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
     const onSubmit = useSnackbarCallback(
         async () => {
             if (state[0] === 0) {
-                const address = await Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', {
+                const address = await Services.Plugin.invokePlugin('maskbook.wallet', 'createWallet', {
                     name,
                     passphrase,
                 })
                 setAsSelectedWallet(address)
             }
             if (state[0] === 1) {
-                const address = await Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                const address = await Services.Plugin.invokePlugin('maskbook.wallet', 'importWallet', {
                     name,
                     mnemonic: mnemonic.split(' '),
                     passphrase: '',
@@ -356,7 +359,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                 )
                 setAsSelectedWallet(address)
                 if (!privateKeyValid) throw new Error(t('import_failed'))
-                await Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                await Services.Plugin.invokePlugin('maskbook.wallet', 'importWallet', {
                     name,
                     address,
                     _private_key_: privKey,
@@ -365,6 +368,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
             function setAsSelectedWallet(address: string) {
                 if (!address) return
                 currentSelectedWalletAddressSettings.value = address
+                currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
             }
         },
         [state[0], name, passphrase, mnemonic, privKey],
@@ -553,7 +557,12 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
         if (!wallet) return
         const { privateKeyInHex } = wallet._private_key_
             ? await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', wallet._private_key_)
-            : await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWallet', wallet.mnemonic, wallet.passphrase)
+            : await Services.Plugin.invokePlugin(
+                  'maskbook.wallet',
+                  'recoverWalletFromMnemonic',
+                  wallet.mnemonic,
+                  wallet.passphrase,
+              )
         return privateKeyInHex
     }, [wallet])
 
