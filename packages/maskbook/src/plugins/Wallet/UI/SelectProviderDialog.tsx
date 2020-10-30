@@ -21,19 +21,8 @@ import { MessageCenter } from '../../../utils/messages'
 import { Flags } from '../../../utils/flags'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
     createStyles({
-        paper: {
-            width: '750px !important',
-            maxWidth: 'unset',
-        },
-        content: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-around',
-            overflow: 'hidden',
-            padding: theme.spacing(2, 1),
-        },
         grid: {
             width: '100%',
         },
@@ -113,57 +102,55 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
         [enqueueSnackbar, t],
     )
     return (
-        <>
-            <InjectedDialog title="Connect wallet" open={open} onExit={onClose}>
-                <DialogContent>
-                    <GridList className={classes.grid} spacing={16} cellHeight={183}>
+        <InjectedDialog title="Connect Wallet" open={open} onExit={onClose}>
+            <DialogContent>
+                <GridList className={classes.grid} cellHeight={183}>
+                    <GridListTile>
+                        <Provider
+                            logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
+                            name="Maskbook"
+                            description="Create wallet with Maskbook"
+                            onClick={() => onConnect(ProviderType.Maskbook)}
+                        />
+                    </GridListTile>
+                    {Flags.metamask_support_enabled ? (
                         <GridListTile>
                             <Provider
-                                logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                name="Maskbook"
-                                description="Create wallet with Maskbook"
-                                onClick={() => onConnect(ProviderType.Maskbook)}
+                                logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
+                                name="MetaMask"
+                                description="Connect to your MetaMask Wallet"
+                                onClick={() => onConnect(ProviderType.MetaMask)}
                             />
                         </GridListTile>
-                        {Flags.metamask_support_enabled ? (
-                            <GridListTile>
-                                <Provider
-                                    logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                    name="MetaMask"
-                                    description="Connect to your MetaMask Wallet"
-                                    onClick={() => onConnect(ProviderType.MetaMask)}
-                                />
-                            </GridListTile>
-                        ) : null}
-                        {Flags.wallet_connect_support_enabled ? (
-                            <GridListTile>
-                                <Provider
-                                    logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                    name="WalletConnect"
-                                    description="Scan with WalletConnect to connect"
-                                    onClick={() => onConnect(ProviderType.WalletConnect)}
-                                />
-                            </GridListTile>
-                        ) : null}
+                    ) : null}
+                    {Flags.wallet_connect_support_enabled ? (
                         <GridListTile>
                             <Provider
-                                logo={
-                                    <MoreHorizontal
-                                        className={classes.icon}
-                                        viewBox="0 0 22.5 22.5"
-                                        width={45}
-                                        height={45}
-                                    />
-                                }
-                                name="More"
-                                description="Comming soon…"
-                                ButtonBaseProps={{ disabled: true }}
+                                logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
+                                name="WalletConnect"
+                                description="Scan with WalletConnect to connect"
+                                onClick={() => onConnect(ProviderType.WalletConnect)}
                             />
                         </GridListTile>
-                    </GridList>
-                </DialogContent>
-            </InjectedDialog>
-        </>
+                    ) : null}
+                    <GridListTile>
+                        <Provider
+                            logo={
+                                <MoreHorizontal
+                                    className={classes.icon}
+                                    viewBox="0 0 22.5 22.5"
+                                    width={45}
+                                    height={45}
+                                />
+                            }
+                            name="More"
+                            description="Comming soon…"
+                            ButtonBaseProps={{ disabled: true }}
+                        />
+                    </GridListTile>
+                </GridList>
+            </DialogContent>
+        </InjectedDialog>
     )
 }
 

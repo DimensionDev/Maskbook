@@ -106,8 +106,6 @@ const useInjectedDialogClassesOverwrite = makeStyles((theme) =>
             },
         },
         dialogTitle: {
-            display: 'flex',
-            alignItems: 'center',
             padding: '10px 15px',
             borderBottom: `1px solid ${theme.palette.type === 'dark' ? '#2f3336' : '#ccd6dd'}`,
             '& > h2': {
@@ -145,10 +143,6 @@ const useInjectedDialogClassesOverwrite = makeStyles((theme) =>
                 margin: '0 auto',
                 padding: '7px 14px 6px !important',
             },
-        },
-        dialogTitleTypography: {
-            verticalAlign: 'middle',
-            marginLeft: 6,
         },
     }),
 )
