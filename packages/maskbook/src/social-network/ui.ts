@@ -298,6 +298,8 @@ let activatedSocialNetworkUI = ({
     currentIdentity: new ValueRef(null),
     myIdentitiesRef: new ValueRef([]),
     useTheme: useMaskbookTheme,
+    // Used in SSR (possibly)
+    networkIdentifier: 'localhost',
 } as Partial<SocialNetworkUI>) as SocialNetworkUI
 export function activateSocialNetworkUI(): void {
     for (const ui of definedSocialNetworkUIs)

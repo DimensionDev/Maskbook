@@ -1,13 +1,12 @@
-import { execFile } from 'child_process'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import { promisify } from 'util'
-
-const ssrPath = require.resolve('../packages/maskbook/src/setup.ssr.js')
-
+import { SSR } from './SSRWorker'
 export class SSRPlugin {
-    constructor(public htmlFileName: string, public pathName: string) {}
+    constructor(public htmlFileName: string, public pathName: string, public title: string) {}
     async renderSSR(): Promise<string> {
-        return (await promisify(execFile)('node', [ssrPath, this.pathName])).stdout
+        return SSR(this.pathName)
+    }
+    appendAfterHead(original: string, text: string) {
+        return original.replace('</head>', text + '</head>')
     }
     appendAfterBody(original: string, text: string) {
         return original.replace('</body>', text + '</body>')
@@ -48,6 +47,7 @@ export class SSRPlugin {
         }
         let regeneratedHTML = originalHTML
         regeneratedHTML = this.removeScripts(regeneratedHTML)
+        regeneratedHTML = this.appendAfterHead(regeneratedHTML, `<title>${this.title}</title>`)
         regeneratedHTML = this.appendAfterBody(regeneratedHTML, ssrString)
         regeneratedHTML = appendScript(regeneratedHTML, '/' + this.htmlFileName + '.js', 'body', 'after')
         // Generate scripts loader

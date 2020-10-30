@@ -1,10 +1,9 @@
 *.test.tsx
 package.json
-package-lock.json
 build/
 dist/
 scripts/
-packages/maskbook/src/polyfill
 e2e
 packages/maskbook/src/plugins/Wallet/contracts
 webpack.config.ts
+public/

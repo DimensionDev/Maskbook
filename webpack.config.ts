@@ -306,7 +306,9 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
     }
     function getSSRPlugin() {
         if (env === 'development') return []
-        return [new SSRPlugin('popup.html', src('./packages/maskbook/src/extension/popup-page/index.tsx'))]
+        return [
+            new SSRPlugin('popup.html', src('./packages/maskbook/src/extension/popup-page/index.tsx'), 'Mask Network'),
+        ]
     }
 }
 

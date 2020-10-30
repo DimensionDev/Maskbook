@@ -1,4 +1,3 @@
-import '../public/env'
 import { addParameters, addDecorator } from '@storybook/react'
 import { withKnobs, radios } from '@storybook/addon-knobs'
 import { getMaskbookTheme } from '../packages/maskbook/src/utils/theme'
@@ -21,8 +20,8 @@ addParameters({
 addDecorator(withKnobs)
 const themes = { Dark: '0', Light: '1' }
 // Theme for MUI
-const MaskbookDarkTheme = getMaskbookTheme({ theme: Appearance.dark })
-const MaskbookLightTheme = getMaskbookTheme({ theme: Appearance.light })
+const MaskbookDarkTheme = getMaskbookTheme({ appearance: Appearance.dark })
+const MaskbookLightTheme = getMaskbookTheme({ appearance: Appearance.light })
 addDecorator((storyFn) => (
     <ThemeProvider theme={[MaskbookDarkTheme, MaskbookLightTheme][radios('Theme', themes, '0')]}>
         {storyFn()}
