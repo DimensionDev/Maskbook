@@ -9,7 +9,6 @@ import type { WalletRecord, WalletRecordDetailed } from '../database/types'
 import { PluginMessageCenter } from '../../PluginMessages'
 import { buf2hex, hex2buf, assert } from '../../../utils/utils'
 import { ProviderType } from '../../../web3/types'
-import { resolveProviderName } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
 import { isSameAddress } from '../../../web3/helpers'
@@ -60,25 +59,29 @@ export async function getWallets(provider?: ProviderType): Promise<WalletRecordD
         )
     ).sort(sortWallet)
 
+    const MaskbookWallets = wallets
+        .filter((x) => x._private_key_)
+        .map((x) => ({ ...x, provider: ProviderType.Maskbook }))
+    const MetaMaskWallets = wallets
+        .filter((x) =>
+            some(currentMetaMaskListOfWalletAddressSettings.value.split(','), (y) => isSameAddress(x.address, y)),
+        )
+        .map((x) => ({ ...x, provider: ProviderType.MetaMask }))
+    const WalletConnectWallets = wallets
+        .filter((x) =>
+            some(currentWalletConnectListOfWalletAddressSettings.value.split(','), (y) => isSameAddress(x.address, y)),
+        )
+        .map((x) => ({ ...x, provider: ProviderType.WalletConnect }))
+
     switch (provider) {
+        case ProviderType.Maskbook:
+            return MaskbookWallets
         case ProviderType.MetaMask:
-            return wallets
-                .filter((x) =>
-                    some(currentMetaMaskListOfWalletAddressSettings.value.split(','), (y) =>
-                        isSameAddress(x.address, y),
-                    ),
-                )
-                .map((x) => ({ ...x, provider: ProviderType.MetaMask }))
+            return MetaMaskWallets
         case ProviderType.WalletConnect:
-            return wallets
-                .filter((x) =>
-                    some(currentWalletConnectListOfWalletAddressSettings.value.split(','), (y) =>
-                        isSameAddress(x.address, y),
-                    ),
-                )
-                .map((x) => ({ ...x, provider: ProviderType.WalletConnect }))
+            return WalletConnectWallets
         default:
-            return wallets.filter((x) => x._private_key_).map((x) => ({ ...x, provider: ProviderType.Maskbook }))
+            return [...MaskbookWallets, ...MetaMaskWallets, ...WalletConnectWallets]
     }
     async function makePrivateKey(record: WalletRecord) {
         if (!record.mnemonic && !record._private_key_) return '0x'

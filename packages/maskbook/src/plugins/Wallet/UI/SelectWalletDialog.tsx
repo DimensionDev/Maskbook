@@ -1,5 +1,14 @@
 import React, { useCallback } from 'react'
-import { Button, createStyles, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
+import {
+    Button,
+    createStyles,
+    DialogActions,
+    DialogContent,
+    List,
+    ListSubheader,
+    makeStyles,
+    Typography,
+} from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -14,11 +23,41 @@ import { sleep } from '../../../utils/utils'
 import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import { currentSelectedWalletProviderSettings, currentSelectedWalletAddressSettings } from '../settings'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { resolveProviderName } from '../../../web3/pipes'
+import { ProviderType } from '../../../web3/types'
+import { ProviderIcon } from '../../../components/shared/ProviderIcon'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         paper: {
-            minHeight: 500,
+            height: 500,
+        },
+        content: {
+            padding: theme.spacing(0, 2, 1, 2),
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
+        list: {
+            padding: 0,
+        },
+        subHeader: {
+            display: 'flex',
+            alignItems: 'center',
+            padding: theme.spacing(2, 2, 1),
+            backgroundColor: theme.palette.background.paper,
+            '&:first-child': {
+                paddingTop: 0,
+            },
+        },
+        subHeaderIcon: {
+            fontSize: 24,
+            width: 24,
+            height: 24,
+        },
+        subHeaderText: {
+            fontSize: 14,
+            marginLeft: theme.spacing(1),
         },
     }),
 )
@@ -79,10 +118,34 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     return (
         <>
             <InjectedDialog classes={classes} open={open} onExit={onClose} title="Select Wallet">
-                <DialogContent>
-                    {wallets.map((wallet) => (
-                        <WalletInList key={wallet.address} wallet={wallet} onClick={() => onSelect(wallet)} />
-                    ))}
+                <DialogContent className={classes.content}>
+                    <List className={classes.list} dense>
+                        {[ProviderType.MetaMask, ProviderType.WalletConnect, ProviderType.Maskbook].map((provider) =>
+                            wallets.some((x) => x.provider === provider) ? (
+                                <>
+                                    <ListSubheader className={classes.subHeader}>
+                                        <ProviderIcon
+                                            classes={{ icon: classes.subHeaderIcon }}
+                                            size={24}
+                                            providerType={provider}
+                                        />
+                                        <Typography className={classes.subHeaderText}>
+                                            {resolveProviderName(provider)}
+                                        </Typography>
+                                    </ListSubheader>
+                                    {wallets
+                                        .filter((x) => x.provider === provider)
+                                        .map((wallet) => (
+                                            <WalletInList
+                                                key={wallet.address}
+                                                wallet={wallet}
+                                                onClick={() => onSelect(wallet)}
+                                            />
+                                        ))}
+                                </>
+                            ) : null,
+                        )}
+                    </List>
                 </DialogContent>
                 <DialogActions>
                     <Button variant="text" onClick={onCreate}>
