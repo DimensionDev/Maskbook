@@ -9,18 +9,19 @@ import {
     Typography,
     Box,
     Divider,
+    Avatar,
 } from '@material-ui/core'
 import { ChevronDown, Copy } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
 import { isSameAddress } from '../helpers'
-import { ProviderIcon } from '../../components/shared/ProviderIcon'
 import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
 import { useSnackbarCallback } from '../../extension/options-page/DashboardDialogs/Base'
 import { MaskbookWalletMessages, WalletMessageCenter } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
+import { useBlockie } from '../hooks/useBlockie'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -69,9 +70,7 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
 
     const wallets = useWallets()
     const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
-    const avatar = (
-        <ProviderIcon classes={{ icon: classes.providerIcon }} size={18} providerType={currentWallet?.provider} />
-    )
+    const currentWalletBlockie = useBlockie(currentWallet?.address ?? '')
     const address_ = address.replace(/^0x/i, '')
 
     //#region copy addr to clipboard
@@ -120,9 +119,9 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
 
     return (
         <>
-            {avatar ? (
+            {currentWalletBlockie ? (
                 <Chip
-                    avatar={avatar}
+                    avatar={<Avatar src={currentWalletBlockie} />}
                     className={classes.root}
                     classes={{ label: classes.label }}
                     size="small"

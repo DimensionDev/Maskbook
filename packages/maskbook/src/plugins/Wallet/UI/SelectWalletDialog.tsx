@@ -15,7 +15,13 @@ import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import { currentSelectedWalletProviderSettings, currentSelectedWalletAddressSettings } from '../settings'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
-const useStyles = makeStyles((theme) => createStyles({}))
+const useStyles = makeStyles((theme) =>
+    createStyles({
+        paper: {
+            minHeight: 500,
+        },
+    }),
+)
 
 interface SelectWalletDialogUIProps extends withClasses<never> {}
 
@@ -72,7 +78,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
 
     return (
         <>
-            <InjectedDialog open={open} onExit={onClose} title="Select Wallet">
+            <InjectedDialog classes={classes} open={open} onExit={onClose} title="Select Wallet">
                 <DialogContent>
                     {wallets.map((wallet) => (
                         <WalletInList key={wallet.address} wallet={wallet} onClick={() => onSelect(wallet)} />
