@@ -129,7 +129,7 @@
     "react-router-dom": "^5.2.0",
     "react-use": "^15.3.4",
     "react-virtualized-auto-sizer": "^1.0.2",
-    "react-window": "^1.8.5",
+    "react-window": "^1.8.6",
     "string.prototype.matchall": "^4.0.2",
     "swr": "0.3.6",
     "tiny-secp256k1": "^1.1.5",
