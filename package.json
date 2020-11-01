@@ -157,7 +157,7 @@
     "@nice-labs/git-rev": "^3.5.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.2",
     "@sinonjs/text-encoding": "^0.7.1",
-    "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-actions": "^6.0.28",
     "@storybook/addon-docs": "^5.3.19",
     "@storybook/addon-info": "^5.3.20",
     "@storybook/addon-knobs": "^5.3.19",
