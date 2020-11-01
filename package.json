@@ -51,7 +51,7 @@
     "@dimensiondev/holoflows-kit": "^0.8.0-20201026073104-400a4b2",
     "@dimensiondev/kit": "^0.0.0-20200805092405-83b3a99",
     "@dimensiondev/matrix-js-sdk-type": "^1.0.0-20200731085604-dc2de92",
-    "@dimensiondev/stego-js": "^0.11.1-20200731084631-79ec32a",
+    "@dimensiondev/stego-js": "^0.11.1-20201027083223-8ab41be",
     "@ethersproject/contracts": "^5.0.4",
     "@ethersproject/networks": "^5.0.3",
     "@ethersproject/providers": "^5.0.9",
