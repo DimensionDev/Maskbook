@@ -72,7 +72,7 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
             <header className={classes.content}>{header}</header>
             {message ? (
                 <main className={classes.content}>
-                    <DefaultTypedMessageRenderer {...props} message={TypedMessage} />
+                    <DefaultTypedMessageRenderer {...props} message={TypedMessage} allowTextEnlarge={true} />
                 </main>
             ) : null}
         </Card>
