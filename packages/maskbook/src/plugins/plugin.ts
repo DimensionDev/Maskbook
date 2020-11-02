@@ -8,12 +8,12 @@ type PluginInjectFunction<T> =
       }
     | React.ComponentType<T>
 
-export const enum PluginScope {
+export enum PluginScope {
     Internal,
     Public,
 }
 
-export const enum PluginStage {
+export enum PluginStage {
     Development,
     Beta,
     Production,
