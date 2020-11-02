@@ -1,5 +1,5 @@
 import React from 'react'
-import { PluginStage, PluginConfig } from '../plugin'
+import { PluginStage, PluginConfig, PluginScope } from '../plugin'
 import {
     TypedMessage,
     isTypedMessageAnchor,
@@ -16,6 +16,7 @@ export const TraderPluginDefine: PluginConfig = {
     pluginName: 'Trader',
     identifier: PLUGIN_IDENTIFIER,
     stage: PluginStage.Production,
+    scope: PluginScope.Public,
     messageProcessor(message: TypedMessageCompound) {
         return {
             ...message,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { PluginStage, PluginConfig } from '../plugin'
+import { PluginStage, PluginConfig, PluginScope } from '../plugin'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { SelectProviderDialog } from './UI/SelectProviderDialog'
 import { SelectWalletDialog } from './UI/SelectWalletDialog'
@@ -9,6 +9,7 @@ export const WalletPluginDefine: PluginConfig = {
     pluginName: 'Wallet',
     identifier: PLUGIN_IDENTIFIER,
     stage: PluginStage.Production,
+    scope: PluginScope.Public,
     PageComponent() {
         return (
             <>
