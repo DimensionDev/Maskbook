@@ -123,15 +123,10 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     <ErrorBoundary key={plugin.identifier + ' ' + index}>
                         <ClickableChip
                             label={
-                                <span>
-                                    <span>{opt.label}</span>
-                                    {plugin.stage === PluginStage.Beta && (
-                                        <span>
-                                            {' '}
-                                            <sup>(Beta)</sup>
-                                        </span>
-                                    )}
-                                </span>
+                                <>
+                                    {opt.label}
+                                    {plugin.stage === PluginStage.Beta && <sup>(Beta)</sup>}
+                                </>
                             }
                             onClick={opt.onClick}
                         />
