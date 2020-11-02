@@ -117,12 +117,12 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
 
     return (
         <>
-            <InjectedDialog classes={classes} open={open} onExit={onClose} title="Select Wallet">
+            <InjectedDialog open={open} onExit={onClose} title="Select Wallet">
                 <DialogContent className={classes.content}>
                     <List className={classes.list} dense>
                         {[ProviderType.MetaMask, ProviderType.WalletConnect, ProviderType.Maskbook].map((provider) =>
                             wallets.some((x) => x.provider === provider) ? (
-                                <>
+                                <React.Fragment key={provider}>
                                     <ListSubheader className={classes.subHeader}>
                                         <ProviderIcon
                                             classes={{ icon: classes.subHeaderIcon }}
@@ -142,7 +142,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
                                                 onClick={() => onSelect(wallet)}
                                             />
                                         ))}
-                                </>
+                                </React.Fragment>
                             ) : null,
                         )}
                     </List>

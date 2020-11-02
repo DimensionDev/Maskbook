@@ -6,7 +6,7 @@ import type { ProviderType } from '../../../web3/types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { WalletArrayComparer } from '../helpers'
 import { isSameAddress } from '../../../web3/helpers'
-import { currentSelectedWalletAddressSettings } from '../settings'
+import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
 import type { WalletRecordDetailed } from '../database/types'
 
 //#region tracking wallets
@@ -20,8 +20,13 @@ revalidate()
 
 export function useSelectedWallet() {
     const address = useValueRef(currentSelectedWalletAddressSettings)
+    const provider = useValueRef(currentSelectedWalletProviderSettings)
     const wallets = useWallets()
-    return wallets.find((x) => isSameAddress(x.address, address)) ?? first(wallets)
+    const wallet = wallets.find((x) => isSameAddress(x.address, address)) ?? first(wallets)
+    return {
+        ...wallet,
+        provider,
+    } as typeof wallet
 }
 
 export function useWallet(address: string) {
