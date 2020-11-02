@@ -1,4 +1,4 @@
-import type { PluginConfig } from '../plugin'
+import { PluginStage, PluginConfig } from '../plugin'
 import { registerTypedMessageRenderer, TypedMessage } from '../../protocols/typed-message'
 import type { TypedMessageRendererProps } from '../../components/InjectedComponents/TypedMessageRenderer'
 import React from 'react'
@@ -6,6 +6,7 @@ import React from 'react'
 export const StorybookPluginDefine: PluginConfig = {
     pluginName: 'Storybook test',
     identifier: 'storybook.debug',
+    stage: PluginStage.Internal,
     postDialogMetadataBadge: new Map([['test', (payload) => 'a lovely test badge']]),
 }
 if (process.env.STORYBOOK) {

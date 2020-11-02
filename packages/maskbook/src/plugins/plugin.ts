@@ -8,9 +8,17 @@ type PluginInjectFunction<T> =
       }
     | React.ComponentType<T>
 
+export const enum PluginStage {
+    Development,
+    Internal,
+    Beta,
+    Production,
+}
+
 export interface PluginConfig {
     pluginName: string
     identifier: string
+    stage: PluginStage
     successDecryptionInspector?: PluginInjectFunction<{ message: TypedMessage }>
     postInspector?: PluginInjectFunction<{}>
     PageComponent?: React.ComponentType<{}>
