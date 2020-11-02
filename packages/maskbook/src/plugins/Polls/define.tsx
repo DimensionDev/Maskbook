@@ -1,5 +1,5 @@
 import React from 'react'
-import { PluginStage, PluginConfig, PluginScope } from '../plugin'
+import { PluginConfig, PluginStage, PluginScope } from '../types'
 import type { PollMetaData } from './types'
 import { PollMetadataReader } from './utils'
 import PollsInPost from './UI/PollsInPost'

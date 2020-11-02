@@ -1,5 +1,5 @@
 import React from 'react'
-import { PluginStage, PluginConfig, PluginScope } from '../plugin'
+import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { SelectProviderDialog } from './UI/SelectProviderDialog'
 import { SelectWalletDialog } from './UI/SelectWalletDialog'
