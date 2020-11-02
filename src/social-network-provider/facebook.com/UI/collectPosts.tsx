@@ -14,7 +14,7 @@ import { Flags } from '../../../utils/flags'
 import { clickSeeMore } from './injectPostInspector'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
-    isMobileFacebook ? '.story_body_container ' : '[data-testid] [role=article] [data-ad-preview="message"]',
+    isMobileFacebook ? '.story_body_container ' : '[role=article] [data-ad-preview="message"]',
 )
 
 export function collectPostsFacebook(this: SocialNetworkUI) {

@@ -138,14 +138,17 @@ declare module '@transak/transak-sdk' {
         public closeRequest(): void
         public modal(): void
 
-        public ALL_EVENTS_EVENTS = EVENTS.ALL
+        public ALL_EVENTS_EVENTS = EVENTS.ALL_EVENTS
         public ERROR = EVENTS.TRANSAK_ERROR
         public EVENTS = EVENTS
     }
 
+    // Learn more https://integrate.transak.com/Query-Parameters-9ec523df3b874ec58cef4fa3a906f238
     export interface TransakSDKConfig {
         apiKey: string
         environment: 'STAGING' | 'PRODUCTION'
+        networks?: string
+        defaultFiatAmount?: number
         defaultCryptoCurrency?: string
         walletAddress?: string
         themeColor?: string
