@@ -1,4 +1,4 @@
-import { PluginStage, PluginConfig } from '../plugin'
+import { PluginStage, PluginConfig, PluginScope } from '../plugin'
 import { RedPacketInspector } from './UI/RedPacketInspector'
 import React from 'react'
 import { formatBalance } from '../Wallet/formatter'
@@ -34,6 +34,7 @@ export const RedPacketPluginDefine: PluginConfig = {
     pluginName: 'Red Packet',
     identifier: RedPacketPluginID,
     stage: PluginStage.Production,
+    scope: PluginScope.Public,
     successDecryptionInspector: function Comp(props) {
         if (!RedPacketMetadataReader(props.message.meta).ok) return null
         return <RedPacketInspector {...props} />

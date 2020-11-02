@@ -1,5 +1,5 @@
 import React from 'react'
-import { PluginStage, PluginConfig } from '../plugin'
+import { PluginStage, PluginConfig, PluginScope } from '../plugin'
 import type { PollMetaData } from './types'
 import { PollMetadataReader } from './utils'
 import PollsInPost from './UI/PollsInPost'
@@ -20,6 +20,7 @@ export const PollsPluginDefine: PluginConfig = {
     pluginName,
     identifier,
     stage: PluginStage.Beta,
+    scope: PluginScope.Internal,
     successDecryptionInspector: function Comp(props) {
         const metadata = PollMetadataReader(props.message.meta)
         if (!metadata.ok) return null

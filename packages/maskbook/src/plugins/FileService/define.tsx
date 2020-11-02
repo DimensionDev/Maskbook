@@ -2,7 +2,7 @@ import { formatFileSize } from '@dimensiondev/kit'
 import { truncate } from 'lodash-es'
 import React from 'react'
 import { createTypedMessageMetadataReader } from '../../protocols/typed-message/metadata'
-import { PluginStage, PluginConfig } from '../plugin'
+import { PluginStage, PluginConfig, PluginScope } from '../plugin'
 import { identifier, META_KEY_1, pluginName } from './constants'
 import { Preview } from './Preview'
 import type { FileInfo } from './types'
@@ -31,6 +31,7 @@ export const FileServicePluginDefine: PluginConfig = {
     pluginName,
     identifier,
     stage: PluginStage.Production,
+    scope: PluginScope.Public,
     successDecryptionInspector(props) {
         const metadata = FileInfoMetadataReader(props.message.meta)
         if (!metadata.ok) return null

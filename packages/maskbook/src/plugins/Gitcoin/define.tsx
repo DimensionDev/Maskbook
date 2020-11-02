@@ -1,4 +1,4 @@
-import { PluginStage, PluginConfig } from '../plugin'
+import { PluginStage, PluginConfig, PluginScope } from '../plugin'
 import React, { Suspense, useMemo } from 'react'
 import { SnackbarContent } from '@material-ui/core'
 import { parseURL } from '../../utils/utils'
@@ -13,6 +13,7 @@ export const GitcoinPluginDefine: PluginConfig = {
     pluginName: 'Gitcoin',
     identifier: 'co.gitcoin',
     stage: PluginStage.Production,
+    scope: PluginScope.Public,
     successDecryptionInspector: function Component(props): JSX.Element | null {
         const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
         const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isGitcoin)
