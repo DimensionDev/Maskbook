@@ -44,6 +44,7 @@ import { Result } from 'ts-results'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
+import { PluginStage } from '../../plugins/types'
 
 const defaultTheme = {}
 
@@ -120,7 +121,20 @@ export function PostDialogUI(props: PostDialogUIProps) {
             return entries.map((opt, index) => {
                 return (
                     <ErrorBoundary key={plugin.identifier + ' ' + index}>
-                        <ClickableChip label={opt.label} onClick={opt.onClick} />
+                        <ClickableChip
+                            label={
+                                <span>
+                                    <span>{opt.label}</span>
+                                    {plugin.stage === PluginStage.Beta && (
+                                        <span>
+                                            {' '}
+                                            <sup>(Beta)</sup>
+                                        </span>
+                                    )}
+                                </span>
+                            }
+                            onClick={opt.onClick}
+                        />
                     </ErrorBoundary>
                 )
             })
@@ -146,7 +160,9 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             inputProps={{ 'data-testid': 'text_textarea' }}
                         />
 
-                        <Typography style={{ marginBottom: 10 }}>Plugins (Experimental)</Typography>
+                        <Typography style={{ marginBottom: 10 }}>
+                            Plugins <sup>(Experimental)</sup>
+                        </Typography>
                         <ErrorBoundary>
                             <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
                                 {pluginEntries}
