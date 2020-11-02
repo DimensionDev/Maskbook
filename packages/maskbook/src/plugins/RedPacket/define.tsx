@@ -1,4 +1,4 @@
-import { PluginStage, PluginConfig, PluginScope } from '../plugin'
+import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { RedPacketInspector } from './UI/RedPacketInspector'
 import React from 'react'
 import { formatBalance } from '../Wallet/formatter'

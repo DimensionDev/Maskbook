@@ -1,7 +1,7 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit/es'
 import React from 'react'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import type { PluginConfig } from '../plugin'
+import type { PluginConfig } from '../types'
 
 export function createCompositionDialog(
     label: string | React.ReactNode,

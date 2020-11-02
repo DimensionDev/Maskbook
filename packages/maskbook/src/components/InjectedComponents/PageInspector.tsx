@@ -1,6 +1,7 @@
 import { useSnackbar } from 'notistack'
 import React from 'react'
-import { PluginUI, PluginConfig } from '../../plugins/plugin'
+import type { PluginConfig } from '../../plugins/types'
+import { PluginUI } from '../../plugins/plugin'
 import { useMessage } from '../../utils/hooks/useMessage'
 import { MessageCenter } from '../../utils/messages'
 import Button from '@material-ui/core/Button'

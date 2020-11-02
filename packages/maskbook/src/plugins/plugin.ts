@@ -1,40 +1,4 @@
-import type { TypedMessage, TypedMessageCompound } from '../protocols/typed-message'
-import type { PostInfo } from '../social-network/PostInfo'
-
-type PluginInjectFunction<T> =
-    | {
-          type: 'raw'
-          init: (post: PostInfo, props: T, mountingPoint: HTMLDivElement) => () => void
-      }
-    | React.ComponentType<T>
-
-export enum PluginScope {
-    Internal,
-    Public,
-}
-
-export enum PluginStage {
-    Development,
-    Beta,
-    Production,
-}
-
-export interface PluginConfig {
-    pluginName: string
-    identifier: string
-    stage: PluginStage
-    scope: PluginScope
-    successDecryptionInspector?: PluginInjectFunction<{ message: TypedMessage }>
-    postInspector?: PluginInjectFunction<{}>
-    PageComponent?: React.ComponentType<{}>
-    DashboardComponent?: React.ComponentType<{}>
-    postDialogMetadataBadge?: Map<string, (metadata: any) => string>
-    postDialogEntries?: {
-        label: string | React.ReactNode
-        onClick(): void
-    }[]
-    messageProcessor?: (message: TypedMessageCompound) => TypedMessageCompound
-}
+import type { PluginConfig } from './types'
 
 const plugins = new Set<PluginConfig>()
 export const PluginUI: ReadonlySet<PluginConfig> = plugins
@@ -48,6 +12,7 @@ import { FileServicePluginDefine } from './FileService/define'
 import { TraderPluginDefine } from './Trader/define'
 import { Flags } from '../utils/flags'
 import { TransakPluginDefine } from './Transak/define'
+
 plugins.add(WalletPluginDefine)
 plugins.add(GitcoinPluginDefine)
 plugins.add(RedPacketPluginDefine)

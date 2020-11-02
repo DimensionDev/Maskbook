@@ -40,7 +40,8 @@ import ActionButton from './DashboardComponents/ActionButton'
 import ShowcaseBox from './DashboardComponents/ShowcaseBox'
 import { Flags } from '../../utils/flags'
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
-import { PluginUI, PluginConfig } from '../../plugins/plugin'
+import type { PluginConfig } from '../../plugins/types'
+import { PluginUI } from '../../plugins/plugin'
 import { ErrorBoundary, withErrorBoundary } from '../../components/shared/ErrorBoundary'
 
 const useStyles = makeStyles((theme) => {

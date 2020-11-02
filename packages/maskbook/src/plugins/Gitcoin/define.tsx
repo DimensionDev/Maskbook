@@ -1,4 +1,4 @@
-import { PluginStage, PluginConfig, PluginScope } from '../plugin'
+import { PluginConfig, PluginStage, PluginScope } from '../types'
 import React, { Suspense, useMemo } from 'react'
 import { SnackbarContent } from '@material-ui/core'
 import { parseURL } from '../../utils/utils'
