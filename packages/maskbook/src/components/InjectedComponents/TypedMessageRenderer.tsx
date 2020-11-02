@@ -1,6 +1,7 @@
 import React from 'react'
-import { Typography, Link } from '@material-ui/core'
+import { Typography, Link, makeStyles, createStyles } from '@material-ui/core'
 import anchorme from 'anchorme'
+import classNames from 'classnames'
 import {
     TypedMessage,
     TypedMessageText,
@@ -28,6 +29,7 @@ export interface TypedMessageRendererProps<T extends TypedMessage> {
      * The TypedMessage
      */
     message: T
+    allowTextEnlarge?: boolean
     afterPreviousMetadata?: React.ReactNode
     beforeLatterMetadata?: React.ReactNode
     metadataRenderer?: {
@@ -51,7 +53,11 @@ export const DefaultTypedMessageTextRenderer = React.memo(function DefaultTypedM
     return renderWithMetadata(
         props,
         <Typography component="span" color="textPrimary" variant="body1" data-testid="text_payload">
-            {deconstructed.ok ? <PayloadReplacer payload={content} /> : <RenderText text={content} />}
+            {deconstructed.ok ? (
+                <PayloadReplacer payload={content} />
+            ) : (
+                <RenderText text={content} allowTextEnlarge={Boolean(props.allowTextEnlarge)} />
+            )}
         </Typography>,
     )
 })
@@ -194,25 +200,71 @@ function renderWithMetadata(props: TypedMessageRendererProps<TypedMessage>, jsx:
     )
 }
 
-const RenderText = React.memo(function RenderText(props: { text: string }) {
-    return <>{parseText(props.text)}</>
+const RenderText = React.memo(function RenderText(props: { text: string; allowTextEnlarge: boolean }) {
+    return <>{parseText(props.text, props.allowTextEnlarge)}</>
 })
 
-function parseText(string: string) {
+interface ParseTextProps {
+    text: string
+    fontSize: number
+}
+
+interface ParseTextLinkProps extends ParseTextProps {
+    link: string
+}
+
+const useStyle = makeStyles((theme) =>
+    createStyles({
+        link: {
+            color: theme.palette.primary.main,
+        },
+        text: {
+            fontSize: (fontSize: number) => fontSize + 'rem',
+        },
+    }),
+)
+
+const ParseTextLink = React.memo(function ParseTextLink({ link, text, fontSize }: ParseTextLinkProps) {
+    const classes = useStyle(fontSize)
+    return (
+        <Link
+            className={classNames(classes.text, classes.link)}
+            target="_blank"
+            rel="noopener noreferrer"
+            href={link}
+            key={link}>
+            {text}
+        </Link>
+    )
+})
+
+const ParseText = React.memo(function ParseText({ text, fontSize }: ParseTextProps) {
+    const classes = useStyle(fontSize)
+    return <span className={classes.text}>{text}</span>
+})
+
+function parseText(string: string, allowTextEnlarge: boolean) {
     const links = anchorme.list(string)
     let current = string
+    const fontSize =
+        allowTextEnlarge && Array.from(current).length < 45
+            ? 1.5
+            : allowTextEnlarge && Array.from(current).length < 85
+            ? 1.2
+            : 1
+
     const result = []
     while (current.length) {
         const search1 = current.search('\n')
         const search2 = links[0] ? current.search(links[0].string) : -1
         // ? if rest is normal
         if (search1 === -1 && search2 === -1) {
-            result.push(current)
+            result.push(<ParseText text={current} fontSize={fontSize} />)
             break
         }
         // ? if rest have \n but no links
         if ((search1 < search2 && search1 !== -1) || search2 === -1) {
-            result.push(current.substring(0, search1), <br key={current} />)
+            result.push(<ParseText text={current.substring(0, search1)} fontSize={fontSize} />, <br key={current} />)
             current = current.substring(search1 + 1)
         }
         // ? if rest have links but no \n
@@ -220,10 +272,8 @@ function parseText(string: string) {
             let link = links[0].string
             if (!links[0].protocol) link = 'http://' + link
             result.push(
-                current.substring(0, search2),
-                <Link color="textPrimary" target="_blank" rel="noopener noreferrer" href={link} key={link}>
-                    {links[0].string}
-                </Link>,
+                <ParseText text={current.substring(0, search2)} fontSize={fontSize} />,
+                <ParseTextLink link={link} text={links[0].string} fontSize={fontSize} />,
             )
             current = current.substring(search2 + links[0].string.length)
             links.shift()
