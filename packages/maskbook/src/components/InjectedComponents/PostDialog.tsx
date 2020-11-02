@@ -59,6 +59,9 @@ const useStyles = makeStyles({
         fontSize: 18,
         minHeight: '8em',
     },
+    sup: {
+        paddingLeft: 2,
+    },
 })
 
 export interface PostDialogUIProps extends withClasses<never> {
@@ -125,7 +128,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             label={
                                 <>
                                     {opt.label}
-                                    {plugin.stage === PluginStage.Beta && <sup>(Beta)</sup>}
+                                    {plugin.stage === PluginStage.Beta && <sup className={classes.sup}>(Beta)</sup>}
                                 </>
                             }
                             onClick={opt.onClick}
