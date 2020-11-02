@@ -1,5 +1,5 @@
 import React from 'react'
-import type { PluginConfig } from '../plugin'
+import { PluginStage, PluginConfig } from '../plugin'
 import {
     TypedMessage,
     isTypedMessageAnchor,
@@ -15,6 +15,7 @@ const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor => isTypedMe
 export const TraderPluginDefine: PluginConfig = {
     pluginName: 'Trader',
     identifier: PLUGIN_IDENTIFIER,
+    stage: PluginStage.Production,
     messageProcessor(message: TypedMessageCompound) {
         return {
             ...message,

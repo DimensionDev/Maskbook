@@ -1,5 +1,5 @@
 import React from 'react'
-import type { PluginConfig } from '../plugin'
+import { PluginStage, PluginConfig } from '../plugin'
 import type { PollMetaData } from './types'
 import { PollMetadataReader } from './utils'
 import PollsInPost from './UI/PollsInPost'
@@ -19,6 +19,7 @@ const [PollCompositionEntry, PollCompositionUI] = createCompositionDialog('ðŸ—³ï
 export const PollsPluginDefine: PluginConfig = {
     pluginName,
     identifier,
+    stage: PluginStage.Beta,
     successDecryptionInspector: function Comp(props) {
         const metadata = PollMetadataReader(props.message.meta)
         if (!metadata.ok) return null

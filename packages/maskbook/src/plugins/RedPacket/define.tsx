@@ -1,4 +1,4 @@
-import type { PluginConfig } from '../plugin'
+import { PluginStage, PluginConfig } from '../plugin'
 import { RedPacketInspector } from './UI/RedPacketInspector'
 import React from 'react'
 import { formatBalance } from '../Wallet/formatter'
@@ -33,6 +33,7 @@ const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDia
 export const RedPacketPluginDefine: PluginConfig = {
     pluginName: 'Red Packet',
     identifier: RedPacketPluginID,
+    stage: PluginStage.Production,
     successDecryptionInspector: function Comp(props) {
         if (!RedPacketMetadataReader(props.message.meta).ok) return null
         return <RedPacketInspector {...props} />
