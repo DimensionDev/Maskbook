@@ -154,21 +154,10 @@ async function syncKey(locales = _.without(_locales, 'en')) {
     const baseKeys = _.keys(baseMessages)
     for (const name of locales) {
         const nextMessages = await readMessages(name)
-        const emptyKeys = _.reduce(
-            _.difference(baseKeys, _.keys(nextMessages)),
-            (record, name) => {
-                record[name] = ''
-                return record
-            },
-            {} as Record<string, string>,
-        )
-        const modifedMessages = _.chain(nextMessages)
-            .assign(emptyKeys)
-            .toPairs()
-            .sortBy(([key]) => baseKeys.indexOf(key))
-            .fromPairs()
-            .value()
-        await writeMessages(name, modifedMessages)
+        for (const key of _.difference(baseKeys, _.keys(nextMessages))) {
+            nextMessages[key] = ''
+        }
+        await writeMessages(name, _.pick(nextMessages, baseKeys))
     }
 }
 
