@@ -318,7 +318,7 @@
     "plugin_file_service_unencrypted": "このファイルは暗号化されていません。",
     "plugin_file_service_signing_failed": "サービスが使用できません。今しばらくお待ちください。",
     "plugin_file_service_on_encrypt_it": "暗号化しましょう",
-    "plugin_file_service_legal_text": "このプラグインを使用することで<terms>利用規約</terms>並びに<policy>個人情報保護方針（プライバシーポリシー）</policy>に同意したこととなります。",
+    "plugin_file_service_legal_text": "このプラグインを使用することで<terms>利用規約</terms>並びに<policy>プライバシーポリシー</policy>に同意したこととなります。",
     "plugin_file_service_legal_terms_link": "https://legal.maskbook.com/arweave/file-service/plugin-terms.html",
     "plugin_file_service_legal_policy_link": "https://legal.maskbook.com/arweave/file-service/privacy-policy-uploader.html",
     "plugin_file_service_drop_indicator": "ファイルをドラッグ＆ドロップしてアップロード！",
