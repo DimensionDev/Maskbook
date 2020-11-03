@@ -26,6 +26,8 @@ import { ProviderType, TokenDetailed } from '../../../web3/types'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransakMessageCenter } from '../../../plugins/Transak/messages'
+import { TransakPluginDefine } from '../../../plugins/Transak/define'
+import { PluginStage } from '../../../plugins/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -114,16 +116,18 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                             startIcon={<AddIcon />}>
                             {t('add_token')}
                         </Button>
-                        <Button
-                            onClick={() => {
-                                setBuyDialogOpen({
-                                    open: true,
-                                    address: wallet.address,
-                                })
-                            }}
-                            startIcon={<ShoppingCartOutlinedIcon />}>
-                            {t('buy_now')}
-                        </Button>
+                        {TransakPluginDefine.stage === PluginStage.Development ? null : (
+                            <Button
+                                onClick={() => {
+                                    setBuyDialogOpen({
+                                        open: true,
+                                        address: wallet.address,
+                                    })
+                                }}
+                                startIcon={<ShoppingCartOutlinedIcon />}>
+                                {t('buy_now')}
+                            </Button>
+                        )}
                     </Box>
                 ) : null}
                 <IconButton className={classes.moreButton} size="small" onClick={openMenu} data-testid="setting_icon">

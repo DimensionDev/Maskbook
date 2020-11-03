@@ -6,7 +6,7 @@ import { BuyTokenDialog } from './UI/BuyTokenDialog'
 export const TransakPluginDefine: PluginConfig = {
     pluginName: 'Transak',
     identifier: PLUGIN_IDENTIFIER,
-    stage: PluginStage.Production,
+    stage: PluginStage.Development,
     scope: PluginScope.Public,
     PageComponent() {
         return (
