@@ -117,6 +117,16 @@ export const currentImportingBackup = createGlobalSettings<boolean>('importingBa
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
+export enum LaunchPage {
+    facebook = 'facebook',
+    twitter = 'twitter',
+    dashboard = 'dashboard',
+}
+export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard, {
+    primary: () => i18n.t('settings_launch_page'),
+    secondary: () => i18n.t('settings_launch_page_secondary'),
+})
+
 sideEffect.then(() => {
     // reset it to false after Maskbook startup
     currentImportingBackup.value = false
