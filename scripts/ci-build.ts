@@ -2,7 +2,7 @@ import git from '@nice-labs/git-rev'
 import { BUILD_PATH, run } from './utils'
 
 const branch = git.branchName()
-const types = ['base', 'chromium', 'firefox', 'gecko', 'iOS']
+const types = ['base', 'chromium', 'firefox', 'gecko', 'iOS', 'chromium-beta']
 
 console.log(`Branch: ${branch}`)
 

@@ -66,7 +66,7 @@ describe(`${READ_POST_STORY_URL}#Story:ReadPost(?br=wip)-BasicWorkflow`, () => {
 
                 // validate the payload
                 const textPayload = await snsPostPage.waitForFunction(
-                    `document.querySelector('${sns.postAffixingCanvasSelector}').shadowRoot.querySelector('[data-testid="text_payload"]')`,
+                    `document.querySelector('${sns.postAffixingCanvasSelector}').shadowRoot.querySelector('.post-inspector [data-testid="text_payload"]')`,
                 )
                 const content = await (textPayload as any).evaluate((e: HTMLElement) => e.textContent)
                 expect(content.includes(text) || content.includes('Maskbook does not find the post key.')).toBeTruthy()

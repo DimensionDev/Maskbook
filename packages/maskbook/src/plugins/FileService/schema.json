@@ -1,0 +1,41 @@
+{
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+        "type": {
+            "type": "string",
+            "enum": ["arweave"],
+            "title": "type"
+        },
+        "id": {
+            "type": "string",
+            "title": "id"
+        },
+        "name": {
+            "type": "string",
+            "title": "name"
+        },
+        "size": {
+            "type": "number",
+            "title": "size"
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "createdAt"
+        },
+        "key": {
+            "type": "string",
+            "title": "key"
+        },
+        "payloadTxID": {
+            "type": "string",
+            "title": "payloadTxID"
+        },
+        "landingTxID": {
+            "type": "string",
+            "title": "landingTxID"
+        }
+    },
+    "required": ["createdAt", "id", "landingTxID", "name", "payloadTxID", "size"]
+}

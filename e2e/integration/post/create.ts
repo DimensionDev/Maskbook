@@ -83,11 +83,16 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                 await snsFeedPage.waitFor(500)
 
                 // designates recipients
-                const defaultGroupChip = await snsFeedPage.waitForFunction(
-                    `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="_default_friends_group_"]')`,
+                const everyoneGroupChip = await snsFeedPage.waitForFunction(
+                    `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="_everyone_group_"]')`,
                 )
-                await (defaultGroupChip as any).click()
-                await snsFeedPage.waitFor(500)
+                const everyoneGroupChipChecked = await everyoneGroupChip
+                    .asElement()
+                    ?.evaluate((e) => /MuiChip-colorPrimary/.test(e.className))
+                if (!everyoneGroupChipChecked) {
+                    await (everyoneGroupChip as any).click()
+                    await snsFeedPage.waitFor(500)
+                }
 
                 // trun on/off image-based payload switch
                 const imageChip = await snsFeedPage.waitForFunction(

@@ -4,7 +4,7 @@
     // "incremental": true,                   /* Enable incremental compilation */
     "target": "ES2019" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */,
     "module": "ESNext" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */,
-    "lib": ["DOM", "DOM.Iterable", "ES2019"] /* Specify library files to be included in the compilation. */,
+    "lib": ["DOM", "DOM.Iterable", "ES2020"] /* Specify library files to be included in the compilation. */,
     "allowJs": true /* Allow javascript files to be compiled. */,
     // "checkJs": true,                       /* Report errors in .js files. */
     "jsx": "react" /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */,
@@ -45,7 +45,7 @@
     // "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
     // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     "rootDirs": [
-      "./src"
+      "./packages/maskbook/src"
     ] /* List of root folders whose combined content represents the structure of the project at runtime. */,
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
     // "types": [],                           /* Type declaration files to be included in compilation. */
@@ -68,12 +68,21 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "useDefineForClassFields": true
   },
-  "include": ["./src/", "./e2e/"],
+  "include": ["./packages/maskbook/src/", "./e2e/"],
   "ts-node": {
     "compilerOptions": {
-      "module": "CommonJS"
-    }
+      "module": "CommonJS",
+      "plugins": [
+        {
+          // Support import.meta syntax in commonjs
+          "transform": "@magic-works/commonjs-import.meta"
+        }
+      ]
+    },
+    "transpileOnly": true,
+    "compiler": "ttypescript"
   }
 }

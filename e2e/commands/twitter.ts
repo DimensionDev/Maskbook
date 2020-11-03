@@ -10,7 +10,7 @@ class Twitter implements SNS {
     // selectors
     composeButtonSelector = '' // no compose button for twitter
     composeImageSelector = '[data-testid="primaryColumn"] [data-testid="attachments"] img'
-    composeEditorSelector = '[data-testid="primaryColumn"] .DraftEditor-root [contenteditable]'
+    composeEditorSelector = '[data-testid="primaryColumn"] .DraftEditor-root [data-testid="tweetTextarea_0"]'
     profileSelector = '[data-testid="primaryColumn"]'
     bioTextareaSelector = 'textarea[name="description"]'
     commentInputSelector = '' // no comment form for twitter
@@ -18,7 +18,7 @@ class Twitter implements SNS {
     // mount point
     setupGuideSelector = 'body > script[nonce] ~ span'
     postDialogHintSelector = '[data-testid="primaryColumn"] [role="progressbar"] ~ span'
-    postDialogModalSelector = 'body > script[nonce] ~ div[aria-hidden="true"]'
+    postDialogModalSelector = 'body > script[nonce] ~ div'
     postAffixingCanvasSelector = '[role="article"] [data-testid="tweet"] + div > div:first-child ~ span'
     commentSelector = '' // no comment for twitter
     commentBoxSelector = '' // no comment form for twitter
@@ -56,10 +56,10 @@ class Twitter implements SNS {
 
         // logined
         if ((await page.evaluate(() => location.href)).includes('/settings/account')) {
-            const screenNameLink = await page.waitFor('[href="/settings/screen_name"]')
+            const accountSwitcher = await page.waitFor('[data-testid="SideNav_AccountSwitcher_Button"]')
 
             // user already login
-            if ((await screenNameLink.evaluate((e) => e.textContent))?.includes(this.username)) return
+            if ((await accountSwitcher.evaluate((e) => e.textContent))?.includes(this.username)) return
 
             // logout old account
             await this.logout(page)

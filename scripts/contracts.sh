@@ -6,8 +6,8 @@
 
 # self hosted contracts
 
-declare -a contract_names=("happy-red-packet" "bulk-checkout" "splitter" "balance-checker")
-declare -a contract_hosted=(true true true false)
+declare -a contract_names=("happy-red-packet" "bulk-checkout" "splitter" "balance-checker" "pair" "uniswap-v2-router" "multicall")
+declare -a contract_hosted=(true true true false false false false)
 declare size=${#contract_names[@]}
 
 for ((i=0; i < $size; i++));
@@ -23,20 +23,32 @@ do
     fi
 
     for f in ./contracts/$contract_name/*.abi
-    do 
+    do
         # generate typings
-        npx typechain $f --target=web3-v1 --outDir ./src/plugins/Wallet/contracts/$contract_name
+        npx typechain $f --target=web3-v1 --outDir ./packages/maskbook/src/contracts/$contract_name
 
         # copy abi to source folder
-        cp $f ./src/plugins/Wallet/contracts/$contract_name/"$(echo "${f##*/}" | sed s/abi/json/)"
+        cp $f ./packages/maskbook/src/contracts/$contract_name/"$(echo "${f##*/}" | sed s/abi/json/)"
 
         # rm duplicate type.d.ts
-        mv ./src/plugins/Wallet/contracts/$contract_name/types.d.ts ./src/plugins/Wallet/contracts/types.d.ts
+        mv ./packages/maskbook/src/contracts/$contract_name/types.d.ts ./packages/maskbook/src/contracts/types.d.ts
     done
 done
 
 # fix the import path of type.d.ts
-sed -i '' "s/.\/types/..\/types/" ./src/plugins/Wallet/contracts/**/*.d.ts
+sed -i '' "s/.\/types/..\/types/" ./packages/maskbook/src/contracts/**/*.d.ts
+
+# fix the type of PromiEvent
+# before: import PromiEvent from 'web/promiEvent'
+# after: import PromiEvent from 'promievent'
+sed -i '' "s/web3\/promiEvent/promievent/" ./packages/maskbook/src/contracts/types.d.ts
+
+# fix the type of send()
+# before: send(tx?: Tx): PromiEvent<T>
+# after: send(tx?: Tx, callback?: (error: Error, hash: string) => void): PromiEvent<TransactionReceipt>
+sed -i '' "s/import { EventLog }/import { EventLog, TransactionReceipt }/" ./packages/maskbook/src/contracts/types.d.ts
+sed -i '' "s/send(options?: EstimateGasOptions): PromiEvent<T>/send(options?: EstimateGasOptions, callback: (error: Error | null, hash: string) => void): PromiEvent<TransactionReceipt>/" ./packages/maskbook/src/contracts/types.d.ts
+sed -i '' "s/send(tx?: Tx): PromiEvent<T>/send(tx?: Tx, callback?: (error: Error | null, hash: string) => void): PromiEvent<TransactionReceipt>/" ./packages/maskbook/src/contracts/types.d.ts
 
 # format code
-npx prettier ./src/plugins/Wallet/contracts/* --write
+npx prettier ./packages/maskbook/src/contracts/* --write

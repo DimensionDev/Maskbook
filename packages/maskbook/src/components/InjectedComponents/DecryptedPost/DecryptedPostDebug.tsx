@@ -1,0 +1,60 @@
+import React, { useMemo } from 'react'
+import type { ProfileIdentifier } from '../../../database/type'
+import type {
+    SuccessDecryption,
+    FailureDecryption,
+} from '../../../extension/background-script/CryptoServices/decryptFrom'
+import { DebugList } from '../../DebugModeUI/DebugList'
+import { DebugModeUI_PostHashDialog } from '../../DebugModeUI/PostHashDialog'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { debugModeSetting } from '../../../settings/settings'
+import { GetContext } from '@dimensiondev/holoflows-kit'
+import { usePostInfoDetails } from '../../DataSource/usePostInfo'
+import { getActivatedUI } from '../../../social-network/ui'
+import { deconstructPayload, PayloadAlpha38 } from '../../../utils/type-transform/Payload'
+
+interface DebugDisplayProps {
+    whoAmI: ProfileIdentifier
+    debugHash: string
+    decryptedResult: SuccessDecryption | FailureDecryption | null
+}
+export function DecryptedPostDebug(props: Partial<DebugDisplayProps>) {
+    const postBy = usePostInfoDetails('postBy')
+    const postContent = usePostInfoDetails('postContent')
+    const payloadResult = useMemo(() => deconstructPayload(postContent, getActivatedUI().payloadDecoder), [postContent])
+    const setting = useValueRef(debugModeSetting)
+    const isDebugging = GetContext() === 'options' ? true : setting
+
+    const { debugHash, decryptedResult, whoAmI } = props
+    if (!isDebugging) return null
+    const postByMyself = <DebugModeUI_PostHashDialog network={postBy.network} post={postContent} />
+    if (payloadResult.err)
+        return (
+            <DebugList
+                items={[
+                    postBy.equals(whoAmI) ? postByMyself : (['Hash of this post', debugHash] as const),
+                    ['Payload Error', payloadResult.val.message],
+                ]}
+            />
+        )
+    const payload = payloadResult.val
+    const ownersAESKeyEncrypted = payload.version === -38 ? payload.AESKeyEncrypted : payload.ownersAESKeyEncrypted
+    return (
+        <DebugList
+            items={[
+                postBy.equals(whoAmI) ? postByMyself : (['Hash of this post', debugHash] as const),
+                [
+                    'Decrypt reason',
+                    decryptedResult && decryptedResult.type !== 'error' ? decryptedResult.through.join(',') : 'Unknown',
+                ],
+                ['Version', payload.version],
+                ['ownersAESKeyEncrypted', ownersAESKeyEncrypted],
+                ['IV', payload.iv],
+                ['EncryptedText', payload.encryptedText],
+                ['Signature', payload.signature],
+                ['sharedPublic (v38)', (payload as PayloadAlpha38).sharedPublic],
+                ['authorPublicKey (v38)', (payload as PayloadAlpha38).authorPublicKey],
+            ]}
+        />
+    )
+}

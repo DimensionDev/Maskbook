@@ -4,7 +4,7 @@ import path from 'path'
 import ts from 'typescript'
 import { run } from './utils'
 
-const SOURCE_PATH = path.join(__dirname, '..', 'src')
+const SOURCE_PATH = path.join(__dirname, '../packages/maskbook/src')
 const LOCALE_PATH = path.join(SOURCE_PATH, '_locales')
 
 const _locales = readdirSync(LOCALE_PATH)
@@ -68,9 +68,23 @@ function getUsedKeys(content: string) {
                 setFromVariableWrapper(node.expression.getText())(rootNode)
             }
         }
+        const checkCallExpression = (node: ts.LeftHandSideExpression | undefined): boolean => {
+            if (node === undefined) {
+                return false
+            } else if (ts.isIdentifier(node)) {
+                return node.text === 't'
+            } else if (ts.isPropertyAccessExpression(node)) {
+                return node.name.text === 't'
+            }
+            return false
+        }
         const visit: ts.Visitor = (node) => {
             if (ts.isIdentifier(node) && node.text === 't') {
-                const localeKey = closest(node, ts.isCallExpression)?.arguments[0]
+                const expression = closest(node, ts.isCallExpression)
+                if (!checkCallExpression(expression?.expression)) {
+                    return node
+                }
+                const localeKey = expression?.arguments[0]
                 if (localeKey === undefined) {
                     return node
                 } else if (ts.isConditionalExpression(localeKey)) {
@@ -90,26 +104,29 @@ function getUsedKeys(content: string) {
     return keys
 }
 
-async function findAllUnusedKeys() {
+async function findAllUsedKeys() {
     const usedKeys: string[] = []
-    const keys = _.keys(await readMessages('en'))
     for await (const file of walk(SOURCE_PATH)) {
         usedKeys.push(...getUsedKeys(await fs.readFile(file, 'utf-8')))
     }
-    return _.difference(keys, usedKeys)
+    return _.uniq(usedKeys)
+}
+
+async function findAllUnusedKeys() {
+    return _.difference(_.keys(await readMessages('en')), await findAllUsedKeys())
 }
 
 async function findAllUnsyncedLocales(locales = _.without(_locales, 'en')) {
     const keys = _.keys(await readMessages('en'))
-    const names: string[] = []
+    const record: Record<string, string[]> = {}
     for (const name of locales) {
         const nextKeys = _.keys(await readMessages(name))
         const diffKeys = _.difference(keys, nextKeys)
         if (diffKeys.length) {
-            names.push(name)
+            record[name] = diffKeys
         }
     }
-    return names
+    return record
 }
 
 async function removeAllUnusedKeys(keys: string[], locales = _locales) {
@@ -119,36 +136,75 @@ async function removeAllUnusedKeys(keys: string[], locales = _locales) {
     }
 }
 
+async function setMissingKeys(locales = _locales) {
+    const keys = await findAllUsedKeys()
+    for (const name of locales) {
+        const modifedMessages = await readMessages(name)
+        for (const key of keys) {
+            if (_.isNil(modifedMessages[key])) {
+                modifedMessages[key] = ''
+            }
+        }
+        await writeMessages(name, modifedMessages)
+    }
+}
+
 async function syncKey(locales = _.without(_locales, 'en')) {
     const baseMessages = await readMessages('en')
     const baseKeys = _.keys(baseMessages)
     for (const name of locales) {
         const nextMessages = await readMessages(name)
-        const emptyKeys = _.reduce(
-            _.difference(baseKeys, _.keys(nextMessages)),
-            (record, name) => {
-                record[name] = ''
-                return record
-            },
-            {} as Record<string, string>,
-        )
-        const modifedMessages = _.chain(nextMessages)
-            .assign(emptyKeys)
-            .toPairs()
-            .sortBy(([key]) => baseKeys.indexOf(key))
-            .fromPairs()
-            .value()
-        await writeMessages(name, modifedMessages)
+        for (const key of _.difference(baseKeys, _.keys(nextMessages))) {
+            nextMessages[key] = ''
+        }
+        await writeMessages(name, _.pick(nextMessages, baseKeys))
+    }
+}
+
+async function diagnosis() {
+    const unusedKeys = await findAllUnusedKeys()
+    if (unusedKeys.length) {
+        for (const locale of _locales) {
+            const filePath = `packages/maskbook/src/_locales/${locale}/messages.json`
+            console.log(
+                `::warning file=${filePath}::Run \`yarn locale-kit --remove-unused-keys\` to solve this problem`,
+            )
+            const messages = _.keys(await readMessages(locale))
+            for (const key of unusedKeys) {
+                const index = messages.indexOf(key)
+                if (index !== -1) {
+                    console.log(`::warning file=${filePath},line=${index + 2}::Please remove the line`)
+                }
+            }
+        }
+    }
+    const unsyncedLocales = await findAllUnsyncedLocales()
+    if (!_.isEmpty(unsyncedLocales)) {
+        for (const [locale, names] of _.toPairs(unsyncedLocales)) {
+            const filePath = `packages/maskbook/src/_locales/${locale}/messages.json`
+            console.log(`::warning file=${filePath}::Run \`yarn locale-kit --sync-key\` to solve this problem`)
+            for (const name of names) {
+                console.log(`::warning file=${filePath}::The ${JSON.stringify(name)} is unsynced`)
+            }
+        }
     }
 }
 
 async function main() {
     const unusedKeys = await findAllUnusedKeys()
-    console.error('Scanned', unusedKeys.length, 'unused keys')
-    console.error('Unsynced', await findAllUnsyncedLocales(), 'locales')
+    console.error(
+        'Scanned',
+        unusedKeys.length,
+        'unused keys, run `yarn locale-kit --remove-unused-keys` to remove them.',
+    )
+    console.error('Unsynced', _.keys(await findAllUnsyncedLocales()), 'locales')
     if (process.argv.includes('--remove-unused-keys')) {
         await removeAllUnusedKeys(unusedKeys)
         console.log('Unused keys removed')
+    }
+    if (process.argv.includes('--set-missing-keys')) {
+        await setMissingKeys()
+        console.log('Set missing keys')
     }
     if (process.argv.includes('--sync-key')) {
         await syncKey()
@@ -156,6 +212,10 @@ async function main() {
     }
 }
 
-main().then(() => {
-    run(undefined, 'git', 'add', 'src/_locales')
-})
+if (process.env.CI) {
+    diagnosis()
+} else {
+    main().then(() => {
+        run(undefined, 'git', 'add', 'packages/maskbook/src/_locales')
+    })
+}
