@@ -6,10 +6,13 @@ import { useTokensDetailedDebank } from './useTokensDetailedDebank'
 import { useTokensDetailed } from './useTokensDetailed'
 import { useTokensDetailedMerged } from './useTokensDetailedMerged'
 import type { Token } from '../types'
+import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
+import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
 
 export function useTokensDetailedCallback(tokens: Token[]) {
     const chainId = useChainId()
     const [address, setAddress] = useState('')
+    const wallet = useWallet(address)
     const chainDetailedTokens = useTokensDetailed(address, [createEetherToken(chainId), ...tokens])
     const debankDetailedTokens = useTokensDetailedDebank(address)
 
@@ -22,5 +25,8 @@ export function useTokensDetailedCallback(tokens: Token[]) {
         setAddress(address)
     }, [])
 
-    return [detailedTokens, detailedTokensCallback] as const
+    return [
+        detailedTokens.filter((x) => !wallet?.erc20_token_blacklist.has(formatChecksumAddress(x.token.address))),
+        detailedTokensCallback,
+    ] as const
 }
