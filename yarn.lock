@@ -11641,10 +11641,10 @@ fuse.js@^3.4.6:
   resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-3.4.6.tgz#545c3411fed88bf2e27c457cab6e73e7af697a45"
   integrity sha512-H6aJY4UpLFwxj1+5nAvufom5b2BT2v45P1MkPvdGIK8fWjQx/7o6tTT1+ALV0yawQvbmvCF0ufl2et8eJ7v7Cg==
 
-fuse.js@^6.4.2:
-  version "6.4.2"
-  resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-6.4.2.tgz#bd1400164de6562c077baeaa54ed642b4c2fca62"
-  integrity sha512-jyy+zOtV96ylMqOGpVjAWQfvEkfTtuJRjsOC6pjReeju8SoDZ2vgFF6eur0a8fxsVwwcpdt3ieaQQeLdkqXH1Q==
+fuse.js@^6.4.3:
+  version "6.4.3"
+  resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-6.4.3.tgz#aadd6ac34aab5b1d6e6c60462fcb4d1c3f53bb01"
+  integrity sha512-JNgngolukIrqwayWnvy6NLH63hmwKPhm63o0uyBg51jPD0j09IvAzlV1rTXfAsgxpghI7khAo6Mv+EmvjDWXig==
 
 fx-runner@1.0.13:
   version "1.0.13"
