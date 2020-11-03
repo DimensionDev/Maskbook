@@ -25,6 +25,10 @@ export function development(manifest: Manifest) {
     manifest.name = 'Maskbook (development)'
     // required by Webpack HMR
     manifest.web_accessible_resources.push('*.json', '*.js')
+    // 8097 is react devtools
+    // connect-src is used by firefox
+    manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; connect-src * https://localhost:8080/ http://localhost:8097; object-src 'self';`
+    manifest.permissions.push('https://localhost:8080/*', 'http://localhost:8087/*')
     manifest.key = // ID：jkoeaghipilijlahjplgbfiocjhldnap
         'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoz51rhO1w+wD' +
         '0EKZJEFJaSMkIcIj0qRadfi0tqcl5nbpuJAsafvLe3MaTbW9LhbixTg9' +

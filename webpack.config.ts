@@ -41,9 +41,9 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
     const enableHMR = env === 'development' && !Boolean(process.env.NO_HMR)
 
     /**
-     * On Firefox, CSP settings does not work. On iOS, eval is async.
+     * On iOS, eval is async.
      */
-    const sourceMapKind: Configuration['devtool'] = target.Safari || target.Firefox ? false : 'eval-source-map'
+    const sourceMapKind: Configuration['devtool'] = target.Safari ? false : 'eval-source-map'
     const config: Configuration = {
         name: 'main',
         mode: env,
@@ -226,6 +226,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
         const dist = env === 'production' ? src('./build') : src('./dist')
         if (env === 'production') return []
         let args: ConstructorParameters<typeof WebExtensionHotLoadPlugin>[0] | undefined = undefined
+        if (target.FirefoxDesktop && enableHMR) return [] // stuck on 99% [0] after emitting cause HMR not working
         if (target.FirefoxDesktop)
             args = {
                 sourceDir: dist,
@@ -327,6 +328,7 @@ function getBuildPresets(argv: any) {
         ReproducibleBuild: !!argv['reproducible-build'],
     }
 }
+export type Target = ReturnType<typeof getBuildPresets>
 /** Get git info */
 function getGitInfo() {
     if (git.isRepository())
