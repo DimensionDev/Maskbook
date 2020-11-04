@@ -1,13 +1,11 @@
-import React from 'react'
-import { Button, Typography, Box, IconButton, MenuItem } from '@material-ui/core'
+import React, { useCallback, useState } from 'react'
+import { Button, Box, IconButton, MenuItem, Tabs, Tab } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-import { truncate } from 'lodash-es'
 import AddIcon from '@material-ui/icons/Add'
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import HistoryIcon from '@material-ui/icons/History'
 import { useModal } from '../DashboardDialogs/Base'
-import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import {
     DashboardWalletAddTokenDialog,
     DashboardWalletHistoryDialog,
@@ -27,6 +25,7 @@ import { WalletAssetsTable } from './WalletAssetsTable'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransakMessageCenter } from '../../../plugins/Transak/messages'
 import { Flags } from '../../../utils/flags'
+import { ElectionTokenAlbum } from '../../../plugins/Election2020/UI/ElectionTokenAlbum'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -34,12 +33,23 @@ const useStyles = makeStyles((theme) =>
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
+            '&> *': {
+                flex: '0 0 auto',
+                overflow: 'auto',
+            },
         },
-        title: {
+        header: {
+            borderBottom: `1px solid ${theme.palette.divider}`,
+        },
+        content: {
             flex: 1,
         },
-        box: {
-            borderBottom: `1px solid ${theme.palette.divider}`,
+        footer: {
+            margin: theme.spacing(1),
+        },
+        title: {},
+        tab: {
+            flex: 1,
         },
         addButton: {
             color: theme.palette.primary.main,
@@ -49,10 +59,6 @@ const useStyles = makeStyles((theme) =>
         },
         assetsTable: {
             flex: 1,
-        },
-        footer: {
-            flex: 0,
-            margin: theme.spacing(1),
         },
     }),
 )
@@ -93,6 +99,16 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
     const [, setBuyDialogOpen] = useRemoteControlledDialog(TransakMessageCenter, 'buyTokenDialogUpdated')
     //#endregion
 
+    //#region tab
+    const [tabIndex, setTabIndex] = useState(0)
+    const onTabChange = useCallback(
+        (_, newTabIndex: number) => {
+            setTabIndex(newTabIndex)
+        },
+        [tabIndex],
+    )
+    //#endregion
+
     return (
         <div className={classes.root} ref={ref}>
             <Box
@@ -102,19 +118,27 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                 pr={2}
                 display="flex"
                 alignItems="center"
-                className={xsMatched ? classes.box : ''}>
-                <Typography className={classes.title} variant="h5" color="textPrimary">
-                    {wallet.name ? truncate(wallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN }) : wallet.address}
-                </Typography>
+                className={xsMatched ? classes.header : ''}>
+                <Tabs
+                    className={classes.tab}
+                    value={tabIndex}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    onChange={onTabChange}>
+                    <Tab label="Token"></Tab>
+                    <Tab label="NFT"></Tab>
+                </Tabs>
                 {!xsMatched ? (
                     <Box className={classes.footer} display="flex" alignItems="center" justifyContent="flex-end">
-                        <Button
-                            className={classes.addButton}
-                            variant="text"
-                            onClick={() => openAddToken({ wallet })}
-                            startIcon={<AddIcon />}>
-                            {t('add_token')}
-                        </Button>
+                        {tabIndex === 0 ? (
+                            <Button
+                                className={classes.addButton}
+                                variant="text"
+                                onClick={() => openAddToken({ wallet })}
+                                startIcon={<AddIcon />}>
+                                {t('add_token')}
+                            </Button>
+                        ) : null}
                         {Flags.transak_enabled ? (
                             <Button
                                 onClick={() => {
@@ -134,11 +158,18 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                 </IconButton>
                 {menu}
             </Box>
-            <WalletAssetsTable
-                classes={{ container: classes.assetsTable }}
-                wallet={wallet}
-                detailedTokens={detailedTokens}
-            />
+
+            <Box className={classes.content}>
+                {tabIndex === 0 ? (
+                    <WalletAssetsTable
+                        classes={{ container: classes.assetsTable }}
+                        wallet={wallet}
+                        detailedTokens={detailedTokens}
+                    />
+                ) : null}
+                {Flags.election2020_enabled && tabIndex === 1 ? <ElectionTokenAlbum /> : null}
+            </Box>
+
             {!xsMatched ? (
                 <Box className={classes.footer} display="flex" alignItems="center">
                     <Button

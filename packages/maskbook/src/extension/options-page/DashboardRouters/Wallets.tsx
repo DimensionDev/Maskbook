@@ -1,12 +1,12 @@
 import React, { useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, IconButton } from '@material-ui/core'
+import { Button, IconButton, Typography } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import AddIcon from '@material-ui/icons/Add'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import RestoreIcon from '@material-ui/icons/Restore'
-import { cloneDeep, merge } from 'lodash-es'
+import { cloneDeep, merge, truncate } from 'lodash-es'
 
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
@@ -27,6 +27,7 @@ import { useTokens } from '../../../plugins/Wallet/hooks/useToken'
 import { useTokensDetailedCallback } from '../../../web3/hooks/useTokensDetailedCallback'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
+import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 
 //#region theme
 const walletsTheme = (theme: Theme) =>
@@ -62,6 +63,9 @@ const useStyles = makeStyles((theme) =>
             height: '100%',
         },
         header: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
             padding: theme.spacing(3, 2, 0, 2),
         },
         content: {
@@ -76,6 +80,7 @@ const useStyles = makeStyles((theme) =>
             flexDirection: 'column',
             height: '100%',
         },
+        title: {},
     }),
 )
 
@@ -181,9 +186,14 @@ export default function DashboardWalletsRouter() {
             <ThemeProvider theme={walletsTheme}>
                 <div className={classes.root}>
                     <div className={classes.header}>
-                        <EthereumStatusBar
-                            BoxProps={{ justifyContent: 'flex-end', flexWrap: 'reverse', flexDirection: 'row-reverse' }}
-                        />
+                        {selectedWallet ? (
+                            <Typography className={classes.title} variant="h5" color="textPrimary">
+                                {selectedWallet.name
+                                    ? truncate(selectedWallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN })
+                                    : selectedWallet.address}
+                            </Typography>
+                        ) : null}
+                        <EthereumStatusBar BoxProps={{ justifyContent: 'flex-end' }} />
                     </div>
                     <div className={classes.content}>
                         <div className={classes.wrapper}>

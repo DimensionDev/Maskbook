@@ -1,7 +1,7 @@
 import React from 'react'
 import Tilt from 'react-tilt'
-import { Card, CardContent, createStyles, makeStyles, Typography } from '@material-ui/core'
-import { CANDIDATE_TYPE, ElectionToken, US_PARTY_TYPE } from '../types'
+import { Card, createStyles, makeStyles } from '@material-ui/core'
+import type { ElectionToken } from '../types'
 import { Image } from '../../../components/shared/Image'
 
 const useStyles = makeStyles((theme) =>
@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) =>
         root: {
             borderRadius: 4,
             position: 'relative',
+            backgroundColor: theme.palette.background.paper,
         },
         content: {},
         identifier: {
@@ -27,8 +28,6 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface ElectionCardProps {
-    candidateType: CANDIDATE_TYPE
-    candidatePartyType: US_PARTY_TYPE
     token: ElectionToken
 }
 
@@ -42,15 +41,8 @@ export function ElectionCard(props: ElectionCardProps) {
                 style={{
                     width: 160,
                     height: 220,
-                    backgroundImage:
-                        props.candidatePartyType === US_PARTY_TYPE.BLUE
-                            ? 'linear-gradient(180deg, #74B4FF 6%, #0947E5 84%)'
-                            : 'linear-gradient(180deg, #D81A1A 6%, #E50909 84%)',
                 }}>
                 <Image component="img" width={160} height={220} src={props.token.tokenImageURL} />
-                <CardContent className={classes.content}>
-                    <Typography>{props.candidatePartyType === US_PARTY_TYPE.BLUE ? 'BIDEN' : 'TRUMP'}</Typography>
-                </CardContent>
             </Card>
         </Tilt>
     )
