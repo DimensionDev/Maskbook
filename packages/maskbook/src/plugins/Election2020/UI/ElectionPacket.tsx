@@ -29,7 +29,6 @@ import { WalletMessageCenter } from '../../Wallet/messages'
 import { useElectionTokens } from '../hooks/useElectionTokens'
 import { useElectionTokensOfOwner } from '../hooks/useElectionTokensOfOwner'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
-import { getActivatedUI } from '../../../social-network/ui'
 import { useAvailability } from '../hooks/useAvailability'
 import { useERC721Token } from '../../../web3/hooks/useERC721Token'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -282,11 +281,7 @@ export function ElectionPacket(props: ElectionPacketProps) {
                         }}>
                         {(tokensOfOwner.length ? tokensOfOwner : tokens).map((x, i) => (
                             <section className={classes.card} key={i}>
-                                <ElectionCard
-                                    candidateType={payload.winner}
-                                    candidatePartyType={resolveCandidatePartyType(payload.winner)}
-                                    token={x}
-                                />
+                                <ElectionCard token={x} />
                             </section>
                         ))}
                     </div>
