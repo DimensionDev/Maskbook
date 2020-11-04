@@ -281,11 +281,7 @@ export function ElectionPacket(props: ElectionPacketProps) {
                         }}>
                         {(tokensOfOwner.length ? tokensOfOwner : tokens).map((x, i) => (
                             <section className={classes.card} key={i}>
-                                <ElectionCard
-                                    candidateType={payload.winner}
-                                    candidatePartyType={resolveCandidatePartyType(payload.winner)}
-                                    token={x}
-                                />
+                                <ElectionCard token={x} />
                             </section>
                         ))}
                     </div>
