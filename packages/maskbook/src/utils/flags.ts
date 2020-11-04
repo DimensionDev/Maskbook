@@ -28,7 +28,7 @@ export const Flags = {
     // TODO: document why it enabled on app
     support_eth_network_switch: process.env.architecture === 'app' || betaOrInsiderOnly,
     //#region Experimental features
-    transak_enabled: webOnly,
+    transak_enabled: false,
     trader_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
     poll_enabled: webOnly,

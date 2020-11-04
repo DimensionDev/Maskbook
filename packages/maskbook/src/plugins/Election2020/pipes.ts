@@ -6,6 +6,11 @@ export function resolveCandidateName(candidateType: CANDIDATE_TYPE) {
     return 'Joe Biden'
 }
 
+export function resolveCandidateBriefName(candidateType: CANDIDATE_TYPE) {
+    if (candidateType === CANDIDATE_TYPE.TRUMP) return 'Trump'
+    return 'Biden'
+}
+
 export function resolveCandiateType(candidateType: CANDIDATE_TYPE) {
     if (candidateType === CANDIDATE_TYPE.TRUMP) return 0
     return 1

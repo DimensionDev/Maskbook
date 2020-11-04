@@ -17,14 +17,14 @@ export function useTransaction(hash: string) {
 }
 
 export function useTransactionReceipt(hash: string) {
-    const [tx, setTx] = useState<TransactionReceipt | null>(null)
+    const [receipt, setReceipt] = useState<TransactionReceipt | null>(null)
     const account = useAccount()
     const chainId = useChainId()
     const blockNumber = useBlockNumber(chainId)
     useAsync(async () => {
-        if (tx) return
         if (!hash) return
-        setTx(await Services.Ethereum.getTransactionReceipt(hash, await Services.Ethereum.getChainId(account)))
-    }, [account, hash, tx, blockNumber])
-    return tx
+        if (receipt?.transactionHash === hash) return
+        setReceipt(await Services.Ethereum.getTransactionReceipt(hash, await Services.Ethereum.getChainId(account)))
+    }, [account, hash, receipt, blockNumber])
+    return receipt
 }

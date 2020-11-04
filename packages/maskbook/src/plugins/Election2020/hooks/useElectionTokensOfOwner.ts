@@ -1,4 +1,4 @@
-import type { ElectionToken, US_STATE_TYPE } from '../types'
+import type { US_STATE_TYPE } from '../types'
 import ELECTION_STATE_VS_VOTES from '../election.json'
 import { useERC721TokenIdsOfOwner } from '../../../web3/hooks/useERC721TokensOfOwner'
 import type { ERC721Token } from '../../../web3/types'

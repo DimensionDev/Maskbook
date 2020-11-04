@@ -1,7 +1,7 @@
 import { Token, EthereumTokenType } from '../types'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
-import { useAsync } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import Services from '../../extension/service'
 import { useChainId } from './useChainState'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
@@ -15,7 +15,7 @@ export function useTokenBalance(token?: PartialRequired<Token, 'address'>) {
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(token?.address ?? '')
     const erc721Contract = useERC721TokenContract(token?.address ?? '')
-    return useAsync(async () => {
+    return useAsyncRetry(async () => {
         if (!account) return '0'
         if (!token?.address) return '0'
         switch (token.type) {
