@@ -3,6 +3,7 @@ import Services from '../../../extension/service'
 import { useTransactionReceipt } from '../../../web3/hooks/useTransaction'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useElectionTokenContract } from '../contracts/useElectionTokenContract'
+import { resolveStateType } from '../pipes'
 import type { CANDIDATE_TYPE, US_STATE_TYPE } from '../types'
 
 export function useMintCallback(from: string, stateType: US_STATE_TYPE, candidateType: CANDIDATE_TYPE) {
@@ -23,7 +24,17 @@ export function useMintCallback(from: string, stateType: US_STATE_TYPE, candidat
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        // step 1: mint by server
+        // step 1: check remaining
+        const remaining = await electionTokenContract.methods.check_availability(resolveStateType(stateType)).call()
+        if (Number.parseInt(remaining || '0', 10) <= 0) {
+            setMintState({
+                type: TransactionStateType.FAILED,
+                error: new Error('There is none NTF token left.'),
+            })
+            return
+        }
+
+        // step 2: mint by server
         try {
             const { mint_transaction_hash } = await Services.Plugin.invokePlugin(
                 'maskbook.election2020',
