@@ -19,7 +19,7 @@ import FireworksImage from '../assets/Fireworks'
 import { EthereumTokenType } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ELECTION_2020_CONSTANTS } from '../constants'
-import { resolveCandidateName, resolveCandidatePartyType, resolveCandidateSNSAccount, resolveStateName } from '../pipes'
+import { resolveCandidateName, resolveCandidateBriefName, resolveCandidatePartyType, resolveStateName } from '../pipes'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { resolveChainId, resolveChainName, resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
 import { useMintCallback } from '../hooks/useMintCallback'
@@ -183,10 +183,9 @@ export function ElectionPacket(props: ElectionPacketProps) {
     const postLink = usePostLink()
     const shareLink = useShareLink(
         [
-            `I just received an election special @${resolveCandidateSNSAccount(
-                getActivatedUI().networkIdentifier,
-                payload.winner,
-            )} NFT from @${payload.sender.name}. Follow @realmaskbook (mask.io) to get your first NFT on Twitter.`,
+            `I just received an election special ${resolveCandidateBriefName(payload.winner)} NFT from @${
+                payload.sender.name
+            }. Follow @realmaskbook (mask.io) to get your first NFT on Twitter.`,
             '#mask_io #twitternft',
             postLink,
         ].join('\n'),
