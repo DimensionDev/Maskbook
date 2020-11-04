@@ -1,8 +1,12 @@
 import React from 'react'
 import Tilt from 'react-tilt'
-import { Card, createStyles, makeStyles } from '@material-ui/core'
+import { Card, createStyles, Link, makeStyles } from '@material-ui/core'
 import type { ElectionToken } from '../types'
 import { Image } from '../../../components/shared/Image'
+import { resolveLinkOnEtherscan } from '../../../web3/pipes'
+import { useChainId } from '../../../web3/hooks/useChainState'
+import { useConstant } from '../../../web3/hooks/useConstant'
+import { ELECTION_2020_CONSTANTS } from '../constants'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -29,12 +33,15 @@ const useStyles = makeStyles((theme) =>
 
 export interface ElectionCardProps {
     token: ElectionToken
+    canViewOnEtherscan?: boolean
 }
 
 export function ElectionCard(props: ElectionCardProps) {
     const classes = useStyles(props)
+    const chainId = useChainId()
+    const ELECTION_TOKEN_ADDRESS = useConstant(ELECTION_2020_CONSTANTS, 'ELECTION_TOKEN_ADDRESS')
 
-    return (
+    const CardComponent = (
         <Tilt options={{ scale: 1, max: 30, glare: true, 'max-glare': 1, speed: 1000 }}>
             <Card
                 className={classes.root}
@@ -45,5 +52,15 @@ export function ElectionCard(props: ElectionCardProps) {
                 <Image component="img" width={160} height={220} src={props.token.tokenImageURL} />
             </Card>
         </Tilt>
+    )
+    return props.canViewOnEtherscan && props.token.tokenId ? (
+        <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            href={`${resolveLinkOnEtherscan(chainId)}/token/${ELECTION_TOKEN_ADDRESS}?a=${props.token.tokenId}`}>
+            {CardComponent}
+        </Link>
+    ) : (
+        CardComponent
     )
 }

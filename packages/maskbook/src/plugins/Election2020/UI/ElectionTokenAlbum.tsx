@@ -37,17 +37,12 @@ export interface ElectionTokenAlbumProps {}
 export function ElectionTokenAlbum(props: ElectionTokenAlbumProps) {
     const classes = useStyles(props)
 
-    // context
-    const account = useAccount()
-    const chainId = useChainId()
-
     // fetch the NFT token
     const ELECTION_TOKEN_ADDRESS = useConstant(ELECTION_2020_CONSTANTS, 'ELECTION_TOKEN_ADDRESS')
     const electionToken = useERC721Token({
         type: EthereumTokenType.ERC721,
         address: ELECTION_TOKEN_ADDRESS,
     })
-
     const tokens = useAllElectionTokensOfOwner(electionToken)
 
     if (!tokens.value.length) return null
@@ -56,7 +51,7 @@ export function ElectionTokenAlbum(props: ElectionTokenAlbumProps) {
             <div className={classes.content}>
                 {tokens.value.map((token) => (
                     <section className={classes.tile}>
-                        <ElectionCard token={token} />
+                        <ElectionCard token={token} canViewOnEtherscan />
                     </section>
                 ))}
             </div>
