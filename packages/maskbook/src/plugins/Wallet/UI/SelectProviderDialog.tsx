@@ -52,10 +52,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const history = useHistory()
 
     //#region remote controlled dialog logic
-    const [open, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
-        WalletMessageCenter,
-        'selectProviderDialogUpdated',
-    )
+    const [open, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
     const onClose = useCallback(() => {
         setOpen({
             open: false,
@@ -64,10 +61,10 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     //#endregion
 
     //#region wallet connect QR code dialog
-    const [_, setWalletConnectDialogOpen] = useRemoteControlledDialog<
-        MaskbookWalletMessages,
-        'walletConnectQRCodeDialogUpdated'
-    >(WalletMessageCenter, 'walletConnectQRCodeDialogUpdated')
+    const [_, setWalletConnectDialogOpen] = useRemoteControlledDialog(
+        WalletMessageCenter,
+        'walletConnectQRCodeDialogUpdated',
+    )
     //#endregion
 
     // render in dashboard

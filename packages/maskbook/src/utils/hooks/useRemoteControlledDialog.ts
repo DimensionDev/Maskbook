@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { v4 as uuid } from 'uuid'
 import type { BatchedMessageCenter } from '../messages'
 import { TAB_ID } from '../../extension/tab'
@@ -43,11 +43,16 @@ export function useRemoteControlledDialog<T, N extends keyof T>(
             onUpdateByRemote,
         ],
     )
+
+    const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
     const onUpdateByLocal = useCallback(
         (ev: T[N]) => {
             const ev_ = (ev as unknown) as RemoteControlledDialogEvent
             setOpen(ev_.open)
-            setTimeout(() => {
+
+            const timer_ = timer.current
+            if (timer_ !== null) clearTimeout(timer_)
+            timer.current = setTimeout(() => {
                 MC.emit(name, ({
                     tabId: tabType === 'self' ? TAB_ID : lastActivatedTabId,
                     hookId: HOOK_ID,

@@ -81,5 +81,11 @@ export function useClaimCallback(from: string, id?: string, password?: string) {
         })
     }, [id, password, from, redPacketContract])
 
-    return [claimState, claimCallback] as const
+    const resetCallback = useCallback(() => {
+        setClaimState({
+            type: TransactionStateType.UNKNOWN,
+        })
+    }, [])
+
+    return [claimState, claimCallback, resetCallback] as const
 }

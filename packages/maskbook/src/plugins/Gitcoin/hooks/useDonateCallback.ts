@@ -97,5 +97,11 @@ export function useDonateCallback(address: string, amount: string, token: Token)
         })
     }, [address, account, amount, token, donations])
 
-    return [donateState, donateCallback] as const
+    const resetCallback = useCallback(() => {
+        setDonateState({
+            type: TransactionStateType.UNKNOWN,
+        })
+    }, [])
+
+    return [donateState, donateCallback, resetCallback] as const
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import {
     makeStyles,
     Theme,
@@ -18,6 +18,8 @@ import { useChainId } from '../hooks/useChainState'
 import { TransactionState, TransactionStateType } from '../hooks/useTransactionState'
 import { resolveTransactionLinkOnEtherscan } from '../pipes'
 import { InjectedDialog } from '../../components/shared/InjectedDialog'
+import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
+import { WalletMessageCenter } from '../../plugins/Wallet/messages'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,20 +41,40 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-interface TransactionDialogUIProps extends withClasses<never> {
-    open: boolean
-    state: TransactionState
-    summary: React.ReactNode
-    onClose?: () => void
-}
+interface TransactionDialogUIProps extends withClasses<never> {}
 
 function TransactionDialogUI(props: TransactionDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const { state, summary, open, onClose } = props
 
     const chainId = useChainId()
 
+    //#region remote controlled dialog
+    const [state, setState] = useState<TransactionState | null>(null)
+    const [shareLink, setShareLink] = useState('')
+    const [summary, setSummary] = useState('')
+    const [open, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'transactionDialogUpdated', (ev) => {
+        if (ev.open) {
+            setState(ev.state)
+            setSummary(ev.summary ?? '')
+            setShareLink(ev.shareLink ?? '')
+        } else {
+            setSummary('')
+            setShareLink('')
+        }
+    })
+    const onShare = useCallback(() => {
+        if (shareLink) window.open(shareLink, '_blank', 'noopener noreferrer')
+        onClose()
+    }, [shareLink])
+    const onClose = useCallback(() => {
+        setOpen({
+            open: false,
+        })
+    }, [state])
+    //#endregion
+
+    if (!state) return null
     return (
         <>
             <InjectedDialog open={open} onExit={onClose} title="Transaction">
@@ -61,7 +83,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         <>
                             <CircularProgress size={64} color="primary" />
                             <Typography className={classes.primary} color="textPrimary" variant="subtitle1">
-                                Waiting For Confirmation
+                                {t('plugin_wallet_transaction_wait_for_confirmation')}
                             </Typography>
                             <Typography className={classes.secondary} color="textSecondary">
                                 {summary}
@@ -72,7 +94,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         <>
                             <DoneIcon className={classes.icon} />
                             <Typography className={classes.primary} color="textPrimary">
-                                Your transaction was submitted!
+                                {t('plugin_wallet_transaction_submitted')}
                             </Typography>
                             <Typography>
                                 <Link
@@ -80,7 +102,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                                     href={resolveTransactionLinkOnEtherscan(chainId, state.hash)}
                                     target="_blank"
                                     rel="noopener noreferrer">
-                                    View on Etherscan
+                                    {t('plugin_wallet_view_on_etherscan')}
                                 </Link>
                             </Typography>
                         </>
@@ -89,7 +111,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         <>
                             <DoneIcon className={classes.icon} />
                             <Typography className={classes.primary} color="textPrimary">
-                                Your transaction was confirmed!
+                                {t('plugin_wallet_transaction_confirmed')}
                             </Typography>
                             <Typography>
                                 <Link
@@ -97,7 +119,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                                     href={resolveTransactionLinkOnEtherscan(chainId, state.receipt.transactionHash)}
                                     target="_blank"
                                     rel="noopener noreferrer">
-                                    View on Etherscan
+                                    {t('plugin_wallet_view_on_etherscan')}
                                 </Link>
                             </Typography>
                         </>
@@ -107,7 +129,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                             <WarningIcon className={classes.icon} />
                             <Typography className={classes.primary} color="textPrimary">
                                 {state.error.message.includes('User denied transaction signature.')
-                                    ? 'Transaction was rejected!'
+                                    ? t('plugin_wallet_transaction_rejected')
                                     : state.error.message}
                             </Typography>
                         </>
@@ -116,8 +138,13 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                 {state.type !== TransactionStateType.UNKNOWN &&
                 state.type !== TransactionStateType.WAIT_FOR_CONFIRMING ? (
                     <DialogActions>
-                        <Button color="primary" size="large" variant="contained" fullWidth onClick={onClose}>
-                            {state.type === TransactionStateType.FAILED ? 'Dismiss' : 'Close'}
+                        <Button
+                            color="primary"
+                            size="large"
+                            variant="contained"
+                            fullWidth
+                            onClick={state.type === TransactionStateType.FAILED || !shareLink ? onClose : onShare}>
+                            {state.type === TransactionStateType.FAILED || !shareLink ? t('dismiss') : t('share')}
                         </Button>
                     </DialogActions>
                 ) : null}

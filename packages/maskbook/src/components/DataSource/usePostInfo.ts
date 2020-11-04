@@ -4,6 +4,7 @@ import { ValueRef } from '@dimensiondev/holoflows-kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { ObservableMap, ObservableSet } from '../../utils/ObservableMapSet'
 import { useObservableValues } from '../../utils/hooks/useObservableMapSet'
+import { getActivatedUI } from '../../social-network/ui'
 
 export const PostInfoContext = createContext(emptyPostInfo)
 export function usePostInfo() {
@@ -14,6 +15,16 @@ type ValidKeys = {
         ? key
         : never
 }[keyof PostInfo]
+
+export function usePostLink() {
+    const ui = getActivatedUI()
+    const postID = usePostInfoDetails('postID')
+    const postIdentifier = usePostInfoDetails('postIdentifier')
+    if (!postID || !postIdentifier) return ''
+    return ui.internalName === 'twitter'
+        ? `https://twitter.com/${postIdentifier.identifier.userId}/status/${postID}`
+        : ''
+}
 
 export function usePostInfoDetails<K extends ValidKeys>(
     key: K,

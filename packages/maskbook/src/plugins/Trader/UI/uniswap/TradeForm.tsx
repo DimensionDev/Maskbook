@@ -102,10 +102,7 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region remote controlled select provider dialog
-    const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
-        WalletMessageCenter,
-        'selectProviderDialogUpdated',
-    )
+    const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
     const onConnect = useCallback(() => {
         setOpen({
             open: true,

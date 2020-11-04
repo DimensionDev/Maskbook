@@ -118,5 +118,11 @@ export function useSwapCallback(
         })
     }, [swapParameters, routerV2Contract])
 
-    return [swapState, swapCallback] as const
+    const resetCallback = useCallback(() => {
+        setSwapState({
+            type: TransactionStateType.UNKNOWN,
+        })
+    }, [])
+
+    return [swapState, swapCallback, resetCallback] as const
 }
