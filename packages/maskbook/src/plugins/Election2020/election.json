@@ -50,5 +50,5 @@
     { "state_type": 48, "state_id": "WV", "state_name": "West Virginia", "votes": 5 },
     { "state_type": 49, "state_id": "WI", "state_name": "Wisconsin", "votes": 10 },
     { "state_type": 50, "state_id": "WY", "state_name": "Wyoming", "votes": 3 },
-    { "state_type": 51, "state_id": "ZONE_51", "state_name": "Zone 51", "votes": 1 }
+    { "state_type": 51, "state_id": "ZONE_51", "state_name": "Zone 51", "votes": 51 }
 ]

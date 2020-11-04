@@ -52,11 +52,17 @@ export function useMintCallback(from: string, stateType: US_STATE_TYPE, candidat
 
     useEffect(() => {
         if (!receipt) return
-        setMintState({
-            type: TransactionStateType.CONFIRMED,
-            no: 0,
-            receipt,
-        })
+        if (receipt.status)
+            setMintState({
+                type: TransactionStateType.CONFIRMED,
+                no: 0,
+                receipt,
+            })
+        else
+            setMintState({
+                type: TransactionStateType.FAILED,
+                error: new Error('The contract execution was not successful, check your transaction.'),
+            })
     }, [receipt])
     //#endregion
 

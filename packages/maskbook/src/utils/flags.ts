@@ -28,12 +28,12 @@ export const Flags = {
     // TODO: document why it enabled on app
     support_eth_network_switch: process.env.architecture === 'app' || betaOrInsiderOnly,
     //#region Experimental features
-    transak_enabled: webOnly,
+    transak_enabled: false,
     trader_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
     poll_enabled: webOnly,
     election2020_enabled: webOnly,
-    election2020_composition_dialog_enabled: process.env.build === 'beta' || process.env.NODE_ENV === 'development',
+    election2020_composition_dialog_enabled: betaOrInsiderOnly || process.env.NODE_ENV === 'development',
     // Note: the server has closed
     matrix_based_service_enabled: false,
     wallet_connect_support_enabled: webOnly,
