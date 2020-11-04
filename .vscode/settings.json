@@ -7,7 +7,7 @@
     },
     "i18n-ally.sourceLanguage": "en",
     "i18n-ally.displayLanguage": "en",
-    "i18n-ally.localesPaths": "src/_locales",
+    "i18n-ally.localesPaths": "packages/maskbook/src/_locales",
     "i18n-ally.sortKeys": true,
     "i18n-ally.keystyle": "flat",
     "i18n-ally.annotations": true,
@@ -15,15 +15,15 @@
     "i18n-ally.enabledParsers": ["json"],
     "json.schemas": [
         {
-            "fileMatch": ["/src/manifest.json"],
+            "fileMatch": ["/packages/maskbook/src/manifest.json"],
             "url": "http://json.schemastore.org/chrome-manifest"
         },
         {
-            "fileMatch": ["/src/plugins/*/schema.json"],
+            "fileMatch": ["/packages/maskbook/src/plugins/*/schema.json"],
             "url": "http://json-schema.org/draft-07/schema"
         },
         {
-            "fileMatch": ["/src/_locales/*/messages.json"],
+            "fileMatch": ["/packages/maskbook/src/_locales/*/messages.json"],
             "url": "/.vscode/schema/locale.json"
         }
     ],

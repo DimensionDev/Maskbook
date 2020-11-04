@@ -79,7 +79,7 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                 const textTextarea = await snsFeedPage.waitForFunction(
                     `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="text_textarea"]')`,
                 )
-                await (textTextarea as any).type('maskbook')
+                await (textTextarea as any).type('mask')
                 await snsFeedPage.waitFor(500)
 
                 // designates recipients
@@ -119,7 +119,7 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                 // validate text
                 const payloadTextarea = await snsFeedPage.waitFor(sns.composeEditorSelector)
                 const cipherText = await payloadTextarea.evaluate((e) => e.textContent)
-                expect(cipherText?.includes('Maskbook')).toBeTruthy()
+                expect(cipherText?.includes('mask')).toBeTruthy()
 
                 // valdiate attachment
                 if (enableImageMode) {
