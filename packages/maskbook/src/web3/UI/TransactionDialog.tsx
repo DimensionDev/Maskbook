@@ -23,6 +23,12 @@ import { WalletMessageCenter } from '../../plugins/Wallet/messages'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        content: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: theme.spacing(5, 1),
+        },
         icon: {
             fontSize: 64,
             width: 64,
@@ -33,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         primary: {
             fontSize: 18,
-            marginTop: theme.spacing(4),
+            marginTop: theme.spacing(1),
         },
         secondary: {
             fontSize: 14,
@@ -78,7 +84,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
     return (
         <>
             <InjectedDialog open={open} onExit={onClose} title="Transaction">
-                <DialogContent>
+                <DialogContent className={classes.content}>
                     {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ? (
                         <>
                             <CircularProgress size={64} color="primary" />

@@ -78,6 +78,6 @@ export function resolveTransactionLinkOnEtherscan(chainId: ChainId, tx: string) 
     return `${resolveLinkOnEtherscan(chainId)}/tx/${tx}`
 }
 
-export function resolveTokenLinkOnEtherscan(token: Token) {
+export function resolveTokenLinkOnEtherscan(token: PartialRequired<Token, 'address' | 'chainId'>) {
     return `${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`
 }

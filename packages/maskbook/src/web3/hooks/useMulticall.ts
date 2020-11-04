@@ -121,8 +121,8 @@ export function useSingleContractMultipleData<T extends Contract, K extends keyo
         }))
     }, [contract, names, callDatas])
     const [state, callback] = useMulticallCallback(calls)
-    const state_ = useMutlicallStateDecoded(new Array(calls.length).fill(contract) as T[], names, state)
-    return [state_, state, callback] as const
+    const results = useMutlicallStateDecoded(new Array(calls.length).fill(contract) as T[], names, state)
+    return [results, state, callback] as const
 }
 
 export function useMutlipleContractSingleData<T extends Contract, K extends keyof T['methods']>(
@@ -139,8 +139,8 @@ export function useMutlipleContractSingleData<T extends Contract, K extends keyo
         [contracts, names, callData],
     )
     const [state, callback] = useMulticallCallback(calls)
-    const state_ = useMutlicallStateDecoded(contracts, names, state)
-    return [state_, state, callback] as const
+    const results = useMutlicallStateDecoded(contracts, names, state)
+    return [results, state, callback] as const
 }
 
 export function useMultipleContractMultipleData<T extends Contract, K extends keyof T['methods']>(
@@ -157,6 +157,6 @@ export function useMultipleContractMultipleData<T extends Contract, K extends ke
         [contracts, names, callDatas],
     )
     const [state, callback] = useMulticallCallback(calls)
-    const state_ = useMutlicallStateDecoded(contracts, names, state)
-    return [state_, state, callback] as const
+    const results = useMutlicallStateDecoded(contracts, names, state)
+    return [results, state, callback] as const
 }

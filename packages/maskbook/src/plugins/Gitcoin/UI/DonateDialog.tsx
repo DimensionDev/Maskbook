@@ -13,7 +13,7 @@ import { createEetherToken } from '../../../web3/helpers'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useDonateCallback } from '../hooks/useDonateCallback'
-import { useTokenApproveCallback, ApproveState } from '../../../web3/hooks/useTokenApproveCallback'
+import { useERC20TokenApproveCallback, ApproveState } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { GITCOIN_CONSTANT } from '../constants'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -24,6 +24,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessageCenter } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
+import { usePostLink } from '../../../components/DataSource/usePostInfo'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -99,7 +100,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
 
     //#region approve ERC20
     const BulkCheckoutAddress = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
-    const [approveState, approveCallback] = useTokenApproveCallback(token, amount, BulkCheckoutAddress)
+    const [approveState, approveCallback] = useERC20TokenApproveCallback(token, amount, BulkCheckoutAddress)
     const onApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback()
@@ -112,12 +113,14 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     //#endregion
 
     //#region remote controlled transaction dialog
+    const postLink = usePostLink()
     const shareLink = useShareLink(
         [
             `I just donated ${title} with ${formatBalance(new BigNumber(amount), token.decimals, token.decimals)} ${
                 token.symbol
             }. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
-            '#Maskbook',
+            '#mask_io',
+            postLink,
         ].join('\n'),
     )
 
@@ -149,7 +152,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     //#region submit button
     const validationMessage = useMemo(() => {
         if (!address) return 'Grant not available'
-        if (!account) return 'Connect a Wallet'
+        if (!account) return t('connect_a_wallet')
         if (!token.address) return 'Select a token'
         if (new BigNumber(amount).isZero()) return 'Enter an amount'
         if (new BigNumber(amount).isGreaterThan(new BigNumber(tokenBalance)))

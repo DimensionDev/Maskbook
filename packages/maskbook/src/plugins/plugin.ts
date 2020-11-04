@@ -10,6 +10,7 @@ import { PollsPluginDefine } from './Polls/define'
 import { StorybookPluginDefine } from './Storybook/define'
 import { FileServicePluginDefine } from './FileService/define'
 import { TraderPluginDefine } from './Trader/define'
+import { Election2020PluginDefine } from './Election2020/define'
 import { Flags } from '../utils/flags'
 import { TransakPluginDefine } from './Transak/define'
 
@@ -20,4 +21,5 @@ plugins.add(FileServicePluginDefine)
 if (Flags.poll_enabled) plugins.add(PollsPluginDefine)
 if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
 if (Flags.transak_enabled) plugins.add(TransakPluginDefine)
+if (Flags.election2020_enabled) plugins.add(Election2020PluginDefine)
 if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)

@@ -17,6 +17,16 @@ export interface Token {
     decimals: number
 }
 
+export interface ERC20Token extends Token {
+    type: EthereumTokenType.ERC20
+    decimals: number
+}
+
+export interface ERC721Token extends Token {
+    type: EthereumTokenType.ERC721
+    baseURI: string
+}
+
 export interface TokenDetailed {
     token: Token
     /**

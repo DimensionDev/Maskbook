@@ -7,11 +7,10 @@ import { getUrl, downloadUrl } from '../../utils/utils'
 import { memoizePromise } from '../../utils/memoize'
 import { getDimension } from '../../utils/image'
 import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
-import { saveAsFile } from './HelperService'
 
 OnlyRunInContext('background', 'SteganographyService')
 
-type Template = 'v1' | 'v2' | 'eth' | 'dai' | 'okb'
+type Template = 'v1' | 'v2' | 'v3' | 'eth' | 'dai' | 'okb'
 type Mask = 'v1' | 'v2' | 'transparent'
 
 type Dimension = {
@@ -33,6 +32,11 @@ const dimensionPreset: (Dimension & { mask: Mask })[] = [
     {
         width: 1200,
         height: 680,
+        mask: 'transparent',
+    },
+    {
+        width: 1000,
+        height: 558,
         mask: 'transparent',
     },
 ]
@@ -63,9 +67,9 @@ export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImag
         await encode(_buf, await getMaskBuf(template === 'v2' ? template : 'transparent'), {
             ...defaultOptions,
             fakeMaskPixels: false,
-            cropEdgePixels: template !== 'v2',
+            cropEdgePixels: template !== 'v2' && template !== 'v3',
             exhaustPixels: true,
-            grayscaleAlgorithm: GrayscaleAlgorithm.NONE,
+            grayscaleAlgorithm: template === 'v3' ? GrayscaleAlgorithm.LUMINANCE : GrayscaleAlgorithm.NONE,
             transformAlgorithm: TransformAlgorithm.FFT1D,
             ...options,
         }),

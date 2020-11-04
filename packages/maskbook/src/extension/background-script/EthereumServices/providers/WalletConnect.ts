@@ -60,8 +60,14 @@ export function createWeb3() {
         eth: new Proxy(web3.eth, {
             get(target, name) {
                 switch (name) {
+                    case 'eth_sign':
+                        return async (data: string, address: string, callback?: (signed: string) => void) => {
+                            const signed = (await connector?.signMessage([data, address])) as string
+                            if (callback) callback(signed)
+                            return signed
+                        }
                     case 'sendTransaction':
-                        return (txData: ITxData) => {
+                        return (txData: ITxData, callback?: () => void) => {
                             const listeners: { name: string; listener: Function }[] = []
                             const promise = connector?.sendTransaction(txData) as Promise<string>
 

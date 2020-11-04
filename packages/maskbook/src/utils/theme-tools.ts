@@ -32,6 +32,11 @@ export function getBackgroundColor(element: HTMLElement | HTMLBodyElement) {
     return color ? toRGB(fromRGB(color)) : ''
 }
 
+export function getForegroundColor(element: HTMLElement | HTMLBodyElement) {
+    const color = getComputedStyle(element).color
+    return color ? toRGB(fromRGB(color)) : ''
+}
+
 export function isDarkTheme(element: HTMLElement = document.body) {
     const rgb = fromRGB(getComputedStyle(element).backgroundColor)
     if (!rgb) return true
