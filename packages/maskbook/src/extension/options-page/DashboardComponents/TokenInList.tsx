@@ -91,7 +91,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
                 <Typography className={classes.primary} color="textPrimary" component="span">
                     <span className={classes.name}>{name}</span>
                     <span className={classes.address}>
-                        {token.address !== ETH_ADDRESS ? formatEthereumAddress(token.address, 8) : null}
+                        {token.address !== ETH_ADDRESS ? formatEthereumAddress(token.address) : null}
                     </span>
                 </Typography>
                 <Typography className={classes.secondary} color="textSecondary" component="span">

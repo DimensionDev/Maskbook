@@ -25,7 +25,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     i18nOverwrite: {
         en: {
             additional_post_box__encrypted_post_pre: [
-                'This tweet is encrypted with #Maskbook (@realMaskbook). 📪🔑',
+                'This tweet is encrypted with #mask_io (@realMaskbook). 📪🔑',
                 'Install {{encrypted}} to decrypt it.',
             ].join('\n\n'),
         },

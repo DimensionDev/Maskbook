@@ -303,12 +303,10 @@ export default function PollsDialog(props: PollsDialogProps) {
     }
 
     return (
-        <>
-            <InjectedDialog open={props.open} onExit={props.onDecline} title={t('plugin_poll_display_name')}>
-                <DialogContent>
-                    <AbstractTab height={450} {...tabProps} />
-                </DialogContent>
-            </InjectedDialog>
-        </>
+        <InjectedDialog open={props.open} onExit={props.onDecline} title={t('plugin_poll_display_name')}>
+            <DialogContent>
+                <AbstractTab height={450} {...tabProps} />
+            </DialogContent>
+        </InjectedDialog>
     )
 }

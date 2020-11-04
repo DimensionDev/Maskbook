@@ -13,8 +13,11 @@ import {
     Appearance,
     currentMaskbookChainIdSettings,
     enableGroupSharingSettings,
+    launchPageSettings,
+    LaunchPage,
 } from '../../../settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
@@ -26,6 +29,7 @@ import TabIcon from '@material-ui/icons/Tab'
 import PaletteIcon from '@material-ui/icons/Palette'
 import LanguageIcon from '@material-ui/icons/Language'
 import WifiIcon from '@material-ui/icons/Wifi'
+import LaunchIcon from '@material-ui/icons/Launch'
 import DashboardRouterContainer from './Container'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
@@ -119,6 +123,7 @@ const settingsTheme = (theme: Theme): Theme =>
 export default function DashboardSettingsRouter() {
     const { t } = useI18N()
     const currentLang = useValueRef(languageSettings)
+    const isMobile = useMatchXS()
     const langMapper = React.useRef((x: Language) => {
         if (x === Language.en) return t('language_en')
         if (x === Language.zh) return t('language_zh')
@@ -129,6 +134,11 @@ export default function DashboardSettingsRouter() {
         if (x === Appearance.dark) return t('settings_appearance_dark')
         if (x === Appearance.light) return t('settings_appearance_light')
         return t('settings_appearance_default')
+    }).current
+    const launchPageMapper = React.useRef((x: LaunchPage) => {
+        if (x === LaunchPage.facebook) return 'Facebook'
+        if (x === LaunchPage.twitter) return 'Twitter'
+        return t('dashboard')
     }).current
 
     const classes = useStyles()
@@ -183,6 +193,15 @@ export default function DashboardSettingsRouter() {
                                     icon={<TrendingUpIcon />}
                                     value={currentDataProviderSettings}
                                 />
+                                {isMobile ? (
+                                    <SettingsUIEnum
+                                        classes={listStyle}
+                                        enumObject={LaunchPage}
+                                        getText={launchPageMapper}
+                                        icon={<LaunchIcon />}
+                                        value={launchPageSettings}
+                                    />
+                                ) : null}
                             </List>
                         </Card>
                     </Paper>

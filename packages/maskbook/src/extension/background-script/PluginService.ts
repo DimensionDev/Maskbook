@@ -4,6 +4,7 @@ import * as Gitcoin from '../../plugins/Gitcoin/service'
 import * as Poll from '../../plugins/Polls/Services'
 import * as FileService from '../../plugins/FileService/service'
 import * as Trader from '../../plugins/Trader/services'
+import * as Election2020 from '../../plugins/Election2020/services'
 
 const Plugins = {
     'maskbook.red_packet': RedPacket,
@@ -12,6 +13,7 @@ const Plugins = {
     'maskbook.trader': Trader,
     'maskbook.polls': Poll,
     'co.gitcoin': Gitcoin,
+    'maskbook.election2020': Election2020,
 } as const
 type Plugins = typeof Plugins
 export async function invokePlugin<K extends keyof Plugins, M extends keyof Plugins[K], P extends Plugins[K][M]>(

@@ -162,7 +162,7 @@ export interface SocialNetworkUITasks {
     taskUploadToPostBox(
         text: string,
         options: {
-            template?: 'v1' | 'v2' | 'eth' | 'dai' | 'okb'
+            template?: 'v1' | 'v2' | 'eth' | 'dai' | 'okb' | 'v3'
             autoPasteFailedRecover: boolean
             relatedText: string
         },

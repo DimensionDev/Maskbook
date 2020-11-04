@@ -37,3 +37,15 @@ export function formatEthereumAddress(address: string, size = 0) {
 export function formatChecksumAddress(address: string) {
     return address && EthereumAddress.isValid(address) ? EthereumAddress.checksumAddress(address) : address
 }
+
+export function formatKeccakHash(hash: string, size = 0) {
+    if (!/0x[\w\d]{64}/.test(hash)) return hash
+    if (size === 0) return hash
+    return `${hash.substr(0, 2 + size)}...${hash.substr(-size)}`
+}
+
+export function formatNumberString(str: string, size = 0) {
+    if (!/\d+/.test(str)) return str
+    if (size === 0) return str
+    return `${str.substr(0, size)}...${str.substr(-size)}`
+}

@@ -103,6 +103,29 @@ declare module 'react-middle-ellipsis' {
     export default component
 }
 
+declare module 'react-tilt' {
+    import React from 'react'
+    import type { StandardProps } from '@material-ui/core'
+    interface Options {
+        reverse: boolean
+        max: number
+        perspective: number
+        scale: number
+        speed: number
+        transition: boolean
+        axis: 'X' | 'Y' | null
+        glare: boolean
+        'max-glare': number
+        reset: boolean
+        easing: string
+    }
+    interface ComponentProps extends React.HTMLAttributes<HTMLDivElement> {
+        options?: Partial<Options>
+    }
+    const component: (props: ComponentProps) => JSX.Element
+    export default component
+}
+
 declare module 'ethereum-blockies' {
     export interface BlockieOptions {
         seed?: string // seed used to generate icon data, default: random
@@ -161,4 +184,14 @@ declare module '@transak/transak-sdk' {
     }
 
     export default TransakSDK
+}
+
+declare module '*.png' {
+    const content: string
+    export default content
+}
+
+declare module '*.jpg' {
+    const content: string
+    export default content
 }

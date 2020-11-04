@@ -90,10 +90,7 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
     //#endregion
 
     //#region select wallet dialog
-    const [, setSelectWalletOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectWalletDialogUpdated'>(
-        WalletMessageCenter,
-        'selectWalletDialogUpdated',
-    )
+    const [, setSelectWalletOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectWalletDialogUpdated')
     const onOpen = useCallback(() => {
         setSelectWalletOpen({
             open: true,

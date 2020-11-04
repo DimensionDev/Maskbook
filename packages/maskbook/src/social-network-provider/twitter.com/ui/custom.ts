@@ -4,23 +4,26 @@ import { unstable_createMuiStrictModeTheme, ThemeProvider, makeStyles } from '@m
 import { useMaskbookTheme } from '../../../utils/theme'
 import type { SocialNetworkUICustomUI } from '../../../social-network/ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { composeAnchorSelector } from '../utils/selector'
+import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
 import React from 'react'
-import { toRGB, getBackgroundColor, fromRGB, shade, isDark } from '../../../utils/theme-tools'
+import { toRGB, getBackgroundColor, fromRGB, shade, isDark, getForegroundColor } from '../../../utils/theme-tools'
 import { Appearance } from '../../../settings/settings'
 import produce, { setAutoFreeze } from 'immer'
 import type { InjectedDialogClassKey } from '../../../components/shared/InjectedDialog'
 import type { StyleRules } from '@material-ui/core'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
+const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))
 const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
 
 export function startWatchThemeColor() {
     function updateThemeColor() {
         const color = getBackgroundColor(composeAnchorSelector().evaluate()!)
+        const contrastColor = getForegroundColor(composeAnchorTextSelector().evaluate()!)
         const backgroundColor = getBackgroundColor(document.body)
 
         if (color) primaryColorRef.value = color
+        if (contrastColor) primaryColorContrastColorRef.value = contrastColor
         if (backgroundColor) backgroundColorRef.value = backgroundColor
     }
     new MutationObserverWatcher(composeAnchorSelector())
@@ -32,21 +35,24 @@ export function startWatchThemeColor() {
         })
 }
 function useTheme() {
-    const backgroundColor = useValueRef(backgroundColorRef)
     const primaryColor = useValueRef(primaryColorRef)
+    const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
+    const backgroundColor = useValueRef(backgroundColorRef)
     const MaskbookTheme = useMaskbookTheme({
         appearance: isDark(fromRGB(backgroundColor)!) ? Appearance.dark : Appearance.light,
     })
     return useMemo(() => {
         const primaryColorRGB = fromRGB(primaryColor)!
+        const primaryContrastColorRGB = fromRGB(primaryContrastColor)
         setAutoFreeze(false)
+
         const TwitterTheme = produce(MaskbookTheme, (theme) => {
             theme.palette.background.paper = backgroundColor
             theme.palette.primary = {
                 light: toRGB(shade(primaryColorRGB, 10)),
                 main: toRGB(primaryColorRGB),
                 dark: toRGB(shade(primaryColorRGB, -10)),
-                contrastText: theme.palette.getContrastText(backgroundColor),
+                contrastText: toRGB(primaryContrastColorRGB),
             }
             theme.shape.borderRadius = 15
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
@@ -75,7 +81,7 @@ function useTheme() {
         })
         setAutoFreeze(true)
         return unstable_createMuiStrictModeTheme(TwitterTheme)
-    }, [MaskbookTheme, backgroundColor, primaryColor])
+    }, [MaskbookTheme, backgroundColor, primaryColor, primaryContrastColor])
 }
 
 export function TwitterThemeProvider(props: Required<React.PropsWithChildren<{}>>) {

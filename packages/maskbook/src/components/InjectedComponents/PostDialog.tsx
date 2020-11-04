@@ -45,6 +45,7 @@ import { ErrorBoundary } from '../shared/ErrorBoundary'
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { PluginStage } from '../../plugins/types'
+import { Election2020MetadataReader } from '../../plugins/Election2020/helpers'
 
 const defaultTheme = {}
 
@@ -288,16 +289,18 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                 )
                 const activeUI = getActivatedUI()
                 // TODO: move into the plugin system
-                const metadata = RedPacketMetadataReader(typedMessageMetadata)
+                const redPacketMetadata = RedPacketMetadataReader(typedMessageMetadata)
+                const election2020Metadata = Election2020MetadataReader(typedMessageMetadata)
                 if (imagePayloadEnabled) {
-                    const isRedPacket = metadata.ok && metadata.val.rpid
+                    const isRedPacket = redPacketMetadata.ok
+                    const isElection2020 = election2020Metadata.ok
                     const isErc20 =
-                        metadata.ok &&
-                        metadata.val &&
-                        metadata.val.token &&
-                        metadata.val.token_type === EthereumTokenType.ERC20
-                    const isDai = isErc20 && metadata.ok && isDAI(metadata.val.token?.address ?? '')
-                    const isOkb = isErc20 && metadata.ok && isOKB(metadata.val.token?.address ?? '')
+                        redPacketMetadata.ok &&
+                        redPacketMetadata.val &&
+                        redPacketMetadata.val.token &&
+                        redPacketMetadata.val.token_type === EthereumTokenType.ERC20
+                    const isDai = isErc20 && redPacketMetadata.ok && isDAI(redPacketMetadata.val.token?.address ?? '')
+                    const isOkb = isErc20 && redPacketMetadata.ok && isOKB(redPacketMetadata.val.token?.address ?? '')
 
                     const relatedText = t('additional_post_box__steganography_post_pre', {
                         random: new Date().toLocaleString(),
@@ -307,24 +310,27 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                         autoPasteFailedRecover: false,
                     })
                     activeUI.taskUploadToPostBox(encrypted, {
-                        template: isRedPacket ? (isDai ? 'dai' : isOkb ? 'okb' : 'eth') : 'v2',
+                        template: isRedPacket ? (isDai ? 'dai' : isOkb ? 'okb' : 'eth') : isElection2020 ? 'v3' : 'v2',
                         autoPasteFailedRecover: true,
                         relatedText,
                     })
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
-                    if (metadata.ok) {
+                    if (redPacketMetadata.ok) {
                         if (i18n.language?.includes('zh')) {
                             text =
                                 activeUI.networkIdentifier === twitterUrl.hostIdentifier
-                                    ? `用 #Maskbook @realMaskbook 開啟紅包 ${encrypted}`
-                                    : `用 #Maskbook 開啟紅包 ${encrypted}`
+                                    ? `用 #mask_io @realMaskbook 開啟紅包 ${encrypted}`
+                                    : `用 #mask_io 開啟紅包 ${encrypted}`
                         } else {
                             text =
                                 activeUI.networkIdentifier === twitterUrl.hostIdentifier
-                                    ? `Claim this Red Packet with #Maskbook @realMaskbook ${encrypted}`
-                                    : `Claim this Red Packet with #Maskbook ${encrypted}`
+                                    ? `Claim this Red Packet with #mask_io @realMaskbook ${encrypted}`
+                                    : `Claim this Red Packet with #mask_io ${encrypted}`
                         }
+                    }
+                    if (election2020Metadata.ok) {
+                        text = `Claim the election special NFT with @realMaskbook (mask.io) #mask_io #twitternft ${encrypted}`
                     }
                     activeUI.taskPasteIntoPostBox(text, {
                         autoPasteFailedRecover: true,

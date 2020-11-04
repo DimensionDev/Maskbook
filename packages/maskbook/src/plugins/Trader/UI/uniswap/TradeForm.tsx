@@ -12,10 +12,11 @@ import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { MaskbookWalletMessages, WalletMessageCenter } from '../../../Wallet/messages'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
-import { ApproveState } from '../../../../web3/hooks/useTokenApproveCallback'
+import { ApproveState } from '../../../../web3/hooks/useERC20TokenApproveCallback'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { TradeStrategy, TokenPanelType } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -70,6 +71,7 @@ export interface TradeFormProps extends withClasses<KeysInferFromUseStyles<typeo
 }
 
 export function TradeForm(props: TradeFormProps) {
+    const { t } = useI18N()
     const {
         approveState,
         strategy,
@@ -87,9 +89,8 @@ export function TradeForm(props: TradeFormProps) {
     } = props
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region UI
+    //#region context
     const account = useAccount()
-    const chainId = useChainId()
     //#endregion
 
     //#region loading balance
@@ -102,10 +103,7 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region remote controlled select provider dialog
-    const [, setOpen] = useRemoteControlledDialog<MaskbookWalletMessages, 'selectProviderDialogUpdated'>(
-        WalletMessageCenter,
-        'selectProviderDialogUpdated',
-    )
+    const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
     const onConnect = useCallback(() => {
         setOpen({
             open: true,
@@ -234,7 +232,7 @@ export function TradeForm(props: TradeFormProps) {
                                 variant="contained"
                                 size="large"
                                 onClick={onConnect}>
-                                Connect a Wallet
+                                {t('connect_a_wallet')}
                             </ActionButton>
                         )}
                     </Grid>

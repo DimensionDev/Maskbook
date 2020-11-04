@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, ChangeEvent } from 'react'
+import React, { useState, useCallback, useMemo, ChangeEvent, useEffect } from 'react'
 import {
     makeStyles,
     FormControl,
@@ -31,13 +31,14 @@ import { createEetherToken } from '../../../web3/helpers'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { useTokenApproveCallback, ApproveState } from '../../../web3/hooks/useTokenApproveCallback'
+import { useERC20TokenApproveCallback, ApproveState } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { useCreateCallback } from '../hooks/useCreateCallback'
-import { TransactionDialog } from '../../../web3/UI/TransactionDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { RedPacketJSONPayload } from '../types'
 import { resolveChainName } from '../../../web3/pipes'
+import { WalletMessageCenter } from '../../Wallet/messages'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -98,13 +99,8 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#endregion
 
     //#region packet settings
-    // is random
     const [isRandom, setIsRandom] = useState(0)
-
-    // message
     const [message, setMessage] = useState('Best Wishes!')
-
-    // sender name
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
 
     // shares
@@ -132,7 +128,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     //#region approve ERC20
     const HappyRedPacketContractAddress = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
-    const [approveState, approveCallback] = useTokenApproveCallback(token, amount, HappyRedPacketContractAddress)
+    const [approveState, approveCallback] = useERC20TokenApproveCallback(token, amount, HappyRedPacketContractAddress)
     const onApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback()
@@ -141,7 +137,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#endregion
 
     //#region blocking
-    const [createSettings, createState, createCallback] = useCreateCallback({
+    const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback({
         password: uuid(),
         duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
         isRandom: Boolean(isRandom),
@@ -151,63 +147,83 @@ export function RedPacketForm(props: RedPacketFormProps) {
         token,
         total: totalAmount.toFixed(),
     })
-    const [openTransactionDialog, setOpenTransactionDialog] = useState(false)
-    const onSubmit = useCallback(async () => {
-        setOpenTransactionDialog(true)
-        await createCallback()
-    }, [createCallback])
-    const onTransactionDialogClose = useCallback(async () => {
-        setOpenTransactionDialog(false)
+    //#endregion
 
-        // the settings is not available
-        if (!createSettings) return
+    //#region remote controlled transaction dialog
+    // close the transaction dialog
+    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+        WalletMessageCenter,
+        'transactionDialogUpdated',
+        (ev) => {
+            if (ev.open) return
 
-        // TODO:
-        // earily return happended
-        // we should guide user to select the red packet in the existing list
-        if (createState.type !== TransactionStateType.CONFIRMED) return
+            // reset state
+            resetCreateCallback()
 
-        const { receipt } = createState
-        const CreationSuccess = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
-            creation_time: string
-            creator: string
-            id: string
-            token_address: string
-            total: string
-        }
+            // the settings is not available
+            if (!createSettings) return
 
-        // assemble JSON payload
-        const payload: RedPacketJSONPayload = {
-            contract_version: 1,
-            contract_address: HAPPY_RED_PACKET_ADDRESS,
-            rpid: CreationSuccess.id,
-            password: createSettings.password,
-            shares: createSettings.shares,
-            sender: {
-                address: account,
-                name: createSettings.name,
-                message: createSettings.message,
-            },
-            is_random: createSettings.isRandom,
-            total: CreationSuccess.total,
-            creation_time: Number.parseInt(CreationSuccess.creation_time, 10) * 1000,
-            duration: createSettings.duration,
-            network: resolveChainName(chainId) as EthereumNetwork,
-            token_type: createSettings.token.type,
-        }
-        if (createSettings.token.type === EthereumTokenType.ERC20)
-            payload.token = omit(createSettings.token, ['type', 'chainId'])
+            // TODO:
+            // earily return happended
+            // we should guide user to select the red packet in the existing list
+            if (createState.type !== TransactionStateType.CONFIRMED) return
 
-        // output the redpacket as JSON payload
-        onCreate?.(payload)
+            const { receipt } = createState
+            const CreationSuccess = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
+                creation_time: string
+                creator: string
+                id: string
+                token_address: string
+                total: string
+            }
 
-        // always reset amount
-        setAmount('0')
-    }, [account, chainId, createSettings, createState, onCreate])
+            // assemble JSON payload
+            const payload: RedPacketJSONPayload = {
+                contract_version: 1,
+                contract_address: HAPPY_RED_PACKET_ADDRESS,
+                rpid: CreationSuccess.id,
+                password: createSettings.password,
+                shares: createSettings.shares,
+                sender: {
+                    address: account,
+                    name: createSettings.name,
+                    message: createSettings.message,
+                },
+                is_random: createSettings.isRandom,
+                total: CreationSuccess.total,
+                creation_time: Number.parseInt(CreationSuccess.creation_time, 10) * 1000,
+                duration: createSettings.duration,
+                network: resolveChainName(chainId) as EthereumNetwork,
+                token_type: createSettings.token.type,
+            }
+            if (createSettings.token.type === EthereumTokenType.ERC20)
+                payload.token = omit(createSettings.token, ['type', 'chainId'])
+
+            // output the redpacket as JSON payload
+            onCreate?.(payload)
+
+            // always reset amount
+            setAmount('0')
+        },
+    )
+
+    // open the transaction dialog
+    useEffect(() => {
+        if (createState.type === TransactionStateType.UNKNOWN) return
+        setTransactionDialogOpen({
+            open: true,
+            state: createState,
+            summary: `Creating red packet with ${formatBalance(
+                new BigNumber(totalAmount),
+                token.decimals,
+                token.decimals,
+            )} ${token.symbol}`,
+        })
+    }, [createState /* update tx dialog only if state changed */])
     //#endregion
 
     const validationMessage = useMemo(() => {
-        if (!account) return 'Connect a Wallet'
+        if (!account) return t('connect_a_wallet')
         if (!token.address) return 'Select a token'
         if (new BigNumber(shares || '0').isZero()) return 'Enter shares'
         if (new BigNumber(amount).isZero()) return 'Enter an amount'
@@ -293,7 +309,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     fullWidth
                     variant="contained"
                     disabled={Boolean(validationMessage)}
-                    onClick={onSubmit}>
+                    onClick={createCallback}>
                     {validationMessage ||
                         `Send ${formatBalance(totalAmount, token.decimals, token.decimals)} ${token.symbol}`}
                 </ActionButton>
@@ -303,16 +319,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 excludeTokens={[token.address]}
                 onSubmit={onSelectERC20TokenDialogSubmit}
                 onClose={onSelectERC20TokenDialogClose}
-            />
-            <TransactionDialog
-                state={createState}
-                summary={`Creating red packet with ${formatBalance(
-                    new BigNumber(totalAmount),
-                    token.decimals,
-                    token.decimals,
-                )} ${token.symbol}`}
-                open={openTransactionDialog}
-                onClose={onTransactionDialogClose}
             />
         </>
     )

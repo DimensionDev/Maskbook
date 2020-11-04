@@ -13,7 +13,11 @@ export async function uploadToPostBoxFacebook(
     const { autoPasteFailedRecover, relatedText, template = 'v2' } = options
     const { lastRecognizedIdentity } = getActivatedUI()
     const blankImage = await downloadUrl(
-        getUrl(`${template === 'v2' ? '/image-payload' : '/wallet'}/payload-${template}.png`),
+        getUrl(
+            `${
+                template === 'v2' ? '/image-payload' : template === 'v3' ? '/election-2020' : '/wallet'
+            }/payload-${template}.png`,
+        ),
     ).then((x) => x.arrayBuffer())
     const secretImage = new Uint8Array(
         decodeArrayBuffer(

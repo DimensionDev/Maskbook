@@ -19,6 +19,8 @@ export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>(
 
 export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
     querySelector<HTMLAnchorElement>('a[href="/compose/tweet"]')
+export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
+    querySelector<HTMLAnchorElement>('a[href="/compose/tweet"] div[dir]')
 
 export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3)')

@@ -19,8 +19,8 @@ export async function claimRedPacket(
     const network = resolveChainName(chainId).toLowerCase()
     const auth = await fetch(`${host}/hi?id=${from}&network=${network}`)
     if (!auth.ok) throw new Error('Auth failed')
-    const verify = await auth.text()
 
+    const verify = await auth.text()
     const jwt_encoded: {
         password: string
         recipient: string
