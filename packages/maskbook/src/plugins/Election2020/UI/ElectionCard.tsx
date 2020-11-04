@@ -47,7 +47,7 @@ export function ElectionCard(props: ElectionCardProps) {
                             ? 'linear-gradient(180deg, #74B4FF 6%, #0947E5 84%)'
                             : 'linear-gradient(180deg, #D81A1A 6%, #E50909 84%)',
                 }}>
-                <Image component="img" width={160} height={240} src={props.token.tokenImageURL} />
+                <Image component="img" width={160} height={220} src={props.token.tokenImageURL} />
                 <CardContent className={classes.content}>
                     <Typography>{props.candidatePartyType === US_PARTY_TYPE.BLUE ? 'BIDEN' : 'TRUMP'}</Typography>
                 </CardContent>
