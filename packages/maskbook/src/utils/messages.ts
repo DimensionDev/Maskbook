@@ -19,10 +19,6 @@ export interface CompositionEvent {
 }
 
 export interface MaskbookMessages {
-    /** emit when my identities created. */
-    identityCreated: undefined
-    /** emit when my identities updated. */
-    identityUpdated: undefined
     /**
      * emit people changed in the database.
      * emit when my personas created
@@ -110,6 +106,8 @@ export interface MaskMessages {
     createInternalSettingsChanged: SettingsUpdateEvent
     /** emit when the settings finished syncing with storage.. */
     createInternalSettingsUpdated: SettingsUpdateEvent
+    ownedPersonaCreated: undefined
+    ownedPersonaUpdated: undefined
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'maskbook' })
 MaskMessage.serialization = Serialization

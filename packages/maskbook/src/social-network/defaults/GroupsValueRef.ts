@@ -4,7 +4,7 @@ import type { ValueRef } from '@dimensiondev/holoflows-kit/es'
 import type { Group } from '../../database'
 import { GroupIdentifier, PreDefinedVirtualGroupNames, ProfileIdentifier } from '../../database/type'
 import { createDataWithIdentifierChangedListener } from './createDataWithIdentifierChangedListener'
-import { MessageCenter } from '../../utils/messages'
+import { MaskMessage, MessageCenter } from '../../utils/messages'
 import { debounce } from 'lodash-es'
 import { enableGroupSharingSettings } from '../../settings/settings'
 
@@ -23,7 +23,7 @@ export async function InitGroupsValueRef(
         trailing: true,
     })
     debouncedCreate(network, self.groupsRef, groupIDs)
-    MessageCenter.on('identityCreated', () => debouncedCreate(network, self.groupsRef, groupIDs))
+    MaskMessage.events.ownedPersonaCreated.on(() => debouncedCreate(network, self.groupsRef, groupIDs))
     MessageCenter.on('joinGroup', ({ group, newMembers }) => debouncedJoin(group, self.groupsRef, newMembers))
     MessageCenter.on(
         'groupsChanged',

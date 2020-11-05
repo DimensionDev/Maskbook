@@ -4,7 +4,7 @@ import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } fro
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
-import { MessageCenter } from '../../utils/messages'
+import { MaskMessage, MessageCenter } from '../../utils/messages'
 import {
     createDBAccess,
     IDBPSafeTransaction,
@@ -302,7 +302,7 @@ export async function safeDeletePersonaDB(
 export async function createProfileDB(record: ProfileRecord, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').add(profileToDB(record))
     setTimeout(async () => {
-        MessageCenter.emit('identityCreated', undefined)
+        MaskMessage.events.ownedPersonaCreated.sendToAll(undefined)
         MessageCenter.emit('profilesChanged', [{ reason: 'new', of: await queryProfile(record.identifier) }])
     }, 0)
 }
