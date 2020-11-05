@@ -23,11 +23,6 @@ export interface MaskbookMessages {
     personaUpdated: undefined
     /** emit people changed in the database */
     profilesChanged: readonly UpdateEvent<Profile>[]
-    groupsChanged: readonly UpdateEvent<Group>[]
-    joinGroup: {
-        group: GroupIdentifier
-        newMembers: ProfileIdentifier[]
-    }
     /** emit when compose status updated. */
     compositionUpdated: CompositionEvent
     /** Public Key found / Changed */
@@ -103,6 +98,10 @@ export interface MaskMessages {
     createInternalSettingsUpdated: SettingsUpdateEvent
     ownedPersonaCreated: undefined
     ownedPersonaUpdated: undefined
+    profileJoinedGroup: {
+        group: GroupIdentifier
+        newMembers: ProfileIdentifier[]
+    }
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'maskbook' })
 MaskMessage.serialization = Serialization

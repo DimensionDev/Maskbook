@@ -1,11 +1,10 @@
 /// <reference path="./global.d.ts" />
 import { DBSchema, openDB, IDBPTransaction } from 'idb/with-async-ittr-cjs'
 import { GroupIdentifier, Identifier, ProfileIdentifier } from './type'
-import { MessageCenter } from '../utils/messages'
+import { MaskMessage } from '../utils/messages'
 import { PrototypeLess, restorePrototypeArray } from '../utils/type'
 import { createDBAccess } from './helpers/openDB'
 import type { Ok } from 'ts-results'
-import { Flags } from '../utils/flags'
 
 //#region Schema
 interface GroupRecordBase {
@@ -139,7 +138,7 @@ export async function updateUserGroupDatabase(
     await t.objectStore('groups').put(GroupRecordIntoDB(nextRecord))
 
     if (process.env.NODE_ENV !== 'test' && nonDuplicateNewMembers.length) {
-        MessageCenter.emit('joinGroup', {
+        MaskMessage.events.profileJoinedGroup.sendToAll({
             group: group.identifier,
             newMembers: nonDuplicateNewMembers,
         })

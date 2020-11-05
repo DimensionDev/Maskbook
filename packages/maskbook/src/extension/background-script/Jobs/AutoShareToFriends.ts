@@ -1,9 +1,8 @@
-import { MessageCenter } from '../../../utils/messages'
-import type { PreDefinedVirtualGroupNames, ProfileIdentifier, GroupIdentifier } from '../../../database/type'
+import { MaskMessage, MessageCenter } from '../../../utils/messages'
+import type { PreDefinedVirtualGroupNames, ProfileIdentifier } from '../../../database/type'
 import { queryPostsDB, PostRecord, RecipientReason } from '../../../database/post'
 import { appendShareTarget } from '../CryptoService'
 import { queryUserGroup } from '../UserGroupService'
-import { IdentifierMap } from '../../../database/IdentifierMap'
 import { queryMyProfiles } from '../IdentityService'
 import { currentImportingBackup } from '../../../settings/settings'
 
@@ -36,7 +35,7 @@ async function appendShare(
 }
 
 export function initAutoShareToFriends() {
-    MessageCenter.on('joinGroup', async (data: { group: GroupIdentifier; newMembers: ProfileIdentifier[] }) => {
+    MaskMessage.events.profileJoinedGroup.on(async (data) => {
         if (currentImportingBackup.value) return
         if (data.group.isReal) return
         const group = await queryUserGroup(data.group)

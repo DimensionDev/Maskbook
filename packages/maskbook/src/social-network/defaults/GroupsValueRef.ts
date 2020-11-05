@@ -16,19 +16,15 @@ export async function InitGroupsValueRef(
     groupIDs: string[] = [PreDefinedVirtualGroupNames.friends],
 ) {
     if (!(await enableGroupSharingSettings.readyPromise)) return
-    const debouncedCreate = debounce(create, 1000, {
+    const createUserGroup = debounce(create, 1000, {
         trailing: true,
     })
-    const debouncedJoin = debounce(join, 1000, {
+    const onJoin = debounce(join, 1000, {
         trailing: true,
     })
-    debouncedCreate(network, self.groupsRef, groupIDs)
-    MaskMessage.events.ownedPersonaCreated.on(() => debouncedCreate(network, self.groupsRef, groupIDs))
-    MessageCenter.on('joinGroup', ({ group, newMembers }) => debouncedJoin(group, self.groupsRef, newMembers))
-    MessageCenter.on(
-        'groupsChanged',
-        createDataWithIdentifierChangedListener(self.groupsRef, (x) => x.of.identifier.network === network),
-    )
+    createUserGroup(network, self.groupsRef, groupIDs)
+    MaskMessage.events.ownedPersonaCreated.on(() => createUserGroup(network, self.groupsRef, groupIDs))
+    MaskMessage.events.profileJoinedGroup.on(({ group, newMembers }) => onJoin(group, self.groupsRef, newMembers))
 }
 
 function join(groupIdentifier: GroupIdentifier, ref: ValueRef<Group[]>, members: ProfileIdentifier[]) {
