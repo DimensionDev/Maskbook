@@ -93,7 +93,10 @@ function PopupUI() {
     }, [])
 
     const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated', noop, 'activated')
-    const onConnect = () => setOpen({ open: true })
+    const onConnect = () => {
+        setOpen({ open: true })
+        setTimeout(() => window.close(), 200)
+    }
 
     return (
         <Paper className={classes.container}>
