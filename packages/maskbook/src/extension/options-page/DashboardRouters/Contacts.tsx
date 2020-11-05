@@ -55,7 +55,7 @@ export default function DashboardContactsRouter() {
 
     const [search, setSearch] = useState('')
     const [searchUI, setSearchUI] = useState('')
-    const [startSearchTransition, isSearchPending] = unstable_useTransition({ timeoutMs: 5000 })
+    const [startSearchTransition, isSearchPending] = unstable_useTransition({})
     const [searchContactDialog, , openSearchContactDialog] = useModal(DashboardContactSearchDialog)
 
     const actions = useMemo(
@@ -93,7 +93,7 @@ export default function DashboardContactsRouter() {
     const isReachingEnd = data && data[data.length - 1]?.length < 20
     const items = data ? ([] as Profile[]).concat(...data) : []
 
-    const [startPageTransition, isPagePending] = unstable_useTransition({ timeoutMs: 1e5 })
+    const [startPageTransition, isPagePending] = unstable_useTransition({})
     const nextPage = useCallback(
         () =>
             startPageTransition(() => {
