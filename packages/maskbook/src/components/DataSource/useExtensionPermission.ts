@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import Services from '../../extension/service'
-import { MessageCenter } from '../../utils/messages'
+import { MaskMessage } from '../../utils/messages'
 import useSWR from 'swr'
 import { DashboardRoute } from '../../extension/options-page/Route'
 
@@ -12,7 +12,7 @@ export function useExtensionPermission(host: browser.permissions.Permissions) {
         initialData: false,
         suspense: true,
     })
-    useEffect(() => MessageCenter.on('permissionUpdated', revalidate), [revalidate])
+    useEffect(() => MaskMessage.events.browserPermissionUpdated.on(revalidate), [revalidate])
     return {
         hasPermission: data!,
         request: () => {

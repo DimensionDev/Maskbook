@@ -1,4 +1,4 @@
-import { MessageCenter } from './messages'
+import { MaskMessage } from './messages'
 
 export async function extraPermissions(origins: string[] | null) {
     if (!origins) return []
@@ -8,6 +8,6 @@ export async function extraPermissions(origins: string[] | null) {
 }
 
 export function notifyPermissionUpdate(result: boolean) {
-    if (result) MessageCenter.emit('permissionUpdated', void 0)
+    if (result) MaskMessage.events.browserPermissionUpdated.sendToAll(undefined)
     return result
 }

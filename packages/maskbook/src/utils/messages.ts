@@ -29,8 +29,6 @@ export interface MaskbookMessages {
         before: PersonaIdentifier | undefined
         after: PersonaIdentifier | undefined
     }
-    /** Permission updated */
-    permissionUpdated: void
     metamaskMessage: string
 }
 export class BatchedMessageCenter<T> extends MC<T> {
@@ -103,6 +101,8 @@ export interface MaskMessages {
     /** emit when compose status updated. */
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     compositionUpdated: CompositionEvent
+    /** Permission updated */
+    browserPermissionUpdated: void
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'maskbook' })
 MaskMessage.serialization = Serialization
