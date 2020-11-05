@@ -1,11 +1,6 @@
-import type { Currency, DataProvider } from './types'
-import { BatchedMessageCenter } from '../../utils/messages'
-
-interface SettingsEvent {
-    currency: Currency
-    platform: DataProvider
-    currencies: Currency[]
-}
+import type { DataProvider } from './types'
+import { createPluginMessage } from '../utils/createPluginMessage'
+import { PLUGIN_IDENTIFIER } from './constants'
 
 interface CashTagEvent {
     name: string
@@ -13,16 +8,11 @@ interface CashTagEvent {
     availablePlatforms: DataProvider[]
 }
 
-export interface MaskbookTraderMessages {
+interface PluginTraderMessage {
     /**
      * View a cash tag
      */
     cashTagObserved: CashTagEvent
-
-    /**
-     * Update settings dialog
-     */
-    settingsUpdated: SettingsEvent
 }
 
-export const TraderMessageCenter = new BatchedMessageCenter<MaskbookTraderMessages>(true, 'maskbook-trader-events')
+export const PluginTraderMessages = createPluginMessage<PluginTraderMessage>(PLUGIN_IDENTIFIER)

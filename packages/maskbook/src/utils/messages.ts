@@ -30,6 +30,7 @@ interface DeprecatedMaskbookMessages {
         after: PersonaIdentifier | undefined
     }
 }
+/** @deprecated */
 export class BatchedMessageCenter<T> extends MC<T> {
     private buffer = new Map<keyof T, T[keyof T][]>()
     private timeout: number = null!
