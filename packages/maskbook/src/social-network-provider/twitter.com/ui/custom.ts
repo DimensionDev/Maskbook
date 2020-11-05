@@ -152,10 +152,6 @@ const useInjectedDialogClassesOverwrite = makeStyles((theme) =>
                 padding: '7px 14px 6px !important',
             },
         },
-        dialogTitleTypography: {
-            verticalAlign: 'middle',
-            marginLeft: 6,
-        },
     }),
 )
 export const twitterUICustomUI: SocialNetworkUICustomUI = {
