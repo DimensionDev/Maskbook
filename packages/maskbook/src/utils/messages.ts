@@ -19,26 +19,6 @@ export interface CompositionEvent {
 }
 
 export interface MaskbookMessages {
-    /**
-     * emit when the settings changed.
-     */
-    settingsChanged: {
-        id: number
-        key: string
-        value: browser.storage.StorageValue
-        initial: boolean
-        context: string
-    }
-    /**
-     * emit when the settings finished syncing with storage.
-     */
-    settingsUpdated: {
-        id: number
-        key: string
-        value: browser.storage.StorageValue
-        initial: boolean
-        context: string
-    }
     /** emit when my identities created. */
     identityCreated: undefined
     /** emit when my identities updated. */
@@ -106,6 +86,14 @@ export class BatchedMessageCenter<T> extends MC<T> {
 /** @deprecated migrate to WebExtensionMessage based */
 export const MessageCenter = new BatchedMessageCenter<MaskbookMessages>(true, 'maskbook-events')
 MessageCenter.serialization = Serialization
+export interface SettingsUpdateEvent {
+    id: number
+    key: string
+    value: browser.storage.StorageValue
+    initial: boolean
+    context: string
+}
+
 export interface MaskMessages {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: {
@@ -117,6 +105,11 @@ export interface MaskMessages {
      * value is "networkKey"
      */
     createNetworkSettingsReady: string
+    // TODO: Document what difference between changed and updated.
+    /** emit when the settings changed. */
+    createInternalSettingsChanged: SettingsUpdateEvent
+    /** emit when the settings finished syncing with storage.. */
+    createInternalSettingsUpdated: SettingsUpdateEvent
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'maskbook' })
 MaskMessage.serialization = Serialization
