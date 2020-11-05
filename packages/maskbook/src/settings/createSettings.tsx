@@ -1,5 +1,5 @@
 import { ValueRef, GetContext } from '@dimensiondev/holoflows-kit'
-import { MessageCenter } from '../utils/messages'
+import { MaskMessage, MessageCenter } from '../utils/messages'
 import { defer } from '../utils/utils'
 import { getStorage, setStorage } from '../extension/background-script/StorageService'
 
@@ -104,7 +104,7 @@ export function createNetworkSettings(settingsKey: string) {
             readyPromise: Promise<string>
         }
     } = {}
-    MessageCenter.on('settingsCreated', (networkKey) => {
+    MaskMessage.events.createNetworkSettingsReady.on((networkKey) => {
         if (!(networkKey in cached)) cached[networkKey] = createInternalSettings(`${networkKey}+${settingsKey}`, '')
     })
     return new Proxy(cached, {
@@ -112,7 +112,7 @@ export function createNetworkSettings(settingsKey: string) {
             if (!(networkKey in target)) {
                 const settings = createInternalSettings(`${networkKey}+${settingsKey}`, '')
                 target[networkKey] = settings
-                settings.readyPromise.then(() => MessageCenter.emit('settingsCreated', networkKey))
+                settings.readyPromise.then(() => MaskMessage.events.createNetworkSettingsReady.sendToAll(networkKey))
             }
             return target[networkKey]
         },

@@ -20,11 +20,6 @@ export interface CompositionEvent {
 
 export interface MaskbookMessages {
     /**
-     * emit when a settings created.
-     * value is instanceKey
-     */
-    settingsCreated: string
-    /**
      * emit when the settings changed.
      */
     settingsChanged: {
@@ -117,6 +112,11 @@ export interface MaskMessages {
         text: string
         image?: Blob
     }
+    /**
+     * Only used by createNetworkSettings.
+     * value is "networkKey"
+     */
+    createNetworkSettingsReady: string
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'maskbook' })
 MaskMessage.serialization = Serialization
