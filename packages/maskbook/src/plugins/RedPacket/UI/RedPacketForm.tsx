@@ -37,7 +37,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { RedPacketJSONPayload } from '../types'
 import { resolveChainName } from '../../../web3/pipes'
-import { WalletMessageCenter } from '../../Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 
 const useStyles = makeStyles((theme) =>
@@ -152,8 +152,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#region remote controlled transaction dialog
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessageCenter,
-        'transactionDialogUpdated',
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
 

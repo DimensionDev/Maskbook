@@ -3,7 +3,7 @@ import { createStyles, makeStyles, withStyles } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { MaskbookTransakMessages, TransakMessageCenter } from '../messages'
+import { PluginTransakMessages } from '../messages'
 import { Transak } from './Transak'
 import { useBlurContext } from '../../../extension/options-page/DashboardContexts/BlurContext'
 
@@ -32,13 +32,9 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
 
     //#region remote controlled buy token dialog
     const [address, setAddress] = useState('')
-    const [open, setOpen] = useRemoteControlledDialog<MaskbookTransakMessages, 'buyTokenDialogUpdated'>(
-        TransakMessageCenter,
-        'buyTokenDialogUpdated',
-        (ev) => {
-            if (ev.open) setAddress(ev.address)
-        },
-    )
+    const [open, setOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated, (ev) => {
+        if (ev.open) setAddress(ev.address)
+    })
     //#endregion
 
     // render in dashboard

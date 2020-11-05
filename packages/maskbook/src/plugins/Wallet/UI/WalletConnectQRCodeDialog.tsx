@@ -5,7 +5,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { QRCode } from '../../../components/shared/qrcode'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { MaskbookWalletMessages, WalletMessageCenter } from '../messages'
+import { WalletMessages } from '../messages'
 import Services from '../../../extension/service'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 import { WalletConnectIcon } from '../../../resources/WalletConnectIcon'
@@ -36,9 +36,10 @@ export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps)
     const [URI, setURI] = useState('')
 
     //#region remote controlled dialog logic
-    const [open, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'walletConnectQRCodeDialogUpdated', (ev) => {
-        if (ev.open) setURI(ev.uri)
-    })
+    const [open, setOpen] = useRemoteControlledDialog(
+        WalletMessages.events.walletConnectQRCodeDialogUpdated,
+        (ev) => ev.open && setURI(ev.uri),
+    )
     const onClose = useCallback(() => {
         setOpen({
             open: false,

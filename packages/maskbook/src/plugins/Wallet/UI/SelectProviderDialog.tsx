@@ -12,7 +12,7 @@ import { MaskbookIcon } from '../../../resources/MaskbookIcon'
 import { WalletConnectIcon } from '../../../resources/WalletConnectIcon'
 import Services from '../../../extension/service'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessageCenter } from '../messages'
+import { WalletMessages } from '../messages'
 import { useBlurContext } from '../../../extension/options-page/DashboardContexts/BlurContext'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { ProviderType } from '../../../web3/types'
@@ -52,7 +52,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const history = useHistory()
 
     //#region remote controlled dialog logic
-    const [open, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
+    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onClose = useCallback(() => {
         setOpen({
             open: false,
@@ -62,8 +62,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
 
     //#region wallet connect QR code dialog
     const [_, setWalletConnectDialogOpen] = useRemoteControlledDialog(
-        WalletMessageCenter,
-        'walletConnectQRCodeDialogUpdated',
+        WalletMessages.events.walletConnectQRCodeDialogUpdated,
     )
     //#endregion
 

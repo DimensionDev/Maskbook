@@ -1,6 +1,7 @@
-import { BatchedMessageCenter } from '../../utils/messages'
 import type { TransactionState } from '../../web3/hooks/useTransactionState'
 import type { Token } from '../../web3/types'
+import { createPluginMessage } from '../utils/createPluginMessage'
+import { PLUGIN_IDENTIFIER } from './constants'
 
 type SelectERC20TokenDialogEvent =
     | {
@@ -51,7 +52,7 @@ type WalletConnectQRCodeDialogEvent =
           open: false
       }
 
-export interface MaskbookWalletMessages {
+interface WalletMessage {
     /**
      * Select wallet dialog
      */
@@ -78,4 +79,4 @@ export interface MaskbookWalletMessages {
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
 }
 
-export const WalletMessageCenter = new BatchedMessageCenter<MaskbookWalletMessages>(true, 'maskbook-wallet-events')
+export const WalletMessages = createPluginMessage<WalletMessage>(PLUGIN_IDENTIFIER)

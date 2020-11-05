@@ -22,7 +22,7 @@ import { EthereumStatusBar } from '../../../../web3/UI/EthereumStatusBar'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import { SelectERC20TokenDialog } from '../../../../web3/UI/SelectERC20TokenDialog'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessageCenter } from '../../../Wallet/messages'
+import { WalletMessages } from '../../../Wallet/messages'
 import { useShareLink } from '../../../../utils/hooks/useShareLink'
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -207,8 +207,7 @@ export function Trader(props: TraderProps) {
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessageCenter,
-        'transactionDialogUpdated',
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             setFreezed(false)

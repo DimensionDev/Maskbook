@@ -12,7 +12,7 @@ import { useRefundCallback } from '../hooks/useRefundCallback'
 import { isDAI, isOKB } from '../../../web3/helpers'
 import { resolveRedPacketStatus } from '../pipes'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessageCenter } from '../../Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { useTokenComputed } from '../hooks/useTokenComputed'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { formatBalance } from '../../Wallet/formatter'
@@ -123,7 +123,7 @@ export function RedPacket(props: RedPacketProps) {
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
 
     //#region remote controlled select provider dialog
-    const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
+    const [, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {
         setOpen({
             open: true,
@@ -145,8 +145,7 @@ export function RedPacket(props: RedPacketProps) {
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessageCenter,
-        'transactionDialogUpdated',
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             resetClaimCallback()

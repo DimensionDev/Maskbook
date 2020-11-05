@@ -10,10 +10,9 @@ import BigNumber from 'bignumber.js'
 import type { Token } from '../../../../web3/types'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
-import { MaskbookWalletMessages, WalletMessageCenter } from '../../../Wallet/messages'
+import { WalletMessages } from '../../../Wallet/messages'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { ApproveState } from '../../../../web3/hooks/useERC20TokenApproveCallback'
-import { useChainId } from '../../../../web3/hooks/useChainState'
 import { TradeStrategy, TokenPanelType } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
@@ -103,7 +102,7 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region remote controlled select provider dialog
-    const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
+    const [, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {
         setOpen({
             open: true,
