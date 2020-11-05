@@ -23,8 +23,6 @@ export interface MaskbookMessages {
     personaUpdated: undefined
     /** emit people changed in the database */
     profilesChanged: readonly UpdateEvent<Profile>[]
-    /** emit when compose status updated. */
-    compositionUpdated: CompositionEvent
     /** Public Key found / Changed */
     linkedProfileChanged: {
         of: ProfileIdentifier
@@ -102,6 +100,9 @@ export interface MaskMessages {
         group: GroupIdentifier
         newMembers: ProfileIdentifier[]
     }
+    /** emit when compose status updated. */
+    // TODO: Maybe in-page UI related messages should use Context instead of messages?
+    compositionUpdated: CompositionEvent
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'maskbook' })
 MaskMessage.serialization = Serialization

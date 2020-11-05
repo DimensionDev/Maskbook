@@ -24,7 +24,7 @@ import { instanceOfTwitterUI } from '.'
 import type { ProfileIdentifier } from '../../../database/type'
 import { encodeArrayBuffer, decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { isMobileTwitter } from '../utils/isMobile'
-import { MaskMessage, MessageCenter } from '../../../utils/messages'
+import { MaskMessage } from '../../../utils/messages'
 
 /**
  * Wait for up to 5000 ms
@@ -112,7 +112,7 @@ const taskOpenComposeBox = async (
         shareToEveryOne?: boolean
     },
 ) => {
-    MessageCenter.emit('compositionUpdated', {
+    MaskMessage.events.compositionUpdated.sendToLocal({
         reason: 'timeline',
         open: true,
         content,

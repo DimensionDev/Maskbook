@@ -6,7 +6,7 @@ import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../util
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { makeStyles, Theme } from '@material-ui/core'
-import { MessageCenter } from '../../../utils/messages'
+import { MaskMessage } from '../../../utils/messages'
 import { hasEditor, isCompose } from '../utils/postBox'
 import { Flags } from '../../../utils/flags'
 
@@ -63,8 +63,9 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const classes = {
         ...useTwitterThemedPostDialogHint(),
     }
-    const onHintButtonClicked = useCallback(() => MessageCenter.emit('compositionUpdated', { reason, open: true }), [
-        reason,
-    ])
+    const onHintButtonClicked = useCallback(
+        () => MaskMessage.events.compositionUpdated.sendToLocal({ reason, open: true }),
+        [reason],
+    )
     return <PostDialogHint classes={classes} onHintButtonClicked={onHintButtonClicked} />
 }

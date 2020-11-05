@@ -4,7 +4,7 @@ import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-k
 import { posteditorToolbarSeelctor } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogIcon } from '../../../components/InjectedComponents/PostDialogIcon'
-import { MessageCenter } from '../../../utils/messages'
+import { MaskMessage } from '../../../utils/messages'
 import { isCompose, isMobile } from '../utils/postBox'
 import { Flags } from '../../../utils/flags'
 import { makeStyles, Theme } from '@material-ui/core'
@@ -39,6 +39,6 @@ const useTwitterMaskbookIcon = makeStyles((theme: Theme) => ({
 
 function PostDialogIconAtTwitter() {
     const classes = useTwitterMaskbookIcon()
-    const onIconClicked = () => MessageCenter.emit('compositionUpdated', { reason: 'timeline', open: true })
+    const onIconClicked = () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'timeline', open: true })
     return <PostDialogIcon classes={classes} onClick={onIconClicked} />
 }
