@@ -18,7 +18,7 @@ export interface CompositionEvent {
     }
 }
 
-interface DeprecatedMaskbookMessages {
+interface DeprecatedMessages {
     /** emit when my personas updated */
     personaUpdated: undefined
     /** emit people changed in the database */
@@ -30,8 +30,7 @@ interface DeprecatedMaskbookMessages {
         after: PersonaIdentifier | undefined
     }
 }
-/** @deprecated */
-export class BatchedMessageCenter<T> extends MC<T> {
+class DeprecatedBatchedMessageCenter<T> extends MC<T> {
     private buffer = new Map<keyof T, T[keyof T][]>()
     private timeout: number = null!
     private policy: 'normal' | 'batch' = 'normal'
@@ -66,7 +65,7 @@ export class BatchedMessageCenter<T> extends MC<T> {
     }
 }
 /** @deprecated migrate to WebExtensionMessage based */
-export const MessageCenter = new BatchedMessageCenter<DeprecatedMaskbookMessages>(true, 'maskbook-events')
+export const MessageCenter = new DeprecatedBatchedMessageCenter<DeprecatedMessages>(true, 'maskbook-events')
 MessageCenter.serialization = Serialization
 export interface SettingsUpdateEvent {
     id: number
