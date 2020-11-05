@@ -54,6 +54,7 @@
     "create_persona": "人格を作成",
     "create_wallet": "暗号通貨ウォレットを作成",
     "connect_wallet": "ウォレットに接続しています",
+    "connect_a_wallet": "",
     "creating": "作成中…",
     "dashboard": "ダッシュボード",
     "dashboard_backup_database_confirmation": "戻りましょう。",

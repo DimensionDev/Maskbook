@@ -1586,7 +1586,7 @@
     pirates "^4.0.0"
     source-map-support "^0.5.16"
 
-"@babel/runtime@7.11.2", "@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.1", "@babel/runtime@^7.11.2", "@babel/runtime@^7.3.1", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.2", "@babel/runtime@^7.4.4", "@babel/runtime@^7.4.5", "@babel/runtime@^7.5.0", "@babel/runtime@^7.5.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.2", "@babel/runtime@^7.6.3", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.6":
+"@babel/runtime@7.11.2", "@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.1", "@babel/runtime@^7.11.2", "@babel/runtime@^7.3.1", "@babel/runtime@^7.4.2", "@babel/runtime@^7.4.4", "@babel/runtime@^7.4.5", "@babel/runtime@^7.5.0", "@babel/runtime@^7.5.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.2", "@babel/runtime@^7.6.3", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.6":
   version "7.11.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.11.2.tgz#f549c13c754cc40b87644b9fa9f09a6a95fe0736"
   integrity sha512-TeWkU52so0mPtDcaCTxNBI/IHiz0pZgr8VEFqXFtZWpYD08ZB6FaSwVAS8MKRQAP3bYKiVjwysOJgMFY28o6Tw==
@@ -1852,32 +1852,32 @@
     node-forge "^0.10.0"
     split "~0.3.3"
 
-"@dimensiondev/common-protocols@^1.6.0-20200814034327-52d7428":
+"@dimensiondev/common-protocols@=1.6.0-20200814034327-52d7428":
   version "1.6.0-20200814034327-52d7428"
   resolved "https://npm.dimension.im/download/@dimensiondev/common-protocols/1.6.0-20200814034327-52d7428/ad1023f04f5ecee31fc416770412f913a512a8977f798371af9cffaa3f17534a#a62554c95ae841abc867df558315aa773cd49228"
   integrity sha512-daWhvHDE2W5rBbD4jNk6Lhu7f+fTBOjP3G7EqnfU5XSO/wNFkJ37pwNRI+MDx8wJrluWvr2MmoB970SlsMYkrQ==
   dependencies:
     "@msgpack/msgpack" "^1.12.2"
 
-"@dimensiondev/holoflows-kit@^0.8.0-20201026073104-400a4b2":
-  version "0.8.0-20201026073104-400a4b2"
-  resolved "https://npm.dimension.im/download/@dimensiondev/holoflows-kit/0.8.0-20201026073104-400a4b2/123640cc19bc92c593920a9561d94c1f3a24047e4b3d5d4aa900563de411c965#3bac22c96cbeee3f79e392d1afe58781e363bc21"
-  integrity sha512-gJsn8EtyUt6J73n108uUkcp947rUjLseYy2h6xVwKYyG2QV2uoQRtu4iRaNwL5lJid2vCBVRW1F+RswOtwCnEA==
+"@dimensiondev/holoflows-kit@=0.8.0-20201105020906-fdfa48b":
+  version "0.8.0-20201105020906-fdfa48b"
+  resolved "https://npm.dimension.im/download/@dimensiondev/holoflows-kit/0.8.0-20201105020906-fdfa48b/fcfe298e6fa7a0190f84cb2a56a533797131a980c20b57432be9e933dec0bd17#332e3f4afd2595740702386aac369c5d21473110"
+  integrity sha512-VQfdpFtUCQD66cD+kWsrh5Wo2m66snMK2ijsHKJUlryRAzQhPSrFYhRc/tcKdMJzdssOg2cRI6m94ClauYnaeg==
   dependencies:
     "@servie/events" "^1.0.0"
     async-call-rpc "^4.1.0"
-    concurrent-lock "^1.0.7"
+    event-iterator "^2.0.0"
     jsx-jsonml-devtools-renderer "^1.4.3"
     lodash-es "^4.17.15"
     memorize-decorator "^0.2.2"
-    tslib "^2.0.1"
+    tslib "^2.0.3"
 
-"@dimensiondev/kit@^0.0.0-20200805092405-83b3a99":
+"@dimensiondev/kit@=0.0.0-20200805092405-83b3a99":
   version "0.0.0-20200805092405-83b3a99"
   resolved "https://npm.dimension.im/download/@dimensiondev/kit/0.0.0-20200805092405-83b3a99/3abe497941823a1392db4f275befbef585f951682fb5c643e46c9550abdae996#339e3cf22c4231bcfe35c5b9a0b1a0fa982de0a8"
   integrity sha512-1pojzjoYgRMhbkp6euLRxS8+KlOtdnxN/mvSFp2n61e7VADZ6oN6kzxyT7kU3ZOyA8GynItX076Su90jlEyyfw==
 
-"@dimensiondev/matrix-js-sdk-type@^1.0.0-20200731085604-dc2de92":
+"@dimensiondev/matrix-js-sdk-type@=1.0.0-20200731085604-dc2de92":
   version "1.0.0-20200731085604-dc2de92"
   resolved "https://npm.dimension.im/download/@dimensiondev/matrix-js-sdk-type/1.0.0-20200731085604-dc2de92/f42145da27cab463133d09c9ffd300af2ba5785ec977872991e77cb99930b3fa#70068ac8c884c8eb9317897823b310e1d6b243b2"
   integrity sha512-Br9l9LKKYXV1djdlfxOSknsVSzd56jNvc9StvPTv3eJfZPD7HbL3Yn+ikE34UR5Qs7Vga3EwtRIZIO77bb9I2g==
@@ -1885,14 +1885,14 @@
     "@types/node" "^12.12.14"
     "@types/request" "^2.48.4"
 
-"@dimensiondev/stego-js@^0.11.1-20201027083223-8ab41be":
+"@dimensiondev/stego-js@=0.11.1-20201027083223-8ab41be":
   version "0.11.1-20201027083223-8ab41be"
   resolved "https://npm.dimension.im/download/@dimensiondev/stego-js/0.11.1-20201027083223-8ab41be/2d41418365c7ea41e10de432e82b0707c3a3a3b70a20a3733276162eeb6c4bcd#7a3f20949bc255a79e5dadf44ccbe5f8eab5a6a4"
   integrity sha512-lm49qcX2O40Nn+AGKN6J4qrpPHaffGnvUI3mCh+obyiZxT9H5/vZv1B+SUm2bXq8r2LeLHIeW90x1lpyg1roTQ==
   dependencies:
     meow "^7.0.1"
 
-"@dimensiondev/webextension-shim@0.0.3-20201020064055-2c3874a":
+"@dimensiondev/webextension-shim@=0.0.3-20201020064055-2c3874a":
   version "0.0.3-20201020064055-2c3874a"
   resolved "https://npm.dimension.im/download/@dimensiondev/webextension-shim/0.0.3-20201020064055-2c3874a/35bcd680a910bbeb41ec3882da01e6b8afd6a749c5349ca7dc164d539fad1f43#c2aa3c7010c7b1be9b6ac76b7cc3660337832706"
   integrity sha512-ufUjM0P3dcEZzh8TWNAe0gjnBP7JSCDk0P1MFsPVuMhUmX6vEgl5UgDb9joKm3XLOwJNB0dwf0z9A2D4g+x6DA==
@@ -1901,7 +1901,7 @@
     systemjs "^6.3.2"
     web-ext-types "^3.2.1"
 
-"@dimensiondev/webpack-web-ext-plugin@^0.0.3-20200731084410-7de6117":
+"@dimensiondev/webpack-web-ext-plugin@=0.0.3-20200731084410-7de6117":
   version "0.0.3-20200731084410-7de6117"
   resolved "https://npm.dimension.im/download/@dimensiondev/webpack-web-ext-plugin/0.0.3-20200731084410-7de6117/1c7faba520214638875b36252b0fa2a85b86171d313554c2ea05cc470943a7c6#842c75317bc05908a3d1d65dc8a54c4c730f29d1"
   integrity sha512-1iqyS6kBJnKC+A3nHLmh+iHYS7zIAUw93EzaGZLJ2auKpCr7Yko/Usp0CeLJgkjk6o/FR5DJ9W6B8dELn+XCvg==
@@ -8326,13 +8326,6 @@ concat-stream@^1.4.7, concat-stream@^1.5.0, concat-stream@^1.6.2:
     inherits "^2.0.3"
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
-
-concurrent-lock@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/concurrent-lock/-/concurrent-lock-1.0.7.tgz#ceda4cec9adcbe3062f91e7401c33f1c9a1489d5"
-  integrity sha512-WhivxLzkjaqpd3Bs+8UCq8cDznvx4vX5tzW17Zbk1c8nyuALt3h7EK5qpc3BSLFZADpCmMJieqUoZ6iOSTYIPA==
-  dependencies:
-    "@babel/runtime" "^7.3.4"
 
 config-chain@^1.1.11:
   version "1.1.12"
@@ -21496,6 +21489,11 @@ tslib@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.1.tgz#410eb0d113e5b6356490eec749603725b021b43e"
   integrity sha512-SgIkNheinmEBgx1IUNirK0TUD4X9yjjBRTqqjggWCU3pUEqIk3/Uwl3yRixYKT6WjQuGiwDv4NomL3wqRCj+CQ==
+
+tslib@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
+  integrity sha512-uZtkfKblCEQtZKBF6EBXVZeQNl82yqtDQdv+eck8u7tdPxjLu2/lp5/uPW+um2tpuxINHWy3GhiccY7QgEaVHQ==
 
 tsutils@3, tsutils@^3.17.1:
   version "3.17.1"
