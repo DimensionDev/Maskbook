@@ -19,8 +19,6 @@ export interface CompositionEvent {
 }
 
 export interface MaskbookMessages {
-    /** Used to polyfill window.close. */
-    closeActiveTab: undefined
     /**
      * emit when a settings created.
      * value is instanceKey
@@ -114,6 +112,7 @@ export class BatchedMessageCenter<T> extends MC<T> {
 export const MessageCenter = new BatchedMessageCenter<MaskbookMessages>(true, 'maskbook-events')
 MessageCenter.serialization = Serialization
 export interface MaskMessages {
+    // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: {
         text: string
         image?: Blob

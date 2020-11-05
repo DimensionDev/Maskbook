@@ -13,10 +13,8 @@ import { useI18N } from '../../utils/i18n-next-ui'
 import i18nNextInstance from '../../utils/i18n-next'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getUrl } from '../../utils/utils'
-import { useChainId } from '../../web3/hooks/useChainState'
-import { WalletMessageCenter, MaskbookWalletMessages } from '../../plugins/Wallet/messages'
+import { WalletMessageCenter } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
 import { Alert } from '@material-ui/lab'
 import { useAsyncRetry } from 'react-use'
 
@@ -95,12 +93,7 @@ function PopupUI() {
     }, [])
 
     const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated', noop, 'activated')
-    const onConnect = useCallback(async () => {
-        setOpen({
-            open: true,
-        })
-        setTimeout(() => window.close(), 100)
-    }, [setOpen])
+    const onConnect = () => setOpen({ open: true })
 
     return (
         <Paper className={classes.container}>
