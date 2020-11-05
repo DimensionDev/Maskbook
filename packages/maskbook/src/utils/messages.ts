@@ -1,5 +1,5 @@
 import { MessageCenter as MC, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import type { Profile, Group } from '../database'
+import type { Profile } from '../database'
 import Serialization from './type-transform/Serialization'
 import type { ProfileIdentifier, GroupIdentifier, PersonaIdentifier } from '../database/type'
 
@@ -18,7 +18,7 @@ export interface CompositionEvent {
     }
 }
 
-export interface MaskbookMessages {
+interface DeprecatedMaskbookMessages {
     /** emit when my personas updated */
     personaUpdated: undefined
     /** emit people changed in the database */
@@ -29,7 +29,6 @@ export interface MaskbookMessages {
         before: PersonaIdentifier | undefined
         after: PersonaIdentifier | undefined
     }
-    metamaskMessage: string
 }
 export class BatchedMessageCenter<T> extends MC<T> {
     private buffer = new Map<keyof T, T[keyof T][]>()
@@ -66,7 +65,7 @@ export class BatchedMessageCenter<T> extends MC<T> {
     }
 }
 /** @deprecated migrate to WebExtensionMessage based */
-export const MessageCenter = new BatchedMessageCenter<MaskbookMessages>(true, 'maskbook-events')
+export const MessageCenter = new BatchedMessageCenter<DeprecatedMaskbookMessages>(true, 'maskbook-events')
 MessageCenter.serialization = Serialization
 export interface SettingsUpdateEvent {
     id: number
@@ -90,10 +89,10 @@ export interface MaskMessages {
     // TODO: Document what difference between changed and updated.
     /** emit when the settings changed. */
     createInternalSettingsChanged: SettingsUpdateEvent
-    /** emit when the settings finished syncing with storage.. */
+    /** emit when the settings finished syncing with storage. */
     createInternalSettingsUpdated: SettingsUpdateEvent
-    ownedPersonaCreated: undefined
-    ownedPersonaUpdated: undefined
+    ownedPersonaCreated: void
+    ownedPersonaUpdated: void
     profileJoinedGroup: {
         group: GroupIdentifier
         newMembers: ProfileIdentifier[]
@@ -101,8 +100,8 @@ export interface MaskMessages {
     /** emit when compose status updated. */
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     compositionUpdated: CompositionEvent
-    /** Permission updated */
     browserPermissionUpdated: void
+    metamaskDisconnected: void
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'maskbook' })
 MaskMessage.serialization = Serialization

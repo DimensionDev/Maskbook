@@ -5,7 +5,7 @@ import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { EthereumAddress } from 'wallet.ts'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import { ProviderType } from '../../../../web3/types'
-import { MessageCenter } from '../../../../utils/messages'
+import { MaskMessage } from '../../../../utils/messages'
 import { currentSelectedWalletAddressSettings } from '../../../../plugins/Wallet/settings'
 
 //#region tracking chain id
@@ -29,7 +29,7 @@ function onNetworkChanged(id: string) {
 
 function onNetworkError(error: any) {
     if (error === 'MetamaskInpageProvider - lost connection to MetaMask') {
-        MessageCenter.emit('metamaskMessage', 'metamask_not_install')
+        MaskMessage.events.metamaskDisconnected.sendToAll(undefined)
         updateExoticWalletFromSource(ProviderType.MetaMask, new Map())
     }
 }
