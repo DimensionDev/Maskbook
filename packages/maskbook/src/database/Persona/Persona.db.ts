@@ -141,7 +141,6 @@ export async function consistentPersonaDBWriteAccess(
  */
 export async function createPersonaDB(record: PersonaRecord, t: PersonasTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('personas').add(personaRecordToDB(record))
-    MessageCenter.emit('personaCreated', undefined)
     MessageCenter.emit('personaUpdated', undefined)
 }
 

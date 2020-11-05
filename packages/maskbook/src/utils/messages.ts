@@ -19,11 +19,6 @@ export interface CompositionEvent {
 }
 
 export interface MaskbookMessages {
-    /**
-     * emit people changed in the database.
-     * emit when my personas created
-     */
-    personaCreated: undefined
     /** emit when my personas updated */
     personaUpdated: undefined
     /** emit people changed in the database */
