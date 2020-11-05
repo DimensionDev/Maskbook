@@ -34,9 +34,9 @@ export async function mintElectionPacket(
         validation: sha3(from)!,
         signature: await Services.Ethereum.sign(verify, from, chainId),
     }
-    const claim = await fetch(
+    const mintResponse = await fetch(
         `${host}/mrpresident?payload=${jwt.sign(jwt_encoded, x, { algorithm: 'HS256' })}&network=${network}`,
     )
-    if (!claim.ok) throw new Error('Claim failed')
-    return { mint_transaction_hash: await claim.text() }
+    if (!mintResponse.ok) throw new Error('Claim failed')
+    return { mint_transaction_hash: await mintResponse.text() }
 }
