@@ -15,7 +15,7 @@ import {
     Button,
 } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
-import type { MaskbookMessages } from '../../utils/messages'
+import type { MaskMessages } from '../../utils/messages'
 import { Image } from '../shared/Image'
 import { useSnackbar } from 'notistack'
 import { DraggableDiv } from '../shared/DraggableDiv'
@@ -28,7 +28,7 @@ import { formatDateTime } from '../../plugins/FileService/utils'
 
 export interface AutoPasteFailedDialogProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     onClose: () => void
-    data: MaskbookMessages['autoPasteFailed']
+    data: MaskMessages['autoPasteFailed']
 }
 const useStyles = makeStyles((theme) => ({
     title: { marginLeft: theme.spacing(1) },
@@ -143,9 +143,9 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
 }
 export function useAutoPasteFailedDialog() {
     const [open, setOpen] = useState(false)
-    const [data, setData] = useState<MaskbookMessages['autoPasteFailed']>({ text: '' })
+    const [data, setData] = useState<MaskMessages['autoPasteFailed']>({ text: '' })
     return [
-        (data: MaskbookMessages['autoPasteFailed']) => {
+        (data: MaskMessages['autoPasteFailed']) => {
             setData(data)
             setOpen(true)
         },

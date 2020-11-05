@@ -3,7 +3,7 @@ import { dispatchCustomEvents, sleep, timeout } from '../../../utils/utils'
 import { isMobileFacebook } from '../isMobile'
 import type { SocialNetworkUI } from '../../../social-network/ui'
 import { untilDocumentReady } from '../../../utils/dom'
-import { MessageCenter } from '../../../utils/messages'
+import { MaskMessage } from '../../../utils/messages'
 
 export async function openPostDialogFacebook() {
     await untilDocumentReady()
@@ -96,6 +96,6 @@ export async function pasteIntoPostBoxFacebook(
     scrollBack()
     function copyFailed(e: any) {
         console.warn('Text not pasted to the text area', e)
-        if (autoPasteFailedRecover) MessageCenter.emit('autoPasteFailed', { text })
+        if (autoPasteFailedRecover) MaskMessage.events.autoPasteFailed.sendToLocal({ text })
     }
 }

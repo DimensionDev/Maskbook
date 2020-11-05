@@ -25,10 +25,10 @@ import { getProfilePageUrlAtFacebook } from './parse-username'
 import { notifyPermissionUpdate } from '../../utils/permissions'
 import { Flags } from '../../utils/flags'
 import { getMaskbookTheme } from '../../utils/theme'
-import { isDark, isDarkTheme } from '../../utils/theme-tools'
+import { isDarkTheme } from '../../utils/theme-tools'
 import { useState } from 'react'
 import { useInterval } from 'react-use'
-import { MessageCenter } from '../../utils/messages'
+import { MaskMessage } from '../../utils/messages'
 import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
 import { Appearance } from '../../settings/settings'
 
@@ -75,7 +75,7 @@ export const facebookUISelf = defineSocialNetworkUI({
         realCurrent,
     ) {
         const fail = () => {
-            MessageCenter.emit('autoPasteFailed', { text: encryptedComment })
+            MaskMessage.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
         }
         if (isMobileFacebook) {
             const root = realCurrent || current.commentBoxSelector!.evaluate()[0]

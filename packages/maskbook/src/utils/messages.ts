@@ -1,4 +1,4 @@
-import { MessageCenter as MC } from '@dimensiondev/holoflows-kit'
+import { MessageCenter as MC, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type { Profile, Group } from '../database'
 import Serialization from './type-transform/Serialization'
 import type { ProfileIdentifier, GroupIdentifier, PersonaIdentifier } from '../database/type'
@@ -75,15 +75,10 @@ export interface MaskbookMessages {
     /** Permission updated */
     permissionUpdated: void
     metamaskMessage: string
-    autoPasteFailed: {
-        text: string
-        image?: Blob
-    }
 }
-
 export class BatchedMessageCenter<T> extends MC<T> {
-    buffer = new Map<keyof T, T[keyof T][]>()
-    timeout: number = null!
+    private buffer = new Map<keyof T, T[keyof T][]>()
+    private timeout: number = null!
     private policy: 'normal' | 'batch' = 'normal'
     private flushBuffer() {
         for (const [key, datas] of this.buffer.entries()) {
@@ -115,7 +110,14 @@ export class BatchedMessageCenter<T> extends MC<T> {
         this.policy = 'normal'
     }
 }
-
+/** @deprecated migrate to WebExtensionMessage based */
 export const MessageCenter = new BatchedMessageCenter<MaskbookMessages>(true, 'maskbook-events')
-
 MessageCenter.serialization = Serialization
+export interface MaskMessages {
+    autoPasteFailed: {
+        text: string
+        image?: Blob
+    }
+}
+export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'maskbook' })
+MaskMessage.serialization = Serialization
