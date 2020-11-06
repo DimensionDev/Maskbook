@@ -43,7 +43,7 @@ export function useRemoteControlledDialog<T extends { open: boolean }>(
                     hookId: HOOK_ID,
                     ...ev,
                 }
-                tabType === 'self' ? event.sendToLocal(payload) : event.sendToFocusedPage(payload)
+                tabType === 'self' ? event.sendToLocal(payload) : event.sendToVisiblePages(payload)
             }, 100)
         },
         [event, tabType, HOOK_ID],
