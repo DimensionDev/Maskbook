@@ -22,7 +22,6 @@ import { injectDashboardEntranceAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
-import { notifyPermissionUpdate } from '../../utils/permissions'
 import { Flags } from '../../utils/flags'
 import { getMaskbookTheme } from '../../utils/theme'
 import { isDarkTheme } from '../../utils/theme-tools'
@@ -52,7 +51,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     requestPermission() {
         // TODO: wait for webextension-shim to support <all_urls> in permission.
         if (Flags.no_web_extension_dynamic_permission_request) return Promise.resolve(true)
-        return browser.permissions.request({ origins }).then(notifyPermissionUpdate)
+        return browser.permissions.request({ origins })
     },
     setupAccount() {
         facebookUISelf.requestPermission().then((granted) => {

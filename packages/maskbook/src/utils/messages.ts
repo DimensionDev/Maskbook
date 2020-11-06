@@ -42,7 +42,6 @@ export interface MaskMessages {
     /** emit when compose status updated. */
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     compositionUpdated: CompositionEvent
-    browserPermissionUpdated: void
     metamaskDisconnected: void
     personaChanged: (UpdateEvent<PersonaIdentifier> & { owned: boolean })[]
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
