@@ -37,10 +37,9 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
         props.onSelect(people).then(onClose, onReject)
     }, [onClose, people, props])
 
-    const canClose = !rejection && committed
     const canCommit = committed || people.length === 0
     return (
-        <InjectedDialog onExit={canClose ? onClose : undefined} open={props.open} title={t('share_to')}>
+        <InjectedDialog onExit={onClose} open={props.open} title={t('share_to')}>
             <DialogContent>
                 <SelectProfileAndGroupsUI<Profile>
                     frozenSelected={props.alreadySelectedPreviously}
@@ -57,7 +56,7 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
                 </DialogContent>
             )}
             <DialogActions>
-                <Button size="large" disabled={canClose} onClick={onClose}>
+                <Button size="large" onClick={onClose}>
                     {t('cancel')}
                 </Button>
                 <Button size="large" color="inherit" disabled={canCommit} onClick={share}>
