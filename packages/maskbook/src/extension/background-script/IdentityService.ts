@@ -24,9 +24,7 @@ import { decompressBackupFile } from '../../utils/type-transform/BackupFileShort
 
 OnlyRunInContext(['background', 'debugging'], 'IdentityService')
 
-//#region Avatars
-export { storeAvatar, getAvatarDataURL as queryAvatarDataURL } from '../../database'
-//#endregion
+export { storeAvatar, queryAvatarDataURL } from '../../database'
 
 //#region Profile
 export { queryProfile, queryProfilePaged } from '../../database'
@@ -88,7 +86,7 @@ export function queryMyPersonas(network?: string): Promise<Persona[]> {
             : x,
     )
 }
-export async function restoreFromObject(object: null | BackupJSONFileLatest) {
+export async function restoreFromObject(object: null | BackupJSONFileLatest): Promise<Persona | null> {
     if (!object) return null
     await restoreBackup(object)
     if (object?.personas?.length) {
@@ -96,17 +94,21 @@ export async function restoreFromObject(object: null | BackupJSONFileLatest) {
     }
     return null
 }
-export async function restoreFromMnemonicWords(mnemonicWords: string, nickname: string, password: string) {
+export async function restoreFromMnemonicWords(
+    mnemonicWords: string,
+    nickname: string,
+    password: string,
+): Promise<Persona> {
     if (!bip39.validateMnemonic(mnemonicWords)) throw new Error('the mnemonic words are not valid')
     const identifier = await restoreNewIdentityWithMnemonicWord(mnemonicWords, password, {
         nickname,
     })
     return queryPersona(identifier)
 }
-export async function restoreFromBase64(base64: string) {
+export async function restoreFromBase64(base64: string): Promise<Persona | null> {
     return restoreFromObject(JSON.parse(decodeText(decodeArrayBuffer(base64))) as BackupJSONFileLatest)
 }
-export async function restoreFromBackup(backup: string) {
+export async function restoreFromBackup(backup: string): Promise<Persona | null> {
     return restoreFromObject(UpgradeBackupJSONFile(decompressBackupFile(backup)))
 }
 //#endregion
@@ -132,7 +134,8 @@ export { detachProfileDB as detachProfile } from '../../database/Persona/Persona
 //#endregion
 
 /**
- * Resolve my possible identity
+ * In older version of Maskbook, identity is marked as `ProfileIdentifier(network, '$unknown')` or `ProfileIdentifier(network, '$self')`. After upgrading to the newer version of Maskbook, Maskbook will try to find the current user in that network and call this function to replace old identifier into a "resolved" identity.
+ * @param identifier The resolved identity
  */
 export async function resolveIdentity(identifier: ProfileIdentifier): Promise<void> {
     const unknown = new ProfileIdentifier(identifier.network, '$unknown')
@@ -145,8 +148,8 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
         identifier,
     }
     try {
-        consistentPersonaDBWriteAccess(async (t) => {
-            await createProfileDB(final, t as any)
+        await consistentPersonaDBWriteAccess(async (t) => {
+            await createProfileDB(final, t)
             await deleteProfileDB(unknown, t).catch(() => {})
             await deleteProfileDB(self, t).catch(() => {})
         })

@@ -417,7 +417,9 @@ export async function createOrUpdateProfileDB(rec: ProfileRecord, t: ProfileTran
 }
 
 /**
- * detach a profile.
+ * Detach a profile from it's linking persona.
+ * @param identifier The profile want to detach
+ * @param t A living transaction
  */
 export async function detachProfileDB(
     identifier: ProfileIdentifier,
@@ -432,14 +434,8 @@ export async function detachProfileDB(
     persona?.linkedProfiles.delete(identifier)
 
     if (persona) {
-        // if (await safeDeletePersonaDB(linkedPersona, t)) {
-        // persona deleted
-        // } else {
-        // update persona
         await updatePersonaDB(persona, { linkedProfiles: 'replace', explicitUndefinedField: 'delete field' }, t)
-        // }
     }
-    // update profile
     profile.linkedPersona = undefined
     await updateProfileDB(profile, t)
 }

@@ -1,6 +1,8 @@
-import { Identifier } from './type'
+import { PersonaIdentifier, Identifier, ProfileIdentifier, GroupIdentifier } from './type'
 import { serializable } from '../utils/type-transform/Serialization'
 import { immerable } from 'immer'
+import type { Persona, Profile } from './Persona/types'
+import type { Group } from './helpers/group'
 
 /**
  * The IdentifierMap is like a built-in Map<Identifier, T>.
@@ -11,6 +13,21 @@ import { immerable } from 'immer'
 @serializable('IdentifierMap')
 export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<IdentifierType, T> {
     [immerable] = true
+    static fromPersonaList(persona: Persona[]) {
+        const map = new IdentifierMap(new Map(), ...PersonaIdentifier)
+        persona.forEach((x) => map.set(x.identifier, x))
+        return map
+    }
+    static fromProfileList(profile: Profile[]) {
+        const map = new IdentifierMap(new Map(), ProfileIdentifier)
+        profile.forEach((x) => map.set(x.identifier, x))
+        return map
+    }
+    static fromGroupList(group: Group[]) {
+        const map = new IdentifierMap(new Map(), GroupIdentifier)
+        group.forEach((x) => map.set(x.identifier, x))
+        return map
+    }
     /**
      *
      * @param __raw_map__ The origin data.
