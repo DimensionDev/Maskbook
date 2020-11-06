@@ -17,6 +17,7 @@ import type { PostInfo } from './PostInfo'
 import { Flags } from '../utils/flags'
 import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 import { editMetadata } from '../protocols/typed-message'
+import type { IdentifierMap, ReadonlyIdentifierMap } from '../database/IdentifierMap'
 
 if (!process.env.STORYBOOK) {
     OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
@@ -231,15 +232,15 @@ export interface SocialNetworkUIDataSources {
     /**
      * My Maskbook friends at this network
      */
-    readonly friendsRef?: ValueRef<Profile[]>
+    readonly friendsRef?: ValueRef<ReadonlyIdentifierMap<ProfileIdentifier, Profile>>
     /**
      * My groups at this network
      */
-    readonly groupsRef?: ValueRef<Group[]>
+    readonly groupsRef?: ValueRef<readonly Group[]>
     /**
      * My identities at current network
      */
-    readonly myIdentitiesRef?: ValueRef<Profile[]>
+    readonly myIdentitiesRef?: ValueRef<readonly Profile[]>
     /**
      * The account that user is using (may not in the database)
      */

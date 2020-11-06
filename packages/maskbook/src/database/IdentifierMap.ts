@@ -1,5 +1,6 @@
 import { Identifier } from './type'
 import { serializable } from '../utils/type-transform/Serialization'
+import { immerable } from 'immer'
 
 /**
  * The IdentifierMap is like a built-in Map<Identifier, T>.
@@ -9,6 +10,7 @@ import { serializable } from '../utils/type-transform/Serialization'
  */
 @serializable('IdentifierMap')
 export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<IdentifierType, T> {
+    [immerable] = true
     /**
      *
      * @param __raw_map__ The origin data.
@@ -19,7 +21,7 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
             this.constructorName = constructor.map((x) => x.name)
         }
     }
-    private constructorName: string[] = []
+    private readonly constructorName: string[] = []
     get(key: IdentifierType) {
         return this.__raw_map__.get(key.toText())
     }
@@ -104,6 +106,7 @@ IdentifierMap.prototype[Symbol.toStringTag] = 'IdentifierMap'
 export type ReadonlyIdentifierMap<IdentifierType extends Identifier, T> = ReadonlyMap<IdentifierType, T> & {
     readonly __raw_map__: ReadonlyMap<string, T>
 }
+// eslint-disable-next-line no-redeclare
 export const ReadonlyIdentifierMap: {
     new <IdentifierType extends Identifier, T>(
         __raw_map__: ReadonlyMap<string, T>,

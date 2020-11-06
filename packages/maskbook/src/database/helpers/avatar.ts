@@ -1,7 +1,7 @@
 import { ProfileIdentifier, GroupIdentifier } from '../type'
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB } from '../avatar'
 import { memoizePromise } from '../../utils/memoize'
-import { MessageCenter } from '../../utils/messages'
+import { MaskMessage } from '../../utils/messages'
 import { downloadUrl } from '../../utils/utils'
 import { queryProfile } from '..'
 
@@ -55,7 +55,7 @@ export async function storeAvatar(
     } finally {
         getAvatarDataURL.cache.delete(identifier.toText())
         if (identifier instanceof ProfileIdentifier) {
-            MessageCenter.emit('profilesChanged', [{ of: await queryProfile(identifier), reason: 'update' }])
+            MaskMessage.events.profilesChanged.sendToAll([{ of: identifier, reason: 'update' }])
         }
     }
 }

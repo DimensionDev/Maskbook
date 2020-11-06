@@ -7,9 +7,9 @@ import type { Profile } from '../../database'
 export function InitMyIdentitiesValueRef(self: SocialNetworkUI, network: string) {
     const ref = self.myIdentitiesRef
     query(network, ref)
-    MaskMessage.events.ownedPersonaUpdated.on(() => query(network, ref))
+    MaskMessage.events.personaChanged.on((e) => e.some((x) => x.owned) && query(network, ref))
 }
 
-function query(network: string, ref: ValueRef<Profile[]>) {
+function query(network: string, ref: ValueRef<readonly Profile[]>) {
     Services.Identity.queryMyProfiles(network).then((p) => (ref.value = p))
 }

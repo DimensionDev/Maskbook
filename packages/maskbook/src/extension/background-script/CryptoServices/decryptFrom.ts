@@ -9,7 +9,6 @@ import { queryPersonaRecord, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
-import { MessageCenter } from '../../../utils/messages'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { cryptoProviderTable } from './cryptoProviderTable'
 import type { PersonaRecord } from '../../../database/Persona/Persona.db'
@@ -23,6 +22,7 @@ import { decodeImageUrl } from '../SteganographyService'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import stringify from 'json-stable-stringify'
 import { calculatePostKeyPartition } from '../../../network/gun/version.2'
+import { MaskMessage } from '../../../utils/messages'
 
 type Progress =
     | {
@@ -363,10 +363,10 @@ async function* findAuthorPublicKey(
                     undo()
                     reject()
                 })
-                const undo = MessageCenter.on('profilesChanged', (data) => {
+                const undo = MaskMessage.events.profilesChanged.on((data) => {
                     for (const x of data) {
                         if (x.reason === 'delete') continue
-                        if (x.of.identifier.equals(by)) {
+                        if (x.of.equals(by)) {
                             undo()
                             resolve()
                             break

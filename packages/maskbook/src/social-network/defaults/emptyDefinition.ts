@@ -6,6 +6,7 @@ import type { Profile } from '../../database'
 import { ProfileArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 import { ObservableWeakMap } from '../../utils/ObservableMapSet'
 import { noop } from 'lodash-es'
+import { IdentifierMap } from '../../database/IdentifierMap'
 
 /**
  * DO NOT use this in content script
@@ -37,7 +38,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     injectPageInspector: nopWithUnmount,
     resolveLastRecognizedIdentity: noop,
     posts: new ObservableWeakMap(),
-    friendsRef: new ValueRef([], ProfileArrayComparer),
+    friendsRef: new ValueRef(new IdentifierMap(new Map(), ProfileIdentifier)),
     isDangerousNetwork: false,
     isValidUsername() {
         return true

@@ -13,7 +13,7 @@ import { createOrUpdatePostDB } from '../../../database/post'
 import { GroupRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
 import { createOrUpdateUserGroupDatabase } from '../../../database/group'
 import { i18n } from '../../../utils/i18n-next'
-import { MessageCenter } from '../../../utils/messages'
+import { MaskMessage } from '../../../utils/messages'
 import { currentImportingBackup } from '../../../settings/settings'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { importNewWallet } from '../../../plugins/Wallet/services'
@@ -27,7 +27,6 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
         const data = UpgradeBackupJSONFile(json, whoAmI)
         if (!data) throw new TypeError(i18n.t('service_invalid_backup_file'))
 
-        MessageCenter.startBatch()
         {
             await consistentPersonaDBWriteAccess(async (t) => {
                 for (const x of data.personas) {
@@ -67,7 +66,6 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
             await createOrUpdateUserGroupDatabase(rec, 'append')
         }
     } finally {
-        MessageCenter.commitBatch()
         currentImportingBackup.value = false
     }
 }

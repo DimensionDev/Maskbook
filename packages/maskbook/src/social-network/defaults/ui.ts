@@ -8,9 +8,10 @@ import type { Profile } from '../../database'
 import { useMaskbookTheme } from '../../utils/theme'
 import { ProfileArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 import { ObservableWeakMap } from '../../utils/ObservableMapSet'
+import { IdentifierMap } from '../../database/IdentifierMap'
 
 const defaultDataSources: Required<SocialNetworkUIDataSources> = cloneDeep({
-    friendsRef: new ValueRef([], ProfileArrayComparer),
+    friendsRef: new ValueRef(new IdentifierMap(new Map(), ProfileIdentifier)),
     myIdentitiesRef: new ValueRef([], ProfileArrayComparer),
     groupsRef: new ValueRef([], GroupArrayComparer),
     currentIdentity: new ValueRef<Profile | null>(null),

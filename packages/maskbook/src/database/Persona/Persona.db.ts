@@ -4,13 +4,8 @@ import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } fro
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
-import { MaskMessage, MessageCenter } from '../../utils/messages'
-import {
-    createDBAccess,
-    IDBPSafeTransaction,
-    createTransaction,
-    createDBAccessWithAsyncUpgrade,
-} from '../helpers/openDB'
+import { MaskMessage } from '../../utils/messages'
+import { IDBPSafeTransaction, createTransaction, createDBAccessWithAsyncUpgrade } from '../helpers/openDB'
 import { queryProfile } from './helpers'
 import { assertPersonaDBConsistency } from './consistency'
 import type {
@@ -19,7 +14,6 @@ import type {
     EC_Private_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
-import { Flags } from '../../utils/flags'
 /**
  * Database structure:
  *
@@ -120,6 +114,10 @@ export async function consistentPersonaDBWriteAccess(
     t.addEventListener('complete', finish)
     t.addEventListener('error', finish)
 
+    // Pause those events when patching write access
+    const resumeProfile = MaskMessage.events.profilesChanged.pause()
+    const resumePersona = MaskMessage.events.personaChanged.pause()
+    const resumeLinkedProfileChanged = MaskMessage.events.linkedProfilesChanged.pause()
     try {
         await action(t)
     } finally {
@@ -129,19 +127,25 @@ export async function consistentPersonaDBWriteAccess(
             // start a new transaction to check consistency
             t = createTransaction(await db(), 'readwrite')('profiles', 'personas')
         }
-        await assertPersonaDBConsistency(tryToAutoFix ? 'fix' : 'throw', 'full check', t)
+        try {
+            await assertPersonaDBConsistency(tryToAutoFix ? 'fix' : 'throw', 'full check', t)
+            resumeProfile((data) => [data.flat()])
+            resumePersona((data) => [data.flat()])
+            resumeLinkedProfileChanged((data) => [data.flat()])
+        } finally {
+            // If the consistency check throws, we drop all pending events
+            resumeProfile(() => [])
+            resumePersona(() => [])
+            resumeLinkedProfileChanged(() => [])
+        }
     }
 }
 
 //#region Plain methods
-/**
- * Create a new Persona.
- * If the record contains `privateKey`, it will be stored in the `self` store.
- * Otherwise, it will be stored in the `others` store.
- */
+/** Create a new Persona. */
 export async function createPersonaDB(record: PersonaRecord, t: PersonasTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('personas').add(personaRecordToDB(record))
-    MessageCenter.emit('personaUpdated', undefined)
+    MaskMessage.events.personaChanged.sendToAll([{ of: record.identifier, owned: !!record.privateKey, reason: 'new' }])
 }
 
 export async function queryPersonaByProfileDB(
@@ -241,7 +245,7 @@ export async function updatePersonaDB(
         updatedAt: nextRecord.updatedAt ?? new Date(),
     })
     await t.objectStore('personas').put(next)
-    MessageCenter.emit('personaUpdated', undefined)
+    MaskMessage.events.personaChanged.sendToAll([{ of: old.identifier, owned: !!next.privateKey, reason: 'update' }])
 }
 
 export async function createOrUpdatePersonaDB(
@@ -275,7 +279,7 @@ export async function deletePersonaDB(
     if (confirm !== 'delete even with private' && r.privateKey)
         throw new TypeError('Cannot delete a persona with a private key')
     await t.objectStore('personas').delete(id.toText())
-    MessageCenter.emit('personaUpdated', undefined)
+    MaskMessage.events.personaChanged.sendToAll([{ of: id, owned: !!r.privateKey, reason: 'delete' }])
 }
 /**
  * Delete a Persona
@@ -291,7 +295,6 @@ export async function safeDeletePersonaDB(
     if (r.linkedProfiles.size !== 0) return false
     if (r.privateKey) return false
     await deletePersonaDB(id, "don't delete if have private key", t)
-    MessageCenter.emit('personaUpdated', undefined)
     return true
 }
 
@@ -300,10 +303,7 @@ export async function safeDeletePersonaDB(
  */
 export async function createProfileDB(record: ProfileRecord, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').add(profileToDB(record))
-    setTimeout(async () => {
-        MaskMessage.events.ownedPersonaCreated.sendToAll(undefined)
-        MessageCenter.emit('profilesChanged', [{ reason: 'new', of: await queryProfile(record.identifier) }])
-    }, 0)
+    MaskMessage.events.profilesChanged.sendToAll([{ of: record.identifier, reason: 'update' }])
 }
 
 /**
@@ -400,16 +400,14 @@ export async function updateProfileDB(
     await t.objectStore('profiles').put(nextRecord)
     setTimeout(async () => {
         const next = await queryProfile(updating.identifier)
-        MessageCenter.emit('profilesChanged', [{ reason: 'update', of: next } as const])
+        MaskMessage.events.profilesChanged.sendToAll([{ reason: 'update', of: updating.identifier }])
 
         const oldKey = old.linkedPersona ? restorePrototype(old.linkedPersona, ECKeyIdentifier.prototype) : undefined
         const newKey = next.linkedPersona
         if (oldKey?.toText() !== newKey?.identifier.toText()) {
-            MessageCenter.emit('linkedProfileChanged', {
-                of: next.identifier,
-                before: oldKey,
-                after: newKey?.identifier,
-            })
+            MaskMessage.events.linkedProfilesChanged.sendToAll([
+                { of: next.identifier, before: oldKey, after: newKey?.identifier },
+            ])
         }
     }, 0)
 }
@@ -479,7 +477,7 @@ export async function attachProfileDB(
  */
 export async function deleteProfileDB(id: ProfileIdentifier, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').delete(id.toText())
-    queryProfile(id).then((of) => MessageCenter.emit('profilesChanged', [{ reason: 'delete', of } as const]))
+    MaskMessage.events.profilesChanged.sendToAll([{ reason: 'delete', of: id }])
 }
 
 //#endregion

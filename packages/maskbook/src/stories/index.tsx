@@ -12,6 +12,7 @@ import { ValueRef } from '@dimensiondev/holoflows-kit/es'
 import { ProfileIdentifier } from '../database/type'
 import { emptyDefinition } from '../social-network/defaults/emptyDefinition'
 import type { Profile } from '../database'
+import { IdentifierMap } from '../database/IdentifierMap'
 
 Object.assign(globalThis, {
     browser: {
@@ -40,7 +41,7 @@ defineSocialNetworkUI({
     groupsRef: new ValueRef(demoGroup),
     lastRecognizedIdentity: new ValueRef({ identifier: new ProfileIdentifier('example.com', 'example-user-name') }),
     currentIdentity: new ValueRef<Profile | null>(null),
-    friendsRef: new ValueRef(demoPeople),
+    friendsRef: new ValueRef(new IdentifierMap(new Map())),
 })
 defineSocialNetworkUI({ ...emptyDefinition, friendlyName: 'Neoparia Breakfast Club' })
 defineSocialNetworkUI({

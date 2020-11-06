@@ -11,7 +11,7 @@ export interface RemoteControlledDialogEvent {
  * Use a dialog state controlled by remote
  */
 export function useRemoteControlledDialog<T extends { open: boolean }>(
-    event: UnboundedRegistry<T, any>,
+    event: UnboundedRegistry<T>,
     onUpdateByRemote?: (ev: T) => void,
     tabType: 'self' | 'activated' = 'self',
 ) {

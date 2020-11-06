@@ -63,7 +63,7 @@ export interface ChooseIdentityProps extends withClasses<KeysInferFromUseStyles<
     /** All available identities
      * @defaultValue `useMyIdentities()`
      */
-    identities: Profile[]
+    identities: readonly Profile[]
     /** When user change the identity
      *  @defaultValue will change the global selected identity
      */
