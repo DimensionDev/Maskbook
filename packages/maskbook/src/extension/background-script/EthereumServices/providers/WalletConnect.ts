@@ -1,4 +1,6 @@
 import Web3 from 'web3'
+import type { Eth } from 'web3-eth'
+import type { Personal } from 'web3-eth-personal'
 import { EthereumAddress } from 'wallet.ts'
 import type { provider as Provider, PromiEvent as PromiEventW3 } from 'web3-core'
 import WalletConnect from '@walletconnect/client'
@@ -49,59 +51,81 @@ export function createProvider() {
     return Maskbook.createProvider(currentChainId)
 }
 
+//#region hijack web3js calls and forword them to walletconnect APIs
+function hijackETH(eth: Eth) {
+    return new Proxy(eth, {
+        get(target, name) {
+            switch (name) {
+                case 'personal':
+                    return hijackPersonal(Reflect.get(target, 'personal'))
+                case 'sendTransaction':
+                    return (txData: ITxData, callback?: () => void) => {
+                        const listeners: { name: string; listener: Function }[] = []
+                        const promise = connector?.sendTransaction(txData) as Promise<string>
+
+                        // mimic PromiEvent API
+                        Object.assign(promise, {
+                            on(name: string, listener: Function) {
+                                listeners.push({ name, listener })
+                            },
+                        })
+
+                        // only trasnaction hash available
+                        promise
+                            .then((hash) => {
+                                listeners
+                                    .filter((x) => x.name === TransactionEventType.TRANSACTION_HASH)
+                                    .forEach((y) => y.listener(hash))
+                            })
+                            .catch((e) => {
+                                listeners
+                                    .filter((x) => x.name === TransactionEventType.ERROR)
+                                    .forEach((y) => y.listener(e))
+                            })
+
+                        return (promise as unknown) as PromiEventW3<string>
+                    }
+                default:
+                    return Reflect.get(target, name)
+            }
+        },
+    })
+}
+
+function hijackPersonal(personal: Personal) {
+    return new Proxy(personal, {
+        get(target, name) {
+            switch (name) {
+                // personal_sign
+                case 'sign':
+                    return async (
+                        data: string,
+                        address: string,
+                        password: string,
+                        callback?: (signed: string) => void,
+                    ) => {
+                        const signed = (await connector?.signPersonalMessage([data, address, password])) as string
+                        if (callback) callback(signed)
+                        return signed
+                    }
+                default:
+                    return Reflect.get(target, name)
+            }
+        },
+    })
+}
+
 // Wrap promise as PromiEvent because WalletConnect returns transaction hash only
 // docs: https://docs.walletconnect.org/client-api
 export function createWeb3() {
     provider = createProvider()
     if (!web3) web3 = new Web3(provider)
     else web3.setProvider(provider)
-
     return Object.assign(web3, {
-        eth: new Proxy(web3.eth, {
-            get(target, name) {
-                switch (name) {
-                    case 'eth_sign':
-                        return async (data: string, address: string, callback?: (signed: string) => void) => {
-                            const signed = (await connector?.signMessage([data, address])) as string
-                            if (callback) callback(signed)
-                            return signed
-                        }
-                    case 'sendTransaction':
-                        return (txData: ITxData, callback?: () => void) => {
-                            const listeners: { name: string; listener: Function }[] = []
-                            const promise = connector?.sendTransaction(txData) as Promise<string>
-
-                            // mimic PromiEvent API
-                            Object.assign(promise, {
-                                on(name: string, listener: Function) {
-                                    listeners.push({ name, listener })
-                                },
-                            })
-
-                            // only trasnaction hash available
-                            promise
-                                .then((hash) => {
-                                    listeners
-                                        .filter((x) => x.name === TransactionEventType.TRANSACTION_HASH)
-                                        .forEach((y) => y.listener(hash))
-                                })
-                                .catch((e) => {
-                                    listeners
-                                        .filter((x) => x.name === TransactionEventType.ERROR)
-                                        .forEach((y) => y.listener(e))
-                                })
-
-                            return (promise as unknown) as PromiEventW3<string>
-                        }
-                    case 'sendRawTransaction':
-                        throw new Error('TO BE IMPLEMENT')
-                    default:
-                        return Reflect.get(target, name)
-                }
-            },
-        }),
+        eth: hijackETH(web3.eth),
     })
 }
+//#endregion
 
 /**
  * Request accounts from WalletConnect
