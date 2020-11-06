@@ -50,7 +50,7 @@ export function useMintCallback(from: string, stateType: US_STATE_TYPE, candidat
                 error,
             })
         }
-    }, [from, stateType, candidateType])
+    }, [from, stateType, candidateType, electionTokenContract])
 
     const resetCallback = useCallback(() => {
         setMintState({

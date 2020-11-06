@@ -1,10 +1,12 @@
 import {
+    createStyles,
     DialogActions,
     DialogClassKey,
     DialogContent,
     DialogContentProps,
     DialogTitle,
     IconButton,
+    makeStyles,
     Typography,
 } from '@material-ui/core'
 import React from 'react'
@@ -12,6 +14,15 @@ import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { getCustomUIOverwrite, mergeClasses, useStylesExtends } from '../custom-ui-helper'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
+
+const useStyles = makeStyles((theme) =>
+    createStyles({
+        dialogTitleTypography: {
+            marginLeft: 6,
+            verticalAlign: 'middle',
+        },
+    }),
+)
 
 export type InjectedDialogClassKey =
     | DialogClassKey
@@ -26,6 +37,7 @@ export interface InjectedDialogProps extends withClasses<InjectedDialogClassKey>
     title: React.ReactChild
 }
 export function InjectedDialog(props: InjectedDialogProps) {
+    const classes = useStyles()
     const overwrite = getCustomUIOverwrite()
     props = overwrite.InjectedDialog?.props?.(props) ?? props
     const {
@@ -34,15 +46,15 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogContent,
         dialogTitle,
         dialogTitleTypography,
-        ...classes
-    } = useStylesExtends({}, props, overwrite.InjectedDialog?.classes)
+        ...dialogClasses
+    } = useStylesExtends(classes, props, overwrite.InjectedDialog?.classes)
     const { t } = useI18N()
     const actions = CopyElementWithNewProps(props.children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(props.children, DialogContent, { root: dialogContent })
 
     return (
         <ShadowRootDialog
-            classes={classes}
+            classes={dialogClasses}
             open={props.open}
             scroll="paper"
             fullWidth

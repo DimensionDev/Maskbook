@@ -123,7 +123,7 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                     textColor="primary"
                     onChange={onTabChange}>
                     <Tab label="Token"></Tab>
-                    <Tab label="NFT"></Tab>
+                    <Tab label="Collectibles"></Tab>
                 </Tabs>
                 {!xsMatched ? (
                     <Box className={classes.footer} display="flex" alignItems="center" justifyContent="flex-end">

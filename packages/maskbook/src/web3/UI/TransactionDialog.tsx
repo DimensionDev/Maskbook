@@ -24,10 +24,11 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         content: {
+            textAlign: 'center',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: theme.spacing(5, 1),
+            padding: theme.spacing(5, 3),
         },
         icon: {
             fontSize: 64,
