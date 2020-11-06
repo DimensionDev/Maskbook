@@ -54,4 +54,5 @@ export interface MaskMessages {
     }[]
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
+Object.assign(globalThis, { MaskMessage })
 MaskMessage.serialization = Serialization

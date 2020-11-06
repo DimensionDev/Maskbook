@@ -1195,10 +1195,10 @@
   dependencies:
     "@msgpack/msgpack" "^1.12.2"
 
-"@dimensiondev/holoflows-kit@0.8.0-20201106041128-f4ecd3b":
-  version "0.8.0-20201106041128-f4ecd3b"
-  resolved "https://npm.dimension.im/download/@dimensiondev/holoflows-kit/0.8.0-20201106041128-f4ecd3b/88d37603432a4cdad82808c5e800c3ef1ddb6076ef2196a92df7a6353bd80f41#a40fda0d312990dfb35300dcde9232240523a2ed"
-  integrity sha512-WL369lYGkHqYuypjP0KcDdbxWBlIao+RqKM7NTIxtL9t2XuPmlWqu54HFx/LP7cVRdOBKB0LuNFnSsu6Ou1BvA==
+"@dimensiondev/holoflows-kit@0.8.0-20201106054814-cd8d5c3":
+  version "0.8.0-20201106054814-cd8d5c3"
+  resolved "https://npm.dimension.im/download/@dimensiondev/holoflows-kit/0.8.0-20201106054814-cd8d5c3/eaf6675b39ee463ec44959e716b3c559b1a553e421e2d0079a9e3e742f68ded2#2f4df15c53c63030952aa780fffd40fa939434c2"
+  integrity sha512-FNUwBlb1V1ttyQJTH2zIS0Z0x304lRzPEzmQ3Gw3iI12M0xCrF+myDaWohna1j4w3mKlZM6zaA/lTvyuA4pQ7Q==
   dependencies:
     "@servie/events" "^1.0.0"
     async-call-rpc "^4.1.0"

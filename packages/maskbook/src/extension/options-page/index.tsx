@@ -1,6 +1,5 @@
 import '../../provider.worker'
 import '../../setup.ui'
-import '../tab'
 
 import React, { useState } from 'react'
 import { useAsync } from 'react-use'
