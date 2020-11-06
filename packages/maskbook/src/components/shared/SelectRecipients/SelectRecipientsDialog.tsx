@@ -57,13 +57,13 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
 
     return (
         <InjectedDialog open={props.open} title={t('select_specific_friends_dialog__title')} onExit={props.onClose}>
-            <InputBase
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className={classes.input}
-                placeholder={t('search_box_placeholder')}
-            />
             <DialogContent>
+                <InputBase
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className={classes.input}
+                    placeholder={t('search_box_placeholder')}
+                />
                 <List style={{ height: items.length * LIST_ITEM_HEIGHT }} dense>
                     {itemsAfterSearch.length === 0 ? (
                         <ListItem>
