@@ -5,14 +5,19 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { QRCode } from '../../../components/shared/qrcode'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { MaskbookWalletMessages, WalletMessageCenter } from '../messages'
+import { WalletMessageCenter } from '../messages'
 import Services from '../../../extension/service'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
-import { WalletConnectIcon } from '../../../resources/WalletConnectIcon'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
+        content: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
         title: {
             fontWeight: 700,
             marginLeft: theme.spacing(1),
@@ -63,16 +68,8 @@ export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps)
 
     return (
         <>
-            <InjectedDialog
-                open={open}
-                onExit={onClose}
-                title={
-                    <Box display="flex" alignItems="center">
-                        <WalletConnectIcon />
-                        <Typography className={classes.title}>WalletConnect</Typography>
-                    </Box>
-                }>
-                <DialogContent>
+            <InjectedDialog open={open} onExit={onClose} title="WalletConnect">
+                <DialogContent className={classes.content}>
                     <Typography className={classes.tip} color="textSecondary">
                         Scan QR code with a WalletConnect-compatible wallet.
                     </Typography>
