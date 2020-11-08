@@ -208,7 +208,7 @@
     "react-devtools": "^4.9.0",
     "react-docgen-typescript-loader": "^3.7.2",
     "react-refresh": "^0.9.0",
-    "react-refresh-typescript": "^1.0.3",
+    "react-refresh-typescript": "^1.1.0",
     "react-test-renderer": "^17.0.1",
     "source-map-loader": "^1.1.2",
     "storybook-addon-designs": "^5.4.2",
