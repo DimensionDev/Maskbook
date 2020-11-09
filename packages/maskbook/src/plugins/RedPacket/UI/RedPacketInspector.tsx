@@ -21,14 +21,13 @@ export interface RedPacketInspectorProps extends withClasses<KeysInferFromUseSty
 export function RedPacketInspector(props: RedPacketInspectorProps) {
     const { message } = props
     const storybookDebugging: boolean = !!process.env.STORYBOOK
-    const account = useAccount()
 
     const jsx = message
         ? renderWithRedPacketMetadata(message.meta, (r) => {
               if (storybookDebugging) return null
               return (
                   <MaskbookPluginWrapper pluginName="Red Packet">
-                      <RedPacketInPost from={account} payload={r} />
+                      <RedPacketInPost payload={r} />
                   </MaskbookPluginWrapper>
               )
           })

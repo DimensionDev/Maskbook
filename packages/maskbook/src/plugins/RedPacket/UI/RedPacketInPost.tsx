@@ -6,12 +6,11 @@ import Services from '../../../extension/service'
 import { RedPacket } from './RedPacket'
 
 export interface RedPacketInPostProps {
-    from: string
     payload: RedPacketJSONPayload
 }
 
 export function RedPacketInPost(props: RedPacketInPostProps) {
-    const { from, payload } = props
+    const { payload } = props
 
     //#region discover red packet
     const postIdentifier = usePostInfoDetails('postIdentifier')
@@ -22,5 +21,5 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     }, [fromUrl])
     //#endregion
 
-    return <RedPacket from={from} payload={payload} />
+    return <RedPacket payload={payload} />
 }

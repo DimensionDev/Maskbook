@@ -2,16 +2,14 @@ import React, { useState, useCallback } from 'react'
 import { DialogContent } from '@material-ui/core'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
 import type { RedPacketJSONPayload } from '../types'
-import { editActivatedPostMetadata, getActivatedUI } from '../../../social-network/ui'
+import { editActivatedPostMetadata } from '../../../social-network/ui'
 import { RedPacketMetaKey } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { RedPacketForm } from './RedPacketForm'
 import { RedPacketBacklogList } from './RedPacketList'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
-import { useAccount } from '../../../web3/hooks/useAccount'
 import Services from '../../../extension/service'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { editMetadata } from '../../../protocols/typed-message'
 
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean
@@ -23,7 +21,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
     const { onConfirm } = props
 
-    const account = useAccount()
     const onCreateOrSelect = useCallback(
         (payload: RedPacketJSONPayload) => {
             editActivatedPostMetadata((next) =>
@@ -48,7 +45,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             },
             {
                 label: t('plugin_red_packet_select_existing'),
-                children: <RedPacketBacklogList from={account} onSelect={onCreateOrSelect} />,
+                children: <RedPacketBacklogList onSelect={onCreateOrSelect} />,
                 p: 0,
             },
         ],

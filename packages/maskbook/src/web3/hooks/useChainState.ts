@@ -35,7 +35,8 @@ export function useChainId(address?: string) {
  */
 export function useIsChainIdValid() {
     const chainId = useChainId()
-    return Flags.wallet_network_strict_mode_enabled && chainId === ChainId.Mainnet
+    const selectedWallet = useSelectedWallet()
+    return !Flags.wallet_network_strict_mode_enabled || chainId === ChainId.Mainnet || !selectedWallet
 }
 
 /**

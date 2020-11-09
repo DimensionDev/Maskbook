@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, createStyles, Typography, Theme } from '@material-ui/core'
+import { makeStyles, createStyles, Typography } from '@material-ui/core'
 import type { RedPacketJSONPayload } from '../types'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { RedPacketInList } from './RedPacketInList'
@@ -8,7 +8,7 @@ import { usePayloadsComputed } from '../hooks/usePayloadComputed'
 import { useIsChainIdValid } from '../../../web3/hooks/useChainState'
 
 //#region red packet list UI
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             display: 'flex',
@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface RedPacketListProps {
-    from: string
     loading?: boolean
     payloads: RedPacketJSONPayload[]
     FixedSizeListProps?: Partial<FixedSizeListProps>
@@ -40,7 +39,7 @@ interface RedPacketListProps {
 }
 
 function RedPacketList(props: RedPacketListProps) {
-    const { from, loading = false, payloads, FixedSizeListProps, onSelect } = props
+    const { loading = false, payloads, FixedSizeListProps, onSelect } = props
     const classes = useStyles()
     return (
         <div className={classes.root}>
@@ -60,7 +59,6 @@ function RedPacketList(props: RedPacketListProps) {
                     overscanCount={4}
                     itemSize={60}
                     itemData={{
-                        from,
                         payloads,
                         onClick: onSelect,
                     }}
@@ -76,13 +74,12 @@ function RedPacketList(props: RedPacketListProps) {
 
 //#region backlog list
 export interface RedPacketBacklogListProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    from: string
     onSelect?: (payload: RedPacketJSONPayload) => void
 }
 
 export function RedPacketBacklogList(props: RedPacketBacklogListProps) {
-    const { from, onSelect } = props
-    const { value: records = [], loading } = useRedPacketsFromChain(from)
+    const { onSelect } = props
+    const { value: records = [], loading } = useRedPacketsFromChain()
     const payloads_ = usePayloadsComputed(
         'create',
         records.filter((x) => x.availability.balance !== '0' && !x.availability.expired),
@@ -90,36 +87,34 @@ export function RedPacketBacklogList(props: RedPacketBacklogListProps) {
 
     // the payloads from the chain has got empty password
     const payloads = payloads_.filter((x) => x.password)
-    return <RedPacketList from={from} loading={loading} payloads={payloads} onSelect={onSelect} />
+    return <RedPacketList loading={loading} payloads={payloads} onSelect={onSelect} />
 }
 //#endregion
 
 //#region inbound list
 export interface RedPacketInboundListProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    from: string
     onSelect?: (payload: RedPacketJSONPayload) => void
 }
 
 export function RedPacketInboundList(props: RedPacketInboundListProps) {
-    const { from, onSelect } = props
-    const { value: records = [], loading } = useRedPacketsFromChain(from)
+    const { onSelect } = props
+    const { value: records = [], loading } = useRedPacketsFromChain()
     const payloads = usePayloadsComputed('claim', records)
     const chainIdValid = useIsChainIdValid()
-    return <RedPacketList from={from} loading={loading} payloads={chainIdValid ? payloads : []} onSelect={onSelect} />
+    return <RedPacketList loading={loading} payloads={chainIdValid ? payloads : []} onSelect={onSelect} />
 }
 //#endregion
 
 //#region outbound list
 export interface RedPacketOutboundListProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    from: string
     onSelect?: (payload: RedPacketJSONPayload) => void
 }
 
 export function RedPacketOutboundList(props: RedPacketOutboundListProps) {
-    const { from, onSelect } = props
-    const { value: records = [], loading } = useRedPacketsFromChain(from)
+    const { onSelect } = props
+    const { value: records = [], loading } = useRedPacketsFromChain()
     const payloads = usePayloadsComputed('create', records)
     const chainIdValid = useIsChainIdValid()
-    return <RedPacketList from={from} loading={loading} payloads={chainIdValid ? payloads : []} onSelect={onSelect} />
+    return <RedPacketList loading={loading} payloads={chainIdValid ? payloads : []} onSelect={onSelect} />
 }
 //#endregion

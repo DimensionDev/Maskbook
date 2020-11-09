@@ -781,12 +781,12 @@ export function DashboardWalletHistoryDialog(
         tabs: [
             {
                 label: t('activity_inbound'),
-                children: <RedPacketInboundList from={wallet.address} onSelect={onRedPacketClicked} />,
+                children: <RedPacketInboundList onSelect={onRedPacketClicked} />,
                 p: 0,
             },
             {
                 label: t('activity_outbound'),
-                children: <RedPacketOutboundList from={wallet.address} onSelect={onRedPacketClicked} />,
+                children: <RedPacketOutboundList onSelect={onRedPacketClicked} />,
                 display: 'flex',
                 p: 0,
             },
@@ -863,7 +863,7 @@ export function DashboardWalletRedPacketDetailDialog(
                 primary="Red Packet Detail"
                 content={
                     <>
-                        <RedPacket from={wallet.address} payload={payload} />
+                        <RedPacket payload={payload} />
                         {redPacket?.from && !isSameAddress(redPacket.payload.sender.address, wallet.address) && (
                             <ActionButton className={classes.sayThanks} onClick={sayThanks} variant="contained">
                                 Say Thanks
