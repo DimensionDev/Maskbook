@@ -1,5 +1,6 @@
 import Web3 from 'web3'
-import createMetaMaskProvider, { MetamaskInpageProvider } from 'metamask-extension-provider'
+import type { MetamaskInpageProvider } from 'metamask-extension-provider'
+import { createMetaMaskProvider } from '../createMetaMaskProvider'
 import { ChainId } from '../../../../web3/types'
 import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { EthereumAddress } from 'wallet.ts'
@@ -61,6 +62,11 @@ export async function requestAccounts() {
     const accounts = await web3.eth.requestAccounts()
     for (const account of accounts) await updateWalletInDB(account, true)
     return accounts
+}
+
+export async function checkIfMetaMaskLocked() {
+    const accounts: string[] = await provider!.request({ method: 'eth_requestAccounts', params: [] })
+    return accounts.length === 0
 }
 
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {

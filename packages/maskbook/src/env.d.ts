@@ -1,6 +1,7 @@
 /// <reference types="web-ext-types" />
 /// <reference types="react/experimental" />
 /// <reference types="react-dom/experimental" />
+/// <reference types="chrome"/>
 
 declare module NodeJS {
     interface ProcessEnv {

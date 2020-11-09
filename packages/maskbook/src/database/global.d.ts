@@ -7,11 +7,17 @@ declare module 'metamask-extension-provider' {
     export class MetamaskInpageProvider extends EventEmitter implements AbstractProvider {
         sendAsync(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void
         send?(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void
-        request?(args: RequestArguments): Promise<any>
+        request(args: RequestArguments): Promise<any>
         connected?: boolean
     }
-    declare function createMetaMaskProvider(): MetamaskInpageProvider
-    export default createMetaMaskProvider
+}
+
+declare module 'extension-port-stream' {
+    import { Duplex } from 'stream'
+
+    export default class PortStream extends Duplex {
+        constructor(port: chrome.runtime.Port): Duplex
+    }
 }
 /**
  * IDBFactory v3
