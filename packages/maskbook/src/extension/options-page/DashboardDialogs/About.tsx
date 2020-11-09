@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) =>
 export function DashboardAboutDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
     const classes = useStyles()
-    const { version } = globalThis.browser?.runtime.getManifest() ?? {}
+    const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
     return (
         <DashboardDialogCore {...props} CloseIconProps={{ className: classes.close }}>
             <section className={classes.wrapper}>
@@ -80,7 +80,11 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
                     <Avatar className={classes.maskface} src="/MB--CircleCanvas--WhiteOverBlue.svg"></Avatar>
                     <img className={classes.masktext} src="/maskbook-title-white.svg" />
                     <Typography className={classes.version} variant="body2" color="inherit">
-                        {t('version_of_stable', { version })}
+                        {t(process.env.build === 'stable' ? 'version_of_stable' : 'version_of_unstable', {
+                            version,
+                            build: process.env.build,
+                            hash: process.env.COMMIT_HASH,
+                        })}
                     </Typography>
                 </header>
                 <main className={classes.main}>
