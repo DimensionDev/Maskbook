@@ -4,6 +4,7 @@ import {
     DialogClassKey,
     DialogContent,
     DialogContentProps,
+    DialogProps,
     DialogTitle,
     IconButton,
     makeStyles,
@@ -17,6 +18,10 @@ import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
+        dialogTitle: {
+            padding: theme.spacing(1, 2),
+            borderBottom: `1px solid ${theme.palette.divider}`,
+        },
         dialogTitleTypography: {
             marginLeft: 6,
             verticalAlign: 'middle',
@@ -35,6 +40,7 @@ export interface InjectedDialogProps extends withClasses<InjectedDialogClassKey>
     open: boolean
     onExit?(): void
     title: React.ReactChild
+    DialogProps?: Partial<DialogProps>
 }
 export function InjectedDialog(props: InjectedDialogProps) {
     const classes = useStyles()
@@ -62,7 +68,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
             disableAutoFocus
             disableEnforceFocus
             onBackdropClick={props.onExit}
-            onEscapeKeyDown={props.onExit}>
+            onEscapeKeyDown={props.onExit}
+            {...props.DialogProps}>
             <DialogTitle classes={{ root: dialogTitle }}>
                 <IconButton
                     classes={{ root: dialogCloseButton }}

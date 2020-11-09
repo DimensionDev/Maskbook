@@ -289,6 +289,7 @@
     "plugin_wallet_view_on_etherscan": "在 Etherscan 上查看",
     "plugin_wallet_wrong_network": "錯誤的網絡",
     "plugin_wallet_connect_a_wallet": "",
+    "plugin_wallet_select_a_wallet": "",
     "plugin_red_packet_display_name": "插件：紅包",
     "plugin_red_packet_split_mode": "分配模式",
     "plugin_red_packet_average": "平均",

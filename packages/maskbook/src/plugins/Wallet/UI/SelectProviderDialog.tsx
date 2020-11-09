@@ -1,6 +1,16 @@
 import React, { useCallback, useEffect } from 'react'
 import { MoreHorizontal } from 'react-feather'
-import { makeStyles, Theme, createStyles, DialogContent, GridList, GridListTile, Typography } from '@material-ui/core'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+    DialogContent,
+    GridList,
+    GridListTile,
+    Typography,
+    Link,
+    DialogActions,
+} from '@material-ui/core'
 import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
@@ -41,6 +51,9 @@ const useStyles = makeStyles((theme: Theme) =>
         icon: {
             fontSize: 45,
         },
+        tip: {
+            fontSize: 12,
+        },
     }),
 )
 
@@ -61,8 +74,12 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     }, [setOpen])
     //#endregion
 
+    //#region select wallet dialog
+    const [, selectWalletDialogOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectWalletDialogUpdated')
+    //#endregion
+
     //#region wallet connect QR code dialog
-    const [_, setWalletConnectDialogOpen] = useRemoteControlledDialog(
+    const [, setWalletConnectDialogOpen] = useRemoteControlledDialog(
         WalletMessageCenter,
         'walletConnectQRCodeDialogUpdated',
     )
@@ -76,6 +93,9 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
             onClose()
             switch (providerType) {
                 case ProviderType.Maskbook:
+                    selectWalletDialogOpen({
+                        open: true,
+                    })
                     if (GetContext() === 'options') history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
                     else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
                     break
@@ -172,6 +192,18 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     </GridListTile>
                 </GridList>
             </DialogContent>
+            <DialogActions>
+                <Typography className={classes.tip} color="textSecondary">
+                    New to Ethereum?{' '}
+                    <Link
+                        color="primary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://ethereum.org/en/wallets/">
+                        Learn more about wallets
+                    </Link>
+                </Typography>
+            </DialogActions>
         </InjectedDialog>
     )
 }

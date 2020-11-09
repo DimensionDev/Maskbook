@@ -289,6 +289,7 @@
     "plugin_wallet_view_on_etherscan": "Etherscanで見る",
     "plugin_wallet_wrong_network": "",
     "plugin_wallet_connect_a_wallet": "",
+    "plugin_wallet_select_a_wallet": "",
     "plugin_red_packet_display_name": "プラグイン: 投げ銭",
     "plugin_red_packet_split_mode": "分割モード",
     "plugin_red_packet_average": "平均",

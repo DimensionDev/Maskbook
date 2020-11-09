@@ -32,13 +32,9 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
 
     //#region remote controlled buy token dialog
     const [address, setAddress] = useState('')
-    const [open, setOpen] = useRemoteControlledDialog<MaskbookTransakMessages, 'buyTokenDialogUpdated'>(
-        TransakMessageCenter,
-        'buyTokenDialogUpdated',
-        (ev) => {
-            if (ev.open) setAddress(ev.address)
-        },
-    )
+    const [open, setOpen] = useRemoteControlledDialog(TransakMessageCenter, 'buyTokenDialogUpdated', (ev) => {
+        if (ev.open) setAddress(ev.address)
+    })
     //#endregion
 
     // render in dashboard

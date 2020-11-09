@@ -31,6 +31,10 @@ type SelectWalletDialogEvent =
           open: false
       }
 
+type WalletStatusDialogEvent = {
+    open: boolean
+}
+
 type TransactionDialogEvent =
     | {
           open: true
@@ -66,6 +70,11 @@ export interface MaskbookWalletMessages {
      * Select token dialog
      */
     selectERC20TokenDialogUpdated: SelectERC20TokenDialogEvent
+
+    /**
+     * Wallet status dialog
+     */
+    walletStatusDialogUpdated: WalletStatusDialogEvent
 
     /**
      * Transaction dialog

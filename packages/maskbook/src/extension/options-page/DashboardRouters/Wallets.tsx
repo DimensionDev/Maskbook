@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, IconButton, Typography } from '@material-ui/core'
+import { Avatar, Button, IconButton, Typography } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import AddIcon from '@material-ui/icons/Add'
@@ -28,6 +28,7 @@ import { useTokensDetailedCallback } from '../../../web3/hooks/useTokensDetailed
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
+import { useBlockie } from '../../../web3/hooks/useBlockie'
 
 //#region theme
 const walletsTheme = (theme: Theme) =>
@@ -80,7 +81,13 @@ const useStyles = makeStyles((theme) =>
             flexDirection: 'column',
             height: '100%',
         },
-        title: {},
+        caption: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        title: {
+            marginLeft: theme.spacing(1),
+        },
     }),
 )
 
@@ -98,6 +105,7 @@ export default function DashboardWalletsRouter() {
 
     const selectedWallet = useSelectedWallet()
     const tokens = useTokens(selectedWallet?.address ?? '')
+    const blockie = useBlockie(selectedWallet?.address ?? '')
 
     const [detailedTokens, detailedTokensCallback] = useTokensDetailedCallback(tokens)
 
@@ -119,7 +127,6 @@ export default function DashboardWalletsRouter() {
 
     // show provider connect dialog
     const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
-
     const onConnect = useCallback(() => {
         setOpen({
             open: true,
@@ -187,11 +194,14 @@ export default function DashboardWalletsRouter() {
                 <div className={classes.root}>
                     <div className={classes.header}>
                         {selectedWallet ? (
-                            <Typography className={classes.title} variant="h5" color="textPrimary">
-                                {selectedWallet.name
-                                    ? truncate(selectedWallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN })
-                                    : selectedWallet.address}
-                            </Typography>
+                            <section className={classes.caption}>
+                                <Avatar src={blockie} />
+                                <Typography className={classes.title} variant="h5" color="textPrimary">
+                                    {selectedWallet.name
+                                        ? truncate(selectedWallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN })
+                                        : selectedWallet.address}
+                                </Typography>
+                            </section>
                         ) : null}
                         <EthereumStatusBar BoxProps={{ justifyContent: 'flex-end' }} />
                     </div>

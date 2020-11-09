@@ -93,12 +93,12 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
     //#endregion
 
     //#region select wallet dialog
-    const [, setSelectWalletOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectWalletDialogUpdated')
+    const [, setSelectWalletOpen] = useRemoteControlledDialog(WalletMessageCenter, 'walletStatusDialogUpdated')
     const onOpen = useCallback(() => {
         setSelectWalletOpen({
             open: true,
         })
-    }, [])
+    }, [setSelectWalletOpen])
     //#endregion
 
     if (!address_) return null
