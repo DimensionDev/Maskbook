@@ -299,6 +299,8 @@
     "plugin_red_packet_shares": "份數",
     "plugin_red_packet_best_wishes": "大吉大利！",
     "plugin_red_packet_create_new": "創建新紅包",
+    "plugin_red_packet_claim": "",
+    "plugin_red_packet_refund": "",
     "plugin_red_packet_select_existing": "選擇已有紅包",
     "plugin_red_packet_attached_message": "附言",
     "plugin_red_packet_from": "來自：{{name}}",

@@ -5,6 +5,7 @@ import { useChainId, useIsChainIdValid } from '../hooks/useChainState'
 import { EthereumAccountChip } from './EthereumAccountChip'
 import { EthereumChainChip } from './EthereumChainChip'
 import { useAccount } from '../hooks/useAccount'
+import { ChainId } from '../types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,7 +38,7 @@ export function EthereumStatusBar(props: EthereumStatusBarProps) {
     if (!account) return null
     return (
         <Box className={classes.root} {...BoxProps}>
-            {chainIdValid ? (
+            {chainId !== ChainId.Mainnet && chainIdValid ? (
                 <EthereumChainChip
                     classes={{ root: classes.chainChip }}
                     chainId={chainId}

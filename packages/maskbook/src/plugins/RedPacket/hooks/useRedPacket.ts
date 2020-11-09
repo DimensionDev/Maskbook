@@ -7,6 +7,7 @@ import { useChainId } from '../../../web3/hooks/useChainState'
 import { resolveChainId } from '../../../web3/pipes'
 import { useBlockNumberOnce } from '../../../web3/hooks/useChainState'
 import { RED_PACKET_HISTROY_MAX_BLOCK_SIZE } from '../constants'
+import { useAccount } from '../../../web3/hooks/useAccount'
 
 //#region tracking red packets in the DB
 const redPacketsRef = new ValueRef<RedPacketRecord[]>([], RedPacketArrayComparer)
@@ -28,14 +29,15 @@ export function useRedPacketsFromDB() {
     return redPackets.filter((x) => (x.payload.network ? resolveChainId(x.payload.network) === chainId : false))
 }
 
-export function useRedPacketsFromChain(from: string) {
-    const chainId = useChainId(from)
+export function useRedPacketsFromChain() {
+    const account = useAccount()
+    const chainId = useChainId()
     const blockNumber = useBlockNumberOnce(chainId)
     return useAsync(
         async () =>
             blockNumber
-                ? RedPacketRPC.getRedPacketsFromChain(from, blockNumber - RED_PACKET_HISTROY_MAX_BLOCK_SIZE)
+                ? RedPacketRPC.getRedPacketsFromChain(account, blockNumber - RED_PACKET_HISTROY_MAX_BLOCK_SIZE)
                 : [],
-        [blockNumber, from],
+        [account, blockNumber],
     )
 }

@@ -299,6 +299,8 @@
     "plugin_red_packet_shares": "Shares",
     "plugin_red_packet_best_wishes": "Best Wishes!",
     "plugin_red_packet_create_new": "Create New",
+    "plugin_red_packet_claim": "Claim",
+    "plugin_red_packet_refund": "Refund",
     "plugin_red_packet_select_existing": "Select Existing",
     "plugin_red_packet_attached_message": "Attached Message",
     "plugin_red_packet_from": "From: {{name}}",

@@ -299,6 +299,8 @@
     "plugin_red_packet_shares": "株数",
     "plugin_red_packet_best_wishes": " 最高！",
     "plugin_red_packet_create_new": "新規作成",
+    "plugin_red_packet_claim": "",
+    "plugin_red_packet_refund": "",
     "plugin_red_packet_select_existing": "既存を選択",
     "plugin_red_packet_attached_message": "メッセージを追加",
     "plugin_red_packet_from": "送信者: {{name}}",
