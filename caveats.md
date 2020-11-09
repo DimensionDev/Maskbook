@@ -30,3 +30,9 @@ Please use [Conventional Commits](https://www.conventionalcommits.org) when comm
 You can use an environment variable `NO_HMR` to close HMR totally.
 
 If you found HMR doesn't work, please open <https://localhost:8080> and ignore the HTTPs certificate error.
+
+## Caveats for Library
+
+- `lodash`, List of unavailable functions.
+   1. `_.chain`
+   2. `_.template`
