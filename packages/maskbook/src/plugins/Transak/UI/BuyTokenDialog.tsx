@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { createStyles, makeStyles, withStyles } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
@@ -35,6 +35,11 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
     const [open, setOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated, (ev) => {
         if (ev.open) setAddress(ev.address)
     })
+    const onClose = useCallback(() => {
+        setOpen({
+            open: false,
+        })
+    }, [setOpen])
     //#endregion
 
     // render in dashboard
@@ -45,11 +50,7 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
             <GlobalCss />
             <Transak
                 open={open}
-                onClose={() =>
-                    setOpen({
-                        open: false,
-                    })
-                }
+                onClose={onClose}
                 TransakSDKConfig={{
                     walletAddress: address,
                 }}

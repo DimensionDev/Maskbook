@@ -1,11 +1,7 @@
 import React from 'react'
 import { Box, makeStyles, createStyles, Theme, ChipProps, BoxProps } from '@material-ui/core'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import { useChainId, useIsChainIdValid } from '../hooks/useChainState'
-import { EthereumAccountChip } from './EthereumAccountChip'
-import { EthereumChainChip } from './EthereumChainChip'
-import { useAccount } from '../hooks/useAccount'
-import { ChainId } from '../types'
+import { EthereumAccountButton } from './EthereumAccountButton'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,33 +19,15 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface EthereumStatusBarProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     BoxProps?: Partial<BoxProps>
-    ChainChipProps?: Partial<ChipProps>
-    AccountChipProps?: Partial<ChipProps>
+    AccountButtonProps?: Partial<ChipProps>
 }
 
 export function EthereumStatusBar(props: EthereumStatusBarProps) {
-    const { BoxProps, AccountChipProps, ChainChipProps } = props
+    const { BoxProps, AccountButtonProps } = props
     const classes = useStylesExtends(useStyles(), props)
-
-    const account = useAccount()
-    const chainId = useChainId()
-    const chainIdValid = useIsChainIdValid()
-
-    if (!account) return null
     return (
         <Box className={classes.root} {...BoxProps}>
-            {chainId !== ChainId.Mainnet && chainIdValid ? (
-                <EthereumChainChip
-                    classes={{ root: classes.chainChip }}
-                    chainId={chainId}
-                    ChipProps={{ variant: 'outlined', ...ChainChipProps }}
-                />
-            ) : null}
-            <EthereumAccountChip
-                classes={{ root: classes.accountChip }}
-                address={account}
-                ChipProps={{ size: 'medium', variant: 'outlined', clickable: true, ...AccountChipProps }}
-            />
+            <EthereumAccountButton classes={{ root: classes.accountChip }} {...AccountButtonProps} />
         </Box>
     )
 }

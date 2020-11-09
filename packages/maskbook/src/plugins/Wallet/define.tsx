@@ -5,6 +5,7 @@ import { PLUGIN_IDENTIFIER } from './constants'
 import { SelectProviderDialog } from './UI/SelectProviderDialog'
 import { SelectWalletDialog } from './UI/SelectWalletDialog'
 import { WalletConnectQRCodeDialog } from './UI/WalletConnectQRCodeDialog'
+import { WalletStatusDialog } from './UI/WalletStatusDialog'
 
 export const WalletPluginDefine: PluginConfig = {
     pluginName: 'Wallet',
@@ -17,6 +18,7 @@ export const WalletPluginDefine: PluginConfig = {
                 <TransactionDialog />
                 <SelectWalletDialog />
                 <SelectProviderDialog />
+                <WalletStatusDialog />
                 <WalletConnectQRCodeDialog />
             </>
         )
@@ -27,6 +29,7 @@ export const WalletPluginDefine: PluginConfig = {
                 <TransactionDialog />
                 <SelectWalletDialog />
                 <SelectProviderDialog />
+                <WalletStatusDialog />
                 <WalletConnectQRCodeDialog />
             </>
         )

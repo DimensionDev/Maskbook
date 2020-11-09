@@ -71,12 +71,10 @@ export function Trader(props: TraderProps) {
     const isEtherOutput = outputTokenAddress === ETH_ADDRESS
 
     const asyncInputToken = useToken({
-        ...inputToken,
         type: isEtherInput ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
         address: isEtherInput ? ETH_ADDRESS : inputTokenAddress,
     })
     const asyncOutputToken = useToken({
-        ...outputToken,
         type: isEtherOutput ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
         address: isEtherOutput ? ETH_ADDRESS : outputTokenAddress,
     })
@@ -211,14 +209,16 @@ export function Trader(props: TraderProps) {
         (ev) => {
             if (ev.open) return
             setFreezed(false)
-            dispatchSwapStore({
-                type: SwapActionType.UPDATE_INPUT_AMOUNT,
-                amount: '0',
-            })
-            dispatchSwapStore({
-                type: SwapActionType.UPDATE_OUTPUT_AMOUNT,
-                amount: '0',
-            })
+            if (swapState.type === TransactionStateType.HASH) {
+                dispatchSwapStore({
+                    type: SwapActionType.UPDATE_INPUT_AMOUNT,
+                    amount: '0',
+                })
+                dispatchSwapStore({
+                    type: SwapActionType.UPDATE_OUTPUT_AMOUNT,
+                    amount: '0',
+                })
+            }
             resetSwapCallback()
         },
     )

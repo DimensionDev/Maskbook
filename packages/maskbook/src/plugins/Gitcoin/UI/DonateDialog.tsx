@@ -10,7 +10,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { createEetherToken } from '../../../web3/helpers'
-import { useChainId, useIsChainIdValid } from '../../../web3/hooks/useChainState'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { useERC20TokenApproveCallback, ApproveState } from '../../../web3/hooks/useERC20TokenApproveCallback'
@@ -75,7 +75,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
-    const chainIdValid = useIsChainIdValid()
+    const chainIdValid = useChainIdValid()
 
     //#region select token
     const [token, setToken] = useState<Token>(createEetherToken(chainId))
@@ -101,12 +101,12 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     //#endregion
 
     //#region connect wallet
-    const [, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {
-        setOpen({
+        setSelectProviderDialogOpen({
             open: true,
         })
-    }, [setOpen])
+    }, [setSelectProviderDialogOpen])
     //#endregion
 
     //#region approve ERC20
@@ -140,7 +140,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-            setAmount('0')
+            if (donateState.type === TransactionStateType.HASH) setAmount('0')
             resetDonateCallback()
         },
     )
@@ -178,7 +178,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     if (!props.address) return null
     return (
         <div className={classes.root}>
-            <InjectedDialog open={props.open} onExit={props.onClose} title={title}>
+            <InjectedDialog open={props.open} onExit={props.onClose} title={title} DialogProps={{ maxWidth: 'xs' }}>
                 <DialogContent>
                     <EthereumStatusBar classes={{ root: classes.root }} />
                     <form className={classes.form} noValidate autoComplete="off">

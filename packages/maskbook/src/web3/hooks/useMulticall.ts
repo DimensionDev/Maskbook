@@ -104,7 +104,7 @@ export function useMutlicallStateDecoded<
                 }
             }
         })
-    }, [contracts, names, state])
+    }, [contracts.map((x) => x.options.address).join(','), names, state])
 }
 //#endregion
 

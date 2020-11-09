@@ -45,33 +45,31 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     //#endregion
 
     return (
-        <>
-            <InjectedDialog open={open} onExit={onClose} title="Select a Token">
-                <DialogContent>
-                    <TextField
-                        className={classes.search}
-                        label={t('add_token_search_hint')}
-                        autoFocus
-                        fullWidth
-                        value={keyword}
-                        variant="outlined"
-                        onChange={(e) => setKeyword(e.target.value)}
-                    />
-                    <FixedTokenList
-                        classes={{ list: classes.list, placeholder: classes.placeholder }}
-                        useEther={true}
-                        keyword={keyword}
-                        excludeTokens={excludeTokens}
-                        onSubmit={onSubmit}
-                        FixedSizeListProps={{
-                            height: 288,
-                            itemSize: 52,
-                            overscanCount: 4,
-                        }}
-                    />
-                </DialogContent>
-            </InjectedDialog>
-        </>
+        <InjectedDialog open={open} onExit={onClose} title="Select a Token" DialogProps={{ maxWidth: 'xs' }}>
+            <DialogContent>
+                <TextField
+                    className={classes.search}
+                    label={t('add_token_search_hint')}
+                    autoFocus
+                    fullWidth
+                    value={keyword}
+                    variant="outlined"
+                    onChange={(e) => setKeyword(e.target.value)}
+                />
+                <FixedTokenList
+                    classes={{ list: classes.list, placeholder: classes.placeholder }}
+                    useEther={true}
+                    keyword={keyword}
+                    excludeTokens={excludeTokens}
+                    onSubmit={onSubmit}
+                    FixedSizeListProps={{
+                        height: 288,
+                        itemSize: 52,
+                        overscanCount: 4,
+                    }}
+                />
+            </DialogContent>
+        </InjectedDialog>
     )
 }
 

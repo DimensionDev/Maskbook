@@ -23,7 +23,7 @@ import { useAvailability } from '../hooks/useAvailability'
 import { useERC721Token } from '../../../web3/hooks/useERC721Token'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { useChainId, useIsChainIdValid } from '../../../web3/hooks/useChainState'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles((theme) =>
@@ -146,7 +146,7 @@ export function ElectionPacket(props: ElectionPacketProps) {
 
     // fetch the NTF token
     const ELECTION_TOKEN_ADDRESS = useConstant(ELECTION_2020_CONSTANTS, 'ELECTION_TOKEN_ADDRESS')
-    const electionToken = useERC721Token({
+    const { value: electionToken } = useERC721Token({
         type: EthereumTokenType.ERC721,
         address: ELECTION_TOKEN_ADDRESS,
     })
@@ -164,7 +164,7 @@ export function ElectionPacket(props: ElectionPacketProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
-    const chainIdValid = useIsChainIdValid()
+    const chainIdValid = useChainIdValid()
 
     //#region mint
     const [mintState, mintCallback, resetMintCallback] = useMintCallback(account, payload.state, payload.winner)
@@ -212,12 +212,12 @@ export function ElectionPacket(props: ElectionPacketProps) {
     //#endregion
 
     //#region remote controlled select provider dialog
-    const [, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {
-        setOpen({
+        setSelectProviderDialogOpen({
             open: true,
         })
-    }, [setOpen])
+    }, [setSelectProviderDialogOpen])
     //#endregion
 
     // TODO:

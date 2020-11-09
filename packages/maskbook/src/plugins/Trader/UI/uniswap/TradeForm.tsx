@@ -16,7 +16,7 @@ import { ApproveState } from '../../../../web3/hooks/useERC20TokenApproveCallbac
 import { TradeStrategy, TokenPanelType } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { useIsChainIdValid } from '../../../../web3/hooks/useChainState'
+import { useChainIdValid } from '../../../../web3/hooks/useChainState'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -91,7 +91,7 @@ export function TradeForm(props: TradeFormProps) {
 
     //#region context
     const account = useAccount()
-    const chainIdValid = useIsChainIdValid()
+    const chainIdValid = useChainIdValid()
     //#endregion
 
     //#region loading balance
@@ -104,12 +104,12 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region remote controlled select provider dialog
-    const [, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {
-        setOpen({
+        setSelectProviderDialogOpen({
             open: true,
         })
-    }, [setOpen])
+    }, [setSelectProviderDialogOpen])
     //#endregion
 
     //#region form controls

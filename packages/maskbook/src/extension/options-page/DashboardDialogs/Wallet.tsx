@@ -41,7 +41,6 @@ import { QRCode } from '../../../components/shared/qrcode'
 import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { Token, EthereumTokenType } from '../../../web3/types'
-import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
 import { RedPacketInboundList, RedPacketOutboundList } from '../../../plugins/RedPacket/UI/RedPacketList'
 import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
@@ -537,11 +536,8 @@ const useBackupDialogStyles = makeStyles((theme: Theme) =>
 
 export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
-    const {
-        wallet: { address },
-    } = props.ComponentProps!
+    const { wallet } = props.ComponentProps!
     const classes = useBackupDialogStyles()
-    const wallet = useWallet(address)
     const { value: privateKeyInHex } = useAsync(async () => {
         if (!wallet) return
         const { privateKeyInHex } = wallet._private_key_
