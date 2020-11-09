@@ -34,5 +34,5 @@ If you found HMR doesn't work, please open <https://localhost:8080> and ignore t
 ## Caveats for Library
 
 - `lodash`, List of unavailable functions.
-   1. `_.chain`
-   2. `_.template`
+  1. `_.chain`
+  2. `_.template` (see #1865)
