@@ -66,5 +66,10 @@ function mockedGlobalThis() {
     globalThis.matchMedia = () => {
         return { matches: false, ...EventTarget }
     }
+    const kit = require('@dimensiondev/holoflows-kit')
+    // Don't setup
+    kit.WebExtensionMessage.setup = () => {}
+    globalThis.__holoflows_kit_get_environment_debug__ =
+        kit.Environment.HasBrowserAPI | kit.Environment.ExtensionProtocol | kit.Environment.ManifestPageAction
     return globalThis
 }
