@@ -77,6 +77,10 @@ export const lastActivatedWalletProvider = createInternalSettings<ProviderType>(
     ProviderType.Maskbook,
 )
 
+export const isMetaMaskUnlocked = createGlobalSettings<boolean>('is metaMask unlocked', false, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
 export enum Language {
     zh = 'zh',
     en = 'en',

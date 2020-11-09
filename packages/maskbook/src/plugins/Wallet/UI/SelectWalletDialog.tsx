@@ -12,7 +12,7 @@ import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { sleep } from '../../../utils/utils'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { currentSelectedWalletAddressSettings } from '../settings'
+import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
 const useStyles = makeStyles((theme) => createStyles({}))
@@ -37,6 +37,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const onSelect = useCallback(
         (wallet: WalletRecord) => {
             currentSelectedWalletAddressSettings.value = wallet.address
+            currentSelectedWalletProviderSettings.value = wallet.provider
             onClose()
         },
         [onClose],

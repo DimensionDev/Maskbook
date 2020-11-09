@@ -34,12 +34,15 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import { useERC20TokenApproveCallback, ApproveState } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { useCreateCallback } from '../hooks/useCreateCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { checkIfMetaMaskLocked } from '../../../extension/background-script/EthereumServices/providers/MetaMask'
+import Services from '../../../extension/service'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { RedPacketJSONPayload } from '../types'
 import { resolveChainName } from '../../../web3/pipes'
 import { WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { isMetaMaskUnlocked, currentSelectedWalletProviderSettings } from '../../Wallet/settings'
+import { ProviderType } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -103,7 +106,9 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const [isRandom, setIsRandom] = useState(0)
     const [message, setMessage] = useState('Best Wishes!')
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
-
+    const isUnlocked = useValueRef(isMetaMaskUnlocked)
+    const currentProvider = useValueRef(currentSelectedWalletProviderSettings)
+    console.log('currentProvider', currentProvider)
     // shares
     const [shares, setShares] = useState<number | ''>(RED_PACKET_DEFAULT_SHARES)
     const onShareChange = useCallback(
@@ -148,6 +153,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         token,
         total: totalAmount.toFixed(),
     })
+
     //#endregion
 
     //#region remote controlled transaction dialog
@@ -292,7 +298,18 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     defaultValue={t('plugin_red_packet_best_wishes')}
                 />
             </div>
-            {approveRequired ? (
+            {!isUnlocked && currentProvider === ProviderType.MetaMask ? (
+                <ActionButton
+                    className={classes.button}
+                    fullWidth
+                    variant="contained"
+                    onClick={async () => {
+                        console.log('popupMetaMaskUnlocked')
+                        await Services.Ethereum.popupMetaMaskUnlocked()
+                    }}>
+                    {t('metamask_unlock')}
+                </ActionButton>
+            ) : approveRequired ? (
                 <ActionButton
                     className={classes.button}
                     fullWidth
@@ -308,7 +325,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     className={classes.button}
                     fullWidth
                     variant="contained"
-                    disabled={Boolean(validationMessage)}
+                    disabled={Boolean(isUnlocked) && Boolean(validationMessage)}
                     onClick={createCallback}>
                     {validationMessage ||
                         `Send ${formatBalance(totalAmount, token.decimals, token.decimals)} ${token.symbol}`}

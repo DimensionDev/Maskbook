@@ -9,6 +9,7 @@ declare module 'metamask-extension-provider' {
         send?(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void
         request(args: RequestArguments): Promise<any>
         connected?: boolean
+        _metamask?: { isUnlocked: () => Promise<boolean> }
     }
 }
 
@@ -16,7 +17,7 @@ declare module 'extension-port-stream' {
     import { Duplex } from 'stream'
 
     export default class PortStream extends Duplex {
-        constructor(port: chrome.runtime.Port): Duplex
+        constructor(port: browser.runtime.Port): Duplex
     }
 }
 /**

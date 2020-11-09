@@ -7,7 +7,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import { ProviderType } from '../../../../web3/types'
 import { MaskMessage } from '../../../../utils/messages'
-import { currentSelectedWalletAddressSettings } from '../../../../plugins/Wallet/settings'
+import { currentSelectedWalletAddressSettings, isMetaMaskUnlocked } from '../../../../plugins/Wallet/settings'
 
 //#region tracking chain id
 let currentChainId: ChainId = ChainId.Mainnet
@@ -24,7 +24,8 @@ async function onData(error: Error | null, event?: { method: string; result: str
     await updateWalletInDB(event.result[0] ?? '', false)
 }
 
-function onNetworkChanged(id: string) {
+async function onNetworkChanged(id: string) {
+    await detectIfMetaMaskUnlocked()
     currentMetaMaskChainIdSettings.value = Number.parseInt(id, 10) as ChainId
 }
 
@@ -64,9 +65,17 @@ export async function requestAccounts() {
     return accounts
 }
 
-export async function checkIfMetaMaskLocked() {
-    const accounts: string[] = await provider!.request({ method: 'eth_requestAccounts', params: [] })
-    return accounts.length === 0
+export async function popupMetaMaskUnlocked() {
+    const isUnlocked = await detectIfMetaMaskUnlocked()
+    if (!isUnlocked) {
+        await provider!.request({ method: 'eth_requestAccounts', params: [] })
+    }
+}
+
+async function detectIfMetaMaskUnlocked() {
+    const isUnlocked = Boolean(await provider!._metamask?.isUnlocked())
+    isMetaMaskUnlocked.value = isUnlocked
+    return isUnlocked
 }
 
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {

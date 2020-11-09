@@ -31,3 +31,7 @@ export async function connectMaskbook() {
     // return the first managed wallet
     return first(wallets)
 }
+
+export async function popupMetaMaskUnlocked() {
+    await MetaMask.popupMetaMaskUnlocked()
+}
