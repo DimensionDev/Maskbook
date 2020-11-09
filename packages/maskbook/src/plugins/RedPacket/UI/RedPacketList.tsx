@@ -5,6 +5,7 @@ import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { RedPacketInList } from './RedPacketInList'
 import { useRedPacketsFromChain } from '../hooks/useRedPacket'
 import { usePayloadsComputed } from '../hooks/usePayloadComputed'
+import { useIsChainIdValid } from '../../../web3/hooks/useChainState'
 
 //#region red packet list UI
 const useStyles = makeStyles((theme: Theme) =>
@@ -103,7 +104,8 @@ export function RedPacketInboundList(props: RedPacketInboundListProps) {
     const { from, onSelect } = props
     const { value: records = [], loading } = useRedPacketsFromChain(from)
     const payloads = usePayloadsComputed('claim', records)
-    return <RedPacketList from={from} loading={loading} payloads={payloads} onSelect={onSelect} />
+    const chainIdValid = useIsChainIdValid()
+    return <RedPacketList from={from} loading={loading} payloads={chainIdValid ? payloads : []} onSelect={onSelect} />
 }
 //#endregion
 
@@ -117,6 +119,7 @@ export function RedPacketOutboundList(props: RedPacketOutboundListProps) {
     const { from, onSelect } = props
     const { value: records = [], loading } = useRedPacketsFromChain(from)
     const payloads = usePayloadsComputed('create', records)
-    return <RedPacketList from={from} loading={loading} payloads={payloads} onSelect={onSelect} />
+    const chainIdValid = useIsChainIdValid()
+    return <RedPacketList from={from} loading={loading} payloads={chainIdValid ? payloads : []} onSelect={onSelect} />
 }
 //#endregion

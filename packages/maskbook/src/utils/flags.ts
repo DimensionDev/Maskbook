@@ -28,6 +28,10 @@ export const Flags = {
     // TODO: document why it enabled on app
     support_eth_network_switch: process.env.architecture === 'app' || betaOrInsiderOnly,
     //#region Experimental features
+    wallet_enabled: true,
+    /** Prohibit the use of wrong networks */
+    // wallet_network_strict_mode_enabled: process.env.NODE_ENV === 'production' && !betaOrInsiderOnly,
+    wallet_network_strict_mode_enabled: true,
     transak_enabled: false,
     trader_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,

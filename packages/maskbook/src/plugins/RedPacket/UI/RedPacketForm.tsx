@@ -24,7 +24,7 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { Token, EthereumTokenType, EthereumNetwork } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useChainState'
+import { useChainId, useIsChainIdValid } from '../../../web3/hooks/useChainState'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { createEetherToken } from '../../../web3/helpers'
@@ -79,6 +79,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
+    const chainIdValid = useIsChainIdValid()
 
     //#region select token
     const [token, setToken] = useState<Token>(createEetherToken(chainId))
@@ -222,8 +223,17 @@ export function RedPacketForm(props: RedPacketFormProps) {
     }, [createState /* update tx dialog only if state changed */])
     //#endregion
 
+    //#region connect wallet
+    const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
+    const onConnect = useCallback(() => {
+        setOpen({
+            open: true,
+        })
+    }, [setOpen])
+    //#endregion
+
     const validationMessage = useMemo(() => {
-        if (!account) return t('connect_a_wallet')
+        if (!account) return t('plugin_wallet_connect_a_wallet')
         if (!token.address) return 'Select a token'
         if (new BigNumber(shares || '0').isZero()) return 'Enter shares'
         if (new BigNumber(amount).isZero()) return 'Enter an amount'
@@ -292,7 +302,11 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     defaultValue={t('plugin_red_packet_best_wishes')}
                 />
             </div>
-            {approveRequired ? (
+            {!account || !chainIdValid ? (
+                <ActionButton className={classes.button} fullWidth variant="contained" size="large" onClick={onConnect}>
+                    {t('plugin_wallet_connect_a_wallet')}
+                </ActionButton>
+            ) : approveRequired ? (
                 <ActionButton
                     className={classes.button}
                     fullWidth
@@ -314,6 +328,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                         `Send ${formatBalance(totalAmount, token.decimals, token.decimals)} ${token.symbol}`}
                 </ActionButton>
             )}
+
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
                 excludeTokens={[token.address]}

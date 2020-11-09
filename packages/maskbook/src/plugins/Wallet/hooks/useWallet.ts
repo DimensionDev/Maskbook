@@ -5,7 +5,7 @@ import Services from '../../../extension/service'
 import type { ProviderType } from '../../../web3/types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { WalletRecord } from '../database/types'
-import { WalletArrayComparer, WalletComparer } from '../helpers'
+import { WalletArrayComparer } from '../helpers'
 import { isSameAddress } from '../../../web3/helpers'
 import { currentSelectedWalletAddressSettings } from '../settings'
 
