@@ -21,10 +21,12 @@ export function PageInspector(props: PageInspectorProps) {
         MaskMessage.events.autoPasteFailed.on((data) => {
             const key = data.image ? Math.random() : data.text
             const close = () => prompt.closeSnackbar(key)
+            const timeout = setTimeout(() => {
+                prompt.closeSnackbar(key)
+            }, 15 * 1000 /** 15 seconds */)
             prompt.enqueueSnackbar(t('auto_paste_failed_snackbar'), {
-                variant: 'warning',
+                variant: 'info',
                 preventDuplicate: true,
-                persist: true,
                 anchorOrigin: xsMatched
                     ? {
                           vertical: 'bottom',
@@ -34,7 +36,7 @@ export function PageInspector(props: PageInspectorProps) {
                 key,
                 action: (
                     <>
-                        <Button color="inherit" onClick={() => [close(), autoPasteFailed(data)]}>
+                        <Button color="inherit" onClick={() => [clearTimeout(timeout), close(), autoPasteFailed(data)]}>
                             {t('auto_paste_failed_snackbar_action')}
                         </Button>
                         <IconButton aria-label="Close" onClick={close}>
