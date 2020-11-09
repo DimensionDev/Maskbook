@@ -19,7 +19,7 @@ import { TransactionState, TransactionStateType } from '../hooks/useTransactionS
 import { resolveTransactionLinkOnEtherscan } from '../pipes'
 import { InjectedDialog } from '../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessageCenter } from '../../plugins/Wallet/messages'
+import { WalletMessages } from '../../plugins/Wallet/messages'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -60,7 +60,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
     const [state, setState] = useState<TransactionState | null>(null)
     const [shareLink, setShareLink] = useState('')
     const [summary, setSummary] = useState('')
-    const [open, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'transactionDialogUpdated', (ev) => {
+    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, (ev) => {
         if (ev.open) {
             setState(ev.state)
             setSummary(ev.summary ?? '')

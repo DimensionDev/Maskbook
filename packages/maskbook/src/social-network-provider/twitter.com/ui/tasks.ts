@@ -24,7 +24,7 @@ import { instanceOfTwitterUI } from '.'
 import type { ProfileIdentifier } from '../../../database/type'
 import { encodeArrayBuffer, decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { isMobileTwitter } from '../utils/isMobile'
-import { MessageCenter } from '../../../utils/messages'
+import { MaskMessage } from '../../../utils/messages'
 
 /**
  * Wait for up to 5000 ms
@@ -64,7 +64,7 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
     }
 
     const fail = (e: Error) => {
-        if (opt.autoPasteFailedRecover) MessageCenter.emit('autoPasteFailed', { text })
+        if (opt.autoPasteFailedRecover) MaskMessage.events.autoPasteFailed.sendToLocal({ text })
         throw e
     }
 
@@ -97,7 +97,7 @@ const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text,
 
     async function uploadFail() {
         if (autoPasteFailedRecover) {
-            MessageCenter.emit('autoPasteFailed', {
+            MaskMessage.events.autoPasteFailed.sendToLocal({
                 text: relatedText,
                 image: new Blob([secretImage], { type: 'image/png' }),
             })
@@ -112,7 +112,7 @@ const taskOpenComposeBox = async (
         shareToEveryOne?: boolean
     },
 ) => {
-    MessageCenter.emit('compositionUpdated', {
+    MaskMessage.events.compositionUpdated.sendToLocal({
         reason: 'timeline',
         open: true,
         content,

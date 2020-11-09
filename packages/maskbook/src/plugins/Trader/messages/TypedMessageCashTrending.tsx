@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { TypedMessageAnchor, registerTypedMessageRenderer } from '../../../protocols/typed-message'
 import { Link, Typography } from '@material-ui/core'
 import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
-import { TraderMessageCenter } from '../messages'
+import { PluginTraderMessages } from '../messages'
 import Services from '../../../extension/service'
 
 export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type'> {
@@ -38,7 +38,7 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
                     props.message.name,
                 )
                 if (availablePlatforms.length)
-                    TraderMessageCenter.emit('cashTagObserved', {
+                    PluginTraderMessages.events.cashTagObserved.sendToLocal({
                         name: props.message.name,
                         element,
                         availablePlatforms,

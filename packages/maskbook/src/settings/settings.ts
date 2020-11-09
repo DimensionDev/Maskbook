@@ -3,16 +3,8 @@ import { createGlobalSettings, createInternalSettings, createNetworkSettings } f
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import type { SetupGuideStep } from '../components/InjectedComponents/SetupGuide'
-import { Flags } from '../utils/flags'
 import { ChainId } from '../web3/types'
 import { ProviderType } from '../web3/types'
-
-/**
- * The id of last activated tab
- */
-export const lastActivatedTabIdSettings = createGlobalSettings<string>('lastActiveTabId', '', {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
 
 /**
  * Does the debug mode on

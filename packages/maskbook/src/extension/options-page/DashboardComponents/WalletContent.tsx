@@ -23,7 +23,7 @@ import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ProviderType, TokenDetailed } from '../../../web3/types'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { TransakMessageCenter } from '../../../plugins/Transak/messages'
+import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { Flags } from '../../../utils/flags'
 import { ElectionTokenAlbum } from '../../../plugins/Election2020/UI/ElectionTokenAlbum'
 
@@ -96,17 +96,14 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
     )
 
     //#region remote controlled buy dialog
-    const [, setBuyDialogOpen] = useRemoteControlledDialog(TransakMessageCenter, 'buyTokenDialogUpdated')
+    const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     //#endregion
 
     //#region tab
     const [tabIndex, setTabIndex] = useState(0)
-    const onTabChange = useCallback(
-        (_, newTabIndex: number) => {
-            setTabIndex(newTabIndex)
-        },
-        [tabIndex],
-    )
+    const onTabChange = useCallback((_, newTabIndex: number) => {
+        setTabIndex(newTabIndex)
+    }, [])
     //#endregion
 
     return (

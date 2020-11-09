@@ -12,12 +12,12 @@ import { MaskbookIcon } from '../../../resources/MaskbookIcon'
 import { WalletConnectIcon } from '../../../resources/WalletConnectIcon'
 import Services from '../../../extension/service'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessageCenter, MaskbookWalletMessages } from '../messages'
+import { WalletMessages } from '../messages'
 import { useBlurContext } from '../../../extension/options-page/DashboardContexts/BlurContext'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { ProviderType } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
-import { MessageCenter } from '../../../utils/messages'
+import { MaskMessage } from '../../../utils/messages'
 import { Flags } from '../../../utils/flags'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
@@ -52,7 +52,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const history = useHistory()
 
     //#region remote controlled dialog logic
-    const [open, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
+    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onClose = useCallback(() => {
         setOpen({
             open: false,
@@ -62,8 +62,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
 
     //#region wallet connect QR code dialog
     const [_, setWalletConnectDialogOpen] = useRemoteControlledDialog(
-        WalletMessageCenter,
-        'walletConnectQRCodeDialogUpdated',
+        WalletMessages.events.walletConnectQRCodeDialogUpdated,
     )
     //#endregion
 
@@ -98,14 +97,12 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     // Show error message when click metamask would be better
     useEffect(
         () =>
-            MessageCenter.on('metamaskMessage', async (payload: string) => {
-                if (payload === 'metamask_not_install') {
-                    enqueueSnackbar(t('metamask_not_install'), {
-                        key: 'metamask_not_install',
-                        variant: 'error',
-                        preventDuplicate: true,
-                    })
-                }
+            MaskMessage.events.metamaskDisconnected.on(async () => {
+                enqueueSnackbar(t('metamask_not_install'), {
+                    key: 'metamask_not_install',
+                    variant: 'error',
+                    preventDuplicate: true,
+                })
             }),
         [enqueueSnackbar, t],
     )

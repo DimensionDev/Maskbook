@@ -1,5 +1,5 @@
 import { ValueRef, GetContext } from '@dimensiondev/holoflows-kit'
-import { MessageCenter } from '../utils/messages'
+import { MaskMessage } from '../utils/messages'
 import { defer } from '../utils/utils'
 import { getStorage, setStorage } from '../extension/background-script/StorageService'
 
@@ -21,14 +21,14 @@ const cached: Map<string, InternalSettings<any>> = new Map()
 const lastEventId: Map<string, number> = new Map()
 
 if (GetContext() === 'background') {
-    MessageCenter.on('settingsChanged', async (payload) => {
+    MaskMessage.events.createInternalSettingsChanged.on(async (payload) => {
         const { id, key, value, initial } = payload
         const stored = await getStorage(key)
         if (!initial || (initial && typeof stored === 'undefined')) await setStorage(key, value)
 
         const updated = await getStorage(key)
         if (typeof updated === 'undefined') return
-        MessageCenter.emit('settingsUpdated', {
+        MaskMessage.events.createInternalSettingsUpdated.sendToAll({
             id,
             key,
             value: updated,
@@ -38,7 +38,7 @@ if (GetContext() === 'background') {
     })
 }
 
-MessageCenter.on('settingsUpdated', async (payload) => {
+MaskMessage.events.createInternalSettingsUpdated.on(async (payload) => {
     const { id, key, value } = payload
     const settings = cached.get(key)
     if (!settings) return
@@ -65,7 +65,7 @@ export function createInternalSettings<T extends browser.storage.StorageValue>(
     const id = Date.now()
     cached.set(key, settings)
     lastEventId.set(key, id)
-    MessageCenter.emit('settingsChanged', {
+    MaskMessage.events.createInternalSettingsChanged.sendToAll({
         id,
         key,
         value,
@@ -75,7 +75,7 @@ export function createInternalSettings<T extends browser.storage.StorageValue>(
     settings.addListener((newVal) => {
         const id = Date.now()
         lastEventId.set(key, id)
-        MessageCenter.emit('settingsChanged', {
+        MaskMessage.events.createInternalSettingsChanged.sendToAll({
             id,
             key,
             value: newVal,
@@ -104,7 +104,7 @@ export function createNetworkSettings(settingsKey: string) {
             readyPromise: Promise<string>
         }
     } = {}
-    MessageCenter.on('settingsCreated', (networkKey) => {
+    MaskMessage.events.createNetworkSettingsReady.on((networkKey) => {
         if (!(networkKey in cached)) cached[networkKey] = createInternalSettings(`${networkKey}+${settingsKey}`, '')
     })
     return new Proxy(cached, {
@@ -112,7 +112,7 @@ export function createNetworkSettings(settingsKey: string) {
             if (!(networkKey in target)) {
                 const settings = createInternalSettings(`${networkKey}+${settingsKey}`, '')
                 target[networkKey] = settings
-                settings.readyPromise.then(() => MessageCenter.emit('settingsCreated', networkKey))
+                settings.readyPromise.then(() => MaskMessage.events.createNetworkSettingsReady.sendToAll(networkKey))
             }
             return target[networkKey]
         },

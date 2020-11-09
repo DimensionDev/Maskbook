@@ -4,7 +4,7 @@ import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoo
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { isMobileFacebook } from '../isMobile'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
-import { MessageCenter } from '../../../utils/messages'
+import { MaskMessage } from '../../../utils/messages'
 import { Flags } from '../../../utils/flags'
 
 let composeBox: LiveSelector<Element>
@@ -33,7 +33,7 @@ export function injectPostBoxFacebook() {
 }
 function UI() {
     const onHintButtonClicked = useCallback(
-        () => MessageCenter.emit('compositionUpdated', { reason: 'popup', open: true }),
+        () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'popup', open: true }),
         [],
     )
     return (

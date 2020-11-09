@@ -1,7 +1,6 @@
 import 'webpack-target-webextension/lib/background'
 import './polyfill'
 import { GetContext } from '@dimensiondev/holoflows-kit/es'
-import { MessageCenter } from './utils/messages'
 // @ts-ignore
 import { crypto } from 'webcrypto-liner/build/index.es'
 Object.defineProperty(globalThis, 'crypto', { configurable: true, enumerable: true, get: () => crypto })
@@ -89,15 +88,6 @@ if (GetContext() === 'background') {
         if (Flags.has_native_welcome_ui) return
         if (detail.reason === 'install') {
             browser.tabs.create({ url: getWelcomePageURL() })
-        }
-    })
-
-    MessageCenter.on('closeActiveTab', async () => {
-        const tabs = await browser.tabs.query({
-            active: true,
-        })
-        if (tabs[0]) {
-            await browser.tabs.remove(tabs[0].id!)
         }
     })
 

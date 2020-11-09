@@ -9,7 +9,7 @@ import { isNumber } from 'lodash-es'
 import { formatBalance } from '../../Wallet/formatter'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessageCenter } from '../../Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages'
 
 function fetcher(key: string, url: string) {
     return Services.Plugin.invokePlugin('co.gitcoin', 'fetchMetadata', url)
@@ -30,10 +30,7 @@ export function Gitcoin(props: GitcoinProps) {
     //#region the donate dialog
     const account = useAccount()
     const [open, setOpen] = useState(false)
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(
-        WalletMessageCenter,
-        'selectProviderDialogUpdated',
-    )
+    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onRequest = useCallback(() => {
         if (account) {
             setOpen(true)

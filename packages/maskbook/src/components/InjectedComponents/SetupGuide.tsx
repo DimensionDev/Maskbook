@@ -25,7 +25,7 @@ import { merge, cloneDeep, noop } from 'lodash-es'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { getActivatedUI } from '../../social-network/ui'
 import { currentSetupGuideStatus, SetupGuideCrossContextStatus } from '../../settings/settings'
-import { MessageCenter } from '../../utils/messages'
+import { MaskMessage } from '../../utils/messages'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
@@ -284,7 +284,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
             ev.preventDefault()
             ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, username))
         },
-        [username],
+        [ui, username],
     )
     return (
         <WizardDialog
@@ -520,7 +520,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             }),
         ])
         if (address) currentSelectedWalletAddressSettings.value = address
-        MessageCenter.emit('identityUpdated', undefined)
+        MaskMessage.events.personaChanged.sendToAll([{ of: persona, owned: true, reason: 'new' }])
     }
     const onCreate = async () => {
         const content = t('setup_guide_say_hello_content')

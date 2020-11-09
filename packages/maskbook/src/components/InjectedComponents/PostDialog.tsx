@@ -16,7 +16,7 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
-import { MessageCenter, CompositionEvent } from '../../utils/messages'
+import { CompositionEvent, MaskMessage } from '../../utils/messages'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
 import { useFriendsList, useCurrentGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
@@ -366,7 +366,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     //#region My Identity
     const identities = useMyIdentities()
     useEffect(() => {
-        return MessageCenter.on('compositionUpdated', ({ reason, open, content, options }: CompositionEvent) => {
+        return MaskMessage.events.compositionUpdated.on(({ reason, open, content, options }: CompositionEvent) => {
             if (reason !== props_reason || identities.length <= 0) return
             setOpen(open)
             if (content) setPostBoxContent(makeTypedMessageText(content))

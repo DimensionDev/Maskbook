@@ -21,7 +21,7 @@ import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { ERC20TokenRecord } from '../../Wallet/database/types'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { WalletMessageCenter } from '../../Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
@@ -126,8 +126,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessageCenter,
-        'transactionDialogUpdated',
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             setAmount('0')

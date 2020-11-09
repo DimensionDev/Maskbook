@@ -8,14 +8,14 @@ import { makeStyles } from '@material-ui/core'
 import { PostInfoContext, usePostInfoDetails, usePostInfo } from '../../components/DataSource/usePostInfo'
 import { Flags } from '../../utils/flags'
 import { noop } from 'lodash-es'
-import { MessageCenter } from '../../utils/messages'
+import { MaskMessage } from '../../utils/messages'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,
     _current: PostInfo,
     _realCurrent: HTMLElement | null,
 ) => {
-    MessageCenter.emit('autoPasteFailed', { text: encryptedComment })
+    MaskMessage.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
 }
 
 export const injectCommentBoxDefaultFactory = function <T extends string>(

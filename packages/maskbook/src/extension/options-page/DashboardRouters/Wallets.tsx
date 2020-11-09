@@ -20,7 +20,7 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { Flags } from '../../../utils/flags'
-import { WalletMessageCenter, MaskbookWalletMessages } from '../../../plugins/Wallet/messages'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useSelectedWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { useTokens } from '../../../plugins/Wallet/hooks/useToken'
@@ -118,7 +118,7 @@ export default function DashboardWalletsRouter() {
     }, [selectedWallet])
 
     // show provider connect dialog
-    const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
+    const [, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
 
     const onConnect = useCallback(() => {
         setOpen({

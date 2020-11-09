@@ -1,9 +1,8 @@
 import { useSnackbar } from 'notistack'
-import React from 'react'
+import React, { useEffect } from 'react'
 import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/plugin'
-import { useMessage } from '../../utils/hooks/useMessage'
-import { MessageCenter } from '../../utils/messages'
+import { MaskMessage } from '../../utils/messages'
 import Button from '@material-ui/core/Button'
 import Close from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
@@ -18,32 +17,34 @@ export function PageInspector(props: PageInspectorProps) {
     const { t } = useI18N()
     const [autoPasteFailed, JSX] = useAutoPasteFailedDialog()
     const xsMatched = useMatchXS()
-    useMessage(MessageCenter, 'autoPasteFailed', (data) => {
-        const key = data.image ? Math.random() : data.text
-        const close = () => prompt.closeSnackbar(key)
-        prompt.enqueueSnackbar(t('auto_paste_failed_snackbar'), {
-            variant: 'warning',
-            preventDuplicate: true,
-            persist: true,
-            anchorOrigin: xsMatched
-                ? {
-                      vertical: 'bottom',
-                      horizontal: 'center',
-                  }
-                : { horizontal: 'left', vertical: 'bottom' },
-            key,
-            action: (
-                <>
-                    <Button color="inherit" onClick={() => [close(), autoPasteFailed(data)]}>
-                        {t('auto_paste_failed_snackbar_action')}
-                    </Button>
-                    <IconButton aria-label="Close" onClick={close}>
-                        <Close />
-                    </IconButton>
-                </>
-            ),
-        })
-    })
+    useEffect(() =>
+        MaskMessage.events.autoPasteFailed.on((data) => {
+            const key = data.image ? Math.random() : data.text
+            const close = () => prompt.closeSnackbar(key)
+            prompt.enqueueSnackbar(t('auto_paste_failed_snackbar'), {
+                variant: 'warning',
+                preventDuplicate: true,
+                persist: true,
+                anchorOrigin: xsMatched
+                    ? {
+                          vertical: 'bottom',
+                          horizontal: 'center',
+                      }
+                    : { horizontal: 'left', vertical: 'bottom' },
+                key,
+                action: (
+                    <>
+                        <Button color="inherit" onClick={() => [close(), autoPasteFailed(data)]}>
+                            {t('auto_paste_failed_snackbar_action')}
+                        </Button>
+                        <IconButton aria-label="Close" onClick={close}>
+                            <Close />
+                        </IconButton>
+                    </>
+                ),
+            })
+        }),
+    )
     return (
         <>
             {JSX}

@@ -18,7 +18,7 @@ import { isSameAddress } from '../helpers'
 import { ProviderIcon } from '../../components/shared/ProviderIcon'
 import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
 import { useSnackbarCallback } from '../../extension/options-page/DashboardDialogs/Base'
-import { MaskbookWalletMessages, WalletMessageCenter } from '../../plugins/Wallet/messages'
+import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 
@@ -90,7 +90,7 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
     //#endregion
 
     //#region select wallet dialog
-    const [, setSelectWalletOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectWalletDialogUpdated')
+    const [, setSelectWalletOpen] = useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated)
     const onOpen = useCallback(() => {
         setSelectWalletOpen({
             open: true,

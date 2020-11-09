@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import type PopperJs from 'popper.js'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@material-ui/core'
 import { useLocation, useWindowScroll } from 'react-use'
-import { TraderMessageCenter } from '../../messages'
-import { WalletMessageCenter } from '../../../Wallet/messages'
+import { PluginTraderMessages } from '../../messages'
+import { WalletMessages } from '../../../Wallet/messages'
 import type { DataProvider } from '../../types'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 
@@ -22,17 +22,17 @@ export function TrendingPopper(props: TrendingPopperProps) {
 
     //#region select token and provider dialog could be open by trending view
     const onFreezed = useCallback((ev) => setFreezed(ev.open), [])
-    useRemoteControlledDialog(WalletMessageCenter, 'selectERC20TokenDialogUpdated', onFreezed)
-    useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated', onFreezed)
-    useRemoteControlledDialog(WalletMessageCenter, 'selectWalletDialogUpdated', onFreezed)
-    useRemoteControlledDialog(WalletMessageCenter, 'walletConnectQRCodeDialogUpdated', onFreezed)
+    useRemoteControlledDialog(WalletMessages.events.selectERC20TokenDialogUpdated, onFreezed)
+    useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, onFreezed)
+    useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated, onFreezed)
+    useRemoteControlledDialog(WalletMessages.events.walletConnectQRCodeDialogUpdated, onFreezed)
     //#endregion
 
     //#region open or close popper
     // open popper from message center
     useEffect(
         () =>
-            TraderMessageCenter.on('cashTagObserved', (ev) => {
+            PluginTraderMessages.events.cashTagObserved.on((ev) => {
                 const update = () => {
                     setLocked(true)
                     setName(ev.name)

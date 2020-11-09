@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { MaskbookWalletMessages, WalletMessageCenter } from '../messages'
+import { WalletMessages } from '../messages'
 import { useWallets } from '../hooks/useWallet'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import type { WalletRecord } from '../database/types'
@@ -26,10 +26,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const wallets = useWallets()
 
     //#region remote controlled dialog logic
-    const [open, setSelectWalletDialogOpen] = useRemoteControlledDialog<
-        MaskbookWalletMessages,
-        'selectWalletDialogUpdated'
-    >(WalletMessageCenter, 'selectWalletDialogUpdated')
+    const [open, setSelectWalletDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated)
     const onClose = useCallback(() => {
         setSelectWalletDialogOpen({
             open: false,
@@ -56,10 +53,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     //#endregion
 
     //#region connect wallet
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog<
-        MaskbookWalletMessages,
-        'selectProviderDialogUpdated'
-    >(WalletMessageCenter, 'selectProviderDialogUpdated')
+    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(async () => {
         onClose()
         await sleep(100)

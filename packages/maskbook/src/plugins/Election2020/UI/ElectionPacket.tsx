@@ -19,13 +19,13 @@ import FireworksImage from '../assets/Fireworks'
 import { EthereumTokenType } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ELECTION_2020_CONSTANTS } from '../constants'
-import { resolveCandidateName, resolveCandidateBriefName, resolveCandidatePartyType, resolveStateName } from '../pipes'
+import { resolveCandidateName, resolveCandidateBriefName, resolveStateName } from '../pipes'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { resolveChainId, resolveChainName, resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
 import { useMintCallback } from '../hooks/useMintCallback'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { WalletMessageCenter } from '../../Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { useElectionTokens } from '../hooks/useElectionTokens'
 import { useElectionTokensOfOwner } from '../hooks/useElectionTokensOfOwner'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
@@ -192,8 +192,7 @@ export function ElectionPacket(props: ElectionPacketProps) {
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessageCenter,
-        'transactionDialogUpdated',
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
 
@@ -221,7 +220,7 @@ export function ElectionPacket(props: ElectionPacketProps) {
     //#endregion
 
     //#region remote controlled select provider dialog
-    const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
+    const [, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {
         setOpen({
             open: true,
