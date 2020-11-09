@@ -214,13 +214,13 @@ function PluginDashboardInspectorForEach({ config }: { config: PluginConfig }) {
 
 function DashboardPluginUI() {
     return (
-        <ErrorBoundary>
-            <ThemeProvider theme={useMaskbookTheme()}>
-                {[...PluginUI.values()].map((x) => (
-                    <PluginDashboardInspectorForEach key={x.identifier} config={x} />
-                ))}
-            </ThemeProvider>
-        </ErrorBoundary>
+        <ThemeProvider theme={useMaskbookTheme()}>
+            {[...PluginUI.values()].map((x) => (
+                <ErrorBoundary key={x.identifier} contain={`Plugin "${x.pluginName}"`}>
+                    <PluginDashboardInspectorForEach config={x} />
+                </ErrorBoundary>
+            ))}
+        </ThemeProvider>
     )
 }
 //#endregion

@@ -5,7 +5,9 @@ import { useI18N } from '../../utils/i18n-next-ui'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 
-export class ErrorBoundary extends React.Component {
+type Title = { contain?: string }
+
+export class ErrorBoundary extends React.Component<Title> {
     static getDerivedStateFromError(error: unknown) {
         return { error }
     }
@@ -39,20 +41,27 @@ const useStyle = makeStyles({
     stack: { userSelect: 'text', overflowX: 'auto', contain: 'strict', height: 300 },
     buttons: { display: 'flex', gap: '8px' },
 })
-export function CrashUI(error: { onRetry: () => void; type: string; message: string; stack: string }) {
+type CrashUIProps = Title & {
+    onRetry: () => void
+    type: string
+    message: string
+    stack: string
+}
+
+export function CrashUI({ message, onRetry, stack, type, contain }: CrashUIProps) {
     const classes = useStyle()
     const { t } = useI18N()
     const [showStack, setShowStack] = useState(false)
-    const reportTitle = `[Crash] ${error.type}: ${error.message.slice(0, 80)}${error.message.length > 80 ? '...' : ''}`
+    const reportTitle = `[Crash] ${type}: ${message.slice(0, 80)}${message.length > 80 ? '...' : ''}`
     const reportBody = `<!--Thanks for the crash report!
 Please write down what you're doing when the crash happened, that will help us to fix it easier!-->
 
 I was ________, then Maskbook report an error.
 
-> ${error.message}
+> ${message}
 
 Error stack:
-<pre>${error.stack}</pre>
+<pre>${stack}</pre>
 
 ## Build information:
 
@@ -86,12 +95,12 @@ ${process.env.REMOTE_URL?.toLowerCase()?.includes('DimensionDev') ? '' : process
     return (
         <div className={classes.root}>
             <Alert severity="error" variant="outlined">
-                <AlertTitle>{t('crash_title')}</AlertTitle>
+                <AlertTitle>{t('crash_title_of', { who: contain || 'Maskbook' })}</AlertTitle>
                 <div className={classes.title}>
-                    {error.type}: {error.message}
+                    {type}: {message}
                 </div>
                 <div className={classes.buttons}>
-                    <Button color="primary" variant="contained" onClick={error.onRetry}>
+                    <Button color="primary" variant="contained" onClick={onRetry}>
                         {t('crash_retry')}
                     </Button>
                     <Button href={githubLink} color="primary" target="_blank">
@@ -109,7 +118,7 @@ ${process.env.REMOTE_URL?.toLowerCase()?.includes('DimensionDev') ? '' : process
                 {showStack ? (
                     <div className={classes.stack}>
                         <Typography component="pre">
-                            <code>{error.stack}</code>
+                            <code>{stack}</code>
                         </Typography>
                     </div>
                 ) : null}

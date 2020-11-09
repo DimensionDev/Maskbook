@@ -72,7 +72,7 @@ function SuccessDecryptionPlugin(props: PluginSuccessDecryptionComponentProps) {
     return (
         <>
             {[...PluginUI.values()].map((x) => (
-                <ErrorBoundary key={x.identifier}>
+                <ErrorBoundary contain={`Plugin "${x.pluginName}"`} key={x.identifier}>
                     <PluginSuccessDecryptionPostInspectorForEach pluginConfig={x} {...props} />
                 </ErrorBoundary>
             ))}

@@ -44,6 +44,7 @@ storiesOf('Shared Components', module)
     .add('Crash UI', () => {
         return (
             <CrashUI
+                contain={text('Title', 'Maskbook')}
                 type={text('type', 'TypeError')}
                 message={text(
                     'message',

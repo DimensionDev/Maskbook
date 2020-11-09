@@ -281,7 +281,7 @@
     "untitled_wallet": "無題の暗号通貨ウォレット",
     "your_message": "あなたのメッセージ...",
     "input_length_exceed_prompt": "{{name}}の長さは{{length}}より短くしてください。",
-    "crash_title": "Maskbookにエラーが発生しました。",
+    "crash_title_of": "{{who}}にエラーが発生しました。",
     "crash_retry": "修復する",
     "plugin_wallet_transaction_wait_for_confirmation": "確認を待っています",
     "plugin_wallet_transaction_submitted": "取引は送信されました．",

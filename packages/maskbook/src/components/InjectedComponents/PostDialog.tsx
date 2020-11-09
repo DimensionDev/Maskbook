@@ -124,7 +124,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
             if (!entries) return null
             return entries.map((opt, index) => {
                 return (
-                    <ErrorBoundary key={plugin.identifier + ' ' + index}>
+                    <ErrorBoundary contain={`Plugin "${plugin.pluginName}"`} key={plugin.identifier + ' ' + index}>
                         <ClickableChip
                             label={
                                 <>
@@ -162,11 +162,9 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         <Typography style={{ marginBottom: 10 }}>
                             Plugins <sup>(Experimental)</sup>
                         </Typography>
-                        <ErrorBoundary>
-                            <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
-                                {pluginEntries}
-                            </Box>
-                        </ErrorBoundary>
+                        <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                            {pluginEntries}
+                        </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
                         </Typography>

@@ -281,7 +281,7 @@
     "untitled_wallet": "Untitled Wallet",
     "your_message": "Your message…",
     "input_length_exceed_prompt": "The length of {{name}} should be less than {{length}}.",
-    "crash_title": "Maskbook has an error:",
+    "crash_title_of": "{{who}} has an error:",
     "crash_retry": "Try to recover",
     "plugin_wallet_transaction_wait_for_confirmation": "Waiting For Confirmation",
     "plugin_wallet_transaction_submitted": "Your transaction was submitted!",

@@ -281,7 +281,7 @@
     "untitled_wallet": "未命名錢包",
     "your_message": "您的留言……",
     "input_length_exceed_prompt": "{{name}}的長度不應超過{{length}}。",
-    "crash_title": "Maskbook 遇到了一個錯誤：",
+    "crash_title_of": "{{who}} 遇到了一個錯誤：",
     "crash_retry": "嘗試恢復",
     "plugin_wallet_transaction_wait_for_confirmation": "",
     "plugin_wallet_transaction_submitted": "",
