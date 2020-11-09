@@ -1,4 +1,4 @@
-import { DOMProxy, LiveSelector, ValueRef } from '@dimensiondev/holoflows-kit/es'
+import { DOMProxy, LiveSelector, ValueRef } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier, PostIdentifier, Identifier } from '../database/type'
 import type { Payload } from '../utils/type-transform/Payload'
 import {

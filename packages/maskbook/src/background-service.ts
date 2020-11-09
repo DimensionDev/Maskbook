@@ -1,6 +1,6 @@
 import 'webpack-target-webextension/lib/background'
 import './polyfill'
-import { GetContext } from '@dimensiondev/holoflows-kit/es'
+import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 // @ts-ignore
 import { crypto } from 'webcrypto-liner/build/index.es'
 Object.defineProperty(globalThis, 'crypto', { configurable: true, enumerable: true, get: () => crypto })
@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'development' && Flags.matrix_based_service_enabled
     import('./network/matrix/instance')
 }
 
-if (GetContext() === 'background') {
+if (isEnvironment(Environment.ManifestBackground)) {
     const injectedScript = getInjectedScript()
     const contentScripts: Array<{ code: string } | { file: string }> = []
     const contentScriptReady = fetch('generated__content__script.html')

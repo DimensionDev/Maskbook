@@ -11,7 +11,7 @@ import type { WalletRecord } from '../database/types'
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { sleep } from '../../../utils/utils'
-import { GetContext } from '@dimensiondev/holoflows-kit/es'
+import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { currentSelectedWalletAddressSettings } from '../settings'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
@@ -47,7 +47,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const onCreate = useCallback(async () => {
         onClose()
         await sleep(100)
-        if (GetContext() === 'options') history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
+        if (isEnvironment(Environment.ManifestOptions)) history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
         else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
     }, [history, onClose])
     //#endregion
@@ -60,7 +60,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
         setSelectProviderDialogOpen({
             open: true,
         })
-    }, [])
+    }, [onClose, setSelectProviderDialogOpen])
     //#endregion
 
     return (

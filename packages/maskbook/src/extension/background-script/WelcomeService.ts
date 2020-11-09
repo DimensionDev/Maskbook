@@ -1,4 +1,3 @@
-import { OnlyRunInContext } from '@dimensiondev/holoflows-kit'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep, getUrl } from '../../utils/utils'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
@@ -11,10 +10,11 @@ import { exclusiveTasks } from '../content-script/tasks'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { saveAsFile } from './HelperService'
 import type { DashboardRoute } from '../options-page/Route'
-
-OnlyRunInContext(['background', 'debugging'], 'WelcomeService')
 export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 export * from './WelcomeServices/restoreBackup'
+
+import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+assertEnvironment(Environment.ManifestBackground)
 
 /**
  * Recover new identity by a password and mnemonic words

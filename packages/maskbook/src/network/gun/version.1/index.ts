@@ -1,12 +1,12 @@
 /* eslint import/no-deprecated: 0 */
 import Gun from 'gun'
 import 'gun/lib/then'
-import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
+import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
 import { gun2 } from '../version.2'
 
 export * from './posts'
-OnlyRunInContext('background', 'Gun')
+assertEnvironment(Environment.ManifestBackground)
 
 /**
  * @deprecated // ! This version will leak post targets ! //

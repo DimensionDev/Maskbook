@@ -1,4 +1,4 @@
-import { MessageCenter as MC } from '@dimensiondev/holoflows-kit/es'
+import { MessageCenter as MC } from '@dimensiondev/holoflows-kit'
 import Serialization from '../utils/type-transform/Serialization'
 
 interface PluginMessages {

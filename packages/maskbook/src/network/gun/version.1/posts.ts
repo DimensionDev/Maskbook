@@ -1,8 +1,9 @@
 /* eslint import/no-deprecated: 0 */
-import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import { gun1 } from '.'
 
-OnlyRunInContext('background', 'gun')
+import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+assertEnvironment(Environment.ManifestBackground)
+
 /**
  * @param salt The salt of this post
  * @param myUsername My username of this post

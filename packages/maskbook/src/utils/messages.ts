@@ -1,4 +1,4 @@
-import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import { Environment, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import Serialization from './type-transform/Serialization'
 import type { ProfileIdentifier, GroupIdentifier, PersonaIdentifier } from '../database/type'
 
@@ -22,7 +22,6 @@ export interface SettingsUpdateEvent {
     key: string
     value: browser.storage.StorageValue
     initial: boolean
-    context: string
 }
 
 export interface MaskMessages {

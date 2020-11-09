@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { v4 as uuid } from 'uuid'
-import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit/es'
+import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 
 export interface RemoteControlledDialogEvent {
     open: boolean

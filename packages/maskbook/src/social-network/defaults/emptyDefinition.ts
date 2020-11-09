@@ -1,4 +1,4 @@
-import { GetContext, ValueRef } from '@dimensiondev/holoflows-kit/es'
+import { Environment, ValueRef, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier } from '../../database/type'
 import type { SocialNetworkUIDefinition } from '../ui'
 import { nopWithUnmount } from '../../utils/utils'
@@ -25,7 +25,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     currentIdentity: new ValueRef<Profile | null>(null),
     init() {
-        if (GetContext() === 'content') throw new Error('DO NOT use this in content script')
+        assertNotEnvironment(Environment.ContentScript)
     },
     collectPeople() {},
     collectPosts() {},

@@ -3,7 +3,7 @@ import { makeStyles, createStyles, useTheme, useMediaQuery, Theme } from '@mater
 import { useLocation } from 'react-router-dom'
 import { noop } from 'lodash-es'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
-import { GetContext } from '@dimensiondev/holoflows-kit/es'
+import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -27,7 +27,7 @@ export function useBlurContext(open: boolean) {
     const context = useContext(DashboardBlurContext)
     useEffect(() => {
         // for options page only
-        if (GetContext() !== 'options') return
+        if (!isEnvironment(Environment.ManifestOptions)) return
         open ? context.blur() : context.unblur()
     }, [context, open])
 }

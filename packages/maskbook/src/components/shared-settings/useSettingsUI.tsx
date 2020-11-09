@@ -1,5 +1,5 @@
 import React, { unstable_useTransition } from 'react'
-import type { ValueRef } from '@dimensiondev/holoflows-kit/es'
+import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import { texts } from '../../settings/createSettings'

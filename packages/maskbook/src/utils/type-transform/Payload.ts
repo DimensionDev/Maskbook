@@ -1,7 +1,7 @@
 import type { SocialNetworkWorkerAndUI } from '../../social-network/shared'
 import { isNil } from 'lodash-es'
 import { definedSocialNetworkWorkers } from '../../social-network/worker'
-import { GetContext } from '@dimensiondev/holoflows-kit/es'
+import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { safeGetActiveUI } from '../safeRequire'
 import { i18n } from '../i18n-next'
 import { Result, Ok, Err } from 'ts-results'
@@ -101,7 +101,7 @@ type Encoder = SocialNetworkWorkerAndUI['payloadEncoder']
 export function deconstructPayload(str: string, decoder: Decoder): Result<Payload, TypeError> {
     const decoders = (() => {
         if (isNil(decoder)) {
-            if (GetContext() === 'content') {
+            if (isEnvironment(Environment.ContentScript)) {
                 return [safeGetActiveUI().payloadDecoder]
             }
             return Array.from(definedSocialNetworkWorkers).map((x) => x.payloadDecoder)

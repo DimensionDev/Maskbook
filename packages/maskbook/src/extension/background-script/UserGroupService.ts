@@ -1,6 +1,6 @@
-import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
+import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+assertEnvironment(Environment.ManifestBackground)
 
-OnlyRunInContext(['background', 'debugging'], 'UserGroupService')
 export {
     addProfileToFriendsGroup,
     createDefaultFriendsGroup,

@@ -1,4 +1,4 @@
-import { ValueRef } from '@dimensiondev/holoflows-kit/es'
+import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { first } from 'lodash-es'
 import { PluginMessageCenter } from '../../PluginMessages'
 import Services from '../../../extension/service'

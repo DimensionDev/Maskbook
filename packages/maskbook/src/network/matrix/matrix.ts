@@ -1,9 +1,11 @@
 /// <reference path="./matrix.type.d.ts" />
 import sdk, { MatrixClient, Room, EventTimelineSet, MatrixEvent } from 'matrix-js-sdk'
 import { Emitter } from '@servie/events'
-import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import { getLogger } from 'loglevel'
-OnlyRunInContext('background', 'Matrix')
+
+import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+assertEnvironment(Environment.ManifestBackground)
+
 export const endpoint = 'https://matrix.vampire.rip'
 function any<T>(x: T): any {
     return x

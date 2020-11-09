@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { ValueRef } from '@dimensiondev/holoflows-kit/es'
+import { ValueRef } from '@dimensiondev/holoflows-kit'
 import Services from '../../../extension/service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { RedPacketRecord } from '../types'

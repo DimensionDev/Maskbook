@@ -8,7 +8,7 @@ import { DebugList } from '../../DebugModeUI/DebugList'
 import { DebugModeUI_PostHashDialog } from '../../DebugModeUI/PostHashDialog'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../../../settings/settings'
-import { GetContext } from '@dimensiondev/holoflows-kit'
+import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { usePostInfoDetails } from '../../DataSource/usePostInfo'
 import { getActivatedUI } from '../../../social-network/ui'
 import { deconstructPayload, PayloadAlpha38 } from '../../../utils/type-transform/Payload'
@@ -23,7 +23,7 @@ export function DecryptedPostDebug(props: Partial<DebugDisplayProps>) {
     const postContent = usePostInfoDetails('postContent')
     const payloadResult = useMemo(() => deconstructPayload(postContent, getActivatedUI().payloadDecoder), [postContent])
     const setting = useValueRef(debugModeSetting)
-    const isDebugging = GetContext() === 'options' ? true : setting
+    const isDebugging = isEnvironment(Environment.ManifestOptions) ? true : setting
 
     const { debugHash, decryptedResult, whoAmI } = props
     if (!isDebugging) return null

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 import { MoreHorizontal } from 'react-feather'
 import { makeStyles, Theme, createStyles, DialogContent, GridList, GridListTile } from '@material-ui/core'
-import { GetContext } from '@dimensiondev/holoflows-kit/es'
+import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -74,7 +74,8 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
             onClose()
             switch (providerType) {
                 case ProviderType.Maskbook:
-                    if (GetContext() === 'options') history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
+                    if (isEnvironment(Environment.ManifestOptions))
+                        history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
                     else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
                     break
                 case ProviderType.MetaMask:
