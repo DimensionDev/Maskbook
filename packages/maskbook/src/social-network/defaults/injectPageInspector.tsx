@@ -2,7 +2,7 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core'
 import { PageInspector, PageInspectorProps } from '../../components/InjectedComponents/PageInspector'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
-import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit/es'
+import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { Flags } from '../../utils/flags'
 
 export function injectPageInspectorDefault<T extends string>(

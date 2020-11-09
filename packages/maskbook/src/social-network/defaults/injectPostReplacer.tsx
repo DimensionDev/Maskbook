@@ -4,7 +4,7 @@ import { PostInfoContext } from '../../components/DataSource/usePostInfo'
 import { PostReplacer, PostReplacerProps } from '../../components/InjectedComponents/PostReplacer'
 import type { PostInfo } from '../PostInfo'
 import { makeStyles } from '@material-ui/core'
-import type { DOMProxy } from '@dimensiondev/holoflows-kit/es'
+import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { noop } from 'lodash-es'
 
 export function injectPostReplacer<T extends string>(

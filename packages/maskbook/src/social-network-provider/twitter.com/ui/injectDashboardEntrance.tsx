@@ -1,4 +1,4 @@
-import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit/es'
+import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import React from 'react'
 import Services from '../../../extension/service'
 import { MaskbookIcon } from '../../../resources/MaskbookIcon'

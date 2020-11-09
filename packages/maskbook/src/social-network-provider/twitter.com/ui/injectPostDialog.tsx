@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { twitterUrl } from '../utils/url'
-import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit/es'
+import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { postEditorContentInPopupSelector, rootSelector } from '../utils/selector'

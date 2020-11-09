@@ -1,5 +1,5 @@
 import { env, Env, Preference, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
-import { ValueRef, OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
+import { ValueRef, assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { Group, Profile, Persona } from '../database'
 import { ProfileIdentifier, PersonaIdentifier } from '../database/type'
 import { defaultTo, isNull } from 'lodash-es'
@@ -20,7 +20,7 @@ import { editMetadata } from '../protocols/typed-message'
 import type { IdentifierMap, ReadonlyIdentifierMap } from '../database/IdentifierMap'
 
 if (!process.env.STORYBOOK) {
-    OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
+    assertEnvironment.oneOf(Environment.ContentScript, Environment.ManifestOptions)
 }
 
 //#region SocialNetworkUI

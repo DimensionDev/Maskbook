@@ -6,12 +6,12 @@ import type {
     IDBPObjectStore,
     IDBPCursorWithValueIteratorValue,
 } from 'idb/with-async-ittr-cjs'
-import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
+import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined
     return async () => {
-        OnlyRunInContext(['background', 'debugging'], 'Database')
+        assertEnvironment(Environment.ManifestBackground)
         if (db) return db
         db = await opener()
         db.addEventListener('close', () => (db = undefined))
@@ -28,7 +28,7 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     let db: IDBPDatabase<DBSchema> | undefined = undefined
     let pendingOpen: Promise<IDBPDatabase<DBSchema>> | undefined = undefined
     async function open(): Promise<IDBPDatabase<DBSchema>> {
-        OnlyRunInContext(['background', 'debugging'], 'Database')
+        assertEnvironment(Environment.ManifestBackground)
         if (db?.version === latestVersion) return db
         let currentVersion = firstVersionThatRequiresAsyncUpgrade
         let lastVersionData: AsyncUpgradePreparedData | undefined = undefined

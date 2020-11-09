@@ -1,4 +1,9 @@
-import { AutomatedTabTask, GetContext, AutomatedTabTaskRuntimeOptions } from '@dimensiondev/holoflows-kit'
+import {
+    AutomatedTabTask,
+    isEnvironment,
+    AutomatedTabTaskRuntimeOptions,
+    Environment,
+} from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier, ECKeyIdentifier, Identifier } from '../../database/type'
 import {
     disableOpenNewTabInBackgroundSettings,
@@ -121,7 +126,7 @@ export function exclusiveTasks(...args: Parameters<typeof realTasks>) {
 }
 
 sideEffect.then(untilDocumentReady).then(() => {
-    if (GetContext() !== 'content') return
+    if (!isEnvironment(Environment.ContentScript)) return
 
     //#region setup guide
     const network = getActivatedUI().networkIdentifier

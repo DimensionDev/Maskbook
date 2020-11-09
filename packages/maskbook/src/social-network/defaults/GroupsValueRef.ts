@@ -1,6 +1,6 @@
 import Services from '../../extension/service'
 import type { SocialNetworkUI } from '../ui'
-import type { ValueRef } from '@dimensiondev/holoflows-kit/es'
+import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { Group } from '../../database'
 import { GroupIdentifier, PreDefinedVirtualGroupNames, ProfileIdentifier } from '../../database/type'
 import { MaskMessage } from '../../utils/messages'

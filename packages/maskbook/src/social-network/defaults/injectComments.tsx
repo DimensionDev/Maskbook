@@ -1,6 +1,6 @@
 import React from 'react'
 import type { PostInfo } from '../PostInfo'
-import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit/es'
+import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
 import { PostComment, PostCommentProps } from '../../components/InjectedComponents/PostComments'
 import { makeStyles } from '@material-ui/core'

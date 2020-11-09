@@ -1,6 +1,6 @@
 import React from 'react'
 import type { PostInfo } from '../PostInfo'
-import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit/es'
+import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CommentBox, CommentBoxProps } from '../../components/InjectedComponents/CommentBox'
 import Services from '../../extension/service'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'

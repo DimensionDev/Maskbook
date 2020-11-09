@@ -1,5 +1,5 @@
-import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
-OnlyRunInContext('background', 'EncryptService')
+import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+assertEnvironment(Environment.ManifestBackground)
 
 export { encryptComment, decryptComment } from '../../crypto/crypto-alpha-40'
 export { encryptTo, publishPostAESKey } from './CryptoServices/encryptTo'

@@ -15,14 +15,14 @@ import {
     consistentPersonaDBWriteAccess,
 } from '../../database/Persona/Persona.db'
 import { queryPersona } from '../../database'
-import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
 import { decodeText, decodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
-OnlyRunInContext(['background', 'debugging'], 'IdentityService')
+import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+assertEnvironment(Environment.ManifestBackground)
 
 export { storeAvatar, queryAvatarDataURL } from '../../database'
 

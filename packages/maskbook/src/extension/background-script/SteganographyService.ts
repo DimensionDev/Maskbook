@@ -1,14 +1,14 @@
 import { encode, decode } from '@dimensiondev/stego-js/cjs/dom'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'
 import { TransformAlgorithm } from '@dimensiondev/stego-js/cjs/transform'
-import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import type { EncodeOptions, DecodeOptions } from '@dimensiondev/stego-js/cjs/stego'
 import { getUrl, downloadUrl } from '../../utils/utils'
 import { memoizePromise } from '../../utils/memoize'
 import { getDimension } from '../../utils/image'
 import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
 
-OnlyRunInContext('background', 'SteganographyService')
+import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+assertEnvironment(Environment.ManifestBackground)
 
 type Template = 'v1' | 'v2' | 'v3' | 'eth' | 'dai' | 'okb'
 type Mask = 'v1' | 'v2' | 'transparent'

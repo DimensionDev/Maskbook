@@ -1,6 +1,6 @@
 import { defineSocialNetworkUI } from '../../social-network/ui'
 import { emptyDefinition } from '../../social-network/defaults/emptyDefinition'
-import { GetContext } from '@dimensiondev/holoflows-kit/es'
+import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 
 defineSocialNetworkUI({
     ...emptyDefinition,
@@ -9,6 +9,6 @@ defineSocialNetworkUI({
         emptyDefinition.init(e, p)
     },
     shouldActivate() {
-        return GetContext() === 'options'
+        return isEnvironment(Environment.ManifestOptions)
     },
 })

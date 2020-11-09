@@ -1,10 +1,10 @@
-import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
 import { gun2, SharedAESKeyGun2 } from '.'
 import { hashPostSalt, hashCryptoKey, hashCryptoKeyUnstable } from './hash'
 import type { PublishedAESKeyRecordV39OrV38 } from '../../../crypto/crypto-alpha-38'
 import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 
-OnlyRunInContext(['background', 'debugging'], 'gun')
+import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+assertEnvironment(Environment.ManifestBackground)
 
 /**
  * @param version current payload version

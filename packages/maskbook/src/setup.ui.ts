@@ -1,7 +1,7 @@
 import './polyfill/index'
 import { definedSocialNetworkUIs, activateSocialNetworkUI } from './social-network/ui'
 import './provider.ui'
-import { LiveSelector, Watcher, DOMProxy } from '@dimensiondev/holoflows-kit/es'
+import { LiveSelector, Watcher, DOMProxy } from '@dimensiondev/holoflows-kit'
 import { enhanceTypedMessageDebugger } from './protocols/typed-message/debugger'
 
 if (typeof window === 'object') {

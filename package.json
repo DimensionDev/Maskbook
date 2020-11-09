@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@dimensiondev/common-protocols": "1.6.0-20201027083702-d0ae6e2",
-    "@dimensiondev/holoflows-kit": "0.8.0-20201106054814-cd8d5c3",
+    "@dimensiondev/holoflows-kit": "0.8.0-20201109043034-d1f6bca",
     "@dimensiondev/kit": "0.0.0-20201027082807-06026ae",
     "@dimensiondev/matrix-js-sdk-type": "=1.0.0-20200731085604-dc2de92",
     "@dimensiondev/stego-js": "=0.11.1-20201027083223-8ab41be",
