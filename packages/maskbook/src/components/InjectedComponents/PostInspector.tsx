@@ -117,7 +117,7 @@ function PluginPostInspector() {
     return (
         <>
             {[...PluginUI.values()].map((x) => (
-                <ErrorBoundary key={x.identifier}>
+                <ErrorBoundary contain={`Plugin "${x.pluginName}"`} key={x.identifier}>
                     <PluginPostInspectorForEach config={x} />
                 </ErrorBoundary>
             ))}

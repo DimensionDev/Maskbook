@@ -1,9 +1,13 @@
-import { Button, makeStyles, Typography } from '@material-ui/core'
+import { Box, Button, IconButton, makeStyles, Typography } from '@material-ui/core'
 import { Alert, AlertTitle } from '@material-ui/lab'
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
+import ExpandLess from '@material-ui/icons/ExpandLess'
+import ExpandMore from '@material-ui/icons/ExpandMore'
 
-export class ErrorBoundary extends React.Component {
+type Title = { contain?: string }
+
+export class ErrorBoundary extends React.Component<Title> {
     static getDerivedStateFromError(error: unknown) {
         return { error }
     }
@@ -32,31 +36,93 @@ export class ErrorBoundary extends React.Component {
     }
 }
 const useStyle = makeStyles({
-    root: { overflowX: 'auto', flex: 1, width: '100%', contain: 'strict', marginTop: 16 },
-    title: { userSelect: 'text' },
-    stack: { fontSize: 15, userSelect: 'text' },
+    root: { overflowX: 'auto', flex: 1, width: '100%', contain: 'paint', marginTop: 16 },
+    title: { userSelect: 'text', marginBottom: 8 },
+    stack: { userSelect: 'text', overflowX: 'auto', contain: 'strict', height: 300 },
+    buttons: { display: 'flex', gap: '8px' },
 })
-function CrashUI(error: { onRetry: () => void; type: string; message: string; stack: string }) {
+type CrashUIProps = Title & {
+    onRetry: () => void
+    type: string
+    message: string
+    stack: string
+}
+
+export function CrashUI({ message, onRetry, stack, type, contain }: CrashUIProps) {
     const classes = useStyle()
     const { t } = useI18N()
+    const [showStack, setShowStack] = useState(false)
+    const reportTitle = `[Crash] ${type}: ${message.slice(0, 80)}${message.length > 80 ? '...' : ''}`
+    const reportBody = `<!--Thanks for the crash report!
+Please write down what you're doing when the crash happened, that will help us to fix it easier!-->
+
+I was ________, then Maskbook report an error.
+
+> ${message}
+
+Error stack:
+<pre>${stack}</pre>
+
+## Build information:
+
+- Version: ${globalThis.browser?.runtime?.getManifest?.()?.version ?? process.env.TAG_NAME?.slice(1)}
+- NODE_ENV: ${process.env.NODE_ENV}
+- STORYBOOK: ${process.env.STORYBOOK}
+- target: ${process.env.target}
+- build: ${process.env.build}
+- architecture: ${process.env.architecture}
+- firefoxVariant: ${process.env.firefoxVariant}
+- resolution: ${process.env.resolution}
+- BUILD_DATE: ${process.env.BUILD_DATE}
+- VERSION: ${process.env.VERSION}
+
+## Git (${process.env.TAG_DIRTY ? '*' : ''}):
+
+${process.env.COMMIT_HASH} (${process.env.BRANCH_NAME}) on tag "${process.env.TAG_NAME}"
+${process.env.REMOTE_URL?.toLowerCase()?.includes('DimensionDev') ? '' : process.env.REMOTE_URL}`
+    const githubLink = useMemo(() => {
+        const url = new URLSearchParams()
+        url.set('title', reportTitle)
+        url.set('body', reportBody)
+        return `https://github.com/DimensionDev/Maskbook/issues/new?` + url.toString()
+    }, [reportBody, reportTitle])
+    const emailLink = useMemo(() => {
+        const url = new URL(`mailto:${t('dashboard_email_address')}`)
+        url.searchParams.set('subject', reportTitle)
+        url.searchParams.set('body', reportBody)
+        return url.toString()
+    }, [reportBody, reportTitle, t])
     return (
         <div className={classes.root}>
-            <Alert
-                severity="error"
-                variant="outlined"
-                action={
-                    <Button color="inherit" size="large" onClick={error.onRetry}>
+            <Alert severity="error" variant="outlined">
+                <AlertTitle>{t('crash_title_of', { who: contain || 'Maskbook' })}</AlertTitle>
+                <div className={classes.title}>
+                    {type}: {message}
+                </div>
+                <div className={classes.buttons}>
+                    <Button color="primary" variant="contained" onClick={onRetry}>
                         {t('crash_retry')}
                     </Button>
-                }>
-                <AlertTitle>{t('crash_title')}</AlertTitle>
-                <span className={classes.title}>
-                    {error.type}: {error.message}
-                </span>
+                    <Button href={githubLink} color="primary" target="_blank">
+                        Report on GitHub
+                    </Button>
+                    {/* The generated link cannot be used to open mail app */}
+                    {/* <Button href={emailLink} color="primary" target="_blank">
+                        Report by EMail
+                    </Button> */}
+                    <Box flex={1}></Box>
+                    <IconButton color="inherit" size="small" onClick={() => setShowStack((x) => !x)}>
+                        {showStack ? <ExpandMore /> : <ExpandLess />}
+                    </IconButton>
+                </div>
+                {showStack ? (
+                    <div className={classes.stack}>
+                        <Typography component="pre">
+                            <code>{stack}</code>
+                        </Typography>
+                    </div>
+                ) : null}
             </Alert>
-            <Typography component="pre" style={{ maxWidth: '100%', overflowX: 'auto' }}>
-                <code className={classes.stack}>{error.stack}</code>
-            </Typography>
         </div>
     )
 }

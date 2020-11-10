@@ -1,3 +1,4 @@
+import './patch'
 import { addParameters, addDecorator } from '@storybook/react'
 import { withKnobs, radios } from '@storybook/addon-knobs'
 import { getMaskbookTheme } from '../packages/maskbook/src/utils/theme'
