@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, makeStyles, createStyles, Theme, ChipProps, BoxProps } from '@material-ui/core'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import { useChainId, useIsChainIdValid } from '../hooks/useChainState'
+import { useChainId, useChainIdValid } from '../hooks/useChainState'
 import { EthereumAccountChip } from './EthereumAccountChip'
 import { EthereumChainChip } from './EthereumChainChip'
 import { useAccount } from '../hooks/useAccount'
@@ -33,7 +33,7 @@ export function EthereumStatusBar(props: EthereumStatusBarProps) {
 
     const account = useAccount()
     const chainId = useChainId()
-    const chainIdValid = useIsChainIdValid()
+    const chainIdValid = useChainIdValid()
 
     if (!account) return null
     return (

@@ -9,6 +9,7 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { resolveLinkOnEtherscan, resolveProviderName } from '../../../web3/pipes'
+import { ProviderType } from '../../../web3/types'
 import { formatEthereumAddress } from '../formatter'
 import { useSelectedWallet } from '../hooks/useWallet'
 import { WalletMessageCenter } from '../messages'
@@ -111,9 +112,11 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                         Connected with {resolveProviderName(selectedWallet.provider)}
                     </Typography>
                     <section className={classes.actions}>
-                        <Button className={classes.actionButton} color="primary" size="small" variant="outlined">
-                            Disconnect
-                        </Button>
+                        {selectedWallet.provider === ProviderType.WalletConnect ? (
+                            <Button className={classes.actionButton} color="primary" size="small" variant="outlined">
+                                Disconnect
+                            </Button>
+                        ) : null}
                         <Button
                             className={classes.actionButton}
                             color="primary"

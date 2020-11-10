@@ -10,7 +10,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { createEetherToken } from '../../../web3/helpers'
-import { useChainId, useIsChainIdValid } from '../../../web3/hooks/useChainState'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { useERC20TokenApproveCallback, ApproveState } from '../../../web3/hooks/useERC20TokenApproveCallback'
@@ -75,7 +75,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
-    const chainIdValid = useIsChainIdValid()
+    const chainIdValid = useChainIdValid()
 
     //#region select token
     const [token, setToken] = useState<Token>(createEetherToken(chainId))

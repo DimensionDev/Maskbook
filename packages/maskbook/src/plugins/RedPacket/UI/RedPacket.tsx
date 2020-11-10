@@ -18,7 +18,7 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
-import { useChainId, useIsChainIdValid } from '../../../web3/hooks/useChainState'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { resolveChainName } from '../../../web3/pipes'
@@ -129,7 +129,7 @@ export function RedPacket(props: RedPacketProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
-    const chainIdValid = useIsChainIdValid()
+    const chainIdValid = useChainIdValid()
 
     const {
         value: availability,

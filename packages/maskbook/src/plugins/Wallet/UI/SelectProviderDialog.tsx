@@ -30,7 +30,8 @@ import { unreachable } from '../../../utils/utils'
 import { MessageCenter } from '../../../utils/messages'
 import { Flags } from '../../../utils/flags'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useIsChainIdValid } from '../../../web3/hooks/useChainState'
+import { useChainIdValid } from '../../../web3/hooks/useChainState'
+import { useWallets } from '../hooks/useWallet'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -88,14 +89,18 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     // render in dashboard
     useBlurContext(open)
 
+    const wallets = useWallets(ProviderType.Maskbook)
     const onConnect = useCallback(
         async (providerType: ProviderType) => {
             onClose()
             switch (providerType) {
                 case ProviderType.Maskbook:
-                    selectWalletDialogOpen({
-                        open: true,
-                    })
+                    if (wallets.length > 0) {
+                        selectWalletDialogOpen({
+                            open: true,
+                        })
+                        return
+                    }
                     if (GetContext() === 'options') history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
                     else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
                     break
@@ -112,7 +117,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     unreachable(providerType)
             }
         },
-        [history, onClose, setWalletConnectDialogOpen],
+        [wallets, history, onClose, setWalletConnectDialogOpen],
     )
 
     // TODO:
@@ -132,7 +137,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     )
 
     //#region chain id is not valid
-    const chainIdValid = useIsChainIdValid()
+    const chainIdValid = useChainIdValid()
     if (!chainIdValid)
         return (
             <InjectedDialog title={t('plugin_wallet_wrong_network')} open={open} onExit={onClose}>
@@ -144,7 +149,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     //#endregion
 
     return (
-        <InjectedDialog title="Connect wallet" open={open} onExit={onClose}>
+        <InjectedDialog title="Connect a Wallet" open={open} onExit={onClose}>
             <DialogContent className={classes.content}>
                 <GridList className={classes.grid} spacing={16} cellHeight={183}>
                     <GridListTile>

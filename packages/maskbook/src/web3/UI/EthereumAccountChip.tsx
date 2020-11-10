@@ -22,7 +22,7 @@ import { useSnackbarCallback } from '../../extension/options-page/DashboardDialo
 import { WalletMessageCenter } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { useIsChainIdValid } from '../hooks/useChainState'
+import { useChainIdValid } from '../hooks/useChainState'
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
         root: {
@@ -70,7 +70,7 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const wallets = useWallets()
-    const chainIdValid = useIsChainIdValid()
+    const chainIdValid = useChainIdValid()
     const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
     const avatar = (
         <ProviderIcon classes={{ icon: classes.providerIcon }} size={18} providerType={currentWallet?.provider} />

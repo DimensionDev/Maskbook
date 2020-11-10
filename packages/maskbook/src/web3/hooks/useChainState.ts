@@ -33,7 +33,7 @@ export function useChainId(address?: string) {
 /**
  * Retruns true if chain id is available
  */
-export function useIsChainIdValid() {
+export function useChainIdValid() {
     const chainId = useChainId()
     const selectedWallet = useSelectedWallet()
     return !Flags.wallet_network_strict_mode_enabled || chainId === ChainId.Mainnet || !selectedWallet

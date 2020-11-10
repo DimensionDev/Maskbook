@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) =>
     createStyles({
         content: {
             padding: 0,
+            minHeight: 300,
         },
     }),
 )
