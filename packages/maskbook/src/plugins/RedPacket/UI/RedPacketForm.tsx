@@ -302,10 +302,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     className={classes.button}
                     fullWidth
                     variant="contained"
-                    onClick={async () => {
-                        console.log('popupMetaMaskUnlocked')
-                        await Services.Ethereum.popupMetaMaskUnlocked()
-                    }}>
+                    onClick={() => Services.Ethereum.popupMetaMaskUnlocked()}>
                     {t('metamask_unlock')}
                 </ActionButton>
             ) : approveRequired ? (
