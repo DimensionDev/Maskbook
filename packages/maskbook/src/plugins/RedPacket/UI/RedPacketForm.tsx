@@ -108,7 +108,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
     const currentProvider = useValueRef(currentSelectedWalletProviderSettings)
     const isMetamaskLocked = !useValueRef(isMetaMaskUnlocked) && currentProvider === ProviderType.MetaMask
-
     // shares
     const [shares, setShares] = useState<number | ''>(RED_PACKET_DEFAULT_SHARES)
     const onShareChange = useCallback(

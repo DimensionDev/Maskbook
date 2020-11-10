@@ -7,6 +7,7 @@ import type { RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
 import { getUrl } from '../../../utils/utils'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
 import { isDAI, isOKB } from '../../../web3/helpers'
@@ -18,6 +19,10 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
+import Services from '../../../extension/service'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { isMetaMaskUnlocked, currentSelectedWalletProviderSettings } from '../../Wallet/settings'
+import { ProviderType } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -103,6 +108,14 @@ const useStyles = makeStyles((theme) =>
             top: 0,
             bottom: 0,
         },
+        icon: {
+            fontSize: 45,
+        },
+        metamaskContent: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+        },
     }),
 )
 
@@ -121,6 +134,8 @@ export function RedPacket(props: RedPacketProps) {
     const { value: token } = useTokenComputed(payload)
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
+    const currentProvider = useValueRef(currentSelectedWalletProviderSettings)
+    const isMetamaskLocked = !useValueRef(isMetaMaskUnlocked) && currentProvider === ProviderType.MetaMask
 
     //#region remote controlled select provider dialog
     const [, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
@@ -178,6 +193,21 @@ export function RedPacket(props: RedPacketProps) {
         if (canClaim) await claimCallback()
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
+
+    if (isMetamaskLocked)
+        return (
+            <Card
+                className={classNames(classes.root, {
+                    [classes.metamaskContent]: true,
+                    [classes.cursor]: true,
+                })}
+                onClick={Services.Ethereum.popupMetaMaskUnlocked}
+                component="article"
+                elevation={0}>
+                <MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />
+                {t('metamask_unlock')}
+            </Card>
+        )
 
     // the red packet can fetch without account
     if (!availability || !token)
