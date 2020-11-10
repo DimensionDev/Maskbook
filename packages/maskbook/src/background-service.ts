@@ -4,7 +4,6 @@ import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 // @ts-ignore
 import { crypto } from 'webcrypto-liner/build/index.es'
 Object.defineProperty(globalThis, 'crypto', { configurable: true, enumerable: true, get: () => crypto })
-import './_background_loader.1'
 import './_background_loader.2'
 import './extension/service'
 import './provider.worker'

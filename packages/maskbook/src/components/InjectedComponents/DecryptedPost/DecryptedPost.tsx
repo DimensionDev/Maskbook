@@ -8,7 +8,6 @@ import type {
     FailureDecryption,
     SuccessDecryption,
 } from '../../../extension/background-script/CryptoServices/decryptFrom'
-import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
 import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwaiting'
@@ -16,7 +15,6 @@ import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
 import { usePostInfoDetails } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { getActivatedUI } from '../../../social-network/ui'
 import { Err, Ok } from 'ts-results'
 import { or } from '../../custom-ui-helper'
 
@@ -108,7 +106,7 @@ export function DecryptPost(props: DecryptPostProps) {
                     progress,
                 })
             for await (const status of asyncIteratorWithResult(iter)) {
-                if (controller.signal.aborted) return iter.return?.()
+                if (controller.signal.aborted) return iter.return?.({ type: 'error', internal: true, error: 'aborted' })
                 if (status.done) return refreshProgress(status.value)
                 if (status.value.type === 'debug') {
                     switch (status.value.debug) {
