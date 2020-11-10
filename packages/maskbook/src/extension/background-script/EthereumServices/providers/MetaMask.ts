@@ -36,16 +36,22 @@ function onNetworkError(error: any) {
     }
 }
 
+async function onAccountsChanged(accounts: string[]) {
+    await detectIfMetaMaskUnlocked(accounts)
+}
+
 export function createProvider() {
     if (provider) {
         provider.off('data', onData)
         provider.off('networkChanged', onNetworkChanged)
         provider.off('error', onNetworkError)
+        provider.off('accountsChanged', onAccountsChanged)
     }
     provider = createMetaMaskProvider()
     provider.on('data', onData)
     provider.on('networkChanged', onNetworkChanged)
     provider.on('error', onNetworkError)
+    provider.on('accountsChanged', onAccountsChanged)
     return provider
 }
 
@@ -72,8 +78,8 @@ export async function popupMetaMaskUnlocked() {
     }
 }
 
-async function detectIfMetaMaskUnlocked() {
-    const isUnlocked = Boolean(await provider!._metamask?.isUnlocked())
+async function detectIfMetaMaskUnlocked(accounts: string[] = []) {
+    const isUnlocked = Boolean(await provider!._metamask?.isUnlocked()) || accounts.length > 0
     isMetaMaskUnlocked.value = isUnlocked
     return isUnlocked
 }

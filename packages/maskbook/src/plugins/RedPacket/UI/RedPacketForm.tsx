@@ -106,9 +106,9 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const [isRandom, setIsRandom] = useState(0)
     const [message, setMessage] = useState('Best Wishes!')
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
-    const isUnlocked = useValueRef(isMetaMaskUnlocked)
     const currentProvider = useValueRef(currentSelectedWalletProviderSettings)
-    console.log('currentProvider', currentProvider)
+    const isMetamaskLocked = !useValueRef(isMetaMaskUnlocked) && currentProvider === ProviderType.MetaMask
+
     // shares
     const [shares, setShares] = useState<number | ''>(RED_PACKET_DEFAULT_SHARES)
     const onShareChange = useCallback(
@@ -298,7 +298,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     defaultValue={t('plugin_red_packet_best_wishes')}
                 />
             </div>
-            {!isUnlocked && currentProvider === ProviderType.MetaMask ? (
+            {isMetamaskLocked ? (
                 <ActionButton
                     className={classes.button}
                     fullWidth
@@ -325,7 +325,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     className={classes.button}
                     fullWidth
                     variant="contained"
-                    disabled={Boolean(isUnlocked) && Boolean(validationMessage)}
+                    disabled={Boolean(validationMessage)}
                     onClick={createCallback}>
                     {validationMessage ||
                         `Send ${formatBalance(totalAmount, token.decimals, token.decimals)} ${token.symbol}`}
