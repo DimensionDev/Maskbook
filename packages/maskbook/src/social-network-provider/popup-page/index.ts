@@ -24,6 +24,6 @@ const popupPageUISelf = defineSocialNetworkUI({
         }
     },
     shouldActivate() {
-        return isEnvironment(Environment.ManifestPageAction)
+        return isEnvironment(Environment.ManifestBrowserAction)
     },
 })

@@ -70,6 +70,6 @@ function mockedGlobalThis() {
     // Don't setup
     kit.WebExtensionMessage.setup = () => {}
     globalThis.__holoflows_kit_get_environment_debug__ =
-        kit.Environment.HasBrowserAPI | kit.Environment.ExtensionProtocol | kit.Environment.ManifestPageAction
+        kit.Environment.HasBrowserAPI | kit.Environment.ExtensionProtocol | kit.Environment.ManifestBrowserAction
     return globalThis
 }

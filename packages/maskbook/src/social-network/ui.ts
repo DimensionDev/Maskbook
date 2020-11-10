@@ -20,7 +20,7 @@ import { editMetadata } from '../protocols/typed-message'
 import type { IdentifierMap, ReadonlyIdentifierMap } from '../database/IdentifierMap'
 
 if (!process.env.STORYBOOK) {
-    assertEnvironment.oneOf(Environment.ContentScript, Environment.ManifestOptions, Environment.ManifestPageAction)
+    assertEnvironment.oneOf(Environment.ContentScript, Environment.ManifestOptions, Environment.ManifestBrowserAction)
 }
 
 //#region SocialNetworkUI
