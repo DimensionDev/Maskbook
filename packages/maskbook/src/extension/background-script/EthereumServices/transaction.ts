@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { enhancePromiEvent, promiEventToIterator, StageType } from '../../../utils/promiEvent'
 import { getWallets } from '../../../plugins/Wallet/services'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { PluginMessageCenter } from '../../../plugins/PluginMessages'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
 import * as Maskbook from './providers/Maskbook'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
@@ -19,7 +19,7 @@ import { getChainId } from './chainState'
 //#region tracking wallets
 let wallets: WalletRecord[] = []
 const revalidate = async () => (wallets = await getWallets())
-PluginMessageCenter.on('maskbook.wallets.update', revalidate)
+WalletMessages.events.walletsUpdated.on(revalidate)
 revalidate()
 //#endregion
 

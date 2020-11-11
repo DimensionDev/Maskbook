@@ -2,7 +2,7 @@ import * as jwt from 'jsonwebtoken'
 import { sha3 } from 'web3-utils'
 import type { RedPacketRecord, RedPacketJSONPayload, History } from './types'
 import { RED_PACKET_HISTORY_URL } from './constants'
-import { PluginMessageCenter } from '../PluginMessages'
+import { RedPacketMessage } from './helpers'
 import * as database from './database'
 import { resolveChainName } from '../../web3/pipes'
 import Services from '../../extension/service'
@@ -52,7 +52,7 @@ export async function discoverRedPacket(from: string, payload: RedPacketJSONPayl
         payload: record_?.payload ?? payload,
     }
     database.addRedPacket(record)
-    PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
+    RedPacketMessage.events.redPacketUpdated.sendToAll(undefined)
 }
 
 export function getRedPacketsFromDB() {

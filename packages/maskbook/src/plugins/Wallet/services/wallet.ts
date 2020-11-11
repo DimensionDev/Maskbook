@@ -6,7 +6,7 @@ import { ec as EC } from 'elliptic'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import type { WalletRecord } from '../database/types'
-import { PluginMessageCenter } from '../../PluginMessages'
+import { WalletMessages } from '../messages'
 import { buf2hex, hex2buf, assert } from '../../../utils/utils'
 import { ProviderType } from '../../../web3/types'
 import { resolveProviderName } from '../../../web3/pipes'
@@ -113,7 +113,7 @@ export async function updateExoticWalletFromSource(
         )
         modified = true
     }
-    if (modified) PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+    if (modified) WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
 export function createNewWallet(
@@ -162,7 +162,7 @@ export async function importNewWallet(
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet', 'ERC20Token')
         t.objectStore('Wallet').add(WalletRecordIntoDB(record))
     }
-    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+    WalletMessages.events.walletsUpdated.sendToAll(undefined)
     return address
     async function getWalletAddress() {
         if (rec.address) return rec.address
@@ -186,7 +186,7 @@ export async function renameWallet(address: string, name: string) {
     wallet.name = name
     wallet.updatedAt = new Date()
     t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
-    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+    WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
 export async function removeWallet(address: string) {
@@ -194,7 +194,7 @@ export async function removeWallet(address: string) {
     const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
     if (!wallet) return
     t.objectStore('Wallet').delete(wallet.address)
-    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+    WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
 export async function recoverWallet(mnemonic: string[], password: string) {

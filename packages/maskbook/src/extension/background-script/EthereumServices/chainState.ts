@@ -1,6 +1,6 @@
 import stringify from 'json-stable-stringify'
 import { debounce, first, uniq } from 'lodash-es'
-import { PluginMessageCenter } from '../../../plugins/PluginMessages'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { getWallets } from '../../../plugins/Wallet/services'
 import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
@@ -47,7 +47,7 @@ currentMetaMaskChainIdSettings.addListener(revalidateChainState)
 currentWalletConnectChainIdSettings.addListener(revalidateChainState)
 
 // revaldiate if the current wallet was changed
-PluginMessageCenter.on('maskbook.wallets.update', revalidateChainState)
+WalletMessages.events.walletsUpdated.on(revalidateChainState)
 //#endregion
 
 //#region tracking wallets
@@ -55,7 +55,7 @@ let wallets: WalletRecord[] = []
 const revalidateWallets = async () => {
     wallets = await getWallets()
 }
-PluginMessageCenter.on('maskbook.wallets.update', revalidateWallets)
+WalletMessages.events.walletsUpdated.on(revalidateWallets)
 revalidateWallets()
 //#endregion
 

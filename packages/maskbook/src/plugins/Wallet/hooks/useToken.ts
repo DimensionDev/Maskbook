@@ -1,5 +1,5 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { PluginMessageCenter } from '../../PluginMessages'
+import { WalletMessages } from '../messages'
 import Services from '../../../extension/service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { ERC20TokenRecord } from '../database/types'
@@ -19,7 +19,7 @@ async function revalidate() {
     const tokens = await Services.Plugin.invokePlugin('maskbook.wallet', 'getTokens')
     tokensRef.value = tokens
 }
-PluginMessageCenter.on('maskbook.tokens.update', revalidate)
+WalletMessages.events.tokensUpdated.on(revalidate)
 revalidate()
 //#endregion
 

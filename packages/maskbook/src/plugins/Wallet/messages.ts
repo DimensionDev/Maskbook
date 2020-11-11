@@ -77,6 +77,8 @@ interface WalletMessage {
      * WalletConnect QR Code dialog
      */
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
+    walletsUpdated: void
+    tokensUpdated: void
 }
 
 export const WalletMessages = createPluginMessage<WalletMessage>(PLUGIN_IDENTIFIER)

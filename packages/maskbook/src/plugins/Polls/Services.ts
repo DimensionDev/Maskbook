@@ -4,7 +4,6 @@ import { first } from 'lodash-es'
 import { gun2 } from '../../network/gun/version.2'
 import type { PollMetaData } from './types'
 import { PollGunServer } from './constants'
-import { PluginMessageCenter } from '../PluginMessages'
 
 const gun = gun2
 const PollGun = gun.get(PollGunServer)
@@ -86,8 +85,6 @@ export async function vote(props: voteProps) {
         .get('results')
         // @ts-ignore
         .put(newResults)
-
-    PluginMessageCenter.emit('maskbook.polls.update', undefined)
 
     return {
         ...poll,
