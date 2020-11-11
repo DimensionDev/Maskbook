@@ -5,7 +5,6 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { ERC20TokenRecord } from '../database/types'
 import { TokenArrayComparer } from '../helpers'
 import { useWallet } from './useWallet'
-import { EthereumAddress } from 'wallet.ts'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../web3/constants'
 import { isSameAddress } from '../../../web3/helpers'
@@ -39,10 +38,9 @@ export function useAllTokens(): Token[] {
  * Fetch tokens owned by a wallet from DB
  * @param address
  */
-export function useTokens(address: string) {
-    const wallet = useWallet(address)
+export function useTokens() {
+    const wallet = useWallet()
     const tokens = useAllTokens()
-    if (!EthereumAddress.isValid(address)) return []
     if (!wallet) return []
     return tokens.filter(
         (x) => wallet.erc20_token_whitelist.has(x.address) && !wallet.erc20_token_blacklist.has(x.address),

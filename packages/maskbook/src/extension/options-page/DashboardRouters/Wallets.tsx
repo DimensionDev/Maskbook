@@ -20,9 +20,9 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { Flags } from '../../../utils/flags'
-import { WalletMessageCenter, MaskbookWalletMessages } from '../../../plugins/Wallet/messages'
+import { WalletMessageCenter } from '../../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { useSelectedWallet } from '../../../plugins/Wallet/hooks/useWallet'
+import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { useTokens } from '../../../plugins/Wallet/hooks/useToken'
 import { useTokensDetailedCallback } from '../../../web3/hooks/useTokensDetailedCallback'
 import { WalletContent } from '../DashboardComponents/WalletContent'
@@ -103,11 +103,11 @@ export default function DashboardWalletsRouter() {
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
 
-    const selectedWallet = useSelectedWallet()
-    const tokens = useTokens(selectedWallet?.address ?? '')
+    const selectedWallet = useWallet()
+    const tokens = useTokens()
     const blockie = useBlockie(selectedWallet?.address ?? '')
 
-    const [detailedTokens, detailedTokensCallback] = useTokensDetailedCallback(tokens)
+    const detailedTokens = useTokensDetailedCallback(tokens)
 
     // show create dialog
     useEffect(() => {
@@ -118,12 +118,6 @@ export default function DashboardWalletsRouter() {
     useEffect(() => {
         if (error) openWalletError()
     }, [error, openWalletError])
-
-    // auto fetch tokens detailed
-    useEffect(() => {
-        if (!selectedWallet) return
-        detailedTokensCallback(selectedWallet.address)
-    }, [selectedWallet])
 
     // show provider connect dialog
     const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')

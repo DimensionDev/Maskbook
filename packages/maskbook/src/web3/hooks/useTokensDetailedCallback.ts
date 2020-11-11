@@ -1,5 +1,3 @@
-import { useCallback, useState } from 'react'
-import { EthereumAddress } from 'wallet.ts'
 import { createEetherToken } from '../helpers'
 import { useChainId } from './useChainState'
 import { useTokensDetailedDebank } from './useTokensDetailedDebank'
@@ -11,22 +9,14 @@ import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
 
 export function useTokensDetailedCallback(tokens: Token[]) {
     const chainId = useChainId()
-    const [address, setAddress] = useState('')
-    const wallet = useWallet(address)
-    const chainDetailedTokens = useTokensDetailed(address, [createEetherToken(chainId), ...tokens])
-    const debankDetailedTokens = useTokensDetailedDebank(address)
+    const wallet = useWallet()
+    const chainDetailedTokens = useTokensDetailed(wallet?.address ?? '', [createEetherToken(chainId), ...tokens])
+    const debankDetailedTokens = useTokensDetailedDebank(wallet?.address ?? '')
 
     // should place debank detailed tokens at the first place
     // it prevents them from replacing by previous detailed tokens because the uniq algorithm
     const detailedTokens = useTokensDetailedMerged(debankDetailedTokens, chainDetailedTokens)
 
-    const detailedTokensCallback = useCallback((address: string) => {
-        if (!EthereumAddress.isValid(address)) return
-        setAddress(address)
-    }, [])
-
-    return [
-        detailedTokens.filter((x) => !wallet?.erc20_token_blacklist.has(formatChecksumAddress(x.token.address))),
-        detailedTokensCallback,
-    ] as const
+    // filter out tokens in blacklist
+    return detailedTokens.filter((x) => !wallet?.erc20_token_blacklist.has(formatChecksumAddress(x.token.address)))
 }

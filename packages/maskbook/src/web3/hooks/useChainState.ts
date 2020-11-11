@@ -8,21 +8,18 @@ import {
     currentMetaMaskChainIdSettings,
     currentWalletConnectChainIdSettings,
 } from '../../settings/settings'
-import { useSelectedWallet, useWallet } from '../../plugins/Wallet/hooks/useWallet'
+import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { Flags } from '../../utils/flags'
 
 /**
  * Get the chain id which is using by the given (or default) wallet
  */
-export function useChainId(address?: string) {
-    const wallet_ = useWallet(address ?? '')
-    const selectedWallet_ = useSelectedWallet()
-
+export function useChainId() {
     const MaskbookChainId = useValueRef(currentMaskbookChainIdSettings)
     const MetaMaskChainId = useValueRef(currentMetaMaskChainIdSettings)
     const WalletConnectChainId = useValueRef(currentWalletConnectChainIdSettings)
 
-    const wallet = wallet_ ?? selectedWallet_
+    const wallet = useWallet()
     if (!wallet) return MaskbookChainId
     if (wallet.provider === ProviderType.Maskbook) return MaskbookChainId
     if (wallet.provider === ProviderType.MetaMask) return MetaMaskChainId
@@ -35,7 +32,7 @@ export function useChainId(address?: string) {
  */
 export function useChainIdValid() {
     const chainId = useChainId()
-    const selectedWallet = useSelectedWallet()
+    const selectedWallet = useWallet()
     return !Flags.wallet_network_strict_mode_enabled || chainId === ChainId.Mainnet || !selectedWallet
 }
 

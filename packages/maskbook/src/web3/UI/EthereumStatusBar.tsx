@@ -36,6 +36,7 @@ export function EthereumStatusBar(props: EthereumStatusBarProps) {
     const chainIdValid = useChainIdValid()
 
     if (!account) return null
+
     return (
         <Box className={classes.root} {...BoxProps}>
             {chainId !== ChainId.Mainnet && chainIdValid ? (
@@ -47,7 +48,6 @@ export function EthereumStatusBar(props: EthereumStatusBarProps) {
             ) : null}
             <EthereumAccountChip
                 classes={{ root: classes.accountChip }}
-                address={account}
                 ChipProps={{ size: 'medium', variant: 'outlined', clickable: true, ...AccountChipProps }}
             />
         </Box>

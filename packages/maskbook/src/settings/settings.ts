@@ -1,11 +1,9 @@
 import stringify from 'json-stable-stringify'
-import { createGlobalSettings, createInternalSettings, createNetworkSettings } from './createSettings'
+import { createGlobalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import type { SetupGuideStep } from '../components/InjectedComponents/SetupGuide'
-import { Flags } from '../utils/flags'
 import { ChainId } from '../web3/types'
-import { ProviderType } from '../web3/types'
 
 /**
  * The id of last activated tab
@@ -41,6 +39,7 @@ export const allPostReplacementSettings = createGlobalSettings<boolean>('post re
     secondary: () => i18n.t('settings_post_replacement_desc'),
 })
 
+//#region appearance
 export enum Appearance {
     default = 'default',
     light = 'light',
@@ -50,6 +49,7 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
     primary: () => i18n.t('settings_appearance'),
     secondary: () => i18n.t('settings_appearance_secondary'),
 })
+//#endregion
 
 //#region chain state settings
 export interface ChainState {
@@ -80,11 +80,20 @@ export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>
 )
 //#endregion
 
-export const lastActivatedWalletProvider = createInternalSettings<ProviderType>(
-    'last activated wallet provider',
-    ProviderType.Maskbook,
+//#region wallet connected
+export const currentMetaMaskConnectedSettings = createGlobalSettings<boolean>('metamask connection status', false, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+export const currentWalletConnectConnectedSettings = createGlobalSettings<boolean>(
+    'walletconnect connection status',
+    false,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
 )
+//#endregion
 
+//#region language
 export enum Language {
     zh = 'zh',
     en = 'en',
@@ -96,6 +105,8 @@ export const languageSettings = createGlobalSettings<Language>(
     lang in Language ? (lang as Language) : Language.en,
     { primary: () => i18n.t('settings_language'), secondary: () => i18n.t('settings_language_secondary') },
 )
+//#endregion
+
 export const enableGroupSharingSettings = createGlobalSettings<boolean>('experimental/group-sharing@sept2020', false, {
     primary: () => 'Experimental: Enable group sharing',
     secondary: () => '(Unstable) Automatically share posts to a group',

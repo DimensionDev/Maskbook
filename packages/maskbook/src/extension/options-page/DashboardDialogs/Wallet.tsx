@@ -40,7 +40,7 @@ import { sleep, checkInputLengthExceed } from '../../../utils/utils'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import { QRCode } from '../../../components/shared/qrcode'
 import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
+import { useChainId } from '../../../web3/hooks/useChainState'
 import { Token, EthereumTokenType } from '../../../web3/types'
 import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
@@ -544,11 +544,8 @@ const useBackupDialogStyles = makeStyles((theme: Theme) =>
 
 export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
-    const {
-        wallet: { address },
-    } = props.ComponentProps!
+    const { wallet } = props.ComponentProps!
     const classes = useBackupDialogStyles()
-    const wallet = useWallet(address)
     const { value: privateKeyInHex } = useAsync(async () => {
         if (!wallet) return
         const { privateKeyInHex } = wallet._private_key_

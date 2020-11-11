@@ -72,14 +72,14 @@ export interface MaskbookWalletMessages {
     selectERC20TokenDialogUpdated: SelectERC20TokenDialogEvent
 
     /**
-     * Wallet status dialog
-     */
-    walletStatusDialogUpdated: WalletStatusDialogEvent
-
-    /**
      * Transaction dialog
      */
     transactionDialogUpdated: TransactionDialogEvent
+
+    /**
+     * Wallet status dialog
+     */
+    walletStatusDialogUpdated: WalletStatusDialogEvent
 
     /**
      * WalletConnect QR Code dialog

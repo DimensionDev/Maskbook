@@ -2,12 +2,13 @@ import { ValueRef } from '@dimensiondev/holoflows-kit/es'
 import { first } from 'lodash-es'
 import { PluginMessageCenter } from '../../PluginMessages'
 import Services from '../../../extension/service'
-import type { ProviderType } from '../../../web3/types'
+import { ProviderType } from '../../../web3/types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { WalletRecord } from '../database/types'
 import { WalletArrayComparer } from '../helpers'
 import { isSameAddress } from '../../../web3/helpers'
 import { currentSelectedWalletAddressSettings } from '../settings'
+import { currentMetaMaskConnectedSettings, currentWalletConnectConnectedSettings } from '../../../settings/settings'
 
 //#region tracking wallets
 const walletsRef = new ValueRef<WalletRecord[]>([], WalletArrayComparer)
@@ -18,15 +19,21 @@ PluginMessageCenter.on('maskbook.wallets.update', revalidate)
 revalidate()
 //#endregion
 
-export function useSelectedWallet() {
+export function useWallet() {
     const address = useValueRef(currentSelectedWalletAddressSettings)
     const wallets = useWallets()
     return wallets.find((x) => isSameAddress(x.address, address)) ?? first(wallets)
 }
 
-export function useWallet(address: string) {
-    const wallets = useWallets()
-    return wallets.find((x) => isSameAddress(x.address, address))
+export function useWalletConnected() {
+    const MetaMaskConnected = useValueRef(currentMetaMaskConnectedSettings)
+    const WalletConnectConnected = useValueRef(currentWalletConnectConnectedSettings)
+    const wallet = useWallet()
+    if (!wallet) return false
+    if (wallet.provider === ProviderType.Maskbook) return true
+    if (wallet.provider === ProviderType.MetaMask) return MetaMaskConnected
+    if (wallet.provider === ProviderType.WalletConnect) return WalletConnectConnected
+    return false
 }
 
 export function useWallets(provider?: ProviderType) {

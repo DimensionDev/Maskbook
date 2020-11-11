@@ -1,38 +1,31 @@
 import React, { useCallback } from 'react'
-import {
-    Chip,
-    ChipProps,
-    makeStyles,
-    Theme,
-    createStyles,
-    IconButton,
-    Typography,
-    Box,
-    Divider,
-} from '@material-ui/core'
-import { ChevronDown, Copy } from 'react-feather'
-import { useCopyToClipboard } from 'react-use'
+import { Chip, ChipProps, makeStyles, Theme, createStyles, Typography, Box } from '@material-ui/core'
+import { ChevronDown } from 'react-feather'
 import ErrorIcon from '@material-ui/icons/Error'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
-import { isSameAddress } from '../helpers'
+import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { ProviderIcon } from '../../components/shared/ProviderIcon'
 import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
-import { useSnackbarCallback } from '../../extension/options-page/DashboardDialogs/Base'
 import { WalletMessageCenter } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { useChainIdValid } from '../hooks/useChainState'
+
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
         root: {
             lineHeight: 1,
+        },
+        content: {
+            display: 'inline-flex',
+            alignItems: 'center',
         },
         address: {
             fontSize: 14,
             lineHeight: 1,
             marginRight: theme.spacing(1),
         },
+        placeholder: {},
         label: {
             overflow: 'visible',
             paddingRight: theme.spacing(1),
@@ -41,14 +34,6 @@ const useStyles = makeStyles((theme: Theme) => {
             height: 20,
             margin: theme.spacing(0, 1),
             backgroundColor: theme.palette.divider,
-        },
-        dropButton: {
-            width: 24,
-            height: 24,
-        },
-        copyButton: {
-            width: 24,
-            height: 24,
         },
         providerIcon: {
             fontSize: 18,
@@ -60,37 +45,15 @@ const useStyles = makeStyles((theme: Theme) => {
 })
 
 export interface EthereumAccountChipProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    address?: string
     ChipProps?: Partial<ChipProps>
 }
 
 export function EthereumAccountChip(props: EthereumAccountChipProps) {
     const { t } = useI18N()
-    const { address = '', ChipProps } = props
     const classes = useStylesExtends(useStyles(), props)
 
-    const wallets = useWallets()
     const chainIdValid = useChainIdValid()
-    const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
-    const avatar = (
-        <ProviderIcon classes={{ icon: classes.providerIcon }} size={18} providerType={currentWallet?.provider} />
-    )
-    const address_ = address.replace(/^0x/i, '')
-
-    //#region copy addr to clipboard
-    const [, copyToClipboard] = useCopyToClipboard()
-    const onCopy = useSnackbarCallback(
-        async (ev: React.MouseEvent<HTMLDivElement>) => {
-            ev.stopPropagation()
-            copyToClipboard(address_)
-        },
-        [],
-        undefined,
-        undefined,
-        undefined,
-        t('copy_success_of_wallet_addr'),
-    )
-    //#endregion
+    const selectedWallet = useWallet()
 
     //#region select wallet dialog
     const [, setSelectWalletOpen] = useRemoteControlledDialog(WalletMessageCenter, 'walletStatusDialogUpdated')
@@ -101,24 +64,16 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
     }, [setSelectWalletOpen])
     //#endregion
 
-    if (!address_) return null
-
     const content = (
-        <Box display="inline-flex" component="span" alignItems="center">
+        <Box className={classes.content} component="span">
             <Typography className={classes.address} color={chainIdValid ? 'textPrimary' : 'secondary'}>
-                {chainIdValid ? formatEthereumAddress(address_, 4) : t('plugin_wallet_wrong_network')}
+                {chainIdValid
+                    ? selectedWallet?.address
+                        ? formatEthereumAddress(selectedWallet.address, 4)
+                        : t('plugin_wallet_connect_a_wallet')
+                    : t('plugin_wallet_wrong_network')}
             </Typography>
-            {chainIdValid ? (
-                <>
-                    <IconButton className={classes.dropButton} size="small">
-                        <ChevronDown size={14} />
-                    </IconButton>
-                    <Divider className={classes.divider} orientation="vertical" />
-                    <IconButton className={classes.copyButton} size="small" onClick={onCopy}>
-                        <Copy size={14} />
-                    </IconButton>
-                </>
-            ) : null}
+            {chainIdValid ? <ChevronDown size={14} /> : null}
         </Box>
     )
 
@@ -133,22 +88,27 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
                 label={content}
                 clickable
                 onClick={onOpen}
-                {...ChipProps}
+                {...props.ChipProps}
             />
         )
-
     return (
         <>
-            {avatar && chainIdValid ? (
+            {chainIdValid && selectedWallet ? (
                 <Chip
-                    avatar={avatar}
+                    avatar={
+                        <ProviderIcon
+                            classes={{ icon: classes.providerIcon }}
+                            size={18}
+                            providerType={selectedWallet.provider}
+                        />
+                    }
                     className={classes.root}
                     classes={{ label: classes.label }}
                     size="small"
                     label={content}
                     clickable
                     onClick={onOpen}
-                    {...ChipProps}
+                    {...props.ChipProps}
                 />
             ) : (
                 <Chip
@@ -156,7 +116,7 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
                     classes={{ label: classes.label }}
                     size="small"
                     label={content}
-                    {...ChipProps}
+                    {...props.ChipProps}
                 />
             )}
         </>

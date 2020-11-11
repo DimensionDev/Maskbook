@@ -5,7 +5,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessageCenter } from '../messages'
-import { useSelectedWallet, useWallets } from '../hooks/useWallet'
+import { useWallet, useWallets } from '../hooks/useWallet'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import type { WalletRecord } from '../database/types'
 import Services from '../../../extension/service'
@@ -31,7 +31,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const selectedWallet = useSelectedWallet()
+    const selectedWallet = useWallet()
     const wallets = useWallets(ProviderType.Maskbook)
 
     //#region remote controlled dialog logic

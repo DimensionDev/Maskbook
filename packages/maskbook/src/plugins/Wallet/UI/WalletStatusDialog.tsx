@@ -5,13 +5,16 @@ import { useCopyToClipboard } from 'react-use'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ProviderIcon } from '../../../components/shared/ProviderIcon'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
+import Services from '../../../extension/service'
+import { currentWalletConnectConnectedSettings } from '../../../settings/settings'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { resolveLinkOnEtherscan, resolveProviderName } from '../../../web3/pipes'
 import { ProviderType } from '../../../web3/types'
 import { formatEthereumAddress } from '../formatter'
-import { useSelectedWallet } from '../hooks/useWallet'
+import { useWallet } from '../hooks/useWallet'
 import { WalletMessageCenter } from '../messages'
 
 const useStyles = makeStyles((theme) =>
@@ -58,7 +61,8 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const classes = useStyles()
 
     const chainId = useChainId()
-    const selectedWallet = useSelectedWallet()
+    const selectedWallet = useWallet()
+    const currentWalletConnectConnected = useValueRef(currentWalletConnectConnectedSettings)
 
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
@@ -92,7 +96,32 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
         WalletMessageCenter,
         'selectProviderDialogUpdated',
     )
-    const onConnect = useCallback(() => {
+    //#endregion
+
+    //#region walletconnect
+    const [, setWalletConnectDialogOpen] = useRemoteControlledDialog(
+        WalletMessageCenter,
+        'walletConnectQRCodeDialogUpdated',
+    )
+    //#endregion
+
+    const onConnect = useCallback(async () => {
+        if (selectedWallet?.provider !== ProviderType.WalletConnect) return
+        const uri = await Services.Ethereum.createConnectionURI()
+        setWalletStatusDialogOpen({
+            open: false,
+        })
+        if (currentWalletConnectConnected)
+            setSelectProviderDialogOpen({
+                open: true,
+            })
+        else
+            setWalletConnectDialogOpen({
+                open: true,
+                uri,
+            })
+    }, [currentWalletConnectConnected, selectedWallet])
+    const onChange = useCallback(() => {
         setWalletStatusDialogOpen({
             open: false,
         })
@@ -100,7 +129,6 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
             open: true,
         })
     }, [setWalletStatusDialogOpen, setSelectProviderDialogOpen])
-    //#endregion
 
     if (!selectedWallet) return null
 
@@ -113,8 +141,13 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                     </Typography>
                     <section className={classes.actions}>
                         {selectedWallet.provider === ProviderType.WalletConnect ? (
-                            <Button className={classes.actionButton} color="primary" size="small" variant="outlined">
-                                Disconnect
+                            <Button
+                                className={classes.actionButton}
+                                color="primary"
+                                size="small"
+                                variant="outlined"
+                                onClick={onConnect}>
+                                {currentWalletConnectConnected ? 'Disconnect' : 'Connect'}
                             </Button>
                         ) : null}
                         <Button
@@ -122,7 +155,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                             color="primary"
                             size="small"
                             variant="outlined"
-                            onClick={onConnect}>
+                            onClick={onChange}>
                             Change
                         </Button>
                     </section>

@@ -1,17 +1,12 @@
 import Web3 from 'web3'
 import createMetaMaskProvider, { MetamaskInpageProvider } from 'metamask-extension-provider'
-import { ChainId } from '../../../../web3/types'
+import type { ChainId } from '../../../../web3/types'
 import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { EthereumAddress } from 'wallet.ts'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import { ProviderType } from '../../../../web3/types'
 import { MessageCenter } from '../../../../utils/messages'
 import { currentSelectedWalletAddressSettings } from '../../../../plugins/Wallet/settings'
-
-//#region tracking chain id
-let currentChainId: ChainId = ChainId.Mainnet
-currentMetaMaskChainIdSettings.addListener((v) => (currentChainId = v))
-//#endregion
 
 let provider: MetamaskInpageProvider | null = null
 let web3: Web3 | null = null
