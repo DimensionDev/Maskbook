@@ -3,10 +3,10 @@ import React from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
 import { useAsync } from 'react-use'
-import Services, { ServicesWithProgress } from '../../../extension/service'
+import { PluginFileServiceRPC, PluginFileServiceRPCGenerator } from '../utils'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { timeout } from '../../../utils/utils'
-import { FileRouter, pluginId } from '../constants'
+import { FileRouter } from '../constants'
 import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
 import { FileName } from './FileName'
@@ -58,7 +58,7 @@ export const Uploading: React.FC = () => {
     }, [onUploading])
     const { error } = useAsync(async () => {
         const payloadTxID = await timeout(
-            Services.Plugin.invokePlugin(pluginId, 'makeAttachment', {
+            PluginFileServiceRPC.makeAttachment({
                 key: state.key,
                 block: state.block,
                 type: state.type,
@@ -66,11 +66,11 @@ export const Uploading: React.FC = () => {
             60000, // ≈ 1 minute
         )
         setPreparing(false)
-        for await (const pctComplete of ServicesWithProgress.pluginArweaveUpload(payloadTxID)) {
+        for await (const pctComplete of PluginFileServiceRPCGenerator.upload(payloadTxID)) {
             setSendSize(state.size * (pctComplete / 100))
         }
         const landingTxID = await timeout(
-            Services.Plugin.invokePlugin(pluginId, 'uploadLandingPage', {
+            PluginFileServiceRPC.uploadLandingPage({
                 name: state.name,
                 size: state.size,
                 txId: payloadTxID,
@@ -90,7 +90,7 @@ export const Uploading: React.FC = () => {
             payloadTxID: payloadTxID,
             landingTxID: landingTxID,
         }
-        await Services.Plugin.invokePlugin(pluginId, 'setFileInfo', item)
+        await PluginFileServiceRPC.setFileInfo(item)
         history.replace(FileRouter.uploaded, item)
     }, [])
     React.useEffect(() => {

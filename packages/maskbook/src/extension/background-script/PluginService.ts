@@ -9,13 +9,16 @@ import * as Election2020 from '../../plugins/Election2020/services'
 const Plugins = {
     'maskbook.red_packet': RedPacket,
     'maskbook.wallet': Wallet,
-    'maskbook.fileservice': FileService,
     'maskbook.trader': Trader,
     'maskbook.polls': Poll,
     'co.gitcoin': Gitcoin,
     'maskbook.election2020': Election2020,
 } as const
 type Plugins = typeof Plugins
+/**
+ * @deprecated
+ * Please manage plugin RPC in the plugin. We suggest to use createPluginMessage + AsyncCall.
+ */
 export async function invokePlugin<K extends keyof Plugins, M extends keyof Plugins[K], P extends Plugins[K][M]>(
     key: K,
     method: M,
