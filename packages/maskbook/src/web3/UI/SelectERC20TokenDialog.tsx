@@ -46,7 +46,7 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
 
     return (
         <>
-            <InjectedDialog open={open} onExit={onClose} title="Select a Token">
+            <InjectedDialog open={open} onExit={onClose} title="Select a Token" DialogProps={{ maxWidth: 'xs' }}>
                 <DialogContent>
                     <TextField
                         className={classes.search}
