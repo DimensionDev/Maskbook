@@ -1,5 +1,4 @@
-// @ts-ignore
-const React = require('jsx-jsonml-devtools-renderer') as any
+import * as React from 'jsx-jsonml-devtools-renderer'
 import {
     TypedMessage,
     TypedMessageCompound,
@@ -76,7 +75,8 @@ class TypedMessageFormatter {
     }
 }
 export function enhanceTypedMessageDebugger() {
-    React.installCustomObjectFormatter(new TypedMessageFormatter())
+    // TODO: this library does not support React new JSX transform yet.
+    // React.installCustomObjectFormatter(new TypedMessageFormatter())
 }
 function display(obj: unknown) {
     switch (typeof obj) {
