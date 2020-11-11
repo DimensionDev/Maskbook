@@ -6,7 +6,7 @@ import React from 'react'
 import { Trans } from 'react-i18next'
 import { useHistory } from 'react-router'
 import { useAsync } from 'react-use'
-import Services from '../../../extension/service'
+import { PluginFileServiceRPC } from '../utils'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeFileKey } from '../arweave/makeFileKey'
 import { FileRouter, MAX_FILE_SIZE, pluginId } from '../constants'
@@ -52,7 +52,7 @@ export const Upload: React.FC = () => {
     const classes = useStyles()
     const history = useHistory()
     const [encrypted, setEncrypted] = React.useState(true)
-    const recent = useAsync(() => Services.Plugin.invokePlugin(pluginId, 'getRecentFiles'), [])
+    const recent = useAsync(() => PluginFileServiceRPC.getRecentFiles(), [])
     const onFile = async (file: File) => {
         let key: string | undefined = undefined
         if (encrypted) {
@@ -60,7 +60,7 @@ export const Upload: React.FC = () => {
         }
         const block = new Uint8Array(await file.arrayBuffer())
         const checksum = encodeArrayBuffer(await Attachment.checksum(block))
-        const item = await Services.Plugin.invokePlugin(pluginId, 'getFileInfo', checksum)
+        const item = await PluginFileServiceRPC.getFileInfo(checksum)
         if (isNil(item) && key) {
             history.replace(FileRouter.uploading, {
                 key,
