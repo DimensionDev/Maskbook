@@ -1,4 +1,5 @@
-import * as React from 'jsx-jsonml-devtools-renderer'
+// Do not use import because it will merge JSX namespace and make a conflict.
+const React = require('jsx-jsonml-devtools-renderer')
 import {
     TypedMessage,
     TypedMessageCompound,

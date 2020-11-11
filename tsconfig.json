@@ -72,6 +72,7 @@
     "useDefineForClassFields": true
   },
   "include": ["./packages/maskbook/src/", "./e2e/"],
+  "exclude": ["node_modules"],
   "ts-node": {
     "compilerOptions": {
       "module": "CommonJS",
