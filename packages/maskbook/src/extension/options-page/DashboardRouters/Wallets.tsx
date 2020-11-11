@@ -1,12 +1,11 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Avatar, Button, IconButton, Typography } from '@material-ui/core'
+import { IconButton } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
-import AddCircleIcon from '@material-ui/icons/AddCircle'
 import AddIcon from '@material-ui/icons/Add'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import RestoreIcon from '@material-ui/icons/Restore'
-import { cloneDeep, merge, truncate } from 'lodash-es'
+import { cloneDeep, merge } from 'lodash-es'
 
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
@@ -19,16 +18,11 @@ import {
 } from '../DashboardDialogs/Wallet'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
-import { Flags } from '../../../utils/flags'
-import { WalletMessageCenter } from '../../../plugins/Wallet/messages'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { useTokens } from '../../../plugins/Wallet/hooks/useToken'
 import { useTokensDetailedCallback } from '../../../web3/hooks/useTokensDetailedCallback'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
-import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
-import { useBlockie } from '../../../web3/hooks/useBlockie'
 
 //#region theme
 const walletsTheme = (theme: Theme) =>
@@ -62,12 +56,6 @@ const useStyles = makeStyles((theme) =>
             flexDirection: 'column',
             flex: '0 0 100%',
             height: '100%',
-        },
-        header: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: theme.spacing(3, 2, 0, 2),
         },
         content: {
             width: '100%',
@@ -105,8 +93,6 @@ export default function DashboardWalletsRouter() {
 
     const selectedWallet = useWallet()
     const tokens = useTokens()
-    const blockie = useBlockie(selectedWallet?.address ?? '')
-
     const detailedTokens = useTokensDetailedCallback(tokens)
 
     // show create dialog
@@ -118,14 +104,6 @@ export default function DashboardWalletsRouter() {
     useEffect(() => {
         if (error) openWalletError()
     }, [error, openWalletError])
-
-    // show provider connect dialog
-    const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
-    const onConnect = useCallback(() => {
-        setOpen({
-            open: true,
-        })
-    }, [setOpen])
 
     //#region right icons from mobile devices
     const rightIcons = [
@@ -162,22 +140,7 @@ export default function DashboardWalletsRouter() {
         <DashboardRouterContainer
             empty={!selectedWallet}
             title={t('my_wallets')}
-            actions={[
-                Flags.metamask_support_enabled || Flags.wallet_connect_support_enabled ? (
-                    <Button variant="outlined" onClick={onConnect}>
-                        {t('connect')}
-                    </Button>
-                ) : (
-                    <></>
-                ),
-                <Button
-                    variant="contained"
-                    onClick={openWalletCreate}
-                    endIcon={<AddCircleIcon />}
-                    data-testid="create_button">
-                    {t('create_wallet')}
-                </Button>,
-            ]}
+            actions={[<EthereumStatusBar BoxProps={{ justifyContent: 'flex-end' }} />]}
             leftIcons={[
                 <IconButton onClick={() => history.goBack()}>
                     <ArrowBackIosIcon />
@@ -186,19 +149,6 @@ export default function DashboardWalletsRouter() {
             rightIcons={rightIcons}>
             <ThemeProvider theme={walletsTheme}>
                 <div className={classes.root}>
-                    <div className={classes.header}>
-                        {selectedWallet ? (
-                            <section className={classes.caption}>
-                                <Avatar src={blockie} />
-                                <Typography className={classes.title} variant="h5" color="textPrimary">
-                                    {selectedWallet.name
-                                        ? truncate(selectedWallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN })
-                                        : selectedWallet.address}
-                                </Typography>
-                            </section>
-                        ) : null}
-                        <EthereumStatusBar BoxProps={{ justifyContent: 'flex-end' }} />
-                    </div>
                     <div className={classes.content}>
                         <div className={classes.wrapper}>
                             {selectedWallet ? (

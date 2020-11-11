@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
-import { Button, Box, IconButton, MenuItem, Tabs, Tab } from '@material-ui/core'
+import { truncate } from 'lodash-es'
+import { Button, Box, IconButton, MenuItem, Tabs, Tab, Typography, Avatar } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined'
@@ -26,6 +27,8 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { TransakMessageCenter } from '../../../plugins/Transak/messages'
 import { Flags } from '../../../utils/flags'
 import { ElectionTokenAlbum } from '../../../plugins/Election2020/UI/ElectionTokenAlbum'
+import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
+import { useBlockie } from '../../../web3/hooks/useBlockie'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -38,6 +41,11 @@ const useStyles = makeStyles((theme) =>
                 overflow: 'auto',
             },
         },
+        caption: {
+            display: 'flex',
+            alignItems: 'center',
+            padding: theme.spacing(3, 2, 0, 2),
+        },
         header: {
             borderBottom: `1px solid ${theme.palette.divider}`,
         },
@@ -47,10 +55,11 @@ const useStyles = makeStyles((theme) =>
         footer: {
             margin: theme.spacing(1),
         },
-        title: {},
-        tab: {
+        title: {
             flex: 1,
+            paddingLeft: theme.spacing(1),
         },
+        tabs: {},
         addButton: {
             color: theme.palette.primary.main,
         },
@@ -109,27 +118,17 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
     )
     //#endregion
 
+    const blockie = useBlockie(wallet.address)
+
     return (
         <div className={classes.root} ref={ref}>
-            <Box
-                pt={xsMatched ? 2 : 3}
-                pb={2}
-                pl={3}
-                pr={2}
-                display="flex"
-                alignItems="center"
-                className={xsMatched ? classes.header : ''}>
-                <Tabs
-                    className={classes.tab}
-                    value={tabIndex}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    onChange={onTabChange}>
-                    <Tab label="Token"></Tab>
-                    <Tab label="Collectibles"></Tab>
-                </Tabs>
+            <Box className={classes.caption}>
+                <Avatar src={blockie} />
+                <Typography className={classes.title} variant="h5" color="textPrimary">
+                    {wallet.name ? truncate(wallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN }) : wallet.address}
+                </Typography>
                 {!xsMatched ? (
-                    <Box className={classes.footer} display="flex" alignItems="center" justifyContent="flex-end">
+                    <Box display="flex" alignItems="center" justifyContent="flex-end">
                         {tabIndex === 0 ? (
                             <Button
                                 className={classes.addButton}
@@ -157,6 +156,25 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                     <MoreVertOutlinedIcon />
                 </IconButton>
                 {menu}
+            </Box>
+
+            <Box
+                pt={xsMatched ? 2 : 3}
+                pb={2}
+                pl={3}
+                pr={2}
+                display="flex"
+                alignItems="center"
+                className={xsMatched ? classes.header : ''}>
+                <Tabs
+                    className={classes.tabs}
+                    value={tabIndex}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    onChange={onTabChange}>
+                    <Tab label="Token"></Tab>
+                    <Tab label="Collectibles"></Tab>
+                </Tabs>
             </Box>
 
             <Box className={classes.content}>
