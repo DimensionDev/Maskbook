@@ -25,6 +25,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { Token, EthereumTokenType, EthereumNetwork } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainState'
+import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { createEetherToken } from '../../../web3/helpers'
@@ -41,7 +42,7 @@ import { resolveChainName } from '../../../web3/pipes'
 import { WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { isMetaMaskUnlocked, currentSelectedWalletProviderSettings } from '../../Wallet/settings'
+import { isMetaMaskUnlocked } from '../../Wallet/settings'
 import { ProviderType } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) =>
@@ -83,6 +84,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
+    const wallet = useWallet(account)
 
     //#region select token
     const [token, setToken] = useState<Token>(createEetherToken(chainId))
@@ -106,8 +108,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const [isRandom, setIsRandom] = useState(0)
     const [message, setMessage] = useState('Best Wishes!')
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
-    const currentProvider = useValueRef(currentSelectedWalletProviderSettings)
-    const isMetamaskLocked = !useValueRef(isMetaMaskUnlocked) && currentProvider === ProviderType.MetaMask
+    const isMetamaskLocked = !useValueRef(isMetaMaskUnlocked) && wallet?.provider === ProviderType.MetaMask
     // shares
     const [shares, setShares] = useState<number | ''>(RED_PACKET_DEFAULT_SHARES)
     const onShareChange = useCallback(

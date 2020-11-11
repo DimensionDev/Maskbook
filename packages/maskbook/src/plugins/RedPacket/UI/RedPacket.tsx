@@ -10,6 +10,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
+import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { isDAI, isOKB } from '../../../web3/helpers'
 import { resolveRedPacketStatus } from '../pipes'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
@@ -21,7 +22,7 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
 import Services from '../../../extension/service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { isMetaMaskUnlocked, currentSelectedWalletProviderSettings } from '../../Wallet/settings'
+import { isMetaMaskUnlocked } from '../../Wallet/settings'
 import { ProviderType } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) =>
@@ -134,8 +135,8 @@ export function RedPacket(props: RedPacketProps) {
     const { value: token } = useTokenComputed(payload)
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
-    const currentProvider = useValueRef(currentSelectedWalletProviderSettings)
-    const isMetamaskLocked = !useValueRef(isMetaMaskUnlocked) && currentProvider === ProviderType.MetaMask
+    const wallet = useWallet(payload.sender.address)
+    const isMetamaskLocked = !useValueRef(isMetaMaskUnlocked) && wallet?.provider === ProviderType.MetaMask
 
     //#region remote controlled select provider dialog
     const [, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
@@ -201,7 +202,7 @@ export function RedPacket(props: RedPacketProps) {
                     [classes.metamaskContent]: true,
                     [classes.cursor]: true,
                 })}
-                onClick={Services.Ethereum.popupMetaMaskUnlocked}
+                onClick={() => Services.Ethereum.popupMetaMaskUnlocked()}
                 component="article"
                 elevation={0}>
                 <MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />
