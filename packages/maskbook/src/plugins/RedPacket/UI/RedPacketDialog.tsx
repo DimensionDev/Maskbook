@@ -12,6 +12,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import Services from '../../../extension/service'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { editMetadata } from '../../../protocols/typed-message'
+import { RedPacketRPC } from '../helpers'
 
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean
@@ -31,7 +32,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             )
             onConfirm(payload)
             // storing the created red packet in DB, it helps retrieve red packet password later
-            Services.Plugin.invokePlugin('maskbook.red_packet', 'discoverRedPacket', '', payload)
+            RedPacketRPC.discoverRedPacket('', payload)
         },
         [onConfirm],
     )
