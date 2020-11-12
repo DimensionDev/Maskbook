@@ -24,6 +24,7 @@ import CopyPlugin from 'copy-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
 import WebExtensionTarget from 'webpack-target-webextension'
 import ManifestPlugin from 'webpack-extension-manifest-plugin'
+import Webpack5AssetModuleTransformer from './scripts/webpack-5-asset-module-backport'
 //#endregion
 
 import git from '@nice-labs/git-rev'
@@ -140,7 +141,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
     //#region Define entries
     if (!(target.Firefox || target.Safari)) {
         // Define "browser" globally in Chrome
-        config.plugins.push(new ProvidePlugin({ browser: 'webextension-polyfill' }))
+        config.plugins!.push(new ProvidePlugin({ browser: 'webextension-polyfill' }))
     }
     config.entry = {
         'options-page': withReactDevTools(src('./packages/maskbook/src/extension/options-page/index.tsx')),
@@ -153,7 +154,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
     for (const entry in config.entry) {
         config.entry[entry] = iOSWebExtensionShimHack(...toArray(config.entry[entry]))
     }
-    config.plugins.push(
+    config.plugins!.push(
         // @ts-ignore
         getHTMLPlugin({ chunks: ['options-page'], filename: 'index.html' }),
         getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }),
@@ -163,7 +164,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
     ) // generate pages for each entry
     //#endregion
 
-    if (argv.profile) config.plugins.push(new BundleAnalyzerPlugin())
+    if (argv.profile) config.plugins!.push(new BundleAnalyzerPlugin())
     return [
         config,
         {
@@ -212,7 +213,9 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
                     importsNotUsedAsValues: 'remove',
                 },
                 getCustomTransformers: () => ({
-                    before: hmr ? [ReactRefreshTypeScriptTransformer()] : undefined,
+                    before: [Webpack5AssetModuleTransformer(), hmr && ReactRefreshTypeScriptTransformer()].filter(
+                        Boolean,
+                    ),
                 }),
             },
         }
