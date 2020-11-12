@@ -1,6 +1,6 @@
 import Web3 from 'web3'
-import type { MetamaskInpageProvider } from 'metamask-extension-provider'
-import { createMetaMaskProvider } from '../createMetaMaskProvider'
+import createMetaMaskProvider from 'metamask-extension-provider'
+import type { MetamaskInpageProvider } from '../types'
 import { ChainId } from '../../../../web3/types'
 import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { EthereumAddress } from 'wallet.ts'

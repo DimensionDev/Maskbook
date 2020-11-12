@@ -7881,10 +7881,10 @@ detect-browser@5.1.0:
   resolved "https://registry.npm.taobao.org/detect-browser/download/detect-browser-5.1.0.tgz#0c51c66b747ad8f98a6832bf3026a5a23a7850ff"
   integrity sha1-DFHGa3R62PmKaDK/MCalojp4UP8=
 
-detect-browser@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/detect-browser/-/detect-browser-5.2.0.tgz#c9cd5afa96a6a19fda0bbe9e9be48a6b6e1e9c97"
-  integrity sha512-tr7XntDAu50BVENgQfajMLzacmSe34D+qZc4zjnniz0ZVuw/TZcLcyxHQjYpJTM36sGEkZZlYLnIM1hH7alTMA==
+detect-browser@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/detect-browser/-/detect-browser-3.0.1.tgz#39beead014347a8a2be1f3c4cb30a0aef2127c44"
+  integrity sha512-L6b76EfUxnoxGHM5Vz7nrshQPIbOHtitDWpGufrp5srQdJrEYi1xpUVZeFbfssWAJvUWo/iDIVlz8hOP4Z8OCw==
 
 detect-libc@^1.0.2:
   version "1.0.3"
@@ -8287,11 +8287,6 @@ emailjs@^2.2.0:
   dependencies:
     addressparser "^0.3.2"
     emailjs-mime-codec "^2.0.7"
-
-emitter-component@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/emitter-component/-/emitter-component-1.1.1.tgz#065e2dbed6959bf470679edabeaf7981d1003ab6"
-  integrity sha1-Bl4tvtaVm/RwZ57avq95gdEAOrY=
 
 emittery@^0.7.1:
   version "0.7.1"
@@ -13624,6 +13619,15 @@ merge2@^1.2.3, merge2@^1.3.0:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.3.0.tgz#5b366ee83b2f1582c48f87e47cf1a9352103ca81"
   integrity sha512-2j4DAdlBOkiSZIsaXk4mTE3sRS02yBHAtfy127xRV3bQUFqXkjHCHLW6Scv7DwNRbIWNHH8zpnz9zMaKXIdvYw==
 
+metamask-extension-provider@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/metamask-extension-provider/-/metamask-extension-provider-2.0.0.tgz#c61e8f3626379575c2d3e36279fb2a7a09db3a73"
+  integrity sha512-Z+5s7W2S0647Z1KCYsH84n7VCkOx7kP42v3Jo7Rve63oRkiDQlARnmToHgGl0CbD7nL3aTrrKCpXOA7QZCM4Kw==
+  dependencies:
+    "@metamask/inpage-provider" "^7.0.0"
+    detect-browser "^3.0.0"
+    extension-port-stream "^1.0.0"
+
 methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
@@ -18227,13 +18231,6 @@ stream-to-promise@3.0.0:
     any-promise "~1.3.0"
     end-of-stream "~1.4.1"
     stream-to-array "~2.3.0"
-
-stream@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/stream/-/stream-0.0.2.tgz#7f5363f057f6592c5595f00bc80a27f5cec1f0ef"
-  integrity sha1-f1Nj8Ff2WSxVlfALyAon9c7B8O8=
-  dependencies:
-    emitter-component "^1.1.1"
 
 strict-uri-encode@^1.0.0:
   version "1.1.0"
