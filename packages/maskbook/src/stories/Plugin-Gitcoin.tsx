@@ -1,6 +1,6 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { text, boolean } from '@storybook/addon-knobs'
+import { text } from '@storybook/addon-knobs'
 import { DonateDialog } from '../plugins/Gitcoin/UI/DonateDialog'
 import { figmaLink } from './utils'
 import { action } from '@storybook/addon-actions'

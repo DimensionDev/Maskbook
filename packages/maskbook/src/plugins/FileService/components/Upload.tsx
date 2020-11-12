@@ -9,7 +9,7 @@ import { useAsync } from 'react-use'
 import { PluginFileServiceRPC } from '../utils'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeFileKey } from '../arweave/makeFileKey'
-import { FileRouter, MAX_FILE_SIZE, pluginId } from '../constants'
+import { FileRouter, MAX_FILE_SIZE } from '../constants'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
 

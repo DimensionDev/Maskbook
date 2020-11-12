@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react'
-import Services from '../../../extension/service'
 import { useTransactionReceipt } from '../../../web3/hooks/useTransaction'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useElectionTokenContract } from '../contracts/useElectionTokenContract'

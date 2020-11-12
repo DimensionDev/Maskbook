@@ -1,6 +1,6 @@
 import { env, Env, Preference, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { ValueRef, assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import type { Group, Profile, Persona } from '../database'
+import type { Group, Profile } from '../database'
 import { ProfileIdentifier, PersonaIdentifier } from '../database/type'
 import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
@@ -17,7 +17,7 @@ import type { PostInfo } from './PostInfo'
 import { Flags } from '../utils/flags'
 import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 import { editMetadata } from '../protocols/typed-message'
-import type { IdentifierMap, ReadonlyIdentifierMap } from '../database/IdentifierMap'
+import type { ReadonlyIdentifierMap } from '../database/IdentifierMap'
 
 if (!process.env.STORYBOOK) {
     assertEnvironment.oneOf(Environment.ContentScript, Environment.ManifestOptions, Environment.ManifestBrowserAction)

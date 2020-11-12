@@ -1,5 +1,5 @@
 import React, { useMemo, useContext, useEffect, useRef, useCallback } from 'react'
-import { makeStyles, createStyles, useTheme, useMediaQuery, Theme } from '@material-ui/core'
+import { makeStyles, createStyles, useTheme } from '@material-ui/core'
 import { useLocation } from 'react-router-dom'
 import { noop } from 'lodash-es'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'

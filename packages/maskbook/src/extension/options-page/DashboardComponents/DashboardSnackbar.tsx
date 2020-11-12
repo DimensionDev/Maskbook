@@ -33,8 +33,6 @@ export const DashboardSnackbar = React.forwardRef<HTMLDivElement, DashboardSnack
     },
 )
 
-import CheckIcon from '@material-ui/icons/Check'
-
 export interface DashboardSnackbarProviderProps {
     children?: React.ReactNode
 }

@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React from 'react'
 import { createStyles, Paper, Typography, makeStyles, TypographyProps } from '@material-ui/core'
 import { selectElementContents } from '../../../utils/utils'
 

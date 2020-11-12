@@ -28,8 +28,6 @@ import type {
     AESJsonWebKey,
     EC_Private_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
-import { i18n } from '../../utils/i18n-next'
-
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
     const persona = rec.linkedPersona

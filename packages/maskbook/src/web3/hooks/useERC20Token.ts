@@ -1,7 +1,5 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { EthereumAddress } from 'wallet.ts'
-import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { Token, EthereumTokenType } from '../types'
 import { useChainId } from './useChainState'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'

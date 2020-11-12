@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { noop } from 'lodash-es'
 import type { TransakSDKConfig } from '@transak/transak-sdk'
 import { useTransak } from '../hooks/useTransak'

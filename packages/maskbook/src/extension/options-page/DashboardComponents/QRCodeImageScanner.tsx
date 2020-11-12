@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { useQRCodeImageScan } from '../../../utils/hooks/useQRCodeImageScan'
 import { CircularProgress, makeStyles, createStyles, Theme } from '@material-ui/core'
 

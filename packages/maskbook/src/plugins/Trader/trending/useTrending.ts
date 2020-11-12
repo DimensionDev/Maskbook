@@ -1,5 +1,4 @@
 import { useAsync } from 'react-use'
-import Services from '../../../extension/service'
 import { PluginTraderRPC } from '../messages'
 import type { DataProvider, Currency } from '../types'
 

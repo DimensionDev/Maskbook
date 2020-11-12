@@ -1,6 +1,5 @@
 import React from 'react'
 import { makeStyles, Theme, createStyles, Typography, Card, ButtonBase, ButtonBaseProps } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme: Theme) =>

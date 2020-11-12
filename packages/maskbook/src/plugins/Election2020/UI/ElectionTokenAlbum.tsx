@@ -1,13 +1,10 @@
 import React from 'react'
 import { createStyles, makeStyles } from '@material-ui/core'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useChainState'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useERC721Token } from '../../../web3/hooks/useERC721Token'
 import { EthereumTokenType } from '../../../web3/types'
 import { ELECTION_2020_CONSTANTS } from '../constants'
 import { useAllElectionTokensOfOwner } from '../hooks/useAllElectionTokensOfOwner'
-import { CANDIDATE_TYPE, US_PARTY_TYPE } from '../types'
 import { ElectionCard } from './ElectionCard'
 
 const useStyles = makeStyles((theme) =>

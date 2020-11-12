@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import type { DataProvider, Currency, Settings } from '../types'
-import Services from '../../../extension/service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { getCurrentDataProviderGeneralSettings } from '../settings'
 import { PluginTraderRPC } from '../messages'

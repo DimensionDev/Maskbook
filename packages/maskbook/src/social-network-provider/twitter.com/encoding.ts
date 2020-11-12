@@ -1,7 +1,5 @@
 import { batchReplace, parseURL, regexMatchAll } from '../../utils/utils'
 import { isNull } from 'lodash-es'
-import anchorme from 'anchorme'
-
 const ICAO9303Checksum = {
     encode: (input: string) => {
         return `${input}${(

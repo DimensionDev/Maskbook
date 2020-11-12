@@ -1,5 +1,4 @@
 import { useAsync } from 'react-use'
-import Services from '../../../extension/service'
 import type { Currency, DataProvider } from '../types'
 import { isUndefined } from 'lodash-es'
 import { Days } from '../UI/trending/PriceChartDaysControl'
