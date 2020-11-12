@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react'
-import Services from '../../../extension/service'
 import useSWR from 'swr'
 import type { GitcoinGrantMetadata } from '../service'
 import { DonateDialog } from './DonateDialog'
@@ -10,9 +9,10 @@ import { formatBalance } from '../../Wallet/formatter'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
+import { PluginGitcoinRPC } from '../constants'
 
 function fetcher(key: string, url: string) {
-    return Services.Plugin.invokePlugin('co.gitcoin', 'fetchMetadata', url)
+    return PluginGitcoinRPC.fetchMetadata(url)
 }
 
 export interface GitcoinProps {
