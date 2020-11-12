@@ -1,6 +1,6 @@
 import React from 'react'
 import DashboardRouterContainer from './Container'
-import { ThemeProvider, Theme, Drawer, IconButton } from '@material-ui/core'
+import { ThemeProvider, Theme, IconButton } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import { merge, cloneDeep } from 'lodash-es'
 

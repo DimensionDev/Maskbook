@@ -1,5 +1,4 @@
 import React, { useEffect, useCallback } from 'react'
-import Services from '../../../extension/service'
 import { TrendingPopper } from './trending/TrendingPopper'
 import { DataProvider, SwapProvider } from '../types'
 import { TrendingView } from './trending/TrendingView'

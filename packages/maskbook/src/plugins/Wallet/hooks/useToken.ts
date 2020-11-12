@@ -1,6 +1,5 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { WalletMessages, WalletRPC } from '../messages'
-import Services from '../../../extension/service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { ERC20TokenRecord } from '../database/types'
 import { TokenArrayComparer } from '../helpers'

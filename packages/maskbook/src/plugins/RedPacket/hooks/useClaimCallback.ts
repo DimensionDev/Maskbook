@@ -5,7 +5,6 @@ import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
-import Services from '../../../extension/service'
 import { RedPacketRPC } from '../helpers'
 
 export function useClaimCallback(from: string, id?: string, password?: string) {

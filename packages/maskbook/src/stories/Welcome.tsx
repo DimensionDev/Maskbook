@@ -1,13 +1,11 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { linkTo as to, linkTo } from '@storybook/addon-links'
+import { linkTo as to } from '@storybook/addon-links'
 import { text, boolean, number } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
 import { BannerUI } from '../components/Welcomes/Banner'
 import { Dialog } from '@material-ui/core'
 import QRScanner from '../components/QRScanner'
-import { demoPeople } from './demoPeopleOrGroups'
-
 const ResponsiveDialog = Dialog
 storiesOf('Welcome', module)
     .add('Banner', () => {

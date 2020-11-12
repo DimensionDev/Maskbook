@@ -3,7 +3,6 @@ import { Dialog, withMobileDialog, DialogProps } from '@material-ui/core'
 import '../../utils/shadow-root/ShadowRootPortal'
 import { PortalShadowRoot } from '../../utils/shadow-root/ShadowRootPortal'
 import { useSheetsRegistryStyles } from './renderInShadowRoot'
-import { useValueRef } from '../hooks/useValueRef'
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)

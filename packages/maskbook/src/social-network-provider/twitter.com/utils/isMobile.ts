@@ -1,4 +1,4 @@
-import { assertEnvironment, Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
+import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
 import { twitterUrl } from './url'
 
 export const isMobileTwitter = isEnvironment(Environment.ContentScript)

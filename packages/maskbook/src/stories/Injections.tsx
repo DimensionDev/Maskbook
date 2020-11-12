@@ -9,7 +9,7 @@ import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPo
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
 import { sleep } from '../utils/utils'
-import { Paper, MuiThemeProvider, Typography, Divider, Button, Link, SnackbarContent } from '@material-ui/core'
+import { Paper, MuiThemeProvider, Typography, Link, SnackbarContent } from '@material-ui/core'
 import { demoPeople as demoProfiles, demoGroup } from './demoPeopleOrGroups'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
 import { CommentBox } from '../components/InjectedComponents/CommentBox'

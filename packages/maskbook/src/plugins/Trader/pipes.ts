@@ -1,4 +1,4 @@
-import { Coin, Currency, DataProvider, SwapProvider } from './types'
+import { Currency, DataProvider, SwapProvider } from './types'
 import { unreachable } from '../../utils/utils'
 
 export function resolveCurrencyName(currency: Currency) {

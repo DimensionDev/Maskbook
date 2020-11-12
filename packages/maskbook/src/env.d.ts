@@ -105,7 +105,6 @@ declare module 'react-middle-ellipsis' {
 
 declare module 'react-tilt' {
     import React from 'react'
-    import type { StandardProps } from '@material-ui/core'
     interface Options {
         reverse: boolean
         max: number

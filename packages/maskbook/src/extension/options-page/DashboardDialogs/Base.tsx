@@ -2,7 +2,6 @@ import React, { useCallback, useReducer } from 'react'
 import classNames from 'classnames'
 import {
     DialogProps,
-    useMediaQuery,
     Dialog,
     Fade,
     IconButton,

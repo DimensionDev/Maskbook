@@ -1,5 +1,5 @@
 import { formatFileSize } from '@dimensiondev/kit'
-import { makeStyles, Paper, Theme, Typography } from '@material-ui/core'
+import { makeStyles, Paper, Typography } from '@material-ui/core'
 import React from 'react'
 import { DownloadCloud, File } from 'react-feather'
 import { CopyableCode } from './components/Copyable'

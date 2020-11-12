@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { Box, Button, createStyles, DialogContent, makeStyles, Typography } from '@material-ui/core'
+import { Button, createStyles, DialogContent, makeStyles, Typography } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { QRCode } from '../../../components/shared/qrcode'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
