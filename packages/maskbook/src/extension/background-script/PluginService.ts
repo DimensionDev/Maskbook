@@ -1,11 +1,9 @@
 import * as RedPacket from '../../plugins/RedPacket/services'
 import * as Wallet from '../../plugins/Wallet/services'
-import * as Trader from '../../plugins/Trader/services'
 
 const Plugins = {
     'maskbook.red_packet': RedPacket,
     'maskbook.wallet': Wallet,
-    'maskbook.trader': Trader,
 } as const
 type Plugins = typeof Plugins
 /**

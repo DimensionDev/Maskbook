@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { TypedMessageAnchor, registerTypedMessageRenderer } from '../../../protocols/typed-message'
 import { Link, Typography } from '@material-ui/core'
 import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
-import { PluginTraderMessages } from '../messages'
+import { PluginTraderMessages, PluginTraderRPC } from '../messages'
 import Services from '../../../extension/service'
 
 export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type'> {
@@ -32,11 +32,7 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
         if (openTimer !== null) clearTimeout(openTimer)
         setOpenTimer(
             setTimeout(async () => {
-                const availablePlatforms = await Services.Plugin.invokePlugin(
-                    'maskbook.trader',
-                    'getAvailableDataProviders',
-                    props.message.name,
-                )
+                const availablePlatforms = await PluginTraderRPC.getAvailableDataProviders(props.message.name)
                 if (availablePlatforms.length)
                     PluginTraderMessages.events.cashTagObserved.sendToLocal({
                         name: props.message.name,

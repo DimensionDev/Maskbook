@@ -3,6 +3,7 @@ import Services from '../../../extension/service'
 import type { Currency, DataProvider } from '../types'
 import { isUndefined } from 'lodash-es'
 import { Days } from '../UI/trending/PriceChartDaysControl'
+import { PluginTraderRPC } from '../messages'
 
 interface Options {
     coinId?: string
@@ -14,6 +15,6 @@ interface Options {
 export function usePriceStats({ coinId, currency, days = Days.MAX, dataProvider }: Options) {
     return useAsync(async () => {
         if (isUndefined(days) || isUndefined(coinId) || isUndefined(dataProvider) || isUndefined(currency)) return []
-        return Services.Plugin.invokePlugin('maskbook.trader', 'getPriceStats', coinId, dataProvider, currency, days)
+        return PluginTraderRPC.getPriceStats(coinId, dataProvider, currency, days)
     }, [coinId, dataProvider, currency?.id, days])
 }

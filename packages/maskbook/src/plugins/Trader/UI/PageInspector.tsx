@@ -3,13 +3,14 @@ import Services from '../../../extension/service'
 import { TrendingPopper } from './trending/TrendingPopper'
 import { DataProvider, SwapProvider } from '../types'
 import { TrendingView } from './trending/TrendingView'
+import { PluginTraderRPC } from '../messages'
 
 export interface PageInspectorProps {}
 
 export function PageInspector(props: PageInspectorProps) {
     useEffect(() => {
         // build availability cache in the background page
-        Services.Plugin.invokePlugin('maskbook.trader', 'getAvailableDataProviders', 'BTC')
+        PluginTraderRPC.getAvailableDataProviders('BTC')
     }, [])
     const createTrendingView = useCallback((name: string, dataProviders: DataProvider[], reposition?: () => void) => {
         return (
