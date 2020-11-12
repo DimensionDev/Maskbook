@@ -72,15 +72,6 @@ export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>
 )
 //#endregion
 
-export const lastActivatedWalletProvider = createInternalSettings<ProviderType>(
-    'last activated wallet provider',
-    ProviderType.Maskbook,
-)
-
-export const isMetaMaskUnlocked = createGlobalSettings<boolean>('is metaMask unlocked', false, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
 export enum Language {
     zh = 'zh',
     en = 'en',

@@ -1,4 +1,4 @@
-import { createGlobalSettings } from '../../settings/createSettings'
+import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
 import { PLUGIN_IDENTIFIER } from './constants'
 
 /**
@@ -13,8 +13,6 @@ export const currentSelectedWalletAddressSettings = createGlobalSettings<string>
 )
 
 /**
- * Is MetaMask Unlocked
+ * Is MetaMask unlocked
  */
-export const isMetaMaskUnlocked = createGlobalSettings<boolean>('is metaMask unlocked', false, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
+export const isMetaMaskUnlocked = createInternalSettings<boolean>('is metaMask unlocked', false)
