@@ -30,6 +30,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
 import { currentSelectedWalletAddressSettings } from '../../plugins/Wallet/settings'
+import { WalletRPC } from '../../plugins/Wallet/messages'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -513,7 +514,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         if (!persona_.hasPrivateKey) throw new Error('invalid persona')
         const [_, address] = await Promise.all([
             Services.Identity.setupPersona(persona_.identifier),
-            Services.Plugin.invokePlugin('maskbook.wallet', 'importFirstWallet', {
+            WalletRPC.importFirstWallet({
                 name: persona_.nickname ?? t('untitled_wallet'),
                 mnemonic: persona_.mnemonic?.words.split(' '),
                 passphrase: '',

@@ -1,7 +1,6 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { first } from 'lodash-es'
-import { WalletMessages } from '../messages'
-import Services from '../../../extension/service'
+import { WalletMessages, WalletRPC } from '../messages'
 import type { ProviderType } from '../../../web3/types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { WalletRecord } from '../database/types'
@@ -12,7 +11,7 @@ import { currentSelectedWalletAddressSettings } from '../settings'
 //#region tracking wallets
 const walletsRef = new ValueRef<WalletRecord[]>([], WalletArrayComparer)
 async function revalidate() {
-    walletsRef.value = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
+    walletsRef.value = await WalletRPC.getWallets()
 }
 WalletMessages.events.walletsUpdated.on(revalidate)
 revalidate()

@@ -1,6 +1,7 @@
 import type { TransactionState } from '../../web3/hooks/useTransactionState'
 import type { Token } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'
+import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
 
 type SelectERC20TokenDialogEvent =
@@ -79,6 +80,8 @@ interface WalletMessage {
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
     walletsUpdated: void
     tokensUpdated: void
+    rpc: unknown
 }
 
 export const WalletMessages = createPluginMessage<WalletMessage>(PLUGIN_IDENTIFIER)
+export const WalletRPC = createPluginRPC(() => import('./services'), WalletMessages.events.rpc)

@@ -43,6 +43,7 @@ import { sleep } from '../../../utils/utils'
 import { SetupStep } from '../SetupStep'
 import { Flags } from '../../../utils/flags'
 import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
+import { WalletRPC } from '../../../plugins/Wallet/messages'
 
 //#region setup form
 const useSetupFormStyles = makeStyles((theme) =>
@@ -362,7 +363,7 @@ export function ConnectNetwork() {
                         onClick={async () => {
                             const [_, address] = await Promise.all([
                                 Services.Identity.setupPersona(persona.identifier),
-                                Services.Plugin.invokePlugin('maskbook.wallet', 'importFirstWallet', {
+                                WalletRPC.importFirstWallet({
                                     name: persona.nickname ?? t('untitled_wallet'),
                                     mnemonic: persona.mnemonic?.words.split(' '),
                                     passphrase: '',

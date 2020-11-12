@@ -9,6 +9,7 @@ import type { RedPacketJSONPayload } from './types'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import RedPacketDialog from './UI/RedPacketDialog'
 import Services from '../../extension/service'
+import { WalletRPC } from '../Wallet/messages'
 
 const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDialog(
     '💰 Red Packet',
@@ -22,7 +23,7 @@ const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDia
         />
     ),
     async () => {
-        const wallets = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
+        const wallets = await WalletRPC.getWallets()
         if (wallets.length) return true
         else {
             Services.Provider.requestConnectWallet()

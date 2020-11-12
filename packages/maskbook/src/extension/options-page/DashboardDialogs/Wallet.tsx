@@ -51,6 +51,7 @@ import WalletLine from './WalletLine'
 import { isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
+import { WalletRPC } from '../../../plugins/Wallet/messages'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -334,14 +335,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
     const onSubmit = useSnackbarCallback(
         async () => {
             if (state[0] === 0) {
-                const address = await Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', {
+                const address = await WalletRPC.createNewWallet({
                     name,
                     passphrase,
                 })
                 setAsSelectedWallet(address)
             }
             if (state[0] === 1) {
-                const address = await Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                const address = await WalletRPC.importNewWallet({
                     name,
                     mnemonic: mnemonic.split(' '),
                     passphrase: '',
@@ -349,14 +350,10 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                 setAsSelectedWallet(address)
             }
             if (state[0] === 2) {
-                const { address, privateKeyValid } = await Services.Plugin.invokePlugin(
-                    'maskbook.wallet',
-                    'recoverWalletFromPrivateKey',
-                    privKey,
-                )
+                const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privKey)
                 setAsSelectedWallet(address)
                 if (!privateKeyValid) throw new Error(t('import_failed'))
-                await Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                await WalletRPC.importNewWallet({
                     name,
                     address,
                     _private_key_: privKey,
@@ -506,10 +503,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
     const onSubmit = useSnackbarCallback(
         async () => {
             if (!token) return
-            await Promise.all([
-                Services.Plugin.invokePlugin('maskbook.wallet', 'addERC20Token', token),
-                Services.Plugin.invokePlugin('maskbook.wallet', 'trustERC20Token', wallet.address, token),
-            ])
+            await Promise.all([WalletRPC.addERC20Token(token), WalletRPC.trustERC20Token(wallet.address, token)])
         },
         [token],
         props.onClose,
@@ -552,8 +546,8 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
     const { value: privateKeyInHex } = useAsync(async () => {
         if (!wallet) return
         const { privateKeyInHex } = wallet._private_key_
-            ? await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', wallet._private_key_)
-            : await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWallet', wallet.mnemonic, wallet.passphrase)
+            ? await WalletRPC.recoverWalletFromPrivateKey(wallet._private_key_)
+            : await WalletRPC.recoverWallet(wallet.mnemonic, wallet.passphrase)
         return privateKeyInHex
     }, [wallet])
 
@@ -589,7 +583,7 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
     const { wallet } = props.ComponentProps!
     const [name, setName] = useState(wallet.name ?? '')
     const renameWallet = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'renameWallet', wallet.address, name),
+        () => WalletRPC.renameWallet(wallet.address, name),
         [wallet.address],
         props.onClose,
     )
@@ -642,7 +636,7 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
     const { wallet } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
         async () => {
-            return Services.Plugin.invokePlugin('maskbook.wallet', 'removeWallet', wallet.address)
+            return WalletRPC.removeWallet(wallet.address)
         },
         [wallet.address],
         props.onClose,
@@ -682,7 +676,7 @@ export function DashboardWalletHideTokenConfirmDialog(
     const { t } = useI18N()
     const { wallet, token } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'blockERC20Token', wallet.address, token),
+        () => WalletRPC.blockERC20Token(wallet.address, token),
         [wallet.address],
         props.onClose,
     )

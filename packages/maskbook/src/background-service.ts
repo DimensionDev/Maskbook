@@ -4,7 +4,6 @@ import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 // @ts-ignore
 import { crypto } from 'webcrypto-liner/build/index.es'
 Object.defineProperty(globalThis, 'crypto', { configurable: true, enumerable: true, get: () => crypto })
-import './_background_loader.2'
 import './extension/service'
 import './provider.worker'
 
@@ -24,6 +23,9 @@ import { definedSocialNetworkWorkers } from './social-network/worker'
 import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
 import { exclusiveTasks } from './extension/content-script/tasks'
 import { Flags } from './utils/flags'
+
+import tasks from './extension/content-script/tasks'
+Object.assign(globalThis, { tasks })
 
 if (process.env.NODE_ENV === 'development' && Flags.matrix_based_service_enabled) {
     import('./network/matrix/instance')

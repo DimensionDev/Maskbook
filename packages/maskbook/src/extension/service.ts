@@ -26,7 +26,6 @@ export const Services = {
         'Steganography',
         MockService.SteganographyService,
     ),
-    Plugin: add(() => import('./background-script/PluginService'), 'Plugin', MockService.PluginService),
     Helper: add(() => import('./background-script/HelperService'), 'Helper', MockService.HelperService),
     Provider: add(() => import('./background-script/ProviderService'), 'Provider'),
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),

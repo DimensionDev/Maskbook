@@ -34,9 +34,3 @@ export const HelperService: Partial<typeof import('./background-script/HelperSer
         return globalThis.fetch(url).then((x) => x.blob())
     },
 }
-
-export const PluginService: Partial<typeof import('./background-script/PluginService')> = {
-    invokePlugin() {
-        return new Promise(() => {})
-    },
-}

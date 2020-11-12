@@ -1,5 +1,5 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { WalletMessages } from '../messages'
+import { WalletMessages, WalletRPC } from '../messages'
 import Services from '../../../extension/service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { ERC20TokenRecord } from '../database/types'
@@ -16,7 +16,7 @@ const tokensRef = new ValueRef<ERC20TokenRecord[]>([], TokenArrayComparer)
 
 async function revalidate() {
     // tokens
-    const tokens = await Services.Plugin.invokePlugin('maskbook.wallet', 'getTokens')
+    const tokens = await WalletRPC.getTokens()
     tokensRef.value = tokens
 }
 WalletMessages.events.tokensUpdated.on(revalidate)
