@@ -72,7 +72,7 @@ export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps)
             <InjectedDialog open={open} onExit={onClose} title="WalletConnect">
                 <DialogContent className={classes.content}>
                     <Typography className={classes.tip} color="textSecondary">
-                        Scan QR code with a WalletConnect-compatible wallet.
+                        {t('plugin_wallet_qr_code_with_wallet_connect')}
                     </Typography>
                     {URI ? (
                         <QRCode
@@ -91,7 +91,7 @@ export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps)
                         />
                     ) : null}
                     <Button className={classes.copyButton} color="secondary" variant="text" onClick={onCopy}>
-                        Copy to clipboard
+                        {t('copy_to_clipboard')}
                     </Button>
                 </DialogContent>
             </InjectedDialog>

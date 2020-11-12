@@ -174,7 +174,7 @@ export default function DashboardWalletsRouter() {
                     onClick={openWalletCreate}
                     endIcon={<AddCircleIcon />}
                     data-testid="create_button">
-                    {t('create_wallet')}
+                    {t('plugin_wallet_on_create')}
                 </Button>,
             ]}
             leftIcons={[
