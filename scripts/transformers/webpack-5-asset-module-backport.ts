@@ -78,6 +78,7 @@ function createRequire(ts: NodeFactory, expr: Expression, loader: string) {
 function getAssetModule(node: Node): false | Expression {
     if (!isNewExpression(node)) return false
     const { expression, arguments: [arg0, arg1] = [] } = node
+    if (!arg0 || !arg1) return false
     if (!isIdentifier(expression) || expression.text !== 'URL') return false
     if (!isImportMetaURL(arg1)) return false
     return arg0
