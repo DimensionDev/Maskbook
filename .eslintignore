@@ -5,5 +5,6 @@ dist/
 scripts/
 e2e
 packages/maskbook/src/plugins/Wallet/contracts
+packages/maskbook/src/contracts
 webpack.config.ts
 public/
