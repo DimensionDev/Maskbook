@@ -73,10 +73,10 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
                 </DialogContent>
                 <DialogActions>
                     <Button variant="text" onClick={onCreate}>
-                        {t('create_wallet')}
+                        {t('plugin_wallet_on_create')}
                     </Button>
                     <Button variant="text" onClick={onConnect}>
-                        {t('connect_wallet')}
+                        {t('plugin_wallet_on_connect')}
                     </Button>
                 </DialogActions>
             </InjectedDialog>

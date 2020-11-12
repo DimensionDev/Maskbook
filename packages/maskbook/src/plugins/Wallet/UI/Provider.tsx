@@ -45,7 +45,6 @@ export interface ProviderProps
 }
 
 export function Provider(props: ProviderProps) {
-    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     return (
         <Card className={classes.root} variant="outlined" onClick={props.onClick}>

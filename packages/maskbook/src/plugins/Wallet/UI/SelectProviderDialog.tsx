@@ -109,14 +109,14 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     )
     return (
         <>
-            <InjectedDialog title="Connect wallet" open={open} onExit={onClose}>
+            <InjectedDialog title={t('plugin_wallet_connect_panel')} open={open} onExit={onClose}>
                 <DialogContent>
                     <GridList className={classes.grid} spacing={16} cellHeight={183}>
                         <GridListTile>
                             <Provider
                                 logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                name="Maskbook"
-                                description="Create wallet with Maskbook"
+                                name={t('plugin_wallet_provide_maskbook')}
+                                description={t('plugin_wallet_create_with_maskbook')}
                                 onClick={() => onConnect(ProviderType.Maskbook)}
                             />
                         </GridListTile>
@@ -124,8 +124,8 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             <GridListTile>
                                 <Provider
                                     logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                    name="MetaMask"
-                                    description="Connect to your MetaMask Wallet"
+                                    name={t('plugin_wallet_provide_metamask')}
+                                    description={t('plugin_wallet_create_with_metamask')}
                                     onClick={() => onConnect(ProviderType.MetaMask)}
                                 />
                             </GridListTile>
@@ -134,8 +134,8 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             <GridListTile>
                                 <Provider
                                     logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                    name="WalletConnect"
-                                    description="Scan with WalletConnect to connect"
+                                    name={t('plugin_wallet_provide_wallet_connect')}
+                                    description={t('plugin_wallet_create_with_wallet_connect_of_desktop')}
                                     onClick={() => onConnect(ProviderType.WalletConnect)}
                                 />
                             </GridListTile>
@@ -150,8 +150,8 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                         height={45}
                                     />
                                 }
-                                name="More"
-                                description="Comming soon…"
+                                name={t('plugin_wallet_provide_more')}
+                                description={t('plugin_wallet_create_with_comming_soon')}
                                 ButtonBaseProps={{ disabled: true }}
                             />
                         </GridListTile>
