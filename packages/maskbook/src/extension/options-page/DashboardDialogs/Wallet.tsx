@@ -373,7 +373,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
             <DashboardDialogWrapper
                 icon={<CreditCardIcon />}
                 iconColor="#4EE0BC"
-                primary={t(state[0] === 0 ? 'create_wallet' : 'import_wallet')}
+                primary={t(state[0] === 0 ? 'plugin_wallet_on_create' : 'import_wallet')}
                 content={<AbstractTab {...tabProps}></AbstractTab>}
                 footer={
                     <DebounceButton
