@@ -6,6 +6,7 @@ import { useTransactionState, TransactionStateType } from '../../../web3/hooks/u
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
 import Services from '../../../extension/service'
+import { RedPacketRPC } from '../helpers'
 
 export function useClaimCallback(from: string, id?: string, password?: string) {
     const [claimState, setClaimState] = useTransactionState()
@@ -72,7 +73,7 @@ export function useClaimCallback(from: string, id?: string, password?: string) {
                     if (hash) onSucceed(hash)
                     // claim by server
                     else if (error?.message.includes('insufficient funds for gas')) {
-                        Services.Plugin.invokePlugin('maskbook.red_packet', 'claimRedPacket', from, id, password)
+                        RedPacketRPC.claimRedPacket(from, id, password)
                             .then(({ claim_transaction_hash }) => onSucceed(claim_transaction_hash))
                             .catch(onFailed)
                     } else if (error) onFailed(error)

@@ -3,6 +3,7 @@ import { RedPacketMetaKey, RedPacketPluginID } from './constants'
 import type { RedPacketJSONPayload, RedPacketRecord } from './types'
 import schema from './schema.json'
 import { createPluginMessage } from '../utils/createPluginMessage'
+import { createPluginRPC } from '../utils/createPluginRPC'
 export const RedPacketMetadataReader = createTypedMessageMetadataReader<RedPacketJSONPayload>(RedPacketMetaKey, schema)
 export const renderWithRedPacketMetadata = createRenderWithMetadata(RedPacketMetadataReader)
 
@@ -17,5 +18,7 @@ export function RedPacketArrayComparer(a: RedPacketRecord[], b: RedPacketRecord[
 }
 export interface RedPacketMessages {
     redPacketUpdated: void
+    rpc: unknown
 }
 export const RedPacketMessage = createPluginMessage<RedPacketMessages>(RedPacketPluginID)
+export const RedPacketRPC = createPluginRPC(() => import('./services'), RedPacketMessage.events.rpc)
