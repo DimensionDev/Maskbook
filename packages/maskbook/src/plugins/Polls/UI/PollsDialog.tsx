@@ -29,6 +29,7 @@ import type { PollMetaData } from '../types'
 import { POLL_META_KEY_1 } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { PluginPollRPC } from '../utils'
 
 const useNewPollStyles = makeStyles((theme) =>
     createStyles({
@@ -104,7 +105,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
             minutes,
         })
         setLoading(true)
-        Services.Plugin.invokePlugin('maskbook.polls', 'createNewPoll', {
+        PluginPollRPC.createNewPoll({
             question,
             options,
             start_time,
@@ -207,7 +208,7 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
 
     useEffect(() => {
         setLoading(true)
-        Services.Plugin.invokePlugin('maskbook.polls', 'getAllExistingPolls').then((polls) => {
+        PluginPollRPC.getAllExistingPolls().then((polls) => {
             setLoading(false)
             const myPolls: PollGunDB[] = []
             polls.map((poll) => {

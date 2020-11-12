@@ -1,6 +1,5 @@
 import * as RedPacket from '../../plugins/RedPacket/services'
 import * as Wallet from '../../plugins/Wallet/services'
-import * as Poll from '../../plugins/Polls/Services'
 import * as Trader from '../../plugins/Trader/services'
 import * as Election2020 from '../../plugins/Election2020/services'
 
@@ -8,7 +7,6 @@ const Plugins = {
     'maskbook.red_packet': RedPacket,
     'maskbook.wallet': Wallet,
     'maskbook.trader': Trader,
-    'maskbook.polls': Poll,
     'maskbook.election2020': Election2020,
 } as const
 type Plugins = typeof Plugins
