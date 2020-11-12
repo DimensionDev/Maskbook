@@ -3,6 +3,7 @@ import Services from '../../../extension/service'
 import { useTransactionReceipt } from '../../../web3/hooks/useTransaction'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useElectionTokenContract } from '../contracts/useElectionTokenContract'
+import { PluginElection2020 } from '../helpers'
 import { resolveStateType } from '../pipes'
 import type { CANDIDATE_TYPE, US_STATE_TYPE } from '../types'
 
@@ -36,9 +37,7 @@ export function useMintCallback(from: string, stateType: US_STATE_TYPE, candidat
 
         // step 2: mint by server
         try {
-            const { mint_transaction_hash } = await Services.Plugin.invokePlugin(
-                'maskbook.election2020',
-                'mintElectionPacket',
+            const { mint_transaction_hash } = await PluginElection2020.mintElectionPacket(
                 from,
                 stateType,
                 candidateType,
