@@ -55,6 +55,7 @@ export default (options: { isWorker?: (name: string) => boolean } = {}): Transfo
     }
     function isWorkerAsset(node: Node) {
         const { parent } = node
+        if (!parent) return false
         if (!isNewExpression(parent)) return false
         const { expression } = parent
         if (!isIdentifier(expression)) return false
