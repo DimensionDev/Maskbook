@@ -24,7 +24,7 @@ import CopyPlugin from 'copy-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
 import WebExtensionTarget from 'webpack-target-webextension'
 import ManifestPlugin from 'webpack-extension-manifest-plugin'
-import Webpack5AssetModuleTransformer from './scripts/webpack-5-asset-module-backport'
+import Webpack5AssetModuleTransformer from './scripts/transformers/webpack-5-asset-module-backport'
 //#endregion
 
 import git from '@nice-labs/git-rev'
