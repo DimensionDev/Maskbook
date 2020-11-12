@@ -124,8 +124,8 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             <GridListTile>
                                 <Provider
                                     logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                    name={t('plugin_wallet_provide_metabook')}
-                                    description={t('plugin_wallet_create_with_metabook')}
+                                    name={t('plugin_wallet_provide_metamask')}
+                                    description={t('plugin_wallet_create_with_metamask')}
                                     onClick={() => onConnect(ProviderType.MetaMask)}
                                 />
                             </GridListTile>
