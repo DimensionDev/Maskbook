@@ -292,6 +292,7 @@
     "plugin_wallet_select_provider_dialog_title": "",
     "plugin_wallet_qr_code_with_wallet_connect": "",
     "plugin_wallet_wrong_network": "",
+    "plugin_wallet_metamask_unlock": "",
     "plugin_red_packet_display_name": "プラグイン: 投げ銭",
     "plugin_red_packet_split_mode": "分割モード",
     "plugin_red_packet_average": "平均",
