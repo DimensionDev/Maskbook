@@ -1,12 +1,12 @@
 /// <reference path="./ShapeDetectionSpec.d.ts" />
 import { isNull } from 'lodash-es'
-import { getUrl } from '../../utils/utils'
 import { sideEffect } from '../../utils/side-effects'
+import { OnDemandWorker } from '../../web-workers/OnDemandWorker'
 
 const noop = () => {}
 let worker: Worker
 sideEffect.then(() => {
-    worker = new Worker(getUrl('js/qrcode.js'))
+    worker = new OnDemandWorker(new URL('../../web-workers/QRCode.ts', import.meta.url))
 })
 
 class BarcodeDetectorPolyfill implements BarcodeDetector {
