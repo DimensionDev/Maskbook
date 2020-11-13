@@ -2,6 +2,8 @@ import Gun from 'gun/gun'
 import 'gun/sea'
 import { gun2Servers } from '../../gun-servers'
 import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
+import { OnlyRunInWebWorker } from '../../../utils/assert-worker'
+OnlyRunInWebWorker()
 
 export * from './people'
 export * from './post'

@@ -44,10 +44,15 @@ export class OnDemandWorker extends Worker {
         this.worker && Worker.prototype.terminate.call(this.worker)
         this.worker = undefined
         this.log('terminated')
+        this.dispatchEvent(new Event('terminated'))
     }
     keepAlive() {
         this.log('keep alive')
         this.lastUsed = Date.now()
+    }
+    onTerminated(callback: () => void) {
+        this.addEventListener('terminated', callback, { once: true })
+        return () => this.removeEventListener('terminated', callback)
     }
 }
 OnDemandWorker.prototype.postMessage = function (this: OnDemandWorker, ...args: [any, any]) {

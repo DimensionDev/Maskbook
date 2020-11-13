@@ -1,10 +1,16 @@
-import { AsyncCall } from 'async-call-rpc'
+import { AsyncCall, AsyncCallOptions, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { WorkerChannel } from 'async-call-rpc/utils/web/worker'
+import serialization from '../../utils/type-transform/Serialization'
 import { OnDemandWorker } from '../../web-workers/OnDemandWorker'
 
-let worker: OnDemandWorker | undefined
+export let GunWorker: OnDemandWorker | undefined
 if (process.env.architecture) {
-    worker = new OnDemandWorker(new URL('./worker.ts', import.meta.url))
+    GunWorker = new OnDemandWorker(new URL('./worker.ts', import.meta.url))
     // we're in webpack bundle
 }
-export const GunAPI = AsyncCall<typeof import('./worker-implementation')>({}, { channel: new WorkerChannel(worker) })
+const options: AsyncCallOptions = {
+    channel: new WorkerChannel(GunWorker),
+    serializer: serialization,
+}
+export const GunAPI = AsyncCall<typeof import('./worker-implementation')>({}, options)
+export const GunAPISubscribe = AsyncGeneratorCall<typeof import('./worker-implementation-subscribe')>({}, options)

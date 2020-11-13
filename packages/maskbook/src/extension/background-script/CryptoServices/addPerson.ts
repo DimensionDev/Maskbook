@@ -1,4 +1,4 @@
-import * as Gun2 from '../../../network/gun/version.2'
+import { GunAPI as Gun2 } from '../../../network/gun'
 import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
 import { verifyOthersProve } from './verifyOthersProve'
