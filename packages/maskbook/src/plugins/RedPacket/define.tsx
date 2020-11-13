@@ -45,7 +45,8 @@ export const RedPacketPluginDefine: PluginConfig = {
             (payload: RedPacketJSONPayload) => {
                 return `A Red Packet with ${formatBalance(
                     new BigNumber(payload.total),
-                    payload.token?.decimals ?? 18,
+                    payload.token?.decimals ?? 0,
+                    payload.token?.decimals ?? 0,
                 )} $${payload.token?.name || 'ETH'} from ${payload.sender.name}`
             },
         ],

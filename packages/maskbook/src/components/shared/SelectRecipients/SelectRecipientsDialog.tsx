@@ -56,7 +56,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const LIST_ITEM_HEIGHT = 56
 
     return (
-        <InjectedDialog open={props.open} title={t('select_specific_friends_dialog__title')} onExit={props.onClose}>
+        <InjectedDialog open={props.open} title={t('select_specific_friends_dialog__title')} onClose={props.onClose}>
             <DialogContent>
                 <InputBase
                     value={search}

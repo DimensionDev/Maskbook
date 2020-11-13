@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 
-export function formatBalance(balance: BigNumber, decimals: number, precision: number = 10) {
+export function formatBalance(balance: BigNumber, decimals: number, precision: number) {
     if (!BigNumber.isBigNumber(balance)) return
     const negative = balance.isNegative() // balance < 0n
     const base = new BigNumber(10).pow(decimals) // 10n ** decimals

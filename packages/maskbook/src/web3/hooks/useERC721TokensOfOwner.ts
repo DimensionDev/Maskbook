@@ -1,14 +1,14 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
-import { EthereumTokenType, Token } from '../types'
+import type { ERC721Token } from '../types'
 import { useAccount } from './useAccount'
+import { useERC721TokenBalance } from './useERC721TokenBalance'
 import { useSingleContractMultipleData } from './useMulticall'
-import { useTokenBalance } from './useTokenBalance'
 
-export function useERC721TokenIdsOfOwner(token?: PartialRequired<Token, 'address' | 'type'>) {
+export function useERC721TokenIdsOfOwner(token?: ERC721Token) {
     const account = useAccount()
-    const asyncResultOfBalanceOf = useTokenBalance(token)
+    const asyncResultOfBalanceOf = useERC721TokenBalance(token?.address ?? '')
     const erc721Contract = useERC721TokenContract(token?.address ?? '')
     const { names, callDatas } = useMemo(() => {
         const balanceOf = asyncResultOfBalanceOf.value ?? '0'
@@ -20,22 +20,18 @@ export function useERC721TokenIdsOfOwner(token?: PartialRequired<Token, 'address
         }
     }, [account, asyncResultOfBalanceOf.value])
 
-    // valdiate callback
+    // valdiate
     const [results, _, callback] = useSingleContractMultipleData(erc721Contract, names, callDatas)
     const asyncResultOfMulticall = useAsyncRetry(callback, [names, callDatas])
 
-    // compose result
-    if (!erc721Contract || !token?.address || token.type !== EthereumTokenType.ERC721)
-        return {
-            loading: asyncResultOfBalanceOf.loading || asyncResultOfMulticall.loading,
-            error: asyncResultOfBalanceOf.error || asyncResultOfMulticall,
-            retry: asyncResultOfBalanceOf.retry,
-            value: [],
-        }
+    // compose
+    const tokenIds = useMemo(() => {
+        if (!erc721Contract) return []
+        return results.filter((x) => !x.error).map((x) => x.value) as string[]
+    }, [erc721Contract, results])
+
     return {
-        loading: asyncResultOfBalanceOf.loading || asyncResultOfMulticall.loading,
-        error: asyncResultOfBalanceOf.error || asyncResultOfMulticall,
-        retry: asyncResultOfBalanceOf.retry,
-        value: results.map((x) => x.value),
+        ...asyncResultOfMulticall,
+        value: tokenIds,
     }
 }

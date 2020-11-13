@@ -16,7 +16,6 @@ import {
     launchPageSettings,
     LaunchPage,
 } from '../../../settings/settings'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'
@@ -122,7 +121,6 @@ const settingsTheme = (theme: Theme): Theme =>
 
 export default function DashboardSettingsRouter() {
     const { t } = useI18N()
-    const currentLang = useValueRef(languageSettings)
     const isMobile = useMatchXS()
     const langMapper = useRef((x: Language) => {
         if (x === Language.en) return t('language_en')

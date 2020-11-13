@@ -6,7 +6,11 @@ import { createPluginRPC } from '../utils/createPluginRPC'
 interface CashTagEvent {
     name: string
     element: HTMLAnchorElement | null
-    availablePlatforms: DataProvider[]
+    dataProviders: DataProvider[]
+}
+
+interface SwapSettingsEvent {
+    open: boolean
 }
 
 interface PluginTraderMessage {
@@ -14,6 +18,11 @@ interface PluginTraderMessage {
      * View a cash tag
      */
     cashTagObserved: CashTagEvent
+
+    /**
+     * Swap settings dialog
+     */
+    swapSettingsUpdated: SwapSettingsEvent
     rpc: unknown
 }
 

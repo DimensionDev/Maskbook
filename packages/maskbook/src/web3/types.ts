@@ -14,32 +14,57 @@ export interface MetaMaskInpageProvider extends ReturnType<typeof createMetaMask
     _metamask?: { isUnlocked: () => Promise<boolean> }
 }
 
-export interface Token {
-    type: EthereumTokenType
-    chainId: ChainId
+//#region Ether
+export interface EtherToken {
+    type: EthereumTokenType.Ether
     address: string
+    chainId: ChainId
+}
+
+export interface EtherTokenDetailed extends EtherToken {
+    name: 'Ether'
+    symbol: 'ETH'
+    decimals: 18
+}
+//#endregion
+
+//#region ERC20
+export interface ERC20Token {
+    type: EthereumTokenType.ERC20
+    address: string
+    chainId: ChainId
+}
+
+export interface ERC20TokenDetailed extends ERC20Token {
+    name?: string
+    symbol?: string
+    decimals?: number
+}
+//#endregion
+
+//#region ERC721
+export interface ERC721Token {
+    type: EthereumTokenType.ERC721
+    address: string
+    chainId: ChainId
+}
+export interface ERC721TokenDetailed extends ERC721Token {
     name: string
     symbol: string
-    decimals: number
-}
-
-export interface EtherToken extends Token {
-    type: EthereumTokenType.Ether
-    decimals: number
-}
-
-export interface ERC20Token extends Token {
-    type: EthereumTokenType.ERC20
-    decimals: number
-}
-
-export interface ERC721Token extends Token {
-    type: EthereumTokenType.ERC721
     baseURI: string
 }
+//#endregion
 
-export interface TokenDetailed {
-    token: Token
+interface TokenDetailedMap {
+    [EthereumTokenType.Ether]: EtherTokenDetailed
+    [EthereumTokenType.ERC20]: ERC20TokenDetailed
+    [EthereumTokenType.ERC721]: ERC721TokenDetailed
+}
+
+export type TokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
+
+export interface AssetDetailed {
+    token: EtherTokenDetailed | ERC20TokenDetailed
     /**
      * The total balance of token
      */
@@ -59,7 +84,7 @@ export interface TokenDetailed {
     logoURL?: string
 }
 
-// A list of chain IDs https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
+// Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
 export enum ChainId {
     Mainnet = 1,
     Ropsten = 3,
