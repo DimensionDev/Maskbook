@@ -4,13 +4,13 @@ import BigNumber from 'bignumber.js'
 import { Trans } from 'react-i18next'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import type { EthereumTokenType, Token } from '../../../web3/types'
+import { ChainId, EthereumTokenType, Token } from '../../../web3/types'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { createEetherToken } from '../../../web3/helpers'
-import { useChainId } from '../../../web3/hooks/useChainState'
+import { useChainId, useIsChainIdValid } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { useERC20TokenApproveCallback, ApproveState } from '../../../web3/hooks/useERC20TokenApproveCallback'
@@ -25,6 +25,7 @@ import { WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -74,6 +75,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
+    const chainIdValid = useIsChainIdValid()
 
     //#region select token
     const [token, setToken] = useState<Token>(createEetherToken(chainId))
@@ -96,6 +98,15 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     //#region amount
     const [amount, setAmount] = useState('0')
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(token)
+    //#endregion
+
+    //#region connect wallet
+    const [, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const onConnect = useCallback(() => {
+        setOpen({
+            open: true,
+        })
+    }, [setOpen])
     //#endregion
 
     //#region approve ERC20
@@ -150,14 +161,18 @@ function DonateDialogUI(props: DonateDialogUIProps) {
 
     //#region submit button
     const validationMessage = useMemo(() => {
-        if (!address) return 'Grant not available'
-        if (!account) return t('connect_a_wallet')
-        if (!token.address) return 'Select a token'
-        if (new BigNumber(amount).isZero()) return 'Enter an amount'
+        if (!address) return t('plugin_gitcoin_grant_not_available')
+        if (!account) return t('plugin_wallet_connect_a_wallet')
+        if (Flags.wallet_network_strict_mode_enabled && chainId !== ChainId.Mainnet)
+            return t('plugin_wallet_wrong_network')
+        if (!token.address) return t('plugin_gitcoin_select_a_token')
+        if (new BigNumber(amount).isZero()) return t('plugin_gitcoin_enter_an_amount')
         if (new BigNumber(amount).isGreaterThan(new BigNumber(tokenBalance)))
-            return `Insufficient ${token.symbol} balance`
+            return t('plugin_gitcoin_insufficient_balance', {
+                symbol: token.symbol,
+            })
         return ''
-    }, [address, account, amount, token, tokenBalance])
+    }, [account, address, amount, chainId, token, tokenBalance])
     //#endregion
 
     if (!props.address) return null
@@ -190,7 +205,16 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                         />
                     </Typography>
 
-                    {approveRequired ? (
+                    {!account || !chainIdValid ? (
+                        <ActionButton
+                            className={classes.button}
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            onClick={onConnect}>
+                            {t('plugin_wallet_connect_a_wallet')}
+                        </ActionButton>
+                    ) : approveRequired ? (
                         <ActionButton
                             className={classes.button}
                             fullWidth
@@ -209,7 +233,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                             size="large"
                             disabled={Boolean(validationMessage)}
                             onClick={donateCallback}>
-                            {validationMessage || 'Donate'}
+                            {validationMessage || t('plugin_gitcoin_donate')}
                         </ActionButton>
                     )}
                 </DialogContent>

@@ -20,6 +20,7 @@ import { CurrencyType, TokenDetailed } from '../../../web3/types'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { TokenActionsBar } from './TokenActionsBar'
+import { useIsChainIdValid } from '../../../web3/hooks/useChainState'
 
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
@@ -65,6 +66,9 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
 
     const classes = useStylesExtends(useStyles(), props)
     const LABELS = [t('wallet_assets'), t('wallet_price'), t('wallet_balance'), t('wallet_value'), ''] as const
+
+    const chainIdValid = useIsChainIdValid()
+    if (!chainIdValid) return null
 
     return (
         <TableContainer className={classes.container}>

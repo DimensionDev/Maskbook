@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core'
 import { ChevronDown, Copy } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
+import ErrorIcon from '@material-ui/icons/Error'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useWallets } from '../../plugins/Wallet/hooks/useWallet'
 import { isSameAddress } from '../helpers'
@@ -21,7 +22,7 @@ import { useSnackbarCallback } from '../../extension/options-page/DashboardDialo
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-
+import { useIsChainIdValid } from '../hooks/useChainState'
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
         root: {
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme: Theme) => {
             marginRight: theme.spacing(1),
         },
         label: {
+            overflow: 'visible',
             paddingRight: theme.spacing(1),
         },
         divider: {
@@ -68,6 +70,7 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const wallets = useWallets()
+    const chainIdValid = useIsChainIdValid()
     const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
     const avatar = (
         <ProviderIcon classes={{ icon: classes.providerIcon }} size={18} providerType={currentWallet?.provider} />
@@ -102,22 +105,41 @@ export function EthereumAccountChip(props: EthereumAccountChipProps) {
 
     const content = (
         <Box display="inline-flex" component="span" alignItems="center">
-            <Typography className={classes.address} color="textPrimary">
-                {formatEthereumAddress(address_, 4)}
+            <Typography className={classes.address} color={chainIdValid ? 'textPrimary' : 'secondary'}>
+                {chainIdValid ? formatEthereumAddress(address_, 4) : t('plugin_wallet_wrong_network')}
             </Typography>
-            <IconButton className={classes.dropButton} size="small">
-                <ChevronDown size={14} />
-            </IconButton>
-            <Divider className={classes.divider} orientation="vertical" />
-            <IconButton className={classes.copyButton} size="small" onClick={onCopy}>
-                <Copy size={14} />
-            </IconButton>
+            {chainIdValid ? (
+                <>
+                    <IconButton className={classes.dropButton} size="small">
+                        <ChevronDown size={14} />
+                    </IconButton>
+                    <Divider className={classes.divider} orientation="vertical" />
+                    <IconButton className={classes.copyButton} size="small" onClick={onCopy}>
+                        <Copy size={14} />
+                    </IconButton>
+                </>
+            ) : null}
         </Box>
     )
 
+    if (!chainIdValid)
+        return (
+            <Chip
+                icon={<ErrorIcon />}
+                className={classes.root}
+                classes={{ label: classes.label }}
+                color="secondary"
+                size="small"
+                label={content}
+                clickable
+                onClick={onOpen}
+                {...ChipProps}
+            />
+        )
+
     return (
         <>
-            {avatar ? (
+            {avatar && chainIdValid ? (
                 <Chip
                     avatar={avatar}
                     className={classes.root}

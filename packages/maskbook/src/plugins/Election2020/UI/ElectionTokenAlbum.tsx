@@ -1,5 +1,6 @@
 import React from 'react'
 import { createStyles, makeStyles } from '@material-ui/core'
+import { useIsChainIdValid } from '../../../web3/hooks/useChainState'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useERC721Token } from '../../../web3/hooks/useERC721Token'
 import { EthereumTokenType } from '../../../web3/types'
@@ -41,6 +42,9 @@ export function ElectionTokenAlbum(props: ElectionTokenAlbumProps) {
         address: ELECTION_TOKEN_ADDRESS,
     })
     const tokens = useAllElectionTokensOfOwner(electionToken)
+
+    const chainIdValid = useIsChainIdValid()
+    if (!chainIdValid) return null
 
     if (!tokens.value.length) return null
     return (
