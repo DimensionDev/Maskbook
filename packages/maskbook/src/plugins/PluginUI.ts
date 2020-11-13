@@ -1,3 +1,4 @@
+// Please make sure you have registered your plugin service (if it need one) at ./PluginService
 import type { PluginConfig } from './types'
 
 const plugins = new Set<PluginConfig>()

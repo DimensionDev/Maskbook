@@ -24,6 +24,8 @@ import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePa
 import { exclusiveTasks } from './extension/content-script/tasks'
 import { Flags } from './utils/flags'
 
+import('./plugins/PluginSerivce')
+
 import tasks from './extension/content-script/tasks'
 Object.assign(globalThis, { tasks })
 

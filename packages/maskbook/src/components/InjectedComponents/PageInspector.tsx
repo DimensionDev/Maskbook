@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack'
 import React, { useEffect } from 'react'
 import type { PluginConfig } from '../../plugins/types'
-import { PluginUI } from '../../plugins/plugin'
+import { PluginUI } from '../../plugins/PluginUI'
 import { MaskMessage } from '../../utils/messages'
 import Button from '@material-ui/core/Button'
 import Close from '@material-ui/icons/Close'

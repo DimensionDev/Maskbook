@@ -40,7 +40,7 @@ import ShowcaseBox from './DashboardComponents/ShowcaseBox'
 import { Flags } from '../../utils/flags'
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import type { PluginConfig } from '../../plugins/types'
-import { PluginUI } from '../../plugins/plugin'
+import { PluginUI } from '../../plugins/PluginUI'
 import { ErrorBoundary, withErrorBoundary } from '../../components/shared/ErrorBoundary'
 
 const useStyles = makeStyles((theme) => {
