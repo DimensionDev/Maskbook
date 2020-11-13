@@ -32,7 +32,7 @@ export class OnDemandWorker extends Worker {
     protected lastUsed = Date.now()
     protected use(onReady: () => void) {
         this.lastUsed = Date.now()
-        this.log('kept alive')
+        this.log('keep alive')
 
         if (this.worker) return onReady()
         this.worker = new Worker(...this.init)
