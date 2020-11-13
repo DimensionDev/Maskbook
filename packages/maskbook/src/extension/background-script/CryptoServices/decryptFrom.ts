@@ -1,6 +1,5 @@
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import * as Gun1 from '../../../network/gun/version.1'
 import * as Gun2 from '../../../network/gun/version.2'
 import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
@@ -23,6 +22,7 @@ import type { TypedMessage } from '../../../protocols/typed-message'
 import stringify from 'json-stable-stringify'
 import { calculatePostKeyPartition } from '../../../network/gun/version.2'
 import { MaskMessage } from '../../../utils/messages'
+import { GunAPI } from '../../../network/gun'
 
 type Progress =
     | {
@@ -204,7 +204,7 @@ async function* decryptFromPayloadWithProgress_raw(
         if (version === -40) {
             // Deprecated payload
             // eslint-disable-next-line import/no-deprecated
-            const result = await Gun1.queryPostAESKey(iv, whoAmI.userId)
+            const result = await GunAPI.queryVersion1PostAESKey(iv, whoAmI.userId)
             if (result === undefined) return makeError(i18n.t('service_not_share_target'))
             aesKeyEncrypted.push(result)
         } else if (version === -39 || version === -38) {

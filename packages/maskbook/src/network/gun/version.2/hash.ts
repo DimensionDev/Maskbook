@@ -1,3 +1,4 @@
+/** This file should not contain active gun instances. Only static methods on gun is allowed. */
 /**
  * @see https://github.com/DimensionDev/Maskbook/wiki/Data-structure-on-Gun-version-2
  */
