@@ -148,7 +148,6 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
         'content-script': withReactDevTools(src('./packages/maskbook/src/content-script.ts')),
         'background-service': src('./packages/maskbook/src/background-service.ts'),
         popup: withReactDevTools(src('./packages/maskbook/src/extension/popup-page/index.tsx')),
-        qrcode: src('./packages/maskbook/src/web-workers/QRCode.ts'),
         debug: src('./packages/maskbook/src/extension/debug-page'),
     }
     for (const entry in config.entry) {
