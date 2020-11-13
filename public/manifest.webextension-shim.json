@@ -1,6 +1,11 @@
 {
     "$schema": "https://dimensiondev.github.io/webextension-polyfill/schema/manifest.json",
-    "external-uri": ["^https?://arweave\\.net"],
-    "universal-link": ["^wc:", "^https?:\\/\\/.+\\/wc\\?uri=wc:", "^.+:\\/\\/wc\\?uri=wc:"],
+    "external-uri": ["^https?:\\/\\/arweave\\.net"],
+    "universal-link": [
+        "^wc:",
+        "^https?:\\/\\/.{6,26}\\/wc\\?uri=wc:",
+        "^.{3,18}:\\/\\/wc\\?uri=wc:",
+        "^argent:\\/\\/app/wc\\?uri=wc:"
+    ],
     "user-scripts": ["js/injected-script.js"]
 }
