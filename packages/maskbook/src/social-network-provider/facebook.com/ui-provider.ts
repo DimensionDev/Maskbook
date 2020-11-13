@@ -18,7 +18,6 @@ import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
-import { injectDashboardEntranceAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
@@ -67,7 +66,6 @@ export const facebookUISelf = defineSocialNetworkUI({
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
     injectPostBox: injectPostBoxFacebook,
     injectPostComments: injectPostCommentsDefault(),
-    injectDashboardEntrance: injectDashboardEntranceAtFacebook,
     injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
         encryptedComment,
         current,
