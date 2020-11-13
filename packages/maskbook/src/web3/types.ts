@@ -1,3 +1,5 @@
+import type createMetaMaskProvider from 'metamask-extension-provider'
+
 export enum ProviderType {
     Maskbook = 'Maskbook',
     MetaMask = 'MetaMask',
@@ -6,6 +8,10 @@ export enum ProviderType {
 
 export enum CurrencyType {
     USD = 'usd',
+}
+
+export interface MetaMaskInpageProvider extends ReturnType<typeof createMetaMaskProvider> {
+    _metamask?: { isUnlocked: () => Promise<boolean> }
 }
 
 export interface Token {
