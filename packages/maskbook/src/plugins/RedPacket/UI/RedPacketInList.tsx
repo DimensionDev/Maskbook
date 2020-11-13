@@ -34,7 +34,6 @@ export interface RedPacketInListProps {
     index: number
     style: any
     data: {
-        from: string
         payloads: RedPacketJSONPayload[]
         onClick?: (payload: RedPacketJSONPayload) => void
     }

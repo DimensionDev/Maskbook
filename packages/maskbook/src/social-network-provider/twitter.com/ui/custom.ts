@@ -72,6 +72,10 @@ function useTheme() {
                         },
                     },
                 },
+                sizeSmall: {
+                    paddingLeft: 15,
+                    paddingRight: 15,
+                },
             }
             theme.overrides!.MuiTab = {
                 root: {

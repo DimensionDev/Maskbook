@@ -25,10 +25,10 @@ storiesOf('Plugin: Red Packets', module)
         return (
             <>
                 <Typography>ETH</Typography>
-                <RedPacket from="" payload={payload} />
+                <RedPacket payload={payload} />
                 <hr />
                 <Typography>ERC20</Typography>
-                <RedPacket from="" payload={payload} />
+                <RedPacket payload={payload} />
             </>
         )
     })

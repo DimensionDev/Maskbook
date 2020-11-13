@@ -1,5 +1,6 @@
 import React from 'react'
 import { createStyles, makeStyles } from '@material-ui/core'
+import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useERC721Token } from '../../../web3/hooks/useERC721Token'
 import { EthereumTokenType } from '../../../web3/types'
@@ -36,18 +37,21 @@ export function ElectionTokenAlbum(props: ElectionTokenAlbumProps) {
 
     // fetch the NFT token
     const ELECTION_TOKEN_ADDRESS = useConstant(ELECTION_2020_CONSTANTS, 'ELECTION_TOKEN_ADDRESS')
-    const electionToken = useERC721Token({
+    const { value: electionToken } = useERC721Token({
         type: EthereumTokenType.ERC721,
         address: ELECTION_TOKEN_ADDRESS,
     })
     const tokens = useAllElectionTokensOfOwner(electionToken)
+
+    const chainIdValid = useChainIdValid()
+    if (!chainIdValid) return null
 
     if (!tokens.value.length) return null
     return (
         <div className={classes.root}>
             <div className={classes.content}>
                 {tokens.value.map((token) => (
-                    <section className={classes.tile}>
+                    <section className={classes.tile} key={token.tokenId}>
                         <ElectionCard token={token} canViewOnEtherscan />
                     </section>
                 ))}

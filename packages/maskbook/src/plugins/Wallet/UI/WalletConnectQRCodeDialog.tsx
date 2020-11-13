@@ -90,7 +90,7 @@ export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps)
                             }}
                         />
                     ) : null}
-                    <Button className={classes.copyButton} color="secondary" variant="text" onClick={onCopy}>
+                    <Button className={classes.copyButton} color="primary" variant="text" onClick={onCopy}>
                         {t('copy_to_clipboard')}
                     </Button>
                 </DialogContent>

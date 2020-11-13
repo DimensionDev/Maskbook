@@ -8,7 +8,6 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { RedPacketForm } from './RedPacketForm'
 import { RedPacketBacklogList } from './RedPacketList'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
-import { useAccount } from '../../../web3/hooks/useAccount'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { RedPacketRPC } from '../helpers'
 
@@ -22,7 +21,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
     const { onConfirm } = props
 
-    const account = useAccount()
     const onCreateOrSelect = useCallback(
         (payload: RedPacketJSONPayload) => {
             editActivatedPostMetadata((next) =>
@@ -47,7 +45,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             },
             {
                 label: t('plugin_red_packet_select_existing'),
-                children: <RedPacketBacklogList from={account} onSelect={onCreateOrSelect} />,
+                children: <RedPacketBacklogList onSelect={onCreateOrSelect} />,
                 p: 0,
             },
         ],

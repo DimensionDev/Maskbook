@@ -78,13 +78,13 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
         setOpen({
             open: false,
         })
-    }, [state])
+    }, [setOpen])
     //#endregion
 
     if (!state) return null
     return (
         <>
-            <InjectedDialog open={open} onExit={onClose} title="Transaction">
+            <InjectedDialog open={open} onExit={onClose} title="Transaction" DialogProps={{ maxWidth: 'xs' }}>
                 <DialogContent className={classes.content}>
                     {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ? (
                         <>

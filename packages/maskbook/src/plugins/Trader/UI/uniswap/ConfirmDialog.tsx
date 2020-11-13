@@ -66,7 +66,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
 
     return (
         <>
-            <InjectedDialog open={open} onExit={onClose} title="Confirm Swap">
+            <InjectedDialog open={open} onExit={onClose} title="Confirm Swap" DialogProps={{ maxWidth: 'xs' }}>
                 <DialogContent>
                     {inputToken && outputToken ? (
                         <>

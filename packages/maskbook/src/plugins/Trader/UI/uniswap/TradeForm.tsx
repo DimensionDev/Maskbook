@@ -16,6 +16,7 @@ import { ApproveState } from '../../../../web3/hooks/useERC20TokenApproveCallbac
 import { TradeStrategy, TokenPanelType } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useChainIdValid } from '../../../../web3/hooks/useChainState'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -90,6 +91,7 @@ export function TradeForm(props: TradeFormProps) {
 
     //#region context
     const account = useAccount()
+    const chainIdValid = useChainIdValid()
     //#endregion
 
     //#region loading balance
@@ -102,12 +104,12 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region remote controlled select provider dialog
-    const [, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {
-        setOpen({
+        setSelectProviderDialogOpen({
             open: true,
         })
-    }, [setOpen])
+    }, [setSelectProviderDialogOpen])
     //#endregion
 
     //#region form controls
@@ -214,7 +216,16 @@ export function TradeForm(props: TradeFormProps) {
                         </Grid>
                     ) : null}
                     <Grid item xs={approveRequired ? 6 : 12}>
-                        {account ? (
+                        {!account || !chainIdValid ? (
+                            <ActionButton
+                                className={classes.button}
+                                fullWidth
+                                variant="contained"
+                                size="large"
+                                onClick={onConnect}>
+                                {t('plugin_wallet_connect_a_wallet')}
+                            </ActionButton>
+                        ) : (
                             <ActionButton
                                 className={classes.button}
                                 fullWidth
@@ -223,15 +234,6 @@ export function TradeForm(props: TradeFormProps) {
                                 disabled={!!validationMessage || approveRequired}
                                 onClick={onSwap}>
                                 {validationMessage || 'Swap'}
-                            </ActionButton>
-                        ) : (
-                            <ActionButton
-                                className={classes.button}
-                                fullWidth
-                                variant="contained"
-                                size="large"
-                                onClick={onConnect}>
-                                {t('connect_a_wallet')}
                             </ActionButton>
                         )}
                     </Grid>

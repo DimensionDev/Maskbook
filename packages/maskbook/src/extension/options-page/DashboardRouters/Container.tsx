@@ -155,6 +155,7 @@ const useStyles = makeStyles((theme) => {
             },
         },
         buttons: {
+            display: 'flex',
             '& > *': {
                 margin: theme.spacing(0, 1),
             },

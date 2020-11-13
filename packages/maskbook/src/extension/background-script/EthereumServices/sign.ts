@@ -3,6 +3,7 @@ import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import { ChainId, ProviderType } from '../../../web3/types'
 import { getWallet } from '../../../plugins/Wallet/services'
+import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
 
 /**
  * Sign a string
@@ -16,7 +17,7 @@ import { getWallet } from '../../../plugins/Wallet/services'
 export async function sign(data: string, address: string, chainId: ChainId) {
     const wallet = await getWallet(address)
     if (!wallet) throw new Error('cannot find given wallet')
-    switch (wallet.provider) {
+    switch (currentSelectedWalletProviderSettings.value) {
         case ProviderType.Maskbook:
             if (!wallet._private_key_ || wallet._private_key_ === '0x') throw new Error('cannot sign with given wallet')
             return Maskbook.createWeb3(chainId, [wallet._private_key_]).eth.sign(data, address)

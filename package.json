@@ -112,7 +112,7 @@
     "lodash-es": "npm:lodash@^4.17.11",
     "loglevel": "^1.7.0",
     "matrix-js-sdk": "^9.0.1",
-    "metamask-extension-provider": "^1.1.1",
+    "metamask-extension-provider": "^2.0.0",
     "notistack": "^0.9.17",
     "popper.js": "^1.16.1",
     "promievent": "^0.1.3",

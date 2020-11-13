@@ -1,35 +1,43 @@
 import { useMemo } from 'react'
-import { useAsyncRetry } from 'react-use'
-import { Token, EthereumTokenType } from '../types'
+import { useAsync } from 'react-use'
+import { Token, ERC20Token, EthereumTokenType } from '../types'
 import { useChainId } from './useChainState'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
-import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { useSingleContractMultipleData } from './useMulticall'
+import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 
 export function useERC20Token(token?: PartialRequired<Token, 'address' | 'type'>) {
     const chainId = useChainId()
-    const erc721Contract = useERC721TokenContract(token?.address ?? '')
+    const erc20TkenContract = useERC20TokenContract(token?.address ?? '')
+
+    // compose calls
     const { names, callDatas } = useMemo(
         () => ({
-            names: ['name', 'symbol', 'baseURI'] as 'name'[],
+            names: ['name', 'symbol', 'decimals'] as 'name'[],
             callDatas: [[], [], []] as [][],
         }),
         [],
     )
-    const [results, _, callback] = useSingleContractMultipleData(erc721Contract, names, callDatas)
 
-    return useAsyncRetry(async () => {
-        if (!erc721Contract) return
-        if (!token?.address) return
-        if (token.type !== EthereumTokenType.ERC721) return
-        const [name = '', symbol = '', baseURI = ''] = results.map((x) => (x.error ? undefined : x.value))
+    // validate
+    const [results, _, callback] = useSingleContractMultipleData(erc20TkenContract, names, callDatas)
+    const asyncResult = useAsync(callback, [erc20TkenContract, names, callDatas])
 
+    // compose
+    const token_ = useMemo(() => {
+        if (!erc20TkenContract || !token?.address || token.type !== EthereumTokenType.ERC20) return
+        const [name = '', symbol = '', decimals = '0'] = results.map((x) => (x.error ? undefined : x.value))
         return {
-            chainId,
+            type: EthereumTokenType.ERC20,
             address: formatChecksumAddress(token.address),
+            chainId,
             name,
             symbol,
-            baseURI,
-        }
-    }, [chainId, token?.type, token?.address, erc721Contract])
+            decimals: Number.parseInt(decimals, 10),
+        } as ERC20Token
+    }, [erc20TkenContract, token?.address, token?.type, chainId, results])
+    return {
+        ...asyncResult,
+        value: token_,
+    }
 }

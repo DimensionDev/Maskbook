@@ -33,6 +33,10 @@ type SelectWalletDialogEvent =
           open: false
       }
 
+type WalletStatusDialogEvent = {
+    open: boolean
+}
+
 type TransactionDialogEvent =
     | {
           open: true
@@ -73,6 +77,11 @@ interface WalletMessage {
      * Transaction dialog
      */
     transactionDialogUpdated: TransactionDialogEvent
+
+    /**
+     * Wallet status dialog
+     */
+    walletStatusDialogUpdated: WalletStatusDialogEvent
 
     /**
      * WalletConnect QR Code dialog

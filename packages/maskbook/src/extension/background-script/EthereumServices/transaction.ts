@@ -15,6 +15,7 @@ import { ProviderType } from '../../../web3/types'
 import { sleep, unreachable } from '../../../utils/utils'
 import { getTransactionReceipt } from './network'
 import { getChainId } from './chainState'
+import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
 
 //#region tracking wallets
 let wallets: WalletRecord[] = []
@@ -68,9 +69,12 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
     const wallet = wallets.find((x) => isSameAddress(x.address, from))
     if (!wallet) throw new Error('the wallet does not exists')
 
+    // Tracking provider type by settings
+    const provider = currentSelectedWalletProviderSettings.value
+
     // For managed wallets need gas, gasPrice and nonce to be calculated.
     // Add the private key into eth accounts list is also required.
-    if (wallet.provider === ProviderType.Maskbook) {
+    if (provider === ProviderType.Maskbook) {
         const privateKey = wallet._private_key_
         if (!privateKey) throw new Error(`cannot find private key for wallet ${wallet.address}`)
         const web3 = Maskbook.createWeb3(await getChainId(from), [privateKey])
@@ -93,9 +97,8 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
             })
     }
 
-    if (wallet.provider === ProviderType.MetaMask) return () => MetaMask.createWeb3().eth.sendTransaction(config)
-    if (wallet.provider === ProviderType.WalletConnect)
-        return () => WalletConnect.createWeb3().eth.sendTransaction(config)
+    if (provider === ProviderType.MetaMask) return () => MetaMask.createWeb3().eth.sendTransaction(config)
+    if (provider === ProviderType.WalletConnect) return () => WalletConnect.createWeb3().eth.sendTransaction(config)
     throw new Error(`cannot send transaction for wallet ${wallet.address}`)
 }
 
@@ -139,17 +142,10 @@ export async function sendSignedTransaction(from: string, config: TransactionCon
  * @param config
  */
 
-export async function callTransaction(from: string | undefined, config: TransactionConfig) {
-    // user can use callTransaction without account
-    if (!from) return Maskbook.createWeb3().eth.call(config)
-
-    // select specific provider with given wallet address
-    const wallet = wallets.find((x) => isSameAddress(x.address, from))
-    if (!wallet) throw new Error('the wallet does not exists')
-
-    // choose provider
-    if (wallet.provider === ProviderType.Maskbook) return Maskbook.createWeb3().eth.call(config)
-    if (wallet.provider === ProviderType.MetaMask) return MetaMask.createWeb3().eth.call(config)
-    if (wallet.provider === ProviderType.WalletConnect) return WalletConnect.createWeb3().eth.call(config)
-    unreachable(wallet.provider)
+export async function callTransaction(config: TransactionConfig) {
+    const provider = currentSelectedWalletProviderSettings.value
+    if (provider === ProviderType.Maskbook) return Maskbook.createWeb3().eth.call(config)
+    if (provider === ProviderType.MetaMask) return MetaMask.createWeb3().eth.call(config)
+    if (provider === ProviderType.WalletConnect) return WalletConnect.createWeb3().eth.call(config)
+    unreachable(provider)
 }

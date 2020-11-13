@@ -25,7 +25,9 @@ export function TrendingPopper(props: TrendingPopperProps) {
     useRemoteControlledDialog(WalletMessages.events.selectERC20TokenDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated, onFreezed)
+    useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.walletConnectQRCodeDialogUpdated, onFreezed)
+    useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, onFreezed)
     //#endregion
 
     //#region open or close popper

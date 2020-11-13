@@ -41,7 +41,6 @@ import { QRCode } from '../../../components/shared/qrcode'
 import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { Token, EthereumTokenType } from '../../../web3/types'
-import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
 import { RedPacketInboundList, RedPacketOutboundList } from '../../../plugins/RedPacket/UI/RedPacketList'
 import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
@@ -537,11 +536,8 @@ const useBackupDialogStyles = makeStyles((theme: Theme) =>
 
 export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
-    const {
-        wallet: { address },
-    } = props.ComponentProps!
+    const { wallet } = props.ComponentProps!
     const classes = useBackupDialogStyles()
-    const wallet = useWallet(address)
     const { value: privateKeyInHex } = useAsync(async () => {
         if (!wallet) return
         const { privateKeyInHex } = wallet._private_key_
@@ -774,12 +770,12 @@ export function DashboardWalletHistoryDialog(
         tabs: [
             {
                 label: t('activity_inbound'),
-                children: <RedPacketInboundList from={wallet.address} onSelect={onRedPacketClicked} />,
+                children: <RedPacketInboundList onSelect={onRedPacketClicked} />,
                 p: 0,
             },
             {
                 label: t('activity_outbound'),
-                children: <RedPacketOutboundList from={wallet.address} onSelect={onRedPacketClicked} />,
+                children: <RedPacketOutboundList onSelect={onRedPacketClicked} />,
                 display: 'flex',
                 p: 0,
             },
@@ -856,7 +852,7 @@ export function DashboardWalletRedPacketDetailDialog(
                 primary="Red Packet Detail"
                 content={
                     <>
-                        <RedPacket from={wallet.address} payload={payload} />
+                        <RedPacket payload={payload} />
                         {redPacket?.from && !isSameAddress(redPacket.payload.sender.address, wallet.address) && (
                             <ActionButton className={classes.sayThanks} onClick={sayThanks} variant="contained">
                                 Say Thanks

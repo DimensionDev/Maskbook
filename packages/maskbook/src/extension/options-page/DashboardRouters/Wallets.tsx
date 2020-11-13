@@ -1,12 +1,12 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, IconButton, Typography } from '@material-ui/core'
+import { Button, IconButton } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
-import AddCircleIcon from '@material-ui/icons/AddCircle'
 import AddIcon from '@material-ui/icons/Add'
+import AddCircleIcon from '@material-ui/icons/AddCircle'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import RestoreIcon from '@material-ui/icons/Restore'
-import { cloneDeep, merge, truncate } from 'lodash-es'
+import { cloneDeep, merge } from 'lodash-es'
 
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
@@ -19,15 +19,11 @@ import {
 } from '../DashboardDialogs/Wallet'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
-import { Flags } from '../../../utils/flags'
-import { WalletMessages } from '../../../plugins/Wallet/messages'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { useSelectedWallet } from '../../../plugins/Wallet/hooks/useWallet'
+import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { useTokens } from '../../../plugins/Wallet/hooks/useToken'
 import { useTokensDetailedCallback } from '../../../web3/hooks/useTokensDetailedCallback'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
-import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 
 //#region theme
 const walletsTheme = (theme: Theme) =>
@@ -62,12 +58,6 @@ const useStyles = makeStyles((theme) =>
             flex: '0 0 100%',
             height: '100%',
         },
-        header: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: theme.spacing(3, 2, 0, 2),
-        },
         content: {
             width: '100%',
             overflow: 'auto',
@@ -80,7 +70,13 @@ const useStyles = makeStyles((theme) =>
             flexDirection: 'column',
             height: '100%',
         },
-        title: {},
+        caption: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        title: {
+            marginLeft: theme.spacing(1),
+        },
     }),
 )
 
@@ -96,10 +92,9 @@ export default function DashboardWalletsRouter() {
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
 
-    const selectedWallet = useSelectedWallet()
-    const tokens = useTokens(selectedWallet?.address ?? '')
-
-    const [detailedTokens, detailedTokensCallback] = useTokensDetailedCallback(tokens)
+    const selectedWallet = useWallet()
+    const tokens = useTokens()
+    const detailedTokens = useTokensDetailedCallback(tokens)
 
     // show create dialog
     useEffect(() => {
@@ -110,21 +105,6 @@ export default function DashboardWalletsRouter() {
     useEffect(() => {
         if (error) openWalletError()
     }, [error, openWalletError])
-
-    // auto fetch tokens detailed
-    useEffect(() => {
-        if (!selectedWallet) return
-        detailedTokensCallback(selectedWallet.address)
-    }, [selectedWallet])
-
-    // show provider connect dialog
-    const [, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-
-    const onConnect = useCallback(() => {
-        setOpen({
-            open: true,
-        })
-    }, [setOpen])
 
     //#region right icons from mobile devices
     const rightIcons = [
@@ -162,13 +142,7 @@ export default function DashboardWalletsRouter() {
             empty={!selectedWallet}
             title={t('my_wallets')}
             actions={[
-                Flags.metamask_support_enabled || Flags.wallet_connect_support_enabled ? (
-                    <Button variant="outlined" onClick={onConnect}>
-                        {t('connect')}
-                    </Button>
-                ) : (
-                    <></>
-                ),
+                <EthereumStatusBar BoxProps={{ justifyContent: 'flex-end' }} />,
                 <Button
                     variant="contained"
                     onClick={openWalletCreate}
@@ -185,16 +159,6 @@ export default function DashboardWalletsRouter() {
             rightIcons={rightIcons}>
             <ThemeProvider theme={walletsTheme}>
                 <div className={classes.root}>
-                    <div className={classes.header}>
-                        {selectedWallet ? (
-                            <Typography className={classes.title} variant="h5" color="textPrimary">
-                                {selectedWallet.name
-                                    ? truncate(selectedWallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN })
-                                    : selectedWallet.address}
-                            </Typography>
-                        ) : null}
-                        <EthereumStatusBar BoxProps={{ justifyContent: 'flex-end' }} />
-                    </div>
                     <div className={classes.content}>
                         <div className={classes.wrapper}>
                             {selectedWallet ? (

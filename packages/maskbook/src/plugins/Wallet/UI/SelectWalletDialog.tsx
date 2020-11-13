@@ -5,17 +5,26 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../messages'
-import { useWallets } from '../hooks/useWallet'
+import { useWallet, useWallets } from '../hooks/useWallet'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import type { WalletRecord } from '../database/types'
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { sleep } from '../../../utils/utils'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { currentSelectedWalletAddressSettings } from '../settings'
+import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { ProviderType } from '../../../web3/types'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
 
-const useStyles = makeStyles((theme) => createStyles({}))
+const useStyles = makeStyles((theme) =>
+    createStyles({
+        content: {
+            padding: 0,
+            minHeight: 300,
+        },
+    }),
+)
 
 interface SelectWalletDialogUIProps extends withClasses<never> {}
 
@@ -23,20 +32,23 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const wallets = useWallets()
+    const wallets = useWallets(ProviderType.Maskbook)
+    const selectedWallet = useWallet()
+    const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
 
     //#region remote controlled dialog logic
-    const [open, setSelectWalletDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated)
+    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated)
     const onClose = useCallback(() => {
-        setSelectWalletDialogOpen({
+        setOpen({
             open: false,
         })
-    }, [setSelectWalletDialogOpen])
+    }, [setOpen])
     //#endregion
 
     const onSelect = useCallback(
         (wallet: WalletRecord) => {
             currentSelectedWalletAddressSettings.value = wallet.address
+            currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
             onClose()
         },
         [onClose],
@@ -64,23 +76,33 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     //#endregion
 
     return (
-        <>
-            <InjectedDialog open={open} onExit={onClose} title="Select Wallet">
-                <DialogContent>
-                    {wallets.map((wallet) => (
-                        <WalletInList key={wallet.address} wallet={wallet} onClick={() => onSelect(wallet)} />
-                    ))}
-                </DialogContent>
-                <DialogActions>
-                    <Button variant="text" onClick={onCreate}>
-                        {t('plugin_wallet_on_create')}
-                    </Button>
-                    <Button variant="text" onClick={onConnect}>
-                        {t('plugin_wallet_on_connect')}
-                    </Button>
-                </DialogActions>
-            </InjectedDialog>
-        </>
+        <InjectedDialog
+            open={open}
+            onExit={onClose}
+            title={t('plugin_wallet_select_a_wallet')}
+            DialogProps={{ maxWidth: 'xs' }}>
+            <DialogContent className={classes.content}>
+                {wallets.map((wallet) => (
+                    <WalletInList
+                        key={wallet.address}
+                        wallet={wallet}
+                        disabled={
+                            selectedWallet?.address === wallet.address &&
+                            selectedWalletProvider === ProviderType.Maskbook
+                        }
+                        onClick={() => onSelect(wallet)}
+                    />
+                ))}
+            </DialogContent>
+            <DialogActions>
+                <Button variant="text" onClick={onCreate}>
+                    {t('plugin_wallet_on_create')}
+                </Button>
+                <Button variant="text" onClick={onConnect}>
+                    {t('plugin_wallet_on_connect')}
+                </Button>
+            </DialogActions>
+        </InjectedDialog>
     )
 }
 

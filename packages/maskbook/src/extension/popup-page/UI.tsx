@@ -12,7 +12,7 @@ import { I18nextProvider } from 'react-i18next'
 import { useI18N } from '../../utils/i18n-next-ui'
 import i18nNextInstance from '../../utils/i18n-next'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { getUrl } from '../../utils/utils'
+import { getUrl, sleep } from '../../utils/utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { Alert } from '@material-ui/lab'
@@ -92,11 +92,16 @@ function PopupUI() {
         }
     }, [])
 
-    const [, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, noop, 'activated')
-    const onConnect = () => {
-        setOpen({ open: true })
-        setTimeout(() => window.close(), 200)
-    }
+    const [, setSelectProviderDailogOpen] = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+        noop,
+        'activated',
+    )
+    const onConnect = useCallback(async () => {
+        setSelectProviderDailogOpen({ open: true })
+        await sleep(200)
+        window.close()
+    }, [setSelectProviderDailogOpen])
 
     return (
         <Paper className={classes.container}>

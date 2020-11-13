@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme: Theme) => {
             marginRight: theme.spacing(-0.5),
         },
         icon: {
+            color: theme.palette.text.primary,
             pointerEvents: 'none',
         },
     })

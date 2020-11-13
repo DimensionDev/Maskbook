@@ -52,7 +52,7 @@ export function ElectionCompositionDialog(props: ElectionCompositionDialogProps)
 
     // fetch the NTF token
     const ELECTION_TOKEN_ADDRESS = useConstant(ELECTION_2020_CONSTANTS, 'ELECTION_TOKEN_ADDRESS')
-    const nftToken = useERC721Token({
+    const { value: nftToken } = useERC721Token({
         type: EthereumTokenType.ERC721,
         address: ELECTION_TOKEN_ADDRESS,
     })

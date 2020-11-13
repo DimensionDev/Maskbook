@@ -1,9 +1,18 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { MoreHorizontal } from 'react-feather'
-import { makeStyles, Theme, createStyles, DialogContent, GridList, GridListTile } from '@material-ui/core'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+    DialogContent,
+    GridList,
+    GridListTile,
+    Typography,
+    Link,
+    DialogActions,
+} from '@material-ui/core'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { useHistory } from 'react-router-dom'
-import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { Provider } from './Provider'
@@ -17,9 +26,9 @@ import { useBlurContext } from '../../../extension/options-page/DashboardContext
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { ProviderType } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
-import { MaskMessage } from '../../../utils/messages'
 import { Flags } from '../../../utils/flags'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { useWallets } from '../hooks/useWallet'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,13 +41,16 @@ const useStyles = makeStyles((theme: Theme) =>
             flexWrap: 'wrap',
             justifyContent: 'space-around',
             overflow: 'hidden',
-            padding: theme.spacing(2, 1),
+            padding: theme.spacing(4, 2),
         },
         grid: {
             width: '100%',
         },
         icon: {
             fontSize: 45,
+        },
+        tip: {
+            fontSize: 12,
         },
     }),
 )
@@ -47,7 +59,6 @@ interface SelectProviderDialogUIProps extends withClasses<never> {}
 
 function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const { t } = useI18N()
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const classes = useStylesExtends(useStyles(), props)
     const history = useHistory()
 
@@ -60,6 +71,10 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     }, [setOpen])
     //#endregion
 
+    //#region select wallet dialog
+    const [, selectWalletDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated)
+    //#endregion
+
     //#region wallet connect QR code dialog
     const [_, setWalletConnectDialogOpen] = useRemoteControlledDialog(
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
@@ -69,11 +84,18 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     // render in dashboard
     useBlurContext(open)
 
+    const wallets = useWallets(ProviderType.Maskbook)
     const onConnect = useCallback(
         async (providerType: ProviderType) => {
             onClose()
             switch (providerType) {
                 case ProviderType.Maskbook:
+                    if (wallets.length > 0) {
+                        selectWalletDialogOpen({
+                            open: true,
+                        })
+                        return
+                    }
                     if (isEnvironment(Environment.ManifestOptions))
                         history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
                     else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
@@ -91,74 +113,71 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     unreachable(providerType)
             }
         },
-        [history, onClose, setWalletConnectDialogOpen],
+        [wallets, history, onClose, selectWalletDialogOpen, setWalletConnectDialogOpen],
     )
 
-    // TODO:
-    // Show error message when click metamask would be better
-    useEffect(
-        () =>
-            MaskMessage.events.metamaskDisconnected.on(async () => {
-                enqueueSnackbar(t('metamask_not_install'), {
-                    key: 'metamask_not_install',
-                    variant: 'error',
-                    preventDuplicate: true,
-                })
-            }),
-        [enqueueSnackbar, t],
-    )
     return (
-        <>
-            <InjectedDialog title={t('plugin_wallet_connect_panel')} open={open} onExit={onClose}>
-                <DialogContent>
-                    <GridList className={classes.grid} spacing={16} cellHeight={183}>
+        <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onExit={onClose}>
+            <DialogContent className={classes.content}>
+                <GridList className={classes.grid} spacing={16} cellHeight={183}>
+                    <GridListTile>
+                        <Provider
+                            logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
+                            name="Maskbook"
+                            description="Create wallet with Maskbook"
+                            onClick={() => onConnect(ProviderType.Maskbook)}
+                        />
+                    </GridListTile>
+                    {Flags.metamask_support_enabled ? (
                         <GridListTile>
                             <Provider
-                                logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                name={t('plugin_wallet_provide_maskbook')}
-                                description={t('plugin_wallet_create_with_maskbook')}
-                                onClick={() => onConnect(ProviderType.Maskbook)}
+                                logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
+                                name="MetaMask"
+                                description="Connect to your MetaMask Wallet"
+                                onClick={() => onConnect(ProviderType.MetaMask)}
                             />
                         </GridListTile>
-                        {Flags.metamask_support_enabled ? (
-                            <GridListTile>
-                                <Provider
-                                    logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                    name={t('plugin_wallet_provide_metamask')}
-                                    description={t('plugin_wallet_create_with_metamask')}
-                                    onClick={() => onConnect(ProviderType.MetaMask)}
-                                />
-                            </GridListTile>
-                        ) : null}
-                        {Flags.wallet_connect_support_enabled ? (
-                            <GridListTile>
-                                <Provider
-                                    logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                    name={t('plugin_wallet_provide_wallet_connect')}
-                                    description={t('plugin_wallet_create_with_wallet_connect_of_desktop')}
-                                    onClick={() => onConnect(ProviderType.WalletConnect)}
-                                />
-                            </GridListTile>
-                        ) : null}
+                    ) : null}
+                    {Flags.wallet_connect_support_enabled ? (
                         <GridListTile>
                             <Provider
-                                logo={
-                                    <MoreHorizontal
-                                        className={classes.icon}
-                                        viewBox="0 0 22.5 22.5"
-                                        width={45}
-                                        height={45}
-                                    />
-                                }
-                                name={t('plugin_wallet_provide_more')}
-                                description={t('plugin_wallet_create_with_comming_soon')}
-                                ButtonBaseProps={{ disabled: true }}
+                                logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
+                                name="WalletConnect"
+                                description="Scan with WalletConnect to connect"
+                                onClick={() => onConnect(ProviderType.WalletConnect)}
                             />
                         </GridListTile>
-                    </GridList>
-                </DialogContent>
-            </InjectedDialog>
-        </>
+                    ) : null}
+                    <GridListTile>
+                        <Provider
+                            logo={
+                                <MoreHorizontal
+                                    className={classes.icon}
+                                    viewBox="0 0 22.5 22.5"
+                                    width={45}
+                                    height={45}
+                                />
+                            }
+                            name="More"
+                            description="Comming soon…"
+                            ButtonBaseProps={{ disabled: true }}
+                        />
+                    </GridListTile>
+                </GridList>
+            </DialogContent>
+            <DialogActions>
+                <Typography className={classes.tip} color="textSecondary">
+                    New to Ethereum?{' '}
+                    <Link
+                        color="primary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://ethereum.org/en/wallets/">
+                        Learn more about wallets
+                    </Link>
+                </Typography>
+            </DialogActions>
+        </InjectedDialog>
     )
 }
 
