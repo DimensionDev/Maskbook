@@ -1,11 +1,11 @@
 type ctor = [stringUrl: string | URL, options?: WorkerOptions]
 const DelayAfterWorkerCreated = 50
-const WorkerShouldTerminateInterval = 60 * 1000
-const InactiveTimeToTerminateDefault = 10 * 1000
+const WorkerCheckTerminateInterval = 60 * 1000
+const InactiveTimeToTerminateDefault = 15 * 1000
 export class OnDemandWorker extends Worker {
     protected readonly init: ctor
     protected worker: Worker | undefined = this
-    protected readonly id = Math.random().toString(16).slice(2)
+    protected readonly id = Math.random().toString(16).slice(2, 8)
     public inactiveTimeToTerminate = InactiveTimeToTerminateDefault
     constructor(...init: ctor) {
         super(...init)
@@ -20,20 +20,18 @@ export class OnDemandWorker extends Worker {
                 return
             }
             if (Date.now() - this.lastUsed > this.inactiveTimeToTerminate) {
-                this.log('inactive for ', this.inactiveTimeToTerminate / 1000, 'sec')
+                this.log('inactive for', this.inactiveTimeToTerminate / 1000, 'sec')
                 this.terminate()
                 clearInterval(i)
             }
-        }, WorkerShouldTerminateInterval)
+        }, Math.min(this.inactiveTimeToTerminate, WorkerCheckTerminateInterval))
     }
     protected log(...args: any[]) {
-        console.log(`OnDemandWorker ${this.id}`, this, ...args)
+        // console.log(`OnDemandWorker ${this.id}`, ...args)
     }
     protected lastUsed = Date.now()
     protected use(onReady: () => void) {
-        this.lastUsed = Date.now()
-        this.log('keep alive')
-
+        this.keepAlive()
         if (this.worker) return onReady()
         this.worker = new Worker(...this.init)
         this.worker.addEventListener('error', (e) => this.dispatchEvent(cloneEvent(e)))
@@ -46,6 +44,10 @@ export class OnDemandWorker extends Worker {
         this.worker && Worker.prototype.terminate.call(this.worker)
         this.worker = undefined
         this.log('terminated')
+    }
+    keepAlive() {
+        this.log('keep alive')
+        this.lastUsed = Date.now()
     }
 }
 OnDemandWorker.prototype.postMessage = function (this: OnDemandWorker, ...args: [any, any]) {
