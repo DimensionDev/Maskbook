@@ -62,7 +62,7 @@
     "@msgpack/msgpack": "^1.12.2",
     "@openzeppelin/contracts": "^3.2.0",
     "@servie/events": "^1.0.0",
-    "@solana/web3.js": "^0.86.4",
+    "@solana/web3.js": "^0.87.0",
     "@transak/transak-sdk": "^1.0.25",
     "@types/bn.js": "^4.11.6",
     "@types/classnames": "^2.2.11",

@@ -156,6 +156,18 @@
             "tokenName": "Wrapped HGET",
             "tokenSymbol": "HGET",
             "decimals": 6
-        }
+        },
+        {
+            "tokenSymbol": "TOMO",
+            "mintAddress": "GXMvfY2jpQctDqZ9RoU3oWPhufKiCcFEfchvYumtX7jd",
+            "tokenName": "Wrapped TOMO",
+            "icon": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/tomochain/info/logo.png"
+          },
+          {
+            "tokenSymbol": "KARMA",
+            "mintAddress": "EcqExpGNFBve2i1cMJUTR4bPXj4ZoqmDD2rTkeCcaTFX",
+            "tokenName": "Wrapped KARMA",
+            "icon": "https://raw.githubusercontent.com/machi-x/assets/152f2ca62611ef23298fac9a8e657386984d2d33/blockchains/ethereum/assets/0xdfe691f37b6264a90ff507eb359c45d55037951c/logo.png"
+          }
     ]
 }
