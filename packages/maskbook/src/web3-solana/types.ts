@@ -49,10 +49,11 @@ export interface TokenDetailed {
 }
 
 // A list of chain IDs https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
+// this need real number Network for Solana Network's
 export enum ChainId {
-    Mainnet = 1,
-    Devnet = 2,
-    Testnet = 3,
+    Mainnet = 6,
+    Devnet = 7,
+    Testnet = 8,
 }
 
 export enum SolanaNetwork {
