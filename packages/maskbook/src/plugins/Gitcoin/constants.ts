@@ -3,7 +3,7 @@ import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 export const gitcoinPluginID = 'co.gitcoin'
 const GitcoinMessage = createPluginMessage<{ _: unknown }>(gitcoinPluginID)
-export const PluginGitcoinRPC = createPluginRPC(() => import('./service'), GitcoinMessage.events._)
+export const PluginGitcoinRPC = createPluginRPC(gitcoinPluginID, () => import('./service'), GitcoinMessage.events._)
 export const GITCOIN_CONSTANT = {
     // accounts
     GITCOIN_MAINTAINER_ADDRESS: {

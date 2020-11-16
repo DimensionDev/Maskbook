@@ -4,7 +4,11 @@ import { pluginId } from '../constants'
 export * from './date'
 
 const PluginFileServiceMessage = createPluginMessage<{ _: unknown; _2: unknown }>(pluginId)
-export const PluginFileServiceRPC = createPluginRPC(() => import('../service'), PluginFileServiceMessage.events._)
+export const PluginFileServiceRPC = createPluginRPC(
+    pluginId,
+    () => import('../service'),
+    PluginFileServiceMessage.events._,
+)
 export const PluginFileServiceRPCGenerator = createPluginRPCGenerator(
     () => import('../service').then(({ upload }) => ({ upload })),
     PluginFileServiceMessage.events._2,

@@ -18,4 +18,8 @@ interface PluginTraderMessage {
 }
 
 export const PluginTraderMessages = createPluginMessage<PluginTraderMessage>(PLUGIN_IDENTIFIER)
-export const PluginTraderRPC = createPluginRPC(() => import('./services'), PluginTraderMessages.events.rpc)
+export const PluginTraderRPC = createPluginRPC(
+    PLUGIN_IDENTIFIER,
+    () => import('./services'),
+    PluginTraderMessages.events.rpc,
+)

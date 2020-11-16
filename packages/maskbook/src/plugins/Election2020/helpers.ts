@@ -10,4 +10,8 @@ export const Election2020MetadataReader = createTypedMessageMetadataReader<Elect
 )
 export const renderWithElection2020Metadata = createRenderWithMetadata(Election2020MetadataReader)
 const ElectionMessage = createPluginMessage<{ _: unknown }>(Election2020PluginID)
-export const PluginElection2020 = createPluginRPC(() => import('./services'), ElectionMessage.events._)
+export const PluginElection2020 = createPluginRPC(
+    Election2020PluginID,
+    () => import('./services'),
+    ElectionMessage.events._,
+)

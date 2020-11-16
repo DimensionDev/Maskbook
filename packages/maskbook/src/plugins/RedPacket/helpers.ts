@@ -21,4 +21,4 @@ export interface RedPacketMessages {
     rpc: unknown
 }
 export const RedPacketMessage = createPluginMessage<RedPacketMessages>(RedPacketPluginID)
-export const RedPacketRPC = createPluginRPC(() => import('./services'), RedPacketMessage.events.rpc)
+export const RedPacketRPC = createPluginRPC(RedPacketPluginID, () => import('./services'), RedPacketMessage.events.rpc)
