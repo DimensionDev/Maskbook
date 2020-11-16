@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, IconButton } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import RestoreIcon from '@material-ui/icons/Restore'
 import { cloneDeep, merge } from 'lodash-es'
 
@@ -107,34 +106,32 @@ export default function DashboardWalletsRouter() {
     }, [error, openWalletError])
 
     //#region right icons from mobile devices
-    const rightIcons = [
-        <IconButton
-            onClick={() => {
+    const floatingButtons = [
+        {
+            icon: <AddIcon />,
+            handler: () => {
                 if (selectedWallet) openAddToken({ wallet: selectedWallet })
                 else openWalletCreate()
-            }}>
-            <AddIcon />
-        </IconButton>,
+            },
+        },
     ]
 
     if (selectedWallet)
-        rightIcons.unshift(
-            <IconButton
-                onClick={() => {
-                    if (!selectedWallet) return
-                    openWalletHistory({
-                        wallet: selectedWallet,
-                        onRedPacketClicked(payload) {
-                            openWalletRedPacketDetail({
-                                wallet: selectedWallet,
-                                payload,
-                            })
-                        },
-                    })
-                }}>
-                <RestoreIcon />
-            </IconButton>,
-        )
+        floatingButtons.push({
+            icon: <RestoreIcon />,
+            handler: () => {
+                if (!selectedWallet) return
+                openWalletHistory({
+                    wallet: selectedWallet,
+                    onRedPacketClicked(payload) {
+                        openWalletRedPacketDetail({
+                            wallet: selectedWallet,
+                            payload,
+                        })
+                    },
+                })
+            },
+        })
     //#endregion
 
     return (
@@ -151,12 +148,7 @@ export default function DashboardWalletsRouter() {
                     {t('plugin_wallet_on_create')}
                 </Button>,
             ]}
-            leftIcons={[
-                <IconButton onClick={() => history.goBack()}>
-                    <ArrowBackIosIcon />
-                </IconButton>,
-            ]}
-            rightIcons={rightIcons}>
+            floatingButtons={floatingButtons}>
             <ThemeProvider theme={walletsTheme}>
                 <div className={classes.root}>
                     <div className={classes.content}>
