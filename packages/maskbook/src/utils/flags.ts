@@ -16,7 +16,6 @@ export const Flags = {
     /** There is no "tabs" to navigate to. We must be careful with this. */
     has_no_browser_tab_ui: process.env.architecture === 'app',
     has_no_connected_user_link: process.env.architecture === 'app',
-    inject_dashboard_entrance: process.env.architecture === 'app',
     /** In E2E, prefer open shadow root so we can test it. */
     using_ShadowDOM_attach_mode: process.env.target === 'E2E' ? 'open' : 'closed',
     /** Don't inject injected script in this mode. Native side will do the job. */

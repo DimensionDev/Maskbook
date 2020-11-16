@@ -14,7 +14,6 @@ import type { I18NStrings } from '../utils/i18n-next'
 import i18nNextInstance from '../utils/i18n-next'
 import type { ObservableWeakMap } from '../utils/ObservableMapSet'
 import type { PostInfo } from './PostInfo'
-import { Flags } from '../utils/flags'
 import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 import { editMetadata } from '../protocols/typed-message'
 import type { ReadonlyIdentifierMap } from '../database/IdentifierMap'
@@ -116,14 +115,6 @@ export interface SocialNetworkUIInjections {
      * This function should inject a hint at their bio if they are known by Maskbook
      */
     injectKnownIdentity?: (() => void) | 'disabled'
-    /**
-     * This is an optional function.
-     *
-     * This function should inject a link to open the options page.
-     *
-     * This function should only active when the Maskbook start as a standalone app.
-     */
-    injectDashboardEntrance?: (() => void) | 'disabled'
     /**
      * This function should inject the comment
      * @param current The current post
@@ -325,10 +316,6 @@ export function activateSocialNetworkUI(): void {
                 ui.myIdentitiesRef.addListener((val) => {
                     if (val.length === 1) ui.currentIdentity.value = val[0]
                 })
-                {
-                    const mountSettingsLink = ui.injectDashboardEntrance
-                    if (Flags.inject_dashboard_entrance && typeof mountSettingsLink === 'function') mountSettingsLink()
-                }
                 {
                     const mountKnownIdentity = ui.injectKnownIdentity
                     if (typeof mountKnownIdentity === 'function') mountKnownIdentity()

@@ -11,7 +11,6 @@ import { twitterUrl } from '../utils/url'
 import { PreDefinedVirtualGroupNames } from '../../../database/type'
 import { twitterUICustomUI, startWatchThemeColor } from './custom'
 import { injectMaskbookIconToProfile, injectMaskbookIconIntoFloatingProfileCard } from './injectMaskbookIcon'
-import { injectDashboardEntranceAtTwitter } from './injectDashboardEntrance'
 import { Flags } from '../../../utils/flags'
 
 const origins = [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`]
@@ -71,5 +70,4 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     ignoreSetupAccount() {
         setStorage(twitterUrl.hostIdentifier, { userIgnoredWelcome: true, forceDisplayWelcome: false }).then()
     },
-    injectDashboardEntrance: injectDashboardEntranceAtTwitter,
 })
