@@ -59,6 +59,10 @@ export function getRedPacketsFromDB() {
     return database.getRedPackets()
 }
 
+export function getRedPacketFromDB(rpid: string) {
+    return database.getRedPacket(rpid)
+}
+
 export async function getRedPacketsFromChain(from: string, startBlock: number) {
     const url = new URL(RED_PACKET_HISTORY_URL)
     url.searchParams.set('chainId', String(await Services.Ethereum.getChainId(from)))
