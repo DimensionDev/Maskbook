@@ -113,25 +113,26 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 {t('copy_image')}
                             </Button>
                         ) : null}
-                        {url && permission !== 'granted' ? (
-                            <>
-                                <Button
-                                    variant="text"
-                                    component={Link}
-                                    download={`maskbook-encrypted-${formatDateTime(new Date()).replace(/:/g, '-')}.png`}
-                                    href={url}
-                                    startIcon={<Download />}>
-                                    {t('download')}
-                                </Button>
-                                <Button
-                                    variant="text"
-                                    component={Link}
-                                    href={url}
-                                    target="_blank"
-                                    startIcon={<OpenInBrowser />}>
-                                    {t('auto_paste_failed_dialog_image_caption')}
-                                </Button>
-                            </>
+                        {url ? (
+                            <Button
+                                variant="text"
+                                component={Link}
+                                download={`maskbook-encrypted-${formatDateTime(new Date()).replace(/:/g, '-')}.png`}
+                                href={url}
+                                startIcon={<Download />}>
+                                {t('download')}
+                            </Button>
+                        ) : null}
+                        {/* Open it in a new tab does not make sense for app. */}
+                        {url && process.env.architecture === 'web' ? (
+                            <Button
+                                variant="text"
+                                component={Link}
+                                href={url}
+                                target="_blank"
+                                startIcon={<OpenInBrowser />}>
+                                {t('auto_paste_failed_dialog_image_caption')}
+                            </Button>
                         ) : null}
                     </div>
                 </DialogContent>
