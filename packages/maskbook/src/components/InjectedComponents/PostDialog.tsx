@@ -347,7 +347,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
         useCallback(() => {
             setOpen(false)
             setOnlyMyself(false)
-            setShareToEveryone(false)
+            setShareToEveryone(true)
             setPostBoxContent(makeTypedMessageText(''))
             setCurrentShareTarget([])
             getActivatedUI().typedMessageMetadata.value = new Map()
