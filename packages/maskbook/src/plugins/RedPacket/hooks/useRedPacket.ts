@@ -19,8 +19,7 @@ RedPacketMessage.events.redPacketUpdated.on(revalidate)
 //#endregion
 
 export function useRedPacketFromDB(rpid: string) {
-    const redPackets = useValueRef(redPacketsRef)
-    return redPackets.find((x) => x.id === rpid)
+    return useAsync(() => RedPacketRPC.getRedPacketFromDB(rpid), [rpid]).value
 }
 
 export function useRedPacketsFromDB() {

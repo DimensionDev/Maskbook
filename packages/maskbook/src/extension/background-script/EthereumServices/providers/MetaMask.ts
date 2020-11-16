@@ -6,17 +6,19 @@ import createMetaMaskProvider from 'metamask-extension-provider'
 import { ChainId } from '../../../../web3/types'
 import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
-import { ProviderType } from '../../../../web3/types'
+import { ProviderType, MetaMaskInpageProvider } from '../../../../web3/types'
 import {
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
+    currentIsMetamaskLockedSettings,
 } from '../../../../plugins/Wallet/settings'
 
-let provider: ReturnType<typeof createMetaMaskProvider> | null = null
+let provider: MetaMaskInpageProvider | null = null
 let web3: Web3 | null = null
 
 async function onAccountsChanged(accounts: string[]) {
     await updateWalletInDB(first(accounts) ?? '')
+    currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked()) && accounts.length === 0
 }
 
 function onNetworkChanged(id: string) {

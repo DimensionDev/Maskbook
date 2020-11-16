@@ -24,6 +24,8 @@ import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePa
 import { exclusiveTasks } from './extension/content-script/tasks'
 import { Flags } from './utils/flags'
 
+import('./plugins/PluginSerivce')
+
 import tasks from './extension/content-script/tasks'
 Object.assign(globalThis, { tasks })
 
@@ -49,6 +51,7 @@ if (isEnvironment(Environment.ManifestBackground)) {
         if (arg.url === 'about:blank') return
         if (!arg.url.startsWith('http')) return
         const contains = await browser.permissions.contains({ origins: [arg.url] })
+        if (!contains) return
         /**
          * For iOS App, there is a special way to do it in the manifest.json
          * A `iOS-injected-scripts` field is used to add extra scripts
@@ -63,7 +66,7 @@ if (isEnvironment(Environment.ManifestBackground)) {
                 })
                 .catch(IgnoreError(arg))
         }
-        if (Flags.requires_injected_script_run_directly && contains) {
+        if (Flags.requires_injected_script_run_directly) {
             browser.tabs.executeScript(arg.tabId, {
                 runAt: 'document_start',
                 frameId: arg.frameId,

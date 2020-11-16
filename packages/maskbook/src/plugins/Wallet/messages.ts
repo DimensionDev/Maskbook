@@ -93,4 +93,4 @@ interface WalletMessage {
 }
 
 export const WalletMessages = createPluginMessage<WalletMessage>(PLUGIN_IDENTIFIER)
-export const WalletRPC = createPluginRPC(() => import('./services'), WalletMessages.events.rpc)
+export const WalletRPC = createPluginRPC(PLUGIN_IDENTIFIER, () => import('./services'), WalletMessages.events.rpc)

@@ -1,9 +1,18 @@
 import { Environment, isEnvironment, MessageTarget, UnboundedRegistry } from '@dimensiondev/holoflows-kit'
-import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
+import { AsyncCall, AsyncCallLogLevel, AsyncGeneratorCall } from 'async-call-rpc/full'
 import serialization from '../../utils/type-transform/Serialization'
-export function createPluginRPC<T>(impl: () => Promise<T>, message: UnboundedRegistry<unknown>) {
+const log: AsyncCallLogLevel = {
+    beCalled: true,
+    localError: true,
+    remoteError: true,
+    requestReplay: true,
+    sendLocalStack: true,
+    type: 'pretty',
+}
+export function createPluginRPC<T>(key: string, impl: () => Promise<T>, message: UnboundedRegistry<unknown>) {
     const isBackground = isEnvironment(Environment.ManifestBackground)
     return AsyncCall<T>(isBackground ? impl() : {}, {
+        key,
         channel: message.bind(MessageTarget.Broadcast),
         preferLocalImplementation: isBackground,
         serializer: serialization,
@@ -11,6 +20,7 @@ export function createPluginRPC<T>(impl: () => Promise<T>, message: UnboundedReg
             methodNotFound: isBackground,
             unknownMessage: true,
         },
+        log,
     })
 }
 
@@ -24,5 +34,6 @@ export function createPluginRPCGenerator<T>(impl: () => Promise<T>, message: Unb
             methodNotFound: isBackground,
             unknownMessage: true,
         },
+        log,
     })
 }

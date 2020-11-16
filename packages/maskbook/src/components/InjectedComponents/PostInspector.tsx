@@ -12,7 +12,7 @@ import { debugModeSetting } from '../../settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
 import type { TypedMessage } from '../../protocols/typed-message'
 import type { PluginConfig } from '../../plugins/types'
-import { PluginUI } from '../../plugins/plugin'
+import { PluginUI } from '../../plugins/PluginUI'
 import { usePostInfoDetails, usePostInfo } from '../DataSource/usePostInfo'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
 
