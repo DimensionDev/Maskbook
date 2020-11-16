@@ -107,10 +107,11 @@ export default function DashboardContactsRouter() {
             title={t('contacts')}
             empty={items.length === 0}
             actions={actions}
-            rightIcons={[
-                <IconButton onClick={() => openSearchContactDialog({ onSearch: setSearch })}>
-                    <SearchIcon />
-                </IconButton>,
+            floatingButtons={[
+                {
+                    icon: <SearchIcon />,
+                    handler: () => openSearchContactDialog({ onSearch: setSearch }),
+                },
             ]}>
             <Typography className={classes.title} variant="body2">
                 {t('people_in_database')}

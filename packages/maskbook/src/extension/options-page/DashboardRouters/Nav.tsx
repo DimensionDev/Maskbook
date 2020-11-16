@@ -1,7 +1,6 @@
 import React from 'react'
 import DashboardRouterContainer from './Container'
-import { ThemeProvider, Theme, IconButton } from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close'
+import { ThemeProvider, Theme } from '@material-ui/core'
 import { merge, cloneDeep } from 'lodash-es'
 
 const navTheme = (theme: Theme): Theme =>
@@ -15,14 +14,7 @@ export interface DashboardNavRouterProps {
 
 export default function DashboardNavRouter(props: DashboardNavRouterProps) {
     return (
-        <DashboardRouterContainer
-            title="Maskbook"
-            compact
-            leftIcons={[
-                <IconButton onClick={() => window.close()}>
-                    <CloseIcon />
-                </IconButton>,
-            ]}>
+        <DashboardRouterContainer title="Maskbook" compact>
             <ThemeProvider theme={navTheme}>{props.children}</ThemeProvider>
         </DashboardRouterContainer>
     )

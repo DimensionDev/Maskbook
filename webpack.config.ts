@@ -282,7 +282,9 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
         let buildType: 'stable' | 'beta' | 'insider' = 'stable'
         if (target.Chromium) buildTarget = 'chromium'
         if (target.Firefox) buildTarget = 'firefox'
+        // Firefox browser on mobile which can use extension
         if (target.FirefoxForAndroid) firefoxVariant = 'fennec'
+        // Android
         if (target.StandaloneGeckoView) {
             firefoxVariant = 'geckoview'
             architecture = 'app'
@@ -291,7 +293,8 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
             buildTarget = 'safari'
             architecture = 'app'
         }
-        if (architecture === 'app' || firefoxVariant === 'fennec') resolution = 'mobile'
+        if (architecture === 'app' || firefoxVariant === 'fennec' || firefoxVariant === 'geckoview')
+            resolution = 'mobile'
         if (target.E2E) buildTarget = 'E2E'
         if (target.Beta) buildType = 'beta'
         if (target.Insider) buildType = 'insider'
