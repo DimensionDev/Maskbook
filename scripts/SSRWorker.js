@@ -27,6 +27,8 @@ async function worker(path) {
     require('ts-node').register({ project: require.resolve('../tsconfig.json'), transpileOnly: true })
     Object.assign(globalThis, mockedGlobalThis())
 
+    require = require('esm')(module)
+
     globalThis.window = globalThis
     require('../packages/maskbook/src/polyfill/index')
     delete globalThis.window
