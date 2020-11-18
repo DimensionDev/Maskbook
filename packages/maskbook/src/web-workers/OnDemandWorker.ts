@@ -1,17 +1,15 @@
 type ctor = [stringUrl: string | URL, options?: WorkerOptions]
-const DelayAfterWorkerCreated = 50
 const WorkerCheckTerminateInterval = 60 * 1000
-const InactiveTimeToTerminateDefault = 15 * 1000
-export class OnDemandWorker extends Worker {
+const InactiveTimeToTerminateDefault = 15 * 10000
+export class OnDemandWorker extends EventTarget implements Worker {
     protected readonly init: ctor
-    protected worker: Worker | undefined = this
+    protected worker: Worker | undefined = undefined
     protected readonly id = Math.random().toString(16).slice(2, 8)
     public inactiveTimeToTerminate = InactiveTimeToTerminateDefault
     constructor(...init: ctor) {
-        super(...init)
+        super()
         this.init = init
         this.log('created with', ...init)
-        this.watchUsage()
     }
     protected watchUsage() {
         const i = setInterval(() => {
@@ -34,11 +32,20 @@ export class OnDemandWorker extends Worker {
         this.keepAlive()
         if (this.worker) return onReady()
         this.worker = new Worker(...this.init)
+        // After the Worker is alive, it will send a message "Alive" in setup.worker.ts
+        // then to start forwarding message
+        // TODO: what if the worker does not start successfully?
+        this.worker.addEventListener(
+            'message',
+            () => {
+                this.worker!.addEventListener('message', (e) => this.dispatchEvent(cloneEvent(e)))
+                onReady()
+            },
+            { once: true },
+        )
         this.worker.addEventListener('error', (e) => this.dispatchEvent(cloneEvent(e)))
-        this.worker.addEventListener('message', (e) => this.dispatchEvent(cloneEvent(e)))
         this.worker.addEventListener('messageerror', (e) => this.dispatchEvent(cloneEvent(e)))
         this.watchUsage()
-        setTimeout(onReady, DelayAfterWorkerCreated)
     }
     terminate() {
         this.worker && Worker.prototype.terminate.call(this.worker)
@@ -54,9 +61,25 @@ export class OnDemandWorker extends Worker {
         this.addEventListener('terminated', callback, { once: true })
         return () => this.removeEventListener('terminated', callback)
     }
+    postMessage(message: any, transfer: Transferable[]): void
+    postMessage(message: any, options?: PostMessageOptions): void
+    postMessage(...args: [any, any]) {
+        console.log('posting message', ...args)
+        this.use(() => this.worker && Worker.prototype.postMessage.apply(this.worker, args))
+    }
+    set onmessage(_: never) {
+        throws()
+    }
+    set onerror(_: never) {
+        throws()
+    }
+    set onmessageerror(_: never) {
+        throws()
+    }
 }
-OnDemandWorker.prototype.postMessage = function (this: OnDemandWorker, ...args: [any, any]) {
-    this.use(() => this.worker && Worker.prototype.postMessage.call(this.worker, ...args))
+Object.setPrototypeOf(OnDemandWorker.prototype, Worker.prototype)
+const throws = () => {
+    throw new TypeError('Please use addEventListener')
 }
 
 function cloneEvent(e: MessageEvent | ErrorEvent) {
