@@ -13,7 +13,7 @@ export const renderWithPollMetadata = createRenderWithMetadata(PollMetadataReade
 const PollMessage = createPluginMessage<{ _: unknown }>(identifier)
 export const PluginPollRPC = createPluginRPC(
     identifier,
-    async () => {
+    () => {
         const PollWorker = new OnDemandWorker(new URL('./Services.ts', import.meta.url))
         return AsyncCall<typeof import('./Services')>({}, { channel: new WorkerChannel(PollWorker) })
     },

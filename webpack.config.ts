@@ -56,6 +56,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
             mainFields: ['browser', 'module', 'main'],
             aliasFields: ['browser'],
             //#endregion
+            alias: { 'async-call-rpc$': 'async-call-rpc/full' },
 
             // If anyone need profiling React please checkout: https://github.com/facebook/create-react-app/blob/865ea05bc93fd2ac56b7e561181c7dc2cead3e78/packages/react-scripts/config/webpack.config.js#L304
         },

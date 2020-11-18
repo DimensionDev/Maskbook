@@ -1,11 +1,10 @@
 /* eslint import/no-deprecated: 0 */
+import '../gun-worker.patch'
 import Gun from 'gun'
 import 'gun/lib/then'
 import type { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
-import { OnlyRunInWebWorker } from '../../../utils/assert-worker'
 import { gun2 } from '../version.2'
 
-OnlyRunInWebWorker()
 /**
  * @deprecated // ! This version will leak post targets ! //
  *

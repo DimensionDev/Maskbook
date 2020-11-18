@@ -6,8 +6,6 @@ import { WorkerChannel } from 'async-call-rpc/utils/web/worker'
 import { AsyncCall } from 'async-call-rpc'
 
 import * as self from './Services'
-import { OnlyRunInWebWorker } from '../../utils/assert-worker'
-OnlyRunInWebWorker()
 setTimeout(() => {
     AsyncCall(self, { channel: new WorkerChannel() })
 }, 0)
