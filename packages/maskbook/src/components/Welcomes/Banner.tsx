@@ -4,6 +4,7 @@ import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
 import { Paper, Button, Theme, ListItemText, ListItemIcon } from '@material-ui/core'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import classNames from 'classnames'
 import Services from '../../extension/service'
 import { getActivatedUI } from '../../social-network/ui'
 import { setStorage } from '../../utils/browser.storage'
@@ -57,6 +58,13 @@ const useStyles = makeStyles((theme: Theme) => {
             height: 56,
             margin: theme.spacing(0, 1),
         },
+        buttonText: {
+            [theme.breakpoints.down('sm')]: {
+                fontSize: '10px',
+                lineHeight: 1.4,
+                padding: '20px 14px !important',
+            },
+        },
     }
 })
 
@@ -75,7 +83,10 @@ export function BannerUI(props: BannerUIProps) {
                     primary={props.title ?? t('banner_title')}
                     secondary={props.description ?? t('banner_preparing_setup')}></ListItemText>
                 {props.nextStep === 'hidden' ? null : (
-                    <Button className={classes.button} onClick={props.nextStep.onClick} variant="contained">
+                    <Button
+                        className={classNames(classes.button, classes.buttonText)}
+                        onClick={props.nextStep.onClick}
+                        variant="contained">
                         {t('banner_get_started')}
                     </Button>
                 )}
