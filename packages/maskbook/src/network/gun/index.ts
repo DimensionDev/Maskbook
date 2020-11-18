@@ -5,7 +5,7 @@ import { OnDemandWorker } from '../../web-workers/OnDemandWorker'
 
 export let GunWorker: OnDemandWorker | undefined
 if (process.env.architecture) {
-    GunWorker = new OnDemandWorker(new URL('./worker.ts', import.meta.url))
+    GunWorker = new OnDemandWorker(new URL('./worker.ts', import.meta.url), { name: 'Gun' })
     // we're in webpack bundle
 }
 const options: AsyncCallOptions = {

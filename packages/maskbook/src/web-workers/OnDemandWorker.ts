@@ -1,15 +1,17 @@
 type ctor = [stringUrl: string | URL, options?: WorkerOptions]
 const WorkerCheckTerminateInterval = 60 * 1000
 const InactiveTimeToTerminateDefault = 15 * 10000
+interface OnDemandWorkerEventMap extends WorkerEventMap {
+    terminated: Event
+}
 export class OnDemandWorker extends EventTarget implements Worker {
     protected readonly init: ctor
     protected worker: Worker | undefined = undefined
-    protected readonly id = Math.random().toString(16).slice(2, 8)
     public inactiveTimeToTerminate = InactiveTimeToTerminateDefault
     constructor(...init: ctor) {
         super()
         this.init = init
-        this.log('created with', ...init)
+        this.log(init[1]?.name, 'created with', ...init)
     }
     protected watchUsage() {
         const i = setInterval(() => {
@@ -25,7 +27,7 @@ export class OnDemandWorker extends EventTarget implements Worker {
         }, Math.min(this.inactiveTimeToTerminate, WorkerCheckTerminateInterval))
     }
     protected log(...args: any[]) {
-        console.log(`OnDemandWorker ${this.id}`, ...args)
+        console.log(`OnDemandWorker ${this.init[1]?.name}`, ...args)
     }
     protected lastUsed = Date.now()
     protected use(onReady: () => void) {
@@ -75,6 +77,22 @@ export class OnDemandWorker extends EventTarget implements Worker {
     }
     set onmessageerror(_: never) {
         throws()
+    }
+    // @ts-ignore
+    addEventListener<K extends keyof OnDemandWorkerEventMap>(
+        type: K,
+        listener: (this: OnDemandWorker, ev: OnDemandWorkerEventMap[K]) => any,
+        options?: boolean | AddEventListenerOptions,
+    ): void {
+        super.addEventListener(type, listener as any, options)
+    }
+    // @ts-ignore
+    removeEventListener<K extends keyof OnDemandWorkerEventMap>(
+        type: K,
+        listener: (this: OnDemandWorker, ev: OnDemandWorkerEventMap[K]) => any,
+        options?: boolean | EventListenerOptions,
+    ): void {
+        super.removeEventListener(type, listener as any, options)
     }
 }
 Object.setPrototypeOf(OnDemandWorker.prototype, Worker.prototype)
