@@ -27,7 +27,7 @@ export class OnDemandWorker extends Worker {
         }, Math.min(this.inactiveTimeToTerminate, WorkerCheckTerminateInterval))
     }
     protected log(...args: any[]) {
-        // console.log(`OnDemandWorker ${this.id}`, ...args)
+        console.log(`OnDemandWorker ${this.id}`, ...args)
     }
     protected lastUsed = Date.now()
     protected use(onReady: () => void) {

@@ -1,8 +1,8 @@
 import '../gun-worker.patch'
 import Gun from 'gun/gun'
 import 'gun/sea'
-import { gun2Servers } from '../../gun-servers'
 import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
+import { gunServers } from '../../gun-servers'
 
 export * from './people'
 export * from './post'
@@ -32,5 +32,5 @@ try {
         Gun.window.rad = require('gun/lib/radix')
     }
 } catch {}
-export const gun2 = new Gun<ApplicationStateInGunVersion2>(gun2Servers)
-gun2.opt({ retry: Infinity })
+export const gun2 = new Gun<ApplicationStateInGunVersion2>({ localStorage: false, peers: { [gunServers[0]]: {} } })
+gun2.opt({ retry: Infinity, localStorage: false })
