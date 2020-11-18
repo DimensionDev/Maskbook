@@ -21,8 +21,8 @@ async function onAccountsChanged(accounts: string[]) {
     currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked()) && accounts.length === 0
 }
 
-function onNetworkChanged(id: string) {
-    const chainId = Number.parseInt(id, 10) as ChainId
+function onChainIdChanged(id: string) {
+    const chainId = Number.parseInt(id.replace(/^0x/, ''), 10) as ChainId
     currentMetaMaskChainIdSettings.value = chainId === 0 ? ChainId.Mainnet : chainId
 }
 
@@ -38,12 +38,12 @@ function onError(error: string) {
 export function createProvider() {
     if (provider) {
         provider.off('accountsChanged', onAccountsChanged)
-        provider.off('networkChanged', onNetworkChanged)
+        provider.off('chainChanged', onChainIdChanged)
         provider.off('error', onError)
     }
     provider = createMetaMaskProvider()
     provider.on('accountsChanged', onAccountsChanged)
-    provider.on('networkChanged', onNetworkChanged)
+    provider.on('chainChanged', onChainIdChanged)
     provider.on('error', onError)
     return provider
 }
