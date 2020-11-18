@@ -42,7 +42,6 @@ export function CommentBox(props: CommentBoxProps) {
             placeholder={t('comment_box__placeholder')}
             onKeyDownCapture={(e) => {
                 const node = e.target as HTMLInputElement
-                console.log(e.currentTarget)
                 if (!node.value) return
                 if (e.key === 'Enter') {
                     props.onSubmit(node.value)

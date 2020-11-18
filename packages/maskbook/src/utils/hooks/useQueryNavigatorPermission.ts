@@ -20,6 +20,7 @@ export function useQueryNavigatorPermission(needRequest: boolean, name: Permissi
     const [permission, updatePermission] = useState<PermissionState>('prompt')
 
     useEffect(() => {
+        // TODO: Only camera related APi need to check Flags.has_no_WebRTC
         if (!needRequest || permission !== 'prompt' || Flags.has_no_WebRTC) return
         let permissionStatus: PermissionStatus
 
@@ -53,6 +54,6 @@ export function useQueryNavigatorPermission(needRequest: boolean, name: Permissi
         return () => {
             if (permissionStatus) permissionStatus.onchange = null
         }
-    }, [needRequest, permission])
+    }, [name, needRequest, permission])
     return permission
 }
