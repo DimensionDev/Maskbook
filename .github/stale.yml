@@ -1,6 +1,6 @@
 # https://github.com/probot/stale
 
-daysUntilStale: 180
+daysUntilStale: 90
 daysUntilClose: 7
 
 exemptLabels: ["Discussion: Security"]
