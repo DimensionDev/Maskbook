@@ -21,7 +21,6 @@ import * as type from './database/type'
 import * as post from './database/post'
 import { definedSocialNetworkWorkers } from './social-network/worker'
 import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
-import { exclusiveTasks } from './extension/content-script/tasks'
 import { Flags } from './utils/flags'
 
 import('./plugins/PluginSerivce')
@@ -92,13 +91,6 @@ if (isEnvironment(Environment.ManifestBackground)) {
         if (Flags.has_native_welcome_ui) return
         if (detail.reason === 'install') {
             browser.tabs.create({ url: getWelcomePageURL() })
-        }
-    })
-
-    contentScriptReady.then(() => {
-        // TODO: support twitter
-        if (Flags.has_no_browser_tab_ui) {
-            exclusiveTasks(getWelcomePageURL(), { important: true })
         }
     })
 }
