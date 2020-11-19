@@ -146,7 +146,7 @@ const Platform: React.FC<{ uri: string }> = ({ uri }) => {
         return (
             <>
                 {map(universalLinks, (link, name) => (
-                    <button onClick={makeConnect(link)}>{name}</button>
+                    <button onClick={makeConnect(link)}>Connect to {name}</button>
                 ))}
             </>
         )
