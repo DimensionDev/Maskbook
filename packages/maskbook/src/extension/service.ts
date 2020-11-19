@@ -7,7 +7,7 @@ import { ProfileIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier, E
 import { IdentifierMap } from '../database/IdentifierMap'
 import BigNumber from 'bignumber.js'
 
-const message = new WebExtensionMessage<{ _: any }>({ domain: 'services' })
+const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services' })
 const log: AsyncCallOptions['log'] = {
     beCalled: true,
     localError: true,
@@ -57,7 +57,7 @@ Object.defineProperty(BigNumber.prototype, '__debug__amount__', {
  * @param mock The mock Implementation, used in Storybook.
  */
 function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, generator = false): T {
-    const channel = message.events._.bind(process.env.STORYBOOK ? MessageTarget.LocalOnly : MessageTarget.Broadcast)
+    const channel = message.events[key].bind(process.env.STORYBOOK ? MessageTarget.LocalOnly : MessageTarget.Broadcast)
     const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
     if (process.env.STORYBOOK) {
         // setup mock server in STORYBOOK
@@ -72,8 +72,9 @@ function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, gene
             { key, serializer: serializer, log: log, channel, strict: false },
         )
     }
+    const isBackground = isEnvironment(Environment.ManifestBackground)
     // Only background script need to provide it's implementation.
-    const localImplementation = isEnvironment(Environment.ManifestBackground)
+    const localImplementation = isBackground
         ? // Set original impl back to the globalThis, it will help debugging.
           impl().then((impl) => (Reflect.set(globalThis, key + 'Service', impl), impl))
         : {}
@@ -82,8 +83,8 @@ function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, gene
         serializer,
         log,
         channel,
-        preferLocalImplementation: isEnvironment(Environment.ManifestBackground),
-        strict: false,
+        preferLocalImplementation: isBackground,
+        strict: isBackground,
     })
     Reflect.set(globalThis, key + 'Service', service)
     return service as any
