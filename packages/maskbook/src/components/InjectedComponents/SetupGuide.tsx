@@ -299,6 +299,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                             variant="outlined"
                             label={t('username')}
                             value={username}
+                            disabled={!username}
                             InputProps={{
                                 classes: {
                                     focused: findUsernameClasses.inputFocus,
