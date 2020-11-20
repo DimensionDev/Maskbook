@@ -161,17 +161,14 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                 onClick={() => onConnect(ProviderType.MetaMask)}
                             />
                         </GridListTile>
-                        {/* TODO: support wallet connect */}
-                        {process.env.NODE_ENV === 'development' ? (
-                            <GridListTile>
-                                <Provider
-                                    logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                    name="WalletConnect"
-                                    description="Scan with WalletConnect to connect"
-                                    onClick={() => onConnect(ProviderType.WalletConnect)}
-                                />
-                            </GridListTile>
-                        ) : null}
+                        <GridListTile>
+                            <Provider
+                                logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
+                                name="WalletConnect"
+                                description="Scan with WalletConnect to connect"
+                                onClick={() => onConnect(ProviderType.WalletConnect)}
+                            />
+                        </GridListTile>
                         <GridListTile>
                             <Provider
                                 logo={
