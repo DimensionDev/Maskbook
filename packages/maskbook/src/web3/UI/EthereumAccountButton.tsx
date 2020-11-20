@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import { makeStyles, Theme, createStyles, Button, ButtonProps } from '@material-ui/core'
 import ErrorIcon from '@material-ui/icons/Error'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { ProviderIcon } from '../../components/shared/ProviderIcon'
@@ -14,6 +15,7 @@ import { resolveChainColor } from '../pipes'
 import { ChainId } from '../types'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
+import { Flags } from '../../utils/flags'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -58,7 +60,9 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
             })
     }, [selectedWallet, setSelectWalletDialogOpen, setSelectProviderDialogOpen])
 
-    return (
+    return Flags.has_native_nav_bar ? (
+        <AccountBalanceWalletIcon onClick={onOpen} />
+    ) : (
         <Button
             className={classes.root}
             variant="outlined"
