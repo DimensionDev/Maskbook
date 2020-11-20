@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, createStyles, Typography, Divider, Fade, Fab } from '@material-ui/core'
+import { makeStyles, createStyles, Typography, Divider, Fade, Fab, PropTypes } from '@material-ui/core'
 import classNames from 'classnames'
 import { getUrl } from '../../../utils/utils'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
@@ -33,6 +33,8 @@ interface DashboardRouterContainerProps {
      */
     actions?: React.ReactElement[]
 }
+
+const FAB_COLORS: PropTypes.Color[] = ['primary', 'secondary', 'default']
 
 const useStyles = makeStyles((theme) => {
     return createStyles<string, { isSetup: boolean }>({
@@ -213,7 +215,7 @@ export default function DashboardRouterContainer(props: DashboardRouterContainer
                     {Flags.has_native_nav_bar
                         ? floatingButtons?.map((floatingButton, index) => (
                               <Fab
-                                  color={index === 0 ? 'primary' : 'secondary'}
+                                  color={FAB_COLORS[index]}
                                   className={classes.floatingButton}
                                   onClick={floatingButton.handler}>
                                   {React.cloneElement(floatingButton.icon, {

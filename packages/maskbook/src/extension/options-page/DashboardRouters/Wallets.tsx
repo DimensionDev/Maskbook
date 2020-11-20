@@ -18,6 +18,7 @@ import {
 } from '../DashboardDialogs/Wallet'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
+import { Flags } from '../../../utils/flags'
 import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { useTokens } from '../../../plugins/Wallet/hooks/useToken'
 import { useTokensDetailedCallback } from '../../../web3/hooks/useTokensDetailedCallback'
@@ -115,6 +116,12 @@ export default function DashboardWalletsRouter() {
             },
         },
     ]
+
+    if (Flags.has_native_nav_bar)
+        floatingButtons.unshift({
+            icon: <EthereumStatusBar />,
+            handler: () => undefined,
+        })
 
     if (selectedWallet)
         floatingButtons.push({
