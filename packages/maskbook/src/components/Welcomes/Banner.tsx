@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
 import { Paper, Button, Theme, ListItemText, ListItemIcon } from '@material-ui/core'
@@ -102,7 +101,7 @@ export function Banner(props: BannerProps) {
     const { nextStep } = props
     const networkIdentifier = getActivatedUI()?.networkIdentifier
 
-    const [value, onChange] = React.useState('')
+    const [value, onChange] = useState('')
     const defaultNextStep = useCallback(() => {
         if (nextStep === 'hidden') return
         if (!networkIdentifier) {

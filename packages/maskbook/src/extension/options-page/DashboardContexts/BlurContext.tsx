@@ -1,4 +1,4 @@
-import React, { useMemo, useContext, useEffect, useRef, useCallback } from 'react'
+import { useMemo, useContext, useEffect, useRef, useCallback, createContext } from 'react'
 import { makeStyles, createStyles, useTheme } from '@material-ui/core'
 import { useLocation } from 'react-router-dom'
 import { noop } from 'lodash-es'
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-const DashboardBlurContext = React.createContext<{
+const DashboardBlurContext = createContext<{
     blur(): void
     unblur(): void
 }>(null!)

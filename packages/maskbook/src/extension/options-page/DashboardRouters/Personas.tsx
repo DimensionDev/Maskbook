@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import DashboardRouterContainer from './Container'
 import { Button, makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'

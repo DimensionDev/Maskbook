@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import { renderWithPollMetadata, PollMetadataReader, PluginPollRPC } from '../utils'

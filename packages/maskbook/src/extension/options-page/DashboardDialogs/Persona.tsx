@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 import { TextField, Button } from '@material-ui/core'
 import { UserPlus, UserCheck, User, UserMinus } from 'react-feather'

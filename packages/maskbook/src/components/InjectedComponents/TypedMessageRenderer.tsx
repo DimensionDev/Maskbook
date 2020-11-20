@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import { Typography, Link, makeStyles, createStyles } from '@material-ui/core'
 import anchorme from 'anchorme'
 import classNames from 'classnames'
@@ -38,14 +38,14 @@ export interface TypedMessageRendererProps<T extends TypedMessage> {
     }
 }
 
-export const DefaultTypedMessageRenderer = React.memo(function DefaultTypedMessageRenderer(
+export const DefaultTypedMessageRenderer = memo(function DefaultTypedMessageRenderer(
     props: TypedMessageRendererProps<TypedMessage>,
 ) {
     const Renderer = getRendererOfTypedMessage(props.message)[0]?.component || DefaultTypedMessageUnknownRenderer
     return <Renderer {...props} message={props.message} />
 })
 
-export const DefaultTypedMessageTextRenderer = React.memo(function DefaultTypedMessageTextRenderer(
+export const DefaultTypedMessageTextRenderer = memo(function DefaultTypedMessageTextRenderer(
     props: TypedMessageRendererProps<TypedMessageText>,
 ) {
     const { content } = props.message
@@ -67,7 +67,7 @@ registerTypedMessageRenderer('text', {
     priority: 0,
 })
 
-export const DefaultTypedMessageAnchorRenderer = React.memo(function DefaultTypedMessageAnchorRenderer(
+export const DefaultTypedMessageAnchorRenderer = memo(function DefaultTypedMessageAnchorRenderer(
     props: TypedMessageRendererProps<TypedMessageAnchor>,
 ) {
     const { content, href } = props.message
@@ -92,7 +92,7 @@ registerTypedMessageRenderer('anchor', {
     priority: 0,
 })
 
-export const DefaultTypedMessageImageRenderer = React.memo(function DefaultTypedMessageImageRenderer(
+export const DefaultTypedMessageImageRenderer = memo(function DefaultTypedMessageImageRenderer(
     props: TypedMessageRendererProps<TypedMessageImage>,
 ) {
     const { image, width, height } = props.message
@@ -109,7 +109,7 @@ registerTypedMessageRenderer('image', {
     priority: 0,
 })
 
-export const DefaultTypedMessageCompoundRenderer = React.memo(function DefaultTypedMessageCompoundRenderer(
+export const DefaultTypedMessageCompoundRenderer = memo(function DefaultTypedMessageCompoundRenderer(
     props: TypedMessageRendererProps<TypedMessageCompound>,
 ) {
     try {
@@ -137,7 +137,7 @@ registerTypedMessageRenderer('compound', {
     priority: 0,
 })
 
-export const DefaultTypedMessageEmptyRenderer = React.memo(function DefaultTypedMessageEmptyRenderer(
+export const DefaultTypedMessageEmptyRenderer = memo(function DefaultTypedMessageEmptyRenderer(
     props: TypedMessageRendererProps<TypedMessageEmpty>,
 ) {
     return renderWithMetadata(props, null)
@@ -148,7 +148,7 @@ registerTypedMessageRenderer('empty', {
     priority: 0,
 })
 
-export const DefaultTypedMessageUnknownRenderer = React.memo(function DefaultTypedMessageUnknownRenderer(
+export const DefaultTypedMessageUnknownRenderer = memo(function DefaultTypedMessageUnknownRenderer(
     props: TypedMessageRendererProps<TypedMessageUnknown>,
 ) {
     return renderWithMetadata(props, <Typography color="textPrimary">Unknown message</Typography>)
@@ -159,7 +159,7 @@ registerTypedMessageRenderer('unknown', {
     priority: 0,
 })
 
-export const DefaultTypedMessageSuspendedRenderer = React.memo(function DefaultTypedMessageSuspendedRenderer(
+export const DefaultTypedMessageSuspendedRenderer = memo(function DefaultTypedMessageSuspendedRenderer(
     props: TypedMessageRendererProps<TypedMessageSuspended>,
 ) {
     const { promise } = props.message
@@ -200,7 +200,7 @@ function renderWithMetadata(props: TypedMessageRendererProps<TypedMessage>, jsx:
     )
 }
 
-const RenderText = React.memo(function RenderText(props: { text: string; allowTextEnlarge: boolean }) {
+const RenderText = memo(function RenderText(props: { text: string; allowTextEnlarge: boolean }) {
     return <>{parseText(props.text, props.allowTextEnlarge)}</>
 })
 
@@ -224,7 +224,7 @@ const useStyle = makeStyles((theme) =>
     }),
 )
 
-const ParseTextLink = React.memo(function ParseTextLink({ link, text, fontSize }: ParseTextLinkProps) {
+const ParseTextLink = memo(function ParseTextLink({ link, text, fontSize }: ParseTextLinkProps) {
     const classes = useStyle(fontSize)
     return (
         <Link
@@ -238,7 +238,7 @@ const ParseTextLink = React.memo(function ParseTextLink({ link, text, fontSize }
     )
 })
 
-const ParseText = React.memo(function ParseText({ text, fontSize }: ParseTextProps) {
+const ParseText = memo(function ParseText({ text, fontSize }: ParseTextProps) {
     const classes = useStyle(fontSize)
     return <span className={classes.text}>{text}</span>
 })

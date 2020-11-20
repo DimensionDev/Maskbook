@@ -3,7 +3,7 @@ import Adapter from 'enzyme-adapter-react-16'
 
 configure({ adapter: new Adapter() })
 
-import React, { createRef, RefObject } from 'react'
+import { createRef, RefObject } from 'react'
 import { renderHook } from '@testing-library/react-hooks'
 import { useQRCodeVideoScan, getBackVideoDeviceId } from '../../hooks/useQRCodeVideoScan'
 import { sleep } from '../../utils'

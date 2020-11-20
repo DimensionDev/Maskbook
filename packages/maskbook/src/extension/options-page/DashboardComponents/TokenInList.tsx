@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { ListItem, ListItemText, Typography, ListItemIcon, Link } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'

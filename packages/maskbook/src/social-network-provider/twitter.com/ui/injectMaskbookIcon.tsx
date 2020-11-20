@@ -1,4 +1,3 @@
-import React from 'react'
 import { MutationObserverWatcher, DOMProxy, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSelector } from '../utils/selector'
 import type { PostInfo } from '../../../social-network/PostInfo'

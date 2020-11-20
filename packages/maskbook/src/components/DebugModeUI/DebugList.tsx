@@ -1,4 +1,3 @@
-import React from 'react'
 type AcceptableDebuggerType = string | number | undefined | boolean
 function F({ content, hint }: { hint: string; content: AcceptableDebuggerType }) {
     return String(content).length > 50 ? (

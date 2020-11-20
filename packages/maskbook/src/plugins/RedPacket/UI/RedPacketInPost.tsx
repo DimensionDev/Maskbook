@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import type { RedPacketJSONPayload } from '../types'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { getPostUrl } from '../../../social-network/utils/getPostUrl'

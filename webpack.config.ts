@@ -210,6 +210,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
                 compilerOptions: {
                     noEmit: false,
                     importsNotUsedAsValues: 'remove',
+                    jsx: env === 'production' ? 'react-jsx' : 'react-jsxdev',
                 },
                 getCustomTransformers: () => ({
                     before: [Webpack5AssetModuleTransformer(), hmr && ReactRefreshTypeScriptTransformer()].filter(

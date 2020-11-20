@@ -1,4 +1,4 @@
-import React from 'react'
+import { Fragment } from 'react'
 import classNames from 'classnames'
 import { List, ListItem, ListItemIcon, ListItemText, Typography, Box, Divider } from '@material-ui/core'
 import { makeStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
@@ -159,7 +159,7 @@ export default function Drawer(props: DrawerProps) {
                         <>
                             <List className={classes.drawerList}>
                                 {routers.map((item, index) => (
-                                    <React.Fragment key={index}>
+                                    <Fragment key={index}>
                                         <ListItem
                                             className={classes.drawerItem}
                                             selected={match ? item[1].startsWith(match.url) : false}
@@ -181,7 +181,7 @@ export default function Drawer(props: DrawerProps) {
                                             ) : null}
                                         </ListItem>
                                         {xsMatched ? <Divider /> : null}
-                                    </React.Fragment>
+                                    </Fragment>
                                 ))}
                             </List>
                             <List className={classes.drawerList}>

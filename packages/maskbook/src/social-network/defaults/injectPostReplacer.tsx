@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
 import { PostInfoContext } from '../../components/DataSource/usePostInfo'
 import { PostReplacer, PostReplacerProps } from '../../components/InjectedComponents/PostReplacer'
@@ -12,7 +12,7 @@ export function injectPostReplacer<T extends string>(
     additionalPropsToPostReplacer: (classes: Record<T, string>) => Partial<PostReplacerProps> = () => ({}),
     useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
 ) {
-    const PostReplacerDefault = React.memo(function PostReplacerDefault(props: {
+    const PostReplacerDefault = memo(function PostReplacerDefault(props: {
         zipPost: PostReplacerProps['zip']
         unZipPost: PostReplacerProps['unzip']
     }) {

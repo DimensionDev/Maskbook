@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { makeStyles, SvgIconClassKey } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'

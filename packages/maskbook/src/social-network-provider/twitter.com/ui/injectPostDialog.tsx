@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useRef } from 'react'
 import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
@@ -26,7 +26,7 @@ function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T,
 }
 
 function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {
-    const rootRef = React.useRef<HTMLDivElement>(null)
+    const rootRef = useRef<HTMLDivElement>(null)
     const dialogProps =
         props.reason === 'popup'
             ? {

@@ -1,5 +1,4 @@
 import { TreeItem, TreeView } from '@material-ui/lab'
-import React from 'react'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 

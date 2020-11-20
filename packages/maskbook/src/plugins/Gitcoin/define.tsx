@@ -1,5 +1,5 @@
 import { PluginConfig, PluginStage, PluginScope } from '../types'
-import React, { Suspense, useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import { SnackbarContent } from '@material-ui/core'
 import { parseURL } from '../../utils/utils'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'

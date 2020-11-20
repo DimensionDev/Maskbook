@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useAsync } from 'react-use'
 import { DecryptPost, DecryptPostProps } from './DecryptedPost/DecryptedPost'
 import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
@@ -125,10 +125,10 @@ function PluginPostInspector() {
     )
 }
 function PluginPostInspectorForEach({ config }: { config: PluginConfig }) {
-    const ref = React.useRef<HTMLDivElement>(null)
+    const ref = useRef<HTMLDivElement>(null)
     const F = config.postInspector
     const post = usePostInfo()
-    React.useEffect(() => {
+    useEffect(() => {
         if (!ref.current || !F || typeof F === 'function') return
         return F.init(post, {}, ref.current)
     }, [F, post])

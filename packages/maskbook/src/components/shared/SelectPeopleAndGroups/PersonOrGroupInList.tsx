@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useMemo } from 'react'
 import type { Profile, Group } from '../../../database'
 import { ListItem, Theme, ListItemAvatar, ListItemText } from '@material-ui/core'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
@@ -99,11 +99,11 @@ export function ProfileOrGroupInList(props: ProfileOrGroupInListProps) {
 
 function useNickNamesFromList(preview: readonly ProfileIdentifier[]) {
     const profile = useFriendsList()
-    const userWithNames = React.useMemo(() => profile.filter((x) => x.nickname), [profile])
+    const userWithNames = useMemo(() => profile.filter((x) => x.nickname), [profile])
 
     const [x, y, z] = preview
-    const [a] = React.useMemo(() => x && userWithNames.filter((w) => w.identifier.equals(x)), [userWithNames, x]) || []
-    const [b] = React.useMemo(() => y && userWithNames.filter((w) => w.identifier.equals(y)), [userWithNames, y]) || []
-    const [c] = React.useMemo(() => z && userWithNames.filter((w) => w.identifier.equals(z)), [userWithNames, z]) || []
-    return React.useMemo(() => [a, b, c].filter((x) => x).map((x) => x.nickname!), [a, b, c])
+    const [a] = useMemo(() => x && userWithNames.filter((w) => w.identifier.equals(x)), [userWithNames, x]) || []
+    const [b] = useMemo(() => y && userWithNames.filter((w) => w.identifier.equals(y)), [userWithNames, y]) || []
+    const [c] = useMemo(() => z && userWithNames.filter((w) => w.identifier.equals(z)), [userWithNames, z]) || []
+    return useMemo(() => [a, b, c].filter((x) => x).map((x) => x.nickname!), [a, b, c])
 }

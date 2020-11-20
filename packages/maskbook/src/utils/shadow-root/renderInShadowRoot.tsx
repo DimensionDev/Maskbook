@@ -1,7 +1,7 @@
 import { create, SheetsRegistry } from 'jss'
 import { jssPreset, StylesProvider, ThemeProvider } from '@material-ui/core/styles'
 import ReactDOM from 'react-dom'
-import React from 'react'
+import { useMemo, StrictMode } from 'react'
 import type {} from 'react/experimental'
 import type {} from 'react-dom/experimental'
 import { getActivatedUI } from '../../social-network/ui'
@@ -136,7 +136,7 @@ class InformativeSheetsRegistry extends SheetsRegistry {
 const jssRegistryMap: WeakMap<ShadowRoot, InformativeSheetsRegistry> = new WeakMap()
 
 export function useSheetsRegistryStyles(_current: Node | null) {
-    const subscription = React.useMemo(() => {
+    const subscription = useMemo(() => {
         let registry: InformativeSheetsRegistry | null | undefined = null
         if (_current) {
             // ! lookup the styled shadowroot
@@ -187,9 +187,9 @@ function Maskbook(_props: MaskbookProps) {
         <ThemeProvider theme={getActivatedUI().useTheme()}>
             <I18nextProvider i18n={i18nNextInstance}>
                 <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-                    <React.StrictMode>
+                    <StrictMode>
                         <span {..._props} />
-                    </React.StrictMode>
+                    </StrictMode>
                 </SnackbarProvider>
             </I18nextProvider>
         </ThemeProvider>

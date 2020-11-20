@@ -1,4 +1,3 @@
-import React from 'react'
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { TransactionDialog } from '../../web3/UI/TransactionDialog'
 import { PLUGIN_IDENTIFIER } from './constants'

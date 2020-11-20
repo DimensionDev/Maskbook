@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { Button, createStyles, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { useI18N } from '../../../utils/i18n-next-ui'

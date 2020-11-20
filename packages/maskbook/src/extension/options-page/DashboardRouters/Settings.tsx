@@ -1,4 +1,4 @@
-import React from 'react'
+import { useRef } from 'react'
 import { Typography, Card, List, Paper } from '@material-ui/core'
 import { makeStyles, createStyles, ThemeProvider, Theme, useTheme } from '@material-ui/core/styles'
 
@@ -124,18 +124,18 @@ export default function DashboardSettingsRouter() {
     const { t } = useI18N()
     const currentLang = useValueRef(languageSettings)
     const isMobile = useMatchXS()
-    const langMapper = React.useRef((x: Language) => {
+    const langMapper = useRef((x: Language) => {
         if (x === Language.en) return t('language_en')
         if (x === Language.zh) return t('language_zh')
         if (x === Language.ja) return t('language_ja')
         return x
     }).current
-    const appearanceMapper = React.useRef((x: Appearance) => {
+    const appearanceMapper = useRef((x: Appearance) => {
         if (x === Appearance.dark) return t('settings_appearance_dark')
         if (x === Appearance.light) return t('settings_appearance_light')
         return t('settings_appearance_default')
     }).current
-    const launchPageMapper = React.useRef((x: LaunchPage) => {
+    const launchPageMapper = useRef((x: LaunchPage) => {
         if (x === LaunchPage.facebook) return 'Facebook'
         if (x === LaunchPage.twitter) return 'Twitter'
         return t('dashboard')

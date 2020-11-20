@@ -1,5 +1,5 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
-import React from 'react'
+import { useState, useEffect } from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
 import { useAsync } from 'react-use'
@@ -48,11 +48,11 @@ export const Uploading: React.FC = () => {
     const classes = useStyles()
     const history = useHistory()
     const { onUploading } = useExchange()
-    const [startedAt] = React.useState(Date.now())
-    const [preparing, setPreparing] = React.useState(true)
-    const [sendSize, setSendSize] = React.useState(0)
+    const [startedAt] = useState(Date.now())
+    const [preparing, setPreparing] = useState(true)
+    const [sendSize, setSendSize] = useState(0)
     const { state } = useLocation<RouteState>()
-    React.useEffect(() => {
+    useEffect(() => {
         onUploading(true)
         return () => onUploading(false)
     }, [onUploading])
@@ -93,7 +93,7 @@ export const Uploading: React.FC = () => {
         await PluginFileServiceRPC.setFileInfo(item)
         history.replace(FileRouter.uploaded, item)
     }, [])
-    React.useEffect(() => {
+    useEffect(() => {
         if (error) {
             onUploading(false)
         }

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useDropArea } from 'react-use'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { makeStyles, createStyles } from '@material-ui/core'

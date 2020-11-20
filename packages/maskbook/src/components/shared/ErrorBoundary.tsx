@@ -1,13 +1,13 @@
 import { Box, Button, IconButton, makeStyles, Typography } from '@material-ui/core'
 import { Alert, AlertTitle } from '@material-ui/lab'
-import React, { useMemo, useState } from 'react'
+import { Component, useMemo, useState } from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 
 type Title = { contain?: string }
 
-export class ErrorBoundary extends React.Component<Title> {
+export class ErrorBoundary extends Component<Title> {
     static getDerivedStateFromError(error: unknown) {
         return { error }
     }

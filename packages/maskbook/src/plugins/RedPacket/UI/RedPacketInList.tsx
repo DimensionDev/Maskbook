@@ -1,4 +1,3 @@
-import React from 'react'
 import { createStyles, ListItem, ListItemText, makeStyles, Theme, Typography } from '@material-ui/core'
 import type { RedPacketJSONPayload } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'

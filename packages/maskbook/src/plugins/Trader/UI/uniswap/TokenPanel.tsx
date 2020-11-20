@@ -1,4 +1,3 @@
-import React from 'react'
 import type { Token } from '../../../../web3/types'
 import { Box, createStyles, makeStyles, Theme, Typography } from '@material-ui/core'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'

@@ -1,7 +1,7 @@
 import { Button, DialogActions, DialogContent, DialogProps, makeStyles } from '@material-ui/core'
 import { isNil } from 'lodash-es'
 import { useSnackbar } from 'notistack'
-import React from 'react'
+import { useState } from 'react'
 import { useBeforeUnload } from 'react-use'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { InjectedDialog } from '../../components/shared/InjectedDialog'
@@ -36,8 +36,8 @@ const FileServiceDialog: React.FC<Props> = (props) => {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const snackbar = useSnackbar()
-    const [uploading, setUploading] = React.useState(false)
-    const [selectedFileInfo, setSelectedFileInfo] = React.useState<FileInfo | null>(null)
+    const [uploading, setUploading] = useState(false)
+    const [selectedFileInfo, setSelectedFileInfo] = useState<FileInfo | null>(null)
     useBeforeUnload(uploading)
     const onInsert = () => {
         if (isNil(selectedFileInfo)) {

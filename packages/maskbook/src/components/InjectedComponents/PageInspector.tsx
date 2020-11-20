@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/PluginUI'
 import { MaskMessage } from '../../utils/messages'

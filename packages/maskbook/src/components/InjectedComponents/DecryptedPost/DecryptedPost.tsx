@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useReducer } from 'react'
+import { useMemo, useState, useEffect, useReducer, Fragment } from 'react'
 import { sleep, unreachable } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
@@ -167,7 +167,7 @@ export function DecryptPost(props: DecryptPostProps) {
                 // the internal progress should not display to the end-user
                 .filter(({ progress }) => !progress.internal)
                 .map(({ progress }, index) => (
-                    <React.Fragment key={index}>{renderProgress(progress)}</React.Fragment>
+                    <Fragment key={index}>{renderProgress(progress)}</Fragment>
                 ))}
         </>
     )

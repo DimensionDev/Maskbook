@@ -1,4 +1,3 @@
-import React from 'react'
 import { Typography, IconButton, Link } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
