@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, Typography, createStyles, Avatar, IconButton, Link } from '@material-ui/core'
 
 import FacebookIcon from '@material-ui/icons/Facebook'

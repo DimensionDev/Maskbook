@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '../PostInfo'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
@@ -12,7 +12,7 @@ export function injectPostInspectorDefault<T extends string>(
     additionalPropsToPostInspector: (classes: Record<T, string>) => Partial<PostInspectorProps> = () => ({}),
     useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
 ) {
-    const PostInspectorDefault = React.memo(function PostInspectorDefault(props: {
+    const PostInspectorDefault = memo(function PostInspectorDefault(props: {
         onDecrypted: PostInspectorProps['onDecrypted']
         zipPost: PostInspectorProps['needZip']
     }) {

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import { useAsync } from 'react-use'
 import Button from '@material-ui/core/Button'
 import List from '@material-ui/core/List'
@@ -73,7 +73,7 @@ function PostHashDialog(props: SimpleDialogProps) {
 }
 
 export function DebugModeUI_PostHashDialog(props: { post: string; network: string }) {
-    const [open, setOpen] = React.useState(false)
+    const [open, setOpen] = useState(false)
     const payload = deconstructPayload(props.post, null)
     const friends = useFriendsList()
     const { value: hashMap = [] } = useAsync(async () => {

@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { posteditorToolbarSeelctor } from '../utils/selector'

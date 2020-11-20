@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, createStyles, Typography } from '@material-ui/core'
 import { DashboardDialogCore, WrappedDialogProps } from './Base'
 import { useI18N } from '../../../utils/i18n-next-ui'

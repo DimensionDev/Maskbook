@@ -1,4 +1,3 @@
-import React from 'react'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { makeStyles, createStyles } from '@material-ui/core'

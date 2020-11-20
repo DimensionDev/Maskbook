@@ -1,4 +1,3 @@
-import React from 'react'
 import type { PersonaIdentifier } from '../../database/type'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
 import Services from '../../extension/service'

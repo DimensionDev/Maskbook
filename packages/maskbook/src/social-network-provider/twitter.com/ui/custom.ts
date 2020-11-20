@@ -1,11 +1,10 @@
-import { useMemo } from 'react'
+import { createElement, useMemo } from 'react'
 import { ValueRef, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { unstable_createMuiStrictModeTheme, ThemeProvider, makeStyles } from '@material-ui/core'
 import { useMaskbookTheme } from '../../../utils/theme'
 import type { SocialNetworkUICustomUI } from '../../../social-network/ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
-import React from 'react'
 import { toRGB, getBackgroundColor, fromRGB, shade, isDark, getForegroundColor } from '../../../utils/theme-tools'
 import { Appearance } from '../../../settings/settings'
 import produce, { setAutoFreeze } from 'immer'
@@ -90,7 +89,7 @@ function useTheme() {
 
 export function TwitterThemeProvider(props: Required<React.PropsWithChildren<{}>>) {
     if (!process.env.STORYBOOK) throw new Error('This API is only for Storybook!')
-    return React.createElement(ThemeProvider, { theme: useTheme(), ...props })
+    return createElement(ThemeProvider, { theme: useTheme(), ...props })
 }
 const useInjectedDialogClassesOverwrite = makeStyles((theme) =>
     createStyles<InjectedDialogClassKey>({

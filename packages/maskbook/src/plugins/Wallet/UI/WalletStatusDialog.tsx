@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { Copy, ExternalLink } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import ErrorIcon from '@material-ui/icons/Error'

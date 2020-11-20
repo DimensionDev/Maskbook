@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, makeStyles, Theme, createStyles, DialogActions, DialogContent, Typography } from '@material-ui/core'
 import type { Trade } from '@uniswap/sdk'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'

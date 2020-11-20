@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { makeStyles, createStyles, Theme, DialogContent, TextField } from '@material-ui/core'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../components/custom-ui-helper'

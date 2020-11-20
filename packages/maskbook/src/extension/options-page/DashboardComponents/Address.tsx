@@ -1,4 +1,3 @@
-import React from 'react'
 import MiddleEllipsis from 'react-middle-ellipsis'
 
 export interface AddressProps {

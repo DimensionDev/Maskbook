@@ -1,4 +1,3 @@
-import React from 'react'
 import { storiesOf } from '@storybook/react'
 import Settings from '../extension/options-page/DashboardRouters/Settings'
 

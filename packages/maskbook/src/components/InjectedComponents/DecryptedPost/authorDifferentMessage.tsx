@@ -1,4 +1,3 @@
-import React from 'react'
 import { Identifier, ProfileIdentifier } from '../../../database/type'
 import { i18n } from '../../../utils/i18n-next'
 

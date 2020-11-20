@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { TokenListsState, useTokensFromLists } from '../../../web3/hooks/useTokensFromLists'
 import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core'

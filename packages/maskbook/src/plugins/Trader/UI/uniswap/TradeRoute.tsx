@@ -1,4 +1,3 @@
-import React from 'react'
 import type { Trade } from '@uniswap/sdk'
 import { Box, Breadcrumbs, Typography, makeStyles, createStyles, Theme, Paper } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'

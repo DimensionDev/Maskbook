@@ -1,4 +1,3 @@
-import React from 'react'
 import classNames from 'classnames'
 import { useColorStyles } from '../../../../utils/theme'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'

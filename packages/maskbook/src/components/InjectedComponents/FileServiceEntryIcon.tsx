@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 
 interface Props {
     fill?: string
@@ -6,7 +6,7 @@ interface Props {
     height?: string | number
 }
 
-export default React.memo<Props>(({ fill = '#000', width, height }) => (
+export default memo<Props>(({ fill = '#000', width, height }) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" width={width} height={height} viewBox="0 0 16 16">
         <path
             fill={fill}

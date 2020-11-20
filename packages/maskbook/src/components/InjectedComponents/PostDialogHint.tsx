@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import { Card, Typography, Button } from '@material-ui/core'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 export interface PostDialogHintUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root'> {
     onHintButtonClicked: () => void
 }
-export const PostDialogHintUI = React.memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
+export const PostDialogHintUI = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     return (

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { Menu } from '@material-ui/core'
 import { PortalShadowRoot } from '../shadow-root/ShadowRootPortal'
 

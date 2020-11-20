@@ -1,5 +1,5 @@
 import type { TextFieldProps } from '@material-ui/core/TextField'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { TextField } from '@material-ui/core'
 
 export function useTextField(label: string, props?: TextFieldProps) {

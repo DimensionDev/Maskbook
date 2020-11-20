@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useCallback } from 'react'
 import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'

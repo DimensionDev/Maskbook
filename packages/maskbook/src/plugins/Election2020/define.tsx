@@ -1,5 +1,5 @@
 import { SnackbarContent } from '@material-ui/core'
-import React, { Suspense } from 'react'
+import { Suspense } from 'react'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { Election2020MetaKey, Election2020PluginID } from './constants'
 import { Election2020MetadataReader } from './helpers'

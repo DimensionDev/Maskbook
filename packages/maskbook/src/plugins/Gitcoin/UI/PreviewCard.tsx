@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, createStyles, Theme, Typography, Button, Box, Paper } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import useSWR from 'swr'
 import type { GitcoinGrantMetadata } from '../service'
 import { DonateDialog } from './DonateDialog'

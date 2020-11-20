@@ -1,4 +1,3 @@
-import React from 'react'
 import DashboardRouterContainer from './Container'
 import { ThemeProvider, Theme } from '@material-ui/core'
 import { merge, cloneDeep } from 'lodash-es'

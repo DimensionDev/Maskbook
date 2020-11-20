@@ -1,4 +1,4 @@
-import React from 'react'
+import { forwardRef } from 'react'
 import { useSnackbar, SnackbarProvider } from 'notistack'
 import { makeStyles, createStyles, useTheme } from '@material-ui/core'
 
@@ -17,7 +17,7 @@ export interface DashboardSnackbarProps {
     children?: React.ReactNode
 }
 
-export const DashboardSnackbar = React.forwardRef<HTMLDivElement, DashboardSnackbarProps>(
+export const DashboardSnackbar = forwardRef<HTMLDivElement, DashboardSnackbarProps>(
     (props: DashboardSnackbarProps, ref) => {
         const { key, message } = props
         const classes = useStyles()

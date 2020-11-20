@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, Theme, createStyles, Link, Typography } from '@material-ui/core'
 import { resolveDaysName } from '../../pipes'
 

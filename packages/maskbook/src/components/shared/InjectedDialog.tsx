@@ -10,7 +10,7 @@ import {
     makeStyles,
     Typography,
 } from '@material-ui/core'
-import React from 'react'
+import { Children, cloneElement } from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/shadow-root/ShadowRootDialog'
 import { getCustomUIOverwrite, mergeClasses, useStylesExtends } from '../custom-ui-helper'
@@ -93,9 +93,9 @@ function CopyElementWithNewProps<T>(
     extraClasses: T['classes'],
 ) {
     return (
-        React.Children.map(children, (child: any) =>
+        Children.map(children, (child: any) =>
             child?.type === Target
-                ? React.cloneElement(child, {
+                ? cloneElement(child, {
                       classes: mergeClasses(extraClasses, child.props.classes),
                   } as DialogContentProps)
                 : null,

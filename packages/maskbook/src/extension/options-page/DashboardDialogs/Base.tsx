@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer } from 'react'
+import { cloneElement, forwardRef, useCallback, useReducer } from 'react'
 import classNames from 'classnames'
 import {
     DialogProps,
@@ -23,10 +23,7 @@ import { merge, cloneDeep } from 'lodash-es'
 import { useMaskbookTheme } from '../../../utils/theme'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
-const Transition = React.forwardRef<unknown, TransitionProps & Pick<FadeProps, 'children'>>(function Transition(
-    props,
-    ref,
-) {
+const Transition = forwardRef<unknown, TransitionProps & Pick<FadeProps, 'children'>>(function Transition(props, ref) {
     return <Fade ref={ref} {...props} />
 })
 
@@ -268,7 +265,7 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
         <ThemeProvider theme={dialogTheme}>
             <DialogContent className={classes.wrapper}>
                 <section className={classes.header}>
-                    {icon && React.cloneElement(icon, { width: 64, height: 64, stroke: iconColor })}
+                    {icon && cloneElement(icon, { width: 64, height: 64, stroke: iconColor })}
                     <Typography className={classes.primary} variant="h5">
                         {primary}
                     </Typography>

@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, Theme, createStyles, Typography, Card, ButtonBase, ButtonBaseProps } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 

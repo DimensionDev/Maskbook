@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, makeStyles, createStyles, Theme, ChipProps, BoxProps } from '@material-ui/core'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { EthereumAccountButton } from './EthereumAccountButton'
