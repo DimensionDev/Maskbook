@@ -32,15 +32,29 @@ import Services from '../../extension/service'
 import { currentSelectedWalletAddressSettings } from '../../plugins/Wallet/settings'
 import { WalletRPC } from '../../plugins/Wallet/messages'
 
+import { useMatchXS } from '../../utils/hooks/useMatchXS'
+
 export enum SetupGuideStep {
     FindUsername = 'find-username',
     SayHelloWorld = 'say-hello-world',
 }
+
 //#region wizard dialog
+const useTextFieldMobileStyle = makeStyles((theme) => ({
+    root: {
+        '& .MuiOutlinedInput-root': {
+            'border-radius': 0,
+        },
+    },
+}))
+
 const wizardTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
         overrides: {
             MuiOutlinedInput: {
+                //root: {
+                //    borderRadius:  0,
+                //},
                 input: {
                     paddingTop: 14.5,
                     paddingBottom: 14.5,
@@ -103,6 +117,20 @@ const useWizardDialogStyles = makeStyles((theme) =>
             border: `${theme.palette.type === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
             overflow: 'hidden',
         },
+        rootMobile: {
+            userSelect: 'none',
+            boxSizing: 'border-box',
+            padding: '35px 20px 16px',
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            margin: 0,
+            alignSelf: 'center',
+            borderRadius: 0,
+            boxShadow: 'none',
+            border: `solid 1px ${theme.palette.divider}`,
+            overflow: 'hidden',
+        },
         back: {
             color: theme.palette.text.primary,
             position: 'absolute',
@@ -129,16 +157,19 @@ const useWizardDialogStyles = makeStyles((theme) =>
         sandbox: {
             marginTop: 16,
         },
-        tip: {
-            fontSize: 16,
-            lineHeight: 1.75,
-            marginBottom: 24,
-        },
         button: {
             fontSize: 16,
             width: 200,
             height: 40,
             wordBreak: 'keep-all',
+        },
+        buttonMobile: {
+            fontSize: 16,
+            width: '100%',
+            height: '45px !important',
+            wordBreak: 'keep-all',
+            marginTop: 20,
+            borderRadius: 0,
         },
         textButton: {
             fontSize: 14,
@@ -163,15 +194,71 @@ const useWizardDialogStyles = makeStyles((theme) =>
             height: 8,
             position: 'absolute',
         },
+        hide: {
+            display: 'none',
+        },
     }),
 )
 
+const useStyles = makeStyles((theme: Theme) => {
+    return {
+        root: {
+            alignItems: 'center',
+        },
+        content: {},
+        footer: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            marginLeft: 16,
+            flex: 1,
+        },
+        tip: {
+            fontSize: 16,
+            lineHeight: 1.75,
+            marginBottom: 24,
+        },
+    }
+})
+
+interface ContentUIProps {
+    optional: boolean
+    content?: React.ReactNode
+    footer?: React.ReactNode
+    tip?: React.ReactNode
+}
+
+function ContentUIForMobile(props: ContentUIProps) {
+    const classes = useStyles(props)
+    const isMobile = useMatchXS()
+    const wizardClasses = useWizardDialogStyles()
+    return props.optional ? (
+        <Box display="block">
+            <Box display={isMobile ? 'flex' : 'undefined'}>
+                <main className={classes.content}>{props.content}</main>
+                <main className={isMobile ? wizardClasses.hide : classes.tip}>{props.tip}</main>
+                <footer className={classes.footer}>{props.footer}</footer>
+            </Box>
+            <main className={isMobile ? classes.tip : wizardClasses.hide}>{props.tip}</main>
+        </Box>
+    ) : (
+        <Box>
+            <main className={classes.content}>{props.content}</main>
+            <main className={classes.tip}>{props.tip}</main>
+            <footer className={wizardClasses.footer}>{props.footer}</footer>
+        </Box>
+    )
+}
+
 interface WizardDialogProps {
     title: string
+    type: string
     completion: number
     status: boolean | 'undetermined'
     optional?: boolean
     content?: React.ReactNode
+    tip?: React.ReactNode
     footer?: React.ReactNode
     onBack?: () => void
     onClose?: () => void
@@ -179,8 +266,9 @@ interface WizardDialogProps {
 
 function WizardDialog(props: WizardDialogProps) {
     const { t } = useI18N()
-    const { title, optional = false, completion, status, content, footer, onBack, onClose } = props
+    const { title, type = 'find', optional = false, completion, status, content, footer, tip, onBack, onClose } = props
     const classes = useWizardDialogStyles(props)
+    const isMobile = useMatchXS()
 
     return (
         <ThemeProvider theme={wizardTheme}>
@@ -204,7 +292,7 @@ function WizardDialog(props: WizardDialogProps) {
                         },
                     })
                 }}>
-                <Paper className={classes.root}>
+                <Paper className={isMobile ? classes.rootMobile : classes.root}>
                     <header className={classes.header}>
                         <Typography className={classes.primary} color="textPrimary" variant="h1">
                             {title}
@@ -215,10 +303,9 @@ function WizardDialog(props: WizardDialogProps) {
                             </Typography>
                         ) : null}
                     </header>
-                    <main className={classes.content}>{content}</main>
-                    <footer className={classes.footer}>{footer}</footer>
+                    <ContentUIForMobile optional={type === 'find'} content={content} tip={tip} footer={footer} />
                     <LinearProgress
-                        className={classes.progress}
+                        className={isMobile ? classes.hide : classes.progress}
                         color="secondary"
                         variant="determinate"
                         value={completion}></LinearProgress>
@@ -271,8 +358,10 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
     const { t } = useI18N()
     const ui = getActivatedUI()
 
+    const isMobile = useMatchXS()
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
+    const textFieldClasses = useTextFieldMobileStyle()
     const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
         e.stopPropagation()
         if (e.key !== 'Enter') return
@@ -290,12 +379,14 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
     return (
         <WizardDialog
             completion={33.33}
+            type="find"
             status="undetermined"
             title={t('setup_guide_find_username_title')}
             content={
                 <form>
                     <Box className={findUsernameClasses.input} display="flex" alignItems="center">
                         <TextField
+                            className={textFieldClasses.root}
                             variant="outlined"
                             label={t('username')}
                             value={username}
@@ -314,22 +405,23 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                             onKeyDown={onKeyDown}
                             inputProps={{ 'data-testid': 'username_input' }}></TextField>
                         <IconButton
-                            className={findUsernameClasses.button}
+                            className={isMobile ? classes.hide : findUsernameClasses.button}
                             color={username ? 'primary' : 'default'}
                             disabled={!username}>
                             <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
                         </IconButton>
                     </Box>
-
-                    <Typography
-                        className={classes.tip}
-                        variant="body2"
-                        dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}></Typography>
                 </form>
+            }
+            tip={
+                <Typography
+                    className={classes.tip}
+                    variant="body2"
+                    dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}></Typography>
             }
             footer={
                 <ActionButtonPromise
-                    className={classes.button}
+                    className={isMobile ? classes.buttonMobile : classes.button}
                     variant="contained"
                     init={t('setup_guide_connect_auto')}
                     waiting={t('connecting')}
@@ -374,13 +466,16 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
     const { t } = useI18N()
     const classes = useWizardDialogStyles()
     const sayHelloWorldClasses = useSayHelloWorldStyles()
+    const isMobile = useMatchXS()
     return (
         <WizardDialog
             completion={100}
+            type="sayHello"
             status={createStatus}
             optional
             title={t('setup_guide_say_hello_title')}
-            content={
+            content={}
+            tip={
                 <form>
                     <Typography className={classNames(classes.tip, sayHelloWorldClasses.primary)} variant="body2">
                         {t('setup_guide_say_hello_primary')}
@@ -393,7 +488,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
             footer={
                 <>
                     <ActionButtonPromise
-                        className={classes.button}
+                        className={isMobile ? classes.buttonMobile : classes.button}
                         variant="contained"
                         init={t('setup_guide_create_post_auto')}
                         waiting={t('creating')}
@@ -407,7 +502,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                         data-testid="create_button"
                     />
                     <ActionButton
-                        className={classes.textButton}
+                        className={isMobile ? classes.hide : classes.textButton}
                         color="inherit"
                         variant="text"
                         onClick={onSkip}
