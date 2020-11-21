@@ -31,6 +31,13 @@ You can use an environment variable `NO_HMR` to close HMR totally.
 
 If you found HMR doesn't work, please open <https://localhost:8080> and ignore the HTTPs certificate error.
 
+## Pull Request
+
+### How to synchronize upstream
+
+- <https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork>
+- <https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork>
+
 ## Caveats for Library
 
 - `lodash`, List of unavailable functions.
