@@ -1,8 +1,8 @@
 import { Button, createStyles, Grid, makeStyles } from '@material-ui/core'
-import React from 'react'
+import classNames from 'classnames'
+import { useState } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { QRCodeModel } from './QRCodeModel'
-import classNames from 'classnames'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -22,7 +22,7 @@ export const FirefoxPlatform: React.FC<{ uri: string }> = ({ uri }) => {
     const { t } = useI18N()
     const classes = useStyles()
     const onConnect = () => open(uri)
-    const [qrMode, setQRMode] = React.useState(false)
+    const [qrMode, setQRMode] = useState(false)
     const ViewArea = () => {
         if (qrMode) {
             return <QRCodeModel uri={uri} />

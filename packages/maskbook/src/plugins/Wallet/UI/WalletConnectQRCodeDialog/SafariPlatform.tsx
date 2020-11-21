@@ -1,7 +1,7 @@
 import { Button, createStyles, Grid, makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 import { map } from 'lodash-es'
-import React from 'react'
+import { useState } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { QRCodeModel } from './QRCodeModel'
 
@@ -28,7 +28,7 @@ const useStyles = makeStyles(() =>
 export const SafariPlatform: React.FC<{ uri: string }> = ({ uri }) => {
     const { t } = useI18N()
     const classes = useStyles()
-    const [qrMode, setQRMode] = React.useState(false)
+    const [qrMode, setQRMode] = useState(false)
     const makeConnect = (link: string) => () => {
         const url = new URL(link)
         url.searchParams.set('uri', uri)

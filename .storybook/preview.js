@@ -27,7 +27,7 @@ const MaskbookLightTheme = getMaskbookTheme({ appearance: Appearance.light })
 addDecorator((storyFn) => (
     <ThemeProvider theme={[MaskbookDarkTheme, MaskbookLightTheme][radios('Theme', themes, '0')]}>
         <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-                {storyFn()}
+            {storyFn()}
         </SnackbarProvider>
     </ThemeProvider>
 ))

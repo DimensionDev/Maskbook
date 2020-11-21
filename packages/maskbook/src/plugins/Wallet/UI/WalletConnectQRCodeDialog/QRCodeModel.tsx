@@ -1,5 +1,4 @@
 import { Button, createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
-import React from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { QRCode } from '../../../../components/shared/qrcode'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'

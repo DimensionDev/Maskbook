@@ -1,5 +1,4 @@
 import { storiesOf } from '@storybook/react'
-import React from 'react'
 import { figmaLink } from './utils'
 import { text } from '@storybook/addon-knobs'
 import { QRCodeModel } from '../plugins/Wallet/UI/WalletConnectQRCodeDialog/QRCodeModel'
@@ -8,6 +7,7 @@ import { SafariPlatform } from '../plugins/Wallet/UI/WalletConnectQRCodeDialog/S
 import { InjectedDialog } from '../components/shared/InjectedDialog'
 import { DialogContent } from '@material-ui/core'
 import { action } from '@storybook/addon-actions'
+
 storiesOf('Plugin: Wallet (Wallet Connect - QRCode Dialog)', module)
     .add(
         'QRCode Model',
