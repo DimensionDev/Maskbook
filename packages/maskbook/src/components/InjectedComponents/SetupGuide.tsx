@@ -40,21 +40,10 @@ export enum SetupGuideStep {
 }
 
 //#region wizard dialog
-const useTextFieldMobileStyle = makeStyles((theme) => ({
-    root: {
-        '& .MuiOutlinedInput-root': {
-            'border-radius': 0,
-        },
-    },
-}))
-
 const wizardTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
         overrides: {
             MuiOutlinedInput: {
-                //root: {
-                //    borderRadius:  0,
-                //},
                 input: {
                     paddingTop: 14.5,
                     paddingBottom: 14.5,
@@ -156,6 +145,11 @@ const useWizardDialogStyles = makeStyles((theme) =>
         },
         sandbox: {
             marginTop: 16,
+        },
+        tip: {
+            fontSize: 16,
+            lineHeight: 1.75,
+            marginBottom: 24,
         },
         button: {
             fontSize: 16,
@@ -361,7 +355,6 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
     const isMobile = useMatchXS()
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
-    const textFieldClasses = useTextFieldMobileStyle()
     const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
         e.stopPropagation()
         if (e.key !== 'Enter') return
@@ -386,7 +379,6 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                 <form>
                     <Box className={findUsernameClasses.input} display="flex" alignItems="center">
                         <TextField
-                            className={textFieldClasses.root}
                             variant="outlined"
                             label={t('username')}
                             value={username}
@@ -394,6 +386,9 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                             InputProps={{
                                 classes: {
                                     focused: findUsernameClasses.inputFocus,
+                                    root: {
+                                        borderRadius: '24px !important',
+                                    },
                                 },
                                 startAdornment: (
                                     <InputAdornment position="start">
@@ -474,7 +469,6 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
             status={createStatus}
             optional
             title={t('setup_guide_say_hello_title')}
-            content={}
             tip={
                 <form>
                     <Typography className={classNames(classes.tip, sayHelloWorldClasses.primary)} variant="body2">
