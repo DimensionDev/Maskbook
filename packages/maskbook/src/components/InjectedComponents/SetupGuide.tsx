@@ -386,9 +386,6 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                             InputProps={{
                                 classes: {
                                     focused: findUsernameClasses.inputFocus,
-                                    root: {
-                                        borderRadius: '24px !important',
-                                    },
                                 },
                                 startAdornment: (
                                     <InputAdornment position="start">
