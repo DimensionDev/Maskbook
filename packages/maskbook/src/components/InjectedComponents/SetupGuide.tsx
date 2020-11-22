@@ -44,9 +44,6 @@ const wizardTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
         overrides: {
             MuiOutlinedInput: {
-                //root: {
-                //    borderRadius:  0,
-                //},
                 input: {
                     paddingTop: 14.5,
                     paddingBottom: 14.5,
