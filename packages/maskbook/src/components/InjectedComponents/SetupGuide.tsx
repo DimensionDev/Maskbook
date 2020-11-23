@@ -94,29 +94,15 @@ const wizardTheme = (theme: Theme): Theme =>
 
 const useWizardDialogStyles = makeStyles((theme) =>
     createStyles({
-        [theme.breakpoints.up('md')]: {
-            root: {
-                userSelect: 'none',
-                boxSizing: 'border-box',
+        root: {
+            [theme.breakpoints.up('md')]: {
                 padding: '56px 20px 48px',
                 position: 'relative',
-                width: 320,
-                borderRadius: 12,
                 boxShadow: theme.palette.type === 'dark' ? 'none' : theme.shadows[4],
                 border: `${theme.palette.type === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
-                overflow: 'hidden',
+                borderRadius: 12,
             },
-            button: {
-                fontSize: 16,
-                width: 200,
-                height: 40,
-                wordBreak: 'keep-all',
-            },
-        },
-        [theme.breakpoints.down('md')]: {
-            root: {
-                userSelect: 'none',
-                boxSizing: 'border-box',
+            [theme.breakpoints.down('md')]: {
                 padding: '35px 20px 16px',
                 position: 'fixed',
                 bottom: 0,
@@ -126,17 +112,26 @@ const useWizardDialogStyles = makeStyles((theme) =>
                 borderRadius: 0,
                 boxShadow: 'none',
                 border: `solid 1px ${theme.palette.divider}`,
-                overflow: 'hidden',
                 width: '100%',
             },
-            button: {
-                fontSize: 16,
+            userSelect: 'none',
+            boxSizing: 'border-box',
+            width: 320,
+            overflow: 'hidden',
+        },
+        button: {
+            [theme.breakpoints.up('md')]: {
+                width: 200,
+                height: 40,
+            },
+            [theme.breakpoints.down('md')]: {
                 width: '100%',
                 height: '45px !important',
-                wordBreak: 'keep-all',
                 marginTop: 20,
                 borderRadius: 0,
             },
+            fontSize: 16,
+            wordBreak: 'keep-all',
         },
         back: {
             color: theme.palette.text.primary,
@@ -164,11 +159,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
         sandbox: {
             marginTop: 16,
         },
-        tip: {
-            fontSize: 16,
-            lineHeight: 1.75,
-            marginBottom: 24,
-        },
+        tip: {},
         textButton: {
             fontSize: 14,
             marginTop: theme.spacing(1),
@@ -178,14 +169,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
             marginBottom: 0,
         },
         content: {},
-        footer: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            marginTop: 16,
-            marginLeft: 0,
-        },
+        footer: {},
         progress: {
             left: 0,
             right: 0,
@@ -206,12 +190,18 @@ const useStyles = makeStyles((theme: Theme) => {
         },
         content: {},
         footer: {
+            [theme.breakpoints.up('md')]: {
+                marginTop: 16,
+                marginLeft: '0px !important',
+            },
+            [theme.breakpoints.down('md')]: {
+                marginLeft: 16,
+                flex: 1,
+            },
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection: 'column',
-            marginLeft: 16,
-            flex: 1,
         },
         tip: {
             fontSize: 16,
@@ -245,7 +235,7 @@ function ContentUIForMobile(props: ContentUIProps) {
         <Box>
             <main className={classes.content}>{props.content}</main>
             <main className={classes.tip}>{props.tip}</main>
-            <footer className={wizardClasses.footer}>{props.footer}</footer>
+            <footer className={classes.footer}>{props.footer}</footer>
         </Box>
     )
 }
