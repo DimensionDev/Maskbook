@@ -186,9 +186,6 @@ const useWizardDialogStyles = makeStyles((theme) =>
             height: 8,
             position: 'absolute',
         },
-        hide: {
-            display: 'none',
-        },
     }),
 )
 
@@ -277,8 +274,6 @@ function WizardDialog(props: WizardDialogProps) {
     const { t } = useI18N()
     const { title, dialogType, optional = false, completion, status, content, tip, footer, onBack, onClose } = props
     const classes = useWizardDialogStyles(props)
-
-    const isMobile = useMatchXS()
 
     return (
         <ThemeProvider theme={wizardTheme}>
@@ -369,8 +364,6 @@ interface FindUsernameProps extends Partial<WizardDialogProps> {
 function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange = noop }: FindUsernameProps) {
     const { t } = useI18N()
     const ui = getActivatedUI()
-
-    const isMobile = useMatchXS()
 
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
