@@ -164,11 +164,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
         sandbox: {
             marginTop: 16,
         },
-        tip: {
-            fontSize: 16,
-            lineHeight: 1.75,
-            marginBottom: 24,
-        },
+        tip: {},
         textButton: {
             fontSize: 14,
             marginTop: theme.spacing(1),
