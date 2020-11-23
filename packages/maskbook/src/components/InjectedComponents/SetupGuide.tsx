@@ -144,14 +144,6 @@ const useWizardDialogStyles = makeStyles((theme) =>
             left: 10,
             top: 10,
         },
-        buttonMobile: {
-            fontSize: 16,
-            width: '100%',
-            height: '45px !important',
-            wordBreak: 'keep-all',
-            marginTop: 20,
-            borderRadius: 0,
-        },
         close: {
             color: theme.palette.text.primary,
             position: 'absolute',
@@ -310,7 +302,7 @@ function WizardDialog(props: WizardDialogProps) {
                         },
                     })
                 }}>
-                <Paper className={isMobile ? classes.rootMobile : classes.root}>
+                <Paper className={classes.root}>
                     <header className={classes.header}>
                         <Typography className={classes.primary} color="textPrimary" variant="h1">
                             {title}
@@ -446,7 +438,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
             }
             footer={
                 <ActionButtonPromise
-                    className={isMobile ? classes.buttonMobile : classes.button}
+                    className={classes.button}
                     variant="contained"
                     init={t('setup_guide_connect_auto')}
                     waiting={t('connecting')}
@@ -512,7 +504,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
             footer={
                 <>
                     <ActionButtonPromise
-                        className={isMobile ? classes.buttonMobile : classes.button}
+                        className={classes.button}
                         variant="contained"
                         init={t('setup_guide_create_post_auto')}
                         waiting={t('creating')}
