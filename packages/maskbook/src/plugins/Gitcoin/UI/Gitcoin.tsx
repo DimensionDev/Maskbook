@@ -49,7 +49,7 @@ export function Gitcoin(props: GitcoinProps) {
                 title={grantTitle}
                 line1={BigNumber.isBigNumber(estimatedAmount) ? `${estimatedAmount.toFixed(2)} USD` : ''}
                 line2="ESTIMATED"
-                line3={BigNumber.isBigNumber(daiAmount) ? `${formatBalance(daiAmount, 18)} DAI` : ''}
+                line3={BigNumber.isBigNumber(daiAmount) ? `${formatBalance(daiAmount, 18, 18)} DAI` : ''}
                 line4={isNumber(transactions) ? `${transactions} transactions` : ''}
                 address={donationAddress}
                 originalURL={url}

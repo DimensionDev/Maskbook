@@ -78,7 +78,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     return (
         <InjectedDialog
             open={open}
-            onExit={onClose}
+            onClose={onClose}
             title={t('plugin_wallet_select_a_wallet')}
             DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent className={classes.content}>

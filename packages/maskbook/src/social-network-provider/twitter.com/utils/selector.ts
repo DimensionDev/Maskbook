@@ -28,6 +28,7 @@ export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
         '[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3) > div:first-child > div:first-child [role="button"][aria-label]:nth-child(6)',
     )
+
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div [role="button"][aria-label]:nth-child(6)')
 export const postEditorDraftContentSelector = () => {
@@ -40,7 +41,11 @@ export const postEditorDraftContentSelector = () => {
         '.public-DraftEditor-content, [contenteditable][aria-label][spellcheck]',
     )
 }
-export const posteditorToolbarSeelctor: () => LiveSelector<E, true> = () =>
+
+export const searchResultHeadingSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] [role="region"] [role="heading"]')
+
+export const postEditorToolbarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="toolBar"] > div > *:last-child')
 
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')

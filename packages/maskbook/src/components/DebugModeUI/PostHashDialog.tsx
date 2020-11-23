@@ -30,7 +30,7 @@ function PostHashDialog(props: SimpleDialogProps) {
     }
 
     return (
-        <InjectedDialog onExit={props.onClose} open={open} title="Troubleshoot">
+        <InjectedDialog onClose={props.onClose} open={open} title="Troubleshoot">
             <DialogContent>
                 <DialogContentText>
                     Appear in this list is not related to if you have shared this post to someone or not.

@@ -7,11 +7,6 @@ export enum DataProvider {
     COIN_MARKET_CAP,
 }
 
-export enum SwapProvider {
-    UNISWAP,
-    // SUSHISWAP,
-}
-
 export interface Currency {
     id: string
     name: string
@@ -24,15 +19,29 @@ export interface Coin {
     name: string
     symbol: string
     platform_url?: string
-    home_url?: string
+    tags?: string[]
+    tech_docs_urls?: string[]
+    message_board_urls?: string[]
+    source_code_urls?: string[]
+    community_urls?: string[]
+    home_urls?: string[]
+    announcement_urls?: string[]
+    blockchain_urls?: string[]
     image_url?: string
     description?: string
     market_cap_rank?: number
     eth_address?: string
+    facebook_url?: string
+    twitter_url?: string
+    telegram_url?: string
 }
 
 export interface Market {
     current_price: number
+    circulating_supply?: number
+    market_cap?: number
+    max_supply?: number
+    total_supply?: number
     total_volume?: number
     price_change_percentage_24h?: number
     price_change_percentage_1h_in_currency?: number

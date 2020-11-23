@@ -5,7 +5,7 @@ export const MAX_AMOUNT_LENGTH = 79
 
 export const CONSTANTS = {
     // token lists
-    TOKEN_LISTS: {
+    ERC20_TOKEN_LISTS: {
         [ChainId.Mainnet]: [
             'http://tokens.1inch.eth.link/',
             'http://defi.cmc.eth.link/',

@@ -22,14 +22,12 @@ import {
     RED_PACKET_DEFAULT_SHARES,
 } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { Token, EthereumTokenType, EthereumNetwork } from '../../../web3/types'
+import { EthereumTokenType, EthereumNetwork, ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { createEetherToken } from '../../../web3/helpers'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
-import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useERC20TokenApproveCallback, ApproveState } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { useCreateCallback } from '../hooks/useCreateCallback'
@@ -39,6 +37,8 @@ import type { RedPacketJSONPayload } from '../types'
 import { resolveChainName } from '../../../web3/pipes'
 import { WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
+import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -82,7 +82,8 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const chainIdValid = useChainIdValid()
 
     //#region select token
-    const [token, setToken] = useState<Token>(createEetherToken(chainId))
+    const { value: etherTokenDetailed } = useEtherTokenDetailed()
+    const [token, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>(etherTokenDetailed)
     const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
     const onTokenChipClick = useCallback(() => {
         setOpenSelectERC20TokenDialog(true)
@@ -91,7 +92,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         setOpenSelectERC20TokenDialog(false)
     }, [])
     const onSelectERC20TokenDialogSubmit = useCallback(
-        (token: Token) => {
+        (token: EtherTokenDetailed | ERC20TokenDetailed) => {
             setToken(token)
             onSelectERC20TokenDialogClose()
         },
@@ -124,12 +125,19 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares || '0')
 
     // balance
-    const { value: tokenBalance = '0', error, loading: loadingTokenBalance } = useTokenBalance(token)
+    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
+        token?.type ?? EthereumTokenType.Ether,
+        token?.address ?? '',
+    )
     //#endregion
 
     //#region approve ERC20
     const HappyRedPacketContractAddress = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
-    const [approveState, approveCallback] = useERC20TokenApproveCallback(token, amount, HappyRedPacketContractAddress)
+    const [approveState, approveCallback] = useERC20TokenApproveCallback(
+        token?.type === EthereumTokenType.ERC20 ? token.address : '',
+        amount,
+        HappyRedPacketContractAddress,
+    )
     const onApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback()
@@ -161,7 +169,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
             resetCreateCallback()
 
             // the settings is not available
-            if (!createSettings) return
+            if (!createSettings?.token) return
 
             // TODO:
             // earily return happended
@@ -197,7 +205,12 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 token_type: createSettings.token.type,
             }
             if (createSettings.token.type === EthereumTokenType.ERC20)
-                payload.token = omit(createSettings.token, ['type', 'chainId'])
+                payload.token = {
+                    name: '',
+                    symbol: '',
+                    decimals: 0,
+                    ...omit(createSettings.token, ['type', 'chainId']),
+                }
 
             // output the redpacket as JSON payload
             onCreate?.(payload)
@@ -209,14 +222,14 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     // open the transaction dialog
     useEffect(() => {
-        if (createState.type === TransactionStateType.UNKNOWN) return
+        if (!token || createState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialogOpen({
             open: true,
             state: createState,
             summary: `Creating red packet with ${formatBalance(
                 new BigNumber(totalAmount),
-                token.decimals,
-                token.decimals,
+                token.decimals ?? 0,
+                token.decimals ?? 0,
             )} ${token.symbol}`,
         })
     }, [createState /* update tx dialog only if state changed */])
@@ -232,8 +245,8 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#endregion
 
     const validationMessage = useMemo(() => {
+        if (!token) return t('plugin_wallet_select_a_token')
         if (!account) return t('plugin_wallet_connect_a_wallet')
-        if (!token.address) return 'Select a token'
         if (new BigNumber(shares || '0').isZero()) return 'Enter shares'
         if (new BigNumber(amount).isZero()) return 'Enter an amount'
         if (new BigNumber(totalAmount).isGreaterThan(new BigNumber(tokenBalance)))
@@ -241,6 +254,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         return ''
     }, [account, amount, totalAmount, shares, token, tokenBalance])
 
+    if (!token) return null
     return (
         <>
             <EthereumStatusBar classes={{ root: classes.bar }} />
@@ -316,15 +330,13 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     {approveState === ApproveState.NOT_APPROVED ? `Approve ${token.symbol}` : ''}
                     {approveState === ApproveState.PENDING ? `Approve... ${token.symbol}` : ''}
                 </ActionButton>
+            ) : validationMessage ? (
+                <ActionButton className={classes.button} fullWidth variant="contained" disabled>
+                    {validationMessage}
+                </ActionButton>
             ) : (
-                <ActionButton
-                    className={classes.button}
-                    fullWidth
-                    variant="contained"
-                    disabled={Boolean(validationMessage)}
-                    onClick={createCallback}>
-                    {validationMessage ||
-                        `Send ${formatBalance(totalAmount, token.decimals, token.decimals)} ${token.symbol}`}
+                <ActionButton className={classes.button} fullWidth onClick={createCallback}>
+                    {`Send ${formatBalance(totalAmount, token.decimals ?? 0, token.decimals ?? 0)} ${token.symbol}`}
                 </ActionButton>
             )}
 

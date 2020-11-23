@@ -1,21 +1,32 @@
 import { createInternalSettings, createGlobalSettings } from '../../settings/createSettings'
-import { DataProvider, SwapProvider } from './types'
-import { PLUGIN_IDENTIFIER } from './constants'
+import { DataProvider, TradeProvider } from './types'
+import { DEFAULT_SLIPPAGE_TOLERANCE, PLUGIN_IDENTIFIER } from './constants'
 import { i18n } from '../../utils/i18n-next'
 
 /**
- * The swap provider for trading
+ * The slippage tolerance of trader
  */
-export const currentSwapProviderSettings = createGlobalSettings<SwapProvider>(
-    `${PLUGIN_IDENTIFIER}+swapProvider`,
-    SwapProvider.UNISWAP,
+export const currentSlippageTolerance = createGlobalSettings<number>(
+    `${PLUGIN_IDENTIFIER}+slippageTolerance`,
+    DEFAULT_SLIPPAGE_TOLERANCE,
     {
         primary: () => '',
     },
 )
 
 /**
- * The data source of the trending view
+ * The default trader provider
+ */
+export const currentTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+tradeProvider`,
+    TradeProvider.UNISWAP,
+    {
+        primary: () => '',
+    },
+)
+
+/**
+ * The default data provider
  */
 export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
     `${PLUGIN_IDENTIFIER}+dataProvider`,
@@ -34,7 +45,7 @@ const coinGeckoSettings = createPluginInternalSettings('currentCoinGeckoSettings
 const coinMarketCapSettings = createPluginInternalSettings('currentCoinMarketCapSettings', '')
 
 /**
- * The general settings of specific data source
+ * The general settings of specific data provider
  */
 export function getCurrentDataProviderGeneralSettings(dataSource: DataProvider) {
     return dataSource === DataProvider.COIN_GECKO ? coinGeckoSettings : coinMarketCapSettings

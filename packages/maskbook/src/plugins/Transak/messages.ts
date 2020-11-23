@@ -4,6 +4,7 @@ import { PLUGIN_IDENTIFIER } from './constants'
 type BuyTokenDialogEvent =
     | {
           open: true
+          code?: string
           address: string
       }
     | {

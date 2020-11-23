@@ -69,7 +69,7 @@ export function WalletConnectQRCodeDialog(props: WalletConnectQRCodeDialogProps)
 
     return (
         <>
-            <InjectedDialog open={open} onExit={onClose} title="WalletConnect">
+            <InjectedDialog open={open} onClose={onClose} title="WalletConnect">
                 <DialogContent className={classes.content}>
                     <Typography className={classes.tip} color="textSecondary">
                         {t('plugin_wallet_qr_code_with_wallet_connect')}

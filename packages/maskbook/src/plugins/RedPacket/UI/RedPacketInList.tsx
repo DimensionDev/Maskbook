@@ -2,10 +2,10 @@ import { createStyles, ListItem, ListItemText, makeStyles, Theme, Typography } f
 import type { RedPacketJSONPayload } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { resolveElapsedTime } from '../pipes'
-import { useTokenComputed } from '../hooks/useTokenComputed'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { Skeleton } from '@material-ui/lab'
+import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -44,7 +44,7 @@ export function RedPacketInList(props: RedPacketInListProps) {
 
     const { t } = useI18N()
     const classes = useStyles()
-    const { value: token } = useTokenComputed(payloads[index])
+    const { value: token } = useTokenDetailed(payloads[index].token_type, payloads[index].token?.address ?? '')
 
     const payload = payloads[index]
 
@@ -68,7 +68,7 @@ export function RedPacketInList(props: RedPacketInListProps) {
                     {t('plugin_red_packet_description_failover', {
                         name: payload.sender.name,
                         shares: payload.shares,
-                        total: formatBalance(new BigNumber(payload.total), token.decimals, token.decimals),
+                        total: formatBalance(new BigNumber(payload.total), token.decimals ?? 0, token.decimals ?? 0),
                         symbol: token.symbol,
                     })}
                 </Typography>

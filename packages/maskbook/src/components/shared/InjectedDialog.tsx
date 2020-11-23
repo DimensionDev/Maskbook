@@ -36,10 +36,11 @@ export type InjectedDialogClassKey =
     | 'dialogActions'
     | 'dialogTitleTypography'
     | 'dialogCloseButton'
+    | 'dialogBackdropRoot'
 export interface InjectedDialogProps extends withClasses<InjectedDialogClassKey>, React.PropsWithChildren<{}> {
     open: boolean
-    onExit?(): void
-    title: React.ReactChild
+    onClose?(): void
+    title?: React.ReactChild
     DialogProps?: Partial<DialogProps>
 }
 export function InjectedDialog(props: InjectedDialogProps) {
@@ -52,8 +53,10 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogContent,
         dialogTitle,
         dialogTitleTypography,
+        dialogBackdropRoot,
         ...dialogClasses
     } = useStylesExtends(classes, props, overwrite.InjectedDialog?.classes)
+
     const { t } = useI18N()
     const actions = CopyElementWithNewProps(props.children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(props.children, DialogContent, { root: dialogContent })
@@ -67,20 +70,27 @@ export function InjectedDialog(props: InjectedDialogProps) {
             maxWidth="sm"
             disableAutoFocus
             disableEnforceFocus
-            onBackdropClick={props.onExit}
-            onEscapeKeyDown={props.onExit}
+            onBackdropClick={props.DialogProps?.disableBackdropClick ? void 0 : props.onClose}
+            onEscapeKeyDown={props.onClose}
+            BackdropProps={{
+                classes: {
+                    root: dialogBackdropRoot,
+                },
+            }}
             {...props.DialogProps}>
-            <DialogTitle classes={{ root: dialogTitle }}>
-                <IconButton
-                    classes={{ root: dialogCloseButton }}
-                    aria-label={t('post_dialog__dismiss_aria')}
-                    onClick={props.onExit}>
-                    <DialogDismissIconUI />
-                </IconButton>
-                <Typography className={dialogTitleTypography} display="inline" variant="inherit">
-                    {props.title}
-                </Typography>
-            </DialogTitle>
+            {props.title ? (
+                <DialogTitle classes={{ root: dialogTitle }}>
+                    <IconButton
+                        classes={{ root: dialogCloseButton }}
+                        aria-label={t('post_dialog__dismiss_aria')}
+                        onClick={props.onClose}>
+                        <DialogDismissIconUI />
+                    </IconButton>
+                    <Typography className={dialogTitleTypography} display="inline" variant="inherit">
+                        {props.title}
+                    </Typography>
+                </DialogTitle>
+            ) : null}
             {content}
             {actions}
         </ShadowRootDialog>
