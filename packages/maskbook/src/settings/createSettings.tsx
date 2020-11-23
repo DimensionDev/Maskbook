@@ -64,7 +64,7 @@ export function createInternalSettings<T extends browser.storage.StorageValue>(
     const id = Date.now()
     cached.set(key, settings)
     lastEventId.set(key, id)
-    MaskMessage.events.createInternalSettingsChanged.sendToAll({
+    MaskMessage.events.createInternalSettingsChanged.sendByBroadcast({
         id,
         key,
         value,
@@ -73,7 +73,7 @@ export function createInternalSettings<T extends browser.storage.StorageValue>(
     settings.addListener((newVal) => {
         const id = Date.now()
         lastEventId.set(key, id)
-        MaskMessage.events.createInternalSettingsChanged.sendToAll({
+        MaskMessage.events.createInternalSettingsChanged.sendByBroadcast({
             id,
             key,
             value: newVal,
