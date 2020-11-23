@@ -1,19 +1,17 @@
 import { useState, useCallback } from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
-import { Paper, Button, Theme, ListItemText, ListItemIcon } from '@material-ui/core'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import classNames from 'classnames'
+import { Theme, Button } from '@material-ui/core'
+import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { getActivatedUI } from '../../social-network/ui'
 import { setStorage } from '../../utils/browser.storage'
 import { useStylesExtends } from '../custom-ui-helper'
-import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { DashboardRoute } from '../../extension/options-page/Route'
+import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
 
 interface BannerUIProps
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'header' | 'content' | 'actions' | 'button'> {
-    title?: string
     description?: string
     nextStep: 'hidden' | { onClick(): void }
     username?:
@@ -26,43 +24,17 @@ interface BannerUIProps
           }
 }
 const useStyles = makeStyles((theme: Theme) => {
-    const network = getActivatedUI()?.networkIdentifier
     return {
-        root: {
-            border: `1px solid ${theme.palette.divider}`,
-            borderRadius: 4,
-            marginBottom: 10,
-            ...(network === 'twitter.com'
-                ? {
-                      borderRadius: 0,
-                      borderStyle: 'solid none none none',
-                      borderTop: `1px solid ${theme.palette.type === 'dark' ? '#2f3336' : '#e6ecf0'}`,
-                      paddingBottom: 10,
-                      marginBottom: 0,
-                      boxShadow: 'none',
-                  }
-                : null),
-        },
-        title: {
-            color: theme.palette.text.primary,
-            paddingBottom: 0,
-        },
-        wrapper: {
-            margin: theme.spacing(1),
-            display: 'flex',
-            alignItems: 'center',
-        },
-        maskicon: {
-            width: 56,
-            height: 56,
-            margin: theme.spacing(0, 1),
-        },
         buttonText: {
+            margin: '10px 0',
             [theme.breakpoints.down('sm')]: {
                 fontSize: '10px',
                 lineHeight: 1.4,
                 padding: '20px 14px !important',
             },
+        },
+        span: {
+            paddingLeft: 8,
         },
     }
 })
@@ -70,27 +42,11 @@ const useStyles = makeStyles((theme: Theme) => {
 export function BannerUI(props: BannerUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    return (
-        <Paper style={{ paddingBottom: 0 }} classes={{ root: classes.root }}>
-            <div className={classes.wrapper}>
-                <ListItemIcon>
-                    <MaskbookIcon className={classes.maskicon}></MaskbookIcon>
-                </ListItemIcon>
-                <ListItemText
-                    className={classes.header}
-                    classes={{ primary: classes.title, secondary: classes.content }}
-                    primary={props.title ?? t('banner_title')}
-                    secondary={props.description ?? t('banner_preparing_setup')}></ListItemText>
-                {props.nextStep === 'hidden' ? null : (
-                    <Button
-                        className={classNames(classes.button, classes.buttonText)}
-                        onClick={props.nextStep.onClick}
-                        variant="contained">
-                        {t('banner_get_started')}
-                    </Button>
-                )}
-            </div>
-        </Paper>
+    return props.nextStep === 'hidden' ? null : (
+        <Button variant="outlined" onClick={props.nextStep.onClick} className={classes.buttonText}>
+            <MaskbookSharpIcon />
+            <span className={classes.span}>{t('banner_get_started')}</span>
+        </Button>
     )
 }
 
@@ -100,7 +56,8 @@ export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const { nextStep } = props
     const networkIdentifier = getActivatedUI()?.networkIdentifier
-
+    const identities = useMyIdentities()
+    console.log('identities', identities)
     const [value, onChange] = useState('')
     const defaultNextStep = useCallback(() => {
         if (nextStep === 'hidden') return
@@ -120,11 +77,11 @@ export function Banner(props: BannerProps) {
               isValid: getActivatedUI().isValidUsername,
           }
         : ('hidden' as const)
-    return (
+    return identities.length === 0 ? (
         <BannerUI
             {...props}
             username={props.username ?? defaultUserName}
             nextStep={props.nextStep ?? { onClick: defaultNextStep }}
         />
-    )
+    ) : null
 }
