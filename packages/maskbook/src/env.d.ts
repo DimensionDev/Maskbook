@@ -137,54 +137,6 @@ declare module 'ethereum-blockies' {
     export function create(options?: BlockieOptions): HTMLCanvasElement
 }
 
-declare module '@transak/transak-sdk' {
-    enum EVENTS {
-        ALL_EVENTS = '*',
-        TRANSAK_WIDGET_INITIALISED = 'TRANSAK_WIDGET_INITIALISED',
-        TRANSAK_WIDGET_OPEN = 'TRANSAK_WIDGET_OPEN',
-        TRANSAK_WIDGET_CLOSE_REQUEST = 'TRANSAK_WIDGET_CLOSE_REQUEST',
-        TRANSAK_WIDGET_CLOSE = 'TRANSAK_WIDGET_CLOSE',
-        TRANSAK_ORDER_CREATED = 'TRANSAK_ORDER_CREATED',
-        TRANSAK_ORDER_CANCELLED = 'TRANSAK_ORDER_CANCELLED',
-        TRANSAK_ORDER_FAILED = 'TRANSAK_ORDER_FAILED',
-        TRANSAK_ORDER_SUCCESSFUL = 'TRANSAK_ORDER_SUCCESSFUL',
-        TRANSAK_ERROR = 'TRANSAK_ERROR',
-    }
-
-    class TransakSDK {
-        constructor(config: TransakSDKConfig) {}
-
-        public on(name: string, callback: Function): void
-        public init(): void
-        public close(): void
-        public closeRequest(): void
-        public modal(): void
-
-        public ALL_EVENTS_EVENTS = EVENTS.ALL_EVENTS
-        public ERROR = EVENTS.TRANSAK_ERROR
-        public EVENTS = EVENTS
-    }
-
-    // Learn more https://integrate.transak.com/Query-Parameters-9ec523df3b874ec58cef4fa3a906f238
-    export interface TransakSDKConfig {
-        apiKey: string
-        environment: 'STAGING' | 'PRODUCTION'
-        networks?: string
-        defaultFiatAmount?: number
-        defaultCryptoCurrency?: string
-        walletAddress?: string
-        themeColor?: string
-        fiatCurrency?: string
-        email?: string
-        redirectURL: string
-        hostURL: string
-        widgetHeight?: string
-        widgetWidth?: string
-    }
-
-    export default TransakSDK
-}
-
 declare module '*.png' {
     const content: string
     export default content

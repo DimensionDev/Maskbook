@@ -2,9 +2,9 @@ import { hexToNumberString, soliditySha3 } from 'web3-utils'
 import type { ElectionToken, US_STATE_TYPE } from '../types'
 import ELECTION_STATE_VS_VOTES from '../election.json'
 import { resolveStateType } from '../pipes'
-import type { ERC721Token } from '../../../web3/types'
+import type { ERC721TokenDetailed } from '../../../web3/types'
 
-export function useElectionTokens(stateType: US_STATE_TYPE, token?: ERC721Token): ElectionToken[] {
+export function useElectionTokens(stateType: US_STATE_TYPE, token?: ERC721TokenDetailed): ElectionToken[] {
     const state = ELECTION_STATE_VS_VOTES.find((x) => x.state_id === stateType)
     if (!state) return []
     if (!token) return []

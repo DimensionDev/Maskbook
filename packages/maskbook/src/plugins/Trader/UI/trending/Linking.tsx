@@ -1,20 +1,38 @@
-import { Link } from '@material-ui/core'
+import { Link, LinkProps, Typography, TypographyProps } from '@material-ui/core'
 
 export interface LinkingProps {
     href?: string
     children?: React.ReactNode
+    LinkProps?: Partial<LinkProps>
+    TypographyProps?: Partial<TypographyProps>
 }
 
 export function Linking(props: LinkingProps) {
-    return (
-        <>
-            {props.href ? (
-                <Link color="primary" target="_blank" rel="noopener noreferrer" href={props.href}>
-                    {props.children}
-                </Link>
-            ) : (
-                props.children
-            )}
-        </>
-    )
+    const { href, LinkProps, TypographyProps, children } = props
+    try {
+        const { hostname } = new URL(href ?? '')
+        return (
+            <Link color="primary" target="_blank" rel="noopener noreferrer" href={props.href} {...LinkProps}>
+                {children ? (
+                    children
+                ) : (
+                    <Typography variant="body2" component="span" {...TypographyProps}>
+                        {hostname.replace(/^www./i, '')}
+                    </Typography>
+                )}
+            </Link>
+        )
+    } catch (e) {
+        return (
+            <>
+                {children ? (
+                    children
+                ) : (
+                    <Typography variant="body2" component="span" {...TypographyProps}>
+                        {href}
+                    </Typography>
+                )}
+            </>
+        )
+    }
 }

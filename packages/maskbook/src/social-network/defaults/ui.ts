@@ -21,6 +21,8 @@ const defaultDataSources: Required<SocialNetworkUIDataSources> = cloneDeep({
 })
 
 const defaultInjections = {
+    injectSearchResultBox: 'disabled',
+    injectSearchPredictionBox: 'disabled',
     injectCommentBox: 'disabled',
     injectPostComments: 'disabled',
     injectWelcomeBanner: 'disabled',

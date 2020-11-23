@@ -1,7 +1,6 @@
 import { useEffect, useCallback, ChangeEvent, useState, useMemo } from 'react'
 import {
     makeStyles,
-    Theme,
     createStyles,
     TextField,
     Typography,
@@ -15,11 +14,11 @@ import BigNumber from 'bignumber.js'
 import { debounce } from 'lodash-es'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { formatBalance } from '../../plugins/Wallet/formatter'
-import type { Token } from '../types'
 import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../constants'
 import { useStylesExtends } from '../../components/custom-ui-helper'
+import type { EtherTokenDetailed, ERC20TokenDetailed } from '../types'
 
-const useStyles = makeStyles((theme: Theme) => {
+const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {},
         input: {
@@ -49,7 +48,7 @@ export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyle
     balance: string
     onAmountChange: (amount: string) => void
     label: string
-    token?: Token | null
+    token?: EtherTokenDetailed | ERC20TokenDetailed | null
     InputProps?: Partial<InputProps>
     MaxChipProps?: Partial<ChipProps>
     SelectTokenChip?: Partial<SelectTokenChipProps>
@@ -63,7 +62,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
 
     //#region update amount by parent
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_PARTIAL_AMOUNT } = useMemo(() => {
-        const fractionLength = token?.decimals ?? 18
+        const fractionLength = token?.decimals ?? 0
         return {
             RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${fractionLength}}$`), // d.ddd...d
             RE_MATCH_PARTIAL_AMOUNT: new RegExp(`^\\d*\\.(?:\\d{0,${fractionLength - 1}}0)?$`), // d.ddd...0
@@ -142,17 +141,19 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                         justifyContent="center"
                         alignItems="flex-end">
                         <Typography className={classes.balance} color="textSecondary" variant="body2" component="span">
-                            Balance: {formatBalance(new BigNumber(balance), token.decimals, 6)}
+                            Balance: {formatBalance(new BigNumber(balance), token.decimals ?? 0, 6)}
                         </Typography>
                         <Box display="flex">
-                            <Chip
-                                className={classes.max}
-                                size="small"
-                                label="MAX"
-                                clickable
-                                onClick={() => onAmountChange(balance)}
-                                {...props.MaxChipProps}
-                            />
+                            {balance !== '0' ? (
+                                <Chip
+                                    className={classes.max}
+                                    size="small"
+                                    label="MAX"
+                                    clickable
+                                    onClick={() => onAmountChange(balance)}
+                                    {...props.MaxChipProps}
+                                />
+                            ) : null}
                             <SelectTokenChip token={token} {...props.SelectTokenChip} />
                         </Box>
                     </Box>

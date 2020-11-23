@@ -96,6 +96,15 @@ export async function getAvailableDataProviders(keyword: string) {
 export async function getCoinInfo(id: string, dataProvider: DataProvider, currency: Currency): Promise<Trending> {
     if (dataProvider === DataProvider.COIN_GECKO) {
         const info = await coinGeckoAPI.getCoinInfo(id)
+        const platform_url = `https://www.coingecko.com/en/coins/${info.id}`
+        const twitter_url = info.links.twitter_screen_name
+            ? `https://twitter.com/${info.links.twitter_screen_name}`
+            : ''
+        const facebook_url = info.links.facebook_username ? `https://t.me/${info.links.facebook_username}` : ''
+        const telegram_url = info.links.telegram_channel_identifier
+            ? `https://t.me/${info.links.telegram_channel_identifier}`
+            : ''
+
         return {
             lastUpdated: info.last_updated,
             dataProvider,
@@ -110,7 +119,23 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
                 description: info.description.en,
                 market_cap_rank: info.market_cap_rank,
                 image_url: info.image.small,
-                home_url: info.links.homepage.filter(Boolean)[0],
+                tags: info.categories.filter(Boolean),
+                announcement_urls: info.links.announcement_url.filter(Boolean),
+                community_urls: [
+                    twitter_url,
+                    facebook_url,
+                    telegram_url,
+                    info.links.subreddit_url,
+                    ...info.links.chat_url,
+                    ...info.links.official_forum_url,
+                ].filter(Boolean),
+                source_code_urls: Object.values(info.links.repos_url).flatMap((x) => x),
+                home_urls: info.links.homepage.filter(Boolean),
+                blockchain_urls: [platform_url, ...info.links.blockchain_site].filter(Boolean),
+                platform_url,
+                facebook_url,
+                twitter_url,
+                telegram_url,
                 eth_address:
                     resolveCoinAddress(id, DataProvider.COIN_GECKO) ??
                     (info.asset_platform_id === 'ethereum' ? info.contract_address : undefined),
@@ -145,14 +170,30 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
             id,
             name: coinInfo.name,
             symbol: coinInfo.symbol,
+            announcement_urls: coinInfo.urls.announcement?.filter(Boolean),
+            tech_docs_urls: coinInfo.urls.technical_doc?.filter(Boolean),
+            message_board_urls: coinInfo.urls.message_board?.filter(Boolean),
+            source_code_urls: coinInfo.urls.source_code?.filter(Boolean),
+            community_urls: [
+                ...(coinInfo.urls.twitter ?? []),
+                ...(coinInfo.urls.reddit ?? []),
+                ...(coinInfo.urls.chat ?? []),
+            ].filter(Boolean),
+            home_urls: coinInfo.urls.website?.filter(Boolean),
+            blockchain_urls: [
+                `https://coinmarketcap.com/currencies/${coinInfo.slug}/`,
+                ...(coinInfo.urls.explorer ?? []),
+            ].filter(Boolean),
+            tags: coinInfo.tags ?? void 0,
             image_url: `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`,
             platform_url: `https://coinmarketcap.com/currencies/${coinInfo.slug}/`,
+            twitter_url: coinInfo.urls.twitter?.find((x) => x.includes('twitter')),
+            telegram_url: coinInfo.urls.chat?.find((x) => x.includes('telegram')),
             market_cap_rank: quotesInfo?.rank,
             description: coinInfo.description,
             eth_address:
                 resolveCoinAddress(id, DataProvider.COIN_MARKET_CAP) ??
                 (coinInfo.platform?.name === 'Ethereum' ? coinInfo.platform?.token_address : undefined),
-            home_url: coinInfo.urls.website[0],
         },
         currency,
         dataProvider,
@@ -179,6 +220,10 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
     }
     if (quotesInfo)
         trending.market = {
+            circulating_supply: quotesInfo.total_supply ?? void 0,
+            total_supply: quotesInfo.total_supply ?? void 0,
+            max_supply: quotesInfo.max_supply ?? void 0,
+            market_cap: quotesInfo.quotes[currencyName].market_cap,
             current_price: quotesInfo.quotes[currencyName].price,
             total_volume: quotesInfo.quotes[currencyName].volume_24h,
             price_change_percentage_1h_in_currency: quotesInfo.quotes[currencyName].percent_change_1h,
@@ -223,5 +268,6 @@ export async function getPriceStats(
         endDate,
         interval,
     )
+    if (stats.data.is_active === 0) return []
     return Object.entries(stats.data).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
 }

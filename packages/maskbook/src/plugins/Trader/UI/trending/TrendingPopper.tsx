@@ -6,9 +6,10 @@ import { PluginTraderMessages } from '../../messages'
 import { WalletMessages } from '../../../Wallet/messages'
 import type { DataProvider } from '../../types'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
+import { PluginTransakMessages } from '../../../Transak/messages'
 
 export interface TrendingPopperProps {
-    children?: (name: string, platforms: DataProvider[], reposition?: () => void) => React.ReactNode
+    children?: (name: string, dataProviders: DataProvider[], reposition?: () => void) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
 
@@ -18,7 +19,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const [availablePlatforms, setAvailablePlatforms] = useState<DataProvider[]>([])
+    const [availableProviders, setAvailableProviders] = useState<DataProvider[]>([])
 
     //#region select token and provider dialog could be open by trending view
     const onFreezed = useCallback((ev) => setFreezed(ev.open), [])
@@ -28,6 +29,8 @@ export function TrendingPopper(props: TrendingPopperProps) {
     useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.walletConnectQRCodeDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, onFreezed)
+    useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated, onFreezed)
+    useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated, onFreezed)
     //#endregion
 
     //#region open or close popper
@@ -39,7 +42,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                     setLocked(true)
                     setName(ev.name)
                     setAnchorEl(ev.element)
-                    setAvailablePlatforms(ev.availablePlatforms)
+                    setAvailableProviders(ev.dataProviders)
                     setLocked(false)
                 }
                 // observe the same element
@@ -90,7 +93,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
-                            {props.children?.(name, availablePlatforms, () =>
+                            {props.children?.(name, availableProviders, () =>
                                 setTimeout(() => popperRef.current?.scheduleUpdate(), 100),
                             )}
                         </div>

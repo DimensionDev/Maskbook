@@ -1,12 +1,12 @@
-import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
 import { useCallback, useMemo } from 'react'
-import { Token, EthereumTokenType } from '../../../web3/types'
+import BigNumber from 'bignumber.js'
+import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
-import BigNumber from 'bignumber.js'
 import { addGasMargin } from '../../../web3/helpers'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import type { Tx } from '../../../contracts/types'
+import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
 import { useAccount } from '../../../web3/hooks/useAccount'
 
 /**
@@ -15,7 +15,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
  * @param amount
  * @param token
  */
-export function useDonateCallback(address: string, amount: string, token: Token) {
+export function useDonateCallback(address: string, amount: string, token?: EtherTokenDetailed | ERC20TokenDetailed) {
     const GITCOIN_ETH_ADDRESS = useConstant(GITCOIN_CONSTANT, 'GITCOIN_ETH_ADDRESS')
     const GITCOIN_TIP_PERCENTAGE = useConstant(GITCOIN_CONSTANT, 'GITCOIN_TIP_PERCENTAGE')
     const bulkCheckoutContract = useBulkCheckoutContract()
@@ -26,7 +26,7 @@ export function useDonateCallback(address: string, amount: string, token: Token)
     const donations = useMemo(() => {
         const tipAmount = new BigNumber(GITCOIN_TIP_PERCENTAGE / 100).multipliedBy(amount)
         const grantAmount = new BigNumber(amount).minus(tipAmount)
-        if (!address) return []
+        if (!address || !token) return []
         return [
             {
                 token: token.type === EthereumTokenType.Ether ? GITCOIN_ETH_ADDRESS : token.address,
@@ -42,7 +42,7 @@ export function useDonateCallback(address: string, amount: string, token: Token)
     }, [address, amount, token])
 
     const donateCallback = useCallback(async () => {
-        if (!bulkCheckoutContract || donations.length === 0) {
+        if (!token || !bulkCheckoutContract || donations.length === 0) {
             setDonateState({
                 type: TransactionStateType.UNKNOWN,
             })

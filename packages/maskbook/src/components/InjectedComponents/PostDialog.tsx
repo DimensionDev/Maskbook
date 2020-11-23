@@ -141,7 +141,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     return (
         <>
             <ThemeProvider theme={props.theme ?? defaultTheme}>
-                <InjectedDialog open={props.open} onExit={props.onCloseButtonClicked} title={t('post_dialog__title')}>
+                <InjectedDialog open={props.open} onClose={props.onCloseButtonClicked} title={t('post_dialog__title')}>
                     <DialogContent>
                         {metadataBadge}
                         <InputBase
