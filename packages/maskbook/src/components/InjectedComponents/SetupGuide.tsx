@@ -95,14 +95,12 @@ const wizardTheme = (theme: Theme): Theme =>
 const useWizardDialogStyles = makeStyles((theme) =>
     createStyles({
         root: {
-            [theme.breakpoints.up('md')]: {
-                padding: '56px 20px 48px',
-                position: 'relative',
-                boxShadow: theme.palette.type === 'dark' ? 'none' : theme.shadows[4],
-                border: `${theme.palette.type === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
-                borderRadius: 12,
-            },
-            [theme.breakpoints.down('md')]: {
+            padding: '56px 20px 48px',
+            position: 'relative',
+            boxShadow: theme.palette.type === 'dark' ? 'none' : theme.shadows[4],
+            border: `${theme.palette.type === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
+            borderRadius: 12,
+            [theme.breakpoints.down('xs')]: {
                 padding: '35px 20px 16px',
                 position: 'fixed',
                 bottom: 0,
@@ -120,11 +118,11 @@ const useWizardDialogStyles = makeStyles((theme) =>
             overflow: 'hidden',
         },
         button: {
-            [theme.breakpoints.up('md')]: {
-                width: 200,
-                height: 40,
-            },
-            [theme.breakpoints.down('md')]: {
+            width: 200,
+            height: 40,
+            marginLeft: 0,
+            marginTop: 0,
+            [theme.breakpoints.down('xs')]: {
                 width: '100%',
                 height: '45px !important',
                 marginTop: 20,
@@ -159,7 +157,11 @@ const useWizardDialogStyles = makeStyles((theme) =>
         sandbox: {
             marginTop: 16,
         },
-        tip: {},
+        tip: {
+            fontSize: 16,
+            lineHeight: 1.75,
+            marginBottom: 24,
+        },
         textButton: {
             fontSize: 14,
             marginTop: theme.spacing(1),
@@ -188,26 +190,19 @@ const useStyles = makeStyles((theme: Theme) => {
         root: {
             alignItems: 'center',
         },
-        content: {},
+        content: {
+            marginRight: 16,
+        },
         footer: {
-            [theme.breakpoints.up('md')]: {
-                marginTop: 16,
-                marginLeft: '0px !important',
-            },
-            [theme.breakpoints.down('md')]: {
-                marginLeft: 16,
-                flex: 1,
-            },
+            marginLeft: 0,
+            marginTop: 0,
+            flex: 1,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection: 'column',
         },
-        tip: {
-            fontSize: 16,
-            lineHeight: 1.75,
-            marginBottom: 24,
-        },
+        tip: {},
     }
 })
 
@@ -226,7 +221,7 @@ function ContentUIForMobile(props: ContentUIProps) {
         <Box display="block">
             <Box display={isMobile ? 'flex' : 'undefined'}>
                 <main className={classes.content}>{props.content}</main>
-                <main className={isMobile ? wizardClasses.hide : classes.tip}>{props.tip}</main>
+                <div className={isMobile ? wizardClasses.hide : 'undefined'}>{props.tip}</div>
                 <footer className={classes.footer}>{props.footer}</footer>
             </Box>
             <main className={isMobile ? classes.tip : wizardClasses.hide}>{props.tip}</main>
@@ -234,7 +229,7 @@ function ContentUIForMobile(props: ContentUIProps) {
     ) : (
         <Box>
             <main className={classes.content}>{props.content}</main>
-            <main className={classes.tip}>{props.tip}</main>
+            <div>{props.tip}</div>
             <footer className={classes.footer}>{props.footer}</footer>
         </Box>
     )
