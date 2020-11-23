@@ -34,8 +34,6 @@
     "backup_wallet_hint": "<strong>12の単語型パスフレーズ</strong> または以下の <strong>秘密鍵</strong> を <strong>大切に保管</strong>します。これがあれば暗号通貨ウォレットを復元できます。",
     "backup_qrcode_error": "不明なエラー: <again>再度</again> 試してください。",
     "banner_get_started": "Maskbook を設定する",
-    "banner_preparing_setup": "Maskbook アカウントを設定してください。",
-    "banner_title": "Maskbook へようこそ。",
     "cancel": "取り消す",
     "comment_box__placeholder": "コメントを暗号化するには…",
     "confirm": "確認する",

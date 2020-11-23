@@ -34,8 +34,6 @@
     "backup_wallet_hint": "請<strong>務必</strong>將以下<strong>12個助記詞</strong>或<strong>私鑰</strong>放在安全的地方，您需要它們來還原此錢包。",
     "backup_qrcode_error": "遇到未知錯誤，請 <again>重試</again>。",
     "banner_get_started": "設定 Maskbook",
-    "banner_preparing_setup": "Maskbook 需要設定您的賬號。",
-    "banner_title": "歡迎使用 Maskbook",
     "cancel": "取消",
     "comment_box__placeholder": "添加一條加密評論…",
     "confirm": "確認",
