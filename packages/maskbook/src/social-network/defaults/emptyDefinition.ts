@@ -32,6 +32,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     ignoreSetupAccount() {},
     injectCommentBox: nopWithUnmount,
     injectPostBox: noop,
+    injectSetupPrompt: noop,
     injectPostComments: nopWithUnmount,
     injectPostReplacer: nopWithUnmount,
     injectPostInspector: nopWithUnmount,

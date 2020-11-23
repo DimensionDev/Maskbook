@@ -25,7 +25,6 @@ import {
     makeTypedMessageSuspended,
 } from '../protocols/typed-message'
 import { DefaultTypedMessageRenderer } from '../components/InjectedComponents/TypedMessageRenderer'
-import { useTwitterThemedPostDialogHint } from '../social-network-provider/twitter.com/ui/injectPostDialogHint'
 import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
 import { figmaLink } from './utils'
 import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
@@ -268,8 +267,7 @@ storiesOf('Injections', module)
             </>
         )
         function TwitterFlavorPostDialogHint() {
-            const style = { ...useTwitterThemedPostDialogHint() }
-            return <PostDialogHint classes={style} onHintButtonClicked={action('clicked')} />
+            return <PostDialogHint onHintButtonClicked={action('clicked')} />
         }
     })
     .add('CharLimitIndicator', () => <CharLimitIndicator max={number('max', 560)} value={number('current', 530)} />)

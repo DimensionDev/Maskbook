@@ -26,10 +26,10 @@ export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () 
     querySelector<E>('[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3)')
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
-        '[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3) > div:first-child > div:first-child',
+        '[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3) > div:first-child > div:first-child [role="button"][aria-label]:nth-child(6)',
     )
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
+    querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div [role="button"][aria-label]:nth-child(6)')
 export const postEditorDraftContentSelector = () => {
     if (location.pathname === '/compose/tweet') {
         return querySelector<HTMLDivElement>(

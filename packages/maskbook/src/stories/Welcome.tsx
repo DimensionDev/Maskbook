@@ -9,7 +9,6 @@ const ResponsiveDialog = Dialog
 storiesOf('Welcome', module)
     .add('Banner', () => {
         const desc = text('description', '')
-        const title = text('title', '')
         const isValid = boolean('is username valid', true)
         return (
             <BannerUI
@@ -21,7 +20,6 @@ storiesOf('Welcome', module)
                     onChange: action('on username change'),
                 }}
                 description={desc === '' ? undefined : desc}
-                title={title === '' ? undefined : title}
             />
         )
     })
