@@ -207,37 +207,44 @@ const useStyles = makeStyles((theme: Theme) => {
 })
 
 interface ContentUIProps {
-    optional: boolean
+    dialogType: SetupGuideStep
     content?: React.ReactNode
     footer?: React.ReactNode
     tip?: React.ReactNode
 }
 
-function ContentUIForMobile(props: ContentUIProps) {
+function ContentUI(props: ContentUIProps) {
     const classes = useStyles(props)
     const isMobile = useMatchXS()
     const wizardClasses = useWizardDialogStyles()
-    return props.optional ? (
-        <Box display="block">
-            <Box display={isMobile ? 'flex' : 'undefined'}>
-                <main className={classes.content}>{props.content}</main>
-                <div className={isMobile ? wizardClasses.hide : 'undefined'}>{props.tip}</div>
-                <footer className={classes.footer}>{props.footer}</footer>
-            </Box>
-            <main className={isMobile ? classes.tip : wizardClasses.hide}>{props.tip}</main>
-        </Box>
-    ) : (
-        <Box>
-            <main className={classes.content}>{props.content}</main>
-            <div>{props.tip}</div>
-            <footer className={classes.footer}>{props.footer}</footer>
-        </Box>
-    )
+    switch (props.dialogType) {
+        case SetupGuideStep.FindUsername:
+            return (
+                <Box display="block">
+                    <Box display={isMobile ? 'flex' : 'undefined'}>
+                        <main className={classes.content}>{props.content}</main>
+                        <div className={isMobile ? wizardClasses.hide : 'undefined'}>{props.tip}</div>
+                        <footer className={classes.footer}>{props.footer}</footer>
+                    </Box>
+                    <main className={isMobile ? classes.tip : wizardClasses.hide}>{props.tip}</main>
+                </Box>
+            )
+
+        default:
+        case SetupGuideStep.SayHelloWorld:
+            return (
+                <Box>
+                    <main className={classes.content}>{props.content}</main>
+                    <div>{props.tip}</div>
+                    <footer className={classes.footer}>{props.footer}</footer>
+                </Box>
+            )
+    }
 }
 
 interface WizardDialogProps {
     title: string
-    type: string
+    dialogType: SetupGuideStep
     completion: number
     status: boolean | 'undetermined'
     optional?: boolean
@@ -250,7 +257,7 @@ interface WizardDialogProps {
 
 function WizardDialog(props: WizardDialogProps) {
     const { t } = useI18N()
-    const { title, type = 'find', optional = false, completion, status, content, tip, footer, onBack, onClose } = props
+    const { title, dialogType, optional = false, completion, status, content, tip, footer, onBack, onClose } = props
     const classes = useWizardDialogStyles(props)
 
     const isMobile = useMatchXS()
@@ -288,7 +295,7 @@ function WizardDialog(props: WizardDialogProps) {
                             </Typography>
                         ) : null}
                     </header>
-                    <ContentUIForMobile optional={type === 'find'} content={content} tip={tip} footer={footer} />
+                    <ContentUI dialogType={dialogType} content={content} tip={tip} footer={footer} />
                     <LinearProgress
                         className={isMobile ? classes.hide : classes.progress}
                         color="secondary"
@@ -364,7 +371,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
     return (
         <WizardDialog
             completion={33.33}
-            type="find"
+            dialogType={SetupGuideStep.FindUsername}
             status="undetermined"
             title={t('setup_guide_find_username_title')}
             content={
@@ -455,7 +462,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
     return (
         <WizardDialog
             completion={100}
-            type="sayHello"
+            dialogType={SetupGuideStep.SayHelloWorld}
             status={createStatus}
             optional
             title={t('setup_guide_say_hello_title')}
