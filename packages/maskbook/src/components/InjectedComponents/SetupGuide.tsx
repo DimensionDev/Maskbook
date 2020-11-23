@@ -94,44 +94,55 @@ const wizardTheme = (theme: Theme): Theme =>
 
 const useWizardDialogStyles = makeStyles((theme) =>
     createStyles({
-        root: {
-            userSelect: 'none',
-            boxSizing: 'border-box',
-            padding: '56px 20px 48px',
-            position: 'relative',
-            width: 320,
-            borderRadius: 12,
-            boxShadow: theme.palette.type === 'dark' ? 'none' : theme.shadows[4],
-            border: `${theme.palette.type === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
-            overflow: 'hidden',
+        [theme.breakpoints.up('md')]: {
+            root: {
+                userSelect: 'none',
+                boxSizing: 'border-box',
+                padding: '56px 20px 48px',
+                position: 'relative',
+                width: 320,
+                borderRadius: 12,
+                boxShadow: theme.palette.type === 'dark' ? 'none' : theme.shadows[4],
+                border: `${theme.palette.type === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
+                overflow: 'hidden',
+            },
+            button: {
+                fontSize: 16,
+                width: 200,
+                height: 40,
+                wordBreak: 'keep-all',
+            },
         },
-        rootMobile: {
-            userSelect: 'none',
-            boxSizing: 'border-box',
-            padding: '35px 20px 16px',
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            margin: 0,
-            alignSelf: 'center',
-            borderRadius: 0,
-            boxShadow: 'none',
-            border: `solid 1px ${theme.palette.divider}`,
-            overflow: 'hidden',
+        [theme.breakpoints.down('md')]: {
+            root: {
+                userSelect: 'none',
+                boxSizing: 'border-box',
+                padding: '35px 20px 16px',
+                position: 'fixed',
+                bottom: 0,
+                left: 0,
+                margin: 0,
+                alignSelf: 'center',
+                borderRadius: 0,
+                boxShadow: 'none',
+                border: `solid 1px ${theme.palette.divider}`,
+                overflow: 'hidden',
+                width: '100%',
+            },
+            button: {
+                fontSize: 16,
+                width: '100%',
+                height: '45px !important',
+                wordBreak: 'keep-all',
+                marginTop: 20,
+                borderRadius: 0,
+            },
         },
         back: {
             color: theme.palette.text.primary,
             position: 'absolute',
             left: 10,
             top: 10,
-        },
-        buttonMobile: {
-            fontSize: 16,
-            width: '100%',
-            height: '45px !important',
-            wordBreak: 'keep-all',
-            marginTop: 20,
-            borderRadius: 0,
         },
         close: {
             color: theme.palette.text.primary,
@@ -158,12 +169,6 @@ const useWizardDialogStyles = makeStyles((theme) =>
             lineHeight: 1.75,
             marginBottom: 24,
         },
-        button: {
-            fontSize: 16,
-            width: 200,
-            height: 40,
-            wordBreak: 'keep-all',
-        },
         textButton: {
             fontSize: 14,
             marginTop: theme.spacing(1),
@@ -179,6 +184,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
             justifyContent: 'center',
             flexDirection: 'column',
             marginTop: 16,
+            marginLeft: 0,
         },
         progress: {
             left: 0,
@@ -286,7 +292,7 @@ function WizardDialog(props: WizardDialogProps) {
                         },
                     })
                 }}>
-                <Paper className={isMobile ? classes.rootMobile : classes.root}>
+                <Paper className={classes.root}>
                     <header className={classes.header}>
                         <Typography className={classes.primary} color="textPrimary" variant="h1">
                             {title}
@@ -414,7 +420,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
             }
             footer={
                 <ActionButtonPromise
-                    className={isMobile ? classes.buttonMobile : classes.button}
+                    className={classes.button}
                     variant="contained"
                     init={t('setup_guide_connect_auto')}
                     waiting={t('connecting')}
@@ -481,7 +487,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
             footer={
                 <>
                     <ActionButtonPromise
-                        className={isMobile ? classes.buttonMobile : classes.button}
+                        className={classes.button}
                         variant="contained"
                         init={t('setup_guide_create_post_auto')}
                         waiting={t('creating')}
