@@ -71,7 +71,7 @@ describe(`${CREATE_COMMENT_STORY_URL}#Story:CreateComment(?br=wip)-BasicWorkflow
             }
 
             // wait maskbook inject comment form
-            await snsPostPage.waitFor(sns.commentBoxSelector)
+            await snsPostPage.waitForSelector(sns.commentBoxSelector)
 
             // input comment
             const commentInput = await snsPostPage.waitForFunction(
@@ -81,13 +81,13 @@ describe(`${CREATE_COMMENT_STORY_URL}#Story:CreateComment(?br=wip)-BasicWorkflow
             await (commentInput as any).press('Enter')
 
             // wait for auto pasting
-            await snsPostPage.waitFor(500)
+            await snsPostPage.waitForTimeout(500)
 
             // take screenshot
             await helpers.screenshot(snsPostPage, `${sns.name}_comment_create`)
 
             // validate comment
-            const originalCommentInput = await snsPostPage.waitFor(sns.commentInputSelector)
+            const originalCommentInput = await snsPostPage.waitForSelector(sns.commentInputSelector)
             const encryptedComment = await originalCommentInput.evaluate((e) => e.textContent)
             expect(encryptedComment?.includes('🎶2/4')).toBeTruthy()
 

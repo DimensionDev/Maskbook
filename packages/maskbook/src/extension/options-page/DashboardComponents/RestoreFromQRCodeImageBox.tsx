@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useDropArea } from 'react-use'
 import { makeStyles, createStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'

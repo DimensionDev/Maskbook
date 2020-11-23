@@ -1,5 +1,4 @@
 import { openDB, wrap } from 'idb/with-async-ittr'
-import React from 'react'
 import type { BackupFormat, Instance, ObjectStore } from './types'
 import typeson from './typeson'
 
@@ -76,7 +75,7 @@ function download(name: string, part: BlobPart) {
 }
 
 function timeout<T>(promise: PromiseLike<T>, time: number): Promise<T | undefined> {
-    return Promise.race([promise, new Promise<T>((resolve) => setTimeout(() => resolve(undefined), time))])
+    return Promise.race([promise, new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), time))])
 }
 
 async function restoreAll(parsed: BackupFormat) {

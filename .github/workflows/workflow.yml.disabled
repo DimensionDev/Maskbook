@@ -37,8 +37,6 @@ jobs:
               run: yarn lint:typecoverage
             - name: ESLint
               run: yarn lint:report
-            - name: Import linter
-              run: yarn ts-node -T ./scripts/import-linter.ts
             - name: ESLint result
               uses: actions/upload-artifact@v1
               with:

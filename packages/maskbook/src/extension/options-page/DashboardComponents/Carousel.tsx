@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useInterval } from 'react-use'
 import { Fade } from '@material-ui/core'
 

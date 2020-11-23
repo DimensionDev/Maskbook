@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, createStyles, Card, Typography, CircularProgress, List, ListItem } from '@material-ui/core'
 import { isValid, formatDistance } from 'date-fns'
 import { zhTW, enUS, ja } from 'date-fns/locale'

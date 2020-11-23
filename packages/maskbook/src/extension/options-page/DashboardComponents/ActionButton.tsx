@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { Button, CircularProgress, makeStyles } from '@material-ui/core'
 import type { ButtonProps } from '@material-ui/core/Button'
 import CheckIcon from '@material-ui/icons/Check'
@@ -114,7 +114,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
         ...b
     } = props
 
-    const [state, setState] = React.useState<ActionButtonPromiseState>('init')
+    const [state, setState] = useState<ActionButtonPromiseState>('init')
     const completeClass = classNames(classes.success, b.className)
     const failClass = classNames(classes.failed, b.className)
 

@@ -1,4 +1,3 @@
-import React from 'react'
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { BuyTokenDialog } from './UI/BuyTokenDialog'

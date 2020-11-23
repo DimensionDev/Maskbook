@@ -21,11 +21,11 @@ describe(`${SETUP_STORY_URL}-Workflow1A:CoreInit/NewUser`, () => {
     for (const sns of [new Twitter('', '', ''), new Facebook('', '', '')]) {
         it(sns.name, async () => {
             // fill & submit the form
-            const usernameInput = await page.waitFor('[data-testid="username_input"]')
-            const nextButton = await page.waitFor('[data-testid="next_button"]')
+            const usernameInput = await page.waitForSelector('[data-testid="username_input"]')
+            const nextButton = await page.waitForSelector('[data-testid="next_button"]')
             await usernameInput.type('alice')
             await nextButton.click()
-            await page.waitFor(500)
+            await page.waitForTimeout(500)
 
             // evaluate network
             expect((await page.evaluate(() => location.hash)).includes('#/setup/connect-network')).toBeTruthy()

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { TypedMessageAnchor, registerTypedMessageRenderer } from '../../../protocols/typed-message'
 import { Link, Typography } from '@material-ui/core'
 import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'

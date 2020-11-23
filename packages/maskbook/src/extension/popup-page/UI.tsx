@@ -1,7 +1,7 @@
 import '../../social-network-provider/popup-page/index'
 import '../../setup.ui'
 
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { noop } from 'lodash-es'
 import { ThemeProvider, makeStyles, Theme, withStyles } from '@material-ui/core/styles'
 import { Button, Paper, Divider, Typography, Box } from '@material-ui/core'

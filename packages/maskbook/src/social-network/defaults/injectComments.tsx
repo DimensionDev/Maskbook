@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import type { PostInfo } from '../PostInfo'
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
@@ -21,9 +21,7 @@ export function injectPostCommentsDefault<T extends string>(
     useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
 ) {
     const { needZip } = config
-    const PostCommentDefault = React.memo(function PostCommentDefault(
-        props: Pick<PostCommentProps, 'needZip' | 'comment'>,
-    ) {
+    const PostCommentDefault = memo(function PostCommentDefault(props: Pick<PostCommentProps, 'needZip' | 'comment'>) {
         const classes = useCustomStyles()
         const additional = additionalPropsToPostComment(classes)
         return <PostComment {...props} {...additional} />

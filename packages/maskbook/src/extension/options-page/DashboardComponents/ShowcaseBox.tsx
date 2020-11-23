@@ -1,4 +1,4 @@
-import React from 'react'
+import { useRef } from 'react'
 import { createStyles, Paper, Typography, makeStyles, TypographyProps } from '@material-ui/core'
 import { selectElementContents } from '../../../utils/utils'
 
@@ -35,7 +35,7 @@ export interface ShowcaseBoxProps {
 export default function ShowcaseBox(props: ShowcaseBoxProps) {
     const classes = useStyle()
     const { title, children, TitleProps, ContentProps } = props
-    const ref = React.useRef<HTMLDivElement>(null)
+    const ref = useRef<HTMLDivElement>(null)
     const copyText = () => selectElementContents(ref.current!)
     return (
         <>

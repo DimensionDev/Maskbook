@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom'
-import React from 'react'
+import { StrictMode } from 'react'
 import { ErrorBoundary } from '../components/shared/ErrorBoundary'
 
 export async function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
@@ -11,9 +11,9 @@ export async function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
         }
         const oldChildren = [...container.children]
         ReactDOM.unstable_createRoot(container).render(
-            <React.StrictMode>
+            <StrictMode>
                 <ErrorBoundary>{jsx}</ErrorBoundary>
-            </React.StrictMode>,
+            </StrictMode>,
         )
         oldChildren.forEach((x) => x.remove())
         return ''

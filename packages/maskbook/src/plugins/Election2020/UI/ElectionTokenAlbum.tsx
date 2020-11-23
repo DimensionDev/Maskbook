@@ -1,4 +1,3 @@
-import React from 'react'
 import { createStyles, makeStyles } from '@material-ui/core'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useConstant } from '../../../web3/hooks/useConstant'

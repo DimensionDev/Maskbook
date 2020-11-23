@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import { noop } from 'lodash-es'
 import { makeStyles, Theme, createStyles, Typography, Grid } from '@material-ui/core'

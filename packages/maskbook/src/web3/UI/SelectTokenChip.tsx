@@ -1,4 +1,3 @@
-import React from 'react'
 import classNames from 'classnames'
 import { makeStyles, Theme, createStyles, Chip, ChipProps, CircularProgress } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'

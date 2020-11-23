@@ -1,6 +1,5 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { truncate } from 'lodash-es'
-import React from 'react'
 import { createTypedMessageMetadataReader } from '../../protocols/typed-message/metadata'
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { identifier, META_KEY_1, pluginName } from './constants'

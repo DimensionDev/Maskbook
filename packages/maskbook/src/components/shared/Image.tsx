@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useRef, useEffect, forwardRef, useImperativeHandle, useState } from 'react'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'

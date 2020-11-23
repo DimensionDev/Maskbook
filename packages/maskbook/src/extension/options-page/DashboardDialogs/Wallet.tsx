@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useAsync, useCopyToClipboard } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
@@ -460,7 +460,7 @@ export function DashboardWalletShareDialog(props: WrappedDialogProps<WalletProps
 export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
-    const [token, setToken] = React.useState<Token | null>(null)
+    const [token, setToken] = useState<Token | null>(null)
 
     const [tabState, setTabState] = useState(0)
     const state = useMemo(

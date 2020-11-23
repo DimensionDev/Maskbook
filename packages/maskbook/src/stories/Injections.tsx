@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { storiesOf } from '@storybook/react'
 import { text, boolean, select, radios, number } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
@@ -109,7 +109,7 @@ storiesOf('Injections', module)
                 async () => sleep(3000),
                 boolean('Has frozen item?', true) ? [demoProfiles[0]] : [],
             )
-            React.useEffect(() => {
+            useEffect(() => {
                 showShare()
             })
             return ShareMenu

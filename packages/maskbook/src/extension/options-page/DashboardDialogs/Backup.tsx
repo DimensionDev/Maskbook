@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import classNames from 'classnames'
 import { Box, createStyles, Theme, makeStyles, InputBase, ThemeProvider } from '@material-ui/core'
 import { Database as DatabaseIcon } from 'react-feather'

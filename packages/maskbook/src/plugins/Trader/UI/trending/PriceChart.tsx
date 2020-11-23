@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import type { Coin, Stat } from '../../types'
 import { makeStyles, Theme, createStyles, CircularProgress, Typography } from '@material-ui/core'
 import { useDimension, Dimension } from '../../graphs/useDimension'

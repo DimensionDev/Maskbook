@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import { forwardRef, useCallback, useState } from 'react'
 import { truncate } from 'lodash-es'
 import { Button, Box, IconButton, MenuItem, Tabs, Tab, Typography, Avatar } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
@@ -75,7 +75,7 @@ interface WalletContentProps {
     detailedTokens: TokenDetailed[]
 }
 
-export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(function WalletContent(
+export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(function WalletContent(
     { wallet, detailedTokens }: WalletContentProps,
     ref,
 ) {

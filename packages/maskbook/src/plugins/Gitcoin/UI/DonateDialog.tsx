@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
 import { makeStyles, createStyles, Theme, Typography, DialogContent, Link } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { Trans } from 'react-i18next'

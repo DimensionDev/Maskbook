@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Avatar } from '../../../utils/components/Avatar'
 import MuiAvatar from '@material-ui/core/Avatar/Avatar'
 import { Chip } from '@material-ui/core'

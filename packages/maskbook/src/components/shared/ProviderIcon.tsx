@@ -1,4 +1,3 @@
-import React from 'react'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { MetaMaskIcon } from '../../resources/MetaMaskIcon'
 import { WalletConnectIcon } from '../../resources/WalletConnectIcon'

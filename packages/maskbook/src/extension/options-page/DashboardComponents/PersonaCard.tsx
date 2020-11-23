@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import type { Persona } from '../../../database'
@@ -78,7 +78,7 @@ export default function PersonaCard({ persona }: Props) {
     )
 
     const id = persona.linkedProfiles.keys().next().value as ProfileIdentifier | undefined
-    React.useEffect(() => {
+    useEffect(() => {
         if (persona.nickname) return
         const profile = id
         if (!profile) Services.Identity.renamePersona(persona.identifier, persona.identifier.compressedPoint)

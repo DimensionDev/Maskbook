@@ -1,7 +1,6 @@
 /**
  * This icon should be sync with https://mask.io/img/MB--CircleCanvas--WhiteOverBlue.svg
  */
-import React from 'react'
 import { SvgIcon, SvgIconProps } from '@material-ui/core'
 
 const MaskbookSmileFaceSVG = (

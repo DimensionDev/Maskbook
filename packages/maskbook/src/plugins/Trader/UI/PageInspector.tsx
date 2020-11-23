@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 import { TrendingPopper } from './trending/TrendingPopper'
 import { DataProvider, SwapProvider } from '../types'
 import { TrendingView } from './trending/TrendingView'

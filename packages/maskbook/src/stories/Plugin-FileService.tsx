@@ -1,6 +1,5 @@
 import { action } from '@storybook/addon-actions'
 import { storiesOf } from '@storybook/react'
-import React from 'react'
 import FileServiceDialog from '../plugins/FileService/MainDialog'
 import { figmaLink } from './utils'
 import { Preview } from '../plugins/FileService/Preview'

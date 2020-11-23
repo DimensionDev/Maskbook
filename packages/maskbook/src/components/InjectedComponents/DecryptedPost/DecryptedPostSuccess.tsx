@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo, useRef, useEffect } from 'react'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
 import { useShareMenu } from '../SelectPeopleDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -36,7 +36,7 @@ const useSuccessStyles = makeStyles((theme) => {
     })
 })
 
-export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
+export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
     const {
         data: { content },
         profiles,
@@ -82,10 +82,10 @@ function SuccessDecryptionPlugin(props: PluginSuccessDecryptionComponentProps) {
 
 function PluginSuccessDecryptionPostInspectorForEach(props: { pluginConfig: PluginConfig; message: TypedMessage }) {
     const { pluginConfig, message } = props
-    const ref = React.useRef<HTMLDivElement | null>(null)
+    const ref = useRef<HTMLDivElement | null>(null)
     const F = pluginConfig.successDecryptionInspector
     const post = usePostInfo()
-    React.useEffect(() => {
+    useEffect(() => {
         if (!ref.current || !F || typeof F === 'function') return
         return F.init(post, { message }, ref.current)
     }, [F, post, message])

@@ -1,4 +1,3 @@
-import React from 'react'
 import MuiAvatar, { AvatarProps } from '@material-ui/core/Avatar/Avatar'
 import type { Profile } from '../../database'
 import { useTheme } from '@material-ui/core'

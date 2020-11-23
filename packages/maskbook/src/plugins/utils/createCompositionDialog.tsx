@@ -1,5 +1,4 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import React from 'react'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import type { PluginConfig } from '../types'
 

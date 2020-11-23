@@ -1,4 +1,4 @@
-import React from 'react'
+import { useRef } from 'react'
 import { Dialog, withMobileDialog, DialogProps } from '@material-ui/core'
 import '../../utils/shadow-root/ShadowRootPortal'
 import { PortalShadowRoot } from '../../utils/shadow-root/ShadowRootPortal'
@@ -12,7 +12,7 @@ const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
  * Please use InjectedDialog if possible.
  */
 export default function ShadowRootDialog(_props: DialogProps) {
-    const ref = React.useRef<HTMLDivElement>(null)
+    const ref = useRef<HTMLDivElement>(null)
     const styles = useSheetsRegistryStyles(ref.current)
 
     // ? I need the render tree to get the shadowroot. Is the extra div must be rendered?

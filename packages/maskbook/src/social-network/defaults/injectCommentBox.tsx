@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo, useCallback } from 'react'
 import type { PostInfo } from '../PostInfo'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CommentBox, CommentBoxProps } from '../../components/InjectedComponents/CommentBox'
@@ -23,13 +23,13 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
     additionPropsToCommentBox: (classes: Record<T, string>) => Partial<CommentBoxProps> = () => ({}),
     useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
 ) {
-    const CommentBoxUI = React.memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
+    const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
         const info = usePostInfo()
         const payload = usePostInfoDetails('postPayload')
         const decrypted = usePostInfoDetails('decryptedPostContentRaw')
         const styles = useCustomStyles()
         const props = additionPropsToCommentBox(styles)
-        const onCallback = React.useCallback(
+        const onCallback = useCallback(
             async (content) => {
                 const encryptedComment = await Services.Crypto.encryptComment(payload.unwrap().iv, decrypted, content)
                 onPasteToCommentBox(encryptedComment, info, dom).catch(console.error)

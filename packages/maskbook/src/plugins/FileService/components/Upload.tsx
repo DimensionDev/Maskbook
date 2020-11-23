@@ -2,7 +2,6 @@ import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeArrayBuffer } from '@dimensiondev/kit'
 import { Checkbox, FormControlLabel, makeStyles, Typography, Link } from '@material-ui/core'
 import { isNil } from 'lodash-es'
-import React from 'react'
 import { Trans } from 'react-i18next'
 import { useHistory } from 'react-router'
 import { useAsync } from 'react-use'
@@ -12,6 +11,7 @@ import { makeFileKey } from '../arweave/makeFileKey'
 import { FileRouter, MAX_FILE_SIZE } from '../constants'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
+import { useState } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -51,7 +51,7 @@ export const Upload: React.FC = () => {
     const { t } = useI18N()
     const classes = useStyles()
     const history = useHistory()
-    const [encrypted, setEncrypted] = React.useState(true)
+    const [encrypted, setEncrypted] = useState(true)
     const recent = useAsync(() => PluginFileServiceRPC.getRecentFiles(), [])
     const onFile = async (file: File) => {
         let key: string | undefined = undefined

@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, useTheme, createStyles } from '@material-ui/core'
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
 import { useStylesExtends } from '../../../components/custom-ui-helper'

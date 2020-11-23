@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { makeStyles, createStyles, Card, Typography, Box } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import classNames from 'classnames'

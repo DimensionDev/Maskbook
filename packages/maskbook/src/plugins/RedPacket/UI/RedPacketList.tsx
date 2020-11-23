@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, createStyles, Typography } from '@material-ui/core'
 import type { RedPacketJSONPayload } from '../types'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'

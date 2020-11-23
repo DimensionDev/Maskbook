@@ -1,7 +1,6 @@
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { registerTypedMessageRenderer, TypedMessage } from '../../protocols/typed-message'
 import type { TypedMessageRendererProps } from '../../components/InjectedComponents/TypedMessageRenderer'
-import React from 'react'
 
 export const StorybookPluginDefine: PluginConfig = {
     pluginName: 'Storybook test',

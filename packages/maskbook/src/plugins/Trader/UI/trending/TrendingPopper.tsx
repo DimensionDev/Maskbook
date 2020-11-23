@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import type PopperJs from 'popper.js'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@material-ui/core'
 import { useLocation, useWindowScroll } from 'react-use'

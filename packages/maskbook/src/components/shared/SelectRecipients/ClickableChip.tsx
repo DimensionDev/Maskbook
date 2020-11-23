@@ -1,4 +1,3 @@
-import * as React from 'react'
 import classNames from 'classnames'
 import { makeStyles } from '@material-ui/core'
 import DoneIcon from '@material-ui/icons/Done'

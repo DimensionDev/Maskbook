@@ -1,5 +1,5 @@
 import { noop, omit } from 'lodash-es'
-import React from 'react'
+import { createContext, useContext } from 'react'
 import type { FileInfo } from '../types'
 
 export interface Props {
@@ -7,7 +7,7 @@ export interface Props {
     onUploading(enabled: boolean): void
 }
 
-const Context = React.createContext<Props>({
+const Context = createContext<Props>({
     onInsert: noop,
     onUploading: noop,
 })
@@ -16,4 +16,4 @@ export const Exchange: React.FC<Props> = (props) => (
     <Context.Provider value={omit(props, ['children'])} children={props.children} />
 )
 
-export const useExchange = () => React.useContext(Context)
+export const useExchange = () => useContext(Context)

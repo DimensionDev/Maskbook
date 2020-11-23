@@ -1,4 +1,3 @@
-import React from 'react'
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { CONSTANTS } from '../../../web3/constants'

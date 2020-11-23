@@ -1,4 +1,3 @@
-import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { linkTo as to } from '@storybook/addon-links'
 import { text, boolean, number } from '@storybook/addon-knobs'

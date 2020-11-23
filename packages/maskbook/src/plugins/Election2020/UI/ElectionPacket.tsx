@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Box, Card, CardContent, CardHeader, createStyles, Link, makeStyles, Typography } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import classNames from 'classnames'
