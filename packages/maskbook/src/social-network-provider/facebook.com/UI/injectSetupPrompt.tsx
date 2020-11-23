@@ -1,11 +1,8 @@
-import { useCallback } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
-import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { isMobileFacebook } from '../isMobile'
-import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
-import { MaskMessage } from '../../../utils/messages'
 import { Flags } from '../../../utils/flags'
+import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt'
 
 let composeBox: LiveSelector<Element>
 if (isMobileFacebook) {
@@ -17,37 +14,24 @@ if (isMobileFacebook) {
         .map((x) => x.parentElement)
         // TODO: should be nth(-1), see https://github.com/DimensionDev/Holoflows-Kit/issues/270
         .reverse()
-        .nth(2)
-        .map((x) => x.parentElement)
+        .nth(0)
 }
 
-export function injectPostBoxFacebook() {
+export function injectSetupPromptFacebook() {
     const watcher = new MutationObserverWatcher(composeBox.clone())
         .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         .startWatch({
             childList: true,
             subtree: true,
         })
-    renderInShadowRoot(<UI />, {
+    renderInShadowRoot(<NotSetupYetPrompt />, {
         shadow: () => watcher.firstDOMProxy.afterShadow,
         rootProps: {
             style: {
                 display: 'block',
-                padding: 0,
-                marginTop: 0,
+                padding: '0 16px',
+                marginTop: 16,
             },
         },
     })
-}
-function UI() {
-    const onHintButtonClicked = useCallback(
-        () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'popup', open: true }),
-        [],
-    )
-    return (
-        <>
-            <PostDialogHint onHintButtonClicked={onHintButtonClicked} />
-            <PostDialog reason="popup" />
-        </>
-    )
 }

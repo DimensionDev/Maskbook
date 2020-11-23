@@ -2,7 +2,6 @@ import { memo } from 'react'
 import { IconButton } from '@material-ui/core'
 import { useMyIdentities } from '../DataSource/useActivatedUI'
 import type { BannerProps } from '../Welcomes/Banner'
-import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import { getActivatedUI } from '../../social-network/ui'
@@ -34,7 +33,6 @@ export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
 export function PostDialogHint(props: PostDialogHintProps) {
     const identities = useMyIdentities()
     const connecting = useValueRef(currentSetupGuideStatus[getActivatedUI().networkIdentifier])
-    if (connecting) return null
-    if (identities.length === 0) return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
+    if (connecting || identities.length === 0) return null
     return <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
 }

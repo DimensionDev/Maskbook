@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
 import { Theme, Button } from '@material-ui/core'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { getActivatedUI } from '../../social-network/ui'
 import { setStorage } from '../../utils/browser.storage'
@@ -56,7 +56,8 @@ export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const { nextStep } = props
     const networkIdentifier = getActivatedUI()?.networkIdentifier
-
+    const identities = useMyIdentities()
+    console.log('identities', identities)
     const [value, onChange] = useState('')
     const defaultNextStep = useCallback(() => {
         if (nextStep === 'hidden') return
@@ -76,11 +77,11 @@ export function Banner(props: BannerProps) {
               isValid: getActivatedUI().isValidUsername,
           }
         : ('hidden' as const)
-    return (
+    return identities.length === 0 ? (
         <BannerUI
             {...props}
             username={props.username ?? defaultUserName}
             nextStep={props.nextStep ?? { onClick: defaultNextStep }}
         />
-    )
+    ) : null
 }
