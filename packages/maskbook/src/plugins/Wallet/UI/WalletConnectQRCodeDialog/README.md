@@ -18,3 +18,4 @@
 ## UI Design
 
 - <https://www.figma.com/file/xxHFHHzRgN2E90xCOB83ae/Dashboard?node-id=1144%3A6747>
+- <https://www.figma.com/file/xxHFHHzRgN2E90xCOB83ae/Dashboard?node-id=1945%3A5205>

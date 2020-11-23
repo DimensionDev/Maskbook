@@ -19,19 +19,11 @@ export function WalletConnectQRCodeDialog() {
     const onClose = useCallback(() => setOpen({ open: false }), [setOpen])
     //#endregion
 
-    const onReject = useCallback(() => {
-        if (process.env.architecture === 'web') {
-            onClose()
-        } else {
-            // notify
-        }
-    }, [onClose])
-
     // connected
     useEffect(() => {
         if (!uri || !open) return
-        Services.Ethereum.connectWalletConnect().then(onClose, onReject)
-    }, [open, uri, onClose, onReject])
+        Services.Ethereum.connectWalletConnect().then(onClose, onClose)
+    }, [open, uri, onClose])
 
     return (
         <>
