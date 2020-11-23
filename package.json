@@ -123,6 +123,7 @@
     "react-draggable": "^4.4.3",
     "react-feather": "^2.0.3",
     "react-highlight-words": "^0.16.0",
+    "react-html-parser": "^2.0.2",
     "react-i18next": "^11.7.3",
     "react-middle-ellipsis": "^1.1.0",
     "react-router": "^5.2.0",
