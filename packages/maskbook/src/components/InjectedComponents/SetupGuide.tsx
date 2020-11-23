@@ -13,6 +13,7 @@ import {
     unstable_createMuiStrictModeTheme,
     IconButton,
     Box,
+    Hidden,
 } from '@material-ui/core'
 import classNames from 'classnames'
 import { ArrowRight } from 'react-feather'
@@ -179,9 +180,6 @@ const useWizardDialogStyles = makeStyles((theme) =>
             height: 8,
             position: 'absolute',
         },
-        hide: {
-            display: 'none',
-        },
     }),
 )
 
@@ -221,12 +219,16 @@ function ContentUI(props: ContentUIProps) {
         case SetupGuideStep.FindUsername:
             return (
                 <Box display="block">
-                    <Box display={isMobile ? 'flex' : 'undefined'}>
+                    <Box display={isMobile ? 'flex' : 'block'}>
                         <main className={classes.content}>{props.content}</main>
-                        <div className={isMobile ? wizardClasses.hide : 'undefined'}>{props.tip}</div>
+                        <Hidden only="xs">
+                            <div>{props.tip}</div>
+                        </Hidden>
                         <footer className={classes.footer}>{props.footer}</footer>
                     </Box>
-                    <main className={isMobile ? classes.tip : wizardClasses.hide}>{props.tip}</main>
+                    <Hidden smUp>
+                        <div>{props.tip}</div>
+                    </Hidden>
                 </Box>
             )
 
@@ -259,8 +261,6 @@ function WizardDialog(props: WizardDialogProps) {
     const { t } = useI18N()
     const { title, dialogType, optional = false, completion, status, content, tip, footer, onBack, onClose } = props
     const classes = useWizardDialogStyles(props)
-
-    const isMobile = useMatchXS()
 
     return (
         <ThemeProvider theme={wizardTheme}>
@@ -296,11 +296,13 @@ function WizardDialog(props: WizardDialogProps) {
                         ) : null}
                     </header>
                     <ContentUI dialogType={dialogType} content={content} tip={tip} footer={footer} />
-                    <LinearProgress
-                        className={isMobile ? classes.hide : classes.progress}
-                        color="secondary"
-                        variant="determinate"
-                        value={completion}></LinearProgress>
+                    <Hidden only="xs">
+                        <LinearProgress
+                            className={classes.progress}
+                            color="secondary"
+                            variant="determinate"
+                            value={completion}></LinearProgress>
+                    </Hidden>
                     {onBack ? (
                         <IconButton className={classes.back} size="small" onClick={onBack}>
                             <ArrowBackIosOutlinedIcon cursor="pointer" />
@@ -350,8 +352,6 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
     const { t } = useI18N()
     const ui = getActivatedUI()
 
-    const isMobile = useMatchXS()
-
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
     const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
@@ -395,12 +395,14 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                             onChange={(e) => onUsernameChange(e.target.value)}
                             onKeyDown={onKeyDown}
                             inputProps={{ 'data-testid': 'username_input' }}></TextField>
-                        <IconButton
-                            className={isMobile ? classes.hide : findUsernameClasses.button}
-                            color={username ? 'primary' : 'default'}
-                            disabled={!username}>
-                            <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
-                        </IconButton>
+                        <Hidden only="xs">
+                            <IconButton
+                                className={findUsernameClasses.button}
+                                color={username ? 'primary' : 'default'}
+                                disabled={!username}>
+                                <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
+                            </IconButton>
+                        </Hidden>
                     </Box>
                 </form>
             }
@@ -457,7 +459,6 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
     const { t } = useI18N()
     const classes = useWizardDialogStyles()
     const sayHelloWorldClasses = useSayHelloWorldStyles()
-    const isMobile = useMatchXS()
 
     return (
         <WizardDialog
@@ -492,14 +493,16 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                         failedOnClick="use executor"
                         data-testid="create_button"
                     />
-                    <ActionButton
-                        className={isMobile ? classes.hide : classes.textButton}
-                        color="inherit"
-                        variant="text"
-                        onClick={onSkip}
-                        data-testid="skip_button">
-                        {t('skip')}
-                    </ActionButton>
+                    <Hidden only="xs">
+                        <ActionButton
+                            className={classes.textButton}
+                            color="inherit"
+                            variant="text"
+                            onClick={onSkip}
+                            data-testid="skip_button">
+                            {t('skip')}
+                        </ActionButton>
+                    </Hidden>
                 </>
             }
             onBack={onBack}
