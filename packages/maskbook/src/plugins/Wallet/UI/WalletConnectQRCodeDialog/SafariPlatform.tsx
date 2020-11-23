@@ -1,8 +1,8 @@
-import { Button, createStyles, Grid, makeStyles } from '@material-ui/core'
-import classNames from 'classnames'
+import { Button, createStyles, Grid, GridList, GridListTile, makeStyles } from '@material-ui/core'
 import { map } from 'lodash-es'
 import { useState } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui'
+import { Provider } from '../Provider'
 import { QRCodeModel } from './QRCodeModel'
 
 const links: Record<string, string> = {
@@ -14,6 +14,7 @@ const links: Record<string, string> = {
 const useStyles = makeStyles(() =>
     createStyles({
         container: {
+            width: '100%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -39,13 +40,13 @@ export const SafariPlatform: React.FC<{ uri: string }> = ({ uri }) => {
             return <QRCodeModel uri={uri} />
         }
         return (
-            <div className={classNames(classes.container, classes.content)}>
+            <GridList className={classes.container} spacing={16} cellHeight={183}>
                 {map(links, (link, name) => (
-                    <Button key={name} onClick={makeConnect(link)}>
-                        Connect to {name}
-                    </Button>
+                    <GridListTile key={name}>
+                        <Provider logo={null} name={name} description={name} onClick={makeConnect(link)} />
+                    </GridListTile>
                 ))}
-            </div>
+            </GridList>
         )
     }
     return (
