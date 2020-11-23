@@ -144,6 +144,14 @@ const useWizardDialogStyles = makeStyles((theme) =>
             left: 10,
             top: 10,
         },
+        buttonMobile: {
+            fontSize: 16,
+            width: '100%',
+            height: '45px !important',
+            wordBreak: 'keep-all',
+            marginTop: 20,
+            borderRadius: 0,
+        },
         close: {
             color: theme.palette.text.primary,
             position: 'absolute',
@@ -185,6 +193,9 @@ const useWizardDialogStyles = makeStyles((theme) =>
             bottom: 0,
             height: 8,
             position: 'absolute',
+        },
+        hide: {
+            display: 'none',
         },
     }),
 )
@@ -275,6 +286,8 @@ function WizardDialog(props: WizardDialogProps) {
     const { title, dialogType, optional = false, completion, status, content, tip, footer, onBack, onClose } = props
     const classes = useWizardDialogStyles(props)
 
+    const isMobile = useMatchXS()
+
     return (
         <ThemeProvider theme={wizardTheme}>
             <ThemeProvider
@@ -297,7 +310,7 @@ function WizardDialog(props: WizardDialogProps) {
                         },
                     })
                 }}>
-                <Paper className={classes.root}>
+                <Paper className={isMobile ? classes.rootMobile : classes.root}>
                     <header className={classes.header}>
                         <Typography className={classes.primary} color="textPrimary" variant="h1">
                             {title}
@@ -365,6 +378,8 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
     const { t } = useI18N()
     const ui = getActivatedUI()
 
+    const isMobile = useMatchXS()
+
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
     const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
@@ -431,7 +446,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
             }
             footer={
                 <ActionButtonPromise
-                    className={classes.button}
+                    className={isMobile ? classes.buttonMobile : classes.button}
                     variant="contained"
                     init={t('setup_guide_connect_auto')}
                     waiting={t('connecting')}
@@ -497,7 +512,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
             footer={
                 <>
                     <ActionButtonPromise
-                        className={classes.button}
+                        className={isMobile ? classes.buttonMobile : classes.button}
                         variant="contained"
                         init={t('setup_guide_create_post_auto')}
                         waiting={t('creating')}
