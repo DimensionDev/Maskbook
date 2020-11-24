@@ -38,6 +38,7 @@ module.exports = {
             new webpack.DefinePlugin({
                 'process.env.STORYBOOK': 'true',
             }),
+            new webpack.ProvidePlugin({ React: 'react' }),
         )
         return config
     },
