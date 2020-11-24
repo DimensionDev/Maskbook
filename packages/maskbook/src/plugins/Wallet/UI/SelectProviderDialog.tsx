@@ -138,20 +138,18 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             />
                         </GridListTile>
                     ) : null}
-                    {Flags.wallet_connect_support_enabled ? (
-                        <GridListTile>
-                            <Provider
-                                logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                name="WalletConnect"
-                                description={t(
-                                    process.env.architecture === 'web'
-                                        ? 'plugin_wallet_connect_to_walletconnect_on_web'
-                                        : 'plugin_wallet_connect_to_walletconnect_on_app',
-                                )}
-                                onClick={() => onConnect(ProviderType.WalletConnect)}
-                            />
-                        </GridListTile>
-                    ) : null}
+                    <GridListTile>
+                        <Provider
+                            logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
+                            name="WalletConnect"
+                            description={t(
+                                process.env.architecture === 'web'
+                                    ? 'plugin_wallet_connect_to_walletconnect_on_web'
+                                    : 'plugin_wallet_connect_to_walletconnect_on_app',
+                            )}
+                            onClick={() => onConnect(ProviderType.WalletConnect)}
+                        />
+                    </GridListTile>
                     <GridListTile>
                         <Provider
                             logo={
