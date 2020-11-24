@@ -1,31 +1,31 @@
-import { Button, createStyles, Grid, GridList, GridListTile, makeStyles } from '@material-ui/core'
+import { Button, createStyles, Grid, GridList, GridListTile, makeStyles, SvgIconProps } from '@material-ui/core'
 import { map } from 'lodash-es'
-import { useState } from 'react'
+import { useState, createElement } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { Provider } from '../Provider'
 import { IMTokenIcon, MetaMaskIcon, RainbowIcon, TrustIcon } from './Icons'
 import { QRCodeModel } from './QRCodeModel'
 
-const useStyles = makeStyles(() => createStyles({ container: { width: '100%' }, content: { height: 400 } }))
-
-const links: Record<string, string> = {
-    Rainbow: 'https://rnbwapp.com/wc',
-    MetaMask: 'https://metamask.app.link/wc',
-    Trust: 'https://link.trustwallet.com/wc',
-    imToken: 'imtokenv2://wc',
-}
+const useStyles = makeStyles(() =>
+    createStyles({
+        container: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' },
+        grid: { width: '100%' },
+        content: { height: 400 },
+        icon: { fontSize: 45 },
+    }),
+)
 
 interface WalletProvider {
     name: string
-    logo: React.ReactNode
+    logo: React.ComponentType<SvgIconProps>
     protocol: string
 }
 
 const providers: WalletProvider[] = [
-    { name: 'MetaMask', logo: <MetaMaskIcon />, protocol: 'https://metamask.app.link/wc' },
-    { name: 'Rainbow', logo: <RainbowIcon />, protocol: 'https://rnbwapp.com/wc' },
-    { name: 'Trust', logo: <TrustIcon />, protocol: 'https://link.trustwallet.com/wc' },
-    { name: 'imToken', logo: <IMTokenIcon />, protocol: 'imtokenv2://wc' },
+    { name: 'MetaMask', logo: MetaMaskIcon, protocol: 'https://metamask.app.link/wc' },
+    { name: 'Rainbow', logo: RainbowIcon, protocol: 'https://rnbwapp.com/wc' },
+    { name: 'Trust', logo: TrustIcon, protocol: 'https://link.trustwallet.com/wc' },
+    { name: 'imToken', logo: IMTokenIcon, protocol: 'imtokenv2://wc' },
 ]
 
 export const SafariPlatform: React.FC<{ uri: string }> = ({ uri }) => {
@@ -44,12 +44,12 @@ export const SafariPlatform: React.FC<{ uri: string }> = ({ uri }) => {
         imToken: t('plugin_wallet_connect_safari_im_token'),
     }
     const ProvideSelector = () => (
-        <GridList className={classes.container} spacing={16} cellHeight={183}>
+        <GridList className={classes.grid} spacing={16} cellHeight={183}>
             {map(providers, ({ name, logo, protocol }, key) => (
                 <GridListTile key={key}>
                     <Provider
-                        logo={logo}
                         name={name}
+                        logo={createElement(logo, { className: classes.icon, viewBox: '0 0 45 45' })}
                         description={descriptionMapping[name]}
                         onClick={makeConnect(protocol)}
                     />
