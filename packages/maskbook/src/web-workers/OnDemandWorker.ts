@@ -27,7 +27,7 @@ export class OnDemandWorker extends EventTarget implements Worker {
         }, Math.min(this.inactiveTimeToTerminate, WorkerCheckTerminateInterval))
     }
     protected log(...args: any[]) {
-        console.log(`OnDemandWorker ${this.init[1]?.name}`, ...args)
+        // console.log(`OnDemandWorker ${this.init[1]?.name}`, ...args)
     }
     protected lastUsed = Date.now()
     protected use(onReady: () => void) {
@@ -66,7 +66,6 @@ export class OnDemandWorker extends EventTarget implements Worker {
     postMessage(message: any, transfer: Transferable[]): void
     postMessage(message: any, options?: PostMessageOptions): void
     postMessage(...args: [any, any]) {
-        console.log('posting message', ...args)
         this.use(() => this.worker && Worker.prototype.postMessage.apply(this.worker, args))
     }
     set onmessage(_: never) {

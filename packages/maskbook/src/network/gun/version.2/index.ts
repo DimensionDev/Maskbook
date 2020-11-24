@@ -1,6 +1,10 @@
 import '../gun-worker.patch'
 import Gun from 'gun/gun'
 import 'gun/sea'
+import 'gun/lib/radix'
+import 'gun/lib/radisk'
+import 'gun/lib/store'
+import 'gun/lib/rindexed'
 import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 import { gunServers } from '../../gun-servers'
 
@@ -26,5 +30,10 @@ export interface PostOnGun2 {
 export interface ApplicationStateInGunVersion2 {
     [sha512_base64_ProfileIdentifier_OR_sha512_base64_PostSalt: string]: PersonOnGun2 | PostOnGun2
 }
-export const gun2 = new Gun<ApplicationStateInGunVersion2>(gunServers)
+
+export const gun2 = new Gun<ApplicationStateInGunVersion2>({
+    peers: gunServers as any,
+    localStorage: false,
+    radisk: true,
+})
 gun2.opt({ retry: Infinity })
