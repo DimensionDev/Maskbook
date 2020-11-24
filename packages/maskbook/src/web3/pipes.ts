@@ -24,6 +24,8 @@ export function resolveChainId(name: string) {
             return ChainId.Rinkeby
         case 'kovan':
             return ChainId.Kovan
+        case 'gorli':
+            return ChainId.Gorli
         default:
             return
     }
@@ -39,6 +41,8 @@ export function resolveChainName(chainId: ChainId) {
             return 'Rinkeby'
         case ChainId.Kovan:
             return 'Kovan'
+        case ChainId.Gorli:
+            return 'Gorli'
         default:
             unreachable(chainId)
     }
@@ -54,6 +58,8 @@ export function resolveChainColor(chainId: ChainId) {
             return 'rgb(112, 87, 255)'
         case ChainId.Rinkeby:
             return 'rgb(246, 195, 67)'
+        case ChainId.Gorli:
+            return 'rgb(48, 153, 242)'
         default:
             return 'silver'
     }
@@ -69,6 +75,8 @@ export function resolveLinkOnEtherscan(chainId: ChainId) {
             return 'https://rinkeby.etherscan.io'
         case ChainId.Kovan:
             return 'https://kovan.etherscan.io'
+        case ChainId.Gorli:
+            return 'https://goerli.etherscan.io'
         default:
             unreachable(chainId)
     }

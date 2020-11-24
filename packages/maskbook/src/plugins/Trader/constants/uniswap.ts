@@ -1,4 +1,4 @@
-import { Percent, JSBI } from '@uniswap/sdk'
+import { JSBI, Percent } from '@uniswap/sdk'
 import { ChainId, ERC20TokenDetailed } from '../../../web3/types'
 import { CONSTANTS } from '../../../web3/constants'
 import { createERC20Token, getConstant } from '../../../web3/helpers'
@@ -101,6 +101,13 @@ export const WETH: {
         'Wrapped Ether',
         'WETH',
     ),
+    [ChainId.Gorli]: createERC20Token(
+        ChainId.Gorli,
+        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Gorli),
+        18,
+        'Wrapped Ether',
+        'WETH',
+    ),
 }
 
 /**
@@ -124,6 +131,7 @@ const WETH_ONLY: {
     [ChainId.Ropsten]: [WETH[ChainId.Ropsten]],
     [ChainId.Rinkeby]: [WETH[ChainId.Rinkeby]],
     [ChainId.Kovan]: [],
+    [ChainId.Gorli]: [],
 }
 
 export const BASE_AGAINST_TOKENS: {
@@ -134,14 +142,7 @@ export const BASE_AGAINST_TOKENS: {
     [ChainId.Rinkeby]: [...WETH_ONLY[ChainId.Rinkeby], ...[MSKA, MSKB, MSKC]],
 }
 
-export const BIPS_BASE = JSBI.BigInt(10000)
-export const ONE_BIPS = new Percent(JSBI.BigInt(1), BIPS_BASE)
-export const DEFAULT_TRANSACTION_DEADLINE = 20 /* minutes */ * 60 /* seconds */ // seconds
+export const UNISWAP_BIPS_BASE = JSBI.BigInt(10000)
+export const UNISWAP_ONE_BIPS = new Percent(JSBI.BigInt(1), UNISWAP_BIPS_BASE)
 
-export const ALLOWED_PRICE_IMPACT_LOW: Percent = new Percent(JSBI.BigInt(100), BIPS_BASE) // 1%
-export const ALLOWED_PRICE_IMPACT_MEDIUM: Percent = new Percent(JSBI.BigInt(300), BIPS_BASE) // 3%
-export const ALLOWED_PRICE_IMPACT_HIGH: Percent = new Percent(JSBI.BigInt(500), BIPS_BASE) // 5%
-// if the price slippage exceeds this number, force the user to type 'confirm' to execute
-export const PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN: Percent = new Percent(JSBI.BigInt(1000), BIPS_BASE) // 10%
-// for non expert mode disable swaps above this
-export const BLOCKED_PRICE_IMPACT_NON_EXPERT: Percent = new Percent(JSBI.BigInt(1500), BIPS_BASE) // 15%
+export const UNISWAP_DEFAULT_TRANSACTION_DEADLINE = 20 /* minutes */ * 60 /* seconds */ // seconds

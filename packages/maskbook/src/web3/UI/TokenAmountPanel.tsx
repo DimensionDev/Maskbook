@@ -1,4 +1,4 @@
-import { useEffect, useCallback, ChangeEvent, useState, useMemo } from 'react'
+import { useCallback, ChangeEvent, useMemo } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -11,7 +11,6 @@ import {
     TextFieldProps,
 } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
-import { debounce } from 'lodash-es'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { formatBalance } from '../../plugins/Wallet/formatter'
 import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../constants'
@@ -61,45 +60,21 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     //#region update amount by parent
-    const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_PARTIAL_AMOUNT } = useMemo(() => {
-        const fractionLength = token?.decimals ?? 0
-        return {
-            RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${fractionLength}}$`), // d.ddd...d
-            RE_MATCH_PARTIAL_AMOUNT: new RegExp(`^\\d*\\.(?:\\d{0,${fractionLength - 1}}0)?$`), // d.ddd...0
-        }
-    }, [token?.decimals])
-    const [amountForUI, setAmountForUI] = useState('')
-
-    useEffect(() => {
-        setAmountForUI(amount === '0' ? '' : amount)
-    }, [amount])
+    const { RE_MATCH_WHOLE_AMOUNT } = useMemo(
+        () => ({
+            RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals ?? 0}}$`), // d.ddd...d
+        }),
+        [token?.decimals],
+    )
     //#endregion
 
     //#region update amount by self
-    const onAmountChangeDebounced = useMemo(
-        () =>
-            debounce(onAmountChange, 50, {
-                leading: false,
-                trailing: true,
-            }),
-        [onAmountChange],
-    )
     const onChange = useCallback(
         (ev: ChangeEvent<HTMLInputElement>) => {
-            if (typeof token?.decimals === 'undefined') return
             const amount_ = ev.currentTarget.value.replace(/,/g, '.')
-            if (!amount_) {
-                setAmountForUI('')
-                onAmountChangeDebounced('0')
-            } else if (amount_ === '0') setAmountForUI('0')
-            else if (RE_MATCH_PARTIAL_AMOUNT.test(amount_)) setAmountForUI(amount_)
-            else if (RE_MATCH_WHOLE_AMOUNT.test(amount_)) {
-                const v = new BigNumber(amount_).multipliedBy(new BigNumber(10).pow(token.decimals)).toFixed()
-                setAmountForUI(v)
-                onAmountChangeDebounced(v)
-            }
+            if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) onAmountChange(amount_)
         },
-        [onAmountChangeDebounced, token?.decimals, RE_MATCH_WHOLE_AMOUNT, RE_MATCH_PARTIAL_AMOUNT],
+        [onAmountChange, RE_MATCH_WHOLE_AMOUNT],
     )
     //#endregion
 
@@ -110,13 +85,8 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
             fullWidth
             required
             type="text"
-            value={
-                amountForUI === ''
-                    ? ''
-                    : RE_MATCH_PARTIAL_AMOUNT.test(amountForUI)
-                    ? amountForUI
-                    : formatBalance(new BigNumber(amountForUI), token?.decimals ?? 0, MAX_AMOUNT_LENGTH - 2)
-            }
+            value={amount}
+            variant="outlined"
             onChange={onChange}
             InputProps={{
                 inputProps: {
@@ -154,6 +124,8 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     size="small"
                                     label="MAX"
                                     clickable
+                                    color="primary"
+                                    variant="outlined"
                                     onClick={() => onAmountChange(balance)}
                                     {...props.MaxChipProps}
                                 />

@@ -7,7 +7,7 @@ import { TradeStrategy } from '../../types'
 import { useAllCommonPairs } from './useAllCommonPairs'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 
-export function useTrade(
+export function useV2Trade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
@@ -15,13 +15,15 @@ export function useTrade(
     outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
 ) {
     const isExactIn = strategy === TradeStrategy.ExactIn
-    const pairs = useAllCommonPairs(inputToken, outputToken)
+    const { value: pairs, ...asyncResult } = useAllCommonPairs(inputToken, outputToken)
     const bestTradeExactIn = useBestTradeExactIn(inputAmount, inputToken, outputToken, pairs)
     const bestTradeExactOut = useBestTradeExactOut(outputAmount, inputToken, outputToken, pairs)
+
     // TODO:
     // maybe we should support v1Trade in the future
     return {
-        v2Trade: isExactIn ? bestTradeExactIn : bestTradeExactOut,
+        ...asyncResult,
+        value: isExactIn ? bestTradeExactIn : bestTradeExactOut,
     }
 }
 

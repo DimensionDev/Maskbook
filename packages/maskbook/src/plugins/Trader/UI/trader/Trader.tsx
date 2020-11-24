@@ -1,19 +1,17 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { makeStyles, createStyles, CircularProgress } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
+import { makeStyles, createStyles } from '@material-ui/core'
+import type { Trade } from '@uniswap/sdk'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../../web3/types'
 import { useConstant } from '../../../../web3/hooks/useConstant'
-import { useTrade } from '../../trader/uniswap/useTrade'
 import { TradeForm } from './TradeForm'
-import { TradeRoute } from './TradeRoute'
-import { TradeSummary } from './TradeSummary'
+import { TradeRoute } from '../uniswap/TradeRoute'
+import { TradeSummary } from '../trader/TradeSummary'
 import { ConfirmDialog } from './ConfirmDialog'
 import { useERC20TokenApproveCallback, ApproveState } from '../../../../web3/hooks/useERC20TokenApproveCallback'
-import { useComputedApprove } from '../../trader/uniswap/useComputedApprove'
-import { useSwapCallback } from '../../trader/uniswap/useSwapCallback'
-import { useSwapState, SwapActionType } from '../../trader/uniswap/useSwapState'
-import { TradeStrategy, TokenPanelType } from '../../types'
+import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
+import { TradeActionType } from '../../trader/useTradeState'
+import { TokenPanelType, TradeComputed, TradeProvider } from '../../types'
 import { CONSTANTS } from '../../../../web3/constants'
 import { TRADE_CONSTANTS } from '../../constants'
 import { sleep } from '../../../../utils/utils'
@@ -23,6 +21,13 @@ import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteCont
 import { WalletMessages } from '../../../Wallet/messages'
 import { useShareLink } from '../../../../utils/hooks/useShareLink'
 import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
+import { formatBalance } from '../../../Wallet/formatter'
+import { TradePairViewer } from '../uniswap/TradePairViewer'
+import { useValueRef } from '../../../../utils/hooks/useValueRef'
+import { currentTradeProviderSettings } from '../../settings'
+import { useTradeCallback } from '../../trader/useTradeCallback'
+import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
+import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -37,9 +42,7 @@ const useStyles = makeStyles((theme) => {
             right: theme.spacing(1),
             position: 'absolute',
         },
-        summary: {
-            marginTop: theme.spacing(1),
-        },
+        summary: {},
         router: {
             marginTop: 0,
         },
@@ -58,9 +61,14 @@ export function Trader(props: TraderProps) {
     const { address, name, symbol } = props
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region swap state
-    const [swapStore, dispatchSwapStore] = useSwapState(undefined, undefined)
-    const { inputToken, outputToken } = swapStore
+    const provider = useValueRef(currentTradeProviderSettings)
+
+    //#region trade state
+    const {
+        tradeState: [tradeStore, dispatchTradeStore],
+        tradeComputed: { value: tradeComputed, ...asyncTradeComputed },
+    } = useTradeStateComputed(provider)
+    const { inputToken, outputToken } = tradeStore
 
     const [inputTokenAddress, setInputTokenAddress] = useState(ETH_ADDRESS)
     const [outputTokenAddress, setOutputTokenAddress] = useState(address === ETH_ADDRESS ? '' : address)
@@ -86,12 +94,12 @@ export function Trader(props: TraderProps) {
     )
 
     useEffect(() => {
-        dispatchSwapStore({
-            type: SwapActionType.UPDATE_INPUT_TOKEN,
+        dispatchTradeStore({
+            type: TradeActionType.UPDATE_INPUT_TOKEN,
             token: asyncInputTokenDetailed.value,
         })
-        dispatchSwapStore({
-            type: SwapActionType.UPDATE_OUTPUT_TOKEN,
+        dispatchTradeStore({
+            type: TradeActionType.UPDATE_OUTPUT_TOKEN,
             token: asyncOutputTokenDetailed.value,
         })
     }, [asyncInputTokenDetailed.value, asyncOutputTokenDetailed.value])
@@ -99,50 +107,70 @@ export function Trader(props: TraderProps) {
 
     //#region switch tokens
     const onReverseClick = useCallback(() => {
-        dispatchSwapStore({
-            type: SwapActionType.SWITCH_TOKEN,
+        dispatchTradeStore({
+            type: TradeActionType.SWITCH_TOKEN,
         })
     }, [])
     //#endregion
 
-    //#region the best trade
-    const { inputAmount, outputAmount, strategy } = swapStore
-
+    //#region update amount
     const onInputAmountChange = useCallback((amount: string) => {
-        dispatchSwapStore({
-            type: SwapActionType.UPDATE_INPUT_AMOUNT,
+        dispatchTradeStore({
+            type: TradeActionType.UPDATE_INPUT_AMOUNT,
             amount,
         })
     }, [])
     const onOutputAmountChange = useCallback((amount: string) => {
-        dispatchSwapStore({
-            type: SwapActionType.UPDATE_OUTPUT_AMOUNT,
+        dispatchTradeStore({
+            type: TradeActionType.UPDATE_OUTPUT_AMOUNT,
             amount,
         })
     }, [])
+    //#endregion
 
-    const uniswapTrade_ = useTrade(strategy, inputAmount, outputAmount, inputToken, outputToken)
+    //#region update balance
+    const {
+        value: inputTokenBalance_,
+        loading: loadingInputTokenBalance,
+        retry: retryInputTokenBalance,
+    } = useTokenBalance(inputToken?.type ?? EthereumTokenType.Ether, inputToken?.address ?? '')
+    const {
+        value: outputTokenBalance_,
+        loading: loadingOutputTokenBalance,
+        retry: retryOutputTokenBalance,
+    } = useTokenBalance(outputToken?.type ?? EthereumTokenType.Ether, outputToken?.address ?? '')
+
+    useEffect(() => {
+        if (inputTokenBalance_ && !loadingInputTokenBalance)
+            dispatchTradeStore({
+                type: TradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+                balance: inputTokenBalance_,
+            })
+        if (outputTokenBalance_ && !loadingOutputTokenBalance)
+            dispatchTradeStore({
+                type: TradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
+                balance: outputTokenBalance_,
+            })
+    }, [inputTokenBalance_, outputTokenBalance_, loadingInputTokenBalance, loadingOutputTokenBalance])
+
+    const onUpdateTokenBalance = useCallback(() => {
+        retryInputTokenBalance()
+        retryOutputTokenBalance()
+    }, [retryInputTokenBalance, retryOutputTokenBalance])
+    //#endregion
+
+    //#region the best trade
+    const { inputAmount, outputAmount, inputTokenBalance, outputTokenBalance, strategy } = tradeStore
 
     // the cached trade will freeze UI from updating when transaction was just confirmed
     const [freezed, setFreezed] = useState(false)
-    const tradeCached_ = useRef<ReturnType<typeof useTrade>>({
-        v2Trade: null,
-    })
+    const tradeCached_ = useRef<TradeComputed<unknown> | null>(tradeComputed)
     useEffect(() => {
-        if (freezed) tradeCached_.current = uniswapTrade_
+        if (freezed) tradeCached_.current = tradeComputed
     }, [freezed])
 
     // the real tread for UI
-    const trade = freezed ? tradeCached_.current : uniswapTrade_
-
-    // only keeps 6 digits in the fraction part for the estimation amount
-    const isExactIn = strategy === TradeStrategy.ExactIn
-    const estimatedInputAmount = new BigNumber(trade.v2Trade?.inputAmount.toSignificant(6) ?? '0')
-        .multipliedBy(new BigNumber(10).pow(trade.v2Trade?.route.input.decimals ?? 0))
-        .toFixed()
-    const estimatedOutputAmount = new BigNumber(trade.v2Trade?.outputAmount.toSignificant(6) ?? '0')
-        .multipliedBy(new BigNumber(10).pow(trade.v2Trade?.route.output.decimals ?? 0))
-        .toFixed()
+    const trade = freezed ? tradeCached_.current : tradeComputed
     //#endregion
 
     //#region select erc20 tokens
@@ -158,11 +186,11 @@ export function Trader(props: TraderProps) {
     }, [])
     const onSelectERC20TokenDialogSubmit = useCallback(
         (token: EtherTokenDetailed | ERC20TokenDetailed) => {
-            dispatchSwapStore({
+            dispatchTradeStore({
                 type:
                     focusedTokenPanelType === TokenPanelType.Input
-                        ? SwapActionType.UPDATE_INPUT_TOKEN
-                        : SwapActionType.UPDATE_OUTPUT_TOKEN,
+                        ? TradeActionType.UPDATE_INPUT_TOKEN
+                        : TradeActionType.UPDATE_OUTPUT_TOKEN,
                 token,
             })
             onSelectERC20TokenDialogClose()
@@ -173,7 +201,7 @@ export function Trader(props: TraderProps) {
 
     //#region approve
     const RouterV2Address = useConstant(TRADE_CONSTANTS, 'ROUTER_V2_ADDRESS')
-    const { approveToken, approveAmount } = useComputedApprove(trade.v2Trade)
+    const { approveToken, approveAmount } = useTradeApproveComputed(trade, inputToken)
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
         approveToken?.address ?? '',
         approveAmount,
@@ -183,17 +211,22 @@ export function Trader(props: TraderProps) {
         if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback()
     }, [approveState])
+
+    const onExactApprove = useCallback(async () => {
+        if (approveState !== ApproveState.NOT_APPROVED) return
+        await approveCallback(true)
+    }, [approveState])
     //#endregion
 
     //#region blocking (swap)
-    const [swapState, swapCallback, resetSwapCallback] = useSwapCallback(trade.v2Trade)
+    const [tradeState, tradeCallback, resetTradeCallback] = useTradeCallback(provider, trade)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const onConfirmDialogConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
         await sleep(100)
         setFreezed(true)
-        await swapCallback()
-    }, [swapCallback])
+        await tradeCallback()
+    }, [tradeCallback])
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
     }, [])
@@ -201,12 +234,12 @@ export function Trader(props: TraderProps) {
 
     //#region remote controlled transaction dialog
     const shareLink = useShareLink(
-        trade.v2Trade
+        trade && inputToken && outputToken
             ? [
-                  `I just swapped ${trade.v2Trade.inputAmount.toSignificant(6)} ${
-                      trade.v2Trade.inputAmount.currency.symbol
-                  } for ${trade.v2Trade.outputAmount.toSignificant(6)} ${
-                      trade.v2Trade.outputAmount.currency.symbol
+                  `I just swapped ${formatBalance(trade.inputAmount, inputToken.decimals ?? 0, 6)} ${
+                      inputToken.symbol
+                  } for ${formatBalance(trade.outputAmount, outputToken.decimals ?? 0, 6)} ${
+                      outputToken.symbol
                   }. Follow @realMaskbook (mask.io) to swap cryptocurrencies on Twitter.`,
                   '#mask_io',
               ].join('\n')
@@ -219,80 +252,84 @@ export function Trader(props: TraderProps) {
         (ev) => {
             if (ev.open) return
             setFreezed(false)
-            if (swapState.type === TransactionStateType.HASH) {
-                dispatchSwapStore({
-                    type: SwapActionType.UPDATE_INPUT_AMOUNT,
-                    amount: '0',
+            if (tradeState.type === TransactionStateType.HASH) {
+                dispatchTradeStore({
+                    type: TradeActionType.UPDATE_INPUT_AMOUNT,
+                    amount: '',
                 })
-                dispatchSwapStore({
-                    type: SwapActionType.UPDATE_OUTPUT_AMOUNT,
-                    amount: '0',
+                dispatchTradeStore({
+                    type: TradeActionType.UPDATE_OUTPUT_AMOUNT,
+                    amount: '',
                 })
             }
-            resetSwapCallback()
+            resetTradeCallback()
         },
     )
 
     // open the transaction dialog
     useEffect(() => {
-        if (swapState.type === TransactionStateType.UNKNOWN) return
+        if (tradeState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialogOpen({
             open: true,
             shareLink,
-            state: swapState,
-            summary: trade.v2Trade
-                ? `Swapping ${trade.v2Trade.inputAmount.toSignificant(6)} ${
-                      trade.v2Trade.inputAmount.currency.symbol
-                  } for ${trade.v2Trade.outputAmount.toSignificant(6)} ${trade.v2Trade.outputAmount.currency.symbol}`
-                : '',
+            state: tradeState,
+            summary:
+                trade && inputToken && outputToken
+                    ? `Swapping ${formatBalance(trade.inputAmount, inputToken.decimals ?? 0, 6)} ${
+                          inputToken.symbol
+                      } for ${formatBalance(trade.outputAmount, outputToken.decimals ?? 0, 6)} ${outputToken.symbol}`
+                    : '',
         })
-    }, [swapState /* update tx dialog only if state changed */])
+    }, [tradeState /* update tx dialog only if state changed */])
     //#endregion
 
     return (
         <div className={classes.root}>
             <TradeForm
                 approveState={approveState}
+                trade={trade}
                 strategy={strategy}
-                trade={trade.v2Trade}
+                loading={asyncTradeComputed.loading}
                 inputToken={inputToken}
                 outputToken={outputToken}
-                inputAmount={
-                    isExactIn ? trade.v2Trade?.inputAmount.raw.toString() ?? inputAmount : estimatedInputAmount
-                }
-                outputAmount={
-                    isExactIn ? estimatedOutputAmount : trade.v2Trade?.outputAmount.raw.toString() ?? outputAmount
-                }
+                inputTokenBalance={inputTokenBalance}
+                outputTokenBalance={outputTokenBalance}
+                inputAmount={inputAmount}
+                outputAmount={outputAmount}
                 onInputAmountChange={onInputAmountChange}
                 onOutputAmountChange={onOutputAmountChange}
                 onReverseClick={onReverseClick}
                 onTokenChipClick={onTokenChipClick}
                 onApprove={onApprove}
+                onExactApprove={onExactApprove}
                 onSwap={() => setOpenConfirmDialog(true)}
             />
-            {asyncInputTokenDetailed.loading || asyncOutputTokenDetailed.loading ? (
-                <CircularProgress className={classes.progress} size={15} />
-            ) : (
+            {trade && inputToken && outputToken ? (
                 <>
+                    <ConfirmDialog
+                        open={openConfirmDialog}
+                        trade={trade}
+                        provider={provider}
+                        inputToken={inputToken}
+                        outputToken={outputToken}
+                        onConfirm={onConfirmDialogConfirm}
+                        onClose={onConfirmDialogClose}
+                    />
                     <TradeSummary
                         classes={{ root: classes.summary }}
-                        trade={trade.v2Trade}
-                        strategy={strategy}
+                        trade={trade}
+                        provider={provider}
                         inputToken={inputToken}
                         outputToken={outputToken}
                     />
-                    <TradeRoute classes={{ root: classes.router }} trade={trade.v2Trade} strategy={strategy} />
+                    {provider === TradeProvider.UNISWAP ? (
+                        <>
+                            <TradeRoute classes={{ root: classes.router }} trade={trade} />
+                            <TradePairViewer trade={trade as TradeComputed<Trade>} />
+                        </>
+                    ) : null}
                 </>
-            )}
-            <ConfirmDialog
-                trade={trade.v2Trade}
-                strategy={strategy}
-                inputToken={inputToken}
-                outputToken={outputToken}
-                open={openConfirmDialog}
-                onConfirm={onConfirmDialogConfirm}
-                onClose={onConfirmDialogClose}
-            />
+            ) : null}
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
                 excludeTokens={excludeTokens}

@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import { Trade, Router, Percent, JSBI, TradeType } from '@uniswap/sdk'
-import { DEFAULT_SLIPPAGE_TOLERANCE, DEFAULT_TRANSACTION_DEADLINE, BIPS_BASE } from '../../constants'
+import { DEFAULT_SLIPPAGE_TOLERANCE, UNISWAP_BIPS_BASE, UNISWAP_DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
 import { useAccount } from '../../../../web3/hooks/useAccount'
+import type { TradeComputed } from '../../types'
 
 /**
  * Returns the swap calls that can be used to make the trade
@@ -10,26 +11,27 @@ import { useAccount } from '../../../../web3/hooks/useAccount'
  * @param deadline the deadline for the trade
  */
 export function useSwapParameters(
-    trade: Trade | null, // trade to execute, required
+    trade: TradeComputed<Trade> | null, // trade to execute, required
     allowedSlippage: number = DEFAULT_SLIPPAGE_TOLERANCE, // in bips
-    deadline: number = DEFAULT_TRANSACTION_DEADLINE, // in seconds from now
+    deadline: number = UNISWAP_DEFAULT_TRANSACTION_DEADLINE, // in seconds from now
 ) {
     const account = useAccount()
     return useMemo(() => {
-        if (!trade || !account) return []
+        if (!trade?.trade_ || !account) return []
+        const { trade_ } = trade
         const calls = [
-            Router.swapCallParameters(trade, {
+            Router.swapCallParameters(trade_, {
                 feeOnTransfer: false,
-                allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
+                allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), UNISWAP_BIPS_BASE),
                 recipient: account,
                 ttl: deadline,
             }),
         ]
-        if (trade.tradeType === TradeType.EXACT_INPUT)
+        if (trade_.tradeType === TradeType.EXACT_INPUT)
             calls.push(
-                Router.swapCallParameters(trade, {
+                Router.swapCallParameters(trade_, {
                     feeOnTransfer: true,
-                    allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
+                    allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), UNISWAP_BIPS_BASE),
                     recipient: account,
                     ttl: deadline,
                 }),

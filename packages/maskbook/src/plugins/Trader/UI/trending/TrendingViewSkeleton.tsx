@@ -1,8 +1,8 @@
-import { makeStyles, CardHeader, CardContent, CardActions, Theme, createStyles } from '@material-ui/core'
-import { Skeleton } from '@material-ui/core'
+import { makeStyles, CardHeader, CardContent, CardActions, createStyles, Skeleton } from '@material-ui/core'
+import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 
-const useStyles = makeStyles((theme: Theme) => {
+const useStyles = makeStyles((theme) => {
     return createStyles({
         content: {
             paddingTop: 0,
@@ -14,13 +14,13 @@ const useStyles = makeStyles((theme: Theme) => {
     })
 })
 
-export interface TrendingViewSkeletonProps {
+export interface TrendingViewSkeletonProps extends withClasses<'content' | 'footer'> {
     TrendingCardProps?: Partial<TrendingCardProps>
 }
 
 export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
     const { TrendingCardProps } = props
-    const classes = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
 
     return (
         <TrendingCard {...TrendingCardProps}>
@@ -31,7 +31,7 @@ export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
             />
             <CardContent className={classes.content}>
                 <Skeleton animation="wave" variant="rectangular" height={58} style={{ marginBottom: 8 }} />
-                <Skeleton animation="wave" variant="rectangular" height={254} />
+                <Skeleton animation="wave" variant="rectangular" height={269} />
             </CardContent>
             <CardActions className={classes.footer}>
                 <Skeleton animation="wave" height={10} width="30%" />

@@ -1,27 +1,27 @@
 import { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import { noop } from 'lodash-es'
-import { makeStyles, Theme, createStyles, Typography, Grid, IconButton, Box } from '@material-ui/core'
+import { makeStyles, createStyles, Typography, Grid, IconButton } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
-import type { Trade } from '@uniswap/sdk'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import BigNumber from 'bignumber.js'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../../Wallet/messages'
-import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { ApproveState } from '../../../../web3/hooks/useERC20TokenApproveCallback'
-import { TradeStrategy, TokenPanelType } from '../../types'
+import { TradeStrategy, TokenPanelType, TradeComputed } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useChainIdValid } from '../../../../web3/hooks/useChainState'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../../web3/types'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 import TuneIcon from '@material-ui/icons/Tune'
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
+import { toBips } from '../../helpers'
+import { formatBalance, formatPercentage } from '../../../Wallet/formatter'
 
-const useStyles = makeStyles((theme: Theme) => {
+const useStyles = makeStyles((theme) => {
     return createStyles({
         form: {
             marginTop: theme.spacing(2),
@@ -31,13 +31,14 @@ const useStyles = makeStyles((theme: Theme) => {
             textAlign: 'center',
             margin: `${theme.spacing(1)}px auto`,
         },
-        account: {
-            textAlign: 'right',
-            margin: theme.spacing(0, 0, 2),
-        },
         divider: {
             marginTop: theme.spacing(-0.5),
             marginBottom: theme.spacing(-1),
+        },
+        status: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
         },
         reverseIcon: {
             cursor: 'pointer',
@@ -60,16 +61,20 @@ const useStyles = makeStyles((theme: Theme) => {
 export interface TradeFormProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     approveState: ApproveState
     strategy: TradeStrategy
-    trade: Trade | null
+    trade: TradeComputed | null
+    loading: boolean
     inputToken?: EtherTokenDetailed | ERC20TokenDetailed
     outputToken?: EtherTokenDetailed | ERC20TokenDetailed
     inputAmount: string
     outputAmount: string
+    inputTokenBalance?: string
+    outputTokenBalance?: string
     onInputAmountChange: (amount: string) => void
     onOutputAmountChange: (amount: string) => void
     onReverseClick?: () => void
     onTokenChipClick?: (token: TokenPanelType) => void
     onApprove: () => void
+    onExactApprove: () => void
     onSwap: () => void
 }
 
@@ -77,10 +82,13 @@ export function TradeForm(props: TradeFormProps) {
     const { t } = useI18N()
     const {
         approveState,
-        strategy,
         trade,
+        loading,
+        strategy,
         inputToken,
         outputToken,
+        inputTokenBalance,
+        outputTokenBalance,
         inputAmount,
         outputAmount,
         onInputAmountChange,
@@ -88,6 +96,7 @@ export function TradeForm(props: TradeFormProps) {
         onReverseClick = noop,
         onTokenChipClick = noop,
         onApprove,
+        onExactApprove,
         onSwap,
     } = props
     const classes = useStylesExtends(useStyles(), props)
@@ -97,19 +106,9 @@ export function TradeForm(props: TradeFormProps) {
     const chainIdValid = useChainIdValid()
     //#endregion
 
-    //#region loading balance
-    const { value: inputTokenBalance, loading: loadingInputToken } = useTokenBalance(
-        inputToken?.type ?? EthereumTokenType.Ether,
-        inputToken?.address ?? '',
-    )
-    const { value: outputTokenBalance, loading: loadingOutputToken } = useTokenBalance(
-        outputToken?.type ?? EthereumTokenType.Ether,
-        outputToken?.address ?? '',
-    )
-    const inputTokenTradeAmount = new BigNumber(inputAmount)
-    const outputTokenTradeAmount = new BigNumber(outputAmount)
-    const inputTokenBalanceAmount = new BigNumber(inputTokenBalance ?? '0')
-    const outputTokenBalanceAmount = new BigNumber(outputTokenBalance ?? '0')
+    //#region token balance
+    const inputTokenBalanceAmount = new BigNumber(inputTokenBalance || '0')
+    const outputTokenBalanceAmount = new BigNumber(outputTokenBalance || '0')
     //#endregion
 
     //#region remote controlled select provider dialog
@@ -127,8 +126,20 @@ export function TradeForm(props: TradeFormProps) {
 
     //#region form controls
     const isExactIn = strategy === TradeStrategy.ExactIn
-    const inputPanelLabel = 'From' + (!isExactIn && inputTokenTradeAmount.isGreaterThan(0) ? ' (estimated)' : '')
-    const outputPanelLabel = 'To' + (isExactIn && outputTokenTradeAmount.isGreaterThan(0) ? ' (estimated)' : '')
+    const inputTokenTradeAmount = new BigNumber(inputAmount || '0').multipliedBy(
+        new BigNumber(10).pow(inputToken?.decimals ?? 0),
+    )
+    const outputTokenTradeAmount = new BigNumber(outputAmount || '0').multipliedBy(
+        new BigNumber(10).pow(outputToken?.decimals ?? 0),
+    )
+    const inputPanelLabel =
+        loading && !isExactIn
+            ? t('plugin_trader_finding_price')
+            : 'From' + (!isExactIn && inputTokenTradeAmount.isGreaterThan(0) ? ' (estimated)' : '')
+    const outputPanelLabel =
+        loading && isExactIn
+            ? t('plugin_trader_finding_price')
+            : 'To' + (isExactIn && outputTokenTradeAmount.isGreaterThan(0) ? ' (estimated)' : '')
     const sections = [
         {
             key: 'input',
@@ -143,7 +154,6 @@ export function TradeForm(props: TradeFormProps) {
                         disabled: !inputToken,
                     }}
                     SelectTokenChip={{
-                        loading: loadingInputToken,
                         ChipProps: {
                             onClick: () => onTokenChipClick(TokenPanelType.Input),
                         },
@@ -173,7 +183,6 @@ export function TradeForm(props: TradeFormProps) {
                         disabled: !outputToken,
                     }}
                     SelectTokenChip={{
-                        loading: loadingOutputToken,
                         ChipProps: {
                             onClick: () => onTokenChipClick(TokenPanelType.Output),
                         },
@@ -192,13 +201,24 @@ export function TradeForm(props: TradeFormProps) {
 
     // validate form return a message if an error exists
     const validationMessage = useMemo(() => {
-        if (inputTokenTradeAmount.isZero() && outputTokenTradeAmount.isZero()) return 'Enter an amount'
-        if (!inputToken || !outputToken) return 'Select a token'
+        if (inputTokenTradeAmount.isZero() && outputTokenTradeAmount.isZero())
+            return t('plugin_trader_error_amount_absence')
+        if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
         if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount))
-            return `Insufficient ${inputToken?.symbol} balance`
-        if (!trade) return 'Insufficient liquidity for this trade.'
+            return t('plugin_trader_error_insufficient_balance', {
+                symbol: inputToken?.symbol,
+            })
+        if (loading) return t('plugin_trader_finding_price')
+        if (!trade) return t('plugin_trader_error_insufficient_lp')
         return ''
-    }, [isExactIn, inputToken, outputToken, inputTokenTradeAmount, outputTokenTradeAmount])
+    }, [
+        loading,
+        inputToken,
+        outputToken,
+        inputTokenBalanceAmount.toFixed(),
+        inputTokenTradeAmount.toFixed(),
+        outputTokenTradeAmount.toFixed(),
+    ])
     //#endregion
 
     return (
@@ -209,62 +229,83 @@ export function TradeForm(props: TradeFormProps) {
                 </div>
             ))}
             <div className={classes.section}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                    }}>
-                    <Typography variant="subtitle2">
-                        Slippage Tolerance: {currentSlippageTolerance.value / 1000}%
+                <div className={classes.status}>
+                    <Typography color="textSecondary" variant="body2">
+                        Slippage Tolerance: {formatPercentage(toBips(currentSlippageTolerance.value))}
                     </Typography>
-                    <IconButton size="small">
-                        <TuneIcon fontSize="small" onClick={() => setSwapSettingsDialogOpen({ open: true })} />
+                    <IconButton size="small" onClick={() => setSwapSettingsDialogOpen({ open: true })}>
+                        <TuneIcon fontSize="small" />
                     </IconButton>
-                </Box>
+                </div>
             </div>
             <div className={classes.section}>
                 <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                    {approveRequired ? (
-                        <Grid item xs={6}>
-                            <ActionButton
-                                className={classes.button}
-                                fullWidth
-                                variant="contained"
-                                size="large"
-                                disabled={approveState === ApproveState.PENDING}
-                                onClick={onApprove}>
-                                {approveState === ApproveState.NOT_APPROVED
-                                    ? `Approve ${trade?.inputAmount.currency.symbol}`
-                                    : ''}
-                                {approveState === ApproveState.PENDING
-                                    ? `Approve... ${trade?.inputAmount.currency.symbol}`
-                                    : ''}
-                            </ActionButton>
-                        </Grid>
-                    ) : null}
-                    <Grid item xs={approveRequired ? 6 : 12}>
-                        {!account || !chainIdValid ? (
-                            <ActionButton
-                                className={classes.button}
-                                fullWidth
-                                variant="contained"
-                                size="large"
-                                onClick={onConnect}>
-                                {t('plugin_wallet_connect_a_wallet')}
-                            </ActionButton>
+                    {approveRequired && !loading ? (
+                        approveState === ApproveState.PENDING ? (
+                            <Grid item xs={12}>
+                                <ActionButton
+                                    className={classes.button}
+                                    fullWidth
+                                    variant="contained"
+                                    size="large"
+                                    disabled={approveState === ApproveState.PENDING}>
+                                    {`Unlocking ${inputToken?.symbol ?? 'Token'}…`}
+                                </ActionButton>
+                            </Grid>
                         ) : (
-                            <ActionButton
-                                className={classes.button}
-                                fullWidth
-                                variant="contained"
-                                size="large"
-                                disabled={!!validationMessage || approveRequired}
-                                onClick={onSwap}>
-                                {validationMessage || 'Swap'}
-                            </ActionButton>
-                        )}
-                    </Grid>
+                            <>
+                                <Grid item xs={6}>
+                                    <ActionButton
+                                        className={classes.button}
+                                        fullWidth
+                                        variant="contained"
+                                        size="large"
+                                        onClick={onExactApprove}>
+                                        {approveState === ApproveState.NOT_APPROVED
+                                            ? `Unlock ${formatBalance(
+                                                  inputTokenTradeAmount,
+                                                  inputToken?.decimals ?? 0,
+                                                  2,
+                                              )} ${inputToken?.symbol ?? 'Token'}`
+                                            : ''}
+                                    </ActionButton>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <ActionButton
+                                        className={classes.button}
+                                        fullWidth
+                                        variant="contained"
+                                        size="large"
+                                        onClick={onApprove}>
+                                        {approveState === ApproveState.NOT_APPROVED ? `Infinite Unlock` : ''}
+                                    </ActionButton>
+                                </Grid>
+                            </>
+                        )
+                    ) : (
+                        <Grid item xs={12}>
+                            {!account || !chainIdValid ? (
+                                <ActionButton
+                                    className={classes.button}
+                                    fullWidth
+                                    variant="contained"
+                                    size="large"
+                                    onClick={onConnect}>
+                                    {t('plugin_wallet_connect_a_wallet')}
+                                </ActionButton>
+                            ) : (
+                                <ActionButton
+                                    className={classes.button}
+                                    fullWidth
+                                    variant="contained"
+                                    size="large"
+                                    disabled={loading || !!validationMessage || approveRequired}
+                                    onClick={onSwap}>
+                                    {validationMessage || t('plugin_trader_swap')}
+                                </ActionButton>
+                            )}
+                        </Grid>
+                    )}
                 </Grid>
             </div>
         </form>

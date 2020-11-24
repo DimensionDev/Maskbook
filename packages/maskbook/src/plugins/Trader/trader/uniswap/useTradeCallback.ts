@@ -1,11 +1,12 @@
-import type { Trade, SwapParameters } from '@uniswap/sdk'
+import type { SwapParameters, Trade } from '@uniswap/sdk'
 import { useCallback, useState } from 'react'
-import { DEFAULT_SLIPPAGE_TOLERANCE, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
-import { useSwapParameters } from './useSwapParameters'
+import { DEFAULT_SLIPPAGE_TOLERANCE, UNISWAP_DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
+import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { addGasMargin } from '../../../../web3/helpers'
 import BigNumber from 'bignumber.js'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract'
+import type { TradeComputed } from '../../types'
 
 interface SuccessfulCall {
     parameters: SwapParameters
@@ -17,34 +18,34 @@ interface FailedCall {
     error: Error
 }
 
-export function useSwapCallback(
-    trade: Trade | null,
+export function useTradeCallback(
+    trade: TradeComputed<Trade> | null,
     allowedSlippage: number = DEFAULT_SLIPPAGE_TOLERANCE,
-    ddl: number = DEFAULT_TRANSACTION_DEADLINE,
+    ddl: number = UNISWAP_DEFAULT_TRANSACTION_DEADLINE,
 ) {
     const routerV2Contract = useRouterV2Contract()
-    const swapParameters = useSwapParameters(trade, allowedSlippage, ddl)
+    const tradeParameters = useTradeParameters(trade, allowedSlippage, ddl)
 
-    const [swapState, setSwapState] = useState<TransactionState>({
+    const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })
 
-    const swapCallback = useCallback(async () => {
+    const tradeCallback = useCallback(async () => {
         if (!routerV2Contract) {
-            setSwapState({
+            setTradeState({
                 type: TransactionStateType.UNKNOWN,
             })
             return
         }
 
         // pre-step: start waiting for provider to confirm tx
-        setSwapState({
+        setTradeState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        // step 1: estimate each swap parameter
+        // step 1: estimate each trade parameter
         const estimatedCalls = await Promise.all(
-            swapParameters.map(async (x) => {
+            tradeParameters.map(async (x) => {
                 const { methodName, args, value } = x
                 const config = !value || /^0x0*$/.test(value) ? {} : { value }
                 // @ts-ignore
@@ -77,7 +78,7 @@ export function useSwapCallback(
         )
         if (!successfulCall) {
             const failedCalls = estimatedCalls.filter((x): x is FailedCall => 'error' in x)
-            setSwapState({
+            setTradeState({
                 type: TransactionStateType.FAILED,
                 error:
                     failedCalls.length > 0 ? failedCalls[failedCalls.length - 1].error : new Error('Unexpected error'),
@@ -101,13 +102,13 @@ export function useSwapCallback(
                 },
                 (error, hash) => {
                     if (error) {
-                        setSwapState({
+                        setTradeState({
                             type: TransactionStateType.FAILED,
                             error,
                         })
                         reject(error)
                     } else {
-                        setSwapState({
+                        setTradeState({
                             type: TransactionStateType.HASH,
                             hash,
                         })
@@ -116,13 +117,13 @@ export function useSwapCallback(
                 },
             )
         })
-    }, [swapParameters, routerV2Contract])
+    }, [tradeParameters, routerV2Contract])
 
     const resetCallback = useCallback(() => {
-        setSwapState({
+        setTradeState({
             type: TransactionStateType.UNKNOWN,
         })
     }, [])
 
-    return [swapState, swapCallback, resetCallback] as const
+    return [tradeState, tradeCallback, resetCallback] as const
 }

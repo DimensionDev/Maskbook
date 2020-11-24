@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -13,19 +13,24 @@ import {
     Button,
     DialogContent,
 } from '@material-ui/core'
-import { TradePool, TradeProvider } from '../../types'
+import { ZrxTradePool, TradeProvider } from '../../types'
 import { SelectPoolPanel } from './SelectPoolPanel'
 import { SlippageSlider } from './SlippageSlider'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { getEnumAsArray } from '../../../../utils/enum'
-import { SelectProviderPanel } from './SelectProviderPanel'
-import { resolveTradeProviderName } from '../../pipes'
-import { currentSlippageTolerance } from '../../settings'
+import {
+    currentSlippageTolerance,
+    currentTradeProviderSettings,
+    getCurrentTradeProviderGeneralSettings,
+} from '../../settings'
 import { DEFAULT_SLIPPAGE_TOLERANCE } from '../../constants'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../messages'
+import { useValueRef } from '../../../../utils/hooks/useValueRef'
+import stringify from 'json-stable-stringify'
+import { useTradeProviderSettings } from '../../trader/useTradeSettings'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -59,6 +64,9 @@ const useStyles = makeStyles((theme) => {
         accordion: {
             backgroundColor: theme.palette.background.default,
         },
+        details: {
+            display: 'flex',
+        },
     })
 })
 
@@ -67,9 +75,10 @@ export interface SettingsDialogProps extends withClasses<'root'> {}
 export function SettingsDialog(props: SettingsDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const [provider, setProvider] = useState(TradeProvider.UNISWAP)
-    const [slippage, setSlippage] = useState(currentSlippageTolerance.value)
-    const [listOfSource, setListOfSource] = useState<TradePool[]>(getEnumAsArray(TradePool).map((x) => x.value))
+
+    const provider = useValueRef(currentTradeProviderSettings)
+    const slippage = useValueRef(currentSlippageTolerance)
+    const { pools } = useTradeProviderSettings(provider)
 
     //#region remote controlled dialog
     const [open, setOpen] = useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated)
@@ -80,16 +89,14 @@ export function SettingsDialog(props: SettingsDialogProps) {
     }, [setOpen])
     //#endregion
 
-    // sync slippage to settings
-    useEffect(() => {
-        currentSlippageTolerance.value = slippage
-    }, [slippage])
-
     const onReset = useCallback(() => {
-        setProvider(TradeProvider.UNISWAP)
-        setSlippage(DEFAULT_SLIPPAGE_TOLERANCE)
-        setListOfSource(getEnumAsArray(TradePool).map((x) => x.value))
-    }, [])
+        currentTradeProviderSettings.value = TradeProvider.UNISWAP
+        currentSlippageTolerance.value = DEFAULT_SLIPPAGE_TOLERANCE
+        if (provider === TradeProvider.ZRX)
+            getCurrentTradeProviderGeneralSettings(provider).value = stringify({
+                pools: getEnumAsArray(ZrxTradePool).map((x) => x.value),
+            })
+    }, [provider])
 
     return (
         <InjectedDialog open={open} onClose={onClose} title="Swap Settings" DialogProps={{ maxWidth: 'xs' }}>
@@ -97,39 +104,43 @@ export function SettingsDialog(props: SettingsDialogProps) {
                 <Paper component="section" elevation={0}>
                     <Card elevation={0}>
                         <CardContent>
-                            <Accordion className={classes.accordion} elevation={0} expanded>
-                                <AccordionSummary>
-                                    <Typography className={classes.heading}>Provider</Typography>
-                                    <Typography className={classes.subheading}>
-                                        {resolveTradeProviderName(provider)}
-                                    </Typography>
-                                </AccordionSummary>
-                                <AccordionDetails style={{ display: 'flex' }}>
-                                    <SelectProviderPanel value={provider} onChange={setProvider} />
-                                </AccordionDetails>
-                            </Accordion>
-                            <Accordion className={classes.accordion} elevation={0} expanded>
+                            <Accordion className={classes.accordion} elevation={0}>
                                 <AccordionSummary>
                                     <Typography className={classes.heading}>Slippage Tolerance</Typography>
                                     <Typography className={classes.subheading}>{slippage / 100}%</Typography>
                                 </AccordionSummary>
-                                <AccordionDetails style={{ display: 'flex' }}>
-                                    <SlippageSlider value={slippage} onChange={setSlippage} />
+                                <AccordionDetails className={classes.details}>
+                                    <SlippageSlider
+                                        value={slippage}
+                                        onChange={(tolerance) => {
+                                            currentSlippageTolerance.value = tolerance
+                                        }}
+                                    />
                                 </AccordionDetails>
                             </Accordion>
                             {provider === TradeProvider.ZRX ? (
-                                <Accordion className={classes.accordion} elevation={0} expanded>
+                                <Accordion className={classes.accordion} elevation={0}>
                                     <AccordionSummary>
                                         <Typography className={classes.heading}>Exchanges</Typography>
-                                        <Typography className={classes.subheading}>{listOfSource.length}</Typography>
+                                        <Typography className={classes.subheading}>{pools.length}</Typography>
                                     </AccordionSummary>
-                                    <AccordionDetails style={{ display: 'flex' }}>
-                                        <SelectPoolPanel value={listOfSource} onChange={setListOfSource} />
+                                    <AccordionDetails className={classes.details}>
+                                        <SelectPoolPanel
+                                            value={pools}
+                                            onChange={(pools) => {
+                                                getCurrentTradeProviderGeneralSettings(provider).value = stringify({
+                                                    pools,
+                                                })
+                                            }}
+                                        />
                                     </AccordionDetails>
                                 </Accordion>
                             ) : null}
                         </CardContent>
                         <CardActions className={classes.footer}>
+                            <Button variant="text" onClick={onClose}>
+                                {t('confirm')}
+                            </Button>
                             <Button variant="text" onClick={onReset}>
                                 {t('reset')}
                             </Button>

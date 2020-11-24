@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import {
     makeStyles,
-    Theme,
     createStyles,
     Paper,
     List,
@@ -11,15 +10,21 @@ import {
     Typography,
     IconButton,
 } from '@material-ui/core'
-import type { Trade } from '@uniswap/sdk'
 import LoopIcon from '@material-ui/icons/Loop'
-import { useComputedTrade } from '../../trader/uniswap/useComputedTrade'
 import { ONE_BIPS } from '../../constants'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { TradeStrategy } from '../../types'
+import { SwapQuoteResponse, TradeComputed, TradeProvider, TradeStrategy } from '../../types'
+import { formatBalance, formatPercentage } from '../../../Wallet/formatter'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import BigNumber from 'bignumber.js'
+import { resolveZrxTradePoolName } from '../../pipes'
+type SummaryRecord = {
+    title: string
+    tip?: string
+    children?: React.ReactNode
+} | null
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             width: '100%',
@@ -51,39 +56,61 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export interface TradeSummaryProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    trade: Trade | null
-    strategy: TradeStrategy
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed
+    trade: TradeComputed
+    provider: TradeProvider
+    inputToken: EtherTokenDetailed | ERC20TokenDetailed
+    outputToken: EtherTokenDetailed | ERC20TokenDetailed
 }
 
 export function TradeSummary(props: TradeSummaryProps) {
-    const { trade, strategy, inputToken, outputToken } = props
+    const { trade, provider, inputToken, outputToken } = props
     const classes = useStylesExtends(useStyles(), props)
 
-    const computedTrade = useComputedTrade(trade)
     const [priceReversed, setPriceReversed] = useState(false)
 
-    if (!trade) return null
-    if (!computedTrade) return null
-    if (!inputToken || !outputToken) return null
+    const { strategy, inputAmount, outputAmount, maximumSold, minimumReceived, priceImpactWithoutFee, fee } = trade
 
     const isExactIn = strategy === TradeStrategy.ExactIn
-    const records = [
-        trade.inputAmount.greaterThan('0') && trade.outputAmount.greaterThan('0')
+
+    const records: SummaryRecord[] = [
+        inputAmount.isGreaterThan('0') && outputAmount.isGreaterThan('0')
             ? {
                   title: 'Price',
                   children: (
                       <Typography className={classes.title}>
                           {priceReversed ? (
                               <span>
-                                  {trade.outputAmount.divide(trade.inputAmount).toSignificant(6)} {outputToken.symbol}
+                                  {formatBalance(
+                                      outputAmount
+                                          .dividedBy(inputAmount)
+                                          .multipliedBy(
+                                              new BigNumber(10).pow(
+                                                  (inputToken.decimals ?? 0) - (outputToken.decimals ?? 0),
+                                              ),
+                                          )
+                                          .multipliedBy(new BigNumber(10).pow(outputToken.decimals ?? 0)),
+                                      outputToken.decimals ?? 0,
+                                      6,
+                                  )}{' '}
+                                  {outputToken.symbol}
                                   {' per '}
                                   {inputToken.symbol}
                               </span>
                           ) : (
                               <span>
-                                  {trade.inputAmount.divide(trade.outputAmount).toSignificant(6)} {inputToken.symbol}
+                                  {formatBalance(
+                                      inputAmount
+                                          .dividedBy(outputAmount)
+                                          .multipliedBy(
+                                              new BigNumber(10).pow(
+                                                  (outputToken.decimals ?? 0) - (inputToken.decimals ?? 0),
+                                              ),
+                                          )
+                                          .multipliedBy(new BigNumber(10).pow(inputToken.decimals ?? 0)),
+                                      inputToken.decimals ?? 0,
+                                      6,
+                                  )}{' '}
+                                  {inputToken.symbol}
                                   {' per '}
                                   {outputToken.symbol}
                               </span>
@@ -104,7 +131,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                   title: 'Minimum received',
                   children: (
                       <Typography className={classes.title}>
-                          {computedTrade.minimumReceived?.toSignificant(4)} {outputToken.symbol}
+                          {formatBalance(minimumReceived, outputToken.decimals ?? 0, 6)} {outputToken.symbol}
                       </Typography>
                   ),
               }
@@ -114,19 +141,22 @@ export function TradeSummary(props: TradeSummaryProps) {
                   title: 'Maximum sold',
                   children: (
                       <Typography className={classes.title}>
-                          {computedTrade.maximumSold?.toSignificant(4)} {inputToken.symbol}
+                          {formatBalance(maximumSold, inputToken.decimals ?? 0, 6)} {inputToken.symbol}
                       </Typography>
                   ),
               }
             : null,
+    ]
+
+    const uniswapRecords: SummaryRecord[] = [
         {
             title: 'Price Impact',
             children: (
                 <Typography className={classes.title}>
-                    {computedTrade.priceImpact
-                        ? computedTrade.priceImpact?.lessThan(ONE_BIPS)
+                    {priceImpactWithoutFee.isGreaterThan('0')
+                        ? priceImpactWithoutFee?.isLessThan(ONE_BIPS)
                             ? '<0.01%'
-                            : `${computedTrade.priceImpact?.toFixed(2)}%`
+                            : `${formatPercentage(priceImpactWithoutFee)}`
                         : '-'}
                 </Typography>
             ),
@@ -135,24 +165,52 @@ export function TradeSummary(props: TradeSummaryProps) {
             title: 'Liquidity Provider Fee',
             children: (
                 <Typography className={classes.title}>
-                    {computedTrade.fee?.toSignificant(6)} {inputToken.symbol}
+                    {formatBalance(fee, inputToken.decimals ?? 0, 6)} {inputToken.symbol}
                 </Typography>
             ),
         },
-    ] as {
-        title: string
-        tip?: string
-        children?: React.ReactNode
-    }[]
+    ]
+
+    const trade_ = (trade as TradeComputed<SwapQuoteResponse>).trade_
+    const zrxRecords: SummaryRecord[] = [
+        {
+            title: 'Proportion',
+            children: (
+                <Typography className={classes.title}>
+                    {(trade_?.sources ?? [])
+                        .filter((x) => x.proportion !== '0')
+                        .sort((a, z) => (new BigNumber(a.proportion).isGreaterThan(z.proportion) ? -1 : 1))
+                        .slice(0, 3)
+                        .map(
+                            (y) =>
+                                `${resolveZrxTradePoolName(y.name)} (${formatPercentage(new BigNumber(y.proportion))})`,
+                        )
+                        .join('+')}
+                </Typography>
+            ),
+        },
+    ]
+
     return (
         <Paper className={classes.root} variant="outlined">
             <List className={classes.list} component="ul">
-                {records.filter(Boolean).map((record) => (
-                    <ListItem className={classes.item} key={record.title}>
-                        <ListItemText primaryTypographyProps={{ className: classes.title }} primary={record.title} />
-                        <ListItemSecondaryAction className={classes.content}>{record.children}</ListItemSecondaryAction>
-                    </ListItem>
-                ))}
+                {[
+                    ...records,
+                    ...(provider === TradeProvider.UNISWAP ? uniswapRecords : []),
+                    ...(provider === TradeProvider.ZRX ? zrxRecords : []),
+                ].map((record) =>
+                    record ? (
+                        <ListItem className={classes.item} key={record.title}>
+                            <ListItemText
+                                primaryTypographyProps={{ className: classes.title }}
+                                primary={record.title}
+                            />
+                            <ListItemSecondaryAction className={classes.content}>
+                                {record.children}
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    ) : null,
+                )}
             </List>
         </Paper>
     )

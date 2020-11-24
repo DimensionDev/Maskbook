@@ -33,7 +33,6 @@ export function SelectProviderPanel(props: SelectProviderPanelProps) {
         <div className={classes.root}>
             {getEnumAsArray(TradeProvider).map((x) => {
                 if (x.value === TradeProvider.ZRX && !Flags.trader_zrx_enabled) return null
-                if (x.value === TradeProvider.ONE_INCH && !Flags.trader_one_inche_enable) return null
                 return (
                     <Chip
                         classes={{ root: classes.chipRoot, label: classes.chipLabel }}
@@ -41,6 +40,7 @@ export function SelectProviderPanel(props: SelectProviderPanelProps) {
                         color={x.value === value ? 'primary' : 'default'}
                         icon={<TradeProviderIcon provider={x.value} />}
                         clickable
+                        key={x.value}
                         label={resolveTradeProviderName(x.value)}
                         onClick={() => onChange(x.value)}
                     />

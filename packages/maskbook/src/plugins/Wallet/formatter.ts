@@ -1,25 +1,37 @@
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 
-export function formatBalance(balance: BigNumber, decimals: number, precision: number) {
-    if (!BigNumber.isBigNumber(balance)) return
+export function formatPercentage(value: BigNumber) {
+    return `${value.multipliedBy(100).toFixed(2).replace(/0+$/, '')}%`
+}
+
+export function formatPrice(price: BigNumber, decimalPlaces: number = 6) {
+    return price.decimalPlaces(decimalPlaces).toString()
+}
+
+export function formatBalance(balance: BigNumber, decimals: number, significant: number = decimals) {
+    if (!BigNumber.isBigNumber(balance)) return '0'
     const negative = balance.isNegative() // balance < 0n
     const base = new BigNumber(10).pow(decimals) // 10n ** decimals
 
-    if (negative) {
-        balance = balance.absoluteValue() // balance * -1n
-    }
+    if (negative) balance = balance.absoluteValue() // balance * -1n
 
     let fraction = balance.modulo(base).toString(10) // (balance % base).toString(10)
 
-    while (fraction.length < decimals) {
-        fraction = `0${fraction}`
-    }
+    // add leading zeros
+    while (fraction.length < decimals) fraction = `0${fraction}`
+
+    // match significant digits
+    const matchSignificantDigits = new RegExp(`^0*[1-9]\\d{${significant > 0 ? significant - 1 : 0}}`)
+    fraction = fraction.match(matchSignificantDigits)?.[0] ?? ''
+
+    // trim tailing zeros
+    fraction = fraction.replace(/0+$/g, '')
 
     const whole = balance.dividedToIntegerBy(base).toString(10) // (balance / base).toString(10)
-    const value = `${whole}${fraction == '0' ? '' : `.${fraction.substr(0, precision)}`}` // eslint-disable-line
-    const raw = negative ? `-${value}` : value
+    const value = `${whole}${fraction === '' ? '' : `.${fraction}`}`
 
+    const raw = negative ? `-${value}` : value
     return raw.indexOf('.') > -1 ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
 }
 

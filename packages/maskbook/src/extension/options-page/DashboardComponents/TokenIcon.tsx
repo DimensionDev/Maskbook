@@ -47,17 +47,11 @@ export interface TokenIconProps extends withClasses<KeysInferFromUseStyles<typeo
 export function TokenIcon(props: TokenIconProps) {
     const { address, name } = props
     const classes = useStylesExtends(useStyles(), props)
-    const checksummedAddress = formatChecksumAddress(address)
     const tokenBlockie = useBlockie(props.address)
 
     return (
-        <Avatar
-            className={classes.icon}
-            src={ICON_MAP[checksummedAddress] ?? `${TRUST_WALLET_ASSETS}/assets/${checksummedAddress}/logo.png`}
-            {...props.AvatarProps}>
-            <Avatar
-                className={classes.icon}
-                src={isSameAddress(checksummedAddress, ETH_ADDRESS) ? '/ethereum-logo.png' : tokenBlockie}>
+        <Avatar className={classes.icon} src={resolveTokenIconURL(address)} {...props.AvatarProps}>
+            <Avatar className={classes.icon} src={tokenBlockie}>
                 {name?.substr(0, 1).toLocaleUpperCase()}
             </Avatar>
         </Avatar>

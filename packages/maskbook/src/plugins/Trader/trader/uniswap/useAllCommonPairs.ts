@@ -67,11 +67,12 @@ export function useAllCommonPairs(
                           return true
                       })
                 : [],
-        [uniswapTokenA, uniswapTokenB, bases, basePairs, chainId],
+        [[uniswapTokenA?.address, uniswapTokenB?.address].sort().join(), bases, basePairs, chainId],
     )
-    const allPairs = useUniswapPairs(allPairCombinations as TokenPair[])
+    const { value: allPairs, ...asyncResult } = useUniswapPairs(allPairCombinations as TokenPair[])
+
     // only pass along valid pairs, non-duplicated pairs
-    return useMemo(
+    const allPairs_ = useMemo(
         () =>
             Object.values(
                 allPairs
@@ -87,4 +88,9 @@ export function useAllCommonPairs(
             ),
         [allPairs],
     )
+
+    return {
+        ...asyncResult,
+        value: allPairs_,
+    }
 }

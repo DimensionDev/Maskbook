@@ -19,6 +19,7 @@ import {
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined'
@@ -34,9 +35,9 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
 import { Flags } from '../../../utils/flags'
-import { currentDataProviderSettings } from '../../../plugins/Trader/settings'
-import { resolveDataProviderName } from '../../../plugins/Trader/pipes'
-import { DataProvider } from '../../../plugins/Trader/types'
+import { currentDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
+import { resolveDataProviderName, resolveTradeProviderName } from '../../../plugins/Trader/pipes'
+import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
 import { ChainId } from '../../../web3/types'
 import { extendsTheme } from '../../../utils/theme'
 
@@ -195,6 +196,13 @@ export default function DashboardSettingsRouter() {
                                     getText={resolveDataProviderName}
                                     icon={<TrendingUpIcon />}
                                     value={currentDataProviderSettings}
+                                />
+                                <SettingsUIEnum
+                                    classes={listStyle}
+                                    enumObject={TradeProvider}
+                                    getText={resolveTradeProviderName}
+                                    icon={<SwapHorizIcon />}
+                                    value={currentTradeProviderSettings}
                                 />
                                 {isMobile ? (
                                     <SettingsUIEnum
