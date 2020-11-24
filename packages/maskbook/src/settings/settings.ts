@@ -88,6 +88,7 @@ export const lastActivatedWalletProvider = createInternalSettings<ProviderType>(
 export enum Language {
     zh = 'zh',
     en = 'en',
+    pt = 'pt',
     ja = 'ja',
 }
 const lang: string = i18nNextInstance.language
