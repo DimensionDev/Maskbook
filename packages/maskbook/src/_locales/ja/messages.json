@@ -292,6 +292,7 @@
     "plugin_wallet_qr_code_with_wallet_connect": "",
     "plugin_wallet_wrong_network": "",
     "plugin_wallet_metamask_unlock": "",
+    "plugin_wallet_connect_dialog_title": "",
     "plugin_wallet_connect_to_maskbook": "",
     "plugin_wallet_connect_to_metamask": "",
     "plugin_wallet_connect_to_walletconnect_on_web": "",
