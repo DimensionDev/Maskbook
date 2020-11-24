@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useState, useMemo } from 'react'
 import Fuse from 'fuse.js'
 import {
     List,
@@ -42,8 +42,8 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const { items, disabledItems } = props
-    const [search, setSearch] = React.useState('')
-    const itemsAfterSearch = React.useMemo(() => {
+    const [search, setSearch] = useState('')
+    const itemsAfterSearch = useMemo(() => {
         const fuse = new Fuse(items, {
             keys: ['identifier.userId', 'linkedPersona.fingerprint', 'nickname'],
             isCaseSensitive: false,
@@ -56,7 +56,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const LIST_ITEM_HEIGHT = 56
 
     return (
-        <InjectedDialog open={props.open} title={t('select_specific_friends_dialog__title')} onExit={props.onClose}>
+        <InjectedDialog open={props.open} title={t('select_specific_friends_dialog__title')} onClose={props.onClose}>
             <DialogContent>
                 <InputBase
                     value={search}

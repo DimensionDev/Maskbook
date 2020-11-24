@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { NotSetupYetPrompt } from '../../shared/NotSetupYetPrompt'
@@ -15,7 +15,7 @@ export interface DecryptPostFailedProps {
     /** The author of the encrypted post */
     postedBy?: ProfileIdentifier
 }
-export const DecryptPostFailed = React.memo(function DecryptPostFailed(props: DecryptPostFailedProps) {
+export const DecryptPostFailed = memo(function DecryptPostFailed(props: DecryptPostFailedProps) {
     const { AdditionalContentProps, NotSetupYetPromptProps, author, postedBy, error } = props
     const { t } = useI18N()
     if (error?.message === DecryptFailedReason.MyCryptoKeyNotFound)

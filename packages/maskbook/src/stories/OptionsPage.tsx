@@ -1,4 +1,3 @@
-import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { QRCode } from '../components/shared/qrcode'
 import { text, array } from '@storybook/addon-knobs'

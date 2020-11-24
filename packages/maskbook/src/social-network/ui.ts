@@ -17,6 +17,7 @@ import type { PostInfo } from './PostInfo'
 import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 import { editMetadata } from '../protocols/typed-message'
 import type { ReadonlyIdentifierMap } from '../database/IdentifierMap'
+import { Flags } from '../utils/flags'
 
 if (!process.env.STORYBOOK) {
     assertEnvironment.oneOf(Environment.ContentScript, Environment.ManifestOptions, Environment.ManifestBrowserAction)
@@ -106,6 +107,10 @@ export interface SocialNetworkUIInjections {
      */
     injectPostBox(): void
     /**
+     * This function should inject the setup prompt
+     */
+    injectSetupPrompt(): void
+    /**
      * This function should inject the page inspector
      */
     injectPageInspector(): void
@@ -115,6 +120,14 @@ export interface SocialNetworkUIInjections {
      * This function should inject a hint at their bio if they are known by Maskbook
      */
     injectKnownIdentity?: (() => void) | 'disabled'
+    /**
+     * This function should inject UI in the search prediction box
+     */
+    injectSearchPredictionBox?: (() => void) | 'disabled'
+    /**
+     * This function should inject UI in the main search result box
+     */
+    injectSearchResultBox?: (() => void) | 'disabled'
     /**
      * This function should inject the comment
      * @param current The current post
@@ -310,6 +323,7 @@ export function activateSocialNetworkUI(): void {
                 ui.init(env, {})
                 ui.resolveLastRecognizedIdentity()
                 ui.injectPostBox()
+                ui.injectSetupPrompt()
                 ui.injectPageInspector()
                 ui.collectPeople()
                 ui.collectPosts()
@@ -317,8 +331,13 @@ export function activateSocialNetworkUI(): void {
                     if (val.length === 1) ui.currentIdentity.value = val[0]
                 })
                 {
-                    const mountKnownIdentity = ui.injectKnownIdentity
-                    if (typeof mountKnownIdentity === 'function') mountKnownIdentity()
+                    if (Flags.inject_search_result_box && typeof ui.injectSearchResultBox === 'function')
+                        ui.injectSearchResultBox()
+                    if (Flags.inject_search_prediction_box && typeof ui.injectSearchPredictionBox === 'function')
+                        ui.injectSearchPredictionBox()
+                }
+                {
+                    if (typeof ui.injectKnownIdentity === 'function') ui.injectKnownIdentity()
                 }
                 ui.lastRecognizedIdentity.addListener((id) => {
                     if (id.identifier.isUnknown) return

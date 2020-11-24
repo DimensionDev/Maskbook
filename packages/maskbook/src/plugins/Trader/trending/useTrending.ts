@@ -1,19 +1,20 @@
 import { useAsync } from 'react-use'
 import { PluginTraderRPC } from '../messages'
-import type { DataProvider, Currency } from '../types'
+import type { DataProvider } from '../types'
+import { useCurrentCurrency } from './useCurrentCurrency'
 
-export function useTrending(keyword: string, platform: DataProvider, currency: Currency | null) {
-    const { value: trending, loading: loadingTrending, error: errorTrending } = useAsync(async () => {
-        if (!currency) return null
-        try {
-            return PluginTraderRPC.getCoinTrendingByKeyword(keyword, platform, currency)
-        } catch (e) {
-            return null
-        }
-    }, [platform, currency, keyword])
+export function useTrending(keyword: string, dataProvider: DataProvider) {
+    const currencyAsyncResult = useCurrentCurrency(dataProvider)
+    const trendingAsyncResult = useAsync(async () => {
+        if (!currencyAsyncResult.value) return null
+        return PluginTraderRPC.getCoinTrendingByKeyword(keyword, dataProvider, currencyAsyncResult.value)
+    }, [dataProvider, currencyAsyncResult.value, keyword])
     return {
-        value: trending,
-        loading: loadingTrending,
-        error: errorTrending,
+        value: {
+            currency: currencyAsyncResult.value,
+            trending: trendingAsyncResult.value,
+        },
+        loading: currencyAsyncResult.loading || trendingAsyncResult.loading,
+        error: currencyAsyncResult.error || trendingAsyncResult.error,
     }
 }

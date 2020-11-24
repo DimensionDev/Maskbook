@@ -1,4 +1,3 @@
-import React from 'react'
 import Tilt from 'react-tilt'
 import { Card, createStyles, Link, makeStyles } from '@material-ui/core'
 import type { ElectionToken } from '../types'

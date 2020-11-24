@@ -1,4 +1,3 @@
-import React from 'react'
 import { Avatar, AvatarProps, createStyles, makeStyles } from '@material-ui/core'
 import { useBlockie } from '../hooks/useBlockie'
 import { useStylesExtends } from '../../components/custom-ui-helper'

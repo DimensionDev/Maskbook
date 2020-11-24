@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, createStyles, Avatar, Theme, AvatarProps } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { isSameAddress, getConstant } from '../../../web3/helpers'

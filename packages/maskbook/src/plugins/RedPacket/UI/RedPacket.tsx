@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { makeStyles, createStyles, Card, Typography, Box } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import classNames from 'classnames'
@@ -13,7 +13,6 @@ import { isDAI, isOKB } from '../../../web3/helpers'
 import { resolveRedPacketStatus } from '../pipes'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
-import { useTokenComputed } from '../hooks/useTokenComputed'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -31,6 +30,7 @@ import { ProviderType } from '../../../web3/types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import Services from '../../../extension/service'
+import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -151,12 +151,14 @@ export function RedPacket(props: RedPacketProps) {
     const isMetamaskRedpacketLocked =
         useValueRef(currentIsMetamaskLockedSettings) && currentSelectedWalletProvider === ProviderType.MetaMask
 
+    //#region token detailed
     const {
         value: availability,
         computed: availabilityComputed,
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, payload)
-    const { value: token } = useTokenComputed(payload)
+    const { value: tokenDetailed } = useTokenDetailed(payload.token_type, payload.token?.address ?? '')
+    //#ednregion
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
 
@@ -200,7 +202,7 @@ export function RedPacket(props: RedPacketProps) {
     useEffect(() => {
         const state = canClaim ? claimState : refundState
         if (state.type === TransactionStateType.UNKNOWN) return
-        if (!availability || !token) return
+        if (!availability || !tokenDetailed) return
         setTransactionDialogOpen({
             open: true,
             shareLink,
@@ -210,9 +212,9 @@ export function RedPacket(props: RedPacketProps) {
                 : canRefund
                 ? `Refunding red packet for ${formatBalance(
                       new BigNumber(availability.balance),
-                      token.decimals,
-                      token.decimals,
-                  )} ${token.symbol}`
+                      tokenDetailed.decimals ?? 0,
+                      tokenDetailed.decimals ?? 0,
+                  )} ${tokenDetailed.symbol}`
                 : '',
         })
     }, [claimState, refundState /* update tx dialog only if state changed */])
@@ -239,7 +241,7 @@ export function RedPacket(props: RedPacketProps) {
         )
 
     // the red packet can fetch without account
-    if (!availability || !token)
+    if (!availability || !tokenDetailed)
         return (
             <Card className={classes.root} component="article" elevation={0}>
                 <Skeleton animation="wave" variant="rect" width={'30%'} height={12} style={{ marginTop: 16 }} />
@@ -275,10 +277,10 @@ export function RedPacket(props: RedPacketProps) {
                                 return t('plugin_red_packet_description_refund', {
                                     balance: formatBalance(
                                         new BigNumber(availability.balance),
-                                        token.decimals,
-                                        token.decimals,
+                                        tokenDetailed.decimals ?? 0,
+                                        tokenDetailed.decimals ?? 0,
                                     ),
-                                    symbol: token.symbol,
+                                    symbol: tokenDetailed.symbol,
                                 })
                             if (listOfStatus.includes(RedPacketStatus.claimed))
                                 return t('plugin_red_packet_description_claimed')
@@ -290,8 +292,12 @@ export function RedPacket(props: RedPacketProps) {
                                 return t('plugin_red_packet_description_empty')
                             if (!payload.password) return t('plugin_red_packet_description_broken')
                             return t('plugin_red_packet_description_failover', {
-                                total: formatBalance(new BigNumber(payload.total), token.decimals, token.decimals),
-                                symbol: token.symbol,
+                                total: formatBalance(
+                                    new BigNumber(payload.total),
+                                    tokenDetailed.decimals ?? 0,
+                                    tokenDetailed.decimals ?? 0,
+                                ),
+                                symbol: tokenDetailed.symbol,
                                 name: payload.sender.name ?? '-',
                                 shares: payload.shares ?? '-',
                             })

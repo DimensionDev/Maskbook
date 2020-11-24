@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { TypedMessageAnchor, registerTypedMessageRenderer } from '../../../protocols/typed-message'
 import { Link, Typography } from '@material-ui/core'
 import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
@@ -30,13 +30,13 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
         if (openTimer !== null) clearTimeout(openTimer)
         setOpenTimer(
             setTimeout(async () => {
-                const availablePlatforms = await PluginTraderRPC.getAvailableDataProviders(props.message.name)
-                if (availablePlatforms.length)
-                    PluginTraderMessages.events.cashTagObserved.sendToLocal({
-                        name: props.message.name,
-                        element,
-                        availablePlatforms,
-                    })
+                const dataProviders = await PluginTraderRPC.getAvailableDataProviders(props.message.name)
+                if (!dataProviders.length) return
+                PluginTraderMessages.events.cashTagObserved.sendToLocal({
+                    name: props.message.name,
+                    element,
+                    dataProviders,
+                })
             }, 500),
         )
     }

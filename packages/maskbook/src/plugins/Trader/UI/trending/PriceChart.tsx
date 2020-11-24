@@ -1,4 +1,5 @@
-import React, { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useWindowSize } from 'react-use'
 import type { Coin, Stat } from '../../types'
 import { makeStyles, Theme, createStyles, CircularProgress, Typography } from '@material-ui/core'
 import { useDimension, Dimension } from '../../graphs/useDimension'
@@ -10,7 +11,7 @@ const DEFAULT_DIMENSION: Dimension = {
     right: 16,
     bottom: 32,
     left: 16,
-    width: 416,
+    width: 598,
     height: 200,
 }
 
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme: Theme) => {
         },
         placeholder: {
             paddingTop: theme.spacing(10),
+            paddingBottom: theme.spacing(10),
             borderStyle: 'none',
         },
     })
@@ -45,20 +47,36 @@ export interface PriceChartProps {
 export function PriceChart(props: PriceChartProps) {
     const { t } = useI18N()
     const classes = useStyles(props)
+    const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
 
-    useDimension(svgRef, DEFAULT_DIMENSION)
+    //#region make chart responisve
+    const { width } = useWindowSize()
+    const [responsiveWidth, setResponsiveWidth] = useState(DEFAULT_DIMENSION.width)
+
+    useEffect(() => {
+        if (!rootRef.current) return
+        setResponsiveWidth(rootRef.current.getBoundingClientRect().width || DEFAULT_DIMENSION.width)
+    }, [width /* redraw canvas if window width resize */])
+    //#endregion
+
+    const dimension = {
+        ...DEFAULT_DIMENSION,
+        width: responsiveWidth,
+    }
+    useDimension(svgRef, dimension)
     usePriceLineChart(
         svgRef,
         props.stats.map(([date, price]) => ({
             date: new Date(date),
             value: price,
         })),
-        DEFAULT_DIMENSION,
+        dimension,
         'x-trader-price-line-chart',
     )
+
     return (
-        <div className={classes.root} style={{ width: DEFAULT_DIMENSION.width, height: DEFAULT_DIMENSION.height }}>
+        <div className={classes.root} ref={rootRef}>
             {props.loading ? <CircularProgress className={classes.progress} color="primary" size={15} /> : null}
             {props.stats.length ? (
                 <>
@@ -66,8 +84,10 @@ export function PriceChart(props: PriceChartProps) {
                     <svg
                         className={classes.svg}
                         ref={svgRef}
-                        width={DEFAULT_DIMENSION.width}
-                        height={DEFAULT_DIMENSION.height}
+                        width={dimension.width}
+                        height={dimension.height}
+                        viewBox={`0 0 ${dimension.width} ${dimension.height}`}
+                        preserveAspectRatio="xMidYMid meet"
                         onClick={() => {
                             props.stats.length &&
                                 props.coin?.platform_url &&

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'

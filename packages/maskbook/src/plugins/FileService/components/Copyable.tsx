@@ -1,5 +1,4 @@
 import { useSnackbar } from 'notistack'
-import React from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/i18n-next-ui'
 

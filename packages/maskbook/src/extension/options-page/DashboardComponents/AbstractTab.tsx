@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Theme, createStyles, Tabs, Tab, Box, BoxProps, Paper } from '@material-ui/core'
 

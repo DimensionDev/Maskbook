@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { SelectProfileAndGroupsUI, SelectProfileAndGroupsUIProps } from '../shared/SelectPeopleAndGroups'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
@@ -39,7 +39,7 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
 
     const canCommit = committed || people.length === 0
     return (
-        <InjectedDialog onExit={onClose} open={props.open} title={t('share_to')}>
+        <InjectedDialog onClose={onClose} open={props.open} title={t('share_to')}>
             <DialogContent>
                 <SelectProfileAndGroupsUI<Profile>
                     frozenSelected={props.alreadySelectedPreviously}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useAsync, useCopyToClipboard } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
@@ -38,9 +38,9 @@ import { DashboardRoute } from '../Route'
 import { sleep, checkInputLengthExceed } from '../../../utils/utils'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import { QRCode } from '../../../components/shared/qrcode'
-import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
+import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { Token, EthereumTokenType } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
 import { RedPacketInboundList, RedPacketOutboundList } from '../../../plugins/RedPacket/UI/RedPacketList'
 import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
@@ -72,7 +72,7 @@ const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
 
 interface ERC20PredefinedTokenSelectorProps {
     excludeTokens?: string[]
-    onTokenChange?: (next: Token | null) => void
+    onTokenChange?: (next: ERC20TokenDetailed | null) => void
 }
 
 export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelectorProps) {
@@ -95,7 +95,7 @@ export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelector
                 classes={{ list: classes.list, placeholder: classes.placeholder }}
                 keyword={keyword}
                 excludeTokens={excludeTokens}
-                onSubmit={onTokenChange}
+                onSubmit={(token) => token.type === EthereumTokenType.ERC20 && onTokenChange?.(token)}
                 FixedSizeListProps={{
                     height: 192,
                     itemSize: 52,
@@ -109,7 +109,7 @@ export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelector
 
 //#region ERC20 customized token selector
 export interface ERC20CustomizedTokenSelectorProps {
-    onTokenChange?: (next: Token | null) => void
+    onTokenChange?: (next: ERC20TokenDetailed | null) => void
     excludeTokens?: string[]
 }
 
@@ -456,11 +456,11 @@ export function DashboardWalletShareDialog(props: WrappedDialogProps<WalletProps
 }
 //#endregion
 
-//#region wallet add token dialog
-export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletProps>) {
+//#region wallet add ERC20 token dialog
+export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
-    const [token, setToken] = React.useState<Token | null>(null)
+    const [token, setToken] = useState<ERC20TokenDetailed | null>(null)
 
     const [tabState, setTabState] = useState(0)
     const state = useMemo(
@@ -666,7 +666,7 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
 
 //#region hide wallet token
 export function DashboardWalletHideTokenConfirmDialog(
-    props: WrappedDialogProps<WalletProps & { token: ERC20TokenRecord }>,
+    props: WrappedDialogProps<WalletProps & { token: ERC20TokenDetailed }>,
 ) {
     const { t } = useI18N()
     const { wallet, token } = props.ComponentProps!

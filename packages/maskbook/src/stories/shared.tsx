@@ -1,4 +1,3 @@
-import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { ChooseIdentity } from '../components/shared/ChooseIdentity'
 import { SettingsUI, SettingsUIEnum } from '../components/shared-settings/useSettingsUI'

@@ -1,4 +1,3 @@
-import React from 'react'
 import type { Persona } from '../../../database'
 import { definedSocialNetworkWorkers } from '../../../social-network/worker'
 

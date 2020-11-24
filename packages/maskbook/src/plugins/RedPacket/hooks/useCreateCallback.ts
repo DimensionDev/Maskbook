@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { Token, EthereumTokenType, TransactionEventType } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed, TransactionEventType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
@@ -15,9 +15,9 @@ export interface RedPacketSettings {
     duration: number
     isRandom: boolean
     total: string
-    token: Token
     name: string
     message: string
+    token?: EtherTokenDetailed | ERC20TokenDetailed
 }
 
 export function useCreateCallback(redPacketSettings: RedPacketSettings) {
@@ -27,13 +27,14 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
 
     const createCallback = useCallback(async () => {
-        if (!redPacketContract) {
+        const { password, duration, isRandom, message, name, shares, total, token } = redPacketSettings
+
+        if (!token || !redPacketContract) {
             setCreateState({
                 type: TransactionStateType.UNKNOWN,
             })
             return
         }
-        const { password, duration, isRandom, message, name, shares, total, token } = redPacketSettings
 
         // error handling
         if (new BigNumber(total).isLessThan(shares)) {
@@ -95,7 +96,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
             })
 
         // step 2: blocking
-        return new Promise<string>(async (resolve, reject) => {
+        return new Promise<void>(async (resolve, reject) => {
             const promiEvent = redPacketContract.methods.create_red_packet(...params).send({
                 gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                 ...config,

@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react'
+import { useMemo, useState, useEffect, useCallback } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import {
     makeStyles,
@@ -214,13 +214,13 @@ interface ContentUIProps {
 
 function ContentUI(props: ContentUIProps) {
     const classes = useStyles(props)
-    const isMobile = useMatchXS()
+    const xsMatch = useMatchXS()
     const wizardClasses = useWizardDialogStyles()
     switch (props.dialogType) {
         case SetupGuideStep.FindUsername:
             return (
                 <Box display="block">
-                    <Box display={isMobile ? 'flex' : 'block'}>
+                    <Box display={xsMatch ? 'flex' : 'block'}>
                         <main className={classes.content}>{props.content}</main>
                         <Hidden only="xs">
                             <div>{props.tip}</div>

@@ -1,5 +1,3 @@
-import React from 'react'
-
 interface ProviderIconProps {
     network?: string
     children?: JSX.Element | string

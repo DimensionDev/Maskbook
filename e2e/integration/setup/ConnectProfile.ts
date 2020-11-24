@@ -51,9 +51,9 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             await dashboard.openPersonas(page)
 
             // click the connect button
-            const connectButton = await page.waitFor(`[data-testid="connect_button_${sns.name}"]`)
+            const connectButton = await page.waitForSelector(`[data-testid="connect_button_${sns.name}"]`)
             await connectButton.click()
-            await page.waitFor(500)
+            await page.waitForTimeout(500)
 
             // continue with the opened sns home page
             const snsPage = await sns.getActivePage(page.browser())
@@ -65,7 +65,7 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             await sns.dimissDialog(snsPage)
 
             // wait maskbook inject setup guide
-            await snsPage.waitFor(sns.setupGuideSelector)
+            await snsPage.waitForSelector(sns.setupGuideSelector)
 
             // validate username
             const usernameInput = await snsPage.waitForFunction(
@@ -81,27 +81,27 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
                 `document.querySelector('${sns.setupGuideSelector}').shadowRoot.querySelector('[data-testid="confirm_button"]')`,
             )
             await (confirmButton as any).click()
-            await page.waitFor(500)
+            await page.waitForTimeout(500)
 
             // click the 'done' button
             await (confirmButton as any).click()
-            await page.waitFor(500)
+            await page.waitForTimeout(500)
 
             // redirect to news feed page
-            await snsPage.waitFor(sns.composeEditorSelector)
+            await snsPage.waitForSelector(sns.composeEditorSelector)
 
             // wait maskbook inject setup guide
-            await snsPage.waitFor(sns.setupGuideSelector)
+            await snsPage.waitForSelector(sns.setupGuideSelector)
 
             // click the 'create' button
             const createButton = await snsPage.waitForFunction(
                 `document.querySelector('${sns.setupGuideSelector}').shadowRoot.querySelector('[data-testid="create_button"]')`,
             )
             await (createButton as any).click()
-            await snsPage.waitFor(500)
+            await snsPage.waitForTimeout(500)
 
             // wait for maskbook inject post dialog modal
-            await snsPage.waitFor(sns.postDialogModalSelector)
+            await snsPage.waitForSelector(sns.postDialogModalSelector)
 
             // validate content of the compose dialog
             const textTextarea = await snsPage.waitForFunction(
@@ -114,11 +114,11 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             await helpers.screenshot(snsPage, `${sns.name}_connect_2`)
 
             // wait for UI update
-            await snsPage.waitFor(500)
+            await snsPage.waitForTimeout(500)
 
             // click the 'done' button
             await (createButton as any).click()
-            await snsPage.waitFor(500)
+            await snsPage.waitForTimeout(500)
 
             // take screenshot
             await helpers.screenshot(snsPage, `${sns.name}_connect_3`)

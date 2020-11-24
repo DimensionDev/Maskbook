@@ -1,4 +1,3 @@
-import React from 'react'
 import {
     Accordion,
     AccordionDetails,
@@ -96,7 +95,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
         </Card>
     ) : null
     return (
-        <InjectedDialog open title="Debug: Metadata Inspector" onExit={onExit}>
+        <InjectedDialog open title="Debug: Metadata Inspector" onClose={onExit}>
             <DialogContent>
                 {editor}
                 {[...props.meta].map(([key, content]) => {

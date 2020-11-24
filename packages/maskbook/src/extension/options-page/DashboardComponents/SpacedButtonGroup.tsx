@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, makeStyles, createStyles, BoxProps } from '@material-ui/core'
 import classNames from 'classnames'
 

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Avatar, ListItem, ListItemText, makeStyles, Theme, ListTypeMap, ListItemAvatar } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../custom-ui-helper'

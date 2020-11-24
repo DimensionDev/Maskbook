@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Box, Card, CardContent, CardHeader, createStyles, Link, makeStyles, Typography } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import classNames from 'classnames'
@@ -6,7 +6,6 @@ import { ElectionCard } from './ElectionCard'
 import type { Election2020JSONPayload } from '../types'
 import FlagImage from '../assets/Flag'
 import FireworksImage from '../assets/Fireworks'
-import { EthereumTokenType } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ELECTION_2020_CONSTANTS } from '../constants'
 import { resolveCandidateName, resolveCandidateBriefName, resolveStateName } from '../pipes'
@@ -20,7 +19,7 @@ import { useElectionTokens } from '../hooks/useElectionTokens'
 import { useElectionTokensOfOwner } from '../hooks/useElectionTokensOfOwner'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { useAvailability } from '../hooks/useAvailability'
-import { useERC721Token } from '../../../web3/hooks/useERC721Token'
+import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
@@ -146,10 +145,7 @@ export function ElectionPacket(props: ElectionPacketProps) {
 
     // fetch the NTF token
     const ELECTION_TOKEN_ADDRESS = useConstant(ELECTION_2020_CONSTANTS, 'ELECTION_TOKEN_ADDRESS')
-    const { value: electionToken } = useERC721Token({
-        type: EthereumTokenType.ERC721,
-        address: ELECTION_TOKEN_ADDRESS,
-    })
+    const { value: electionToken } = useERC721TokenDetailed(ELECTION_TOKEN_ADDRESS)
 
     const { value: remaining, loading: loadingRemaining, retry: revalidateAvailability } = useAvailability(
         payload.state,

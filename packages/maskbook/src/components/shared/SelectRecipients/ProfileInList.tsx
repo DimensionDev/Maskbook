@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback } from 'react'
+import { ChangeEvent, useCallback } from 'react'
 import classNames from 'classnames'
 import { makeStyles, Theme, ListItem, ListItemText, Checkbox, ListItemAvatar } from '@material-ui/core'
 import Highlighter from 'react-highlight-words'

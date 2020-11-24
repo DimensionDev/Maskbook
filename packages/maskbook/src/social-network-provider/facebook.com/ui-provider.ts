@@ -3,6 +3,7 @@ import { InitFriendsValueRef } from '../../social-network/defaults/FriendsValueR
 import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdentitiesRef'
 import { sharedProvider } from './shared-provider'
 import { injectPostBoxFacebook } from './UI/injectPostBox'
+import { injectSetupPromptFacebook } from './UI/injectSetupPrompt'
 import { collectPeopleFacebook } from './UI/collectPeople'
 import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
 import { taskOpenComposeBoxFacebook } from './tasks/openComposeBox'
@@ -65,6 +66,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     },
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
     injectPostBox: injectPostBoxFacebook,
+    injectSetupPrompt: injectSetupPromptFacebook,
     injectPostComments: injectPostCommentsDefault(),
     injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
         encryptedComment,

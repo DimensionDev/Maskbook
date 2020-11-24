@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from './Base'
 import { Smile as SmileIcon } from 'react-feather'
 import { TextField } from '@material-ui/core'

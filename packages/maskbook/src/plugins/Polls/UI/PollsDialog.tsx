@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -303,7 +303,7 @@ export default function PollsDialog(props: PollsDialogProps) {
     }
 
     return (
-        <InjectedDialog open={props.open} onExit={props.onDecline} title={t('plugin_poll_display_name')}>
+        <InjectedDialog open={props.open} onClose={props.onDecline} title={t('plugin_poll_display_name')}>
             <DialogContent>
                 <AbstractTab height={450} {...tabProps} />
             </DialogContent>

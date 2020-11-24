@@ -1,4 +1,3 @@
-import * as React from 'react'
 import classNames from 'classnames'
 import Chip, { ChipProps } from '@material-ui/core/Chip'
 import type { Group } from '../../../database'

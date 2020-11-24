@@ -1,5 +1,5 @@
 import { Percent, JSBI } from '@uniswap/sdk'
-import { ChainId, Token } from '../../../web3/types'
+import { ChainId, ERC20TokenDetailed } from '../../../web3/types'
 import { CONSTANTS } from '../../../web3/constants'
 import { createERC20Token, getConstant } from '../../../web3/helpers'
 
@@ -71,7 +71,7 @@ const MSKC = createERC20Token(
 )
 
 export const WETH: {
-    readonly [chainId in ChainId]: Token
+    readonly [chainId in ChainId]: ERC20TokenDetailed
 } = {
     [ChainId.Mainnet]: createERC20Token(
         ChainId.Mainnet,
@@ -109,7 +109,7 @@ export const WETH: {
  */
 export const CUSTOM_BASES: {
     readonly [chainId in ChainId]?: {
-        [tokenAddress: string]: Token[]
+        [tokenAddress: string]: ERC20TokenDetailed[]
     }
 } = {
     [ChainId.Mainnet]: {
@@ -118,7 +118,7 @@ export const CUSTOM_BASES: {
 }
 
 const WETH_ONLY: {
-    readonly [chainId in ChainId]: Token[]
+    readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
     [ChainId.Mainnet]: [WETH[ChainId.Mainnet]],
     [ChainId.Ropsten]: [WETH[ChainId.Ropsten]],
@@ -127,7 +127,7 @@ const WETH_ONLY: {
 }
 
 export const BASE_AGAINST_TOKENS: {
-    readonly [chainId in ChainId]: Token[]
+    readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
     ...WETH_ONLY,
     [ChainId.Mainnet]: [...WETH_ONLY[ChainId.Mainnet], ...[DAI, USDC, USDT, COMP, MKR, AMPL]],
@@ -136,7 +136,6 @@ export const BASE_AGAINST_TOKENS: {
 
 export const BIPS_BASE = JSBI.BigInt(10000)
 export const ONE_BIPS = new Percent(JSBI.BigInt(1), BIPS_BASE)
-export const DEFAULT_SLIPPAGE_TOLERANCE = 50 // bips
 export const DEFAULT_TRANSACTION_DEADLINE = 20 /* minutes */ * 60 /* seconds */ // seconds
 
 export const ALLOWED_PRICE_IMPACT_LOW: Percent = new Percent(JSBI.BigInt(100), BIPS_BASE) // 1%

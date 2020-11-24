@@ -1,4 +1,4 @@
-import { ChainId, Token } from '../../../web3/types'
+import { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import {
     Token as UniswapToken,
     ChainId as UniswapChainId,
@@ -33,17 +33,21 @@ export function toUniswapPercent(numerator: number, denominator: number) {
     return new Percent(JSBI.BigInt(numerator), JSBI.BigInt(denominator))
 }
 
-export function toUniswapCurrency(chainId: ChainId, token: Token): UniswapCurrency {
+export function toUniswapCurrency(chainId: ChainId, token: EtherTokenDetailed | ERC20TokenDetailed): UniswapCurrency {
     if (token.address === getConstant(CONSTANTS, 'ETH_ADDRESS')) return ETHER
     return toUniswapToken(chainId, token)
 }
 
-export function toUniswapToken(chainId: ChainId, token: Token): UniswapToken {
+export function toUniswapToken(chainId: ChainId, token: EtherTokenDetailed | ERC20TokenDetailed): UniswapToken {
     if (token.address === getConstant(CONSTANTS, 'ETH_ADDRESS')) return toUniswapToken(chainId, WETH[chainId])
-    return new UniswapToken(toUniswapChainId(chainId), token.address, token.decimals, token.symbol, token.name)
+    return new UniswapToken(toUniswapChainId(chainId), token.address, token.decimals ?? 0, token.symbol, token.name)
 }
 
-export function toUniswapCurrencyAmount(chainId: ChainId, token: Token, amount: string) {
+export function toUniswapCurrencyAmount(
+    chainId: ChainId,
+    token: EtherTokenDetailed | ERC20TokenDetailed,
+    amount: string,
+) {
     return token.address === getConstant(CONSTANTS, 'ETH_ADDRESS')
         ? CurrencyAmount.ether(JSBI.BigInt(amount))
         : new TokenAmount(toUniswapToken(chainId, token), JSBI.BigInt(amount))

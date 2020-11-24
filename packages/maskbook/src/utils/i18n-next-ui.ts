@@ -2,7 +2,7 @@
 import type { i18n } from 'i18next'
 import { initReactI18next, useTranslation as useTranslation_, UseTranslationOptions } from 'react-i18next'
 import type { TOptions } from 'i18next'
-import React, { useEffect } from 'react'
+import { useMemo, useCallback, useEffect } from 'react'
 import type en from '../_locales/en/messages.json'
 import i18nNextInstance from './i18n-next'
 import { languageSettings } from '../settings/settings'
@@ -53,8 +53,8 @@ languageSettings.addListener((next) => {
 })
 
 export function useIntlListFormat() {
-    const formatter = React.useMemo(() => {
+    const formatter = useMemo(() => {
         return new Intl.ListFormat({ type: 'conjunction' })
     }, [])
-    return React.useCallback((list: string[]) => formatter.format(list), [formatter])
+    return useCallback((list: string[]) => formatter.format(list), [formatter])
 }

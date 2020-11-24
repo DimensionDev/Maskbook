@@ -20,7 +20,8 @@ class NonceManager {
         return new Promise<number>(async (resolve, reject) => {
             const callback = (e: Error | null, nonce?: number) => {
                 if (e) reject(e)
-                else resolve(nonce)
+                // TODO: is 0 a correct value if nonce is undefined?
+                else resolve(nonce ?? 0)
                 this.unlock()
                 this.contine()
             }

@@ -1,6 +1,5 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { makeStyles, Typography, LinearProgress, Box } from '@material-ui/core'
-import React from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles({

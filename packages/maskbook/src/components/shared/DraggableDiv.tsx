@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import Draggable, { DraggableProps } from 'react-draggable'
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import { makeStyles, Theme } from '@material-ui/core'

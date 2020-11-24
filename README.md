@@ -44,4 +44,4 @@ Help us by donating us:
 
 - Bitcoin: `3PRrXj1HTXDc4j9SCQZ6hovpa74iimqtgX`
 - Ethereum: `0xD71c7150962fd484a4291a193c85426Df9EaABbB`
-- Gitcoin (All erc20): [Mask Network](https://gitcoin.co/grants/159/mask-networkmaskbook-the-portal-to-the-new-open-i)
+- Gitcoin (ETH/ERC20): [Mask Network](https://gitcoin.co/grants/159/mask-networkmaskbook-the-portal-to-the-new-open-i)

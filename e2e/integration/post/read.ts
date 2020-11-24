@@ -62,7 +62,7 @@ describe(`${READ_POST_STORY_URL}#Story:ReadPost(?br=wip)-BasicWorkflow`, () => {
                 await sns.dimissDialog(snsPostPage)
 
                 // wait maskbook decrypt the payload
-                await snsPostPage.waitFor(sns.postAffixingCanvasSelector)
+                await snsPostPage.waitForSelector(sns.postAffixingCanvasSelector)
 
                 // validate the payload
                 const textPayload = await snsPostPage.waitForFunction(

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { storiesOf } from '@storybook/react'
 import { text, boolean, select, radios, number } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
@@ -25,7 +25,6 @@ import {
     makeTypedMessageSuspended,
 } from '../protocols/typed-message'
 import { DefaultTypedMessageRenderer } from '../components/InjectedComponents/TypedMessageRenderer'
-import { useTwitterThemedPostDialogHint } from '../social-network-provider/twitter.com/ui/injectPostDialogHint'
 import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
 import { figmaLink } from './utils'
 import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
@@ -109,7 +108,7 @@ storiesOf('Injections', module)
                 async () => sleep(3000),
                 boolean('Has frozen item?', true) ? [demoProfiles[0]] : [],
             )
-            React.useEffect(() => {
+            useEffect(() => {
                 showShare()
             })
             return ShareMenu
@@ -268,8 +267,7 @@ storiesOf('Injections', module)
             </>
         )
         function TwitterFlavorPostDialogHint() {
-            const style = { ...useTwitterThemedPostDialogHint() }
-            return <PostDialogHint classes={style} onHintButtonClicked={action('clicked')} />
+            return <PostDialogHint onHintButtonClicked={action('clicked')} />
         }
     })
     .add('CharLimitIndicator', () => <CharLimitIndicator max={number('max', 560)} value={number('current', 530)} />)

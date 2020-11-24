@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { MoreHorizontal } from 'react-feather'
 import {
     makeStyles,
@@ -117,7 +117,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     )
 
     return (
-        <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onExit={onClose}>
+        <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <GridList className={classes.grid} spacing={16} cellHeight={183}>
                     <GridListTile>

@@ -1,4 +1,3 @@
-import React from 'react'
 import classNames from 'classnames'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'

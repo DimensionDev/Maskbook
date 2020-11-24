@@ -1,30 +1,28 @@
-import React, { useState, useEffect } from 'react'
+import { useCallback, useState } from 'react'
+import { DollarSign } from 'react-feather'
 import {
     makeStyles,
     Avatar,
     Typography,
-    Card,
     CardHeader,
     CardContent,
     CardActions,
-    Theme,
     createStyles,
     Link,
     Box,
     Paper,
     Tab,
     Tabs,
+    IconButton,
 } from '@material-ui/core'
-import { last } from 'lodash-es'
-import { AlertCircle } from 'react-feather'
-import { DataProvider, SwapProvider } from '../../types'
+import { first, last } from 'lodash-es'
+import { DataProvider, TradeProvider } from '../../types'
 import {
     resolveDataProviderName,
     resolveDataProviderLink,
-    resolveSwapProviderName,
-    resolveSwapProviderLink,
+    resolveTradeProviderName,
+    resolveTradeProviderLink,
 } from '../../pipes'
-import { getActivatedUI } from '../../../../social-network/ui'
 import { formatCurrency } from '../../../Wallet/formatter'
 import { useTrending } from '../../trending/useTrending'
 import { TickersTable } from './TickersTable'
@@ -33,38 +31,26 @@ import { PriceChanged } from './PriceChanged'
 import { PriceChart } from './PriceChart'
 import { Linking } from './Linking'
 import { usePriceStats } from '../../trending/usePriceStats'
-import { Skeleton } from '@material-ui/lab'
 import { Days, PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
-import { useCurrentSwapProvider } from '../../trending/useCurrentSwapProvider'
-import { useCurrentCurrency } from '../../trending/useCurrentCurrency'
+import { useCurrentTradeProvider } from '../../trending/useCurrentTradeProvider'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { CoinMarketCapIcon } from '../../../../resources/CoinMarketCapIcon'
-import { Trader } from '../uniswap/Trader'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { MaskbookTextIcon } from '../../../../resources/MaskbookIcon'
 import { CONSTANTS } from '../../../../web3/constants'
+import { TradeView } from '../trader/TradeView'
+import { TrendingCard } from './TrendingCard'
+import { TrendingViewError } from './TrendingViewError'
+import { TrendingViewSkeleton } from './TrendingViewSkeleton'
+import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
+import { PluginTransakMessages } from '../../../Transak/messages'
+import { useAccount } from '../../../../web3/hooks/useAccount'
+import { Flags } from '../../../../utils/flags'
 
-const useStyles = makeStyles((theme: Theme) => {
-    const internalName = getActivatedUI()?.internalName
+const useStyles = makeStyles((theme) => {
     return createStyles({
-        root: {
-            width: 450,
-            overflow: 'auto',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-            ...(internalName === 'twitter'
-                ? {
-                      boxShadow: `${
-                          theme.palette.type === 'dark'
-                              ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
-                              : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
-                      }`,
-                  }
-                : null),
-        },
         content: {
             paddingTop: 0,
             paddingBottom: 0,
@@ -115,8 +101,8 @@ const useStyles = makeStyles((theme: Theme) => {
             marginLeft: theme.spacing(1),
         },
         maskbook: {
-            width: 60,
-            height: 9,
+            width: 40,
+            height: 10,
         },
         cmc: {
             width: 96,
@@ -131,80 +117,10 @@ const useStyles = makeStyles((theme: Theme) => {
     })
 })
 
-//#region skeleton
-interface TrendingViewSkeletonProps {}
-
-function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
-    const classes = useStyles()
-    return (
-        <Card className={classes.root} elevation={0} component="article">
-            <CardHeader
-                avatar={<Skeleton animation="wave" variant="circle" width={40} height={40} />}
-                title={<Skeleton animation="wave" height={10} width="30%" />}
-                subheader={<Skeleton animation="wave" height={10} width="20%" />}
-            />
-            <CardContent className={classes.content}>
-                <Skeleton animation="wave" variant="rect" height={58} style={{ marginBottom: 8 }} />
-                <Skeleton animation="wave" variant="rect" height={254} />
-            </CardContent>
-            <CardActions className={classes.footer}>
-                <Skeleton animation="wave" height={10} width="30%" />
-            </CardActions>
-        </Card>
-    )
-}
-//#endregion
-
-//#region error
-const useErrorStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        placeholder: {
-            padding: theme.spacing(18, 4),
-        },
-        icon: {
-            width: theme.spacing(8),
-            height: theme.spacing(8),
-            marginBottom: theme.spacing(2),
-            color: theme.palette.text.secondary,
-        },
-        message: {
-            fontSize: 16,
-        },
-    }),
-)
-interface TrendingViewErrorProps {
-    message: React.ReactNode
-}
-
-function TrendingViewError(props: TrendingViewErrorProps) {
-    const classes = useStyles()
-    const errorClasses = useErrorStyles()
-    const { message } = props
-    return (
-        <Card className={classes.root} elevation={0} component="article">
-            <CardContent className={classes.content}>
-                <Box
-                    className={errorClasses.placeholder}
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="center"
-                    alignItems="center">
-                    <AlertCircle className={errorClasses.icon} />
-                    <Typography className={errorClasses.message} color="textSecondary">
-                        {message}
-                    </Typography>
-                </Box>
-            </CardContent>
-        </Card>
-    )
-}
-//#endregion
-
-//#region trending view
 export interface TrendingViewProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     name: string
     dataProviders: DataProvider[]
-    swapProviders: SwapProvider[]
+    tradeProviders: TradeProvider[]
     onUpdate?: () => void
 }
 
@@ -217,12 +133,15 @@ export function TrendingView(props: TrendingViewProps) {
 
     //#region trending
     const dataProvider = useCurrentDataProvider(props.dataProviders)
-    const { value: currency, loading: loadingCurrency } = useCurrentCurrency(dataProvider)
-    const { value: trending, loading: loadingTrending } = useTrending(props.name, dataProvider, currency)
+    const {
+        value: { currency, trending },
+        error: trendingError,
+        loading: loadingTrending,
+    } = useTrending(props.name, dataProvider)
     //#endregion
 
     //#region swap
-    const swapProvider = useCurrentSwapProvider(props.swapProviders)
+    const tradeProvider = useCurrentTradeProvider(props.tradeProviders)
     //#endregion
 
     //#region stats
@@ -235,25 +154,26 @@ export function TrendingView(props: TrendingViewProps) {
     })
     //#endregion
 
-    //#region api ready callback
-    useEffect(() => {
-        props.onUpdate?.()
-    }, [tabIndex, loadingCurrency, loadingTrending])
+    //#region buy
+    const account = useAccount()
+    const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
+
+    const onBuyButtonClicked = useCallback(() => {
+        setBuyDialogOpen({
+            open: true,
+            code: coin.symbol,
+            address: account,
+        })
+    }, [account, trending?.coin?.symbol])
     //#endregion
 
-    //#region display loading skeleton
-    if (loadingCurrency || loadingTrending) return <TrendingViewSkeleton />
+    //#region no available platform
+    if (props.dataProviders.length === 0) return null
     //#endregion
 
     //#region error handling
-    // error: no available platform
-    if (props.dataProviders.length === 0) return null
-
-    // error: fail to load currency
-    if (!currency) return <TrendingViewError message="Fail to load currency info." />
-
     // error: unknown coin or api error
-    if (!trending)
+    if (trendingError)
         return (
             <TrendingViewError
                 message={
@@ -271,17 +191,20 @@ export function TrendingView(props: TrendingViewProps) {
                 }
             />
         )
+
+    //#region display loading skeleton
+    if (loadingTrending || !currency || !trending) return <TrendingViewSkeleton />
     //#endregion
 
     const { coin, market, tickers } = trending
     const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
 
     return (
-        <Card className={classes.root} elevation={0} component="article">
+        <TrendingCard>
             <CardHeader
                 className={classes.header}
                 avatar={
-                    <Linking href={coin.home_url}>
+                    <Linking href={first(coin.home_urls)}>
                         <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol} />
                     </Linking>
                 }
@@ -293,9 +216,14 @@ export function TrendingView(props: TrendingViewProps) {
                                     #{coin.market_cap_rank}
                                 </span>
                             ) : null}
-                            <Linking href={coin.home_url}>{coin.symbol.toUpperCase()}</Linking>
+                            <Linking href={first(coin.home_urls)}>{coin.symbol.toUpperCase()}</Linking>
                             <span>{` / ${currency.name}`}</span>
                         </Typography>
+                        {account && trending.coin.symbol && Flags.transak_enabled ? (
+                            <IconButton color="primary" onClick={onBuyButtonClicked}>
+                                <DollarSign size={18} />
+                            </IconButton>
+                        ) : null}
                     </Box>
                 }
                 subheader={
@@ -349,9 +277,15 @@ export function TrendingView(props: TrendingViewProps) {
                             </PriceChart>
                         </>
                     ) : null}
-                    {tabIndex === 1 ? <TickersTable tickers={tickers} platform={dataProvider} /> : null}
+                    {tabIndex === 1 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
                     {tabIndex === 2 && canSwap ? (
-                        <Trader address={coin.eth_address ?? ETH_ADDRESS} name={coin.name} symbol={coin.symbol} />
+                        <TradeView
+                            TraderProps={{
+                                address: coin.eth_address ?? ETH_ADDRESS,
+                                name: coin.name,
+                                symbol: coin.symbol,
+                            }}
+                        />
                     ) : null}
                 </Paper>
             </CardContent>
@@ -365,7 +299,7 @@ export function TrendingView(props: TrendingViewProps) {
                         rel="noopener noreferrer"
                         title="Mask Network"
                         href="https://mask.io">
-                        <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 60 9" />
+                        <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
                     </Link>
                 </Typography>
 
@@ -401,19 +335,18 @@ export function TrendingView(props: TrendingViewProps) {
                             color="textSecondary"
                             target="_blank"
                             rel="noopener noreferrer"
-                            title={resolveSwapProviderName(SwapProvider.UNISWAP)}
-                            href={resolveSwapProviderLink(SwapProvider.UNISWAP)}>
-                            {swapProvider === SwapProvider.UNISWAP ? (
+                            title={resolveTradeProviderName(TradeProvider.UNISWAP)}
+                            href={resolveTradeProviderLink(TradeProvider.UNISWAP)}>
+                            {tradeProvider === TradeProvider.UNISWAP ? (
                                 <UniswapIcon classes={{ root: classes.uniswap }} viewBox="0 0 16 16" />
                             ) : (
-                                resolveSwapProviderName(swapProvider)
+                                resolveTradeProviderName(tradeProvider)
                             )}
                         </Link>
                         {' V2'}
                     </Typography>
                 ) : null}
             </CardActions>
-        </Card>
+        </TrendingCard>
     )
 }
-//#endregion

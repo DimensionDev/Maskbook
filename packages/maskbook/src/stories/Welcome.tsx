@@ -1,4 +1,3 @@
-import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { linkTo as to } from '@storybook/addon-links'
 import { text, boolean, number } from '@storybook/addon-knobs'
@@ -10,7 +9,6 @@ const ResponsiveDialog = Dialog
 storiesOf('Welcome', module)
     .add('Banner', () => {
         const desc = text('description', '')
-        const title = text('title', '')
         const isValid = boolean('is username valid', true)
         return (
             <BannerUI
@@ -22,7 +20,6 @@ storiesOf('Welcome', module)
                     onChange: action('on username change'),
                 }}
                 description={desc === '' ? undefined : desc}
-                title={title === '' ? undefined : title}
             />
         )
     })

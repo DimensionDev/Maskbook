@@ -1,2 +1,2 @@
+export * from './trader'
 export * from './trending'
-export * from './uniswap'

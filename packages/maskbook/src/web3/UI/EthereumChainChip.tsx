@@ -1,4 +1,3 @@
-import React from 'react'
 import { Chip, createStyles, makeStyles, ChipProps } from '@material-ui/core'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import type { ChainId } from '../types'

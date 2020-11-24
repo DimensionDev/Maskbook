@@ -1,11 +1,10 @@
-import { useMemo } from 'react'
+import { useMemo, createElement } from 'react'
 import { ValueRef, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { unstable_createMuiStrictModeTheme, ThemeProvider, makeStyles } from '@material-ui/core'
 import { useMaskbookTheme } from '../../../utils/theme'
 import type { SocialNetworkUICustomUI } from '../../../social-network/ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
-import React from 'react'
 import { toRGB, getBackgroundColor, fromRGB, shade, isDark, getForegroundColor } from '../../../utils/theme-tools'
 import { Appearance } from '../../../settings/settings'
 import produce, { setAutoFreeze } from 'immer'
@@ -57,6 +56,14 @@ function useTheme() {
             }
             theme.shape.borderRadius = isMobileTwitter ? 0 : 15
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
+            theme.props = theme.props || {}
+            theme.props!.MuiButton = {
+                size: 'medium',
+                disableElevation: true,
+            }
+            theme.props.MuiPaper = {
+                elevation: 0,
+            }
             theme.overrides = theme.overrides || {}
             theme.overrides!.MuiButton = {
                 root: {
@@ -64,6 +71,8 @@ function useTheme() {
                     textTransform: 'initial',
                     fontWeight: 'bold',
                     minHeight: 39,
+                    paddingLeft: 15,
+                    paddingRight: 15,
                     boxShadow: 'none',
                     [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
                         '&': {
@@ -73,7 +82,13 @@ function useTheme() {
                         },
                     },
                 },
+                sizeLarge: {
+                    minHeight: 49,
+                    paddingLeft: 30,
+                    paddingRight: 30,
+                },
                 sizeSmall: {
+                    minHeight: 30,
                     paddingLeft: 15,
                     paddingRight: 15,
                 },
@@ -91,8 +106,9 @@ function useTheme() {
 
 export function TwitterThemeProvider(props: Required<React.PropsWithChildren<{}>>) {
     if (!process.env.STORYBOOK) throw new Error('This API is only for Storybook!')
-    return React.createElement(ThemeProvider, { theme: useTheme(), ...props })
+    return createElement(ThemeProvider, { theme: useTheme(), ...props })
 }
+
 const useInjectedDialogClassesOverwrite = makeStyles((theme) =>
     createStyles<InjectedDialogClassKey>({
         root: {
@@ -157,8 +173,12 @@ const useInjectedDialogClassesOverwrite = makeStyles((theme) =>
                 padding: '7px 14px 6px !important',
             },
         },
+        dialogBackdropRoot: {
+            backgroundColor: theme.palette.type === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+        },
     }),
 )
+
 export const twitterUICustomUI: SocialNetworkUICustomUI = {
     useTheme,
     componentOverwrite: {

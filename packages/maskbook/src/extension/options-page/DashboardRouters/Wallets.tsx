@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
@@ -11,16 +11,17 @@ import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletCreateDialog,
-    DashboardWalletAddTokenDialog,
+    DashboardWalletAddERC20TokenDialog,
     DashboardWalletHistoryDialog,
     DashboardWalletErrorDialog,
     DashboardWalletRedPacketDetailDialog,
 } from '../DashboardDialogs/Wallet'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
+import { Flags } from '../../../utils/flags'
 import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
-import { useTokens } from '../../../plugins/Wallet/hooks/useToken'
-import { useTokensDetailedCallback } from '../../../web3/hooks/useTokensDetailedCallback'
+import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Token'
+import { useAssetsDetailedCallback } from '../../../web3/hooks/useAssetsDetailedCallback'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 
@@ -87,13 +88,13 @@ export default function DashboardWalletsRouter() {
 
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
     const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)
-    const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
+    const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const selectedWallet = useWallet()
-    const tokens = useTokens()
-    const detailedTokens = useTokensDetailedCallback(tokens)
+    const tokens = useTrustedERC20TokensFromDB()
+    const detailedTokens = useAssetsDetailedCallback(tokens)
 
     // show create dialog
     useEffect(() => {
@@ -115,6 +116,12 @@ export default function DashboardWalletsRouter() {
             },
         },
     ]
+
+    if (Flags.has_native_nav_bar)
+        floatingButtons.unshift({
+            icon: <EthereumStatusBar />,
+            handler: () => undefined,
+        })
 
     if (selectedWallet)
         floatingButtons.push({

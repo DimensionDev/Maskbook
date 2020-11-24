@@ -1,6 +1,5 @@
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { RedPacketInspector } from './UI/RedPacketInspector'
-import React from 'react'
 import { formatBalance } from '../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { RedPacketMetadataReader } from './helpers'
@@ -46,7 +45,8 @@ export const RedPacketPluginDefine: PluginConfig = {
             (payload: RedPacketJSONPayload) => {
                 return `A Red Packet with ${formatBalance(
                     new BigNumber(payload.total),
-                    payload.token?.decimals ?? 18,
+                    payload.token?.decimals ?? 0,
+                    payload.token?.decimals ?? 0,
                 )} $${payload.token?.name || 'ETH'} from ${payload.sender.name}`
             },
         ],

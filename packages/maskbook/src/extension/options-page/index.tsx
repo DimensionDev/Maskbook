@@ -1,7 +1,7 @@
 import '../../provider.worker'
 import '../../setup.ui'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useAsync } from 'react-use'
 import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card } from '@material-ui/core'
 import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'
