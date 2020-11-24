@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core'
 import { PageInspector, PageInspectorProps } from '../../components/InjectedComponents/PageInspector'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
-import { Flags } from '../../utils/flags'
+import { startWatch } from '../../utils/watcher'
 
 export function injectPageInspectorDefault<T extends string>(
     config: InjectPageInspectorDefaultConfig = {},
@@ -18,14 +18,7 @@ export function injectPageInspectorDefault<T extends string>(
 
     return function injectPageInspector() {
         const watcher = new MutationObserverWatcher(new LiveSelector().querySelector('body'))
-            .setDOMProxyOption({
-                afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
-            })
-            .startWatch({
-                childList: true,
-                subtree: true,
-            })
-
+        startWatch(watcher)
         return renderInShadowRoot(<PageInspectorDefault />, { shadow: () => watcher.firstDOMProxy.afterShadow })
     }
 }

@@ -5,9 +5,9 @@ import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
 import { PostComment, PostCommentProps } from '../../components/InjectedComponents/PostComments'
 import { makeStyles } from '@material-ui/core'
 import { PostInfoContext } from '../../components/DataSource/usePostInfo'
-import { Flags } from '../../utils/flags'
 import { noop } from 'lodash-es'
 import { collectNodeText } from '../../social-network-provider/facebook.com/UI/collectPosts'
+import { startWatch } from '../../utils/watcher'
 
 interface injectPostCommentsDefaultConfig {
     needZip?(): void
@@ -29,8 +29,8 @@ export function injectPostCommentsDefault<T extends string>(
     return function injectPostComments(current: PostInfo) {
         const selector = current.commentsSelector
         if (!selector) return noop
-        const commentWatcher = new MutationObserverWatcher(selector, current.rootNode)
-            .useForeach((commentNode, key, meta) => {
+        const commentWatcher = new MutationObserverWatcher(selector, current.rootNode).useForeach(
+            (commentNode, key, meta) => {
                 const commentRef = new ValueRef(collectNodeText(commentNode))
                 const needZipF =
                     needZip ||
@@ -56,12 +56,9 @@ export function injectPostCommentsDefault<T extends string>(
                         unmount()
                     },
                 }
-            })
-            .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
-            .startWatch({
-                childList: true,
-                subtree: true,
-            })
+            },
+        )
+        startWatch(commentWatcher)
 
         return () => commentWatcher.stopWatch()
     }

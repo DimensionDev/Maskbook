@@ -22,8 +22,8 @@ import {
     makeTypedMessageCompound,
     extractTextFromTypedMessage,
 } from '../../../protocols/typed-message'
-import { Flags } from '../../../utils/flags'
 import type { Result } from 'ts-results'
+import { startWatch } from '../../../utils/watcher'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -108,7 +108,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
         },
         (info: PostInfo) => info.postBy.value?.toText(),
     )
-    new MutationObserverWatcher(postsContentSelector())
+    const watcher = new MutationObserverWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
@@ -143,7 +143,6 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 onNodeMutation: run,
             }
         })
-        .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
             const isQuotedTweet = tweetNode?.getAttribute('role') === 'blockquote'
@@ -151,10 +150,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 ? `${isQuotedTweet ? 'QUOTED' : ''}${postIdParser(tweetNode)}${node.innerText.replace(/\s/gm, '')}`
                 : node.innerText
         })
-        .startWatch({
-            childList: true,
-            subtree: true,
-        })
+    startWatch(watcher)
 }
 
 export const twitterUIFetch: SocialNetworkUIInformationCollector = {

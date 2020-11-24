@@ -1,8 +1,8 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { isMobileFacebook } from '../isMobile'
-import { Flags } from '../../../utils/flags'
 import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt'
+import { startWatch } from '../../../utils/watcher'
 
 let composeBox: LiveSelector<Element>
 if (isMobileFacebook) {
@@ -19,11 +19,7 @@ if (isMobileFacebook) {
 
 export function injectSetupPromptFacebook() {
     const watcher = new MutationObserverWatcher(composeBox.clone())
-        .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
-        .startWatch({
-            childList: true,
-            subtree: true,
-        })
+    startWatch(watcher)
     renderInShadowRoot(<NotSetupYetPrompt />, {
         shadow: () => watcher.firstDOMProxy.afterShadow,
         rootProps: {
