@@ -43,7 +43,6 @@ export const Flags = {
     election2020_composition_dialog_enabled: betaOrInsiderOnly || devOnly,
     // Note: the server has closed
     matrix_based_service_enabled: false,
-    wallet_connect_support_enabled: webOnly,
     metamask_support_enabled: webOnly,
     //#endregion
 

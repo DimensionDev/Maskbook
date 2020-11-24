@@ -124,7 +124,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                         <Provider
                             logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
                             name="Maskbook"
-                            description="Create wallet with Maskbook"
+                            description={t('plugin_wallet_connect_to_maskbook')}
                             onClick={() => onConnect(ProviderType.Maskbook)}
                         />
                     </GridListTile>
@@ -133,21 +133,23 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             <Provider
                                 logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
                                 name="MetaMask"
-                                description="Connect to your MetaMask Wallet"
+                                description={t('plugin_wallet_connect_to_metamask')}
                                 onClick={() => onConnect(ProviderType.MetaMask)}
                             />
                         </GridListTile>
                     ) : null}
-                    {Flags.wallet_connect_support_enabled ? (
-                        <GridListTile>
-                            <Provider
-                                logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                name="WalletConnect"
-                                description="Scan with WalletConnect to connect"
-                                onClick={() => onConnect(ProviderType.WalletConnect)}
-                            />
-                        </GridListTile>
-                    ) : null}
+                    <GridListTile>
+                        <Provider
+                            logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
+                            name="WalletConnect"
+                            description={t(
+                                process.env.architecture === 'web'
+                                    ? 'plugin_wallet_connect_to_walletconnect_on_web'
+                                    : 'plugin_wallet_connect_to_walletconnect_on_app',
+                            )}
+                            onClick={() => onConnect(ProviderType.WalletConnect)}
+                        />
+                    </GridListTile>
                     <GridListTile>
                         <Provider
                             logo={
@@ -158,8 +160,8 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                     height={45}
                                 />
                             }
-                            name="More"
-                            description="Comming soon…"
+                            name={t('plugin_wallet_connect_more')}
+                            description={t('plugin_wallet_connect_more_description')}
                             ButtonBaseProps={{ disabled: true }}
                         />
                     </GridListTile>
@@ -167,13 +169,13 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
             </DialogContent>
             <DialogActions>
                 <Typography className={classes.tip} color="textSecondary">
-                    New to Ethereum?{' '}
+                    {t('plugin_wallet_connect_new_ethereum')}
                     <Link
                         color="primary"
                         target="_blank"
                         rel="noopener noreferrer"
                         href="https://ethereum.org/en/wallets/">
-                        Learn more about wallets
+                        {t('plugin_wallet_connect_learn_more_wallets')}
                     </Link>
                 </Typography>
             </DialogActions>
