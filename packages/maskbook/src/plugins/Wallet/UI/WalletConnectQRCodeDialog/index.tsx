@@ -17,6 +17,13 @@ const useStyles = makeStyles(() =>
             alignItems: 'center',
             justifyContent: 'center',
         },
+        actions: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '30%',
+        },
     }),
 )
 
@@ -70,11 +77,11 @@ export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({ uri, open, onClose, 
         return <QRCodeModel uri={uri} />
     }
     return (
-        <InjectedDialog open={open} onClose={onClose} title="Wallet Connect">
+        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_connect_dialog_title')}>
             <DialogContent className={classes.container}>
                 <PlatformSelector />
             </DialogContent>
-            <DialogActions className={classes.container}>
+            <DialogActions className={classes.actions}>
                 {mode !== 'qrcode' && (
                     <Button variant="contained" onClick={() => setQRMode(!qrMode)}>
                         {t(qrMode ? 'plugin_wallet_return_mobile_wallet_options' : 'plugin_wallet_view_qr_code')}
