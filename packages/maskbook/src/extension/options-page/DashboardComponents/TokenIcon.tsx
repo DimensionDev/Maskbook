@@ -6,10 +6,17 @@ import { CONSTANTS } from '../../../web3/constants'
 import { useBlockie } from '../../../web3/hooks/useBlockie'
 import { formatChecksumAddress } from '../../../plugins/Wallet/formatter'
 
+//#region fix icon image
+const TRUST_WALLET_ASSETS = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum'
+const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS')
 const ICON_MAP = {
+    [ETH_ADDRESS]: `${TRUST_WALLET_ASSETS}/info/logo.png`,
     [formatChecksumAddress(
         '0x32a7c02e79c4ea1008dd6564b35f131428673c41',
-    )]: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6747.png',
+    )]: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6747.png', // CRUST
+    [formatChecksumAddress(
+        '0x04abEdA201850aC0124161F037Efd70c74ddC74C',
+    )]: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5841.png', // NEST
 }
 
 function resolveTokenIconURL(address: string) {
@@ -17,8 +24,9 @@ function resolveTokenIconURL(address: string) {
     if (isSameAddress(checksummedAddress, getConstant(CONSTANTS, 'ETH_ADDRESS')))
         return 'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png'
     if (ICON_MAP[checksummedAddress]) return ICON_MAP[checksummedAddress]
-    return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${checksummedAddress}/logo.png`
+    return `${TRUST_WALLET_ASSETS}/assets/${checksummedAddress}/logo.png`
 }
+//#endregion
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
