@@ -27,7 +27,7 @@ export function WalletConnectQRCodeDialog() {
 
     return (
         <>
-            <InjectedDialog open={open} onExit={onClose} title="WalletConnect">
+            <InjectedDialog open={open} onClose={onClose} title="WalletConnect">
                 <DialogContent>
                     <PlatformSelector uri={uri} />
                 </DialogContent>
