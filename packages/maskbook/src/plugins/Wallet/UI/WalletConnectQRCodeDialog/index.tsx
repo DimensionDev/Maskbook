@@ -20,15 +20,8 @@ const useStyles = makeStyles(() =>
     }),
 )
 
-interface Props {
-    mode?: 'qrcode' | 'firefox' | 'safari'
-}
-
-export const WalletConnectQRCodeDialog: React.FC<Props> = ({ mode }) => {
-    const { t } = useI18N()
-    const classes = useStyles()
-    const [uri, setURI] = useState('asd')
-    const [qrMode, setQRMode] = useState(false)
+export const WalletConnectQRCodeDialog: React.FC = () => {
+    const [uri, setURI] = useState('')
 
     //#region remote controlled dialog logic
     const [open, setOpen] = useRemoteControlledDialog(
@@ -44,10 +37,42 @@ export const WalletConnectQRCodeDialog: React.FC<Props> = ({ mode }) => {
         Services.Ethereum.connectWalletConnect().then(onClose, onClose)
     }, [open, uri, onClose])
 
+    let mode: QRCodeDialogProps['mode'] = 'qrcode'
+    if (process.env.architecture === 'app' && process.env.target === 'firefox') {
+        mode = 'firefox'
+    } else if (process.env.architecture === 'app' && process.env.target === 'safari') {
+        mode = 'safari'
+    }
+    return <QRCodeDialog uri={uri} open={open} mode={mode} onClose={onClose} />
+}
+
+interface QRCodeDialogProps {
+    uri: string
+    open: boolean
+    onClose(): void
+    mode?: 'qrcode' | 'firefox' | 'safari'
+}
+
+export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({ uri, open, onClose, mode }) => {
+    const { t } = useI18N()
+    const classes = useStyles()
+    const [qrMode, setQRMode] = useState(false)
+    const PlatformSelector: React.FC = () => {
+        if (!uri) {
+            return null
+        } else if (qrMode || mode === 'qrcode') {
+            return <QRCodeModel uri={uri} />
+        } else if (mode === 'firefox') {
+            return <FirefoxPlatform uri={uri} />
+        } else if (mode === 'safari') {
+            return <SafariPlatform uri={uri} />
+        }
+        return <QRCodeModel uri={uri} />
+    }
     return (
         <InjectedDialog open={open} onClose={onClose} title="Wallet Connect">
             <DialogContent className={classes.container}>
-                <PlatformSelector uri={uri} mode={qrMode ? 'qrcode' : mode} />
+                <PlatformSelector />
             </DialogContent>
             <DialogActions className={classes.container}>
                 {mode !== 'qrcode' && (
@@ -58,28 +83,4 @@ export const WalletConnectQRCodeDialog: React.FC<Props> = ({ mode }) => {
             </DialogActions>
         </InjectedDialog>
     )
-}
-
-WalletConnectQRCodeDialog.defaultProps = {
-    mode: (() => {
-        if (process.env.architecture === 'app' && process.env.target === 'firefox') {
-            return 'firefox'
-        } else if (process.env.architecture === 'app' && process.env.target === 'safari') {
-            return 'safari'
-        }
-        return 'qrcode'
-    })(),
-}
-
-export const PlatformSelector: React.FC<{ uri: string; mode: Props['mode'] }> = ({ uri, mode }) => {
-    if (!uri) {
-        return null
-    } else if (mode === 'qrcode') {
-        return <QRCodeModel uri={uri} />
-    } else if (mode === 'firefox') {
-        return <FirefoxPlatform uri={uri} />
-    } else if (mode === 'safari') {
-        return <SafariPlatform uri={uri} />
-    }
-    return <QRCodeModel uri={uri} />
 }
