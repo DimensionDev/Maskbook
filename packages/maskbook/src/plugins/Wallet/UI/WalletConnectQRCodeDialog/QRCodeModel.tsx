@@ -13,13 +13,8 @@ const useStyles = makeStyles((theme) =>
             alignItems: 'center',
             justifyContent: 'center',
         },
-        tip: {
-            fontSize: 14,
-            marginBottom: theme.spacing(2),
-        },
-        copyButton: {
-            marginTop: theme.spacing(1),
-        },
+        tip: { fontSize: 14, marginBottom: theme.spacing(2) },
+        onCopy: { marginTop: theme.spacing(1) },
     }),
 )
 
@@ -39,7 +34,7 @@ export const QRCodeModel: React.FC<{ uri: string }> = ({ uri }) => {
                 {t('plugin_wallet_qr_code_with_wallet_connect')}
             </Typography>
             <QRCode text={uri} options={{ width: 400 }} canvasProps={{ style }} />
-            <Button className={classes.copyButton} color="primary" variant="text" onClick={onCopy}>
+            <Button className={classes.onCopy} color="primary" variant="text" onClick={onCopy}>
                 {t('copy_to_clipboard')}
             </Button>
         </Grid>
