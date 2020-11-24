@@ -29,7 +29,6 @@ export const FirefoxPlatform: React.FC<{ uri: string }> = ({ uri }) => {
     )
     return (
         <Grid className={classes.container}>
-            <CallLocalApp />
             {qrMode ? <QRCodeModel uri={uri} /> : <CallLocalApp />}
             <Button onClick={() => setQRMode(!qrMode)}>
                 {t(qrMode ? 'plugin_wallet_return_mobile_wallet_options' : 'plugin_wallet_view_qr_code')}
