@@ -8,24 +8,26 @@ assignees:
 
 ## Catalogue
 
-- [ ] Platform
+- Platform
   - [ ] Gitcoin
   - [ ] Hackerlink
   - [ ] Mask
-- [ ] Experience
+- Experience
   - [ ] Beginner
   - [ ] Intermediate
   - [ ] Advanced
-- [ ] Category
+- Category
   - [ ] Mask Core Feature
   - [ ] Mask Plugin
   - [ ] Security/Cryptography Feature
   - [ ] Documentation
   - [ ] Design
   - [ ] Other
-    - /_List it here_/
-- [ ] Time Commitment
-  - [ ] *PLACEHOLDER*
+    - [ ] /_List it here_/
+- Time Commitment
+  - [x] *PLACEHOLDER*
+- Bounty Size
+  - [x] *PLACEHOLDER*
 
 ## Part 1: Problem Description
 
