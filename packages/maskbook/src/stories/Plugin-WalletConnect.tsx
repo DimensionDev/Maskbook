@@ -12,7 +12,7 @@ storiesOf('Plugin: Wallet (Wallet Connect - QRCode Dialog)', module)
     .add(
         'QRCode Model',
         () => (
-            <InjectedDialog open onExit={action('onExit')} title="WalletConnect">
+            <InjectedDialog open onClose={action('onClose')} title="WalletConnect">
                 <DialogContent>
                     <QRCodeModel uri={text('URI', 'Wallet Connect URI')} />
                 </DialogContent>
@@ -23,7 +23,7 @@ storiesOf('Plugin: Wallet (Wallet Connect - QRCode Dialog)', module)
     .add(
         'Firefox only (Android specific)',
         () => (
-            <InjectedDialog open onExit={action('onExit')} title="WalletConnect">
+            <InjectedDialog open onClose={action('onClose')} title="WalletConnect">
                 <DialogContent>
                     <FirefoxPlatform uri={text('URI', 'Wallet Connect URI')} />
                 </DialogContent>
@@ -32,7 +32,7 @@ storiesOf('Plugin: Wallet (Wallet Connect - QRCode Dialog)', module)
         figmaLink('https://www.figma.com/file/xxHFHHzRgN2E90xCOB83ae/Dashboard?node-id=806%3A23705'),
     )
     .add('Safari only (iOS specific)', () => (
-        <InjectedDialog open onExit={action('onExit')} title="WalletConnect">
+        <InjectedDialog open onClose={action('onClose')} title="WalletConnect">
             <DialogContent>
                 <SafariPlatform uri={text('URI', 'Wallet Connect URI')} />
             </DialogContent>
