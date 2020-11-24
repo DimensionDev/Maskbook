@@ -2,7 +2,7 @@ import { SvgIcon, SvgIconProps } from '@material-ui/core'
 
 export const TrustIcon: React.FC = (props: SvgIconProps) => (
     <SvgIcon {...props}>
-        <svg width="128" height="128" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="128" height="128" rx="24" fill="#3375BB" />
             <path
                 fill-rule="evenodd"
@@ -16,7 +16,7 @@ export const TrustIcon: React.FC = (props: SvgIconProps) => (
 
 export const IMTokenIcon: React.FC = (props: SvgIconProps) => (
     <SvgIcon {...props}>
-        <svg width="128" height="128" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="128" height="128" rx="24" fill="url(#paint0_linear)" />
             <path
                 d="M105.782 36.041c2.77 37.67-21.348 55.475-42.97 57.374-20.1 1.765-39.022-10.636-40.681-29.69-1.37-15.74 8.32-22.441 15.933-23.11 7.83-.689 14.41 4.733 14.982 11.297.55 6.311-3.373 9.184-6.1 9.423-2.158.19-4.872-1.125-5.117-3.948-.21-2.426.707-2.757.483-5.334-.399-4.588-4.384-5.123-6.566-4.933-2.64.232-7.431 3.326-6.759 11.033.676 7.774 8.1 13.916 17.832 13.062 10.503-.921 17.815-9.131 18.364-20.646a4.2 4.2 0 01.375-1.768l.004-.014c.113-.242.245-.473.395-.693a9.37 9.37 0 01.883-1.118c.004-.01.004-.01.01-.01.27-.306.596-.637.964-.992 4.587-4.346 21.11-14.595 36.735-11.35a1.565 1.565 0 011.233 1.417z"
@@ -34,8 +34,7 @@ export const IMTokenIcon: React.FC = (props: SvgIconProps) => (
 
 export const RainbowIcon: React.FC = (props: SvgIconProps) => (
     <SvgIcon {...props}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" fill="none">
-            <defs />
+        <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="128" height="128" fill="url(#paint0_linear)" rx="24" />
             <path
                 fill="url(#paint1_radial)"
@@ -92,7 +91,6 @@ export const RainbowIcon: React.FC = (props: SvgIconProps) => (
 export const MetaMaskIcon: React.FC = (props: SvgIconProps) => (
     <SvgIcon {...props}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 128 128">
-            <defs />
             <rect width="128" height="128" fill="#fff" rx="24" />
             <path
                 fill="#E17726"
