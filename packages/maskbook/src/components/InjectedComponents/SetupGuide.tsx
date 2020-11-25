@@ -34,7 +34,6 @@ import { currentSelectedWalletAddressSettings } from '../../plugins/Wallet/setti
 import { WalletRPC } from '../../plugins/Wallet/messages'
 
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
-import ReactHtmlParser from 'react-html-parser'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -408,9 +407,10 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                 </form>
             }
             tip={
-                <Typography className={classes.tip} variant="body2">
-                    {ReactHtmlParser(t('setup_guide_find_username_text'))}
-                </Typography>
+                <Typography
+                    className={classes.tip}
+                    variant="body2"
+                    dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}></Typography>
             }
             footer={
                 <ActionButtonPromise
