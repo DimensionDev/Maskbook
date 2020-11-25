@@ -38,6 +38,7 @@ import {
 } from 'typescript'
 
 export default (options: { isWorker?: (name: string) => boolean } = {}): TransformerFactory<SourceFile> => {
+    let workerID = 0
     const isWorkerConstructor = options?.isWorker || ((name) => name.endsWith('Worker') || name.endsWith('Worklet'))
     return (context) => (file) => {
         return visit(file) as SourceFile
@@ -45,7 +46,14 @@ export default (options: { isWorker?: (name: string) => boolean } = {}): Transfo
             const assetPath = getAssetModule(node)
             if (assetPath) {
                 if (isWorkerAsset(node)) {
-                    return createRequire(context.factory, assetPath, '!worker-plugin/loader!')
+                    const guess = isStringLiteralLike(assetPath)
+                        ? assetPath.text.replace(/\.ts$/g, '').replace(/\.|\//g, '')
+                        : String(workerID++)
+                    return createRequire(
+                        context.factory,
+                        assetPath,
+                        `!worker-plugin/loader?filename=[name]-[contenthash:4].worker.js&name=${guess}-worker!`,
+                    )
                 } else {
                     return createRequire(context.factory, assetPath, '!file-loader!')
                 }
