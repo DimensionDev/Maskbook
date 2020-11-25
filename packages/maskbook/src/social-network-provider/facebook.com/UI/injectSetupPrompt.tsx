@@ -26,7 +26,7 @@ export function injectSetupPromptFacebook() {
             style: {
                 display: 'block',
                 padding: '0 16px',
-                marginTop: 16,
+                marginTop: 0,
             },
         },
     })
