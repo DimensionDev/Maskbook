@@ -6,9 +6,9 @@ import Services from '../../extension/service'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
 import { makeStyles } from '@material-ui/core'
 import { PostInfoContext, usePostInfoDetails, usePostInfo } from '../../components/DataSource/usePostInfo'
-import { Flags } from '../../utils/flags'
 import { noop } from 'lodash-es'
 import { MaskMessage } from '../../utils/messages'
+import { startWatch } from '../../utils/watcher'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,
@@ -42,20 +42,18 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
     })
     return (current: PostInfo) => {
         if (!current.commentBoxSelector) return noop
-        const commentBoxWatcher = new MutationObserverWatcher(current.commentBoxSelector.clone(), current.rootNode)
-            .useForeach((node, key, meta) =>
-                renderInShadowRoot(
-                    <PostInfoContext.Provider value={current}>
-                        <CommentBoxUI {...{ ...current, dom: meta.realCurrent }} />
-                    </PostInfoContext.Provider>,
-                    { shadow: () => meta.afterShadow },
-                ),
-            )
-            .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
-            .startWatch({
-                childList: true,
-                subtree: true,
-            })
+        const commentBoxWatcher = new MutationObserverWatcher(
+            current.commentBoxSelector.clone(),
+            current.rootNode,
+        ).useForeach((node, key, meta) =>
+            renderInShadowRoot(
+                <PostInfoContext.Provider value={current}>
+                    <CommentBoxUI {...{ ...current, dom: meta.realCurrent }} />
+                </PostInfoContext.Provider>,
+                { shadow: () => meta.afterShadow },
+            ),
+        )
+        startWatch(commentBoxWatcher)
         return () => commentBoxWatcher.stopWatch()
     }
 }

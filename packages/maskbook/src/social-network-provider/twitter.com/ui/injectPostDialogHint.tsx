@@ -6,7 +6,7 @@ import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoo
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { MaskMessage } from '../../../utils/messages'
 import { hasEditor, isCompose } from '../utils/postBox'
-import { Flags } from '../../../utils/flags'
+import { startWatch } from '../../../utils/watcher'
 
 export function injectPostDialogHintAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
@@ -20,13 +20,7 @@ export function injectPostDialogHintAtTwitter() {
 
 function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>) {
     const watcher = new MutationObserverWatcher(ls)
-        .setDOMProxyOption({
-            afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
-        })
-        .startWatch({
-            childList: true,
-            subtree: true,
-        })
+    startWatch(watcher)
 
     renderInShadowRoot(<PostDialogHintAtTwitter reason={reason} />, { shadow: () => watcher.firstDOMProxy.afterShadow })
 }

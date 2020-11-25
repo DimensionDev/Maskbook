@@ -7,6 +7,7 @@ import { MaskbookIcon } from '../../../resources/MaskbookIcon'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { memoizePromise } from '../../../utils/memoize'
 import { Flags } from '../../../utils/flags'
+import { startWatch } from '../../../utils/watcher'
 
 function Icon(props: { size: number }) {
     return (
@@ -20,13 +21,11 @@ function Icon(props: { size: number }) {
         />
     )
 }
-const opt = { afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } } as const
 function _(main: () => LiveSelector<HTMLElement, true>, size: number) {
     // TODO: for unknown reason the MutationObserverWatcher doesn't work well
     // To reproduce, open a profile and switch to another profile.
-    new MutationObserverWatcher(main())
-        .setDOMProxyOption(opt)
-        .useForeach((ele, _, meta) => {
+    startWatch(
+        new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
             let remover = () => {}
             const remove = () => remover()
             const check = () => {
@@ -42,12 +41,8 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number) {
                 onTargetChanged: check,
                 onRemove: remove,
             }
-        })
-        .startWatch({
-            subtree: true,
-            childList: true,
-            characterData: true,
-        })
+        }),
+    )
 }
 export function injectMaskbookIconToProfile() {
     _(bioPageUserNickNameSelector, 24)
@@ -69,7 +64,7 @@ export function injectMaskbookIconToPost(post: PostInfo) {
     function add() {
         const node = ls.evaluate()
         if (!node) return
-        const proxy = DOMProxy(opt)
+        const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         proxy.realCurrent = node
         remover = renderInShadowRoot(<Icon size={24} />, { shadow: () => proxy.afterShadow })
     }

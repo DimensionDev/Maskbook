@@ -5,8 +5,8 @@ import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoo
 import { PostDialogIcon } from '../../../components/InjectedComponents/PostDialogIcon'
 import { MaskMessage } from '../../../utils/messages'
 import { isCompose, isMobile } from '../utils/postBox'
-import { Flags } from '../../../utils/flags'
 import { makeStyles, Theme } from '@material-ui/core'
+import { startWatch } from '../../../utils/watcher'
 
 export function injectPostDialogIconAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
@@ -16,13 +16,7 @@ export function injectPostDialogIconAtTwitter() {
 
 function renderPostDialogIconTo<T>(ls: LiveSelector<T, true>) {
     const watcher = new MutationObserverWatcher(ls)
-        .setDOMProxyOption({
-            afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
-        })
-        .startWatch({
-            childList: true,
-            subtree: true,
-        })
+    startWatch(watcher)
 
     renderInShadowRoot(<PostDialogIconAtTwitter />, { shadow: () => watcher.firstDOMProxy.afterShadow })
 }
