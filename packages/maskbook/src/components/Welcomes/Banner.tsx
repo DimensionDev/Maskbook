@@ -27,11 +27,6 @@ const useStyles = makeStyles((theme: Theme) => {
     return {
         buttonText: {
             margin: '10px 0',
-            [theme.breakpoints.down('sm')]: {
-                fontSize: '10px',
-                lineHeight: 1.4,
-                padding: '20px 14px !important',
-            },
         },
         span: {
             paddingLeft: 8,
