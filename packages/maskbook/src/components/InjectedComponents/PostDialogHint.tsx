@@ -32,22 +32,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const PostDialogHintUI = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
+const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const classes = useStyles()
-    const { t } = useI18N()
-    const EntryIconButton = memo((props: PostDialogHintUIProps) => (
+    return (
         <IconButton className={classes.button} onClick={props.onHintButtonClicked}>
             <MaskbookSharpIcon />
         </IconButton>
-    ))
+    )
+})
+
+export const PostDialogHintUI = memo(function PostDialogHintUI({ onHintButtonClicked }: PostDialogHintUIProps) {
+    const classes = useStyles()
+    const { t } = useI18N()
 
     return isMobileFacebook ? (
-        <div className={classes.wrapper} onClick={props.onHintButtonClicked}>
+        <div className={classes.wrapper} onClick={onHintButtonClicked}>
             <EntryIconButton onHintButtonClicked={() => undefined} />
             <span className={classes.text}>{t('post_modal_hint__button')}</span>
         </div>
     ) : (
-        <EntryIconButton onHintButtonClicked={props.onHintButtonClicked} />
+        <EntryIconButton onHintButtonClicked={onHintButtonClicked} />
     )
 })
 
