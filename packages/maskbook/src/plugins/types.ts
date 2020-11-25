@@ -1,5 +1,6 @@
 import type { TypedMessage, TypedMessageCompound } from '../protocols/typed-message'
 import type { PostInfo } from '../social-network/PostInfo'
+import type { TranslationBundle } from '../utils/i18n-next'
 
 type PluginInjectFunction<T> =
     | {
@@ -33,6 +34,9 @@ export interface PluginConfig {
     identifier: string
     stage: PluginStage
     scope: PluginScope
+    i18n?: (
+        onHMR: (newBundle: Promise<TranslationBundle> | TranslationBundle) => void,
+    ) => Promise<TranslationBundle> | TranslationBundle
     successDecryptionInspector?: PluginInjectFunction<{ message: TypedMessage }>
     postInspector?: PluginInjectFunction<{}>
     PageComponent?: React.ComponentType<{}>

@@ -8,22 +8,21 @@ import type { FileInfo } from './types'
 import schema from './schema.json'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import FileServiceDialog from './MainDialog'
+import * as i18n from './locales'
 
 export const FileInfoMetadataReader = createTypedMessageMetadataReader<FileInfo>(META_KEY_1, schema)
 const [FileServiceCompositionEntry, FileServiceCompositionUI] = createCompositionDialog('📃 File Service', (props) => (
-    <FileServiceDialog
-        // classes={classes}
-        // DialogProps={props.DialogProps}
-        open={props.open}
-        onConfirm={props.onClose}
-        onDecline={props.onClose}
-    />
+    <FileServiceDialog open={props.open} onConfirm={props.onClose} onDecline={props.onClose} />
 ))
 export const FileServicePluginDefine: PluginConfig = {
     pluginName,
     identifier,
     stage: PluginStage.Production,
     scope: PluginScope.Public,
+    i18n: (onUpdate) => {
+        if (module.hot) module.hot.accept(['./locales/'], () => onUpdate(i18n))
+        return i18n
+    },
     successDecryptionInspector(props) {
         const metadata = FileInfoMetadataReader(props.message.meta)
         if (!metadata.ok) return null

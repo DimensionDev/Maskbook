@@ -1,13 +1,13 @@
 import { useSnackbar } from 'notistack'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18NFileService } from '../utils'
 
 interface Props {
     className?: string
 }
 
 export const CopyableCode: React.FC<Props> = ({ children, className }) => {
-    const { t } = useI18N()
+    const { t } = useI18NFileService()
     const snackbar = useSnackbar()
     const [, copy] = useCopyToClipboard()
     const onSelect = (event: React.MouseEvent<Node>) => {
@@ -26,7 +26,7 @@ export const CopyableCode: React.FC<Props> = ({ children, className }) => {
     const onCopy = async (event: React.MouseEvent<HTMLElement>) => {
         onSelect(event)
         copy(event.currentTarget.textContent!)
-        snackbar.enqueueSnackbar(t('plugin_file_service_file_key_copied'))
+        snackbar.enqueueSnackbar(t('file_key_copied'))
     }
     return (
         <code

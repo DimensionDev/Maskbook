@@ -3,11 +3,10 @@ import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import { useEffect } from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { FileRouter } from '../constants'
 import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
-import { formatDateTime } from '../utils'
+import { formatDateTime, useI18NFileService } from '../utils'
 import { FileName } from './FileName'
 
 const useStyles = makeStyles({
@@ -45,7 +44,7 @@ const useStyles = makeStyles({
 })
 
 export const Uploaded: React.FC = () => {
-    const { t } = useI18N()
+    const { t } = useI18NFileService()
     const classes = useStyles()
     const history = useHistory()
     const { onInsert } = useExchange()
@@ -81,7 +80,7 @@ export const Uploaded: React.FC = () => {
                         <span>{formatDateTime(state.createdAt)}</span>
                     </p>
                     <Button onClick={onBack} variant="contained">
-                        {t('plugin_file_service_on_change_file')}
+                        {t('on_change_file')}
                     </Button>
                 </Typography>
             </Grid>

@@ -3,8 +3,7 @@ import { useState, useEffect } from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
 import { useAsync } from 'react-use'
-import { PluginFileServiceRPC, PluginFileServiceRPCGenerator } from '../utils'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { PluginFileServiceRPC, PluginFileServiceRPCGenerator, useI18NFileService } from '../utils'
 import { timeout } from '../../../utils/utils'
 import { FileRouter } from '../constants'
 import { useExchange } from '../hooks/Exchange'
@@ -44,7 +43,7 @@ interface RouteState {
 }
 
 export const Uploading: React.FC = () => {
-    const { t } = useI18N()
+    const { t } = useI18NFileService()
     const classes = useStyles()
     const history = useHistory()
     const { onUploading } = useExchange()
@@ -105,7 +104,7 @@ export const Uploading: React.FC = () => {
                     <File width={96} height={120} />
                 </Grid>
                 <Grid item>
-                    <Typography>{t('plugin_file_service_signing_failed')}</Typography>
+                    <Typography>{t('signing_failed')}</Typography>
                 </Grid>
             </Grid>
         )

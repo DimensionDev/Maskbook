@@ -6,11 +6,11 @@ import { useBeforeUnload } from 'react-use'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { InjectedDialog } from '../../components/shared/InjectedDialog'
 import { editActivatedPostMetadata } from '../../social-network/ui'
-import { useI18N } from '../../utils/i18n-next-ui'
 import { Entry } from './components'
 import { META_KEY_1 } from './constants'
 import { Exchange } from './hooks/Exchange'
 import type { FileInfo } from './types'
+import { useI18NFileService } from './utils'
 
 interface Props extends withClasses<never> {
     open: boolean
@@ -33,7 +33,7 @@ const useStyles = makeStyles({
     },
 })
 const FileServiceDialog: React.FC<Props> = (props) => {
-    const { t } = useI18N()
+    const { t } = useI18NFileService()
     const classes = useStylesExtends(useStyles(), props)
     const snackbar = useSnackbar()
     const [uploading, setUploading] = useState(false)
@@ -58,10 +58,10 @@ const FileServiceDialog: React.FC<Props> = (props) => {
             props.onDecline()
             return
         }
-        snackbar.enqueueSnackbar(t('plugin_file_service_uploading_on_cancal'))
+        snackbar.enqueueSnackbar(t('uploading_on_cancal'))
     }
     return (
-        <InjectedDialog open={props.open} title={t('plugin_file_service_display_name')} onClose={onDecline}>
+        <InjectedDialog open={props.open} title={t('display_name')} onClose={onDecline}>
             <DialogContent>
                 <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
                     <Entry />
@@ -73,7 +73,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
                     classes={{ root: classes.button }}
                     onClick={onInsert}
                     disabled={isNil(selectedFileInfo)}>
-                    {t('plugin_file_service_on_insert')}
+                    {t('on_insert')}
                 </Button>
             </DialogActions>
         </InjectedDialog>

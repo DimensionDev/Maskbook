@@ -5,8 +5,7 @@ import { isNil } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import { UploadCloud } from 'react-feather'
 import { useDropArea } from 'react-use'
-import { useI18N } from '../../../utils/i18n-next-ui'
-
+import { useI18NFileService } from '../utils'
 const useStyles = makeStyles((theme) => ({
     label: {
         display: 'flex',
@@ -75,7 +74,7 @@ interface Props {
 }
 
 export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
-    const { t } = useI18N()
+    const { t } = useI18NFileService()
     const classes = useStyles()
     const snackbar = useSnackbar()
     const [bond, { over }] = useDropArea({
@@ -106,8 +105,8 @@ export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
     // see https://confluence.dimension.chat/x/3IEf#Maskbook:Plugin:FileService-ErrorHandling
     const onError = (code: number) => {
         const messages: Record<number, string> = {
-            101: t('plugin_file_service_error_101'),
-            102: t('plugin_file_service_error_102', { limit: MAX_FILE_SIZE }),
+            101: t('error_101'),
+            102: t('error_102', { limit: MAX_FILE_SIZE }),
         }
         if (code in messages) {
             snackbar.enqueueSnackbar(`Error ${code}: ${messages[code]}`, { variant: 'error' })
@@ -116,11 +115,11 @@ export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
     return (
         <Typography component="label" {...bond} className={classNames(classes.label, { [classes.over]: over })}>
             <input type="file" onInput={onInput} hidden />
-            <section className={classes.indicator}>{t('plugin_file_service_drop_indicator')}</section>
+            <section className={classes.indicator}>{t('drop_indicator')}</section>
             <UploadCloud className={classes.uploader} width={64} height={64} />
-            <b className={classes.here}>{t('plugin_file_service_drop_here')}</b>
-            <p className={classes.hint}>{t('plugin_file_service_drop_hint_1', { limit: MAX_FILE_SIZE })}</p>
-            <p className={classes.hint}>{t('plugin_file_service_drop_hint_2')}</p>
+            <b className={classes.here}>{t('drop_here')}</b>
+            <p className={classes.hint}>{t('drop_hint_1', { limit: MAX_FILE_SIZE })}</p>
+            <p className={classes.hint}>{t('drop_hint_2')}</p>
         </Typography>
     )
 }

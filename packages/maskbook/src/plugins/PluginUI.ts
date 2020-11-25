@@ -1,7 +1,14 @@
 // Please make sure you have registered your plugin service (if it need one) at ./PluginService
 import type { PluginConfig } from './types'
-
+import { insertI18NBundle } from '../utils/i18n-next'
 const plugins = new Set<PluginConfig>()
+plugins.add = (value) => {
+    if (value.i18n) {
+        const f = insertI18NBundle.bind(null, value.identifier)
+        Promise.resolve(value.i18n(f)).then(f).catch(console.error)
+    }
+    return Set.prototype.add.call(plugins, value)
+}
 export const PluginUI: ReadonlySet<PluginConfig> = plugins
 
 import { WalletPluginDefine } from './Wallet/define'

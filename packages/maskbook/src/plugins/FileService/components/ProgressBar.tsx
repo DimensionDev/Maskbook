@@ -1,6 +1,6 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { makeStyles, Typography, LinearProgress, Box } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18NFileService } from '../utils'
 
 const useStyles = makeStyles({
     container: {
@@ -39,14 +39,14 @@ interface Props {
 }
 
 export const ProgressBar: React.FC<Props> = (props) => {
-    const { t } = useI18N()
+    const { t } = useI18NFileService()
     const classes = useStyles()
     const { startedAt, fileSize, sendSize } = props
     const value = (sendSize / fileSize) * 100
     const elapsed = (Date.now() - startedAt) / 1000
     const remaining = (fileSize - sendSize) / (elapsed ? sendSize / elapsed : 0)
     const variant = props.preparing ? 'indeterminate' : 'determinate'
-    let completion = t('plugin_file_service_uploading_preparing')
+    let completion = t('uploading_preparing')
     if (!props.preparing) {
         completion = `${formatFileSize(sendSize)} of ${formatFileSize(fileSize)}`
     }
@@ -64,14 +64,14 @@ export const ProgressBar: React.FC<Props> = (props) => {
 }
 
 const Duration: React.FC<{ value: number }> = ({ value }) => {
-    const { t } = useI18N()
+    const { t } = useI18NFileService()
     const render = () => {
         if (!Number.isFinite(value)) {
-            return t('plugin_file_service_uploading_estimating_time')
+            return t('uploading_estimating_time')
         } else if (value < 60) {
-            return t('plugin_file_service_uploading_in_minute_remaining', { seconds: value.toFixed(0) })
+            return t('uploading_in_minute_remaining', { seconds: value.toFixed(0) })
         }
-        return t('plugin_file_service_uploading_remaining', {
+        return t('uploading_remaining', {
             minutes: Math.trunc(value / 60),
             seconds: (value % 60).toFixed(0),
         })

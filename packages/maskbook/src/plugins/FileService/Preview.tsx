@@ -3,8 +3,7 @@ import { makeStyles, Paper, Typography } from '@material-ui/core'
 import { DownloadCloud, File } from 'react-feather'
 import { CopyableCode } from './components/Copyable'
 import type { FileInfo } from './types'
-import { useI18N } from '../../utils/i18n-next-ui'
-
+import { useI18NFileService } from './utils'
 interface Props {
     info: FileInfo
 }
@@ -48,15 +47,15 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const Preview: React.FC<Props> = ({ info }) => {
-    const { t } = useI18N()
+    const { t } = useI18NFileService()
     const classes = useStyles()
     const fileKey = info.key ? (
         <Typography component="p" color="textPrimary">
-            {t('plugin_file_service_file_key')} <CopyableCode className={classes.code}>{info.key}</CopyableCode>
+            {t('file_key')} <CopyableCode className={classes.code}>{info.key}</CopyableCode>
         </Typography>
     ) : (
         <Typography component="p" color="textSecondary">
-            {t('plugin_file_service_unencrypted')}
+            {t('unencrypted')}
         </Typography>
     )
     const link = `https://arweave.net/${info.landingTxID}`

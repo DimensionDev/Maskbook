@@ -5,8 +5,7 @@ import { isNil } from 'lodash-es'
 import { Trans } from 'react-i18next'
 import { useHistory } from 'react-router'
 import { useAsync } from 'react-use'
-import { PluginFileServiceRPC } from '../utils'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { PluginFileServiceRPC, useI18NFileService } from '../utils'
 import { makeFileKey } from '../arweave/makeFileKey'
 import { FileRouter, MAX_FILE_SIZE } from '../constants'
 import { RecentFiles } from './RecentFiles'
@@ -47,8 +46,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const Upload: React.FC = () => {
-    const { t } = useI18N()
+export function Upload() {
+    const { t } = useI18NFileService()
     const classes = useStyles()
     const history = useHistory()
     const [encrypted, setEncrypted] = useState(true)
@@ -84,14 +83,14 @@ export const Upload: React.FC = () => {
                 <FormControlLabel
                     control={<Checkbox checked={encrypted} onChange={(event, checked) => setEncrypted(checked)} />}
                     className={classes.encrypted}
-                    label={t('plugin_file_service_on_encrypt_it')}
+                    label={t('on_encrypt_it')}
                 />
                 <Typography className={classes.legalText}>
                     <Trans
-                        i18nKey="plugin_file_service_legal_text"
+                        i18nKey="legal_text"
                         components={{
-                            terms: <Link target="_blank" href={t('plugin_file_service_legal_terms_link')} />,
-                            policy: <Link target="_blank" href={t('plugin_file_service_legal_policy_link')} />,
+                            terms: <Link target="_blank" href={t('legal_terms_link')} />,
+                            policy: <Link target="_blank" href={t('legal_policy_link')} />,
                         }}
                     />
                 </Typography>

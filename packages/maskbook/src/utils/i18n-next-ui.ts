@@ -10,42 +10,30 @@ import { useUpdate } from 'react-use'
 
 i18nNextInstance.use(initReactI18next)
 
-// const test = {
-//     my_test: 'string',
-// } as const
-type Namespaces = {
-    default: typeof en
-    // test: typeof test
-}
-
 export type I18NFunction<TInterpolationMap extends object = typeof en> = <TKeys extends keyof TInterpolationMap>(
     key: TKeys | TKeys[],
     // defaultValue?: string,
     options?: TOptions | string,
 ) => TInterpolationMap[TKeys]
 
-/**
- * Enhanced version of useTranslation
- * @param ns Namespace
- * @param opt Options
- */
-export function useI18N<NS extends keyof Namespaces = 'default'>(
-    _ns?: NS,
-    opt?: UseTranslationOptions,
-    // The [F, i18n, boolean] case is not recommend because i18n ally doesn't recognize that if the name is not "t"
-): /** [F<Namespaces[NS]>, i18n, boolean] &  */
-{
-    t: I18NFunction<Namespaces[NS]>
+export type i18nHooksResult<T extends object> = {
+    t: I18NFunction<T>
     i18n: i18n
     ready: boolean
-} {
-    if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const update = useUpdate()
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        useEffect(() => document.addEventListener('i18n-hmr', update))
+}
+/**
+ * Enhanced version of useTranslation
+ * @param opt Options
+ */
+export const useI18N = createI18NHooksNS<typeof import('../_locales/en/messages.json')>('maskbook')
+export function createI18NHooksNS<T extends object>(namespace: string) {
+    return (opt?: UseTranslationOptions): i18nHooksResult<T> => {
+        if (process.env.NODE_ENV === 'development') {
+            const update = useUpdate()
+            useEffect(() => document.addEventListener(namespace + '-i18n-hmr', update))
+        }
+        return useTranslation_(namespace, opt)
     }
-    return useTranslation_(undefined, opt)
 }
 
 languageSettings.addListener((next) => {
