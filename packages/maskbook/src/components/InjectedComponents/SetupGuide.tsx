@@ -232,7 +232,6 @@ function ContentUI(props: ContentUIProps) {
                 </Box>
             )
 
-        default:
         case SetupGuideStep.SayHelloWorld:
             return (
                 <Box>
@@ -241,6 +240,8 @@ function ContentUI(props: ContentUIProps) {
                     <footer className={classes.footer}>{props.footer}</footer>
                 </Box>
             )
+        default:
+            return null
     }
 }
 
