@@ -67,11 +67,11 @@ function mockedGlobalThis() {
     globalThis.navigator = { appVersion: '', userAgent: '', language: '', platform: 'ssr' }
     globalThis.ShadowRoot = ShadowRoot
     globalThis.document = new Document()
-   globalThis.Event = class {
-       get target() {
-           return null
-       }
-   }
+    globalThis.Event = class {
+        get target() {
+            return null
+        }
+    }
     globalThis.Worker = class Worker extends EventTarget {}
     globalThis.sessionStorage = {}
     globalThis.matchMedia = () => Object.assign(new EventTarget(), { matches: false })
