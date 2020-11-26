@@ -1,6 +1,7 @@
 import type { ProfileIdentifier } from '../../../database/type'
 import { gun2, PersonOnGun2 as ProfileOnGun2 } from '.'
 import { hashProfileIdentifier } from './hash'
+import { EventIterator } from 'event-iterator'
 
 /**
  * Query person from gun by once.
@@ -18,16 +19,18 @@ export async function queryPersonFromGun2(user: ProfileIdentifier): Promise<Prof
  * @param user Identifier
  * @param callback Callback
  */
-export function subscribePersonFromGun2(user: ProfileIdentifier, callback: (data: ProfileOnGun2) => void) {
-    hashProfileIdentifier(user).then((hash) =>
-        gun2.get(hash).on((data: ProfileOnGun2) => {
-            const data2 = Object.assign({}, data)
-            // @ts-ignore
-            delete data2._
-            callback(data2)
-        }),
-    )
-    return () => (callback = () => {})
+export async function* subscribeProfileFromGun2(user: ProfileIdentifier) {
+    const iter = new EventIterator<ProfileOnGun2>(({ push: callback }) => {
+        hashProfileIdentifier(user).then((hash) =>
+            gun2.get(hash).on((data: ProfileOnGun2) => {
+                const data2 = Object.assign({}, data)
+                // @ts-ignore
+                delete data2._
+                callback(data2)
+            }),
+        )
+    })
+    yield* iter
 }
 /**
  * Note: unused.

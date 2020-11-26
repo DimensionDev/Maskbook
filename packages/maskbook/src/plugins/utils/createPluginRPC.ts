@@ -9,7 +9,7 @@ const log: AsyncCallLogLevel = {
     sendLocalStack: true,
     type: 'pretty',
 }
-export function createPluginRPC<T>(key: string, impl: () => Promise<T>, message: UnboundedRegistry<unknown>) {
+export function createPluginRPC<T>(key: string, impl: () => T | Promise<T>, message: UnboundedRegistry<unknown>) {
     const isBackground = isEnvironment(Environment.ManifestBackground)
     return AsyncCall<T>(isBackground ? impl() : {}, {
         key,

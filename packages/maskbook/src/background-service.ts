@@ -11,7 +11,6 @@ import * as PersonaDB from './database/Persona/Persona.db'
 import * as PersonaDBHelper from './database/Persona/helpers'
 import { initAutoShareToFriends } from './extension/background-script/Jobs/AutoShareToFriends'
 
-import { gun2 } from './network/gun/version.2'
 import * as crypto40 from './crypto/crypto-alpha-40'
 import * as crypto39 from './crypto/crypto-alpha-39'
 import * as crypto38 from './crypto/crypto-alpha-38'
@@ -133,7 +132,6 @@ console.log('Build info', {
 // Friendly to debug
 Object.assign(window, {
     definedSocialNetworkWorkers,
-    gun2: gun2,
     crypto40: crypto40,
     crypto39: crypto39,
     crypto38: crypto38,

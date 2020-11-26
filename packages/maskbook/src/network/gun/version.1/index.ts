@@ -1,12 +1,9 @@
 /* eslint import/no-deprecated: 0 */
+import '../gun-worker.patch'
 import Gun from 'gun'
 import 'gun/lib/then'
-import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
 import { gun2 } from '../version.2'
-
-export * from './posts'
-assertEnvironment(Environment.ManifestBackground)
 
 /**
  * @deprecated // ! This version will leak post targets ! //
@@ -15,7 +12,7 @@ assertEnvironment(Environment.ManifestBackground)
  *
  * Use exchange v2 instead!
  */
-export interface ApplicationStateInGunVersion1 {
+interface ApplicationStateInGunVersion1 {
     maskbook: {
         users: {
             // User ID
@@ -39,3 +36,16 @@ function typeHelper() {
 }
 /** @deprecated */
 export const gun1 = ((gun2 as any) as ReturnType<typeof typeHelper>).get('maskbook')
+/**
+ * @param salt The salt of this post
+ * @param myUsername My username of this post
+ * @deprecated Do not use in new code
+ */
+export async function queryVersion1PostAESKey(salt: string, myUsername: string) {
+    const result = await gun1.get('posts').get(salt).get(myUsername).then!()
+    if (result && result.encryptedKey && result.salt) return result
+    return undefined
+}
+export async function getVersion1PostByHash(postSalt: string) {
+    return gun1.get('posts').get(postSalt).then!()
+}

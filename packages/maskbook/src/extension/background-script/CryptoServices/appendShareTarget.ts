@@ -1,5 +1,5 @@
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import * as Gun2 from '../../../network/gun/version.2'
+import { GunAPI as Gun2 } from '../../../network/gun/'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { cryptoProviderTable } from './cryptoProviderTable'

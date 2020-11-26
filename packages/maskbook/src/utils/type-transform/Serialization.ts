@@ -1,5 +1,5 @@
 /// <reference path="../../env.d.ts" />
-import type { Serialization } from '@dimensiondev/holoflows-kit'
+import type { Serialization } from 'async-call-rpc'
 import Typeson from 'typeson'
 import { Ok, Err } from 'ts-results'
 import { BigNumber } from 'bignumber.js'
@@ -48,7 +48,7 @@ typeson.register([blob, file, fileList, imageBitMap, num])
 serializable('Ok')(Ok as any)
 serializable('Err')(Err as any)
 serializable('BigNumber')(BigNumber)
-const serialization: Serialization = {
+export const serialization: Serialization = {
     async serialization(from: unknown) {
         return typeson.encapsulate(from)
     },
@@ -61,5 +61,4 @@ const serialization: Serialization = {
         }
     },
 }
-
 export default serialization

@@ -1,7 +1,6 @@
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import * as Gun1 from '../../../network/gun/version.1'
-import * as Gun2 from '../../../network/gun/version.2'
+import { GunAPI as Gun2, GunAPISubscribe as Gun2Subscribe, GunWorker } from '../../../network/gun/'
 import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../utils/i18n-next'
@@ -21,8 +20,10 @@ import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/Crypt
 import { decodeImageUrl } from '../SteganographyService'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import stringify from 'json-stable-stringify'
-import { calculatePostKeyPartition } from '../../../network/gun/version.2'
+import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
 import { MaskMessage } from '../../../utils/messages'
+import { GunAPI } from '../../../network/gun'
+import { calculatePostKeyPartition } from '../../../network/gun/version.2/hash'
 
 type Progress =
     | {
@@ -200,11 +201,11 @@ async function* decryptFromPayloadWithProgress_raw(
         }
 
         yield makeProgress('finding_post_key')
-        const aesKeyEncrypted: Array<Alpha40.PublishedAESKey | Gun2.SharedAESKeyGun2> = []
+        const aesKeyEncrypted: Array<Alpha40.PublishedAESKey | SharedAESKeyGun2> = []
         if (version === -40) {
             // Deprecated payload
             // eslint-disable-next-line import/no-deprecated
-            const result = await Gun1.queryPostAESKey(iv, whoAmI.userId)
+            const result = await GunAPI.queryVersion1PostAESKey(iv, whoAmI.userId)
             if (result === undefined) return makeError(i18n.t('service_not_share_target'))
             aesKeyEncrypted.push(result)
         } else if (version === -39 || version === -38) {
@@ -229,25 +230,23 @@ async function* decryptFromPayloadWithProgress_raw(
         }
 
         // Failed, we have to wait for the future info from gun.
-        return new Promise<Success>((resolve, reject) => {
-            if (version === -40) return reject()
-            const undo = Gun2.subscribePostKeysOnGun2(
-                version,
-                iv,
-                minePublic,
-                authorNetworkWorker.val.gunNetworkHint,
-                async (key) => {
-                    console.log('New key received, trying', key)
-                    try {
-                        const result = await decryptWith(key)
-                        undo()
-                        resolve(result)
-                    } catch (e) {
-                        console.debug(e)
-                    }
-                },
-            )
-        })
+        if (version === -40) return makeError(i18n.t('service_not_share_target'))
+        const subscription = Gun2Subscribe.subscribePostKeysOnGun2(
+            version,
+            iv,
+            minePublic,
+            authorNetworkWorker.val.gunNetworkHint,
+        )
+        GunWorker?.onTerminated(() => subscription.return?.())
+        for await (const aes of subscription) {
+            console.log('New key received, trying', aes)
+            try {
+                return await decryptWith(aes)
+            } catch (e) {
+                console.debug(e)
+            }
+        }
+        return makeError(i18n.t('service_not_share_target'))
 
         async function decryptWith(
             key:
@@ -345,19 +344,17 @@ async function* findAuthorPublicKey(
         if (!author?.publicKey) {
             if (hasCache) return 'use cache' as const
             const abort = new AbortController()
-            const gunPromise = new Promise<void>((resolve, reject) => {
-                abort.signal.addEventListener('abort', () => {
-                    undo()
-                    reject()
-                })
-                const undo = Gun2.subscribePersonFromGun2(by, (data) => {
-                    const provePostID = data?.provePostId as string | '' | undefined
-                    if (provePostID?.length ?? 0 > 0) {
-                        undo()
-                        resolve()
-                    }
-                })
-            })
+            const gunPromise = (async () => {
+                const subscription = Gun2Subscribe.subscribeProfileFromGun2(by)
+                const undo = () => subscription.return?.(void 0)
+                abort.signal.addEventListener('abort', undo)
+                GunWorker?.onTerminated(undo)
+                for await (const data of subscription) {
+                    const provePostID = String(data?.provePostId || '')
+                    if (provePostID.length > 0) return
+                }
+                throw new Error()
+            })()
             const databasePromise = new Promise<void>((resolve, reject) => {
                 abort.signal.addEventListener('abort', () => {
                     undo()

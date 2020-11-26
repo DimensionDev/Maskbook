@@ -1,28 +1,9 @@
 import { gun2, SharedAESKeyGun2 } from '.'
-import { hashPostSalt, hashCryptoKey, hashCryptoKeyUnstable } from './hash'
+import { hashPostSalt, hashCryptoKey, hashCryptoKeyUnstable, calculatePostKeyPartition } from './hash'
 import type { PublishedAESKeyRecordV39OrV38 } from '../../../crypto/crypto-alpha-38'
 import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
+import { EventIterator } from 'event-iterator'
 
-import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-assertEnvironment(Environment.ManifestBackground)
-
-/**
- * @param version current payload version
- * @param postIV Post iv
- * @param partitionByCryptoKey Public key of the current user (receiver)
- * @param networkHint The network specific string
- */
-export async function calculatePostKeyPartition(
-    version: -39 | -38,
-    postIV: string,
-    partitionByCryptoKey: EC_Public_JsonWebKey,
-    networkHint: string,
-) {
-    const postHash = await hashPostSalt(postIV, networkHint)
-    // In version > -39, we will use stable hash to prevent unstable result for key hashing
-    const keyHash = await (version <= -39 ? hashCryptoKeyUnstable : hashCryptoKey)(partitionByCryptoKey)
-    return { postHash, keyHash }
-}
 /**
  * Query all possible keys stored on the gun
  * @param version current payload version
@@ -58,30 +39,30 @@ export async function queryPostKeysOnGun2(
  * @param version current payload version
  * @param postSalt Post iv
  * @param partitionByCryptoKey Public key of the current user (receiver)
- * @param callback
  */
-export function subscribePostKeysOnGun2(
+export async function* subscribePostKeysOnGun2(
     version: -39 | -38,
     postSalt: string,
     partitionByCryptoKey: EC_Public_JsonWebKey,
     networkHint: string,
-    callback: (data: SharedAESKeyGun2) => void,
 ) {
-    hashPostSalt(postSalt, networkHint).then((postHash) => {
-        // In version > -39, we will use stable hash to prevent unstable result for key hashing
-        ;(version <= -39 ? hashCryptoKeyUnstable : hashCryptoKey)(partitionByCryptoKey).then((keyHash) => {
-            gun2.get(postHash)
-                // @ts-ignore
-                .get(keyHash)
-                .map()
-                .on((data: SharedAESKeyGun2) => {
+    const iter = new EventIterator<SharedAESKeyGun2>(({ push: callback }) => {
+        hashPostSalt(postSalt, networkHint).then((postHash) => {
+            // In version > -39, we will use stable hash to prevent unstable result for key hashing
+            ;(version <= -39 ? hashCryptoKeyUnstable : hashCryptoKey)(partitionByCryptoKey).then((keyHash) => {
+                gun2.get(postHash)
                     // @ts-ignore
-                    const { _, ...data2 } = Object.assign({}, data)
-                    callback(data2)
-                })
+                    .get(keyHash)
+                    .map()
+                    .on((data: SharedAESKeyGun2) => {
+                        // @ts-ignore
+                        const { _, ...data2 } = Object.assign({}, data)
+                        callback(data2)
+                    })
+            })
         })
     })
-    return () => (callback = () => {})
+    yield* iter
 }
 
 /**

@@ -1,12 +1,16 @@
-import Gun from 'gun'
-import 'gun/lib/then.js'
 import { first } from 'lodash-es'
 import { gun2 } from '../../network/gun/version.2'
 import type { PollMetaData } from './types'
 import { PollGunServer } from './constants'
+import { WorkerChannel } from 'async-call-rpc/utils/web/worker'
+import { AsyncCall } from 'async-call-rpc'
 
-const gun = gun2
-const PollGun = gun.get(PollGunServer)
+import * as self from './Services'
+setTimeout(() => {
+    AsyncCall(self, { channel: new WorkerChannel() })
+}, 0)
+
+const PollGun = gun2.get(PollGunServer)
 
 const defaultPoll: PollGunDB = {
     key: '',
