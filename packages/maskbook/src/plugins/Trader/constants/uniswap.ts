@@ -130,7 +130,7 @@ export const BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: Token[]
 } = {
     ...WETH_ONLY,
-    [ChainId.Mainnet]: [...WETH_ONLY[ChainId.Mainnet], ...[DAI, USDC, USDT, COMP, MKR, AMPL]],
+    [ChainId.Mainnet]: [...WETH_ONLY[ChainId.Mainnet], ...[DAI, USDC, USDT, COMP, MKR]],
     [ChainId.Rinkeby]: [...WETH_ONLY[ChainId.Rinkeby], ...[MSKA, MSKB, MSKC]],
 }
 
