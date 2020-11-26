@@ -27,7 +27,7 @@ const USDT = createERC20Token(
 )
 const COMP = createERC20Token(
     ChainId.Mainnet,
-    getConstant(CONSTANTS, 'USDT_ADDRESS', ChainId.Mainnet),
+    getConstant(CONSTANTS, 'COMP_ADDRESS', ChainId.Mainnet),
     18,
     'Compound',
     'COMP',
