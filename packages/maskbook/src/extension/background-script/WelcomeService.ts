@@ -8,7 +8,7 @@ import type { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
 import { generateBackupJSON, BackupOptions } from './WelcomeServices/generateBackupJSON'
 import { exclusiveTasks } from '../content-script/tasks'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
-import { saveAsFile } from './HelperService'
+import { saveAsFileFromBuffer } from './HelperService'
 import type { DashboardRoute } from '../options-page/Route'
 export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 export * from './WelcomeServices/restoreBackup'
@@ -57,7 +57,7 @@ export async function downloadBackup<T>(obj: T) {
     const today = `${date.getFullYear()}-${(date.getMonth() + 1)
         .toString()
         .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
-    saveAsFile(buffer, 'application/json', `maskbook-keystore-backup-${today}.json`)
+    saveAsFileFromBuffer(buffer, 'application/json', `maskbook-keystore-backup-${today}.json`)
     return obj
 }
 
