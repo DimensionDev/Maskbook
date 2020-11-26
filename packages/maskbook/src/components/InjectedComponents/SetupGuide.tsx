@@ -13,6 +13,7 @@ import {
     unstable_createMuiStrictModeTheme,
     IconButton,
     Box,
+    Hidden,
 } from '@material-ui/core'
 import classNames from 'classnames'
 import { ArrowRight } from 'react-feather'
@@ -31,6 +32,8 @@ import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } fro
 import Services from '../../extension/service'
 import { currentSelectedWalletAddressSettings } from '../../plugins/Wallet/settings'
 import { WalletRPC } from '../../plugins/Wallet/messages'
+
+import { useMatchXS } from '../../utils/hooks/useMatchXS'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -93,15 +96,41 @@ const wizardTheme = (theme: Theme): Theme =>
 const useWizardDialogStyles = makeStyles((theme) =>
     createStyles({
         root: {
-            userSelect: 'none',
-            boxSizing: 'border-box',
             padding: '56px 20px 48px',
             position: 'relative',
-            width: 320,
-            borderRadius: 12,
             boxShadow: theme.palette.type === 'dark' ? 'none' : theme.shadows[4],
             border: `${theme.palette.type === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
+            borderRadius: 12,
+            [theme.breakpoints.down('xs')]: {
+                padding: '35px 20px 16px',
+                position: 'fixed',
+                bottom: 0,
+                left: 0,
+                margin: 0,
+                alignSelf: 'center',
+                borderRadius: 0,
+                boxShadow: 'none',
+                border: `solid 1px ${theme.palette.divider}`,
+                width: '100%',
+            },
+            userSelect: 'none',
+            boxSizing: 'border-box',
+            width: 320,
             overflow: 'hidden',
+        },
+        button: {
+            width: 200,
+            height: 40,
+            marginLeft: 0,
+            marginTop: 0,
+            [theme.breakpoints.down('xs')]: {
+                width: '100%',
+                height: '45px !important',
+                marginTop: 20,
+                borderRadius: 0,
+            },
+            fontSize: 16,
+            wordBreak: 'keep-all',
         },
         back: {
             color: theme.palette.text.primary,
@@ -134,12 +163,6 @@ const useWizardDialogStyles = makeStyles((theme) =>
             lineHeight: 1.75,
             marginBottom: 24,
         },
-        button: {
-            fontSize: 16,
-            width: 200,
-            height: 40,
-            wordBreak: 'keep-all',
-        },
         textButton: {
             fontSize: 14,
             marginTop: theme.spacing(1),
@@ -149,13 +172,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
             marginBottom: 0,
         },
         content: {},
-        footer: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            marginTop: 16,
-        },
+        footer: {},
         progress: {
             left: 0,
             right: 0,
@@ -166,12 +183,76 @@ const useWizardDialogStyles = makeStyles((theme) =>
     }),
 )
 
+const useStyles = makeStyles((theme: Theme) => {
+    return {
+        root: {
+            alignItems: 'center',
+        },
+        content: {
+            marginRight: 16,
+        },
+        footer: {
+            marginLeft: 0,
+            marginTop: 0,
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+        },
+        tip: {},
+    }
+})
+
+interface ContentUIProps {
+    dialogType: SetupGuideStep
+    content?: React.ReactNode
+    footer?: React.ReactNode
+    tip?: React.ReactNode
+}
+
+function ContentUI(props: ContentUIProps) {
+    const classes = useStyles(props)
+    const xsMatch = useMatchXS()
+    const wizardClasses = useWizardDialogStyles()
+    switch (props.dialogType) {
+        case SetupGuideStep.FindUsername:
+            return (
+                <Box display="block">
+                    <Box display={xsMatch ? 'flex' : 'block'}>
+                        <main className={classes.content}>{props.content}</main>
+                        <Hidden only="xs">
+                            <div>{props.tip}</div>
+                        </Hidden>
+                        <footer className={classes.footer}>{props.footer}</footer>
+                    </Box>
+                    <Hidden smUp>
+                        <div>{props.tip}</div>
+                    </Hidden>
+                </Box>
+            )
+
+        case SetupGuideStep.SayHelloWorld:
+            return (
+                <Box>
+                    <main className={classes.content}>{props.content}</main>
+                    <div>{props.tip}</div>
+                    <footer className={classes.footer}>{props.footer}</footer>
+                </Box>
+            )
+        default:
+            return null
+    }
+}
+
 interface WizardDialogProps {
     title: string
+    dialogType: SetupGuideStep
     completion: number
     status: boolean | 'undetermined'
     optional?: boolean
     content?: React.ReactNode
+    tip?: React.ReactNode
     footer?: React.ReactNode
     onBack?: () => void
     onClose?: () => void
@@ -179,7 +260,7 @@ interface WizardDialogProps {
 
 function WizardDialog(props: WizardDialogProps) {
     const { t } = useI18N()
-    const { title, optional = false, completion, status, content, footer, onBack, onClose } = props
+    const { title, dialogType, optional = false, completion, status, content, tip, footer, onBack, onClose } = props
     const classes = useWizardDialogStyles(props)
 
     return (
@@ -215,13 +296,14 @@ function WizardDialog(props: WizardDialogProps) {
                             </Typography>
                         ) : null}
                     </header>
-                    <main className={classes.content}>{content}</main>
-                    <footer className={classes.footer}>{footer}</footer>
-                    <LinearProgress
-                        className={classes.progress}
-                        color="secondary"
-                        variant="determinate"
-                        value={completion}></LinearProgress>
+                    <ContentUI dialogType={dialogType} content={content} tip={tip} footer={footer} />
+                    <Hidden only="xs">
+                        <LinearProgress
+                            className={classes.progress}
+                            color="secondary"
+                            variant="determinate"
+                            value={completion}></LinearProgress>
+                    </Hidden>
                     {onBack ? (
                         <IconButton className={classes.back} size="small" onClick={onBack}>
                             <ArrowBackIosOutlinedIcon cursor="pointer" />
@@ -290,6 +372,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
     return (
         <WizardDialog
             completion={33.33}
+            dialogType={SetupGuideStep.FindUsername}
             status="undetermined"
             title={t('setup_guide_find_username_title')}
             content={
@@ -313,19 +396,22 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                             onChange={(e) => onUsernameChange(e.target.value)}
                             onKeyDown={onKeyDown}
                             inputProps={{ 'data-testid': 'username_input' }}></TextField>
-                        <IconButton
-                            className={findUsernameClasses.button}
-                            color={username ? 'primary' : 'default'}
-                            disabled={!username}>
-                            <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
-                        </IconButton>
+                        <Hidden only="xs">
+                            <IconButton
+                                className={findUsernameClasses.button}
+                                color={username ? 'primary' : 'default'}
+                                disabled={!username}>
+                                <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
+                            </IconButton>
+                        </Hidden>
                     </Box>
-
-                    <Typography
-                        className={classes.tip}
-                        variant="body2"
-                        dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}></Typography>
                 </form>
+            }
+            tip={
+                <Typography
+                    className={classes.tip}
+                    variant="body2"
+                    dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}></Typography>
             }
             footer={
                 <ActionButtonPromise
@@ -374,13 +460,15 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
     const { t } = useI18N()
     const classes = useWizardDialogStyles()
     const sayHelloWorldClasses = useSayHelloWorldStyles()
+
     return (
         <WizardDialog
             completion={100}
+            dialogType={SetupGuideStep.SayHelloWorld}
             status={createStatus}
             optional
             title={t('setup_guide_say_hello_title')}
-            content={
+            tip={
                 <form>
                     <Typography className={classNames(classes.tip, sayHelloWorldClasses.primary)} variant="body2">
                         {t('setup_guide_say_hello_primary')}
@@ -406,14 +494,16 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                         failedOnClick="use executor"
                         data-testid="create_button"
                     />
-                    <ActionButton
-                        className={classes.textButton}
-                        color="inherit"
-                        variant="text"
-                        onClick={onSkip}
-                        data-testid="skip_button">
-                        {t('skip')}
-                    </ActionButton>
+                    <Hidden only="xs">
+                        <ActionButton
+                            className={classes.textButton}
+                            color="inherit"
+                            variant="text"
+                            onClick={onSkip}
+                            data-testid="skip_button">
+                            {t('skip')}
+                        </ActionButton>
+                    </Hidden>
                 </>
             }
             onBack={onBack}

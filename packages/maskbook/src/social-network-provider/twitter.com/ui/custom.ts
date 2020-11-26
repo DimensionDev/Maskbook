@@ -10,6 +10,7 @@ import { Appearance } from '../../../settings/settings'
 import produce, { setAutoFreeze } from 'immer'
 import type { InjectedDialogClassKey } from '../../../components/shared/InjectedDialog'
 import type { StyleRules } from '@material-ui/core'
+import { isMobileTwitter } from '../utils/isMobile'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))
@@ -53,7 +54,7 @@ function useTheme() {
                 dark: toRGB(shade(primaryColorRGB, -10)),
                 contrastText: toRGB(primaryContrastColorRGB),
             }
-            theme.shape.borderRadius = 15
+            theme.shape.borderRadius = isMobileTwitter ? 0 : 15
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
             theme.props = theme.props || {}
             theme.props!.MuiButton = {
