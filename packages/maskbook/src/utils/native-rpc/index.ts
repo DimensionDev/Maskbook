@@ -26,10 +26,10 @@ if (process.env.architecture === 'app') {
             channel: new AndroidGeckoViewChannel(),
         }))
         nativeAPI = { type: 'Android', api }
-        const data = ['hello!', 'android should echo this message as-is']
-        timeout(api.android_echo(...data), 1000).then(
-            (x) =>
-                x.join('') === data.join('')
+        const data = 'hello! android should echo this message as-is'
+        timeout(api.android_echo(data), 1000).then(
+            (x: string) =>
+                x === data
                     ? console.log('Android implemented android_echo correctly')
                     : console.error('Android did not implemented android_echo correctly, received', x),
             (err) => console.error('api.android_echo reports an error:', err),

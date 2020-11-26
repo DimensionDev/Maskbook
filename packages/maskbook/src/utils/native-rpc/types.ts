@@ -3,7 +3,7 @@
  * JS = server, native = client
  */
 export interface WebviewAPIs {
-    web_echo<T extends any[]>(...args: T): Promise<T>
+    web_echo<T>(arg: T): Promise<T>
 }
 export interface SharedNativeAPIs {}
 /**
@@ -19,5 +19,5 @@ export interface iOSNativeAPIs extends SharedNativeAPIs {
  * JS = client, Android = server
  */
 export interface AndroidNativeAPIs extends SharedNativeAPIs {
-    android_echo<T extends any[]>(...args: T): Promise<T>
+    android_echo(arg: string): Promise<string>
 }
