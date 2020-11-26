@@ -6,8 +6,8 @@ import { QRCodeVideoScannerDialog } from '../DashboardDialogs/Setup'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useVideoDevices } from '../../../utils/hooks/useVideoDevices'
-import { hasWKWebkitRPCHandlers, iOSHost } from '../../../utils/iOS-RPC'
-import { useAsync } from 'react-use'
+import { nativeAPI } from '../../../utils/native-rpc'
+import { NativeQRScanner } from '../../../components/shared/qrcode'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -34,65 +34,62 @@ export interface RestoreFromQRCodeCameraBoxProps extends withClasses<KeysInferFr
     onError?: () => void
 }
 
-export const RestoreFromQRCodeCameraBox = hasWKWebkitRPCHandlers
-    ? (props: RestoreFromQRCodeCameraBoxProps) => {
-          useAsync(async () => {
-              props.onScan?.(await iOSHost.scanQRCode())
-          })
-          return null
-      }
-    : (props: RestoreFromQRCodeCameraBoxProps) => {
-          const { onScan, onError } = props
+export const RestoreFromQRCodeCameraBox =
+    nativeAPI?.type === 'iOS'
+        ? NativeQRScanner
+        : (props: RestoreFromQRCodeCameraBoxProps) => {
+              const { onScan, onError } = props
 
-          const classes = useStylesExtends(useStyles(), props)
-          const [qrCodeVideoScannerDialog, , openQRCodeVideoScannerDialog] = useModal(QRCodeVideoScannerDialog)
+              const classes = useStylesExtends(useStyles(), props)
+              const [qrCodeVideoScannerDialog, , openQRCodeVideoScannerDialog] = useModal(QRCodeVideoScannerDialog)
 
-          const devices = useVideoDevices()
-          const filteredDevices = devices.filter((d) => !!d.deviceId)
-          const [selectedDeviceId, setSelectedDeviceId] = useState('')
+              const devices = useVideoDevices()
+              const filteredDevices = devices.filter((d) => !!d.deviceId)
+              const [selectedDeviceId, setSelectedDeviceId] = useState('')
 
-          // set default device id
-          useEffect(() => {
-              if (!selectedDeviceId && filteredDevices[0]?.deviceId) setSelectedDeviceId(filteredDevices[0]?.deviceId)
-          }, [filteredDevices, selectedDeviceId])
+              // set default device id
+              useEffect(() => {
+                  if (!selectedDeviceId && filteredDevices[0]?.deviceId)
+                      setSelectedDeviceId(filteredDevices[0]?.deviceId)
+              }, [filteredDevices, selectedDeviceId])
 
-          return (
-              <Box
-                  className={classes.root}
-                  sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                  }}>
-                  <FormControl className={classes.formControl} variant="filled">
-                      <Select
-                          value={selectedDeviceId}
+              return (
+                  <Box
+                      className={classes.root}
+                      sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                      }}>
+                      <FormControl className={classes.formControl} variant="filled">
+                          <Select
+                              value={selectedDeviceId}
+                              variant="outlined"
+                              MenuProps={{
+                                  container: PortalShadowRoot,
+                                  classes: { paper: classes.menuPaper },
+                              }}
+                              onChange={(e) => setSelectedDeviceId(e.target.value as string)}>
+                              {filteredDevices.map(({ deviceId, label }) => (
+                                  <MenuItem key={deviceId} value={deviceId}>
+                                      {label}
+                                  </MenuItem>
+                              ))}
+                          </Select>
+                      </FormControl>
+                      <Button
+                          className={classes.button}
                           variant="outlined"
-                          MenuProps={{
-                              container: PortalShadowRoot,
-                              classes: { paper: classes.menuPaper },
-                          }}
-                          onChange={(e) => setSelectedDeviceId(e.target.value as string)}>
-                          {filteredDevices.map(({ deviceId, label }) => (
-                              <MenuItem key={deviceId} value={deviceId}>
-                                  {label}
-                              </MenuItem>
-                          ))}
-                      </Select>
-                  </FormControl>
-                  <Button
-                      className={classes.button}
-                      variant="outlined"
-                      disabled={!selectedDeviceId}
-                      onClick={() =>
-                          openQRCodeVideoScannerDialog({
-                              deviceId: selectedDeviceId,
-                              onScan,
-                              onError,
-                          })
-                      }>
-                      <CropFreeIcon />
-                  </Button>
-                  {qrCodeVideoScannerDialog}
-              </Box>
-          )
-      }
+                          disabled={!selectedDeviceId}
+                          onClick={() =>
+                              openQRCodeVideoScannerDialog({
+                                  deviceId: selectedDeviceId,
+                                  onScan,
+                                  onError,
+                              })
+                          }>
+                          <CropFreeIcon />
+                      </Button>
+                      {qrCodeVideoScannerDialog}
+                  </Box>
+              )
+          }
