@@ -3,6 +3,7 @@ import { AndroidGeckoViewChannel } from './Android.channel'
 import { iOSWebkitChannel } from './iOS.channel'
 import { WebviewAPI } from './Web'
 import type { AndroidNativeAPIs, iOSNativeAPIs } from './types'
+import { timeout } from '../utils'
 
 export const hasNativeAPI = process.env.architecture === 'app'
 export let nativeAPI:
@@ -11,9 +12,7 @@ export let nativeAPI:
     | undefined = undefined
 
 export let sharedNativeAPI: _AsyncVersionOf<iOSNativeAPIs | AndroidNativeAPIs> | undefined = undefined
-setup()
-function setup() {
-    if (process.env.architecture !== 'app') return
+if (process.env.architecture === 'app') {
     const options: Partial<AsyncCallOptions> = { key: 'native' }
     if (process.env.target === 'safari') {
         const api = (sharedNativeAPI = AsyncCall<iOSNativeAPIs>(WebviewAPI, {
@@ -27,5 +26,13 @@ function setup() {
             channel: new AndroidGeckoViewChannel(),
         }))
         nativeAPI = { type: 'Android', api }
+        const data = ['hello!', 'android should echo this message as-is']
+        timeout(api.android_echo(...data), 1000).then(
+            (x) =>
+                x.join('') === data.join('')
+                    ? console.log('Android implemented android_echo correctly')
+                    : console.error('Android did not implemented android_echo correctly, received', x),
+            (err) => console.error('api.android_echo reports an error:', err),
+        )
     }
 }

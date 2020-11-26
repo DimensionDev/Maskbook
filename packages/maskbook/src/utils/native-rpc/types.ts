@@ -2,7 +2,9 @@
  * JSON RPC calls that can be called from the native side.
  * JS = server, native = client
  */
-export interface WebviewAPIs {}
+export interface WebviewAPIs {
+    web_echo<T extends any[]>(...args: T): Promise<T>
+}
 export interface SharedNativeAPIs {}
 /**
  * JSON RPC calls that can be called if it is running on iOS.
@@ -13,7 +15,9 @@ export interface iOSNativeAPIs extends SharedNativeAPIs {
     log(...args: any[]): Promise<void>
 }
 /**
- * JSON RPC calls that can be called if it is running on iOS.
+ * JSON RPC calls that can be called if it is running on Android.
  * JS = client, Android = server
  */
-export interface AndroidNativeAPIs extends SharedNativeAPIs {}
+export interface AndroidNativeAPIs extends SharedNativeAPIs {
+    android_echo<T extends any[]>(...args: T): Promise<T>
+}
