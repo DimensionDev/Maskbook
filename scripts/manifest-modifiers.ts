@@ -9,7 +9,11 @@ export function firefox(manifest: Manifest) {
 /** Geckoview is firefox with some quirks. */
 export function geckoview(manifest: Manifest) {
     firefox(manifest)
-    manifest.permissions.push('<all_urls>')
+    manifest.permissions.push(
+        'nativeMessaging', 
+        'nativeMessagingFromContent', 
+        'geckoViewAddons', 
+        '<all_urls>')
     manifest.applications = {
         gecko: {
             id: 'info@dimension.com',
