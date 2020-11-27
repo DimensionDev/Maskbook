@@ -30,11 +30,11 @@ export function fetch(url: string) {
 const createDlElement = once(() => document.createElement('a'))
 
 export function saveAsFileFromUrl(url: string, fileName = '') {
-    if (process.env.architecture === 'app' && process.env.firefoxVariant === 'geckoview') {
-        const dlElem = createDlElement()
-        dlElem.href = url
-        dlElem.download = fileName
-        dlElem.click()
+    if (process.env.architecture === 'app' && process.env.target === 'firefox') {
+        const element = createDlElement()
+        element.href = url
+        element.download = fileName
+        element.click()
     } else {
         browser.downloads.download({
             url,

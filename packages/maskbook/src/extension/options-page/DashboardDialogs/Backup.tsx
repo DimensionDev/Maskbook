@@ -36,7 +36,7 @@ const useDatabaseStyles = makeStyles((theme: Theme) =>
 export function DashboardBackupDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
     const classes = useDatabaseStyles()
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { value, loading } = useAsync(() => Services.Welcome.generateBackupJSON())
     const records = [
@@ -119,7 +119,7 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
     const { t } = useI18N()
     const classes = useDatabaseStyles()
     const selectBackupClasses = useSelectBackupStyles()
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const [file, setFile] = useState<File | null>(null)
     const [json, setJSON] = useState<BackupJSONFileLatest | null>(null)
@@ -255,7 +255,7 @@ function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackupProps) 
     const confirmBackupClasses = useConfirmBackupStyles({
         imported: imported === true,
     })
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const time = new Date(date ? Number(date) : 0)
     const records = [

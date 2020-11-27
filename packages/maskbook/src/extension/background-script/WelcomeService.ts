@@ -51,13 +51,8 @@ export async function restoreNewIdentityWithMnemonicWord(
 }
 
 export async function downloadBackup<T>(obj: T) {
-    const string = typeof obj === 'string' ? obj : JSON.stringify(obj)
-    const buffer = encodeText(string)
-    const date = new Date()
-    const today = `${date.getFullYear()}-${(date.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
-    saveAsFileFromBuffer(buffer, 'application/json', `maskbook-keystore-backup-${today}.json`)
+    const { buffer, mimeType, fileName } = await createBackupInfo(obj)
+    saveAsFileFromBuffer(buffer, mimeType, fileName)
     return obj
 }
 
@@ -69,6 +64,28 @@ export async function createBackupFile(
     // Don't make the download pop so fast
     await sleep(1000)
     return downloadBackup(obj)
+}
+
+export async function createBackupUrl(
+    options: { download: boolean; onlyBackupWhoAmI: boolean } & Partial<BackupOptions>,
+) {
+    const obj = await generateBackupJSON(options)
+    const { buffer, mimeType, fileName } = await createBackupInfo(obj)
+    const blob = new Blob([buffer], { type: mimeType })
+    const url = URL.createObjectURL(blob)
+    return { url, fileName }
+}
+
+async function createBackupInfo<T>(obj: T) {
+    const string = typeof obj === 'string' ? obj : JSON.stringify(obj)
+    const buffer = encodeText(string)
+    const date = new Date()
+    const today = `${date.getFullYear()}-${(date.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
+    const fileName = `maskbook-keystore-backup-${today}.json`
+    const mimeType = 'application/json'
+    return { buffer, mimeType, fileName }
 }
 
 export async function openOptionsPage(route?: DashboardRoute, search?: string) {
