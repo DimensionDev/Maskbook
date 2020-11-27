@@ -12,6 +12,7 @@ import {
 } from '../../../protocols/typed-message'
 import { Flags } from '../../../utils/flags'
 import { clickSeeMore } from './injectPostInspector'
+import Services from '../../../extension/service'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container ' : '[role=article] [data-ad-preview="message"]',
@@ -72,8 +73,9 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 postContentNode = metadata.realCurrent!
             })()
 
+            const payloadDecoder = this.payloadDecoder
             this.posts.set(metadata, info)
-            function collectPostInfo() {
+            async function collectPostInfo() {
                 const nextTypedMessage: TypedMessage[] = []
                 info.postBy.value = getPostBy(metadata, info.postPayload.value !== null).identifier
                 info.postID.value = getPostID(metadata)
@@ -86,14 +88,21 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 for (const url of images) {
                     info.postMetadataImages.add(url)
                     nextTypedMessage.push(makeTypedMessageImage(url))
+                    const post = await Services.Steganography.decodeImageUrl(url, {
+                        pass: info.postBy.value.toText(),
+                    })
+
+                    if (post.indexOf('🎼') === 0 || /https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post)) {
+                        info.iv.value = deconstructPayload(post, payloadDecoder).unwrap().iv
+                    }
                 }
                 // parse post content
                 info.postMessage.value = makeTypedMessageCompound(nextTypedMessage)
             }
             collectPostInfo()
-            info.postPayload.value = deconstructPayload(info.postContent.value, this.payloadDecoder)
+            info.postPayload.value = deconstructPayload(info.postContent.value, payloadDecoder)
             info.postContent.addListener((newVal) => {
-                info.postPayload.value = deconstructPayload(newVal, this.payloadDecoder)
+                info.postPayload.value = deconstructPayload(newVal, payloadDecoder)
             })
             return {
                 onNodeMutation: collectPostInfo,

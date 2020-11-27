@@ -47,7 +47,8 @@ export function PostComment(props: PostCommentProps) {
     const comment = useValueRef(props.comment)
     const decryptedPostContent = usePostInfoDetails('decryptedPostContentRaw')
     const postPayload = usePostInfoDetails('postPayload')
-    const postIV = postPayload.ok ? postPayload.val.iv : ''
+    const iv = usePostInfoDetails('iv')
+    const postIV = postPayload.ok ? postPayload.val.iv : iv
 
     const dec = useAsync(async () => {
         if (!postIV || !decryptedPostContent) throw new Error('Decrypt comment failed')
