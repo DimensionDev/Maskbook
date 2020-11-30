@@ -52,7 +52,7 @@ export abstract class PostInfo {
     readonly decryptedPostContent = new ValueRef<TypedMessage | null>(null)
     /** @deprecated It should appear in the transformedPostContent */
     readonly decryptedPostContentRaw = new ValueRef('')
-    readonly iv = new ValueRef('')
+    readonly iv = new ValueRef<string | null>(null)
     abstract readonly rootNode: HTMLElement
     abstract readonly rootNodeProxy: DOMProxy
     abstract readonly postContentNode?: HTMLElement

@@ -99,7 +99,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 // parse post content
                 info.postMessage.value = makeTypedMessageCompound(nextTypedMessage)
             }
-            collectPostInfo()
+            collectPostInfo().catch(console.error)
             info.postPayload.value = deconstructPayload(info.postContent.value, payloadDecoder)
             info.postContent.addListener((newVal) => {
                 info.postPayload.value = deconstructPayload(newVal, payloadDecoder)
