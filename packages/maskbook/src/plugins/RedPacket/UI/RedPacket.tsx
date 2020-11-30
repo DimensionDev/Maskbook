@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import { makeStyles, createStyles, Card, Typography, Box } from '@material-ui/core'
-import { Skeleton } from '@material-ui/lab'
+import { Skeleton } from '@material-ui/core'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import type { RedPacketJSONPayload } from '../types'

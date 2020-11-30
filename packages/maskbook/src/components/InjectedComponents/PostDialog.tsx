@@ -105,7 +105,13 @@ export function PostDialogUI(props: PostDialogUIProps) {
             if (!knownMeta) return undefined
             return [...knownMeta.entries()].map(([metadataKey, tag]) => {
                 return renderWithMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
-                    <Box key={metadataKey} marginRight={1} marginTop={1} display="inline-block">
+                    <Box
+                        key={metadataKey}
+                        sx={{
+                            marginRight: 1,
+                            marginTop: 1,
+                            display: 'inline-block',
+                        }}>
                         <Tooltip title={`Provided by plugin "${plugin.pluginName}"`}>
                             <Chip
                                 onDelete={() => editActivatedPostMetadata((meta) => meta.delete(metadataKey))}
@@ -161,13 +167,23 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         <Typography style={{ marginBottom: 10 }}>
                             Plugins <sup>(Experimental)</sup>
                         </Typography>
-                        <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                        <Box
+                            style={{ marginBottom: 10 }}
+                            sx={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                            }}>
                             {pluginEntries}
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
                         </Typography>
-                        <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                        <Box
+                            style={{ marginBottom: 10 }}
+                            sx={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                            }}>
                             <SelectRecipientsUI
                                 disabled={props.onlyMyself || props.shareToEveryone}
                                 items={props.availableShareTarget}
@@ -192,7 +208,12 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         </Box>
 
                         <Typography style={{ marginBottom: 10 }}>{t('post_dialog__more_options_title')}</Typography>
-                        <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                        <Box
+                            style={{ marginBottom: 10 }}
+                            sx={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                            }}>
                             <ClickableChip
                                 checked={props.imagePayload}
                                 label={t('post_dialog__image_payload')}
@@ -433,7 +454,11 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
     const normalized = Math.min((value / max) * 100, 100)
     const style = { transitionProperty: 'transform,width,height,color' } as React.CSSProperties
     return (
-        <Box position="relative" display="inline-flex">
+        <Box
+            sx={{
+                position: 'relative',
+                display: 'inline-flex',
+            }}>
             <CircularProgress
                 variant="determinate"
                 value={normalized}
@@ -444,14 +469,16 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
             />
             {displayLabel ? (
                 <Box
-                    top={0}
-                    left={0}
-                    bottom={0}
-                    right={0}
-                    position="absolute"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
+                    sx={{
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        position: 'absolute',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
                     <Typography variant="caption" component="div" color="textSecondary">
                         {max - value}
                     </Typography>

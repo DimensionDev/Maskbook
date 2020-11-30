@@ -27,7 +27,12 @@ export function PriceStaleWarnning(props: PriceStaleWarnningProps) {
 
     return (
         <Paper className={classes.root} variant="outlined">
-            <Box display="flex" alignItems="center" justifyContent="space-between">
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                }}>
                 <Typography className={classes.type} color="primary">
                     <WarningIcon className={classes.icon} />
                     <span>Price Updated</span>

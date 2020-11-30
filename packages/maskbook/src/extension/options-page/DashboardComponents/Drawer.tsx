@@ -156,10 +156,12 @@ export default function Drawer(props: DrawerProps) {
                     </Box>
                 )}
                 <Box
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="space-between"
-                    className={classes.drawerBody}>
+                    className={classes.drawerBody}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                    }}>
                     {forSetupPurpose ? null : (
                         <>
                             <List className={classes.drawerList}>

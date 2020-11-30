@@ -1,6 +1,6 @@
 import { create as createJSS, SheetsRegistry as JSSSheetsRegistry } from 'jss'
 import { jssPreset, StylesProvider as JSSStylesProvider, ThemeProvider } from '@material-ui/core/styles'
-import { CacheProvider as EmotionCacheProvider } from '@emotion/core'
+import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
 import createEmotionCache, { EmotionCache } from '@emotion/cache'
 import ReactDOM from 'react-dom'
 import { useMemo, StrictMode } from 'react'

@@ -57,7 +57,12 @@ export const RestoreFromQRCodeCameraBox = hasWKWebkitRPCHandlers
           }, [filteredDevices, selectedDeviceId])
 
           return (
-              <Box className={classes.root} display="flex" justifyContent="space-between">
+              <Box
+                  className={classes.root}
+                  sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                  }}>
                   <FormControl className={classes.formControl} variant="filled">
                       <Select
                           value={selectedDeviceId}

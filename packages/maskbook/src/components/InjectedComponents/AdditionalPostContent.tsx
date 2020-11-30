@@ -55,7 +55,11 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             gutterBottom
             className={classNames(classes.title)}>
             <span className={classes.icon}>{ProgressJSX || <MaskbookIcon></MaskbookIcon>}</span>
-            <Box flex={1} display="flex">
+            <Box
+                sx={{
+                    flex: 1,
+                    display: 'flex',
+                }}>
                 {title}
                 {RightIconJSX}
             </Box>

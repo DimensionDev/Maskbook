@@ -124,16 +124,22 @@ export function ElectionCompositionDialog(props: ElectionCompositionDialogProps)
                     <TextField
                         label="Name (Optional)"
                         value={name}
-                        onChange={(e) => setName(e.target.value)}></TextField>
+                        onChange={(e) => setName(e.target.value)}
+                        variant="standard"></TextField>
                 </FormControl>
                 <FormControl className={classes.control}>
                     <TextField
                         label="Message (Optional)"
                         value={message}
-                        onChange={(e) => setMessage(e.target.value)}></TextField>
+                        onChange={(e) => setMessage(e.target.value)}
+                        variant="standard"></TextField>
                 </FormControl>
                 <FormControl className={classes.control}>
-                    <Box display="flex" justifyContent="flex-end">
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                        }}>
                         <ActionButton disabled={!nftToken} variant="contained" onClick={onConfirm}>
                             {t('confirm')}
                         </ActionButton>

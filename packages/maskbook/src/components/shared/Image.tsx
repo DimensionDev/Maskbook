@@ -1,7 +1,7 @@
 import { useRef, useEffect, forwardRef, useImperativeHandle, useState } from 'react'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
-import { Skeleton, SkeletonProps } from '@material-ui/lab'
+import { Skeleton, SkeletonProps } from '@material-ui/core'
 export interface ImageProps {
     children?: never
     src: string | Blob

@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { InjectedDialog } from './InjectedDialog'
-import { Autocomplete } from '@material-ui/lab'
+import { Autocomplete } from '@material-ui/core'
 import { editMetadata, isDataMatchJSONSchema, metadataSchemaStoreReadonly } from '../../protocols/typed-message'
 import { ShadowRootPopper } from '../../utils/shadow-root/ShadowRootPopper'
 import { useState } from 'react'
@@ -56,6 +56,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                                 fullWidth
                                 label="Metadata Key"
                                 margin="normal"
+                                variant="standard"
                             />
                         )}
                     />
@@ -71,6 +72,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                         autoCorrect="off"
                         error={isInvalid}
                         helperText={<span style={{ whiteSpace: 'pre-wrap' }}>{result}</span>}
+                        variant="standard"
                     />
                 </form>
             </CardContent>
@@ -124,7 +126,11 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                         <Accordion key={key}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                 <Typography style={{ alignSelf: 'center' }}>{key}</Typography>
-                                <Box flex={1} />
+                                <Box
+                                    sx={{
+                                        flex: 1,
+                                    }}
+                                />
                                 <Typography onClick={(e) => e.stopPropagation()}>{editButton}</Typography>
                             </AccordionSummary>
                             <AccordionDetails style={{ display: 'flex' }}>

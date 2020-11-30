@@ -1,5 +1,5 @@
 import { makeStyles, CardHeader, CardContent, CardActions, Theme, createStyles } from '@material-ui/core'
-import { Skeleton } from '@material-ui/lab'
+import { Skeleton } from '@material-ui/core'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 
 const useStyles = makeStyles((theme: Theme) => {

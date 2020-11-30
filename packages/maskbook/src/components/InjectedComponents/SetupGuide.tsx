@@ -224,8 +224,14 @@ function ContentUI(props: ContentUIProps) {
     switch (props.dialogType) {
         case SetupGuideStep.FindUsername:
             return (
-                <Box display="block">
-                    <Box display={xsMatch ? 'flex' : 'block'}>
+                <Box
+                    sx={{
+                        display: 'block',
+                    }}>
+                    <Box
+                        sx={{
+                            display: xsMatch ? 'flex' : 'block',
+                        }}>
                         <main className={classes.content}>{props.content}</main>
                         <Hidden only="xs">
                             <div>{props.tip}</div>
@@ -383,9 +389,13 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
             title={t('setup_guide_find_username_title')}
             content={
                 <form>
-                    <Box className={findUsernameClasses.input} display="flex" alignItems="center">
+                    <Box
+                        className={findUsernameClasses.input}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}>
                         <TextField
-                            variant="outlined"
                             label={t('username')}
                             value={username}
                             disabled={!username}

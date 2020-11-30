@@ -209,7 +209,12 @@ export function TradeForm(props: TradeFormProps) {
                 </div>
             ))}
             <div className={classes.section}>
-                <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                    }}>
                     <Typography variant="subtitle2">
                         Slippage Tolerance: {currentSlippageTolerance.value / 1000}%
                     </Typography>

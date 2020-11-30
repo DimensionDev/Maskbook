@@ -4,7 +4,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { resolveElapsedTime } from '../pipes'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
-import { Skeleton } from '@material-ui/lab'
+import { Skeleton } from '@material-ui/core'
 import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
 
 const useStyles = makeStyles((theme: Theme) =>

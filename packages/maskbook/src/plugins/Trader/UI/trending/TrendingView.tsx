@@ -209,7 +209,12 @@ export function TrendingView(props: TrendingViewProps) {
                     </Linking>
                 }
                 title={
-                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                        }}>
                         <Typography variant="h6">
                             {typeof coin.market_cap_rank === 'number' ? (
                                 <span className={classes.rank} title="Market Cap Rank">
