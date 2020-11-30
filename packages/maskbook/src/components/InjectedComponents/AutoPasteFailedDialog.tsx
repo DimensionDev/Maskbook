@@ -25,6 +25,7 @@ import Download from '@material-ui/icons/CloudDownload'
 import CloseIcon from '@material-ui/icons/Close'
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser'
 import { formatDateTime } from '../../plugins/FileService/utils'
+import { saveAsFileFromUrl } from '../../extension/background-script/HelperService'
 
 export interface AutoPasteFailedDialogProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     onClose: () => void
@@ -44,6 +45,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const [, copy] = useCopyToClipboard()
     const isMobile = useMatchXS()
     const permission = useQueryNavigatorPermission(true, 'clipboard-write')
+    const fileName = `maskbook-encrypted-${formatDateTime(new Date()).replace(/:/g, '-')}.png`
 
     return (
         <DraggableDiv>
@@ -116,9 +118,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                         {url ? (
                             <Button
                                 variant="text"
-                                component={Link}
-                                download={`maskbook-encrypted-${formatDateTime(new Date()).replace(/:/g, '-')}.png`}
-                                href={url}
+                                onClick={() => saveAsFileFromUrl(url, fileName)}
                                 startIcon={<Download />}>
                                 {t('download')}
                             </Button>

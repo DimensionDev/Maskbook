@@ -37,41 +37,44 @@ async function worker(path) {
 }
 function mockedGlobalThis() {
     const globalThis = {}
-    const EventTarget = { addEventListener() {} }
+    class EventTarget {
+        addEventListener() {}
+        removeEventListener() {}
+        dispatchEvent() {}
+    }
+    class Element extends EventTarget {
+        attachShadow() {
+            return new ShadowRoot()
+        }
+        appendChild() {}
+    }
+    class ShadowRoot extends Element {}
+    class Document extends EventTarget {
+        constructor() {
+            super()
+            this.adoptedStyleSheets = []
+            this.body = new Element()
+            this.documentElement = { onmouseenter() {} }
+            this.readyState = 'loading'
+        }
+        getElementById() {}
+        createElement() {
+            return new Element()
+        }
+    }
+    globalThis.EventTarget = EventTarget
     globalThis.location = { hostname: 'localhost' }
     globalThis.navigator = { appVersion: '', userAgent: '', language: '', platform: 'ssr' }
-    globalThis.document = {
-        adoptedStyleSheets: {},
-        getElementById() {},
-        createElement() {
-            return {
-                attachShadow() {
-                    return EventTarget
-                },
-            }
-        },
-        body: { appendChild() {} },
-        ...EventTarget,
-        documentElement: {
-            onmouseenter() {},
-        },
-        readyState: 'loading',
-    }
-    globalThis.ShadowRoot = class {}
+    globalThis.ShadowRoot = ShadowRoot
+    globalThis.document = new Document()
     globalThis.Event = class {
         get target() {
             return null
         }
     }
-    globalThis.Worker = class {}
+    globalThis.Worker = class Worker extends EventTarget {}
     globalThis.sessionStorage = {}
-    globalThis.matchMedia = () => {
-        return { matches: false, ...EventTarget }
-    }
-    const kit = require('@dimensiondev/holoflows-kit')
-    // Don't setup
-    kit.WebExtensionMessage.setup = () => {}
-    globalThis.__holoflows_kit_get_environment_debug__ =
-        kit.Environment.HasBrowserAPI | kit.Environment.ExtensionProtocol | kit.Environment.ManifestBrowserAction
+    globalThis.matchMedia = () => Object.assign(new EventTarget(), { matches: false })
+    globalThis.browser = {}
     return globalThis
 }
