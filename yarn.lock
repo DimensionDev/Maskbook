@@ -1982,10 +1982,10 @@
   resolved "https://registry.yarnpkg.com/@magic-works/commonjs-import.meta/-/commonjs-import.meta-1.0.0.tgz#5114765fea55a8582dbb1a264c78434702cbc0f9"
   integrity sha512-+k8JqF+cQ0EsNGW7Mz306aV20CCwMvHANnQ+lE6XyNkXBAnlqAjrSBumCcgs/ooDGeVXwG/N9WAHgK6Io4PJ+A==
 
-"@material-ui/core@5.0.0-alpha.8":
-  version "5.0.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-5.0.0-alpha.8.tgz#40bd56ebc9623cb4e50202a0129ad6773766ec68"
-  integrity sha512-oWlT/WVZ7ySx5T9dqFVmC0C3PX9/XUr0p/gfuRfaRrEZCw6uJQWB5r7GHprpbPJR+0DkFqb+X/3aT1xNapZb2Q==
+"@material-ui/core@5.0.0-alpha.10":
+  version "5.0.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-5.0.0-alpha.10.tgz#d027811aeed06e104fb0c8f33b47d31942c4a537"
+  integrity sha512-VVwdwkRYJcccdBYuVp32Zv9imJ6yP63ywyeqETQxKMiQObFOQK9AfLGEmjbdSkukge3PD7mRl1qcccHNS9RDqA==
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@material-ui/styles" "^5.0.0-alpha.8"
@@ -2007,10 +2007,10 @@
   dependencies:
     "@babel/runtime" "^7.4.4"
 
-"@material-ui/lab@5.0.0-alpha.8":
-  version "5.0.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-5.0.0-alpha.8.tgz#100c3b051ff9822ed3c1937f0e25be73bc04427e"
-  integrity sha512-OIR+cKBXZ7va/ngSy9gS9c+uS70HqmnLaAhYg35QKDQ00vM7KeLxtIGd1498N2n+H36LWV3eHnm2qOJhEpyDOA==
+"@material-ui/lab@5.0.0-alpha.10":
+  version "5.0.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-5.0.0-alpha.10.tgz#8164d1176502e0c55784448ebe31100d30180da5"
+  integrity sha512-ONJQUhzEQSlLXwVU6WJVMPBHmH9syMHV3boK4qvkDBXn9kn9e0F+WMHfBXSjOsV6tiBNC+CwVyjkrGpuOcj5YA==
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@material-ui/utils" "^5.0.0-alpha.8"

@@ -41,7 +41,7 @@ export const SafariPlatform: React.FC<{ uri: string }> = ({ uri }) => {
         imToken: t('plugin_wallet_connect_safari_im_token'),
     }
     return (
-        <ImageList className={classes.grid} spacing={16} cellHeight={183}>
+        <ImageList className={classes.grid} gap={16} rowHeight={183}>
             {map(providers, ({ name, logo, protocol }, key) => (
                 <ImageListItem key={key}>
                     <Provider

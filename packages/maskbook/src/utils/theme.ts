@@ -26,6 +26,7 @@ const base: ThemeOptions = {
     palette: {
         primary: { main: '#1c68f3' }, // blue,
         secondary: orange,
+        text: { hint: 'rgba(0, 0, 0, 0.38)' },
     },
     typography: {
         fontFamily: getFontFamily(),
@@ -157,4 +158,10 @@ export const useErrorStyles = makeStyles((theme) => {
 })
 export function extendsTheme(extend: (theme: Theme) => ThemeOptions) {
     return (theme: Theme) => merge(cloneDeep(theme), extend(theme))
+}
+
+declare module '@material-ui/core/styles/createPalette.d' {
+    export interface TypeText {
+        hint: string
+    }
 }

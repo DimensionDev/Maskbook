@@ -119,7 +119,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
-                <ImageList className={classes.grid} spacing={16} cellHeight={183}>
+                <ImageList className={classes.grid} gap={16} rowHeight={183}>
                     <ImageListItem>
                         <Provider
                             logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
