@@ -2018,15 +2018,15 @@
     prop-types "^15.7.2"
     react-is "^16.8.0"
 
-"@material-ui/styles@^5.0.0-alpha.8":
-  version "5.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/@material-ui/styles/-/styles-5.0.0-alpha.15.tgz#fb0922ae4e931e5b3645d77a16f4c34f2c872649"
-  integrity sha512-jM9wS5SBSBlaw2oqPFdN8pCzpIajDEGZ+9bWE22yIn48t5BvcELjmXshlJe3yy21+8R+8pAISRx8VTig1ccTTw==
+"@material-ui/styles@>=5.0.0-alpha.1 <=5.0.0-alpha.10", "@material-ui/styles@^5.0.0-alpha.8":
+  version "5.0.0-alpha.8"
+  resolved "https://registry.yarnpkg.com/@material-ui/styles/-/styles-5.0.0-alpha.8.tgz#e4a11e685627d660262e23a5b8851887a53ad20a"
+  integrity sha512-AkrZp+ZHnSoCvXl3V66LTjeBgfnoK/PAnUpOibWvQmSy+y9ypk62kiadveY7usml4E/HriuAqGnV+qDGuHrQAw==
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@emotion/hash" "^0.8.0"
     "@material-ui/types" "^5.1.0"
-    "@material-ui/utils" "^5.0.0-alpha.15"
+    "@material-ui/utils" "^5.0.0-alpha.8"
     clsx "^1.0.4"
     csstype "^3.0.2"
     hoist-non-react-statics "^3.3.2"
@@ -2040,14 +2040,13 @@
     jss-plugin-vendor-prefixer "^10.0.3"
     prop-types "^15.7.2"
 
-"@material-ui/system@^5.0.0-alpha.6":
-  version "5.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@material-ui/system/-/system-5.0.0-alpha.17.tgz#5b4542bb8b757d1188a06dbb72c93b405b54f0f1"
-  integrity sha512-QXhnLJAJL/8tJv91ICJ+3m/fc9Ow2OKHpu3sJJFL+kBcByql3Jm/Iz08tt/0Qry3vdMtOIZDWP8EHzsil6meHA==
+"@material-ui/system@>=5.0.0-alpha.1 <=5.0.0-alpha.10", "@material-ui/system@^5.0.0-alpha.6":
+  version "5.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@material-ui/system/-/system-5.0.0-alpha.6.tgz#475467435d03e9bc2fcdab63b60eba5212d559bf"
+  integrity sha512-vpkQ4OWWVlwm2mIlxmTD6cIE9iQmeb8XXDPPXgEaaegWQ0/LF/4hZ5usWFrx6YeL/2CZBjRhOh0GRW6NBVZGyA==
   dependencies:
     "@babel/runtime" "^7.4.4"
-    "@material-ui/utils" "^5.0.0-alpha.17"
-    csstype "^3.0.2"
+    "@material-ui/utils" "^5.0.0-alpha.1"
     prop-types "^15.7.2"
 
 "@material-ui/types@^5.1.0":
@@ -2055,16 +2054,16 @@
   resolved "https://registry.yarnpkg.com/@material-ui/types/-/types-5.1.0.tgz#efa1c7a0b0eaa4c7c87ac0390445f0f88b0d88f2"
   integrity sha512-7cqRjrY50b8QzRSYyhSpx4WRw2YuO0KKIGQEVk5J8uoz2BanawykgZGoWEqKm7pVIbzFDN0SpPcVV4IhOFkl8A==
 
-"@material-ui/utils@^5.0.0-alpha.15", "@material-ui/utils@^5.0.0-alpha.17", "@material-ui/utils@^5.0.0-alpha.8":
-  version "5.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@material-ui/utils/-/utils-5.0.0-alpha.17.tgz#0bf1956ef67d12926b007aca7fc3dcfa816c0a11"
-  integrity sha512-50DCE2m47pvGye6n7d4+nGu6DDvoqM+7m80lCRNViJlIXLINuWbz4VuhfLl1eHYSiAmh2Ls65IUn8u1yDJnJBg==
+"@material-ui/utils@>=5.0.0-alpha.1 <=5.0.0-alpha.10", "@material-ui/utils@^5.0.0-alpha.1", "@material-ui/utils@^5.0.0-alpha.8":
+  version "5.0.0-alpha.8"
+  resolved "https://registry.yarnpkg.com/@material-ui/utils/-/utils-5.0.0-alpha.8.tgz#521e143041805441c1e5fd15baaa0ece38e27bf6"
+  integrity sha512-g1uWRBLQtPUJ/C+tLx5XQ7Gn2u4/xysPWezy8/65G4iXt3pCPrbAmrb6qWbLUHNdGkwJ2/+wyaXKe5gs4fHNAg==
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@types/prop-types" "^15.7.3"
-    "@types/react-is" "^16.7.1 || ^17.0.0"
+    "@types/react-is" "^16.7.1"
     prop-types "^15.7.2"
-    react-is "^16.8.0 || ^17.0.0"
+    react-is "^16.8.0"
 
 "@mdx-js/loader@^1.5.1":
   version "1.5.5"
@@ -3759,12 +3758,12 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-is@^16.7.1 || ^17.0.0":
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/@types/react-is/-/react-is-17.0.0.tgz#6b60190ae60591ae0c83d6f3854e61e08f5a7976"
-  integrity sha512-A0DQ1YWZ0RG2+PV7neAotNCIh8gZ3z7tQnDJyS2xRPDNtAtSPcJ9YyfMP8be36Ha0kQRzbZCrrTMznA4blqO5g==
+"@types/react-is@^16.7.1":
+  version "16.7.2"
+  resolved "https://registry.yarnpkg.com/@types/react-is/-/react-is-16.7.2.tgz#8c2862013d00d741be189ceb71da8e8d21e8fa7d"
+  integrity sha512-rdQUu9J+RUz4Vcr768UyTzv+fZGzKBy1/PPhaxTfzAfaHSW4+b0olA6czXLZv7PO7/ktbHu41kcpAG7Z46kvDQ==
   dependencies:
-    "@types/react" "*"
+    "@types/react" "^16"
 
 "@types/react-router-dom@^5.1.6":
   version "5.1.6"
@@ -3829,6 +3828,14 @@
   version "16.9.55"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.55.tgz#47078587f5bfe028a23b6b46c7b94ac0d436acff"
   integrity sha512-6KLe6lkILeRwyyy7yG9rULKJ0sXplUsl98MGoCfpteXf9sPWFWWMknDcsvubcpaTdBuxtsLF6HDUwdApZL/xIg==
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^3.0.2"
+
+"@types/react@^16":
+  version "16.14.2"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.2.tgz#85dcc0947d0645349923c04ccef6018a1ab7538c"
+  integrity sha512-BzzcAlyDxXl2nANlabtT4thtvbbnhee8hMmH/CcJrISDBVcJS1iOsP1f0OAgSdGE0MsY9tqcrb9YoZcOFv9dbQ==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
@@ -16294,7 +16301,7 @@ react-inspector@^4.0.0:
     prop-types "^15.6.1"
     storybook-chromatic "^2.2.2"
 
-"react-is@^16.12.0 || ^17.0.0", "react-is@^16.8.0 || ^17.0.0", react-is@^17.0.1:
+"react-is@^16.12.0 || ^17.0.0", react-is@^17.0.1:
   version "17.0.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==

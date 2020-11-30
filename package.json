@@ -239,5 +239,10 @@
   },
   "engines": {
     "node": ">=14.4.0"
+  },
+  "resolutions": {
+    "@material-ui/styles": ">=5.0.0-alpha.1 <=5.0.0-alpha.10",
+    "@material-ui/utils": ">=5.0.0-alpha.1 <=5.0.0-alpha.10",
+    "@material-ui/system": ">=5.0.0-alpha.1 <=5.0.0-alpha.10"
   }
 }
