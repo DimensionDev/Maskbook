@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import DashboardRouterContainer from './Container'
-import { Button, makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core'
+import { Button, makeStyles, createStyles, ThemeProvider } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import RestoreIcon from '@material-ui/icons/Restore'
@@ -8,8 +8,8 @@ import PersonaCard from '../DashboardComponents/PersonaCard'
 import { DashboardPersonaCreateDialog, DashboardImportPersonaDialog } from '../DashboardDialogs/Persona'
 import { useModal } from '../DashboardDialogs/Base'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { merge, cloneDeep } from 'lodash-es'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
+import { extendsTheme } from '../../../utils/theme'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -43,16 +43,17 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-const personasTheme = (theme: Theme): Theme =>
-    merge(cloneDeep(theme), {
-        overrides: {
-            MuiIconButton: {
+const personasTheme = extendsTheme((theme) => ({
+    components: {
+        MuiIconButton: {
+            styleOverrides: {
                 root: {
-                    color: theme.palette.text,
+                    color: theme.palette.text.primary,
                 },
             },
         },
-    })
+    },
+}))
 
 export default function DashboardPersonasRouter() {
     const { t } = useI18N()

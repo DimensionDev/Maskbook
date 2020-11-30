@@ -36,7 +36,7 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                         />
                         <TextField
                             multiline
-                            rows={4}
+                            minRows={4}
                             required
                             label={t('your_message')}
                             value={message}

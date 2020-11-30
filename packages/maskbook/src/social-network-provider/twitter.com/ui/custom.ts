@@ -56,46 +56,51 @@ function useTheme() {
             }
             theme.shape.borderRadius = isMobileTwitter ? 0 : 15
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
-            theme.props = theme.props || {}
-            theme.props!.MuiButton = {
-                size: 'medium',
-                disableElevation: true,
-            }
-            theme.props.MuiPaper = {
-                elevation: 0,
-            }
-            theme.overrides = theme.overrides || {}
-            theme.overrides!.MuiButton = {
-                root: {
-                    borderRadius: 500,
-                    textTransform: 'initial',
-                    fontWeight: 'bold',
-                    minHeight: 39,
-                    paddingLeft: 15,
-                    paddingRight: 15,
-                    boxShadow: 'none',
-                    [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
-                        '&': {
-                            height: '28px !important',
-                            minHeight: 'auto !important',
-                            padding: '0 14px !important',
+            theme.components = theme.components || {}
+            theme.components.MuiButton = {
+                defaultProps: {
+                    size: 'medium',
+                    disableElevation: true,
+                },
+                styleOverrides: {
+                    root: {
+                        borderRadius: 500,
+                        textTransform: 'initial',
+                        fontWeight: 'bold',
+                        minHeight: 39,
+                        paddingLeft: 15,
+                        paddingRight: 15,
+                        boxShadow: 'none',
+                        [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                            '&': {
+                                height: '28px !important',
+                                minHeight: 'auto !important',
+                                padding: '0 14px !important',
+                            },
                         },
                     },
-                },
-                sizeLarge: {
-                    minHeight: 49,
-                    paddingLeft: 30,
-                    paddingRight: 30,
-                },
-                sizeSmall: {
-                    minHeight: 30,
-                    paddingLeft: 15,
-                    paddingRight: 15,
+                    sizeLarge: {
+                        minHeight: 49,
+                        paddingLeft: 30,
+                        paddingRight: 30,
+                    },
+                    sizeSmall: {
+                        minHeight: 30,
+                        paddingLeft: 15,
+                        paddingRight: 15,
+                    },
                 },
             }
-            theme.overrides!.MuiTab = {
-                root: {
-                    textTransform: 'none',
+            theme.components.MuiPaper = {
+                defaultProps: {
+                    elevation: 0,
+                },
+            }
+            theme.components.MuiTab = {
+                styleOverrides: {
+                    root: {
+                        textTransform: 'none',
+                    },
                 },
             }
         })

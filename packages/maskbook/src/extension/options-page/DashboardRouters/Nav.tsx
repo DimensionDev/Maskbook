@@ -1,11 +1,6 @@
 import DashboardRouterContainer from './Container'
 import { ThemeProvider, Theme } from '@material-ui/core'
-import { merge, cloneDeep } from 'lodash-es'
-
-const navTheme = (theme: Theme): Theme =>
-    merge(cloneDeep(theme), {
-        overrides: {},
-    })
+const navTheme = (theme: Theme): Theme => theme
 
 export interface DashboardNavRouterProps {
     children?: React.ReactNode

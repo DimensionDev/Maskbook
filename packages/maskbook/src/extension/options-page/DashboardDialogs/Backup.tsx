@@ -12,11 +12,11 @@ import { useAsync } from 'react-use'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { RestoreFromBackupBox } from '../DashboardComponents/RestoreFromBackupBox'
 import { useSnackbar } from 'notistack'
-import { merge, cloneDeep } from 'lodash-es'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { extraPermissions } from '../../../utils/permissions'
 import { green } from '@material-ui/core/colors'
+import { extendsTheme } from '../../../utils/theme'
 
 const useDatabaseStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -328,10 +328,10 @@ function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackupProps) 
 //#endregion
 
 //#region dashboard restore dialog
-const backupTheme = (theme: Theme): Theme =>
-    merge(cloneDeep(theme), {
-        overrides: {
-            MuiButton: {
+const backupTheme = extendsTheme((theme) => ({
+    components: {
+        MuiButton: {
+            styleOverrides: {
                 root: {
                     '&[hidden]': {
                         visibility: 'hidden',
@@ -339,7 +339,8 @@ const backupTheme = (theme: Theme): Theme =>
                 },
             },
         },
-    })
+    },
+}))
 
 enum RestoreStep {
     SelectBackup = 'select-backup',

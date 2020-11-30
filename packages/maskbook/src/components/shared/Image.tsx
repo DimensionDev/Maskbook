@@ -98,7 +98,7 @@ export const Image = forwardRef<ImageRef, ImageProps>(function Image(props, outg
     if (propsLoading || loading) {
         return (
             <Skeleton
-                variant="rect"
+                variant="rectangular"
                 width={width}
                 height={height}
                 className={className}

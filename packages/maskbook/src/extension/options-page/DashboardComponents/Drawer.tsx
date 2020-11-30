@@ -1,18 +1,18 @@
 import { Fragment } from 'react'
 import classNames from 'classnames'
 import { List, ListItem, ListItemIcon, ListItemText, Typography, Box, Divider } from '@material-ui/core'
-import { makeStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
 import { Link, useRouteMatch } from 'react-router-dom'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardFeedbackDialog } from '../DashboardDialogs/Feedback'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { cloneDeep, merge } from 'lodash-es'
 import Logo from './MaskbookLogo'
 import { Carousel } from './Carousel'
 import { makeNewBugIssueURL } from '../../debug-page/issue'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
+import { extendsTheme } from '../../../utils/theme'
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -81,10 +81,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const drawerTheme = (theme: Theme): Theme =>
-    merge(cloneDeep(theme), {
-        overrides: {
-            MuiListItem: {
+const drawerTheme = extendsTheme((theme) => ({
+    components: {
+        MuiListItem: {
+            styleOverrides: {
                 root: {
                     '&$selected$selected': {
                         borderLeftColor:
@@ -94,13 +94,17 @@ const drawerTheme = (theme: Theme): Theme =>
                     },
                 },
             },
-            MuiListItemIcon: {
+        },
+        MuiListItemIcon: {
+            styleOverrides: {
                 root: {
                     justifyContent: 'center',
                     color: 'unset',
                 },
             },
-            MuiListItemText: {
+        },
+        MuiListItemText: {
+            styleOverrides: {
                 primary: {
                     fontSize: 14,
                     lineHeight: '24px',
@@ -108,7 +112,8 @@ const drawerTheme = (theme: Theme): Theme =>
                 },
             },
         },
-    })
+    },
+}))
 
 interface DrawerProps {
     routers: readonly (readonly [string, string, JSX.Element])[]

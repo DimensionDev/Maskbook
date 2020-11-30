@@ -56,9 +56,9 @@
     "@ethersproject/networks": "^5.0.4",
     "@ethersproject/providers": "^5.0.9",
     "@ethersproject/solidity": "^5.0.4",
-    "@material-ui/core": "5.0.0-alpha.5",
-    "@material-ui/icons": "5.0.0-alpha.4",
-    "@material-ui/lab": "5.0.0-alpha.5",
+    "@material-ui/core": "5.0.0-alpha.10",
+    "@material-ui/icons": "5.0.0-alpha.7",
+    "@material-ui/lab": "5.0.0-alpha.10",
     "@msgpack/msgpack": "^1.12.2",
     "@openzeppelin/contracts": "^3.2.0",
     "@servie/events": "^1.0.0",
@@ -112,7 +112,7 @@
     "loglevel": "^1.7.0",
     "matrix-js-sdk": "^9.1.0",
     "metamask-extension-provider": "^2.0.0",
-    "notistack": "^0.9.17",
+    "notistack": "^1.0.2",
     "popper.js": "^1.16.1",
     "promievent": "^0.1.4",
     "pvtsutils": "^1.0.14",
@@ -239,5 +239,10 @@
   },
   "engines": {
     "node": ">=14.4.0"
+  },
+  "resolutions": {
+    "@material-ui/styles": ">=5.0.0-alpha.1 <=5.0.0-alpha.10",
+    "@material-ui/utils": ">=5.0.0-alpha.1 <=5.0.0-alpha.10",
+    "@material-ui/system": ">=5.0.0-alpha.1 <=5.0.0-alpha.10"
   }
 }
