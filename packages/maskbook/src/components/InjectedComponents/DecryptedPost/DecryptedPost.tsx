@@ -17,6 +17,7 @@ import { usePostInfoDetails } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
 import { Err, Ok } from 'ts-results'
 import { or } from '../../custom-ui-helper'
+import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
@@ -65,6 +66,7 @@ export function DecryptPost(props: DecryptPostProps) {
     const authorInPayload = deconstructedPayload
         .andThen((x) => (x.version === -38 ? Ok(x.authorUserID) : Err.EMPTY))
         .unwrapOr(undefined)
+    const current = usePostInfo()
     const currentPostBy = usePostInfoDetails('postBy')
     const postBy = or(authorInPayload, currentPostBy)
     const postMetadataImages = usePostInfoDetails('postMetadataImages')
@@ -107,7 +109,12 @@ export function DecryptPost(props: DecryptPostProps) {
                 })
             for await (const status of asyncIteratorWithResult(iter)) {
                 if (controller.signal.aborted) return iter.return?.({ type: 'error', internal: true, error: 'aborted' })
-                if (status.done) return refreshProgress(status.value)
+                if (status.done) {
+                    if (status.value.type === 'success') {
+                        current.iv.value = status.value.iv
+                    }
+                    return refreshProgress(status.value)
+                }
                 if (status.value.type === 'debug') {
                     switch (status.value.debug) {
                         case 'debug_finding_hash':
@@ -119,6 +126,8 @@ export function DecryptPost(props: DecryptPostProps) {
                 } else refreshProgress(status.value)
                 if (status.value.type === 'progress' && status.value.progress === 'intermediate_success')
                     refreshProgress(status.value.data)
+                if (status.value.type === 'progress' && status.value.progress === 'iv_decrypted')
+                    current.iv.value = status.value.iv
             }
         }
 

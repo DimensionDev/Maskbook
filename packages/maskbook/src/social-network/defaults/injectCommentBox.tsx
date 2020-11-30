@@ -28,13 +28,15 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         const payload = usePostInfoDetails('postPayload')
         const decrypted = usePostInfoDetails('decryptedPostContentRaw')
         const styles = useCustomStyles()
+        const iv = usePostInfoDetails('iv')
         const props = additionPropsToCommentBox(styles)
         const onCallback = useCallback(
             async (content) => {
-                const encryptedComment = await Services.Crypto.encryptComment(payload.unwrap().iv, decrypted, content)
+                const postIV = iv || payload.unwrap().iv
+                const encryptedComment = await Services.Crypto.encryptComment(postIV, decrypted, content)
                 onPasteToCommentBox(encryptedComment, info, dom).catch(console.error)
             },
-            [payload, decrypted, info, dom],
+            [payload, decrypted, info, dom, iv],
         )
 
         if (!(payload && decrypted)) return null
