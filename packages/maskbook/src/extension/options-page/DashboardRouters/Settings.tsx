@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { Typography, Card, List, Paper } from '@material-ui/core'
-import { makeStyles, createStyles, ThemeProvider, Theme, useTheme } from '@material-ui/core/styles'
+import { makeStyles, createStyles, ThemeProvider, Theme, useTheme, ThemeOptions } from '@material-ui/core/styles'
 
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
 import {
@@ -117,7 +117,7 @@ const settingsTheme = (theme: Theme): Theme =>
                 },
             },
         },
-    })
+    } as ThemeOptions)
 
 export default function DashboardSettingsRouter() {
     const { t } = useI18N()

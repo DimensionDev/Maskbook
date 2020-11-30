@@ -31,7 +31,7 @@ const walletsTheme = (theme: Theme) =>
         overrides: {
             MuiIconButton: {
                 root: {
-                    color: theme.palette.text,
+                    color: theme.palette.text.primary,
                 },
             },
             MuiListItemIcon: {
@@ -47,7 +47,7 @@ const walletsTheme = (theme: Theme) =>
                 },
             },
         },
-    })
+    } as Partial<Theme>)
 //#endregion
 
 const useStyles = makeStyles((theme) =>

@@ -244,7 +244,7 @@ const dialogTheme = (theme: Theme): Theme =>
                 margin: 'normal',
             },
         },
-    })
+    } as Partial<Theme>)
 
 interface DashboardDialogWrapperProps {
     icon?: React.ReactElement

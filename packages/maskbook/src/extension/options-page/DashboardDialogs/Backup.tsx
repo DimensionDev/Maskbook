@@ -339,7 +339,7 @@ const backupTheme = (theme: Theme): Theme =>
                 },
             },
         },
-    })
+    } as Partial<Theme>)
 
 enum RestoreStep {
     SelectBackup = 'select-backup',

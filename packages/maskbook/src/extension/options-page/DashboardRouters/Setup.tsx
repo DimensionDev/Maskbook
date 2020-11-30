@@ -902,7 +902,7 @@ const setupTheme = (theme: Theme): Theme =>
                 margin: 'normal',
             },
         },
-    })
+    } as Partial<Theme>)
 
 const CurrentStep = () => {
     const { step } = useParams<{ step: SetupStep }>()

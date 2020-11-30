@@ -45,12 +45,12 @@ const wizardTheme = (theme: Theme): Theme =>
         overrides: {
             MuiOutlinedInput: {
                 input: {
-                    paddingTop: 14.5,
-                    paddingBottom: 14.5,
+                    paddingTop: 10.5,
+                    paddingBottom: 10.5,
                 },
                 multiline: {
-                    paddingTop: 14.5,
-                    paddingBottom: 14.5,
+                    paddingTop: 10.5,
+                    paddingBottom: 10.5,
                 },
             },
             MuiInputLabel: {
@@ -91,7 +91,7 @@ const wizardTheme = (theme: Theme): Theme =>
                 margin: 'normal',
             },
         },
-    })
+    } as Partial<Theme>)
 
 const useWizardDialogStyles = makeStyles((theme) =>
     createStyles({

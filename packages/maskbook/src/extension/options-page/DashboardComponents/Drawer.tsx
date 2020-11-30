@@ -108,7 +108,7 @@ const drawerTheme = (theme: Theme): Theme =>
                 },
             },
         },
-    })
+    } as Partial<Theme>)
 
 interface DrawerProps {
     routers: readonly (readonly [string, string, JSX.Element])[]

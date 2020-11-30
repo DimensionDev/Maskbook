@@ -48,11 +48,11 @@ const personasTheme = (theme: Theme): Theme =>
         overrides: {
             MuiIconButton: {
                 root: {
-                    color: theme.palette.text,
+                    color: theme.palette.text.primary,
                 },
             },
         },
-    })
+    } as Partial<Theme>)
 
 export default function DashboardPersonasRouter() {
     const { t } = useI18N()

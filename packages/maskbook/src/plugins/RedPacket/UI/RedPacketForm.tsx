@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) =>
         },
         input: {
             flex: 1,
-            padding: theme.spacing(1),
+            padding: theme.spacing(0.5),
         },
         tip: {
             fontSize: 12,

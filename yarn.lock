@@ -1982,13 +1982,13 @@
   resolved "https://registry.yarnpkg.com/@magic-works/commonjs-import.meta/-/commonjs-import.meta-1.0.0.tgz#5114765fea55a8582dbb1a264c78434702cbc0f9"
   integrity sha512-+k8JqF+cQ0EsNGW7Mz306aV20CCwMvHANnQ+lE6XyNkXBAnlqAjrSBumCcgs/ooDGeVXwG/N9WAHgK6Io4PJ+A==
 
-"@material-ui/core@5.0.0-alpha.6":
-  version "5.0.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-5.0.0-alpha.6.tgz#ace12510e1a9543ef7c8d5a0d32b7c78ef41e827"
-  integrity sha512-htcTQpXj1PbQrqFH70UwW55hzydpuJ+WyHmJ6IXi5s747mY/Tzl7aTWtW2yYjI8DhgSvVSl5ldExskxeZb/J+A==
+"@material-ui/core@5.0.0-alpha.7":
+  version "5.0.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-5.0.0-alpha.7.tgz#b812b5d33fbfae1296a23e2c6a806a54a8b2208b"
+  integrity sha512-2YYcwbPU0t/oiwV9Pd+XYR4iDTJ34uCs906KWeFHdAFQTNBiuCGsdlCMcIpHqFbLFEOSPjfSL7/k5GtZyYMDXA==
   dependencies:
     "@babel/runtime" "^7.4.4"
-    "@material-ui/styles" "^5.0.0-alpha.6"
+    "@material-ui/styles" "^5.0.0-alpha.7"
     "@material-ui/system" "^5.0.0-alpha.6"
     "@material-ui/types" "^5.1.0"
     "@material-ui/utils" "^5.0.0-alpha.1"
@@ -2000,17 +2000,17 @@
     react-is "^16.8.0"
     react-transition-group "^4.4.0"
 
-"@material-ui/icons@5.0.0-alpha.4":
-  version "5.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-5.0.0-alpha.4.tgz#edaa333b9612f5a02669fcec6b4af1ab91c31402"
-  integrity sha512-AE1nn/cYBNZ9FSihUMLb2c39HwdUpGXF3S1v7no68NtwOLjUorWshJJ/0i//cLgwvVEieRKI2XJpZjg6Ze/xNA==
+"@material-ui/icons@5.0.0-alpha.7":
+  version "5.0.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-5.0.0-alpha.7.tgz#dff0b4e0c60f5578426f268f1505ba29fb0cb6a9"
+  integrity sha512-zl5iEYZieZRQ9i3mSIxFpzPneMjXjXCp6gw/JsvosZycL/LKMyBpsLnJyiiRBZzvKWo9YavRaFahZtmPyjm3jA==
   dependencies:
     "@babel/runtime" "^7.4.4"
 
-"@material-ui/lab@5.0.0-alpha.6":
-  version "5.0.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-5.0.0-alpha.6.tgz#669ecfef8d636a1cc426194ee0b9c99c33c4b870"
-  integrity sha512-AtJ88Esgf8tFMVPGk0n9J2ChBrhBuCB6j11eCnJrs9jwkEgl67DuvFqzq6dx9FcILcLRWTKsNNcM4ixYOu5BRg==
+"@material-ui/lab@5.0.0-alpha.7":
+  version "5.0.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-5.0.0-alpha.7.tgz#d599bc511be75b98bcddfa7694054b0b6860495a"
+  integrity sha512-8DIx6mwlLZXdxFvHVdnUDPFDTdijYOyL9lIvW/imtXGqGyfnYFiMhoZHCrb+gGwD+X7hRIGOo54MIO8+PIQHXA==
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@material-ui/utils" "^5.0.0-alpha.1"
@@ -2018,7 +2018,7 @@
     prop-types "^15.7.2"
     react-is "^16.8.0"
 
-"@material-ui/styles@^5.0.0-alpha.6":
+"@material-ui/styles@^5.0.0-alpha.7":
   version "5.0.0-alpha.15"
   resolved "https://registry.yarnpkg.com/@material-ui/styles/-/styles-5.0.0-alpha.15.tgz#fb0922ae4e931e5b3645d77a16f4c34f2c872649"
   integrity sha512-jM9wS5SBSBlaw2oqPFdN8pCzpIajDEGZ+9bWE22yIn48t5BvcELjmXshlJe3yy21+8R+8pAISRx8VTig1ccTTw==
