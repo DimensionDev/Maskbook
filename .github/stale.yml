@@ -3,7 +3,16 @@
 daysUntilStale: 90
 daysUntilClose: 7
 
-exemptLabels: ["Discussion: Security"]
+exemptLabels:
+  - "Blocked: Local"
+  - "Blocked: Upstream"
+  - "Bounty: Open"
+  - "Bounty"
+  - "Discussion: Security"
+  - "Long-term Task"
+  - "OpenSourcePromotionPlan"
+  - "Severity: Blocker"
+  - "RFC: Open"
 
 staleLabel: "Will Not Fix"
 
