@@ -3,7 +3,11 @@
 daysUntilStale: 90
 daysUntilClose: 7
 
-exemptLabels: ["Discussion: Security"]
+exemptLabels:
+  - "Discussion: Security"
+  - "OpenSourcePromotionPlan"
+  - "Bounty"
+  - "Bounty: Open"
 
 staleLabel: "Will Not Fix"
 
