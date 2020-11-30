@@ -12,6 +12,7 @@ exemptLabels:
   - "Long-term Task"
   - "OpenSourcePromotionPlan"
   - "Severity: Blocker"
+  - "RFC: Open"
 
 staleLabel: "Will Not Fix"
 
