@@ -77,7 +77,6 @@ export interface WrappedDialogProps<T extends object = any> extends DialogProps 
     ComponentProps?: T
     onClose(): void
 }
-type ShowModal = () => void
 enum DialogState {
     Opened = 1,
     Closing,
@@ -113,11 +112,11 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
     const compositeProps =
         ComponentProps || props ? { ComponentProps: { ...ComponentProps, ...props } as DialogProps } : {}
 
-    const modalProps = {
+    const modalProps: WrappedDialogProps<DialogProps> = {
+        TransitionProps: { onExited },
         ...compositeProps,
         open: state === DialogState.Opened,
         onClose,
-        onExited,
     }
     const theme = useMaskbookTheme()
     const renderedComponent =

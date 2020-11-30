@@ -614,7 +614,7 @@ export function RestoreDatabaseAdvance() {
                 children: (
                     <TextField
                         multiline
-                        rows={1}
+                        minRows={1}
                         autoFocus
                         placeholder={t('dashboard_paste_database_base64_hint')}
                         onChange={(e) => setBase64Value(e.target.value)}

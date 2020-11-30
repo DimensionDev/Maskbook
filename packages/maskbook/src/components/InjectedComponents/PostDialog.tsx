@@ -435,7 +435,7 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
     return (
         <Box position="relative" display="inline-flex">
             <CircularProgress
-                variant="static"
+                variant="determinate"
                 value={normalized}
                 color={displayLabel ? 'secondary' : 'primary'}
                 size={displayLabel ? void 0 : 16}
