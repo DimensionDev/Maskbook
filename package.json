@@ -52,13 +52,15 @@
     "@dimensiondev/kit": "0.0.0-20201027082807-06026ae",
     "@dimensiondev/matrix-js-sdk-type": "=1.0.0-20200731085604-dc2de92",
     "@dimensiondev/stego-js": "=0.11.1-20201027083223-8ab41be",
+    "@emotion/core": "^10",
+    "@emotion/styled": "^10",
     "@ethersproject/contracts": "^5.0.4",
     "@ethersproject/networks": "^5.0.4",
     "@ethersproject/providers": "^5.0.9",
     "@ethersproject/solidity": "^5.0.4",
-    "@material-ui/core": "5.0.0-alpha.10",
-    "@material-ui/icons": "5.0.0-alpha.7",
-    "@material-ui/lab": "5.0.0-alpha.10",
+    "@material-ui/core": "5.0.0-alpha.11",
+    "@material-ui/icons": "5.0.0-alpha.11",
+    "@material-ui/lab": "5.0.0-alpha.11",
     "@msgpack/msgpack": "^1.12.2",
     "@openzeppelin/contracts": "^3.2.0",
     "@servie/events": "^1.0.0",
@@ -241,8 +243,8 @@
     "node": ">=14.4.0"
   },
   "resolutions": {
-    "@material-ui/styles": ">=5.0.0-alpha.1 <=5.0.0-alpha.10",
-    "@material-ui/utils": ">=5.0.0-alpha.1 <=5.0.0-alpha.10",
-    "@material-ui/system": ">=5.0.0-alpha.1 <=5.0.0-alpha.10"
+    "@material-ui/styles": ">=5.0.0-alpha.1 <=5.0.0-alpha.11",
+    "@material-ui/utils": ">=5.0.0-alpha.1 <=5.0.0-alpha.11",
+    "@material-ui/system": ">=5.0.0-alpha.1 <=5.0.0-alpha.11"
   }
 }

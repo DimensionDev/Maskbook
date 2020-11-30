@@ -146,7 +146,7 @@ export default function DashboardSettingsRouter() {
 
     const classes = useStyles()
     const theme = useTheme()
-    const elevation = theme.palette.type === 'dark' ? 1 : 0
+    const elevation = theme.palette.mode === 'dark' ? 1 : 0
 
     const [backupDialog, openBackupDialog] = useModal(DashboardBackupDialog)
     const [restoreDialog, openRestoreDialog] = useModal(DashboardRestoreDialog)

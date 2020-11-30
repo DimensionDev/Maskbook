@@ -90,7 +90,7 @@ export function RestoreBox(props: RestoreBoxProps) {
                 ) : (
                     <img
                         className={classes.placeholderImage}
-                        src={getUrl(`${placeholder}-${theme.palette.type}.png`)}
+                        src={getUrl(`${placeholder}-${theme.palette.mode}.png`)}
                     />
                 )}
             </div>

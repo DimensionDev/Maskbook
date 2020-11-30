@@ -15,7 +15,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getUrl, sleep } from '../../utils/utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { Alert } from '@material-ui/lab'
+import { Alert } from '@material-ui/core'
 import { useAsyncRetry } from 'react-use'
 
 const GlobalCss = withStyles({

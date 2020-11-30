@@ -104,8 +104,8 @@ const useWizardDialogStyles = makeStyles((theme) =>
         root: {
             padding: '56px 20px 48px',
             position: 'relative',
-            boxShadow: theme.palette.type === 'dark' ? 'none' : theme.shadows[4],
-            border: `${theme.palette.type === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
+            boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
+            border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
             borderRadius: 12,
             [theme.breakpoints.down('xs')]: {
                 padding: '35px 20px 16px',

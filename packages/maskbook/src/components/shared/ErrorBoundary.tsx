@@ -1,5 +1,5 @@
 import { Box, Button, IconButton, makeStyles, Typography } from '@material-ui/core'
-import { Alert, AlertTitle } from '@material-ui/lab'
+import { Alert, AlertTitle } from '@material-ui/core'
 import { Component, useMemo, useState } from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ExpandLess from '@material-ui/icons/ExpandLess'

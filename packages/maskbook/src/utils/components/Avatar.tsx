@@ -19,7 +19,7 @@ export function Avatar({ person, ...props }: Props) {
     const { avatar, nickname, identifier } = person
     const name = nickname || identifier.userId || ''
     const [first, last] = name.split(' ')
-    const theme = useTheme().palette.type
+    const theme = useTheme().palette.mode
     return (
         <MuiAvatar
             aria-label={name}
