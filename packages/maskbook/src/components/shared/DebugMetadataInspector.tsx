@@ -127,7 +127,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                                 <Box flex={1} />
                                 <Typography onClick={(e) => e.stopPropagation()}>{editButton}</Typography>
                             </AccordionSummary>
-                            <AccordionDetails>
+                            <AccordionDetails style={{ display: 'flex' }}>
                                 <Typography
                                     component="code"
                                     children={JSON.stringify(content, undefined, 4)}

@@ -104,7 +104,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                         {resolveTradeProviderName(provider)}
                                     </Typography>
                                 </AccordionSummary>
-                                <AccordionDetails>
+                                <AccordionDetails style={{ display: 'flex' }}>
                                     <SelectProviderPanel value={provider} onChange={setProvider} />
                                 </AccordionDetails>
                             </Accordion>
@@ -113,7 +113,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                     <Typography className={classes.heading}>Slippage Tolerance</Typography>
                                     <Typography className={classes.subheading}>{slippage / 100}%</Typography>
                                 </AccordionSummary>
-                                <AccordionDetails>
+                                <AccordionDetails style={{ display: 'flex' }}>
                                     <SlippageSlider value={slippage} onChange={setSlippage} />
                                 </AccordionDetails>
                             </Accordion>
@@ -123,7 +123,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                         <Typography className={classes.heading}>Exchanges</Typography>
                                         <Typography className={classes.subheading}>{listOfSource.length}</Typography>
                                     </AccordionSummary>
-                                    <AccordionDetails>
+                                    <AccordionDetails style={{ display: 'flex' }}>
                                         <SelectPoolPanel value={listOfSource} onChange={setListOfSource} />
                                     </AccordionDetails>
                                 </Accordion>
