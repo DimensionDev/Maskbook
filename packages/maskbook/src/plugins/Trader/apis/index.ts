@@ -4,7 +4,7 @@ import * as coinMarketCapAPI from './coinmarketcap'
 import { Days } from '../UI/trending/PriceChartDaysControl'
 import { getEnumAsArray } from '../../../utils/enum'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../constants'
-import { resolveCoinId, resolveCoinAddress } from './hotfix'
+import { resolveCoinId, resolveCoinAddress, resolveAlias } from './hotfix'
 
 export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
     if (dataProvider === DataProvider.COIN_GECKO) {
@@ -76,17 +76,19 @@ function isCacheExipred(dataProvider: DataProvider) {
 }
 
 export async function checkAvailabilityOnDataProvider(dataProvider: DataProvider, keyword: string) {
+    const keyword_ = resolveAlias(keyword, dataProvider)
     // cache never built before update in blocking way
     if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
     // data fetched before update in nonblocking way
     else if (isCacheExipred(dataProvider)) updateCache(dataProvider)
-    return coinNamespace.get(dataProvider)?.supported.has(keyword.toLowerCase()) ?? false
+    return coinNamespace.get(dataProvider)?.supported.has(resolveAlias(keyword_, dataProvider).toLowerCase()) ?? false
 }
 
 export async function getAvailableDataProviders(keyword: string) {
     const checked = await Promise.all(
         getEnumAsArray(DataProvider).map(
-            async (x) => [x.value, await checkAvailabilityOnDataProvider(x.value, keyword)] as const,
+            async (x) =>
+                [x.value, await checkAvailabilityOnDataProvider(x.value, resolveAlias(keyword, x.value))] as const,
         ),
     )
     return checked.filter(([_, y]) => y).map(([x]) => x)
@@ -235,9 +237,14 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
 
 export async function getCoinTrendingByKeyword(keyword: string, dataProvider: DataProvider, currency: Currency) {
     const coins = await getCoins(dataProvider)
-    const coin = coins.find((x) => x.symbol.toLowerCase() === keyword.toLowerCase())
+    const keyword_ = resolveAlias(keyword, dataProvider)
+    const coin = coins.find((x) => x.symbol.toLowerCase() === keyword_.toLowerCase())
     if (!coin) return null
-    return getCoinInfo(resolveCoinId(keyword, dataProvider) ?? coin.id, dataProvider, currency)
+    return getCoinInfo(
+        resolveCoinId(resolveAlias(keyword_, dataProvider), dataProvider) ?? coin.id,
+        dataProvider,
+        currency,
+    )
 }
 
 export async function getPriceStats(
