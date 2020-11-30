@@ -40,7 +40,7 @@ const revalidateChainState = debounce(
 )
 
 // polling the newest block state from the chain
-pollingTask(revalidateChainState, {
+pollingTask(revalidateChainState as any, {
     delay: 30 /* seconds */ * 1000 /* milliseconds */,
 })
 
