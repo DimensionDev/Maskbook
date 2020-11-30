@@ -12,11 +12,11 @@ export const CONSTANTS = {
             'https://www.coingecko.com/tokens_list/uniswap/defi_100/v_0_0_0.json',
             'https://gateway.ipfs.io/ipns/tokens.uniswap.org',
             'http://tokenlist.dharma.eth.link',
-            'https://raw.githubusercontent.com/DimensionDev/Maskbook-Token-List/gh-pages/maskbook_v_0_0_1.json',
+            'https://raw.githubusercontent.com/DimensionDev/Maskbook-Token-List/gh-pages/maskbook.json',
         ],
         [ChainId.Ropsten]: [] as string[],
         [ChainId.Rinkeby]: [
-            'https://raw.githubusercontent.com/DimensionDev/Maskbook-Token-List/gh-pages/maskbook_v_0_0_1.json',
+            'https://raw.githubusercontent.com/DimensionDev/Maskbook-Token-List/gh-pages/maskbook.json',
         ],
         [ChainId.Kovan]: [] as string[],
     },
@@ -61,7 +61,7 @@ export const CONSTANTS = {
         [ChainId.Kovan]: '',
     },
     MKR_ADDRESS: {
-        [ChainId.Mainnet]: '0xc00e94Cb662C3520282E6f5717214004A7f26888',
+        [ChainId.Mainnet]: '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2',
         [ChainId.Ropsten]: '',
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
