@@ -1,12 +1,10 @@
 import { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button } from '@material-ui/core'
-import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
+import { makeStyles, createStyles, ThemeProvider } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import RestoreIcon from '@material-ui/icons/Restore'
-import { cloneDeep, merge } from 'lodash-es'
-
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
 import {
@@ -24,30 +22,36 @@ import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useER
 import { useAssetsDetailedCallback } from '../../../web3/hooks/useAssetsDetailedCallback'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
+import { extendsTheme } from '../../../utils/theme'
 
 //#region theme
-const walletsTheme = (theme: Theme) =>
-    merge(cloneDeep(theme), {
-        overrides: {
-            MuiIconButton: {
+const walletsTheme = extendsTheme((theme) => ({
+    components: {
+        MuiIconButton: {
+            styleOverrides: {
                 root: {
                     color: theme.palette.text.primary,
                 },
             },
-            MuiListItemIcon: {
+        },
+        MuiListItemIcon: {
+            styleOverrides: {
                 root: {
                     justifyContent: 'center',
                     minWidth: 'unset',
                     marginRight: theme.spacing(2),
                 },
             },
-            MuiListItemSecondaryAction: {
+        },
+        MuiListItemSecondaryAction: {
+            styleOverrides: {
                 root: {
                     ...theme.typography.body1,
                 },
             },
         },
-    } as Partial<Theme>)
+    },
+}))
 //#endregion
 
 const useStyles = makeStyles((theme) =>

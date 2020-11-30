@@ -5,8 +5,8 @@ import {
     Theme,
     createStyles,
     DialogContent,
-    GridList,
-    GridListTile,
+    ImageList,
+    ImageListItem,
     Typography,
     Link,
     DialogActions,
@@ -119,26 +119,26 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
-                <GridList className={classes.grid} spacing={16} cellHeight={183}>
-                    <GridListTile>
+                <ImageList className={classes.grid} spacing={16} cellHeight={183}>
+                    <ImageListItem>
                         <Provider
                             logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
                             name="Maskbook"
                             description={t('plugin_wallet_connect_to_maskbook')}
                             onClick={() => onConnect(ProviderType.Maskbook)}
                         />
-                    </GridListTile>
+                    </ImageListItem>
                     {Flags.metamask_support_enabled ? (
-                        <GridListTile>
+                        <ImageListItem>
                             <Provider
                                 logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
                                 name="MetaMask"
                                 description={t('plugin_wallet_connect_to_metamask')}
                                 onClick={() => onConnect(ProviderType.MetaMask)}
                             />
-                        </GridListTile>
+                        </ImageListItem>
                     ) : null}
-                    <GridListTile>
+                    <ImageListItem>
                         <Provider
                             logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
                             name="WalletConnect"
@@ -149,8 +149,8 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             )}
                             onClick={() => onConnect(ProviderType.WalletConnect)}
                         />
-                    </GridListTile>
-                    <GridListTile>
+                    </ImageListItem>
+                    <ImageListItem>
                         <Provider
                             logo={
                                 <MoreHorizontal
@@ -164,8 +164,8 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             description={t('plugin_wallet_connect_more_description')}
                             ButtonBaseProps={{ disabled: true }}
                         />
-                    </GridListTile>
-                </GridList>
+                    </ImageListItem>
+                </ImageList>
             </DialogContent>
             <DialogActions>
                 <Typography className={classes.tip} color="textSecondary">

@@ -1,7 +1,7 @@
 import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import { orange, green, red, blue, grey } from '@material-ui/core/colors'
-import type { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
+import type { Theme, ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
 import { merge, cloneDeep } from 'lodash-es'
 import { Appearance, appearanceSettings, Language, languageSettings } from '../settings/settings'
 import { useValueRef } from './hooks/useValueRef'
@@ -39,26 +39,28 @@ const base: ThemeOptions = {
             xl: 1920,
         },
     },
-    overrides: {
+    components: {
         MuiButton: {
-            root: {
-                textTransform: 'unset',
-                minWidth: '100px',
+            styleOverrides: {
+                root: {
+                    textTransform: 'unset',
+                    minWidth: '100px',
+                },
+            },
+            defaultProps: {
+                size: 'small',
+                disableElevation: true,
             },
         },
         MuiTab: {
-            root: { textTransform: 'unset', padding: '0' },
+            styleOverrides: { root: { textTransform: 'unset', padding: '0' } },
         },
         MuiDialog: {
-            paper: {
-                borderRadius: '12px',
+            styleOverrides: {
+                paper: {
+                    borderRadius: '12px',
+                },
             },
-        },
-    },
-    props: {
-        MuiButton: {
-            size: 'small',
-            disableElevation: true,
         },
     },
 }
@@ -153,3 +155,6 @@ export const useErrorStyles = makeStyles((theme) => {
         },
     })
 })
+export function extendsTheme(extend: (theme: Theme) => ThemeOptions) {
+    return (theme: Theme) => merge(cloneDeep(theme), extend(theme))
+}

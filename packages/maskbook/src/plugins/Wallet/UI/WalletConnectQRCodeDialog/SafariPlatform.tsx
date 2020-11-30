@@ -1,4 +1,4 @@
-import { createStyles, GridList, GridListTile, makeStyles, SvgIconProps } from '@material-ui/core'
+import { createStyles, ImageList, ImageListItem, makeStyles, SvgIconProps } from '@material-ui/core'
 import { map } from 'lodash-es'
 import { createElement } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui'
@@ -41,17 +41,17 @@ export const SafariPlatform: React.FC<{ uri: string }> = ({ uri }) => {
         imToken: t('plugin_wallet_connect_safari_im_token'),
     }
     return (
-        <GridList className={classes.grid} spacing={16} cellHeight={183}>
+        <ImageList className={classes.grid} spacing={16} cellHeight={183}>
             {map(providers, ({ name, logo, protocol }, key) => (
-                <GridListTile key={key}>
+                <ImageListItem key={key}>
                     <Provider
                         name={name}
                         logo={createElement(logo, { className: classes.icon, viewBox: '0 0 45 45' })}
                         description={descriptionMapping[name]}
                         onClick={makeConnect(protocol)}
                     />
-                </GridListTile>
+                </ImageListItem>
             ))}
-        </GridList>
+        </ImageList>
     )
 }
