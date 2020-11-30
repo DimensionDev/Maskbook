@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Typography, Link, makeStyles, createStyles } from '@material-ui/core'
+import { Typography, Link, makeStyles } from '@material-ui/core'
 import anchorme from 'anchorme'
 import classNames from 'classnames'
 import {
@@ -213,16 +213,14 @@ interface ParseTextLinkProps extends ParseTextProps {
     link: string
 }
 
-const useStyle = makeStyles((theme) =>
-    createStyles({
-        link: {
-            color: theme.palette.primary.main,
-        },
-        text: {
-            fontSize: (fontSize: number) => fontSize + 'rem',
-        },
-    }),
-)
+const useStyle = makeStyles((theme) => ({
+    link: {
+        color: theme.palette.primary.main,
+    },
+    text: {
+        fontSize: (fontSize) => Number(fontSize) + 'rem',
+    },
+}))
 
 const ParseTextLink = memo(function ParseTextLink({ link, text, fontSize }: ParseTextLinkProps) {
     const classes = useStyle(fontSize)
