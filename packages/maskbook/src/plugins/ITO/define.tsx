@@ -8,6 +8,13 @@ import type { ITO_JSONPayload } from './types'
 import { ITO_MetadataReader } from './helpers'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { SnackbarContent } from '@material-ui/core'
+import { Flags } from '../../utils/flags'
+import { createCompositionDialog } from '../utils/createCompositionDialog'
+import { ITO_CompositionDialog } from './UI/ITO_CompositionDialog'
+
+const [ITO_CompositionEntry, ITO_CompositionUI] = createCompositionDialog('ITO', (props) => (
+    <ITO_CompositionDialog {...props} />
+))
 
 export const ITO_PluginDefine: PluginConfig = {
     pluginName: 'ITO',
@@ -37,4 +44,6 @@ export const ITO_PluginDefine: PluginConfig = {
             },
         ],
     ]),
+    PageComponent: Flags.ito_enabled ? ITO_CompositionUI : undefined,
+    postDialogEntries: Flags.ito_enabled ? [ITO_CompositionEntry] : undefined,
 }
