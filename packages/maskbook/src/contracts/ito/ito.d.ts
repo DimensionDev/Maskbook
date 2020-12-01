@@ -17,39 +17,43 @@ export class Ito extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
     clone(): Ito
     methods: {
-<<<<<<< HEAD
+        check_availability(
+            id: string | number[],
+        ): TransactionObject<{
+            token_address: string
+            balance: string
+            total: string
+            claimed: string
+            expired: boolean
+            ifclaimed: boolean
+            0: string
+            1: string
+            2: string
+            3: string
+            4: boolean
+            5: boolean
+        }>
+
         claim(
             id: string | number[],
             password: string,
             _recipient: string,
             validation: string | number[],
-            _exchange_addr_i: number | string,
         ): TransactionObject<string>
+
+        contract_creator(): TransactionObject<string>
 
         destruct(id: string | number[]): TransactionObject<void>
 
         fill_pool(
             _hash: string | number[],
+            _number: number | string,
             _duration: number | string,
             _exchange_addrs: string[],
             _ratios: (number | string)[],
             _token_addr: string,
             _total_tokens: number | string,
-            _limit: number | string,
         ): TransactionObject<void>
-
-        check_availability(
-            id: string | number[],
-        ): TransactionObject<{
-            total: string
-            expired: boolean
-            claimed: string
-            0: string
-            1: boolean
-            2: string
-        }>
-
-        contract_creator(): TransactionObject<string>
 
         toBytes(a: string): TransactionObject<string>
 
@@ -66,7 +70,7 @@ export class Ito extends Contract {
             2: string
             3: string
         }>
-        FillSuccess: ContractEvent<{
+        CreationSuccess: ContractEvent<{
             total: string
             id: string
             creator: string
@@ -82,31 +86,6 @@ export class Ito extends Contract {
             id: string
             token_address: string
             remaining_balance: string
-=======
-        totalSupply(): TransactionObject<string>
-
-        balances(arg0: string): TransactionObject<string>
-
-        maximumFee(): TransactionObject<string>
-
-        _totalSupply(): TransactionObject<string>
-
-        balanceOf(_owner: string): TransactionObject<string>
-
-        owner(): TransactionObject<string>
-
-        transfer(_to: string, _value: number | string): TransactionObject<void>
-
-        basisPointsRate(): TransactionObject<string>
-
-        transferOwnership(newOwner: string): TransactionObject<void>
-    }
-    events: {
-        Transfer: ContractEvent<{
-            from: string
-            to: string
-            value: string
->>>>>>> chore: compile contracts
             0: string
             1: string
             2: string
