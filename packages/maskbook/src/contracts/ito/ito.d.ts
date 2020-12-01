@@ -17,6 +17,7 @@ export class Ito extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
     clone(): Ito
     methods: {
+<<<<<<< HEAD
         claim(
             id: string | number[],
             password: string,
@@ -81,6 +82,31 @@ export class Ito extends Contract {
             id: string
             token_address: string
             remaining_balance: string
+=======
+        totalSupply(): TransactionObject<string>
+
+        balances(arg0: string): TransactionObject<string>
+
+        maximumFee(): TransactionObject<string>
+
+        _totalSupply(): TransactionObject<string>
+
+        balanceOf(_owner: string): TransactionObject<string>
+
+        owner(): TransactionObject<string>
+
+        transfer(_to: string, _value: number | string): TransactionObject<void>
+
+        basisPointsRate(): TransactionObject<string>
+
+        transferOwnership(newOwner: string): TransactionObject<void>
+    }
+    events: {
+        Transfer: ContractEvent<{
+            from: string
+            to: string
+            value: string
+>>>>>>> chore: compile contracts
             0: string
             1: string
             2: string
