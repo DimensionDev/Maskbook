@@ -26,6 +26,9 @@ export abstract class PostInfo {
             this.postMentionedLinks.clear()
             this.postMentionedLinks.add(...parseURL(post))
         })
+        this.postPayload.addListener((payload) => {
+            if (payload.ok) this.iv.value = payload.val.iv
+        })
     }
     readonly nickname = new ValueRef<string | null>(null)
     readonly avatarURL = new ValueRef<string | null>(null)

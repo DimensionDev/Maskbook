@@ -18,6 +18,7 @@ import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIter
 import { Err, Ok } from 'ts-results'
 import { or } from '../../custom-ui-helper'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
+import type { Payload } from '../../../utils/type-transform/Payload'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
@@ -99,35 +100,38 @@ export function DecryptPost(props: DecryptPostProps) {
         .andThen((x) => (x.version === -38 ? Ok(!!x.sharedPublic) : Err.EMPTY))
         .unwrapOr(false)
     useEffect(() => {
-        const controller = new AbortController()
-        async function makeProgress(key: string, iter: ReturnType<typeof ServicesWithProgress.decryptFromText>) {
+        const signal = new AbortController()
+        async function makeProgress(
+            key: string,
+            decryptionProcess: ReturnType<typeof ServicesWithProgress.decryptFromText>,
+        ) {
             const refreshProgress = (progress: SuccessDecryption | FailureDecryption | DecryptionProgress) =>
                 dispatch({
                     type: 'refresh',
                     key,
                     progress,
                 })
-            for await (const status of asyncIteratorWithResult(iter)) {
-                if (controller.signal.aborted) return iter.return?.({ type: 'error', internal: true, error: 'aborted' })
-                if (status.done) {
-                    if (status.value.type === 'success') {
-                        current.iv.value = status.value.iv
-                    }
-                    return refreshProgress(status.value)
+            for await (const process of asyncIteratorWithResult(decryptionProcess)) {
+                if (signal.signal.aborted)
+                    return decryptionProcess.return?.({ type: 'error', internal: true, error: 'aborted' })
+                if (process.done) {
+                    if (process.value.type === 'success') current.iv.value = process.value.iv
+                    return refreshProgress(process.value)
                 }
-                if (status.value.type === 'debug') {
-                    switch (status.value.debug) {
+                const status = process.value
+                if (status.type === 'debug') {
+                    switch (status.debug) {
                         case 'debug_finding_hash':
-                            setDebugHash(status.value.hash.join('-'))
+                            setDebugHash(status.hash.join('-'))
                             break
                         default:
-                            unreachable(status.value.debug)
+                            unreachable(status.debug)
                     }
-                } else refreshProgress(status.value)
-                if (status.value.type === 'progress' && status.value.progress === 'intermediate_success')
-                    refreshProgress(status.value.data)
-                if (status.value.type === 'progress' && status.value.progress === 'iv_decrypted')
-                    current.iv.value = status.value.iv
+                } else refreshProgress(status)
+                if (status.type === 'progress') {
+                    if (status.progress === 'intermediate_success') refreshProgress(status.data)
+                    else if (status.progress === 'iv_decrypted') current.iv.value = status.iv
+                }
             }
         }
 
@@ -137,13 +141,14 @@ export function DecryptPost(props: DecryptPostProps) {
                 ServicesWithProgress.decryptFromText(deconstructedPayload.val, postBy, whoAmI, sharedPublic),
             )
         postMetadataImages.forEach((url) => {
-            if (controller.signal.aborted) return
+            if (signal.signal.aborted) return
             makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI))
         })
-        return () => controller.abort()
+        return () => signal.abort()
     }, [
+        current.iv,
         deconstructedPayload.ok,
-        (deconstructedPayload.val as any)?.encryptedText,
+        (deconstructedPayload.val as Payload)?.encryptedText,
         postBy.toText(),
         postMetadataImages.join(),
         sharedPublic,

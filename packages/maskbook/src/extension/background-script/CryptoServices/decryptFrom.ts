@@ -25,15 +25,15 @@ import { MaskMessage } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
 import { calculatePostKeyPartition } from '../../../network/gun/version.2/hash'
 
-type Progress =
-    | {
-          type: 'progress'
-          progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post'
-          // whether this progress shows to user or not.
-          internal: boolean
-      }
-    | { type: 'progress'; progress: 'intermediate_success'; data: Success; internal: boolean }
-    | { type: 'progress'; progress: 'iv_decrypted'; iv: string; internal: boolean }
+type Progress = (
+    | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
+    | { progress: 'intermediate_success'; data: Success }
+    | { progress: 'iv_decrypted'; iv: string }
+) & {
+    type: 'progress'
+    /** if this is true, this progress should not cause UI change. */
+    internal: boolean
+}
 type DebugInfo = {
     debug: 'debug_finding_hash'
     hash: [string, string]
