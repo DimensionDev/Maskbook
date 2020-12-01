@@ -24,12 +24,13 @@ async function SSR(path) {
 }
 module.exports.SSR = SSR
 async function worker(path) {
-    require('ts-node').register({ project: require.resolve('../tsconfig.json'), transpileOnly: true })
     Object.assign(globalThis, mockedGlobalThis())
 
     require = require('esm')(module)
+    require('ts-node').register({ project: require.resolve('../tsconfig.json'), transpileOnly: true })
 
     globalThis.window = globalThis
+    require('@emotion/react')
     require('../packages/maskbook/src/polyfill/index')
     delete globalThis.window
 
