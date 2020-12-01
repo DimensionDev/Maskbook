@@ -2,25 +2,17 @@
     "type": "object",
     "additionalProperties": true,
     "properties": {
-        "contract_version": {
-            "type": "number",
-            "title": "contract_version"
-        },
-        "contract_address": {
+        "pid": {
             "type": "string",
-            "title": "contract_address"
-        },
-        "rpid": {
-            "type": "string",
-            "title": "rpid"
+            "title": "pid"
         },
         "password": {
             "type": "string",
             "title": "password"
         },
-        "shares": {
-            "type": "number",
-            "title": "shares"
+        "total": {
+            "type": "string",
+            "title": "total"
         },
         "sender": {
             "type": "object",
@@ -41,14 +33,6 @@
             },
             "required": ["address", "message", "name"],
             "title": "sender"
-        },
-        "is_random": {
-            "type": "boolean",
-            "title": "is_random"
-        },
-        "total": {
-            "type": "string",
-            "title": "total"
         },
         "creation_time": {
             "type": "number",
@@ -98,16 +82,14 @@
         }
     },
     "required": [
-        "contract_address",
-        "contract_version",
+        "pid",
+        "password",
+        "total",
+        "sender",
         "creation_time",
         "duration",
-        "is_random",
-        "password",
-        "rpid",
-        "sender",
-        "shares",
+        "network",
         "token_type",
-        "total"
+        "token"
     ]
 }
