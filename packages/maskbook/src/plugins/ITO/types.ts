@@ -1,4 +1,3 @@
-
 import type { EthereumNetwork, EthereumTokenType } from '../../web3/types'
 import type { ERC20TokenRecord } from '../Wallet/database/types'
 
