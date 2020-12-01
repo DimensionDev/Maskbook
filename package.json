@@ -165,7 +165,7 @@
     "@storybook/addon-info": "^5.3.20",
     "@storybook/addon-knobs": "^5.3.19",
     "@storybook/addon-links": "^5.3.19",
-    "@storybook/addon-viewport": "^5.3.19",
+    "@storybook/addon-viewport": "^6.1.9",
     "@storybook/addons": "^5.3.17",
     "@storybook/react": "^5.3.19",
     "@testing-library/react-hooks": "^3.4.2",
