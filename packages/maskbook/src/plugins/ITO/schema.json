@@ -1,6 +1,36 @@
 {
     "type": "object",
     "additionalProperties": true,
+    "definitions": {
+        "erc20_token": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "address": {
+                    "description": "token address",
+                    "type": "string",
+                    "title": "address"
+                },
+                "name": {
+                    "description": "token name",
+                    "type": "string",
+                    "title": "name"
+                },
+                "decimals": {
+                    "description": "token decimal",
+                    "type": "number",
+                    "title": "decimals"
+                },
+                "symbol": {
+                    "description": "token symbol",
+                    "type": "string",
+                    "title": "symbol"
+                }
+            },
+            "required": ["address", "decimals", "name", "symbol"],
+            "title": "token"
+        }
+    },
     "properties": {
         "pid": {
             "type": "string",
@@ -53,43 +83,35 @@
             "title": "token_type"
         },
         "token": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-                "address": {
-                    "description": "token address",
-                    "type": "string",
-                    "title": "address"
-                },
-                "name": {
-                    "description": "token name",
-                    "type": "string",
-                    "title": "name"
-                },
-                "decimals": {
-                    "description": "token decimal",
-                    "type": "number",
-                    "title": "decimals"
-                },
-                "symbol": {
-                    "description": "token symbol",
-                    "type": "string",
-                    "title": "symbol"
-                }
-            },
-            "required": ["address", "decimals", "name", "symbol"],
-            "title": "token"
+            "$ref": "#/definitions/erc20_token"
+        },
+        "exchange_ratios": {
+            "type": "array",
+            "title": "exchange_ratios",
+            "description": "A list of exchange ratios",
+            "additionalItems": true,
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "title": "exchange ratio"
+                    }
+                ]
+            }
+        },
+        "exchange_tokens": {
+            "type": "array",
+            "title": "exchange_tokens",
+            "description": "A list of exchange tokens",
+            "additionalItems": true,
+            "items": {
+                "anyOf": [
+                    {
+                        "$ref": "#/definitions/erc20_token"
+                    }
+                ]
+            }
         }
     },
-    "required": [
-        "pid",
-        "password",
-        "total",
-        "sender",
-        "creation_time",
-        "duration",
-        "network",
-        "token_type",
-        "token"
-    ]
+    "required": ["pid", "password", "total", "sender", "creation_time", "duration", "network", "token_type", "exchange_ratios", "exchange_tokens"]
 }
