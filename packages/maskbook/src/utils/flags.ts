@@ -40,6 +40,7 @@ export const Flags = {
     trader_all_api_cached_enabled: devOnly,
     poll_enabled: webOnly,
     election2020_enabled: webOnly,
+    ito_enabled: webOnly,
     election2020_composition_dialog_enabled: betaOrInsiderOnly || devOnly,
     // Note: the server has closed
     matrix_based_service_enabled: false,
