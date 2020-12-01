@@ -120,7 +120,7 @@
     "pvtsutils": "^1.0.14",
     "qrcode": "^1.4.4",
     "react": "=0.0.0-experimental-94c0244ba",
-    "react-dom": "=0.0.0-experimental-94c0244ba",
+    "react-dom": "=17.0.1",
     "react-draggable": "^4.4.3",
     "react-feather": "^2.0.9",
     "react-highlight-words": "^0.16.0",
