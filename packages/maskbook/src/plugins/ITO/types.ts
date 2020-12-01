@@ -12,7 +12,9 @@ export interface ITO_JSONPayload {
     }
     creation_time: number
     duration: number
-    network?: EthereumNetwork
+    network: EthereumNetwork
     token_type: EthereumTokenType.Ether | EthereumTokenType.ERC20
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
+    exchange_ratios: string[]
+    exchange_tokens: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>[]
 }

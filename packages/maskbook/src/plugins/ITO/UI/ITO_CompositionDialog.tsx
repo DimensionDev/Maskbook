@@ -19,6 +19,7 @@ export interface ITO_CompositionDialogProps {
 export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
     const chainId = useChainId()
     const onCreatePayload = useCallback(() => {
+        // An ITO packet offering 1000000000 ETH for ordering 1000000000 * 500 MAK from public domain
         const payload: ITO_JSONPayload = {
             pid: uuid(),
             password: uuid(),
@@ -31,13 +32,16 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
             creation_time: new Date().getTime(),
             duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
             network: resolveChainName(chainId) as EthereumNetwork,
-            token_type: EthereumTokenType.ERC20,
-            token: {
-                address: '0x',
-                name: 'MASKBOOK TEST TOKEN',
-                decimals: 18,
-                symbol: 'MAK',
-            },
+            token_type: EthereumTokenType.Ether,
+            exchange_ratios: ['1', '500'],
+            exchange_tokens: [
+                {
+                    address: '0x',
+                    name: 'MASKBOOK TEST TOKEN',
+                    decimals: 18,
+                    symbol: 'MAK',
+                },
+            ],
         }
 
         // update the composition dialog
