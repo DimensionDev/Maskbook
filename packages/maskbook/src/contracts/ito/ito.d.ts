@@ -5,7 +5,7 @@ import BN from 'bn.js'
 import { Contract, ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import { ContractEvent, Callback, TransactionObject, BlockType } from '../types'
 
 interface EventOptions {
     filter?: object
@@ -17,48 +17,47 @@ export class Ito extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
     clone(): Ito
     methods: {
-        contract_creator(): TransactionObject<string>
-
-        fill_pool(
-            _hash: string | number[],
-            _start: number | string,
-            _end: number | string,
-            name: string,
-            message: string,
-            _exchange_addrs: string[],
-            _ratios: (number | string)[],
-            _token_addr: string,
-            _total_tokens: number | string,
-            _limit: number | string,
-        ): TransactionObject<void>
+        check_availability(
+            id: string | number[],
+        ): TransactionObject<{
+            token_address: string
+            balance: string
+            total: string
+            claimed: string
+            expired: boolean
+            ifclaimed: boolean
+            0: string
+            1: string
+            2: string
+            3: string
+            4: boolean
+            5: boolean
+        }>
 
         claim(
             id: string | number[],
             password: string,
             _recipient: string,
             validation: string | number[],
-            _exchange_addr_i: number | string,
-            input_total: number | string,
         ): TransactionObject<string>
 
-        check_availability(
-            id: string | number[],
-        ): TransactionObject<{
-            exchange_addrs: string[]
-            remaining: string
-            started: boolean
-            expired: boolean
-            claimed: string
-            exchanged_tokens: string[]
-            0: string[]
-            1: string
-            2: boolean
-            3: boolean
-            4: string
-            5: string[]
-        }>
+        contract_creator(): TransactionObject<string>
 
         destruct(id: string | number[]): TransactionObject<void>
+
+        fill_pool(
+            _hash: string | number[],
+            _number: number | string,
+            _duration: number | string,
+            _exchange_addrs: string[],
+            _ratios: (number | string)[],
+            _token_addr: string,
+            _total_tokens: number | string,
+        ): TransactionObject<void>
+
+        toBytes(a: string): TransactionObject<string>
+
+        validRange(size: number | string, data: number | string): TransactionObject<boolean>
     }
     events: {
         ClaimSuccess: ContractEvent<{
@@ -71,21 +70,17 @@ export class Ito extends Contract {
             2: string
             3: string
         }>
-        FillSuccess: ContractEvent<{
+        CreationSuccess: ContractEvent<{
             total: string
             id: string
             creator: string
             creation_time: string
             token_address: string
-            name: string
-            message: string
             0: string
             1: string
             2: string
             3: string
             4: string
-            5: string
-            6: string
         }>
         RefundSuccess: ContractEvent<{
             id: string
@@ -95,7 +90,6 @@ export class Ito extends Contract {
             1: string
             2: string
         }>
-        Test: ContractEvent<string>
         allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
     }
 }

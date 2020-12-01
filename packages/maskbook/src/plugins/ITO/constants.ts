@@ -9,7 +9,7 @@ export const ITO_CONSTANTS = {
     ITO_CONTRACT_ADDRESS: {
         [ChainId.Mainnet]: '',
         [ChainId.Ropsten]: '',
-        [ChainId.Rinkeby]: '0xc0a44477c137b9a603eba80ddad219a02a62f0ff',
+        [ChainId.Rinkeby]: '0xad329807b1dd9cca742d0a935d04e86d6405f8ae',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },

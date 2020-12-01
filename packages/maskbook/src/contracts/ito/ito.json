@@ -67,21 +67,9 @@
                 "internalType": "address",
                 "name": "token_address",
                 "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "name",
-                "type": "string"
-            },
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "message",
-                "type": "string"
             }
         ],
-        "name": "FillSuccess",
+        "name": "CreationSuccess",
         "type": "event"
     },
     {
@@ -110,87 +98,47 @@
         "type": "event"
     },
     {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "a",
-                "type": "uint256"
-            }
-        ],
-        "name": "Test",
-        "type": "event"
-    },
-    {
-        "inputs": [],
-        "name": "contract_creator",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "bytes32",
-                "name": "_hash",
+                "name": "id",
                 "type": "bytes32"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_start",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_end",
-                "type": "uint256"
-            },
-            {
-                "internalType": "string",
-                "name": "name",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "message",
-                "type": "string"
-            },
-            {
-                "internalType": "address[]",
-                "name": "_exchange_addrs",
-                "type": "address[]"
-            },
-            {
-                "internalType": "uint256[]",
-                "name": "_ratios",
-                "type": "uint256[]"
-            },
+            }
+        ],
+        "name": "check_availability",
+        "outputs": [
             {
                 "internalType": "address",
-                "name": "_token_addr",
+                "name": "token_address",
                 "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "_total_tokens",
+                "name": "balance",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_limit",
+                "name": "total",
                 "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "claimed",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "expired",
+                "type": "bool"
+            },
+            {
+                "internalType": "bool",
+                "name": "ifclaimed",
+                "type": "bool"
             }
         ],
-        "name": "fill_pool",
-        "outputs": [],
-        "stateMutability": "payable",
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -214,16 +162,6 @@
                 "internalType": "bytes32",
                 "name": "validation",
                 "type": "bytes32"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_exchange_addr_i",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "input_total",
-                "type": "uint256"
             }
         ],
         "name": "claim",
@@ -238,44 +176,13 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "id",
-                "type": "bytes32"
-            }
-        ],
-        "name": "check_availability",
+        "inputs": [],
+        "name": "contract_creator",
         "outputs": [
             {
-                "internalType": "address[]",
-                "name": "exchange_addrs",
-                "type": "address[]"
-            },
-            {
-                "internalType": "uint256",
-                "name": "remaining",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bool",
-                "name": "started",
-                "type": "bool"
-            },
-            {
-                "internalType": "bool",
-                "name": "expired",
-                "type": "bool"
-            },
-            {
-                "internalType": "uint256",
-                "name": "claimed",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256[]",
-                "name": "exchanged_tokens",
-                "type": "uint256[]"
+                "internalType": "address",
+                "name": "",
+                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -292,6 +199,92 @@
         "name": "destruct",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "_hash",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_number",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_duration",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address[]",
+                "name": "_exchange_addrs",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "_ratios",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "address",
+                "name": "_token_addr",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_total_tokens",
+                "type": "uint256"
+            }
+        ],
+        "name": "fill_pool",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "a",
+                "type": "address"
+            }
+        ],
+        "name": "toBytes",
+        "outputs": [
+            {
+                "internalType": "bytes",
+                "name": "b",
+                "type": "bytes"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint16",
+                "name": "size",
+                "type": "uint16"
+            },
+            {
+                "internalType": "uint256",
+                "name": "data",
+                "type": "uint256"
+            }
+        ],
+        "name": "validRange",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "pure",
         "type": "function"
     }
 ]
