@@ -10,7 +10,8 @@ import { PageInspector } from './UI/PageInspector'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { SettingsDialog } from './UI/trader/SettingsDialog'
 
-const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor => isTypedMessageAnchor(m) && m.category === 'cash'
+const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor =>
+    isTypedMessageAnchor(m) && ['cash', 'hash'].includes(m.category)
 
 export const TraderPluginDefine: PluginConfig = {
     pluginName: 'Trader',

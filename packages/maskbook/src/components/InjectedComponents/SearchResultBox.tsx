@@ -18,7 +18,7 @@ export function SearchResultBox(props: SearchResultBoxProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const keyword = useSearchedKeyword()
-    const [_, name = ''] = keyword.match(/\$([\w\d]+)/) ?? []
+    const [_, name = ''] = keyword.match(/[\$\#]([\w\d]+)/) ?? []
     const { value: dataProviders } = useAsync(async () => {
         if (!name) return
         return PluginTraderRPC.getAvailableDataProviders(name)
