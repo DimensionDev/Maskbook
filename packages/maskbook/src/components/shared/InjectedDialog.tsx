@@ -42,6 +42,7 @@ export interface InjectedDialogProps extends withClasses<InjectedDialogClassKey>
     onClose?(): void
     title?: React.ReactChild
     DialogProps?: Partial<DialogProps>
+    disableBackdropClick?: boolean
 }
 export function InjectedDialog(props: InjectedDialogProps) {
     const classes = useStyles()
@@ -70,8 +71,11 @@ export function InjectedDialog(props: InjectedDialogProps) {
             maxWidth="sm"
             disableAutoFocus
             disableEnforceFocus
-            onBackdropClick={props.DialogProps?.disableBackdropClick ? void 0 : props.onClose}
-            onEscapeKeyDown={props.onClose}
+            onClose={(event, reason) => {
+                if (reason === 'backdropClick' && props.disableBackdropClick) return
+                props.onClose?.()
+            }}
+            onBackdropClick={props.disableBackdropClick ? void 0 : props.onClose}
             BackdropProps={{
                 classes: {
                     root: dialogBackdropRoot,

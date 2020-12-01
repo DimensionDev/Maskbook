@@ -16,7 +16,7 @@ const useStyle = makeStyles((theme) =>
         paper: {
             height: '100%',
             border: `solid 1px ${theme.palette.divider}`,
-            backgroundColor: theme.palette.type === 'light' ? '#FAFAFA' : '',
+            backgroundColor: theme.palette.mode === 'light' ? '#FAFAFA' : '',
             boxShadow: 'none',
             padding: theme.spacing(2, 3),
         },

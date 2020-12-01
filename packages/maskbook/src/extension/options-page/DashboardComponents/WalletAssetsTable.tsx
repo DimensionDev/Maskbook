@@ -89,7 +89,10 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                     {detailedTokens.map((x) => (
                         <TableRow className={classes.cell} key={x.token.address}>
                             {[
-                                <Box display="flex">
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                    }}>
                                     <TokenIcon
                                         classes={{ icon: classes.coin }}
                                         name={x.token.name}
@@ -97,14 +100,22 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                     />
                                     <Typography className={classes.name}>{x.token.name}</Typography>
                                 </Box>,
-                                <Box display="flex" justifyContent="flex-end">
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                    }}>
                                     <Typography className={classes.price} color="textPrimary" component="span">
                                         {x.price?.[CurrencyType.USD]
                                             ? formatCurrency(Number.parseFloat(x.price[CurrencyType.USD]), '$')
                                             : '-'}
                                     </Typography>
                                 </Box>,
-                                <Box display="flex" justifyContent="flex-end">
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                    }}>
                                     <Typography className={classes.name} color="textPrimary" component="span">
                                         {formatBalance(
                                             new BigNumber(x.balance),
@@ -116,14 +127,22 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                         {x.token.symbol}
                                     </Typography>
                                 </Box>,
-                                <Box display="flex" justifyContent="flex-end">
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                    }}>
                                     <Typography className={classes.price} color="textPrimary" component="span">
                                         {x.value?.[CurrencyType.USD]
                                             ? formatCurrency(Number.parseFloat(x.value[CurrencyType.USD]), '$')
                                             : formatCurrency(0, '$')}
                                     </Typography>
                                 </Box>,
-                                <Box display="flex" justifyContent="flex-end">
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                    }}>
                                     {x.token.type === EthereumTokenType.ERC20 ? (
                                         <ERC20TokenActionsBar wallet={wallet} token={x.token} />
                                     ) : null}

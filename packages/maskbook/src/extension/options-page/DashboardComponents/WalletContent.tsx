@@ -117,13 +117,23 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
 
     return (
         <div className={classes.root} ref={ref}>
-            <Box className={classes.caption} display="flex" alignItems="center">
+            <Box
+                className={classes.caption}
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                }}>
                 <Avatar src={blockie} />
                 <Typography className={classes.title} variant="h5" color="textPrimary">
                     {wallet.name ? truncate(wallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN }) : wallet.address}
                 </Typography>
                 {!xsMatched ? (
-                    <Box display="flex" alignItems="center" justifyContent="flex-end">
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-end',
+                        }}>
                         {tabIndex === 0 ? (
                             <Button
                                 className={classes.addButton}
@@ -154,13 +164,15 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
             </Box>
 
             <Box
-                pt={xsMatched ? 2 : 3}
-                pb={2}
-                pl={3}
-                pr={2}
-                display="flex"
-                alignItems="center"
-                className={xsMatched ? classes.header : ''}>
+                className={xsMatched ? classes.header : ''}
+                sx={{
+                    pt: xsMatched ? 2 : 3,
+                    pb: 2,
+                    pl: 3,
+                    pr: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                }}>
                 <Tabs
                     className={classes.tabs}
                     value={tabIndex}
@@ -184,7 +196,12 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
             </Box>
 
             {!xsMatched ? (
-                <Box className={classes.footer} display="flex" alignItems="center">
+                <Box
+                    className={classes.footer}
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                    }}>
                     <Button
                         onClick={() =>
                             openWalletHistory({

@@ -76,8 +76,8 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
                     classes: {
                         paper: classes.dialogPaper,
                     },
-                    disableBackdropClick: true,
-                }}>
+                }}
+                disableBackdropClick>
                 <DialogContent className={classes.content}>
                     <IconButton className={classes.close} size="small" onClick={onClose}>
                         <CloseIcon />

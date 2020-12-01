@@ -284,7 +284,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     InputLabelProps={{ shrink: true }}
                     label={t('plugin_red_packet_shares')}
                     value={shares}
-                    variant="outlined"
                     onChange={onShareChange}
                 />
             </div>
@@ -311,7 +310,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     InputLabelProps={{ shrink: true }}
                     inputProps={{ placeholder: t('plugin_red_packet_best_wishes') }}
                     label={t('plugin_red_packet_attached_message')}
-                    variant="outlined"
                     defaultValue={t('plugin_red_packet_best_wishes')}
                 />
             </div>

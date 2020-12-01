@@ -53,7 +53,6 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                     autoFocus
                     fullWidth
                     value={keyword}
-                    variant="outlined"
                     onChange={(e) => setKeyword(e.target.value)}
                 />
                 <FixedTokenList

@@ -68,13 +68,13 @@ const base: ThemeOptions = {
 
 const lightThemePatch: Partial<ThemeOptions> = {
     palette: {
-        type: 'light',
+        mode: 'light',
     },
 }
 
 const darkThemePatch: Partial<ThemeOptions> = {
     palette: {
-        type: 'dark',
+        mode: 'dark',
         background: {
             paper: grey[900],
         },
@@ -124,7 +124,7 @@ export function useMaskbookTheme(opt?: { appearance?: Appearance; language?: Lan
 }
 
 export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
-    const dark = theme.palette.type === 'dark'
+    const dark = theme.palette.mode === 'dark'
     return createStyles({
         error: {
             color: dark ? red[500] : red[900],
@@ -139,7 +139,7 @@ export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
 })
 
 export const useErrorStyles = makeStyles((theme) => {
-    const dark = theme.palette.type === 'dark'
+    const dark = theme.palette.mode === 'dark'
     return createStyles({
         containedPrimary: {
             backgroundColor: dark ? red[500] : red[900],

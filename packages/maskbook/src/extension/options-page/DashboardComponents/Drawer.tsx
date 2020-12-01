@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerItemIcon: {
         [theme.breakpoints.down('sm')]: {
-            color: theme.palette.type === 'light' ? theme.palette.primary.main : theme.palette.text.primary,
+            color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary,
         },
     },
     drawerItemText: {
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
         borderLeft: 'none',
     },
     slogan: {
-        color: theme.palette.type === 'light' ? '#A1C1FA' : '#3B3B3B',
+        color: theme.palette.mode === 'light' ? '#A1C1FA' : '#3B3B3B',
         opacity: 0.5,
         width: 316,
         height: 260,
@@ -88,9 +88,9 @@ const drawerTheme = extendsTheme((theme) => ({
                 root: {
                     '&$selected$selected': {
                         borderLeftColor:
-                            theme.palette.type === 'dark' ? theme.palette.primary.light : 'var(--drawerBody)',
+                            theme.palette.mode === 'dark' ? theme.palette.primary.light : 'var(--drawerBody)',
                         backgroundColor:
-                            theme.palette.type === 'dark' ? theme.palette.primary.dark : theme.palette.primary.light,
+                            theme.palette.mode === 'dark' ? theme.palette.primary.dark : theme.palette.primary.light,
                     },
                 },
             },
@@ -156,10 +156,12 @@ export default function Drawer(props: DrawerProps) {
                     </Box>
                 )}
                 <Box
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="space-between"
-                    className={classes.drawerBody}>
+                    className={classes.drawerBody}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                    }}>
                     {forSetupPurpose ? null : (
                         <>
                             <List className={classes.drawerList}>

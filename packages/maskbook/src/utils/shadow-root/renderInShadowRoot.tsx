@@ -1,5 +1,7 @@
-import { create, SheetsRegistry } from 'jss'
-import { jssPreset, StylesProvider, ThemeProvider } from '@material-ui/core/styles'
+import { create as createJSS, SheetsRegistry as JSSSheetsRegistry } from 'jss'
+import { jssPreset, StylesProvider as JSSStylesProvider, ThemeProvider } from '@material-ui/core/styles'
+import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
+import createEmotionCache, { EmotionCache } from '@emotion/cache'
 import ReactDOM from 'react-dom'
 import { useMemo, StrictMode } from 'react'
 import type {} from 'react/experimental'
@@ -55,11 +57,11 @@ export function renderInShadowRoot(
             rendered = true
             unmount = mount(
                 element,
-                <ErrorBoundary>
-                    <ShadowRootStyleProvider shadow={element}>
+                <ShadowRootStyleProvider shadow={element}>
+                    <ErrorBoundary>
                         <Maskbook {...config.rootProps} children={node} />
-                    </ShadowRootStyleProvider>
-                </ErrorBoundary>,
+                    </ErrorBoundary>
+                </ShadowRootStyleProvider>,
                 config.keyBy,
                 config.concurrent,
             )
@@ -103,41 +105,57 @@ try {
     })
 } catch (e) {}
 
-// ! let jss tell us if it has made an update
-class InformativeSheetsRegistry extends SheetsRegistry {
+class Informative {
     private callback = new Set<() => void>()
-    private inform() {
-        // ? Callback must be async or React will complain:
-        // Warning: Cannot update a component from inside the function body of a different component.
-        setTimeout(() => {
-            // TODO: batch update
-            // ? aggregating multiple inform request to one callback is possible
-            for (const cb of this.callback) cb()
-        })
-    }
     addListener(cb: () => void) {
         this.callback.add(cb)
         return () => void this.callback.delete(cb)
     }
-    add(...args: Parameters<SheetsRegistry['add']>) {
+    inform() {
+        // ? Callback must be async or React will complain:
+        // Warning: Cannot update a component from inside the function body of a different component.
+        setTimeout(() => {
+            // TODO: batch update ? aggregating multiple inform request to one callback is possible
+            for (const cb of this.callback) cb()
+        })
+    }
+}
+class EmotionInformativeSheetsRegistry {
+    reg = new Informative()
+    constructor(public cache: EmotionCache) {
+        const orig = cache.sheet.insert
+        cache.sheet.insert = (...args) => {
+            const r = orig.call(cache.sheet, ...args)
+            this.reg.inform()
+            return r
+        }
+    }
+    toString() {
+        return this.cache.sheet.tags.map((x) => x.innerHTML).join('\n')
+    }
+}
+// ! let jss tell us if it has made an update
+class JSSInformativeSheetsRegistry extends JSSSheetsRegistry {
+    reg = new Informative()
+    add(...args: Parameters<JSSSheetsRegistry['add']>) {
         super.add(...args)
-        this.inform()
+        this.reg.inform()
     }
-    reset(...args: Parameters<SheetsRegistry['reset']>) {
+    reset(...args: Parameters<JSSSheetsRegistry['reset']>) {
         super.reset(...args)
-        this.inform()
+        this.reg.inform()
     }
-    remove(...args: Parameters<SheetsRegistry['remove']>) {
+    remove(...args: Parameters<JSSSheetsRegistry['remove']>) {
         super.remove(...args)
-        this.inform()
+        this.reg.inform()
     }
 }
 
-const jssRegistryMap: WeakMap<ShadowRoot, InformativeSheetsRegistry> = new WeakMap()
-
+const jssRegistryMap = new WeakMap<ShadowRoot, JSSInformativeSheetsRegistry>()
+const emotionRegistryMap = new WeakMap<ShadowRoot, EmotionInformativeSheetsRegistry>()
 export function useSheetsRegistryStyles(_current: Node | null) {
-    const subscription = useMemo(() => {
-        let registry: InformativeSheetsRegistry | null | undefined = null
+    const jssSubscription = useMemo(() => {
+        let registry: JSSInformativeSheetsRegistry | null | undefined = null
         if (_current) {
             // ! lookup the styled shadowroot
             const current: Node = _current.getRootNode()
@@ -148,10 +166,25 @@ export function useSheetsRegistryStyles(_current: Node | null) {
         }
         return {
             getCurrentValue: () => registry?.toString(),
-            subscribe: (callback: () => void) => registry?.addListener(callback) ?? (() => 0),
+            subscribe: (callback: () => void) => registry?.reg.addListener(callback) ?? (() => 0),
         }
     }, [_current])
-    return useSubscription(subscription)
+    const emotionSubscription = useMemo(() => {
+        let registry: EmotionInformativeSheetsRegistry | null | undefined = null
+        if (_current) {
+            // ! lookup the styled shadowroot
+            const current: Node = _current.getRootNode()
+            if (current) {
+                const shadowroot = current as ShadowRoot | undefined
+                registry = shadowroot === portalShadowRoot ? null : emotionRegistryMap.get(shadowroot as ShadowRoot)
+            }
+        }
+        return {
+            getCurrentValue: () => registry?.toString(),
+            subscribe: (callback: () => void) => registry?.reg.addListener(callback) ?? (() => 0),
+        }
+    }, [_current])
+    return useSubscription(jssSubscription) + '\n' + useSubscription(emotionSubscription)
 }
 const initOnceMap = new WeakMap<ShadowRoot, unknown>()
 function initOnce<T>(keyBy: ShadowRoot, init: () => T): T {
@@ -161,22 +194,40 @@ function initOnce<T>(keyBy: ShadowRoot, init: () => T): T {
     return val
 }
 function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{ shadow: ShadowRoot }>) {
-    const { jss, registry, manager } = initOnce(shadow, () => {
-        const insertionPoint = document.createElement('div')
-        shadow.appendChild(document.createElement('head')).appendChild(insertionPoint)
-        const jss = create({
+    const { jss, JSSRegistry, JSSSheetsManager, emotionCache } = initOnce(shadow, () => {
+        const head = shadow.appendChild(document.createElement('head'))
+        const JSSInsertionPoint = head.appendChild(document.createElement('div'))
+        const EmotionInsertionPoint = head.appendChild(document.createElement('div'))
+        // JSS
+        const jss = createJSS({
             ...jssPreset(),
-            insertionPoint: insertionPoint,
+            insertionPoint: JSSInsertionPoint,
         })
-        const registry = new InformativeSheetsRegistry()
-        const manager = new WeakMap()
-        jssRegistryMap.set(shadow, registry)
-        return { jss, registry, manager }
+        const JSSRegistry = new JSSInformativeSheetsRegistry()
+        const JSSSheetsManager = new WeakMap()
+        jssRegistryMap.set(shadow, JSSRegistry)
+        // Emotion
+        const emotionCache = createEmotionCache({
+            container: EmotionInsertionPoint,
+            // emotion doesn't allow numbers appears in the key
+            key: 'emo-' + Math.random().toString(36).slice(2).replace(/[0-9]/g, 'x'),
+            speedy: false,
+            // TODO: support speedy mode which use insertRule https://github.com/emotion-js/emotion/blob/master/packages/sheet/src/index.js
+        })
+        emotionRegistryMap.set(shadow, new EmotionInformativeSheetsRegistry(emotionCache))
+        return { jss, JSSRegistry, JSSSheetsManager, emotionCache }
     })
     return (
-        // ! sheetsRegistry: We use this to get styles as a whole string
         // ! sheetsManager: Material-ui uses this to detect if the style has been rendered
-        <StylesProvider sheetsRegistry={registry} jss={jss} sheetsManager={manager} children={props.children} />
+        // ! sheetsRegistry: We use this to get styles as a whole string
+        <EmotionCacheProvider value={emotionCache}>
+            <JSSStylesProvider
+                sheetsRegistry={JSSRegistry}
+                jss={jss}
+                sheetsManager={JSSSheetsManager}
+                children={props.children}
+            />
+        </EmotionCacheProvider>
     )
 }
 

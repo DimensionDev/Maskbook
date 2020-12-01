@@ -15,7 +15,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getUrl, sleep } from '../../utils/utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { Alert } from '@material-ui/lab'
+import { Alert } from '@material-ui/core'
 import { useAsyncRetry } from 'react-use'
 
 const GlobalCss = withStyles({
@@ -122,14 +122,22 @@ function PopupUI() {
             ) : null}
             {ui.networkIdentifier === 'localhost' || identities.length === 0 ? null : (
                 <>
-                    <Box className={classes.header} display="flex" justifyContent="space-between">
+                    <Box
+                        className={classes.header}
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}>
                         <Typography className={classes.title}>{t('popup_current_persona')}</Typography>
                     </Box>
                     <ChooseIdentity identities={identities} />
                 </>
             )}
             <Divider className={classes.divider} />
-            <Box display="flex">
+            <Box
+                sx={{
+                    display: 'flex',
+                }}>
                 {ui.networkIdentifier !== 'localhost' && identities.length === 0 ? (
                     <Button className={classes.button} variant="text" onClick={onEnter}>
                         {t('popup_setup_first_persona')}

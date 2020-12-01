@@ -88,7 +88,11 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
     const showSelectNone = !hideSelectNone && selected.length > 0
     return (
         <div className={classes.root}>
-            <Box display="flex" className={classes.selectedArea}>
+            <Box
+                className={classes.selectedArea}
+                sx={{
+                    display: 'flex',
+                }}>
                 {frozenSelected.map((x) => FrozenChip(x, props.ProfileOrGroupInChipProps))}
                 {selected
                     .filter((item) => !frozenSelected.includes(item as ServeType))
@@ -118,11 +122,17 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
                     disabled={disabled}
                 />
             </Box>
-            <Box display="flex">
+            <Box
+                sx={{
+                    display: 'flex',
+                }}>
                 {showSelectAll && SelectAllButton}
                 {showSelectNone && SelectNoneButton}
             </Box>
-            <Box flex={1}>
+            <Box
+                sx={{
+                    flex: 1,
+                }}>
                 <List dense>
                     {listBeforeSearch.length > 0 && listAfterSearch.length === 0 && search && (
                         <ListItem>

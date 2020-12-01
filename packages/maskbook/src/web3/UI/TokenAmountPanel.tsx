@@ -117,7 +117,6 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                     ? amountForUI
                     : formatBalance(new BigNumber(amountForUI), token?.decimals ?? 0, MAX_AMOUNT_LENGTH - 2)
             }
-            variant="outlined"
             onChange={onChange}
             InputProps={{
                 inputProps: {
@@ -136,14 +135,19 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                 endAdornment: token ? (
                     <Box
                         className={classes.token}
-                        display="flex"
-                        flexDirection="column"
-                        justifyContent="center"
-                        alignItems="flex-end">
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'flex-end',
+                        }}>
                         <Typography className={classes.balance} color="textSecondary" variant="body2" component="span">
                             Balance: {formatBalance(new BigNumber(balance), token.decimals ?? 0, 6)}
                         </Typography>
-                        <Box display="flex">
+                        <Box
+                            sx={{
+                                display: 'flex',
+                            }}>
                             {balance !== '0' ? (
                                 <Chip
                                     className={classes.max}
@@ -160,10 +164,12 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                 ) : (
                     <Box
                         className={classes.token}
-                        display="flex"
-                        flexDirection="column"
-                        justifyContent="center"
-                        alignItems="flex-end">
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'flex-end',
+                        }}>
                         <Typography className={classes.balance} color="textSecondary" variant="body2" component="span">
                             -
                         </Typography>

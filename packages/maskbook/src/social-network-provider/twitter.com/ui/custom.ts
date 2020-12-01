@@ -141,7 +141,7 @@ const useInjectedDialogClassesOverwrite = makeStyles((theme) =>
             display: 'flex',
             alignItems: 'center',
             padding: '10px 15px',
-            borderBottom: `1px solid ${theme.palette.type === 'dark' ? '#2f3336' : '#ccd6dd'}`,
+            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#ccd6dd'}`,
             '& > h2': {
                 display: 'inline-block',
                 whiteSpace: 'nowrap',
@@ -179,7 +179,7 @@ const useInjectedDialogClassesOverwrite = makeStyles((theme) =>
             },
         },
         dialogBackdropRoot: {
-            backgroundColor: theme.palette.type === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
         },
     }),
 )

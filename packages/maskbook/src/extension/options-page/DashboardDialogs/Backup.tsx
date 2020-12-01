@@ -67,7 +67,13 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
                 primary={t('backup_database')}
                 secondary={t('dashboard_backup_database_hint')}
                 footer={
-                    <Box className={classes.root} display="flex" flexDirection="column" alignItems="center">
+                    <Box
+                        className={classes.root}
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}>
                         <DatabasePreviewCard
                             classes={{ table: classes.dashboardPreviewCardTable }}
                             dense
@@ -198,10 +204,17 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
             footer={
                 <Box
                     className={classNames(classes.root, selectBackupClasses.root)}
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center">
-                    <Box display="flex" flexDirection="column" style={{ width: '100%' }}>
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}>
+                    <Box
+                        style={{ width: '100%' }}
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                        }}>
                         <AbstractTab {...tabProps}></AbstractTab>
                     </Box>
                     <ActionButton
@@ -298,7 +311,13 @@ function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackupProps) 
                     : t('set_up_restore_confirmation_hint')
             }
             footer={
-                <Box className={classes.root} display="flex" flexDirection="column" alignItems="center">
+                <Box
+                    className={classes.root}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}>
                     <DatabasePreviewCard
                         classes={{
                             table: classNames(

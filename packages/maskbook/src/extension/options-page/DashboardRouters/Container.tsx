@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => {
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center center',
             backgroundImage: `url(${getUrl(
-                theme.palette.type === 'light' ? 'dashboard-placeholder.png' : 'dashboard-placeholder-dark.png',
+                theme.palette.mode === 'light' ? 'dashboard-placeholder.png' : 'dashboard-placeholder-dark.png',
             )})`,
             [theme.breakpoints.down('sm')]: {
                 backgroundSize: '100px 70px',
@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => {
             fontSize: 40,
             lineHeight: 1.2,
             [theme.breakpoints.down('sm')]: {
-                color: theme.palette.type === 'light' ? theme.palette.common.white : theme.palette.text.primary,
+                color: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.text.primary,
                 left: 0,
                 right: 0,
                 pointerEvents: 'none',
@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme) => {
             },
         },
         FloatingIcon: {
-            color: theme.palette.type === 'light' ? theme.palette.common.white : theme.palette.text.primary,
+            color: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.text.primary,
             padding: theme.spacing(1),
             fontSize: '2.5rem',
         },
@@ -134,7 +134,7 @@ const useStyles = makeStyles((theme) => {
         divider: {
             borderColor: theme.palette.divider,
             [theme.breakpoints.down('sm')]: {
-                display: theme.palette.type === 'light' ? 'none' : 'block',
+                display: theme.palette.mode === 'light' ? 'none' : 'block',
             },
         },
         dividerPadded: {

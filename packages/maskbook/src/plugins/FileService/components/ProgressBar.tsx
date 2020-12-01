@@ -56,7 +56,10 @@ export const ProgressBar: React.FC<Props> = (props) => {
                 <Duration value={remaining} />
                 <span>{completion}</span>
             </Typography>
-            <Box width="100%">
+            <Box
+                sx={{
+                    width: '100%',
+                }}>
                 <LinearProgress variant={variant} value={value} />
             </Box>
         </Box>

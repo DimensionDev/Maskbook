@@ -219,7 +219,12 @@ export function SearchResultView(props: SearchResultViewProps) {
                     </Linking>
                 }
                 title={
-                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                        }}>
                         <Typography variant="h6">
                             <Linking href={first(coin.home_urls)}>{coin.symbol.toUpperCase()}</Linking>
                             <span>{` / ${currency.name}`}</span>

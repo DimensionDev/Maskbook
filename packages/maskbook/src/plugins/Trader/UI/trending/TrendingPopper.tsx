@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import type PopperJs from 'popper.js'
+import type { Instance } from '@popperjs/core'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@material-ui/core'
 import { useLocation, useWindowScroll } from 'react-use'
 import { PluginTraderMessages } from '../../messages'
@@ -14,7 +14,7 @@ export interface TrendingPopperProps {
 }
 
 export function TrendingPopper(props: TrendingPopperProps) {
-    const popperRef = useRef<PopperJs | null>(null)
+    const popperRef = useRef<Instance | null>(null)
     const [freezed, setFreezed] = useState(false) // disable any click
     const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
@@ -94,7 +94,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
                             {props.children?.(name, availableProviders, () =>
-                                setTimeout(() => popperRef.current?.scheduleUpdate(), 100),
+                                setTimeout(() => popperRef.current?.update(), 100),
                             )}
                         </div>
                     </Fade>

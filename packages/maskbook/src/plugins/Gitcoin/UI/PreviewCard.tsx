@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) =>
             '& > *': { overflow: 'hidden' },
         },
         infoArea: {
-            background: theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgb(232, 255, 246)',
+            background: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgb(232, 255, 246)',
             flex: 1,
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme: Theme) =>
             color: 'rgb(0, 154, 87)',
         },
         secondaryArea: {
-            color: theme.palette.type === 'dark' ? '#BDBDBD' : theme.palette.common.black,
+            color: theme.palette.mode === 'dark' ? '#BDBDBD' : theme.palette.common.black,
         },
     }),
 )
