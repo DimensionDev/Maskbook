@@ -28,9 +28,14 @@ export interface SNS {
     composeImageSelector: string
 
     /**
-     * the editor node in native composing view
+     * the in-page edtior node in native composing view
      */
     composeEditorSelector: string
+
+    /**
+     * the dialog editor node in native composing view
+     */
+    composeDialogEditorSelector: string
 
     /**
      * a node indicate current page is a profile page

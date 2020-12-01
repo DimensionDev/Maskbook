@@ -11,6 +11,7 @@ class Facebook implements SNS {
     composeButtonSelector = '#feedx_sprouts_container textarea'
     composeImageSelector = '#feedx_sprouts_container .fbScrollableArea img'
     composeEditorSelector = '#feedx_sprouts_container textarea, #feedx_sprouts_container [contenteditable="true"]'
+    composeDialogEditorSelector = ''
     profileSelector = '#profile_timeline_intro_card'
     bioTextareaSelector = 'textarea[name="bio"]'
     commentInputSelector = '.userContentWrapper form.commentable_item form [contenteditable="true"]'
