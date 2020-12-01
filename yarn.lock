@@ -1293,10 +1293,10 @@
     memorize-decorator "^0.2.2"
     tslib "^2.0.3"
 
-"@dimensiondev/kit@0.0.0-20201027082807-06026ae":
-  version "0.0.0-20201027082807-06026ae"
-  resolved "https://npm.dimension.im/download/@dimensiondev/kit/0.0.0-20201027082807-06026ae/46f23a0813b777f793fe4d107e8f53387563c629a9e102afb8dc52a0e04b9f86#708d571636574ab5ddafc674750121ba3eea3c40"
-  integrity sha512-9QhBH4U2t/qC3/mrhXa+kGtqIwwAFmkj1npy4w7IvB3WqVh5pKyasuG60kkLsuKSQHgHHkGn8vb/GKtVVsPfsg==
+"@dimensiondev/kit@0.0.0-20201126061915-b58b8f0":
+  version "0.0.0-20201126061915-b58b8f0"
+  resolved "https://npm.dimension.im/download/@dimensiondev/kit/0.0.0-20201126061915-b58b8f0/fd88309d242423a479a6b502b088834b16f8fbc0450e4391522791839054c2c1#dc9ec944cb02afb70ba6c86d66cb07710739efa2"
+  integrity sha512-CX980Fwsk7zLKLpHeqmq9vGGotSMW22jcob6hCPpQ64NUB1EcvX/ZvmGU5doWJgbZuAJrwTLwktE8EPU0znMog==
 
 "@dimensiondev/matrix-js-sdk-type@=1.0.0-20200731085604-dc2de92":
   version "1.0.0-20200731085604-dc2de92"
