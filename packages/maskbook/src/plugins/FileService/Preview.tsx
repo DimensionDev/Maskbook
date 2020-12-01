@@ -1,7 +1,6 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { makeStyles, Paper, Typography } from '@material-ui/core'
 import { DownloadCloud, File } from 'react-feather'
-import { CopyableCode } from './components/Copyable'
 import type { FileInfo } from './types'
 import { useI18N } from '../../utils/i18n-next-ui'
 
@@ -50,11 +49,7 @@ const useStyles = makeStyles((theme) => ({
 export const Preview: React.FC<Props> = ({ info }) => {
     const { t } = useI18N()
     const classes = useStyles()
-    const fileKey = info.key ? (
-        <Typography component="p" color="textPrimary">
-            {t('plugin_file_service_file_key')} <CopyableCode className={classes.code}>{info.key}</CopyableCode>
-        </Typography>
-    ) : (
+    const fileKey = info.key ? null : (
         <Typography component="p" color="textSecondary">
             {t('plugin_file_service_unencrypted')}
         </Typography>
