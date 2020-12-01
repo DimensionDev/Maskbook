@@ -178,7 +178,7 @@
     "@types/puppeteer": "^5.4.0",
     "@types/webpack": "^4.41.24",
     "@types/webpack-dev-server": "^3.11.1",
-    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.8.1",
     "babel-loader": "^8.1.0",
     "chrome-launcher": "^0.13.4",
