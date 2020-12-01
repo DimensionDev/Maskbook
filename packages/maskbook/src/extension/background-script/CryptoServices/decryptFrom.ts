@@ -25,13 +25,15 @@ import { MaskMessage } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
 import { calculatePostKeyPartition } from '../../../network/gun/version.2/hash'
 
-type Progress =
-    | {
-          type: 'progress'
-          progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post'
-          internal: boolean
-      }
-    | { type: 'progress'; progress: 'intermediate_success'; data: Success; internal: boolean }
+type Progress = (
+    | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
+    | { progress: 'intermediate_success'; data: Success }
+    | { progress: 'iv_decrypted'; iv: string }
+) & {
+    type: 'progress'
+    /** if this is true, this progress should not cause UI change. */
+    internal: boolean
+}
 type DebugInfo = {
     debug: 'debug_finding_hash'
     hash: [string, string]
@@ -40,6 +42,7 @@ type DebugInfo = {
 type SuccessThrough = 'author_key_not_found' | 'post_key_cached' | 'normal_decrypted'
 type Success = {
     type: 'success'
+    iv: string
     content: TypedMessage
     rawContent: string
     through: SuccessThrough[]
@@ -58,11 +61,13 @@ type ReturnOfDecryptPostContentWithProgress = AsyncGenerator<Failure | Progress 
 const successDecryptionCache = new Map<string, Success>()
 const makeSuccessResultF = (
     cacheKey: string,
+    iv: string,
     cryptoProvider: typeof cryptoProviderTable[keyof typeof cryptoProviderTable],
 ) => (rawEncryptedContent: string, through: Success['through']): Success => {
     const success: Success = {
         rawContent: rawEncryptedContent,
         through,
+        iv,
         content: cryptoProvider.typedMessageParse(rawEncryptedContent),
         type: 'success',
         internal: false,
@@ -72,7 +77,7 @@ const makeSuccessResultF = (
 }
 
 function makeProgress(
-    progress: Exclude<Progress['progress'], 'intermediate_success'> | Success,
+    progress: Exclude<Progress['progress'], 'intermediate_success' | 'iv_decrypted'> | Success,
     internal = false,
 ): Progress {
     if (typeof progress === 'string') return { type: 'progress', progress, internal }
@@ -132,9 +137,10 @@ async function* decryptFromPayloadWithProgress_raw(
     if (version === -40 || version === -39 || version === -38) {
         const { encryptedText, iv, version } = data
         const cryptoProvider = cryptoProviderTable[version]
-        const makeSuccessResult = makeSuccessResultF(cacheKey, cryptoProvider)
+        const makeSuccessResult = makeSuccessResultF(cacheKey, iv, cryptoProvider)
         const ownersAESKeyEncrypted = data.version === -38 ? data.AESKeyEncrypted : data.ownersAESKeyEncrypted
 
+        yield { type: 'progress', progress: 'iv_decrypted', iv: iv, internal: true }
         // ? Early emit the cache.
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, author)
         if (cachedPostResult) {

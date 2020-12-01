@@ -20,6 +20,7 @@ export const DecryptPostAwaiting = memo(function DecryptPostAwaiting(props: Decr
         finding_person_public_key: t('decrypted_postbox_decrypting_finding_person_key'),
         init: t('decrypted_postbox_decrypting'),
         decode_post: t('decrypted_postbox_decoding'),
+        iv_decrypted: t('decrypted_postbox_decoding'),
         intermediate_success: 'unreachable case. it should display success UI',
         undefined: t('decrypted_postbox_decrypting'),
     } as const

@@ -147,6 +147,7 @@ storiesOf('Injections', module)
                             data: {
                                 content: makeTypedMessageText(msg),
                                 rawContent: '',
+                                iv: '',
                                 through: [],
                                 type: 'success',
                                 internal: false,
