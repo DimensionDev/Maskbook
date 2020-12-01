@@ -2,7 +2,7 @@
 
 ## Feature Set
 
-- [ ] Create ITO packet 
+- [ ] Create ITO packet
 
 ## Related discussion
 
