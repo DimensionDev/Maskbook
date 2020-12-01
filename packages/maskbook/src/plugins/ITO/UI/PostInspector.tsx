@@ -5,5 +5,5 @@ export interface PostInspectorProps {
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    return <h1>Post Inspector</h1>
+    return <pre>{JSON.stringify(props.payload, null, 2)}</pre>
 }
