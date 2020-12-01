@@ -17,29 +17,75 @@ export class Ito extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
     clone(): Ito
     methods: {
-        totalSupply(): TransactionObject<string>
+        check_availability(
+            id: string | number[],
+        ): TransactionObject<{
+            token_address: string
+            balance: string
+            total: string
+            claimed: string
+            expired: boolean
+            ifclaimed: boolean
+            0: string
+            1: string
+            2: string
+            3: string
+            4: boolean
+            5: boolean
+        }>
 
-        balances(arg0: string): TransactionObject<string>
+        claim(
+            id: string | number[],
+            password: string,
+            _recipient: string,
+            validation: string | number[],
+        ): TransactionObject<string>
 
-        maximumFee(): TransactionObject<string>
+        contract_creator(): TransactionObject<string>
 
-        _totalSupply(): TransactionObject<string>
+        destruct(id: string | number[]): TransactionObject<void>
 
-        balanceOf(_owner: string): TransactionObject<string>
+        fill_pool(
+            _hash: string | number[],
+            _number: number | string,
+            _duration: number | string,
+            _exchange_addrs: string[],
+            _ratios: (number | string)[],
+            _token_addr: string,
+            _total_tokens: number | string,
+        ): TransactionObject<void>
 
-        owner(): TransactionObject<string>
+        toBytes(a: string): TransactionObject<string>
 
-        transfer(_to: string, _value: number | string): TransactionObject<void>
-
-        basisPointsRate(): TransactionObject<string>
-
-        transferOwnership(newOwner: string): TransactionObject<void>
+        validRange(size: number | string, data: number | string): TransactionObject<boolean>
     }
     events: {
-        Transfer: ContractEvent<{
-            from: string
-            to: string
-            value: string
+        ClaimSuccess: ContractEvent<{
+            id: string
+            claimer: string
+            claimed_value: string
+            token_address: string
+            0: string
+            1: string
+            2: string
+            3: string
+        }>
+        CreationSuccess: ContractEvent<{
+            total: string
+            id: string
+            creator: string
+            creation_time: string
+            token_address: string
+            0: string
+            1: string
+            2: string
+            3: string
+            4: string
+        }>
+        RefundSuccess: ContractEvent<{
+            id: string
+            token_address: string
+            remaining_balance: string
             0: string
             1: string
             2: string
