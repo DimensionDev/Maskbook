@@ -270,7 +270,7 @@ export function CreatePersona() {
                         inputProps={{
                             'data-testid': 'username_input',
                         }}
-                        variant="standard"
+                        variant="outlined"
                     />
                 </>
             }
@@ -588,7 +588,7 @@ export function RestoreDatabaseAdvance() {
                             inputProps={{
                                 'data-testid': 'username_input',
                             }}
-                            variant="standard"
+                            variant="outlined"
                         />
                         <TextField
                             value={mnemonicWordsValue}
@@ -598,7 +598,7 @@ export function RestoreDatabaseAdvance() {
                             inputProps={{
                                 'data-testid': 'mnemonic_input',
                             }}
-                            variant="standard"
+                            variant="outlined"
                         />
                         <TextField
                             onChange={(e) => setPassword(e.target.value)}
@@ -607,7 +607,7 @@ export function RestoreDatabaseAdvance() {
                             inputProps={{
                                 'data-testid': 'password_input',
                             }}
-                            variant="standard"
+                            variant="outlined"
                         />
                     </>
                 ),
@@ -627,7 +627,7 @@ export function RestoreDatabaseAdvance() {
                             style: { height: 147 },
                             'data-testid': 'base64_input',
                         }}
-                        variant="standard"
+                        variant="outlined"
                     />
                 ),
                 display: 'flex',

@@ -68,7 +68,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                                         createPersonaAndNext()
                                     }
                                 }}
-                                variant="standard"
+                                variant="outlined"
                             />
                         </form>
                     </>
@@ -134,7 +134,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                             inputProps={{
                                 'data-testid': 'username_input',
                             }}
-                            variant="standard"
+                            variant="outlined"
                         />
                         <TextField
                             value={mnemonicWordsValue}
@@ -144,7 +144,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                             inputProps={{
                                 'data-testid': 'mnemonic_input',
                             }}
-                            variant="standard"
+                            variant="outlined"
                         />
                         <TextField
                             onChange={(e) => setPassword(e.target.value)}
@@ -153,7 +153,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                             inputProps={{
                                 'data-testid': 'password_input',
                             }}
-                            variant="standard"
+                            variant="outlined"
                         />
                     </>
                 ),
@@ -171,7 +171,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                         placeholder={t('dashboard_paste_database_base64_hint')}
                         onChange={(e) => setBase64Value(e.target.value)}
                         value={base64Value}
-                        variant="standard"></TextField>
+                        variant="outlined"></TextField>
                 ),
                 display: 'flex',
                 p: 0,

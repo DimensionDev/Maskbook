@@ -56,7 +56,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                                 fullWidth
                                 label="Metadata Key"
                                 margin="normal"
-                                variant="standard"
+                                variant="outlined"
                             />
                         )}
                     />
@@ -72,7 +72,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                         autoCorrect="off"
                         error={isInvalid}
                         helperText={<span style={{ whiteSpace: 'pre-wrap' }}>{result}</span>}
-                        variant="standard"
+                        variant="outlined"
                     />
                 </form>
             </CardContent>

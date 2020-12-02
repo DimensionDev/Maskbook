@@ -147,7 +147,7 @@ export function DashboardContactSearchDialog(props: WrappedDialogProps<{ onSearc
                                     searchText()
                                 }
                             }}
-                            variant="standard"
+                            variant="outlined"
                         />
                     </form>
                 }
