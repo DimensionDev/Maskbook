@@ -42,6 +42,7 @@ import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/PluginUI'
 import { ErrorBoundary, withErrorBoundary } from '../../components/shared/ErrorBoundary'
+import { sleep, timeout } from '../../utils/utils'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.mode === 'dark'
@@ -114,6 +115,17 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
+async function fetchPersona() {
+    while (true) {
+        try {
+            return await timeout(Services.Identity.queryMyPersonas(), 2000)
+        } catch {
+            await sleep(500)
+            continue
+        }
+    }
+}
+
 function DashboardUI() {
     const { t } = useI18N()
     const classes = useStyles()
@@ -131,7 +143,7 @@ function DashboardUI() {
     const { loading, error } = useAsync(async () => {
         if (process.env.target === 'E2E' && location.hash.includes('noredirect=true')) return
         if (location.hash.includes(SetupStep.ConsentDataCollection)) return
-        const personas = (await Services.Identity.queryMyPersonas()).filter((x) => !x.uninitialized)
+        const personas = (await fetchPersona()).filter((x) => !x.uninitialized)
         // the user need setup at least one persona
         if (!personas.length) {
             history.replace(`${DashboardRoute.Setup}/${SetupStep.CreatePersona}`)
