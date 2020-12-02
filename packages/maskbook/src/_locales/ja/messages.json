@@ -342,7 +342,6 @@
     "plugin_gitcoin_insufficient_balance": "",
     "plugin_gitcoin_donate": "",
     "plugin_file_service_display_name": "プラグイン: ファイル共有",
-    "plugin_file_service_file_key_copied": "ファイルの鍵がコピーされました",
     "plugin_file_service_on_insert": "ファイルを使用する",
     "plugin_file_service_uploading_preparing": "準備中",
     "plugin_file_service_uploading_estimating_time": "転送時間を計算中...",
