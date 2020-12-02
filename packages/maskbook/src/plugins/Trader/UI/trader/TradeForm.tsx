@@ -32,8 +32,8 @@ const useStyles = makeStyles((theme) => {
             margin: `${theme.spacing(1)}px auto`,
         },
         divider: {
-            marginTop: theme.spacing(-0.5),
-            marginBottom: theme.spacing(-1),
+            marginTop: theme.spacing(1.5),
+            marginBottom: theme.spacing(1),
         },
         status: {
             display: 'flex',

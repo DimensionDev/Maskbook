@@ -167,7 +167,7 @@ export function Trader(props: TraderProps) {
     const tradeCached_ = useRef<TradeComputed<unknown> | null>(tradeComputed)
     useEffect(() => {
         if (freezed) tradeCached_.current = tradeComputed
-    }, [freezed])
+    }, [freezed /* update trade computed if the update button was clicked */])
 
     // the real tread for UI
     const trade = freezed ? tradeCached_.current : tradeComputed
