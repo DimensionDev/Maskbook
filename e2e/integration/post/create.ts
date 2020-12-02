@@ -67,7 +67,7 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
 
                 // click the hint button open maskbook post composing view
                 const hintButton = await snsFeedPage.waitForFunction(
-                    `document.querySelector('${sns.postDialogHintSelector}').shadowRoot.querySelector('[data-testid="hint_button"]')`,
+                    `document.querySelector('${sns.postDialogHintSelector}').shadowRoot.querySelector('button')`,
                 )
                 await (hintButton as any).click()
                 await snsFeedPage.waitForTimeout(500)
@@ -117,7 +117,9 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                 await snsFeedPage.waitForTimeout(5000)
 
                 // validate text
-                const payloadTextarea = await snsFeedPage.waitForSelector(sns.composeEditorSelector)
+                const payloadTextarea = await snsFeedPage.waitForSelector(
+                    sns.name === 'twitter.com' ? sns.composeDialogEditorSelector : sns.composeEditorSelector,
+                )
                 const cipherText = await payloadTextarea.evaluate((e) => e.textContent)
                 expect(cipherText?.includes('mask')).toBeTruthy()
 
