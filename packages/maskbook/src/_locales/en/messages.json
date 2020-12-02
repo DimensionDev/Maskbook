@@ -342,7 +342,6 @@
     "plugin_gitcoin_insufficient_balance": "Insufficient {{symbol}} balance",
     "plugin_gitcoin_donate": "Donate",
     "plugin_file_service_display_name": "Plugin: File Service",
-    "plugin_file_service_file_key_copied": "File key copied.",
     "plugin_file_service_on_insert": "Use the file",
     "plugin_file_service_uploading_preparing": "Preparing",
     "plugin_file_service_uploading_estimating_time": "Estimating time…",

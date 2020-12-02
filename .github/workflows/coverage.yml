@@ -8,14 +8,15 @@ on:
 
 jobs:
   type-checking:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Setup Node
         uses: actions/setup-node@v2-beta
-        with:
-          node-version: 14
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -37,14 +38,15 @@ jobs:
       - name: Prettier Checking
         run: yarn prettier --check .
   eslint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Setup Node
         uses: actions/setup-node@v2-beta
-        with:
-          node-version: 14
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -65,14 +67,15 @@ jobs:
           name: eslint
           path: ./reports/junit
   storybook:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Setup Node
         uses: actions/setup-node@v2-beta
-        with:
-          node-version: 14
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"

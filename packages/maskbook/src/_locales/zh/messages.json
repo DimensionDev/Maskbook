@@ -342,7 +342,6 @@
     "plugin_gitcoin_insufficient_balance": "",
     "plugin_gitcoin_donate": "",
     "plugin_file_service_display_name": "插件: 文檔服務",
-    "plugin_file_service_file_key_copied": "已拷貝 FileKey",
     "plugin_file_service_on_insert": "使用此文檔",
     "plugin_file_service_uploading_preparing": "準備上傳……",
     "plugin_file_service_uploading_estimating_time": "正在計算剩餘時間",
