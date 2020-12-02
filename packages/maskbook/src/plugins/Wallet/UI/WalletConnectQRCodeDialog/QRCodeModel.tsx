@@ -1,4 +1,4 @@
-import { Button, createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
+import { createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
 import { useCopyToClipboard } from 'react-use'
 import { QRCode } from '../../../../components/shared/qrcode'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
@@ -34,9 +34,6 @@ export const QRCodeModel: React.FC<{ uri: string }> = ({ uri }) => {
                 {t('plugin_wallet_qr_code_with_wallet_connect')}
             </Typography>
             <QRCode text={uri} options={{ width: 400 }} canvasProps={{ style }} />
-            <Button className={classes.onCopy} color="primary" variant="text" onClick={onCopy}>
-                {t('copy_to_clipboard')}
-            </Button>
         </Grid>
     )
 }
