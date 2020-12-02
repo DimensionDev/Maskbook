@@ -36,7 +36,7 @@ export function resolveTradeProviderName(tradeProvider: TradeProvider) {
         case TradeProvider.UNISWAP:
             return 'Uniswap V2'
         case TradeProvider.ZRX:
-            return 'ZRX (0x)'
+            return '0x'
         default:
             unreachable(tradeProvider)
     }
