@@ -1,7 +1,6 @@
 import { createStyles, makeStyles } from '@material-ui/core'
 import { CoinMarketCapIcon } from '../../../../resources/CoinMarketCapIcon'
 import { unreachable } from '../../../../utils/utils'
-import { resolveDataProviderName } from '../../pipes'
 import { DataProvider } from '../../types'
 
 const useStyles = makeStyles((theme) => {
@@ -23,7 +22,7 @@ export function DataProviderIcon(props: DataProviderIconProps) {
 
     switch (props.provider) {
         case DataProvider.COIN_GECKO:
-            return <span>{resolveDataProviderName(props.provider)}</span>
+            return null
         case DataProvider.COIN_MARKET_CAP:
             return <CoinMarketCapIcon classes={{ root: classes.cmc }} viewBox="0 0 16 16" />
         default:

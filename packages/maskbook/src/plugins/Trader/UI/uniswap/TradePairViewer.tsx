@@ -32,8 +32,8 @@ export function TradePairViewer(props: TradePairViewerProps) {
     const classes = useStyles()
 
     const address = trade.trade_?.route.pairs[0]?.liquidityToken.address
-
     if (!address) return null
+
     return (
         <div className={classes.root}>
             <Link

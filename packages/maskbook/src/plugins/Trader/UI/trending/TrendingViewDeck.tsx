@@ -264,7 +264,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 ) : null}
                 {showTradeProviderIcon ? (
                     <div className={classes.footMenu}>
-                        <Typography className={classes.footnote}>Base on</Typography>
+                        <Typography className={classes.footnote}>Supported by</Typography>
                         <FootnoteMenu
                             options={getEnumAsArray(TradeProvider).map((x) => ({
                                 name: (
