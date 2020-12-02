@@ -20729,10 +20729,10 @@ webpack-dev-server@^3.11.0:
     ws "^6.2.1"
     yargs "^13.3.2"
 
-webpack-extension-manifest-plugin@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/webpack-extension-manifest-plugin/-/webpack-extension-manifest-plugin-0.5.0.tgz#a3e1d1409f9288a37ac38c82cc77bd60eb9e1f0d"
-  integrity sha512-OIfmgA/OKTBpLLu7JvsnI+M+4y+R/SsuXWtwq7lzsGhWGKFI4MYwKSHABRTZBr139Aw/ni+n8pBCA8Fce60FqA==
+webpack-extension-manifest-plugin@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/webpack-extension-manifest-plugin/-/webpack-extension-manifest-plugin-0.6.0.tgz#5fea2b71fa510712d0ecb946784dc7c7672e6dc8"
+  integrity sha512-wDxo7kwBJzCjh5wKq0mJcrRdCpOxVVNsGOruUBJgdonK7S/xVrs9Ni/rUn1dyQ0g4svgx3ykB8X7trcETI0msw==
   dependencies:
     core-js "^3.1.4"
     deepmerge "^4.0.0"
