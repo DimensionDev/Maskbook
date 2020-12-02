@@ -13,6 +13,8 @@ export interface GitcoinGrantMetadata {
     permalink?: string
 }
 const domain = 'https://gitcoin.co/'
+// proxy: https://gitcoin.co/api
+const proxy_api = 'https://d2jqwvolbx4ity.cloudfront.net'
 
 export async function fetchMetadata(url: string): Promise<Result<GitcoinGrantMetadata, readonly [Reason, Error?]>> {
     if (!url.startsWith(domain)) return Err([Reason.InvalidURL] as const)
@@ -44,14 +46,10 @@ export async function fetchMetadata(url: string): Promise<Result<GitcoinGrantMet
 }
 
 async function fetchData(id: string) {
-    const fetchGrant = (id: string) =>
-        fetch(`https://gitcoin.provide.maskbook.com/api/v0.1/grants/${id}/`).then(
-            (x) => x.json() as Promise<GitcoinGrant>,
-        )
-    const fetchGrantReport = (address: string) =>
-        fetch(`https://gitcoin.provide.maskbook.com/api/v0.1/grants/report/?eth_address=${address}`).then(
-            (x) => x.json() as Promise<GitcoinGrantReport>,
-        )
+    const fetchGrant = async (id: string): Promise<GitcoinGrant> =>
+        (await fetch(`${proxy_api}/v0.1/grants/${id}/`)).json()
+    const fetchGrantReport = async (address: string): Promise<GitcoinGrantReport> =>
+        (await fetch(`${proxy_api}/v0.1/grants/report/?eth_address=${address}`)).json()
     try {
         const grant = await fetchGrant(id)
         if (!grant.admin_address) return Err<Error>(new Error('cannot find the admin address'))
