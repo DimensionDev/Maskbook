@@ -376,7 +376,6 @@
     "plugin_trader_table_volume": "取引高（24時間）",
     "plugin_trader_finding_price": "",
     "plugin_trader_error_amount_absence": "",
-    "plugin_trader_error_token_absence": "",
     "plugin_trader_error_insufficient_balance": "",
     "plugin_trader_error_insufficient_lp": "",
     "plugin_trader_settings_data_source_primary": "データーのソース",

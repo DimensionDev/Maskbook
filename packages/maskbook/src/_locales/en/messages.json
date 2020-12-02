@@ -376,7 +376,6 @@
     "plugin_trader_table_volume": "Volume (24h)",
     "plugin_trader_finding_price": "Finding price…",
     "plugin_trader_error_amount_absence": "Enter an amount",
-    "plugin_trader_error_token_absence": "Select a token",
     "plugin_trader_error_insufficient_balance": "Insufficient {{symbol}} balance",
     "plugin_trader_error_insufficient_lp": "Insufficient liquidity for this trade.",
     "plugin_trader_settings_data_source_primary": "Data Source",
