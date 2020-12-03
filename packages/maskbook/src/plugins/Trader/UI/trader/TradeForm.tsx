@@ -1,11 +1,12 @@
 import { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import { noop } from 'lodash-es'
+import BigNumber from 'bignumber.js'
 import { makeStyles, createStyles, Typography, Grid, IconButton } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
+import TuneIcon from '@material-ui/icons/Tune'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import BigNumber from 'bignumber.js'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../../Wallet/messages'
@@ -15,7 +16,6 @@ import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useChainIdValid } from '../../../../web3/hooks/useChainState'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
-import TuneIcon from '@material-ui/icons/Tune'
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { toBips } from '../../helpers'
@@ -222,7 +222,7 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     return (
-        <form className={classes.form} noValidate autoComplete="off">
+        <div className={classes.form}>
             {sections.map(({ key, children }) => (
                 <div className={classNames(classes.section, key === 'divider' ? classes.divider : '')} key={key}>
                     {children}
@@ -308,6 +308,6 @@ export function TradeForm(props: TradeFormProps) {
                     )}
                 </Grid>
             </div>
-        </form>
+        </div>
     )
 }
