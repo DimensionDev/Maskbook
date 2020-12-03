@@ -1,6 +1,6 @@
 import { createStyles, makeStyles, MenuProps, InputLabel, TextField, InputAdornment, Box } from '@material-ui/core'
 import { v4 as uuid } from 'uuid'
-import { useState, useCallback, ChangeEvent } from 'react'
+import { useState, useCallback, ChangeEvent, useMemo } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -15,6 +15,10 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useCreateCallback } from '../hooks/useCreateCallback'
 
 import { ITOTokenSelect } from './ITOSelect'
+import { useConstant } from '../../../web3/hooks/useConstant'
+import { ITO_CONSTANTS } from '../constants'
+import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -88,18 +92,8 @@ export function ITOForm(props: ITOFormProps) {
     const [eth, setEth] = useState('0')
 
     const [amount, setAmount] = useState('0')
-    const onAmountChange = useCallback(
-        (amount) => {
-            console.log(amount)
-            /*
-        setAmount(amount)
-        setEth(new BigNumber(amount).dividedBy(ratio))
-        */
-        },
-        [amount],
-    )
 
-    const [allocationPerWallet, setAllocationPerWallet] = useState<number | ''>('1')
+    const [allocationPerWallet, setAllocationPerWallet] = useState<number | ''>('')
     const onAllocationPerWalletChange = useCallback(
         (ev: ChangeEvent<HTMLInputElement>) => {
             const allocationPerWallet_ = ev.currentTarget.value.replace(/[,].]/g, '')
@@ -116,6 +110,25 @@ export function ITOForm(props: ITOFormProps) {
     )
 
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
+    const ITOContractAddress = useConstant(ITO_CONSTANTS, 'HAPPY_ITO_ADDRESS')
+    const [approveState, approveCallback] = useERC20TokenApproveCallback(
+        fromToken?.type === EthereumTokenType.ERC20 ? fromToken.address : '',
+        amount,
+        ITOContractAddress,
+    )
+
+    const onApprove = useCallback(async () => {
+        if (approveState !== ApproveState.NOT_APPROVED) {
+            return
+        }
+        await approveCallback()
+    }, [approveState, approveCallback])
+
+    const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
+    console.log('*******************')
+    console.log(approveRequired)
+    console.log(ApproveState.PENDING)
+    console.log('*********************')
 
     const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback({
         password: uuid(),
@@ -128,6 +141,26 @@ export function ITOForm(props: ITOFormProps) {
         total: allocationPerWallet,
         ratio,
     })
+
+    const validationMessage = useMemo(() => {
+        if (!fromToken) {
+            return 'Select from token'
+        }
+        if (!toToken) {
+            return 'select to token'
+        }
+
+        if (new BigNumber(ratio || '0').isZero()) {
+            return 'Enter swap ratio'
+        }
+        if (new BigNumber(amount).isZero()) {
+            return 'Enter amount'
+        }
+        if (new BigNumber(alloctionPerWallet || '0').isZero()) {
+            return 'Enter allocation per wallet'
+        }
+        return ''
+    }, [fromToken, toToken])
 
     return (
         <>
@@ -163,9 +196,9 @@ export function ITOForm(props: ITOFormProps) {
                     amount={amount}
                     balance={tokenBalance}
                     token={fromToken}
-                    onAmountChange={onAmountChange}
+                    onAmountChange={setAmount}
                     textFieldProps={{
-                        helperText: 'fdasfdafafa',
+                        helperText: `You meight get ${eth} ${toToken?.symbo}`,
                     }}
                 />
             </div>
@@ -176,7 +209,8 @@ export function ITOForm(props: ITOFormProps) {
                     required
                     fullWidth
                     type="text"
-                    value={allocationPerWallet}
+                    onChange={onAllocationPerWalletChange}
+                    defaultValue="1"
                     InputProps={{
                         inputProps: {
                             autoComplet: 'off',
@@ -218,6 +252,21 @@ export function ITOForm(props: ITOFormProps) {
             {!account || !chainIdValid ? (
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" onClick={onConnect}>
                     Connect a Wallet
+                </ActionButton>
+            ) : approveRequired ? (
+                <ActionButton
+                    className={classes.button}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    disabled={approveState === ApproveState.PENDING}
+                    onClick={onApprove}>
+                    {approveState === ApproveState.NOT_APPROVED ? `Approve ${fromToken.symbol}` : ''}
+                    {approveState === ApproveState.PENDING ? `Approve... ${fromToken.symbol}` : ''}
+                </ActionButton>
+            ) : validationMessage ? (
+                <ActionButton className={classes.button} fullWidth variant="contained" disabled>
+                    {validationMessage}
                 </ActionButton>
             ) : (
                 <ActionButton className={classes.button} fullWidth onClick={createCallback}>
