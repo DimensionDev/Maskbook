@@ -95,6 +95,7 @@ export function resolveZrxTradePoolName(swapSource: ZrxTradePool) {
         [ZrxTradePool.SnowSwap]: 'SnowSwap',
         [ZrxTradePool.SushiSwap]: 'SushiSwap',
         [ZrxTradePool.Dodo]: 'DODO',
+        [ZrxTradePool.CryptoCom]: 'CryptoCom',
     }
     return SWAP_SOURCE_NAME_MAP[swapSource]
 }

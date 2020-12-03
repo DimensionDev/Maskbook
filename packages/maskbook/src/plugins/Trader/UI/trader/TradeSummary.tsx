@@ -178,7 +178,11 @@ export function TradeSummary(props: TradeSummaryProps) {
             children: (
                 <Typography className={classes.title}>
                     {(trade_?.sources ?? [])
-                        .filter((x) => x.proportion !== '0')
+                        .filter(
+                            (x) =>
+                                x.proportion !== '0' &&
+                                new BigNumber(x.proportion).isGreaterThan(new BigNumber('0.00001')),
+                        )
                         .sort((a, z) => (new BigNumber(a.proportion).isGreaterThan(z.proportion) ? -1 : 1))
                         .slice(0, 3)
                         .map(
