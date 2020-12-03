@@ -43,7 +43,6 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          sudo chown -R 1000:1000 "/tmp/.npm-cache-1000/v6"
           npm config set cache /tmp/.npm-cache-1000/v6
           npm ci
 
