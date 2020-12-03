@@ -22,6 +22,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: sudo npm i -g npm@7
+      - run: sudo chown -R 1000:1000 "/tmp/.npm-cache-1000/v6"
       - run: npm ci
       - run: npx prettier --check .
       - run: npx tsc --noEmit
