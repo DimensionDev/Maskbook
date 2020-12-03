@@ -2,7 +2,10 @@ import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 
 export function formatPercentage(value: BigNumber) {
-    return `${value.multipliedBy(100).toFixed(2).replace(/0+$/, '')}%`
+    return `${value
+        .multipliedBy(100)
+        .toFixed(2)
+        .replace(/\.?0+$/, '')}%`
 }
 
 export function formatPrice(price: BigNumber, decimalPlaces: number = 6) {
