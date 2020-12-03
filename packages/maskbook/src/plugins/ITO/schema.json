@@ -1,62 +1,8 @@
 {
     "type": "object",
     "additionalProperties": true,
-    "properties": {
-        "contract_version": {
-            "type": "number",
-            "title": "contract_version"
-        },
-        "contract_address": {
-            "type": "string",
-            "title": "contract_address"
-        },
-        "rpid": {
-            "type": "string",
-            "title": "rpid"
-        },
-        "password": {
-            "type": "string",
-            "title": "password"
-        },
-        "sender": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "title": "address"
-                },
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "message": {
-                    "type": "string",
-                    "title": "message",
-                }
-            },
-            "requried": ["address", "message", "name"],
-            "title": "sender"
-        },
-        "total": {
-            "type": "number",
-            "title": "total"
-        },
-        "duration": {
-            "type": "number",
-            "title": "duration"
-        },
-        "network": {
-            "enum": ["Mainnet", "Rinkey", "repsten"],
-            "type": "string",
-            "title": "network"
-        },
-        "from_token_type": {
-            "enum": [0, 1, 2],
-            "type": "number",
-            "title": "from_token_type"
-        },
-        "from_token": {
+    "definitions": {
+        "erc20_token": {
             "type": "object",
             "additionalProperties": true,
             "properties": {
@@ -81,70 +27,91 @@
                     "title": "symbol"
                 }
             },
-            "required": ["address", "decimals", "symbol", "name"],
-            "title": "from_token"
+            "required": ["address", "decimals", "name", "symbol"],
+            "title": "token"
+        }
+    },
+    "properties": {
+        "pid": {
+            "type": "string",
+            "title": "pid"
         },
-        "to_token_type": {
-            "enum": [0, 1, 2],
-            "type": "number",
-            "title": "to_token_type"
+        "password": {
+            "type": "string",
+            "title": "password"
         },
-        "to_token": {
+        "total": {
+            "type": "string",
+            "title": "total"
+        },
+        "sender": {
             "type": "object",
             "additionalProperties": true,
             "properties": {
                 "address": {
-                    "description": "token address",
                     "type": "string",
                     "title": "address"
                 },
                 "name": {
-                    "description": "token name",
                     "type": "string",
                     "title": "name"
                 },
-                "decimals": {
-                    "description": "token decimals",
-                    "type": "number",
-                    "title": "decimals"
-                },
-                "symbol": {
-                    "description": "token symbol",
+                "message": {
                     "type": "string",
-                    "title": "symbol"
+                    "title": "message"
                 }
             },
-            "required": ["address", "decimals", "name", "symbol"],
-            "title": "to_token"
+            "required": ["address", "message", "name"],
+            "title": "sender"
         },
-        "enddate": {
+        "creation_time": {
+            "type": "number",
+            "title": "creation_time"
+        },
+        "duration": {
+            "type": "number",
+            "title": "duration"
+        },
+        "network": {
+            "enum": ["Mainnet", "Rinkeby", "Ropsten"],
             "type": "string",
-            "title": "enddate"
+            "title": "network"
         },
-        "num": {
+        "token_type": {
+            "enum": [0, 1, 2],
             "type": "number",
-            "title": "num"
+            "title": "token_type"
         },
-        "ratio": {
-            "type": "number",
-            "title": "ratio"
+        "token": {
+            "$ref": "#/definitions/erc20_token"
+        },
+        "exchange_ratios": {
+            "type": "array",
+            "title": "exchange_ratios",
+            "description": "A list of exchange ratios",
+            "additionalItems": true,
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "title": "exchange ratio"
+                    }
+                ]
+            }
+        },
+        "exchange_tokens": {
+            "type": "array",
+            "title": "exchange_tokens",
+            "description": "A list of exchange tokens",
+            "additionalItems": true,
+            "items": {
+                "anyOf": [
+                    {
+                        "$ref": "#/definitions/erc20_token"
+                    }
+                ]
+            }
         }
     },
-    "required": [
-        "contract_version",
-        "contract_address",
-        "rpid",
-        "password",
-        "sender",
-        "total",
-        "duration",
-        "network",
-        "from_token_type",
-        "from_token",
-        "to_token_type",
-        "to_token",
-        "enddate",
-        "num",
-        "ratio"
-    ]
+    "required": ["pid", "password", "total", "sender", "creation_time", "duration", "network", "token_type", "exchange_ratios", "exchange_tokens"]
 }
