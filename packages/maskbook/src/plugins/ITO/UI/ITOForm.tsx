@@ -92,7 +92,6 @@ export function ITOForm(props: ITOFormProps) {
     const [eth, setEth] = useState('0')
 
     const [amount, setAmount] = useState('0')
-
     const [allocationPerWallet, setAllocationPerWallet] = useState<number | ''>('')
     const onAllocationPerWalletChange = useCallback(
         (ev: ChangeEvent<HTMLInputElement>) => {

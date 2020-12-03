@@ -19,6 +19,8 @@ import { ITO_PluginDefine } from './ITO/define'
 
 import { ITOPluginDefine } from './ITO/define'
 
+import { ITOPluginDefine } from './ITO/define'
+
 plugins.add(WalletPluginDefine)
 plugins.add(GitcoinPluginDefine)
 plugins.add(RedPacketPluginDefine)
