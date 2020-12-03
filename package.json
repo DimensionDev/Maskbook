@@ -63,7 +63,7 @@
     "@material-ui/icons": "5.0.0-alpha.15",
     "@material-ui/lab": "5.0.0-alpha.18",
     "@material-ui/unstyled": "5.0.0-alpha.17",
-    "@msgpack/msgpack": "^1.12.2",
+    "@msgpack/msgpack": "^2.3.0",
     "@openzeppelin/contracts": "^3.2.0",
     "@servie/events": "^1.0.0",
     "@types/bn.js": "^4.11.6",
