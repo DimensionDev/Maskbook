@@ -23,7 +23,7 @@ import { useBlurContext } from '../../../extension/options-page/DashboardContext
 const useStyles = makeStyles((theme) =>
     createStyles({
         content: {
-            padding: theme.spacing(2, 4),
+            padding: theme.spacing(2, 4, 3),
         },
         footer: {
             fontSize: 12,

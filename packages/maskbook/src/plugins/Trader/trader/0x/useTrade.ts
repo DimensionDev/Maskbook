@@ -5,6 +5,7 @@ import { CONSTANTS } from '../../../../web3/constants'
 import { useBlockNumber, useChainId } from '../../../../web3/hooks/useChainState'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import type { EtherTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
+import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy, ZrxTradePool } from '../../types'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance'
@@ -40,6 +41,7 @@ export function useTrade(
                 getEnumAsArray(ZrxTradePool).map((x) => x.value),
                 pools,
             ),
+            affiliateAddress: ZRX_AFFILIATE_ADDRESS,
         })
     }, [
         ETH_ADDRESS,
