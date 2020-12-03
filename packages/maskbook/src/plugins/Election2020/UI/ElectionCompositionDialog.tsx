@@ -125,14 +125,16 @@ export function ElectionCompositionDialog(props: ElectionCompositionDialogProps)
                         label="Name (Optional)"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        variant="standard"></TextField>
+                        variant="outlined"
+                    />
                 </FormControl>
                 <FormControl className={classes.control}>
                     <TextField
                         label="Message (Optional)"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        variant="standard"></TextField>
+                        variant="outlined"
+                    />
                 </FormControl>
                 <FormControl className={classes.control}>
                     <Box

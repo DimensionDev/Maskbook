@@ -1,12 +1,11 @@
 import { Trade, Percent, JSBI, Fraction, TokenAmount, CurrencyAmount } from '@uniswap/sdk'
-import { useSlippageTolerance } from './useSlippageTolerance'
 import { useMemo } from 'react'
 
 const BASE_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000))
 const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
 const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE)
 
-function tradePriceBreakDown(trade: Trade) {
+function tradePriceBreakdown(trade: Trade) {
     // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
     // e.g. for 3 tokens/2 hops: 1 - ((1-.03) * (1-.03))
     const realizedLPFee = !trade
@@ -37,16 +36,13 @@ function tradePriceBreakDown(trade: Trade) {
     return { priceImpactWithoutFee: priceImpactWithoutFeePercent, realizedLPFee: realizedLPFeeAmount }
 }
 
-export function useComputedTrade(trade: Trade | null) {
-    const slippage = useSlippageTolerance()
+export function useV2TradeBreakdown(trade: Trade | null) {
     return useMemo(() => {
         if (!trade) return null
-        const { priceImpactWithoutFee, realizedLPFee } = tradePriceBreakDown(trade)
+        const { priceImpactWithoutFee, realizedLPFee } = tradePriceBreakdown(trade)
         return {
-            maximumSold: trade.maximumAmountIn(slippage),
-            minimumReceived: trade.minimumAmountOut(slippage),
-            priceImpact: priceImpactWithoutFee,
-            fee: realizedLPFee,
+            priceImpactWithoutFee,
+            realizedLPFee,
         }
-    }, [trade, slippage])
+    }, [trade])
 }

@@ -10,7 +10,7 @@ type KeysInferFromUseStyles<T, OmitKeys extends keyof ReturnType<T> = ''> = keyo
 
 type PropsOf<T> = T extends React.ComponentType<infer U> ? U : never
 
-type EnumRecord<T extends number, U> = {
+type EnumRecord<T extends number | string, U> = {
     [K in T]: U
 }
 

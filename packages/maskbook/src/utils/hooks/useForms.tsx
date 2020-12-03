@@ -14,7 +14,7 @@ export function useTextField(label: string, props?: TextFieldProps) {
             onChange={(e) => setValue(e.currentTarget.value)}
             margin="normal"
             {..._props}
-            variant="standard"
+            variant="outlined"
         />,
     ] as const
 }

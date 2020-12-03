@@ -89,6 +89,7 @@ export enum ChainId {
     Mainnet = 1,
     Ropsten = 3,
     Rinkeby = 4,
+    Gorli = 5,
     Kovan = 42,
 }
 

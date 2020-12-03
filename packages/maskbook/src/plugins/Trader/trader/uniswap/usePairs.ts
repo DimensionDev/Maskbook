@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useAsync } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import { Pair as UniswapPair, Token as UniswapToken, Pair, TokenAmount } from '@uniswap/sdk'
 import { usePairContract } from '../../contracts/uniswap/usePairContract'
 import { useConstant } from '../../../../web3/hooks/useConstant'
@@ -36,7 +36,7 @@ export function useUniswapPairs(tokens: readonly TokenPair[]) {
     const blockNumber = useBlockNumber(chainId)
 
     // get reserves for each pair
-    const { value: results = [] } = useAsync(async () => {
+    const { value: results = [], ...asyncResult } = useAsyncRetry(async () => {
         if (!pairContract) return []
         return Promise.allSettled(
             pairAddresses.map((address) =>
@@ -48,7 +48,7 @@ export function useUniswapPairs(tokens: readonly TokenPair[]) {
         )
     }, [pairAddresses.join(), pairContract, blockNumber])
 
-    return useMemo(() => {
+    const pairs = useMemo(() => {
         if (tokens.length !== results.length) return []
         return results.map((x, i) => {
             const tokenA = tokens[i][0]
@@ -64,4 +64,9 @@ export function useUniswapPairs(tokens: readonly TokenPair[]) {
             ]
         })
     }, [results, tokens])
+
+    return {
+        ...asyncResult,
+        value: pairs,
+    }
 }

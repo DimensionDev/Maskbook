@@ -10,6 +10,7 @@ export const RED_PACKET_CONSTANTS = {
         [ChainId.Ropsten]: '0x26760783c12181efa3c435aee4ae686c53bdddbb',
         [ChainId.Rinkeby]: '0x575f906db24154977c7361c2319e2b25e897e3b6',
         [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
     },
 }
 

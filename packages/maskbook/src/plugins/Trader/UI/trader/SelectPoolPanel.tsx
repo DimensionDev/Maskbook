@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import { difference } from 'lodash-es'
 import { makeStyles, createStyles, Checkbox, FormControlLabel } from '@material-ui/core'
-import { TradePool } from '../../types'
+import { ZrxTradePool } from '../../types'
 import { getEnumAsArray } from '../../../../utils/enum'
-import { resolveTradePoolName } from '../../pipes'
+import { resolveZrxTradePoolName } from '../../pipes'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -21,8 +21,8 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface SelectPoolPanelProps {
-    value: TradePool[]
-    onChange: (value: TradePool[]) => void
+    value: ZrxTradePool[]
+    onChange: (value: ZrxTradePool[]) => void
 }
 
 export function SelectPoolPanel(props: SelectPoolPanelProps) {
@@ -31,23 +31,24 @@ export function SelectPoolPanel(props: SelectPoolPanelProps) {
 
     const onChange = useCallback(
         (ev: React.ChangeEvent<HTMLInputElement>) => {
-            const source = Number.parseInt(ev.target.name, 10) as TradePool
-            props.onChange(value.includes(source) ? difference(value, [source]) : value.concat(source))
+            const pool = ev.target.name as ZrxTradePool
+            props.onChange(value.includes(pool) ? difference(value, [pool]) : value.concat(pool))
         },
         [value, props.onChange],
     )
 
     return (
         <div className={classes.root}>
-            {getEnumAsArray(TradePool).map((source) => (
+            {getEnumAsArray(ZrxTradePool).map((pool) => (
                 <FormControlLabel
                     className={classes.control}
-                    label={resolveTradePoolName(source.value)}
+                    label={resolveZrxTradePoolName(pool.value)}
+                    key={pool.value}
                     control={
                         <Checkbox
                             color="primary"
-                            name={String(source.value)}
-                            checked={value.includes(source.value)}
+                            name={String(pool.value)}
+                            checked={value.includes(pool.value)}
                             onChange={onChange}
                         />
                     }

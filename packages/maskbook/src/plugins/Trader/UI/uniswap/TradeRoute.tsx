@@ -1,9 +1,9 @@
-import type { Trade } from '@uniswap/sdk'
 import { Box, Breadcrumbs, Typography, makeStyles, createStyles, Paper } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import type { TradeStrategy } from '../../types'
+import type { TradeComputed } from '../../types'
+import { formatEthereumAddress } from '../../../Wallet/formatter'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -29,14 +29,13 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface TradeRouteProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    trade: Trade | null
-    strategy: TradeStrategy
+    trade: TradeComputed
 }
 
 export function TradeRoute(props: TradeRouteProps) {
     const classes = useStylesExtends(useStyles(), props)
 
-    const path = props.trade?.route.path
+    const { path } = props.trade
     if (!path || path.length <= 2) return null
     return (
         <Paper className={classes.root} variant="outlined">
@@ -51,7 +50,9 @@ export function TradeRoute(props: TradeRouteProps) {
                             alignItems: 'center',
                         }}>
                         <TokenIcon address={token.address} name={token.name} />
-                        <Typography className={classes.name}>{token.symbol ?? token.name}</Typography>
+                        <Typography className={classes.name}>
+                            {token.symbol ?? token.name ?? formatEthereumAddress(token.address, 2)}
+                        </Typography>
                     </Box>
                 ))}
             </Breadcrumbs>

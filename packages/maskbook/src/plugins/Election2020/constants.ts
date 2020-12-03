@@ -9,5 +9,6 @@ export const ELECTION_2020_CONSTANTS = {
         [ChainId.Ropsten]: '',
         [ChainId.Rinkeby]: '0xdb52de365ad57bf54272e2ea37bb8651b44bb397',
         [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
     },
 }

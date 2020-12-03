@@ -27,7 +27,11 @@ export function SearchResultBox(props: SearchResultBoxProps) {
     if (!name || !dataProviders?.length) return null
     return (
         <div className={classes.root}>
-            <SearchResultView name={name} dataProviders={dataProviders} tradeProviders={[TradeProvider.UNISWAP]} />
+            <SearchResultView
+                name={name}
+                dataProviders={dataProviders}
+                tradeProviders={[TradeProvider.UNISWAP, TradeProvider.ZRX]}
+            />
         </div>
     )
 }

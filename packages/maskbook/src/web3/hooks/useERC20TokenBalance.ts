@@ -12,7 +12,7 @@ export function useERC20TokenBalance(address: string) {
     const chainId = useChainId()
     const erc20Contract = useERC20TokenContract(address)
     return useAsyncRetry(async () => {
-        if (!account || !erc20Contract) return '0'
+        if (!account || !erc20Contract) return undefined
         return erc20Contract.methods.balanceOf(account).call()
     }, [account, chainId /* re-calc when switch the chain */, address, erc20Contract])
 }

@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react'
-import { Button, makeStyles, Theme, createStyles, DialogActions, DialogContent, Typography } from '@material-ui/core'
-import type { Trade } from '@uniswap/sdk'
+import { Button, makeStyles, createStyles, DialogActions, DialogContent, Typography } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
+import type BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import { TradeSummary, TradeSummaryProps } from './TradeSummary'
+import { TradeSummary, TradeSummaryProps } from '../trader/TradeSummary'
 import { TokenPanel } from './TokenPanel'
-import { useComputedTrade } from '../../trader/uniswap/useComputedTrade'
 import { PriceStaleWarnning } from './PriceStaleWarnning'
-import type { TradeStrategy } from '../../types'
+import type { TradeComputed, TradeProvider } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { formatBalance, formatEthereumAddress } from '../../../Wallet/formatter'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         reverseIcon: {
             width: 16,
@@ -35,34 +34,41 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export interface ConfirmDialogUIProps extends withClasses<never> {
-    trade: Trade | null
-    strategy: TradeStrategy
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed
     open: boolean
+    trade: TradeComputed
+    provider: TradeProvider
+    inputToken: EtherTokenDetailed | ERC20TokenDetailed
+    outputToken: EtherTokenDetailed | ERC20TokenDetailed
     onConfirm: () => void
     onClose?: () => void
-    UniswapTradeSummaryProps?: Partial<TradeSummaryProps>
+    TradeSummaryProps?: Partial<TradeSummaryProps>
 }
 
 export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
-    const { t } = useI18N()
-
     const classes = useStylesExtends(useStyles(), props)
-    const { trade, strategy, inputToken, outputToken, open, onConfirm, onClose, UniswapTradeSummaryProps } = props
+    const {
+        open,
+        trade,
+        provider,
+        inputToken,
+        outputToken,
+        onConfirm,
+        onClose,
+        TradeSummaryProps: UniswapTradeSummaryProps,
+    } = props
+    const { inputAmount, outputAmount, minimumReceived } = trade
 
     //#region detect price changing
-    const [executionPrice, setExecutionPrice] = useState(trade?.executionPrice)
+    const [executionPrice, setExecutionPrice] = useState<BigNumber | undefined>(trade.executionPrice)
     useEffect(() => {
         if (open) setExecutionPrice(undefined)
     }, [open])
     useEffect(() => {
-        if (trade && typeof executionPrice === 'undefined') setExecutionPrice(trade.executionPrice)
+        if (typeof executionPrice === 'undefined') setExecutionPrice(trade.executionPrice)
     }, [trade, executionPrice])
     //#endregion
 
-    const computedTrade = useComputedTrade(trade)
-    const staled = !!(trade && executionPrice && !executionPrice.equalTo(trade.executionPrice))
+    const staled = !!(executionPrice && !executionPrice.isEqualTo(trade.executionPrice))
 
     return (
         <>
@@ -70,27 +76,31 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                 <DialogContent>
                     {inputToken && outputToken ? (
                         <>
-                            <TokenPanel amount={trade?.inputAmount.raw.toString() ?? '0'} token={inputToken} />
+                            <TokenPanel amount={inputAmount.toFixed() ?? '0'} token={inputToken} />
                             <ArrowDownwardIcon className={classes.reverseIcon} />
-                            <TokenPanel amount={trade?.outputAmount.raw.toString() ?? '0'} token={outputToken} />
+                            <TokenPanel amount={outputAmount.toFixed() ?? '0'} token={outputToken} />
                         </>
                     ) : null}
                     {staled ? (
                         <PriceStaleWarnning
                             onAccept={() => {
-                                setExecutionPrice(trade?.executionPrice)
+                                setExecutionPrice(trade.executionPrice)
                             }}
                         />
                     ) : null}
                     <Typography
                         className={classes.tip}
-                        color="textSecondary">{`Output is estimated. You will receive at least ${
-                        computedTrade?.minimumReceived.toSignificant(9) ?? '0'
-                    } ${trade?.outputAmount.currency.symbol} or the transaction will revert.`}</Typography>
+                        color="textSecondary">{`Output is estimated. You will receive at least ${formatBalance(
+                        minimumReceived,
+                        outputToken.decimals ?? 0,
+                        9,
+                    )} ${
+                        outputToken.symbol ?? formatEthereumAddress(outputToken.address, 2)
+                    } or the transaction will revert.`}</Typography>
                     <TradeSummary
                         classes={{ root: classes.summary }}
+                        provider={provider}
                         trade={trade}
-                        strategy={strategy}
                         inputToken={inputToken}
                         outputToken={outputToken}
                         {...UniswapTradeSummaryProps}

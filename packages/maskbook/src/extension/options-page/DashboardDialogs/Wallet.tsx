@@ -93,7 +93,7 @@ export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelector
                 autoFocus
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
-                variant="standard"
+                variant="outlined"
             />
             <FixedTokenList
                 classes={{ list: classes.list, placeholder: classes.placeholder }}
@@ -150,7 +150,7 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
                 error={!isValidAddress && !!address}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                variant="standard"
+                variant="outlined"
             />
             <TextField
                 required
@@ -159,21 +159,21 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
                 type="number"
                 inputProps={{ min: 0 }}
                 onChange={(e) => setDecimals(parseInt(e.target.value))}
-                variant="standard"
+                variant="outlined"
             />
             <TextField
                 required
                 label={t('add_token_name')}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                variant="standard"
+                variant="outlined"
             />
             <TextField
                 required
                 label={t('add_token_symbol')}
                 value={symbol}
                 onChange={(e) => setSymbol(e.target.value)}
-                variant="standard"
+                variant="outlined"
             />
         </Box>
     )
@@ -247,7 +247,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                                 label={t('wallet_name')}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                variant="standard"
+                                variant="outlined"
                             />
                         </form>
                         <br />
@@ -309,14 +309,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             label={t('wallet_name')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            variant="standard"
+                            variant="outlined"
                         />
                         <TextField
                             required
                             label={t('mnemonic_words')}
                             value={mnemonic}
                             onChange={(e) => setMnemonic(e.target.value)}
-                            variant="standard"
+                            variant="outlined"
                         />
                     </div>
                 ),
@@ -340,7 +340,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             label={t('wallet_name')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            variant="standard"
+                            variant="outlined"
                         />
                         <TextField
                             type="password"
@@ -348,7 +348,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             label={t('private_key')}
                             value={privKey}
                             onChange={(e) => setPrivKey(e.target.value)}
-                            variant="standard"
+                            variant="outlined"
                         />
                     </div>
                 ),
@@ -466,7 +466,7 @@ export function DashboardWalletShareDialog(props: WrappedDialogProps<WalletProps
                                         </InputAdornment>
                                     ),
                                 }}
-                                variant="standard"
+                                variant="outlined"
                             />
                         </form>
                         <Box

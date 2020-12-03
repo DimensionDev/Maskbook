@@ -1,4 +1,4 @@
-import { Currency, DataProvider, TradeProvider, TradePool } from './types'
+import { Currency, DataProvider, TradeProvider, ZrxTradePool } from './types'
 import { unreachable } from '../../utils/utils'
 
 export function resolveCurrencyName(currency: Currency) {
@@ -12,9 +12,9 @@ export function resolveCurrencyName(currency: Currency) {
 export function resolveDataProviderName(dataProvider: DataProvider) {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
-            return 'Coin Gecko'
+            return 'CoinGecko'
         case DataProvider.COIN_MARKET_CAP:
-            return 'Coin Market Cap'
+            return 'CoinMarketCap'
         default:
             unreachable(dataProvider)
     }
@@ -34,11 +34,9 @@ export function resolveDataProviderLink(dataProvider: DataProvider) {
 export function resolveTradeProviderName(tradeProvider: TradeProvider) {
     switch (tradeProvider) {
         case TradeProvider.UNISWAP:
-            return 'Uniswap'
+            return 'Uniswap V2'
         case TradeProvider.ZRX:
-            return 'ZRX (0x)'
-        case TradeProvider.ONE_INCH:
-            return '1inch'
+            return '0x'
         default:
             unreachable(tradeProvider)
     }
@@ -50,8 +48,17 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider) {
             return 'https://uniswap.org/'
         case TradeProvider.ZRX:
             return 'https://0x.org/'
-        case TradeProvider.ONE_INCH:
-            return 'https://1inch.exchange/'
+        default:
+            unreachable(tradeProvider)
+    }
+}
+
+export function resolveTradePairLink(tradeProvider: TradeProvider, address: string) {
+    switch (tradeProvider) {
+        case TradeProvider.UNISWAP:
+            return `https://info.uniswap.org/pair/${address}`
+        case TradeProvider.ZRX:
+            return ''
         default:
             unreachable(tradeProvider)
     }
@@ -65,27 +72,30 @@ export function resolveDaysName(days: number) {
     return `${days}d`
 }
 
-export function resolveTradePoolName(swapSource: TradePool) {
-    const SWAP_SOURCE_NAME_MAP: EnumRecord<TradePool, string> = {
-        [TradePool.ZRX]: 'ZRX',
-        [TradePool.Uniswap]: 'Uniswap',
-        [TradePool.UniswapV2]: 'Uniswap_V2',
-        [TradePool.Eth2Dai]: 'Eth2Dai',
-        [TradePool.Kyber]: 'Kyber',
-        [TradePool.Curve]: 'Curve',
-        [TradePool.LiquidityProvider]: 'LiquidityProvider',
-        [TradePool.MultiBridge]: 'MultiBridge',
-        [TradePool.Balancer]: 'Balancer',
-        [TradePool.Cream]: 'CREAM',
-        [TradePool.Bancor]: 'Bancor',
-        [TradePool.MStable]: 'mStable',
-        [TradePool.Mooniswap]: 'Mooniswap',
-        [TradePool.MultiHop]: 'MultiHop',
-        [TradePool.Shell]: 'Shell',
-        [TradePool.Swerve]: 'Swerve',
-        [TradePool.SnowSwap]: 'SnowSwap',
-        [TradePool.SushiSwap]: 'SushiSwap',
-        [TradePool.Dodo]: 'DODO',
+export function resolveZrxTradePoolName(swapSource: ZrxTradePool) {
+    const SWAP_SOURCE_NAME_MAP: EnumRecord<ZrxTradePool, string> = {
+        [ZrxTradePool.ZRX]: 'ZRX',
+        [ZrxTradePool.Native]: 'Native',
+        [ZrxTradePool.Mesh]: 'Mesh',
+        [ZrxTradePool.Uniswap]: 'Uniswap',
+        [ZrxTradePool.UniswapV2]: 'Uniswap V2',
+        [ZrxTradePool.Eth2Dai]: 'Eth2Dai',
+        [ZrxTradePool.Kyber]: 'Kyber',
+        [ZrxTradePool.Curve]: 'Curve',
+        [ZrxTradePool.LiquidityProvider]: 'LiquidityProvider',
+        [ZrxTradePool.MultiBridge]: 'MultiBridge',
+        [ZrxTradePool.Balancer]: 'Balancer',
+        [ZrxTradePool.Cream]: 'CREAM',
+        [ZrxTradePool.Bancor]: 'Bancor',
+        [ZrxTradePool.MStable]: 'mStable',
+        [ZrxTradePool.Mooniswap]: 'Mooniswap',
+        [ZrxTradePool.MultiHop]: 'MultiHop',
+        [ZrxTradePool.Shell]: 'Shell',
+        [ZrxTradePool.Swerve]: 'Swerve',
+        [ZrxTradePool.SnowSwap]: 'SnowSwap',
+        [ZrxTradePool.SushiSwap]: 'SushiSwap',
+        [ZrxTradePool.Dodo]: 'DODO',
+        [ZrxTradePool.CryptoCom]: 'CryptoCom',
     }
     return SWAP_SOURCE_NAME_MAP[swapSource]
 }

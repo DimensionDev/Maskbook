@@ -1,5 +1,5 @@
-import { DataProvider } from '../types'
-import { unreachable } from '../../../utils/utils'
+import { DataProvider } from '../../types'
+import { unreachable } from '../../../../utils/utils'
 
 const KEYWORD_ALIAS_MAP: {
     [key in DataProvider]: {

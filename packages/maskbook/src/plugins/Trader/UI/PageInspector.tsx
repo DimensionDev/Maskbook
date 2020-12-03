@@ -17,7 +17,7 @@ export function PageInspector(props: PageInspectorProps) {
             <TrendingView
                 name={name}
                 dataProviders={dataProviders}
-                tradeProviders={[TradeProvider.UNISWAP]}
+                tradeProviders={[TradeProvider.UNISWAP, TradeProvider.ZRX]}
                 onUpdate={reposition}
             />
         )

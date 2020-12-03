@@ -77,7 +77,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
         ['Explorer', trending.coin.blockchain_urls],
         ['Tech Docs', trending.coin.tech_docs_urls],
         ['Source Code', trending.coin.source_code_urls],
-        ['Commnuity', trending.coin.community_urls],
+        ['Community', trending.coin.community_urls],
     ] as [string, string[] | undefined][]
 
     return (

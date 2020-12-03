@@ -21,7 +21,9 @@ const useStyles = makeStyles((theme: Theme) => {
             position: 'relative',
             cursor: ({ stats, coin }: PriceChartProps) => (stats.length && coin?.platform_url ? 'pointer' : 'default'),
         },
-        svg: {},
+        svg: {
+            display: 'block',
+        },
         progress: {
             bottom: theme.spacing(1),
             right: theme.spacing(1),
