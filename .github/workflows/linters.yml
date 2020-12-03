@@ -15,13 +15,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2-beta
-      - run: echo "::set-output name=dir::$(npm get cache)"
-      - run: sudo npm i -g npm@7
       - uses: actions/cache@v2
         with:
-          path: ${{ steps.npm-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-npm-
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: sudo npm i -g npm@7
       - run: npm ci
       - run: npx prettier --check .
       - run: npx tsc -- --noEmitOnError
@@ -41,12 +41,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2-beta
-      - run: echo "::set-output name=dir::$(npm get cache)"
       - uses: actions/cache@v2
         with:
-          path: ${{ steps.npm-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-npm-
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - run: sudo npm i -g npm@7
       - run: npm ci
       - run: npm run build-storybook
