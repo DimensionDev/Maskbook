@@ -1,0 +1,125 @@
+{
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+        "contract_version": {
+            "type": "number",
+            "title": "contract_version"
+        },
+        "contract_address": {
+            "type": "string",
+            "title": "contract_address"
+        },
+        "rpid": {
+            "type": "string",
+            "title": "rpid"
+        },
+        "password": {
+            "type": "string",
+            "title": "password"
+        },
+        "sender": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "title": "address"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "name"
+                },
+                "message": {
+                    "type": "string",
+                    "title": "message",
+                }
+            },
+            "requried": ["address", "message", "name"],
+            "title": "sender"
+        },
+        "total": {
+            "type": "number",
+            "title": "total"
+        },
+        "duration": {
+            "type": "number",
+            "title": "duration"
+        },
+        "network": {
+            "enum": ["Mainnet", "Rinkey", "repsten"],
+            "type": "string",
+            "title": "network"
+        },
+        "from_token_type": {
+            "enum": [0, 1, 2],
+            "type": "number",
+            "title": "from_token_type"
+        },
+        "from_token": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "address": {
+                    "description": "token address",
+                    "type": "string",
+                    "title": "address"
+                },
+                "name": {
+                    "description": "token name",
+                    "type": "string",
+                    "title": "name"
+                },
+                "decimals": {
+                    "description": "token decimal",
+                    "type": "number",
+                    "title": "decimals"
+                },
+                "symbol": {
+                    "description": "token symbol",
+                    "type": "string",
+                    "title": "symbol"
+                },
+                "required": ["address", "decimals", "symbol", "name"],
+                "title": "from_token"
+            }
+        },
+        "to_token_type": [0, 1, 2],
+        "to_token": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "address": {
+                    "description": "token address",
+                    "type": "string",
+                    "title": "address"
+                },
+                "name": {
+                    "description": "token name",
+                    "type": "string",
+                    "title": "name"
+                },
+                "decimals": {
+                    "description": "token decimals",
+                    "type": "number",
+                    "title": "decimals"
+                },
+                "symbol": {
+                    "description": "token symbol",
+                    "type": "string",
+                    "title": "symbol"
+                },
+                "required": ["address", "decimals", "name", "symbol"],
+                "title": "to_token"
+            }
+        },
+        "enddate": {
+            "type": "string",
+            "title": "enddate"
+        },
+        "num": {
+            "type": "number",
+            "title": "num"
+        }
+    }
+}
