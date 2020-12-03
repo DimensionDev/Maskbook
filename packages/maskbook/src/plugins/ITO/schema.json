@@ -79,12 +79,16 @@
                     "description": "token symbol",
                     "type": "string",
                     "title": "symbol"
-                },
-                "required": ["address", "decimals", "symbol", "name"],
-                "title": "from_token"
-            }
+                }
+            },
+            "required": ["address", "decimals", "symbol", "name"],
+            "title": "from_token"
         },
-        "to_token_type": [0, 1, 2],
+        "to_token_type": {
+            "enum": [0, 1, 2],
+            "type": "number",
+            "title": "to_token_type"
+        },
         "to_token": {
             "type": "object",
             "additionalProperties": true,
@@ -108,10 +112,10 @@
                     "description": "token symbol",
                     "type": "string",
                     "title": "symbol"
-                },
-                "required": ["address", "decimals", "name", "symbol"],
-                "title": "to_token"
-            }
+                }
+            },
+            "required": ["address", "decimals", "name", "symbol"],
+            "title": "to_token"
         },
         "enddate": {
             "type": "string",
@@ -120,6 +124,27 @@
         "num": {
             "type": "number",
             "title": "num"
+        },
+        "ratio": {
+            "type": "number",
+            "title": "ratio"
         }
-    }
+    },
+    "required": [
+        "contract_version",
+        "contract_address",
+        "rpid",
+        "password",
+        "sender",
+        "total",
+        "duration",
+        "network",
+        "from_token_type",
+        "from_token",
+        "to_token_type",
+        "to_token",
+        "enddate",
+        "num",
+        "ratio"
+    ]
 }

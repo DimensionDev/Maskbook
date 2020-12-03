@@ -52,4 +52,5 @@ export interface ITOJSONPayload {
     to_token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
     num: number
     enddate: string
+    ratio: number
 }
