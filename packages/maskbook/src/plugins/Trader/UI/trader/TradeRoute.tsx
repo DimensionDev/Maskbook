@@ -44,7 +44,12 @@ export function TradeRoute(props: TradeRouteProps) {
                 classes={{ ol: classes.list, li: classes.item }}
                 separator={<NavigateNextIcon fontSize="small" />}>
                 {path.map((token) => (
-                    <Box key={token.address} display="inline-flex" alignItems="center">
+                    <Box
+                        key={token.address}
+                        sx={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                        }}>
                         <TokenIcon address={token.address} name={token.name} />
                         <Typography className={classes.name}>{token.symbol ?? token.name}</Typography>
                     </Box>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import { makeStyles, createStyles, Card, Typography, Box } from '@material-ui/core'
-import { Skeleton } from '@material-ui/lab'
+import { Skeleton } from '@material-ui/core'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import type { RedPacketJSONPayload } from '../types'
@@ -244,9 +244,15 @@ export function RedPacket(props: RedPacketProps) {
     if (!availability || !tokenDetailed)
         return (
             <Card className={classes.root} component="article" elevation={0}>
-                <Skeleton animation="wave" variant="rect" width={'30%'} height={12} style={{ marginTop: 16 }} />
-                <Skeleton animation="wave" variant="rect" width={'40%'} height={12} style={{ marginTop: 16 }} />
-                <Skeleton animation="wave" variant="rect" width={'70%'} height={12} style={{ marginBottom: 16 }} />
+                <Skeleton animation="wave" variant="rectangular" width={'30%'} height={12} style={{ marginTop: 16 }} />
+                <Skeleton animation="wave" variant="rectangular" width={'40%'} height={12} style={{ marginTop: 16 }} />
+                <Skeleton
+                    animation="wave"
+                    variant="rectangular"
+                    width={'70%'}
+                    height={12}
+                    style={{ marginBottom: 16 }}
+                />
             </Card>
         )
 

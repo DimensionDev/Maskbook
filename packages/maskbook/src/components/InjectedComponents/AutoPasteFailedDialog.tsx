@@ -62,14 +62,11 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     <DialogContentText>{t('auto_paste_failed_dialog_content')}</DialogContentText>
                     {props.data.text ? (
                         <>
-                            <TextField
-                                multiline
-                                fullWidth
-                                variant="outlined"
-                                value={data.text}
-                                InputProps={{ readOnly: true }}
-                            />
-                            <Box marginBottom={1}></Box>
+                            <TextField multiline fullWidth value={data.text} InputProps={{ readOnly: true }} />
+                            <Box
+                                sx={{
+                                    marginBottom: 1,
+                                }}></Box>
                             <Button
                                 variant="contained"
                                 onClick={() => {
@@ -88,13 +85,19 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                             </Button>
                         </>
                     ) : null}
-                    <Box marginBottom={1}></Box>
+                    <Box
+                        sx={{
+                            marginBottom: 1,
+                        }}></Box>
                     <div style={{ textAlign: permission === 'granted' ? 'left' : 'center' }}>
                         {data.image ? (
                             // It must be img
                             <Image component="img" onURL={setURL} src={data.image} width={260} height={180} />
                         ) : null}
-                        <Box marginBottom={1}></Box>
+                        <Box
+                            sx={{
+                                marginBottom: 1,
+                            }}></Box>
                         {permission === 'granted' ? (
                             <Button
                                 variant="contained"

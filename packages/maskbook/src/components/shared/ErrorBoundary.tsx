@@ -1,5 +1,5 @@
 import { Box, Button, IconButton, makeStyles, Typography } from '@material-ui/core'
-import { Alert, AlertTitle } from '@material-ui/lab'
+import { Alert, AlertTitle } from '@material-ui/core'
 import { Component, useMemo, useState } from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ExpandLess from '@material-ui/icons/ExpandLess'
@@ -110,7 +110,10 @@ ${process.env.REMOTE_URL?.toLowerCase()?.includes('DimensionDev') ? '' : process
                     {/* <Button href={emailLink} color="primary" target="_blank">
                         Report by EMail
                     </Button> */}
-                    <Box flex={1}></Box>
+                    <Box
+                        sx={{
+                            flex: 1,
+                        }}></Box>
                     <IconButton color="inherit" size="small" onClick={() => setShowStack((x) => !x)}>
                         {showStack ? <ExpandMore /> : <ExpandLess />}
                     </IconButton>

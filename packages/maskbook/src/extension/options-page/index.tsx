@@ -44,7 +44,7 @@ import { PluginUI } from '../../plugins/PluginUI'
 import { ErrorBoundary, withErrorBoundary } from '../../components/shared/ErrorBoundary'
 
 const useStyles = makeStyles((theme) => {
-    const dark = theme.palette.type === 'dark'
+    const dark = theme.palette.mode === 'dark'
     return createStyles({
         root: {
             '--monospace': 'SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace',

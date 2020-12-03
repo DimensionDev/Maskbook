@@ -22,7 +22,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 import stringify from 'json-stable-stringify'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
-import { merge, cloneDeep, noop } from 'lodash-es'
+import { noop } from 'lodash-es'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { getActivatedUI } from '../../social-network/ui'
 import { currentSetupGuideStatus, SetupGuideCrossContextStatus } from '../../settings/settings'
@@ -34,31 +34,41 @@ import { currentSelectedWalletAddressSettings } from '../../plugins/Wallet/setti
 import { WalletRPC } from '../../plugins/Wallet/messages'
 
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
+import { extendsTheme } from '../../utils/theme'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
     SayHelloWorld = 'say-hello-world',
 }
 //#region wizard dialog
-const wizardTheme = (theme: Theme): Theme =>
-    merge(cloneDeep(theme), {
-        overrides: {
-            MuiOutlinedInput: {
+const wizardTheme = extendsTheme((theme: Theme) => ({
+    components: {
+        MuiOutlinedInput: {
+            styleOverrides: {
                 input: {
-                    paddingTop: 14.5,
-                    paddingBottom: 14.5,
+                    paddingTop: 10.5,
+                    paddingBottom: 10.5,
                 },
                 multiline: {
-                    paddingTop: 14.5,
-                    paddingBottom: 14.5,
+                    paddingTop: 10.5,
+                    paddingBottom: 10.5,
                 },
             },
-            MuiInputLabel: {
+        },
+        MuiInputLabel: {
+            styleOverrides: {
                 outlined: {
                     transform: 'translate(14px, 16px) scale(1)',
                 },
             },
-            MuiTextField: {
+        },
+        MuiTextField: {
+            defaultProps: {
+                fullWidth: true,
+                variant: 'outlined',
+                margin: 'normal',
+            },
+            styleOverrides: {
                 root: {
                     marginTop: theme.spacing(2),
                     marginBottom: 0,
@@ -67,7 +77,12 @@ const wizardTheme = (theme: Theme): Theme =>
                     },
                 },
             },
-            MuiButton: {
+        },
+        MuiButton: {
+            defaultProps: {
+                size: 'medium',
+            },
+            styleOverrides: {
                 root: {
                     '&[hidden]': {
                         visibility: 'hidden',
@@ -81,25 +96,16 @@ const wizardTheme = (theme: Theme): Theme =>
                 },
             },
         },
-        props: {
-            MuiButton: {
-                size: 'medium',
-            },
-            MuiTextField: {
-                fullWidth: true,
-                variant: 'outlined',
-                margin: 'normal',
-            },
-        },
-    })
+    },
+}))
 
 const useWizardDialogStyles = makeStyles((theme) =>
     createStyles({
         root: {
             padding: '56px 20px 48px',
             position: 'relative',
-            boxShadow: theme.palette.type === 'dark' ? 'none' : theme.shadows[4],
-            border: `${theme.palette.type === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
+            boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
+            border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
             borderRadius: 12,
             [theme.breakpoints.down('xs')]: {
                 padding: '35px 20px 16px',
@@ -218,8 +224,14 @@ function ContentUI(props: ContentUIProps) {
     switch (props.dialogType) {
         case SetupGuideStep.FindUsername:
             return (
-                <Box display="block">
-                    <Box display={xsMatch ? 'flex' : 'block'}>
+                <Box
+                    sx={{
+                        display: 'block',
+                    }}>
+                    <Box
+                        sx={{
+                            display: xsMatch ? 'flex' : 'block',
+                        }}>
                         <main className={classes.content}>{props.content}</main>
                         <Hidden only="xs">
                             <div>{props.tip}</div>
@@ -377,9 +389,13 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
             title={t('setup_guide_find_username_title')}
             content={
                 <form>
-                    <Box className={findUsernameClasses.input} display="flex" alignItems="center">
+                    <Box
+                        className={findUsernameClasses.input}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}>
                         <TextField
-                            variant="outlined"
                             label={t('username')}
                             value={username}
                             disabled={!username}

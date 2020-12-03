@@ -41,12 +41,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 children: (
                     <RedPacketForm onCreate={onCreateOrSelect} SelectMenuProps={{ container: PortalShadowRoot }} />
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 label: t('plugin_red_packet_select_existing'),
                 children: <RedPacketBacklogList onSelect={onCreateOrSelect} />,
-                p: 0,
+                sx: { p: 0 },
             },
         ],
         state,

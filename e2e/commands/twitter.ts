@@ -9,15 +9,16 @@ class Twitter implements SNS {
 
     // selectors
     composeButtonSelector = '' // no compose button for twitter
-    composeImageSelector = '[data-testid="primaryColumn"] [data-testid="attachments"] img'
+    composeImageSelector = '#layers [role="dialog"] [data-testid="attachments"] img'
     composeEditorSelector = '[data-testid="primaryColumn"] .DraftEditor-root [data-testid="tweetTextarea_0"]'
+    composeDialogEditorSelector = '#layers [role="dialog"] .DraftEditor-root [data-testid="tweetTextarea_0"]'
     profileSelector = '[data-testid="primaryColumn"]'
     bioTextareaSelector = 'textarea[name="description"]'
     commentInputSelector = '' // no comment form for twitter
 
     // mount point
     setupGuideSelector = 'body > script[nonce] ~ span'
-    postDialogHintSelector = '[data-testid="primaryColumn"] [role="progressbar"] ~ span'
+    postDialogHintSelector = '[data-testid="scheduleOption"] ~ span:last-child'
     postDialogModalSelector = 'body > script[nonce] ~ div'
     postAffixingCanvasSelector = '[role="article"] [data-testid="tweet"] + div > div:first-child ~ span'
     commentSelector = '' // no comment for twitter

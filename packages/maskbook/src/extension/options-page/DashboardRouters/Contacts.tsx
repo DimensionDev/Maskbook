@@ -62,7 +62,6 @@ export default function DashboardContactsRouter() {
         () => [
             <TextField
                 placeholder={t('search')}
-                variant="outlined"
                 size="small"
                 value={searchUI}
                 onChange={(e) => {

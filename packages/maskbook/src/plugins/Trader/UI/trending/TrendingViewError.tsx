@@ -35,10 +35,12 @@ export function TrendingViewError(props: TrendingViewErrorProps) {
             <CardContent className={classes.content}>
                 <Box
                     className={classes.placeholder}
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="center"
-                    alignItems="center">
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
                     <AlertCircle className={classes.icon} />
                     <Typography className={classes.message} color="textSecondary">
                         {message}

@@ -285,7 +285,7 @@ export default function PollsDialog(props: PollsDialogProps) {
                         senderFingerprint={senderFingerprint}
                     />
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 label: t('plugin_poll_select_existing'),
@@ -296,7 +296,7 @@ export default function PollsDialog(props: PollsDialogProps) {
                         senderFingerprint={senderFingerprint}
                     />
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
         ],
         state,

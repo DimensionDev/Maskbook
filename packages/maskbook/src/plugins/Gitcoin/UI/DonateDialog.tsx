@@ -79,7 +79,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
 
     //#region select token
     const { value: etherTokenDetailed } = useEtherTokenDetailed()
-    const [token, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>(etherTokenDetailed)
+    const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
     const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
     const onTokenChipClick = useCallback(() => {
         setOpenSelectERC20TokenDialog(true)

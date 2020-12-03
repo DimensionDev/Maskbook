@@ -38,7 +38,13 @@ export function TokenPanel(props: TokenPanelProps) {
     const classes = useStyles()
 
     return (
-        <Box className={classes.root} display="flex" justifyContent="space-between" alignItems="center">
+        <Box
+            className={classes.root}
+            sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+            }}>
             <Typography className={classes.primary} component="div">
                 <TokenIcon classes={{ icon: classes.icon }} address={token.address} name={token.name} />{' '}
                 <span className={classes.amount}>

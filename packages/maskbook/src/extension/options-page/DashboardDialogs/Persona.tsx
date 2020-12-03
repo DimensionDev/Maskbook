@@ -68,6 +68,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                                         createPersonaAndNext()
                                     }
                                 }}
+                                variant="standard"
                             />
                         </form>
                     </>
@@ -133,6 +134,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                             inputProps={{
                                 'data-testid': 'username_input',
                             }}
+                            variant="standard"
                         />
                         <TextField
                             value={mnemonicWordsValue}
@@ -142,6 +144,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                             inputProps={{
                                 'data-testid': 'mnemonic_input',
                             }}
+                            variant="standard"
                         />
                         <TextField
                             onChange={(e) => setPassword(e.target.value)}
@@ -150,10 +153,11 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                             inputProps={{
                                 'data-testid': 'password_input',
                             }}
+                            variant="standard"
                         />
                     </>
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 id: 'text',
@@ -162,14 +166,14 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                     <TextField
                         inputProps={{ style: { height: 147 } }}
                         multiline
-                        rows={1}
+                        minRows={1}
                         autoFocus
                         placeholder={t('dashboard_paste_database_base64_hint')}
                         onChange={(e) => setBase64Value(e.target.value)}
-                        value={base64Value}></TextField>
+                        value={base64Value}
+                        variant="standard"></TextField>
                 ),
-                display: 'flex',
-                p: 0,
+                sx: { p: 0, display: 'flex' },
             },
             {
                 id: 'qr',
@@ -199,7 +203,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                         />
                     </>
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
         ],
         state,
@@ -276,7 +280,6 @@ export function DashboardPersonaRenameDialog(props: WrappedDialogProps<PersonaPr
                         }
                         required
                         label={t('persona_name')}
-                        variant="outlined"
                         value={name}
                         autoFocus
                         onChange={(e) => setName(e.target.value)}

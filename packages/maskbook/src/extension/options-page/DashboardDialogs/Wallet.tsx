@@ -83,13 +83,17 @@ export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelector
     const [keyword, setKeyword] = useState('')
 
     return (
-        <Box textAlign="left">
+        <Box
+            sx={{
+                textAlign: 'left',
+            }}>
             <TextField
                 className={classes.search}
                 label={t('add_token_search_hint')}
                 autoFocus
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
+                variant="standard"
             />
             <FixedTokenList
                 classes={{ list: classes.list, placeholder: classes.placeholder }}
@@ -135,7 +139,10 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
         else onTokenChange?.(null)
     }, [chainId, address, decimals, isValidAddress, name, symbol, onTokenChange])
     return (
-        <Box textAlign="left">
+        <Box
+            sx={{
+                textAlign: 'left',
+            }}>
             <TextField
                 required
                 autoFocus
@@ -143,6 +150,7 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
                 error={!isValidAddress && !!address}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
+                variant="standard"
             />
             <TextField
                 required
@@ -151,13 +159,21 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
                 type="number"
                 inputProps={{ min: 0 }}
                 onChange={(e) => setDecimals(parseInt(e.target.value))}
+                variant="standard"
             />
-            <TextField required label={t('add_token_name')} value={name} onChange={(e) => setName(e.target.value)} />
+            <TextField
+                required
+                label={t('add_token_name')}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                variant="standard"
+            />
             <TextField
                 required
                 label={t('add_token_symbol')}
                 value={symbol}
                 onChange={(e) => setSymbol(e.target.value)}
+                variant="standard"
             />
         </Box>
     )
@@ -231,10 +247,16 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                                 label={t('wallet_name')}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
+                                variant="standard"
                             />
                         </form>
                         <br />
-                        <Box display="flex" alignItems="center" justifyContent="center">
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
                             <FormControlLabel
                                 control={
                                     <Checkbox
@@ -243,7 +265,11 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                                     />
                                 }
                                 label={
-                                    <Box display="inline-flex" alignItems="center">
+                                    <Box
+                                        sx={{
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                        }}>
                                         <Typography className={classes.confirmation} variant="body2">
                                             {t('wallet_confirmation_hint')}
                                         </Typography>
@@ -283,16 +309,18 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             label={t('wallet_name')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            variant="standard"
                         />
                         <TextField
                             required
                             label={t('mnemonic_words')}
                             value={mnemonic}
                             onChange={(e) => setMnemonic(e.target.value)}
+                            variant="standard"
                         />
                     </div>
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 label: t('private_key'),
@@ -312,6 +340,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             label={t('wallet_name')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            variant="standard"
                         />
                         <TextField
                             type="password"
@@ -319,11 +348,11 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             label={t('private_key')}
                             value={privKey}
                             onChange={(e) => setPrivKey(e.target.value)}
+                            variant="standard"
                         />
                     </div>
                 ),
-                display: 'flex',
-                p: 0,
+                sx: { display: 'flex', p: 0 },
             },
         ],
         state,
@@ -437,9 +466,16 @@ export function DashboardWalletShareDialog(props: WrappedDialogProps<WalletProps
                                         </InputAdornment>
                                     ),
                                 }}
+                                variant="standard"
                             />
                         </form>
-                        <Box className={classes.qr} display="flex" justifyContent="center" alignItems="center">
+                        <Box
+                            className={classes.qr}
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
                             <QRCode
                                 text={`ethereum:${wallet.address}`}
                                 options={{ width: 200 }}
@@ -600,7 +636,6 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                         required
                         autoFocus
                         label={t('wallet_name')}
-                        variant="outlined"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         inputProps={{ onKeyPress: (e) => e.key === 'Enter' && renameWallet() }}
@@ -771,13 +806,12 @@ export function DashboardWalletHistoryDialog(
             {
                 label: t('activity_inbound'),
                 children: <RedPacketInboundList onSelect={onRedPacketClicked} />,
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 label: t('activity_outbound'),
                 children: <RedPacketOutboundList onSelect={onRedPacketClicked} />,
-                display: 'flex',
-                p: 0,
+                sx: { display: 'flex', p: 0 },
             },
         ],
         state,
@@ -881,7 +915,12 @@ export function DashboardWalletRedPacketDetailDialog(
                             }
                         />
                         <WalletLine line1="Message" line2={payload.sender.message} />
-                        <Box p={1} display="flex" justifyContent="center">
+                        <Box
+                            sx={{
+                                p: 1,
+                                display: 'flex',
+                                justifyContent: 'center',
+                            }}>
                             <Typography variant="caption" color="textSecondary">
                                 Created at {new Date(payload.creation_time).toLocaleString()}
                             </Typography>

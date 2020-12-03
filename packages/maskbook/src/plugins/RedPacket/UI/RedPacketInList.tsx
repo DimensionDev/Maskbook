@@ -4,7 +4,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { resolveElapsedTime } from '../pipes'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
-import { Skeleton } from '@material-ui/lab'
+import { Skeleton } from '@material-ui/core'
 import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -52,8 +52,8 @@ export function RedPacketInList(props: RedPacketInListProps) {
         return (
             <ListItem style={style}>
                 <ListItemText>
-                    <Skeleton animation="wave" variant="rect" width="30%" height={10} />
-                    <Skeleton animation="wave" variant="rect" width="70%" height={10} style={{ marginTop: 8 }} />
+                    <Skeleton animation="wave" variant="rectangular" width="30%" height={10} />
+                    <Skeleton animation="wave" variant="rectangular" width="70%" height={10} style={{ marginTop: 8 }} />
                 </ListItemText>
             </ListItem>
         )

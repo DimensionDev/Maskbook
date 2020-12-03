@@ -24,6 +24,7 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                             label={t('name')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            variant="standard"
                         />
                         {/* Todo: fix the whole feedback loop asap, now just mailto info@dimension.im */}
                         <TextField
@@ -33,14 +34,16 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            variant="standard"
                         />
                         <TextField
                             multiline
-                            rows={4}
+                            minRows={4}
                             required
                             label={t('your_message')}
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
+                            variant="standard"
                         />
                     </form>
                 }

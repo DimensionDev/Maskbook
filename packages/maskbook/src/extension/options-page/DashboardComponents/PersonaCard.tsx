@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) =>
             marginBottom: theme.spacing(5),
             padding: theme.spacing(4, 3, 5, 3),
             boxShadow:
-                theme.palette.type === 'dark'
+                theme.palette.mode === 'dark'
                     ? 'none'
                     : '0px 2px 4px rgba(96, 97, 112, 0.16), 0px 0px 1px rgba(40, 41, 61, 0.04)',
 

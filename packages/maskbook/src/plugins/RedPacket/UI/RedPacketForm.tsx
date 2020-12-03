@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) =>
         },
         input: {
             flex: 1,
-            padding: theme.spacing(1),
+            padding: theme.spacing(0.5),
         },
         tip: {
             fontSize: 12,
@@ -83,7 +83,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     //#region select token
     const { value: etherTokenDetailed } = useEtherTokenDetailed()
-    const [token, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>(etherTokenDetailed)
+    const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
     const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
     const onTokenChipClick = useCallback(() => {
         setOpenSelectERC20TokenDialog(true)
@@ -284,7 +284,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     InputLabelProps={{ shrink: true }}
                     label={t('plugin_red_packet_shares')}
                     value={shares}
-                    variant="outlined"
                     onChange={onShareChange}
                 />
             </div>
@@ -311,7 +310,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     InputLabelProps={{ shrink: true }}
                     inputProps={{ placeholder: t('plugin_red_packet_best_wishes') }}
                     label={t('plugin_red_packet_attached_message')}
-                    variant="outlined"
                     defaultValue={t('plugin_red_packet_best_wishes')}
                 />
             </div>
