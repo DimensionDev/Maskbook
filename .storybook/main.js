@@ -1,3 +1,5 @@
+require('ts-node/register')
+const Webpack5AssetModuleTransformer = require('../scripts/transformers/webpack-5-asset-module-backport').default
 module.exports = {
     stories: ['../packages/maskbook/src/stories/**/*.tsx'],
     addons: [
@@ -22,6 +24,9 @@ module.exports = {
                             noEmit: false,
                             importsNotUsedAsValues: 'remove',
                         },
+                        getCustomTransformers: () => ({
+                            before: [Webpack5AssetModuleTransformer()].filter(Boolean),
+                        }),
                     },
                 },
                 { loader: require.resolve('react-docgen-typescript-loader') },
@@ -33,6 +38,7 @@ module.exports = {
             new webpack.DefinePlugin({
                 'process.env.STORYBOOK': 'true',
             }),
+            new webpack.ProvidePlugin({ React: 'react' }),
         )
         return config
     },

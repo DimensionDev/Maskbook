@@ -40,11 +40,11 @@ describe(`${SETUP_STORY_URL}-Workflow1B:CoreInit/RestoreBackup`, () => {
                         ).toBeTruthy()
                         break
                     case 'db_backup_1_persona_1_profile':
-                        const personaTitle = await page.waitFor('[data-testid="persona_title"]')
+                        const personaTitle = await page.waitForSelector('[data-testid="persona_title"]')
                         expect(await personaTitle.evaluate((e) => e.textContent?.toLowerCase())).toBe('alice')
                         break
                     default:
-                        await page.waitFor('[data-testid="persona_title"]')
+                        await page.waitForSelector('[data-testid="persona_title"]')
                         const titles = await page.evaluate(() =>
                             Array.from(document.querySelectorAll('[data-testid="persona_title"]')).map((e) =>
                                 e.textContent?.toLowerCase(),

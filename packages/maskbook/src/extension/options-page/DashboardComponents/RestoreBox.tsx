@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, useTheme, createStyles } from '@material-ui/core'
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -91,7 +90,7 @@ export function RestoreBox(props: RestoreBoxProps) {
                 ) : (
                     <img
                         className={classes.placeholderImage}
-                        src={getUrl(`${placeholder}-${theme.palette.type}.png`)}
+                        src={getUrl(`${placeholder}-${theme.palette.mode}.png`)}
                     />
                 )}
             </div>

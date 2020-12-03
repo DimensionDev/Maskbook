@@ -3,6 +3,7 @@ import { InitFriendsValueRef } from '../../social-network/defaults/FriendsValueR
 import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdentitiesRef'
 import { sharedProvider } from './shared-provider'
 import { injectPostBoxFacebook } from './UI/injectPostBox'
+import { injectSetupPromptFacebook } from './UI/injectSetupPrompt'
 import { collectPeopleFacebook } from './UI/collectPeople'
 import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
 import { taskOpenComposeBoxFacebook } from './tasks/openComposeBox'
@@ -18,17 +19,15 @@ import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
-import { injectDashboardEntranceAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
-import { notifyPermissionUpdate } from '../../utils/permissions'
 import { Flags } from '../../utils/flags'
 import { getMaskbookTheme } from '../../utils/theme'
-import { isDark, isDarkTheme } from '../../utils/theme-tools'
+import { isDarkTheme } from '../../utils/theme-tools'
 import { useState } from 'react'
 import { useInterval } from 'react-use'
-import { MessageCenter } from '../../utils/messages'
+import { MaskMessage } from '../../utils/messages'
 import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
 import { Appearance } from '../../settings/settings'
 
@@ -52,7 +51,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     requestPermission() {
         // TODO: wait for webextension-shim to support <all_urls> in permission.
         if (Flags.no_web_extension_dynamic_permission_request) return Promise.resolve(true)
-        return browser.permissions.request({ origins }).then(notifyPermissionUpdate)
+        return browser.permissions.request({ origins })
     },
     setupAccount() {
         facebookUISelf.requestPermission().then((granted) => {
@@ -67,15 +66,15 @@ export const facebookUISelf = defineSocialNetworkUI({
     },
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
     injectPostBox: injectPostBoxFacebook,
+    injectSetupPrompt: injectSetupPromptFacebook,
     injectPostComments: injectPostCommentsDefault(),
-    injectDashboardEntrance: injectDashboardEntranceAtFacebook,
     injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
         encryptedComment,
         current,
         realCurrent,
     ) {
         const fail = () => {
-            MessageCenter.emit('autoPasteFailed', { text: encryptedComment })
+            MaskMessage.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
         }
         if (isMobileFacebook) {
             const root = realCurrent || current.commentBoxSelector!.evaluate()[0]

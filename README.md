@@ -29,8 +29,8 @@ For general introductions, see [Mask.io](https://mask.io/).
 
 - [User Forum](https://github.com/DimensionDev/Maskbook-Talks)
 - [Report Bug](https://mask.io/links/?report-bug)
-- [Twitter](https://twitter.com/ProjectMaskbook)
-- [Facebook](https://www.facebook.com/realmaskbook)
+- [Twitter](https://twitter.com/realMaskbook)
+- [Facebook](https://www.facebook.com/masknetwork)
 - [Telegram](https://t.me/maskbook_group)
 - [Discord](https://discord.gg/4SVXvj7)
 
@@ -44,4 +44,4 @@ Help us by donating us:
 
 - Bitcoin: `3PRrXj1HTXDc4j9SCQZ6hovpa74iimqtgX`
 - Ethereum: `0xD71c7150962fd484a4291a193c85426Df9EaABbB`
-- Gitcoin (All erc20): [Mask Network](https://gitcoin.co/grants/159/mask-networkmaskbook-the-portal-to-the-new-open-i)
+- Gitcoin (ETH/ERC20): [Mask Network](https://gitcoin.co/grants/159/mask-networkmaskbook-the-portal-to-the-new-open-i)

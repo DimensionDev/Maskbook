@@ -1,5 +1,4 @@
 import { Button, List, ListItem, ListItemIcon, ListItemText, makeStyles, Typography } from '@material-ui/core'
-import React from 'react'
 import { File } from 'react-feather'
 import { useHistory } from 'react-router'
 import { useI18N } from '../../../utils/i18n-next-ui'

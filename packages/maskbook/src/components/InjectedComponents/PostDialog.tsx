@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import {
     makeStyles,
@@ -16,7 +15,7 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
-import { MessageCenter, CompositionEvent } from '../../utils/messages'
+import { CompositionEvent, MaskMessage } from '../../utils/messages'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
 import { useFriendsList, useCurrentGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
@@ -39,7 +38,7 @@ import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
-import { PluginUI } from '../../plugins/plugin'
+import { PluginUI } from '../../plugins/PluginUI'
 import { Result } from 'ts-results'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
 import { InjectedDialog } from '../shared/InjectedDialog'
@@ -106,7 +105,13 @@ export function PostDialogUI(props: PostDialogUIProps) {
             if (!knownMeta) return undefined
             return [...knownMeta.entries()].map(([metadataKey, tag]) => {
                 return renderWithMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
-                    <Box key={metadataKey} marginRight={1} marginTop={1} display="inline-block">
+                    <Box
+                        key={metadataKey}
+                        sx={{
+                            marginRight: 1,
+                            marginTop: 1,
+                            display: 'inline-block',
+                        }}>
                         <Tooltip title={`Provided by plugin "${plugin.pluginName}"`}>
                             <Chip
                                 onDelete={() => editActivatedPostMetadata((meta) => meta.delete(metadataKey))}
@@ -124,7 +129,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
             if (!entries) return null
             return entries.map((opt, index) => {
                 return (
-                    <ErrorBoundary key={plugin.identifier + ' ' + index}>
+                    <ErrorBoundary contain={`Plugin "${plugin.pluginName}"`} key={plugin.identifier + ' ' + index}>
                         <ClickableChip
                             label={
                                 <>
@@ -142,7 +147,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     return (
         <>
             <ThemeProvider theme={props.theme ?? defaultTheme}>
-                <InjectedDialog open={props.open} onExit={props.onCloseButtonClicked} title={t('post_dialog__title')}>
+                <InjectedDialog open={props.open} onClose={props.onCloseButtonClicked} title={t('post_dialog__title')}>
                     <DialogContent>
                         {metadataBadge}
                         <InputBase
@@ -162,15 +167,23 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         <Typography style={{ marginBottom: 10 }}>
                             Plugins <sup>(Experimental)</sup>
                         </Typography>
-                        <ErrorBoundary>
-                            <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
-                                {pluginEntries}
-                            </Box>
-                        </ErrorBoundary>
+                        <Box
+                            style={{ marginBottom: 10 }}
+                            sx={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                            }}>
+                            {pluginEntries}
+                        </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
                         </Typography>
-                        <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                        <Box
+                            style={{ marginBottom: 10 }}
+                            sx={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                            }}>
                             <SelectRecipientsUI
                                 disabled={props.onlyMyself || props.shareToEveryone}
                                 items={props.availableShareTarget}
@@ -195,7 +208,12 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         </Box>
 
                         <Typography style={{ marginBottom: 10 }}>{t('post_dialog__more_options_title')}</Typography>
-                        <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                        <Box
+                            style={{ marginBottom: 10 }}
+                            sx={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                            }}>
                             <ClickableChip
                                 checked={props.imagePayload}
                                 label={t('post_dialog__image_payload')}
@@ -349,7 +367,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
         useCallback(() => {
             setOpen(false)
             setOnlyMyself(false)
-            setShareToEveryone(false)
+            setShareToEveryone(true)
             setPostBoxContent(makeTypedMessageText(''))
             setCurrentShareTarget([])
             getActivatedUI().typedMessageMetadata.value = new Map()
@@ -366,7 +384,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     //#region My Identity
     const identities = useMyIdentities()
     useEffect(() => {
-        return MessageCenter.on('compositionUpdated', ({ reason, open, content, options }: CompositionEvent) => {
+        return MaskMessage.events.compositionUpdated.on(({ reason, open, content, options }: CompositionEvent) => {
             if (reason !== props_reason || identities.length <= 0) return
             setOpen(open)
             if (content) setPostBoxContent(makeTypedMessageText(content))
@@ -436,9 +454,13 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
     const normalized = Math.min((value / max) * 100, 100)
     const style = { transitionProperty: 'transform,width,height,color' } as React.CSSProperties
     return (
-        <Box position="relative" display="inline-flex">
+        <Box
+            sx={{
+                position: 'relative',
+                display: 'inline-flex',
+            }}>
             <CircularProgress
-                variant="static"
+                variant="determinate"
                 value={normalized}
                 color={displayLabel ? 'secondary' : 'primary'}
                 size={displayLabel ? void 0 : 16}
@@ -447,14 +469,16 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
             />
             {displayLabel ? (
                 <Box
-                    top={0}
-                    left={0}
-                    bottom={0}
-                    right={0}
-                    position="absolute"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
+                    sx={{
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        position: 'absolute',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
                     <Typography variant="caption" component="div" color="textSecondary">
                         {max - value}
                     </Typography>

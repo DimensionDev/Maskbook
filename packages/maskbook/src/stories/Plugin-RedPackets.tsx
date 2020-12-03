@@ -1,4 +1,3 @@
-import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { RedPacketRecord, RedPacketStatus, RedPacketJSONPayload } from '../plugins/RedPacket/types'
 import { number, text, select } from '@storybook/addon-knobs'
@@ -25,10 +24,10 @@ storiesOf('Plugin: Red Packets', module)
         return (
             <>
                 <Typography>ETH</Typography>
-                <RedPacket from="" payload={payload} />
+                <RedPacket payload={payload} />
                 <hr />
                 <Typography>ERC20</Typography>
-                <RedPacket from="" payload={payload} />
+                <RedPacket payload={payload} />
             </>
         )
     })

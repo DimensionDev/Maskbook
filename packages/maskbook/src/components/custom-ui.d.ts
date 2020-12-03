@@ -9,3 +9,9 @@ type PartialRequired<T, RequiredKeys extends keyof T> = Partial<T> & Pick<T, Req
 type KeysInferFromUseStyles<T, OmitKeys extends keyof ReturnType<T> = ''> = keyof Omit<ReturnType<T>, OmitKeys>
 
 type PropsOf<T> = T extends React.ComponentType<infer U> ? U : never
+
+type EnumRecord<T extends number | string, U> = {
+    [K in T]: U
+}
+
+type Primitive = string | boolean | number

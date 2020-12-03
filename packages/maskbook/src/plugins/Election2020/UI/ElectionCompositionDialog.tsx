@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import {
     Box,
     createStyles,
@@ -18,14 +18,14 @@ import { getEnumAsArray } from '../../../utils/enum'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { EthereumNetwork, EthereumTokenType } from '../../../web3/types'
+import type { EthereumNetwork } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { resolveChainName } from '../../../web3/pipes'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { Election2020MetaKey, ELECTION_2020_CONSTANTS } from '../constants'
 import { getActivatedUI } from '../../../social-network/ui'
 import { resolveStateName } from '../pipes'
-import { useERC721Token } from '../../../web3/hooks/useERC721Token'
+import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) =>
@@ -52,10 +52,7 @@ export function ElectionCompositionDialog(props: ElectionCompositionDialogProps)
 
     // fetch the NTF token
     const ELECTION_TOKEN_ADDRESS = useConstant(ELECTION_2020_CONSTANTS, 'ELECTION_TOKEN_ADDRESS')
-    const nftToken = useERC721Token({
-        type: EthereumTokenType.ERC721,
-        address: ELECTION_TOKEN_ADDRESS,
-    })
+    const { value: nftToken } = useERC721TokenDetailed(ELECTION_TOKEN_ADDRESS)
 
     // payload settings
     const [name, setName] = useState('')
@@ -91,7 +88,7 @@ export function ElectionCompositionDialog(props: ElectionCompositionDialogProps)
     }, [account, chainId, name, message, state, candidate, nftToken, props.onClose])
 
     return (
-        <InjectedDialog open={props.open} title="Election Composition Dialog" onExit={props.onClose}>
+        <InjectedDialog open={props.open} title="Election Composition Dialog" onClose={props.onClose}>
             <DialogContent>
                 <FormControl className={classes.control}>
                     <InputLabel>Winner</InputLabel>
@@ -127,16 +124,24 @@ export function ElectionCompositionDialog(props: ElectionCompositionDialogProps)
                     <TextField
                         label="Name (Optional)"
                         value={name}
-                        onChange={(e) => setName(e.target.value)}></TextField>
+                        onChange={(e) => setName(e.target.value)}
+                        variant="outlined"
+                    />
                 </FormControl>
                 <FormControl className={classes.control}>
                     <TextField
                         label="Message (Optional)"
                         value={message}
-                        onChange={(e) => setMessage(e.target.value)}></TextField>
+                        onChange={(e) => setMessage(e.target.value)}
+                        variant="outlined"
+                    />
                 </FormControl>
                 <FormControl className={classes.control}>
-                    <Box display="flex" justifyContent="flex-end">
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                        }}>
                         <ActionButton disabled={!nftToken} variant="contained" onClick={onConfirm}>
                             {t('confirm')}
                         </ActionButton>

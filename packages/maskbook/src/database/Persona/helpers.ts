@@ -20,7 +20,7 @@ import {
     queryProfilesPagedDB,
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
-import { getAvatarDataURL } from '../helpers/avatar'
+import { queryAvatarDataURL } from '../helpers/avatar'
 import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import type {
@@ -28,15 +28,13 @@ import type {
     AESJsonWebKey,
     EC_Private_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
-import { i18n } from '../../utils/i18n-next'
-
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
     const persona = rec.linkedPersona
     delete rec.linkedPersona
     delete rec.localKey
     const _ = persona ? queryPersona(persona) : undefined
-    const _2 = getAvatarDataURL(rec.identifier).catch(() => undefined)
+    const _2 = queryAvatarDataURL(rec.identifier).catch(() => undefined)
     return {
         ...rec,
         linkedPersona: await _,

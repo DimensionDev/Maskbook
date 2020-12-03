@@ -1,6 +1,6 @@
 import './setup.ui'
-import { GetContext } from '@dimensiondev/holoflows-kit/es'
-if (GetContext() === 'content') {
+import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+if (isEnvironment(Environment.ContentScript)) {
     console.log('Maskbook content script loaded')
     require('./extension/content-script/index')
 }

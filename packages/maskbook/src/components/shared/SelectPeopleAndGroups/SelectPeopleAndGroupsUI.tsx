@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from '@material-ui/core'
 import type { Profile, Group } from '../../../database'
@@ -46,7 +46,7 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
     const { frozenSelected, onSetSelected, disabled, ignoreMyself } = props
     const { hideSelectAll, hideSelectNone, showAtNetwork, maxSelection } = props
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (myself && ignoreMyself) {
             const filtered = selected.find((x) => x.identifier.equals(myself.identifier))
             if (filtered) onSetSelected(selected.filter((x) => x !== filtered) as ServeType[])
@@ -88,7 +88,11 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
     const showSelectNone = !hideSelectNone && selected.length > 0
     return (
         <div className={classes.root}>
-            <Box display="flex" className={classes.selectedArea}>
+            <Box
+                className={classes.selectedArea}
+                sx={{
+                    display: 'flex',
+                }}>
                 {frozenSelected.map((x) => FrozenChip(x, props.ProfileOrGroupInChipProps))}
                 {selected
                     .filter((item) => !frozenSelected.includes(item as ServeType))
@@ -118,11 +122,17 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
                     disabled={disabled}
                 />
             </Box>
-            <Box display="flex">
+            <Box
+                sx={{
+                    display: 'flex',
+                }}>
                 {showSelectAll && SelectAllButton}
                 {showSelectNone && SelectNoneButton}
             </Box>
-            <Box flex={1}>
+            <Box
+                sx={{
+                    flex: 1,
+                }}>
                 <List dense>
                     {listBeforeSearch.length > 0 && listAfterSearch.length === 0 && search && (
                         <ListItem>

@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react'
+import { useEffect } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import type { Persona } from '../../../database'
-import { TextField, MenuItem, Card, IconButton } from '@material-ui/core'
+import { MenuItem, Card, IconButton } from '@material-ui/core'
 import Services from '../../service'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { useColorStyles } from '../../../utils/theme'
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) =>
             marginBottom: theme.spacing(5),
             padding: theme.spacing(4, 3, 5, 3),
             boxShadow:
-                theme.palette.type === 'dark'
+                theme.palette.mode === 'dark'
                     ? 'none'
                     : '0px 2px 4px rgba(96, 97, 112, 0.16), 0px 0px 1px rgba(40, 41, 61, 0.04)',
 
@@ -78,7 +78,7 @@ export default function PersonaCard({ persona }: Props) {
     )
 
     const id = persona.linkedProfiles.keys().next().value as ProfileIdentifier | undefined
-    React.useEffect(() => {
+    useEffect(() => {
         if (persona.nickname) return
         const profile = id
         if (!profile) Services.Identity.renamePersona(persona.identifier, persona.identifier.compressedPoint)

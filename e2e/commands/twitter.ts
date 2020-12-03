@@ -9,15 +9,16 @@ class Twitter implements SNS {
 
     // selectors
     composeButtonSelector = '' // no compose button for twitter
-    composeImageSelector = '[data-testid="primaryColumn"] [data-testid="attachments"] img'
+    composeImageSelector = '#layers [role="dialog"] [data-testid="attachments"] img'
     composeEditorSelector = '[data-testid="primaryColumn"] .DraftEditor-root [data-testid="tweetTextarea_0"]'
+    composeDialogEditorSelector = '#layers [role="dialog"] .DraftEditor-root [data-testid="tweetTextarea_0"]'
     profileSelector = '[data-testid="primaryColumn"]'
     bioTextareaSelector = 'textarea[name="description"]'
     commentInputSelector = '' // no comment form for twitter
 
     // mount point
     setupGuideSelector = 'body > script[nonce] ~ span'
-    postDialogHintSelector = '[data-testid="primaryColumn"] [role="progressbar"] ~ span'
+    postDialogHintSelector = '[data-testid="scheduleOption"] ~ span:last-child'
     postDialogModalSelector = 'body > script[nonce] ~ div'
     postAffixingCanvasSelector = '[role="article"] [data-testid="tweet"] + div > div:first-child ~ span'
     commentSelector = '' // no comment for twitter
@@ -52,11 +53,11 @@ class Twitter implements SNS {
         await page.goto('https://twitter.com/settings/account', {
             waitUntil: 'load',
         })
-        await page.waitFor(2000)
+        await page.waitForTimeout(2000)
 
         // logined
         if ((await page.evaluate(() => location.href)).includes('/settings/account')) {
-            const accountSwitcher = await page.waitFor('[data-testid="SideNav_AccountSwitcher_Button"]')
+            const accountSwitcher = await page.waitForSelector('[data-testid="SideNav_AccountSwitcher_Button"]')
 
             // user already login
             if ((await accountSwitcher.evaluate((e) => e.textContent))?.includes(this.username)) return
@@ -70,13 +71,15 @@ class Twitter implements SNS {
             waitUntil: 'load',
         })
 
-        const nameInput = await page.waitFor(
+        const nameInput = await page.waitForSelector(
             '.signin [name="session[username_or_email]"], #react-root [name="session[username_or_email]"]',
         )
-        const passwordInput = await page.waitFor(
+        const passwordInput = await page.waitForSelector(
             '.signin [name="session[password]"], #react-root [name="session[password]"]',
         )
-        const submitButton = await page.waitFor('.signin [type="submit"], [data-testid="LoginForm_Login_Button"]')
+        const submitButton = await page.waitForSelector(
+            '.signin [type="submit"], [data-testid="LoginForm_Login_Button"]',
+        )
         // select preexist name
         await nameInput.click({ clickCount: 3 })
         await nameInput.type(this.username)
@@ -91,16 +94,16 @@ class Twitter implements SNS {
             (await page.evaluate(() => location.href)).includes('account/login_challenge') &&
             process.env.E2E_ALICE_TWITTER_PHONE
         ) {
-            const phoneInput = await page.waitFor('#challenge_response')
-            const submitButton = await page.waitFor('[type="submit"]')
+            const phoneInput = await page.waitForSelector('#challenge_response')
+            const submitButton = await page.waitForSelector('[type="submit"]')
 
             await phoneInput.type(process.env.E2E_ALICE_TWITTER_PHONE)
             await submitButton.click()
-            await page.waitFor(500)
+            await page.waitForTimeout(500)
         }
 
         // wait for home
-        await page.waitFor('[data-testid="AppTabBar_Home_Link"]')
+        await page.waitForSelector('[data-testid="AppTabBar_Home_Link"]')
     }
 
     async logout(page: Page) {
@@ -109,9 +112,9 @@ class Twitter implements SNS {
             waitUntil: 'load',
         })
 
-        const confirmButton = await page.waitFor('[data-testid="confirmationSheetConfirm"]')
+        const confirmButton = await page.waitForSelector('[data-testid="confirmationSheetConfirm"]')
         await confirmButton.click()
-        await page.waitFor('[data-testid="signupButton"]')
+        await page.waitForSelector('[data-testid="signupButton"]')
     }
 
     async getBio(page: Page) {
@@ -124,13 +127,15 @@ class Twitter implements SNS {
             waitUntil: 'load',
         })
 
-        const bioTextarea: ElementHandle<HTMLTextAreaElement> = await page.waitFor('textarea[name="description"]')
+        const bioTextarea: ElementHandle<HTMLTextAreaElement> = await page.waitForSelector(
+            'textarea[name="description"]',
+        )
         await bioTextarea.evaluate((e) => (e.value = bio))
 
-        const saveButton = await page.waitFor('[data-testid="Profile_Save_Button"]')
+        const saveButton = await page.waitForSelector('[data-testid="Profile_Save_Button"]')
         await updateInput(bioTextarea, bio)
         await saveButton.click()
-        await page.waitFor('[href="/settings/profile"]') // confirm back to profile page
+        await page.waitForSelector('[href="/settings/profile"]') // confirm back to profile page
     }
 
     async unsetBio(page: Page) {
@@ -143,15 +148,15 @@ class Twitter implements SNS {
             waitUntil: 'load',
         })
 
-        const caretButton = await page.waitFor('[data-testid="caret"]')
+        const caretButton = await page.waitForSelector('[data-testid="caret"]')
         await caretButton.click()
 
-        const deleteButton = await page.waitFor('[role="menu"] [role="menuitem"]:first-child')
+        const deleteButton = await page.waitForSelector('[role="menu"] [role="menuitem"]:first-child')
         await deleteButton.click()
 
-        const confirmButton = await page.waitFor('[data-testid="confirmationSheetConfirm"]')
+        const confirmButton = await page.waitForSelector('[data-testid="confirmationSheetConfirm"]')
         await confirmButton.click()
-        await page.waitFor('[href="/settings/profile"]') // confirm back to profile page
+        await page.waitForSelector('[href="/settings/profile"]') // confirm back to profile page
     }
 
     async dimissDialog(page: Page, maxRetries = 3) {
@@ -163,7 +168,7 @@ class Twitter implements SNS {
                 try {
                     await closeButton.click()
                 } catch (e) {}
-                await page.waitFor(500)
+                await page.waitForTimeout(500)
             }
         }
     }

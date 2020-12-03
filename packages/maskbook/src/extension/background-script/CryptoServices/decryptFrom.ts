@@ -1,7 +1,6 @@
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import * as Gun1 from '../../../network/gun/version.1'
-import * as Gun2 from '../../../network/gun/version.2'
+import { GunAPI as Gun2, GunAPISubscribe as Gun2Subscribe, GunWorker } from '../../../network/gun/'
 import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../utils/i18n-next'
@@ -9,7 +8,6 @@ import { queryPersonaRecord, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
-import { MessageCenter } from '../../../utils/messages'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { cryptoProviderTable } from './cryptoProviderTable'
 import type { PersonaRecord } from '../../../database/Persona/Persona.db'
@@ -22,15 +20,20 @@ import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/Crypt
 import { decodeImageUrl } from '../SteganographyService'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import stringify from 'json-stable-stringify'
-import { calculatePostKeyPartition } from '../../../network/gun/version.2'
+import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
+import { MaskMessage } from '../../../utils/messages'
+import { GunAPI } from '../../../network/gun'
+import { calculatePostKeyPartition } from '../../../network/gun/version.2/hash'
 
-type Progress =
-    | {
-          type: 'progress'
-          progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post'
-          internal: boolean
-      }
-    | { type: 'progress'; progress: 'intermediate_success'; data: Success; internal: boolean }
+type Progress = (
+    | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
+    | { progress: 'intermediate_success'; data: Success }
+    | { progress: 'iv_decrypted'; iv: string }
+) & {
+    type: 'progress'
+    /** if this is true, this progress should not cause UI change. */
+    internal: boolean
+}
 type DebugInfo = {
     debug: 'debug_finding_hash'
     hash: [string, string]
@@ -39,6 +42,7 @@ type DebugInfo = {
 type SuccessThrough = 'author_key_not_found' | 'post_key_cached' | 'normal_decrypted'
 type Success = {
     type: 'success'
+    iv: string
     content: TypedMessage
     rawContent: string
     through: SuccessThrough[]
@@ -57,11 +61,13 @@ type ReturnOfDecryptPostContentWithProgress = AsyncGenerator<Failure | Progress 
 const successDecryptionCache = new Map<string, Success>()
 const makeSuccessResultF = (
     cacheKey: string,
+    iv: string,
     cryptoProvider: typeof cryptoProviderTable[keyof typeof cryptoProviderTable],
 ) => (rawEncryptedContent: string, through: Success['through']): Success => {
     const success: Success = {
         rawContent: rawEncryptedContent,
         through,
+        iv,
         content: cryptoProvider.typedMessageParse(rawEncryptedContent),
         type: 'success',
         internal: false,
@@ -71,7 +77,7 @@ const makeSuccessResultF = (
 }
 
 function makeProgress(
-    progress: Exclude<Progress['progress'], 'intermediate_success'> | Success,
+    progress: Exclude<Progress['progress'], 'intermediate_success' | 'iv_decrypted'> | Success,
     internal = false,
 ): Progress {
     if (typeof progress === 'string') return { type: 'progress', progress, internal }
@@ -131,9 +137,10 @@ async function* decryptFromPayloadWithProgress_raw(
     if (version === -40 || version === -39 || version === -38) {
         const { encryptedText, iv, version } = data
         const cryptoProvider = cryptoProviderTable[version]
-        const makeSuccessResult = makeSuccessResultF(cacheKey, cryptoProvider)
+        const makeSuccessResult = makeSuccessResultF(cacheKey, iv, cryptoProvider)
         const ownersAESKeyEncrypted = data.version === -38 ? data.AESKeyEncrypted : data.ownersAESKeyEncrypted
 
+        yield { type: 'progress', progress: 'iv_decrypted', iv: iv, internal: true }
         // ? Early emit the cache.
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, author)
         if (cachedPostResult) {
@@ -200,11 +207,11 @@ async function* decryptFromPayloadWithProgress_raw(
         }
 
         yield makeProgress('finding_post_key')
-        const aesKeyEncrypted: Array<Alpha40.PublishedAESKey | Gun2.SharedAESKeyGun2> = []
+        const aesKeyEncrypted: Array<Alpha40.PublishedAESKey | SharedAESKeyGun2> = []
         if (version === -40) {
             // Deprecated payload
             // eslint-disable-next-line import/no-deprecated
-            const result = await Gun1.queryPostAESKey(iv, whoAmI.userId)
+            const result = await GunAPI.queryVersion1PostAESKey(iv, whoAmI.userId)
             if (result === undefined) return makeError(i18n.t('service_not_share_target'))
             aesKeyEncrypted.push(result)
         } else if (version === -39 || version === -38) {
@@ -229,25 +236,23 @@ async function* decryptFromPayloadWithProgress_raw(
         }
 
         // Failed, we have to wait for the future info from gun.
-        return new Promise<Success>((resolve, reject) => {
-            if (version === -40) return reject()
-            const undo = Gun2.subscribePostKeysOnGun2(
-                version,
-                iv,
-                minePublic,
-                authorNetworkWorker.val.gunNetworkHint,
-                async (key) => {
-                    console.log('New key received, trying', key)
-                    try {
-                        const result = await decryptWith(key)
-                        undo()
-                        resolve(result)
-                    } catch (e) {
-                        console.debug(e)
-                    }
-                },
-            )
-        })
+        if (version === -40) return makeError(i18n.t('service_not_share_target'))
+        const subscription = Gun2Subscribe.subscribePostKeysOnGun2(
+            version,
+            iv,
+            minePublic,
+            authorNetworkWorker.val.gunNetworkHint,
+        )
+        GunWorker?.onTerminated(() => subscription.return?.())
+        for await (const aes of subscription) {
+            console.log('New key received, trying', aes)
+            try {
+                return await decryptWith(aes)
+            } catch (e) {
+                console.debug(e)
+            }
+        }
+        return makeError(i18n.t('service_not_share_target'))
 
         async function decryptWith(
             key:
@@ -345,28 +350,26 @@ async function* findAuthorPublicKey(
         if (!author?.publicKey) {
             if (hasCache) return 'use cache' as const
             const abort = new AbortController()
-            const gunPromise = new Promise<void>((resolve, reject) => {
-                abort.signal.addEventListener('abort', () => {
-                    undo()
-                    reject()
-                })
-                const undo = Gun2.subscribePersonFromGun2(by, (data) => {
-                    const provePostID = data?.provePostId as string | '' | undefined
-                    if (provePostID?.length ?? 0 > 0) {
-                        undo()
-                        resolve()
-                    }
-                })
-            })
+            const gunPromise = (async () => {
+                const subscription = Gun2Subscribe.subscribeProfileFromGun2(by)
+                const undo = () => subscription.return?.(void 0)
+                abort.signal.addEventListener('abort', undo)
+                GunWorker?.onTerminated(undo)
+                for await (const data of subscription) {
+                    const provePostID = String(data?.provePostId || '')
+                    if (provePostID.length > 0) return
+                }
+                throw new Error()
+            })()
             const databasePromise = new Promise<void>((resolve, reject) => {
                 abort.signal.addEventListener('abort', () => {
                     undo()
                     reject()
                 })
-                const undo = MessageCenter.on('profilesChanged', (data) => {
+                const undo = MaskMessage.events.profilesChanged.on((data) => {
                     for (const x of data) {
                         if (x.reason === 'delete') continue
-                        if (x.of.identifier.equals(by)) {
+                        if (x.of.equals(by)) {
                             undo()
                             resolve()
                             break

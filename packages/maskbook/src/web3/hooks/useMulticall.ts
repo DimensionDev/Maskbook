@@ -86,6 +86,7 @@ export function useMutlicallStateDecoded<
 >(contracts: T[], names: K[], state: MulticalState) {
     return useMemo(() => {
         if (state.type !== MulticalStateType.SUCCEED) return []
+        if (contracts.length !== state.results.length) return []
         return state.results.map((raw, i) => {
             const outputs =
                 contracts[i].options.jsonInterface.find((x) => x.type === 'function' && x.name === names[i])?.outputs ??
@@ -104,7 +105,7 @@ export function useMutlicallStateDecoded<
                 }
             }
         })
-    }, [contracts, names, state])
+    }, [contracts.map((x) => x.options.address).join(','), names, state])
 }
 //#endregion
 

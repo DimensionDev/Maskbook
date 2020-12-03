@@ -1,66 +1,52 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { v4 as uuid } from 'uuid'
-import type { BatchedMessageCenter } from '../messages'
-import { TAB_ID } from '../../extension/tab'
-import { useValueRef } from './useValueRef'
-import { lastActivatedTabIdSettings } from '../../settings/settings'
+import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 
 export interface RemoteControlledDialogEvent {
     open: boolean
-    tabId?: string
     hookId?: string
 }
 
 /**
  * Use a dialog state controlled by remote
  */
-export function useRemoteControlledDialog<T, N extends keyof T>(
-    MC: BatchedMessageCenter<T>,
-    name: T[N] extends RemoteControlledDialogEvent ? N : never,
-    onUpdateByRemote?: (ev: T[N]) => void,
+export function useRemoteControlledDialog<T extends { open: boolean }>(
+    event: UnboundedRegistry<T>,
+    onUpdateByRemote?: (ev: T) => void,
     tabType: 'self' | 'activated' = 'self',
 ) {
     const [HOOK_ID] = useState(uuid()) // create a id for every hook
     const [open, setOpen] = useState(false)
-    const lastActivatedTabId = useValueRef(lastActivatedTabIdSettings)
     useEffect(
         () =>
-            MC.on(name, (ev: T[N]) => {
-                const ev_ = (ev as unknown) as RemoteControlledDialogEvent
+            event.on((_ev: T) => {
+                const event = (_ev as unknown) as RemoteControlledDialogEvent
 
-                // ignore if current tab isn't the activated tab
-                if (ev_.tabId !== TAB_ID) return
                 // ignore the event from the same hook
-                if (ev_.hookId === HOOK_ID) return
+                if (event.hookId === HOOK_ID) return
 
-                setOpen(ev_.open)
-                onUpdateByRemote?.(ev)
+                setOpen(event.open)
+                onUpdateByRemote?.(_ev)
             }),
-        [
-            TAB_ID,
-            // don't add onUpdateByRemote into the deps list
-            // the user should keep it unchange
-            onUpdateByRemote,
-        ],
+        [onUpdateByRemote, event, HOOK_ID],
     )
 
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
     const onUpdateByLocal = useCallback(
-        (ev: T[N]) => {
-            const ev_ = (ev as unknown) as RemoteControlledDialogEvent
-            setOpen(ev_.open)
+        (ev: T) => {
+            setOpen(ev.open)
 
             const timer_ = timer.current
             if (timer_ !== null) clearTimeout(timer_)
             timer.current = setTimeout(() => {
-                MC.emit(name, ({
-                    tabId: tabType === 'self' ? TAB_ID : lastActivatedTabId,
+                const payload: T & RemoteControlledDialogEvent = {
                     hookId: HOOK_ID,
                     ...ev,
-                } as unknown) as T[N])
+                }
+                tabType === 'self' ? event.sendToLocal(payload) : event.sendToVisiblePages(payload)
             }, 100)
         },
-        [tabType, lastActivatedTabId],
+        [event, tabType, HOOK_ID],
     )
     return [open, onUpdateByLocal] as const
 }

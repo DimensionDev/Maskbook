@@ -24,6 +24,7 @@ import CopyPlugin from 'copy-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
 import WebExtensionTarget from 'webpack-target-webextension'
 import ManifestPlugin from 'webpack-extension-manifest-plugin'
+import Webpack5AssetModuleTransformer from './scripts/transformers/webpack-5-asset-module-backport'
 //#endregion
 
 import git from '@nice-labs/git-rev'
@@ -55,6 +56,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
             mainFields: ['browser', 'module', 'main'],
             aliasFields: ['browser'],
             //#endregion
+            alias: { 'async-call-rpc$': 'async-call-rpc/full' },
 
             // If anyone need profiling React please checkout: https://github.com/facebook/create-react-app/blob/865ea05bc93fd2ac56b7e561181c7dc2cead3e78/packages/react-scripts/config/webpack.config.js#L304
         },
@@ -140,20 +142,19 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
     //#region Define entries
     if (!(target.Firefox || target.Safari)) {
         // Define "browser" globally in Chrome
-        config.plugins.push(new ProvidePlugin({ browser: 'webextension-polyfill' }))
+        config.plugins!.push(new ProvidePlugin({ browser: 'webextension-polyfill' }))
     }
     config.entry = {
         'options-page': withReactDevTools(src('./packages/maskbook/src/extension/options-page/index.tsx')),
         'content-script': withReactDevTools(src('./packages/maskbook/src/content-script.ts')),
         'background-service': src('./packages/maskbook/src/background-service.ts'),
         popup: withReactDevTools(src('./packages/maskbook/src/extension/popup-page/index.tsx')),
-        qrcode: src('./packages/maskbook/src/web-workers/QRCode.ts'),
         debug: src('./packages/maskbook/src/extension/debug-page'),
     }
     for (const entry in config.entry) {
         config.entry[entry] = iOSWebExtensionShimHack(...toArray(config.entry[entry]))
     }
-    config.plugins.push(
+    config.plugins!.push(
         // @ts-ignore
         getHTMLPlugin({ chunks: ['options-page'], filename: 'index.html' }),
         getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }),
@@ -163,7 +164,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
     ) // generate pages for each entry
     //#endregion
 
-    if (argv.profile) config.plugins.push(new BundleAnalyzerPlugin())
+    if (argv.profile) config.plugins!.push(new BundleAnalyzerPlugin())
     return [
         config,
         {
@@ -210,9 +211,12 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
                 compilerOptions: {
                     noEmit: false,
                     importsNotUsedAsValues: 'remove',
+                    jsx: env === 'production' ? 'react-jsx' : 'react-jsxdev',
                 },
                 getCustomTransformers: () => ({
-                    before: hmr ? [ReactRefreshTypeScriptTransformer()] : undefined,
+                    before: [Webpack5AssetModuleTransformer(), hmr && ReactRefreshTypeScriptTransformer()].filter(
+                        Boolean,
+                    ),
                 }),
             },
         }
@@ -280,7 +284,9 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
         let buildType: 'stable' | 'beta' | 'insider' = 'stable'
         if (target.Chromium) buildTarget = 'chromium'
         if (target.Firefox) buildTarget = 'firefox'
+        // Firefox browser on mobile which can use extension
         if (target.FirefoxForAndroid) firefoxVariant = 'fennec'
+        // Android
         if (target.StandaloneGeckoView) {
             firefoxVariant = 'geckoview'
             architecture = 'app'
@@ -289,7 +295,8 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
             buildTarget = 'safari'
             architecture = 'app'
         }
-        if (architecture === 'app' || firefoxVariant === 'fennec') resolution = 'mobile'
+        if (architecture === 'app' || firefoxVariant === 'fennec' || firefoxVariant === 'geckoview')
+            resolution = 'mobile'
         if (target.E2E) buildTarget = 'E2E'
         if (target.Beta) buildType = 'beta'
         if (target.Insider) buildType = 'insider'
@@ -308,7 +315,8 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
     function getSSRPlugin() {
         if (env === 'development') return []
         return [
-            new SSRPlugin('popup.html', src('./packages/maskbook/src/extension/popup-page/index.tsx'), 'Mask Network'),
+            // TODO: Help wanted
+            // new SSRPlugin('popup.html', src('./packages/maskbook/src/extension/popup-page/index.tsx'), 'Mask Network'),
         ]
     }
 }

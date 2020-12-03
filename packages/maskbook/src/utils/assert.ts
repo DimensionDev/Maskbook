@@ -1,4 +1,4 @@
-import { notStrictEqual as notEqual, strictEqual as equal } from 'assert'
+import { notStrictEqual as notEqual } from 'assert'
 
 const notInclude = (val: unknown, things: unknown[], message: string) => {
     things.forEach((value) => {

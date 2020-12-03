@@ -57,30 +57,30 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
 
                 // click compose button if needed
                 if (sns.composeButtonSelector) {
-                    const composeButton = await snsFeedPage.waitFor(sns.composeButtonSelector)
+                    const composeButton = await snsFeedPage.waitForSelector(sns.composeButtonSelector)
                     await composeButton.click()
-                    await snsFeedPage.waitFor(500)
+                    await snsFeedPage.waitForTimeout(500)
                 }
 
                 // wait maskbook inject post dialog hint
-                await snsFeedPage.waitFor(sns.postDialogHintSelector)
+                await snsFeedPage.waitForSelector(sns.postDialogHintSelector)
 
                 // click the hint button open maskbook post composing view
                 const hintButton = await snsFeedPage.waitForFunction(
-                    `document.querySelector('${sns.postDialogHintSelector}').shadowRoot.querySelector('[data-testid="hint_button"]')`,
+                    `document.querySelector('${sns.postDialogHintSelector}').shadowRoot.querySelector('button')`,
                 )
                 await (hintButton as any).click()
-                await snsFeedPage.waitFor(500)
+                await snsFeedPage.waitForTimeout(500)
 
                 // wait maskbook inject post dialog modal
-                await snsFeedPage.waitFor(sns.postDialogModalSelector)
+                await snsFeedPage.waitForSelector(sns.postDialogModalSelector)
 
                 // type plain text
                 const textTextarea = await snsFeedPage.waitForFunction(
                     `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="text_textarea"]')`,
                 )
                 await (textTextarea as any).type('mask')
-                await snsFeedPage.waitFor(500)
+                await snsFeedPage.waitForTimeout(500)
 
                 // designates recipients
                 const everyoneGroupChip = await snsFeedPage.waitForFunction(
@@ -91,7 +91,7 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                     ?.evaluate((e) => /MuiChip-colorPrimary/.test(e.className))
                 if (!everyoneGroupChipChecked) {
                     await (everyoneGroupChip as any).click()
-                    await snsFeedPage.waitFor(500)
+                    await snsFeedPage.waitForTimeout(500)
                 }
 
                 // trun on/off image-based payload switch
@@ -103,7 +103,7 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                     ?.evaluate((e) => /MuiChip-colorPrimary/.test(e.className))
                 if (enableImageMode !== imageChipChecked) {
                     await (imageChip as any).click()
-                    await snsFeedPage.waitFor(500)
+                    await snsFeedPage.waitForTimeout(500)
                 }
 
                 // take screenshot
@@ -114,16 +114,18 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                     `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="finish_button"]')`,
                 )
                 await (finishButton as any).click()
-                await snsFeedPage.waitFor(5000)
+                await snsFeedPage.waitForTimeout(5000)
 
                 // validate text
-                const payloadTextarea = await snsFeedPage.waitFor(sns.composeEditorSelector)
+                const payloadTextarea = await snsFeedPage.waitForSelector(
+                    sns.name === 'twitter.com' ? sns.composeDialogEditorSelector : sns.composeEditorSelector,
+                )
                 const cipherText = await payloadTextarea.evaluate((e) => e.textContent)
                 expect(cipherText?.includes('mask')).toBeTruthy()
 
                 // valdiate attachment
                 if (enableImageMode) {
-                    const payloadImage = await snsFeedPage.waitFor(sns.composeImageSelector)
+                    const payloadImage = await snsFeedPage.waitForSelector(sns.composeImageSelector)
                     const imageUrl = await payloadImage.evaluate((e) => e.getAttribute('src'))
                     expect(imageUrl).toBeTruthy()
                 }

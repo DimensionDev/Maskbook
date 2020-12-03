@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Theme, createStyles, Tabs, Tab, Box, BoxProps, Paper } from '@material-ui/core'
 
@@ -52,10 +51,12 @@ export default function AbstractTab({ tabs, state, height = 200 }: AbstractTabPr
             </Paper>
             <Box
                 className={classes.tabPanel}
-                height={height}
-                minHeight={height}
                 role="tabpanel"
                 {...tabs.find((_, index) => index === value)}
+                sx={{
+                    height: height,
+                    minHeight: height,
+                }}
             />
         </>
     )

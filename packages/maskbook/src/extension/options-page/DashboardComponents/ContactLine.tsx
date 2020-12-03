@@ -1,4 +1,3 @@
-import React from 'react'
 import { Typography, IconButton, MenuItem, ListItem, ListItemTypeMap } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'

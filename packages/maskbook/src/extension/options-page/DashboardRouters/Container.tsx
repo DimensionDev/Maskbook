@@ -1,10 +1,9 @@
-import React from 'react'
-import { makeStyles, createStyles, Typography, Divider, Fade, IconButton } from '@material-ui/core'
+import { cloneElement } from 'react'
+import { makeStyles, createStyles, Typography, Divider, Fade, Fab, PropTypes } from '@material-ui/core'
 import classNames from 'classnames'
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { getUrl } from '../../../utils/utils'
-import { useHistory } from 'react-router-dom'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
+import { Flags } from '../../../utils/flags'
 
 interface DashboardRouterContainerProps {
     title?: string
@@ -21,17 +20,12 @@ interface DashboardRouterContainerProps {
      * add or remove the padding of scroller
      */
     compact?: boolean
-    /**
-     * (mobile only)
-     * icons on the left of title
-     */
-    leftIcons?: React.ReactElement[]
 
     /**
      * (mobile only)
-     * icons onthe right of title
+     * fab on the right bottom position of page
      */
-    rightIcons?: React.ReactElement[]
+    floatingButtons?: { icon: React.ReactElement; handler: () => void }[]
 
     /**
      * (pc only)
@@ -40,13 +34,17 @@ interface DashboardRouterContainerProps {
     actions?: React.ReactElement[]
 }
 
+const FAB_COLORS: PropTypes.Color[] = ['primary', 'secondary', 'default']
+
 const useStyles = makeStyles((theme) => {
     return createStyles<string, { isSetup: boolean }>({
         wrapper: {
             flex: 1,
-            display: 'grid',
-            gridTemplateRows: (props) => (props.isSetup ? '1fr' : '[titleAction] 0fr [divider] 0fr [content] auto'),
             height: '100%',
+            [theme.breakpoints.up('sm')]: {
+                display: 'grid',
+                gridTemplateRows: (props) => (props.isSetup ? '1fr' : '[titleAction] 0fr [divider] 0fr [content] auto'),
+            },
         },
         placeholder: {
             height: '100%',
@@ -59,7 +57,7 @@ const useStyles = makeStyles((theme) => {
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center center',
             backgroundImage: `url(${getUrl(
-                theme.palette.type === 'light' ? 'dashboard-placeholder.png' : 'dashboard-placeholder-dark.png',
+                theme.palette.mode === 'light' ? 'dashboard-placeholder.png' : 'dashboard-placeholder-dark.png',
             )})`,
             [theme.breakpoints.down('sm')]: {
                 backgroundSize: '100px 70px',
@@ -83,11 +81,6 @@ const useStyles = makeStyles((theme) => {
             alignItems: 'center',
             height: 129,
             padding: '40px 24px 40px 34px',
-            [theme.breakpoints.down('sm')]: {
-                height: 'auto',
-                padding: theme.spacing(1, 2),
-                backgroundColor: theme.palette.type === 'light' ? theme.palette.primary.main : 'transparent',
-            },
         },
         titleContent: {
             color: theme.palette.text.primary,
@@ -95,7 +88,7 @@ const useStyles = makeStyles((theme) => {
             fontSize: 40,
             lineHeight: 1.2,
             [theme.breakpoints.down('sm')]: {
-                color: theme.palette.type === 'light' ? theme.palette.common.white : theme.palette.text.primary,
+                color: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.text.primary,
                 left: 0,
                 right: 0,
                 pointerEvents: 'none',
@@ -107,9 +100,10 @@ const useStyles = makeStyles((theme) => {
                 marginBottom: 0,
             },
         },
-        titleIcon: {
-            color: theme.palette.type === 'light' ? theme.palette.common.white : theme.palette.text.primary,
+        FloatingIcon: {
+            color: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.text.primary,
             padding: theme.spacing(1),
+            fontSize: '2.5rem',
         },
         titlePlaceholder: {
             flex: 1,
@@ -140,7 +134,7 @@ const useStyles = makeStyles((theme) => {
         divider: {
             borderColor: theme.palette.divider,
             [theme.breakpoints.down('sm')]: {
-                display: theme.palette.type === 'light' ? 'none' : 'block',
+                display: theme.palette.mode === 'light' ? 'none' : 'block',
             },
         },
         dividerPadded: {
@@ -150,76 +144,63 @@ const useStyles = makeStyles((theme) => {
             },
         },
         dividerCompact: {
-            [theme.breakpoints.down('sm')]: {
-                padding: '0 !important',
-            },
+            padding: '0 !important',
         },
         buttons: {
+            display: 'flex',
             '& > *': {
                 margin: theme.spacing(0, 1),
             },
+        },
+        floatButtonContainer: {
+            position: 'fixed',
+            bottom: theme.spacing(1),
+            right: theme.spacing(2),
+        },
+        floatingButton: {
+            display: 'flex',
+            justifyItems: 'center',
+            alignItems: 'center',
+            marginBottom: theme.spacing(2),
         },
     })
 })
 
 export default function DashboardRouterContainer(props: DashboardRouterContainerProps) {
-    const { title, actions, children, padded, empty, compact = false, leftIcons = [], rightIcons = [] } = props
+    const { title, actions, children, padded, empty, compact = false, floatingButtons = [] } = props
     const isSetup = location.hash.includes('/setup')
     const classes = useStyles({
         isSetup,
     })
-    const history = useHistory()
     const xsMatched = useMatchXS()
-
-    if (xsMatched && !leftIcons.length) {
-        leftIcons.push(
-            <IconButton onClick={() => history.goBack()}>
-                <ArrowBackIosIcon />
-            </IconButton>,
-        )
-    }
 
     return (
         <Fade in>
             <section className={classes.wrapper}>
                 {isSetup ? null : (
                     <>
-                        <section className={classes.title}>
-                            {xsMatched
-                                ? leftIcons?.map((icon, index) =>
-                                      React.cloneElement(icon, {
-                                          key: index,
-                                          size: 'small',
-                                          className: classes.titleIcon,
-                                      }),
-                                  )
-                                : null}
-                            <Typography className={classes.titleContent} color="textPrimary" variant="h6">
-                                {title}
-                            </Typography>
-                            {xsMatched ? <div className={classes.titlePlaceholder}></div> : null}
-                            {xsMatched
-                                ? rightIcons?.map((icon, index) =>
-                                      React.cloneElement(icon, {
-                                          key: index,
-                                          size: 'small',
-                                          className: classes.titleIcon,
-                                      }),
-                                  )
-                                : null}
-                            {xsMatched ? null : (
-                                <div className={classes.buttons}>
-                                    {actions?.map((action, index) => React.cloneElement(action, { key: index }))}
+                        {Flags.has_native_nav_bar ? null : (
+                            <>
+                                <section className={classes.title}>
+                                    <Typography className={classes.titleContent} color="textPrimary" variant="h6">
+                                        {title}
+                                    </Typography>
+
+                                    {Flags.has_native_nav_bar ? null : (
+                                        <div className={classes.buttons}>
+                                            {actions?.map((action, index) => cloneElement(action, { key: index }))}
+                                        </div>
+                                    )}
+                                </section>
+                                <div
+                                    className={classNames({
+                                        [classes.dividerPadded]: padded !== false,
+                                        [classes.dividerCompact]: xsMatched,
+                                    })}>
+                                    <Divider className={classes.divider} />
                                 </div>
-                            )}
-                        </section>
-                        <div
-                            className={classNames({
-                                [classes.dividerPadded]: padded !== false,
-                                [classes.dividerCompact]: xsMatched,
-                            })}>
-                            <Divider className={classes.divider} />
-                        </div>
+                            </>
+                        )}
                     </>
                 )}
                 <main className={classNames(classes.content, { [classes.contentPadded]: padded !== false })}>
@@ -228,6 +209,21 @@ export default function DashboardRouterContainer(props: DashboardRouterContainer
                     </div>
                     {empty ? <div className={classes.placeholder}></div> : null}
                 </main>
+                <div className={classes.floatButtonContainer}>
+                    {Flags.has_native_nav_bar
+                        ? floatingButtons?.map((floatingButton, index) => (
+                              <Fab
+                                  color={FAB_COLORS[index]}
+                                  className={classes.floatingButton}
+                                  onClick={floatingButton.handler}>
+                                  {cloneElement(floatingButton.icon, {
+                                      key: index,
+                                      className: classes.FloatingIcon,
+                                  })}
+                              </Fab>
+                          ))
+                        : null}
+                </div>
             </section>
         </Fade>
     )

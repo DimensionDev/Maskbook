@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback, useModal } from './Base'
+import { useState } from 'react'
+import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import { TextField, makeStyles, createStyles, Button } from '@material-ui/core'
 import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
@@ -35,7 +35,7 @@ export function DashboardContactDeleteConfirmDialog(
         [contact],
         () => {
             props.onClose()
-            onDeleted()
+            setTimeout(onDeleted, 0)
         },
     )
     return (
@@ -82,29 +82,21 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactProps & 
                 primary={contact.nickname || contact.identifier.userId}
                 content={
                     <form>
-                        <TextField
-                            label={t('internal_id')}
-                            value={contact.identifier.toText()}
-                            variant="outlined"
-                            disabled
-                        />
+                        <TextField label={t('internal_id')} value={contact.identifier.toText()} disabled />
                         <TextField
                             label={t('nickname')}
                             value={nickname}
                             onChange={(e) => setNickname(e.target.value)}
-                            variant="outlined"
                         />
                         <TextField
                             label={t('new_avatar_url')}
                             placeholder={t('new_avatar_url_placeholder')}
                             value={avatarURL}
                             onChange={(e) => setAvatarURL(e.target.value)}
-                            variant="outlined"
                         />
                         <TextField
                             label={t('fingerprint')}
                             defaultValue={contact.linkedPersona?.fingerprint}
-                            variant="outlined"
                             disabled
                         />
                     </form>
@@ -155,6 +147,7 @@ export function DashboardContactSearchDialog(props: WrappedDialogProps<{ onSearc
                                     searchText()
                                 }
                             }}
+                            variant="outlined"
                         />
                     </form>
                 }

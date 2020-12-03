@@ -227,6 +227,8 @@ export class ECKeyIdentifier extends Identifier {
 }
 
 export type PersonaIdentifier = ECKeyIdentifier
+// eslint-disable-next-line no-redeclare
+export const PersonaIdentifier = [ECKeyIdentifier]
 
 /**
  * Because "/" is used to split parts in identifier

@@ -11,6 +11,7 @@ class Facebook implements SNS {
     composeButtonSelector = '#feedx_sprouts_container textarea'
     composeImageSelector = '#feedx_sprouts_container .fbScrollableArea img'
     composeEditorSelector = '#feedx_sprouts_container textarea, #feedx_sprouts_container [contenteditable="true"]'
+    composeDialogEditorSelector = ''
     profileSelector = '#profile_timeline_intro_card'
     bioTextareaSelector = 'textarea[name="bio"]'
     commentInputSelector = '.userContentWrapper form.commentable_item form [contenteditable="true"]'
@@ -62,9 +63,9 @@ class Facebook implements SNS {
             waitUntil: 'load',
         })
 
-        const nameInput = await page.waitFor('[name="email"]')
-        const passwordInput = await page.waitFor('[name="pass"]')
-        const submitButton = await page.waitFor('[name="login"]')
+        const nameInput = await page.waitForSelector('[name="email"]')
+        const passwordInput = await page.waitForSelector('[name="pass"]')
+        const submitButton = await page.waitForSelector('[name="login"]')
         // select preexist name
         await nameInput.click({ clickCount: 3 })
         await nameInput.type(this.username)
@@ -75,7 +76,7 @@ class Facebook implements SNS {
         })
 
         // wait for home
-        await page.waitFor('[data-click="profile_icon"]')
+        await page.waitForSelector('[data-click="profile_icon"]')
     }
 
     async logout(page: Page) {
@@ -85,17 +86,17 @@ class Facebook implements SNS {
         })
 
         // click the nav link
-        const navLink = await page.waitFor('#userNavigationLabel')
+        const navLink = await page.waitForSelector('#userNavigationLabel')
         await navLink.click()
-        await page.waitFor(500)
+        await page.waitForTimeout(500)
 
         // click logout button
-        const logoutButton = await page.waitFor('.uiContextualLayer [role="menuitem"][data-gt*="menu_logout"]')
+        const logoutButton = await page.waitForSelector('.uiContextualLayer [role="menuitem"][data-gt*="menu_logout"]')
         await logoutButton.click()
-        await page.waitFor(500)
+        await page.waitForTimeout(500)
 
         // wait for login button
-        await page.waitFor('#loginbutton')
+        await page.waitForSelector('#loginbutton')
     }
 
     async getBio(page: Page) {

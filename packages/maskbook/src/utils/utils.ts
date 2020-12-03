@@ -43,6 +43,7 @@ export function randomElement(arr: unknown[]) {
 
 /**
  * Get reference of file in both extension and storybook
+ * @deprecated Please use `new URL('./file.png', import.meta.url)`
  */
 export function getUrl(path: string, fallback: string = '') {
     if (typeof browser === 'object' && browser.runtime && browser.runtime.getURL) {

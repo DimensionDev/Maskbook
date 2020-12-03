@@ -1,6 +1,5 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { makeStyles, Typography, LinearProgress, Box } from '@material-ui/core'
-import React from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles({
@@ -57,7 +56,10 @@ export const ProgressBar: React.FC<Props> = (props) => {
                 <Duration value={remaining} />
                 <span>{completion}</span>
             </Typography>
-            <Box width="100%">
+            <Box
+                sx={{
+                    width: '100%',
+                }}>
                 <LinearProgress variant={variant} value={value} />
             </Box>
         </Box>

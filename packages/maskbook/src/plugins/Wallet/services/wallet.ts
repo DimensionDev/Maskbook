@@ -1,19 +1,18 @@
 import * as bip39 from 'bip39'
-import { first } from 'lodash-es'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import type { WalletRecord } from '../database/types'
-import { PluginMessageCenter } from '../../PluginMessages'
+import { WalletMessages } from '../messages'
 import { buf2hex, hex2buf, assert } from '../../../utils/utils'
 import { ProviderType } from '../../../web3/types'
 import { resolveProviderName } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
 import { isSameAddress } from '../../../web3/helpers'
-import { currentSelectedWalletAddressSettings } from '../settings'
+import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -36,15 +35,9 @@ export async function isEmptyWallets() {
     return count === 0
 }
 
-export async function getWallet(address: string) {
+export async function getWallet(address: string = currentSelectedWalletAddressSettings.value) {
     const wallets = await getWallets()
     return wallets.find((x) => isSameAddress(x.address, address))
-}
-
-export async function getSelectedWallet() {
-    const wallets = await getWallets()
-    const address = currentSelectedWalletAddressSettings.value
-    return (address ? wallets.find((x) => x.address === address) : undefined) ?? first(wallets)
 }
 
 export async function getWallets(provider?: ProviderType) {
@@ -61,9 +54,14 @@ export async function getWallets(provider?: ProviderType) {
             }),
         )
     ).sort(sortWallet)
-    return wallets.length && typeof provider !== 'undefined' ? wallets.filter((x) => x.provider === provider) : wallets
+    if (provider === ProviderType.Maskbook) return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
+    if (provider === currentSelectedWalletProviderSettings.value)
+        return wallets.filter((x) => isSameAddress(x.address, currentSelectedWalletAddressSettings.value))
+    if (provider) return []
+    return wallets
     async function makePrivateKey(record: WalletRecord) {
-        if (record.provider !== ProviderType.Maskbook) return '0x'
+        // not a managed wallet
+        if (!record._private_key_ && !record.mnemonic.length) return ''
         const { privateKey } = record._private_key_
             ? await recoverWalletFromPrivateKey(record._private_key_)
             : await recoverWallet(record.mnemonic, record.passphrase)
@@ -79,8 +77,6 @@ export async function updateExoticWalletFromSource(
     let modified = false
     for await (const cursor of walletStore) {
         const wallet = cursor.value
-        if (wallet.provider === ProviderType.Maskbook) continue
-        if (wallet.provider !== provider) continue
         {
             if (updates.has(formatChecksumAddress(wallet.address))) {
                 await cursor.update(
@@ -90,13 +86,13 @@ export async function updateExoticWalletFromSource(
                         updatedAt: new Date(),
                     }),
                 )
-            } else await cursor.delete()
+            }
             modified = true
         }
     }
     for (const address of updates.keys()) {
         const wallet = await walletStore.get(formatChecksumAddress(address))
-        if (wallet && wallet.provider === provider) continue
+        if (wallet) continue
         await walletStore.put(
             WalletRecordIntoDB({
                 address,
@@ -106,14 +102,13 @@ export async function updateExoticWalletFromSource(
                 erc20_token_whitelist: new Set(),
                 name: resolveProviderName(provider),
                 passphrase: '',
-                provider,
                 mnemonic: [] as string[],
                 ...updates.get(address)!,
             }),
         )
         modified = true
     }
-    if (modified) PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+    if (modified) WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
 export function createNewWallet(
@@ -123,7 +118,6 @@ export function createNewWallet(
         | 'address'
         | 'mnemonic'
         | 'eth_balance'
-        | 'provider'
         | '_data_source_'
         | 'erc20_token_balance'
         | 'erc20_token_whitelist'
@@ -142,7 +136,7 @@ export async function importNewWallet(
         'name'
     >,
 ) {
-    const { name, provider = ProviderType.Maskbook, mnemonic = [], passphrase = '' } = rec
+    const { name, mnemonic = [], passphrase = '' } = rec
     const address = await getWalletAddress()
     if (!address) throw new Error('cannot get the wallet address')
     if (rec.name === null) rec.name = address.slice(0, 6)
@@ -150,7 +144,6 @@ export async function importNewWallet(
         name,
         mnemonic,
         passphrase,
-        provider,
         address,
         erc20_token_whitelist: new Set(),
         erc20_token_blacklist: new Set(),
@@ -162,7 +155,7 @@ export async function importNewWallet(
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet', 'ERC20Token')
         t.objectStore('Wallet').add(WalletRecordIntoDB(record))
     }
-    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+    WalletMessages.events.walletsUpdated.sendToAll(undefined)
     return address
     async function getWalletAddress() {
         if (rec.address) return rec.address
@@ -186,7 +179,7 @@ export async function renameWallet(address: string, name: string) {
     wallet.name = name
     wallet.updatedAt = new Date()
     t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
-    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+    WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
 export async function removeWallet(address: string) {
@@ -194,7 +187,7 @@ export async function removeWallet(address: string) {
     const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
     if (!wallet) return
     t.objectStore('Wallet').delete(wallet.address)
-    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+    WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
 export async function recoverWallet(mnemonic: string[], password: string) {

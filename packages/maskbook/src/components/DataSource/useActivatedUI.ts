@@ -2,9 +2,11 @@ import type { Profile } from '../../database'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
 import { currentSelectedIdentity } from '../../settings/settings'
+import { useMemo } from 'react'
 
 export function useFriendsList() {
-    return useValueRef(getActivatedUI().friendsRef)
+    const ref = useValueRef(getActivatedUI().friendsRef)
+    return useMemo(() => [...ref.values()], [ref])
 }
 export function useGroupsList() {
     return useValueRef(getActivatedUI().groupsRef)

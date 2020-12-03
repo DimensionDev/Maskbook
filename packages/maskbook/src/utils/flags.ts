@@ -15,8 +15,10 @@ export const Flags = {
     },
     /** There is no "tabs" to navigate to. We must be careful with this. */
     has_no_browser_tab_ui: process.env.architecture === 'app',
-
-    inject_dashboard_entrance: process.env.architecture === 'app',
+    has_no_connected_user_link: process.env.architecture === 'app',
+    has_native_nav_bar: process.env.architecture === 'app',
+    inject_search_result_box: true,
+    inject_search_prediction_box: webOnly,
     /** In E2E, prefer open shadow root so we can test it. */
     using_ShadowDOM_attach_mode: process.env.target === 'E2E' ? 'open' : 'closed',
     /** Don't inject injected script in this mode. Native side will do the job. */
@@ -28,15 +30,18 @@ export const Flags = {
     // TODO: document why it enabled on app
     support_eth_network_switch: process.env.architecture === 'app' || betaOrInsiderOnly,
     //#region Experimental features
-    transak_enabled: false,
+    wallet_enabled: true,
+    /** Prohibit the use of test networks in production */
+    wallet_network_strict_mode_enabled: process.env.NODE_ENV === 'production' && !betaOrInsiderOnly,
+    transak_enabled: betaOrInsiderOnly || devOnly,
     trader_enabled: webOnly,
+    trader_zrx_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
     poll_enabled: webOnly,
     election2020_enabled: webOnly,
-    election2020_composition_dialog_enabled: betaOrInsiderOnly || process.env.NODE_ENV === 'development',
+    election2020_composition_dialog_enabled: betaOrInsiderOnly || devOnly,
     // Note: the server has closed
     matrix_based_service_enabled: false,
-    wallet_connect_support_enabled: webOnly,
     metamask_support_enabled: webOnly,
     //#endregion
 

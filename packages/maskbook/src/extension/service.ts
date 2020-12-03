@@ -1,29 +1,14 @@
 import { AsyncCall, AsyncGeneratorCall, AsyncCallOptions } from 'async-call-rpc/full'
-import { GetContext, OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
+import { isEnvironment, Environment, WebExtensionMessage, MessageTarget } from '@dimensiondev/holoflows-kit'
 import * as MockService from './mock-service'
-import Serialization from '../utils/type-transform/Serialization'
+import serializer from '../utils/type-transform/Serialization'
 import { ProfileIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier, ECKeyIdentifier } from '../database/type'
 
-import { MessageCenter } from '@dimensiondev/holoflows-kit/es'
 import { IdentifierMap } from '../database/IdentifierMap'
-import type { upload as pluginArweaveUpload } from '../plugins/FileService/arweave/index'
 import BigNumber from 'bignumber.js'
 
-interface Services {
-    Crypto: typeof import('./background-script/CryptoService')
-    Identity: typeof import('./background-script/IdentityService')
-    UserGroup: typeof import('./background-script/UserGroupService')
-    Welcome: typeof import('./background-script/WelcomeService')
-    Steganography: typeof import('./background-script/SteganographyService')
-    Plugin: typeof import('./background-script/PluginService')
-    Helper: typeof import('./background-script/HelperService')
-    Provider: typeof import('./background-script/ProviderService')
-    Ethereum: typeof import('./background-script/EthereumService')
-}
-const Services = {} as Services
-export default Services
-
-const logOptions: AsyncCallOptions['log'] = {
+const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services' })
+const log: AsyncCallOptions['log'] = {
     beCalled: true,
     localError: true,
     remoteError: true,
@@ -31,54 +16,23 @@ const logOptions: AsyncCallOptions['log'] = {
     type: 'pretty',
     requestReplay: process.env.NODE_ENV === 'development',
 }
-if (!('Services' in globalThis)) {
-    Object.assign(globalThis, { Services })
-    // Sorry you should add import at '../_background_loader.1.ts'
-    register(createProxyToService('CryptoService'), 'Crypto', MockService.CryptoService)
-    register(createProxyToService('WelcomeService'), 'Welcome', MockService.WelcomeService)
-    register(createProxyToService('SteganographyService'), 'Steganography', MockService.SteganographyService)
-    register(createProxyToService('IdentityService'), 'Identity', {})
-    register(createProxyToService('UserGroupService'), 'UserGroup', {})
-    register(createProxyToService('PluginService'), 'Plugin', MockService.PluginService)
-    register(createProxyToService('HelperService'), 'Helper', MockService.HelperService)
-    register(createProxyToService('ProviderService'), 'Provider', {})
-    register(createProxyToService('EthereumService'), 'Ethereum', {})
+export const Services = {
+    Crypto: add(() => import('./background-script/CryptoService'), 'Crypto', MockService.CryptoService),
+    Identity: add(() => import('./background-script/IdentityService'), 'Identity'),
+    UserGroup: add(() => import('./background-script/UserGroupService'), 'UserGroup'),
+    Welcome: add(() => import('./background-script/WelcomeService'), 'Welcome', MockService.WelcomeService),
+    Steganography: add(
+        () => import('./background-script/SteganographyService'),
+        'Steganography',
+        MockService.SteganographyService,
+    ),
+    Helper: add(() => import('./background-script/HelperService'), 'Helper', MockService.HelperService),
+    Provider: add(() => import('./background-script/ProviderService'), 'Provider'),
+    Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
 }
-interface ServicesWithProgress {
-    // Sorry you should add import at '../_background_loader.1.ts'
-    pluginArweaveUpload: typeof pluginArweaveUpload
-    decryptFromText: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromText
-    decryptFromImageUrl: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromImageUrl
-    sendTransaction: typeof import('./background-script/EthereumServices/transaction').sendTransaction
-}
-function createProxyToService(name: string) {
-    return new Proxy(
-        // @ts-ignore
-        globalThis[name] || {},
-        {
-            get(_, key) {
-                // @ts-ignore
-                const service = globalThis[name] || {}
-                if (key === 'methods')
-                    return () =>
-                        Object.keys(service)
-                            .map((f) => f + ': ' + service[f].toString().split('\n')[0])
-                            .join('\n')
-                return service[key]
-            },
-        },
-    )
-}
-export const ServicesWithProgress = AsyncGeneratorCall<ServicesWithProgress>(
-    createProxyToService('ServicesWithProgress'),
-    {
-        key: 'Service+',
-        log: logOptions,
-        serializer: Serialization,
-        channel: new MessageCenter(false, 'service-progress').eventBasedChannel,
-        strict: false,
-    },
-)
+Object.assign(globalThis, { Services })
+export default Services
+export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', {}, true)
 
 Object.assign(globalThis, {
     ProfileIdentifier,
@@ -96,43 +50,42 @@ Object.defineProperty(BigNumber.prototype, '__debug__amount__', {
     configurable: true,
 })
 
-//#region
-type Service = Record<string, (...args: unknown[]) => Promise<unknown>>
-function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
-    if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false) || process.env.STORYBOOK) {
-        GetContext() !== 'debugging' && console.log(`Service ${name} registered in ${GetContext()}`)
-        const mc = new MessageCenter(process.env.STORYBOOK ? true : false, name)
-        Object.assign(Services, {
-            [name]: AsyncCall(service, {
-                key: name,
-                serializer: Serialization,
-                log: logOptions,
-                channel: mc.eventBasedChannel,
-                preferLocalImplementation: GetContext() === 'background',
-                strict: false,
-            }),
-        })
-        Object.assign(globalThis, { [name]: Object.assign({}, service) })
-        if (process.env.STORYBOOK) {
-            // ? -> UI developing
-            const mockService = new Proxy(mock || {}, {
+/**
+ * Helper to add a new service to Services.* / ServicesWithProgress.* namespace.
+ * @param impl Implementation of the service. Should be things like () => import("./background-script/CryptoService")
+ * @param key Name of the service. Used for better debugging.
+ * @param mock The mock Implementation, used in Storybook.
+ */
+function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, generator = false): T {
+    const channel = message.events[key].bind(process.env.STORYBOOK ? MessageTarget.LocalOnly : MessageTarget.Broadcast)
+    const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
+    if (process.env.STORYBOOK) {
+        // setup mock server in STORYBOOK
+        // ? -> UI developing
+        RPC(
+            new Proxy(mock || {}, {
                 get(target: any, key: string) {
-                    return async function (...args: any[]) {
-                        if (target[key]) return target[key](...args)
-                        return void 0
-                    }
+                    if (target[key]) return target[key]
+                    return async () => void 0
                 },
-            })
-            AsyncCall(mockService, {
-                key: name,
-                serializer: Serialization,
-                log: logOptions,
-                channel: mc.eventBasedChannel,
-                strict: false,
-            })
-        }
-    } else {
-        console.warn('Unknown environment, service not registered')
+            }),
+            { key, serializer: serializer, log: log, channel, strict: false },
+        )
     }
+    const isBackground = isEnvironment(Environment.ManifestBackground)
+    // Only background script need to provide it's implementation.
+    const localImplementation = isBackground
+        ? // Set original impl back to the globalThis, it will help debugging.
+          impl().then((impl) => (Reflect.set(globalThis, key + 'Service', impl), impl))
+        : {}
+    const service = RPC(localImplementation, {
+        key,
+        serializer,
+        log,
+        channel,
+        preferLocalImplementation: isBackground,
+        strict: isBackground,
+    })
+    Reflect.set(globalThis, key + 'Service', service)
+    return service as any
 }
-//#endregion

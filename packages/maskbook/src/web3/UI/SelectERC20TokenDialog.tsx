@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { makeStyles, createStyles, Theme, DialogContent, TextField } from '@material-ui/core'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import type { Token } from '../types'
 import { FixedTokenList } from '../../extension/options-page/DashboardComponents/FixedTokenList'
 import { InjectedDialog } from '../../components/shared/InjectedDialog'
+import type { ERC20TokenDetailed } from '../types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface SelectERC20TokenDialogUIProps extends withClasses<never> {
     open: boolean
     excludeTokens: string[]
-    onSubmit(token: Token): void
+    onSubmit(token: ERC20TokenDetailed): void
     onClose(): void
 }
 
@@ -45,33 +45,30 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     //#endregion
 
     return (
-        <>
-            <InjectedDialog open={open} onExit={onClose} title="Select a Token">
-                <DialogContent>
-                    <TextField
-                        className={classes.search}
-                        label={t('add_token_search_hint')}
-                        autoFocus
-                        fullWidth
-                        value={keyword}
-                        variant="outlined"
-                        onChange={(e) => setKeyword(e.target.value)}
-                    />
-                    <FixedTokenList
-                        classes={{ list: classes.list, placeholder: classes.placeholder }}
-                        useEther={true}
-                        keyword={keyword}
-                        excludeTokens={excludeTokens}
-                        onSubmit={onSubmit}
-                        FixedSizeListProps={{
-                            height: 288,
-                            itemSize: 52,
-                            overscanCount: 4,
-                        }}
-                    />
-                </DialogContent>
-            </InjectedDialog>
-        </>
+        <InjectedDialog open={open} onClose={onClose} title="Select a Token" DialogProps={{ maxWidth: 'xs' }}>
+            <DialogContent>
+                <TextField
+                    className={classes.search}
+                    label={t('add_token_search_hint')}
+                    autoFocus
+                    fullWidth
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                />
+                <FixedTokenList
+                    classes={{ list: classes.list, placeholder: classes.placeholder }}
+                    useEther={true}
+                    keyword={keyword}
+                    excludeTokens={excludeTokens}
+                    onSubmit={onSubmit}
+                    FixedSizeListProps={{
+                        height: 288,
+                        itemSize: 52,
+                        overscanCount: 4,
+                    }}
+                />
+            </DialogContent>
+        </InjectedDialog>
     )
 }
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { DecryptionProgress } from '../../../extension/background-script/CryptoServices/decryptFrom'
@@ -12,7 +12,7 @@ export interface DecryptPostAwaitingProps {
     /** The author of the encrypted post */
     postedBy?: ProfileIdentifier
 }
-export const DecryptPostAwaiting = React.memo(function DecryptPostAwaiting(props: DecryptPostAwaitingProps) {
+export const DecryptPostAwaiting = memo(function DecryptPostAwaiting(props: DecryptPostAwaitingProps) {
     const { AdditionalContentProps, author, postedBy, type } = props
     const { t } = useI18N()
     const key = {
@@ -20,6 +20,7 @@ export const DecryptPostAwaiting = React.memo(function DecryptPostAwaiting(props
         finding_person_public_key: t('decrypted_postbox_decrypting_finding_person_key'),
         init: t('decrypted_postbox_decrypting'),
         decode_post: t('decrypted_postbox_decoding'),
+        iv_decrypted: t('decrypted_postbox_decoding'),
         intermediate_success: 'unreachable case. it should display success UI',
         undefined: t('decrypted_postbox_decrypting'),
     } as const

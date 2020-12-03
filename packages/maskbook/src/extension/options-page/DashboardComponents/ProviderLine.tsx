@@ -1,4 +1,3 @@
-import React from 'react'
 import { Typography, IconButton, Link } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
@@ -10,6 +9,7 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { facebookDomain } from '../../../social-network-provider/facebook.com/isMobile'
 import { twitterDomain } from '../../../social-network-provider/twitter.com/utils/isMobile'
+import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -56,7 +56,6 @@ export default function ProviderLine(props: ProviderLineProps) {
     const { t } = useI18N()
     const { internalName, network, connected, userId, onAction } = props
     const classes = useStylesExtends(useStyles(), props)
-
     return (
         <div className={classes.control}>
             <Typography className={classes.title} variant="body2" color="textSecondary">
@@ -69,7 +68,15 @@ export default function ProviderLine(props: ProviderLineProps) {
                 component="div"
                 onClick={connected ? undefined : onAction}
                 data-testid={`connect_button_${network.toLowerCase()}`}>
-                {connected ? Goto(network, userId) : <span>{`${t('connect_to')} ${network}`}</span>}
+                {connected ? (
+                    Flags.has_no_connected_user_link ? (
+                        <span>{userId}</span>
+                    ) : (
+                        Goto(network, userId)
+                    )
+                ) : (
+                    <span>{`${t('connect_to')} ${network}`}</span>
+                )}
                 {connected ? (
                     <IconButton size="small" onClick={onAction} className={classes.cursor}>
                         <LinkOffIcon />

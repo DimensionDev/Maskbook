@@ -1,20 +1,17 @@
-import * as React from 'react'
-import { useCallback } from 'react'
-import { useI18N } from '../../utils/i18n-next-ui'
+import { useState, useCallback } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Paper, Button, Theme, ListItemText, ListItemIcon } from '@material-ui/core'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import { Theme, IconButton } from '@material-ui/core'
+import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { getActivatedUI } from '../../social-network/ui'
 import { setStorage } from '../../utils/browser.storage'
 import { useStylesExtends } from '../custom-ui-helper'
-import { ProfileIdentifier } from '../../database/type'
-import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { DashboardRoute } from '../../extension/options-page/Route'
+import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
+import { useMount } from 'react-use'
 
 interface BannerUIProps
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'header' | 'content' | 'actions' | 'button'> {
-    title?: string
     description?: string
     nextStep: 'hidden' | { onClick(): void }
     username?:
@@ -27,61 +24,24 @@ interface BannerUIProps
           }
 }
 const useStyles = makeStyles((theme: Theme) => {
-    const network = getActivatedUI()?.networkIdentifier
     return {
-        root: {
-            border: `1px solid ${theme.palette.divider}`,
-            borderRadius: 4,
-            marginBottom: 10,
-            ...(network === 'twitter.com'
-                ? {
-                      borderRadius: 0,
-                      borderStyle: 'solid none none none',
-                      borderTop: `1px solid ${theme.palette.type === 'dark' ? '#2f3336' : '#e6ecf0'}`,
-                      paddingBottom: 10,
-                      marginBottom: 0,
-                      boxShadow: 'none',
-                  }
-                : null),
+        buttonText: {
+            width: 38,
+            height: 38,
+            margin: '10px 0',
         },
-        title: {
-            color: theme.palette.text.primary,
-            paddingBottom: 0,
-        },
-        wrapper: {
-            margin: theme.spacing(1),
-            display: 'flex',
-            alignItems: 'center',
-        },
-        maskicon: {
-            width: 56,
-            height: 56,
-            margin: theme.spacing(0, 1),
+        span: {
+            paddingLeft: 8,
         },
     }
 })
 
 export function BannerUI(props: BannerUIProps) {
-    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    return (
-        <Paper style={{ paddingBottom: 0 }} classes={{ root: classes.root }}>
-            <div className={classes.wrapper}>
-                <ListItemIcon>
-                    <MaskbookIcon className={classes.maskicon}></MaskbookIcon>
-                </ListItemIcon>
-                <ListItemText
-                    className={classes.header}
-                    classes={{ primary: classes.title, secondary: classes.content }}
-                    primary={props.title ?? t('banner_title')}
-                    secondary={props.description ?? t('banner_preparing_setup')}></ListItemText>
-                {props.nextStep === 'hidden' ? null : (
-                    <Button className={classes.button} onClick={props.nextStep.onClick} variant="contained">
-                        {t('banner_get_started')}
-                    </Button>
-                )}
-            </div>
-        </Paper>
+    return props.nextStep === 'hidden' ? null : (
+        <IconButton className={classes.buttonText} onClick={props.nextStep.onClick}>
+            <MaskbookSharpIcon />
+        </IconButton>
     )
 }
 
@@ -91,8 +51,8 @@ export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const { nextStep } = props
     const networkIdentifier = getActivatedUI()?.networkIdentifier
-
-    const [value, onChange] = React.useState('')
+    const identities = useMyIdentities()
+    const [value, onChange] = useState('')
     const defaultNextStep = useCallback(() => {
         if (nextStep === 'hidden') return
         if (!networkIdentifier) {
@@ -111,11 +71,15 @@ export function Banner(props: BannerProps) {
               isValid: getActivatedUI().isValidUsername,
           }
         : ('hidden' as const)
-    return (
+
+    const [mounted, setMounted] = useState(false)
+    useMount(() => setMounted(true))
+
+    return identities.length === 0 && mounted ? (
         <BannerUI
             {...props}
             username={props.username ?? defaultUserName}
             nextStep={props.nextStep ?? { onClick: defaultNextStep }}
         />
-    )
+    ) : null
 }

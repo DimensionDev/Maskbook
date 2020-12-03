@@ -1,8 +1,8 @@
-import { ValueRef, GetContext } from '@dimensiondev/holoflows-kit/es'
+import { ValueRef, Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
 import { Subscription, useSubscription } from 'use-subscription'
 import { useMemo } from 'react'
 export function useValueRef<T>(ref: ValueRef<T>) {
-    if (GetContext() === 'background') throw new Error('Illegal context')
+    if (isEnvironment(Environment.ManifestBackground)) throw new Error('Illegal context')
     const subscription = useMemo<Subscription<T>>(
         () => ({
             getCurrentValue: () => ref.value,

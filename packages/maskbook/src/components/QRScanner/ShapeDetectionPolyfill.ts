@@ -1,12 +1,11 @@
 /// <reference path="./ShapeDetectionSpec.d.ts" />
 import { isNull } from 'lodash-es'
-import { getUrl } from '../../utils/utils'
 import { sideEffect } from '../../utils/side-effects'
+import { OnDemandWorker } from '../../web-workers/OnDemandWorker'
 
-const noop = () => {}
-let worker: Worker
+let worker: OnDemandWorker
 sideEffect.then(() => {
-    worker = new Worker(getUrl('js/qrcode.js'))
+    worker = new OnDemandWorker(new URL('../../web-workers/QRCode.ts', import.meta.url), { name: 'ShapeDetection' })
 })
 
 class BarcodeDetectorPolyfill implements BarcodeDetector {
@@ -24,22 +23,20 @@ class BarcodeDetectorPolyfill implements BarcodeDetector {
         const d = ctx.getImageData(0, 0, canvas.width, canvas.height)
         return new Promise<DetectedBarcode[]>((resolve) => {
             worker.postMessage([d.data, canvas.width, canvas.height])
-            worker.onmessage = (ev: MessageEvent) => {
-                if (isNull(ev.data)) {
-                    resolve([])
-                    return
-                }
-                const result = new DetectedBarcodePolyfill()
-                result.rawValue = ev.data.data
-                resolve([result])
-            }
-            worker.onerror = (err: ErrorEvent) => {
-                resolve([])
-            }
-        }).then((detected) => {
-            worker.onmessage = noop
-            worker.onerror = noop
-            return detected
+            worker.addEventListener(
+                'message',
+                (ev: MessageEvent) => {
+                    if (isNull(ev.data)) {
+                        resolve([])
+                        return
+                    }
+                    const result = new DetectedBarcodePolyfill()
+                    result.rawValue = ev.data.data
+                    resolve([result])
+                },
+                { once: true },
+            )
+            worker.addEventListener('error', () => resolve([]))
         })
     }
 }

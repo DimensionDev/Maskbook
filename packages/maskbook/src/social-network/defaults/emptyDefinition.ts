@@ -1,4 +1,4 @@
-import { GetContext, ValueRef } from '@dimensiondev/holoflows-kit/es'
+import { Environment, ValueRef, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier } from '../../database/type'
 import type { SocialNetworkUIDefinition } from '../ui'
 import { nopWithUnmount } from '../../utils/utils'
@@ -6,6 +6,7 @@ import type { Profile } from '../../database'
 import { ProfileArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 import { ObservableWeakMap } from '../../utils/ObservableMapSet'
 import { noop } from 'lodash-es'
+import { IdentifierMap } from '../../database/IdentifierMap'
 
 /**
  * DO NOT use this in content script
@@ -24,20 +25,21 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     currentIdentity: new ValueRef<Profile | null>(null),
     init() {
-        if (GetContext() === 'content') throw new Error('DO NOT use this in content script')
+        assertNotEnvironment(Environment.ContentScript)
     },
     collectPeople() {},
     collectPosts() {},
     ignoreSetupAccount() {},
     injectCommentBox: nopWithUnmount,
     injectPostBox: noop,
+    injectSetupPrompt: noop,
     injectPostComments: nopWithUnmount,
     injectPostReplacer: nopWithUnmount,
     injectPostInspector: nopWithUnmount,
     injectPageInspector: nopWithUnmount,
     resolveLastRecognizedIdentity: noop,
     posts: new ObservableWeakMap(),
-    friendsRef: new ValueRef([], ProfileArrayComparer),
+    friendsRef: new ValueRef(new IdentifierMap(new Map(), ProfileIdentifier)),
     isDangerousNetwork: false,
     isValidUsername() {
         return true

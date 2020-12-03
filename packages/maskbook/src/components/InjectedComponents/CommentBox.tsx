@@ -1,4 +1,3 @@
-import React from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
 import { InputBase } from '@material-ui/core'
@@ -42,7 +41,6 @@ export function CommentBox(props: CommentBoxProps) {
             placeholder={t('comment_box__placeholder')}
             onKeyDownCapture={(e) => {
                 const node = e.target as HTMLInputElement
-                console.log(e.currentTarget)
                 if (!node.value) return
                 if (e.key === 'Enter') {
                     props.onSubmit(node.value)

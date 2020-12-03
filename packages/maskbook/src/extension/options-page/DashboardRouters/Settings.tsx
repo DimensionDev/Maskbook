@@ -1,6 +1,6 @@
-import React from 'react'
+import { useRef } from 'react'
 import { Typography, Card, List, Paper } from '@material-ui/core'
-import { makeStyles, createStyles, ThemeProvider, Theme, useTheme } from '@material-ui/core/styles'
+import { makeStyles, createStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
 
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
 import {
@@ -16,10 +16,10 @@ import {
     launchPageSettings,
     LaunchPage,
 } from '../../../settings/settings'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined'
@@ -32,14 +32,14 @@ import WifiIcon from '@material-ui/icons/Wifi'
 import LaunchIcon from '@material-ui/icons/Launch'
 import DashboardRouterContainer from './Container'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { merge, cloneDeep } from 'lodash-es'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
 import { Flags } from '../../../utils/flags'
-import { currentDataProviderSettings } from '../../../plugins/Trader/settings'
-import { resolveDataProviderName } from '../../../plugins/Trader/pipes'
-import { DataProvider } from '../../../plugins/Trader/types'
+import { currentDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
+import { resolveDataProviderName, resolveTradeProviderName } from '../../../plugins/Trader/pipes'
+import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
 import { ChainId } from '../../../web3/types'
+import { extendsTheme } from '../../../utils/theme'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -90,52 +90,56 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-const settingsTheme = (theme: Theme): Theme =>
-    merge(cloneDeep(theme), {
-        wrapper: {
-            padding: theme.spacing(0, 3),
+const settingsTheme = extendsTheme((theme) => ({
+    wrapper: {
+        padding: theme.spacing(0, 3),
+    },
+    typography: {
+        body1: {
+            lineHeight: 1.75,
         },
-        typography: {
-            body1: {
-                lineHeight: 1.75,
-            },
-        },
-        overrides: {
-            MuiPaper: {
+    },
+    components: {
+        MuiPaper: {
+            styleOverrides: {
                 rounded: {
                     borderRadius: 12,
                 },
             },
-            MuiCard: {
+        },
+        MuiCard: {
+            styleOverrides: {
                 root: {
                     overflow: 'visible',
                 },
             },
-            MuiOutlinedInput: {
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
                 input: {
                     paddingTop: theme.spacing(1),
                     paddingBottom: theme.spacing(1),
                 },
             },
         },
-    })
+    },
+}))
 
 export default function DashboardSettingsRouter() {
     const { t } = useI18N()
-    const currentLang = useValueRef(languageSettings)
     const isMobile = useMatchXS()
-    const langMapper = React.useRef((x: Language) => {
+    const langMapper = useRef((x: Language) => {
         if (x === Language.en) return t('language_en')
         if (x === Language.zh) return t('language_zh')
         if (x === Language.ja) return t('language_ja')
         return x
     }).current
-    const appearanceMapper = React.useRef((x: Appearance) => {
+    const appearanceMapper = useRef((x: Appearance) => {
         if (x === Appearance.dark) return t('settings_appearance_dark')
         if (x === Appearance.light) return t('settings_appearance_light')
         return t('settings_appearance_default')
     }).current
-    const launchPageMapper = React.useRef((x: LaunchPage) => {
+    const launchPageMapper = useRef((x: LaunchPage) => {
         if (x === LaunchPage.facebook) return 'Facebook'
         if (x === LaunchPage.twitter) return 'Twitter'
         return t('dashboard')
@@ -143,7 +147,7 @@ export default function DashboardSettingsRouter() {
 
     const classes = useStyles()
     const theme = useTheme()
-    const elevation = theme.palette.type === 'dark' ? 1 : 0
+    const elevation = theme.palette.mode === 'dark' ? 1 : 0
 
     const [backupDialog, openBackupDialog] = useModal(DashboardBackupDialog)
     const [restoreDialog, openRestoreDialog] = useModal(DashboardRestoreDialog)
@@ -192,6 +196,13 @@ export default function DashboardSettingsRouter() {
                                     getText={resolveDataProviderName}
                                     icon={<TrendingUpIcon />}
                                     value={currentDataProviderSettings}
+                                />
+                                <SettingsUIEnum
+                                    classes={listStyle}
+                                    enumObject={TradeProvider}
+                                    getText={resolveTradeProviderName}
+                                    icon={<SwapHorizIcon />}
+                                    value={currentTradeProviderSettings}
                                 />
                                 {isMobile ? (
                                     <SettingsUIEnum

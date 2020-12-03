@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import { safeGetActiveUI } from '../utils/safeRequire'
 
 // Priority: classes from props > configHooks > defaultStyles

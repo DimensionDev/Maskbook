@@ -27,11 +27,11 @@
 import { GroupIdentifier, Identifier, ProfileIdentifier } from '../type'
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../utils/type-transform/CryptoKey-JsonWebKey'
-import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
+import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { createDBAccess } from '../helpers/openDB'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 
-OnlyRunInContext(['background', 'debugging'], 'People db')
+assertEnvironment(Environment.ManifestBackground)
 //#region Type and utils
 /**
  * Transform data out of database

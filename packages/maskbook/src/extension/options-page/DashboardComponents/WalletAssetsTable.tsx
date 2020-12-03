@@ -1,4 +1,3 @@
-import React from 'react'
 import {
     Box,
     makeStyles,
@@ -16,10 +15,11 @@ import classNames from 'classnames'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency } from '../../../plugins/Wallet/formatter'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { CurrencyType, TokenDetailed } from '../../../web3/types'
+import { CurrencyType, AssetDetailed, EthereumTokenType } from '../../../web3/types'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { TokenActionsBar } from './TokenActionsBar'
+import { ERC20TokenActionsBar } from './ERC20TokenActionsBar'
+import { useChainIdValid } from '../../../web3/hooks/useChainState'
 
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export interface WalletAssetsTableProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     wallet: WalletRecord
-    detailedTokens: TokenDetailed[]
+    detailedTokens: AssetDetailed[]
 }
 
 export function WalletAssetsTable(props: WalletAssetsTableProps) {
@@ -65,6 +65,10 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
 
     const classes = useStylesExtends(useStyles(), props)
     const LABELS = [t('wallet_assets'), t('wallet_price'), t('wallet_balance'), t('wallet_value'), ''] as const
+
+    const chainIdValid = useChainIdValid()
+    if (!chainIdValid) return null
+    if (!detailedTokens.length) return null
 
     return (
         <TableContainer className={classes.container}>
@@ -85,7 +89,10 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                     {detailedTokens.map((x) => (
                         <TableRow className={classes.cell} key={x.token.address}>
                             {[
-                                <Box display="flex">
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                    }}>
                                     <TokenIcon
                                         classes={{ icon: classes.coin }}
                                         name={x.token.name}
@@ -93,36 +100,60 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                     />
                                     <Typography className={classes.name}>{x.token.name}</Typography>
                                 </Box>,
-                                <Box display="flex" justifyContent="flex-end">
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                    }}>
                                     <Typography className={classes.price} color="textPrimary" component="span">
                                         {x.price?.[CurrencyType.USD]
                                             ? formatCurrency(Number.parseFloat(x.price[CurrencyType.USD]), '$')
                                             : '-'}
                                     </Typography>
                                 </Box>,
-                                <Box display="flex" justifyContent="flex-end">
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                    }}>
                                     <Typography className={classes.name} color="textPrimary" component="span">
-                                        {formatBalance(new BigNumber(x.balance), x.token.decimals)}
+                                        {formatBalance(
+                                            new BigNumber(x.balance),
+                                            x.token.decimals ?? 0,
+                                            x.token.decimals ?? 0,
+                                        )}
                                     </Typography>
                                     <Typography className={classes.symbol} color="textSecondary" component="span">
                                         {x.token.symbol}
                                     </Typography>
                                 </Box>,
-                                <Box display="flex" justifyContent="flex-end">
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                    }}>
                                     <Typography className={classes.price} color="textPrimary" component="span">
                                         {x.value?.[CurrencyType.USD]
                                             ? formatCurrency(Number.parseFloat(x.value[CurrencyType.USD]), '$')
                                             : formatCurrency(0, '$')}
                                     </Typography>
                                 </Box>,
-                                <Box display="flex" justifyContent="flex-end">
-                                    <TokenActionsBar wallet={wallet} token={x.token} />
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                    }}>
+                                    {x.token.type === EthereumTokenType.ERC20 ? (
+                                        <ERC20TokenActionsBar wallet={wallet} token={x.token} />
+                                    ) : null}
                                 </Box>,
-                            ].map((y, i) => (
-                                <TableCell className={classes.cell} key={i}>
-                                    {y}
-                                </TableCell>
-                            ))}
+                            ]
+                                .filter(Boolean)
+                                .map((y, i) => (
+                                    <TableCell className={classes.cell} key={i}>
+                                        {y}
+                                    </TableCell>
+                                ))}
                         </TableRow>
                     ))}
                 </TableBody>

@@ -1,15 +1,19 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
-import { TokenListsState, useTokensFromLists } from '../../../web3/hooks/useTokensFromLists'
-import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core'
+import {
+    TokenListsState,
+    useERC20TokensDetailedFromTokenLists,
+} from '../../../web3/hooks/useERC20TokensDetailedFromTokenLists'
+import { makeStyles, createStyles, Typography } from '@material-ui/core'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../web3/constants'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { isSameAddress } from '../../../web3/helpers'
 import { TokenInList } from './TokenInList'
-import type { Token } from '../../../web3/types'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         list: {},
         placeholder: {},
@@ -20,7 +24,7 @@ export interface FixedTokenListProps extends withClasses<KeysInferFromUseStyles<
     useEther?: boolean
     keyword?: string
     excludeTokens?: string[]
-    onSubmit?(token: Token): void
+    onSubmit?(token: EtherTokenDetailed | ERC20TokenDetailed): void
     FixedSizeListProps?: Partial<FixedSizeListProps>
 }
 
@@ -29,17 +33,18 @@ export function FixedTokenList(props: FixedTokenListProps) {
     const { keyword, excludeTokens, useEther = false, onSubmit, FixedSizeListProps } = props
 
     //#region search tokens
-    const TOKEN_LISTS = useConstant(CONSTANTS, 'TOKEN_LISTS')
+    const ERC20_TOKEN_LISTS = useConstant(CONSTANTS, 'ERC20_TOKEN_LISTS')
     const [address, setAddress] = useState('')
-    const searchedTokens = useTokensFromLists(TOKEN_LISTS, {
+    const { value: etherTokenDetailed } = useEtherTokenDetailed()
+    const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(
+        ERC20_TOKEN_LISTS,
         keyword,
-        useEther,
-    })
+    )
     //#endregion
 
     //#region UI helpers
     const renderList = useCallback(
-        (tokens: Token[]) => {
+        (tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) => {
             return (
                 <FixedSizeList
                     className={classes.list}
@@ -75,8 +80,10 @@ export function FixedTokenList(props: FixedTokenListProps) {
         [],
     )
     //#endregion
-    if (searchedTokens.state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
-    if (searchedTokens.state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token...')
-    if (searchedTokens.tokens.length) return renderList(searchedTokens.tokens)
+
+    if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
+    if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token...')
+    if (useEther && etherTokenDetailed) return renderList([etherTokenDetailed, ...erc20TokensDetailed])
+    if (erc20TokensDetailed.length) return renderList(erc20TokensDetailed)
     return renderPlaceholder('No token found')
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from './Base'
 import { Smile as SmileIcon } from 'react-feather'
 import { TextField } from '@material-ui/core'
@@ -24,6 +24,7 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                             label={t('name')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            variant="outlined"
                         />
                         {/* Todo: fix the whole feedback loop asap, now just mailto info@dimension.im */}
                         <TextField
@@ -33,14 +34,16 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            variant="outlined"
                         />
                         <TextField
                             multiline
-                            rows={4}
+                            minRows={4}
                             required
                             label={t('your_message')}
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
+                            variant="outlined"
                         />
                     </form>
                 }

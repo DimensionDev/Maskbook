@@ -1,9 +1,9 @@
-import React, { useMemo, useContext, useEffect, useRef, useCallback } from 'react'
-import { makeStyles, createStyles, useTheme, useMediaQuery, Theme } from '@material-ui/core'
+import { useMemo, useContext, useEffect, useRef, useCallback, createContext } from 'react'
+import { makeStyles, createStyles, useTheme } from '@material-ui/core'
 import { useLocation } from 'react-router-dom'
 import { noop } from 'lodash-es'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
-import { GetContext } from '@dimensiondev/holoflows-kit/es'
+import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-const DashboardBlurContext = React.createContext<{
+const DashboardBlurContext = createContext<{
     blur(): void
     unblur(): void
 }>(null!)
@@ -27,7 +27,7 @@ export function useBlurContext(open: boolean) {
     const context = useContext(DashboardBlurContext)
     useEffect(() => {
         // for options page only
-        if (GetContext() !== 'options') return
+        if (!isEnvironment(Environment.ManifestOptions)) return
         open ? context.blur() : context.unblur()
     }, [context, open])
 }

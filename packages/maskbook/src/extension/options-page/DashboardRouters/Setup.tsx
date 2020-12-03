@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent } from 'react'
 import {
     Typography,
     Theme,
@@ -17,7 +17,6 @@ import DashboardRouterContainer from './Container'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
 
 import ActionButton from '../DashboardComponents/ActionButton'
-import { merge, cloneDeep } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import Services from '../../service'
@@ -43,6 +42,8 @@ import { sleep } from '../../../utils/utils'
 import { SetupStep } from '../SetupStep'
 import { Flags } from '../../../utils/flags'
 import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
+import { WalletRPC } from '../../../plugins/Wallet/messages'
+import { extendsTheme } from '../../../utils/theme'
 
 //#region setup form
 const useSetupFormStyles = makeStyles((theme) =>
@@ -269,6 +270,7 @@ export function CreatePersona() {
                         inputProps={{
                             'data-testid': 'username_input',
                         }}
+                        variant="outlined"
                     />
                 </>
             }
@@ -362,7 +364,7 @@ export function ConnectNetwork() {
                         onClick={async () => {
                             const [_, address] = await Promise.all([
                                 Services.Identity.setupPersona(persona.identifier),
-                                Services.Plugin.invokePlugin('maskbook.wallet', 'importFirstWallet', {
+                                WalletRPC.importFirstWallet({
                                     name: persona.nickname ?? t('untitled_wallet'),
                                     mnemonic: persona.mnemonic?.words.split(' '),
                                     passphrase: '',
@@ -444,7 +446,7 @@ export function RestoreDatabase() {
                         }}
                     />
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 id: 'text',
@@ -462,7 +464,7 @@ export function RestoreDatabase() {
                         }}
                     />
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
         ],
         state,
@@ -586,6 +588,7 @@ export function RestoreDatabaseAdvance() {
                             inputProps={{
                                 'data-testid': 'username_input',
                             }}
+                            variant="outlined"
                         />
                         <TextField
                             value={mnemonicWordsValue}
@@ -595,6 +598,7 @@ export function RestoreDatabaseAdvance() {
                             inputProps={{
                                 'data-testid': 'mnemonic_input',
                             }}
+                            variant="outlined"
                         />
                         <TextField
                             onChange={(e) => setPassword(e.target.value)}
@@ -603,17 +607,18 @@ export function RestoreDatabaseAdvance() {
                             inputProps={{
                                 'data-testid': 'password_input',
                             }}
+                            variant="outlined"
                         />
                     </>
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 label: 'Base64',
                 children: (
                     <TextField
                         multiline
-                        rows={1}
+                        minRows={1}
                         autoFocus
                         placeholder={t('dashboard_paste_database_base64_hint')}
                         onChange={(e) => setBase64Value(e.target.value)}
@@ -622,10 +627,10 @@ export function RestoreDatabaseAdvance() {
                             style: { height: 147 },
                             'data-testid': 'base64_input',
                         }}
+                        variant="outlined"
                     />
                 ),
-                display: 'flex',
-                p: 0,
+                sx: { display: 'flex', p: 0 },
             },
             {
                 label: t('qr_code'),
@@ -654,7 +659,7 @@ export function RestoreDatabaseAdvance() {
                         />
                     </>
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
         ],
         state,
@@ -836,10 +841,10 @@ export function RestoreDatabaseConfirmation() {
 }
 //#endregion
 
-const setupTheme = (theme: Theme): Theme =>
-    merge(cloneDeep(theme), {
-        overrides: {
-            MuiOutlinedInput: {
+const setupTheme = extendsTheme((theme) => ({
+    components: {
+        MuiOutlinedInput: {
+            styleOverrides: {
                 input: {
                     paddingTop: 14.5,
                     paddingBottom: 14.5,
@@ -849,12 +854,16 @@ const setupTheme = (theme: Theme): Theme =>
                     paddingBottom: 14.5,
                 },
             },
-            MuiInputLabel: {
+        },
+        MuiInputLabel: {
+            styleOverrides: {
                 outlined: {
                     transform: 'translate(14px, 16px) scale(1)',
                 },
             },
-            MuiTextField: {
+        },
+        MuiTextField: {
+            styleOverrides: {
                 root: {
                     marginTop: theme.spacing(2),
                     marginBottom: 0,
@@ -864,19 +873,31 @@ const setupTheme = (theme: Theme): Theme =>
                     },
                 },
             },
-            MuiButton: {
+            defaultProps: {
+                fullWidth: true,
+                variant: 'outlined',
+                margin: 'normal',
+            },
+        },
+        MuiButton: {
+            styleOverrides: {
                 root: {
                     '&[hidden]': {
                         visibility: 'hidden',
                     },
                 },
             },
-            MuiPaper: {
+            defaultProps: { size: 'medium' },
+        },
+        MuiPaper: {
+            styleOverrides: {
                 root: {
                     backgroundColor: 'transparent',
                 },
             },
-            MuiTabs: {
+        },
+        MuiTabs: {
+            styleOverrides: {
                 root: {
                     minHeight: 38,
                 },
@@ -884,24 +905,17 @@ const setupTheme = (theme: Theme): Theme =>
                     height: 1,
                 },
             },
-            MuiTab: {
+        },
+        MuiTab: {
+            styleOverrides: {
                 root: {
                     minHeight: 38,
                     borderBottom: `solid 1px ${theme.palette.divider}`,
                 },
             },
         },
-        props: {
-            MuiButton: {
-                size: 'medium',
-            },
-            MuiTextField: {
-                fullWidth: true,
-                variant: 'outlined',
-                margin: 'normal',
-            },
-        },
-    })
+    },
+}))
 
 const CurrentStep = () => {
     const { step } = useParams<{ step: SetupStep }>()

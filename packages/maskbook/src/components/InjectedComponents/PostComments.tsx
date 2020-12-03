@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Chip, makeStyles } from '@material-ui/core'
 import Lock from '@material-ui/icons/Lock'
 import Services from '../../extension/service'
-import type { ValueRef } from '@dimensiondev/holoflows-kit/es'
+import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import type { ChipProps } from '@material-ui/core/Chip'
 import { useStylesExtends } from '../custom-ui-helper'
@@ -47,7 +47,8 @@ export function PostComment(props: PostCommentProps) {
     const comment = useValueRef(props.comment)
     const decryptedPostContent = usePostInfoDetails('decryptedPostContentRaw')
     const postPayload = usePostInfoDetails('postPayload')
-    const postIV = postPayload.ok ? postPayload.val.iv : ''
+    const iv = usePostInfoDetails('iv')
+    const postIV = postPayload.map((x) => x.iv).unwrapOr(iv)
 
     const dec = useAsync(async () => {
         if (!postIV || !decryptedPostContent) throw new Error('Decrypt comment failed')

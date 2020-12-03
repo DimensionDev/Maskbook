@@ -1,4 +1,4 @@
-import { DOMProxy, LiveSelector, ValueRef } from '@dimensiondev/holoflows-kit/es'
+import { DOMProxy, LiveSelector, ValueRef } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier, PostIdentifier, Identifier } from '../database/type'
 import type { Payload } from '../utils/type-transform/Payload'
 import {
@@ -26,6 +26,9 @@ export abstract class PostInfo {
             this.postMentionedLinks.clear()
             this.postMentionedLinks.add(...parseURL(post))
         })
+        this.postPayload.addListener((payload) => {
+            if (payload.ok) this.iv.value = payload.val.iv
+        })
     }
     readonly nickname = new ValueRef<string | null>(null)
     readonly avatarURL = new ValueRef<string | null>(null)
@@ -52,6 +55,7 @@ export abstract class PostInfo {
     readonly decryptedPostContent = new ValueRef<TypedMessage | null>(null)
     /** @deprecated It should appear in the transformedPostContent */
     readonly decryptedPostContentRaw = new ValueRef('')
+    readonly iv = new ValueRef<string | null>(null)
     abstract readonly rootNode: HTMLElement
     abstract readonly rootNodeProxy: DOMProxy
     abstract readonly postContentNode?: HTMLElement

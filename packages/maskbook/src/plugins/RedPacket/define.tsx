@@ -1,6 +1,5 @@
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { RedPacketInspector } from './UI/RedPacketInspector'
-import React from 'react'
 import { formatBalance } from '../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { RedPacketMetadataReader } from './helpers'
@@ -9,6 +8,7 @@ import type { RedPacketJSONPayload } from './types'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import RedPacketDialog from './UI/RedPacketDialog'
 import Services from '../../extension/service'
+import { WalletRPC } from '../Wallet/messages'
 
 const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDialog(
     '💰 Red Packet',
@@ -22,7 +22,7 @@ const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDia
         />
     ),
     async () => {
-        const wallets = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
+        const wallets = await WalletRPC.getWallets()
         if (wallets.length) return true
         else {
             Services.Provider.requestConnectWallet()
@@ -45,7 +45,8 @@ export const RedPacketPluginDefine: PluginConfig = {
             (payload: RedPacketJSONPayload) => {
                 return `A Red Packet with ${formatBalance(
                     new BigNumber(payload.total),
-                    payload.token?.decimals ?? 18,
+                    payload.token?.decimals ?? 0,
+                    payload.token?.decimals ?? 0,
                 )} $${payload.token?.name || 'ETH'} from ${payload.sender.name}`
             },
         ],

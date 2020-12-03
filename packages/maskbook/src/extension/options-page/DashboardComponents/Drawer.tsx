@@ -1,18 +1,18 @@
-import React from 'react'
+import { Fragment } from 'react'
 import classNames from 'classnames'
-import { List, ListItem, ListItemIcon, ListItemText, Typography, Box, Divider, useMediaQuery } from '@material-ui/core'
-import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/styles'
+import { List, ListItem, ListItemIcon, ListItemText, Typography, Box, Divider } from '@material-ui/core'
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
 import { Link, useRouteMatch } from 'react-router-dom'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardFeedbackDialog } from '../DashboardDialogs/Feedback'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { cloneDeep, merge } from 'lodash-es'
 import Logo from './MaskbookLogo'
 import { Carousel } from './Carousel'
 import { makeNewBugIssueURL } from '../../debug-page/issue'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
+import { extendsTheme } from '../../../utils/theme'
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerItemIcon: {
         [theme.breakpoints.down('sm')]: {
-            color: theme.palette.type === 'light' ? theme.palette.primary.main : theme.palette.text.primary,
+            color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary,
         },
     },
     drawerItemText: {
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
         borderLeft: 'none',
     },
     slogan: {
-        color: theme.palette.type === 'light' ? '#A1C1FA' : '#3B3B3B',
+        color: theme.palette.mode === 'light' ? '#A1C1FA' : '#3B3B3B',
         opacity: 0.5,
         width: 316,
         height: 260,
@@ -81,26 +81,30 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const drawerTheme = (theme: Theme): Theme =>
-    merge(cloneDeep(theme), {
-        overrides: {
-            MuiListItem: {
+const drawerTheme = extendsTheme((theme) => ({
+    components: {
+        MuiListItem: {
+            styleOverrides: {
                 root: {
                     '&$selected$selected': {
                         borderLeftColor:
-                            theme.palette.type === 'dark' ? theme.palette.primary.light : 'var(--drawerBody)',
+                            theme.palette.mode === 'dark' ? theme.palette.primary.light : 'var(--drawerBody)',
                         backgroundColor:
-                            theme.palette.type === 'dark' ? theme.palette.primary.dark : theme.palette.primary.light,
+                            theme.palette.mode === 'dark' ? theme.palette.primary.dark : theme.palette.primary.light,
                     },
                 },
             },
-            MuiListItemIcon: {
+        },
+        MuiListItemIcon: {
+            styleOverrides: {
                 root: {
                     justifyContent: 'center',
                     color: 'unset',
                 },
             },
-            MuiListItemText: {
+        },
+        MuiListItemText: {
+            styleOverrides: {
                 primary: {
                     fontSize: 14,
                     lineHeight: '24px',
@@ -108,7 +112,8 @@ const drawerTheme = (theme: Theme): Theme =>
                 },
             },
         },
-    })
+    },
+}))
 
 interface DrawerProps {
     routers: readonly (readonly [string, string, JSX.Element])[]
@@ -151,15 +156,17 @@ export default function Drawer(props: DrawerProps) {
                     </Box>
                 )}
                 <Box
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="space-between"
-                    className={classes.drawerBody}>
+                    className={classes.drawerBody}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                    }}>
                     {forSetupPurpose ? null : (
                         <>
                             <List className={classes.drawerList}>
                                 {routers.map((item, index) => (
-                                    <React.Fragment key={index}>
+                                    <Fragment key={index}>
                                         <ListItem
                                             className={classes.drawerItem}
                                             selected={match ? item[1].startsWith(match.url) : false}
@@ -181,7 +188,7 @@ export default function Drawer(props: DrawerProps) {
                                             ) : null}
                                         </ListItem>
                                         {xsMatched ? <Divider /> : null}
-                                    </React.Fragment>
+                                    </Fragment>
                                 ))}
                             </List>
                             <List className={classes.drawerList}>

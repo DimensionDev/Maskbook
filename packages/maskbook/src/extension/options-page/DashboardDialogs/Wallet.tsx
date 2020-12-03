@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useAsync, useCopyToClipboard } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
@@ -32,17 +32,15 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton, { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
-import Services from '../../service'
 import type { RedPacketJSONPayload } from '../../../plugins/RedPacket/types'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { DashboardRoute } from '../Route'
 import { sleep, checkInputLengthExceed } from '../../../utils/utils'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import { QRCode } from '../../../components/shared/qrcode'
-import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
+import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { Token, EthereumTokenType } from '../../../web3/types'
-import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
+import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
 import { RedPacketInboundList, RedPacketOutboundList } from '../../../plugins/RedPacket/UI/RedPacketList'
 import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
@@ -51,6 +49,7 @@ import WalletLine from './WalletLine'
 import { isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
+import { WalletRPC } from '../../../plugins/Wallet/messages'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -73,7 +72,7 @@ const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
 
 interface ERC20PredefinedTokenSelectorProps {
     excludeTokens?: string[]
-    onTokenChange?: (next: Token | null) => void
+    onTokenChange?: (next: ERC20TokenDetailed | null) => void
 }
 
 export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelectorProps) {
@@ -84,19 +83,23 @@ export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelector
     const [keyword, setKeyword] = useState('')
 
     return (
-        <Box textAlign="left">
+        <Box
+            sx={{
+                textAlign: 'left',
+            }}>
             <TextField
                 className={classes.search}
                 label={t('add_token_search_hint')}
                 autoFocus
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
+                variant="outlined"
             />
             <FixedTokenList
                 classes={{ list: classes.list, placeholder: classes.placeholder }}
                 keyword={keyword}
                 excludeTokens={excludeTokens}
-                onSubmit={onTokenChange}
+                onSubmit={(token) => token.type === EthereumTokenType.ERC20 && onTokenChange?.(token)}
                 FixedSizeListProps={{
                     height: 192,
                     itemSize: 52,
@@ -110,7 +113,7 @@ export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelector
 
 //#region ERC20 customized token selector
 export interface ERC20CustomizedTokenSelectorProps {
-    onTokenChange?: (next: Token | null) => void
+    onTokenChange?: (next: ERC20TokenDetailed | null) => void
     excludeTokens?: string[]
 }
 
@@ -136,7 +139,10 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
         else onTokenChange?.(null)
     }, [chainId, address, decimals, isValidAddress, name, symbol, onTokenChange])
     return (
-        <Box textAlign="left">
+        <Box
+            sx={{
+                textAlign: 'left',
+            }}>
             <TextField
                 required
                 autoFocus
@@ -144,6 +150,7 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
                 error={!isValidAddress && !!address}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
+                variant="outlined"
             />
             <TextField
                 required
@@ -152,13 +159,21 @@ export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20C
                 type="number"
                 inputProps={{ min: 0 }}
                 onChange={(e) => setDecimals(parseInt(e.target.value))}
+                variant="outlined"
             />
-            <TextField required label={t('add_token_name')} value={name} onChange={(e) => setName(e.target.value)} />
+            <TextField
+                required
+                label={t('add_token_name')}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                variant="outlined"
+            />
             <TextField
                 required
                 label={t('add_token_symbol')}
                 value={symbol}
                 onChange={(e) => setSymbol(e.target.value)}
+                variant="outlined"
             />
         </Box>
     )
@@ -232,10 +247,16 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                                 label={t('wallet_name')}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
+                                variant="outlined"
                             />
                         </form>
                         <br />
-                        <Box display="flex" alignItems="center" justifyContent="center">
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
                             <FormControlLabel
                                 control={
                                     <Checkbox
@@ -244,7 +265,11 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                                     />
                                 }
                                 label={
-                                    <Box display="inline-flex" alignItems="center">
+                                    <Box
+                                        sx={{
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                        }}>
                                         <Typography className={classes.confirmation} variant="body2">
                                             {t('wallet_confirmation_hint')}
                                         </Typography>
@@ -284,16 +309,18 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             label={t('wallet_name')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            variant="outlined"
                         />
                         <TextField
                             required
                             label={t('mnemonic_words')}
                             value={mnemonic}
                             onChange={(e) => setMnemonic(e.target.value)}
+                            variant="outlined"
                         />
                     </div>
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 label: t('private_key'),
@@ -313,6 +340,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             label={t('wallet_name')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            variant="outlined"
                         />
                         <TextField
                             type="password"
@@ -320,11 +348,11 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             label={t('private_key')}
                             value={privKey}
                             onChange={(e) => setPrivKey(e.target.value)}
+                            variant="outlined"
                         />
                     </div>
                 ),
-                display: 'flex',
-                p: 0,
+                sx: { display: 'flex', p: 0 },
             },
         ],
         state,
@@ -334,14 +362,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
     const onSubmit = useSnackbarCallback(
         async () => {
             if (state[0] === 0) {
-                const address = await Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', {
+                const address = await WalletRPC.createNewWallet({
                     name,
                     passphrase,
                 })
                 setAsSelectedWallet(address)
             }
             if (state[0] === 1) {
-                const address = await Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                const address = await WalletRPC.importNewWallet({
                     name,
                     mnemonic: mnemonic.split(' '),
                     passphrase: '',
@@ -349,14 +377,10 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                 setAsSelectedWallet(address)
             }
             if (state[0] === 2) {
-                const { address, privateKeyValid } = await Services.Plugin.invokePlugin(
-                    'maskbook.wallet',
-                    'recoverWalletFromPrivateKey',
-                    privKey,
-                )
+                const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privKey)
                 setAsSelectedWallet(address)
                 if (!privateKeyValid) throw new Error(t('import_failed'))
-                await Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                await WalletRPC.importNewWallet({
                     name,
                     address,
                     _private_key_: privKey,
@@ -376,7 +400,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
             <DashboardDialogWrapper
                 icon={<CreditCardIcon />}
                 iconColor="#4EE0BC"
-                primary={t(state[0] === 0 ? 'create_wallet' : 'import_wallet')}
+                primary={t(state[0] === 0 ? 'plugin_wallet_on_create' : 'import_wallet')}
                 content={<AbstractTab {...tabProps}></AbstractTab>}
                 footer={
                     <DebounceButton
@@ -442,9 +466,16 @@ export function DashboardWalletShareDialog(props: WrappedDialogProps<WalletProps
                                         </InputAdornment>
                                     ),
                                 }}
+                                variant="outlined"
                             />
                         </form>
-                        <Box className={classes.qr} display="flex" justifyContent="center" alignItems="center">
+                        <Box
+                            className={classes.qr}
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
                             <QRCode
                                 text={`ethereum:${wallet.address}`}
                                 options={{ width: 200 }}
@@ -461,11 +492,11 @@ export function DashboardWalletShareDialog(props: WrappedDialogProps<WalletProps
 }
 //#endregion
 
-//#region wallet add token dialog
-export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletProps>) {
+//#region wallet add ERC20 token dialog
+export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
-    const [token, setToken] = React.useState<Token | null>(null)
+    const [token, setToken] = useState<ERC20TokenDetailed | null>(null)
 
     const [tabState, setTabState] = useState(0)
     const state = useMemo(
@@ -506,10 +537,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
     const onSubmit = useSnackbarCallback(
         async () => {
             if (!token) return
-            await Promise.all([
-                Services.Plugin.invokePlugin('maskbook.wallet', 'addERC20Token', token),
-                Services.Plugin.invokePlugin('maskbook.wallet', 'trustERC20Token', wallet.address, token),
-            ])
+            await Promise.all([WalletRPC.addERC20Token(token), WalletRPC.trustERC20Token(wallet.address, token)])
         },
         [token],
         props.onClose,
@@ -544,16 +572,13 @@ const useBackupDialogStyles = makeStyles((theme: Theme) =>
 
 export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
-    const {
-        wallet: { address },
-    } = props.ComponentProps!
+    const { wallet } = props.ComponentProps!
     const classes = useBackupDialogStyles()
-    const wallet = useWallet(address)
     const { value: privateKeyInHex } = useAsync(async () => {
         if (!wallet) return
         const { privateKeyInHex } = wallet._private_key_
-            ? await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', wallet._private_key_)
-            : await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWallet', wallet.mnemonic, wallet.passphrase)
+            ? await WalletRPC.recoverWalletFromPrivateKey(wallet._private_key_)
+            : await WalletRPC.recoverWallet(wallet.mnemonic, wallet.passphrase)
         return privateKeyInHex
     }, [wallet])
 
@@ -589,7 +614,7 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
     const { wallet } = props.ComponentProps!
     const [name, setName] = useState(wallet.name ?? '')
     const renameWallet = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'renameWallet', wallet.address, name),
+        () => WalletRPC.renameWallet(wallet.address, name),
         [wallet.address],
         props.onClose,
     )
@@ -611,7 +636,6 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                         required
                         autoFocus
                         label={t('wallet_name')}
-                        variant="outlined"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         inputProps={{ onKeyPress: (e) => e.key === 'Enter' && renameWallet() }}
@@ -642,7 +666,7 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
     const { wallet } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
         async () => {
-            return Services.Plugin.invokePlugin('maskbook.wallet', 'removeWallet', wallet.address)
+            return WalletRPC.removeWallet(wallet.address)
         },
         [wallet.address],
         props.onClose,
@@ -677,12 +701,12 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
 
 //#region hide wallet token
 export function DashboardWalletHideTokenConfirmDialog(
-    props: WrappedDialogProps<WalletProps & { token: ERC20TokenRecord }>,
+    props: WrappedDialogProps<WalletProps & { token: ERC20TokenDetailed }>,
 ) {
     const { t } = useI18N()
     const { wallet, token } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'blockERC20Token', wallet.address, token),
+        () => WalletRPC.blockERC20Token(wallet.address, token),
         [wallet.address],
         props.onClose,
     )
@@ -781,14 +805,13 @@ export function DashboardWalletHistoryDialog(
         tabs: [
             {
                 label: t('activity_inbound'),
-                children: <RedPacketInboundList from={wallet.address} onSelect={onRedPacketClicked} />,
-                p: 0,
+                children: <RedPacketInboundList onSelect={onRedPacketClicked} />,
+                sx: { p: 0 },
             },
             {
                 label: t('activity_outbound'),
-                children: <RedPacketOutboundList from={wallet.address} onSelect={onRedPacketClicked} />,
-                display: 'flex',
-                p: 0,
+                children: <RedPacketOutboundList onSelect={onRedPacketClicked} />,
+                sx: { display: 'flex', p: 0 },
             },
         ],
         state,
@@ -863,7 +886,7 @@ export function DashboardWalletRedPacketDetailDialog(
                 primary="Red Packet Detail"
                 content={
                     <>
-                        <RedPacket from={wallet.address} payload={payload} />
+                        <RedPacket payload={payload} />
                         {redPacket?.from && !isSameAddress(redPacket.payload.sender.address, wallet.address) && (
                             <ActionButton className={classes.sayThanks} onClick={sayThanks} variant="contained">
                                 Say Thanks
@@ -892,7 +915,12 @@ export function DashboardWalletRedPacketDetailDialog(
                             }
                         />
                         <WalletLine line1="Message" line2={payload.sender.message} />
-                        <Box p={1} display="flex" justifyContent="center">
+                        <Box
+                            sx={{
+                                p: 1,
+                                display: 'flex',
+                                justifyContent: 'center',
+                            }}>
                             <Typography variant="caption" color="textSecondary">
                                 Created at {new Date(payload.creation_time).toLocaleString()}
                             </Typography>

@@ -3,10 +3,10 @@ name: Bug
 about: Report a bug
 title: '[Bug] '
 labels: 'Type: Bug'
-assignees: Jack-Works,jk234ert
+assignees: Jack-Works, jk234ert
 ---
 
-# Bug Report
+## Bug Report
 
 ## Environment
 

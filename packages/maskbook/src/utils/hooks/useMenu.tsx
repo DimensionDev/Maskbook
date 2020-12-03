@@ -1,6 +1,5 @@
-import React, { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { Menu } from '@material-ui/core'
-import { GetContext } from '@dimensiondev/holoflows-kit/es'
 import { PortalShadowRoot } from '../shadow-root/ShadowRootPortal'
 
 /**
@@ -13,7 +12,7 @@ export function useMenu(...menus: (JSX.Element | undefined)[]) {
     const close = () => setOpen(false)
     return [
         <Menu
-            container={GetContext() === 'content' ? PortalShadowRoot : undefined}
+            container={PortalShadowRoot}
             open={open}
             anchorEl={anchorElRef.current}
             onClose={close}

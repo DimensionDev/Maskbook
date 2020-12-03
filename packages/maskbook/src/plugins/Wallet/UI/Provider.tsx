@@ -1,6 +1,4 @@
-import React from 'react'
 import { makeStyles, Theme, createStyles, Typography, Card, ButtonBase, ButtonBaseProps } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -45,7 +43,6 @@ export interface ProviderProps
 }
 
 export function Provider(props: ProviderProps) {
-    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     return (
         <Card className={classes.root} variant="outlined" onClick={props.onClick}>

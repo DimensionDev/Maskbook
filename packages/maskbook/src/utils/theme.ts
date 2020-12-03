@@ -1,7 +1,7 @@
 import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import { orange, green, red, blue, grey } from '@material-ui/core/colors'
-import type { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
+import type { Theme, ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
 import { merge, cloneDeep } from 'lodash-es'
 import { Appearance, appearanceSettings, Language, languageSettings } from '../settings/settings'
 import { useValueRef } from './hooks/useValueRef'
@@ -26,6 +26,7 @@ const base: ThemeOptions = {
     palette: {
         primary: { main: '#1c68f3' }, // blue,
         secondary: orange,
+        text: { hint: 'rgba(0, 0, 0, 0.38)' },
     },
     typography: {
         fontFamily: getFontFamily(),
@@ -39,39 +40,41 @@ const base: ThemeOptions = {
             xl: 1920,
         },
     },
-    overrides: {
+    components: {
         MuiButton: {
-            root: {
-                textTransform: 'unset',
-                minWidth: '100px',
+            styleOverrides: {
+                root: {
+                    textTransform: 'unset',
+                    minWidth: '100px',
+                },
+            },
+            defaultProps: {
+                size: 'small',
+                disableElevation: true,
             },
         },
         MuiTab: {
-            root: { textTransform: 'unset', padding: '0' },
+            styleOverrides: { root: { textTransform: 'unset', padding: '0' } },
         },
         MuiDialog: {
-            paper: {
-                borderRadius: '12px',
+            styleOverrides: {
+                paper: {
+                    borderRadius: '12px',
+                },
             },
-        },
-    },
-    props: {
-        MuiButton: {
-            size: 'small',
-            disableElevation: true,
         },
     },
 }
 
 const lightThemePatch: Partial<ThemeOptions> = {
     palette: {
-        type: 'light',
+        mode: 'light',
     },
 }
 
 const darkThemePatch: Partial<ThemeOptions> = {
     palette: {
-        type: 'dark',
+        mode: 'dark',
         background: {
             paper: grey[900],
         },
@@ -121,7 +124,7 @@ export function useMaskbookTheme(opt?: { appearance?: Appearance; language?: Lan
 }
 
 export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
-    const dark = theme.palette.type === 'dark'
+    const dark = theme.palette.mode === 'dark'
     return createStyles({
         error: {
             color: dark ? red[500] : red[900],
@@ -136,7 +139,7 @@ export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
 })
 
 export const useErrorStyles = makeStyles((theme) => {
-    const dark = theme.palette.type === 'dark'
+    const dark = theme.palette.mode === 'dark'
     return createStyles({
         containedPrimary: {
             backgroundColor: dark ? red[500] : red[900],
@@ -153,3 +156,12 @@ export const useErrorStyles = makeStyles((theme) => {
         },
     })
 })
+export function extendsTheme(extend: (theme: Theme) => ThemeOptions) {
+    return (theme: Theme) => merge(cloneDeep(theme), extend(theme))
+}
+
+declare module '@material-ui/core/styles/createPalette.d' {
+    export interface TypeText {
+        hint: string
+    }
+}

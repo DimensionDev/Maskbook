@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect } from 'react'
-import { makeStyles, createStyles, Card, Typography } from '@material-ui/core'
-import { Skeleton } from '@material-ui/lab'
+import { useCallback, useEffect } from 'react'
+import { makeStyles, createStyles, Card, Typography, Box } from '@material-ui/core'
+import { Skeleton } from '@material-ui/core'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import type { RedPacketJSONPayload } from '../types'
@@ -12,12 +12,25 @@ import { useRefundCallback } from '../hooks/useRefundCallback'
 import { isDAI, isOKB } from '../../../web3/helpers'
 import { resolveRedPacketStatus } from '../pipes'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessageCenter } from '../../Wallet/messages'
-import { useTokenComputed } from '../hooks/useTokenComputed'
+import { WalletMessages } from '../../Wallet/messages'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
+import { useAccount } from '../../../web3/hooks/useAccount'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { resolveChainName } from '../../../web3/pipes'
+import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import {
+    currentIsMetamaskLockedSettings,
+    currentSelectedWalletProviderSettings,
+} from '../../../plugins/Wallet/settings'
+import { ProviderType } from '../../../web3/types'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
+import Services from '../../../extension/service'
+import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -38,6 +51,18 @@ const useStyles = makeStyles((theme) =>
             justifyContent: 'space-between',
             alignItems: 'flex-start',
         },
+        content: {
+            display: 'flex',
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+        },
+        footer: {
+            paddingTop: theme.spacing(2),
+            display: 'flex',
+            justifyContent: 'center',
+        },
         from: {
             flex: '1',
             textAlign: 'left',
@@ -53,13 +78,6 @@ const useStyles = makeStyles((theme) =>
         },
         button: {
             color: theme.palette.common.white,
-        },
-        content: {
-            display: 'flex',
-            flex: 1,
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
         },
         packet: {
             top: 40,
@@ -103,76 +121,103 @@ const useStyles = makeStyles((theme) =>
             top: 0,
             bottom: 0,
         },
+        icon: {
+            fontSize: 45,
+        },
+        metamaskContent: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+        },
     }),
 )
 
 export interface RedPacketProps {
-    from: string
     payload: RedPacketJSONPayload
 }
 
 export function RedPacket(props: RedPacketProps) {
-    const { from, payload } = props
+    const { payload } = props
 
     const { t } = useI18N()
     const classes = useStyles()
 
-    const { value: availability, computed: availabilityComputed } = useAvailabilityComputed(from, payload)
-    const { value: token } = useTokenComputed(payload)
+    // context
+    const account = useAccount()
+    const chainId = useChainId()
+    const chainIdValid = useChainIdValid()
+
+    const currentSelectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
+    const isMetamaskRedpacketLocked =
+        useValueRef(currentIsMetamaskLockedSettings) && currentSelectedWalletProvider === ProviderType.MetaMask
+
+    //#region token detailed
+    const {
+        value: availability,
+        computed: availabilityComputed,
+        retry: revalidateAvailability,
+    } = useAvailabilityComputed(account, payload)
+    const { value: tokenDetailed } = useTokenDetailed(payload.token_type, payload.token?.address ?? '')
+    //#ednregion
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
 
     //#region remote controlled select provider dialog
-    const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
+    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {
-        setOpen({
+        setSelectProviderDialogOpen({
             open: true,
         })
-    }, [setOpen])
+    }, [setSelectProviderDialogOpen])
     //#endregion
 
     //#region remote controlled transaction dialog
+    const postLink = usePostLink()
     const shareLink = useShareLink(
         canClaim
             ? [
                   `I just claimed a red packet from @${payload.sender.name}. Follow @realMaskbook (mask.io) to claim red packets.`,
                   '#mask_io #RedPacket',
-              ].join('\n')
+                  postLink,
+              ]
+                  .filter(Boolean)
+                  .join('\n')
             : '',
     )
-    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(from, payload.rpid, payload.password)
-    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(from, payload.rpid)
+    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(account, payload.rpid, payload.password)
+    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(account, payload.rpid)
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessageCenter,
-        'transactionDialogUpdated',
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             resetClaimCallback()
             resetRefundCallback()
+            revalidateAvailability()
         },
     )
 
     // open the transation dialog
     useEffect(() => {
-        if (claimState.type === TransactionStateType.UNKNOWN) return
-        if (!availability || !token) return
+        const state = canClaim ? claimState : refundState
+        if (state.type === TransactionStateType.UNKNOWN) return
+        if (!availability || !tokenDetailed) return
         setTransactionDialogOpen({
             open: true,
             shareLink,
-            state: canClaim ? claimState : refundState,
+            state,
             summary: canClaim
                 ? `Claiming red packet from ${payload.sender.name}`
                 : canRefund
                 ? `Refunding red packet for ${formatBalance(
                       new BigNumber(availability.balance),
-                      token.decimals,
-                      token.decimals,
-                  )} ${token.symbol}`
+                      tokenDetailed.decimals ?? 0,
+                      tokenDetailed.decimals ?? 0,
+                  )} ${tokenDetailed.symbol}`
                 : '',
         })
-    }, [canClaim, canRefund, shareLink, claimState, refundState])
+    }, [claimState, refundState /* update tx dialog only if state changed */])
     //#endregion
 
     const onClaimOrRefund = useCallback(async () => {
@@ -180,49 +225,43 @@ export function RedPacket(props: RedPacketProps) {
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
 
-    // the red packet can fetch without account
-    if (!availability || !token)
-        return (
-            <Card className={classes.root} component="article" elevation={0}>
-                <Skeleton animation="wave" variant="rect" width={'30%'} height={12} style={{ marginTop: 16 }} />
-                <Skeleton animation="wave" variant="rect" width={'40%'} height={12} style={{ marginTop: 16 }} />
-                <Skeleton animation="wave" variant="rect" width={'70%'} height={12} style={{ marginBottom: 16 }} />
-            </Card>
-        )
-
-    // the red packet cannot claim or refund without account
-    if (!from)
+    if (isMetamaskRedpacketLocked)
         return (
             <Card
                 className={classNames(classes.root, {
+                    [classes.metamaskContent]: true,
                     [classes.cursor]: true,
                 })}
+                onClick={() => Services.Ethereum.connectMetaMask()}
                 component="article"
-                elevation={0}
-                onClick={onConnect}>
-                <div className={classes.header}>
-                    <Typography className={classes.from} variant="body1" color="inherit">
-                        {t('plugin_red_packet_from', { from: payload.sender.name ?? '-' })}
-                    </Typography>
-                </div>
-                <div className={classNames(classes.content)}>
-                    <Typography className={classes.words} variant="h6">
-                        {payload.sender.message}
-                    </Typography>
-                    <Typography variant="body2">Click to connect a wallet.</Typography>
-                </div>
+                elevation={0}>
+                <MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />
+                {t('plugin_wallet_metamask_unlock')}
             </Card>
         )
+
+    // the red packet can fetch without account
+    if (!availability || !tokenDetailed)
+        return (
+            <Card className={classes.root} component="article" elevation={0}>
+                <Skeleton animation="wave" variant="rectangular" width={'30%'} height={12} style={{ marginTop: 16 }} />
+                <Skeleton animation="wave" variant="rectangular" width={'40%'} height={12} style={{ marginTop: 16 }} />
+                <Skeleton
+                    animation="wave"
+                    variant="rectangular"
+                    width={'70%'}
+                    height={12}
+                    style={{ marginBottom: 16 }}
+                />
+            </Card>
+        )
+
+    // the chain id is not available
+    if (!canFetch && payload.network) return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
 
     return (
         <>
-            <Card
-                className={classNames(classes.root, {
-                    [classes.cursor]: canClaim || canRefund,
-                })}
-                component="article"
-                elevation={0}
-                onClick={onClaimOrRefund}>
+            <Card className={classNames(classes.root)} component="article" elevation={0}>
                 <div className={classes.header}>
                     <Typography className={classes.from} variant="body1" color="inherit">
                         {t('plugin_red_packet_from', { name: payload.sender.name ?? '-' })}
@@ -238,39 +277,38 @@ export function RedPacket(props: RedPacketProps) {
                     <Typography className={classes.words} variant="h6">
                         {payload.sender.message}
                     </Typography>
-                    {canFetch ? (
-                        <Typography variant="body2">
-                            {(() => {
-                                if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
-                                    return t('plugin_red_packet_description_refund', {
-                                        balance: formatBalance(
-                                            new BigNumber(availability.balance),
-                                            token.decimals,
-                                            token.decimals,
-                                        ),
-                                        symbol: token.symbol,
-                                    })
-                                if (listOfStatus.includes(RedPacketStatus.claimed))
-                                    return t('plugin_red_packet_description_claimed')
-                                if (listOfStatus.includes(RedPacketStatus.refunded))
-                                    return t('plugin_red_packet_description_refunded')
-                                if (listOfStatus.includes(RedPacketStatus.expired))
-                                    return t('plugin_red_packet_description_expired')
-                                if (listOfStatus.includes(RedPacketStatus.empty))
-                                    return t('plugin_red_packet_description_empty')
-                                if (!payload.password) return t('plugin_red_packet_description_broken')
-                                return t('plugin_red_packet_description_failover', {
-                                    total: formatBalance(new BigNumber(payload.total), token.decimals, token.decimals),
-                                    symbol: token.symbol,
-                                    name: payload.sender.name ?? '-',
-                                    shares: payload.shares ?? '-',
+                    <Typography variant="body2">
+                        {(() => {
+                            if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
+                                return t('plugin_red_packet_description_refund', {
+                                    balance: formatBalance(
+                                        new BigNumber(availability.balance),
+                                        tokenDetailed.decimals ?? 0,
+                                        tokenDetailed.decimals ?? 0,
+                                    ),
+                                    symbol: tokenDetailed.symbol,
                                 })
-                            })()}
-                        </Typography>
-                    ) : null}
-                    {!canFetch && payload.network ? (
-                        <Typography variant="body2">Only available on {payload.network} network.</Typography>
-                    ) : null}
+                            if (listOfStatus.includes(RedPacketStatus.claimed))
+                                return t('plugin_red_packet_description_claimed')
+                            if (listOfStatus.includes(RedPacketStatus.refunded))
+                                return t('plugin_red_packet_description_refunded')
+                            if (listOfStatus.includes(RedPacketStatus.expired))
+                                return t('plugin_red_packet_description_expired')
+                            if (listOfStatus.includes(RedPacketStatus.empty))
+                                return t('plugin_red_packet_description_empty')
+                            if (!payload.password) return t('plugin_red_packet_description_broken')
+                            return t('plugin_red_packet_description_failover', {
+                                total: formatBalance(
+                                    new BigNumber(payload.total),
+                                    tokenDetailed.decimals ?? 0,
+                                    tokenDetailed.decimals ?? 0,
+                                ),
+                                symbol: tokenDetailed.symbol,
+                                name: payload.sender.name ?? '-',
+                                shares: payload.shares ?? '-',
+                            })
+                        })()}
+                    </Typography>
                 </div>
                 <div
                     className={classNames(classes.packet, {
@@ -284,6 +322,19 @@ export function RedPacket(props: RedPacketProps) {
                     })}
                 />
             </Card>
+            {canClaim || canRefund ? (
+                <Box className={classes.footer}>
+                    {!account || !chainIdValid ? (
+                        <ActionButton variant="contained" size="large" onClick={onConnect}>
+                            {t('plugin_wallet_connect_a_wallet')}
+                        </ActionButton>
+                    ) : (
+                        <ActionButton variant="contained" size="large" onClick={onClaimOrRefund}>
+                            {canClaim ? t('plugin_red_packet_claim') : t('plugin_red_packet_refund')}
+                        </ActionButton>
+                    )}
+                </Box>
+            ) : null}
         </>
     )
 }

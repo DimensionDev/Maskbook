@@ -1,39 +1,29 @@
-import React, { useCallback, useEffect } from 'react'
-import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    CardHeader,
-    createStyles,
-    Link,
-    makeStyles,
-    Typography,
-} from '@material-ui/core'
+import { useCallback, useEffect } from 'react'
+import { Box, Card, CardContent, CardHeader, createStyles, Link, makeStyles, Typography } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import classNames from 'classnames'
 import { ElectionCard } from './ElectionCard'
 import type { Election2020JSONPayload } from '../types'
 import FlagImage from '../assets/Flag'
 import FireworksImage from '../assets/Fireworks'
-import { EthereumTokenType } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ELECTION_2020_CONSTANTS } from '../constants'
-import { resolveCandidateName, resolveCandidateBriefName, resolveCandidatePartyType, resolveStateName } from '../pipes'
+import { resolveCandidateName, resolveCandidateBriefName, resolveStateName } from '../pipes'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { resolveChainId, resolveChainName, resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
 import { useMintCallback } from '../hooks/useMintCallback'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { WalletMessageCenter } from '../../Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { useElectionTokens } from '../hooks/useElectionTokens'
 import { useElectionTokensOfOwner } from '../hooks/useElectionTokensOfOwner'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { useAvailability } from '../hooks/useAvailability'
-import { useERC721Token } from '../../../web3/hooks/useERC721Token'
+import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { useChainId } from '../../../web3/hooks/useChainState'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -155,10 +145,7 @@ export function ElectionPacket(props: ElectionPacketProps) {
 
     // fetch the NTF token
     const ELECTION_TOKEN_ADDRESS = useConstant(ELECTION_2020_CONSTANTS, 'ELECTION_TOKEN_ADDRESS')
-    const electionToken = useERC721Token({
-        type: EthereumTokenType.ERC721,
-        address: ELECTION_TOKEN_ADDRESS,
-    })
+    const { value: electionToken } = useERC721TokenDetailed(ELECTION_TOKEN_ADDRESS)
 
     const { value: remaining, loading: loadingRemaining, retry: revalidateAvailability } = useAvailability(
         payload.state,
@@ -173,6 +160,7 @@ export function ElectionPacket(props: ElectionPacketProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
+    const chainIdValid = useChainIdValid()
 
     //#region mint
     const [mintState, mintCallback, resetMintCallback] = useMintCallback(account, payload.state, payload.winner)
@@ -192,8 +180,7 @@ export function ElectionPacket(props: ElectionPacketProps) {
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessageCenter,
-        'transactionDialogUpdated',
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
 
@@ -221,12 +208,12 @@ export function ElectionPacket(props: ElectionPacketProps) {
     //#endregion
 
     //#region remote controlled select provider dialog
-    const [, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'selectProviderDialogUpdated')
+    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {
-        setOpen({
+        setSelectProviderDialogOpen({
             open: true,
         })
-    }, [setOpen])
+    }, [setSelectProviderDialogOpen])
     //#endregion
 
     // TODO:
@@ -291,15 +278,14 @@ export function ElectionPacket(props: ElectionPacketProps) {
                 </CardContent>
             </Card>
             <Box className={classes.footer}>
-                {account && remaining > 0 && tokensOfOwner.length === 0 ? (
-                    <Button onClick={mintCallback} variant="contained">
+                {!account || !chainIdValid ? (
+                    <ActionButton variant="contained" size="large" onClick={onConnect}>
+                        {t('plugin_wallet_connect_a_wallet')}
+                    </ActionButton>
+                ) : remaining > 0 && tokensOfOwner.length === 0 ? (
+                    <ActionButton onClick={mintCallback} variant="contained">
                         {`Get ${resolveCandidateName(payload.winner)} wins NFT`}
-                    </Button>
-                ) : null}
-                {!account ? (
-                    <Button onClick={onConnect} variant="contained">
-                        {t('connect_a_wallet')}
-                    </Button>
+                    </ActionButton>
                 ) : null}
             </Box>
         </>

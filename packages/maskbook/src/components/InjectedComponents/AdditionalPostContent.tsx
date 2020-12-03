@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { makeStyles, Typography, Card, Theme, Box, CircularProgress, CircularProgressProps } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
@@ -8,6 +7,7 @@ import CheckIcon from '@material-ui/icons/Check'
 import CloseIcon from '@material-ui/icons/Close'
 import green from '@material-ui/core/colors/green'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
+import { memo, useCallback, useMemo } from 'react'
 
 export enum AdditionalIcon {
     check = 'check',
@@ -33,9 +33,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     rightIcon: { paddingLeft: theme.spacing(0.75) },
 }))
 
-export const AdditionalContent = React.memo(function AdditionalContent(props: AdditionalContentProps) {
+export const AdditionalContent = memo(function AdditionalContent(props: AdditionalContentProps): JSX.Element {
     const classes = useStylesExtends(useStyles(), props)
-    const stop = React.useCallback((ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => ev.stopPropagation(), [])
+    const stop = useCallback((ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => ev.stopPropagation(), [])
     const { progress, title, message } = props
     const ProgressJSX = !progress ? null : progress === true ? (
         <CircularProgress size={20} color="primary" variant="indeterminate" />
@@ -55,14 +55,18 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
             gutterBottom
             className={classNames(classes.title)}>
             <span className={classes.icon}>{ProgressJSX || <MaskbookIcon></MaskbookIcon>}</span>
-            <Box flex={1} display="flex">
+            <Box
+                sx={{
+                    flex: 1,
+                    display: 'flex',
+                }}>
                 {title}
                 {RightIconJSX}
             </Box>
             {props.headerActions}
         </Typography>
     )
-    const TypedMessage = React.useMemo(() => {
+    const TypedMessage = useMemo(() => {
         if (typeof message === 'string') return makeTypedMessageText(message)
         if (typeof message === 'undefined') return makeTypedMessageText('')
         return message

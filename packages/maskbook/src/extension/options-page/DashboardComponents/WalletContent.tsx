@@ -1,13 +1,14 @@
-import React, { useCallback, useState } from 'react'
-import { Button, Box, IconButton, MenuItem, Tabs, Tab } from '@material-ui/core'
+import { forwardRef, useCallback, useState } from 'react'
+import { truncate } from 'lodash-es'
+import { Button, Box, IconButton, MenuItem, Tabs, Tab, Typography, Avatar } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
-import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined'
+import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import HistoryIcon from '@material-ui/icons/History'
 import { useModal } from '../DashboardDialogs/Base'
 import {
-    DashboardWalletAddTokenDialog,
+    DashboardWalletAddERC20TokenDialog,
     DashboardWalletHistoryDialog,
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
@@ -20,12 +21,14 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorStyles } from '../../../utils/theme'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { ProviderType, TokenDetailed } from '../../../web3/types'
+import type { AssetDetailed } from '../../../web3/types'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { TransakMessageCenter } from '../../../plugins/Transak/messages'
+import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { Flags } from '../../../utils/flags'
 import { ElectionTokenAlbum } from '../../../plugins/Election2020/UI/ElectionTokenAlbum'
+import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
+import { useBlockie } from '../../../web3/hooks/useBlockie'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -38,6 +41,9 @@ const useStyles = makeStyles((theme) =>
                 overflow: 'auto',
             },
         },
+        caption: {
+            padding: theme.spacing(3, 2, 0, 2),
+        },
         header: {
             borderBottom: `1px solid ${theme.palette.divider}`,
         },
@@ -47,10 +53,11 @@ const useStyles = makeStyles((theme) =>
         footer: {
             margin: theme.spacing(1),
         },
-        title: {},
-        tab: {
+        title: {
             flex: 1,
+            paddingLeft: theme.spacing(1),
         },
+        tabs: {},
         addButton: {
             color: theme.palette.primary.main,
         },
@@ -65,10 +72,10 @@ const useStyles = makeStyles((theme) =>
 
 interface WalletContentProps {
     wallet: WalletRecord
-    detailedTokens: TokenDetailed[]
+    detailedTokens: AssetDetailed[]
 }
 
-export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(function WalletContent(
+export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(function WalletContent(
     { wallet, detailedTokens }: WalletContentProps,
     ref,
 ) {
@@ -76,7 +83,7 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
     const { t } = useI18N()
     const color = useColorStyles()
     const xsMatched = useMatchXS()
-    const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
+    const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
     const [walletShare, , openWalletShare] = useModal(DashboardWalletShareDialog)
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
@@ -87,7 +94,7 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
     const [menu, openMenu] = useMenu(
         <MenuItem onClick={() => openWalletShare({ wallet })}>{t('share')}</MenuItem>,
         <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
-        wallet.provider === ProviderType.Maskbook ? (
+        wallet._private_key_ || wallet.mnemonic ? (
             <MenuItem onClick={() => openWalletBackup({ wallet })}>{t('backup')}</MenuItem>
         ) : undefined,
         <MenuItem onClick={() => openWalletDelete({ wallet })} className={color.error} data-testid="delete_button">
@@ -96,40 +103,37 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
     )
 
     //#region remote controlled buy dialog
-    const [, setBuyDialogOpen] = useRemoteControlledDialog(TransakMessageCenter, 'buyTokenDialogUpdated')
+    const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     //#endregion
 
     //#region tab
     const [tabIndex, setTabIndex] = useState(0)
-    const onTabChange = useCallback(
-        (_, newTabIndex: number) => {
-            setTabIndex(newTabIndex)
-        },
-        [tabIndex],
-    )
+    const onTabChange = useCallback((_, newTabIndex: number) => {
+        setTabIndex(newTabIndex)
+    }, [])
     //#endregion
+
+    const blockie = useBlockie(wallet.address)
 
     return (
         <div className={classes.root} ref={ref}>
             <Box
-                pt={xsMatched ? 2 : 3}
-                pb={2}
-                pl={3}
-                pr={2}
-                display="flex"
-                alignItems="center"
-                className={xsMatched ? classes.header : ''}>
-                <Tabs
-                    className={classes.tab}
-                    value={tabIndex}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    onChange={onTabChange}>
-                    <Tab label="Token"></Tab>
-                    <Tab label="Collectibles"></Tab>
-                </Tabs>
+                className={classes.caption}
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                }}>
+                <Avatar src={blockie} />
+                <Typography className={classes.title} variant="h5" color="textPrimary">
+                    {wallet.name ? truncate(wallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN }) : wallet.address}
+                </Typography>
                 {!xsMatched ? (
-                    <Box className={classes.footer} display="flex" alignItems="center" justifyContent="flex-end">
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-end',
+                        }}>
                         {tabIndex === 0 ? (
                             <Button
                                 className={classes.addButton}
@@ -147,7 +151,7 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                                         address: wallet.address,
                                     })
                                 }}
-                                startIcon={<ShoppingCartOutlinedIcon />}>
+                                startIcon={<MonetizationOnOutlinedIcon />}>
                                 {t('buy_now')}
                             </Button>
                         ) : null}
@@ -157,6 +161,27 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                     <MoreVertOutlinedIcon />
                 </IconButton>
                 {menu}
+            </Box>
+
+            <Box
+                className={xsMatched ? classes.header : ''}
+                sx={{
+                    pt: xsMatched ? 2 : 3,
+                    pb: 2,
+                    pl: 3,
+                    pr: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                }}>
+                <Tabs
+                    className={classes.tabs}
+                    value={tabIndex}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    onChange={onTabChange}>
+                    <Tab label="Token"></Tab>
+                    <Tab label="Collectibles"></Tab>
+                </Tabs>
             </Box>
 
             <Box className={classes.content}>
@@ -171,7 +196,12 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
             </Box>
 
             {!xsMatched ? (
-                <Box className={classes.footer} display="flex" alignItems="center">
+                <Box
+                    className={classes.footer}
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                    }}>
                     <Button
                         onClick={() =>
                             openWalletHistory({

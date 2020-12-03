@@ -1,9 +1,12 @@
 import stringify from 'json-stable-stringify'
 import { debounce, first, uniq } from 'lodash-es'
-import { PluginMessageCenter } from '../../../plugins/PluginMessages'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { getWallets } from '../../../plugins/Wallet/services'
-import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
+import {
+    currentSelectedWalletAddressSettings,
+    currentSelectedWalletProviderSettings,
+} from '../../../plugins/Wallet/settings'
 import {
     currentChainStateSettings,
     currentMaskbookChainIdSettings,
@@ -37,7 +40,7 @@ const revalidateChainState = debounce(
 )
 
 // polling the newest block state from the chain
-pollingTask(revalidateChainState, {
+pollingTask(revalidateChainState as any, {
     delay: 30 /* seconds */ * 1000 /* milliseconds */,
 })
 
@@ -47,7 +50,7 @@ currentMetaMaskChainIdSettings.addListener(revalidateChainState)
 currentWalletConnectChainIdSettings.addListener(revalidateChainState)
 
 // revaldiate if the current wallet was changed
-PluginMessageCenter.on('maskbook.wallets.update', revalidateChainState)
+WalletMessages.events.walletsUpdated.on(revalidateChainState)
 //#endregion
 
 //#region tracking wallets
@@ -55,7 +58,7 @@ let wallets: WalletRecord[] = []
 const revalidateWallets = async () => {
     wallets = await getWallets()
 }
-PluginMessageCenter.on('maskbook.wallets.update', revalidateWallets)
+WalletMessages.events.walletsUpdated.on(revalidateWallets)
 revalidateWallets()
 //#endregion
 
@@ -63,15 +66,16 @@ revalidateWallets()
  * Get the chain id which is using by the given (or default) wallet
  * @param address
  */
-export async function getChainId(address?: string) {
+export async function getChainId(address: string) {
     const address_ = currentSelectedWalletAddressSettings.value
+    const provider = currentSelectedWalletProviderSettings.value
     const wallet =
         (address ? wallets.find((x) => isSameAddress(x.address, address)) : undefined) ??
         (address_ ? wallets.find((x) => isSameAddress(x.address, address_)) : undefined) ??
         first(wallets)
     if (!wallet) return currentMaskbookChainIdSettings.value
-    if (wallet.provider === ProviderType.Maskbook) return currentMaskbookChainIdSettings.value
-    if (wallet.provider === ProviderType.MetaMask) return currentMetaMaskChainIdSettings.value
-    if (wallet.provider === ProviderType.WalletConnect) return currentWalletConnectChainIdSettings.value
-    unreachable(wallet.provider)
+    if (provider === ProviderType.Maskbook) return currentMaskbookChainIdSettings.value
+    if (provider === ProviderType.MetaMask) return currentMetaMaskChainIdSettings.value
+    if (provider === ProviderType.WalletConnect) return currentWalletConnectChainIdSettings.value
+    unreachable(provider)
 }

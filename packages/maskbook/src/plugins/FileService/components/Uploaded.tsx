@@ -1,6 +1,6 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
-import React from 'react'
+import { useEffect } from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -50,7 +50,7 @@ export const Uploaded: React.FC = () => {
     const history = useHistory()
     const { onInsert } = useExchange()
     const { state } = useLocation<FileInfo>()
-    React.useEffect(() => {
+    useEffect(() => {
         onInsert(state)
     }, [onInsert, state])
     const onBack = () => {

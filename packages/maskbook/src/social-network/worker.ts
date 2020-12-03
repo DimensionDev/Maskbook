@@ -1,5 +1,5 @@
 import { env, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
-import { GetContext } from '@dimensiondev/holoflows-kit/es'
+import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { ProfileIdentifier, PostIdentifier } from '../database/type'
 import { defaultSharedSettings } from './defaults/shared'
 import getCurrentNetworkWorker from './utils/getCurrentNetworkWorker'
@@ -54,7 +54,7 @@ export function defineSocialNetworkWorker(worker: SocialNetworkWorkerDefinition)
     }
 
     definedSocialNetworkWorkers.add(res)
-    if (GetContext() === 'background') {
+    if (isEnvironment(Environment.ManifestBackground)) {
         console.log('Activating social network provider', res.networkIdentifier, worker)
         res.init(env, {})
     }

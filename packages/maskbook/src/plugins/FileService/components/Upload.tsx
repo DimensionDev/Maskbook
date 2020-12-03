@@ -2,16 +2,16 @@ import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeArrayBuffer } from '@dimensiondev/kit'
 import { Checkbox, FormControlLabel, makeStyles, Typography, Link } from '@material-ui/core'
 import { isNil } from 'lodash-es'
-import React from 'react'
 import { Trans } from 'react-i18next'
 import { useHistory } from 'react-router'
 import { useAsync } from 'react-use'
-import Services from '../../../extension/service'
+import { PluginFileServiceRPC } from '../utils'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeFileKey } from '../arweave/makeFileKey'
-import { FileRouter, MAX_FILE_SIZE, pluginId } from '../constants'
+import { FileRouter, MAX_FILE_SIZE } from '../constants'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
+import { useState } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -51,8 +51,8 @@ export const Upload: React.FC = () => {
     const { t } = useI18N()
     const classes = useStyles()
     const history = useHistory()
-    const [encrypted, setEncrypted] = React.useState(true)
-    const recent = useAsync(() => Services.Plugin.invokePlugin(pluginId, 'getRecentFiles'), [])
+    const [encrypted, setEncrypted] = useState(true)
+    const recent = useAsync(() => PluginFileServiceRPC.getRecentFiles(), [])
     const onFile = async (file: File) => {
         let key: string | undefined = undefined
         if (encrypted) {
@@ -60,8 +60,8 @@ export const Upload: React.FC = () => {
         }
         const block = new Uint8Array(await file.arrayBuffer())
         const checksum = encodeArrayBuffer(await Attachment.checksum(block))
-        const item = await Services.Plugin.invokePlugin(pluginId, 'getFileInfo', checksum)
-        if (isNil(item) && key) {
+        const item = await PluginFileServiceRPC.getFileInfo(checksum)
+        if (isNil(item)) {
             history.replace(FileRouter.uploading, {
                 key,
                 name: file.name,

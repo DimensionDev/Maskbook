@@ -10,26 +10,22 @@ import {
     makeTypedMessageImage,
     makeTypedMessageCompound,
 } from '../../../protocols/typed-message'
-import { Flags } from '../../../utils/flags'
 import { clickSeeMore } from './injectPostInspector'
+import { startWatch } from '../../../utils/watcher'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
-    isMobileFacebook ? '.story_body_container ' : '[role=article] [data-ad-preview="message"]',
+    isMobileFacebook ? '.story_body_container > div' : '[role=article] [data-ad-preview="message"]',
 )
 
 export function collectPostsFacebook(this: SocialNetworkUI) {
-    new MutationObserverWatcher(posts)
-        .useForeach((node, key, metadata) => {
+    startWatch(
+        new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
             clickSeeMore(node)
-        })
-        .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
-        .startWatch({
-            childList: true,
-            subtree: true,
-        })
+        }),
+    )
 
-    new MutationObserverWatcher(posts)
-        .useForeach((node, key, metadata) => {
+    startWatch(
+        new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
             const root = new LiveSelector()
                 .replace(() => [metadata.realCurrent])
                 .closest('[role=article]')
@@ -100,12 +96,8 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 onTargetChanged: collectPostInfo,
                 onRemove: () => this.posts.delete(metadata),
             }
-        })
-        .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
-        .startWatch({
-            childList: true,
-            subtree: true,
-        })
+        }),
+    )
 }
 
 export function collectNodeText(node: HTMLElement | undefined): string {

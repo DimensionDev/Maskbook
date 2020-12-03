@@ -1,4 +1,3 @@
-import React from 'react'
 import { map } from 'lodash-es'
 import { makeNewBugIssueURL } from './issue'
 

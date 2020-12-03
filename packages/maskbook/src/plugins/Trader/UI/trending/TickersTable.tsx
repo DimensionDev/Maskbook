@@ -1,4 +1,3 @@
-import React from 'react'
 import {
     TableContainer,
     Table,
@@ -19,7 +18,7 @@ import { useI18N } from '../../../../utils/i18n-next-ui'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
-            height: 266,
+            maxHeight: 266,
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
@@ -38,13 +37,14 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         placeholder: {
             paddingTop: theme.spacing(10),
+            paddingBottom: theme.spacing(10),
             borderStyle: 'none',
         },
     }),
 )
 
 export interface TickersTableProps {
-    platform: DataProvider
+    dataProvider: DataProvider
     tickers: Ticker[]
 }
 

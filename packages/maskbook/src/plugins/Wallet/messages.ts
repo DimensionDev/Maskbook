@@ -1,6 +1,8 @@
-import { BatchedMessageCenter } from '../../utils/messages'
 import type { TransactionState } from '../../web3/hooks/useTransactionState'
-import type { Token } from '../../web3/types'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
+import { createPluginMessage } from '../utils/createPluginMessage'
+import { createPluginRPC } from '../utils/createPluginRPC'
+import { PLUGIN_IDENTIFIER } from './constants'
 
 type SelectERC20TokenDialogEvent =
     | {
@@ -11,7 +13,7 @@ type SelectERC20TokenDialogEvent =
       }
     | {
           open: false
-          token?: Token
+          token?: EtherTokenDetailed | ERC20TokenDetailed
       }
 
 type SelectProviderDialogEvent =
@@ -30,6 +32,10 @@ type SelectWalletDialogEvent =
     | {
           open: false
       }
+
+type WalletStatusDialogEvent = {
+    open: boolean
+}
 
 type TransactionDialogEvent =
     | {
@@ -51,7 +57,7 @@ type WalletConnectQRCodeDialogEvent =
           open: false
       }
 
-export interface MaskbookWalletMessages {
+interface WalletMessage {
     /**
      * Select wallet dialog
      */
@@ -73,9 +79,18 @@ export interface MaskbookWalletMessages {
     transactionDialogUpdated: TransactionDialogEvent
 
     /**
+     * Wallet status dialog
+     */
+    walletStatusDialogUpdated: WalletStatusDialogEvent
+
+    /**
      * WalletConnect QR Code dialog
      */
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
+    walletsUpdated: void
+    tokensUpdated: void
+    rpc: unknown
 }
 
-export const WalletMessageCenter = new BatchedMessageCenter<MaskbookWalletMessages>(true, 'maskbook-wallet-events')
+export const WalletMessages = createPluginMessage<WalletMessage>(PLUGIN_IDENTIFIER)
+export const WalletRPC = createPluginRPC(PLUGIN_IDENTIFIER, () => import('./services'), WalletMessages.events.rpc)

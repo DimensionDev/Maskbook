@@ -13,8 +13,7 @@ export function useCurrentDataProvider(availableDataProviders: DataProvider[]) {
     useEffect(() => {
         // cached data provider unavailable
         if (!availableDataProviders.includes(currentDataProvider)) return
-        if (currentDataProvider === DataProvider.COIN_GECKO) setDataProvider(DataProvider.COIN_GECKO)
-        else if (currentDataProvider === DataProvider.COIN_MARKET_CAP) setDataProvider(DataProvider.COIN_MARKET_CAP)
+        setDataProvider(currentDataProvider)
     }, [availableDataProviders.sort().join(','), currentDataProvider])
     return dataProvider
 }

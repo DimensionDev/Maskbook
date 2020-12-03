@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 
 export function useQRCodeImageScan(image: React.MutableRefObject<HTMLImageElement | null>) {

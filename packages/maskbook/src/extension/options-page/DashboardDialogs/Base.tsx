@@ -1,8 +1,7 @@
-import React, { useCallback, useReducer } from 'react'
+import { cloneElement, forwardRef, useCallback, useReducer } from 'react'
 import classNames from 'classnames'
 import {
     DialogProps,
-    useMediaQuery,
     Dialog,
     Fade,
     IconButton,
@@ -14,20 +13,16 @@ import {
     SvgIconProps,
     IconButtonProps,
 } from '@material-ui/core'
-import { Theme, ThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
 import type { TransitionProps } from '@material-ui/core/transitions'
 import { useBlurContext } from '../DashboardContexts/BlurContext'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { merge, cloneDeep } from 'lodash-es'
-import { useMaskbookTheme } from '../../../utils/theme'
+import { extendsTheme, useMaskbookTheme } from '../../../utils/theme'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
-const Transition = React.forwardRef<unknown, TransitionProps & Pick<FadeProps, 'children'>>(function Transition(
-    props,
-    ref,
-) {
+const Transition = forwardRef<unknown, TransitionProps & Pick<FadeProps, 'children'>>(function Transition(props, ref) {
     return <Fade ref={ref} {...props} />
 })
 
@@ -81,7 +76,6 @@ export interface WrappedDialogProps<T extends object = any> extends DialogProps 
     ComponentProps?: T
     onClose(): void
 }
-type ShowModal = () => void
 enum DialogState {
     Opened = 1,
     Closing,
@@ -117,11 +111,11 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
     const compositeProps =
         ComponentProps || props ? { ComponentProps: { ...ComponentProps, ...props } as DialogProps } : {}
 
-    const modalProps = {
+    const modalProps: WrappedDialogProps<DialogProps> = {
+        TransitionProps: { onExited },
         ...compositeProps,
         open: state === DialogState.Opened,
         onClose,
-        onExited,
     }
     const theme = useMaskbookTheme()
     const renderedComponent =
@@ -180,10 +174,10 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
     }),
 )
 
-const dialogTheme = (theme: Theme): Theme =>
-    merge(cloneDeep(theme), {
-        overrides: {
-            MuiOutlinedInput: {
+const dialogTheme = extendsTheme((theme) => ({
+    components: {
+        MuiOutlinedInput: {
+            styleOverrides: {
                 input: {
                     paddingTop: 14.5,
                     paddingBottom: 14.5,
@@ -193,12 +187,16 @@ const dialogTheme = (theme: Theme): Theme =>
                     paddingBottom: 14.5,
                 },
             },
-            MuiInputLabel: {
+        },
+        MuiInputLabel: {
+            styleOverrides: {
                 outlined: {
                     transform: 'translate(14px, 16px) scale(1)',
                 },
             },
-            MuiAutocomplete: {
+        },
+        MuiAutocomplete: {
+            styleOverrides: {
                 root: {
                     marginTop: theme.spacing(2),
                 },
@@ -207,7 +205,9 @@ const dialogTheme = (theme: Theme): Theme =>
                     paddingBottom: '5px !important',
                 },
             },
-            MuiTextField: {
+        },
+        MuiTextField: {
+            styleOverrides: {
                 root: {
                     marginTop: theme.spacing(2),
                     marginBottom: 0,
@@ -217,14 +217,24 @@ const dialogTheme = (theme: Theme): Theme =>
                     },
                 },
             },
-            MuiButton: {
+            defaultProps: {
+                fullWidth: true,
+                variant: 'outlined',
+                margin: 'normal',
+            },
+        },
+        MuiButton: {
+            styleOverrides: {
                 root: {
                     '&[hidden]': {
                         visibility: 'hidden',
                     },
                 },
             },
-            MuiTabs: {
+            defaultProps: { size: 'medium' },
+        },
+        MuiTabs: {
+            styleOverrides: {
                 root: {
                     minHeight: 38,
                 },
@@ -232,24 +242,17 @@ const dialogTheme = (theme: Theme): Theme =>
                     height: 1,
                 },
             },
-            MuiTab: {
+        },
+        MuiTab: {
+            styleOverrides: {
                 root: {
                     minHeight: 38,
                     borderBottom: `solid 1px ${theme.palette.divider}`,
                 },
             },
         },
-        props: {
-            MuiButton: {
-                size: 'medium',
-            },
-            MuiTextField: {
-                fullWidth: true,
-                variant: 'outlined',
-                margin: 'normal',
-            },
-        },
-    })
+    },
+}))
 
 interface DashboardDialogWrapperProps {
     icon?: React.ReactElement
@@ -269,7 +272,7 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
         <ThemeProvider theme={dialogTheme}>
             <DialogContent className={classes.wrapper}>
                 <section className={classes.header}>
-                    {icon && React.cloneElement(icon, { width: 64, height: 64, stroke: iconColor })}
+                    {icon && cloneElement(icon, { width: 64, height: 64, stroke: iconColor })}
                     <Typography className={classes.primary} variant="h5">
                         {primary}
                     </Typography>

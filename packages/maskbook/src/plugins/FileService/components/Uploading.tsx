@@ -1,12 +1,12 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
-import React from 'react'
+import { useState, useEffect } from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
 import { useAsync } from 'react-use'
-import Services, { ServicesWithProgress } from '../../../extension/service'
+import { PluginFileServiceRPC, PluginFileServiceRPCGenerator } from '../utils'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { timeout } from '../../../utils/utils'
-import { FileRouter, pluginId } from '../constants'
+import { FileRouter } from '../constants'
 import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
 import { FileName } from './FileName'
@@ -48,17 +48,17 @@ export const Uploading: React.FC = () => {
     const classes = useStyles()
     const history = useHistory()
     const { onUploading } = useExchange()
-    const [startedAt] = React.useState(Date.now())
-    const [preparing, setPreparing] = React.useState(true)
-    const [sendSize, setSendSize] = React.useState(0)
+    const [startedAt] = useState(Date.now())
+    const [preparing, setPreparing] = useState(true)
+    const [sendSize, setSendSize] = useState(0)
     const { state } = useLocation<RouteState>()
-    React.useEffect(() => {
+    useEffect(() => {
         onUploading(true)
         return () => onUploading(false)
     }, [onUploading])
     const { error } = useAsync(async () => {
         const payloadTxID = await timeout(
-            Services.Plugin.invokePlugin(pluginId, 'makeAttachment', {
+            PluginFileServiceRPC.makeAttachment({
                 key: state.key,
                 block: state.block,
                 type: state.type,
@@ -66,11 +66,11 @@ export const Uploading: React.FC = () => {
             60000, // ≈ 1 minute
         )
         setPreparing(false)
-        for await (const pctComplete of ServicesWithProgress.pluginArweaveUpload(payloadTxID)) {
+        for await (const pctComplete of PluginFileServiceRPCGenerator.upload(payloadTxID)) {
             setSendSize(state.size * (pctComplete / 100))
         }
         const landingTxID = await timeout(
-            Services.Plugin.invokePlugin(pluginId, 'uploadLandingPage', {
+            PluginFileServiceRPC.uploadLandingPage({
                 name: state.name,
                 size: state.size,
                 txId: payloadTxID,
@@ -90,10 +90,10 @@ export const Uploading: React.FC = () => {
             payloadTxID: payloadTxID,
             landingTxID: landingTxID,
         }
-        await Services.Plugin.invokePlugin(pluginId, 'setFileInfo', item)
+        await PluginFileServiceRPC.setFileInfo(item)
         history.replace(FileRouter.uploaded, item)
     }, [])
-    React.useEffect(() => {
+    useEffect(() => {
         if (error) {
             onUploading(false)
         }

@@ -1,17 +1,18 @@
 import { PluginConfig, PluginStage, PluginScope } from '../types'
-import React, { Suspense, useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import { SnackbarContent } from '@material-ui/core'
 import { parseURL } from '../../utils/utils'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { extractTextFromTypedMessage } from '../../protocols/typed-message'
 import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import { Gitcoin } from './UI/Gitcoin'
+import { gitcoinPluginID } from './constants'
 
 const isGitcoin = (x: string): boolean => x.startsWith('https://gitcoin.co/grants')
 
 export const GitcoinPluginDefine: PluginConfig = {
     pluginName: 'Gitcoin',
-    identifier: 'co.gitcoin',
+    identifier: gitcoinPluginID,
     stage: PluginStage.Production,
     scope: PluginScope.Public,
     successDecryptionInspector: function Component(props): JSX.Element | null {

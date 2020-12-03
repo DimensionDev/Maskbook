@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import {
     makeStyles,
     Theme,
@@ -19,7 +19,7 @@ import { TransactionState, TransactionStateType } from '../hooks/useTransactionS
 import { resolveTransactionLinkOnEtherscan } from '../pipes'
 import { InjectedDialog } from '../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessageCenter } from '../../plugins/Wallet/messages'
+import { WalletMessages } from '../../plugins/Wallet/messages'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -60,7 +60,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
     const [state, setState] = useState<TransactionState | null>(null)
     const [shareLink, setShareLink] = useState('')
     const [summary, setSummary] = useState('')
-    const [open, setOpen] = useRemoteControlledDialog(WalletMessageCenter, 'transactionDialogUpdated', (ev) => {
+    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, (ev) => {
         if (ev.open) {
             setState(ev.state)
             setSummary(ev.summary ?? '')
@@ -78,85 +78,82 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
         setOpen({
             open: false,
         })
-    }, [state])
+    }, [setOpen])
     //#endregion
 
     if (!state) return null
     return (
-        <>
-            <InjectedDialog open={open} onExit={onClose} title="Transaction">
-                <DialogContent className={classes.content}>
-                    {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ? (
-                        <>
-                            <CircularProgress size={64} color="primary" />
-                            <Typography className={classes.primary} color="textPrimary" variant="subtitle1">
-                                {t('plugin_wallet_transaction_wait_for_confirmation')}
-                            </Typography>
-                            <Typography className={classes.secondary} color="textSecondary">
-                                {summary}
-                            </Typography>
-                        </>
-                    ) : null}
-                    {state.type === TransactionStateType.HASH ? (
-                        <>
-                            <DoneIcon className={classes.icon} />
-                            <Typography className={classes.primary} color="textPrimary">
-                                {t('plugin_wallet_transaction_submitted')}
-                            </Typography>
-                            <Typography>
-                                <Link
-                                    className={classes.link}
-                                    href={resolveTransactionLinkOnEtherscan(chainId, state.hash)}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    {t('plugin_wallet_view_on_etherscan')}
-                                </Link>
-                            </Typography>
-                        </>
-                    ) : null}
-                    {state.type === TransactionStateType.CONFIRMED ? (
-                        <>
-                            <DoneIcon className={classes.icon} />
-                            <Typography className={classes.primary} color="textPrimary">
-                                {t('plugin_wallet_transaction_confirmed')}
-                            </Typography>
-                            <Typography>
-                                <Link
-                                    className={classes.link}
-                                    href={resolveTransactionLinkOnEtherscan(chainId, state.receipt.transactionHash)}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    {t('plugin_wallet_view_on_etherscan')}
-                                </Link>
-                            </Typography>
-                        </>
-                    ) : null}
-                    {state.type === TransactionStateType.FAILED ? (
-                        <>
-                            <WarningIcon className={classes.icon} />
-                            <Typography className={classes.primary} color="textPrimary">
-                                {state.error.message.includes('User denied transaction signature.')
-                                    ? t('plugin_wallet_transaction_rejected')
-                                    : state.error.message}
-                            </Typography>
-                        </>
-                    ) : null}
-                </DialogContent>
-                {state.type !== TransactionStateType.UNKNOWN &&
-                state.type !== TransactionStateType.WAIT_FOR_CONFIRMING ? (
-                    <DialogActions>
-                        <Button
-                            color="primary"
-                            size="large"
-                            variant="contained"
-                            fullWidth
-                            onClick={state.type === TransactionStateType.FAILED || !shareLink ? onClose : onShare}>
-                            {state.type === TransactionStateType.FAILED || !shareLink ? t('dismiss') : t('share')}
-                        </Button>
-                    </DialogActions>
+        <InjectedDialog open={open} onClose={onClose} title="Transaction" DialogProps={{ maxWidth: 'xs' }}>
+            <DialogContent className={classes.content}>
+                {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ? (
+                    <>
+                        <CircularProgress size={64} color="primary" />
+                        <Typography className={classes.primary} color="textPrimary" variant="subtitle1">
+                            {t('plugin_wallet_transaction_wait_for_confirmation')}
+                        </Typography>
+                        <Typography className={classes.secondary} color="textSecondary">
+                            {summary}
+                        </Typography>
+                    </>
                 ) : null}
-            </InjectedDialog>
-        </>
+                {state.type === TransactionStateType.HASH ? (
+                    <>
+                        <DoneIcon className={classes.icon} />
+                        <Typography className={classes.primary} color="textPrimary">
+                            {t('plugin_wallet_transaction_submitted')}
+                        </Typography>
+                        <Typography>
+                            <Link
+                                className={classes.link}
+                                href={resolveTransactionLinkOnEtherscan(chainId, state.hash)}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                {t('plugin_wallet_view_on_etherscan')}
+                            </Link>
+                        </Typography>
+                    </>
+                ) : null}
+                {state.type === TransactionStateType.CONFIRMED ? (
+                    <>
+                        <DoneIcon className={classes.icon} />
+                        <Typography className={classes.primary} color="textPrimary">
+                            {t('plugin_wallet_transaction_confirmed')}
+                        </Typography>
+                        <Typography>
+                            <Link
+                                className={classes.link}
+                                href={resolveTransactionLinkOnEtherscan(chainId, state.receipt.transactionHash)}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                {t('plugin_wallet_view_on_etherscan')}
+                            </Link>
+                        </Typography>
+                    </>
+                ) : null}
+                {state.type === TransactionStateType.FAILED ? (
+                    <>
+                        <WarningIcon className={classes.icon} />
+                        <Typography className={classes.primary} color="textPrimary">
+                            {state.error.message.includes('User denied transaction signature.')
+                                ? t('plugin_wallet_transaction_rejected')
+                                : state.error.message}
+                        </Typography>
+                    </>
+                ) : null}
+            </DialogContent>
+            {state.type !== TransactionStateType.UNKNOWN && state.type !== TransactionStateType.WAIT_FOR_CONFIRMING ? (
+                <DialogActions>
+                    <Button
+                        color="primary"
+                        size="large"
+                        variant="contained"
+                        fullWidth
+                        onClick={state.type === TransactionStateType.FAILED || !shareLink ? onClose : onShare}>
+                        {state.type === TransactionStateType.FAILED || !shareLink ? t('dismiss') : t('share')}
+                    </Button>
+                </DialogActions>
+            ) : null}
+        </InjectedDialog>
     )
 }
 

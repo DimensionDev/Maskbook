@@ -35,19 +35,17 @@ function createContract<T extends Contract>(from: string, address: string, ABI: 
                                 data: cached.encodeABI(),
                                 ...config,
                             })
-                            const result = await Services.Ethereum.callTransaction(config_.from as string, config_)
+                            const result = await Services.Ethereum.callTransaction(config_)
 
                             if (process.env.NODE_ENV === 'development')
-                                console.log(
-                                    `call - ${JSON.stringify({
-                                        name,
-                                        args,
-                                        config: config_,
-                                        result,
-                                        outputs: methodABI?.outputs ?? [],
-                                    })}`,
-                                )
-
+                                console.log({
+                                    type: 'call',
+                                    name,
+                                    args,
+                                    config: config_,
+                                    outputs: methodABI?.outputs ?? [],
+                                    result,
+                                })
                             return decodeOutputString(nonFunctionalWeb3, methodABI?.outputs ?? [], result)
                         },
                         // don't add async keyword for this method because a PromiEvent was returned
@@ -60,13 +58,12 @@ function createContract<T extends Contract>(from: string, address: string, ABI: 
                             })
 
                             if (process.env.NODE_ENV === 'development')
-                                console.log(
-                                    `send - ${JSON.stringify({
-                                        name,
-                                        args,
-                                        config: config_,
-                                    })}`,
-                                )
+                                console.log({
+                                    type: 'send',
+                                    name,
+                                    args,
+                                    config: config_,
+                                })
 
                             const iterator = ServicesWithProgress.sendTransaction(config_.from as string, config_)
 

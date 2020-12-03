@@ -1,16 +1,16 @@
-import React from 'react'
+import { memo } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { PageInspector, PageInspectorProps } from '../../components/InjectedComponents/PageInspector'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
-import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit/es'
-import { Flags } from '../../utils/flags'
+import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
+import { startWatch } from '../../utils/watcher'
 
 export function injectPageInspectorDefault<T extends string>(
     config: InjectPageInspectorDefaultConfig = {},
     additionalPropsToPageInspector: (classes: Record<T, string>) => Partial<PageInspectorProps> = () => ({}),
     useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
 ) {
-    const PageInspectorDefault = React.memo(function PageInspectorDefault() {
+    const PageInspectorDefault = memo(function PageInspectorDefault() {
         const classes = useCustomStyles()
         const additionalProps = additionalPropsToPageInspector(classes)
         return <PageInspector {...additionalProps} />
@@ -18,14 +18,7 @@ export function injectPageInspectorDefault<T extends string>(
 
     return function injectPageInspector() {
         const watcher = new MutationObserverWatcher(new LiveSelector().querySelector('body'))
-            .setDOMProxyOption({
-                afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
-            })
-            .startWatch({
-                childList: true,
-                subtree: true,
-            })
-
+        startWatch(watcher)
         return renderInShadowRoot(<PageInspectorDefault />, { shadow: () => watcher.firstDOMProxy.afterShadow })
     }
 }

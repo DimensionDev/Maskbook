@@ -8,14 +8,13 @@ import type { ITxData } from '@walletconnect/types'
 import * as Maskbook from '../providers/Maskbook'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import { currentWalletConnectChainIdSettings } from '../../../../settings/settings'
-import { ChainId, TransactionEventType } from '../../../../web3/types'
+import {
+    currentSelectedWalletAddressSettings,
+    currentSelectedWalletProviderSettings,
+} from '../../../../plugins/Wallet/settings'
+import { TransactionEventType } from '../../../../web3/types'
 import { ProviderType } from '../../../../web3/types'
-import { currentSelectedWalletAddressSettings } from '../../../../plugins/Wallet/settings'
-
-//#region tracking chain id
-let currentChainId: ChainId = ChainId.Mainnet
-currentWalletConnectChainIdSettings.addListener((v) => (currentChainId = v))
-//#endregion
+import { first } from 'lodash-es'
 
 let web3: Web3 | null = null
 let provider: Provider | null = null
@@ -48,7 +47,7 @@ export async function createConnectorIfNeeded() {
 
 export function createProvider() {
     if (!connector?.connected) throw new Error('The connection is lost, please reconnect.')
-    return Maskbook.createProvider(currentChainId)
+    return Maskbook.createProvider(currentWalletConnectChainIdSettings.value)
 }
 
 //#region hijack web3js calls and forword them to walletconnect APIs
@@ -147,7 +146,7 @@ export async function requestAccounts() {
 const onConnect = async () => {
     if (!connector?.accounts.length) return
     currentWalletConnectChainIdSettings.value = connector.chainId
-    for (const account of connector.accounts) await updateWalletInDB(account, connector.peerMeta?.name, true)
+    await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, true)
 }
 
 const onUpdate = async (
@@ -162,21 +161,31 @@ const onUpdate = async (
     if (error) return
     if (!connector?.accounts.length) return
     currentWalletConnectChainIdSettings.value = connector.chainId
-    for (const account of connector.accounts) await updateWalletInDB(account, connector.peerMeta?.name, false)
+    await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, false)
 }
 
 const onDisconnect = async (error: Error | null) => {
     if (connector?.connected) await connector.killSession()
     connector = null
+    if (currentSelectedWalletProviderSettings.value === ProviderType.WalletConnect)
+        currentSelectedWalletAddressSettings.value = ''
 }
 
 async function updateWalletInDB(address: string, name: string = 'WalletConnect', setAsDefault: boolean = false) {
+    const provider_ = currentSelectedWalletProviderSettings.value
+
     // validate address
-    if (!EthereumAddress.isValid(address)) throw new Error('Cannot found account or invalid account')
+    if (!EthereumAddress.isValid(address)) {
+        if (provider_ === ProviderType.WalletConnect) currentSelectedWalletAddressSettings.value = ''
+        return
+    }
 
     // update wallet in the DB
     await updateExoticWalletFromSource(ProviderType.WalletConnect, new Map([[address, { name, address }]]))
 
+    // update the selected wallet provider type
+    if (setAsDefault) currentSelectedWalletProviderSettings.value = ProviderType.WalletConnect
+
     // update the selected wallet address
-    if (setAsDefault) currentSelectedWalletAddressSettings.value = address
+    if (setAsDefault || provider_ === ProviderType.WalletConnect) currentSelectedWalletAddressSettings.value = address
 }

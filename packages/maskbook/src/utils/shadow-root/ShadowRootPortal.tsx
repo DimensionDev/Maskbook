@@ -1,4 +1,4 @@
-import { GetContext } from '@dimensiondev/holoflows-kit/es'
+import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { untilDomLoaded } from '../dom'
 import { Flags } from '../flags'
 
@@ -13,7 +13,7 @@ untilDomLoaded().then(() => {
 })
 
 export function PortalShadowRoot(): Element {
-    if (GetContext() === 'options') return document.body
+    if (isEnvironment(Environment.ExtensionProtocol)) return document.body
     if (globalThis.location.hostname === 'localhost') return document.body
     return inner
 }

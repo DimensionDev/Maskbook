@@ -1,4 +1,4 @@
-import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit/es'
+import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { timeout } from '../../../utils/utils'
 
 const postContent = new LiveSelector().querySelector<HTMLElement>('[data-ad-preview="message"]')

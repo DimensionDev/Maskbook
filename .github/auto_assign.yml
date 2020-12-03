@@ -1,0 +1,16 @@
+addReviewers: true
+
+addAssignees: false
+
+reviewers:
+  - guanbinrui
+  - Jack-Works
+  - jk234ert
+  - septs
+  - zhouhanseng
+
+numberOfReviewers: 0
+
+skipKeywords: # A list of keywords to be skipped the process that add reviewers if pull requests include it
+  - wip
+  - draft

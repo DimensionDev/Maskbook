@@ -1,4 +1,3 @@
-import React from 'react'
 import { MemoryRouter, Redirect, Route } from 'react-router'
 import { FileRouter } from '../constants'
 import { Upload } from './Upload'

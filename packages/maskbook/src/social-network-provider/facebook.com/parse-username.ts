@@ -44,11 +44,6 @@ export function getProfilePageUrlAtFacebook(user: ProfileIdentifier | GroupIdent
     return `${host}/${username}`
 }
 export function getFacebookHostName(usage: 'fetch' | 'open') {
-    // if (usage === 'fetch') {
-    // if (GetContext() === 'background' || isMobileFacebook) return 'https://m.facebook.com'
-    // return 'https://www.facebook.com'
-    // } else {
     if (isMobileFacebook) return 'https://m.facebook.com'
     return 'https://www.facebook.com'
-    // }
 }

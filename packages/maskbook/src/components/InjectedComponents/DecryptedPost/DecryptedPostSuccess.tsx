@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo, useRef, useEffect } from 'react'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
 import { useShareMenu } from '../SelectPeopleDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -7,7 +7,7 @@ import { Link } from '@material-ui/core'
 import type { Profile } from '../../../database'
 import { useStylesExtends } from '../../custom-ui-helper'
 import type { TypedMessage } from '../../../protocols/typed-message'
-import { PluginUI } from '../../../plugins/plugin'
+import { PluginUI } from '../../../plugins/PluginUI'
 import type { PluginConfig } from '../../../plugins/types'
 import { usePostInfo } from '../../DataSource/usePostInfo'
 import type { ProfileIdentifier } from '../../../database/type'
@@ -36,7 +36,7 @@ const useSuccessStyles = makeStyles((theme) => {
     })
 })
 
-export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
+export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
     const {
         data: { content },
         profiles,
@@ -72,7 +72,7 @@ function SuccessDecryptionPlugin(props: PluginSuccessDecryptionComponentProps) {
     return (
         <>
             {[...PluginUI.values()].map((x) => (
-                <ErrorBoundary key={x.identifier}>
+                <ErrorBoundary contain={`Plugin "${x.pluginName}"`} key={x.identifier}>
                     <PluginSuccessDecryptionPostInspectorForEach pluginConfig={x} {...props} />
                 </ErrorBoundary>
             ))}
@@ -82,10 +82,10 @@ function SuccessDecryptionPlugin(props: PluginSuccessDecryptionComponentProps) {
 
 function PluginSuccessDecryptionPostInspectorForEach(props: { pluginConfig: PluginConfig; message: TypedMessage }) {
     const { pluginConfig, message } = props
-    const ref = React.useRef<HTMLDivElement | null>(null)
+    const ref = useRef<HTMLDivElement | null>(null)
     const F = pluginConfig.successDecryptionInspector
     const post = usePostInfo()
-    React.useEffect(() => {
+    useEffect(() => {
         if (!ref.current || !F || typeof F === 'function') return
         return F.init(post, { message }, ref.current)
     }, [F, post, message])

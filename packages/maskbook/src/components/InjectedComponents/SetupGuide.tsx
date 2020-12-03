@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react'
+import { useMemo, useState, useEffect, useCallback } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import {
     makeStyles,
@@ -13,6 +13,7 @@ import {
     unstable_createMuiStrictModeTheme,
     IconButton,
     Box,
+    Hidden,
 } from '@material-ui/core'
 import classNames from 'classnames'
 import { ArrowRight } from 'react-feather'
@@ -21,40 +22,53 @@ import CloseIcon from '@material-ui/icons/Close'
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 import stringify from 'json-stable-stringify'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
-import { merge, cloneDeep, noop } from 'lodash-es'
+import { noop } from 'lodash-es'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { getActivatedUI } from '../../social-network/ui'
 import { currentSetupGuideStatus, SetupGuideCrossContextStatus } from '../../settings/settings'
-import { MessageCenter } from '../../utils/messages'
+import { MaskMessage } from '../../utils/messages'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
 import { currentSelectedWalletAddressSettings } from '../../plugins/Wallet/settings'
+import { WalletRPC } from '../../plugins/Wallet/messages'
+
+import { useMatchXS } from '../../utils/hooks/useMatchXS'
+import { extendsTheme } from '../../utils/theme'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
     SayHelloWorld = 'say-hello-world',
 }
 //#region wizard dialog
-const wizardTheme = (theme: Theme): Theme =>
-    merge(cloneDeep(theme), {
-        overrides: {
-            MuiOutlinedInput: {
+const wizardTheme = extendsTheme((theme: Theme) => ({
+    components: {
+        MuiOutlinedInput: {
+            styleOverrides: {
                 input: {
-                    paddingTop: 14.5,
-                    paddingBottom: 14.5,
+                    paddingTop: 10.5,
+                    paddingBottom: 10.5,
                 },
                 multiline: {
-                    paddingTop: 14.5,
-                    paddingBottom: 14.5,
+                    paddingTop: 10.5,
+                    paddingBottom: 10.5,
                 },
             },
-            MuiInputLabel: {
+        },
+        MuiInputLabel: {
+            styleOverrides: {
                 outlined: {
                     transform: 'translate(14px, 16px) scale(1)',
                 },
             },
-            MuiTextField: {
+        },
+        MuiTextField: {
+            defaultProps: {
+                fullWidth: true,
+                variant: 'outlined',
+                margin: 'normal',
+            },
+            styleOverrides: {
                 root: {
                     marginTop: theme.spacing(2),
                     marginBottom: 0,
@@ -63,7 +77,12 @@ const wizardTheme = (theme: Theme): Theme =>
                     },
                 },
             },
-            MuiButton: {
+        },
+        MuiButton: {
+            defaultProps: {
+                size: 'medium',
+            },
+            styleOverrides: {
                 root: {
                     '&[hidden]': {
                         visibility: 'hidden',
@@ -77,30 +96,47 @@ const wizardTheme = (theme: Theme): Theme =>
                 },
             },
         },
-        props: {
-            MuiButton: {
-                size: 'medium',
-            },
-            MuiTextField: {
-                fullWidth: true,
-                variant: 'outlined',
-                margin: 'normal',
-            },
-        },
-    })
+    },
+}))
 
 const useWizardDialogStyles = makeStyles((theme) =>
     createStyles({
         root: {
-            userSelect: 'none',
-            boxSizing: 'border-box',
             padding: '56px 20px 48px',
             position: 'relative',
-            width: 320,
+            boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
+            border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
             borderRadius: 12,
-            boxShadow: theme.palette.type === 'dark' ? 'none' : theme.shadows[4],
-            border: `${theme.palette.type === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
+            [theme.breakpoints.down('xs')]: {
+                padding: '35px 20px 16px',
+                position: 'fixed',
+                bottom: 0,
+                left: 0,
+                margin: 0,
+                alignSelf: 'center',
+                borderRadius: 0,
+                boxShadow: 'none',
+                border: `solid 1px ${theme.palette.divider}`,
+                width: '100%',
+            },
+            userSelect: 'none',
+            boxSizing: 'border-box',
+            width: 320,
             overflow: 'hidden',
+        },
+        button: {
+            width: 200,
+            height: 40,
+            marginLeft: 0,
+            marginTop: 0,
+            [theme.breakpoints.down('xs')]: {
+                width: '100%',
+                height: '45px !important',
+                marginTop: 20,
+                borderRadius: 0,
+            },
+            fontSize: 16,
+            wordBreak: 'keep-all',
         },
         back: {
             color: theme.palette.text.primary,
@@ -133,12 +169,6 @@ const useWizardDialogStyles = makeStyles((theme) =>
             lineHeight: 1.75,
             marginBottom: 24,
         },
-        button: {
-            fontSize: 16,
-            width: 200,
-            height: 40,
-            wordBreak: 'keep-all',
-        },
         textButton: {
             fontSize: 14,
             marginTop: theme.spacing(1),
@@ -148,13 +178,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
             marginBottom: 0,
         },
         content: {},
-        footer: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            marginTop: 16,
-        },
+        footer: {},
         progress: {
             left: 0,
             right: 0,
@@ -165,12 +189,82 @@ const useWizardDialogStyles = makeStyles((theme) =>
     }),
 )
 
+const useStyles = makeStyles((theme: Theme) => {
+    return {
+        root: {
+            alignItems: 'center',
+        },
+        content: {
+            marginRight: 16,
+        },
+        footer: {
+            marginLeft: 0,
+            marginTop: 0,
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+        },
+        tip: {},
+    }
+})
+
+interface ContentUIProps {
+    dialogType: SetupGuideStep
+    content?: React.ReactNode
+    footer?: React.ReactNode
+    tip?: React.ReactNode
+}
+
+function ContentUI(props: ContentUIProps) {
+    const classes = useStyles(props)
+    const xsMatch = useMatchXS()
+    const wizardClasses = useWizardDialogStyles()
+    switch (props.dialogType) {
+        case SetupGuideStep.FindUsername:
+            return (
+                <Box
+                    sx={{
+                        display: 'block',
+                    }}>
+                    <Box
+                        sx={{
+                            display: xsMatch ? 'flex' : 'block',
+                        }}>
+                        <main className={classes.content}>{props.content}</main>
+                        <Hidden only="xs">
+                            <div>{props.tip}</div>
+                        </Hidden>
+                        <footer className={classes.footer}>{props.footer}</footer>
+                    </Box>
+                    <Hidden smUp>
+                        <div>{props.tip}</div>
+                    </Hidden>
+                </Box>
+            )
+
+        case SetupGuideStep.SayHelloWorld:
+            return (
+                <Box>
+                    <main className={classes.content}>{props.content}</main>
+                    <div>{props.tip}</div>
+                    <footer className={classes.footer}>{props.footer}</footer>
+                </Box>
+            )
+        default:
+            return null
+    }
+}
+
 interface WizardDialogProps {
     title: string
+    dialogType: SetupGuideStep
     completion: number
     status: boolean | 'undetermined'
     optional?: boolean
     content?: React.ReactNode
+    tip?: React.ReactNode
     footer?: React.ReactNode
     onBack?: () => void
     onClose?: () => void
@@ -178,7 +272,7 @@ interface WizardDialogProps {
 
 function WizardDialog(props: WizardDialogProps) {
     const { t } = useI18N()
-    const { title, optional = false, completion, status, content, footer, onBack, onClose } = props
+    const { title, dialogType, optional = false, completion, status, content, tip, footer, onBack, onClose } = props
     const classes = useWizardDialogStyles(props)
 
     return (
@@ -214,13 +308,14 @@ function WizardDialog(props: WizardDialogProps) {
                             </Typography>
                         ) : null}
                     </header>
-                    <main className={classes.content}>{content}</main>
-                    <footer className={classes.footer}>{footer}</footer>
-                    <LinearProgress
-                        className={classes.progress}
-                        color="secondary"
-                        variant="determinate"
-                        value={completion}></LinearProgress>
+                    <ContentUI dialogType={dialogType} content={content} tip={tip} footer={footer} />
+                    <Hidden only="xs">
+                        <LinearProgress
+                            className={classes.progress}
+                            color="secondary"
+                            variant="determinate"
+                            value={completion}></LinearProgress>
+                    </Hidden>
                     {onBack ? (
                         <IconButton className={classes.back} size="small" onClick={onBack}>
                             <ArrowBackIosOutlinedIcon cursor="pointer" />
@@ -284,20 +379,26 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
             ev.preventDefault()
             ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, username))
         },
-        [username],
+        [ui, username],
     )
     return (
         <WizardDialog
             completion={33.33}
+            dialogType={SetupGuideStep.FindUsername}
             status="undetermined"
             title={t('setup_guide_find_username_title')}
             content={
                 <form>
-                    <Box className={findUsernameClasses.input} display="flex" alignItems="center">
+                    <Box
+                        className={findUsernameClasses.input}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}>
                         <TextField
-                            variant="outlined"
                             label={t('username')}
                             value={username}
+                            disabled={!username}
                             InputProps={{
                                 classes: {
                                     focused: findUsernameClasses.inputFocus,
@@ -311,19 +412,22 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                             onChange={(e) => onUsernameChange(e.target.value)}
                             onKeyDown={onKeyDown}
                             inputProps={{ 'data-testid': 'username_input' }}></TextField>
-                        <IconButton
-                            className={findUsernameClasses.button}
-                            color={username ? 'primary' : 'default'}
-                            disabled={!username}>
-                            <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
-                        </IconButton>
+                        <Hidden only="xs">
+                            <IconButton
+                                className={findUsernameClasses.button}
+                                color={username ? 'primary' : 'default'}
+                                disabled={!username}>
+                                <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
+                            </IconButton>
+                        </Hidden>
                     </Box>
-
-                    <Typography
-                        className={classes.tip}
-                        variant="body2"
-                        dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}></Typography>
                 </form>
+            }
+            tip={
+                <Typography
+                    className={classes.tip}
+                    variant="body2"
+                    dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}></Typography>
             }
             footer={
                 <ActionButtonPromise
@@ -372,13 +476,15 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
     const { t } = useI18N()
     const classes = useWizardDialogStyles()
     const sayHelloWorldClasses = useSayHelloWorldStyles()
+
     return (
         <WizardDialog
             completion={100}
+            dialogType={SetupGuideStep.SayHelloWorld}
             status={createStatus}
             optional
             title={t('setup_guide_say_hello_title')}
-            content={
+            tip={
                 <form>
                     <Typography className={classNames(classes.tip, sayHelloWorldClasses.primary)} variant="body2">
                         {t('setup_guide_say_hello_primary')}
@@ -404,14 +510,16 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                         failedOnClick="use executor"
                         data-testid="create_button"
                     />
-                    <ActionButton
-                        className={classes.textButton}
-                        color="inherit"
-                        variant="text"
-                        onClick={onSkip}
-                        data-testid="skip_button">
-                        {t('skip')}
-                    </ActionButton>
+                    <Hidden only="xs">
+                        <ActionButton
+                            className={classes.textButton}
+                            color="inherit"
+                            variant="text"
+                            onClick={onSkip}
+                            data-testid="skip_button">
+                            {t('skip')}
+                        </ActionButton>
+                    </Hidden>
                 </>
             }
             onBack={onBack}
@@ -513,14 +621,14 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         if (!persona_.hasPrivateKey) throw new Error('invalid persona')
         const [_, address] = await Promise.all([
             Services.Identity.setupPersona(persona_.identifier),
-            Services.Plugin.invokePlugin('maskbook.wallet', 'importFirstWallet', {
+            WalletRPC.importFirstWallet({
                 name: persona_.nickname ?? t('untitled_wallet'),
                 mnemonic: persona_.mnemonic?.words.split(' '),
                 passphrase: '',
             }),
         ])
         if (address) currentSelectedWalletAddressSettings.value = address
-        MessageCenter.emit('identityUpdated', undefined)
+        MaskMessage.events.personaChanged.sendToAll([{ of: persona, owned: true, reason: 'new' }])
     }
     const onCreate = async () => {
         const content = t('setup_guide_say_hello_content')

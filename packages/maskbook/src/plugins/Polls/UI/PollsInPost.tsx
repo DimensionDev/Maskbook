@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import type { TypedMessage } from '../../../protocols/typed-message'
-import { renderWithPollMetadata, PollMetadataReader } from '../utils'
-import Services from '../../../extension/service'
+import { renderWithPollMetadata, PollMetadataReader, PluginPollRPC } from '../utils'
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
 import { PollMetaData, PollStatus } from '../types'
@@ -19,7 +18,7 @@ export default function PollsInPost(props: PollsInPostProps) {
     const vote = (poll: PollGunDB, index: number) => {
         if (new Date().getTime() <= poll.end_time) {
             setStatus(PollStatus.Voting)
-            Services.Plugin.invokePlugin('maskbook.polls', 'vote', {
+            PluginPollRPC.vote({
                 poll,
                 index,
             }).then((res) => {
@@ -35,7 +34,7 @@ export default function PollsInPost(props: PollsInPostProps) {
         const metadata = PollMetadataReader(props.message.meta)
         if (metadata.ok) {
             const key = metadata.val.key
-            Services.Plugin.invokePlugin('maskbook.polls', 'getPollByKey', { key }).then((res) => {
+            PluginPollRPC.getPollByKey({ key }).then((res) => {
                 setUpdatedPoll(res as PollMetaData)
             })
         }

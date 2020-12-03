@@ -1,25 +1,38 @@
-import React, { useState } from 'react'
-import { createStyles, makeStyles, withStyles } from '@material-ui/core'
+import { useCallback, useState } from 'react'
+import { createStyles, DialogContent, IconButton, makeStyles } from '@material-ui/core'
+import CloseIcon from '@material-ui/icons/Close'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { MaskbookTransakMessages, TransakMessageCenter } from '../messages'
-import { Transak } from './Transak'
+import { PluginTransakMessages } from '../messages'
 import { useBlurContext } from '../../../extension/options-page/DashboardContexts/BlurContext'
-
-const GlobalCss = withStyles({
-    '@global': {
-        '#transak_modal-overlay': {
-            // disable close the buy dialog when click the backdrop
-            display: 'none',
-        },
-    },
-})(() => null)
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { useTransakURL } from '../hooks/useTransakURL'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
-        paper: {
-            width: '370px !important',
+        dialogPaper: {
+            width: '500px !important',
+        },
+        close: {
+            color: `${theme.palette.common.white} !important`,
+            backgroundColor: `${theme.palette.primary.light} !important`,
+            top: theme.spacing(2),
+            right: theme.spacing(2),
+            position: 'absolute',
+            // transform: 'translate(-50%, -50%)'
+        },
+        content: {
+            width: '100%',
+            padding: 0,
+            backgroundColor: theme.palette.common.white,
+            position: 'relative',
+        },
+        frame: {
+            display: 'block',
+            width: '100%',
+            height: 630,
+            border: 0,
         },
     }),
 )
@@ -30,15 +43,25 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region remote controlled buy token dialog
+    const [code, setCode] = useState('ETH')
     const [address, setAddress] = useState('')
-    const [open, setOpen] = useRemoteControlledDialog<MaskbookTransakMessages, 'buyTokenDialogUpdated'>(
-        TransakMessageCenter,
-        'buyTokenDialogUpdated',
-        (ev) => {
-            if (ev.open) setAddress(ev.address)
-        },
-    )
+    const transakURL = useTransakURL({
+        defaultCryptoCurrency: code,
+        walletAddress: address,
+    })
+
+    //#region remote controlled buy token dialog
+    const [open, setOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated, (ev) => {
+        if (ev.open) {
+            setCode(ev.code ?? 'ETH')
+            setAddress(ev.address)
+        }
+    })
+    const onClose = useCallback(() => {
+        setOpen({
+            open: false,
+        })
+    }, [setOpen])
     //#endregion
 
     // render in dashboard
@@ -46,18 +69,22 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
 
     return (
         <div className={classes.root}>
-            <GlobalCss />
-            <Transak
+            <InjectedDialog
                 open={open}
-                onClose={() =>
-                    setOpen({
-                        open: false,
-                    })
-                }
-                TransakSDKConfig={{
-                    walletAddress: address,
+                onClose={onClose}
+                DialogProps={{
+                    classes: {
+                        paper: classes.dialogPaper,
+                    },
                 }}
-            />
+                disableBackdropClick>
+                <DialogContent className={classes.content}>
+                    <IconButton className={classes.close} size="small" onClick={onClose}>
+                        <CloseIcon />
+                    </IconButton>
+                    {transakURL ? <iframe className={classes.frame} src={transakURL} /> : null}
+                </DialogContent>
+            </InjectedDialog>
         </div>
     )
 }

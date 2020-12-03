@@ -1,5 +1,5 @@
-import { LiveSelector } from '@dimensiondev/holoflows-kit/es'
-import { MessageCenter } from '../../../utils/messages'
+import { LiveSelector } from '@dimensiondev/holoflows-kit'
+import { MaskMessage } from '../../../utils/messages'
 import { i18n } from '../../../utils/i18n-next'
 import { sleep } from '../../../utils/utils'
 import { untilDocumentReady } from '../../../utils/dom'
@@ -59,7 +59,7 @@ export async function taskOpenComposeBoxFacebook(
     }
 
     await sleep(800)
-    MessageCenter.emit('compositionUpdated', {
+    MaskMessage.events.compositionUpdated.sendToLocal({
         reason: 'popup',
         open: true,
         content,

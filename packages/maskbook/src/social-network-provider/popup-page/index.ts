@@ -1,7 +1,7 @@
-import { defineSocialNetworkUI, definedSocialNetworkUIs, SocialNetworkUI } from '../../social-network/ui'
+import { defineSocialNetworkUI, definedSocialNetworkUIs } from '../../social-network/ui'
 import '../../provider.ui'
 import { emptyDefinition } from '../../social-network/defaults/emptyDefinition'
-import { GetContext, ValueRef } from '@dimensiondev/holoflows-kit/es'
+import { isEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdentitiesRef'
 
 export const hasPermissionCheckAtPopupPage = new ValueRef(true)
@@ -24,6 +24,6 @@ const popupPageUISelf = defineSocialNetworkUI({
         }
     },
     shouldActivate() {
-        return GetContext() === 'options'
+        return isEnvironment(Environment.ManifestBrowserAction)
     },
 })

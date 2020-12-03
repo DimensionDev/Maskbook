@@ -1,12 +1,11 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { isMobileFacebook } from '../isMobile'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
-import { MessageCenter } from '../../../utils/messages'
-import { Flags } from '../../../utils/flags'
-
+import { MaskMessage } from '../../../utils/messages'
+import { startWatch } from '../../../utils/watcher'
 let composeBox: LiveSelector<Element>
 if (isMobileFacebook) {
     composeBox = new LiveSelector().querySelector('#structured_composer_form')
@@ -17,23 +16,27 @@ if (isMobileFacebook) {
         .map((x) => x.parentElement)
         // TODO: should be nth(-1), see https://github.com/DimensionDev/Holoflows-Kit/issues/270
         .reverse()
-        .nth(0)
+        .nth(2)
+        .map((x) => x.parentElement)
 }
+
 export function injectPostBoxFacebook() {
     const watcher = new MutationObserverWatcher(composeBox.clone())
-        .setDOMProxyOption({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
-        .startWatch({
-            childList: true,
-            subtree: true,
-        })
+    startWatch(watcher)
     renderInShadowRoot(<UI />, {
         shadow: () => watcher.firstDOMProxy.afterShadow,
-        rootProps: { style: { display: 'block', padding: '0 16px', marginTop: 16 } },
+        rootProps: {
+            style: {
+                display: 'block',
+                padding: 0,
+                marginTop: 0,
+            },
+        },
     })
 }
 function UI() {
     const onHintButtonClicked = useCallback(
-        () => MessageCenter.emit('compositionUpdated', { reason: 'popup', open: true }),
+        () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'popup', open: true }),
         [],
     )
     return (

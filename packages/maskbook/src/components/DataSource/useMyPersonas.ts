@@ -1,8 +1,9 @@
-import { ValueRef } from '@dimensiondev/holoflows-kit/es'
+import { ValueRef } from '@dimensiondev/holoflows-kit'
 import Services from '../../extension/service'
 import { PersonaArrayComparer } from '../../utils/comparer'
-import { MessageCenter } from '../../utils/messages'
+import { MaskMessage } from '../../utils/messages'
 import type { Persona } from '../../database'
+import { setStorage } from '../../extension/background-script/StorageService'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { sideEffect } from '../../utils/side-effects'
 import { debounce } from 'lodash-es'
@@ -18,15 +19,14 @@ const independentRef = {
             Services.Identity.queryMyPersonas().then((p) => {
                 independentRef.myPersonasRef.value = p.filter((x) => !x.uninitialized)
                 independentRef.myUninitializedPersonasRef.value = p.filter((x) => x.uninitialized)
+                setStorage<boolean>('mobileIsMyPersonasInitialized', independentRef.myPersonasRef.value.length > 0)
             })
         },
         500,
-        {
-            trailing: true,
-        },
+        { trailing: true },
     )
     sideEffect.then(query)
-    MessageCenter.on('personaUpdated', query)
+    MaskMessage.events.personaChanged.on((x) => x.some((x) => x.owned) && query())
 }
 
 export function useMyPersonas() {

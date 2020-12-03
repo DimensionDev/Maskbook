@@ -1,13 +1,13 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { ListItem, ListItemText, Typography, ListItemIcon, Link } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { TokenIcon } from './TokenIcon'
-import type { Token } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../web3/constants'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import { resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -63,7 +63,7 @@ export interface TokenInListProps {
     index: number
     style: any
     data: {
-        tokens: Token[]
+        tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
         excludeTokens: string[]
         selected: string
         onSelect(address: string): void
@@ -91,7 +91,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
                 <Typography className={classes.primary} color="textPrimary" component="span">
                     <span className={classes.name}>{name}</span>
                     <span className={classes.address}>
-                        {token.address !== ETH_ADDRESS ? formatEthereumAddress(token.address) : null}
+                        {token.address !== ETH_ADDRESS ? formatEthereumAddress(token.address, 8) : null}
                     </span>
                 </Typography>
                 <Typography className={classes.secondary} color="textSecondary" component="span">

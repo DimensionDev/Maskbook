@@ -1,7 +1,12 @@
+import '../gun-worker.patch'
 import Gun from 'gun/gun'
 import 'gun/sea'
-import { gun2Servers } from '../../gun-servers'
+import 'gun/lib/radix'
+import 'gun/lib/radisk'
+import 'gun/lib/store'
+import 'gun/lib/rindexed'
 import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
+import { gunServers } from '../../gun-servers'
 
 export * from './people'
 export * from './post'
@@ -25,11 +30,10 @@ export interface PostOnGun2 {
 export interface ApplicationStateInGunVersion2 {
     [sha512_base64_ProfileIdentifier_OR_sha512_base64_PostSalt: string]: PersonOnGun2 | PostOnGun2
 }
-try {
-    if (process.env.NODE_ENV === 'test') {
-        // @ts-ignore
-        Gun.window.rad = require('gun/lib/radix')
-    }
-} catch {}
-export const gun2 = new Gun<ApplicationStateInGunVersion2>(gun2Servers)
+
+export const gun2 = new Gun<ApplicationStateInGunVersion2>({
+    peers: gunServers as any,
+    localStorage: false,
+    radisk: true,
+})
 gun2.opt({ retry: Infinity })

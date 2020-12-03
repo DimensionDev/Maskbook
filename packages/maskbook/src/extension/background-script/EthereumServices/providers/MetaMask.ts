@@ -1,49 +1,50 @@
 import Web3 from 'web3'
-import createMetaMaskProvider, { MetamaskInpageProvider } from 'metamask-extension-provider'
+import type { provider as Provider } from 'web3-core'
+import { first } from 'lodash-es'
+import { EthereumAddress } from 'wallet.ts'
+import createMetaMaskProvider from 'metamask-extension-provider'
 import { ChainId } from '../../../../web3/types'
 import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
-import { EthereumAddress } from 'wallet.ts'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
-import { ProviderType } from '../../../../web3/types'
-import { MessageCenter } from '../../../../utils/messages'
-import { currentSelectedWalletAddressSettings } from '../../../../plugins/Wallet/settings'
+import { ProviderType, MetaMaskInpageProvider } from '../../../../web3/types'
+import {
+    currentSelectedWalletAddressSettings,
+    currentSelectedWalletProviderSettings,
+    currentIsMetamaskLockedSettings,
+} from '../../../../plugins/Wallet/settings'
 
-//#region tracking chain id
-let currentChainId: ChainId = ChainId.Mainnet
-currentMetaMaskChainIdSettings.addListener((v) => (currentChainId = v))
-//#endregion
-
-let provider: MetamaskInpageProvider | null = null
+let provider: MetaMaskInpageProvider | null = null
 let web3: Web3 | null = null
 
-async function onData(error: Error | null, event?: { method: string; result: string[] }) {
-    if (error) return
-    if (!event) return
-    if (event.method !== 'wallet_accountsChanged') return
-    await updateWalletInDB(event.result[0] ?? '', false)
+async function onAccountsChanged(accounts: string[]) {
+    await updateWalletInDB(first(accounts) ?? '')
+    currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked()) && accounts.length === 0
 }
 
-function onNetworkChanged(id: string) {
-    currentMetaMaskChainIdSettings.value = Number.parseInt(id, 10) as ChainId
+function onChainIdChanged(id: string) {
+    const chainId = Number.parseInt(id.replace(/^0x/, ''), 10) as ChainId
+    currentMetaMaskChainIdSettings.value = chainId === 0 ? ChainId.Mainnet : chainId
 }
 
-function onNetworkError(error: any) {
-    if (error === 'MetamaskInpageProvider - lost connection to MetaMask') {
-        MessageCenter.emit('metamaskMessage', 'metamask_not_install')
-        updateExoticWalletFromSource(ProviderType.MetaMask, new Map())
-    }
+function onError(error: string) {
+    if (
+        typeof error === 'string' &&
+        /Lost Connection to MetaMask/i.test(error) &&
+        currentSelectedWalletProviderSettings.value === ProviderType.MetaMask
+    )
+        currentSelectedWalletAddressSettings.value = ''
 }
 
 export function createProvider() {
     if (provider) {
-        provider.off('data', onData)
-        provider.off('networkChanged', onNetworkChanged)
-        provider.off('error', onNetworkError)
+        provider.off('accountsChanged', onAccountsChanged)
+        provider.off('chainChanged', onChainIdChanged)
+        provider.off('error', onError)
     }
     provider = createMetaMaskProvider()
-    provider.on('data', onData)
-    provider.on('networkChanged', onNetworkChanged)
-    provider.on('error', onNetworkError)
+    provider.on('accountsChanged', onAccountsChanged)
+    provider.on('chainChanged', onChainIdChanged)
+    provider.on('error', onError)
     return provider
 }
 
@@ -51,25 +52,33 @@ export function createProvider() {
 // https://github.com/MetaMask/extension-provider
 export function createWeb3() {
     provider = createProvider()
-    if (!web3) web3 = new Web3(provider)
-    else web3.setProvider(provider)
+    if (!web3) web3 = new Web3(provider as Provider)
+    else web3.setProvider(provider as Provider)
     return web3
 }
 
 export async function requestAccounts() {
     const web3 = createWeb3()
     const accounts = await web3.eth.requestAccounts()
-    for (const account of accounts) await updateWalletInDB(account, true)
+    await updateWalletInDB(first(accounts) ?? '', true)
     return accounts
 }
 
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {
+    const provider_ = currentSelectedWalletProviderSettings.value
+
     // validate address
-    if (!EthereumAddress.isValid(address)) throw new Error('Cannot found account or invalid account')
+    if (!EthereumAddress.isValid(address)) {
+        if (provider_ === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = ''
+        return
+    }
 
     // update wallet in the DB
     await updateExoticWalletFromSource(ProviderType.MetaMask, new Map([[address, { address }]]))
 
+    // update the selected wallet provider type
+    if (setAsDefault) currentSelectedWalletProviderSettings.value = ProviderType.MetaMask
+
     // update the selected wallet address
-    if (setAsDefault) currentSelectedWalletAddressSettings.value = address
+    if (setAsDefault || provider_ === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = address
 }

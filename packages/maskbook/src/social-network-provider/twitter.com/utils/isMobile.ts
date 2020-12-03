@@ -1,7 +1,7 @@
-import { OnlyRunInContext } from '@dimensiondev/holoflows-kit/es'
+import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
 import { twitterUrl } from './url'
 
-export const isMobileTwitter = OnlyRunInContext('content', false)
+export const isMobileTwitter = isEnvironment(Environment.ContentScript)
     ? location.hostname === twitterUrl.hostLeadingUrlMobile.substr(8)
     : !!navigator.userAgent.match(/Mobile|mobile/)
 export const twitterDomain = isMobileTwitter ? 'https://m.twitter.com/' : 'https://twitter.com/'
