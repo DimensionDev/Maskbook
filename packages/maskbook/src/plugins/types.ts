@@ -24,7 +24,7 @@ export interface PostDialogEntry {
     onClick(): void
 }
 
-export type BadgeConvertor<T = any> = (metadata: T) => string
+export type BadgeConvertor<T = any> = (metadata: T) => string | React.ReactNode
 
 export type MessageProcessor = (message: TypedMessageCompound) => TypedMessageCompound
 
