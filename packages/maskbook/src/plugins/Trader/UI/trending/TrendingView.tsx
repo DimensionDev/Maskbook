@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => {
             minHeight: 'unset',
             minWidth: 'unset',
         },
+        tradeViewRoot: {
+            maxWidth: 380,
+        },
     })
 })
 
@@ -152,6 +155,7 @@ export function TrendingView(props: TrendingViewProps) {
             {tabIndex === 1 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
             {tabIndex === 2 && canSwap ? (
                 <TradeView
+                    classes={{ root: classes.tradeViewRoot }}
                     TraderProps={{
                         address: coin.eth_address ?? ETH_ADDRESS,
                         name: coin.name,

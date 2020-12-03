@@ -1,4 +1,5 @@
 import { makeStyles, createStyles } from '@material-ui/core'
+import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { EthereumStatusBar } from '../../../../web3/UI/EthereumStatusBar'
 import { Trader, TraderProps } from './Trader'
 
@@ -27,13 +28,13 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface TradeViewProps {
+export interface TradeViewProps extends withClasses<'root'> {
     TraderProps: TraderProps
 }
 
 export function TradeView(props: TradeViewProps) {
     const { TraderProps } = props
-    const classes = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
     return (
         <div className={classes.root}>
             <div className={classes.bar}>
