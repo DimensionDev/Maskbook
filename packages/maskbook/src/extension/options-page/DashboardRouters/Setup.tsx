@@ -446,7 +446,7 @@ export function RestoreDatabase() {
                         }}
                     />
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 id: 'text',
@@ -464,7 +464,7 @@ export function RestoreDatabase() {
                         }}
                     />
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
         ],
         state,
@@ -611,7 +611,7 @@ export function RestoreDatabaseAdvance() {
                         />
                     </>
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 label: 'Base64',
@@ -630,8 +630,7 @@ export function RestoreDatabaseAdvance() {
                         variant="standard"
                     />
                 ),
-                display: 'flex',
-                p: 0,
+                sx: { display: 'flex', p: 0 },
             },
             {
                 label: t('qr_code'),
@@ -660,7 +659,7 @@ export function RestoreDatabaseAdvance() {
                         />
                     </>
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
         ],
         state,

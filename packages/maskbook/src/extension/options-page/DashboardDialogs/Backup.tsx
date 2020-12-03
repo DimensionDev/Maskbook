@@ -147,7 +147,7 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
                         }}
                     />
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 id: 'text',
@@ -165,7 +165,7 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
                         }}
                     />
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
         ],
         state,

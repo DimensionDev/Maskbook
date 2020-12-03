@@ -150,7 +150,7 @@ export default function DashboardWalletsRouter() {
             empty={!selectedWallet}
             title={t('my_wallets')}
             actions={[
-                <EthereumStatusBar BoxProps={{ justifyContent: 'flex-end' }} />,
+                <EthereumStatusBar BoxProps={{ sx: { justifyContent: 'flex-end' } }} />,
                 <Button
                     variant="contained"
                     onClick={openWalletCreate}

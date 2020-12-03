@@ -320,7 +320,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                         />
                     </div>
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 label: t('private_key'),
@@ -352,8 +352,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                         />
                     </div>
                 ),
-                display: 'flex',
-                p: 0,
+                sx: { display: 'flex', p: 0 },
             },
         ],
         state,
@@ -807,13 +806,12 @@ export function DashboardWalletHistoryDialog(
             {
                 label: t('activity_inbound'),
                 children: <RedPacketInboundList onSelect={onRedPacketClicked} />,
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 label: t('activity_outbound'),
                 children: <RedPacketOutboundList onSelect={onRedPacketClicked} />,
-                display: 'flex',
-                p: 0,
+                sx: { display: 'flex', p: 0 },
             },
         ],
         state,

@@ -157,7 +157,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                         />
                     </>
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
             {
                 id: 'text',
@@ -173,8 +173,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                         value={base64Value}
                         variant="standard"></TextField>
                 ),
-                display: 'flex',
-                p: 0,
+                sx: { p: 0, display: 'flex' },
             },
             {
                 id: 'qr',
@@ -204,7 +203,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                         />
                     </>
                 ),
-                p: 0,
+                sx: { p: 0 },
             },
         ],
         state,
