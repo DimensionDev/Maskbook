@@ -21,8 +21,8 @@
     "lint:report": "eslint packages/maskbook/src/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml",
     "lint:typecoverage": "type-coverage --strict --ignore-catch --ignore-files packages/maskbook/src/plugins/Wallet/contracts/** --ignore-files **/__tests__/** --ignore-files **\\__tests__\\** --detail --at-least 98",
     "locale-kit": "ts-node scripts/locale-kit.ts",
-    "profile:build": "yarn build --profile",
-    "profile:start": "yarn start --profile",
+    "profile:build": "npm run build -- --env profile",
+    "profile:start": "npm run start -- --env profile",
     "start": "webpack serve --mode development",
     "start:android": "webpack serve --env firefox-android --mode development",
     "start:chromium": "webpack serve --env chromium --mode development",
@@ -37,7 +37,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && yarn locale-kit --sync-key",
+      "pre-commit": "lint-staged && npm run locale-kit -- --sync-key",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },

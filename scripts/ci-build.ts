@@ -13,7 +13,7 @@ for (const type of types) {
         // just copying base version is acceptable
         run(undefined, 'cp', '-v', 'Maskbook.base.zip', 'Maskbook.chromium.zip')
     } else {
-        run(undefined, 'yarn', `build:${type.toLowerCase()}`)
+        run(undefined, 'npm run', `build:${type.toLowerCase()}`)
         run(BUILD_PATH, 'zip', '-FS', '-r', `../Maskbook.${type}.zip`, '.')
         run(undefined, 'rm', '-rfv', 'build')
     }
