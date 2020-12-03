@@ -2,7 +2,7 @@ import type { ITO_JSONPayload } from '../types'
 import { makeStyles, createStyles, Card, Typography, Box } from '@material-ui/core'
 import BackgroundImage from '../assets/background'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import StyledLinearProgress from './LinearProgressWithLabel'
+import { StyledLinearProgress } from './StyledLinearProgress'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) =>
             paddingBottom: theme.spacing(2),
         },
         title: {
-            marginBottom: theme.spacing(3),
+            fontWeight: 'bold',
         },
         totalText: {
             display: 'flex',
@@ -36,7 +36,8 @@ const useStyles = makeStyles((theme) =>
         },
         progressWrap: {
             width: 220,
-            margin: `${theme.spacing(4)} 0`,
+            marginBottom: theme.spacing(4),
+            marginTop: theme.spacing(1),
         },
         footer: {
             display: 'flex',
@@ -63,16 +64,16 @@ export function ITO(props: ITO_Props) {
                 <Typography variant="h5" className={classes.title}>
                     {payload.sender.message}
                 </Typography>
-                <Typography variant="h6" className={''}>
-                    1 ETH: 500 Mask
-                </Typography>
                 <Typography variant="body2" className={classes.totalText}>
-                    Total: 1,000.00 / 2,000.00 MASK
+                    Sold 30,000.00 Sell Total Amount 200,000.00 MASK
                     <OpenInNewIcon fontSize="small" className={classes.totalIcon} />
                 </Typography>
                 <Box className={classes.progressWrap}>
-                    <StyledLinearProgress value={50} />
+                    <StyledLinearProgress variant="determinate" value={50} />
                 </Box>
+                <Typography variant="h6" className={''}>
+                    1 ETH: 500 Mask
+                </Typography>
                 <Typography variant="body1">Limit per&nbsp;&nbsp;&nbsp;2 ETH</Typography>
                 <Box className={classes.footer}>
                     <Typography variant="body1">Remaining time：1 d&nbsp;&nbsp;3 h&nbsp;&nbsp;30m</Typography>
