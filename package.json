@@ -235,19 +235,24 @@
     "webpack-target-webextension": "^0.2.1",
     "worker-plugin": "^5.0.0"
   },
-  "optionalDependencies": {
+  "peerDependencies": {
     "expect-puppeteer": "^4.4.0",
     "jest-puppeteer": "^4.4.0",
     "puppeteer": "^5.5.0"
   },
-  "engines": {
-    "node": ">=14.4.0"
+  "peerDependenciesMeta": {
+    "expect-puppeteer": {
+      "optional": true
+    },
+    "jest-puppeteer": {
+      "optional": true
+    },
+    "puppeteer": {
+      "optional": true
+    }
   },
-  "resolutions": {
-    "@material-ui/styles": "5.0.0-alpha.18",
-    "@material-ui/utils": "5.0.0-alpha.18",
-    "@material-ui/system": "5.0.0-alpha.18",
-    "@material-ui/styled-engine": "5.0.0-alpha.18",
-    "jss": "10.5.0"
+  "engines": {
+    "node": ">=14.4.0",
+    "npm": ">=7"
   }
 }

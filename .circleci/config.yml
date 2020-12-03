@@ -20,17 +20,20 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          name: Restore Yarn Package Cache
+          name: Restore NPM Package Cache
           keys:
-            - v2-maskbook-cache
+            - v3-maskbook-cache-npm
+      - run:
+          name: Install NPMv7
+          command: sudo npm i -g npm@7
       - run:
           name: Install Dependencies
-          command: yarn install --link-duplicates --frozen-lockfile
+          command: npm ci
       - save_cache:
-          name: Save Yarn Package Cache
-          key: v2-maskbook-cache
+          name: Save NPM Package Cache
+          key: v3-maskbook-cache-npm
           paths:
-            - ~/.cache/yarn
+            - ~/.npm/
       - persist_to_workspace:
           root: ~/
           paths:
@@ -44,7 +47,7 @@ jobs:
           command: sudo apt-get install zip
       - run:
           name: Build Maskbook
-          command: yarn build-ci
+          command: npm run build-ci
       - store_artifacts:
           path: Maskbook.base.zip
           destination: /Maskbook.base.zip
