@@ -1,4 +1,4 @@
-export const ItoLabelSvg = ({ size }: { size: number }) => (
+export const ItoLabelIcon = ({ size = 24 }: { size?: number }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
             d="M23.4867 7.61475C23.4632 8.64131 11.9976 22.3382 11.9976 22.3382C11.9976 22.3382 4.93356 14.346 0.513245 7.61709H23.4867V7.61475Z"

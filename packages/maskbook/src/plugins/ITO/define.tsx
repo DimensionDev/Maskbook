@@ -12,7 +12,7 @@ import { SnackbarContent } from '@material-ui/core'
 import { Flags } from '../../utils/flags'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import { ITO_CompositionDialog } from './UI/ITO_CompositionDialog'
-import { ItoLabelSvg } from './assets/ItoLabelSvg'
+import { ItoLabelIcon } from './assets/ItoLabelIcon'
 
 interface LabelWrapperProps {
     iconSize: number
@@ -35,7 +35,7 @@ function LabelWrapper(props: LabelWrapperProps) {
     const classes = useStyles()
     return (
         <div className={classes.root}>
-            <ItoLabelSvg size={props.iconSize} />
+            <ItoLabelIcon size={props.iconSize} />
             <span className={classes.span}>{props.labelText}</span>
         </div>
     )

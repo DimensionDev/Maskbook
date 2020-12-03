@@ -3,6 +3,7 @@ import { makeStyles, createStyles, Card, Typography, Box } from '@material-ui/co
 import BackgroundImage from '../assets/background'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { StyledLinearProgress } from './StyledLinearProgress'
+import { EthIcon, DaiIcon, UsdcIcon, UsdtIcon } from '../assets/tokenIcon'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -10,11 +11,11 @@ const useStyles = makeStyles((theme) =>
             position: 'relative',
             color: theme.palette.common.white,
             flexDirection: 'column',
-            height: 295,
+            height: 340,
             boxSizing: 'border-box',
             backgroundAttachment: 'local',
             backgroundPosition: '0 0',
-            backgroundSize: 'contain',
+            backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundImage: `url(${BackgroundImage})`,
             borderRadius: theme.spacing(1),
@@ -24,7 +25,9 @@ const useStyles = makeStyles((theme) =>
             paddingBottom: theme.spacing(2),
         },
         title: {
+            fontSize: '1.8rem',
             fontWeight: 'bold',
+            marginBottom: 4,
         },
         totalText: {
             display: 'flex',
@@ -36,16 +39,32 @@ const useStyles = makeStyles((theme) =>
         },
         progressWrap: {
             width: 220,
-            marginBottom: theme.spacing(4),
+            marginBottom: theme.spacing(3),
             marginTop: theme.spacing(1),
         },
         footer: {
+            position: 'absolute',
+            width: 425,
+            bottom: theme.spacing(2),
             display: 'flex',
-            marginTop: theme.spacing(1),
             justifyContent: 'space-between',
+            alignItems: 'center',
         },
         fromText: {
             opacity: 0.6,
+        },
+        rateWrap: {
+            marginBottom: theme.spacing(1),
+            display: 'flex',
+            alignItems: 'center',
+            '& > span': {
+                marginLeft: theme.spacing(1),
+                fontSize: 14,
+                '& > b': {
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                },
+            },
         },
     }),
 )
@@ -71,12 +90,37 @@ export function ITO(props: ITO_Props) {
                 <Box className={classes.progressWrap}>
                     <StyledLinearProgress variant="determinate" value={50} />
                 </Box>
-                <Typography variant="h6" className={''}>
-                    1 ETH: 500 Mask
-                </Typography>
-                <Typography variant="body1">Limit per&nbsp;&nbsp;&nbsp;2 ETH</Typography>
+                <Box>
+                    <div className={classes.rateWrap}>
+                        <EthIcon />
+                        <span>
+                            <b>0.001</b> ETH / MASK
+                        </span>
+                    </div>
+                    <div className={classes.rateWrap}>
+                        <DaiIcon />
+                        <span>
+                            <b>0.1</b> USDT / MASK
+                        </span>
+                    </div>
+                    <div className={classes.rateWrap}>
+                        <UsdcIcon />
+                        <span>
+                            <b>0.1</b> DAI / MASK
+                        </span>
+                    </div>
+                    <div className={classes.rateWrap}>
+                        <UsdtIcon />
+                        <span>
+                            <b>0.1</b> USDC / MASK
+                        </span>
+                    </div>
+                </Box>
                 <Box className={classes.footer}>
-                    <Typography variant="body1">Remaining time：1 d&nbsp;&nbsp;3 h&nbsp;&nbsp;30m</Typography>
+                    <div>
+                        <Typography variant="body1">limit per：200 MASK</Typography>
+                        <Typography variant="body1">Remaining time：1 d&nbsp;&nbsp;3 h&nbsp;&nbsp;30m</Typography>
+                    </div>
                     <Typography variant="body1" className={classes.fromText}>
                         From: @Pineapple
                     </Typography>
