@@ -61,7 +61,7 @@ export const Upload: React.FC = () => {
         const block = new Uint8Array(await file.arrayBuffer())
         const checksum = encodeArrayBuffer(await Attachment.checksum(block))
         const item = await PluginFileServiceRPC.getFileInfo(checksum)
-        if (isNil(item) && key) {
+        if (isNil(item)) {
             history.replace(FileRouter.uploading, {
                 key,
                 name: file.name,
