@@ -25,7 +25,7 @@ export function formatBalance(balance: BigNumber, decimals: number, significant:
     while (fraction.length < decimals) fraction = `0${fraction}`
 
     // match significant digits
-    const matchSignificantDigits = new RegExp(`^0*[1-9]\\d{${significant > 0 ? significant - 1 : 0}}`)
+    const matchSignificantDigits = new RegExp(`^0*[1-9]\\d{0,${significant > 0 ? significant - 1 : 0}}`)
     fraction = fraction.match(matchSignificantDigits)?.[0] ?? ''
 
     // trim tailing zeros
