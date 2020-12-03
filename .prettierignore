@@ -1,5 +1,6 @@
 .github/
 package.json
+package-lock.json
 
 # VSCode personal settings
 .vscode/launch.json
