@@ -1,18 +1,16 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useTransactionReceipt } from '../../../web3/hooks/useTransaction'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { useElectionTokenContract } from '../contracts/useElectionTokenContract'
-import { PluginElection2020 } from '../messages'
-import { resolveStateType } from '../pipes'
-import type { CANDIDATE_TYPE, US_STATE_TYPE } from '../types'
+import { useCOTM_TokenContract } from '../contracts/useCOTM_TokenContract'
+import { PluginCOTM } from '../messages'
 
-export function useMintCallback(from: string, stateType: US_STATE_TYPE, candidateType: CANDIDATE_TYPE) {
+export function useMintCallback(from: string) {
     const [txHash, setTxHash] = useState('')
     const [mintState, setMintState] = useTransactionState()
-    const electionTokenContract = useElectionTokenContract()
+    const COTM_TokenContract = useCOTM_TokenContract()
 
     const mintCallback = useCallback(async () => {
-        if (!electionTokenContract) {
+        if (!COTM_TokenContract) {
             setMintState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -25,7 +23,7 @@ export function useMintCallback(from: string, stateType: US_STATE_TYPE, candidat
         })
 
         // step 1: check remaining
-        const remaining = await electionTokenContract.methods.check_availability(resolveStateType(stateType)).call()
+        const remaining = await COTM_TokenContract.methods.check_availability().call()
         if (Number.parseInt(remaining || '0', 10) <= 0) {
             setMintState({
                 type: TransactionStateType.FAILED,
@@ -36,11 +34,7 @@ export function useMintCallback(from: string, stateType: US_STATE_TYPE, candidat
 
         // step 2: mint by server
         try {
-            const { mint_transaction_hash } = await PluginElection2020.mintElectionPacket(
-                from,
-                stateType,
-                candidateType,
-            )
+            const { mint_transaction_hash } = await PluginCOTM.mintCOTM_Packet(from)
             setTxHash(mint_transaction_hash)
         } catch (error) {
             setMintState({
@@ -48,7 +42,7 @@ export function useMintCallback(from: string, stateType: US_STATE_TYPE, candidat
                 error,
             })
         }
-    }, [from, stateType, candidateType, electionTokenContract])
+    }, [from, COTM_TokenContract])
 
     const resetCallback = useCallback(() => {
         setMintState({
