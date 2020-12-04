@@ -55,8 +55,10 @@ export async function getWallets(provider?: ProviderType) {
         )
     ).sort(sortWallet)
     if (provider === ProviderType.Maskbook) return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
-    if (provider === currentSelectedWalletProviderSettings.value)
-        return wallets.filter((x) => isSameAddress(x.address, currentSelectedWalletAddressSettings.value))
+    if (provider === currentSelectedWalletProviderSettings.value) {
+        const address_ = currentSelectedWalletAddressSettings.value
+        return wallets.filter((x) => isSameAddress(x.address, address_))
+    }
     if (provider) return []
     return wallets
     async function makePrivateKey(record: WalletRecord) {
@@ -153,7 +155,7 @@ export async function importNewWallet(
     if (rec._private_key_) record._private_key_ = rec._private_key_
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet', 'ERC20Token')
-        t.objectStore('Wallet').add(WalletRecordIntoDB(record))
+        await t.objectStore('Wallet').add(WalletRecordIntoDB(record))
     }
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
     return address
@@ -178,7 +180,7 @@ export async function renameWallet(address: string, name: string) {
     assert(wallet)
     wallet.name = name
     wallet.updatedAt = new Date()
-    t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
+    await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
@@ -186,7 +188,7 @@ export async function removeWallet(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
     if (!wallet) return
-    t.objectStore('Wallet').delete(wallet.address)
+    await t.objectStore('Wallet').delete(wallet.address)
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 

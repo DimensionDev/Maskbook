@@ -18,11 +18,16 @@ export function useV2Trade(
     const { value: pairs, ...asyncResult } = useAllCommonPairs(inputToken, outputToken)
     const bestTradeExactIn = useBestTradeExactIn(inputAmount, inputToken, outputToken, pairs)
     const bestTradeExactOut = useBestTradeExactOut(outputAmount, inputToken, outputToken, pairs)
-
-    // TODO:
-    // maybe we should support v1Trade in the future
+    if ((new BigNumber(inputAmount).isZero() && new BigNumber(outputAmount).isZero()) || !inputToken || !outputToken)
+        return {
+            ...asyncResult,
+            error: void 0,
+            loading: false,
+            value: null,
+        }
     return {
         ...asyncResult,
+
         value: isExactIn ? bestTradeExactIn : bestTradeExactOut,
     }
 }

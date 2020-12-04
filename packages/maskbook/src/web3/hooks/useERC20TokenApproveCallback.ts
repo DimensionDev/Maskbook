@@ -19,8 +19,8 @@ export enum ApproveState {
 export function useERC20TokenApproveCallback(address: string, amount?: string, spender?: string) {
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(address)
-    const { value: balance } = useERC20TokenBalance(address)
-    const { value: allowance } = useERC20TokenAllowance(address, spender)
+    const { value: balance, retry: revalidateBalance } = useERC20TokenBalance(address)
+    const { value: allowance, retry: revalidateAllowance } = useERC20TokenAllowance(address, spender)
 
     const [approveHash, setApproveHash] = useState('')
     const receipt = useTransactionReceipt(approveHash)
@@ -75,5 +75,12 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
         },
         [approveState, amount, account, spender, erc20Contract],
     )
-    return [approveState, approveCallback] as const
+
+    const resetCallback = useCallback(() => {
+        setApproveHash('')
+        revalidateBalance()
+        revalidateAllowance()
+    }, [])
+
+    return [approveState, approveCallback, resetCallback] as const
 }

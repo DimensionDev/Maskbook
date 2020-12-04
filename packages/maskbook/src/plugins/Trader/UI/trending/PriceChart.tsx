@@ -5,6 +5,7 @@ import { makeStyles, Theme, createStyles, CircularProgress, Typography } from '@
 import { useDimension, Dimension } from '../../graphs/useDimension'
 import { usePriceLineChart } from '../../graphs/usePriceLineChart'
 import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useStylesExtends } from '../../../../components/custom-ui-helper'
 
 const DEFAULT_DIMENSION: Dimension = {
     top: 32,
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) => {
     })
 })
 
-export interface PriceChartProps {
+export interface PriceChartProps extends withClasses<'root'> {
     coin?: Coin
     stats: Stat[]
     loading?: boolean
@@ -48,23 +49,26 @@ export interface PriceChartProps {
 
 export function PriceChart(props: PriceChartProps) {
     const { t } = useI18N()
-    const classes = useStyles(props)
+    const classes = useStylesExtends(useStyles(props), props)
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
 
     //#region make chart responisve
     const { width } = useWindowSize()
     const [responsiveWidth, setResponsiveWidth] = useState(DEFAULT_DIMENSION.width)
+    const [responsiveHeight, setResponsiveHeight] = useState(DEFAULT_DIMENSION.height)
 
     useEffect(() => {
         if (!rootRef.current) return
         setResponsiveWidth(rootRef.current.getBoundingClientRect().width || DEFAULT_DIMENSION.width)
+        setResponsiveHeight(rootRef.current.getBoundingClientRect().height || DEFAULT_DIMENSION.height)
     }, [width /* redraw canvas if window width resize */])
     //#endregion
 
     const dimension = {
         ...DEFAULT_DIMENSION,
         width: responsiveWidth,
+        height: responsiveHeight,
     }
     useDimension(svgRef, dimension)
     usePriceLineChart(

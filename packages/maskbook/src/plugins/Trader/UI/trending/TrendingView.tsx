@@ -25,6 +25,8 @@ const useStyles = makeStyles((theme) => {
             minHeight: 303,
             overflow: 'hidden',
             border: `solid 1px ${theme.palette.divider}`,
+            display: 'flex',
+            flexDirection: 'column',
         },
         footer: {},
         tabs: {
@@ -39,6 +41,9 @@ const useStyles = makeStyles((theme) => {
         },
         tradeViewRoot: {
             maxWidth: 380,
+        },
+        priceChartRoot: {
+            flex: 1,
         },
     })
 })
@@ -147,7 +152,11 @@ export function TrendingView(props: TrendingViewProps) {
             {tabIndex === 0 ? (
                 <>
                     {market ? <PriceChangedTable market={market} /> : null}
-                    <PriceChart coin={coin} stats={stats} loading={loadingStats}>
+                    <PriceChart
+                        classes={{ root: classes.priceChartRoot }}
+                        coin={coin}
+                        stats={stats}
+                        loading={loadingStats}>
                         <PriceChartDaysControl days={days} onDaysChange={setDays} />
                     </PriceChart>
                 </>

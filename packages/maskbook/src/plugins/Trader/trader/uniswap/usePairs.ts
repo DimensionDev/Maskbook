@@ -61,7 +61,7 @@ export function useUniswapPairs(tokens: readonly TokenPair[]) {
             return [
                 PairState.EXISTS,
                 new Pair(new TokenAmount(token0, reserve0.toString()), new TokenAmount(token1, reserve1.toString())),
-            ]
+            ] as const
         })
     }, [results, tokens])
 
