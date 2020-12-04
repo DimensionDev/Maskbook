@@ -28,6 +28,7 @@ import { currentTradeProviderSettings } from '../../settings'
 import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
+import { getActivatedUI } from '../../../../social-network/ui'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -233,12 +234,13 @@ export function Trader(props: TraderProps) {
     //#endregion
 
     //#region remote controlled transaction dialog
+    const cashTag = getActivatedUI()?.networkIdentifier === 'twitter.com' ? '$' : ''
     const shareLink = useShareLink(
         trade && inputToken && outputToken
             ? [
-                  `I just swapped ${formatBalance(trade.inputAmount, inputToken.decimals ?? 0, 6)} ${
+                  `I just swapped ${formatBalance(trade.inputAmount, inputToken.decimals ?? 0, 6)} ${cashTag}${
                       inputToken.symbol
-                  } for ${formatBalance(trade.outputAmount, outputToken.decimals ?? 0, 6)} ${
+                  } for ${formatBalance(trade.outputAmount, outputToken.decimals ?? 0, 6)} ${cashTag}${
                       outputToken.symbol
                   }. Follow @realMaskbook (mask.io) to swap cryptocurrencies on Twitter.`,
                   '#mask_io',
