@@ -16,8 +16,6 @@ import { Flags } from '../utils/flags'
 import { TransakPluginDefine } from './Transak/define'
 import { ITO_PluginDefine } from './ITO/define'
 
-import { ITOPluginDefine } from './ITO/define'
-
 plugins.add(WalletPluginDefine)
 plugins.add(GitcoinPluginDefine)
 plugins.add(RedPacketPluginDefine)
@@ -28,4 +26,3 @@ if (Flags.transak_enabled) plugins.add(TransakPluginDefine)
 if (Flags.election2020_enabled) plugins.add(Election2020PluginDefine)
 if (Flags.ito_enabled) plugins.add(ITO_PluginDefine)
 if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)
-plugins.add(ITOPluginDefine)
