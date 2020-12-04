@@ -36,9 +36,6 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Install Optional Dependencies
-        run: npm install expect-puppeteer jest-puppeteer puppeteer
-
       - name: Build
         run: npm run build:e2e
 
