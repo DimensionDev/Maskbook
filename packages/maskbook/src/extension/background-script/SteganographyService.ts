@@ -10,8 +10,8 @@ import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 assertEnvironment(Environment.ManifestBackground)
 
-type Template = 'v1' | 'v2' | 'v3' | 'eth' | 'dai' | 'okb'
-type Mask = 'v1' | 'v2' | 'transparent'
+type Template = 'v1' | 'v2' | 'v3' | 'v4' | 'eth' | 'dai' | 'okb'
+type Mask = 'v1' | 'v2' | 'v4' | 'transparent'
 
 type Dimension = {
     width: number
@@ -39,6 +39,11 @@ const dimensionPreset: (Dimension & { mask: Mask })[] = [
         height: 558,
         mask: 'transparent',
     },
+    {
+        width: 1000,
+        height: 560,
+        mask: 'v4',
+    },
 ]
 
 const defaultOptions = {
@@ -64,10 +69,10 @@ export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImag
     const { template } = options
     const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
     return encodeArrayBuffer(
-        await encode(_buf, await getMaskBuf(template === 'v2' ? template : 'transparent'), {
+        await encode(_buf, await getMaskBuf(template === 'v2' || template === 'v4' ? template : 'transparent'), {
             ...defaultOptions,
             fakeMaskPixels: false,
-            cropEdgePixels: template !== 'v2' && template !== 'v3',
+            cropEdgePixels: template !== 'v2' && template !== 'v3' && template !== 'v4',
             exhaustPixels: true,
             grayscaleAlgorithm: template === 'v3' ? GrayscaleAlgorithm.LUMINANCE : GrayscaleAlgorithm.NONE,
             transformAlgorithm: TransformAlgorithm.FFT1D,

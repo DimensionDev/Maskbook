@@ -73,12 +73,7 @@ export function COTM_CompositionDialog(props: COTM_CompositionDialogProps) {
         <InjectedDialog open={props.open} title="#CreativityOnTheMove Composition Dialog" onClose={props.onClose}>
             <DialogContent>
                 <FormControl className={classes.control}>
-                    <TextField
-                        label="Name (Optional)"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        variant="outlined"
-                    />
+                    <TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} variant="outlined" />
                 </FormControl>
                 <FormControl className={classes.control}>
                     <TextField
@@ -94,7 +89,7 @@ export function COTM_CompositionDialog(props: COTM_CompositionDialogProps) {
                             display: 'flex',
                             justifyContent: 'flex-end',
                         }}>
-                        <ActionButton disabled={!nftToken} variant="contained" onClick={onConfirm}>
+                        <ActionButton disabled={!nftToken || !name} variant="contained" onClick={onConfirm}>
                             {t('confirm')}
                         </ActionButton>
                     </Box>

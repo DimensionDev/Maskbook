@@ -6,7 +6,7 @@ import { MAX_TOKEN_COUNT } from '../constants'
 export function useTokens(token?: ERC721TokenDetailed): COTM_Token[] {
     if (!token) return []
     return new Array(MAX_TOKEN_COUNT).fill(0).map((_, idx) => {
-        const tokenId_ = soliditySha3({ t: 'string', v: 'hollandchina' }, { t: 'uint8', v: idx })
+        const tokenId_ = soliditySha3({ t: 'uint8', v: idx })
         const tokenId = tokenId_ ? hexToNumberString(tokenId_) : ''
         return {
             tokenId,

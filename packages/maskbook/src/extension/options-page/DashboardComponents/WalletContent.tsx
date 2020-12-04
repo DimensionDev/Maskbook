@@ -29,6 +29,7 @@ import { Flags } from '../../../utils/flags'
 import { ElectionTokenAlbum } from '../../../plugins/Election2020/UI/ElectionTokenAlbum'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import { useBlockie } from '../../../web3/hooks/useBlockie'
+import { TokenAlbum as COTM_TokenAlbum } from '../../../plugins/COTM/UI/TokenAlbum'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -192,6 +193,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                         detailedTokens={detailedTokens}
                     />
                 ) : null}
+                {Flags.COTM_enabled && tabIndex === 1 ? <COTM_TokenAlbum /> : null}
                 {Flags.election2020_enabled && tabIndex === 1 ? <ElectionTokenAlbum /> : null}
             </Box>
 

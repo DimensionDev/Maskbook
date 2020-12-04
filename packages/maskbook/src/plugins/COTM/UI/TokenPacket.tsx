@@ -2,10 +2,9 @@ import { useCallback, useEffect } from 'react'
 import { Box, Card, CardContent, CardHeader, createStyles, Link, makeStyles, Typography } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import classNames from 'classnames'
+import LisaImage from '../assets/Lisa'
 import { TokenCard } from './TokenCard'
 import type { COTM_JSONPayload } from '../types'
-import FlagImage from '../assets/Flag'
-import FireworksImage from '../assets/Fireworks'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { COTM_CONSTANTS } from '../constants'
 import { useAccount } from '../../../web3/hooks/useAccount'
@@ -23,50 +22,19 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { first } from 'lodash-es'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             userSelect: 'none',
-            backgroundImage: 'linear-gradient(180deg, #121d76 0%, #2c39b9 100%)',
+            backgroundImage: `url(${LisaImage})`,
             position: 'relative',
-
-            '&::before, &::after': {
-                content: '""',
-                width: '90%',
-                height: 260,
-                backgroundImage: `url(${FlagImage})`,
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat',
-
-                bottom: '-21%',
-                position: 'absolute',
-                zIndex: 0,
-            },
-            '&::before': {
-                left: '-12%',
-            },
-            '&::after': {
-                right: '-12%',
-                transform: 'scaleX(-1)',
-            },
         },
         header: {
             zIndex: 0,
             position: 'relative',
             padding: 0,
-            '&::before': {
-                content: '""',
-                width: '100%',
-                height: 260,
-                backgroundImage: `url(${FireworksImage})`,
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat',
-                top: 0,
-                left: 0,
-                position: 'absolute',
-                zIndex: 0,
-            },
         },
         content: {
             zIndex: 1,
@@ -114,14 +82,14 @@ const useStyles = makeStyles((theme) =>
             color: theme.palette.common.white,
             fontSize: 'inherit',
             textShadow: [
-                '-1px 0 0 #121d76',
-                '1px 0 0 #121d76',
-                '0 -1px 0 #121d76',
-                '0 1px 0 #121d76',
-                '-1px -1px 0 #121d76',
-                '1px -1px 0 #121d76',
-                '-1px 1px 0 #121d76',
-                '1px 1px 0 #121d76',
+                '-1px 0 0 #c2130f',
+                '1px 0 0 #c2130f',
+                '0 -1px 0 #c2130f',
+                '0 1px 0 #c2130f',
+                '-1px -1px 0 #c2130f',
+                '1px -1px 0 #c2130f',
+                '-1px 1px 0 #c2130f',
+                '1px 1px 0 #c2130f',
             ].join(','),
         },
         link: {
@@ -151,6 +119,7 @@ export function TokenPacket(props: TokenPacketProps) {
     const { value: tokensOfOwner, loading: loadingTokensOfOwner, retry: revalidateTokensOfOwner } = useTokensOfOwner(
         COTM_Token,
     )
+    const prefaceToken = first(tokensOfOwner.length ? tokensOfOwner : tokens)
 
     // context
     const account = useAccount()
@@ -225,7 +194,7 @@ export function TokenPacket(props: TokenPacketProps) {
                         gutterBottom
                         variant="h5"
                         component="h2">
-                        #CreativityOnTheMove - Strange Design
+                        #CreativityOnTheMove
                     </Typography>
                     <div className={classes.notes}>
                         {tokensOfOwner.length ? (
@@ -255,14 +224,13 @@ export function TokenPacket(props: TokenPacketProps) {
                     <div
                         className={classes.cards}
                         style={{
-                            justifyContent:
-                                (tokensOfOwner.length ? tokensOfOwner : tokens).length < 3 ? 'center' : 'flex-start',
+                            justifyContent: 'center',
                         }}>
-                        {(tokensOfOwner.length ? tokensOfOwner : tokens).map((x, i) => (
-                            <section className={classes.card} key={i}>
-                                <TokenCard token={x} />
+                        {prefaceToken ? (
+                            <section className={classes.card}>
+                                <TokenCard token={prefaceToken} />
                             </section>
-                        ))}
+                        ) : null}
                     </div>
                     <div className={classes.notes}>
                         <Typography className={classes.note}>From @{payload.sender.name || 'Unknown'}</Typography>

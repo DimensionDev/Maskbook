@@ -1,7 +1,6 @@
 import Tilt from 'react-tilt'
 import { Card, createStyles, Link, makeStyles } from '@material-ui/core'
 import type { COTM_Token } from '../types'
-import { Image } from '../../../components/shared/Image'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { useConstant } from '../../../web3/hooks/useConstant'
@@ -45,10 +44,12 @@ export function TokenCard(props: TokenCardProps) {
             <Card
                 className={classes.root}
                 style={{
-                    width: 160,
+                    width: 390,
                     height: 220,
                 }}>
-                <Image component="img" width={160} height={220} src={props.token.tokenImageURL} />
+                <video controls loop width={390} height={220}>
+                    <source src={props.token.tokenImageURL} type="video/mp4" />
+                </video>
             </Card>
         </Tilt>
     )
