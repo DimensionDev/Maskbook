@@ -24,8 +24,6 @@ jobs:
           keys:
             - v3-maskbook-cache-npm
       - run:
-          name: Install NPMv7
-      - run:
           name: Install Dependencies
           command: npm ci
       - save_cache:
