@@ -6,6 +6,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { DialogContent, Typography } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ITOForm } from './ITOForm'
+
 interface ITODialogProps extends withClasses<never> {
     open: boolean
 

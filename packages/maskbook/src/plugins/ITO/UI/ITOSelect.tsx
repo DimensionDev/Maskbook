@@ -1,18 +1,11 @@
-import { useState, useCallback } from 'react'
-import {
-    makeStyles,
-    createStyles,
-    IconButton,
-    InputAdornment,
-    TextField,
-    TextFieldProps,
-    InputProps,
-} from '@material-ui/core'
+import { makeStyles, createStyles } from '@material-ui/core'
+import { useCallback, useState } from 'react'
+import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
+import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
-import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -25,54 +18,20 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface ITOSelectUIProps {
-    label?: string
-    onclick: () => void
-    value: string
-    icon?: React.ReactNode
-    textFieldProps: Partial<TextFieldProps>
-    inputProps: Partial<InputProps>
+export interface ExchangeTokens {
+    token: EtherTokenDetailed | ERC20TokenDetailed
+    amount: string
 }
 
-export function ITOSelectUI(props: ITOSelectUIProps) {
-    const classes = useStyles()
-
-    return (
-        <>
-            <TextField
-                className={classes.input}
-                value={props.value}
-                label={props.label}
-                fullWidth
-                required
-                InputProps={{
-                    inputProps: {},
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton onClick={props.onClick}>
-                                <ExpandMoreIcon fontSize="large" />
-                            </IconButton>
-                        </InputAdornment>
-                    ),
-                    startAdornment: <InputAdornment position="end">{props.icon}</InputAdornment>,
-                    ...props.inputProps,
-                }}
-                {...props.textFieldProps}
-            />
-        </>
-    )
+export interface ITOExchangeTokenPanelProps {
+    exchangeTokenArray: ExchangeTokens[]
 }
 
-export interface ITOTokenSelectProps extends ITOSelectUIProps {
-    title: string
-    token?: EtherTokenDetailed | ERC20TokenDetailed
-    onTokenChange: (token?: EtherTokenDetailed | ERC20TokenDetailed) => void
-}
-
-export function ITOTokenSelect(props: ITOTokenSelectProps) {
+function ExchangeTokenPanel(exchangeToken: ExchangeTokens | null) {
+    //#region select token
+    const { value: etherTokenDetailed } = useEtherTokenDetailed()
+    const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
     const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
-
-    const { token, onTokenChange } = props
     const onTokenChipClick = useCallback(() => {
         setOpenSelectERC20TokenDialog(true)
     }, [])
@@ -81,28 +40,53 @@ export function ITOTokenSelect(props: ITOTokenSelectProps) {
     }, [])
     const onSelectERC20TokenDialogSubmit = useCallback(
         (token: EtherTokenDetailed | ERC20TokenDetailed) => {
-            onTokenChange(token)
+            setToken(token)
             onSelectERC20TokenDialogClose()
         },
         [onSelectERC20TokenDialogClose],
     )
+    //#endregion
+    // balance
+    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
+        token?.type ?? EthereumTokenType.Ether,
+        token?.address ?? '',
+    )
+    //#endregion
+
     return (
         <>
-            <ITOSelectUI
-                label={props.title}
-                value={token?.symbol ?? ''}
-                icon={token ? <TokenIcon address={token.address} name={token.name} /> : null}
-                onClick={onTokenChipClick}
-                inputProps={{}}
-                textFieldProps={{}}
-                {...props}
+            <TokenAmountPanel
+                classes={{ root: classes.input }}
+                label="Swap Ration"
+                amount={amount}
+                balance={tokenBalance}
+                token={token}
+                onAmountChange={setAmount}
+                SelectTokenChip={{
+                    loading: loadingTokenBalance,
+                    ChipProps: {
+                        onClick: onTokenChipClick,
+                    },
+                }}
             />
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
-                excludeTokens={token ? [props.token.address] : []}
+                excludeTokens={[token?.address]}
                 onSubmit={onSelectERC20TokenDialogSubmit}
                 onClose={onSelectERC20TokenDialogClose}
             />
         </>
     )
+}
+
+export function ITOExchangeTokenPanel(props: ITOExchangeTokenPanelProps) {
+    const { exchangeTokenArray } = props
+
+    const { amount, setAmount } = useState('0')
+
+    if (exchangeTokenArray.length === 0) {
+        return ExchangeTokenPanel()
+    }
+
+    return exchangeTokenArray.map((exchangeToken, idx) => {})
 }

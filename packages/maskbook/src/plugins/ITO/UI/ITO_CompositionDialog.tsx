@@ -1,6 +1,6 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { Button, DialogContent, DialogProps } from '@material-ui/core'
+import { Button, DialogContent, DialogProps, Typography } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { getActivatedUI } from '../../../social-network/ui'
 import { useChainId } from '../../../web3/hooks/useChainState'
@@ -9,6 +9,10 @@ import { EthereumNetwork, EthereumTokenType } from '../../../web3/types'
 import { ITO_MetaKey } from '../constants'
 import type { ITO_JSONPayload } from '../types'
 import BigNumber from 'bignumber.js'
+import type { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
+import AbstractTab from '../../../extension/options-page/DashboardComponents/AbstractTab'
+
+import { ITOForm } from './ITOForm'
 
 export interface ITO_CompositionDialogProps {
     open: boolean
@@ -53,10 +57,29 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
         // close the dialog
         props.onClose()
     }, [chainId, props.onClose])
+
+    const state = useState(0)
+
+    const tabProps: AbstractTabProps = {
+        tabs: [
+            {
+                label: 'Create New',
+                children: <ITOForm onCreate={onCreatePayload} />,
+                p: 0,
+            },
+            {
+                label: 'Select Existing',
+                children: <Typography>abc2</Typography>,
+                p: 0,
+            },
+        ],
+        state,
+    }
+
     return (
         <InjectedDialog open={props.open} title="ITO Composition Dialog" onClose={props.onClose}>
             <DialogContent>
-                <h1>Form</h1>
+                <AbstractTab height={362} {...tabProps} />
                 <Button onClick={onCreatePayload}>Create a ITO payload</Button>
             </DialogContent>
         </InjectedDialog>
