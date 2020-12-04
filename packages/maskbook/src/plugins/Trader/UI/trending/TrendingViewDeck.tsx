@@ -60,6 +60,11 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            position: 'relative',
+        },
+        buy: {
+            right: theme.spacing(2),
+            position: 'absolute',
         },
         tabs: {
             height: 35,
@@ -190,6 +195,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                         </Typography>
                         {account && trending.coin.symbol && Flags.transak_enabled ? (
                             <Button
+                                className={classes.buy}
                                 startIcon={<MonetizationOnOutlinedIcon />}
                                 variant="text"
                                 color="primary"
