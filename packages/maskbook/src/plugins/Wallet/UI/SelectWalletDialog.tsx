@@ -47,9 +47,9 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
 
     const onSelect = useCallback(
         (wallet: WalletRecord) => {
+            onClose()
             currentSelectedWalletAddressSettings.value = wallet.address
             currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
-            onClose()
         },
         [onClose],
     )
