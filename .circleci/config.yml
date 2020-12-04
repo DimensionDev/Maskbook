@@ -25,7 +25,6 @@ jobs:
             - v3-maskbook-cache-npm
       - run:
           name: Install NPMv7
-          command: sudo npm i -g npm@7
       - run:
           name: Install Dependencies
           command: npm ci
