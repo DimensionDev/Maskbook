@@ -30,6 +30,9 @@ jobs:
             npm config get cache
             npm -v
 
+      - name: Root
+        run: sudo chown -R 1000:1000 "/github/home/.npm"
+
       # @v2 requires too much configurations
       - uses: actions/checkout@v1
 
