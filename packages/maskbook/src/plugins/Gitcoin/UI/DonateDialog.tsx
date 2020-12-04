@@ -26,6 +26,7 @@ import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { Flags } from '../../../utils/flags'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
+import { getActivatedUI } from '../../../social-network/ui'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -129,6 +130,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     //#endregion
 
     //#region remote controlled transaction dialog
+    const cashTag = getActivatedUI()?.networkIdentifier === 'twitter.com' ? '$' : ''
     const postLink = usePostLink()
     const shareLink = useShareLink(
         token
@@ -137,7 +139,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                       new BigNumber(amount),
                       token.decimals ?? 0,
                       token.decimals ?? 0,
-                  )} ${token.symbol}. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
+                  )} ${cashTag}${token.symbol}. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
                   '#mask_io',
                   postLink,
               ].join('\n')

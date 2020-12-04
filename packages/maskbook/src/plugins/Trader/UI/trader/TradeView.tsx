@@ -6,10 +6,12 @@ import { Trader, TraderProps } from './Trader'
 const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
+            width: '100%',
             maxWidth: 450,
             margin: '0 auto',
-            padding: `0 ${theme.spacing(3)}px`,
+            padding: theme.spacing(0, 3),
             position: 'relative',
+            boxSizing: 'border-box',
         },
         bar: {
             display: 'flex',
