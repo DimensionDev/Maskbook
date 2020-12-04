@@ -37,7 +37,7 @@ jobs:
         run: npm ci
 
       - name: Install Optional Dependencies
-        run: npm install expect-puppeteer@4.4.0 jest-puppeteer@4.4.0 puppeteer@5.5.0 --no-save
+        run: npm install expect-puppeteer@4.4.0 jest-puppeteer@4.4.0 puppeteer@5.5.0
 
       - name: Build
         run: npm run build:e2e
