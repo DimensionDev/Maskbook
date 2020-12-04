@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import classNames from 'classnames'
-import { Box, createStyles, Theme, makeStyles, InputBase, ThemeProvider } from '@material-ui/core'
+import { Box, createStyles, Theme, makeStyles, InputBase, ThemeProvider, Link, Button } from '@material-ui/core'
 import { Database as DatabaseIcon } from 'react-feather'
 import { v4 as uuid } from 'uuid'
 import { WrappedDialogProps, DashboardDialogCore, DashboardDialogWrapper } from './Base'
@@ -29,6 +29,9 @@ const useDatabaseStyles = makeStyles((theme: Theme) =>
             marginTop: 2,
             marginBottom: 28,
         },
+        buttonText: {
+            color: '#fff',
+        },
     }),
 )
 
@@ -39,6 +42,11 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
     const { enqueueSnackbar } = useSnackbar()
 
     const { value, loading } = useAsync(() => Services.Welcome.generateBackupJSON())
+
+    // since Android doesn't support `browser.download.downloads`,
+    //  we should create download url before click button.
+    const backupInfo = useAsync(() => Services.Welcome.createBackupUrl({ download: false, onlyBackupWhoAmI: false }))
+
     const records = [
         { type: DatabaseRecordType.Persona, length: value?.personas.length ?? 0, checked: false },
         { type: DatabaseRecordType.Profile, length: value?.profiles.length ?? 0, checked: false },
@@ -73,13 +81,28 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
                             dense
                             records={records}
                         />
-                        <ActionButton
-                            loading={loading}
-                            disabled={loading || records.every((r) => !r.length)}
-                            variant="contained"
-                            onClick={onConfirm}>
-                            {t('dashboard_backup_database_confirmation')}
-                        </ActionButton>
+                        {process.env.architecture === 'app' && process.env.target === 'firefox' ? (
+                            backupInfo.loading || loading ? null : (
+                                <Button
+                                    component={Link}
+                                    onClick={() => props.onClose()}
+                                    variant="contained"
+                                    href={backupInfo?.value?.url}
+                                    download={backupInfo?.value?.fileName}>
+                                    <span className={classes.buttonText}>
+                                        {t('dashboard_backup_database_confirmation')}
+                                    </span>
+                                </Button>
+                            )
+                        ) : (
+                            <ActionButton
+                                loading={loading}
+                                disabled={loading || records.every((r) => !r.length)}
+                                variant="contained"
+                                onClick={onConfirm}>
+                                {t('dashboard_backup_database_confirmation')}
+                            </ActionButton>
+                        )}
                     </Box>
                 }></DashboardDialogWrapper>
         </DashboardDialogCore>
