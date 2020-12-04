@@ -3,8 +3,8 @@ import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
 import { COTM_CONSTANTS } from '../constants'
-import { useAllCOTM_TokensOfOwner } from '../hooks/useAllCOTM_TokensOfOwner'
-import { COTM_Card } from './COTM_Card'
+import { useAllTokensOfOwner } from '../hooks/useAllTokensOfOwner'
+import { TokenCard } from './TokenCard'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -28,15 +28,15 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface COTM_TokenAlbumProps {}
+export interface TokenAlbumProps {}
 
-export function COTM_TokenAlbum(props: COTM_TokenAlbumProps) {
+export function TokenAlbum(props: TokenAlbumProps) {
     const classes = useStyles(props)
 
     // fetch the NFT token
     const COTM_TOKEN_ADDRESS = useConstant(COTM_CONSTANTS, 'COTM_TOKEN_ADDRESS')
     const { value: COTM_Token } = useERC721TokenDetailed(COTM_TOKEN_ADDRESS)
-    const tokens = useAllCOTM_TokensOfOwner(COTM_Token)
+    const tokens = useAllTokensOfOwner(COTM_Token)
 
     const chainIdValid = useChainIdValid()
     if (!chainIdValid) return null
@@ -46,7 +46,7 @@ export function COTM_TokenAlbum(props: COTM_TokenAlbumProps) {
             <div className={classes.content}>
                 {tokens.value.map((token) => (
                     <section className={classes.tile} key={token.tokenId}>
-                        <COTM_Card token={token} canViewOnEtherscan />
+                        <TokenCard token={token} canViewOnEtherscan />
                     </section>
                 ))}
             </div>

@@ -3,7 +3,7 @@ import type { COTM_Token } from '../types'
 import type { ERC721TokenDetailed } from '../../../web3/types'
 import { MAX_TOKEN_COUNT } from '../constants'
 
-export function useCOTM_Tokens(token?: ERC721TokenDetailed): COTM_Token[] {
+export function useTokens(token?: ERC721TokenDetailed): COTM_Token[] {
     if (!token) return []
     return new Array(MAX_TOKEN_COUNT).fill(0).map((_, idx) => {
         const tokenId_ = soliditySha3({ t: 'string', v: 'hollandchina' }, { t: 'uint8', v: idx })

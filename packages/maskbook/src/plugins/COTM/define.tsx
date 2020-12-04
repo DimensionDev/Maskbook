@@ -5,8 +5,8 @@ import { COTM_MetaKey, COTM_PluginID } from './constants'
 import { COTM_MetadataReader } from './helpers'
 import type { COTM_JSONPayload } from './types'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
-import { COTM_Packet } from './UI/COTM_Packet'
-import { COTM_CompositionDialog as COTM_CompositionDialog } from './UI/COTM_CompositionDialog'
+import { TokenPacket } from './UI/TokenPacket'
+import { COTM_CompositionDialog as COTM_CompositionDialog } from './UI/CompositionDialog'
 import { Flags } from '../../utils/flags'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 
@@ -25,7 +25,7 @@ export const COTM_PluginDefine: PluginConfig = {
         return (
             <MaskbookPluginWrapper pluginName="#CreativityOnTheMove">
                 <Suspense fallback={<SnackbarContent message="Maskbook is loading this plugin..." />}>
-                    <COTM_Packet payload={payload.val} />
+                    <TokenPacket payload={payload.val} />
                 </Suspense>
             </MaskbookPluginWrapper>
         )

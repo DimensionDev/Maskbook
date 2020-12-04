@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { Box, Card, CardContent, CardHeader, createStyles, Link, makeStyles, Typography } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import classNames from 'classnames'
-import { COTM_Card } from './COTM_Card'
+import { TokenCard } from './TokenCard'
 import type { COTM_JSONPayload } from '../types'
 import FlagImage from '../assets/Flag'
 import FireworksImage from '../assets/Fireworks'
@@ -14,10 +14,10 @@ import { useMintCallback } from '../hooks/useMintCallback'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
-import { useCOTM_Tokens } from '../hooks/useCOTM_Tokens'
-import { useCOTM_TokensOfOwner } from '../hooks/useCOTM_TokensOfOwner'
+import { useTokens } from '../hooks/useTokens'
+import { useTokensOfOwner } from '../hooks/useTokensOfOwner'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
-import { useAvailability } from '../hooks/useCOTM_Availability'
+import { useAvailability } from '../hooks/useAvailability'
 import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
@@ -132,11 +132,11 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface COTM_PacketProps {
+export interface TokenPacketProps {
     payload: COTM_JSONPayload
 }
 
-export function COTM_Packet(props: COTM_PacketProps) {
+export function TokenPacket(props: TokenPacketProps) {
     const { payload } = props
 
     const { t } = useI18N()
@@ -147,12 +147,10 @@ export function COTM_Packet(props: COTM_PacketProps) {
     const { value: COTM_Token } = useERC721TokenDetailed(COTM_TOKEN_ADDRESS)
 
     const { value: remaining, loading: loadingRemaining, retry: revalidateAvailability } = useAvailability()
-    const tokens = useCOTM_Tokens(COTM_Token)
-    const {
-        value: tokensOfOwner,
-        loading: loadingTokensOfOwner,
-        retry: revalidateTokensOfOwner,
-    } = useCOTM_TokensOfOwner(COTM_Token)
+    const tokens = useTokens(COTM_Token)
+    const { value: tokensOfOwner, loading: loadingTokensOfOwner, retry: revalidateTokensOfOwner } = useTokensOfOwner(
+        COTM_Token,
+    )
 
     // context
     const account = useAccount()
@@ -262,7 +260,7 @@ export function COTM_Packet(props: COTM_PacketProps) {
                         }}>
                         {(tokensOfOwner.length ? tokensOfOwner : tokens).map((x, i) => (
                             <section className={classes.card} key={i}>
-                                <COTM_Card token={x} />
+                                <TokenCard token={x} />
                             </section>
                         ))}
                     </div>

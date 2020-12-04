@@ -30,12 +30,12 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface COTM_CardProps {
+export interface TokenCardProps {
     token: COTM_Token
     canViewOnEtherscan?: boolean
 }
 
-export function COTM_Card(props: COTM_CardProps) {
+export function TokenCard(props: TokenCardProps) {
     const classes = useStyles(props)
     const chainId = useChainId()
     const COTM_TOKEN_ADDRESS = useConstant(COTM_CONSTANTS, 'COTM_TOKEN_ADDRESS')
