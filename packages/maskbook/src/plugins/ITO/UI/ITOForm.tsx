@@ -13,7 +13,7 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
 import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
 
-import { ITOExchangeTokenPanel } from './ITOSelect'
+import { ITOExchangeTokenPanel, ExchangeTokenPanel, ExchangeTokenItem } from './ITOSelect'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import BigNumber from 'bignumber.js'
@@ -60,7 +60,7 @@ export function ITOForm(props: ITOFormProps) {
     const chainIdValid = useChainIdValid()
 
     const { value: tokenDetailed } = useEtherTokenDetailed()
-    const [token, setFromToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>(tokenDetailed)
+    const [token, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>(tokenDetailed)
 
     const [message, setMessage] = useState('Best Wishes!')
 
@@ -90,41 +90,31 @@ export function ITOForm(props: ITOFormProps) {
     }, [approveState, approveCallback])
 
     const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
-    /*
-    const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback({
-        password: uuid(),
-        duration: 60 * 60 * 24,
-        name: senderName,
-        fromToken,
-        toToken,
-        message,
-        end_date: selectedDate,
-        total: allocationPerWallet,
-        ratio,
-    })
-*/
-    const validationMessage = useMemo(() => {
-        if (!token) {
-            return 'select to token'
-        }
 
+    const validationMessage = useMemo(() => {
         if (new BigNumber(amount).isZero()) {
-            return 'Enter amount'
+            return 'Enter an amount'
+        }
+        if (!token) {
+            return 'Select to token'
         }
         return ''
     }, [token, amount])
 
     const [exchangeTokens, setExchangeTokens] = useState([])
+    const [tokenAmount, setTokenAmount] = useState<ExchangeTokenItem>({ amount: '0', token: null })
+
     return (
         <>
             <EthereumStatusBar classes={{ root: classes.bar }} />
             <Box className={classes.line}>
-                <ITOExchangeTokenPanel
-                    exchangetokenPanelUIProps={{
-                        showAdd: false,
-                        showRemove: false,
-                        label: 'Sel total Amount',
-                    }}
+                <ExchangeTokenPanel
+                    onChange={}
+                    exchangeToken={tokenAmount}
+                    showAdd={false}
+                    showRemove={false}
+                    index={0}
+                    label="Total amount"
                 />
             </Box>
             <Box className={classes.flow}>
@@ -132,9 +122,10 @@ export function ITOForm(props: ITOFormProps) {
             </Box>
             <Box className={classes.line}>
                 <ITOExchangeTokenPanel
+                    token={token}
                     onChange={setExchangeTokens}
-                    exchangetokenPanelUIProps={{
-                        title: 'Swap Ration',
+                    exchangetokenPanelProps={{
+                        label: 'Swap Ration',
                     }}
                 />
             </Box>

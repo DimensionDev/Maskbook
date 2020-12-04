@@ -1,5 +1,5 @@
-import { makeStyles, createStyles, Paper, IconButton } from '@material-ui/core'
-import { useCallback, useState } from 'react'
+import { makeStyles, createStyles, Paper, IconButton, Typography } from '@material-ui/core'
+import { useCallback, useState, useEffect } from 'react'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 
@@ -8,6 +8,7 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
 import AddIcon from '@material-ui/icons/Add'
 import RemoveIcon from '@material-ui/icons/Remove'
+import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -32,18 +33,19 @@ export interface ExchangeTokenItem {
     amount: string
 }
 
-export interface ExchangetokenPanelUIProps {
-    onChange: () => void
+export interface ExchangetokenPanelProps {
+    onChange?: (item: ExchangeTokenItem, index: number) => void
     onAdd: () => void
     index: number
     showRemove: boolean
     showAdd: boolean
     label?: string
-    exchangeItem: ExchangeTokenItem
-    onRemove: (index: number, exchangeItem: ExchangeTokenItem | null) => void
+    exchangeItem?: ExchangeTokenItem
+    tokenAmountPanelProps: Partial<TokenAmountPanelProps>
+    onRemove: (index: number) => void
 }
 
-function ExchangeTokenPanelUI(props: ExchangetokenPanelUIProps) {
+export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
     const { onChange, showAdd = true, showRemove = false, label, exchangeItem, onRemove, onAdd } = props
 
     const classes = useStyles()
@@ -65,6 +67,12 @@ function ExchangeTokenPanelUI(props: ExchangetokenPanelUIProps) {
         [onSelectERC20TokenDialogClose],
     )
 
+    useEffect(() => {
+        if (exchangeItem) {
+            setToken(exchangeItem.token)
+        }
+    }, [exchangeItem])
+
     //#endregion
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
@@ -73,42 +81,46 @@ function ExchangeTokenPanelUI(props: ExchangetokenPanelUIProps) {
     )
     //#endregion
 
-    const [amount, setAmount] = useState('')
+    const onRemoveClicked = useCallback(() => {
+        onRemove(props.index)
+    }, [])
 
+    const setAmount = (amount: string) => {
+        console.log(amount)
+    }
     return (
         <>
-            <div>
-                <Paper className={classes.line}>
-                    <TokenAmountPanel
-                        classes={{ root: classes.input }}
-                        label={props.label}
-                        amount={amount}
-                        balance={tokenBalance}
-                        token={token}
-                        onAmountChange={setAmount}
-                        SelectTokenChip={{
-                            loading: loadingTokenBalance,
-                            ChipProps: {
-                                onClick: onTokenChipClick,
-                            },
-                        }}
-                    />
-                    {showAdd ? (
-                        <IconButton onClick={onAdd} className={classes.button}>
-                            <AddIcon />
-                        </IconButton>
-                    ) : (
-                        ''
-                    )}
-                    {showRemove ? (
-                        <IconButton onclick={onRemove} className={classes.button}>
-                            <RemoveIcon />
-                        </IconButton>
-                    ) : (
-                        ''
-                    )}
-                </Paper>
-            </div>
+            <Paper className={classes.line}>
+                <TokenAmountPanel
+                    classes={{ root: classes.input }}
+                    label={props.label}
+                    amount={exchangeItem?.amount}
+                    balance={tokenBalance}
+                    token={token}
+                    onAmountChange={setAmount}
+                    SelectTokenChip={{
+                        loading: loadingTokenBalance,
+                        ChipProps: {
+                            onClick: onTokenChipClick,
+                        },
+                    }}
+                    {...props.tokenAmountPanelProps}
+                />
+                {showAdd ? (
+                    <IconButton onClick={onAdd} className={classes.button}>
+                        <AddIcon />
+                    </IconButton>
+                ) : (
+                    ''
+                )}
+                {showRemove ? (
+                    <IconButton onClick={onRemoveClicked} className={classes.button}>
+                        <RemoveIcon />
+                    </IconButton>
+                ) : (
+                    ''
+                )}
+            </Paper>
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
                 excludeTokens={[token?.address]}
@@ -121,35 +133,55 @@ function ExchangeTokenPanelUI(props: ExchangetokenPanelUIProps) {
 
 export interface ITOExchangeTokenPanelProps {
     onChange: () => void
-    exchangetokenPanelUIProps: Partial<ExchangetokenPanelUIProps>
+    token: EtherTokenDetailed | ERC20TokenDetailed | null
+    exchangetokenPanelProps: Partial<ExchangetokenPanelProps>
 }
 export function ITOExchangeTokenPanel(props: ITOExchangeTokenPanelProps) {
-    const [exchangeTokenArray, setExchangeTokens] = useState([])
-    const onRemove = useCallback((index: number) => {
-        exchangeTokenArray.splice(index, 1)
-    }, [])
+    const [exchangeTokenArray, setExchangeTokenArray] = useState([])
+
+    const onRemove = (index) => {
+        console.log('onRemove')
+        const arr = [...exchangeTokenArray]
+        arr.splice(index, 1)
+        setExchangeTokenArray(arr)
+    }
+
     const onAdd = useCallback(() => {
         console.log('onAdd')
-        exchangeTokenArray.push({
+        const arr = [...exchangeTokenArray]
+        arr.push({
             amount: '0',
             token: null,
         })
+        setExchangeTokenArray(arr)
     }, [])
 
     if (!exchangeTokenArray || exchangeTokenArray.length === 0) {
         onAdd()
     }
+
+    const AddExchangeToken = (item: ExchangeTokenItem, index: number) => {
+        const arr = [...exchangeTokenArray]
+        arr[index] = item
+        setExchangeTokenArray(arr)
+    }
+
     return exchangeTokenArray.map((exchangeToken, idx) => {
         return (
-            <ExchangeTokenPanelUI
+            <ExchangeTokenPanel
                 exchangeToken={exchangeToken}
-                onChangeToken={}
+                onChange={AddExchangeToken}
                 index={idx}
                 showRemove={idx < exchangeTokenArray.length && exchangeTokenArray.length !== 1}
                 showAdd={idx === exchangeTokenArray.length - 1}
-                {...props.exchangetokenPanelUIProps}
+                {...props.exchangetokenPanelProps}
                 onRemove={onRemove}
                 onAdd={onAdd}
+                tokenAmountPanelProps={{
+                    InputProps: {
+                        startAdornment: <Typography>1{props.token?.symbol}=</Typography>,
+                    },
+                }}
             />
         )
     })
