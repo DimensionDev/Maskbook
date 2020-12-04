@@ -40,7 +40,6 @@ export function useFillCallback(poolSettings: PoolSettings) {
             return
         }
 
-        // 1606780800 is the base timestamp
         const startTime_ = startTime.getTime() - ITO_CONTRACT_BASE_DATE.getTime()
         const endTime_ = endTime.getTime() - ITO_CONTRACT_BASE_DATE.getTime()
 
