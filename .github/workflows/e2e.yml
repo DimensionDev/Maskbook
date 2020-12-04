@@ -18,10 +18,11 @@ jobs:
 
       # more: https://github.community/t5/GitHub-Actions/How-to-run-action-as-a-non-root-user/m-p/45733/highlight/true#M6330
       options: '--user 1000
-        -v /home/ubuntu/.cache/npm:/tmp/.npm-cache-1000
+        -v /home/ubuntu/.cache/npm:/github/home/.npm
         -v /home/ubuntu/.cache/alice_home:/tmp/alice_home
         -v /home/ubuntu/.cache/bob_home:/tmp/bob_home
         -v /home/ubuntu/.e2e/e2e-test:/tmp/e2e-test'
+
     steps:
       - name: Debug
         run: |
@@ -33,9 +34,7 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Install Dependencies
-        run: |
-          npm config set cache /tmp/.npm-cache-1000 --global
-          npm ci
+        run: npm ci
 
       - name: Build
         run: npm run build:e2e
