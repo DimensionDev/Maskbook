@@ -66,7 +66,10 @@ export const Preview: React.FC<Props> = ({ info }) => {
         open(info.key ? `${link}#${info.key}` : link)
     }
     return (
-        <Paper elevation={0} className={classes.root}>
+        <Paper
+            elevation={0}
+            className={classes.root}
+            onClick={process.env.architecture === 'app' ? onClick : undefined}>
             <File className={classes.download} width={44} height={44} onClick={onClick} />
             <section className={classes.meta}>
                 <Typography component="p" color="textPrimary" className={classes.name} title={info.name}>
