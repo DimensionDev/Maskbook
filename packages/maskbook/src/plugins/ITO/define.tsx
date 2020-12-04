@@ -11,7 +11,7 @@ import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { SnackbarContent } from '@material-ui/core'
 import { Flags } from '../../utils/flags'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
-import { ITO_CompositionDialog } from './UI/ITO_CompositionDialog'
+import { CompositionDialog } from './UI/CompositionDialog'
 import { ItoLabelIcon } from './assets/ItoLabelIcon'
 
 interface LabelWrapperProps {
@@ -43,7 +43,7 @@ function LabelWrapper(props: LabelWrapperProps) {
 
 const [ITO_CompositionEntry, ITO_CompositionUI] = createCompositionDialog(
     <LabelWrapper iconSize={12} labelText={'ITO'} />,
-    (props) => <ITO_CompositionDialog {...props} />,
+    (props) => <CompositionDialog {...props} />,
 )
 
 export const ITO_PluginDefine: PluginConfig = {

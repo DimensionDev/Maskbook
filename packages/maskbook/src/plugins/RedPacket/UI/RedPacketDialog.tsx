@@ -9,12 +9,12 @@ import { RedPacketForm } from './RedPacketForm'
 import { RedPacketBacklogList } from './RedPacketList'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { RedPacketRPC } from '../messages'
+import { PluginRedPacketRPC } from '../messages'
 
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean
     onConfirm: (opt?: RedPacketJSONPayload | null) => void
-    onDecline: () => void
+    onClose: () => void
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
@@ -28,7 +28,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             )
             onConfirm(payload)
             // storing the created red packet in DB, it helps retrieve red packet password later
-            RedPacketRPC.discoverRedPacket('', payload)
+            PluginRedPacketRPC.discoverRedPacket('', payload)
         },
         [onConfirm],
     )
@@ -53,7 +53,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }
 
     return (
-        <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={props.onDecline}>
+        <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={props.onClose}>
             <DialogContent>
                 <AbstractTab height={362} {...tabProps} />
             </DialogContent>
