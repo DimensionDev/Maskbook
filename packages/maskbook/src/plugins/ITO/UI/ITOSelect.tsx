@@ -1,33 +1,52 @@
-import { makeStyles, createStyles } from '@material-ui/core'
+import { makeStyles, createStyles, Paper, IconButton } from '@material-ui/core'
 import { useCallback, useState } from 'react'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 
-import { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
+import AddIcon from '@material-ui/icons/Add'
+import RemoveIcon from '@material-ui/icons/Remove'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             width: '100%',
         },
-
-        input: {},
-        iconButton: {},
+        line: {
+            margin: theme.spacing(1),
+            display: 'flex',
+        },
+        input: {
+            flex: 1,
+        },
+        button: {
+            borderRadius: 10,
+        },
     }),
 )
 
-export interface ExchangeTokens {
-    token: EtherTokenDetailed | ERC20TokenDetailed
+export interface ExchangeTokenItem {
+    token: EtherTokenDetailed | ERC20TokenDetailed | null
     amount: string
 }
 
-export interface ITOExchangeTokenPanelProps {
-    exchangeTokenArray: ExchangeTokens[]
+export interface ExchangetokenPanelUIProps {
+    onChange: () => void
+    onAdd: () => void
+    index: number
+    showRemove: boolean
+    showAdd: boolean
+    label?: string
+    exchangeItem: ExchangeTokenItem
+    onRemove: (index: number, exchangeItem: ExchangeTokenItem | null) => void
 }
 
-function ExchangeTokenPanel(exchangeToken: ExchangeTokens | null) {
+function ExchangeTokenPanelUI(props: ExchangetokenPanelUIProps) {
+    const { onChange, showAdd = true, showRemove = false, label, exchangeItem, onRemove, onAdd } = props
+
+    const classes = useStyles()
     //#region select token
     const { value: etherTokenDetailed } = useEtherTokenDetailed()
     const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
@@ -45,6 +64,7 @@ function ExchangeTokenPanel(exchangeToken: ExchangeTokens | null) {
         },
         [onSelectERC20TokenDialogClose],
     )
+
     //#endregion
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
@@ -53,22 +73,42 @@ function ExchangeTokenPanel(exchangeToken: ExchangeTokens | null) {
     )
     //#endregion
 
+    const [amount, setAmount] = useState('')
+
     return (
         <>
-            <TokenAmountPanel
-                classes={{ root: classes.input }}
-                label="Swap Ration"
-                amount={amount}
-                balance={tokenBalance}
-                token={token}
-                onAmountChange={setAmount}
-                SelectTokenChip={{
-                    loading: loadingTokenBalance,
-                    ChipProps: {
-                        onClick: onTokenChipClick,
-                    },
-                }}
-            />
+            <div>
+                <Paper className={classes.line}>
+                    <TokenAmountPanel
+                        classes={{ root: classes.input }}
+                        label={props.label}
+                        amount={amount}
+                        balance={tokenBalance}
+                        token={token}
+                        onAmountChange={setAmount}
+                        SelectTokenChip={{
+                            loading: loadingTokenBalance,
+                            ChipProps: {
+                                onClick: onTokenChipClick,
+                            },
+                        }}
+                    />
+                    {showAdd ? (
+                        <IconButton onClick={onAdd} className={classes.button}>
+                            <AddIcon />
+                        </IconButton>
+                    ) : (
+                        ''
+                    )}
+                    {showRemove ? (
+                        <IconButton onclick={onRemove} className={classes.button}>
+                            <RemoveIcon />
+                        </IconButton>
+                    ) : (
+                        ''
+                    )}
+                </Paper>
+            </div>
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
                 excludeTokens={[token?.address]}
@@ -79,14 +119,38 @@ function ExchangeTokenPanel(exchangeToken: ExchangeTokens | null) {
     )
 }
 
+export interface ITOExchangeTokenPanelProps {
+    onChange: () => void
+    exchangetokenPanelUIProps: Partial<ExchangetokenPanelUIProps>
+}
 export function ITOExchangeTokenPanel(props: ITOExchangeTokenPanelProps) {
-    const { exchangeTokenArray } = props
+    const [exchangeTokenArray, setExchangeTokens] = useState([])
+    const onRemove = useCallback((index: number) => {
+        exchangeTokenArray.splice(index, 1)
+    }, [])
+    const onAdd = useCallback(() => {
+        console.log('onAdd')
+        exchangeTokenArray.push({
+            amount: '0',
+            token: null,
+        })
+    }, [])
 
-    const { amount, setAmount } = useState('0')
-
-    if (exchangeTokenArray.length === 0) {
-        return ExchangeTokenPanel()
+    if (!exchangeTokenArray || exchangeTokenArray.length === 0) {
+        onAdd()
     }
-
-    return exchangeTokenArray.map((exchangeToken, idx) => {})
+    return exchangeTokenArray.map((exchangeToken, idx) => {
+        return (
+            <ExchangeTokenPanelUI
+                exchangeToken={exchangeToken}
+                onChangeToken={}
+                index={idx}
+                showRemove={idx < exchangeTokenArray.length && exchangeTokenArray.length !== 1}
+                showAdd={idx === exchangeTokenArray.length - 1}
+                {...props.exchangetokenPanelUIProps}
+                onRemove={onRemove}
+                onAdd={onAdd}
+            />
+        )
+    })
 }

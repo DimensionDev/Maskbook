@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { Button, DialogContent, DialogProps, Typography } from '@material-ui/core'
+import { DialogContent, DialogProps, Typography } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { getActivatedUI } from '../../../social-network/ui'
 import { useChainId } from '../../../web3/hooks/useChainState'
@@ -80,7 +80,6 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
         <InjectedDialog open={props.open} title="ITO Composition Dialog" onClose={props.onClose}>
             <DialogContent>
                 <AbstractTab height={362} {...tabProps} />
-                <Button onClick={onCreatePayload}>Create a ITO payload</Button>
             </DialogContent>
         </InjectedDialog>
     )
