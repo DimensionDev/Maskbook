@@ -17,15 +17,3 @@ export interface Persona extends TypedOmit<PersonaRecord, 'localKey' | 'publicKe
 export interface PersonaWithPrivateKey
     extends Omit<PersonaRecord, 'privateKey'>,
         Required<Pick<PersonaRecord, 'privateKey'>> {}
-
-export interface Provider {
-    internalName: string
-    network: string
-    connected: boolean
-    userId: string | undefined
-    identifier: ProfileIdentifier | undefined
-}
-
-export interface PersonaWithProviders extends Persona {
-    providers: Provider[]
-}
