@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { flatMap } from 'lodash-es'
 import type { Pair } from '@uniswap/sdk'
-import { toUniswapToken } from '../../helpers'
+import { toUniswapChainId, toUniswapToken } from '../../helpers'
 import { useUniswapPairs, TokenPair, PairState } from './usePairs'
 import { BASE_AGAINST_TOKENS, CUSTOM_BASES } from '../../constants'
 import { useChainId } from '../../../../web3/hooks/useChainState'
@@ -26,7 +26,10 @@ export function useAllCommonPairs(
     )
     const allPairCombinations = useMemo(
         () =>
-            uniswapTokenA && uniswapTokenB
+            uniswapTokenA &&
+            uniswapTokenB &&
+            uniswapTokenA.chainId === toUniswapChainId(chainId) &&
+            uniswapTokenA.chainId === uniswapTokenB.chainId
                 ? [
                       // the direct pair
                       [uniswapTokenA, uniswapTokenB] as TokenPair,
