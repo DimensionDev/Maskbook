@@ -1,6 +1,6 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { Button, DialogContent, DialogProps } from '@material-ui/core'
+import { DialogContent, DialogProps, Typography } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { getActivatedUI } from '../../../social-network/ui'
 import { useChainId } from '../../../web3/hooks/useChainState'
@@ -9,6 +9,10 @@ import { EthereumNetwork, EthereumTokenType } from '../../../web3/types'
 import { ITO_MetaKey } from '../constants'
 import type { ITO_JSONPayload } from '../types'
 import BigNumber from 'bignumber.js'
+import type { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
+import AbstractTab from '../../../extension/options-page/DashboardComponents/AbstractTab'
+
+import { ITOForm } from './ITOForm'
 
 export interface ITO_CompositionDialogProps {
     open: boolean
@@ -23,19 +27,17 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
         const payload: ITO_JSONPayload = {
             pid: uuid(),
             password: uuid(),
-            limit: new BigNumber('100').toFixed(),
             total: new BigNumber('1000000000').toFixed(),
             sender: {
                 address: '0x',
                 name: 'Maskbook',
-                message: 'This is my first ITO',
+                message: 'ITO',
             },
-            start_time: new Date().getTime(),
-            end_time: new Date().getTime(),
             creation_time: new Date().getTime(),
+            duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
             network: resolveChainName(chainId) as EthereumNetwork,
             token_type: EthereumTokenType.Ether,
-            exchange_amonuts: ['1', '500'],
+            exchange_ratios: ['1', '500'],
             exchange_tokens: [
                 {
                     address: '0x',
@@ -55,11 +57,29 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
         // close the dialog
         props.onClose()
     }, [chainId, props.onClose])
+
+    const state = useState(0)
+
+    const tabProps: AbstractTabProps = {
+        tabs: [
+            {
+                label: 'Create New',
+                children: <ITOForm onCreate={onCreatePayload} />,
+                p: 0,
+            },
+            {
+                label: 'Select Existing',
+                children: <Typography>abc2</Typography>,
+                p: 0,
+            },
+        ],
+        state,
+    }
+
     return (
         <InjectedDialog open={props.open} title="ITO Composition Dialog" onClose={props.onClose}>
             <DialogContent>
-                <h1>Form</h1>
-                <Button onClick={onCreatePayload}>Create a ITO payload</Button>
+                <AbstractTab height={362} {...tabProps} />
             </DialogContent>
         </InjectedDialog>
     )
