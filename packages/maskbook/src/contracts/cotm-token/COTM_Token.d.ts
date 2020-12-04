@@ -19,18 +19,6 @@ export class CotmToken extends Contract {
     methods: {
         approve(to: string, tokenId: number | string): TransactionObject<void>
 
-        mintStateToken(claimer: string, state: number | string): TransactionObject<string>
-
-        modify_admin(target: string, ifadmin: boolean): TransactionObject<void>
-
-        modify_limits(state: number | string, delta: number | string): TransactionObject<void>
-
-        safeTransferFrom(from: string, to: string, tokenId: number | string): TransactionObject<void>
-
-        setApprovalForAll(operator: string, approved: boolean): TransactionObject<void>
-
-        transferFrom(from: string, to: string, tokenId: number | string): TransactionObject<void>
-
         balanceOf(owner: string): TransactionObject<string>
 
         baseURI(): TransactionObject<string>
@@ -41,9 +29,19 @@ export class CotmToken extends Contract {
 
         isApprovedForAll(owner: string, operator: string): TransactionObject<boolean>
 
+        mintToken(claimer: string): TransactionObject<string>
+
+        modify_admin(target: string, ifadmin: boolean): TransactionObject<void>
+
+        modify_limit(delta: number | string): TransactionObject<void>
+
         name(): TransactionObject<string>
 
         ownerOf(tokenId: number | string): TransactionObject<string>
+
+        safeTransferFrom(from: string, to: string, tokenId: number | string): TransactionObject<void>
+
+        setApprovalForAll(operator: string, approved: boolean): TransactionObject<void>
 
         supportsInterface(interfaceId: string | number[]): TransactionObject<boolean>
 
@@ -56,6 +54,8 @@ export class CotmToken extends Contract {
         tokenURI(tokenId: number | string): TransactionObject<string>
 
         totalSupply(): TransactionObject<string>
+
+        transferFrom(from: string, to: string, tokenId: number | string): TransactionObject<void>
     }
     events: {
         Approval: ContractEvent<{

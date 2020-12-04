@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useTransactionReceipt } from '../../../web3/hooks/useTransaction'
+import BigNumber from 'bignumber.js'
+import { useCallback } from 'react'
+import type { Tx } from '../../../contracts/types'
+import { addGasMargin } from '../../../web3/helpers'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useCOTM_TokenContract } from '../contracts/useCOTM_TokenContract'
-import { PluginCOTM } from '../messages'
 
 export function useMintCallback(from: string) {
-    const [txHash, setTxHash] = useState('')
     const [mintState, setMintState] = useTransactionState()
     const COTM_TokenContract = useCOTM_TokenContract()
 
@@ -32,16 +32,49 @@ export function useMintCallback(from: string) {
             return
         }
 
-        // step 2: mint by server
-        try {
-            const { mint_transaction_hash } = await PluginCOTM.mintCOTM_Packet(from)
-            setTxHash(mint_transaction_hash)
-        } catch (error) {
-            setMintState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
+        // step 2-1: estimatedGas
+        const config: Tx = {
+            from,
+            to: COTM_TokenContract.options.address,
         }
+        const estimatedGas = await COTM_TokenContract.methods
+            .mintToken(from)
+            .estimateGas(config)
+            .catch((error) => {
+                setMintState({
+                    type: TransactionStateType.FAILED,
+                    error,
+                })
+                throw error
+            })
+
+        // step 2-2: blocking
+        return new Promise<string>((resolve, reject) => {
+            const onSucceed = (hash: string) => {
+                setMintState({
+                    type: TransactionStateType.HASH,
+                    hash,
+                })
+                resolve(hash)
+            }
+            const onFailed = (error: Error) => {
+                setMintState({
+                    type: TransactionStateType.FAILED,
+                    error,
+                })
+                reject(error)
+            }
+            COTM_TokenContract.methods.mintToken(from).send(
+                {
+                    gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                    ...config,
+                },
+                async (error, hash) => {
+                    if (hash) onSucceed(hash)
+                    else if (error) onFailed(error)
+                },
+            )
+        })
     }, [from, COTM_TokenContract])
 
     const resetCallback = useCallback(() => {
@@ -49,25 +82,6 @@ export function useMintCallback(from: string) {
             type: TransactionStateType.UNKNOWN,
         })
     }, [])
-
-    //#region tracking receipt
-    const receipt = useTransactionReceipt(txHash)
-
-    useEffect(() => {
-        if (!receipt) return
-        if (receipt.status)
-            setMintState({
-                type: TransactionStateType.CONFIRMED,
-                no: 0,
-                receipt,
-            })
-        else
-            setMintState({
-                type: TransactionStateType.FAILED,
-                error: new Error('The contract execution was not successful, check your transaction.'),
-            })
-    }, [receipt])
-    //#endregion
 
     return [mintState, mintCallback, resetCallback] as const
 }
