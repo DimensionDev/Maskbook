@@ -23,6 +23,12 @@ jobs:
         -v /home/ubuntu/.cache/bob_home:/tmp/bob_home
         -v /home/ubuntu/.e2e/e2e-test:/tmp/e2e-test'
     steps:
+      - name: Debug
+        run: |
+            pwd
+            npm config get cache
+            npm -v
+
       # @v2 requires too much configurations
       - uses: actions/checkout@v1
 
@@ -30,11 +36,6 @@ jobs:
         run: |
           npm config set cache /tmp/.npm-cache-1000 --global
           npm ci
-
-      - name: Debug
-        run: |
-            pwd
-            npm config get cache
 
       - name: Build
         run: npm run build:e2e
