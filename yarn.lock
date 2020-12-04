@@ -2324,6 +2324,11 @@
   resolved "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-1.12.2.tgz#6a22e99a49b131a8789053d0b0903834552da36f"
   integrity sha512-Vwhc3ObxmDZmA5hY8mfsau2rJ4vGPvzbj20QSZ2/E1GDPF61QVyjLfNHak9xmel6pW4heRt3v1fHa6np9Ehfeg==
 
+"@msgpack/msgpack@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-2.3.0.tgz#a9043b920837b2dd63482e7bf6b8345813e9816b"
+  integrity sha512-xxRejzNpiVQ2lzxMG/yo2ocfZSk+cKo2THq54AimaubMucg66DpQm9Yj7ESMr/l2EqDkmF2Dx4r0F/cbsitAaw==
+
 "@nice-labs/git-rev@^3.5.0":
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/@nice-labs/git-rev/-/git-rev-3.5.0.tgz#997edfb9d1831dd5d6593512c46fb3064c30ea0c"
