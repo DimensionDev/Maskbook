@@ -107,7 +107,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
             boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
             border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
             borderRadius: 12,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 padding: '35px 20px 16px',
                 position: 'fixed',
                 bottom: 0,
@@ -129,7 +129,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
             height: 40,
             marginLeft: 0,
             marginTop: 0,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 width: '100%',
                 height: '45px !important',
                 marginTop: 20,

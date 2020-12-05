@@ -167,7 +167,7 @@ async function diagnosis() {
         for (const locale of _locales) {
             const filePath = `packages/maskbook/src/_locales/${locale}/messages.json`
             console.log(
-                `::warning file=${filePath}::Run \`yarn locale-kit --remove-unused-keys\` to solve this problem`,
+                `::warning file=${filePath}::Run \`npm run locale-kit -- --remove-unused-keys\` to solve this problem`,
             )
             const messages = _.keys(await readMessages(locale))
             for (const key of unusedKeys) {
@@ -182,7 +182,7 @@ async function diagnosis() {
     if (!_.isEmpty(unsyncedLocales)) {
         for (const [locale, names] of _.toPairs(unsyncedLocales)) {
             const filePath = `packages/maskbook/src/_locales/${locale}/messages.json`
-            console.log(`::warning file=${filePath}::Run \`yarn locale-kit --sync-key\` to solve this problem`)
+            console.log(`::warning file=${filePath}::Run \`npm run locale-kit -- --sync-key\` to solve this problem`)
             for (const name of names) {
                 console.log(`::warning file=${filePath}::The ${JSON.stringify(name)} is unsynced`)
             }
@@ -195,7 +195,7 @@ async function main() {
     console.error(
         'Scanned',
         unusedKeys.length,
-        'unused keys, run `yarn locale-kit --remove-unused-keys` to remove them.',
+        'unused keys, run `npm run locale-kit -- --remove-unused-keys` to remove them.',
     )
     console.error('Unsynced', _.keys(await findAllUnsyncedLocales()), 'locales')
     if (process.argv.includes('--remove-unused-keys')) {

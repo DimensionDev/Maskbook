@@ -1,6 +1,6 @@
 {
   "name": "maskbook",
-  "version": "1.20.2",
+  "version": "1.21.0",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -21,8 +21,8 @@
     "lint:report": "eslint packages/maskbook/src/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml",
     "lint:typecoverage": "type-coverage --strict --ignore-catch --ignore-files packages/maskbook/src/plugins/Wallet/contracts/** --ignore-files **/__tests__/** --ignore-files **\\__tests__\\** --detail --at-least 98",
     "locale-kit": "ts-node scripts/locale-kit.ts",
-    "profile:build": "yarn build --profile",
-    "profile:start": "yarn start --profile",
+    "profile:build": "npm run build -- --env profile",
+    "profile:start": "npm run start -- --env profile",
     "start": "webpack serve --mode development",
     "start:android": "webpack serve --env firefox-android --mode development",
     "start:chromium": "webpack serve --env chromium --mode development",
@@ -33,11 +33,12 @@
     "storybook": "start-storybook -p 9009 -s public --quiet",
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
-    "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js"
+    "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
+    "preinstall": "npx --yes only-allow npm"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && yarn locale-kit --sync-key",
+      "pre-commit": "lint-staged && npm run locale-kit -- --sync-key",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
@@ -52,9 +53,9 @@
     "@dimensiondev/kit": "0.0.0-20201126061915-b58b8f0",
     "@dimensiondev/matrix-js-sdk-type": "=1.0.0-20200731085604-dc2de92",
     "@dimensiondev/stego-js": "=0.11.1-20201027083223-8ab41be",
+    "@emotion/cache": "^11",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@emotion/cache": "^11",
     "@ethersproject/contracts": "^5.0.4",
     "@ethersproject/networks": "^5.0.4",
     "@ethersproject/providers": "^5.0.9",
@@ -63,7 +64,7 @@
     "@material-ui/icons": "5.0.0-alpha.15",
     "@material-ui/lab": "5.0.0-alpha.18",
     "@material-ui/unstyled": "5.0.0-alpha.17",
-    "@msgpack/msgpack": "^1.12.2",
+    "@msgpack/msgpack": "^2.3.0",
     "@openzeppelin/contracts": "^3.2.0",
     "@servie/events": "^1.0.0",
     "@types/bn.js": "^4.11.6",
@@ -194,6 +195,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-unused-imports": "^1.0.0",
     "esm": "^3.2.25",
+    "expect-puppeteer": "^4.4.0",
     "fake-indexeddb": "^3.1.2",
     "file-loader": "^6.2.0",
     "fork-ts-checker-notifier-webpack-plugin": "^3.0.0",
@@ -203,11 +205,14 @@
     "jest-environment-jsdom-fourteen": "^1.0.1",
     "jest-esm-transformer": "^1.0.0",
     "jest-junit": "^12.0.0",
+    "jest-puppeteer": "^4.4.0",
     "jest-webextension-mock": "^3.7.3",
     "lint-staged": "^10.5.1",
     "npm-run-all": "^4.1.5",
+    "only-allow": "^1.0.0",
     "openzeppelin-solidity": "^3.2.0",
     "prettier": "^2.1.2",
+    "puppeteer": "^5.5.0",
     "react-dev-utils": "^11.0.1",
     "react-devtools": "^4.9.0",
     "react-docgen-typescript-loader": "^3.7.2",
@@ -235,19 +240,8 @@
     "webpack-target-webextension": "^0.2.1",
     "worker-plugin": "^5.0.0"
   },
-  "optionalDependencies": {
-    "expect-puppeteer": "^4.4.0",
-    "jest-puppeteer": "^4.4.0",
-    "puppeteer": "^5.5.0"
-  },
   "engines": {
-    "node": ">=14.4.0"
-  },
-  "resolutions": {
-    "@material-ui/styles": "5.0.0-alpha.18",
-    "@material-ui/utils": "5.0.0-alpha.18",
-    "@material-ui/system": "5.0.0-alpha.18",
-    "@material-ui/styled-engine": "5.0.0-alpha.18",
-    "jss": "10.5.0"
+    "node": ">=14.4.0",
+    "npm": ">=7"
   }
 }

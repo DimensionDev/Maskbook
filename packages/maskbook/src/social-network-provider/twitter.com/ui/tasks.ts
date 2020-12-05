@@ -79,7 +79,11 @@ const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text,
     const { template = 'v2', autoPasteFailedRecover, relatedText } = options
     const { lastRecognizedIdentity } = getActivatedUI()
     const blankImage = await downloadUrl(
-        getUrl(`${template === 'v2' || template === 'v3' ? '/image-payload' : '/wallet'}/payload-${template}.png`),
+        getUrl(
+            `${
+                template === 'v2' || template === 'v3' || template === 'v4' ? '/image-payload' : '/wallet'
+            }/payload-${template}.png`,
+        ),
     ).then((x) => x.arrayBuffer())
     const secretImage = new Uint8Array(
         decodeArrayBuffer(

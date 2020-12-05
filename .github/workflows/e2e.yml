@@ -18,36 +18,26 @@ jobs:
 
       # more: https://github.community/t5/GitHub-Actions/How-to-run-action-as-a-non-root-user/m-p/45733/highlight/true#M6330
       options: '--user 1000
-        -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
+        -v /home/ubuntu/.cache/npm:/github/home/.npm
         -v /home/ubuntu/.cache/alice_home:/tmp/alice_home
         -v /home/ubuntu/.cache/bob_home:/tmp/bob_home
         -v /home/ubuntu/.e2e/e2e-test:/tmp/e2e-test'
 
-
-      # more: https://stackoverflow.com/a/60202672/1986338
-      # volumes:
-      #     - /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
-      #     - /home/ubuntu/.cache/alice_home:/tmp/alice_home
-      #     - /home/ubuntu/.cache/bob_home:/tmp/bob_home
-      #     - /home/ubuntu/.e2e/e2e-test:/tmp/e2e-test
     steps:
       # - name: Debug
       #   run: |
       #       pwd
-      #       ls /tmp/alice_home
-      #       ls /tmp/bob_home
-      #       ls -alh
+      #       npm config get cache
+      #       npm -v
 
       # @v2 requires too much configurations
       - uses: actions/checkout@v1
 
       - name: Install Dependencies
-        run: |
-          yarn config set cache-folder /tmp/.yarn-cache-1000/v6
-          yarn install --link-duplicates --frozen-lockfile --pure-lockfile
+        run: npm ci
 
       - name: Build
-        run: yarn build:e2e
+        run: npm run build:e2e
 
       - name: Setup E2E
         run: |
@@ -56,7 +46,7 @@ jobs:
           mkdir -p ./screenshots
 
       - name: Jest E2E
-        run: xvfb-run --server-args="-screen 0 1366x768x24" yarn test:e2e
+        run: xvfb-run --server-args="-screen 0 1366x768x24" npm run test:e2e
 
       - name: Teardown E2E
         run: rm -rf ./build
