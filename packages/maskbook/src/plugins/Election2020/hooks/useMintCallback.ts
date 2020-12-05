@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useTransactionReceipt } from '../../../web3/hooks/useTransaction'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useElectionTokenContract } from '../contracts/useElectionTokenContract'
-import { PluginElection2020 } from '../helpers'
+import { PluginElection2020 } from '../messages'
 import { resolveStateType } from '../pipes'
 import type { CANDIDATE_TYPE, US_STATE_TYPE } from '../types'
 
