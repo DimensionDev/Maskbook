@@ -5,6 +5,7 @@ import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { COTM_CONSTANTS } from '../constants'
+import { Video } from '../../../components/shared/Video'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -47,9 +48,20 @@ export function TokenCard(props: TokenCardProps) {
                     width: 390,
                     height: 220,
                 }}>
-                <video controls loop width={390} height={220}>
-                    <source src={props.token.tokenImageURL} type="video/mp4" />
-                </video>
+                <Video
+                    src={props.token.tokenImageURL}
+                    VideoProps={{
+                        autoPlay: true,
+                        controls: true,
+                        preload: 'auto',
+                        width: 390,
+                        height: 220,
+                    }}
+                    SkeletonProps={{
+                        width: 390,
+                        height: 220,
+                    }}
+                />
             </Card>
         </Tilt>
     )

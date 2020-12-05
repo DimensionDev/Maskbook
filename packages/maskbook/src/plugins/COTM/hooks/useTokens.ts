@@ -10,7 +10,7 @@ export function useTokens(token?: ERC721TokenDetailed): COTM_Token[] {
         const tokenId = tokenId_ ? hexToNumberString(tokenId_) : ''
         return {
             tokenId,
-            tokenImageURL: tokenId ? `${token.baseURI}${tokenId}.gif` : '',
+            tokenImageURL: tokenId ? `${token.baseURI}${tokenId}.mp4` : '',
         }
     })
 }
