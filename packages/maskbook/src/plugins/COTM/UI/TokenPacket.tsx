@@ -9,7 +9,6 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import { COTM_CONSTANTS } from '../constants'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { resolveChainId, resolveChainName, resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
-import { useMintCallback } from '../hooks/useMintCallback'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
@@ -23,6 +22,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { first } from 'lodash-es'
+import { useMintFromServerCallback } from '../hooks/useMintFromServerCallback'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -127,7 +127,7 @@ export function TokenPacket(props: TokenPacketProps) {
     const chainIdValid = useChainIdValid()
 
     //#region mint
-    const [mintState, mintCallback, resetMintCallback] = useMintCallback(account)
+    const [mintState, mintCallback, resetMintCallback] = useMintFromServerCallback(account)
     //#endregion
 
     //#region remote controlled transaction dialog
