@@ -7,7 +7,7 @@ export function useAllTokensOfOwner(token?: ERC721TokenDetailed) {
         ...result,
         value: tokenIds.filter(Boolean).map((tokenId) => ({
             tokenId: tokenId ?? '',
-            tokenImageURL: tokenId ? `${token?.baseURI}${tokenId}.gif` : '',
+            tokenImageURL: tokenId ? `${token?.baseURI}${tokenId}.mp4` : '',
         })),
     }
 }
