@@ -71,7 +71,7 @@ export function ITOForm(props: ITOFormProps) {
     )
     const [selectedDate, setSelectedDate] = useState(new Date())
 
-    const [amount, setAmount] = useState('0')
+    const [amount, setAmount] = useState('')
 
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
 
@@ -103,18 +103,19 @@ export function ITOForm(props: ITOFormProps) {
 
     const [exchangeTokens, setExchangeTokens] = useState([])
     const [tokenAmount, setTokenAmount] = useState<ExchangeTokenItem>({ amount: '0', token: null })
-
     return (
         <>
             <EthereumStatusBar classes={{ root: classes.bar }} />
             <Box className={classes.line}>
                 <ExchangeTokenPanel
-                    onChange={}
+                    onChange={setTokenAmount}
                     exchangeToken={tokenAmount}
                     showAdd={false}
                     showRemove={false}
                     index={0}
                     label="Total amount"
+                    amount={amount}
+                    setAmount={setAmount}
                 />
             </Box>
             <Box className={classes.flow}>
