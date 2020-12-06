@@ -195,9 +195,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 title={
                     <div className={classes.title}>
                         <Typography variant="h6">
-                            <Linking href={first(coin.home_urls)}>{coin.name.toUpperCase()}</Linking>
+                            <Linking href={first(coin.home_urls)} LinkProps={{ title: coin.name.toUpperCase() }}>
+                                {coin.name.toUpperCase()}
+                            </Linking>
                             <span className={classes.symbol}>({coin.symbol.toUpperCase()})</span>
-                            <span>{` / ${currency.name}`}</span>
                         </Typography>
                         {account && trending.coin.symbol && Flags.transak_enabled ? (
                             <Button
