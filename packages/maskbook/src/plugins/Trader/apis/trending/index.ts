@@ -5,6 +5,8 @@ import { Days } from '../../UI/trending/PriceChartDaysControl'
 import { getEnumAsArray } from '../../../../utils/enum'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import { resolveCoinId, resolveCoinAddress, resolveAlias } from './hotfix'
+import STOCKS_KEYWORDS from './stocks.json'
+import VOCABULARY_KEYWORDS from './vocabulary.json'
 
 export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
     if (dataProvider === DataProvider.COIN_GECKO) {
@@ -75,7 +77,12 @@ function isCacheExipred(dataProvider: DataProvider) {
     )
 }
 
+function isBlockedKeyword(keyword: string) {
+    return [...STOCKS_KEYWORDS, ...VOCABULARY_KEYWORDS].includes(keyword.toUpperCase())
+}
+
 export async function checkAvailabilityOnDataProvider(dataProvider: DataProvider, keyword: string) {
+    if (isBlockedKeyword(keyword)) return false
     const keyword_ = resolveAlias(keyword, dataProvider)
     // cache never built before update in blocking way
     if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
