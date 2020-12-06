@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => {
             marginLeft: theme.spacing(0.5),
         },
         buy: {
-            right: theme.spacing(2),
+            right: 0,
             position: 'absolute',
         },
         tabs: {
