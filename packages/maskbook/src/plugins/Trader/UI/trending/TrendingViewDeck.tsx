@@ -195,6 +195,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 title={
                     <div className={classes.title}>
                         <Typography variant="h6">
+                            {typeof coin.market_cap_rank === 'number' ? (
+                                <span className={classes.rank} title="Market Cap Rank">
+                                    #{coin.market_cap_rank}
+                                </span>
+                            ) : null}
                             <Linking href={first(coin.home_urls)} LinkProps={{ title: coin.name.toUpperCase() }}>
                                 {coin.name.toUpperCase()}
                             </Linking>
