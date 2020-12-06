@@ -51,7 +51,7 @@ export function TokenCard(props: TokenCardProps) {
                 <Video
                     src={props.token.tokenImageURL}
                     VideoProps={{
-                        autoPlay: true,
+                        autoPlay: false,
                         controls: true,
                         preload: 'auto',
                         width: 390,
