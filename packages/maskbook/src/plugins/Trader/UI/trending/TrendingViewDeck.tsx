@@ -62,6 +62,11 @@ const useStyles = makeStyles((theme) => {
             justifyContent: 'space-between',
             position: 'relative',
         },
+        symbol: {
+            color: theme.palette.text.secondary,
+            fontSize: 12,
+            marginLeft: theme.spacing(0.5),
+        },
         buy: {
             right: theme.spacing(2),
             position: 'absolute',
@@ -190,7 +195,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 title={
                     <div className={classes.title}>
                         <Typography variant="h6">
-                            <Linking href={first(coin.home_urls)}>{coin.symbol.toUpperCase()}</Linking>
+                            <Linking href={first(coin.home_urls)}>{coin.name.toUpperCase()}</Linking>
+                            <span className={classes.symbol}>({coin.symbol.toUpperCase()})</span>
                             <span>{` / ${currency.name}`}</span>
                         </Typography>
                         {account && trending.coin.symbol && Flags.transak_enabled ? (
