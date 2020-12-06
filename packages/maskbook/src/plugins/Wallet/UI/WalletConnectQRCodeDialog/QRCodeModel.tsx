@@ -7,7 +7,6 @@ import { useI18N } from '../../../../utils/i18n-next-ui'
 const useStyles = makeStyles((theme) =>
     createStyles({
         container: {
-            height: 400,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',

@@ -191,7 +191,7 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
             platform_url: `https://coinmarketcap.com/currencies/${coinInfo.slug}/`,
             twitter_url: coinInfo.urls.twitter?.find((x) => x.includes('twitter')),
             telegram_url: coinInfo.urls.chat?.find((x) => x.includes('telegram')),
-            market_cap_rank: quotesInfo?.rank,
+            market_cap_rank: quotesInfo?.[id]?.cmc_rank,
             description: coinInfo.description,
             eth_address:
                 resolveCoinAddress(id, DataProvider.COIN_MARKET_CAP) ??
@@ -220,17 +220,20 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
                 return z.volume - a.volume // volumn from high to low
             }),
     }
-    if (quotesInfo)
+    const quotesInfo_ = quotesInfo?.[id]
+    if (quotesInfo_)
         trending.market = {
-            circulating_supply: quotesInfo.total_supply ?? void 0,
-            total_supply: quotesInfo.total_supply ?? void 0,
-            max_supply: quotesInfo.max_supply ?? void 0,
-            market_cap: quotesInfo.quotes[currencyName].market_cap,
-            current_price: quotesInfo.quotes[currencyName].price,
-            total_volume: quotesInfo.quotes[currencyName].volume_24h,
-            price_change_percentage_1h_in_currency: quotesInfo.quotes[currencyName].percent_change_1h,
-            price_change_percentage_24h_in_currency: quotesInfo.quotes[currencyName].percent_change_24h,
-            price_change_percentage_7d_in_currency: quotesInfo.quotes[currencyName].percent_change_7d,
+            circulating_supply: quotesInfo_.total_supply ?? void 0,
+            total_supply: quotesInfo_.total_supply ?? void 0,
+            max_supply: quotesInfo_.max_supply ?? void 0,
+            market_cap: quotesInfo_.quote[currencyName].market_cap,
+            current_price: quotesInfo_.quote[currencyName].price,
+            total_volume: quotesInfo_.quote[currencyName].volume_24h,
+            price_change_percentage_1h: quotesInfo_.quote[currencyName].percent_change_1h,
+            price_change_percentage_24h: quotesInfo_.quote[currencyName].percent_change_24h,
+            price_change_percentage_1h_in_currency: quotesInfo_.quote[currencyName].percent_change_1h,
+            price_change_percentage_24h_in_currency: quotesInfo_.quote[currencyName].percent_change_24h,
+            price_change_percentage_7d_in_currency: quotesInfo_.quote[currencyName].percent_change_7d,
         }
     return trending
 }
