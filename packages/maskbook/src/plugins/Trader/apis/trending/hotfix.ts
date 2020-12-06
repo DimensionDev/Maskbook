@@ -25,11 +25,13 @@ const KEYWORK_ID_MAP: {
         UNI: '7083',
         CRU: '6747',
         CRUST: '6747',
+        YAM: '7131', // v3
     },
     [DataProvider.COIN_GECKO]: {
         UNI: 'uniswap',
         CRU: 'crust-network',
         CRUST: 'crust-network',
+        YAM: 'yam-3',
     },
 }
 
