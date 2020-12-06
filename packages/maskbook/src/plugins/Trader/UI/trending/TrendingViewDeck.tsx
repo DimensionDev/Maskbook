@@ -223,9 +223,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             ) : (
                                 <span>{t('plugin_trader_no_data')}</span>
                             )}
-                            {typeof market?.price_change_percentage_24h === 'number' ? (
-                                <PriceChanged amount={market.price_change_percentage_24h} />
-                            ) : null}
+                            <PriceChanged
+                                amount={market?.price_change_percentage_1h ?? market?.price_change_percentage_24h ?? 0}
+                            />
                         </Typography>
                     </>
                 }
