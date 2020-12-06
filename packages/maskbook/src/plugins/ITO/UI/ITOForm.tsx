@@ -13,11 +13,12 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
 import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
 
-import { ITOExchangeTokenPanel, ExchangeTokenPanel, ExchangeTokenItem } from './ITOSelect'
+import { ITOExchangeTokenPanel, ExchangeTokenPanel } from './ITOExchangeTokenPanel'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { v4 as uuid } from 'uuid'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -69,8 +70,6 @@ export function ITOForm(props: ITOFormProps) {
         token?.type ?? EthereumTokenType.Ether,
         token?.address ?? '',
     )
-    const [selectedDate, setSelectedDate] = useState(new Date())
-
     const [amount, setAmount] = useState('')
 
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
@@ -81,6 +80,14 @@ export function ITOForm(props: ITOFormProps) {
         amount,
         ITOContractAddress,
     )
+
+    const onAmountChange = useCallback((amount: string, key: string) => {
+        setAmount(amount)
+    })
+
+    const onTokenChange = useCallback((token: EtherTokenDetailed | ERC20TokenDetailed, key: string) => {
+        setToken(token)
+    }, [])
 
     const onApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) {
@@ -101,21 +108,19 @@ export function ITOForm(props: ITOFormProps) {
         return ''
     }, [token, amount])
 
-    const [exchangeTokens, setExchangeTokens] = useState([])
-    const [tokenAmount, setTokenAmount] = useState<ExchangeTokenItem>({ amount: '0', token: null })
     return (
         <>
             <EthereumStatusBar classes={{ root: classes.bar }} />
             <Box className={classes.line}>
                 <ExchangeTokenPanel
-                    onChange={setTokenAmount}
-                    exchangeToken={tokenAmount}
+                    onAmountChange={onAmountChange}
                     showAdd={false}
                     showRemove={false}
-                    index={0}
+                    dataIndex={uuid()}
                     label="Total amount"
-                    amount={amount}
-                    setAmount={setAmount}
+                    inputAmount={amount}
+                    exchangeToken={token}
+                    onExchangeTokenChange={onTokenChange}
                 />
             </Box>
             <Box className={classes.flow}>
@@ -123,8 +128,7 @@ export function ITOForm(props: ITOFormProps) {
             </Box>
             <Box className={classes.line}>
                 <ITOExchangeTokenPanel
-                    token={token}
-                    onChange={setExchangeTokens}
+                    originToken={token}
                     exchangetokenPanelProps={{
                         label: 'Swap Ration',
                     }}
@@ -139,15 +143,15 @@ export function ITOForm(props: ITOFormProps) {
             </Box>
             {!account || !chainIdValid ? (
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large">
-                    'Connect a wallet'
+                    Connect a wallet
                 </ActionButton>
             ) : validationMessage ? (
                 <ActionButton className={classes.button} fullWidth variant="contained" disabled>
                     {validationMessage}
                 </ActionButton>
             ) : (
-                <ActionButton className={classes.button} fullWidth onClick={createCallback}>
-                    {`Send ${formatBalance(totalAmount, token.decimals ?? 0, token.decimals ?? 0)} ${token.symbol}`}
+                <ActionButton className={classes.button} fullWidth>
+                    Send
                 </ActionButton>
             )}
         </>

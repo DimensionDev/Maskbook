@@ -1,5 +1,5 @@
 import { makeStyles, createStyles, Paper, IconButton, Typography } from '@material-ui/core'
-import { useCallback, useReducer, useState } from 'react'
+import { useCallback, useEffect, useReducer, useState } from 'react'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
@@ -29,33 +29,41 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface ExchangeTokenItem {
-    inputToken: EtherTokenDetailed | ERC20TokenDetailed | null
+export interface ExchangetokenPanelProps {
+    onAmountChange: (amount: string) => void
     inputAmount: string
 
-    outputToken: EtherTokenDetailed | ERC20TokenDetailed | null
-    outputAmount: string
-    index: number
-}
+    exchangeToken: EtherTokenDetailed | ERC20TokenDetailed | undefined
+    onExchangeTokenChange: (token: EtherTokenDetailed | ERC20TokenDetailed) => void
 
-export interface ExchangetokenPanelProps {
-    onChange: (item: ExchangeTokenItem) => void
-    onAdd: (index: number) => void
-    index: number
+    onAdd: () => void
+    onRemove: () => void
+
+    dataIndex: string
+
     showRemove: boolean
     showAdd: boolean
-    amount: string
-    setAmount: () => void
-    token: EtherTokenDetailed | ERC20TokenDetailed | undefined
-    setToken: () => void
+
     label?: string
-    exchangeItem?: ExchangeTokenItem
+
     tokenAmountPanelProps: Partial<TokenAmountPanelProps>
-    onRemove: (index: number) => void
 }
 
 export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
-    const { onChange, showAdd = true, showRemove = false, label, onRemove, onAdd, token, setToken } = props
+    const {
+        onAmountChange,
+        dataIndex,
+        inputAmount,
+
+        exchangeToken,
+        onExchangeTokenChange,
+
+        showAdd = true,
+        showRemove = false,
+        label,
+        onRemove,
+        onAdd,
+    } = props
 
     const classes = useStyles()
     //#region select token
@@ -69,32 +77,38 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
     }, [])
     const onSelectERC20TokenDialogSubmit = useCallback(
         (token: EtherTokenDetailed | ERC20TokenDetailed) => {
-            setToken(token)
+            onExchangeTokenChange(token, dataIndex)
             onSelectERC20TokenDialogClose()
         },
-        [onSelectERC20TokenDialogClose],
+        [dataIndex, onSelectERC20TokenDialogClose],
     )
 
     //#endregion
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
-        token?.type ?? EthereumTokenType.Ether,
-        token?.address ?? '',
+        exchangeToken?.type ?? EthereumTokenType.Ether,
+        exchangeToken?.address ?? '',
     )
     //#endregion
 
-    const [amount, setAmount] = useState('')
+    const [inputAmountForUI, setInputAmountForUI] = useState('')
+    useEffect(() => {
+        setInputAmountForUI(inputAmount)
+    }, [inputAmount])
 
+    const onAmountChangeForUI = useCallback((amount: string) => {
+        onAmountChange(amount, dataIndex)
+    }, [])
     return (
         <>
             <Paper className={classes.line}>
                 <TokenAmountPanel
                     classes={{ root: classes.input }}
                     label={props.label}
-                    amount={amount}
+                    amount={inputAmountForUI}
                     balance={tokenBalance}
-                    token={token}
-                    onAmountChange={setAmount}
+                    token={exchangeToken}
+                    onAmountChange={onAmountChangeForUI}
                     SelectTokenChip={{
                         loading: loadingTokenBalance,
                         ChipProps: {
@@ -120,7 +134,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
             </Paper>
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
-                excludeTokens={[token?.address]}
+                excludeTokens={[exchangeToken?.address]}
                 onSubmit={onSelectERC20TokenDialogSubmit}
                 onClose={onSelectERC20TokenDialogClose}
             />
@@ -129,8 +143,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
 }
 
 export interface ITOExchangeTokenPanelProps {
-    onChange: () => void
-    token: EtherTokenDetailed | ERC20TokenDetailed | null
+    originToken: EtherTokenDetailed | ERC20TokenDetailed | null
     exchangetokenPanelProps: Partial<ExchangetokenPanelProps>
 }
 export function ITOExchangeTokenPanel(props: ITOExchangeTokenPanelProps) {
@@ -141,19 +154,34 @@ export function ITOExchangeTokenPanel(props: ITOExchangeTokenPanelProps) {
                     ...state,
                     {
                         id: action.key,
+                        token: action.token,
+                        amount: action.amount,
                     },
                 ]
             case 'remove':
-                return state.filter((_, index) => index !== action.index)
+                return state.filter((item) => item.id !== action.key)
+
+            case 'update_amount': {
+                return state.map((item) => (item.id === action.key ? { ...item, amount: action.amount } : item))
+            }
+
+            case 'update_token': {
+                return state.map((item) => (item.id === action.key ? { ...item, token: action.token } : item))
+            }
             default:
                 return state
         }
     }, [])
 
+    const { value: etherTokenDetailed } = useEtherTokenDetailed()
+    const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
+
     const onAdd = useCallback(() => {
         dispatchExchangeTokenArray({
             type: 'add',
             key: uuid(),
+            token: token,
+            amount: '0',
         })
     }, [])
 
@@ -161,26 +189,38 @@ export function ITOExchangeTokenPanel(props: ITOExchangeTokenPanelProps) {
         onAdd()
     }
 
-    const { value: etherTokenDetailed } = useEtherTokenDetailed()
-    const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
+    const onAmountChange = useCallback((amount: string, key: string) => {
+        dispatchExchangeTokenArray({
+            type: 'update_amount',
+            amount,
+            key,
+        })
+    })
 
-    const [amount, setAmount] = useState('')
+    const onTokenChange = useCallback((token: EtherTokenDetailed | ERC20TokenDetailed, key: string) => {
+        dispatchExchangeTokenArray({
+            type: 'update_token',
+            token,
+            key,
+        })
+    }, [])
+
     return exchangeTokenArray.map((item, idx) => {
         return (
             <ExchangeTokenPanel
-                key={item.key}
-                exchangeToken={}
-                onChange={}
-                token={token}
-                setToken={setToken}
+                dataIndex={item.id}
+                inputAmount={item.amount}
+                onAmountChange={onAmountChange}
+                exchangeToken={item.token || token}
+                onExchangeTokenChange={onTokenChange}
                 showRemove={idx < exchangeTokenArray.length && exchangeTokenArray.length !== 1}
                 showAdd={idx === exchangeTokenArray.length - 1}
                 {...props.exchangetokenPanelProps}
-                onRemove={() => dispatchExchangeTokenArray({ type: 'remove', index: idx })}
+                onRemove={() => dispatchExchangeTokenArray({ type: 'remove', key: item.id })}
                 onAdd={onAdd}
                 tokenAmountPanelProps={{
                     InputProps: {
-                        startAdornment: <Typography>1{props.token?.symbol}=</Typography>,
+                        startAdornment: <Typography>1{props.originToken?.symbol}=</Typography>,
                     },
                 }}
             />
