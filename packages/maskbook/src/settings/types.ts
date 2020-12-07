@@ -1,4 +1,4 @@
-// Hack: this file is exposed as part of public API to the native side,
+// WARNING: Types with @public mark is exposed as public API to the native side,
 //  if you make an incompatible change in this file, it will break the API.
 import type { ChainId } from '../web3/types'
 import type { SetupGuideStep } from '../components/InjectedComponents/SetupGuide'
