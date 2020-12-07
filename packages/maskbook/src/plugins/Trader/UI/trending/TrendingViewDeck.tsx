@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => {
             minWidth: 'unset',
         },
         rank: {
-            color: theme.palette.text.primary,
+            color: theme.palette.text.secondary,
             fontWeight: 300,
             marginRight: theme.spacing(1),
         },
@@ -195,11 +195,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 title={
                     <div className={classes.title}>
                         <Typography variant="h6">
-                            {typeof coin.market_cap_rank === 'number' ? (
-                                <span className={classes.rank} title="Market Cap Rank">
-                                    #{coin.market_cap_rank}
-                                </span>
-                            ) : null}
                             <Linking href={first(coin.home_urls)} LinkProps={{ title: coin.name.toUpperCase() }}>
                                 {coin.name.toUpperCase()}
                             </Linking>
@@ -222,6 +217,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                         <Typography component="p" variant="body1">
                             {market ? (
                                 <>
+                                    {typeof coin.market_cap_rank === 'number' ? (
+                                        <span className={classes.rank} title="Market Cap Rank">
+                                            #{coin.market_cap_rank}
+                                        </span>
+                                    ) : null}
                                     <span className={classes.currency}>{currency.name}</span>
                                     <span>
                                         {formatCurrency(

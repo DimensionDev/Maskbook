@@ -1,17 +1,15 @@
 import { useCallback } from 'react'
-import { useEffectOnce } from 'react-use'
 import { TrendingPopper } from './trending/TrendingPopper'
-import { DataProvider, TradeProvider } from '../types'
+import { DataProvider, TagType, TradeProvider } from '../types'
 import { TrendingView } from './trending/TrendingView'
-import { PluginTraderRPC } from '../messages'
+import { useAvailableDataProviders } from '../trending/useAvailableDataProviders'
 
 export interface PageInspectorProps {}
 
 export function PageInspector(props: PageInspectorProps) {
-    useEffectOnce(() => {
-        // build availability cache in the background page
-        PluginTraderRPC.getAvailableDataProviders('BTC')
-    })
+    // build availability cache in the background page
+    useAvailableDataProviders(TagType.CASH, 'BTC')
+
     const createTrendingView = useCallback((name: string, dataProviders: DataProvider[], reposition?: () => void) => {
         return (
             <TrendingView

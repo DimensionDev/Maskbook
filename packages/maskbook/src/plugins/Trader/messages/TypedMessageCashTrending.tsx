@@ -3,6 +3,7 @@ import { TypedMessageAnchor, registerTypedMessageRenderer } from '../../../proto
 import { Link, Typography } from '@material-ui/core'
 import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
 import { PluginTraderMessages, PluginTraderRPC } from '../messages'
+import { TagType } from '../types'
 export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type'> {
     readonly type: 'x-cash-trending'
     readonly name: string
@@ -30,7 +31,11 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
         if (openTimer !== null) clearTimeout(openTimer)
         setOpenTimer(
             setTimeout(async () => {
-                const dataProviders = await PluginTraderRPC.getAvailableDataProviders(props.message.name)
+                if (props.message.category !== 'cash' && props.message.category !== 'hash') return
+                const dataProviders = await PluginTraderRPC.getAvailableDataProviders(
+                    props.message.category === 'cash' ? TagType.CASH : TagType.HASH,
+                    props.message.name,
+                )
                 if (!dataProviders.length) return
                 PluginTraderMessages.events.cashTagObserved.sendToLocal({
                     name: props.message.name,

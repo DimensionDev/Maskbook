@@ -7,6 +7,11 @@ export enum DataProvider {
     COIN_MARKET_CAP,
 }
 
+export enum TagType {
+    CASH = 1,
+    HASH,
+}
+
 export interface Currency {
     id: string
     name: string

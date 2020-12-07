@@ -1,11 +1,10 @@
-import { useAsync } from 'react-use'
 import { makeStyles } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { TradeProvider } from '../../plugins/Trader/types'
+import { TagType, TradeProvider } from '../../plugins/Trader/types'
 import { SearchResultView } from '../../plugins/Trader/UI/trending/SearchResultView'
 import { useSearchedKeyword } from '../../plugins/Trader/trending/useSearchedKeyword'
-import { PluginTraderRPC } from '../../plugins/Trader/messages'
+import { useAvailableDataProviders } from '../../plugins/Trader/trending/useAvailableDataProviders'
 
 const useStyles = makeStyles({
     root: {},
@@ -18,11 +17,8 @@ export function SearchResultBox(props: SearchResultBoxProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const keyword = useSearchedKeyword()
-    const [_, name = ''] = keyword.match(/[\$\#]([\w\d]+)/) ?? []
-    const { value: dataProviders } = useAsync(async () => {
-        if (!name) return
-        return PluginTraderRPC.getAvailableDataProviders(name)
-    }, [name])
+    const [_, type, name = ''] = keyword.match(/([\$\#])([\w\d]+)/) ?? []
+    const { value: dataProviders } = useAvailableDataProviders(type === '$' ? TagType.CASH : TagType.HASH, name)
 
     if (!name || !dataProviders?.length) return null
     return (
