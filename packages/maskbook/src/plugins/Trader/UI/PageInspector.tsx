@@ -10,15 +10,19 @@ export function PageInspector(props: PageInspectorProps) {
     // build availability cache in the background page
     useAvailableDataProviders(TagType.CASH, 'BTC')
 
-    const createTrendingView = useCallback((name: string, dataProviders: DataProvider[], reposition?: () => void) => {
-        return (
-            <TrendingView
-                name={name}
-                dataProviders={dataProviders}
-                tradeProviders={[TradeProvider.UNISWAP, TradeProvider.ZRX]}
-                onUpdate={reposition}
-            />
-        )
-    }, [])
+    const createTrendingView = useCallback(
+        (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => {
+            return (
+                <TrendingView
+                    name={name}
+                    tagType={type}
+                    dataProviders={dataProviders}
+                    tradeProviders={[TradeProvider.UNISWAP, TradeProvider.ZRX]}
+                    onUpdate={reposition}
+                />
+            )
+        },
+        [],
+    )
     return <TrendingPopper>{createTrendingView}</TrendingPopper>
 }

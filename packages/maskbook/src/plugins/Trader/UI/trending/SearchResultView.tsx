@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { makeStyles, createStyles, Link, Tab, Tabs } from '@material-ui/core'
-import type { DataProvider, TradeProvider } from '../../types'
+import type { DataProvider, TagType, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
-import { useTrending } from '../../trending/useTrending'
+import { useTrendingByKeyword } from '../../trending/useTrending'
 import { TickersTable } from './TickersTable'
 import { PriceChangedTable } from './PriceChangedTable'
 import { PriceChart } from './PriceChart'
@@ -18,6 +18,7 @@ import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewError } from './TrendingViewError'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton'
 import { TrendingViewDeck } from './TrendingViewDeck'
+import { useAvailableCoins } from '../../trending/useAvailableCoins'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -58,6 +59,7 @@ const useStyles = makeStyles((theme) => {
 
 export interface SearchResultViewProps {
     name: string
+    tagType: TagType
     dataProviders: DataProvider[]
     tradeProviders: TradeProvider[]
 }
@@ -71,11 +73,18 @@ export function SearchResultView(props: SearchResultViewProps) {
 
     //#region trending
     const dataProvider = useCurrentDataProvider(props.dataProviders)
+    //#endregion
+
+    //#region multiple coins share the same symbol
+    const { value: coins = [] } = useAvailableCoins(props.name, props.tagType, dataProvider)
+    //#endregion
+
+    //#region trending
     const {
         value: { currency, trending },
         error: trendingError,
         loading: loadingTrending,
-    } = useTrending(props.name, dataProvider)
+    } = useTrendingByKeyword(props.name, props.tagType, dataProvider)
     //#endregion
 
     //#region swap
@@ -136,6 +145,7 @@ export function SearchResultView(props: SearchResultViewProps) {
         <TrendingViewDeck
             classes={{ header: classes.header, body: classes.body, footer: classes.footer, content: classes.content }}
             stats={stats}
+            coins={coins}
             currency={currency}
             trending={trending}
             dataProvider={dataProvider}

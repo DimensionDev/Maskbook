@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { makeStyles, createStyles, Link, Tab, Tabs } from '@material-ui/core'
-import type { DataProvider, TradeProvider } from '../../types'
+import type { DataProvider, TagType, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
-import { useTrending } from '../../trending/useTrending'
+import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
 import { TickersTable } from './TickersTable'
 import { PriceChangedTable } from './PriceChangedTable'
 import { PriceChart } from './PriceChart'
@@ -17,6 +17,8 @@ import { TradeView } from '../trader/TradeView'
 import { TrendingViewError } from './TrendingViewError'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton'
 import { TrendingViewDeck } from './TrendingViewDeck'
+import { useAvailableCoins } from '../../trending/useAvailableCoins'
+import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -50,6 +52,7 @@ const useStyles = makeStyles((theme) => {
 
 export interface TrendingViewProps {
     name: string
+    tagType: TagType
     dataProviders: DataProvider[]
     tradeProviders: TradeProvider[]
     onUpdate?: () => void
@@ -64,11 +67,17 @@ export function TrendingView(props: TrendingViewProps) {
 
     //#region trending
     const dataProvider = useCurrentDataProvider(props.dataProviders)
+    //#endregion
+
+    //#region trending
+    const coinId = usePreferredCoinId(props.name, dataProvider)
+    const trendingById = useTrendingById(coinId, dataProvider)
+    const trendingByKeyword = useTrendingByKeyword(props.name, props.tagType, dataProvider)
     const {
         value: { currency, trending },
         error: trendingError,
         loading: loadingTrending,
-    } = useTrending(props.name, dataProvider)
+    } = coinId ? trendingById : trendingByKeyword
     //#endregion
 
     //#region swap
@@ -89,6 +98,10 @@ export function TrendingView(props: TrendingViewProps) {
     useEffect(() => {
         props.onUpdate?.()
     }, [tabIndex, loadingTrending])
+    //#endregion
+
+    //#region multiple coins share the same symbol
+    const { value: coins = [] } = useAvailableCoins(props.name, props.tagType, dataProvider)
     //#endregion
 
     //#region no available platform
@@ -128,6 +141,7 @@ export function TrendingView(props: TrendingViewProps) {
         <TrendingViewDeck
             classes={{ header: classes.header, body: classes.body, footer: classes.footer }}
             stats={stats}
+            coins={coins}
             currency={currency}
             trending={trending}
             dataProvider={dataProvider}
