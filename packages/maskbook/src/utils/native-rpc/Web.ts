@@ -1,11 +1,12 @@
 import type { WebviewAPIs } from './types'
 import Services from '../../extension/service'
 import { definedSocialNetworkWorkers } from '../../social-network/worker'
+import * as settings from '../../settings/settings'
 
 export const WebviewAPI: WebviewAPIs = {
     web_echo: async (arg) => arg,
     getDashboardUrl: async (path: string) => browser.runtime.getURL(path),
-    getStorage: async (key: string) => browser.storage.local.get(key),
+    getSettings: async (key: keyof typeof settings) => settings[key].value,
     getConnectedPersonas: async () => {
         const personas = await Services.Identity.queryMyPersonas()
         return personas

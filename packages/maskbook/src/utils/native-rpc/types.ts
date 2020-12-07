@@ -1,3 +1,4 @@
+import type * as settings from '../../settings/settings'
 /**
  * JSON RPC calls that can be called from the native side.
  * JS = server, native = client
@@ -5,7 +6,7 @@
 export interface WebviewAPIs {
     web_echo<T>(arg: T): Promise<T>
     getDashboardUrl(path: string): Promise<string>
-    getStorage(key: string): Promise<browser.storage.StorageObject>
+    getSettings(key: keyof typeof settings): Promise<any>
     getConnectedPersonas(): Promise<{ network: string; connected: boolean }[][]>
 }
 export interface SharedNativeAPIs {}

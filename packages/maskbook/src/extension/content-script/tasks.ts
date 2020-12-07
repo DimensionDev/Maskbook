@@ -5,11 +5,8 @@ import {
     Environment,
 } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier, ECKeyIdentifier, Identifier } from '../../database/type'
-import {
-    disableOpenNewTabInBackgroundSettings,
-    currentSetupGuideStatus,
-    SetupGuideCrossContextStatus,
-} from '../../settings/settings'
+import { disableOpenNewTabInBackgroundSettings, currentSetupGuideStatus } from '../../settings/settings'
+import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import type { SocialNetworkUI } from '../../social-network/ui'
 import { memoizePromise } from '../../utils/memoize'
 import { safeGetActiveUI } from '../../utils/safeRequire'

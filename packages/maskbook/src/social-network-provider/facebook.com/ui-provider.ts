@@ -29,7 +29,7 @@ import { useState } from 'react'
 import { useInterval } from 'react-use'
 import { MaskMessage } from '../../utils/messages'
 import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
-import { Appearance } from '../../settings/settings'
+import { Appearance } from '../../settings/types'
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
 export const facebookUISelf = defineSocialNetworkUI({
