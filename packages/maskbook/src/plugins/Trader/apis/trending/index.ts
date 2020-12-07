@@ -227,7 +227,7 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
                         : pair.quote[currencyName].price_quote,
                 volume: pair.quote[currencyName].volume_24h,
                 score: String(pair.market_score),
-                updated: new Date(),
+                updated: new Date(pair.quote[currencyName].last_updated),
             }))
             .sort((a, z) => {
                 if (a.market_reputation !== z.market_reputation) return z.market_reputation - a.market_reputation // reputation from high to low
