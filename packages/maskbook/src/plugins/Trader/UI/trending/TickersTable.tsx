@@ -49,6 +49,9 @@ export interface TickersTableProps {
 }
 
 export function TickersTable(props: TickersTableProps) {
+    console.log('DEBUG: TickersTable')
+    console.log(props.tickers)
+
     const { t } = useI18N()
     const classes = useStyles()
     const rows = [
@@ -56,6 +59,7 @@ export function TickersTable(props: TickersTableProps) {
         t('plugin_trader_table_pair'),
         t('plugin_trader_table_price'),
         t('plugin_trader_table_volume'),
+        t('plugin_trader_table_updated'),
     ]
     const tickers = props.tickers.map((ticker, index) => (
         <TableRow key={index}>
@@ -77,6 +81,7 @@ export function TickersTable(props: TickersTableProps) {
             </TableCell>
             <TableCell className={classes.cell}>{formatCurrency(ticker.price, '$')}</TableCell>
             <TableCell className={classes.cell}>{formatCurrency(ticker.volume, '$')}</TableCell>
+            <TableCell className={classes.cell}>{}</TableCell>
         </TableRow>
     ))
 

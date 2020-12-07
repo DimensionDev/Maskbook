@@ -69,6 +69,7 @@ export interface Ticker {
     price: number
     volume: number
     score: string
+    updated: Date
 }
 
 export interface Trending {

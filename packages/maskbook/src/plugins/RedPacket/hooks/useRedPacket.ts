@@ -2,12 +2,13 @@ import { useAsync } from 'react-use'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { RedPacketRecord } from '../types'
-import { RedPacketArrayComparer, RedPacketMessage, RedPacketRPC } from '../helpers'
+import { RedPacketArrayComparer } from '../helpers'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { resolveChainId } from '../../../web3/pipes'
 import { useBlockNumberOnce } from '../../../web3/hooks/useChainState'
 import { RED_PACKET_HISTROY_MAX_BLOCK_SIZE } from '../constants'
 import { useAccount } from '../../../web3/hooks/useAccount'
+import { RedPacketMessage, RedPacketRPC } from '../messages'
 
 //#region tracking red packets in the DB
 const redPacketsRef = new ValueRef<RedPacketRecord[]>([], RedPacketArrayComparer)
