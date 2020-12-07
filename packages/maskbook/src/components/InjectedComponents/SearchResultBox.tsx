@@ -18,13 +18,15 @@ export function SearchResultBox(props: SearchResultBoxProps) {
 
     const keyword = useSearchedKeyword()
     const [_, type, name = ''] = keyword.match(/([\$\#])([\w\d]+)/) ?? []
-    const { value: dataProviders } = useAvailableDataProviders(type === '$' ? TagType.CASH : TagType.HASH, name)
+    const type_ = type === '$' ? TagType.CASH : TagType.HASH
+    const { value: dataProviders } = useAvailableDataProviders(type_, name)
 
     if (!name || !dataProviders?.length) return null
     return (
         <div className={classes.root}>
             <SearchResultView
                 name={name}
+                tagType={type_}
                 dataProviders={dataProviders}
                 tradeProviders={[TradeProvider.UNISWAP, TradeProvider.ZRX]}
             />

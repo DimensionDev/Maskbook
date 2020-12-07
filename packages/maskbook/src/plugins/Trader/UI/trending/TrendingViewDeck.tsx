@@ -13,8 +13,10 @@ import {
     IconButton,
 } from '@material-ui/core'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
+import stringify from 'json-stable-stringify'
 import { findIndex, first, last } from 'lodash-es'
-import { Currency, DataProvider, Stat, TradeProvider, Trending } from '../../types'
+import { Coin, Currency, DataProvider, Stat, TradeProvider, Trending } from '../../types'
 import { resolveDataProviderName, resolveTradeProviderName } from '../../pipes'
 import { formatCurrency } from '../../../Wallet/formatter'
 import { PriceChanged } from './PriceChanged'
@@ -32,8 +34,13 @@ import { FootnoteMenu, FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { getEnumAsArray } from '../../../../utils/enum'
 import { TradeProviderIcon } from '../trader/TradeProviderIcon'
 import { DataProviderIcon } from '../trader/DataProviderIcon'
-import { currentDataProviderSettings, currentTradeProviderSettings } from '../../settings'
-import { ArrowDropDown } from '@material-ui/icons'
+import {
+    currentDataProviderSettings,
+    currentTradeProviderSettings,
+    getCurrentPreferredCoinIdSettings,
+} from '../../settings'
+import { CoinMenu, CoinMenuOption } from './CoinMenu'
+import { useValueRef } from '../../../../utils/hooks/useValueRef'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -134,6 +141,7 @@ const useStyles = makeStyles((theme) => {
 
 export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content'> {
     stats: Stat[]
+    coins: Coin[]
     currency: Currency
     trending: Trending
     dataProvider: DataProvider
@@ -146,6 +154,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const {
+        coins,
         currency,
         trending,
         dataProvider,
@@ -183,8 +192,16 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [])
     //#endregion
 
-    //#region select dup coins
-    const onClickDrop = useCallback(() => {}, [])
+    //#region switch coin
+    const currentPreferredCoinIdSettings = useValueRef(getCurrentPreferredCoinIdSettings(dataProvider))
+    const onCoinMenuChange = useCallback(
+        (option: CoinMenuOption) => {
+            const settings = JSON.parse(currentPreferredCoinIdSettings) as Record<string, string>
+            settings[option.coin.symbol.toLowerCase()] = option.value
+            getCurrentPreferredCoinIdSettings(dataProvider).value = stringify(settings)
+        },
+        [dataProvider, currentPreferredCoinIdSettings],
+    )
     //#endregion
 
     return (
@@ -211,9 +228,21 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             </Linking>
                             <span className={classes.symbol}>({coin.symbol.toUpperCase()})</span>
                         </Typography>
-                        <IconButton size="small" onClick={onClickDrop}>
-                            <ArrowDropDown />
-                        </IconButton>
+
+                        {coins.length > 1 ? (
+                            <CoinMenu
+                                options={coins.map((coin) => ({
+                                    coin,
+                                    value: coin.id,
+                                }))}
+                                selectedIndex={coins.findIndex((x) => x.id === coin.id)}
+                                onChange={onCoinMenuChange}>
+                                <IconButton size="small">
+                                    <ArrowDropDownIcon />
+                                </IconButton>
+                            </CoinMenu>
+                        ) : null}
+
                         {account && trending.coin.symbol && Flags.transak_enabled ? (
                             <Button
                                 className={classes.buy}

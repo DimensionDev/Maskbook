@@ -32,13 +32,13 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
         setOpenTimer(
             setTimeout(async () => {
                 if (props.message.category !== 'cash' && props.message.category !== 'hash') return
-                const dataProviders = await PluginTraderRPC.getAvailableDataProviders(
-                    props.message.category === 'cash' ? TagType.CASH : TagType.HASH,
-                    props.message.name,
-                )
+                const { name, category } = props.message
+                const type = category === 'cash' ? TagType.CASH : TagType.HASH
+                const dataProviders = await PluginTraderRPC.getAvailableDataProviders(type, name)
                 if (!dataProviders.length) return
                 PluginTraderMessages.events.cashTagObserved.sendToLocal({
-                    name: props.message.name,
+                    name,
+                    type,
                     element,
                     dataProviders,
                 })

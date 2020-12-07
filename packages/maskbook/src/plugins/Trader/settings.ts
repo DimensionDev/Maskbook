@@ -87,3 +87,25 @@ export function getCurrentDataProviderGeneralSettings(dataProvider: DataProvider
     }
 }
 //#endregion
+
+//#region the user preferred coin id
+const coinGeckoPreferredCoinId = createInternalSettings<string>(
+    `${PLUGIN_IDENTIFIER}+currentCoinGeckoPreferredCoinId`,
+    '{}',
+)
+const coinMarketCapPreferredCoinId = createInternalSettings<string>(
+    `${PLUGIN_IDENTIFIER}+currentCoinMarketCapPreferredCoinId`,
+    '{}',
+)
+
+export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
+    switch (dataProvider) {
+        case DataProvider.COIN_GECKO:
+            return coinGeckoPreferredCoinId
+        case DataProvider.COIN_MARKET_CAP:
+            return coinMarketCapPreferredCoinId
+        default:
+            unreachable(dataProvider)
+    }
+}
+//#endregion

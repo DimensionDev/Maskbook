@@ -8,6 +8,7 @@ import { resolveCoinId, resolveCoinAddress, resolveAlias } from './hotfix'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
+import { groupBy } from 'lodash-es'
 
 export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
     if (dataProvider === DataProvider.COIN_GECKO) {
@@ -57,15 +58,18 @@ export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
 const coinNamespace = new Map<
     DataProvider,
     {
-        supported: Set<string>
+        supportedSymbolsSet: Set<string>
+        supportedSymbolIdsMap: Map<string, Coin[]>
         lastUpdated: Date
     }
 >()
 
 async function updateCache(dataProvider: DataProvider) {
     const coins = await getCoins(dataProvider)
+    const coinsGrouped = groupBy(coins, (x) => x.symbol.toLowerCase())
     coinNamespace.set(dataProvider, {
-        supported: new Set<string>(coins.map((x) => x.symbol.toLowerCase())),
+        supportedSymbolsSet: new Set<string>(Object.keys(coinsGrouped)),
+        supportedSymbolIdsMap: new Map(Object.entries(coinsGrouped).map(([symbol, coins]) => [symbol, coins])),
         lastUpdated: new Date(),
     })
 }
@@ -84,14 +88,14 @@ function isBlockedKeyword(type: TagType, keyword: string) {
     return true
 }
 
-export async function checkAvailabilityOnDataProvider(dataProvider: DataProvider, type: TagType, keyword: string) {
+export async function checkAvailabilityOnDataProvider(keyword: string, type: TagType, dataProvider: DataProvider) {
     if (isBlockedKeyword(type, keyword)) return false
     const keyword_ = resolveAlias(keyword, dataProvider)
     // cache never built before update in blocking way
     if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
     // data fetched before update in nonblocking way
     else if (isCacheExipred(dataProvider)) updateCache(dataProvider)
-    return coinNamespace.get(dataProvider)?.supported.has(resolveAlias(keyword_, dataProvider).toLowerCase()) ?? false
+    return coinNamespace.get(dataProvider)?.supportedSymbolsSet.has(keyword_.toLowerCase()) ?? false
 }
 
 export async function getAvailableDataProviders(type: TagType, keyword: string) {
@@ -100,15 +104,26 @@ export async function getAvailableDataProviders(type: TagType, keyword: string) 
             async (x) =>
                 [
                     x.value,
-                    await checkAvailabilityOnDataProvider(x.value, type, resolveAlias(keyword, x.value)),
+                    await checkAvailabilityOnDataProvider(resolveAlias(keyword, x.value), type, x.value),
                 ] as const,
         ),
     )
     return checked.filter(([_, y]) => y).map(([x]) => x)
 }
+
+export async function getAvailableCoins(keyword: string, type: TagType, dataProvider: DataProvider) {
+    if (isBlockedKeyword(type, keyword)) return []
+    const keyword_ = resolveAlias(keyword, dataProvider)
+    // cache never built before update in blocking way
+    if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
+    // data fetched before update in nonblocking way
+    else if (isCacheExipred(dataProvider)) updateCache(dataProvider)
+    return coinNamespace.get(dataProvider)?.supportedSymbolIdsMap.get(keyword_.toLowerCase()) ?? []
+}
+
 //#endregion
 
-export async function getCoinInfo(id: string, dataProvider: DataProvider, currency: Currency): Promise<Trending> {
+export async function getCoinInfo(id: string, currency: Currency, dataProvider: DataProvider): Promise<Trending> {
     if (dataProvider === DataProvider.COIN_GECKO) {
         const info = await coinGeckoAPI.getCoinInfo(id)
         const platform_url = `https://www.coingecko.com/en/coins/${info.id}`
@@ -253,23 +268,27 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
     return trending
 }
 
-export async function getCoinTrendingByKeyword(keyword: string, dataProvider: DataProvider, currency: Currency) {
-    const coins = await getCoins(dataProvider)
+export async function getCoinTrendingByKeyword(
+    keyword: string,
+    tagType: TagType,
+    currency: Currency,
+    dataProvider: DataProvider,
+) {
     const keyword_ = resolveAlias(keyword, dataProvider)
-    const coin = coins.find((x) => x.symbol.toLowerCase() === keyword_.toLowerCase())
+    const [coin] = await getAvailableCoins(keyword_, tagType, dataProvider)
     if (!coin) return null
-    return getCoinInfo(
-        resolveCoinId(resolveAlias(keyword_, dataProvider), dataProvider) ?? coin.id,
-        dataProvider,
-        currency,
-    )
+    return getCoinTrendingById(resolveCoinId(keyword_, dataProvider) ?? coin.id, currency, dataProvider)
+}
+
+export async function getCoinTrendingById(id: string, currency: Currency, dataProvider: DataProvider) {
+    return getCoinInfo(id, currency, dataProvider)
 }
 
 export async function getPriceStats(
     id: string,
-    dataProvider: DataProvider,
     currency: Currency,
     days: number,
+    dataProvider: DataProvider,
 ): Promise<Stat[]> {
     if (dataProvider === DataProvider.COIN_GECKO) {
         const stats = await coinGeckoAPI.getPriceStats(id, currency.id, days === Days.MAX ? 11430 : days)
