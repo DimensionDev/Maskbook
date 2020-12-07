@@ -29,6 +29,7 @@ export type SetupGuideCrossContextStatus = {
     status?: SetupGuideStep
 }
 
+/** @public */
 export enum LaunchPage {
     facebook = 'facebook',
     twitter = 'twitter',
