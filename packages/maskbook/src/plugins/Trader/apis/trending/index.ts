@@ -169,6 +169,7 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
                 price: x.converted_last.usd,
                 volume: x.converted_volume.usd,
                 score: x.trust_score,
+                updated: new Date(x.timestamp),
             })),
         }
     }
@@ -226,6 +227,7 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
                         : pair.quote[currencyName].price_quote,
                 volume: pair.quote[currencyName].volume_24h,
                 score: String(pair.market_score),
+                updated: new Date(),
             }))
             .sort((a, z) => {
                 if (a.market_reputation !== z.market_reputation) return z.market_reputation - a.market_reputation // reputation from high to low
