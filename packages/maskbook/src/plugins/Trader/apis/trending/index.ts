@@ -1,4 +1,4 @@
-import { DataProvider, Currency, Coin, Trending, Stat } from '../../types'
+import { DataProvider, Currency, Coin, Trending, Stat, TagType } from '../../types'
 import * as coinGeckoAPI from '../coingecko'
 import * as coinMarketCapAPI from '../coinmarketcap'
 import { Days } from '../../UI/trending/PriceChartDaysControl'
@@ -6,7 +6,8 @@ import { getEnumAsArray } from '../../../../utils/enum'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import { resolveCoinId, resolveCoinAddress, resolveAlias } from './hotfix'
 import STOCKS_KEYWORDS from './stocks.json'
-import VOCABULARY_KEYWORDS from './vocabulary.json'
+import CASHTAG_KEYWORDS from './cashtag.json'
+import HASHTAG_KEYWORDS from './hashtag.json'
 
 export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
     if (dataProvider === DataProvider.COIN_GECKO) {
@@ -77,12 +78,14 @@ function isCacheExipred(dataProvider: DataProvider) {
     )
 }
 
-function isBlockedKeyword(keyword: string) {
-    return [...STOCKS_KEYWORDS, ...VOCABULARY_KEYWORDS].includes(keyword.toUpperCase())
+function isBlockedKeyword(type: TagType, keyword: string) {
+    if (type === TagType.HASH) return [...STOCKS_KEYWORDS, ...HASHTAG_KEYWORDS].includes(keyword.toUpperCase())
+    else if (type === TagType.CASH) return [...STOCKS_KEYWORDS, ...CASHTAG_KEYWORDS].includes(keyword.toUpperCase())
+    return true
 }
 
-export async function checkAvailabilityOnDataProvider(dataProvider: DataProvider, keyword: string) {
-    if (isBlockedKeyword(keyword)) return false
+export async function checkAvailabilityOnDataProvider(dataProvider: DataProvider, type: TagType, keyword: string) {
+    if (isBlockedKeyword(type, keyword)) return false
     const keyword_ = resolveAlias(keyword, dataProvider)
     // cache never built before update in blocking way
     if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
@@ -91,11 +94,14 @@ export async function checkAvailabilityOnDataProvider(dataProvider: DataProvider
     return coinNamespace.get(dataProvider)?.supported.has(resolveAlias(keyword_, dataProvider).toLowerCase()) ?? false
 }
 
-export async function getAvailableDataProviders(keyword: string) {
+export async function getAvailableDataProviders(type: TagType, keyword: string) {
     const checked = await Promise.all(
         getEnumAsArray(DataProvider).map(
             async (x) =>
-                [x.value, await checkAvailabilityOnDataProvider(x.value, resolveAlias(keyword, x.value))] as const,
+                [
+                    x.value,
+                    await checkAvailabilityOnDataProvider(x.value, type, resolveAlias(keyword, x.value)),
+                ] as const,
         ),
     )
     return checked.filter(([_, y]) => y).map(([x]) => x)
