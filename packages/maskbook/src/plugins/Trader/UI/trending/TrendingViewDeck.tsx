@@ -10,6 +10,7 @@ import {
     Link,
     Paper,
     Button,
+    IconButton,
 } from '@material-ui/core'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import { findIndex, first, last } from 'lodash-es'
@@ -32,6 +33,7 @@ import { getEnumAsArray } from '../../../../utils/enum'
 import { TradeProviderIcon } from '../trader/TradeProviderIcon'
 import { DataProviderIcon } from '../trader/DataProviderIcon'
 import { currentDataProviderSettings, currentTradeProviderSettings } from '../../settings'
+import { ArrowDropDown } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -56,16 +58,21 @@ const useStyles = makeStyles((theme) => {
         footer: {
             justifyContent: 'space-between',
         },
+        headline: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            position: 'relative',
+        },
         title: {
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
-            position: 'relative',
         },
         symbol: {
-            color: theme.palette.text.secondary,
             fontSize: 12,
+            color: theme.palette.text.secondary,
             marginLeft: theme.spacing(0.5),
+            marginRight: theme.spacing(0.5),
         },
         buy: {
             right: 0,
@@ -176,6 +183,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [])
     //#endregion
 
+    //#region select dup coins
+    const onClickDrop = useCallback(() => {}, [])
+    //#endregion
+
     return (
         <TrendingCard {...TrendingCardProps}>
             <CardHeader
@@ -193,13 +204,16 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     </Linking>
                 }
                 title={
-                    <div className={classes.title}>
-                        <Typography variant="h6">
+                    <div className={classes.headline}>
+                        <Typography className={classes.title} variant="h6">
                             <Linking href={first(coin.home_urls)} LinkProps={{ title: coin.name.toUpperCase() }}>
                                 {coin.name.toUpperCase()}
                             </Linking>
                             <span className={classes.symbol}>({coin.symbol.toUpperCase()})</span>
                         </Typography>
+                        <IconButton size="small" onClick={onClickDrop}>
+                            <ArrowDropDown />
+                        </IconButton>
                         {account && trending.coin.symbol && Flags.transak_enabled ? (
                             <Button
                                 className={classes.buy}
@@ -222,7 +236,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             #{coin.market_cap_rank}
                                         </span>
                                     ) : null}
-                                    <span className={classes.currency}>{currency.name}</span>
                                     <span>
                                         {formatCurrency(
                                             dataProvider === DataProvider.COIN_MARKET_CAP
