@@ -10,7 +10,6 @@ import RemoveIcon from '@material-ui/icons/Remove'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { v4 as uuid } from 'uuid'
-import { OutlinedFlagRounded } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -229,7 +228,7 @@ export function ITOExchangeTokenPanel(props: ITOExchangeTokenPanelProps) {
                 showAdd={idx === exchangeTokenArray.length - 1}
                 {...props.exchangetokenPanelProps}
                 onRemove={() => dispatchExchangeTokenArray({ type: 'remove', key: item.id })}
-                onAdd={OutlinedFlagRounded}
+                onAdd={onAdd}
                 tokenAmountPanelProps={{
                     InputProps: {
                         startAdornment: <Typography>1{props.originToken?.symbol}=</Typography>,

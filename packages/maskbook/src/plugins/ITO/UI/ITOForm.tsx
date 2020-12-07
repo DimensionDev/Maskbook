@@ -36,6 +36,11 @@ const useStyles = makeStyles((theme) =>
             padding: theme.spacing(1),
             flex: 1,
         },
+        inputLine: {
+            maring: theme.spacing(1),
+            paddingRight: theme.spacing(3),
+            paddingLeft: theme.spacing(1),
+        },
         tip: {
             fontSize: 12,
             color: theme.palette.text.secondary,
@@ -134,8 +139,8 @@ export function ITOForm(props: ITOFormProps) {
                     }}
                 />
             </Box>
-            <Box className={classes.line}>
-                <TextField className={classes.input} fullWidth label="Title" defalutValue="MASK" />
+            <Box className={classes.inputLine}>
+                <TextField className={classes.input} fullWidth label="Title" defaultValue="MASK" />
             </Box>
             <Box className={classes.line} style={{ display: 'flex' }}>
                 <TextField className={classes.input} label="Allocation per wallet" />
