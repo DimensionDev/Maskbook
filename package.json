@@ -3,6 +3,9 @@
   "version": "1.21.1",
   "private": true,
   "license": "AGPL-3.0-or-later",
+  "workspaces": [
+    "packages/maskbook"
+  ],
   "scripts": {
     "build": "webpack --mode production",
     "build-ci": "node --max_old_space_size=4096 -r ts-node/register/transpile-only scripts/ci-build.ts",
