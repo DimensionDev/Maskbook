@@ -6,7 +6,8 @@ import type { LaunchPage, NativeAPISettingsName } from '../../settings/types'
 export interface WebviewAPIs {
     web_echo<T>(arg: T): Promise<T>
     getDashboardURL(): Promise<string>
-    getSettings(key: NativeAPISettingsName): Promise<LaunchPage>
+    /** Definition of LaunchPage see https://github.com/DimensionDev/Maskbook/blob/master/packages/maskbook/src/settings/types.ts */
+    getSettings(key: 'launchPageSettings'): Promise<LaunchPage>
     getConnectedPersonas(): Promise<{ network: string; connected: boolean }[][]>
 }
 export interface SharedNativeAPIs {}
