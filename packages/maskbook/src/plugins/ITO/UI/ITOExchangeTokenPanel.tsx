@@ -10,6 +10,7 @@ import RemoveIcon from '@material-ui/icons/Remove'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { v4 as uuid } from 'uuid'
+import { OutlinedFlagRounded } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -30,11 +31,11 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface ExchangetokenPanelProps {
-    onAmountChange: (amount: string) => void
+    onAmountChange: (amount: string, key: string) => void
     inputAmount: string
 
     exchangeToken: EtherTokenDetailed | ERC20TokenDetailed | undefined
-    onExchangeTokenChange: (token: EtherTokenDetailed | ERC20TokenDetailed) => void
+    onExchangeTokenChange: (token: EtherTokenDetailed | ERC20TokenDetailed, key: string) => void
 
     onAdd: () => void
     onRemove: () => void
@@ -80,7 +81,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
             onExchangeTokenChange(token, dataIndex)
             onSelectERC20TokenDialogClose()
         },
-        [dataIndex, onSelectERC20TokenDialogClose],
+        [dataIndex, onExchangeTokenChange, onSelectERC20TokenDialogClose],
     )
 
     //#endregion
@@ -96,9 +97,12 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         setInputAmountForUI(inputAmount)
     }, [inputAmount])
 
-    const onAmountChangeForUI = useCallback((amount: string) => {
-        onAmountChange(amount, dataIndex)
-    }, [])
+    const onAmountChangeForUI = useCallback(
+        (amount: string) => {
+            onAmountChange(amount, dataIndex)
+        },
+        [dataIndex, onAmountChange],
+    )
     return (
         <>
             <Paper className={classes.line}>
@@ -162,7 +166,10 @@ export function ITOExchangeTokenPanel(props: ITOExchangeTokenPanelProps) {
                 return state.filter((item) => item.id !== action.key)
 
             case 'update_amount': {
-                return state.map((item) => (item.id === action.key ? { ...item, amount: action.amount } : item))
+                console.log(action)
+
+                state = state.map((item) => (item.id === action.key ? { ...item, amount: action.amount } : item))
+                return state
             }
 
             case 'update_token': {
@@ -180,7 +187,12 @@ export function ITOExchangeTokenPanel(props: ITOExchangeTokenPanelProps) {
         dispatchExchangeTokenArray({
             type: 'add',
             key: uuid(),
-            token: token,
+            token: {
+                address: '0x',
+                decimals: 18,
+                symbol: 'ETH',
+                name: 'Ether',
+            },
             amount: '0',
         })
     }, [])
@@ -211,13 +223,13 @@ export function ITOExchangeTokenPanel(props: ITOExchangeTokenPanelProps) {
                 dataIndex={item.id}
                 inputAmount={item.amount}
                 onAmountChange={onAmountChange}
-                exchangeToken={item.token || token}
+                exchangeToken={item.token}
                 onExchangeTokenChange={onTokenChange}
                 showRemove={idx < exchangeTokenArray.length && exchangeTokenArray.length !== 1}
                 showAdd={idx === exchangeTokenArray.length - 1}
                 {...props.exchangetokenPanelProps}
                 onRemove={() => dispatchExchangeTokenArray({ type: 'remove', key: item.id })}
-                onAdd={onAdd}
+                onAdd={OutlinedFlagRounded}
                 tokenAmountPanelProps={{
                     InputProps: {
                         startAdornment: <Typography>1{props.originToken?.symbol}=</Typography>,

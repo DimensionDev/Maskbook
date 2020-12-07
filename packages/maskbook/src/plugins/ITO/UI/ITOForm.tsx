@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, MenuProps, Box, TextField } from '@material-ui/core'
+import { createStyles, makeStyles, MenuProps, Box, TextField, Grid } from '@material-ui/core'
 import { useState, useCallback, useMemo } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
@@ -83,7 +83,7 @@ export function ITOForm(props: ITOFormProps) {
 
     const onAmountChange = useCallback((amount: string, key: string) => {
         setAmount(amount)
-    })
+    }, [])
 
     const onTokenChange = useCallback((token: EtherTokenDetailed | ERC20TokenDetailed, key: string) => {
         setToken(token)
@@ -139,21 +139,43 @@ export function ITOForm(props: ITOFormProps) {
             </Box>
             <Box className={classes.line} style={{ display: 'flex' }}>
                 <TextField className={classes.input} label="Allocation per wallet" />
+
                 <TextField className={classes.input} label="Event Times" />
             </Box>
-            {!account || !chainIdValid ? (
-                <ActionButton className={classes.button} fullWidth variant="contained" size="large">
-                    Connect a wallet
-                </ActionButton>
-            ) : validationMessage ? (
-                <ActionButton className={classes.button} fullWidth variant="contained" disabled>
-                    {validationMessage}
-                </ActionButton>
-            ) : (
-                <ActionButton className={classes.button} fullWidth>
-                    Send
-                </ActionButton>
-            )}
+            <Box className={classes.line}>
+                <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
+                    {approveRequired ? (
+                        <Grid item xs={6}>
+                            <ActionButton
+                                className={classes.button}
+                                fullWidth
+                                variant="contained"
+                                size="large"
+                                disabled={approveState === ApproveState.PENDING}
+                                onClick={onApprove}>
+                                {approveState === ApproveState.NOT_APPROVED ? `Approve ${token?.symbol}` : ''}
+                                {approveState === ApproveState.PENDING ? `Approve... ${token?.symbol}` : ''}
+                            </ActionButton>
+                        </Grid>
+                    ) : null}
+
+                    <Grid item xs={approveRequired ? 6 : 12}>
+                        {!account || !chainIdValid ? (
+                            <ActionButton className={classes.button} fullWidth variant="contained" size="large">
+                                Connect a wallet
+                            </ActionButton>
+                        ) : validationMessage ? (
+                            <ActionButton className={classes.button} fullWidth variant="contained" disabled>
+                                {validationMessage}
+                            </ActionButton>
+                        ) : (
+                            <ActionButton className={classes.button} fullWidth>
+                                Send
+                            </ActionButton>
+                        )}
+                    </Grid>
+                </Grid>
+            </Box>
         </>
     )
 }
