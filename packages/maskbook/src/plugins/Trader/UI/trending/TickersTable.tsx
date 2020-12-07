@@ -49,9 +49,6 @@ export interface TickersTableProps {
 }
 
 export function TickersTable(props: TickersTableProps) {
-    console.log('DEBUG: TickersTable')
-    console.log(props.tickers)
-
     const { t } = useI18N()
     const classes = useStyles()
     const rows = [
