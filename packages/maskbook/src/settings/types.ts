@@ -1,3 +1,5 @@
+// Hack: this file is exposed as part of public API to the native side,
+//  if you make an incompatible change in this file, it will break the API.
 import type { ChainId } from '../web3/types'
 import type { SetupGuideStep } from '../components/InjectedComponents/SetupGuide'
 
@@ -32,3 +34,5 @@ export enum LaunchPage {
     twitter = 'twitter',
     dashboard = 'dashboard',
 }
+
+export type NativeAPIKey = 'launchPageSettings'

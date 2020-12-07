@@ -1,12 +1,12 @@
-import type * as settings from '../../settings/settings'
+import type { LaunchPage, NativeAPISettingsName } from '../../settings/types'
 /**
  * JSON RPC calls that can be called from the native side.
  * JS = server, native = client
  */
 export interface WebviewAPIs {
     web_echo<T>(arg: T): Promise<T>
-    getDashboardUrl(path: string): Promise<string>
-    getSettings(key: keyof typeof settings): Promise<any>
+    getDashboardURL(): Promise<string>
+    getSettings(key: NativeAPISettingsName): Promise<LaunchPage>
     getConnectedPersonas(): Promise<{ network: string; connected: boolean }[][]>
 }
 export interface SharedNativeAPIs {}
