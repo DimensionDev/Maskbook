@@ -31,7 +31,6 @@ const KEYWORK_ID_MAP: {
         UNI: 'uniswap',
         CRU: 'crust-network',
         CRUST: 'crust-network',
-        YAM: 'yam-3',
     },
 }
 
