@@ -1,20 +1,21 @@
 {
-  "name": "components",
+  "name": "@dimensiondev/maskbook-theme",
+  "private": true,
   "description": "@material-ui/core theme of design system of Mask Network",
   "scripts": {
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "start": "npm run storybook"
   },
-  "dependencies": {
-    "@emotion/react": "^11.1.1",
-    "@emotion/styled": "^11.0.0",
-    "@material-ui/core": "^5.0.0-alpha.17",
-    "@material-ui/lab": "^5.0.0-alpha.17",
-    "@material-ui/unstyled": "^5.0.0-alpha.17",
-    "@types/react": "^17.0.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "typescript": "^4.1.2"
+  "peerDependencies": {
+    "@emotion/react": "*",
+    "@emotion/styled": "*",
+    "@material-ui/core": "*",
+    "@material-ui/lab": "*",
+    "@types/react": "*",
+    "react": "*",
+    "react-dom": "*",
+    "typescript": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
