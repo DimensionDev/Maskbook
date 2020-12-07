@@ -35,4 +35,4 @@ export enum LaunchPage {
     dashboard = 'dashboard',
 }
 
-export type NativeAPIKey = 'launchPageSettings'
+export type NativeAPISettingsName = 'launchPageSettings'
