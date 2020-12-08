@@ -35,5 +35,3 @@ export enum LaunchPage {
     twitter = 'twitter',
     dashboard = 'dashboard',
 }
-
-export type NativeAPISettingsName = 'launchPageSettings'

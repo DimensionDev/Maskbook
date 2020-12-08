@@ -1,4 +1,4 @@
-import type { LaunchPage, NativeAPISettingsName } from '../../settings/types'
+import type { LaunchPage } from '../../settings/types'
 /**
  * JSON RPC calls that can be called from the native side.
  * JS = server, native = client
