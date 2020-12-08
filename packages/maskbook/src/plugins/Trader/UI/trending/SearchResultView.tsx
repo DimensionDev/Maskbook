@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { makeStyles, createStyles, Link, Tab, Tabs } from '@material-ui/core'
 import type { DataProvider, TagType, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
-import { useTrendingByKeyword } from '../../trending/useTrending'
+import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
 import { TickersTable } from './TickersTable'
 import { PriceChangedTable } from './PriceChangedTable'
 import { PriceChart } from './PriceChart'
@@ -19,6 +19,7 @@ import { TrendingViewError } from './TrendingViewError'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
+import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -65,6 +66,7 @@ export interface SearchResultViewProps {
 }
 
 export function SearchResultView(props: SearchResultViewProps) {
+    const { name, tagType, dataProviders, tradeProviders } = props
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     const { t } = useI18N()
@@ -72,23 +74,26 @@ export function SearchResultView(props: SearchResultViewProps) {
     const [tabIndex, setTabIndex] = useState(1)
 
     //#region trending
-    const dataProvider = useCurrentDataProvider(props.dataProviders)
+    const dataProvider = useCurrentDataProvider(dataProviders)
     //#endregion
 
     //#region multiple coins share the same symbol
-    const { value: coins = [] } = useAvailableCoins(props.name, props.tagType, dataProvider)
+    const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
     //#endregion
 
-    //#region trending
+    //#region merge trending
+    const coinId = usePreferredCoinId(name, dataProvider)
+    const trendingById = useTrendingById(coinId, dataProvider)
+    const trendingByKeyword = useTrendingByKeyword(tagType, coinId ? '' : name, dataProvider)
     const {
         value: { currency, trending },
         error: trendingError,
         loading: loadingTrending,
-    } = useTrendingByKeyword(props.name, props.tagType, dataProvider)
+    } = coinId ? trendingById : trendingByKeyword
     //#endregion
 
     //#region swap
-    const tradeProvider = useCurrentTradeProvider(props.tradeProviders)
+    const tradeProvider = useCurrentTradeProvider(tradeProviders)
     //#endregion
 
     //#region stats
@@ -102,7 +107,7 @@ export function SearchResultView(props: SearchResultViewProps) {
     //#endregion
 
     //#region no available providers
-    if (props.dataProviders.length === 0) return null
+    if (dataProviders.length === 0) return null
     //#endregion
 
     //#region error handling

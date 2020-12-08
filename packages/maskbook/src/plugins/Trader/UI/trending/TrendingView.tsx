@@ -70,10 +70,14 @@ export function TrendingView(props: TrendingViewProps) {
     const dataProvider = useCurrentDataProvider(dataProviders)
     //#endregion
 
-    //#region trending
+    //#region multiple coins share the same symbol
+    const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
+    //#endregion
+
+    //#region merge trending
     const coinId = usePreferredCoinId(name, dataProvider)
     const trendingById = useTrendingById(coinId, dataProvider)
-    const trendingByKeyword = useTrendingByKeyword(coinId ? '' : name, tagType, dataProvider)
+    const trendingByKeyword = useTrendingByKeyword(tagType, coinId ? '' : name, dataProvider)
     const {
         value: { currency, trending },
         error: trendingError,
@@ -99,10 +103,6 @@ export function TrendingView(props: TrendingViewProps) {
     useEffect(() => {
         props.onUpdate?.()
     }, [tabIndex, loadingTrending])
-    //#endregion
-
-    //#region multiple coins share the same symbol
-    const { value: coins = [] } = useAvailableCoins(name, tagType, dataProvider)
     //#endregion
 
     //#region no available platform
