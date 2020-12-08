@@ -1,10 +1,14 @@
-import { DataProvider, Currency, Coin, Trending, Stat } from '../../types'
+import { groupBy } from 'lodash-es'
+import { DataProvider, Currency, Coin, Trending, Stat, TagType } from '../../types'
 import * as coinGeckoAPI from '../coingecko'
 import * as coinMarketCapAPI from '../coinmarketcap'
 import { Days } from '../../UI/trending/PriceChartDaysControl'
 import { getEnumAsArray } from '../../../../utils/enum'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import { resolveCoinId, resolveCoinAddress, resolveAlias } from './hotfix'
+import STOCKS_KEYWORDS from './stocks.json'
+import CASHTAG_KEYWORDS from './cashtag.json'
+import HASHTAG_KEYWORDS from './hashtag.json'
 
 export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
     if (dataProvider === DataProvider.COIN_GECKO) {
@@ -42,27 +46,33 @@ export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<C
 
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     if (dataProvider === DataProvider.COIN_GECKO) return coinGeckoAPI.getAllCoins()
-    return (await coinMarketCapAPI.getAllCoins()).data.map((x) => ({
-        id: String(x.id),
-        name: x.name,
-        symbol: x.symbol,
-        eth_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
-    }))
+    const { data: coins } = await coinMarketCapAPI.getAllCoins()
+    return coins
+        .filter((x) => x.status === 'active')
+        .map((y) => ({
+            id: String(y.id),
+            name: y.name,
+            symbol: y.symbol,
+            eth_address: y.platform?.name === 'Ethereum' ? y.platform.token_address : undefined,
+        }))
 }
 
 //#region check a specific coin is available on specific dataProvider
 const coinNamespace = new Map<
     DataProvider,
     {
-        supported: Set<string>
+        supportedSymbolsSet: Set<string>
+        supportedSymbolIdsMap: Map<string, Coin[]>
         lastUpdated: Date
     }
 >()
 
 async function updateCache(dataProvider: DataProvider) {
     const coins = await getCoins(dataProvider)
+    const coinsGrouped = groupBy(coins, (x) => x.symbol.toLowerCase())
     coinNamespace.set(dataProvider, {
-        supported: new Set<string>(coins.map((x) => x.symbol.toLowerCase())),
+        supportedSymbolsSet: new Set<string>(Object.keys(coinsGrouped)),
+        supportedSymbolIdsMap: new Map(Object.entries(coinsGrouped).map(([symbol, coins]) => [symbol, coins])),
         lastUpdated: new Date(),
     })
 }
@@ -75,27 +85,48 @@ function isCacheExipred(dataProvider: DataProvider) {
     )
 }
 
-export async function checkAvailabilityOnDataProvider(dataProvider: DataProvider, keyword: string) {
+function isBlockedKeyword(type: TagType, keyword: string) {
+    if (type === TagType.HASH) return [...STOCKS_KEYWORDS, ...HASHTAG_KEYWORDS].includes(keyword.toUpperCase())
+    else if (type === TagType.CASH) return [...STOCKS_KEYWORDS, ...CASHTAG_KEYWORDS].includes(keyword.toUpperCase())
+    return true
+}
+
+export async function checkAvailabilityOnDataProvider(keyword: string, type: TagType, dataProvider: DataProvider) {
+    if (isBlockedKeyword(type, keyword)) return false
     const keyword_ = resolveAlias(keyword, dataProvider)
     // cache never built before update in blocking way
     if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
     // data fetched before update in nonblocking way
     else if (isCacheExipred(dataProvider)) updateCache(dataProvider)
-    return coinNamespace.get(dataProvider)?.supported.has(resolveAlias(keyword_, dataProvider).toLowerCase()) ?? false
+    return coinNamespace.get(dataProvider)?.supportedSymbolsSet.has(keyword_.toLowerCase()) ?? false
 }
 
-export async function getAvailableDataProviders(keyword: string) {
+export async function getAvailableDataProviders(type: TagType, keyword: string) {
     const checked = await Promise.all(
         getEnumAsArray(DataProvider).map(
             async (x) =>
-                [x.value, await checkAvailabilityOnDataProvider(x.value, resolveAlias(keyword, x.value))] as const,
+                [
+                    x.value,
+                    await checkAvailabilityOnDataProvider(resolveAlias(keyword, x.value), type, x.value),
+                ] as const,
         ),
     )
     return checked.filter(([_, y]) => y).map(([x]) => x)
 }
+
+export async function getAvailableCoins(keyword: string, type: TagType, dataProvider: DataProvider) {
+    if (isBlockedKeyword(type, keyword)) return []
+    const keyword_ = resolveAlias(keyword, dataProvider)
+    // cache never built before update in blocking way
+    if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
+    // data fetched before update in nonblocking way
+    else if (isCacheExipred(dataProvider)) updateCache(dataProvider)
+    return coinNamespace.get(dataProvider)?.supportedSymbolIdsMap.get(keyword_.toLowerCase()) ?? []
+}
+
 //#endregion
 
-export async function getCoinInfo(id: string, dataProvider: DataProvider, currency: Currency): Promise<Trending> {
+export async function getCoinInfo(id: string, currency: Currency, dataProvider: DataProvider): Promise<Trending> {
     if (dataProvider === DataProvider.COIN_GECKO) {
         const info = await coinGeckoAPI.getCoinInfo(id)
         const platform_url = `https://www.coingecko.com/en/coins/${info.id}`
@@ -156,6 +187,7 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
                 price: x.converted_last.usd,
                 volume: x.converted_volume.usd,
                 score: x.trust_score,
+                updated: new Date(x.timestamp),
             })),
         }
     }
@@ -191,7 +223,7 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
             platform_url: `https://coinmarketcap.com/currencies/${coinInfo.slug}/`,
             twitter_url: coinInfo.urls.twitter?.find((x) => x.includes('twitter')),
             telegram_url: coinInfo.urls.chat?.find((x) => x.includes('telegram')),
-            market_cap_rank: quotesInfo?.rank,
+            market_cap_rank: quotesInfo?.[id]?.cmc_rank,
             description: coinInfo.description,
             eth_address:
                 resolveCoinAddress(id, DataProvider.COIN_MARKET_CAP) ??
@@ -213,6 +245,7 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
                         : pair.quote[currencyName].price_quote,
                 volume: pair.quote[currencyName].volume_24h,
                 score: String(pair.market_score),
+                updated: new Date(pair.quote[currencyName].last_updated),
             }))
             .sort((a, z) => {
                 if (a.market_reputation !== z.market_reputation) return z.market_reputation - a.market_reputation // reputation from high to low
@@ -220,38 +253,45 @@ export async function getCoinInfo(id: string, dataProvider: DataProvider, curren
                 return z.volume - a.volume // volumn from high to low
             }),
     }
-    if (quotesInfo)
+    const quotesInfo_ = quotesInfo?.[id]
+    if (quotesInfo_)
         trending.market = {
-            circulating_supply: quotesInfo.total_supply ?? void 0,
-            total_supply: quotesInfo.total_supply ?? void 0,
-            max_supply: quotesInfo.max_supply ?? void 0,
-            market_cap: quotesInfo.quotes[currencyName].market_cap,
-            current_price: quotesInfo.quotes[currencyName].price,
-            total_volume: quotesInfo.quotes[currencyName].volume_24h,
-            price_change_percentage_1h_in_currency: quotesInfo.quotes[currencyName].percent_change_1h,
-            price_change_percentage_24h_in_currency: quotesInfo.quotes[currencyName].percent_change_24h,
-            price_change_percentage_7d_in_currency: quotesInfo.quotes[currencyName].percent_change_7d,
+            circulating_supply: quotesInfo_.total_supply ?? void 0,
+            total_supply: quotesInfo_.total_supply ?? void 0,
+            max_supply: quotesInfo_.max_supply ?? void 0,
+            market_cap: quotesInfo_.quote[currencyName].market_cap,
+            current_price: quotesInfo_.quote[currencyName].price,
+            total_volume: quotesInfo_.quote[currencyName].volume_24h,
+            price_change_percentage_1h: quotesInfo_.quote[currencyName].percent_change_1h,
+            price_change_percentage_24h: quotesInfo_.quote[currencyName].percent_change_24h,
+            price_change_percentage_1h_in_currency: quotesInfo_.quote[currencyName].percent_change_1h,
+            price_change_percentage_24h_in_currency: quotesInfo_.quote[currencyName].percent_change_24h,
+            price_change_percentage_7d_in_currency: quotesInfo_.quote[currencyName].percent_change_7d,
         }
     return trending
 }
 
-export async function getCoinTrendingByKeyword(keyword: string, dataProvider: DataProvider, currency: Currency) {
-    const coins = await getCoins(dataProvider)
+export async function getCoinTrendingByKeyword(
+    keyword: string,
+    tagType: TagType,
+    currency: Currency,
+    dataProvider: DataProvider,
+) {
     const keyword_ = resolveAlias(keyword, dataProvider)
-    const coin = coins.find((x) => x.symbol.toLowerCase() === keyword_.toLowerCase())
+    const [coin] = await getAvailableCoins(keyword_, tagType, dataProvider)
     if (!coin) return null
-    return getCoinInfo(
-        resolveCoinId(resolveAlias(keyword_, dataProvider), dataProvider) ?? coin.id,
-        dataProvider,
-        currency,
-    )
+    return getCoinTrendingById(resolveCoinId(keyword_, dataProvider) ?? coin.id, currency, dataProvider)
+}
+
+export async function getCoinTrendingById(id: string, currency: Currency, dataProvider: DataProvider) {
+    return getCoinInfo(id, currency, dataProvider)
 }
 
 export async function getPriceStats(
     id: string,
-    dataProvider: DataProvider,
     currency: Currency,
     days: number,
+    dataProvider: DataProvider,
 ): Promise<Stat[]> {
     if (dataProvider === DataProvider.COIN_GECKO) {
         const stats = await coinGeckoAPI.getPriceStats(id, currency.id, days === Days.MAX ? 11430 : days)

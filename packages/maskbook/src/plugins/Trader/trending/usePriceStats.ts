@@ -14,6 +14,6 @@ interface Options {
 export function usePriceStats({ coinId, currency, days = Days.MAX, dataProvider }: Options) {
     return useAsync(async () => {
         if (isUndefined(days) || isUndefined(coinId) || isUndefined(dataProvider) || isUndefined(currency)) return []
-        return PluginTraderRPC.getPriceStats(coinId, dataProvider, currency, days)
+        return PluginTraderRPC.getPriceStats(coinId, currency, days, dataProvider)
     }, [coinId, dataProvider, currency?.id, days])
 }

@@ -1,5 +1,4 @@
 import { memoizePromise } from '../../utils/memoize'
-import { once } from 'lodash-es'
 
 const cache = new Map<string, string>()
 export const resolveTCOLink = memoizePromise(
@@ -27,21 +26,12 @@ export function fetch(url: string) {
     return globalThis.fetch(url).then((x) => x.blob())
 }
 
-const createDlElement = once(() => document.createElement('a'))
-
 export function saveAsFileFromUrl(url: string, fileName = '') {
-    if (process.env.architecture === 'app' && process.env.firefoxVariant === 'geckoview') {
-        const dlElem = createDlElement()
-        dlElem.href = url
-        dlElem.download = fileName
-        dlElem.click()
-    } else {
-        browser.downloads.download({
-            url,
-            filename: fileName,
-            saveAs: true,
-        })
-    }
+    browser.downloads.download({
+        url,
+        filename: fileName,
+        saveAs: true,
+    })
 }
 
 export function saveAsFileFromBuffer(file: BufferSource, mimeType: string, fileName = '') {

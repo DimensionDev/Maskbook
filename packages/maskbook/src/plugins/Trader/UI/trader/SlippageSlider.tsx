@@ -1,6 +1,6 @@
 import { Slider } from '@material-ui/core'
 import { formatPercentage } from '../../../Wallet/formatter'
-import { DEFAULT_SLIPPAGE_TOLERANCE, MIN_SLIPPAGE_TOLERANCE, MAX_SLIPPAGE_TOLERANCE } from '../../constants'
+import { SLIPPAGE_TOLERANCE_DEFAULT, SLIPPAGE_TOLERANCE_MIN, SLIPPAGE_TOLERANCE_MAX } from '../../constants'
 import { toBips } from '../../helpers'
 
 export interface SlippageSliderProps {
@@ -9,14 +9,14 @@ export interface SlippageSliderProps {
 }
 
 export function SlippageSlider(props: SlippageSliderProps) {
-    const { value = DEFAULT_SLIPPAGE_TOLERANCE, onChange } = props
+    const { value = SLIPPAGE_TOLERANCE_DEFAULT, onChange } = props
     return (
         <Slider
             value={value}
             getAriaValueText={(v) => formatPercentage(toBips(v))}
             step={10}
-            min={MIN_SLIPPAGE_TOLERANCE}
-            max={MAX_SLIPPAGE_TOLERANCE}
+            min={SLIPPAGE_TOLERANCE_MIN}
+            max={SLIPPAGE_TOLERANCE_MAX}
             onChange={(_, value: number | number[]) => onChange(value as number)}
         />
     )

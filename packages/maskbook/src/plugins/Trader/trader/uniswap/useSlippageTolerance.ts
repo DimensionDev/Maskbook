@@ -1,11 +1,11 @@
 import { clamp } from 'lodash-es'
 import { useValueRef } from '../../../../utils/hooks/useValueRef'
-import { MAX_SLIPPAGE_TOLERANCE, MIN_SLIPPAGE_TOLERANCE } from '../../constants'
+import { SLIPPAGE_TOLERANCE_MAX, SLIPPAGE_TOLERANCE_MIN } from '../../constants'
 import { toUniswapPercent } from '../../helpers'
 import { currentSlippageTolerance } from '../../settings'
 
 export function useSlippageTolerance() {
     const slippage_ = useValueRef(currentSlippageTolerance)
-    const slippage = clamp(slippage_, MIN_SLIPPAGE_TOLERANCE, MAX_SLIPPAGE_TOLERANCE)
+    const slippage = clamp(slippage_, SLIPPAGE_TOLERANCE_MIN, SLIPPAGE_TOLERANCE_MAX)
     return toUniswapPercent(slippage, 10000)
 }

@@ -1,4 +1,4 @@
-import { CMC_V1_BASE_URL, CMC_V2_BASE_URL } from '../../constants'
+import { CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../../constants'
 import { Flags } from '../../../../utils/flags'
 
 export interface Status {
@@ -35,7 +35,7 @@ export interface Coin {
     }
     rank: number
     slug: string
-    status: 'active'
+    status: 'active' | 'untracked'
     symbol: string
 }
 
@@ -53,38 +53,45 @@ export async function getAllCoins() {
 
 //#regin get quote info
 export interface QuotesInfo {
-    id: number
-    name: string
-    symbol: string
-    website_slug: string
-    rank: number
     circulating_supply: number
-    total_supply: number
+    cmc_rank: number
+    date_added: string
+    id: number
+    is_active: boolean
+    is_fiat: 0 | 1
+    last_updated: string
     max_supply: null | number
-    quotes: Record<
+    name: string
+    num_market_pairs: number
+    quote: Record<
         string,
         {
-            price: number
-            volume_24h?: number
+            last_updated: string
             market_cap?: number
             percent_change_1h?: number
-            percent_change_24h?: number
             percent_change_7d?: number
+            percent_change_24h?: number
+            price: number
+            volume_24h?: number
         }
     >
-    last_updated: number
+    slug: string
+    symbol: string
+    tags: string[]
+    total_supply: number
 }
 
 export async function getQuotesInfo(id: string, currency: string) {
-    const params = new URLSearchParams('ref=widget')
+    const params = new URLSearchParams()
+    params.append('id', id)
     params.append('convert', currency)
 
     try {
-        const response = await fetch(`${CMC_V2_BASE_URL}/ticker/${id}/?${params.toString()}`, {
+        const response = await fetch(`${THIRD_PARTY_V1_BASE_URL}/cryptocurrency/widget?${params.toString()}`, {
             cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
         })
         return response.json() as Promise<{
-            data: QuotesInfo
+            data: Record<string, QuotesInfo>
             status: Status
         }>
     } catch (e) {

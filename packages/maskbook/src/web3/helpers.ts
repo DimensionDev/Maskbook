@@ -3,7 +3,14 @@ import type { EventLog, TransactionReceipt } from 'web3-core'
 import Web3Utils, { AbiItem, AbiOutput } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { CONSTANTS } from './constants'
-import { ChainId, ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from './types'
+import {
+    ChainId,
+    ERC20TokenDetailed,
+    EthereumTokenType,
+    EtherTokenDetailed,
+    CurrencyType,
+    AssetDetailed,
+} from './types'
 
 export function isSameAddress(addrA: string, addrB: string) {
     return addrA.toLowerCase() === addrB.toLowerCase()
@@ -106,3 +113,6 @@ export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionRe
         return accumulate
     }, {} as { [eventName: string]: EventLog })
 }
+
+export const getTokenUSDValue = (token: AssetDetailed) =>
+    token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0

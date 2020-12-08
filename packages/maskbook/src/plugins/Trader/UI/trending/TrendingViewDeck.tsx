@@ -10,10 +10,13 @@ import {
     Link,
     Paper,
     Button,
+    IconButton,
 } from '@material-ui/core'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
+import stringify from 'json-stable-stringify'
 import { findIndex, first, last } from 'lodash-es'
-import { Currency, DataProvider, Stat, TradeProvider, Trending } from '../../types'
+import { Coin, Currency, DataProvider, Stat, TradeProvider, Trending } from '../../types'
 import { resolveDataProviderName, resolveTradeProviderName } from '../../pipes'
 import { formatCurrency } from '../../../Wallet/formatter'
 import { PriceChanged } from './PriceChanged'
@@ -31,7 +34,13 @@ import { FootnoteMenu, FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { getEnumAsArray } from '../../../../utils/enum'
 import { TradeProviderIcon } from '../trader/TradeProviderIcon'
 import { DataProviderIcon } from '../trader/DataProviderIcon'
-import { currentDataProviderSettings, currentTradeProviderSettings } from '../../settings'
+import {
+    currentDataProviderSettings,
+    currentTradeProviderSettings,
+    getCurrentPreferredCoinIdSettings,
+} from '../../settings'
+import { CoinMenu, CoinMenuOption } from './CoinMenu'
+import { useValueRef } from '../../../../utils/hooks/useValueRef'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -56,14 +65,24 @@ const useStyles = makeStyles((theme) => {
         footer: {
             justifyContent: 'space-between',
         },
+        headline: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            position: 'relative',
+        },
         title: {
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
-            position: 'relative',
+        },
+        symbol: {
+            fontSize: 12,
+            color: theme.palette.text.secondary,
+            marginLeft: theme.spacing(0.5),
+            marginRight: theme.spacing(0.5),
         },
         buy: {
-            right: theme.spacing(2),
+            right: 0,
             position: 'absolute',
         },
         tabs: {
@@ -76,7 +95,7 @@ const useStyles = makeStyles((theme) => {
             minWidth: 'unset',
         },
         rank: {
-            color: theme.palette.text.primary,
+            color: theme.palette.text.secondary,
             fontWeight: 300,
             marginRight: theme.spacing(1),
         },
@@ -122,6 +141,7 @@ const useStyles = makeStyles((theme) => {
 
 export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content'> {
     stats: Stat[]
+    coins: Coin[]
     currency: Currency
     trending: Trending
     dataProvider: DataProvider
@@ -134,6 +154,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const {
+        coins,
         currency,
         trending,
         dataProvider,
@@ -171,6 +192,18 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [])
     //#endregion
 
+    //#region switch between coins with the same symbol
+    const currentPreferredCoinIdSettings = useValueRef(getCurrentPreferredCoinIdSettings(dataProvider))
+    const onCoinMenuChange = useCallback(
+        (option: CoinMenuOption) => {
+            const settings = JSON.parse(currentPreferredCoinIdSettings) as Record<string, string>
+            settings[option.coin.symbol.toLowerCase()] = option.value
+            getCurrentPreferredCoinIdSettings(dataProvider).value = stringify(settings)
+        },
+        [dataProvider, currentPreferredCoinIdSettings],
+    )
+    //#endregion
+
     return (
         <TrendingCard {...TrendingCardProps}>
             <CardHeader
@@ -188,11 +221,28 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     </Linking>
                 }
                 title={
-                    <div className={classes.title}>
-                        <Typography variant="h6">
-                            <Linking href={first(coin.home_urls)}>{coin.symbol.toUpperCase()}</Linking>
-                            <span>{` / ${currency.name}`}</span>
+                    <div className={classes.headline}>
+                        <Typography className={classes.title} variant="h6">
+                            <Linking href={first(coin.home_urls)} LinkProps={{ title: coin.name.toUpperCase() }}>
+                                {coin.name.toUpperCase()}
+                            </Linking>
+                            <span className={classes.symbol}>({coin.symbol.toUpperCase()})</span>
                         </Typography>
+
+                        {coins.length > 1 ? (
+                            <CoinMenu
+                                options={coins.map((coin) => ({
+                                    coin,
+                                    value: coin.id,
+                                }))}
+                                selectedIndex={coins.findIndex((x) => x.id === coin.id)}
+                                onChange={onCoinMenuChange}>
+                                <IconButton size="small">
+                                    <ArrowDropDownIcon />
+                                </IconButton>
+                            </CoinMenu>
+                        ) : null}
+
                         {account && trending.coin.symbol && Flags.transak_enabled ? (
                             <Button
                                 className={classes.buy}
@@ -210,7 +260,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                         <Typography component="p" variant="body1">
                             {market ? (
                                 <>
-                                    <span className={classes.currency}>{currency.name}</span>
+                                    {typeof coin.market_cap_rank === 'number' ? (
+                                        <span className={classes.rank} title="Market Cap Rank">
+                                            #{coin.market_cap_rank}
+                                        </span>
+                                    ) : null}
                                     <span>
                                         {formatCurrency(
                                             dataProvider === DataProvider.COIN_MARKET_CAP
@@ -223,9 +277,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             ) : (
                                 <span>{t('plugin_trader_no_data')}</span>
                             )}
-                            {typeof market?.price_change_percentage_24h === 'number' ? (
-                                <PriceChanged amount={market.price_change_percentage_24h} />
-                            ) : null}
+                            <PriceChanged
+                                amount={market?.price_change_percentage_1h ?? market?.price_change_percentage_24h ?? 0}
+                            />
                         </Typography>
                     </>
                 }

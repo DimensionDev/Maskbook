@@ -12,17 +12,17 @@ export const TRADE_CONSTANTS = {
     },
 }
 
-export const MIN_SLIPPAGE_TOLERANCE = 10 // bips
-export const DEFAULT_SLIPPAGE_TOLERANCE = 50 // bips
-export const MAX_SLIPPAGE_TOLERANCE = 500 // bips
-
 export const BIPS_BASE = new BigNumber(10000)
 export const ONE_BIPS = new BigNumber(1).dividedBy(BIPS_BASE)
 
-export const ALLOWED_PRICE_IMPACT_LOW = new BigNumber(100).multipliedBy(BIPS_BASE) // 1%
-export const ALLOWED_PRICE_IMPACT_MEDIUM = new BigNumber(300).multipliedBy(BIPS_BASE) // 3%
-export const ALLOWED_PRICE_IMPACT_HIGH = new BigNumber(500).multipliedBy(BIPS_BASE) // 5%
+export const SLIPPAGE_TOLERANCE_MIN = 10 // bips
+export const SLIPPAGE_TOLERANCE_DEFAULT = 50 // bips
+export const SLIPPAGE_TOLERANCE_MAX = 500 // bips
+
+export const PRICE_IMPACT_LOW = 100 // 1%
+export const PRICE_IMPACT_MEDIUM = 300 // 3%
+export const PRICE_IMPACT_HIGH = 500 // 5%
 // if the price slippage exceeds this number, force the user to type 'confirm' to execute
-export const PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN = new BigNumber(1000).multipliedBy(BIPS_BASE) // 10%
+export const PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN = 1000 // 10%
 // for non expert mode disable swaps above this
-export const BLOCKED_PRICE_IMPACT_NON_EXPERT = new BigNumber(1500).multipliedBy(BIPS_BASE) // 15%
+export const PRICE_IMPACT_NON_EXPERT_BLOCKED = 1500 // 15%
