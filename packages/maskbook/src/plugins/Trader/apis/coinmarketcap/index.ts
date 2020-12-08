@@ -35,7 +35,7 @@ export interface Coin {
     }
     rank: number
     slug: string
-    status: 'active'
+    status: 'active' | 'untracked'
     symbol: string
 }
 
