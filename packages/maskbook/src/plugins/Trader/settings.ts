@@ -1,7 +1,7 @@
 import stringify from 'json-stable-stringify'
 import { createInternalSettings, createGlobalSettings } from '../../settings/createSettings'
 import { DataProvider, ZrxTradePool, TradeProvider } from './types'
-import { DEFAULT_SLIPPAGE_TOLERANCE, PLUGIN_IDENTIFIER } from './constants'
+import { SLIPPAGE_TOLERANCE_DEFAULT, PLUGIN_IDENTIFIER } from './constants'
 import { i18n } from '../../utils/i18n-next'
 import { unreachable } from '../../utils/utils'
 import { getEnumAsArray } from '../../utils/enum'
@@ -11,7 +11,7 @@ import { getEnumAsArray } from '../../utils/enum'
  */
 export const currentSlippageTolerance = createGlobalSettings<number>(
     `${PLUGIN_IDENTIFIER}+slippageTolerance`,
-    DEFAULT_SLIPPAGE_TOLERANCE,
+    SLIPPAGE_TOLERANCE_DEFAULT,
     {
         primary: () => '',
     },
