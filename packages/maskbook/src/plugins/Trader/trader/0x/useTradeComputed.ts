@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
-import { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types'
+import type { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types'
 
 export function useTradeComputed(
     trade: SwapQuoteResponse | null,
@@ -12,7 +12,6 @@ export function useTradeComputed(
     return useMemo(() => {
         if (!trade) return null
         if (!inputToken || !outputToken) return null
-        const isExactIn = strategy === TradeStrategy.ExactIn
         return {
             strategy,
             inputAmount: new BigNumber(trade.sellAmount),
@@ -21,7 +20,9 @@ export function useTradeComputed(
 
             fee: new BigNumber(trade.minimumProtocolFee),
             maximumSold: new BigNumber(trade.sellAmount),
-            minimumReceived: new BigNumber(trade.buyAmount),
+            minimumReceived: new BigNumber(trade.guaranteedPrice).multipliedBy(
+                new BigNumber(10).pow(outputToken.decimals ?? 0),
+            ),
             priceImpactWithoutFee: new BigNumber(0),
 
             // not supported fields
