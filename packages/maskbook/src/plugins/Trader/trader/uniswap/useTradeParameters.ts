@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Trade, Router, Percent, JSBI, TradeType } from '@uniswap/sdk'
-import { DEFAULT_SLIPPAGE_TOLERANCE, UNISWAP_BIPS_BASE, UNISWAP_DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
+import { SLIPPAGE_TOLERANCE_DEFAULT, UNISWAP_BIPS_BASE, UNISWAP_DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import type { TradeComputed } from '../../types'
 
@@ -12,7 +12,7 @@ import type { TradeComputed } from '../../types'
  */
 export function useSwapParameters(
     trade: TradeComputed<Trade> | null, // trade to execute, required
-    allowedSlippage: number = DEFAULT_SLIPPAGE_TOLERANCE, // in bips
+    allowedSlippage: number = SLIPPAGE_TOLERANCE_DEFAULT, // in bips
     deadline: number = UNISWAP_DEFAULT_TRANSACTION_DEADLINE, // in seconds from now
 ) {
     const account = useAccount()

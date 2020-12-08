@@ -7,6 +7,11 @@ export enum DataProvider {
     COIN_MARKET_CAP,
 }
 
+export enum TagType {
+    CASH = 1,
+    HASH,
+}
+
 export interface Currency {
     id: string
     name: string
@@ -43,6 +48,7 @@ export interface Market {
     max_supply?: number
     total_supply?: number
     total_volume?: number
+    price_change_percentage_1h?: number
     price_change_percentage_24h?: number
     price_change_percentage_1h_in_currency?: number
     price_change_percentage_1y_in_currency?: number
@@ -63,6 +69,7 @@ export interface Ticker {
     price: number
     volume: number
     score: string
+    updated: Date
 }
 
 export interface Trending {

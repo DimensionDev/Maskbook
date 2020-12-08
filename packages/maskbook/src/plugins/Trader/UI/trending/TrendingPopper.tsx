@@ -4,12 +4,12 @@ import { Popper, ClickAwayListener, PopperProps, Fade } from '@material-ui/core'
 import { useLocation, useWindowScroll } from 'react-use'
 import { PluginTraderMessages } from '../../messages'
 import { WalletMessages } from '../../../Wallet/messages'
-import type { DataProvider } from '../../types'
+import type { DataProvider, TagType } from '../../types'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../../Transak/messages'
 
 export interface TrendingPopperProps {
-    children?: (name: string, dataProviders: DataProvider[], reposition?: () => void) => React.ReactNode
+    children?: (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
 
@@ -18,6 +18,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [freezed, setFreezed] = useState(false) // disable any click
     const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
+    const [type, setType] = useState<TagType | undefined>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [availableProviders, setAvailableProviders] = useState<DataProvider[]>([])
 
@@ -41,6 +42,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 const update = () => {
                     setLocked(true)
                     setName(ev.name)
+                    setType(ev.type)
                     setAnchorEl(ev.element)
                     setAvailableProviders(ev.dataProviders)
                     setLocked(false)
@@ -76,7 +78,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     //#endregion
 
     if (locked) return null
-    if (!anchorEl) return null
+    if (!anchorEl || !type) return null
     return (
         <ClickAwayListener
             onClickAway={() => {
@@ -93,7 +95,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
-                            {props.children?.(name, availableProviders, () =>
+                            {props.children?.(name, type, availableProviders, () =>
                                 setTimeout(() => popperRef.current?.update(), 100),
                             )}
                         </div>

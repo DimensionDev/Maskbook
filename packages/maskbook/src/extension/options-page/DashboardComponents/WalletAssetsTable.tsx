@@ -16,6 +16,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency } from '../../../plugins/Wallet/formatter'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CurrencyType, AssetDetailed, EthereumTokenType } from '../../../web3/types'
+import { getTokenUSDValue } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenActionsBar } from './ERC20TokenActionsBar'
@@ -133,9 +134,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                         justifyContent: 'flex-end',
                                     }}>
                                     <Typography className={classes.price} color="textPrimary" component="span">
-                                        {x.value?.[CurrencyType.USD]
-                                            ? formatCurrency(Number.parseFloat(x.value[CurrencyType.USD]), '$')
-                                            : formatCurrency(0, '$')}
+                                        {formatCurrency(getTokenUSDValue(x), '$')}
                                     </Typography>
                                 </Box>,
                                 <Box

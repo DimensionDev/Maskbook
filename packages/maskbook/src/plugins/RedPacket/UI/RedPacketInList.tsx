@@ -1,10 +1,9 @@
+import BigNumber from 'bignumber.js'
+import { Skeleton } from '@material-ui/core'
 import { createStyles, ListItem, ListItemText, makeStyles, Theme, Typography } from '@material-ui/core'
 import type { RedPacketJSONPayload } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { resolveElapsedTime } from '../pipes'
-import { formatBalance } from '../../Wallet/formatter'
-import BigNumber from 'bignumber.js'
-import { Skeleton } from '@material-ui/core'
+import { formatBalance, formatElapsed } from '../../Wallet/formatter'
 import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -62,7 +61,7 @@ export function RedPacketInList(props: RedPacketInListProps) {
             <ListItemText>
                 <Typography className={classes.primary} color="inherit" variant="body1">
                     <span className={classes.message}>{payload.sender.message}</span>
-                    <span className={classes.time}>{resolveElapsedTime(payload.creation_time)}</span>
+                    <span className={classes.time}>{formatElapsed(payload.creation_time)}</span>
                 </Typography>
                 <Typography className={classes.secondary} color="textSecondary" variant="body2">
                     {t('plugin_red_packet_description_failover', {

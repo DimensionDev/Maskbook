@@ -1,7 +1,7 @@
 import stringify from 'json-stable-stringify'
 import { createInternalSettings, createGlobalSettings } from '../../settings/createSettings'
 import { DataProvider, ZrxTradePool, TradeProvider } from './types'
-import { DEFAULT_SLIPPAGE_TOLERANCE, PLUGIN_IDENTIFIER } from './constants'
+import { SLIPPAGE_TOLERANCE_DEFAULT, PLUGIN_IDENTIFIER } from './constants'
 import { i18n } from '../../utils/i18n-next'
 import { unreachable } from '../../utils/utils'
 import { getEnumAsArray } from '../../utils/enum'
@@ -11,7 +11,7 @@ import { getEnumAsArray } from '../../utils/enum'
  */
 export const currentSlippageTolerance = createGlobalSettings<number>(
     `${PLUGIN_IDENTIFIER}+slippageTolerance`,
-    DEFAULT_SLIPPAGE_TOLERANCE,
+    SLIPPAGE_TOLERANCE_DEFAULT,
     {
         primary: () => '',
     },
@@ -82,6 +82,28 @@ export function getCurrentDataProviderGeneralSettings(dataProvider: DataProvider
             return coinGeckoSettings
         case DataProvider.COIN_MARKET_CAP:
             return coinMarketCapSettings
+        default:
+            unreachable(dataProvider)
+    }
+}
+//#endregion
+
+//#region the user preferred coin id
+const coinGeckoPreferredCoinId = createInternalSettings<string>(
+    `${PLUGIN_IDENTIFIER}+currentCoinGeckoPreferredCoinId`,
+    '{}',
+)
+const coinMarketCapPreferredCoinId = createInternalSettings<string>(
+    `${PLUGIN_IDENTIFIER}+currentCoinMarketCapPreferredCoinId`,
+    '{}',
+)
+
+export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
+    switch (dataProvider) {
+        case DataProvider.COIN_GECKO:
+            return coinGeckoPreferredCoinId
+        case DataProvider.COIN_MARKET_CAP:
+            return coinMarketCapPreferredCoinId
         default:
             unreachable(dataProvider)
     }

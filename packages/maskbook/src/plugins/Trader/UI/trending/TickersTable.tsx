@@ -12,7 +12,7 @@ import {
     Typography,
 } from '@material-ui/core'
 import type { Ticker, DataProvider } from '../../types'
-import { formatCurrency, formatEthereumAddress } from '../../../Wallet/formatter'
+import { formatCurrency, formatElapsed, formatEthereumAddress } from '../../../Wallet/formatter'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -56,6 +56,7 @@ export function TickersTable(props: TickersTableProps) {
         t('plugin_trader_table_pair'),
         t('plugin_trader_table_price'),
         t('plugin_trader_table_volume'),
+        t('plugin_trader_table_updated'),
     ]
     const tickers = props.tickers.map((ticker, index) => (
         <TableRow key={index}>
@@ -77,6 +78,7 @@ export function TickersTable(props: TickersTableProps) {
             </TableCell>
             <TableCell className={classes.cell}>{formatCurrency(ticker.price, '$')}</TableCell>
             <TableCell className={classes.cell}>{formatCurrency(ticker.volume, '$')}</TableCell>
+            <TableCell className={classes.cell}>{formatElapsed(ticker.updated.getTime())}</TableCell>
         </TableRow>
     ))
 
@@ -97,7 +99,7 @@ export function TickersTable(props: TickersTableProps) {
                 ) : (
                     <TableBody>
                         <TableRow>
-                            <TableCell className={classes.cell} colSpan={4} style={{ borderStyle: 'none' }}>
+                            <TableCell className={classes.cell} colSpan={5} style={{ borderStyle: 'none' }}>
                                 <Typography className={classes.placeholder} align="center" color="textSecondary">
                                     {t('plugin_trader_no_data')}
                                 </Typography>
