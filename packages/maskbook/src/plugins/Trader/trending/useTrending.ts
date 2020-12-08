@@ -6,6 +6,7 @@ import { useCurrentCurrency } from './useCurrentCurrency'
 export function useTrendingByKeyword(keyword: string, tagType: TagType, dataProvider: DataProvider) {
     const currencyAsyncResult = useCurrentCurrency(dataProvider)
     const trendingAsyncResult = useAsync(async () => {
+        if (!keyword) return null
         if (!currencyAsyncResult.value) return null
         return PluginTraderRPC.getCoinTrendingByKeyword(keyword, tagType, currencyAsyncResult.value, dataProvider)
     }, [dataProvider, currencyAsyncResult.value, keyword])
