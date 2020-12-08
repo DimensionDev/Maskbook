@@ -192,7 +192,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [])
     //#endregion
 
-    //#region switch coin
+    //#region switch between coins with the same symbol
     const currentPreferredCoinIdSettings = useValueRef(getCurrentPreferredCoinIdSettings(dataProvider))
     const onCoinMenuChange = useCallback(
         (option: CoinMenuOption) => {

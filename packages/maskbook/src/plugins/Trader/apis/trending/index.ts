@@ -1,3 +1,4 @@
+import { groupBy } from 'lodash-es'
 import { DataProvider, Currency, Coin, Trending, Stat, TagType } from '../../types'
 import * as coinGeckoAPI from '../coingecko'
 import * as coinMarketCapAPI from '../coinmarketcap'
@@ -8,7 +9,6 @@ import { resolveCoinId, resolveCoinAddress, resolveAlias } from './hotfix'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
-import { groupBy } from 'lodash-es'
 
 export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
     if (dataProvider === DataProvider.COIN_GECKO) {
