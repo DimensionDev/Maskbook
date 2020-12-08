@@ -59,6 +59,7 @@ export interface TrendingViewProps {
 }
 
 export function TrendingView(props: TrendingViewProps) {
+    const { name, tagType, dataProviders, tradeProviders } = props
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     const { t } = useI18N()
@@ -66,13 +67,13 @@ export function TrendingView(props: TrendingViewProps) {
     const [tabIndex, setTabIndex] = useState(0)
 
     //#region trending
-    const dataProvider = useCurrentDataProvider(props.dataProviders)
+    const dataProvider = useCurrentDataProvider(dataProviders)
     //#endregion
 
     //#region trending
-    const coinId = usePreferredCoinId(props.name, dataProvider)
+    const coinId = usePreferredCoinId(name, dataProvider)
     const trendingById = useTrendingById(coinId, dataProvider)
-    const trendingByKeyword = useTrendingByKeyword(props.name, props.tagType, dataProvider)
+    const trendingByKeyword = useTrendingByKeyword(coinId ? '' : name, tagType, dataProvider)
     const {
         value: { currency, trending },
         error: trendingError,
@@ -81,7 +82,7 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region swap
-    const tradeProvider = useCurrentTradeProvider(props.tradeProviders)
+    const tradeProvider = useCurrentTradeProvider(tradeProviders)
     //#endregion
 
     //#region stats
@@ -101,11 +102,11 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region multiple coins share the same symbol
-    const { value: coins = [] } = useAvailableCoins(props.name, props.tagType, dataProvider)
+    const { value: coins = [] } = useAvailableCoins(name, tagType, dataProvider)
     //#endregion
 
     //#region no available platform
-    if (props.dataProviders.length === 0) return null
+    if (dataProviders.length === 0) return null
     //#endregion
 
     //#region error handling
