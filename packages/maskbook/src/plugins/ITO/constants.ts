@@ -9,5 +9,6 @@ export const ITO_CONSTANTS = {
         [ChainId.Ropsten]: '',
         [ChainId.Rinkeby]: '0xad329807b1dd9cca742d0a935d04e86d6405f8ae',
         [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
     },
 }

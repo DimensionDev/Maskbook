@@ -44,6 +44,6 @@ export const ITO_PluginDefine: PluginConfig = {
             },
         ],
     ]),
-    PageComponent: Flags.ito_enabled ? ITO_CompositionUI : undefined,
-    postDialogEntries: Flags.ito_enabled ? [ITO_CompositionEntry] : undefined,
+    PageComponent: Flags.ITO_enabled ? ITO_CompositionUI : undefined,
+    postDialogEntries: Flags.ITO_enabled ? [ITO_CompositionEntry] : undefined,
 }
