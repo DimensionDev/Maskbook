@@ -46,12 +46,15 @@ export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<C
 
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     if (dataProvider === DataProvider.COIN_GECKO) return coinGeckoAPI.getAllCoins()
-    return (await coinMarketCapAPI.getAllCoins()).data.map((x) => ({
-        id: String(x.id),
-        name: x.name,
-        symbol: x.symbol,
-        eth_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
-    }))
+    const { data: coins } = await coinMarketCapAPI.getAllCoins()
+    return coins
+        .filter((x) => x.status === 'active')
+        .map((y) => ({
+            id: String(y.id),
+            name: y.name,
+            symbol: y.symbol,
+            eth_address: y.platform?.name === 'Ethereum' ? y.platform.token_address : undefined,
+        }))
 }
 
 //#region check a specific coin is available on specific dataProvider
