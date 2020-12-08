@@ -146,7 +146,8 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
 }
 
 export interface ITOExchangeTokenPanelProps {
-    originToken: EtherTokenDetailed | ERC20TokenDetailed | null
+    originToken: EtherTokenDetailed | ERC20TokenDetailed | undefined
+    onChange: () => void
     exchangetokenPanelProps: Partial<ExchangetokenPanelProps>
 }
 export function ITOExchangeTokenPanel(props: ITOExchangeTokenPanelProps) {

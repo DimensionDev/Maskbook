@@ -8,14 +8,13 @@ import { EthereumTokenType, ERC20TokenDetailed, EtherTokenDetailed } from '../..
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
-
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
 import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
 
 import { ITOExchangeTokenPanel, ExchangeTokenPanel } from './ITOExchangeTokenPanel'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { v4 as uuid } from 'uuid'
@@ -115,7 +114,7 @@ export function ITOForm(props: ITOFormProps) {
 
     return (
         <>
-            <EthereumStatusBar classes={{ root: classes.bar }} />
+            <EthereumStatusBar classes={{}} />
             <Box className={classes.line}>
                 <ExchangeTokenPanel
                     onAmountChange={onAmountChange}
@@ -144,8 +143,7 @@ export function ITOForm(props: ITOFormProps) {
             </Box>
             <Box className={classes.line} style={{ display: 'flex' }}>
                 <TextField className={classes.input} label="Allocation per wallet" />
-
-                <TextField className={classes.input} label="Event Times" />
+                <TextField className={classes.input} label="Event times" />
             </Box>
             <Box className={classes.line}>
                 <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
