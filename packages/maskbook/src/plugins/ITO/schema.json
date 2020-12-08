@@ -113,5 +113,16 @@
             }
         }
     },
-    "required": ["pid", "password", "total", "sender", "creation_time", "duration", "network", "token_type", "exchange_ratios", "exchange_tokens"]
+    "required": [
+        "pid",
+        "password",
+        "total",
+        "sender",
+        "creation_time",
+        "duration",
+        "network",
+        "token_type",
+        "exchange_ratios",
+        "exchange_tokens"
+    ]
 }
