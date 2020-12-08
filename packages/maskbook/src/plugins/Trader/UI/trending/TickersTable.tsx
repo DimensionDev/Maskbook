@@ -99,7 +99,7 @@ export function TickersTable(props: TickersTableProps) {
                 ) : (
                     <TableBody>
                         <TableRow>
-                            <TableCell className={classes.cell} colSpan={4} style={{ borderStyle: 'none' }}>
+                            <TableCell className={classes.cell} colSpan={5} style={{ borderStyle: 'none' }}>
                                 <Typography className={classes.placeholder} align="center" color="textSecondary">
                                     {t('plugin_trader_no_data')}
                                 </Typography>
