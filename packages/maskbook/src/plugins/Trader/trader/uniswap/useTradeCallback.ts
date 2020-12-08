@@ -1,6 +1,6 @@
 import type { SwapParameters, Trade } from '@uniswap/sdk'
 import { useCallback, useState } from 'react'
-import { DEFAULT_SLIPPAGE_TOLERANCE, UNISWAP_DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
+import { SLIPPAGE_TOLERANCE_DEFAULT, UNISWAP_DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { addGasMargin } from '../../../../web3/helpers'
 import BigNumber from 'bignumber.js'
@@ -20,7 +20,7 @@ interface FailedCall {
 
 export function useTradeCallback(
     trade: TradeComputed<Trade> | null,
-    allowedSlippage: number = DEFAULT_SLIPPAGE_TOLERANCE,
+    allowedSlippage: number = SLIPPAGE_TOLERANCE_DEFAULT,
     ddl: number = UNISWAP_DEFAULT_TRANSACTION_DEADLINE,
 ) {
     const routerV2Contract = useRouterV2Contract()

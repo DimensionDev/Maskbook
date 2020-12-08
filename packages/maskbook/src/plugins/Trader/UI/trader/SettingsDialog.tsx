@@ -23,7 +23,7 @@ import {
     currentTradeProviderSettings,
     getCurrentTradeProviderGeneralSettings,
 } from '../../settings'
-import { DEFAULT_SLIPPAGE_TOLERANCE } from '../../constants'
+import { SLIPPAGE_TOLERANCE_DEFAULT } from '../../constants'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
@@ -91,7 +91,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
 
     const onReset = useCallback(() => {
         currentTradeProviderSettings.value = TradeProvider.UNISWAP
-        currentSlippageTolerance.value = DEFAULT_SLIPPAGE_TOLERANCE
+        currentSlippageTolerance.value = SLIPPAGE_TOLERANCE_DEFAULT
         if (provider === TradeProvider.ZRX)
             getCurrentTradeProviderGeneralSettings(provider).value = stringify({
                 pools: getEnumAsArray(ZrxTradePool).map((x) => x.value),
