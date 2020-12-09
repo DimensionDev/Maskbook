@@ -9,18 +9,20 @@ export const WebviewAPI: WebviewAPIs = {
     getSettings: async (key) => settings[key].value,
     getConnectedPersonas: async () => {
         const personas = await Services.Identity.queryMyPersonas()
-        return personas
-            .filter((p) => !p.uninitialized)
-            .map((p) => {
-                const profiles = [...p.linkedProfiles]
-                const providers = [...definedSocialNetworkWorkers].map((i) => {
-                    const profile = profiles.find(([key]) => key.network === i.networkIdentifier)
-                    return {
-                        network: i.networkIdentifier,
-                        connected: !!profile,
-                    }
-                })
-                return providers
-            })
+        return {
+            personas: personas
+                .filter((p) => !p.uninitialized)
+                .map((p) => {
+                    const profiles = [...p.linkedProfiles]
+                    const providers = [...definedSocialNetworkWorkers].map((i) => {
+                        const profile = profiles.find(([key]) => key.network === i.networkIdentifier)
+                        return {
+                            network: i.networkIdentifier,
+                            connected: !!profile,
+                        }
+                    })
+                    return providers
+                }),
+        }
     },
 }
