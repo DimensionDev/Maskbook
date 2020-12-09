@@ -27,7 +27,7 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
             sender: {
                 address: '0x',
                 name: 'Maskbook',
-                message: 'ITO',
+                message: 'This is my first ITO',
             },
             creation_time: new Date().getTime(),
             duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
