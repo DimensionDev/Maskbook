@@ -1,4 +1,4 @@
-import { groupBy } from 'lodash-es'
+import { first, groupBy } from 'lodash-es'
 import { DataProvider, Currency, Coin, Trending, Stat, TagType } from '../../types'
 import * as coinGeckoAPI from '../coingecko'
 import * as coinMarketCapAPI from '../coinmarketcap'
@@ -278,7 +278,10 @@ export async function getCoinTrendingByKeyword(
     dataProvider: DataProvider,
 ) {
     const keyword_ = resolveAlias(keyword, dataProvider)
-    const [coin] = await getAvailableCoins(keyword_, tagType, dataProvider)
+    const coins = await getAvailableCoins(keyword_, tagType, dataProvider)
+    if (!coins.length) return null
+    // prefer coins on the etherenum network
+    const coin = coins.find((x) => x.eth_address) ?? first(coins)
     if (!coin) return null
     return getCoinTrendingById(resolveCoinId(keyword_, dataProvider) ?? coin.id, currency, dataProvider)
 }
