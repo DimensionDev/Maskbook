@@ -6,7 +6,7 @@ import stringify from 'json-stable-stringify'
 
 export const WebviewAPI: WebviewAPIs = {
     web_echo: async (arg) => arg,
-    getDashboardURL: async () => browser.runtime.getURL(''),
+    getDashboardURL: async () => browser.runtime.getURL('/index.html'),
     getSettings: async (key) => settings[key].value,
     getConnectedPersonas: async () => {
         const personas = await Services.Identity.queryMyPersonas()
