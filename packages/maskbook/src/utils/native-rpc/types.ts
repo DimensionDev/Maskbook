@@ -8,7 +8,7 @@ export interface WebviewAPIs {
     getDashboardURL(): Promise<string>
     /** Definition of LaunchPage see https://github.com/DimensionDev/Maskbook/blob/master/packages/maskbook/src/settings/types.ts */
     getSettings(key: 'launchPageSettings'): Promise<LaunchPage>
-    getConnectedPersonas(): Promise<{ personas: { network: string; connected: boolean }[][] }>
+    getConnectedPersonas(): Promise<string>
 }
 export interface SharedNativeAPIs {}
 /**
