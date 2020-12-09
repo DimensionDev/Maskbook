@@ -64,13 +64,17 @@
             "required": ["address", "message", "name"],
             "title": "sender"
         },
+        "start_time": {
+            "type": "number",
+            "title": "start_time"
+        },
+        "end_time": {
+            "type": "number",
+            "title": "end_time"
+        },
         "creation_time": {
             "type": "number",
             "title": "creation_time"
-        },
-        "duration": {
-            "type": "number",
-            "title": "duration"
         },
         "network": {
             "enum": ["Mainnet", "Rinkeby", "Ropsten"],
