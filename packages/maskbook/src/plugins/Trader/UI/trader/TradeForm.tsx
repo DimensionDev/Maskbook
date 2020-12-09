@@ -20,6 +20,8 @@ import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { toBips } from '../../helpers'
 import { formatBalance, formatPercentage } from '../../../Wallet/formatter'
+import { resolveUniswapWarningLevel } from '../../pipes'
+import { WarningLevel } from '../../types/uniswap'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -210,6 +212,8 @@ export function TradeForm(props: TradeFormProps) {
             })
         if (loading) return t('plugin_trader_finding_price')
         if (!trade) return t('plugin_trader_error_insufficient_lp')
+        if (resolveUniswapWarningLevel(trade.priceImpact) === WarningLevel.BLOCKED)
+            return t('plugin_trader_error_price_impact_too_high')
         return ''
     }, [
         loading,
@@ -218,6 +222,7 @@ export function TradeForm(props: TradeFormProps) {
         inputTokenBalanceAmount.toFixed(),
         inputTokenTradeAmount.toFixed(),
         outputTokenTradeAmount.toFixed(),
+        trade?.priceImpact,
     ])
     //#endregion
 

@@ -379,6 +379,7 @@
     "plugin_trader_error_amount_absence": "",
     "plugin_trader_error_insufficient_balance": "",
     "plugin_trader_error_insufficient_lp": "",
+    "plugin_trader_error_price_impact_too_high": "",
     "plugin_trader_settings_data_source_primary": "",
     "plugin_trader_settings_data_source_secondary": "",
     "plugin_trader_settings_trade_provider_primary": "",

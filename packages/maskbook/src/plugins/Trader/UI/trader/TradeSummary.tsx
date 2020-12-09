@@ -17,7 +17,7 @@ import { SwapQuoteResponse, TradeComputed, TradeProvider, TradeStrategy } from '
 import { formatBalance, formatPercentage } from '../../../Wallet/formatter'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 import BigNumber from 'bignumber.js'
-import { resolveZrxTradePoolName } from '../../pipes'
+import { resolveUniswapWarningLevel, resolveUniswapWarningLevelColor, resolveZrxTradePoolName } from '../../pipes'
 type SummaryRecord = {
     title: string
     tip?: string
@@ -152,7 +152,11 @@ export function TradeSummary(props: TradeSummaryProps) {
         {
             title: 'Price Impact',
             children: (
-                <Typography className={classes.title}>
+                <Typography
+                    className={classes.title}
+                    style={{
+                        color: resolveUniswapWarningLevelColor(resolveUniswapWarningLevel(priceImpactWithoutFee)),
+                    }}>
                     {priceImpactWithoutFee.isGreaterThan('0')
                         ? priceImpactWithoutFee?.isLessThan(ONE_BIPS)
                             ? '<0.01%'
