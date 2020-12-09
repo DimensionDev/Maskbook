@@ -379,6 +379,7 @@
     "plugin_trader_error_amount_absence": "Enter an amount",
     "plugin_trader_error_insufficient_balance": "Insufficient {{symbol}} balance",
     "plugin_trader_error_insufficient_lp": "Insufficient liquidity for this trade.",
+    "plugin_trader_error_price_impact_too_high": "Price Impact Too High",
     "plugin_trader_settings_data_source_primary": "Data Source",
     "plugin_trader_settings_data_source_secondary": "Fetch trending data from different platforms.",
     "plugin_trader_settings_trade_provider_primary": "Swap Network",
