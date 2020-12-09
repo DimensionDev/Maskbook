@@ -1,7 +1,7 @@
 ---
 name: Release
 about: Create a new Release
-title: '[Release] patch'
+title: '[Release] minor'
 ---
 
 <!--
