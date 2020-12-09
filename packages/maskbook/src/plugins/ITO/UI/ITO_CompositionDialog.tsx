@@ -29,6 +29,8 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
                 name: 'Maskbook',
                 message: 'This is my first ITO',
             },
+            start_time: new Date().getTime(),
+            end_time: new Date().getTime(),
             creation_time: new Date().getTime(),
             duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
             network: resolveChainName(chainId) as EthereumNetwork,
