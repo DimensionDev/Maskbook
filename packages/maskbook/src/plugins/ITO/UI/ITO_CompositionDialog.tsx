@@ -23,6 +23,7 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
         const payload: ITO_JSONPayload = {
             pid: uuid(),
             password: uuid(),
+            limit: new BigNumber('100').toFixed(),
             total: new BigNumber('1000000000').toFixed(),
             sender: {
                 address: '0x',
@@ -34,7 +35,7 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
             creation_time: new Date().getTime(),
             network: resolveChainName(chainId) as EthereumNetwork,
             token_type: EthereumTokenType.Ether,
-            exchange_ratios: ['1', '500'],
+            exchange_amonuts: ['1', '500'],
             exchange_tokens: [
                 {
                     address: '0x',
