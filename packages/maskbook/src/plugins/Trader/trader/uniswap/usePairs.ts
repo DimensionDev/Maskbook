@@ -48,6 +48,12 @@ export function useUniswapPairs(tokens: readonly TokenPair[]) {
         )
     }, [pairAddresses.join(), pairContract, blockNumber])
 
+    console.log('DEBUG: pairs')
+    console.log({
+        results,
+        pairAddresses,
+    })
+
     const pairs = useMemo(() => {
         if (tokens.length !== results.length) return []
         return results.map((x, i) => {
