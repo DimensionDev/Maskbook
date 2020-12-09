@@ -1,5 +1,100 @@
 [
     {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "id",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "string",
+                "name": "password",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "_recipient",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "validation",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_exchange_addr_i",
+                "type": "uint256"
+            }
+        ],
+        "name": "claim",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "claimed",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "id",
+                "type": "bytes32"
+            }
+        ],
+        "name": "destruct",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "_hash",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_duration",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address[]",
+                "name": "_exchange_addrs",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "_ratios",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "address",
+                "name": "_token_addr",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_total_tokens",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_limit",
+                "type": "uint256"
+            }
+        ],
+        "name": "fill_pool",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "stateMutability": "nonpayable",
         "type": "constructor"
@@ -69,7 +164,7 @@
                 "type": "address"
             }
         ],
-        "name": "CreationSuccess",
+        "name": "FillSuccess",
         "type": "event"
     },
     {
@@ -108,23 +203,8 @@
         "name": "check_availability",
         "outputs": [
             {
-                "internalType": "address",
-                "name": "token_address",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "balance",
-                "type": "uint256"
-            },
-            {
                 "internalType": "uint256",
                 "name": "total",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "claimed",
                 "type": "uint256"
             },
             {
@@ -133,46 +213,12 @@
                 "type": "bool"
             },
             {
-                "internalType": "bool",
-                "name": "ifclaimed",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "id",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "string",
-                "name": "password",
-                "type": "string"
-            },
-            {
-                "internalType": "address",
-                "name": "_recipient",
-                "type": "address"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "validation",
-                "type": "bytes32"
-            }
-        ],
-        "name": "claim",
-        "outputs": [
-            {
                 "internalType": "uint256",
                 "name": "claimed",
                 "type": "uint256"
             }
         ],
-        "stateMutability": "payable",
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -186,62 +232,6 @@
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "id",
-                "type": "bytes32"
-            }
-        ],
-        "name": "destruct",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "_hash",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_number",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_duration",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address[]",
-                "name": "_exchange_addrs",
-                "type": "address[]"
-            },
-            {
-                "internalType": "uint256[]",
-                "name": "_ratios",
-                "type": "uint256[]"
-            },
-            {
-                "internalType": "address",
-                "name": "_token_addr",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_total_tokens",
-                "type": "uint256"
-            }
-        ],
-        "name": "fill_pool",
-        "outputs": [],
-        "stateMutability": "payable",
         "type": "function"
     },
     {
