@@ -13,7 +13,6 @@ export interface ITO_JSONPayload {
     start_time: number
     end_time: number
     creation_time: number
-    duration: number
     network: EthereumNetwork
     token_type: EthereumTokenType.Ether | EthereumTokenType.ERC20
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
