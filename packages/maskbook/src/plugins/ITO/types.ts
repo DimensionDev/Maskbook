@@ -10,6 +10,8 @@ export interface ITO_JSONPayload {
         name: string
         message: string
     }
+    start_time: number
+    end_time: number
     creation_time: number
     duration: number
     network: EthereumNetwork
