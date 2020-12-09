@@ -40,6 +40,10 @@
             "type": "string",
             "title": "password"
         },
+        "limit": {
+            "type": "number",
+            "title": "limit"
+        },
         "total": {
             "type": "string",
             "title": "total"
@@ -89,9 +93,9 @@
         "token": {
             "$ref": "#/definitions/erc20_token"
         },
-        "exchange_ratios": {
+        "exchange_amounts": {
             "type": "array",
-            "title": "exchange_ratios",
+            "title": "exchange_amounts",
             "description": "A list of exchange ratios",
             "additionalItems": true,
             "items": {
@@ -120,13 +124,14 @@
     "required": [
         "pid",
         "password",
+        "limit",
         "total",
         "sender",
         "creation_time",
         "duration",
         "network",
         "token_type",
-        "exchange_ratios",
+        "exchange_amounts",
         "exchange_tokens"
     ]
 }
