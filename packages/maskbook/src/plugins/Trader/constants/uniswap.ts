@@ -146,3 +146,11 @@ export const UNISWAP_BIPS_BASE = JSBI.BigInt(10000)
 export const UNISWAP_ONE_BIPS = new Percent(JSBI.BigInt(1), UNISWAP_BIPS_BASE)
 
 export const UNISWAP_DEFAULT_TRANSACTION_DEADLINE = 20 /* minutes */ * 60 /* seconds */ // seconds
+
+export const UNISWAP_PRICE_IMPACT_LOW = 100 // 1%
+export const UNISWAP_PRICE_IMPACT_MEDIUM = 300 // 3%
+export const UNISWAP_PRICE_IMPACT_HIGH = 500 // 5%
+// if the price slippage exceeds this number, force the user to type 'confirm' to execute
+export const UNISWAP_PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN = 1000 // 10%
+// for non expert mode disable swaps above this
+export const UNISWAP_PRICE_IMPACT_NON_EXPERT_BLOCKED = 1500 // 15%
