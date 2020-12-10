@@ -74,6 +74,13 @@ const useStyles = makeStyles((theme) => {
         title: {
             display: 'flex',
             alignItems: 'center',
+            whiteSpace: 'nowrap',
+        },
+        name: {
+            maxWidth: 200,
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
         },
         symbol: {
             fontSize: 12,
@@ -223,7 +230,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 title={
                     <div className={classes.headline}>
                         <Typography className={classes.title} variant="h6">
-                            <Linking href={first(coin.home_urls)} LinkProps={{ title: coin.name.toUpperCase() }}>
+                            <Linking
+                                href={first(coin.home_urls)}
+                                LinkProps={{ className: classes.name, title: coin.name.toUpperCase() }}>
                                 {coin.name.toUpperCase()}
                             </Linking>
                             <span className={classes.symbol}>({coin.symbol.toUpperCase()})</span>
