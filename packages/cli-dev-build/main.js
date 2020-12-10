@@ -29,7 +29,8 @@ async function main(mode) {
         if (!confirm) return
     }
 
-    let command = ['serve', '--mode', mode === 'dev' ? 'development' : 'production']
+    const command = ['--mode', mode === 'dev' ? 'development' : 'production']
+    if (mode === 'dev') command.unshift('serve')
     args.forEach((flag) => {
         command.push('--env', flag)
         if (!knownFlags.includes(flag)) throw new TypeError('Unknown flag ' + flag)
