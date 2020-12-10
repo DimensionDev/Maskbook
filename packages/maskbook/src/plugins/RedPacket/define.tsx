@@ -18,7 +18,7 @@ const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDia
             // DialogProps={props.DialogProps}
             open={props.open}
             onConfirm={props.onClose}
-            onDecline={props.onClose}
+            onClose={props.onClose}
         />
     ),
     async () => {
