@@ -27,7 +27,7 @@ For general introductions, see [Mask.io](https://mask.io/).
 
 ## Useful Links
 
-- [User Forum](https://github.com/DimensionDev/Maskbook-Talks)
+- [User Forum](https://github.com/DimensionDev/Maskbook/discussions)
 - [Report Bug](https://mask.io/links/?report-bug)
 - [Twitter](https://twitter.com/realMaskbook)
 - [Facebook](https://www.facebook.com/masknetwork)
