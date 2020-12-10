@@ -7,15 +7,13 @@ import {
     debugModeSetting,
     disableOpenNewTabInBackgroundSettings,
     languageSettings,
-    Language,
     allPostReplacementSettings,
     appearanceSettings,
-    Appearance,
     currentMaskbookChainIdSettings,
     enableGroupSharingSettings,
     launchPageSettings,
-    LaunchPage,
 } from '../../../settings/settings'
+import { Appearance, LaunchPage, Language } from '../../../settings/types'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'

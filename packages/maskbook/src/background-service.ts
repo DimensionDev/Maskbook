@@ -21,6 +21,7 @@ import * as post from './database/post'
 import { definedSocialNetworkWorkers } from './social-network/worker'
 import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
 import { Flags } from './utils/flags'
+import './utils/native-rpc/index'
 
 import('./plugins/PluginSerivce')
 
