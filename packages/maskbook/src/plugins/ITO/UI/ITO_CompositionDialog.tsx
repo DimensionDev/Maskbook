@@ -23,6 +23,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -86,8 +87,8 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
     //#endregion
 
     //#region pool settings
-    const [amount, setAmount] = useState('')
-    const [limit, setLimit] = useState('')
+    const [amount, setAmount] = useState('0')
+    const [allocationPerWallet, setAllocationPerWallet] = useState('1')
     const [message, setMessage] = useState('')
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
     const [exchangeAmounts, setExchangeAmounts] = useState<string[]>([])
@@ -120,7 +121,7 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
         endTime: new Date(),
         title: message,
         name: senderName,
-        limit,
+        limit: new BigNumber(allocationPerWallet).multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0)).toFixed(),
         total: amount,
         token,
         exchangeAmounts: [],
@@ -177,7 +178,7 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
             }
             if (fillSettings.token.type === EthereumTokenType.ERC20) payload.token = fillSettings.token
 
-            // output the redpacket as JSON payload
+            // output the packet as JSON payload
             props.onCreate?.(payload)
 
             // always reset amount
@@ -212,12 +213,11 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
     const validationMessage = useMemo(() => {
         if (!token) return t('plugin_wallet_select_a_token')
         if (!account) return t('plugin_wallet_connect_a_wallet')
-        if (new BigNumber(limit || '0').isZero()) return 'Enter limit'
         if (new BigNumber(amount).isZero()) return 'Enter an amount'
         if (new BigNumber(amount).isGreaterThan(new BigNumber(tokenBalance)))
             return `Insufficient ${token.symbol} balance`
         return ''
-    }, [account, amount, limit, token, tokenBalance])
+    }, [account, amount, token, tokenBalance])
 
     if (!token) return null
     return (
@@ -225,6 +225,23 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
             <InjectedDialog open={props.open} title="ITO Composition Dialog" onClose={props.onClose}>
                 <DialogContent>
                     <h1>Form</h1>
+
+                    <div className={classes.line}>
+                        <TokenAmountPanel
+                            classes={{ root: classes.input }}
+                            label="Sell Total Amount"
+                            amount={amount}
+                            balance={tokenBalance}
+                            token={token}
+                            onAmountChange={setAmount}
+                            SelectTokenChip={{
+                                loading: loadingTokenBalance,
+                                ChipProps: {
+                                    onClick: onTokenChipClick,
+                                },
+                            }}
+                        />
+                    </div>
 
                     {!account || !chainIdValid ? (
                         <ActionButton
@@ -252,7 +269,9 @@ export function ITO_CompositionDialog(props: ITO_CompositionDialogProps) {
                         </ActionButton>
                     ) : (
                         <ActionButton className={classes.button} fullWidth onClick={fillCallback}>
-                            {`Send ${formatBalance(new BigNumber(amount), token.decimals ?? 0)} ${token.symbol}`}
+                            {`Send ${formatBalance(new BigNumber(amount), token.decimals ?? 0, token.decimals ?? 0)} ${
+                                token.symbol
+                            }`}
                         </ActionButton>
                     )}
                 </DialogContent>
