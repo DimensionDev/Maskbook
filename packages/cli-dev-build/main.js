@@ -1,8 +1,8 @@
 const { spawn } = require('child_process')
 
-const preset = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base']
+const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base']
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'manifest-v3']
-const knownFlags = ['-h', '--help', ...preset, ...otherFlags]
+const knownFlags = ['-h', '--help', ...presets, ...otherFlags]
 /** @param {'dev' | 'build'} mode */
 async function main(mode) {
     let args = process.argv.slice(2)
@@ -13,7 +13,7 @@ async function main(mode) {
             type: 'list',
             name: 'preset',
             message: 'Choose preset',
-            choices: preset,
+            choices: presets,
         })
         const { flags } = await inquirer.prompt({
             type: 'checkbox',

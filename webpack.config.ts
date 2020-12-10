@@ -264,6 +264,8 @@ export default function (cli_env: Record<string, boolean> = {}, argv: { mode?: '
         if (env === 'development') modifiers.development(manifest)
         else modifiers.production(manifest)
 
+        if (target.runtimeEnv.manifest === 3) modifiers.manifestV3(manifest)
+
         return new ManifestPlugin({ config: { base: manifest } })
     }
     function getHotModuleReloadPlugin() {
