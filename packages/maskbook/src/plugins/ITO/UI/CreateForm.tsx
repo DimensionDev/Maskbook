@@ -184,7 +184,12 @@ export function CreateForm(props: CreateFormProps) {
                 />
             </Box>
             <Box className={classes.inputLine}>
-                <TextField className={classes.input} fullWidth label="Title" onChange={setMessage} />
+                <TextField
+                    className={classes.input}
+                    fullWidth
+                    label="Title"
+                    onChange={(ev) => setMessage(ev.target.value)}
+                />
             </Box>
             <Box className={classes.line} style={{ display: 'flex' }}>
                 <TextField
