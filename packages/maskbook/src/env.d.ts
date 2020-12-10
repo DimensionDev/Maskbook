@@ -18,6 +18,10 @@ declare module NodeJS {
          * It DOESN't means the app MUST run in this size.
          */
         readonly resolution: 'desktop' | 'mobile'
+        /**
+         * Which version of Web Extension manifest
+         */
+        readonly manifest: 2 | 3
 
         /**
          * Debug flags

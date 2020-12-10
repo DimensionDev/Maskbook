@@ -37,7 +37,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build:e2e
+        run: npm run build E2E
 
       - name: Setup E2E
         run: |
