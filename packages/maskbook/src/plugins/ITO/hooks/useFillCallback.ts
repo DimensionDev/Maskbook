@@ -9,22 +9,25 @@ import { EtherTokenDetailed, ERC20TokenDetailed, EthereumTokenType, TransactionE
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { gcd } from '../helpers'
+import { ITO_CONTRACT_BASE_DATE } from '../constants'
 
 export interface PoolSettings {
     password: string
     startTime: Date
     endTime: Date
+    title: string
+    name: string
     limit: string
     total: string
-    token: EtherTokenDetailed | ERC20TokenDetailed
     exchangeAmounts: string[]
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
+    token?: EtherTokenDetailed | ERC20TokenDetailed
 }
 
 export function useFillCallback(poolSettings: PoolSettings) {
     const account = useAccount()
-    const [fillState, setFillState] = useTransactionState()
     const ITO_Contract = useITO_Contract()
+    const [fillState, setFillState] = useTransactionState()
     const [fillSettings, setFillSettings] = useState<PoolSettings | null>(null)
 
     const fillCallback = useCallback(async () => {
@@ -37,8 +40,9 @@ export function useFillCallback(poolSettings: PoolSettings) {
             return
         }
 
-        const startTime_ = (startTime.getTime() % 1000) - 1606780800
-        const endTime_ = (endTime.getTime() % 1000) - 1606780800
+        // 1606780800 is the base timestamp
+        const startTime_ = startTime.getTime() - ITO_CONTRACT_BASE_DATE.getTime()
+        const endTime_ = endTime.getTime() - ITO_CONTRACT_BASE_DATE.getTime()
 
         // error: the start time before 1606780800
         if (startTime_ < 0) {

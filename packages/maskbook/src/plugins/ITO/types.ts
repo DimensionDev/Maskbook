@@ -1,7 +1,7 @@
-import type { EthereumNetwork, EthereumTokenType } from '../../web3/types'
-import type { ERC20TokenRecord } from '../Wallet/database/types'
+import type { ERC20TokenDetailed, EthereumNetwork, EthereumTokenType, EtherTokenDetailed } from '../../web3/types'
 
 export interface ITO_JSONPayload {
+    contract_address: string
     pid: string // pool id
     password: string
     limit: string
@@ -16,7 +16,7 @@ export interface ITO_JSONPayload {
     creation_time: number
     network: EthereumNetwork
     token_type: EthereumTokenType.Ether | EthereumTokenType.ERC20
-    token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
+    token?: EtherTokenDetailed | ERC20TokenDetailed
     exchange_amonuts: string[]
-    exchange_tokens: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>[]
+    exchange_tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
 }

@@ -132,11 +132,10 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#endregion
 
     //#region approve ERC20
-    const HappyRedPacketContractAddress = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
         token?.type === EthereumTokenType.ERC20 ? token.address : '',
         amount,
-        HappyRedPacketContractAddress,
+        HAPPY_RED_PACKET_ADDRESS,
     )
     const onApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
@@ -313,6 +312,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     defaultValue={t('plugin_red_packet_best_wishes')}
                 />
             </div>
+
             {!account || !chainIdValid ? (
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" onClick={onConnect}>
                     {t('plugin_wallet_connect_a_wallet')}
