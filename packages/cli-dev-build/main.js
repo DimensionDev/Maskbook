@@ -1,6 +1,6 @@
 const { spawn } = require('child_process')
 
-const preset = ['chromium', 'E2E', 'firefox', 'android', 'iOS']
+const preset = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base']
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'manifest-v3']
 const knownFlags = ['-h', '--help', ...preset, ...otherFlags]
 /** @param {'dev' | 'build'} mode */
@@ -32,7 +32,7 @@ async function main(mode) {
     let command = mode === 'dev' ? 'serve --mode development' : '--mode production'
     args.forEach((flag) => {
         command += ' --env ' + flag
-        if (!knownFlags.includes(flag)) throw new TypeError('Unknown flag' + flag)
+        if (!knownFlags.includes(flag)) throw new TypeError('Unknown flag ' + flag)
     })
     spawn('webpack', command.split(' '), { stdio: 'inherit', shell: true })
 }

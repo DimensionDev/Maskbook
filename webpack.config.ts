@@ -296,12 +296,10 @@ function getCompilationInfo(argv: any) {
     else if (argv.firefox) {
         preset = 'firefox'
         isReproducibleBuild = true
-    }
-    else if (argv.android) {
+    } else if (argv.android) {
         preset = 'android'
         webExtensionFirefoxLaunchVariant = 'firefox-android'
-    }
-    else if (argv.iOS) preset = 'iOS'
+    } else if (argv.iOS) preset = 'iOS'
     else if (argv.E2E) preset = 'e2e'
     else preset = 'chromium'
     //#endregion
