@@ -46,5 +46,5 @@ addParameters({
 })
 import { withI18n } from 'storybook-addon-i18n'
 import { ThemeProvider } from '@material-ui/core'
-import { Appearance } from '../packages/maskbook/src/settings/settings'
+import { Appearance } from '../packages/maskbook/src/settings/types'
 addDecorator(withI18n)
