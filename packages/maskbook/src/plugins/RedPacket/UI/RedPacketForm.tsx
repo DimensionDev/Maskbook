@@ -74,7 +74,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const HAPPY_RED_PACKET_ADDRESS = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
-    const { onCreate } = props
 
     // context
     const account = useAccount()
@@ -212,7 +211,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 }
 
             // output the redpacket as JSON payload
-            onCreate?.(payload)
+            props.onCreate?.(payload)
 
             // always reset amount
             setAmount('0')
@@ -334,7 +333,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 </ActionButton>
             ) : (
                 <ActionButton className={classes.button} fullWidth onClick={createCallback}>
-                    {`Send ${formatBalance(totalAmount, token.decimals ?? 0, token.decimals ?? 0)} ${token.symbol}`}
+                    {`Send ${formatBalance(totalAmount, token.decimals ?? 0)} ${token.symbol}`}
                 </ActionButton>
             )}
 
