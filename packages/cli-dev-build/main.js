@@ -29,11 +29,11 @@ async function main(mode) {
         if (!confirm) return
     }
 
-    let command = mode === 'dev' ? 'serve --mode development' : '--mode production'
+    let command = ['serve', '--mode', mode === 'dev' ? 'development' : 'production']
     args.forEach((flag) => {
-        command += ' --env ' + flag
+        command.push('--env', flag)
         if (!knownFlags.includes(flag)) throw new TypeError('Unknown flag ' + flag)
     })
-    spawn('webpack', command.split(' '), { stdio: 'inherit', shell: true })
+    spawn('webpack', command, { stdio: 'inherit', shell: true })
 }
 module.exports = main
