@@ -39,7 +39,8 @@ export default function (cli_env: Record<string, boolean> = {}, argv: { mode?: '
     const env: 'production' | 'development' = argv.mode ?? 'production'
     const dist = env === 'production' ? src('./build') : src('./dist')
 
-    const enableHMR = env === 'development' && !Boolean(process.env.NO_HMR)
+    const isManifestV3 = target.runtimeEnv.manifest === 3
+    const enableHMR = env === 'development' && !Boolean(process.env.NO_HMR) && !isManifestV3
 
     /** On iOS, eval is async. */
     const sourceMapKind: Configuration['devtool'] = target.iOS ? false : 'eval-source-map'
@@ -150,25 +151,26 @@ export default function (cli_env: Record<string, boolean> = {}, argv: { mode?: '
         popup: withReactDevTools(src('./packages/maskbook/src/extension/popup-page/index.tsx')),
         debug: src('./packages/maskbook/src/extension/debug-page'),
     }
+    if (isManifestV3) delete config.entry['background-script']
     for (const entry in config.entry) {
         config.entry[entry] = iOSWebExtensionShimHack(...toArray(config.entry[entry]))
     }
     config.plugins!.push(
         // @ts-ignore
         getHTMLPlugin({ chunks: ['options-page'], filename: 'index.html' }),
-        getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }),
+        isManifestV3 ? undefined : getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }),
         getHTMLPlugin({ chunks: ['popup'], filename: 'popup.html' }),
         getHTMLPlugin({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
         getHTMLPlugin({ chunks: ['debug'], filename: 'debug.html' }),
     ) // generate pages for each entry
+    config.plugins = config.plugins.filter(Boolean)
     //#endregion
 
     if (target.isProfile) config.plugins!.push(new BundleAnalyzerPlugin())
-    return [
-        config,
-        {
-            name: 'injected-script',
-            entry: { 'injected-script': src('./packages/maskbook/src/extension/injected-script/index.ts') },
+    function getChildConfig(name: string, entry: string, modifier?: (x: Configuration) => void): Configuration {
+        const c: Configuration = {
+            name,
+            entry: { [name]: entry },
             devtool: false,
             output: config.output,
             module: { rules: [getTypeScriptLoader(false)] },
@@ -179,13 +181,31 @@ export default function (cli_env: Record<string, boolean> = {}, argv: { mode?: '
                 hot: false,
                 injectClient: false,
                 injectHot: false,
-                port: 35938,
+                port: 35938 + ~~(Math.random() * 1000),
                 overlay: false,
             },
             optimization: { splitChunks: false, minimize: false },
             plugins: [ProcessEnvPlugin, env === 'production' && new CleanWebpackPlugin({})].filter(Boolean),
-        } as Configuration,
-    ]
+        }
+        if (modifier) modifier(c)
+        return c
+    }
+    return [
+        config,
+        getChildConfig('injected-script', src('./packages/maskbook/src/extension/injected-script/index.ts')),
+        isManifestV3 &&
+            getChildConfig('background-worker', src('./packages/maskbook/src/background-worker.ts'), (x) => {
+                x.target = 'webworker'
+                x.output = {
+                    futureEmitAssets: true,
+                    path: dist,
+                    // ? Service workers must registered at the / root
+                    filename: 'manifest-v3.entry.js',
+                    chunkFilename: 'js/[name]-worker.chunk.js',
+                    globalObject: 'globalThis',
+                }
+            }),
+    ].filter(Boolean)
 
     function withReactDevTools(...src: string[]) {
         // ! Use Firefox Nightly or enable network.websocket.allowInsecureFromHTTPS in about:config, then remove this line (but don't commit)
@@ -264,7 +284,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: { mode?: '
         if (env === 'development') modifiers.development(manifest)
         else modifiers.production(manifest)
 
-        if (target.runtimeEnv.manifest === 3) modifiers.manifestV3(manifest)
+        if (isManifestV3) modifiers.manifestV3(manifest)
 
         return new ManifestPlugin({ config: { base: manifest } })
     }
