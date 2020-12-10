@@ -32,15 +32,6 @@ async function writeMessages(name: string, messages: unknown) {
 
 function getUsedKeys(content: string) {
     const keys = new Set<string>()
-    const closest = <T extends ts.Node>(node: ts.Node, match: (node: ts.Node) => node is T): T | undefined => {
-        while (node) {
-            if (match(node)) {
-                return node
-            }
-            node = node.parent
-        }
-        return undefined
-    }
     const transformer = (context: ts.TransformationContext) => (rootNode: ts.Node) => {
         const setFromVariableWrapper = (variableValue: string): ((node: ts.Node) => ts.Node) => {
             const setFromVariable = (node: ts.Node): ts.Node => {
@@ -80,7 +71,7 @@ function getUsedKeys(content: string) {
         }
         const visit: ts.Visitor = (node) => {
             if (ts.isIdentifier(node) && node.text === 't') {
-                const expression = closest(node, ts.isCallExpression)
+                const expression = ts.findAncestor(node, ts.isCallExpression)
                 if (!checkCallExpression(expression?.expression)) {
                     return node
                 }
