@@ -69,7 +69,6 @@ export function TradeSummary(props: TradeSummaryProps) {
     const [priceReversed, setPriceReversed] = useState(false)
 
     const { strategy, inputAmount, outputAmount, maximumSold, minimumReceived, priceImpactWithoutFee, fee } = trade
-
     const isExactIn = strategy === TradeStrategy.ExactIn
 
     const records: SummaryRecord[] = [
@@ -88,7 +87,8 @@ export function TradeSummary(props: TradeSummaryProps) {
                                                   (inputToken.decimals ?? 0) - (outputToken.decimals ?? 0),
                                               ),
                                           )
-                                          .multipliedBy(new BigNumber(10).pow(outputToken.decimals ?? 0)),
+                                          .multipliedBy(new BigNumber(10).pow(outputToken.decimals ?? 0))
+                                          .integerValue(),
                                       outputToken.decimals ?? 0,
                                       6,
                                   )}{' '}
@@ -106,7 +106,8 @@ export function TradeSummary(props: TradeSummaryProps) {
                                                   (outputToken.decimals ?? 0) - (inputToken.decimals ?? 0),
                                               ),
                                           )
-                                          .multipliedBy(new BigNumber(10).pow(inputToken.decimals ?? 0)),
+                                          .multipliedBy(new BigNumber(10).pow(inputToken.decimals ?? 0))
+                                          .integerValue(),
                                       inputToken.decimals ?? 0,
                                       6,
                                   )}{' '}
