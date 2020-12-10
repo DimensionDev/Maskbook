@@ -6,6 +6,6 @@ import type { Ito as ITO } from '../../../contracts/ito/ito'
 import ITO_ABI from '../../../contracts/ito/ito.json'
 
 export function useITO_Contract() {
-    const address = useConstant(ITO_CONSTANTS, 'ITO_ADDRESS')
+    const address = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
     return useContract<ITO>(address, ITO_ABI as AbiItem[])
 }

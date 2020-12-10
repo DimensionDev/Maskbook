@@ -32,6 +32,10 @@
         }
     },
     "properties": {
+        "contract_address": {
+            "type": "string",
+            "title": "contract_address"
+        },
         "pid": {
             "type": "string",
             "title": "pid"
@@ -122,6 +126,7 @@
         }
     },
     "required": [
+        "contract_address",
         "pid",
         "password",
         "limit",

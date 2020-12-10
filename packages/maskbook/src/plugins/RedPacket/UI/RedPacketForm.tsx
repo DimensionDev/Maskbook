@@ -314,6 +314,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     defaultValue={t('plugin_red_packet_best_wishes')}
                 />
             </div>
+
             {!account || !chainIdValid ? (
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" onClick={onConnect}>
                     {t('plugin_wallet_connect_a_wallet')}
