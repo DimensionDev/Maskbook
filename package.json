@@ -144,7 +144,7 @@
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "@dimensiondev/maskbook-cli-dev-or-build": "^",
+    "@dimensiondev/maskbook-cli-dev-or-build": "*",
     "@dimensiondev/webextension-shim": "0.0.3-20201103060201-1bd22b9",
     "@dimensiondev/webpack-web-ext-plugin": "=0.0.3-20200731084410-7de6117",
     "@magic-works/commonjs-import.meta": "^1.0.0",
