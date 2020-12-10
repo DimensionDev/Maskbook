@@ -7,7 +7,7 @@ if (typeof File !== 'undefined' && !File.prototype.arrayBuffer) {
     })
 }
 
-function toArrayBuffer(this: File) {
+export function toArrayBuffer(this: File | Blob) {
     return new Promise<ArrayBuffer>((resolve, reject) => {
         const reader = new FileReader()
         reader.addEventListener('abort', reject)
