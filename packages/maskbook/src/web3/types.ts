@@ -100,6 +100,7 @@ export enum EthereumNetwork {
     Ropsten = 'Ropsten',
     Rinkeby = 'Rinkeby',
     Kovan = 'Kovan',
+    Gorli = 'Gorli',
 }
 
 export enum EthereumTokenType {

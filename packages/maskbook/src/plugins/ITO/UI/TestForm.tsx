@@ -12,6 +12,8 @@ import { useERC20TokenDetailed } from '../../../web3/hooks/useERC20TokenDetailed
 import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
+import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
+import { CONSTANTS } from '../../../web3/constants'
 
 export interface TestFormProps {
     onCreate?: (payload: ITO_JSONPayload) => void
@@ -21,6 +23,7 @@ export function TestForm(props: TestFormProps) {
     const account = useAccount()
     const chainId = useChainId()
 
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
 
     const { value: MaskbookA } = useERC20TokenDetailed('0x960B816d6dD03eD514c03F56788279154348Ea37')
@@ -62,6 +65,46 @@ export function TestForm(props: TestFormProps) {
     }, [])
     //#endregion
 
+    //#region compose JSON payload
+    const payload = useMemo(() => {
+        if (!fillSettings?.token) return
+        if (fillState.type !== TransactionStateType.CONFIRMED) return
+        const { receipt } = fillState
+        const FillSuccess = (receipt.events?.FillSuccess.returnValues ?? {}) as {
+            total: string
+            id: string
+            creator: string
+            creation_time: string
+            token_address: string
+            name: string
+            message: string
+        }
+        return {
+            contract_address: ITO_CONTRACT_ADDRESS,
+            creation_time: Number.parseInt(FillSuccess.creation_time, 10) * 1000,
+            total: FillSuccess.total,
+            pid: FillSuccess.id,
+            sender: {
+                address: FillSuccess.creator,
+                name: FillSuccess.name,
+                message: FillSuccess.message,
+            },
+            chainId,
+            token: fillSettings.token,
+            limit: fillSettings.limit,
+            password: fillSettings.password,
+            start_time: fillSettings.startTime.getTime(),
+            end_time: fillSettings.endTime.getTime(),
+            exchange_tokens: fillSettings.exchangeTokens,
+            exchange_amounts: fillSettings.exchangeAmounts,
+        } as ITO_JSONPayload
+    }, [fillState /* update payload only if state changed */])
+    const onCompose = useCallback(() => {
+        if (!payload) return
+        props.onCreate?.(payload)
+    }, [payload])
+    //#endregion
+
     return (
         <div>
             <Accordion elevation={0}>
@@ -82,6 +125,16 @@ export function TestForm(props: TestFormProps) {
                 </AccordionDetails>
             </Accordion>
             <Accordion elevation={0}>
+                <AccordionSummary>
+                    <Typography>Payload</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <AccordionDetails>
+                        <pre>{JSON.stringify(payload, null, 2)}</pre>
+                    </AccordionDetails>
+                </AccordionDetails>
+            </Accordion>
+            <Accordion>
                 <AccordionSummary>
                     <Typography>Status</Typography>
                 </AccordionSummary>
@@ -108,7 +161,8 @@ export function TestForm(props: TestFormProps) {
                 </AccordionDetails>
             </Accordion>
 
-            <ActionButton onClick={onCreate}>Create</ActionButton>
+            <ActionButton onClick={onCreate}>Mine</ActionButton>
+            <ActionButton onClick={onCompose}>Compose</ActionButton>
             <ActionButton onClick={onReset}>Reset</ActionButton>
         </div>
     )
