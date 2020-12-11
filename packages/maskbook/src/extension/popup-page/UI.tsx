@@ -1,7 +1,7 @@
 import '../../social-network-provider/popup-page/index'
 import '../../setup.ui'
 
-import { useCallback, memo } from 'react'
+import { useCallback } from 'react'
 import { noop } from 'lodash-es'
 import { ThemeProvider, makeStyles, Theme, withStyles } from '@material-ui/core/styles'
 import { Button, Paper, Divider, Typography, Box } from '@material-ui/core'
@@ -103,16 +103,16 @@ function PopupUI() {
         window.close()
     }, [setSelectProviderDailogOpen])
 
-    const Trademark = memo(() => {
+    const Trademark = () => {
         if (ui.networkIdentifier !== 'localhost') {
             return null
         }
         const src =
             process.env.NODE_ENV === 'development' || process.env.build === 'insider'
-                ? getUrl('MB--ComboCircle--Blue.svg')
-                : getUrl('MB--ComboCircle--Nightly.svg')
+                ? getUrl('MB--ComboCircle--Nightly.svg')
+                : getUrl('MB--ComboCircle--Blue.svg')
         return <img className={classes.logo} src={src} />
-    })
+    }
 
     return (
         <Paper className={classes.container}>

@@ -1,8 +1,8 @@
 export default function Logo() {
     return process.env.NODE_ENV === 'development' || process.env.build === 'insider' ? (
-        <MaskbookLogo />
-    ) : (
         <MaskbookNightlyLogo />
+    ) : (
+        <MaskbookLogo />
     )
 }
 
