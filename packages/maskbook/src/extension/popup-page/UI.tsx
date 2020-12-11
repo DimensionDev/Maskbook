@@ -108,7 +108,7 @@ function PopupUI() {
             return null
         }
         const src =
-            process.env.NODE_ENV === 'production'
+            process.env.NODE_ENV === 'development' || process.env.build === 'insider'
                 ? getUrl('MB--ComboCircle--Blue.svg')
                 : getUrl('MB--ComboCircle--Nightly.svg')
         return <img className={classes.logo} src={src} />
