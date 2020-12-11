@@ -10,7 +10,7 @@ import { COTM_CompositionDialog as COTM_CompositionDialog } from './UI/Compositi
 import { Flags } from '../../utils/flags'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 
-const [COTM_CompositionEntry, COTM_CompositionUI] = createCompositionDialog('👽 #CreativityOnTheMove', (props) => (
+const [COTM_CompositionEntry, COTM_CompositionUI] = createCompositionDialog('🇳🇱 #CreativityOnTheMove', (props) => (
     <COTM_CompositionDialog {...props} />
 ))
 
