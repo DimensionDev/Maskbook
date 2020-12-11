@@ -127,7 +127,7 @@ export default function Drawer(props: DrawerProps) {
     const forSetupPurpose = match?.url.includes('/setup')
     const xsMatched = useMatchXS()
 
-    const { routers, exitDashboard } = props
+    const { routers } = props
     const [feedback, openFeedback] = useModal(DashboardFeedbackDialog)
 
     const onDebugPage = (event: React.MouseEvent) => {
