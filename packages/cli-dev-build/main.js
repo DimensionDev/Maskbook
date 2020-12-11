@@ -1,4 +1,4 @@
-const { exec } = require('child_process')
+const { execFileSync } = require('child_process')
 const inquirer = require('inquirer')
 
 const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base']
@@ -36,7 +36,7 @@ async function main(mode) {
         command.push('--env', flag)
         if (!knownFlags.includes(flag)) throw new TypeError('Unknown flag ' + flag)
     })
-    return exec('webpack', command, { stdio: 'inherit', shell: true })
+    return execFileSync('webpack', command, { stdio: 'inherit', shell: true })
 }
 
 module.exports = main
