@@ -16,9 +16,15 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2-beta
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - run: sudo npm install --global npm@7
       - run: npm ci
-      - run: npx build insider
+      - run: npx webpack --mode production --env insider
       - run: zip -FS -r ../Maskbook.nightly.zip .
         working-directory: build
       - uses: DimensionDev/browser-extension-action@latest
