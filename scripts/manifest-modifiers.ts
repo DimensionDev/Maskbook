@@ -60,6 +60,7 @@ export function development(manifest: Manifest) {
         'TDEYcqr0OMZvVrKz7IkJasER1uJyoGj4gFJeXNGE8y4Sqb150wBju70l' +
         'KNKlNevWDRJKasG9CjagAD2+BAfqNyltn7KwK7jAyL1w6d6mOwIDAQAB'
 }
+export function production(manifest: Manifest) {}
 export function E2E(manifest: Manifest) {
     development(manifest)
     // can not capture permission dialog in pptr
@@ -68,4 +69,9 @@ export function E2E(manifest: Manifest) {
     )
     manifest.optional_permissions = []
 }
-export function production(manifest: Manifest) {}
+export function beta(manifest: Manifest) {
+    manifest.name += ' (Beta)'
+}
+export function nightly(manifest: Manifest) {
+    manifest.name += ' (Nightly)'
+}

@@ -286,6 +286,9 @@ export default function (cli_env: Record<string, boolean> = {}, argv: { mode?: '
 
         if (isManifestV3) modifiers.manifestV3(manifest)
 
+        if (target.runtimeEnv.build === 'beta') modifiers.beta(manifest)
+        else if (target.runtimeEnv.build === 'insider') modifiers.nightly(manifest)
+
         return new ManifestPlugin({ config: { base: manifest } })
     }
     function getHotModuleReloadPlugin() {
