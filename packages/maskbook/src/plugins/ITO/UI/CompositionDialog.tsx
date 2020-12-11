@@ -6,8 +6,8 @@ import type { ITO_JSONPayload } from '../types'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
-import { CreateForm } from './CreateForm'
 import { editActivatedPostMetadata } from '../../../social-network/ui'
+import { TestForm } from './TestForm'
 
 const useStyles = makeStyles((theme) => createStyles({}))
 
@@ -35,10 +35,15 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: 'Create New',
-                children: <CreateForm onCreate={onCreateOrSelect} />,
+                label: 'Test',
+                children: <TestForm onCreate={onCreateOrSelect} />,
                 sx: { p: 0 },
             },
+            // {
+            //     label: 'Create New',
+            //     children: <CreateForm onCreate={onCreateOrSelect} />,
+            //     sx: { p: 0 },
+            // },
             {
                 label: 'Select Existing',
                 children: <Typography>abc2</Typography>,

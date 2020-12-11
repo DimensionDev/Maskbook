@@ -1,6 +1,6 @@
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { createStyles, DialogContent, makeStyles, Typography, Grid, Paper } from '@material-ui/core'
-import type { ITOSettings } from '../hooks/useCreateCallback'
+import type { PoolSettings } from '../hooks/useFillCallback'
 import BigNumber from 'bignumber.js'
 import { formatBalance } from '../../Wallet/formatter'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) =>
         data: {
             padding: theme.spacing(2),
             textAlign: 'right',
-            color: theme.palette.text.first,
+            color: theme.palette.text.primary,
         },
         label: {
             padding: theme.spacing(2),
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 export interface ConfirmDialogProps {
-    itoSettings: ITOSettings
+    itoSettings: PoolSettings
     open: boolean
     onDecline: () => void
     onSubmit: () => void
@@ -73,14 +73,14 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     <Grid item xs={6}>
                         <Paper className={classes.data}>
                             {formatBalance(
-                                new BigNumber(itoSettings.amount),
+                                new BigNumber(itoSettings.total),
                                 itoSettings.token?.decimals ?? 0,
                                 itoSettings.token?.decimals ?? 0,
                             )}
                         </Paper>
                     </Grid>
 
-                    {itoSettings.exchanges
+                    {itoSettings.exchangeTokens
                         .filter((item, index) => item)
                         .map((item, index) => {
                             return (
@@ -93,7 +93,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                                     <Grid item xs={6}>
                                         <Paper className={classes.data}>
                                             {formatBalance(
-                                                new BigNumber(itoSettings.rations?.[index]),
+                                                new BigNumber(itoSettings.exchangeAmounts?.[index]),
                                                 item?.decimals ?? 0,
                                                 item?.decimals ?? 0,
                                             )}
@@ -114,7 +114,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Paper className={classes.label}>Begin Times</Paper>
                     </Grid>
                     <Grid item xs={6}>
-                        <Paper className={classes.data}>{new Date(itoSettings.beginTime).toLocaleString()}</Paper>
+                        <Paper className={classes.data}>{new Date(itoSettings.startTime).toLocaleString()}</Paper>
                     </Grid>
 
                     <Grid item xs={6}>
@@ -131,7 +131,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     <Grid item xs={12}>
                         <ActionButton className={classes.button} fullWidth variant="contained" onClick={onSubmit}>
                             {` Send ${formatBalance(
-                                new BigNumber(itoSettings.amount),
+                                new BigNumber(itoSettings.total),
                                 itoSettings.token?.decimals ?? 0,
                                 itoSettings.token?.decimals ?? 0,
                             )} ${itoSettings.token?.symbol} `}
