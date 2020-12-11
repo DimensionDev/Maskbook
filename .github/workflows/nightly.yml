@@ -13,8 +13,6 @@ jobs:
       APP_ID: ''
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2-beta
       - uses: actions/cache@v2
         with:
@@ -27,12 +25,12 @@ jobs:
       - run: npx webpack --mode production --env insider
       - run: zip -FS -r ../Maskbook.nightly.zip .
         working-directory: build
-      - uses: DimensionDev/browser-extension-action@latest
-        with:
-            publish: true
-            app-id: ${{ env.APP_ID }}
-            refresh-token: ${{ secrets.REFRESH_TOKEN }}
-            client-id: ${{ secrets.CLIENT_ID }}
-            client-secret: ${{ secrets.CLIENT_SECRET }}
-            file-name: 'Maskbook.nightly.zip'
+      # - uses: DimensionDev/browser-extension-action@latest
+      #   with:
+      #       publish: true
+      #       app-id: ${{ env.APP_ID }}
+      #       refresh-token: ${{ secrets.REFRESH_TOKEN }}
+      #       client-id: ${{ secrets.CLIENT_ID }}
+      #       client-secret: ${{ secrets.CLIENT_SECRET }}
+      #       file-name: 'Maskbook.nightly.zip'
 
