@@ -58,7 +58,7 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                         </TableCell>
                         <TableCell className={classes.head} align="center">
                             <Typography color="textSecondary" variant="body2">
-                                Volumn (24h)
+                                Volume (24h)
                             </Typography>
                         </TableCell>
                         <TableCell className={classes.head} align="center">
