@@ -9,7 +9,7 @@ import { RedPacketForm } from './RedPacketForm'
 import { RedPacketBacklogList } from './RedPacketList'
 import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { PluginRedPacketRPC } from '../messages'
+import { RedPacketRPC } from '../messages'
 
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean
@@ -28,7 +28,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             )
             onConfirm(payload)
             // storing the created red packet in DB, it helps retrieve red packet password later
-            PluginRedPacketRPC.discoverRedPacket('', payload)
+            RedPacketRPC.discoverRedPacket('', payload)
         },
         [onConfirm],
     )
