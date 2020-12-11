@@ -31,7 +31,18 @@ export function useFillCallback(poolSettings: PoolSettings) {
     const [fillSettings, setFillSettings] = useState<PoolSettings | null>(null)
 
     const fillCallback = useCallback(async () => {
-        const { password, startTime, endTime, token, total, limit, exchangeAmounts, exchangeTokens } = poolSettings
+        const {
+            password,
+            startTime,
+            endTime,
+            name,
+            title,
+            token,
+            total,
+            limit,
+            exchangeAmounts,
+            exchangeTokens,
+        } = poolSettings
 
         if (!token || !ITO_Contract) {
             setFillState({
@@ -40,8 +51,9 @@ export function useFillCallback(poolSettings: PoolSettings) {
             return
         }
 
-        const startTime_ = startTime.getTime() - ITO_CONTRACT_BASE_DATE.getTime()
-        const endTime_ = endTime.getTime() - ITO_CONTRACT_BASE_DATE.getTime()
+        const startTime_ = Math.floor((startTime.getTime() - ITO_CONTRACT_BASE_DATE.getTime()) / 1000)
+        const endTime_ = Math.floor((endTime.getTime() - ITO_CONTRACT_BASE_DATE.getTime()) / 1000)
+        const now_ = Math.floor((Date.now() - ITO_CONTRACT_BASE_DATE.getTime()) / 1000)
 
         // error: the start time before 1606780800
         if (startTime_ < 0) {
@@ -71,7 +83,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
         }
 
         // error: the end time before now
-        if (endTime_ <= Date.now() % 1000) {
+        if (endTime_ <= now_) {
             setFillState({
                 type: TransactionStateType.FAILED,
                 error: new Error('The end date should be a future date.'),
@@ -80,7 +92,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
         }
 
         // error: limit greater than the total supply
-        if (new BigNumber(limit).isLessThan(total)) {
+        if (new BigNumber(limit).isGreaterThan(total)) {
             setFillState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Limits should less than the total supply.'),
@@ -110,7 +122,10 @@ export function useFillCallback(poolSettings: PoolSettings) {
         }
         const params: Parameters<typeof ITO_Contract['methods']['fill_pool']> = [
             Web3Utils.sha3(password)!,
-            endTime.getTime() - startTime.getTime(),
+            startTime_,
+            endTime_,
+            name,
+            title,
             exchangeTokens.map((x) => x.address),
             exchangeAmounts
                 .flatMap((x) => {
