@@ -1,4 +1,4 @@
-import type { ERC20TokenDetailed, EthereumNetwork, EthereumTokenType, EtherTokenDetailed } from '../../web3/types'
+import type { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
 
 export interface ITO_JSONPayload {
     contract_address: string
@@ -12,11 +12,10 @@ export interface ITO_JSONPayload {
         message: string
     }
     start_time: number
+    chainId: ChainId
     end_time: number
     creation_time: number
-    network: EthereumNetwork
-    token_type: EthereumTokenType.Ether | EthereumTokenType.ERC20
-    token?: EtherTokenDetailed | ERC20TokenDetailed
-    exchange_amonuts: string[]
+    token: EtherTokenDetailed | ERC20TokenDetailed
+    exchange_amounts: string[]
     exchange_tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
 }

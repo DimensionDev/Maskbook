@@ -2,10 +2,20 @@
     "type": "object",
     "additionalProperties": true,
     "definitions": {
-        "erc20_token": {
+        "token": {
             "type": "object",
             "additionalProperties": true,
             "properties": {
+                "type": {
+                    "enum": [0, 1],
+                    "type": "number",
+                    "title": "type"
+                },
+                "chainId": {
+                    "enum": [1, 3, 4, 5, 42],
+                    "type": "number",
+                    "title": "chainId"
+                },
                 "address": {
                     "description": "token address",
                     "type": "string",
@@ -45,12 +55,17 @@
             "title": "password"
         },
         "limit": {
-            "type": "number",
+            "type": "string",
             "title": "limit"
         },
         "total": {
             "type": "string",
             "title": "total"
+        },
+        "chainId": {
+            "enum": [1, 3, 4, 5, 42],
+            "type": "number",
+            "title": "chainId"
         },
         "sender": {
             "type": "object",
@@ -84,18 +99,8 @@
             "type": "number",
             "title": "creation_time"
         },
-        "network": {
-            "enum": ["Mainnet", "Rinkeby", "Ropsten"],
-            "type": "string",
-            "title": "network"
-        },
-        "token_type": {
-            "enum": [0, 1, 2],
-            "type": "number",
-            "title": "token_type"
-        },
         "token": {
-            "$ref": "#/definitions/erc20_token"
+            "$ref": "#/definitions/token"
         },
         "exchange_amounts": {
             "type": "array",
@@ -119,7 +124,7 @@
             "items": {
                 "anyOf": [
                     {
-                        "$ref": "#/definitions/erc20_token"
+                        "$ref": "#/definitions/token"
                     }
                 ]
             }
@@ -127,15 +132,16 @@
     },
     "required": [
         "contract_address",
-        "pid",
-        "password",
-        "limit",
-        "total",
-        "sender",
         "creation_time",
-        "duration",
-        "network",
-        "token_type",
+        "total",
+        "pid",
+        "sender",
+        "chainId",
+        "token",
+        "limit",
+        "password",
+        "start_time",
+        "end_time",
         "exchange_amounts",
         "exchange_tokens"
     ]
