@@ -142,6 +142,8 @@ export const BASE_AGAINST_TOKENS: {
     [ChainId.Rinkeby]: [...WETH_ONLY[ChainId.Rinkeby], ...[MSKA, MSKB, MSKC]],
 }
 
+export const THEGRAPH_UNISWAP_V2 = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2'
+
 export const UNISWAP_BIPS_BASE = JSBI.BigInt(10000)
 export const UNISWAP_ONE_BIPS = new Percent(JSBI.BigInt(1), UNISWAP_BIPS_BASE)
 

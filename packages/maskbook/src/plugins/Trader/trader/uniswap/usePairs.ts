@@ -1,14 +1,8 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { Pair as UniswapPair, Token as UniswapToken, Pair, TokenAmount } from '@uniswap/sdk'
-import { usePairContract } from '../../contracts/uniswap/usePairContract'
-import { useConstant } from '../../../../web3/hooks/useConstant'
+import { Pair, Pair as UniswapPair, Token as UniswapToken, TokenAmount } from '@uniswap/sdk'
 import { useBlockNumber, useChainId } from '../../../../web3/hooks/useChainState'
-import { CONSTANTS } from '../../../../web3/constants'
-
-function resolvePairResult<T>(result: PromiseSettledResult<T>, fallback: T) {
-    return result.status === 'fulfilled' ? result.value : fallback
-}
+import { PluginTraderRPC } from '../../messages'
 
 export enum PairState {
     NOT_EXISTS,
@@ -19,7 +13,7 @@ export enum PairState {
 export type TokenPair = [UniswapToken, UniswapToken]
 
 export function useUniswapPairs(tokens: readonly TokenPair[]) {
-    const pairAddresses = useMemo(
+    const listOfPairAddress = useMemo(
         () =>
             tokens.map(([tokenA, tokenB]) =>
                 tokenA && tokenB && !tokenA.equals(tokenB) ? UniswapPair.getAddress(tokenA, tokenB) : undefined,
@@ -27,36 +21,24 @@ export function useUniswapPairs(tokens: readonly TokenPair[]) {
         [tokens],
     )
 
-    // this initial address is fake we use the real address in the call() method
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-    const pairContract = usePairContract(ETH_ADDRESS)
-
     // auto refresh pair reserves for each block
     const chainId = useChainId()
     const blockNumber = useBlockNumber(chainId)
 
     // get reserves for each pair
-    const { value: results = [], ...asyncResult } = useAsyncRetry(async () => {
-        if (!pairContract) return []
-        return Promise.allSettled(
-            pairAddresses.map((address) =>
-                pairContract.methods.getReserves().call({
-                    // the real contract address
-                    to: address,
-                }),
-            ),
-        )
-    }, [pairAddresses.join(), pairContract, blockNumber])
+    const { value: results = [], ...asyncResults } = useAsyncRetry(async () => {
+        const listOfAddress = listOfPairAddress.filter(Boolean) as string[]
+        if (!listOfAddress.length) return []
+        return PluginTraderRPC.queryPairs(listOfAddress)
+    }, [[...new Set(listOfPairAddress).values()].join(), blockNumber])
 
     const pairs = useMemo(() => {
-        if (tokens.length !== results.length) return []
-        return results.map((x, i) => {
+        return listOfPairAddress.map((address, i) => {
             const tokenA = tokens[i][0]
             const tokenB = tokens[i][1]
-            const reserves = resolvePairResult(x, undefined)
             if (!tokenA || !tokenB || tokenA.equals(tokenB)) return [PairState.INVALID, null]
-            if (!reserves) return [PairState.NOT_EXISTS, null]
-            const { 0: reserve0, 1: reserve1 } = reserves
+            const { reserve0, reserve1 } = results.find((x) => x.id.toLowerCase() === address?.toLowerCase()) ?? {}
+            if (!reserve0 || !reserve1) return [PairState.NOT_EXISTS, null]
             const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
             return [
                 PairState.EXISTS,
@@ -66,7 +48,7 @@ export function useUniswapPairs(tokens: readonly TokenPair[]) {
     }, [results, tokens])
 
     return {
-        ...asyncResult,
+        ...asyncResults,
         value: pairs,
     }
 }
