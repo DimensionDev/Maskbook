@@ -1,0 +1,32 @@
+name: Nightly
+
+on:
+  push:
+    branches: [nightly]
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  nightly:
+    runs-on: ubuntu-20.04
+    env:
+      APP_ID: ''
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v2-beta
+      - run: sudo npm install --global npm@7
+      - run: npm ci
+      - run: npx build insider
+      - run: zip -FS -r ../Maskbook.nightly.zip .
+        working-directory: build
+      - uses: DimensionDev/browser-extension-action@latest
+        with:
+            publish: true
+            app-id: ${{ env.APP_ID }}
+            refresh-token: ${{ secrets.REFRESH_TOKEN }}
+            client-id: ${{ secrets.CLIENT_ID }}
+            client-secret: ${{ secrets.CLIENT_SECRET }}
+            file-name: 'Maskbook.nightly.zip'
+
