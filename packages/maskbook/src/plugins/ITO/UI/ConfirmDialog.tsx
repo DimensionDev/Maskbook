@@ -4,6 +4,7 @@ import type { PoolSettings } from '../hooks/useFillCallback'
 import BigNumber from 'bignumber.js'
 import { formatBalance } from '../../Wallet/formatter'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -21,18 +22,17 @@ const useStyles = makeStyles((theme) =>
             padding: theme.spacing(1),
         },
         data: {
-            padding: theme.spacing(2),
+            padding: theme.spacing(0),
             textAlign: 'right',
             color: theme.palette.text.primary,
         },
         label: {
-            padding: theme.spacing(2),
+            padding: theme.spacing(0),
             textAlign: 'left',
             color: theme.palette.text.secondary,
         },
         button: {
-            margin: theme.spacing(2, 0),
-            padding: 12,
+            padding: theme.spacing(2),
         },
     }),
 )
@@ -46,29 +46,30 @@ export interface ConfirmDialogProps {
 export function ConfirmDialog(props: ConfirmDialogProps) {
     const { itoSettings, open, onDecline, onSubmit } = props
     const classes = useStyles()
+    const { t } = useI18N()
 
     console.log('111')
     console.log(itoSettings)
     console.log()
     console.log('222')
     return (
-        <InjectedDialog open={open} title="ITO Detail" onClose={onDecline}>
+        <InjectedDialog open={open} title={t('plugin_ito_confirm_display_name')} onClose={onDecline}>
             <DialogContent>
                 <Grid container spacing={0}>
                     <Grid item xs={12}>
-                        <Typography variant="h3" className={classes.title}>
+                        <Typography ariant="h3" className={classes.title} component="span">
                             New Year Special Events
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Paper className={classes.label}>Sell Token</Paper>
+                        <Paper className={classes.label}>{t('plugin_ito_sell_token')}</Paper>
                     </Grid>
                     <Grid item xs={6}>
                         <Paper className={classes.data}>{itoSettings.token?.symbol}</Paper>
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Paper className={classes.label}>Sell Total amount</Paper>
+                        <Paper className={classes.label}>{t('plugin_ito_sell_total_aount')}</Paper>
                     </Grid>
                     <Grid item xs={6}>
                         <Paper className={classes.data}>
@@ -81,7 +82,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </Grid>
 
                     {itoSettings.exchangeTokens
-                        .filter((item, index) => item)
+                        ?.filter((item, index) => item)
                         .map((item, index) => {
                             return (
                                 <>
@@ -104,21 +105,21 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         })}
 
                     <Grid item xs={6}>
-                        <Paper className={classes.label}>Allocation Per Wallet</Paper>
+                        <Paper className={classes.label}>{t('plugin_ito_allocation_per_wallet')}</Paper>
                     </Grid>
                     <Grid item xs={6}>
                         <Paper className={classes.data}>{itoSettings.total}</Paper>
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Paper className={classes.label}>Begin Times</Paper>
+                        <Paper className={classes.label}>{t('plugin_ito_begin_times')}</Paper>
                     </Grid>
                     <Grid item xs={6}>
                         <Paper className={classes.data}>{new Date(itoSettings.startTime).toLocaleString()}</Paper>
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Paper className={classes.label}>End Times</Paper>
+                        <Paper className={classes.label}>{t('plugin_ito_end_times')}</Paper>
                     </Grid>
                     <Grid item xs={6}>
                         <Paper className={classes.data}>{new Date(itoSettings.endTime).toLocaleString()}</Paper>

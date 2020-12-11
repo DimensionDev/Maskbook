@@ -396,5 +396,18 @@
     "plugin_poll_status_closed": "投票は終了しました",
     "plugin_poll_status_voting": "投票しています",
     "plugin_poll_status_voted": "投票した.",
-    "plugin_poll_deadline": "{{time}}で終了"
+    "plugin_poll_deadline": "{{time}}で終了",
+    "plugin_ito_create_new": "",
+    "plugin_ito_select_existing": "",
+    "plugin_ito_display_name": "",
+    "plugin_ito_confirm_display_name": "",
+    "plugin_ito_sell_token": "",
+    "plugin_ito_sell_total_aount": "",
+    "plugin_ito_allocation_per_wallet": "",
+    "plugin_ito_begin_times": "",
+    "plugin_ito_end_times": "",
+    "plugin_ito_swap_ration_label": "",
+    "plugin_item_message_label": "",
+    "plugin_ito_begin_times_label": "",
+    "plugin_ito_end_times_label": ""
 }
