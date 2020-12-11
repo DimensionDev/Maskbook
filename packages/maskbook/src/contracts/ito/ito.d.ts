@@ -23,13 +23,17 @@ export class Ito extends Contract {
             _recipient: string,
             validation: string | number[],
             _exchange_addr_i: number | string,
+            input_total: number | string,
         ): TransactionObject<string>
 
         destruct(id: string | number[]): TransactionObject<void>
 
         fill_pool(
             _hash: string | number[],
-            _duration: number | string,
+            _start: number | string,
+            _end: number | string,
+            name: string,
+            message: string,
             _exchange_addrs: string[],
             _ratios: (number | string)[],
             _token_addr: string,
@@ -49,10 +53,6 @@ export class Ito extends Contract {
         }>
 
         contract_creator(): TransactionObject<string>
-
-        toBytes(a: string): TransactionObject<string>
-
-        validRange(size: number | string, data: number | string): TransactionObject<boolean>
     }
     events: {
         ClaimSuccess: ContractEvent<{
@@ -71,11 +71,15 @@ export class Ito extends Contract {
             creator: string
             creation_time: string
             token_address: string
+            name: string
+            message: string
             0: string
             1: string
             2: string
             3: string
             4: string
+            5: string
+            6: string
         }>
         RefundSuccess: ContractEvent<{
             id: string
@@ -85,6 +89,7 @@ export class Ito extends Contract {
             1: string
             2: string
         }>
+        Test: ContractEvent<string>
         allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
     }
 }

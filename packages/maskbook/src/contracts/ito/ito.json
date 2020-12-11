@@ -25,6 +25,11 @@
                 "internalType": "uint256",
                 "name": "_exchange_addr_i",
                 "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "input_total",
+                "type": "uint256"
             }
         ],
         "name": "claim",
@@ -35,62 +40,6 @@
                 "type": "uint256"
             }
         ],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "id",
-                "type": "bytes32"
-            }
-        ],
-        "name": "destruct",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "_hash",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_duration",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address[]",
-                "name": "_exchange_addrs",
-                "type": "address[]"
-            },
-            {
-                "internalType": "uint256[]",
-                "name": "_ratios",
-                "type": "uint256[]"
-            },
-            {
-                "internalType": "address",
-                "name": "_token_addr",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_total_tokens",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_limit",
-                "type": "uint256"
-            }
-        ],
-        "name": "fill_pool",
-        "outputs": [],
         "stateMutability": "payable",
         "type": "function"
     },
@@ -131,6 +80,77 @@
         "type": "event"
     },
     {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "id",
+                "type": "bytes32"
+            }
+        ],
+        "name": "destruct",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "_hash",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_start",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_end",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "message",
+                "type": "string"
+            },
+            {
+                "internalType": "address[]",
+                "name": "_exchange_addrs",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "_ratios",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "address",
+                "name": "_token_addr",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_total_tokens",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_limit",
+                "type": "uint256"
+            }
+        ],
+        "name": "fill_pool",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
         "anonymous": false,
         "inputs": [
             {
@@ -162,6 +182,18 @@
                 "internalType": "address",
                 "name": "token_address",
                 "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "message",
+                "type": "string"
             }
         ],
         "name": "FillSuccess",
@@ -190,6 +222,19 @@
             }
         ],
         "name": "RefundSuccess",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "a",
+                "type": "uint256"
+            }
+        ],
+        "name": "Test",
         "type": "event"
     },
     {
@@ -232,49 +277,6 @@
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "a",
-                "type": "address"
-            }
-        ],
-        "name": "toBytes",
-        "outputs": [
-            {
-                "internalType": "bytes",
-                "name": "b",
-                "type": "bytes"
-            }
-        ],
-        "stateMutability": "pure",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint16",
-                "name": "size",
-                "type": "uint16"
-            },
-            {
-                "internalType": "uint256",
-                "name": "data",
-                "type": "uint256"
-            }
-        ],
-        "name": "validRange",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "pure",
         "type": "function"
     }
 ]
