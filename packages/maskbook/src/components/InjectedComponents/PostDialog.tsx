@@ -46,6 +46,7 @@ import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { PluginStage } from '../../plugins/types'
 import { Election2020MetadataReader } from '../../plugins/Election2020/helpers'
 import { COTM_MetadataReader } from '../../plugins/COTM/helpers'
+import { Flags } from '../../utils/flags'
 
 const defaultTheme = {}
 
@@ -217,7 +218,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             }}>
                             <ClickableChip
                                 checked={props.imagePayload}
-                                label={t('post_dialog__image_payload')}
+                                label={t('post_dialog__image_payload') + Flags.has_no_browser_tab_ui ? `(Beta)` : ''}
                                 onClick={() => props.onImagePayloadSwitchChanged(!props.imagePayload)}
                                 data-testid="image_chip"
                             />
