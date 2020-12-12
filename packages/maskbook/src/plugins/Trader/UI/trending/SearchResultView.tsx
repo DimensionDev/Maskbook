@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { makeStyles, createStyles, Link, Tab, Tabs } from '@material-ui/core'
-import type { DataProvider, TagType, TradeProvider } from '../../types'
+import { DataProvider, TagType, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
 import { TickersTable } from './TickersTable'
@@ -71,12 +71,10 @@ export function SearchResultView(props: SearchResultViewProps) {
 
     const { t } = useI18N()
     const classes = useStyles()
-    const [tabIndex, setTabIndex] = useState(1)
-
     //#region trending
     const dataProvider = useCurrentDataProvider(dataProviders)
     //#endregion
-
+    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP ? 1 : 0)
     //#region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
     //#endregion
@@ -145,6 +143,7 @@ export function SearchResultView(props: SearchResultViewProps) {
 
     const { coin, market, tickers } = trending
     const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
+    const swapTabIndex = dataProvider !== DataProvider.UNISWAP ? 3 : 1
 
     return (
         <TrendingViewDeck
@@ -155,8 +154,8 @@ export function SearchResultView(props: SearchResultViewProps) {
             trending={trending}
             dataProvider={dataProvider}
             tradeProvider={tradeProvider}
-            showDataProviderIcon={tabIndex !== 3}
-            showTradeProviderIcon={tabIndex === 3}
+            showDataProviderIcon={tabIndex !== swapTabIndex}
+            showTradeProviderIcon={tabIndex === swapTabIndex}
             TrendingCardProps={{ classes: { root: classes.root } }}>
             <Tabs
                 className={classes.tabs}
@@ -170,12 +169,16 @@ export function SearchResultView(props: SearchResultViewProps) {
                     },
                 }}>
                 <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />
-                <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
-                <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
+                {dataProvider !== DataProvider.UNISWAP ? (
+                    <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
+                ) : null}
+                {dataProvider !== DataProvider.UNISWAP ? (
+                    <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
+                ) : null}
                 {canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null}
             </Tabs>
             {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
-            {tabIndex === 1 ? (
+            {tabIndex === 1 && dataProvider !== DataProvider.UNISWAP ? (
                 <>
                     {market ? <PriceChangedTable market={market} /> : null}
                     <PriceChart coin={coin} stats={stats} loading={loadingStats}>
@@ -183,8 +186,10 @@ export function SearchResultView(props: SearchResultViewProps) {
                     </PriceChart>
                 </>
             ) : null}
-            {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
-            {tabIndex === 3 && canSwap ? (
+            {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
+                <TickersTable tickers={tickers} dataProvider={dataProvider} />
+            ) : null}
+            {tabIndex === swapTabIndex && canSwap ? (
                 <TradeView
                     TraderProps={{
                         address: coin.eth_address ?? ETH_ADDRESS,

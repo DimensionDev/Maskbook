@@ -72,6 +72,7 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
 //#region data provider general settings
 const coinGeckoSettings = createInternalSettings(`${PLUGIN_IDENTIFIER}+currentCoinGeckoSettings`, '')
 const coinMarketCapSettings = createInternalSettings(`${PLUGIN_IDENTIFIER}+currentCoinMarketCapSettings`, '')
+const coinUniswapSettings = createInternalSettings(`${PLUGIN_IDENTIFIER}+currentCoinUniswapSettings`, '')
 
 /**
  * The general settings of specific data provider
@@ -82,8 +83,10 @@ export function getCurrentDataProviderGeneralSettings(dataProvider: DataProvider
             return coinGeckoSettings
         case DataProvider.COIN_MARKET_CAP:
             return coinMarketCapSettings
+        case DataProvider.UNISWAP:
+            return coinUniswapSettings
         default:
-            unreachable(dataProvider)
+            unreachable(dataProvider as never)
     }
 }
 //#endregion
@@ -97,6 +100,10 @@ const coinMarketCapPreferredCoinId = createInternalSettings<string>(
     `${PLUGIN_IDENTIFIER}+currentCoinMarketCapPreferredCoinId`,
     '{}',
 )
+const coinUniswapPreferredCoinId = createInternalSettings<string>(
+    `${PLUGIN_IDENTIFIER}+currentCoinUniswapPreferredCoinId`,
+    '{}',
+)
 
 export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
     switch (dataProvider) {
@@ -104,6 +111,8 @@ export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
             return coinGeckoPreferredCoinId
         case DataProvider.COIN_MARKET_CAP:
             return coinMarketCapPreferredCoinId
+        case DataProvider.UNISWAP:
+            return coinUniswapPreferredCoinId
         default:
             unreachable(dataProvider)
     }

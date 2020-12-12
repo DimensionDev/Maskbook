@@ -323,16 +323,26 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     <div className={classes.footMenu}>
                         <Typography className={classes.footnote}>Supported by</Typography>
                         <FootnoteMenu
-                            options={getEnumAsArray(TradeProvider).map((x) => ({
-                                name: (
-                                    <>
-                                        <TradeProviderIcon provider={x.value} />
-                                        <span className={classes.footName}>{resolveTradeProviderName(x.value)}</span>
-                                    </>
-                                ),
-                                value: x.value,
-                            }))}
-                            selectedIndex={findIndex(getEnumAsArray(TradeProvider), (x) => x.value === tradeProvider)}
+                            options={getEnumAsArray(TradeProvider)
+                                .filter((x) => {
+                                    return dataProvider === DataProvider.UNISWAP ? x.value === TradeProvider.ZRX : true
+                                })
+                                .map((x) => ({
+                                    name: (
+                                        <>
+                                            <TradeProviderIcon provider={x.value} />
+                                            <span className={classes.footName}>
+                                                {resolveTradeProviderName(x.value)}
+                                            </span>
+                                        </>
+                                    ),
+                                    value: x.value,
+                                }))}
+                            selectedIndex={
+                                dataProvider === DataProvider.UNISWAP
+                                    ? 0
+                                    : findIndex(getEnumAsArray(TradeProvider), (x) => x.value === tradeProvider)
+                            }
                             onChange={onTradeProviderChange}
                         />
                     </div>
