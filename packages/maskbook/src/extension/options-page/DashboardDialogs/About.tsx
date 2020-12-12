@@ -3,6 +3,7 @@ import { makeStyles, Typography, createStyles, Avatar, IconButton, Link } from '
 import FacebookIcon from '@material-ui/icons/Facebook'
 import TwitterIcon from '@material-ui/icons/Twitter'
 import GitHubIcon from '@material-ui/icons/GitHub'
+import TelegramIcon from '@material-ui/icons/Telegram'
 import { DashboardDialogCore, WrappedDialogProps } from './Base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
@@ -68,6 +69,18 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
+const DiscordIcon = () => (
+    <svg fill="none" width="24" height="24" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <path d="M-1-1h582v402H-1z" />
+        <circle r="256" cy="255.1" cx="254.2" />
+        <path
+            stroke="null"
+            fill="#FFFFFF"
+            d="M395 151s-40-31-88-35l-4 8c43 11 63 26 83 44-35-18-70-35-131-35s-96 17-131 35c20-18 44-35 83-44l-5-8c-49 5-87 35-87 35s-45 65-53 193c46 52 114 52 114 52l15-19c-25-8-52-24-76-51 28 21 71 44 140 44s112-22 140-44c-23 27-51 43-75 51l14 19s69 0 114-52c-8-128-53-193-53-193zM198 309c-17 0-31-16-31-35s14-36 31-36 31 16 31 36-14 35-31 35zm114 0c-17 0-31-16-31-35s14-36 31-36 31 16 31 36-14 35-31 35z"
+        />
+    </svg>
+)
+
 export function DashboardAboutDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
     const classes = useStyles()
@@ -97,7 +110,7 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
                                 className={classes.icon}
                                 target="_blank"
                                 size="small"
-                                href="https://www.facebook.com/groups/324857694838456">
+                                href="https://www.facebook.com/masknetwork">
                                 <FacebookIcon />
                             </IconButton>
                             <IconButton
@@ -113,6 +126,20 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
                                 size="small"
                                 href="https://github.com/DimensionDev/Maskbook">
                                 <GitHubIcon />
+                            </IconButton>
+                            <IconButton
+                                className={classes.icon}
+                                target="_blank"
+                                size="small"
+                                href="https://t.me/maskbook_group">
+                                <TelegramIcon />
+                            </IconButton>
+                            <IconButton
+                                className={classes.icon}
+                                target="_blank"
+                                size="small"
+                                href="https://discord.gg/4SVXvj7">
+                                <DiscordIcon />
                             </IconButton>
                         </div>
                     </section>
