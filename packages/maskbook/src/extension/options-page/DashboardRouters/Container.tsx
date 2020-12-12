@@ -41,9 +41,9 @@ const useStyles = makeStyles((theme) => {
         wrapper: {
             flex: 1,
             height: '100%',
-        },
-        [theme.breakpoints.up('sm')]: {
-            gridTemplateRows: (props) => (props.isSetup ? '1fr' : '[titleAction] 0fr [divider] 0fr [content] auto'),
+            [theme.breakpoints.up('sm')]: {
+                gridTemplateRows: (props) => (props.isSetup ? '1fr' : '[titleAction] 0fr [divider] 0fr [content] auto'),
+            },
         },
         placeholder: {
             height: '100%',
