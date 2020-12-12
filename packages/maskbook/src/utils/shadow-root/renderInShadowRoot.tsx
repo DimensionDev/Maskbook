@@ -237,7 +237,7 @@ function Maskbook(_props: MaskbookProps) {
     return (
         <ThemeProvider theme={getActivatedUI().useTheme()}>
             <I18nextProvider i18n={i18nNextInstance}>
-                <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
                     <StrictMode>
                         <span {..._props} />
                     </StrictMode>
