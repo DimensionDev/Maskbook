@@ -25,7 +25,7 @@ export function useSearchedKeyword() {
         const params = new URLSearchParams(location.search)
         const hashTagMatched = location.pathname.match(/\/hashtag\/([A-Za-z]+)/)
         if (location.pathname === '/search' && !params.get('f')) setKeyword(decodeURIComponent(params.get('q') ?? ''))
-        if (hashTagMatched) setKeyword('#' + hashTagMatched[1])
+        else if (hashTagMatched) setKeyword('#' + hashTagMatched[1])
         else if (!SAFE_PATHNAMES_ON_TWITTER.includes(location.pathname)) setKeyword('')
     }, [])
 
