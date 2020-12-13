@@ -29,6 +29,7 @@ type Progress = (
     | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
     | { progress: 'intermediate_success'; data: Success }
     | { progress: 'iv_decrypted'; iv: string }
+    | { progress: 'payload_decrypted'; decryptedPayload: Payload }
 ) & {
     type: 'progress'
     /** if this is true, this progress should not cause UI change. */
@@ -77,7 +78,7 @@ const makeSuccessResultF = (
 }
 
 function makeProgress(
-    progress: Exclude<Progress['progress'], 'intermediate_success' | 'iv_decrypted'> | Success,
+    progress: Exclude<Progress['progress'], 'intermediate_success' | 'iv_decrypted' | 'payload_decrypted'> | Success,
     internal = false,
 ): Progress {
     if (typeof progress === 'string') return { type: 'progress', progress, internal }
@@ -140,6 +141,7 @@ async function* decryptFromPayloadWithProgress_raw(
         const makeSuccessResult = makeSuccessResultF(cacheKey, iv, cryptoProvider)
         const ownersAESKeyEncrypted = data.version === -38 ? data.AESKeyEncrypted : data.ownersAESKeyEncrypted
 
+        yield { type: 'progress', progress: 'payload_decrypted', decryptedPayload: data, internal: true }
         yield { type: 'progress', progress: 'iv_decrypted', iv: iv, internal: true }
         // ? Early emit the cache.
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, author)
