@@ -250,7 +250,7 @@ export async function getCoinInfo(id: string, currency: Currency, dataProvider: 
             .sort((a, z) => {
                 if (a.market_reputation !== z.market_reputation) return z.market_reputation - a.market_reputation // reputation from high to low
                 if (a.price.toFixed(2) !== z.price.toFixed(2)) return z.price - a.price // price from high to low
-                return z.volume - a.volume // volumn from high to low
+                return z.volume - a.volume // volume from high to low
             }),
     }
     const quotesInfo_ = quotesInfo?.[id]

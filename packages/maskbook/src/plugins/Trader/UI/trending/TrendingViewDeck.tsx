@@ -92,14 +92,8 @@ const useStyles = makeStyles((theme) => {
             right: 0,
             position: 'absolute',
         },
-        tabs: {
-            height: 35,
-            width: '100%',
-            minHeight: 'unset',
-        },
-        tab: {
-            minHeight: 'unset',
-            minWidth: 'unset',
+        arrowIcon: {
+            color: theme.palette.text.primary,
         },
         rank: {
             color: theme.palette.text.secondary,
@@ -132,12 +126,6 @@ const useStyles = makeStyles((theme) => {
         avatarFallback: {
             width: 40,
             height: 40,
-        },
-        currency: {
-            marginRight: theme.spacing(1),
-        },
-        percentage: {
-            marginLeft: theme.spacing(1),
         },
         maskbook: {
             width: 40,
@@ -246,7 +234,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 }))}
                                 selectedIndex={coins.findIndex((x) => x.id === coin.id)}
                                 onChange={onCoinMenuChange}>
-                                <IconButton size="small">
+                                <IconButton className={classes.arrowIcon} size="small">
                                     <ArrowDropDownIcon />
                                 </IconButton>
                             </CoinMenu>
