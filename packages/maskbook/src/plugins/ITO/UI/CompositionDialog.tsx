@@ -10,8 +10,6 @@ import AbstractTab from '../../../extension/options-page/DashboardComponents/Abs
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CreateItoGuide } from './CreateItoGuide'
 import React from 'react'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import DateFnsUtils from '@date-io/date-fns'
 
 export interface ITO_CompositionDialogProps {
     open: boolean
@@ -78,12 +76,10 @@ export function CompositionDialog(props: ITO_CompositionDialogProps) {
     }
 
     return (
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <InjectedDialog open={props.open} title={t('plugin_ito_display_name')} onClose={props.onClose}>
-                <DialogContent>
-                    <AbstractTab height={362} {...tabProps} />
-                </DialogContent>
-            </InjectedDialog>
-        </MuiPickersUtilsProvider>
+        <InjectedDialog open={props.open} title={t('plugin_ito_display_name')} onClose={props.onClose}>
+            <DialogContent>
+                <AbstractTab height={362} {...tabProps} />
+            </DialogContent>
+        </InjectedDialog>
     )
 }

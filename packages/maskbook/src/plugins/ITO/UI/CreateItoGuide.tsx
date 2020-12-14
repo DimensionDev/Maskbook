@@ -1,4 +1,4 @@
-import React from 'react'
+import type React from 'react'
 import { useCallback } from 'react'
 import { useState } from 'react'
 import { PoolSettings, useFillCallback } from '../hooks/useFillCallback'
@@ -10,8 +10,7 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { resolveChainName } from '../../../web3/pipes'
-import { EthereumNetwork, EthereumTokenType } from '../../../web3/types'
+import { EthereumTokenType } from '../../../web3/types'
 import { omit } from 'lodash-es'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
@@ -78,6 +77,7 @@ export function CreateItoGuide(props: CreateItoGuideProps) {
 
             // assemble JSON payload
             const payload: ITO_JSONPayload = {
+                chainId: chainId,
                 contract_address: ITO_CONTRACT_ADDRESS,
                 pid: CreationSuccess.id,
                 password: createSettings.password,
@@ -89,11 +89,10 @@ export function CreateItoGuide(props: CreateItoGuideProps) {
                 },
                 limit: createSettings.limit,
                 creation_time: Number.parseInt(CreationSuccess.creation_time, 10) * 1000,
-                network: resolveChainName(chainId) as EthereumNetwork,
-                token_type: createSettings.token.type,
+                token: createSettings.token,
                 start_time: createSettings.startTime.getTime(),
                 end_time: createSettings.endTime.getTime(),
-                exchange_amonuts: createSettings.exchangeAmounts,
+                exchange_amounts: createSettings.exchangeAmounts,
                 exchange_tokens: createSettings.exchangeTokens,
             }
             if (createSettings.token.type === EthereumTokenType.ERC20)

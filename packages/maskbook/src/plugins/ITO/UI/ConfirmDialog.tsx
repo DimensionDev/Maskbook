@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) =>
 )
 export interface ConfirmDialogProps {
     poolSettings?: PoolSettings
-    onConnectWallet: () => void
     onDone: () => void
     onBack: () => void
 }

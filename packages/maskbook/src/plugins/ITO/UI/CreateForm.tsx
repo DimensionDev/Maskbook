@@ -12,7 +12,7 @@ import { ExchangeTokenPanelGroup } from './ExchangeTokenPanel'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import BigNumber from 'bignumber.js'
 import type { PoolSettings } from '../hooks/useFillCallback'
-import React from 'react'
+import type React from 'react'
 import 'date-fns'
 import type { ExchangeTokenAndAmountState } from '../api/useExchangeTokenAmountstate'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
@@ -77,6 +77,8 @@ export function CreateForm(props: CreateFormProps) {
     const [endTime, setEndTime] = useState('')
 
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
+
+    const GMT = new Date().getTimezoneOffset() / 60
 
     const ITOContractAddress = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
@@ -258,7 +260,7 @@ export function CreateForm(props: CreateFormProps) {
                 <TextField
                     className={classes.date}
                     onChange={(ev) => handleStartTime(ev.target.value)}
-                    label={t('plugin_ito_begin_times_label')}
+                    label={t('plugin_ito_begin_times_label', { GMT })}
                     value={startTime.toLocaleString()}
                     defaultValue={new Date().toLocaleString()}
                     type="datetime-local"
@@ -270,7 +272,7 @@ export function CreateForm(props: CreateFormProps) {
                 <TextField
                     className={classes.date}
                     onChange={(ev) => handleEndTime(ev.target.value)}
-                    label={t('plugin_ito_begin_times_label')}
+                    label={t('plugin_ito_end_times_label', { GMT })}
                     value={endTime.toLocaleString()}
                     defaultValue={new Date().toLocaleString()}
                     type="datetime-local"
