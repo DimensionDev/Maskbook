@@ -4,21 +4,21 @@
         "name": "YES Trump at Inauguration Token",
         "symbol": "yINAUG",
         "decimals": 18,
-        "eth_address": "0x934e03e671e09528a52cb3373dc7bb7ca475b924"
+        "eth_address": "0x934E03e671E09528A52cb3373dc7Bb7CA475b924"
     },
     {
         "id": "n-inaug",
         "name": "NO Trump at Inauguration Token",
         "symbol": "nINAUG",
         "decimals": 18,
-        "eth_address": "0x55b2969a6d832c6091ba1af4ed6d0e6e7c2c0d90"
+        "eth_address": "0x55b2969a6D832c6091Ba1AF4ed6d0E6E7c2C0d90"
     },
     {
         "id": "y-blue",
         "name": "YES Dem Control Token",
         "symbol": "yBLUE",
         "decimals": 18,
-        "eth_address": "0xf732ee9ccbf0df22f53fbdd9ec88d62df298fbf8"
+        "eth_address": "0xf732eE9CCbf0Df22F53fBDd9ec88D62df298FBF8"
     },
     {
         "id": "n-blue",
