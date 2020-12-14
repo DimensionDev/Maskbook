@@ -24,7 +24,7 @@ export function Linking(props: LinkingProps) {
         )
     } catch (e) {
         return (
-            <>
+            <span className={LinkProps?.className} title={LinkProps?.title}>
                 {children ? (
                     children
                 ) : (
@@ -32,7 +32,7 @@ export function Linking(props: LinkingProps) {
                         {href}
                     </Typography>
                 )}
-            </>
+            </span>
         )
     }
 }

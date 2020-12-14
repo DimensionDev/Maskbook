@@ -59,13 +59,13 @@ export function resolveCoinId(keyword: string, dataProvider: DataProvider) {
     if (dataProvider === DataProvider.COIN_MARKET_CAP)
         return KEYWORK_ID_MAP[DataProvider.COIN_MARKET_CAP][keyword.toUpperCase()]
     if (dataProvider === DataProvider.COIN_GECKO) return KEYWORK_ID_MAP[DataProvider.COIN_GECKO][keyword.toUpperCase()]
-    if (dataProvider === DataProvider.UNISWAP) throw new Error('not implemented')
+    if (dataProvider === DataProvider.UNISWAP) return KEYWORK_ID_MAP[DataProvider.UNISWAP][keyword.toUpperCase()]
     unreachable(dataProvider)
 }
 
 export function resolveCoinAddress(id: string, dataProvider: DataProvider) {
     if (dataProvider === DataProvider.COIN_MARKET_CAP) return ID_ADDRESS_MAP[DataProvider.COIN_MARKET_CAP][id]
     if (dataProvider === DataProvider.COIN_GECKO) return ID_ADDRESS_MAP[DataProvider.COIN_GECKO][id]
-    if (dataProvider === DataProvider.UNISWAP) throw new Error('not implemented')
+    if (dataProvider === DataProvider.UNISWAP) return ID_ADDRESS_MAP[DataProvider.UNISWAP][id]
     unreachable(dataProvider)
 }
