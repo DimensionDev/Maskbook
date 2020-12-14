@@ -6,13 +6,15 @@ export interface ITO_JSONPayload {
     password: string
     limit: string
     total: string
+    total_remaining: string
+    claim_remaining: string
     sender: {
         address: string
         name: string
         message: string
     }
-    start_time: number
     chainId: ChainId
+    start_time: number
     end_time: number
     creation_time: number
     token: EtherTokenDetailed | ERC20TokenDetailed
