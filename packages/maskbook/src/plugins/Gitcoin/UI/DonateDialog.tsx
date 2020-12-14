@@ -127,7 +127,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     //#endregion
 
     //#region blocking
-    const [donateState, donateCallback, resetDonateCallback] = useDonateCallback(address ?? '', amount, token)
+    const [donateState, donateCallback, resetDonateCallback] = useDonateCallback(address ?? '', amount.toFixed(), token)
     //#endregion
 
     //#region remote controlled transaction dialog
