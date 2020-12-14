@@ -66,7 +66,11 @@ export async function getMidPriceOnDAI(coin: Coin) {
     if ((await getChainId()) !== ChainId.Mainnet) return 0
     const PMTK = new Token(UniswapChainId.MAINNET, coin.eth_address!, coin.decimals ?? 18, coin.symbol, coin.name)
     const DAI = new Token(UniswapChainId.MAINNET, DAI_ADDRESS, 18, 'DAI', 'DAI')
-    const pair = await Fetcher.fetchPairData(PMTK, DAI)
-    const route = new Route([pair], DAI)
-    return Number(route.midPrice.invert().toSignificant(6)) / 1000 || 0
+    try {
+        const pair = await Fetcher.fetchPairData(PMTK, DAI)
+        const route = new Route([pair], DAI)
+        return Number(route.midPrice.invert().toSignificant(6)) / 1000 || 0
+    } catch (e) {
+        return 0
+    }
 }
