@@ -66,7 +66,7 @@ revalidateWallets()
  * Get the chain id which is using by the given (or default) wallet
  * @param address
  */
-export async function getChainId(address: string) {
+export async function getChainId(address?: string) {
     const address_ = currentSelectedWalletAddressSettings.value
     const provider = currentSelectedWalletProviderSettings.value
     const wallet =
