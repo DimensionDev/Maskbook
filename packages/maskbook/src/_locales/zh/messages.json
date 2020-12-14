@@ -11,7 +11,6 @@
     "add_to_key_store_verifying": "Maskbook 公鑰已獲取，正在驗證…",
     "add_token": "添加代幣",
     "add_token_well_known": "知名代幣",
-    "add_token_your_own": "自定義代幣",
     "add_token_search_hint": "搜索 ERC20 代幣",
     "add_token_contract_address": "合約地址",
     "add_token_decimals": "小數點",

@@ -11,7 +11,6 @@
     "add_to_key_store_verifying": "公開鍵が見つかりました。認証しています…",
     "add_token": "トークンを追加",
     "add_token_well_known": "身元のわかるトークン",
-    "add_token_your_own": "あなたのものを追加する",
     "add_token_search_hint": "トークンを探しています。",
     "add_token_contract_address": "取引アドレス",
     "add_token_decimals": "小数",
