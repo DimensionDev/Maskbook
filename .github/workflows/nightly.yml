@@ -9,8 +9,6 @@ on:
 jobs:
   nightly:
     runs-on: ubuntu-20.04
-    env:
-      APP_ID: 'kbhkmnhjabandbpkfgfkepnpajnpljig'
     steps:
       - uses: actions/checkout@v2
         with:
@@ -30,9 +28,9 @@ jobs:
       # - uses: DimensionDev/browser-extension-action@latest
       #   with:
       #       publish: true
-      #       app-id: ${{ env.APP_ID }}
+      #       app-id: kbhkmnhjabandbpkfgfkepnpajnpljig
       #       refresh-token: ${{ secrets.REFRESH_TOKEN }}
       #       client-id: ${{ secrets.CLIENT_ID }}
       #       client-secret: ${{ secrets.CLIENT_SECRET }}
-      #       file-name: 'Maskbook.nightly.zip'
+      #       file-name: './Maskbook.nightly.zip'
 
