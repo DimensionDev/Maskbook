@@ -83,6 +83,8 @@ export function TestForm(props: TestFormProps) {
             contract_address: ITO_CONTRACT_ADDRESS,
             creation_time: Number.parseInt(FillSuccess.creation_time, 10) * 1000,
             total: FillSuccess.total,
+            total_remaining: FillSuccess.total,
+            claim_remaining: fillSettings.limit,
             pid: FillSuccess.id,
             sender: {
                 address: FillSuccess.creator,
