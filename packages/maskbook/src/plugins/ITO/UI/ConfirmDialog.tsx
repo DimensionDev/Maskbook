@@ -2,6 +2,7 @@ import { createStyles, makeStyles, Typography, Grid, Paper, Card } from '@materi
 import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { languageSettings } from '../../../settings/settings'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -43,6 +44,13 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const { poolSettings, onDone, onBack } = props
     const classes = useStyles()
     const { t } = useI18N()
+    const dateTimeFormat = Intl.DateTimeFormat(languageSettings.value, {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+    })
 
     return (
         <Card>
@@ -94,22 +102,18 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     <Paper className={classes.label}>{t('plugin_ito_begin_times')}</Paper>
                 </Grid>
                 <Grid item xs={6}>
-                    <Paper className={classes.data}>
-                        {poolSettings?.startTime.toLocaleString().replace(/:00$/g, '')}
-                    </Paper>
+                    <Paper className={classes.data}>{dateTimeFormat.format(poolSettings?.startTime)}</Paper>
                 </Grid>
 
                 <Grid item xs={6}>
                     <Paper className={classes.label}>{t('plugin_ito_end_times')}</Paper>
                 </Grid>
                 <Grid item xs={6}>
-                    <Paper className={classes.data}>
-                        {poolSettings?.endTime.toLocaleString().replace(/:00$/g, '')}
-                    </Paper>
+                    <Paper className={classes.data}>{dateTimeFormat.format(poolSettings?.endTime)}</Paper>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h5" className={classes.title} component="p">
-                        You can select Existing in ITO to view the selection after successful sending
+                        {t('plugin_ito_send_tip')}
                     </Typography>
                 </Grid>
                 <Grid item xs={6} className={classes.button}>
@@ -119,7 +123,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 </Grid>
                 <Grid item xs={6} className={classes.button}>
                     <ActionButton fullWidth variant="contained" onClick={onDone}>
-                        {` Send ${poolSettings?.total} ${poolSettings?.token?.symbol} `}
+                        {t('plugin_ito_send_text', {
+                            tital: poolSettings?.token,
+                            symbol: poolSettings?.token?.symbol,
+                        })}
                     </ActionButton>
                 </Grid>
             </Grid>

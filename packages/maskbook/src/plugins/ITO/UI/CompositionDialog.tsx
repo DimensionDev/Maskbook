@@ -9,7 +9,6 @@ import type { AbstractTabProps } from '../../../extension/options-page/Dashboard
 import AbstractTab from '../../../extension/options-page/DashboardComponents/AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CreateItoGuide } from './CreateItoGuide'
-import React from 'react'
 
 export interface ITO_CompositionDialogProps {
     open: boolean
@@ -23,7 +22,6 @@ export function CompositionDialog(props: ITO_CompositionDialogProps) {
 
     const onCreatePayload = useCallback(
         (payload: ITO_JSONPayload) => {
-            // An ITO packet offering 1000000000 ETH for ordering 1000000000 * 500 MAK from public domain
             /*
         const payload: ITO_JSONPayload = {
             pid: uuid(),
@@ -69,6 +67,11 @@ export function CompositionDialog(props: ITO_CompositionDialogProps) {
             {
                 label: t('plugin_ito_create_new'),
                 children: <CreateItoGuide onCreate={onCreatePayload} />,
+                p: 0,
+            },
+            {
+                label: t('plugin_ito_select_existing'),
+                children: <p>ITO sending list</p>,
                 p: 0,
             },
         ],

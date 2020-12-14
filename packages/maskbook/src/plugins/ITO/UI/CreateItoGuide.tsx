@@ -1,4 +1,3 @@
-import type React from 'react'
 import { useCallback } from 'react'
 import { useState } from 'react'
 import { PoolSettings, useFillCallback } from '../hooks/useFillCallback'
@@ -17,6 +16,7 @@ import { ITO_CONSTANTS } from '../constants'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',
@@ -29,7 +29,7 @@ export interface CreateItoGuideProps {
 
 export function CreateItoGuide(props: CreateItoGuideProps) {
     const { onCreate } = props
-
+    const { t } = useI18N()
     const account = useAccount()
     const chainId = useChainId()
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
@@ -114,13 +114,16 @@ export function CreateItoGuide(props: CreateItoGuideProps) {
         setTransactionDialogOpen({
             open: true,
             state: createState,
-            summary: `Create ITO with ${formatBalance(
-                new BigNumber(poolSettings?.total),
-                poolSettings?.token.decimals ?? 0,
-                poolSettings?.token.decimals ?? 0,
-            )} ${poolSettings?.token.symbol}`,
+            summary: t('plugin_ito_transaction_dialog_summary', {
+                amount: formatBalance(
+                    new BigNumber(poolSettings?.total),
+                    poolSettings?.token.decimals ?? 0,
+                    poolSettings?.token.decimals ?? 0,
+                ),
+                symbol: poolSettings.token.symbol,
+            }),
         })
-    }, [createState, poolSettings, setTransactionDialogOpen])
+    }, [createState, poolSettings, setTransactionDialogOpen, t])
     //#region connect wallet
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {

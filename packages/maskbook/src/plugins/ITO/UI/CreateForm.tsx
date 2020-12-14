@@ -12,7 +12,6 @@ import { ExchangeTokenPanelGroup } from './ExchangeTokenPanel'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import BigNumber from 'bignumber.js'
 import type { PoolSettings } from '../hooks/useFillCallback'
-import type React from 'react'
 import 'date-fns'
 import type { ExchangeTokenAndAmountState } from '../api/useExchangeTokenAmountstate'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
@@ -163,7 +162,9 @@ export function CreateForm(props: CreateFormProps) {
         }
 
         if (new BigNumber(tokenAndAmount?.amount ?? '0').isGreaterThan(new BigNumber(tokenBalance)))
-            return `Insufficient ${tokenAndAmount?.token?.symbol} balance`
+            return t('plugin_ito_error_balance', {
+                symbol: tokenAndAmount?.token?.symbol,
+            })
 
         if (Number(totalOfPerWallet) === 0) {
             return t('plugin_ito_error_enter_allocation_per_walllet')
@@ -188,14 +189,8 @@ export function CreateForm(props: CreateFormProps) {
 
     const handleStartTime = useCallback(
         (timeString) => {
-            const now = new Date()
-            if (endTime === '' && new Date(timeString).getTime() >= now.getTime()) {
-                setStartTime(timeString)
-            }
-            if (
-                new Date(timeString).getTime() < new Date(endTime).getTime() &&
-                new Date(timeString).getTime() >= now.getTime()
-            ) {
+            const time = new Date(timeString).getTime()
+            if (endTime === '' || time < new Date(endTime).getTime()) {
                 setStartTime(timeString)
             }
         },
@@ -204,11 +199,12 @@ export function CreateForm(props: CreateFormProps) {
 
     const handleEndTime = useCallback(
         (timeString) => {
+            const time = new Date(timeString).getTime()
             const now = new Date()
-            if (startTime === '' && new Date(timeString).getTime() >= now.getTime()) {
-                setEndTime(timeString)
+            if (time < now.getTime()) {
+                return
             }
-            if (new Date(timeString).getTime() > new Date(startTime).getTime()) {
+            if (startTime === '' || time > new Date(startTime).getTime()) {
                 setEndTime(timeString)
             }
         },
@@ -261,21 +257,21 @@ export function CreateForm(props: CreateFormProps) {
                     className={classes.date}
                     onChange={(ev) => handleStartTime(ev.target.value)}
                     label={t('plugin_ito_begin_times_label', { GMT })}
-                    value={startTime.toLocaleString()}
-                    defaultValue={new Date().toLocaleString()}
                     type="datetime-local"
+                    value={startTime}
                     InputLabelProps={{
                         shrink: true,
                     }}
+                    required={true}
                 />
 
                 <TextField
+                    required={true}
                     className={classes.date}
                     onChange={(ev) => handleEndTime(ev.target.value)}
                     label={t('plugin_ito_end_times_label', { GMT })}
-                    value={endTime.toLocaleString()}
-                    defaultValue={new Date().toLocaleString()}
                     type="datetime-local"
+                    value={endTime}
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -293,10 +289,10 @@ export function CreateForm(props: CreateFormProps) {
                                 disabled={approveState === ApproveState.PENDING}
                                 onClick={onApprove}>
                                 {approveState === ApproveState.NOT_APPROVED
-                                    ? `Approve ${tokenAndAmount?.token?.symbol}`
+                                    ? t('plugin_ito_approve', { symbol: tokenAndAmount?.token?.symbol })
                                     : ''}
                                 {approveState === ApproveState.PENDING
-                                    ? `Approve... ${tokenAndAmount?.token?.symbol}`
+                                    ? t('plugin_ito_approve_pending', { symbol: tokenAndAmount?.token?.symbol })
                                     : ''}
                             </ActionButton>
                         </Grid>

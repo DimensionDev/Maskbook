@@ -12,7 +12,6 @@ import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed
 import { v4 as uuid } from 'uuid'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import { ExchangeTokenAndAmountActionType, useExchangeTokenAndAmount } from '../api/useExchangeTokenAmountstate'
-import React from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) =>
@@ -210,9 +209,7 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
 
     useEffect(() => {
         onTokenAmountChange(exchangeTokenArray)
-        const addresses = exchangeTokenArray
-            .filter((item) => item && item.token)
-            .map((item) => item?.token?.address ?? '')
+        const addresses = exchangeTokenArray.filter((item) => item?.token).map((item) => item?.token?.address ?? '')
         setexcludeTokensAddress(addresses)
     }, [exchangeTokenArray, onTokenAmountChange, setexcludeTokensAddress])
 
