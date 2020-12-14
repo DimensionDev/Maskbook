@@ -86,7 +86,7 @@ export function getCurrentDataProviderGeneralSettings(dataProvider: DataProvider
         case DataProvider.UNISWAP:
             return coinUniswapSettings
         default:
-            unreachable(dataProvider as never)
+            unreachable(dataProvider)
     }
 }
 //#endregion

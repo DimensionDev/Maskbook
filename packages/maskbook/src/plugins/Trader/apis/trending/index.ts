@@ -9,8 +9,8 @@ import { resolveCoinId, resolveCoinAddress, resolveAlias } from './hotfix'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
-import PREDICTION_MARKET_TOKENS from './prediction_market_tokens.json'
-import { ChainId, Token, Fetcher, Route } from '@uniswap/sdk'
+import PREDICTION_MARKET_TOKENS from '../uniswap/prediction_market_tokens.json'
+import { getCoinTrendingFromUniswap } from '../uniswap'
 
 export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
     if (dataProvider === DataProvider.COIN_GECKO) {
@@ -291,24 +291,6 @@ export async function getCoinTrendingByKeyword(
     }
 
     return getCoinTrendingById(resolveCoinId(keyword_, dataProvider) ?? coin.id, currency, dataProvider)
-}
-
-export async function getCoinTrendingFromUniswap(currency: Currency, coin: Coin) {
-    const PMTk = new Token(ChainId.MAINNET, coin.eth_address!, 18, coin.symbol, coin.name)
-    const DAI = new Token(ChainId.MAINNET, '0x6b175474e89094c44da98b954eedeac495271d0f', 18, 'DAI', 'DAI')
-    const pair = await Fetcher.fetchPairData(PMTk, DAI)
-    const route = new Route([pair], DAI)
-
-    return {
-        currency,
-        dataProvider: DataProvider.UNISWAP,
-        market: {
-            current_price: Number(route.midPrice.invert().toSignificant(6)) / 1000,
-        },
-        coin,
-        tickers: [],
-        lastUpdated: '',
-    } as Trending
 }
 
 export async function getCoinTrendingById(id: string, currency: Currency, dataProvider: DataProvider) {
