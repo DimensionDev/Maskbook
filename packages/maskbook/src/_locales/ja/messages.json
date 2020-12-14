@@ -10,7 +10,7 @@
     "add_to_key_store_success": "公開鍵はキーストアに追加されました。",
     "add_to_key_store_verifying": "公開鍵が見つかりました。認証しています…",
     "add_token": "トークンを追加",
-    "add_token_search_hint": "トークンを探しています。",
+    "add_token_search_hint": "トークンの検索。",
     "additional_post_box__encrypted_post_pre": "#Maskbook で復号しましょう！ {{encrypted}}",
     "additional_post_box__steganography_post_pre": "この投稿は #Maskbook によって暗号化されています。 📪🔑 mask.io で復号しましょう！ ([I:b]) {{random}}",
     "auto_paste_failed_dialog_title": "手動でペーストする",
