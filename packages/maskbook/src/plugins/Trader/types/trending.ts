@@ -5,6 +5,7 @@ export interface Settings {
 export enum DataProvider {
     COIN_GECKO,
     COIN_MARKET_CAP,
+    UNISWAP,
 }
 
 export enum TagType {
@@ -23,6 +24,7 @@ export interface Coin {
     id: string
     name: string
     symbol: string
+    decimals?: number
     platform_url?: string
     tags?: string[]
     tech_docs_urls?: string[]

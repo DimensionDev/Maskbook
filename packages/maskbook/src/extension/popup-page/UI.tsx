@@ -1,7 +1,7 @@
 import '../../social-network-provider/popup-page/index'
 import '../../setup.ui'
 
-import { useCallback } from 'react'
+import { useCallback, memo } from 'react'
 import { noop } from 'lodash-es'
 import { ThemeProvider, makeStyles, Theme, withStyles } from '@material-ui/core/styles'
 import { Button, Paper, Divider, Typography, Box } from '@material-ui/core'
@@ -103,11 +103,20 @@ function PopupUI() {
         window.close()
     }, [setSelectProviderDailogOpen])
 
+    const Trademark = memo(() => {
+        if (ui.networkIdentifier !== 'localhost') {
+            return null
+        }
+        const src =
+            process.env.NODE_ENV === 'production'
+                ? getUrl('MB--ComboCircle--Blue.svg')
+                : getUrl('MB--ComboCircle--Nightly.svg')
+        return <img className={classes.logo} src={src} />
+    })
+
     return (
         <Paper className={classes.container}>
-            {ui.networkIdentifier === 'localhost' ? (
-                <img className={classes.logo} src={getUrl('MB--ComboCircle--Blue.svg')} />
-            ) : null}
+            <Trademark />
             {hasPermission === false ? (
                 <Alert severity="error" variant="outlined" action={null}>
                     <Typography>{t('popup_missing_permission')}</Typography>

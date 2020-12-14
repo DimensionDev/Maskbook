@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { makeStyles, createStyles, Link, Tab, Tabs } from '@material-ui/core'
-import type { DataProvider, TagType, TradeProvider } from '../../types'
+import { DataProvider, TagType, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
 import { TickersTable } from './TickersTable'
@@ -16,6 +16,7 @@ import { CONSTANTS } from '../../../../web3/constants'
 import { TradeView } from '../trader/TradeView'
 import { TrendingViewError } from './TrendingViewError'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton'
+import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
@@ -64,11 +65,12 @@ export function TrendingView(props: TrendingViewProps) {
 
     const { t } = useI18N()
     const classes = useStyles()
-    const [tabIndex, setTabIndex] = useState(0)
 
     //#region trending
     const dataProvider = useCurrentDataProvider(dataProviders)
     //#endregion
+
+    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP ? 1 : 0)
 
     //#region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
@@ -137,6 +139,7 @@ export function TrendingView(props: TrendingViewProps) {
 
     const { coin, market, tickers } = trending
     const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
+    const swapTabIndex = dataProvider !== DataProvider.UNISWAP ? 3 : 1
 
     return (
         <TrendingViewDeck
@@ -147,8 +150,8 @@ export function TrendingView(props: TrendingViewProps) {
             trending={trending}
             dataProvider={dataProvider}
             tradeProvider={tradeProvider}
-            showDataProviderIcon={tabIndex !== 2}
-            showTradeProviderIcon={tabIndex === 2}>
+            showDataProviderIcon={tabIndex !== swapTabIndex}
+            showTradeProviderIcon={tabIndex === swapTabIndex}>
             <Tabs
                 className={classes.tabs}
                 textColor="primary"
@@ -160,11 +163,17 @@ export function TrendingView(props: TrendingViewProps) {
                         display: 'none',
                     },
                 }}>
-                <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
-                <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
+                <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />
+                {dataProvider !== DataProvider.UNISWAP ? (
+                    <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
+                ) : null}
+                {dataProvider !== DataProvider.UNISWAP ? (
+                    <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
+                ) : null}
                 {canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null}
             </Tabs>
-            {tabIndex === 0 ? (
+            {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
+            {tabIndex === 1 && dataProvider !== DataProvider.UNISWAP ? (
                 <>
                     {market ? <PriceChangedTable market={market} /> : null}
                     <PriceChart
@@ -176,8 +185,10 @@ export function TrendingView(props: TrendingViewProps) {
                     </PriceChart>
                 </>
             ) : null}
-            {tabIndex === 1 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
-            {tabIndex === 2 && canSwap ? (
+            {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
+                <TickersTable tickers={tickers} dataProvider={dataProvider} />
+            ) : null}
+            {tabIndex === swapTabIndex && canSwap ? (
                 <TradeView
                     classes={{ root: classes.tradeViewRoot }}
                     TraderProps={{

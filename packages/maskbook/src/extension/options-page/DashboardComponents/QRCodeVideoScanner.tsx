@@ -1,6 +1,6 @@
 import { useRef } from 'react'
-import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
-import { WKWebkitQRScanner } from '../../../components/shared/qrcode'
+import { nativeAPI } from '../../../utils/native-rpc'
+import { NativeQRScanner } from '../../../components/shared/qrcode'
 import { useQRCodeVideoScan } from '../../../utils/hooks/useQRCodeVideoScan'
 
 export interface QRCodeVideoScannerProps {
@@ -22,8 +22,8 @@ export function QRCodeVideoScanner({
     const videoRef = useRef<HTMLVideoElement | null>(null)
 
     useQRCodeVideoScan(videoRef, scanning, deviceId, onScan, onError)
-    return hasWKWebkitRPCHandlers ? (
-        <WKWebkitQRScanner onScan={onScan} onQuit={onQuit} />
+    return nativeAPI?.type === 'iOS' ? (
+        <NativeQRScanner onScan={onScan} onQuit={onQuit} />
     ) : (
         <div style={{ position: 'relative' }}>
             <video style={{ minWidth: 404 }} aria-label="QR Code scanner" ref={videoRef} {...props} />

@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { ChainId, ProviderType } from '../types'
 import {
-    ChainState,
     currentChainStateSettings,
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
     currentWalletConnectChainIdSettings,
 } from '../../settings/settings'
+import type { ChainState } from '../../settings/types'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { Flags } from '../../utils/flags'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'

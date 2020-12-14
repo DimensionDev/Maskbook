@@ -34,17 +34,17 @@ import * as modifiers from './scripts/manifest-modifiers'
 const src = (file: string) => path.join(__dirname, file)
 const publicDir = src('./public')
 
-export default function (cli_env: Record<string, boolean> = {}, argv: any) {
-    const target = getBuildPresets(cli_env)
+export default function (cli_env: Record<string, boolean> = {}, argv: { mode?: 'production' | 'development' }) {
+    const target = getCompilationInfo(cli_env)
     const env: 'production' | 'development' = argv.mode ?? 'production'
     const dist = env === 'production' ? src('./build') : src('./dist')
 
-    const enableHMR = env === 'development' && !Boolean(process.env.NO_HMR)
+    const isManifestV3 = target.runtimeEnv.manifest === 3
+    const enableHMR = env === 'development' && !Boolean(process.env.NO_HMR) && !isManifestV3
 
-    /**
-     * On iOS, eval is async.
-     */
-    const sourceMapKind: Configuration['devtool'] = target.Safari ? false : 'eval-source-map'
+    /** On iOS, eval is async. */
+    const sourceMapKind: Configuration['devtool'] = target.iOS ? false : 'eval-source-map'
+    const ProcessEnvPlugin = new EnvironmentPlugin({ NODE_ENV: env, ...getGitInfo(), ...target.runtimeEnv })
     const config: Configuration = {
         name: 'main',
         mode: env,
@@ -79,7 +79,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
         },
         // ModuleNotFoundPlugin & ModuleScopePlugin not included please leave a comment if someone need it.
         plugins: [
-            new EnvironmentPlugin({ NODE_ENV: env, ...getGitInfo(), ...getCompilationInfo() }),
+            ProcessEnvPlugin,
             new WatchMissingModulesPlugin(path.resolve('node_modules')),
             // copy assets
             new CopyPlugin({
@@ -140,8 +140,8 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
         } as DevServerConfiguration,
     }
     //#region Define entries
-    if (!(target.Firefox || target.Safari)) {
-        // Define "browser" globally in Chrome
+    if (!target.FirefoxEngine && !target.iOS) {
+        // Define "browser" globally in platform that don't have "browser"
         config.plugins!.push(new ProvidePlugin({ browser: 'webextension-polyfill' }))
     }
     config.entry = {
@@ -151,25 +151,26 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
         popup: withReactDevTools(src('./packages/maskbook/src/extension/popup-page/index.tsx')),
         debug: src('./packages/maskbook/src/extension/debug-page'),
     }
+    if (isManifestV3) delete config.entry['background-script']
     for (const entry in config.entry) {
         config.entry[entry] = iOSWebExtensionShimHack(...toArray(config.entry[entry]))
     }
     config.plugins!.push(
         // @ts-ignore
         getHTMLPlugin({ chunks: ['options-page'], filename: 'index.html' }),
-        getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }),
+        isManifestV3 ? undefined : getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }),
         getHTMLPlugin({ chunks: ['popup'], filename: 'popup.html' }),
         getHTMLPlugin({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
         getHTMLPlugin({ chunks: ['debug'], filename: 'debug.html' }),
     ) // generate pages for each entry
+    config.plugins = config.plugins.filter(Boolean)
     //#endregion
 
-    if (argv.profile) config.plugins!.push(new BundleAnalyzerPlugin())
-    return [
-        config,
-        {
-            name: 'injected-script',
-            entry: { 'injected-script': src('./packages/maskbook/src/extension/injected-script/index.ts') },
+    if (target.isProfile) config.plugins!.push(new BundleAnalyzerPlugin())
+    function getChildConfig(name: string, entry: string, modifier?: (x: Configuration) => void): Configuration {
+        const c: Configuration = {
+            name,
+            entry: { [name]: entry },
             devtool: false,
             output: config.output,
             module: { rules: [getTypeScriptLoader(false)] },
@@ -180,25 +181,40 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
                 hot: false,
                 injectClient: false,
                 injectHot: false,
-                port: 35938,
+                port: 35938 + ~~(Math.random() * 1000),
                 overlay: false,
             },
             optimization: { splitChunks: false, minimize: false },
-            plugins: [
-                new EnvironmentPlugin({ NODE_ENV: env }),
-                env === 'production' && new CleanWebpackPlugin({}),
-            ].filter(Boolean),
-        } as Configuration,
-    ]
+            plugins: [ProcessEnvPlugin, env === 'production' && new CleanWebpackPlugin({})].filter(Boolean),
+        }
+        if (modifier) modifier(c)
+        return c
+    }
+    return [
+        config,
+        getChildConfig('injected-script', src('./packages/maskbook/src/extension/injected-script/index.ts')),
+        isManifestV3 &&
+            getChildConfig('background-worker', src('./packages/maskbook/src/background-worker.ts'), (x) => {
+                x.target = 'webworker'
+                x.output = {
+                    futureEmitAssets: true,
+                    path: dist,
+                    // ? Service workers must registered at the / root
+                    filename: 'manifest-v3.entry.js',
+                    chunkFilename: 'js/[name]-worker.chunk.js',
+                    globalObject: 'globalThis',
+                }
+            }),
+    ].filter(Boolean)
 
-    /** If you are using Firefox and want to use React devtools, use Firefox nightly or start without the flag --firefox, then open about:config and switch network.websocket.allowInsecureFromHTTPS to true */
     function withReactDevTools(...src: string[]) {
-        if (target.Firefox && target.Firefox !== 'nightly') return src
+        // ! Use Firefox Nightly or enable network.websocket.allowInsecureFromHTTPS in about:config, then remove this line (but don't commit)
+        if (target.FirefoxEngine) return src
         if (env === 'development') return ['react-devtools', ...src]
         return src
     }
     function iOSWebExtensionShimHack(...path: string[]) {
-        if (!(target.Safari || target.StandaloneGeckoView)) return path
+        if (!target.iOS && !target.Android) return path
         return [...path, src('./packages/maskbook/src/polyfill/permissions.js')]
     }
     function getTypeScriptLoader(hmr = enableHMR): RuleSetRule {
@@ -230,27 +246,29 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
         const dist = env === 'production' ? src('./build') : src('./dist')
         if (env === 'production') return []
         let args: ConstructorParameters<typeof WebExtensionHotLoadPlugin>[0] | undefined = undefined
-        if (target.FirefoxDesktop && enableHMR) return [] // stuck on 99% [0] after emitting cause HMR not working
-        if (target.FirefoxDesktop)
-            args = {
-                sourceDir: dist,
-                target: 'firefox-desktop',
-                firefoxProfile: src('.firefox'),
-                keepProfileChanges: true,
-                // --firefox=nightly
-                firefox: typeof target.FirefoxDesktop === 'string' ? target.FirefoxDesktop : undefined,
+        if (target.Firefox && enableHMR) return [] // ! stuck on 99% [0] after emitting cause HMR not working
+        if (target.Firefox) {
+            if (target.webExtensionFirefoxLaunchVariant === 'firefox-desktop') {
+                args = {
+                    sourceDir: dist,
+                    target: 'firefox-desktop',
+                    firefoxProfile: src('.firefox'),
+                    keepProfileChanges: true,
+                    // --firefox=nightly
+                    firefox: typeof target.Firefox === 'string' ? target.Firefox : undefined,
+                }
+            } else if (target.webExtensionFirefoxLaunchVariant === 'firefox-android') {
+                args = {
+                    sourceDir: dist,
+                    target: 'firefox-android',
+                }
             }
-        else if (target.Chromium)
+        } else if (target.Chromium)
             args = {
                 sourceDir: dist,
                 target: 'chromium',
                 chromiumProfile: src('.chrome'),
                 keepProfileChanges: true,
-            }
-        else if (target.FirefoxForAndroid)
-            args = {
-                sourceDir: dist,
-                target: 'firefox-android',
             }
         if (args) return [new WebExtensionHotLoadPlugin(args)]
         return []
@@ -258,14 +276,18 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
     function getManifestPlugin() {
         const manifest = require('./packages/maskbook/src/manifest.json')
         if (target.Chromium) modifiers.chromium(manifest)
-        else if (target.FirefoxDesktop) modifiers.firefox(manifest)
-        else if (target.FirefoxForAndroid) modifiers.firefox(manifest)
-        else if (target.StandaloneGeckoView) modifiers.geckoview(manifest)
-        else if (target.Safari) modifiers.safari(manifest)
+        else if (target.Firefox) modifiers.firefox(manifest)
+        else if (target.Android) modifiers.geckoview(manifest)
+        else if (target.iOS) modifiers.safari(manifest)
         else if (target.E2E) modifiers.E2E(manifest)
 
         if (env === 'development') modifiers.development(manifest)
         else modifiers.production(manifest)
+
+        if (isManifestV3) modifiers.manifestV3(manifest)
+
+        if (target.runtimeEnv.build === 'beta') modifiers.beta(manifest)
+        else if (target.runtimeEnv.build === 'insider') modifiers.nightly(manifest)
 
         return new ManifestPlugin({ config: { base: manifest } })
     }
@@ -275,43 +297,6 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
         return [new HotModuleReplacementPlugin(), new ReactRefreshWebpackPlugin({ overlay: false })]
     }
 
-    /** Get environment targets */
-    function getCompilationInfo() {
-        let buildTarget: 'chromium' | 'firefox' | 'safari' | 'E2E' = 'chromium'
-        let firefoxVariant: 'fennec' | 'geckoview' | undefined = undefined
-        let architecture: 'web' | 'app' = 'web'
-        let resolution: 'desktop' | 'mobile' = 'desktop'
-        let buildType: 'stable' | 'beta' | 'insider' = 'stable'
-        if (target.Chromium) buildTarget = 'chromium'
-        if (target.Firefox) buildTarget = 'firefox'
-        // Firefox browser on mobile which can use extension
-        if (target.FirefoxForAndroid) firefoxVariant = 'fennec'
-        // Android
-        if (target.StandaloneGeckoView) {
-            firefoxVariant = 'geckoview'
-            architecture = 'app'
-        }
-        if (target.Safari) {
-            buildTarget = 'safari'
-            architecture = 'app'
-        }
-        if (architecture === 'app' || firefoxVariant === 'fennec' || firefoxVariant === 'geckoview')
-            resolution = 'mobile'
-        if (target.E2E) buildTarget = 'E2E'
-        if (target.Beta) buildType = 'beta'
-        if (target.Insider) buildType = 'insider'
-
-        // build the envs
-        const allEnv = {
-            STORYBOOK: false,
-            target: buildTarget,
-            build: buildType,
-            architecture,
-            resolution,
-        }
-        if (firefoxVariant) allEnv[firefoxVariant] = firefoxVariant
-        return allEnv
-    }
     function getSSRPlugin() {
         if (env === 'development') return []
         return [
@@ -321,22 +306,88 @@ export default function (cli_env: Record<string, boolean> = {}, argv: any) {
     }
 }
 
-/** All targets available: --firefox --firefox-android --firefox-gecko --chromium --wk-webview --e2e */
-function getBuildPresets(argv: any) {
+type Presets = 'chromium' | 'e2e' | 'firefox' | 'android' | 'iOS'
+function getCompilationInfo(argv: any) {
+    let preset = 'chromium' as Presets
+
+    //#region build time flags
+    let isReproducibleBuild = !!argv.reproducible
+    let isProfile = !!argv.profile
+    let webExtensionFirefoxLaunchVariant = 'firefox-desktop' as 'firefox-desktop' | 'firefox-android'
+    //#endregion
+
+    //#region Set preset
+    if (argv.chromium) preset = 'chromium'
+    else if (argv.firefox) {
+        preset = 'firefox'
+        isReproducibleBuild = true
+    } else if (argv.android) {
+        preset = 'android'
+        webExtensionFirefoxLaunchVariant = 'firefox-android'
+    } else if (argv.iOS) preset = 'iOS'
+    else if (argv.E2E) preset = 'e2e'
+    else preset = 'chromium'
+    //#endregion
+
+    // ! this section must match packages/maskbook/src/env.d.ts
+    let target: 'chromium' | 'firefox' | 'safari' | 'E2E' = 'chromium'
+    let firefoxVariant: 'fennec' | 'geckoview' | undefined = undefined
+    let architecture: 'web' | 'app' = 'web'
+    let resolution: 'desktop' | 'mobile' = 'desktop'
+    let build: 'stable' | 'beta' | 'insider' = 'stable'
+    let manifest: 2 | 3 = 2
+
+    //#region Manifest V3
+    if (argv['manifest-v3']) {
+        preset = 'chromium'
+        manifest = 3
+    }
+    //#endregion
+
+    //#region Build presets
+    if (preset === 'chromium') {
+    } else if (preset === 'firefox') {
+        target = 'firefox'
+        firefoxVariant = 'fennec'
+    } else if (preset === 'android') {
+        target = 'firefox'
+        firefoxVariant = 'geckoview'
+        architecture = 'app'
+        resolution = 'mobile'
+    } else if (preset === 'e2e') {
+        target = 'E2E'
+    } else if (preset === 'iOS') {
+        target = 'safari'
+        architecture = 'app'
+        resolution = 'mobile'
+    } else {
+        throw new TypeError('Unknown preset ' + preset)
+    }
+    //#endregion
+
+    //#region Build version Stable/Beta/Insider
+    if (argv.insider) build = 'insider'
+    else if (argv.beta) build = 'beta'
+    else build = 'stable'
+    //#endregion
+
     return {
-        Firefox: (argv.firefox || argv['firefox-android'] || argv['firefox-gecko']) as 'nightly' | boolean,
-        FirefoxDesktop: argv.firefox as string | boolean,
-        FirefoxForAndroid: !!argv['firefox-android'],
-        StandaloneGeckoView: !!argv['firefox-gecko'],
-        Chromium: !!argv.chromium,
-        Safari: !!argv['wk-webview'],
-        E2E: !!argv.e2e,
-        Beta: !!argv.beta,
-        Insider: !!argv.insider,
-        ReproducibleBuild: !!argv['reproducible-build'],
+        runtimeEnv: { target, firefoxVariant, architecture, resolution, build, manifest, STORYBOOK: false },
+        isReproducibleBuild,
+        isProfile,
+        webExtensionFirefoxLaunchVariant,
+        // Shortcut properties
+        Chromium: preset === 'chromium',
+        iOS: preset === 'iOS',
+        Android: preset === 'android',
+        E2E: preset === 'e2e',
+        FirefoxEngine: preset === 'firefox' || preset === 'android',
+        // ! We cannot upload different version for Firefox desktop and Firefox Android, so they must emit same output.
+        Firefox: preset === 'firefox',
     }
 }
-export type Target = ReturnType<typeof getBuildPresets>
+
+export type Target = ReturnType<typeof getCompilationInfo>
 /** Get git info */
 function getGitInfo() {
     if (git.isRepository())

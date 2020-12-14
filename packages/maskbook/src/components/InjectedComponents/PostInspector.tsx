@@ -15,6 +15,7 @@ import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/PluginUI'
 import { usePostInfoDetails, usePostInfo } from '../DataSource/usePostInfo'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
+import type { PayloadAlpha40_Or_Alpha39, PayloadAlpha38 } from '../../utils/type-transform/Payload'
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessage, raw: string): void
@@ -29,6 +30,7 @@ export function PostInspector(props: PostInspectorProps) {
     const postContent = usePostInfoDetails('postContent')
     const encryptedPost = usePostInfoDetails('postPayload')
     const postId = usePostInfoDetails('postIdentifier')
+    const decryptedPayload = usePostInfoDetails('decryptedPayload')
     const postImages = usePostInfoDetails('postMetadataImages')
     const isDebugging = useValueRef(debugModeSetting)
     const whoAmI = useCurrentIdentity()
@@ -69,9 +71,12 @@ export function PostInspector(props: PostInspectorProps) {
                 onDecrypted={props.onDecrypted}
                 requestAppendRecipients={
                     // So should not create new data on version -40
-                    encryptedPost.ok && encryptedPost.val.version !== -40
+                    (encryptedPost.ok && encryptedPost.val.version !== -40) || decryptedPayload
                         ? async (profile) => {
-                              const { val } = encryptedPost
+                              const val = (postImages ? decryptedPayload : encryptedPost.val) as
+                                  | PayloadAlpha40_Or_Alpha39
+                                  | PayloadAlpha38
+
                               const { iv, version } = val
                               const ownersAESKeyEncrypted =
                                   val.version === -38 ? val.AESKeyEncrypted : val.ownersAESKeyEncrypted

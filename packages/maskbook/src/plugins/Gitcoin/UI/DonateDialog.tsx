@@ -98,7 +98,8 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     //#endregion
 
     //#region amount
-    const [amount, setAmount] = useState('0')
+    const [rawAmount, setRawAmount] = useState('0')
+    const amount = new BigNumber(rawAmount || '0').multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0))
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useERC20TokenBalance(token?.address ?? '')
     //#endregion
 
@@ -115,7 +116,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     const BulkCheckoutAddress = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
         token?.type === EthereumTokenType.ERC20 ? token.address : '',
-        amount,
+        amount.toFixed(),
         BulkCheckoutAddress,
     )
     const onApprove = useCallback(async () => {
@@ -126,7 +127,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     //#endregion
 
     //#region blocking
-    const [donateState, donateCallback, resetDonateCallback] = useDonateCallback(address ?? '', amount, token)
+    const [donateState, donateCallback, resetDonateCallback] = useDonateCallback(address ?? '', amount.toFixed(), token)
     //#endregion
 
     //#region remote controlled transaction dialog
@@ -136,7 +137,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
         token
             ? [
                   `I just donated ${title} with ${formatBalance(
-                      new BigNumber(amount),
+                      amount,
                       token.decimals ?? 0,
                       token.decimals ?? 0,
                   )} ${cashTag}${token.symbol}. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
@@ -151,7 +152,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-            if (donateState.type === TransactionStateType.HASH) setAmount('0')
+            if (donateState.type === TransactionStateType.HASH) setRawAmount('0')
             resetDonateCallback()
         },
     )
@@ -197,10 +198,10 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel
                             label="Amount"
-                            amount={amount}
+                            amount={rawAmount}
                             balance={tokenBalance ?? '0'}
                             token={token}
-                            onAmountChange={setAmount}
+                            onAmountChange={setRawAmount}
                             SelectTokenChip={{
                                 loading: loadingTokenBalance,
                                 ChipProps: {

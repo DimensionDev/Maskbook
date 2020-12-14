@@ -2,8 +2,8 @@ import stringify from 'json-stable-stringify'
 import { createGlobalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
-import type { SetupGuideStep } from '../components/InjectedComponents/SetupGuide'
 import { ChainId } from '../web3/types'
+import { Appearance, Language, LaunchPage } from './types'
 
 /**
  * Does the debug mode on
@@ -33,11 +33,6 @@ export const allPostReplacementSettings = createGlobalSettings<boolean>('post re
 })
 
 //#region appearance
-export enum Appearance {
-    default = 'default',
-    light = 'light',
-    dark = 'dark',
-}
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default, {
     primary: () => i18n.t('settings_appearance'),
     secondary: () => i18n.t('settings_appearance_secondary'),
@@ -45,10 +40,6 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
 //#endregion
 
 //#region chain state settings
-export interface ChainState {
-    chainId: ChainId
-    blockNumber: number
-}
 export const currentChainStateSettings = createGlobalSettings<string>('chain state', stringify([]), {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
@@ -74,11 +65,6 @@ export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>
 //#endregion
 
 //#region language
-export enum Language {
-    zh = 'zh',
-    en = 'en',
-    ja = 'ja',
-}
 const lang: string = i18nNextInstance.language
 export const languageSettings = createGlobalSettings<Language>(
     'language',
@@ -95,24 +81,11 @@ export const enableGroupSharingSettings = createGlobalSettings<boolean>('experim
 export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
 export const currentSelectedIdentity = createNetworkSettings('currentSelectedIdentity')
 
-export type SetupGuideCrossContextStatus = {
-    /** The persona to be connected */
-    persona?: string
-    /** The user name given by user */
-    username?: string
-    /** The WIP step */
-    status?: SetupGuideStep
-}
 export const currentSetupGuideStatus = createNetworkSettings('currentSetupGuideStatus')
 export const currentImportingBackup = createGlobalSettings<boolean>('importingBackup', false, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
-export enum LaunchPage {
-    facebook = 'facebook',
-    twitter = 'twitter',
-    dashboard = 'dashboard',
-}
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard, {
     primary: () => i18n.t('settings_launch_page'),
     secondary: () => i18n.t('settings_launch_page_secondary'),

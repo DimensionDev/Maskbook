@@ -15,7 +15,10 @@ export async function getRedPacket(rpid: string) {
     return record ? RedPacketRecordOutDB(record) : undefined
 }
 
-export function addRedPacket(record: RedPacketRecord) {
+export async function addRedPacket(record: RedPacketRecord) {
+    if (await RedPacketDatabase.has('red-packet', record.id)) {
+        return
+    }
     return RedPacketDatabase.add(RedPacketRecordIntoDB(record))
 }
 

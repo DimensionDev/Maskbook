@@ -1,0 +1,11 @@
+{
+  "name": "@dimensiondev/maskbook-cli-dev-or-build",
+  "private": true,
+  "bin": {
+    "build": "./build.js",
+    "dev": "./dev.js"
+  },
+  "dependencies": {
+    "inquirer": "^7.3.3"
+  }
+}

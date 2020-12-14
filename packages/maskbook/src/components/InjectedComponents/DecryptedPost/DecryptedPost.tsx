@@ -131,6 +131,8 @@ export function DecryptPost(props: DecryptPostProps) {
                 if (status.type === 'progress') {
                     if (status.progress === 'intermediate_success') refreshProgress(status.data)
                     else if (status.progress === 'iv_decrypted') current.iv.value = status.iv
+                    else if (status.progress === 'payload_decrypted')
+                        current.decryptedPayload.value = status.decryptedPayload
                 }
             }
         }

@@ -1,6 +1,5 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useAsync, useCopyToClipboard } from 'react-use'
-import { EthereumAddress } from 'wallet.ts'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import {
     CreditCard as CreditCardIcon,
@@ -39,7 +38,6 @@ import { sleep, checkInputLengthExceed } from '../../../utils/utils'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import { QRCode } from '../../../components/shared/qrcode'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { useChainId } from '../../../web3/hooks/useChainState'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
 import { RedPacketInboundList, RedPacketOutboundList } from '../../../plugins/RedPacket/UI/RedPacketList'
@@ -105,75 +103,6 @@ export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelector
                     itemSize: 52,
                     overscanCount: 2,
                 }}
-            />
-        </Box>
-    )
-}
-//#endregion
-
-//#region ERC20 customized token selector
-export interface ERC20CustomizedTokenSelectorProps {
-    onTokenChange?: (next: ERC20TokenDetailed | null) => void
-    excludeTokens?: string[]
-}
-
-export function ERC20CustomizedTokenSelector({ onTokenChange, ...props }: ERC20CustomizedTokenSelectorProps) {
-    const { t } = useI18N()
-    const chainId = useChainId()
-    const [address, setAddress] = useState('')
-    const [decimals, setDecimals] = useState(0)
-    const [name, setName] = useState('')
-    const [symbol, setSymbol] = useState('')
-    const isValidAddress = EthereumAddress.isValid(address)
-
-    useEffect(() => {
-        if (isValidAddress)
-            onTokenChange?.({
-                type: EthereumTokenType.ERC20,
-                chainId,
-                address,
-                decimals,
-                name,
-                symbol,
-            })
-        else onTokenChange?.(null)
-    }, [chainId, address, decimals, isValidAddress, name, symbol, onTokenChange])
-    return (
-        <Box
-            sx={{
-                textAlign: 'left',
-            }}>
-            <TextField
-                required
-                autoFocus
-                label={t('add_token_contract_address')}
-                error={!isValidAddress && !!address}
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                variant="outlined"
-            />
-            <TextField
-                required
-                label={t('add_token_decimals')}
-                value={decimals === 0 ? '' : decimals}
-                type="number"
-                inputProps={{ min: 0 }}
-                onChange={(e) => setDecimals(parseInt(e.target.value))}
-                variant="outlined"
-            />
-            <TextField
-                required
-                label={t('add_token_name')}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                variant="outlined"
-            />
-            <TextField
-                required
-                label={t('add_token_symbol')}
-                value={symbol}
-                onChange={(e) => setSymbol(e.target.value)}
-                variant="outlined"
             />
         </Box>
     )
@@ -510,30 +439,6 @@ export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<Wal
             ] as const,
         [tabState],
     )
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            {
-                label: t('add_token_well_known'),
-                children: (
-                    <ERC20PredefinedTokenSelector
-                        excludeTokens={Array.from(wallet.erc20_token_whitelist)}
-                        onTokenChange={setToken}
-                    />
-                ),
-            },
-            {
-                label: t('add_token_your_own'),
-                children: (
-                    <ERC20CustomizedTokenSelector
-                        excludeTokens={Array.from(wallet.erc20_token_whitelist)}
-                        onTokenChange={setToken}
-                    />
-                ),
-            },
-        ],
-        state,
-        height: 240,
-    }
     const onSubmit = useSnackbarCallback(
         async () => {
             if (!token) return
@@ -549,7 +454,12 @@ export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<Wal
                 icon={<HexagonIcon />}
                 iconColor="#699CF7"
                 primary={t('add_token')}
-                content={<AbstractTab {...tabProps}></AbstractTab>}
+                content={
+                    <ERC20PredefinedTokenSelector
+                        excludeTokens={Array.from(wallet.erc20_token_whitelist)}
+                        onTokenChange={setToken}
+                    />
+                }
                 footer={
                     <DebounceButton disabled={!token} variant="contained" onClick={onSubmit}>
                         {t('import')}
