@@ -10,9 +10,11 @@ jobs:
   nightly:
     runs-on: ubuntu-20.04
     env:
-      APP_ID: ''
+      APP_ID: 'kbhkmnhjabandbpkfgfkepnpajnpljig'
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 10
       - uses: actions/setup-node@v2-beta
       - uses: actions/cache@v2
         with:
