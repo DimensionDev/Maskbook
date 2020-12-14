@@ -121,7 +121,8 @@ export function RedPacketForm(props: RedPacketFormProps) {
     )
 
     // amount
-    const [amount, setAmount] = useState('0')
+    const [rawAmount, setRawAmount] = useState('0')
+    const amount = new BigNumber(rawAmount || '0').multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0))
     const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares || '0')
 
     // balance
@@ -135,7 +136,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const HappyRedPacketContractAddress = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
         token?.type === EthereumTokenType.ERC20 ? token.address : '',
-        amount,
+        amount.toFixed(),
         HappyRedPacketContractAddress,
     )
     const onApprove = useCallback(async () => {
@@ -216,7 +217,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
             onCreate?.(payload)
 
             // always reset amount
-            setAmount('0')
+            setRawAmount('0')
         },
     )
 
@@ -291,10 +292,10 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 <TokenAmountPanel
                     classes={{ root: classes.input }}
                     label={isRandom ? 'Total Amount' : 'Amount per Share'}
-                    amount={amount}
+                    amount={rawAmount}
                     balance={tokenBalance}
                     token={token}
-                    onAmountChange={setAmount}
+                    onAmountChange={setRawAmount}
                     SelectTokenChip={{
                         loading: loadingTokenBalance,
                         ChipProps: {
