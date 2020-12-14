@@ -1,0 +1,36 @@
+[
+    {
+        "id": "y-inaug",
+        "name": "YES Trump at Inauguration Token",
+        "symbol": "yINAUG",
+        "eth_address": "0x934e03e671e09528a52cb3373dc7bb7ca475b924"
+    },
+    {
+        "id": "n-inaug",
+        "name": "NO Trump at Inauguration Token",
+        "symbol": "nINAUG",
+        "eth_address": "0x55b2969a6d832c6091ba1af4ed6d0e6e7c2c0d90"
+    },
+    {
+        "id": "y-blue",
+        "name": "YES Dem Control Token",
+        "symbol": "yBLUE",
+        "eth_address": "0xf732ee9ccbf0df22f53fbdd9ec88d62df298fbf8"
+    },
+    {
+        "id": "n-blue",
+        "name": "NO Dem Control Token",
+        "symbol": "nBLUE",
+        "eth_address": "0x542439Eca879E52E03E0d6E87bcdCA165634245D"
+    },
+    {
+        "id": "y-kyc",
+        "name": "YES KYC Token",
+        "symbol": "yKYC",
+        "eth_address": "0x14de81C71B3F73874659082b971433514E201B27",
+        "home_urls": ["https://foundry.finance/"],
+        "community_urls": ["https://twitter.com/catnip_exchange", "https://discord.gg/dBN2tHZ"],
+        "source_code_urls": ["https://github.com/aug-dao/augur_foundry"],
+        "blockchain_urls": ["https://etherscan.io/address/0x14de81C71B3F73874659082b971433514E201B27"]
+    }
+]

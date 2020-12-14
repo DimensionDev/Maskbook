@@ -9,6 +9,8 @@ import { resolveCoinId, resolveCoinAddress, resolveAlias } from './hotfix'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
+import PREDICTION_MARKET_TOKENS from '../uniswap/prediction_market_tokens.json'
+import { getCoinTrendingFromUniswap } from '../uniswap'
 
 export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
     if (dataProvider === DataProvider.COIN_GECKO) {
@@ -46,6 +48,7 @@ export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<C
 
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     if (dataProvider === DataProvider.COIN_GECKO) return coinGeckoAPI.getAllCoins()
+    if (dataProvider === DataProvider.UNISWAP) return PREDICTION_MARKET_TOKENS
     const { data: coins } = await coinMarketCapAPI.getAllCoins()
     return coins
         .filter((x) => x.status === 'active')
@@ -283,6 +286,10 @@ export async function getCoinTrendingByKeyword(
     // prefer coins on the etherenum network
     const coin = coins.find((x) => x.eth_address) ?? first(coins)
     if (!coin) return null
+    if (dataProvider === DataProvider.UNISWAP) {
+        return getCoinTrendingFromUniswap(currency, coin)
+    }
+
     return getCoinTrendingById(resolveCoinId(keyword_, dataProvider) ?? coin.id, currency, dataProvider)
 }
 
