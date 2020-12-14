@@ -30,10 +30,10 @@ export async function getCurrenies(dataProvider: DataProvider): Promise<Currency
         case DataProvider.UNISWAP:
             return [
                 {
-                    id: 'dai',
-                    name: 'Dai Stablecoin',
-                    symbol: 'DAI',
-                    description: 'Dai Stablecoin',
+                    id: 'usd',
+                    name: 'USD',
+                    symbol: '$',
+                    description: 'Unite State Dollar',
                 },
             ]
         default:
@@ -64,10 +64,10 @@ export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<C
         case DataProvider.UNISWAP:
             return [
                 {
-                    id: 'dai',
-                    name: 'Dai Stablecoin',
-                    symbol: 'DAI',
-                    description: 'Dai Stablecoin',
+                    id: 'usd',
+                    name: 'USD',
+                    symbol: '$',
+                    description: 'Unite State Dollar',
                 },
             ]
     }
