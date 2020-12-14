@@ -103,7 +103,7 @@ function PopupUI() {
         window.close()
     }, [setSelectProviderDailogOpen])
 
-    const Trademark = () => {
+    const Trademark = (() => {
         if (ui.networkIdentifier !== 'localhost') {
             return null
         }
@@ -112,11 +112,11 @@ function PopupUI() {
                 ? getUrl('MB--ComboCircle--Nightly.svg')
                 : getUrl('MB--ComboCircle--Blue.svg')
         return <img className={classes.logo} src={src} />
-    }
+    })()
 
     return (
         <Paper className={classes.container}>
-            <Trademark />
+            {Trademark}
             {hasPermission === false ? (
                 <Alert severity="error" variant="outlined" action={null}>
                     <Typography>{t('popup_missing_permission')}</Typography>
