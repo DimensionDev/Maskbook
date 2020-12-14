@@ -28,6 +28,11 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(plugin_i
             if (!data) return undefined
             return data.value as Of<T>
         },
+        async has<T extends Type>(type: T, id: ID<T>): Promise<boolean> {
+            const t = await c('r')
+            const count = await t.store.count(key({ type, id }))
+            return count > 0
+        },
         /**
          * Store a data into the database.
          * @param data Must be an object with "type" and "id"

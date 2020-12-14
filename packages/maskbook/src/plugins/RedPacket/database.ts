@@ -2,7 +2,7 @@ import type { RedPacketRecord, RedPacketRecordInDatabase } from './types'
 import { RedPacketPluginID } from './constants'
 import { createPluginDatabase } from '../../database/Plugin/wrap-plugin-database'
 import { asyncIteratorToArray } from '../../utils/type-transform/asyncIteratorHelpers'
-import { isNil, omit } from 'lodash-es'
+import { omit } from 'lodash-es'
 
 export const RedPacketDatabase = createPluginDatabase<RedPacketRecordInDatabase>(RedPacketPluginID)
 
@@ -16,7 +16,7 @@ export async function getRedPacket(rpid: string) {
 }
 
 export async function addRedPacket(record: RedPacketRecord) {
-    if (!isNil(await RedPacketDatabase.get('red-packet', record.id))) {
+    if (await RedPacketDatabase.has('red-packet', record.id)) {
         return
     }
     return RedPacketDatabase.add(RedPacketRecordIntoDB(record))
