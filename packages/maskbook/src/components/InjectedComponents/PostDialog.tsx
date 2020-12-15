@@ -221,7 +221,9 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 label={
                                     <>
                                         {t('post_dialog__image_payload')}
-                                        {Flags.has_no_browser_tab_ui && <sup className={classes.sup}>(Beta)</sup>}
+                                        {Flags.image_payload_marked_as_beta && (
+                                            <sup className={classes.sup}>(Beta)</sup>
+                                        )}
                                     </>
                                 }
                                 onClick={() => props.onImagePayloadSwitchChanged(!props.imagePayload)}

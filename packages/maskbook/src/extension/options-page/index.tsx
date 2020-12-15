@@ -199,7 +199,10 @@ function DashboardUI() {
                 <Route path={DashboardRoute.Setup} component={withErrorBoundary(DashboardSetupRouter)} />
                 {/* // TODO: this page should be boardless */}
                 <Route path={DashboardRoute.RequestPermission} component={withErrorBoundary(RequestPermissionPage)} />
-                <Redirect path="*" to={Flags.has_no_browser_tab_ui && xsMatched ? DashboardRoute.Nav : DashboardRoute.Personas} />
+                <Redirect
+                    path="*"
+                    to={Flags.has_no_browser_tab_ui && xsMatched ? DashboardRoute.Nav : DashboardRoute.Personas}
+                />
             </Switch>
         </>,
     )
