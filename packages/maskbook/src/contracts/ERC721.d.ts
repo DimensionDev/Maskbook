@@ -13,9 +13,9 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class Erc721 extends Contract {
+export class ERC721 extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): Erc721
+    clone(): ERC721
     methods: {
         supportsInterface(interfaceId: string | number[]): TransactionObject<boolean>
 

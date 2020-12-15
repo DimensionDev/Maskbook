@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
 import COTM_TokenABI from '../../../../abis/COTM_Token.json'
-import type { CotmToken as COTM_Token } from '../../../contracts/COTM_Token'
+import type { COTMToken as COTM_Token } from '../../../contracts/COTM_Token'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useContract } from '../../../web3/hooks/useContract'
 import { COTM_CONSTANTS } from '../constants'

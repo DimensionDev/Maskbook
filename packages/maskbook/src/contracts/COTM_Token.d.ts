@@ -13,9 +13,9 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class CotmToken extends Contract {
+export class COTMToken extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): CotmToken
+    clone(): COTMToken
     methods: {
         approve(to: string, tokenId: number | string): TransactionObject<void>
 

@@ -13,9 +13,9 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class Erc20 extends Contract {
+export class ERC20 extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): Erc20
+    clone(): ERC20
     methods: {
         name(): TransactionObject<string>
 

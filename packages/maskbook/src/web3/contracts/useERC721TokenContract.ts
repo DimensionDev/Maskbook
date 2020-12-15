@@ -1,5 +1,5 @@
 import type { AbiItem } from 'web3-utils'
-import type { Erc721 as ERC721 } from '../../contracts/ERC721'
+import type { ERC721 } from '../../contracts/ERC721'
 import ERC721ABI from '../../../abis/ERC721.json'
 import { useContract } from '../hooks/useContract'
 
