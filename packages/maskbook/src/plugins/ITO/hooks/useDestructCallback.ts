@@ -36,7 +36,7 @@ export function useDestructCallback(id: string) {
         const estimatedGas = await ITO_Contract.methods
             .destruct(id)
             .estimateGas(config)
-            .catch((error) => {
+            .catch((error: Error) => {
                 setDestructState({
                     type: TransactionStateType.FAILED,
                     error,
@@ -65,7 +65,7 @@ export function useDestructCallback(id: string) {
                     gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                     ...config,
                 },
-                async (error, hash) => {
+                async (error: Error, hash: string) => {
                     if (hash) onSucceed(hash)
                     else if (error) onFailed(error)
                 },

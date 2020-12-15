@@ -21,3 +21,10 @@ export interface ITO_JSONPayload {
     exchange_amounts: string[]
     exchange_tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
 }
+
+export enum ITO_Status {
+    completed = 'completed',
+    waited = 'waited',
+    started = 'started',
+    expired = 'expired',
+}

@@ -392,5 +392,9 @@
     "plugin_poll_status_closed": "Closed",
     "plugin_poll_status_voting": "Voting",
     "plugin_poll_status_voted": "Voted.",
-    "plugin_poll_deadline": "{{time}} left until vote ends"
+    "plugin_poll_deadline": "{{time}} left until vote ends",
+    "plugin_ito_share": "Share",
+    "plugin_ito_enter": "Enter",
+    "plugin_ito_expired": "Expired",
+    "plugin_ito_completed": "Completed"
 }

@@ -51,7 +51,7 @@ export function useClaimCallback(
         const estimatedGas = await ITO_Contract.methods
             .claim(...params)
             .estimateGas(config)
-            .catch((error) => {
+            .catch((error: Error) => {
                 setClaimState({
                     type: TransactionStateType.FAILED,
                     error,
@@ -80,7 +80,7 @@ export function useClaimCallback(
                     gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                     ...config,
                 },
-                async (error, hash) => {
+                async (error: Error, hash: string) => {
                     if (hash) onSucceed(hash)
                     else if (error) onFailed(error)
                 },
