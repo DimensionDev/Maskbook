@@ -29,6 +29,7 @@ async function main() {
     // fix some typings bugs
     const definitionFilePath = path.join(GENERATED_PATH, 'types.d.ts')
 
+    replaceFileAll(definitionFilePath, 'web3/promiEvent', 'promievent')
     replaceFileAll(definitionFilePath, 'import { EventLog }', 'import { EventLog, TransactionReceipt }')
     replaceFileAll(
         definitionFilePath,
