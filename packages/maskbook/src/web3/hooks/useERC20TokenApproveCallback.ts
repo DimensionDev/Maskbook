@@ -5,6 +5,8 @@ import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useTransactionReceipt } from './useTransaction'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
+import { useConstant } from './useConstant'
+import { CONSTANTS } from '../constants'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
@@ -22,6 +24,8 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
     const { value: balance, retry: revalidateBalance } = useERC20TokenBalance(address)
     const { value: allowance, retry: revalidateAllowance } = useERC20TokenAllowance(address, spender)
 
+    const usdtAddress = useConstant(CONSTANTS, 'USDT_ADDRESS')
+
     const [approveHash, setApproveHash] = useState('')
     const receipt = useTransactionReceipt(approveHash)
 
@@ -33,54 +37,48 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
         return new BigNumber(allowance).isLessThan(amount) ? ApproveState.NOT_APPROVED : ApproveState.APPROVED
     }, [amount, spender, allowance, balance, approveHash, receipt?.blockHash])
 
+    const usdtResetCallback = useCallback(async () => {
+        if (approveState !== ApproveState.NOT_APPROVED) return
+        if (!spender || !erc20Contract) return
+        const approve = erc20Contract.methods.approve(spender, '0')
+        const from = account
+        const to = erc20Contract.options.address
+        const estimatedGas = await approve.estimateGas({ from, to })
+        return approve.send({ gas: estimatedGas, from, to })
+    }, [approveState, account, spender, erc20Contract])
+
     const approveCallback = useCallback(
         async (useExact: boolean = false) => {
             if (approveState !== ApproveState.NOT_APPROVED) return
             if (!account || !spender || !erc20Contract) return
             if (!amount || new BigNumber(amount).isZero()) return
-
-            const estimatedGas = await erc20Contract.methods
-                // general fallback for tokens who restrict approval amounts
-                .approve(spender, useExact ? amount : MaxUint256)
-                .estimateGas({
-                    from: account,
-                    to: erc20Contract.options.address,
-                })
-                .catch(() => {
-                    // if the current approve strategy is failed
-                    // then use oppsite strategy instead
-                    useExact = !useExact
-                    return erc20Contract.methods.approve(spender, amount).estimateGas({
-                        from: account,
-                        to: erc20Contract.options.address,
-                    })
-                })
-
-            return new Promise<string>((resolve, reject) => {
-                erc20Contract.methods.approve(spender, useExact ? amount : MaxUint256).send(
-                    {
-                        gas: estimatedGas,
-                        from: account,
-                        to: erc20Contract.options.address,
-                    },
-                    (error, hash) => {
-                        if (error) reject(error)
-                        else {
-                            resolve(hash)
-                            setApproveHash(hash)
-                        }
-                    },
-                )
-            })
+            if (account === usdtAddress && allowance && new BigNumber(allowance).gt(amount)) {
+                await usdtResetCallback()
+            }
+            const from = account
+            const to = erc20Contract.options.address
+            try {
+                const approve = erc20Contract.methods.approve(spender, useExact ? amount : MaxUint256)
+                const estimatedGas = await approve.estimateGas({ from, to })
+                const { transactionHash } = await approve.send({ gas: estimatedGas, from, to })
+                setApproveHash(transactionHash)
+                return transactionHash
+            } catch {
+                const approve = erc20Contract.methods.approve(spender, amount)
+                const estimatedGas = await approve.estimateGas({ from, to })
+                const { transactionHash } = await approve.send({ gas: estimatedGas, from, to })
+                setApproveHash(transactionHash)
+                return transactionHash
+            }
         },
-        [approveState, amount, account, spender, erc20Contract],
+        [approveState, amount, usdtAddress, allowance, account, spender, erc20Contract, usdtResetCallback],
     )
 
     const resetCallback = useCallback(() => {
         setApproveHash('')
         revalidateBalance()
         revalidateAllowance()
-    }, [])
+    }, [revalidateBalance, revalidateAllowance])
 
     return [approveState, approveCallback, resetCallback] as const
 }
