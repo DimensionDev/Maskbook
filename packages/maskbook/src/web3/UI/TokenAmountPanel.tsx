@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => {
 export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     amount: string
     balance: string
-    viewBalance: boolean
+    viewBalance?: boolean
     onAmountChange: (amount: string) => void
     label: string
     token?: EtherTokenDetailed | ERC20TokenDetailed | null
