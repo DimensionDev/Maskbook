@@ -1,15 +1,18 @@
-import { makeStyles, createStyles, Paper, IconButton, Typography } from '@material-ui/core'
-import { useCallback, useEffect, useReducer, useState } from 'react'
+import { makeStyles, createStyles, Paper, IconButton } from '@material-ui/core'
+import { useCallback, useEffect, useState } from 'react'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
-import AddIcon from '@material-ui/icons/Add'
-import RemoveIcon from '@material-ui/icons/Remove'
+import AddIcon from '@material-ui/icons/AddOutlined'
+import RemoveIcon from '@material-ui/icons/RemoveOutlined'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { v4 as uuid } from 'uuid'
+import { ITO_EXCHANGE_RATION_MAX } from '../constants'
+import { ExchangeTokenAndAmountActionType, useExchangeTokenAndAmount } from '../api/useExchangeTokenAmountstate'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -22,54 +25,56 @@ const useStyles = makeStyles((theme) =>
         },
         input: {
             flex: 1,
+            paddingTop: theme.spacing(1),
+            paddingBottom: theme.spacing(1),
+        },
+        flow: {
+            margin: theme.spacing(1),
+            textAlign: 'center',
         },
         button: {
+            margin: theme.spacing(1),
             borderRadius: 10,
         },
     }),
 )
 
-export interface ExchangeTokenAmount {
-    token: EtherTokenDetailed | ERC20TokenDetailed
-    amount: string
-}
-
-interface stateExchangeTokeAmount extends ExchangeTokenAmount {
-    id: string
-}
-
-export interface ExchangetokenPanelUIProps {
+export interface ExchangetokenPanelProps {
     onAmountChange: (amount: string, key: string) => void
     inputAmount: string
+
+    viewBalance: boolean
 
     exchangeToken: EtherTokenDetailed | ERC20TokenDetailed | undefined
     onExchangeTokenChange: (token: EtherTokenDetailed | ERC20TokenDetailed, key: string) => void
 
     onAdd: () => void
     onRemove: () => void
-
     dataIndex: string
 
     showRemove: boolean
     showAdd: boolean
 
-    label?: string
+    label: string
+    excludeTokensAddress?: string[]
 
     tokenAmountPanelProps: Partial<TokenAmountPanelProps>
 }
 
-export function ExchangeTokenPanelUI(props: ExchangetokenPanelUIProps) {
+export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
     const {
         onAmountChange,
         dataIndex,
         inputAmount,
-
+        viewBalance,
         exchangeToken,
         onExchangeTokenChange,
 
         showAdd = true,
         showRemove = false,
         label,
+
+        excludeTokensAddress = [],
         onRemove,
         onAdd,
     } = props
@@ -103,7 +108,7 @@ export function ExchangeTokenPanelUI(props: ExchangetokenPanelUIProps) {
     const [inputAmountForUI, setInputAmountForUI] = useState('')
     useEffect(() => {
         setInputAmountForUI(inputAmount)
-    }, [inputAmount])
+    }, [inputAmount, setInputAmountForUI])
 
     const onAmountChangeForUI = useCallback(
         (amount: string) => {
@@ -111,34 +116,39 @@ export function ExchangeTokenPanelUI(props: ExchangetokenPanelUIProps) {
         },
         [dataIndex, onAmountChange],
     )
+
     return (
         <>
             <Paper className={classes.line}>
                 <TokenAmountPanel
                     classes={{ root: classes.input }}
-                    label={props.label ?? ''}
+                    label={label}
                     amount={inputAmountForUI}
-                    balance={tokenBalance}
+                    viewBalance={viewBalance}
+                    balance={viewBalance ? tokenBalance : '0'}
                     token={exchangeToken}
                     onAmountChange={onAmountChangeForUI}
                     SelectTokenChip={{
-                        loading: loadingTokenBalance,
+                        loading: false,
                         ChipProps: {
                             onClick: onTokenChipClick,
                         },
+                    }}
+                    TextFieldProps={{
+                        disabled: !exchangeToken,
                     }}
                     {...props.tokenAmountPanelProps}
                 />
                 {showAdd ? (
                     <IconButton onClick={onAdd} className={classes.button}>
-                        <AddIcon />
+                        <AddIcon color="primary" />
                     </IconButton>
                 ) : (
                     ''
                 )}
                 {showRemove ? (
                     <IconButton onClick={onRemove} className={classes.button}>
-                        <RemoveIcon />
+                        <RemoveIcon color="secondary" />
                     </IconButton>
                 ) : (
                     ''
@@ -146,7 +156,7 @@ export function ExchangeTokenPanelUI(props: ExchangetokenPanelUIProps) {
             </Paper>
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
-                excludeTokens={[exchangeToken?.address]}
+                excludeTokens={[exchangeToken?.address ?? '', ...excludeTokensAddress]}
                 onSubmit={onSelectERC20TokenDialogSubmit}
                 onClose={onSelectERC20TokenDialogClose}
             />
@@ -154,106 +164,93 @@ export function ExchangeTokenPanelUI(props: ExchangetokenPanelUIProps) {
     )
 }
 
-export interface ExchangeTokenPanelProps {
+export interface ExchangeTokenPanelGroupProps {
     originToken: EtherTokenDetailed | ERC20TokenDetailed | undefined
-    onChange: (data: any) => void
-    exchangetokenPanelProps: Partial<ExchangetokenPanelUIProps>
+    onTokenAmountChange: (data: any) => void
 }
-export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
-    const { onChange } = props
 
-    const [exchangeTokenArray, dispatchExchangeTokenArray] = useReducer((state, action) => {
-        switch (action.type) {
-            case 'add':
-                return [
-                    ...state,
-                    {
-                        id: action.key,
-                        token: action.token,
-                        amount: action.amount,
-                    },
-                ]
-            case 'remove':
-                return state.filter((item) => item.id !== action.key)
-
-            case 'update_amount': {
-                console.log(action)
-
-                state = state.map((item) => (item.id === action.key ? { ...item, amount: action.amount } : item))
-                return state
-            }
-
-            case 'update_token': {
-                return state.map((item) => (item.id === action.key ? { ...item, token: action.token } : item))
-            }
-            default:
-                return state
-        }
-    }, [])
-
-    const { value: etherTokenDetailed } = useEtherTokenDetailed()
-    const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
+export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
+    const classes = useStyles()
+    const { t } = useI18N()
+    const { onTokenAmountChange } = props
+    const { value: token } = useEtherTokenDetailed()
+    const [excludeTokensAddress, setexcludeTokensAddress] = useState<string[]>([])
+    const [exchangeTokenArray, dispatchExchangeTokenArray] = useExchangeTokenAndAmount(token)
 
     const onAdd = useCallback(() => {
+        if (exchangeTokenArray.length > ITO_EXCHANGE_RATION_MAX) {
+            return
+        }
         dispatchExchangeTokenArray({
-            type: 'add',
+            type: ExchangeTokenAndAmountActionType.ADD,
             key: uuid(),
-            token: {
-                address: '0x',
-                decimals: 18,
-                symbol: 'MASK',
-                name: 'Ether',
-            },
+            token: undefined,
             amount: '0',
         })
-    }, [])
+    }, [dispatchExchangeTokenArray, exchangeTokenArray.length])
 
-    if (exchangeTokenArray && exchangeTokenArray.length === 0) {
-        onAdd()
+    const onAmountChange = useCallback(
+        (amount: string, key: string) => {
+            dispatchExchangeTokenArray({
+                type: ExchangeTokenAndAmountActionType.UPDATE_AMOUNT,
+                amount,
+                key,
+            })
+        },
+        [dispatchExchangeTokenArray],
+    )
+
+    const onTokenChange = useCallback(
+        (token: EtherTokenDetailed | ERC20TokenDetailed, key: string) => {
+            dispatchExchangeTokenArray({
+                type: ExchangeTokenAndAmountActionType.UPDATE_TOKEN,
+                token,
+                key,
+            })
+        },
+        [dispatchExchangeTokenArray],
+    )
+
+    function isETH(token?: EtherTokenDetailed | ERC20TokenDetailed) {
+        return token?.address === '0x0000000000000000000000000000000000000000'
     }
-
-    const onAmountChange = useCallback((amount: string, key: string) => {
-        dispatchExchangeTokenArray({
-            type: 'update_amount',
-            amount,
-            key,
-        })
-    }, [])
-
-    const onTokenChange = useCallback((token: EtherTokenDetailed | ERC20TokenDetailed, key: string) => {
-        dispatchExchangeTokenArray({
-            type: 'update_token',
-            token,
-            key,
-        })
-    }, [])
-
     useEffect(() => {
-        if (exchangeTokenArray?.length > 0) {
-            const arr = exchangeTokenArray.map((item) => [item.amount, item.token])
-            onChange(arr)
-        }
-    }, [exchangeTokenArray, onChange])
+        onTokenAmountChange(exchangeTokenArray)
+        const addresses = exchangeTokenArray
+            .filter((item) => !isETH(item?.token))
+            .map((item) => item?.token?.address ?? '')
+        setexcludeTokensAddress(addresses)
+    }, [exchangeTokenArray, onTokenAmountChange, setexcludeTokensAddress])
 
-    return exchangeTokenArray.map((item, idx) => {
-        return (
-            <ExchangeTokenPanelUI
-                dataIndex={item.id}
-                inputAmount={item.amount}
-                onAmountChange={onAmountChange}
-                exchangeToken={item.token}
-                onExchangeTokenChange={onTokenChange}
-                showRemove={idx < exchangeTokenArray.length && exchangeTokenArray.length !== 1}
-                showAdd={idx === exchangeTokenArray.length - 1}
-                {...props.exchangetokenPanelProps}
-                onRemove={() => dispatchExchangeTokenArray({ type: 'remove', key: item.id })}
-                onAdd={onAdd}
-                tokenAmountPanelProps={{
-                    InputProps: {
-                        startAdornment: <Typography>1{props.originToken?.symbol}=</Typography>,
-                    },
-                }}
-            />
-        )
-    })
+    return (
+        <>
+            {exchangeTokenArray.map((item, idx) => {
+                return (
+                    <ExchangeTokenPanel
+                        label={idx ? t('plugin_ito_swap_ration_label') : t('plugin_ito_sell_total_amount')}
+                        dataIndex={item.key}
+                        viewBalance={idx === 0}
+                        inputAmount={item.amount}
+                        excludeTokensAddress={excludeTokensAddress}
+                        onAmountChange={onAmountChange}
+                        exchangeToken={item.token}
+                        onExchangeTokenChange={onTokenChange}
+                        showRemove={idx > 0 && idx < exchangeTokenArray.length && exchangeTokenArray.length !== 2}
+                        showAdd={idx === exchangeTokenArray.length - 1 && idx < ITO_EXCHANGE_RATION_MAX}
+                        onRemove={() =>
+                            dispatchExchangeTokenArray({ type: ExchangeTokenAndAmountActionType.REMOVE, key: item.key })
+                        }
+                        onAdd={onAdd}
+                        tokenAmountPanelProps={{
+                            InputProps: idx
+                                ? {
+                                      startAdornment: props.originToken ? `1${props.originToken?.symbol}=` : '',
+                                  }
+                                : {},
+                        }}
+                    />
+                )
+            })}
+        </>
+    )
 }

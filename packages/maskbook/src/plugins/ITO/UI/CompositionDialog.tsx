@@ -7,7 +7,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
 import { editActivatedPostMetadata } from '../../../social-network/ui'
-import { TestForm } from './TestForm'
+import { CreateItoGuide } from './CreateItoGuide'
 
 const useStyles = makeStyles((theme) => createStyles({}))
 
@@ -35,17 +35,12 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: 'Test',
-                children: <TestForm onCreate={onCreateOrSelect} />,
+                label: t('plugin_ito_create_new'),
+                children: <CreateItoGuide onCreate={onCreateOrSelect} />,
                 sx: { p: 0 },
             },
-            // {
-            //     label: 'Create New',
-            //     children: <CreateForm onCreate={onCreateOrSelect} />,
-            //     sx: { p: 0 },
-            // },
             {
-                label: 'Select Existing',
+                label: t('plugin_ito_select_existing'),
                 children: <Typography>abc2</Typography>,
                 sx: { p: 0 },
             },
@@ -56,9 +51,9 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     return (
         <>
-            <InjectedDialog open={props.open} title="ITO Composition Dialog" onClose={props.onClose}>
+            <InjectedDialog open={props.open} title={t('plugin_ito_display_name')} onClose={props.onClose}>
                 <DialogContent>
-                    <AbstractTab height={362} {...tabProps} />
+                    <AbstractTab height={540} {...tabProps} />
                 </DialogContent>
             </InjectedDialog>
         </>

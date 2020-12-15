@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme) => {
 export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     amount: string
     balance: string
+    viewBalance: boolean
     onAmountChange: (amount: string) => void
     label: string
     token?: EtherTokenDetailed | ERC20TokenDetailed | null
@@ -55,7 +56,7 @@ export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyle
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
-    const { amount, balance, token, onAmountChange, label } = props
+    const { amount, balance, token, onAmountChange, label, viewBalance = true } = props
 
     const classes = useStylesExtends(useStyles(), props)
 
@@ -111,14 +112,22 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                             justifyContent: 'center',
                             alignItems: 'flex-end',
                         }}>
-                        <Typography className={classes.balance} color="textSecondary" variant="body2" component="span">
-                            Balance: {formatBalance(new BigNumber(balance), token.decimals ?? 0, 6)}
-                        </Typography>
+                        {viewBalance ? (
+                            <Typography
+                                className={classes.balance}
+                                color="textSecondary"
+                                variant="body2"
+                                component="span">
+                                Balance: {formatBalance(new BigNumber(balance), token.decimals ?? 0, 6)}
+                            </Typography>
+                        ) : (
+                            ''
+                        )}
                         <Box
                             sx={{
                                 display: 'flex',
                             }}>
-                            {balance !== '0' ? (
+                            {balance !== '0' && viewBalance ? (
                                 <Chip
                                     className={classes.max}
                                     size="small"
@@ -144,9 +153,17 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                             justifyContent: 'center',
                             alignItems: 'flex-end',
                         }}>
-                        <Typography className={classes.balance} color="textSecondary" variant="body2" component="span">
-                            -
-                        </Typography>
+                        {viewBalance ? (
+                            <Typography
+                                className={classes.balance}
+                                color="textSecondary"
+                                variant="body2"
+                                component="span">
+                                -
+                            </Typography>
+                        ) : (
+                            ''
+                        )}
                         <SelectTokenChip token={token} {...props.SelectTokenChip} />
                     </Box>
                 ),

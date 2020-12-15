@@ -1,29 +1,29 @@
+import { createStyles, makeStyles, Box, TextField, Grid } from '@material-ui/core'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
-import BigNumber from 'bignumber.js'
-import { v4 as uuid } from 'uuid'
-import { createStyles, makeStyles, MenuProps, Box, TextField, Grid } from '@material-ui/core'
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import { EthereumTokenType, ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
+import { EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
 import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
-import type { ITO_JSONPayload } from '../types'
-import { ExchangeTokenPanel } from './ExchangeTokenPanel'
+import { ExchangeTokenPanelGroup } from './ExchangeTokenPanel'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import BigNumber from 'bignumber.js'
+import type { PoolSettings } from '../hooks/useFillCallback'
+import 'date-fns'
+import type { ExchangeTokenAndAmountState } from '../api/useExchangeTokenAmountstate'
+import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { formatBalance } from '../../Wallet/formatter'
+import { v4 as uuid } from 'uuid'
+import { useChainIdValid } from '../../../web3/hooks/useChainState'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         line: {
             margin: theme.spacing(1),
+            display: 'flex',
         },
         flow: {
             margin: theme.spacing(1),
@@ -36,16 +36,8 @@ const useStyles = makeStyles((theme) =>
             padding: theme.spacing(1),
             flex: 1,
         },
-        inputLine: {
-            maring: theme.spacing(1),
-            paddingRight: theme.spacing(3),
-            paddingLeft: theme.spacing(1),
-        },
-        daysInput: {
-            flex: 1,
-        },
-        hoursInput: {
-            flex: 1,
+        label: {
+            paddingLeft: theme.spacing(2),
         },
         tip: {
             fontSize: 12,
@@ -55,52 +47,44 @@ const useStyles = makeStyles((theme) =>
             margin: theme.spacing(2, 0),
             padding: 12,
         },
+        date: {
+            flex: 1,
+            padding: theme.spacing(1),
+        },
     }),
 )
 
-export interface CreateFormProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    onCreate?(payload: ITO_JSONPayload): void
-    SelectMenuProps?: Partial<MenuProps>
+export interface CreateFormProps extends withClasses<never> {
+    onChangePoolSettings: (pollSettings: PoolSettings | undefined) => void
+    onConnectWallet: () => void
+    onNext: () => void
 }
 
 export function CreateForm(props: CreateFormProps) {
+    const { onChangePoolSettings, onNext, onConnectWallet } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
-    const chainId = useChainId()
     const chainIdValid = useChainIdValid()
 
-    const { value: tokenDetailed } = useEtherTokenDetailed()
-    const [token, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>(tokenDetailed)
-    const [amount, setAmount] = useState('')
-    const [message, setMessage] = useState('Best Wishes!')
-    const [totalOfPerWallet, setTotalOfPerWallet] = useState(1)
-    const [days, setDays] = useState(0)
-    const [hours, setHours] = useState(0)
-
-    // balance
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
-        token?.type ?? EthereumTokenType.Ether,
-        token?.address ?? '',
-    )
+    const [message, setMessage] = useState('')
+    const [totalOfPerWallet, setTotalOfPerWallet] = useState('0')
+    const [tokenAndAmounts, setTokenAndAmounts] = useState<ExchangeTokenAndAmountState[]>([])
+    const [tokenAndAmount, setTokenAndAmount] = useState<ExchangeTokenAndAmountState>()
+    const [startTime, setStartTime] = useState('')
+    const [endTime, setEndTime] = useState('')
 
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
 
-    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const GMT = new Date().getTimezoneOffset() / 60
+
+    const ITOContractAddress = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
-        token?.type === EthereumTokenType.ERC20 ? token.address : '',
-        amount,
-        ITO_CONTRACT_ADDRESS,
+        tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount?.token?.address : '',
+        tokenAndAmount?.amount,
+        ITOContractAddress,
     )
-
-    const onAmountChange = useCallback((amount: string, key: string) => {
-        setAmount(amount)
-    }, [])
-
-    const onTokenChange = useCallback((token: EtherTokenDetailed | ERC20TokenDetailed, key: string) => {
-        setToken(token)
-    }, [])
 
     const onApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) {
@@ -110,136 +94,172 @@ export function CreateForm(props: CreateFormProps) {
     }, [approveState, approveCallback])
 
     const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
-    const [tokenAndAmount, setTokenAndAmount] = useState([])
-
-    const validationMessage = useMemo(() => {
-        if (new BigNumber(amount).isZero()) {
-            return 'Enter an amount'
-        }
-        if (!token) {
-            return 'Select to token'
-        }
-        return ''
-    }, [token, amount])
 
     const onTotalOfPerWalletChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
-        const total = ev.currentTarget.value.replace(/[,\.]/g, '')
-        if (total === '') setTotalOfPerWallet(0)
-        else if (/^[1-9]+\d*$/.test(total)) {
-            setTotalOfPerWallet(Number.parseInt(total, 10))
+        const total = ev.currentTarget.value
+        if (total === '') setTotalOfPerWallet('')
+        if (/^\d+[\.]?\d*$/.test(total)) {
+            setTotalOfPerWallet(total)
+        } else {
+            setTotalOfPerWallet('')
         }
     }, [])
 
-    const onDaysChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
-        const days_ = ev.currentTarget.value.replace(/[,\.]/g, '')
-        console.log(days_)
-        if (days_ === '') setDays(0)
-        else if (/^[0-9]+\d*$/.test(days_)) {
-            setDays(Number.parseInt(days_, 10))
-        }
-    }, [])
-    const onHoursChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
-        const hours_ = ev.currentTarget.value.replace(/[,\.]/g, '')
-        if (hours_ === '') setHours(0)
-        else if (/^[0-9]+\d*$/.test(hours_)) {
-            setHours(Number.parseInt(hours_, 10))
-        }
-    }, [])
+    const [poolSettings, setPoolSettings] = useState<PoolSettings>()
 
     useEffect(() => {
-        console.log('**********************')
-        console.log(amount)
-        console.log(token)
-        console.log(tokenAndAmount)
-        console.log(message)
-        console.log(totalOfPerWallet)
-    }, [amount, token, tokenAndAmount, message, totalOfPerWallet])
+        const [first, ...last] = tokenAndAmounts
+        setTokenAndAmount(first)
+        setPoolSettings({
+            password: uuid(),
+            name: senderName,
+            title: message,
+            limit: totalOfPerWallet,
+            token: tokenAndAmount?.token,
+            total: new BigNumber(tokenAndAmount?.amount ?? '0').toFixed(),
+            exchangeAmounts: last.map((item) => new BigNumber(item.amount).toFixed()),
+            exchangeTokens: last.map((item) => item.token) ?? [],
+            startTime: new Date(startTime),
+            endTime: new Date(endTime),
+        })
+    }, [
+        senderName,
+        message,
+        totalOfPerWallet,
+        tokenAndAmount,
+        setTokenAndAmount,
+        tokenAndAmounts,
+        startTime,
+        endTime,
+        account,
+    ])
 
-    if (!token) return null
+    useEffect(() => {
+        onChangePoolSettings(poolSettings)
+    }, [onChangePoolSettings, poolSettings])
+
+    // balance
+    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
+        tokenAndAmount?.token?.type ?? EthereumTokenType.Ether,
+        tokenAndAmount?.token?.address ?? '',
+    )
+
+    const validationMessage = useMemo(() => {
+        if (!tokenAndAmounts || tokenAndAmounts.length === 0) return t('plugin_ito_error_enter_amount_and_token')
+        for (const { amount, token } of tokenAndAmounts) {
+            if (!token) return t('plugin_ito_error_select_token')
+            if (new BigNumber(amount).isZero()) return t('plugin_ito_error_enter_amount')
+        }
+
+        if (new BigNumber(tokenAndAmount?.amount ?? '0').isGreaterThan(new BigNumber(tokenBalance)))
+            return t('plugin_ito_error_balance', {
+                symbol: tokenAndAmount?.token?.symbol,
+            })
+
+        if (
+            new BigNumber(totalOfPerWallet).isZero() ||
+            new BigNumber(totalOfPerWallet).isGreaterThan(new BigNumber(tokenAndAmount?.amount ?? '0'))
+        )
+            return t('plugin_ito_error_enter_allocation_per_walllet')
+
+        if (startTime === '' || endTime === '' || startTime >= endTime) return t('plugin_ito_error_exchange_time')
+
+        return ''
+    }, [
+        endTime,
+        startTime,
+        t,
+        tokenAndAmount?.amount,
+        tokenAndAmount?.token?.symbol,
+        tokenAndAmounts,
+        tokenBalance,
+        totalOfPerWallet,
+    ])
+
+    const handleStartTime = useCallback(
+        (timeString) => {
+            const time = new Date(timeString).getTime()
+            if (endTime === '' || time < new Date(endTime).getTime()) setStartTime(timeString)
+        },
+        [endTime],
+    )
+
+    const handleEndTime = useCallback(
+        (timeString) => {
+            const time = new Date(timeString).getTime()
+            const now = new Date()
+            if (time < now.getTime()) return
+            if (startTime === '' || time > new Date(startTime).getTime()) setEndTime(timeString)
+        },
+        [startTime],
+    )
+
     return (
         <>
-            <EthereumStatusBar />
-            <Box className={classes.line}>
-                <ExchangeTokenPanel
-                    onAmountChange={onAmountChange}
-                    showAdd={false}
-                    showRemove={false}
-                    dataIndex={uuid()}
-                    label="Total amount"
-                    inputAmount={amount}
-                    exchangeToken={token}
-                    onExchangeTokenChange={onTokenChange}
+            <EthereumStatusBar classes={{ root: classes.bar }} />
+            <Box className={classes.line} style={{ display: 'block' }}>
+                <ExchangeTokenPanelGroup
+                    originToken={tokenAndAmount?.token}
+                    onTokenAmountChange={(arr) => setTokenAndAmounts(arr)}
                 />
             </Box>
-            <Box className={classes.flow}>
-                <ArrowDownwardIcon />
-            </Box>
             <Box className={classes.line}>
-                <ExchangeTokenPanel
-                    originToken={token}
-                    onChange={setTokenAndAmount}
-                    exchangetokenPanelProps={{
-                        label: 'Swap Ration',
+                <TextField
+                    className={classes.input}
+                    label={t('plugin_item_message_label')}
+                    defaultValue="MASK"
+                    onChange={(e) => setMessage(e.target.value)}
+                    InputLabelProps={{
+                        shrink: true,
                     }}
                 />
             </Box>
-            <Box className={classes.inputLine}>
+            <Box className={classes.line}>
                 <TextField
                     className={classes.input}
-                    fullWidth
-                    label="Title"
-                    onChange={(ev) => setMessage(ev.target.value)}
-                />
-            </Box>
-            <Box className={classes.line} style={{ display: 'flex' }}>
-                <TextField
-                    className={classes.input}
-                    label="Allocation per wallet"
+                    label={t('plugin_ito_allocation_per_wallet')}
                     onChange={onTotalOfPerWalletChange}
+                    value={totalOfPerWallet}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
                     InputProps={{
-                        endAdornment: 'ETH',
+                        endAdornment: tokenAndAmount?.token?.symbol,
                         inputProps: {
                             autoComplete: 'off',
                             autoCorrect: 'off',
                             inputMode: 'decimal',
-                            placeholder: '1',
+                            placeholder: '0',
                             pattern: '^[0-9]$',
                             spellCheck: false,
                         },
                     }}
                 />
-                <Box className={classes.input} style={{ display: 'flex' }}>
-                    <TextField
-                        onChange={onDaysChange}
-                        className={classes.daysInput}
-                        InputProps={{
-                            endAdornment: 'days',
-                            inputProps: {
-                                autoComplete: 'off',
-                                autoCorrect: 'off',
-                                inputMode: 'decimal',
-                                placeholder: '0',
-                                pattern: '^[0-9]$',
-                                spellCheck: false,
-                            },
-                        }}
-                    />
-                    <TextField
-                        className={classes.hoursInput}
-                        onChange={onHoursChange}
-                        InputProps={{
-                            endAdornment: 'hours',
-                            inputProps: {
-                                autoComplete: 'off',
-                                autoCorrect: 'off',
-                                inputMode: 'decimal',
-                                placeholder: '0',
-                                pattern: '^[0-9]$',
-                                spellCheck: false,
-                            },
-                        }}
-                    />
-                </Box>
+            </Box>
+            <Box className={classes.line} style={{ display: 'flex' }}>
+                <TextField
+                    className={classes.date}
+                    onChange={(ev) => handleStartTime(ev.target.value)}
+                    label={t('plugin_ito_begin_times_label', { GMT })}
+                    type="datetime-local"
+                    value={startTime}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    required={true}
+                />
+
+                <TextField
+                    required={true}
+                    className={classes.date}
+                    onChange={(ev) => handleEndTime(ev.target.value)}
+                    label={t('plugin_ito_end_times_label', { GMT })}
+                    type="datetime-local"
+                    value={endTime}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                />
             </Box>
             <Box className={classes.line}>
                 <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
@@ -252,28 +272,33 @@ export function CreateForm(props: CreateFormProps) {
                                 size="large"
                                 disabled={approveState === ApproveState.PENDING}
                                 onClick={onApprove}>
-                                {approveState === ApproveState.NOT_APPROVED ? `Approve ${token?.symbol}` : ''}
-                                {approveState === ApproveState.PENDING ? `Approve... ${token?.symbol}` : ''}
+                                {approveState === ApproveState.NOT_APPROVED
+                                    ? t('plugin_ito_approve', { symbol: tokenAndAmount?.token?.symbol })
+                                    : ''}
+                                {approveState === ApproveState.PENDING
+                                    ? t('plugin_ito_approve_pending', { symbol: tokenAndAmount?.token?.symbol })
+                                    : ''}
                             </ActionButton>
                         </Grid>
                     ) : null}
 
                     <Grid item xs={approveRequired ? 6 : 12}>
                         {!account || !chainIdValid ? (
-                            <ActionButton className={classes.button} fullWidth variant="contained" size="large">
-                                Connect a wallet
+                            <ActionButton
+                                className={classes.button}
+                                fullWidth
+                                variant="contained"
+                                size="large"
+                                onClick={onConnectWallet}>
+                                {t('plugin_ito_connect_a_wallet')}
                             </ActionButton>
                         ) : validationMessage ? (
                             <ActionButton className={classes.button} fullWidth variant="contained" disabled>
                                 {validationMessage}
                             </ActionButton>
                         ) : (
-                            <ActionButton className={classes.button} fullWidth>
-                                {`Send ${formatBalance(
-                                    new BigNumber(amount),
-                                    token.decimals ?? 0,
-                                    token.decimals ?? 0,
-                                )} ${token.symbol}`}
+                            <ActionButton className={classes.button} fullWidth onClick={onNext} variant="contained">
+                                {t('plugin_ito_next')}
                             </ActionButton>
                         )}
                     </Grid>
