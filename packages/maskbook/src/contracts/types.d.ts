@@ -5,7 +5,7 @@ import BN from 'bn.js'
 import { EventLog, TransactionReceipt } from 'web3-core/types'
 import { EventEmitter } from 'events'
 // @ts-ignore
-import PromiEvent from 'promievent'
+import PromiEvent from 'web3/promiEvent'
 
 interface EstimateGasOptions {
     from?: string
@@ -25,7 +25,7 @@ export interface TransactionObject<T> {
     call(options?: EstimateGasOptions): Promise<T>
     send(
         options?: EstimateGasOptions,
-        callback: (error: Error | null, hash: string) => void,
+        callback?: (error: Error | null, hash: string) => void,
     ): PromiEvent<TransactionReceipt>
     estimateGas(options?: EstimateGasOptions): Promise<number>
     encodeABI(): string

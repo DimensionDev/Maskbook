@@ -5,7 +5,7 @@ import BN from 'bn.js'
 import { Contract, ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from '../types'
+import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
 
 interface EventOptions {
     filter?: object
@@ -13,35 +13,37 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class CotmToken extends Contract {
+export class ElectionToken extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): CotmToken
+    clone(): ElectionToken
     methods: {
         approve(to: string, tokenId: number | string): TransactionObject<void>
+
+        mintStateToken(claimer: string, state: number | string): TransactionObject<string>
+
+        modify_admin(target: string, ifadmin: boolean): TransactionObject<void>
+
+        modify_limits(state: number | string, delta: number | string): TransactionObject<void>
+
+        safeTransferFrom(from: string, to: string, tokenId: number | string): TransactionObject<void>
+
+        setApprovalForAll(operator: string, approved: boolean): TransactionObject<void>
+
+        transferFrom(from: string, to: string, tokenId: number | string): TransactionObject<void>
 
         balanceOf(owner: string): TransactionObject<string>
 
         baseURI(): TransactionObject<string>
 
-        check_availability(): TransactionObject<string>
+        check_availability(state: number | string): TransactionObject<string>
 
         getApproved(tokenId: number | string): TransactionObject<string>
 
         isApprovedForAll(owner: string, operator: string): TransactionObject<boolean>
 
-        mintToken(claimer: string): TransactionObject<string>
-
-        modify_admin(target: string, ifadmin: boolean): TransactionObject<void>
-
-        modify_limit(delta: number | string): TransactionObject<void>
-
         name(): TransactionObject<string>
 
         ownerOf(tokenId: number | string): TransactionObject<string>
-
-        safeTransferFrom(from: string, to: string, tokenId: number | string): TransactionObject<void>
-
-        setApprovalForAll(operator: string, approved: boolean): TransactionObject<void>
 
         supportsInterface(interfaceId: string | number[]): TransactionObject<boolean>
 
@@ -54,8 +56,6 @@ export class CotmToken extends Contract {
         tokenURI(tokenId: number | string): TransactionObject<string>
 
         totalSupply(): TransactionObject<string>
-
-        transferFrom(from: string, to: string, tokenId: number | string): TransactionObject<void>
     }
     events: {
         Approval: ContractEvent<{
