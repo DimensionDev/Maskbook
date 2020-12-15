@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => {
             flex: 1,
             height: '100%',
             [theme.breakpoints.up('sm')]: {
-                display: 'grid',
+                display: Flags.has_native_nav_bar ? 'inline' : 'grid',
                 gridTemplateRows: (props) => (props.isSetup ? '1fr' : '[titleAction] 0fr [divider] 0fr [content] auto'),
             },
         },

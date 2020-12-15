@@ -1,5 +1,6 @@
-const is_iOSApp = process.env.target === 'safari' && process.env.architecture === 'app'
-const isAndroidApp = process.env.architecture === 'app' && process.env.target === 'firefox'
+export const is_iOSApp = process.env.target === 'safari' && process.env.architecture === 'app'
+export const isAndroidApp = process.env.architecture === 'app' && process.env.target === 'firefox'
+const appOnly = process.env.architecture === 'app'
 
 const devOnly = process.env.NODE_ENV === 'development'
 
@@ -14,23 +15,22 @@ export const Flags = {
         architecture: process.env.architecture,
     },
     /** There is no "tabs" to navigate to. We must be careful with this. */
-    has_no_browser_tab_ui: process.env.architecture === 'app',
-    has_no_connected_user_link: process.env.architecture === 'app',
-    has_native_nav_bar: process.env.architecture === 'app',
-    inject_search_result_box: true,
+    has_no_browser_tab_ui: appOnly,
+    has_no_connected_user_link: appOnly,
+    has_native_nav_bar: appOnly,
     inject_search_prediction_box: webOnly,
     /** In E2E, prefer open shadow root so we can test it. */
     using_ShadowDOM_attach_mode: process.env.target === 'E2E' ? 'open' : 'closed',
     /** Don't inject injected script in this mode. Native side will do the job. */
     support_native_injected_script_declaration: is_iOSApp,
     /** Don't show welcome page in this mode. Native side will do the job. */
-    has_native_welcome_ui: process.env.architecture === 'app',
+    has_native_welcome_ui: appOnly,
     /** Firefox has a special API that can inject to the document with a higher permission. */
     requires_injected_script_run_directly: process.env.target === 'firefox',
     // TODO: document why it enabled on app
-    support_eth_network_switch: process.env.architecture === 'app' || betaOrInsiderOnly,
+    support_eth_network_switch: appOnly || betaOrInsiderOnly,
     //#region Experimental features
-    wallet_enabled: true,
+    image_payload_marked_as_beta: appOnly,
     /** Prohibit the use of test networks in production */
     wallet_network_strict_mode_enabled: process.env.NODE_ENV === 'production' && !betaOrInsiderOnly,
     transak_enabled: webOnly,

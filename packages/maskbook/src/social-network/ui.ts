@@ -333,8 +333,7 @@ export function activateSocialNetworkUI(): void {
                     if (val.length === 1) ui.currentIdentity.value = val[0]
                 })
                 {
-                    if (Flags.inject_search_result_box && typeof ui.injectSearchResultBox === 'function')
-                        ui.injectSearchResultBox()
+                    if (typeof ui.injectSearchResultBox === 'function') ui.injectSearchResultBox()
                     if (Flags.inject_search_prediction_box && typeof ui.injectSearchPredictionBox === 'function')
                         ui.injectSearchPredictionBox()
                 }
