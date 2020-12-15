@@ -102,8 +102,68 @@ export function TestForm(props: TestFormProps) {
         } as ITO_JSONPayload
     }, [fillState /* update payload only if state changed */])
     const onCompose = useCallback(() => {
-        if (!payload) return
-        props.onCreate?.(payload)
+        // if (!payload) return
+        props.onCreate?.({
+            contract_address: '0x52ceb31d6c197b5c039786fbefd6a82df70fdfd6',
+            total: '1000000',
+            total_remaining: '900000',
+            claim_remaining: '500',
+            pid: '0x91abb4660d1925c3c0a5bfb9d0481e80a558d86b3fe446764cadc2cd9505f1b4',
+            sender: {
+                address: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
+                name: 'Mask',
+                message: 'Test ITO Packet',
+            },
+            chainId: 4,
+            token: {
+                type: 1,
+                address: '0x960b816d6dd03ed514c03f56788279154348ea37',
+                chainId: 4,
+                name: 'MASKBOOK A',
+                symbol: 'MSKA',
+                decimals: 18,
+            },
+            limit: '1000',
+            password: 'd928b4b2-0a7e-4c08-aaa9-6d02d7a40391',
+            creation_time: 1607669042000,
+            start_time: 1609668871197,
+            end_time: 1610668871197,
+            exchange_tokens: [
+                {
+                    type: 1,
+                    address: '0x0000000000000000000000000000000000000000',
+                    chainId: 4,
+                    name: 'Ether',
+                    symbol: 'ETH',
+                    decimals: 18,
+                },
+                {
+                    type: 1,
+                    address: '0x6b175474e89094c44da98b954eedeac495271d0f',
+                    chainId: 4,
+                    name: 'Dai Stablecoin',
+                    symbol: 'DAI',
+                    decimals: 18,
+                },
+                {
+                    type: 1,
+                    address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+                    chainId: 4,
+                    name: 'Tether USD',
+                    symbol: 'USDT',
+                    decimals: 18,
+                },
+                {
+                    type: 1,
+                    address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+                    chainId: 4,
+                    name: 'USD Coin',
+                    symbol: 'USDC',
+                    decimals: 18,
+                },
+            ],
+            exchange_amounts: ['333000000000000000', '12220000000000000', '18999222000000000', '5000000000000000'],
+        })
     }, [payload])
     //#endregion
 

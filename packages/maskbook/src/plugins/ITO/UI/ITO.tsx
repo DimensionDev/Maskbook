@@ -1,9 +1,35 @@
-import type { ITO_JSONPayload } from '../types'
-import { makeStyles, createStyles, Card, Typography, Box } from '@material-ui/core'
+import { useCallback } from 'react'
+import { BigNumber } from 'bignumber.js'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { WalletMessages } from '../../Wallet/messages'
+import { ITO_JSONPayload, ITO_Status } from '../types'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { makeStyles, createStyles, Card, Typography, Box, Link } from '@material-ui/core'
+import { getConstant } from '../../../web3/helpers'
+import { CONSTANTS } from '../../../web3/constants'
+import { resolveLinkOnEtherscan } from '../../../web3/pipes'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
+import { useAccount } from '../../../web3/hooks/useAccount'
 import BackgroundImage from '../assets/background'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { EthIcon, DaiIcon, UsdcIcon, UsdtIcon } from '../assets/tokenIcon'
+import { formatBalance, formatToken } from '../../Wallet/formatter'
+import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { formatDateTime } from '../../../utils/date'
+
+const DAI_ADDRESS = getConstant(CONSTANTS, 'DAI_ADDRESS').toLowerCase()
+const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS').toLowerCase()
+const USDT_ADDRESS = getConstant(CONSTANTS, 'USDT_ADDRESS').toLowerCase()
+const USDC_ADDRESS = getConstant(CONSTANTS, 'USDC_ADDRESS').toLowerCase()
+
+const TOKEN_ICON_LIST_TABLE: Record<string, JSX.Element> = {
+    [DAI_ADDRESS]: <DaiIcon />,
+    [ETH_ADDRESS]: <EthIcon />,
+    [USDT_ADDRESS]: <UsdtIcon />,
+    [USDC_ADDRESS]: <UsdcIcon />,
+}
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -24,14 +50,30 @@ const useStyles = makeStyles((theme) =>
             paddingTop: theme.spacing(4),
             paddingBottom: theme.spacing(2),
         },
+        header: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: 470,
+        },
         title: {
             fontSize: '1.8rem',
             fontWeight: 'bold',
             marginBottom: 4,
         },
+        status: {
+            background: 'rgba(20, 23, 26, 0.6)',
+            padding: '5px 16px',
+            borderRadius: '10px',
+        },
         totalText: {
             display: 'flex',
             alignItems: 'center',
+        },
+        tokenLink: {
+            display: 'flex',
+            alignItems: 'center',
+            color: '#fff',
         },
         totalIcon: {
             marginLeft: theme.spacing(1),
@@ -44,7 +86,7 @@ const useStyles = makeStyles((theme) =>
         },
         footer: {
             position: 'absolute',
-            width: 425,
+            width: 470,
             bottom: theme.spacing(2),
             display: 'flex',
             justifyContent: 'space-between',
@@ -52,8 +94,9 @@ const useStyles = makeStyles((theme) =>
         },
         fromText: {
             opacity: 0.6,
+            transform: 'translateY(5px)',
         },
-        rateWrap: {
+        rationWrap: {
             marginBottom: theme.spacing(1),
             display: 'flex',
             alignItems: 'center',
@@ -66,6 +109,13 @@ const useStyles = makeStyles((theme) =>
                 },
             },
         },
+        actionFooter: {
+            marginTop: theme.spacing(2),
+        },
+        actionButton: {
+            minHeight: 'auto',
+            width: '100%',
+        },
     }),
 )
 
@@ -73,60 +123,152 @@ export interface ITO_Props {
     payload: ITO_JSONPayload
 }
 
+interface TokenItemProps {
+    ration: string
+    TokenIcon: () => JSX.Element
+    tokenSymbol: string
+    sellTokenSymbol: string
+    decimals?: number
+}
+
+const TokenItem = ({ ration, TokenIcon, tokenSymbol, sellTokenSymbol, decimals = 18 }: TokenItemProps) => (
+    <>
+        <TokenIcon />
+        <span>
+            <b>{formatBalance(new BigNumber(Number(ration)), decimals)}</b> {tokenSymbol} / {sellTokenSymbol}
+        </span>
+    </>
+)
+
 export function ITO(props: ITO_Props) {
     const { payload } = props
+    const {
+        token,
+        total: payload_total,
+        total_remaining: payload_total_remaining,
+        claim_remaining: payload_claim_remaining,
+        sender,
+        exchange_amounts,
+        exchange_tokens,
+        limit,
+        start_time,
+        pid,
+    } = payload
     const classes = useStyles()
+    const { t } = useI18N()
+
+    const total = Number(payload_total)
+    const total_remaining = Number(payload_total_remaining)
+    const claim_remaining = Number(payload_claim_remaining)
+    const sold = total - total_remaining
+
+    // context
+    const account = useAccount()
+    const chainId = useChainId()
+    const chainIdValid = useChainIdValid()
+
+    //#region token detailed
+    const {
+        value: availability,
+        computed: availabilityComputed,
+        retry: revalidateAvailability,
+    } = useAvailabilityComputed(payload)
+    //#ednregion
+
+    const { canFetch, canClaim, canShare, listOfStatus } = availabilityComputed
+
+    //#region remote controlled select provider dialog
+    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const onConnect = useCallback(() => {
+        setSelectProviderDialogOpen({
+            open: true,
+        })
+    }, [setSelectProviderDialogOpen])
+    //#endregion
+
+    console.log('value', availability)
+    console.log('time', new Date().getTime(), start_time)
+    const onClaimOrShare = useCallback(async () => {}, [])
 
     return (
         <div>
             <Card className={classes.root}>
-                <Typography variant="h5" className={classes.title}>
-                    {payload.sender.message}
-                </Typography>
+                <Box className={classes.header}>
+                    <Typography variant="h5" className={classes.title}>
+                        {sender.message}
+                    </Typography>
+                    {listOfStatus.includes(ITO_Status.expired) || listOfStatus.includes(ITO_Status.completed) ? (
+                        <Typography variant="body2" className={classes.status}>
+                            {listOfStatus.includes(ITO_Status.expired)
+                                ? t('plugin_ito_expired')
+                                : t('plugin_ito_completed')}
+                        </Typography>
+                    ) : null}
+                </Box>
                 <Typography variant="body2" className={classes.totalText}>
-                    Sold 30,000.00 Sell Total Amount 200,000.00 MASK
-                    <OpenInNewIcon fontSize="small" className={classes.totalIcon} />
+                    {`Sold ${formatToken(sold)} Sell Total Amount ${formatToken(total)} ${token.symbol}`}
+                    <Link
+                        className={classes.tokenLink}
+                        href={`${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <OpenInNewIcon fontSize="small" className={classes.totalIcon} />
+                    </Link>
                 </Typography>
                 <Box className={classes.progressWrap}>
-                    <StyledLinearProgress variant="determinate" value={50} />
+                    <StyledLinearProgress variant="determinate" value={(sold * 100) / total} />
                 </Box>
                 <Box>
-                    <div className={classes.rateWrap}>
-                        <EthIcon />
-                        <span>
-                            <b>0.001</b> ETH / MASK
-                        </span>
-                    </div>
-                    <div className={classes.rateWrap}>
-                        <DaiIcon />
-                        <span>
-                            <b>0.1</b> USDT / MASK
-                        </span>
-                    </div>
-                    <div className={classes.rateWrap}>
-                        <UsdcIcon />
-                        <span>
-                            <b>0.1</b> DAI / MASK
-                        </span>
-                    </div>
-                    <div className={classes.rateWrap}>
-                        <UsdtIcon />
-                        <span>
-                            <b>0.1</b> USDC / MASK
-                        </span>
-                    </div>
+                    {exchange_tokens.map((t, i) => {
+                        const TokenIcon = TOKEN_ICON_LIST_TABLE[t.address.toLowerCase()]
+                        return TokenIcon ? (
+                            <div className={classes.rationWrap}>
+                                <TokenItem
+                                    decimals={t.decimals}
+                                    ration={exchange_amounts[i]}
+                                    TokenIcon={() => TokenIcon}
+                                    tokenSymbol={t.symbol!}
+                                    sellTokenSymbol={token.symbol!}
+                                />
+                            </div>
+                        ) : null
+                    })}
                 </Box>
                 <Box className={classes.footer}>
                     <div>
-                        <Typography variant="body1">limit per：200 MASK</Typography>
-                        <Typography variant="body1">Remaining time：1 d&nbsp;&nbsp;3 h&nbsp;&nbsp;30m</Typography>
+                        <Typography variant="body1">{`limit per: ${limit} MASK`}</Typography>
+                        <Typography variant="body1">
+                            {listOfStatus.includes(ITO_Status.waited)
+                                ? `Start Date: ${formatDateTime(new Date(start_time), true)}`
+                                : `Remaining time: `}
+                        </Typography>
                     </div>
                     <Typography variant="body1" className={classes.fromText}>
-                        From: @Pineapple
+                        {`From: @${sender.name}`}
                     </Typography>
                 </Box>
             </Card>
-            {JSON.stringify(payload, null, 2)}
+            {canClaim || canShare ? (
+                <Box className={classes.actionFooter}>
+                    {!account || !chainIdValid ? (
+                        <ActionButton
+                            variant="contained"
+                            size="large"
+                            onClick={onConnect}
+                            className={classes.actionButton}>
+                            {t('plugin_wallet_connect_a_wallet')}
+                        </ActionButton>
+                    ) : (
+                        <ActionButton
+                            variant="contained"
+                            size="large"
+                            onClick={onClaimOrShare}
+                            className={classes.actionButton}>
+                            {canClaim ? t('plugin_ito_enter') : t('plugin_ito_share')}
+                        </ActionButton>
+                    )}
+                </Box>
+            ) : null}
         </div>
     )
 }

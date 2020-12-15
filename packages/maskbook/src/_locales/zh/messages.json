@@ -392,5 +392,9 @@
     "plugin_poll_status_closed": "投票已截止",
     "plugin_poll_status_voting": "投票中",
     "plugin_poll_status_voted": "已投票.",
-    "plugin_poll_deadline": "{{time}}後截止"
+    "plugin_poll_deadline": "{{time}}後截止",
+    "plugin_ito_share": "",
+    "plugin_ito_enter": "",
+    "plugin_ito_expired": "",
+    "plugin_ito_completed": "Completed"
 }
