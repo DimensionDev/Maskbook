@@ -5,7 +5,7 @@ import BN from 'bn.js'
 import { Contract, ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from '../types'
+import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
 
 interface EventOptions {
     filter?: object

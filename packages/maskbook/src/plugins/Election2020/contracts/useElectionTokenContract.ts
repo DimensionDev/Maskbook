@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
-import type { ElectionToken } from '../../../contracts/election-token/ElectionToken'
-import ElectionTokenABI from '../../../contracts/election-token/ElectionToken.json'
+import ElectionTokenABI from '../../../../abis/ElectionToken.json'
+import type { ElectionToken } from '../../../contracts/ElectionToken'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useContract } from '../../../web3/hooks/useContract'
 import { ELECTION_2020_CONSTANTS } from '../constants'

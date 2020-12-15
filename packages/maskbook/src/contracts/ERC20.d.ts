@@ -5,7 +5,7 @@ import BN from 'bn.js'
 import { Contract, ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from '../types'
+import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
 
 interface EventOptions {
     filter?: object
@@ -13,9 +13,9 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class Erc20 extends Contract {
+export class ERC20 extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): Erc20
+    clone(): ERC20
     methods: {
         name(): TransactionObject<string>
 
