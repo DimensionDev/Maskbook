@@ -63,7 +63,8 @@ const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
         },
         placeholder: {
             textAlign: 'center',
-            paddingTop: theme.spacing(10),
+            paddingTop: theme.spacing(10.5),
+            paddingBottom: theme.spacing(10.5),
         },
     }),
 )
