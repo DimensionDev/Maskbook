@@ -7,6 +7,7 @@ import { useTransactionReceipt } from './useTransaction'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { useConstant } from './useConstant'
 import { CONSTANTS } from '../constants'
+import type { TransactionObject } from '../../contracts/types'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
@@ -57,19 +58,18 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
             }
             const from = account
             const to = erc20Contract.options.address
+            let approve: TransactionObject<boolean>
+            let estimatedGas: number
             try {
-                const approve = erc20Contract.methods.approve(spender, useExact ? amount : MaxUint256)
-                const estimatedGas = await approve.estimateGas({ from, to })
-                const { transactionHash } = await approve.send({ gas: estimatedGas, from, to })
-                setApproveHash(transactionHash)
-                return transactionHash
+                approve = erc20Contract.methods.approve(spender, useExact ? amount : MaxUint256)
+                estimatedGas = await approve.estimateGas({ from, to })
             } catch {
-                const approve = erc20Contract.methods.approve(spender, amount)
-                const estimatedGas = await approve.estimateGas({ from, to })
-                const { transactionHash } = await approve.send({ gas: estimatedGas, from, to })
-                setApproveHash(transactionHash)
-                return transactionHash
+                approve = erc20Contract.methods.approve(spender, amount)
+                estimatedGas = await approve.estimateGas({ from, to })
             }
+            const { transactionHash } = await approve.send({ gas: estimatedGas, from, to })
+            setApproveHash(transactionHash)
+            return transactionHash
         },
         [approveState, amount, usdtAddress, allowance, account, spender, erc20Contract, usdtResetCallback],
     )
