@@ -10,12 +10,9 @@ const TRUST_WALLET_ASSETS = 'https://raw.githubusercontent.com/trustwallet/asset
 const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS')
 const ICON_MAP = {
     [ETH_ADDRESS]: `${TRUST_WALLET_ASSETS}/info/logo.png`,
-    [formatChecksumAddress(
-        '0x32a7c02e79c4ea1008dd6564b35f131428673c41',
-    )]: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6747.png', // CRUST
-    [formatChecksumAddress(
-        '0x04abEdA201850aC0124161F037Efd70c74ddC74C',
-    )]: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5841.png', // NEST
+    '0x32a7C02e79c4ea1008dD6564b35F131428673c41': 'https://s2.coinmarketcap.com/static/img/coins/64x64/6747.png', // CRUST
+    '0x04abEdA201850aC0124161F037Efd70c74ddC74C': 'https://s2.coinmarketcap.com/static/img/coins/64x64/5841.png', // NEST
+    '0x14de81C71B3F73874659082b971433514E201B27': 'https://etherscan.io/token/images/ykyctoken_32.png', // Yes KYC
 }
 
 function resolveTokenIconURL(address: string) {
