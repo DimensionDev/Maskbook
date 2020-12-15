@@ -218,7 +218,12 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             }}>
                             <ClickableChip
                                 checked={props.imagePayload}
-                                label={t('post_dialog__image_payload') + Flags.has_no_browser_tab_ui ? `(Beta)` : ''}
+                                label={
+                                    <>
+                                        {t('post_dialog__image_payload')}
+                                        {Flags.has_no_browser_tab_ui && <sup className={classes.sup}>(Beta)</sup>}
+                                    </>
+                                }
                                 onClick={() => props.onImagePayloadSwitchChanged(!props.imagePayload)}
                                 data-testid="image_chip"
                             />
