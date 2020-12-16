@@ -14,7 +14,7 @@ export function usePoolPayload(id: string) {
                 name: 'Mask',
                 message: 'Test ITO Packet',
             },
-            chainId: 4,
+            chain_id: 4,
             token: {
                 type: 1,
                 address: '0x960B816d6dD03eD514c03F56788279154348Ea37',

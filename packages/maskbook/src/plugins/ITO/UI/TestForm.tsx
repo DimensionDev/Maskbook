@@ -91,7 +91,7 @@ export function TestForm(props: TestFormProps) {
                 name: FillSuccess.name,
                 message: FillSuccess.message,
             },
-            chainId,
+            chain_id: chainId,
             token: fillSettings.token,
             limit: fillSettings.limit,
             password: fillSettings.password,
@@ -114,7 +114,7 @@ export function TestForm(props: TestFormProps) {
                 name: 'Mask',
                 message: 'Test ITO Packet',
             },
-            chainId: 4,
+            chain_id: 4,
             token: {
                 type: 1,
                 address: '0x960b816d6dd03ed514c03f56788279154348ea37',

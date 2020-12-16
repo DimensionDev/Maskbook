@@ -33,9 +33,9 @@ export function useAvailabilityComputed(payload: ITO_JSONPayload) {
     return {
         ...asyncResult,
         computed: {
-            canFetch: payload.chainId === chainId,
-            canClaim: isStarted && !isExpired && !isCompleted && payload.chainId === chainId && payload.password,
-            canRefund: isExpired && payload.chainId === chainId,
+            canFetch: payload.chain_id === chainId,
+            canClaim: isStarted && !isExpired && !isCompleted && payload.chain_id === chainId && payload.password,
+            canRefund: isExpired && payload.chain_id === chainId,
             canShare: !isStarted,
             listOfStatus: compact([
                 isStarted ? ITO_Status.started : ITO_Status.waited,
