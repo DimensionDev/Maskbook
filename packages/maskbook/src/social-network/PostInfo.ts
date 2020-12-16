@@ -45,7 +45,7 @@ export abstract class PostInfo {
     readonly postMessage = new ValueRef<TypedMessageCompound>(makeTypedMessageCompound([]), isTypedMessageEqual)
     /** @deprecated It should appear in the transformedPostContent */
     readonly postPayload = new ValueRef<Result<Payload, Error>>(Err(new Error('Empty')))
-    readonly decryptedPayload = new ValueRef<Payload | null>(null)
+    readonly decryptedPayloadForImage = new ValueRef<Payload | null>(null)
     abstract readonly commentsSelector?: LiveSelector<HTMLElement, false>
     abstract readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
     /**
