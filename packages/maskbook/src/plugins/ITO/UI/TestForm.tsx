@@ -26,9 +26,9 @@ export function TestForm(props: TestFormProps) {
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
 
-    const { value: MaskbookA } = useERC20TokenDetailed('0x960B816d6dD03eD514c03F56788279154348Ea37')
-    const { value: MaskbookB } = useERC20TokenDetailed('0xFa4Bddbc85c0aC7a543c4b59dCfb5deB17F67D8E')
-    const { value: MaskbookC } = useERC20TokenDetailed('0xbE88c0E7029929f50c81690275395Da1d05745B0')
+    const { value: MaskbookA } = useERC20TokenDetailed('0xe54bf69054da160c597f8b5177924b9e4b81e930')
+    const { value: MaskbookB } = useERC20TokenDetailed('0xe379c7a6ba07575a5a49d8f8ebfd04921b86917d')
+    const { value: MaskbookC } = useERC20TokenDetailed('0xb1465b954f893D921566D8BB4092B6f03FC8C313')
 
     const settings = useMemo(() => {
         const today = new Date()
