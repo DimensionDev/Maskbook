@@ -80,7 +80,7 @@ export function useClaimCallback(
                     gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                     ...config,
                 },
-                async (error: Error, hash: string) => {
+                async (error: Error | null, hash: string) => {
                     if (hash) onSucceed(hash)
                     else if (error) onFailed(error)
                 },

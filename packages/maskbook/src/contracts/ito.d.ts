@@ -13,9 +13,9 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class Ito extends Contract {
+export class ITO extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): Ito
+    clone(): ITO
     methods: {
         contract_creator(): TransactionObject<string>
 
