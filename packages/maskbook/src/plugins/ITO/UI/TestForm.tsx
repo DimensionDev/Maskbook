@@ -56,7 +56,7 @@ export function TestForm(props: TestFormProps) {
     )
     const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(settings)
     const onCreate = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) await approveCallback()
+        if (approveState === ApproveState.NOT_APPROVED) await approveCallback()
         await fillCallback()
     }, [approveState, settings])
     const onReset = useCallback(() => {
