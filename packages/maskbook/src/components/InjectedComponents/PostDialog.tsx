@@ -187,21 +187,18 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 flexWrap: 'wrap',
                             }}>
                             <SelectRecipientsUI
-                                disabled={props.onlyMyself || props.shareToEveryone}
                                 items={props.availableShareTarget}
                                 selected={props.currentShareTarget}
                                 onSetSelected={props.onSetSelected}
                                 {...props.SelectRecipientsUIProps}>
                                 <ClickableChip
                                     checked={props.shareToEveryone}
-                                    disabled={props.onlyMyself}
                                     label={t('post_dialog__select_recipients_share_to_everyone')}
                                     data-testid="_everyone_group_"
                                     onClick={() => props.onShareToEveryoneChanged(!props.shareToEveryone)}
                                 />
                                 <ClickableChip
                                     checked={props.onlyMyself}
-                                    disabled={props.shareToEveryone}
                                     label={t('post_dialog__select_recipients_only_myself')}
                                     data-testid="_only_myself_group_"
                                     onClick={() => props.onOnlyMyselfChanged(!props.onlyMyself)}
