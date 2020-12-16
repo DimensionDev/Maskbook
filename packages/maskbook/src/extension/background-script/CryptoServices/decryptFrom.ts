@@ -29,7 +29,7 @@ type Progress = (
     | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
     | { progress: 'intermediate_success'; data: Success }
     | { progress: 'iv_decrypted'; iv: string }
-    | { progress: 'payload_decrypted'; decryptedPayload: Payload }
+    | { progress: 'payload_decrypted'; decryptedPayloadForImage: Payload }
 ) & {
     type: 'progress'
     /** if this is true, this progress should not cause UI change. */
@@ -44,6 +44,7 @@ type SuccessThrough = 'author_key_not_found' | 'post_key_cached' | 'normal_decry
 type Success = {
     type: 'success'
     iv: string
+    decryptedPayloadForImage: Payload
     content: TypedMessage
     rawContent: string
     through: SuccessThrough[]
@@ -63,12 +64,14 @@ const successDecryptionCache = new Map<string, Success>()
 const makeSuccessResultF = (
     cacheKey: string,
     iv: string,
+    decryptedPayloadForImage: Payload,
     cryptoProvider: typeof cryptoProviderTable[keyof typeof cryptoProviderTable],
 ) => (rawEncryptedContent: string, through: Success['through']): Success => {
     const success: Success = {
         rawContent: rawEncryptedContent,
         through,
         iv,
+        decryptedPayloadForImage,
         content: cryptoProvider.typedMessageParse(rawEncryptedContent),
         type: 'success',
         internal: false,
@@ -138,10 +141,10 @@ async function* decryptFromPayloadWithProgress_raw(
     if (version === -40 || version === -39 || version === -38) {
         const { encryptedText, iv, version } = data
         const cryptoProvider = cryptoProviderTable[version]
-        const makeSuccessResult = makeSuccessResultF(cacheKey, iv, cryptoProvider)
+        const makeSuccessResult = makeSuccessResultF(cacheKey, iv, data, cryptoProvider)
         const ownersAESKeyEncrypted = data.version === -38 ? data.AESKeyEncrypted : data.ownersAESKeyEncrypted
 
-        yield { type: 'progress', progress: 'payload_decrypted', decryptedPayload: data, internal: true }
+        yield { type: 'progress', progress: 'payload_decrypted', decryptedPayloadForImage: data, internal: true }
         yield { type: 'progress', progress: 'iv_decrypted', iv: iv, internal: true }
         // ? Early emit the cache.
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, author)
