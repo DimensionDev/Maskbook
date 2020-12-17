@@ -1,4 +1,4 @@
-import { useMemo, useState, unstable_useTransition, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import DashboardRouterContainer from './Container'
 import { TextField, IconButton, Typography } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
@@ -8,7 +8,7 @@ import AutoResize from 'react-virtualized-auto-sizer'
 import { ContactLine } from '../DashboardComponents/ContactLine'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { FixedSizeList } from 'react-window'
-import { useSWRInfinite } from 'swr'
+import { useAsyncFn, useMap } from 'react-use'
 import Services from '../../service'
 import type { Profile } from '../../../database'
 import { last } from 'lodash-es'
@@ -39,67 +39,102 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-const fetcher = (search: string, offset?: Profile) =>
-    Services.Identity.queryProfilePaged(
-        {
-            // undefined will fetch the first page
-            query: search ? search : void 0,
-            after: offset?.identifier,
-        },
-        20,
-    )
+async function* queryProfilePaged(query: string | undefined) {
+    if (query === '') query = undefined
+    const values: Profile[] = []
+    const page = 20
+    while (true) {
+        const current = await Services.Identity.queryProfilePaged({ query, after: last(values)?.identifier }, page)
+        values.push(...current)
+        if (current.length < page) break
+        yield values
+    }
+    return values
+}
+// TODO: support concurrent mode
+function createPaged<P extends any[], T>(
+    fetcher: (...args: P) => AsyncGenerator<T[], T[], unknown>,
+    hashArgs: (...args: P) => string,
+) {
+    type Records = readonly [
+        generator: AsyncGenerator<T[], T[], unknown>,
+        done: boolean,
+        value: readonly T[],
+        aborted: AbortController,
+    ]
+    return function usePaged(...InitArgs: P) {
+        const [[query], setQuery] = useState([InitArgs])
+        const key = hashArgs(...query)
+
+        const [rec, { get, set, remove }] = useMap({} as Record<string, Records>)
+        const [generator, done, value = [], abort] =
+            get(key) ||
+            (() => {
+                const rec = [fetcher(...query), false, [], new AbortController()] as const
+                set(key, rec)
+                return rec
+            })()
+
+        const [{ loading }, nextPage] = useAsyncFn(async () => {
+            if (done) return
+            const result = await generator.next()
+            if (abort.signal.aborted) return
+            set(key, [generator, !!result.done, result.value, abort])
+        }, [generator, done, abort])
+        useEffect(() => void nextPage(), [nextPage])
+
+        return {
+            done,
+            value,
+            loading,
+            nextPage,
+            revalidate: useCallback(() => {
+                remove(key)
+                abort.abort()
+            }, [abort, key, remove]),
+            query,
+            setQuery: useCallback((...args: P) => setQuery([args]), []),
+        }
+    }
+}
+const usePagedProfile = createPaged(queryProfilePaged, (x) => x || '')
 
 export default function DashboardContactsRouter() {
+    const {
+        value: items,
+        revalidate: mutate,
+        loading: isPagePending,
+        done: isReachingEnd,
+        nextPage,
+        query: [search],
+        setQuery: setSearch,
+    } = usePagedProfile('')
+
     const { t } = useI18N()
     const classes = useStyles()
 
-    const [search, setSearch] = useState('')
+    const isEmpty = !isPagePending && items.length === 0
     const [searchUI, setSearchUI] = useState('')
-    const [startSearchTransition, isSearchPending] = unstable_useTransition({})
     const [searchContactDialog, , openSearchContactDialog] = useModal(DashboardContactSearchDialog)
 
-    const actions = useMemo(
-        () => [
-            <TextField
-                placeholder={t('search')}
-                size="small"
-                value={searchUI}
-                onChange={(e) => {
-                    setSearchUI(e.target.value)
-                    startSearchTransition(() => setSearch(e.target.value))
-                }}
-                InputProps={{
-                    endAdornment: (
-                        <IconButton size="small" onClick={() => setSearch('')}>
-                            {search ? <ClearIcon /> : <SearchIcon />}
-                        </IconButton>
-                    ),
-                }}
-            />,
-        ],
-        [search, searchUI, startSearchTransition],
-    )
-    const swr = useSWRInfinite<Profile[]>(
-        (_size, previousPageData) => [
-            search || undefined, // undefined means fetch from start
-            last(previousPageData),
-        ],
-        fetcher,
-    )
-
-    const { data, size, setSize, mutate } = swr
-    const isEmpty = data?.[0]?.length === 0
-    const isReachingEnd = data && data[data.length - 1]?.length < 20
-    const items = data ? ([] as Profile[]).concat(...data) : []
-
-    const [startPageTransition, isPagePending] = unstable_useTransition({})
-    const nextPage = useCallback(
-        () =>
-            startPageTransition(() => {
-                setSize?.(size ? size + 1 : 0)
-            }),
-        [size, setSize],
-    )
+    const actions = [
+        <TextField
+            placeholder={t('search')}
+            size="small"
+            value={searchUI}
+            onChange={(e) => {
+                setSearchUI(e.target.value)
+                setSearch(e.target.value)
+            }}
+            InputProps={{
+                endAdornment: (
+                    <IconButton size="small" onClick={() => setSearch('')}>
+                        {search ? <ClearIcon /> : <SearchIcon />}
+                    </IconButton>
+                ),
+            }}
+        />,
+    ]
 
     return (
         <DashboardRouterContainer
@@ -122,7 +157,7 @@ export default function DashboardContactsRouter() {
                             overscanCount={5}
                             onItemsRendered={(data) => {
                                 if (isEmpty || isReachingEnd) return
-                                if (isPagePending || isSearchPending) return
+                                if (isPagePending) return
                                 if (data.visibleStopIndex === data.overscanStopIndex) nextPage()
                             }}
                             itemSize={64}

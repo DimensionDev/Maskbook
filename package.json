@@ -124,7 +124,6 @@
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.6",
     "string.prototype.matchall": "^4.0.2",
-    "swr": "0.3.9",
     "tiny-secp256k1": "^1.1.5",
     "ts-results": "^3.0.0",
     "typeson": "^5.18.2",

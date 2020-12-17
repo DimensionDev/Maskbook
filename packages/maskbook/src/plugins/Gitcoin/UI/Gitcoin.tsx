@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react'
-import useSWR from 'swr'
 import type { GitcoinGrantMetadata } from '../service'
 import { DonateDialog } from './DonateDialog'
 import { PreviewCard } from './PreviewCard'
@@ -10,10 +9,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { PluginGitcoinRPC } from '../constants'
-
-function fetcher(key: string, url: string) {
-    return PluginGitcoinRPC.fetchMetadata(url)
-}
+import { useAsyncFn } from 'react-use'
 
 export interface GitcoinProps {
     url: string
@@ -21,7 +17,7 @@ export interface GitcoinProps {
 
 export function Gitcoin(props: GitcoinProps) {
     const url = props.url
-    const { data } = useSWR(['co.gitcoin', url], { fetcher })
+    const [{ value: data }] = useAsyncFn(() => PluginGitcoinRPC.fetchMetadata(url), [url])
     const { transactions, daiAmount, estimatedAmount, title, image, address: donationAddress } = data?.ok
         ? data.val
         : ({} as GitcoinGrantMetadata)
