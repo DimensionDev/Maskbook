@@ -31,7 +31,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
         if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) return ApproveState.INSUFFICIENT_BALANCE
         if (approveHash && !receipt?.blockHash) return ApproveState.PENDING
         return new BigNumber(allowance).isLessThan(amount) ? ApproveState.NOT_APPROVED : ApproveState.APPROVED
-    }, [amount, spender, allowance, balance, approveHash, receipt?.blockHash])
+    }, [address, amount, spender, allowance, balance, approveHash, receipt?.blockHash])
 
     const approveCallback = useCallback(
         async (useExact: boolean = false) => {

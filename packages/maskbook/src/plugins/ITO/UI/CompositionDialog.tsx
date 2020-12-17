@@ -8,6 +8,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
 import { editActivatedPostMetadata } from '../../../social-network/ui'
 import { CreateItoGuide } from './CreateItoGuide'
+import { TestForm } from './TestForm'
 
 const useStyles = makeStyles((theme) => createStyles({}))
 
@@ -34,6 +35,11 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const state = useState(0)
     const tabProps: AbstractTabProps = {
         tabs: [
+            {
+                label: 'Test',
+                children: <TestForm onCreate={onCreateOrSelect} />,
+                sx: { p: 0 },
+            },
             {
                 label: t('plugin_ito_create_new'),
                 children: <CreateItoGuide onCreate={onCreateOrSelect} />,

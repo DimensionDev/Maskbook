@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -14,6 +14,8 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { CONSTANTS } from '../../../web3/constants'
+import { useClaimCallback } from '../hooks/useClaimCallback'
+import { usePoolPayload } from '../hooks/usePoolPayload'
 
 export interface TestFormProps {
     onCreate?: (payload: ITO_JSONPayload) => void
@@ -49,20 +51,10 @@ export function TestForm(props: TestFormProps) {
     }, [chainId, MaskbookA, MaskbookB, MaskbookC])
 
     //#region blocking
-    const [approveState, approveCallback, resetApproveCallback] = useERC20TokenApproveCallback(
-        MaskbookA?.address ?? '',
-        '100',
-        ITO_CONTRACT_ADDRESS,
-    )
     const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(settings)
     const onCreate = useCallback(async () => {
-        if (approveState === ApproveState.NOT_APPROVED) await approveCallback()
         await fillCallback()
-    }, [approveState, settings])
-    const onReset = useCallback(() => {
-        resetApproveCallback()
-        resetFillCallback()
-    }, [])
+    }, [settings])
     //#endregion
 
     //#region compose JSON payload
@@ -101,6 +93,7 @@ export function TestForm(props: TestFormProps) {
             exchange_amounts: fillSettings.exchangeAmounts,
         } as ITO_JSONPayload
     }, [fillState /* update payload only if state changed */])
+
     const onCompose = useCallback(() => {
         // if (!payload) return
         props.onCreate?.({
@@ -167,6 +160,42 @@ export function TestForm(props: TestFormProps) {
     }, [payload])
     //#endregion
 
+    //#region claim
+    const claimPayload = usePoolPayload('')
+    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
+        claimPayload.pid,
+        claimPayload.password,
+        '10',
+        {
+            address: MaskbookB?.address ?? '',
+        },
+    )
+    const onClaim = useCallback(() => {
+        if (!claimPayload) return
+        claimCallback()
+    }, [claimPayload, claimCallback])
+    //#endregion
+
+    //#region approve
+    const [approveToken, setApproveToken] = useState(MaskbookA)
+    const [approveState, approveCallback, resetApproveCallback] = useERC20TokenApproveCallback(
+        approveToken?.address ?? '',
+        '10',
+        ITO_CONTRACT_ADDRESS,
+    )
+    const onApprove = useCallback(() => {
+        if (approveState !== ApproveState.APPROVED) approveCallback(true)
+    }, [approveState, approveCallback])
+    //#endregion
+
+    //#region reset
+    const onReset = useCallback(() => {
+        resetFillCallback()
+        resetClaimCallback()
+        resetApproveCallback()
+    }, [])
+    //#endregion
+
     return (
         <div>
             <Accordion elevation={0}>
@@ -205,6 +234,7 @@ export function TestForm(props: TestFormProps) {
                         {JSON.stringify(
                             {
                                 approveState,
+                                claimState,
                                 fillState,
                                 fillSettings,
                             },
@@ -223,8 +253,32 @@ export function TestForm(props: TestFormProps) {
                 </AccordionDetails>
             </Accordion>
 
-            <ActionButton onClick={onCreate}>Mine</ActionButton>
-            <ActionButton onClick={onCompose}>Compose</ActionButton>
+            <ActionButton onClick={onCreate}>Create Pool</ActionButton>
+            <ActionButton onClick={onCompose}>Compose Payload</ActionButton>
+            <ActionButton disabled={!claimPayload} onClick={onClaim}>
+                Claim Pool
+            </ActionButton>
+            <ActionButton
+                onClick={() => {
+                    if (approveToken?.address === MaskbookA?.address) onApprove()
+                    else setApproveToken(MaskbookA)
+                }}>
+                {approveToken?.address === MaskbookA?.address ? 'Approve MSKA' : 'Switch To MSKA'}
+            </ActionButton>
+            <ActionButton
+                onClick={() => {
+                    if (approveToken?.address === MaskbookB?.address) onApprove()
+                    else setApproveToken(MaskbookB)
+                }}>
+                {approveToken?.address === MaskbookB?.address ? 'Approve MSKB' : 'Switch To MSKB'}
+            </ActionButton>
+            <ActionButton
+                onClick={() => {
+                    if (approveToken?.address === MaskbookC?.address) onApprove()
+                    else setApproveToken(MaskbookC)
+                }}>
+                {approveToken?.address === MaskbookC?.address ? 'Approve MSKC' : 'Switch To MSKC'}
+            </ActionButton>
             <ActionButton onClick={onReset}>Reset</ActionButton>
         </div>
     )
