@@ -143,7 +143,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
         const estimatedGas = await ITO_Contract.methods
             .fill_pool(...params)
             .estimateGas(config)
-            .catch((error) => {
+            .catch((error: Error) => {
                 setFillState({
                     type: TransactionStateType.FAILED,
                     error,
@@ -174,7 +174,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
                 })
                 resolve()
             })
-            promiEvent.on(TransactionEventType.ERROR, (error) => {
+            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
                 setFillState({
                     type: TransactionStateType.FAILED,
                     error,
