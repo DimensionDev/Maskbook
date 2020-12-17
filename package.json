@@ -81,7 +81,7 @@
     "@walletconnect/client": "^1.2.2",
     "anchorme": "^2.1.2",
     "arweave": "^1.9.1",
-    "async-call-rpc": "^4.2.1",
+    "async-call-rpc": "^5.0.0",
     "bignumber.js": "^9.0.1",
     "bip39": "^3.0.2",
     "classnames": "^2.2.6",
