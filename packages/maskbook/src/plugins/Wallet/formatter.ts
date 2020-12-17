@@ -40,7 +40,8 @@ export function formatBalance(balance: BigNumber, decimals: number, significant:
 }
 
 export function formatCurrency(balance: number, sign: string = '$') {
-    return `${sign}${balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, `${sign}&,`)}`
+    const fixedBalance = balance > 1 ? balance.toFixed(2) : balance.toPrecision(2)
+    return `${sign}${fixedBalance.replace(/\d(?=(\d{3})+\.)/g, `${sign}&,`)}`
 }
 
 export function formatEthereumAddress(address: string, size = 0) {
