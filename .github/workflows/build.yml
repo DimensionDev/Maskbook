@@ -7,7 +7,7 @@ on:
     branches: [master, released]
 
 jobs:
-  linters:
+  build:
     runs-on: ubuntu-20.04
     continue-on-error: false
     steps:
