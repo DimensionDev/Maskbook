@@ -26,32 +26,32 @@ jobs:
       - run: npm ci
       - run: npm run build-ci
       - name: Upload `Maskbook.base.zip`
-        uses: actions/upload-artifact@v2-preview
+        uses: actions/upload-artifact@v2
         with:
           name: Maskbook.base.zip
           path: Maskbook.base.zip
       - name: Upload `Maskbook.iOS.zip`
-        uses: actions/upload-artifact@v2-preview
+        uses: actions/upload-artifact@v2
         with:
           name: Maskbook.iOS.zip
           path: Maskbook.iOS.zip
       - name: Upload `Maskbook.chromium.zip`
-        uses: actions/upload-artifact@v2-preview
+        uses: actions/upload-artifact@v2
         with:
           name: Maskbook.chromium.zip
           path: Maskbook.chromium.zip
       - name: Upload `Maskbook.chromium-beta.zip`
-        uses: actions/upload-artifact@v2-preview
+        uses: actions/upload-artifact@v2
         with:
           name: Maskbook.chromium-beta.zip
           path: Maskbook.chromium-beta.zip
       - name: Upload `Maskbook.firefox.zip`
-        uses: actions/upload-artifact@v2-preview
+        uses: actions/upload-artifact@v2
         with:
           name: Maskbook.firefox.zip
           path: Maskbook.firefox.zip
       - name: Upload `Maskbook.gecko.zip`
-        uses: actions/upload-artifact@v2-preview
+        uses: actions/upload-artifact@v2
         with:
           name: Maskbook.gecko.zip
           path: Maskbook.gecko.zip
