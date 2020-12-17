@@ -21,7 +21,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - run: sudo npm i -g npm@7
+      - run: sudo npm install --global npm@7
       - run: npm ci
       - run: npx prettier --check .
       - run: npx tsc --noEmit
@@ -47,7 +47,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - run: sudo npm i -g npm@7
+      - run: sudo npm install --global npm@7
       - run: npm ci
       - run: npm run build-storybook
       - uses: actions/upload-artifact@v1
