@@ -9,10 +9,8 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { EthereumTokenType } from '../../../web3/types'
-import { omit } from 'lodash-es'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { ITO_CONSTANTS } from '../constants'
+import { ITO_CONSTANTS, ITO_CONTRACT_BASE_DATE } from '../constants'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
@@ -36,7 +34,17 @@ export function CreateItoGuide(props: CreateItoGuideProps) {
 
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
 
-    const [poolSettings, setPoolSettings] = useState<PoolSettings>()
+    const [poolSettings, setPoolSettings] = useState<PoolSettings>({
+        password: '',
+        startTime: ITO_CONTRACT_BASE_DATE,
+        endTime: ITO_CONTRACT_BASE_DATE,
+        title: '',
+        name: '',
+        limit: '0',
+        total: '0',
+        exchangeAmounts: [],
+        exchangeTokens: [],
+    })
     const onNext = useCallback(() => {
         if (step === ITOCreateFormPageStep.NewItoPage) {
             setStep(ITOCreateFormPageStep.ConfirmItoPage)
@@ -75,36 +83,7 @@ export function CreateItoGuide(props: CreateItoGuideProps) {
                 total: string
             }
 
-            // assemble JSON payload
-            const payload: ITO_JSONPayload = {
-                chain_id: chainId,
-                contract_address: ITO_CONTRACT_ADDRESS,
-                pid: CreationSuccess.id,
-                password: createSettings.password,
-                total: createSettings.total,
-                sender: {
-                    address: account,
-                    name: createSettings.name,
-                    message: createSettings.title,
-                },
-                limit: createSettings.limit,
-                creation_time: Number.parseInt(CreationSuccess.creation_time, 10) * 1000,
-                token: createSettings.token,
-                start_time: createSettings.startTime.getTime(),
-                end_time: createSettings.endTime.getTime(),
-                exchange_amounts: createSettings.exchangeAmounts,
-                exchange_tokens: createSettings.exchangeTokens,
-            }
-            if (createSettings.token.type === EthereumTokenType.ERC20)
-                payload.token = {
-                    name: '',
-                    symbol: '',
-                    decimals: 0,
-                    ...omit(createSettings.token, ['type', 'chainId']),
-                }
-
             // output the redpacket as JSON payload
-            props.onCreate?.(payload)
         },
     )
 
@@ -139,7 +118,7 @@ export function CreateItoGuide(props: CreateItoGuideProps) {
                 <CreateForm
                     onNext={onNext}
                     onConnectWallet={onConnect}
-                    onChangePoolSettings={(poolSettings) => setPoolSettings(poolSettings)}
+                    onChangePoolSettings={(poolSettings) => setPoolSettings(poolSettings!)}
                 />
             )
         }

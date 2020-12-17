@@ -211,7 +211,7 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
         [dispatchExchangeTokenArray],
     )
 
-    function isETH(token?: EtherTokenDetailed | ERC20TokenDetailed) {
+    function isETH(token?: EtherTokenDetailed | ERC20TokenDetailed): boolean {
         return token?.address === '0x0000000000000000000000000000000000000000'
     }
     useEffect(() => {

@@ -118,7 +118,7 @@ export function CreateForm(props: CreateFormProps) {
             token: tokenAndAmount?.token,
             total: new BigNumber(tokenAndAmount?.amount ?? '0').toFixed(),
             exchangeAmounts: last.map((item) => new BigNumber(item.amount).toFixed()),
-            exchangeTokens: last.map((item) => item.token) ?? [],
+            exchangeTokens: last.map((item) => item.token!),
             startTime: new Date(startTime),
             endTime: new Date(endTime),
         })
