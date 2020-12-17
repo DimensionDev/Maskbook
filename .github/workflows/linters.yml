@@ -29,7 +29,7 @@ jobs:
       - run: npm run locale-kit
       - run: npm run lint:report
       - name: Upload ESLint Report
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: eslint
           path: ./reports/junit
@@ -50,7 +50,7 @@ jobs:
       - run: sudo npm install --global npm@7
       - run: npm ci
       - run: npm run build-storybook
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         with:
           name: storybook
           path: ./storybook-static
