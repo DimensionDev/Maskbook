@@ -77,7 +77,7 @@ export function CreateItoGuide(props: CreateItoGuideProps) {
 
             // assemble JSON payload
             const payload: ITO_JSONPayload = {
-                chainId: chainId,
+                chain_id: chainId,
                 contract_address: ITO_CONTRACT_ADDRESS,
                 pid: CreationSuccess.id,
                 password: createSettings.password,
