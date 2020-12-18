@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
 import type { Tx } from '../../../contracts/types'
+import { buf2hex, hex2buf } from '../../../utils/utils'
 import { addGasMargin, isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
@@ -38,9 +39,13 @@ export function useClaimCallback(
             from: account,
             to: ITO_Contract.options.address,
         }
+
         const params: Parameters<typeof ITO_Contract['methods']['claim']> = [
             id,
-            password,
+            Web3Utils.soliditySha3(
+                Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 6))}`),
+                account,
+            )!,
             account,
             Web3Utils.sha3(account)!,
             poolPayload.exchange_tokens.findIndex((x) => isSameAddress(x.address, token.address)),

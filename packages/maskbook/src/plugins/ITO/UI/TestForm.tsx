@@ -40,11 +40,14 @@ export function TestForm(props: TestFormProps) {
             name: 'Mask',
             title: 'Test ITO Packet',
             password: uuid(),
-            limit: new BigNumber(10).toFixed(),
-            total: new BigNumber(100).toFixed(),
+            limit: new BigNumber('0.1e18').toFixed(),
+            total: new BigNumber('1e18').toFixed(),
             startTime: today,
             endTime: tomorrow,
-            exchangeAmounts: [new BigNumber(1000).toFixed(), new BigNumber(10000).toFixed()],
+            exchangeAmounts: [
+                new BigNumber('1e18').toFixed(), // 1:1
+                new BigNumber('2e18').toFixed(),
+            ], // 1:2
             exchangeTokens: MaskbookB && MaskbookC ? [MaskbookB, MaskbookC] : [],
             token: MaskbookA,
         }
@@ -165,7 +168,7 @@ export function TestForm(props: TestFormProps) {
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
         claimPayload.pid,
         claimPayload.password,
-        '10',
+        claimPayload.limit,
         {
             address: MaskbookB?.address ?? '',
         },
@@ -180,7 +183,7 @@ export function TestForm(props: TestFormProps) {
     const [approveToken, setApproveToken] = useState(MaskbookA)
     const [approveState, approveCallback, resetApproveCallback] = useERC20TokenApproveCallback(
         approveToken?.address ?? '',
-        '10',
+        approveToken?.address === MaskbookA?.address ? settings.total : settings.limit,
         ITO_CONTRACT_ADDRESS,
     )
     const onApprove = useCallback(() => {

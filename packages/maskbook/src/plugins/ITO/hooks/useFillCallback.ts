@@ -112,8 +112,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
         // error: token amount is not enough for dividing into integral pieces
         const ONE_TOKEN = new BigNumber(1).multipliedBy(new BigNumber(10).pow(token.decimals ?? 0))
         const exchangeAmounts_ = exchangeAmounts.map((x, i) => {
-            const exchangeToken = exchangeTokens[i]
-            const amount = new BigNumber(x).multipliedBy(new BigNumber(10).pow(exchangeToken.decimals ?? 0))
+            const amount = new BigNumber(x)
             const divisor = gcd(ONE_TOKEN, amount)
             return [ONE_TOKEN.dividedToIntegerBy(divisor), amount.dividedToIntegerBy(divisor)] as const
         })

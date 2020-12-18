@@ -17,30 +17,6 @@ export class ITO extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
     clone(): ITO
     methods: {
-        contract_creator(): TransactionObject<string>
-
-        fill_pool(
-            _hash: string | number[],
-            _start: number | string,
-            _end: number | string,
-            name: string,
-            message: string,
-            _exchange_addrs: string[],
-            _ratios: (number | string)[],
-            _token_addr: string,
-            _total_tokens: number | string,
-            _limit: number | string,
-        ): TransactionObject<void>
-
-        claim(
-            id: string | number[],
-            password: string,
-            _recipient: string,
-            validation: string | number[],
-            _exchange_addr_i: number | string,
-            input_total: number | string,
-        ): TransactionObject<string>
-
         check_availability(
             id: string | number[],
         ): TransactionObject<{
@@ -58,7 +34,31 @@ export class ITO extends Contract {
             5: string[]
         }>
 
+        claim(
+            id: string | number[],
+            verification: string | number[],
+            _recipient: string,
+            validation: string | number[],
+            _exchange_addr_i: number | string,
+            input_total: number | string,
+        ): TransactionObject<string>
+
+        contract_creator(): TransactionObject<string>
+
         destruct(id: string | number[]): TransactionObject<void>
+
+        fill_pool(
+            _hash: string | number[],
+            _start: number | string,
+            _end: number | string,
+            name: string,
+            message: string,
+            _exchange_addrs: string[],
+            _ratios: (number | string)[],
+            _token_addr: string,
+            _total_tokens: number | string,
+            _limit: number | string,
+        ): TransactionObject<void>
     }
     events: {
         ClaimSuccess: ContractEvent<{
@@ -95,7 +95,12 @@ export class ITO extends Contract {
             1: string
             2: string
         }>
-        Test: ContractEvent<string>
+        Test: ContractEvent<{
+            a: string
+            b: string
+            0: string
+            1: string
+        }>
         allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
     }
 }
