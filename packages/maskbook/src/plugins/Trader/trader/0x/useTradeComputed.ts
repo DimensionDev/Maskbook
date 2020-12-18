@@ -20,9 +20,8 @@ export function useTradeComputed(
 
             fee: new BigNumber(trade.minimumProtocolFee),
             maximumSold: new BigNumber(trade.sellAmount),
-            minimumReceived: new BigNumber(trade.guaranteedPrice).multipliedBy(
-                new BigNumber(10).pow(outputToken.decimals ?? 0),
-            ),
+            minimumReceived: new BigNumber(trade.buyAmount),
+
             priceImpactWithoutFee: new BigNumber(0),
 
             // not supported fields
