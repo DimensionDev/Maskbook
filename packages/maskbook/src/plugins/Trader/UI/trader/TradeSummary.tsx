@@ -51,6 +51,8 @@ const useStyles = makeStyles((theme) =>
         content: {
             fontSize: 12,
             color: theme.palette.text.secondary,
+            paddingLeft: theme.spacing(15),
+            textAlign: 'right',
         },
     }),
 )
@@ -194,7 +196,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                             (y) =>
                                 `${resolveZrxTradePoolName(y.name)} (${formatPercentage(new BigNumber(y.proportion))})`,
                         )
-                        .join('+')}
+                        .join(' + ')}
                 </Typography>
             ),
         },

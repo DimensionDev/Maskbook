@@ -16,12 +16,10 @@ export function useTradeComputed(
     outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
 ) {
     // uniswap
-    const inputAmount_ = new BigNumber(inputAmount || '0')
-        .multipliedBy(new BigNumber(10).pow(inputToken?.decimals ?? 0))
-        .toFixed()
-    const outputAmount_ = new BigNumber(outputAmount || '0')
-        .multipliedBy(new BigNumber(10).pow(outputToken?.decimals ?? 0))
-        .toFixed()
+    const inputTokenProduct = new BigNumber(10).pow(inputToken?.decimals ?? 0)
+    const outputTokenProduct = new BigNumber(10).pow(outputToken?.decimals ?? 0)
+    const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
+    const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
 
     const uniswap_ = useUniswapTrade(
         strategy,
