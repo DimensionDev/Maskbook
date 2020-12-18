@@ -109,12 +109,33 @@ export function useFillCallback(poolSettings: PoolSettings) {
             return
         }
 
+        // error: token amount is not enough for dividing into integral pieces
+        const ONE_TOKEN = new BigNumber(1).multipliedBy(new BigNumber(10).pow(token.decimals ?? 0))
+        const exchangeAmounts_ = exchangeAmounts.map((x, i) => {
+            const exchangeToken = exchangeTokens[i]
+            const amount = new BigNumber(x).multipliedBy(new BigNumber(10).pow(exchangeToken.decimals ?? 0))
+            const divisor = gcd(ONE_TOKEN, amount)
+            return [ONE_TOKEN.dividedToIntegerBy(divisor), amount.dividedToIntegerBy(divisor)] as const
+        })
+        const totalAmount = new BigNumber(total)
+        const invalidTokenAt = exchangeAmounts_.findIndex(([tokenAmountA, tokenAmountB]) =>
+            totalAmount.multipliedBy(tokenAmountA).dividedToIntegerBy(tokenAmountB).isZero(),
+        )
+        if (invalidTokenAt >= 0) {
+            setFillState({
+                type: TransactionStateType.FAILED,
+                error: new Error(
+                    `Cannot swap enough ${token.symbol ?? ''} out with ${exchangeTokens[invalidTokenAt].symbol ?? ''}`,
+                ),
+            })
+            return
+        }
+
         // pre-step: start waiting for provider to confirm tx
         setFillState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const ONE_TOKEN = new BigNumber(1).multipliedBy(new BigNumber(10).pow(token.decimals ?? 0))
         const config: Tx = {
             from: account,
             to: ITO_Contract.options.address,
@@ -127,13 +148,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
             name,
             title,
             exchangeTokens.map((x) => x.address),
-            exchangeAmounts
-                .flatMap((x) => {
-                    const amount = new BigNumber(x)
-                    const divisor = gcd(ONE_TOKEN, amount)
-                    return [ONE_TOKEN.dividedToIntegerBy(divisor), amount.dividedToIntegerBy(divisor)]
-                })
-                .map((y) => y.toFixed()),
+            exchangeAmounts_.flatMap((x) => x).map((y) => y.toFixed()),
             token.address,
             total,
             limit,

@@ -54,7 +54,7 @@ export function TestForm(props: TestFormProps) {
     const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(settings)
     const onCreate = useCallback(async () => {
         await fillCallback()
-    }, [settings])
+    }, [fillCallback])
     //#endregion
 
     //#region compose JSON payload
@@ -237,6 +237,10 @@ export function TestForm(props: TestFormProps) {
                                 claimState,
                                 fillState,
                                 fillSettings,
+                                claimError:
+                                    claimState.type === TransactionStateType.FAILED ? claimState.error.message : '',
+                                fillError:
+                                    fillState.type === TransactionStateType.FAILED ? fillState.error.message : '',
                             },
                             null,
                             2,
