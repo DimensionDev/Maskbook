@@ -11,5 +11,6 @@ export const Default = of({
     args: {
         children: 'A button?',
         variant: 'contained',
+        size: 'medium',
     },
 })

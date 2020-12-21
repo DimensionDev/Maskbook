@@ -1,11 +1,10 @@
 export type ControlType = 'radio' | 'inline-radio' | 'check' | 'inline-check' | 'select' | 'multi-select'
-export function argsOfEnum(e: object, type?: ControlType) {
-    const options = Object.keys(e).filter((x) => Number.isNaN(Number.parseInt(x)))
+export function argsOfArr<T>(keys: NonNullable<T>[], type?: ControlType) {
     if (type === undefined) {
-        if (options.length <= 3) type = 'inline-radio'
+        if (keys.length <= 3) type = 'inline-radio'
         else type = 'select'
     }
-    return {
-        control: { type, options },
-    }
+    const options = {} as any
+    keys.forEach((x) => (options[x] = x))
+    return { control: { type, options } }
 }

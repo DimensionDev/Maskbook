@@ -1,20 +1,10 @@
 import { createMuiTheme, PaletteMode } from '@material-ui/core'
-import { Components } from '@material-ui/core/styles/components'
+import * as Changes from './changes'
+import { merge } from 'lodash-es'
 
-const MuiButton: Components['MuiButton'] = {
-    styleOverrides: {
-        root: {
-            textTransform: 'unset',
-        },
-    },
-}
 function MaskTheme(mode: PaletteMode) {
-    return createMuiTheme({
-        palette: { mode },
-        components: {
-            MuiButton,
-        },
-    })
+    const theme = merge({ palette: { mode } }, ...Object.values(Changes))
+    return createMuiTheme(theme)
 }
 export const MaskLightTheme = MaskTheme('light')
 export const MaskDarkTheme = MaskTheme('dark')
