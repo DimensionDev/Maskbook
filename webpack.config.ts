@@ -15,7 +15,6 @@ import ForkTSCheckerPlugin from 'fork-ts-checker-webpack-plugin'
 import ForkTSCheckerNotifier from 'fork-ts-checker-notifier-webpack-plugin'
 //#endregion
 //#region Production plugins
-import { SSRPlugin } from './scripts/SSRPlugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 //#endregion
 //#region Other plugins
