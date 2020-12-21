@@ -333,7 +333,7 @@ function getCompilationInfo(argv: any) {
 
     // ! this section must match packages/maskbook/src/env.d.ts
     let target: 'chromium' | 'firefox' | 'safari' | 'E2E' = 'chromium'
-    let firefoxVariant: 'fennec' | 'geckoview' | undefined = undefined
+    let firefoxVariant: 'fennec' | 'geckoview' | false = false
     let architecture: 'web' | 'app' = 'web'
     let resolution: 'desktop' | 'mobile' = 'desktop'
     let build: 'stable' | 'beta' | 'insider' = 'stable'

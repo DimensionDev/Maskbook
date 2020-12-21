@@ -11,7 +11,7 @@ declare module NodeJS {
         readonly build: 'stable' | 'beta' | 'insider'
         readonly architecture: 'web' | 'app'
         /** fennec = stable firefox; geckoview = next generation firefox (used in Android App, in future it will become the default engine on Firefox for Android) */
-        readonly firefoxVariant: 'fennec' | 'geckoview'
+        readonly firefoxVariant: 'fennec' | 'geckoview' | false
         /**
          * STRONGLY SUGGEST to make the app flexible as possible!
          * This value is the build time fallback for the screen size.
