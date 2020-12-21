@@ -11,7 +11,7 @@ export const Breakpoints: ThemeOptions = {
  * ? Paper should be used as the main building block in the page
  * ? Paper should be 12px
  * ? Dialog should be 12px
- * ! Input (Button, TextField and Select) should be 4px(small) 6px(medium) and 8px(large)
+ * ? Input (Button, TextField and Select) should be 4px(small) 6px(medium) and 8px(large)
  */
 export const BorderRadius: ThemeOptions = {
     components: {
@@ -26,7 +26,12 @@ export const BorderRadius: ThemeOptions = {
             },
         },
         MuiInputBase: {
-            styleOverrides: {},
+            styleOverrides: {
+                sizeSmall: { borderRadius: 4 },
+                // Medium has no style class
+                root: { borderRadius: 6 },
+                // No large for InputBase
+            },
         },
     },
 }

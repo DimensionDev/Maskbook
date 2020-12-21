@@ -10,11 +10,12 @@ import {
     Switch,
     Select,
     MenuItem,
+    Checkbox,
 } from '@material-ui/core'
-import { MaskDarkTheme } from '../src/theme'
+import { MaskLightTheme } from '../src/theme'
 
 export default () => (
-    <MuiThemeProvider theme={MaskDarkTheme}>
+    <MuiThemeProvider theme={MaskLightTheme}>
         <Card>
             <CardHeader
                 title="Subscribe"
@@ -28,7 +29,8 @@ export default () => (
                     <MenuItem>Item 2</MenuItem>
                     <MenuItem>Item 3</MenuItem>
                 </Select>
-                <FormControlLabel control={<Switch checked name="send-me-ads" />} label="Send me ads" />
+                <FormControlLabel control={<Switch name="send-me-ads" />} label="Send me ads" />
+                <FormControlLabel label="Parent" control={<Checkbox />} />
             </CardContent>
             <CardActions>
                 <Button variant="text">Cancel</Button>

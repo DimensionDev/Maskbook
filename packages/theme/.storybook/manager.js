@@ -3,7 +3,7 @@ import { themes } from '@storybook/theming'
 
 addons.setConfig({
     panelPosition: 'right',
-    theme: themes.dark,
+    theme: themes.light,
     selectedPanel: undefined,
     initialActive: 'sidebar',
     showRoots: true,
