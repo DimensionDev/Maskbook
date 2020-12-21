@@ -126,7 +126,7 @@
     "ok": "OK",
     "password": "パスワード",
     "copy_to_clipboard": "コピー",
-    "payload_bad": "この投稿は破損しており、Maskbook が復号化することができません。",
+    "payload_bad": "この投稿は破損しているため、Maskbookで復号化できません。",
     "payload_incomplete": "この投稿は不完全です。全文を見ることにより復号が可能になります。",
     "payload_not_found": "ペイロードが見つかりませんでした。",
     "payload_throw_in_alpha41": "Alpha41方式は使用できません。Maskbook をアップデートしてください。",
