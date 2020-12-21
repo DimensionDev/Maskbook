@@ -17,7 +17,6 @@ import ForkTSCheckerNotifier from 'fork-ts-checker-notifier-webpack-plugin'
 //#region Production plugins
 import { SSRPlugin } from './scripts/SSRPlugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
-import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 //#endregion
 //#region Other plugins
 import CopyPlugin from 'copy-webpack-plugin'
@@ -28,16 +27,20 @@ import Webpack5AssetModuleTransformer from './scripts/transformers/webpack-5-ass
 //#endregion
 
 import git from '@nice-labs/git-rev'
+import rimraf from 'rimraf'
 
 import * as modifiers from './scripts/manifest-modifiers'
+import { promisify } from 'util'
 
 const src = (file: string) => path.join(__dirname, file)
 const publicDir = src('./public')
 
-export default function (cli_env: Record<string, boolean> = {}, argv: { mode?: 'production' | 'development' }) {
+export default async function (cli_env: Record<string, boolean> = {}, argv: { mode?: 'production' | 'development' }) {
     const target = getCompilationInfo(cli_env)
     const env: 'production' | 'development' = argv.mode ?? 'production'
     const dist = env === 'production' ? src('./build') : src('./dist')
+
+    if (env === 'production') await promisify(rimraf)(dist)
 
     const isManifestV3 = target.runtimeEnv.manifest === 3
     const enableHMR = env === 'development' && !Boolean(process.env.NO_HMR) && !isManifestV3
@@ -185,7 +188,7 @@ export default function (cli_env: Record<string, boolean> = {}, argv: { mode?: '
                 overlay: false,
             },
             optimization: { splitChunks: false, minimize: false },
-            plugins: [ProcessEnvPlugin, env === 'production' && new CleanWebpackPlugin({})].filter(Boolean),
+            plugins: [ProcessEnvPlugin],
         }
         if (modifier) modifier(c)
         return c
