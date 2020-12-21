@@ -1,11 +1,11 @@
 {
-  "name": "@dimensiondev/maskbook-theme",
+  "name": "@dimensiondev/dashboard",
   "private": true,
-  "description": "@material-ui/core theme of design system of Mask Network",
+  "description": "New dashboard of Mask Network",
   "scripts": {
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "start": "npm run storybook"
+    "start": "snowpack dev"
   },
   "peerDependencies": {
     "@emotion/react": "*",
@@ -27,6 +27,11 @@
     "@storybook/addons": "^6.1.9",
     "@storybook/react": "^6.1.9",
     "@storybook/theming": "^6.1.9",
-    "babel-loader": "^8.2.2"
+    "babel-loader": "^8.2.2",
+    "snowpack": "^2",
+    "@snowpack/plugin-dotenv": "^2.0.5",
+    "@snowpack/plugin-react-refresh": "^2.3.9",
+    "@snowpack/plugin-typescript": "^1.1.1",
+    "@types/snowpack-env": "^2.3.2"
   }
 }

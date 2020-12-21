@@ -6,7 +6,8 @@
   "workspaces": [
     "packages/maskbook",
     "packages/cli-dev-build",
-    "packages/theme"
+    "packages/theme",
+    "packages/dashboard"
   ],
   "scripts": {
     "start": "dev",
