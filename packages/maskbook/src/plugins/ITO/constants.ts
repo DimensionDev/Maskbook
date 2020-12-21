@@ -15,4 +15,4 @@ export const ITO_CONSTANTS = {
     },
 }
 
-export const ITO_CONTRACT_BASE_DATE = new Date(1606780800000)
+export const ITO_CONTRACT_BASE_DATE = new Date(2020, 11, 1, 8, 0, 0, 0).getTime()
