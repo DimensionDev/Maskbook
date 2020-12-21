@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
@@ -18,17 +18,22 @@ import { formatBalance, formatToken } from '../../Wallet/formatter'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatDateTime } from '../../../utils/date'
+import { ClaimDialog } from './ClaimDialog'
 
-const DAI_ADDRESS = getConstant(CONSTANTS, 'DAI_ADDRESS').toLowerCase()
-const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS').toLowerCase()
-const USDT_ADDRESS = getConstant(CONSTANTS, 'USDT_ADDRESS').toLowerCase()
-const USDC_ADDRESS = getConstant(CONSTANTS, 'USDC_ADDRESS').toLowerCase()
+export const DAI_ADDRESS = getConstant(CONSTANTS, 'DAI_ADDRESS').toLowerCase()
+export const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS').toLowerCase()
+export const USDT_ADDRESS = getConstant(CONSTANTS, 'USDT_ADDRESS').toLowerCase()
+export const USDC_ADDRESS = getConstant(CONSTANTS, 'USDC_ADDRESS').toLowerCase()
 
-const TOKEN_ICON_LIST_TABLE: Record<string, JSX.Element> = {
-    [DAI_ADDRESS]: <DaiIcon />,
-    [ETH_ADDRESS]: <EthIcon />,
-    [USDT_ADDRESS]: <UsdtIcon />,
-    [USDC_ADDRESS]: <UsdcIcon />,
+interface IconProps {
+    size?: number
+}
+
+export const TOKEN_ICON_LIST_TABLE: Record<string, (props: IconProps) => JSX.Element> = {
+    [DAI_ADDRESS]: (props: IconProps) => <DaiIcon size={props.size} />,
+    [ETH_ADDRESS]: (props: IconProps) => <EthIcon size={props.size} />,
+    [USDT_ADDRESS]: (props: IconProps) => <UsdtIcon size={props.size} />,
+    [USDC_ADDRESS]: (props: IconProps) => <UsdcIcon size={props.size} />,
 }
 
 const useStyles = makeStyles((theme) =>
@@ -54,7 +59,8 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            width: 470,
+            width: '100%',
+            maxWidth: 470,
         },
         title: {
             fontSize: '1.8rem',
@@ -86,7 +92,8 @@ const useStyles = makeStyles((theme) =>
         },
         footer: {
             position: 'absolute',
-            width: 470,
+            width: '90%',
+            maxWidth: 470,
             bottom: theme.spacing(2),
             display: 'flex',
             justifyContent: 'space-between',
@@ -110,11 +117,15 @@ const useStyles = makeStyles((theme) =>
             },
         },
         actionFooter: {
-            marginTop: theme.spacing(2),
+            marginTop: theme.spacing(1),
         },
         actionButton: {
             minHeight: 'auto',
             width: '100%',
+        },
+        textProviderErr: {
+            color: '#EB5757',
+            marginTop: theme.spacing(1),
         },
     }),
 )
@@ -125,7 +136,7 @@ export interface ITO_Props {
 
 interface TokenItemProps {
     ration: string
-    TokenIcon: () => JSX.Element
+    TokenIcon: (props: IconProps) => JSX.Element
     tokenSymbol: string
     sellTokenSymbol: string
     decimals?: number
@@ -156,6 +167,7 @@ export function ITO(props: ITO_Props) {
     } = payload
     const classes = useStyles()
     const { t } = useI18N()
+    const [openClaimDialog, setOpenClaimDialog] = useState(false)
 
     const total = Number(payload_total)
     const total_remaining = Number(payload_total_remaining)
@@ -188,7 +200,9 @@ export function ITO(props: ITO_Props) {
 
     console.log('value', availability)
     console.log('time', new Date().getTime(), start_time)
-    const onClaimOrShare = useCallback(async () => {}, [])
+    const onClaimOrShare = useCallback(async () => {
+        setOpenClaimDialog(true)
+    }, [])
 
     return (
         <div>
@@ -226,7 +240,7 @@ export function ITO(props: ITO_Props) {
                                 <TokenItem
                                     decimals={t.decimals}
                                     ration={exchange_amounts[i]}
-                                    TokenIcon={() => TokenIcon}
+                                    TokenIcon={TokenIcon}
                                     tokenSymbol={t.symbol!}
                                     sellTokenSymbol={token.symbol!}
                                 />
@@ -248,6 +262,11 @@ export function ITO(props: ITO_Props) {
                     </Typography>
                 </Box>
             </Card>
+
+            <Typography variant="body1" className={classes.textProviderErr}>
+                {t('plugin_ito_wrong_provider')}
+            </Typography>
+
             {canClaim || canShare ? (
                 <Box className={classes.actionFooter}>
                     {!account || !chainIdValid ? (
@@ -269,6 +288,11 @@ export function ITO(props: ITO_Props) {
                     )}
                 </Box>
             ) : null}
+            <ClaimDialog
+                exchangeTokens={exchange_tokens}
+                open={openClaimDialog}
+                onClose={() => setOpenClaimDialog(false)}
+            />
         </div>
     )
 }
