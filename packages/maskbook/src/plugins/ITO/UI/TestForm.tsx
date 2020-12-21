@@ -79,7 +79,6 @@ export function TestForm(props: TestFormProps) {
             creation_time: Number.parseInt(FillSuccess.creation_time, 10) * 1000,
             total: FillSuccess.total,
             total_remaining: FillSuccess.total,
-            claim_remaining: fillSettings.limit,
             pid: FillSuccess.id,
             sender: {
                 address: FillSuccess.creator,
@@ -103,7 +102,6 @@ export function TestForm(props: TestFormProps) {
             contract_address: '0x52ceb31d6c197b5c039786fbefd6a82df70fdfd6',
             total: '1000000',
             total_remaining: '900000',
-            claim_remaining: '500',
             pid: '0x91abb4660d1925c3c0a5bfb9d0481e80a558d86b3fe446764cadc2cd9505f1b4',
             sender: {
                 address: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
@@ -164,11 +162,11 @@ export function TestForm(props: TestFormProps) {
     //#endregion
 
     //#region claim
-    const claimPayload = usePoolPayload('')
+    const { value: claimPayload } = usePoolPayload('0xbcba924b02aa7b0b27923367e8d817bcec456957e69557a317eb5feb70b3c54f')
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
-        claimPayload.pid,
-        claimPayload.password,
-        claimPayload.limit,
+        claimPayload?.pid ?? '',
+        claimPayload?.password ?? '',
+        claimPayload?.limit ?? '0',
         {
             address: MaskbookB?.address ?? '',
         },

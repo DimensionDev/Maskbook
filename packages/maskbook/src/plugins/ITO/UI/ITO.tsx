@@ -153,25 +153,14 @@ const TokenItem = ({ ration, TokenIcon, tokenSymbol, sellTokenSymbol, decimals =
 
 export function ITO(props: ITO_Props) {
     const { payload } = props
-    const {
-        token,
-        total: payload_total,
-        total_remaining: payload_total_remaining,
-        claim_remaining: payload_claim_remaining,
-        sender,
-        exchange_amounts,
-        exchange_tokens,
-        limit,
-        start_time,
-        pid,
-    } = payload
+    const { token, total: payload_total, sender, exchange_amounts, exchange_tokens, limit, start_time, pid } = payload
     const classes = useStyles()
     const { t } = useI18N()
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
 
     const total = Number(payload_total)
-    const total_remaining = Number(payload_total_remaining)
-    const claim_remaining = Number(payload_claim_remaining)
+    const total_remaining = Number('0')
+    const claim_remaining = Number('0')
     const sold = total - total_remaining
 
     // context

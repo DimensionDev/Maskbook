@@ -19,11 +19,11 @@ export function useClaimCallback(
     const account = useAccount()
     const ITO_Contract = useITO_Contract()
 
-    const poolPayload = usePoolPayload(id)
+    const { value: poolPayload } = usePoolPayload(id)
     const [claimState, setClaimState] = useTransactionState()
 
     const claimCallback = useCallback(async () => {
-        if (!ITO_Contract || !id || !password) {
+        if (!ITO_Contract || !poolPayload || !id || !password) {
             setClaimState({
                 type: TransactionStateType.UNKNOWN,
             })
