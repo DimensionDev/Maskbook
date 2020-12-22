@@ -142,7 +142,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 <Grid item xs={6} className={classes.button}>
                     <ActionButton fullWidth variant="contained" onClick={onDone}>
                         {t('plugin_ito_send_text', {
-                            tital: poolSettings?.token,
+                            total: formatBalance(
+                                new BigNumber(poolSettings?.total ?? '0'),
+                                poolSettings?.token?.decimals ?? 18,
+                            ),
                             symbol: poolSettings?.token?.symbol,
                         })}
                     </ActionButton>
