@@ -17,4 +17,4 @@ export const ITO_CONSTANTS = {
 
 export const ITO_CONTRACT_BASE_DATE = new Date(2020, 11, 1, 8, 0, 0, 0)
 
-export const THEGRAPH_MASK_ITO = 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito'
+export const ITO_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito'
