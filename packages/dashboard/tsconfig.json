@@ -1,8 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDirs": ["./"],
-    "strict": true
+    "rootDir": "./",
+    "outDir": "./dist/"
   },
-  "include": ["./src/","./stories/"]
+  "include": ["./src/", "./stories/"],
+  "references": [{ "path": "../theme/" }, {"path": "../maskbook/"}]
 }
