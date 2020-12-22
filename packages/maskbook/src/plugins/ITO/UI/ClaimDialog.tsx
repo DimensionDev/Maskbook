@@ -27,6 +27,7 @@ import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { formatToken } from '../../Wallet/formatter'
 import { TOKEN_ICON_LIST_TABLE } from './ITO'
 import { SelectSwapTokenDialog } from './SelectSwapTokenDialog'
+import ITO_ShareImage from '../assets/share_ito'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -195,6 +196,43 @@ const useStyles = makeStyles((theme) =>
             width: 'fit-content',
             margin: theme.spacing(0, 1),
         },
+        shareImage: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            backgroundAttachment: 'local',
+            backgroundPosition: '0',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            background: `url(${ITO_ShareImage})`,
+            width: 475,
+            height: 341,
+            backgroundColor: '#332C61',
+            borderRadius: 10,
+        },
+        shareWrapper: {
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            marginTop: theme.spacing(2),
+        },
+        shareButton: {
+            width: 'fit-content',
+            padding: theme.spacing(1, 8),
+            marginTop: theme.spacing(2),
+        },
+        shareAmount: {
+            fontSize: 23,
+            marginTop: 140,
+        },
+        shareToken: {
+            fontSize: 23,
+        },
+        shareText: {
+            fontSize: 24,
+            marginTop: 80,
+        },
     }),
 )
 
@@ -286,7 +324,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                     Continue
                                 </Button>
                             </>
-                        ) : (
+                        ) : status === ClaimStatus.Swap ? (
                             <>
                                 <section className={classes.providerWrapper}>
                                     <EthereumStatusBar classes={{ root: classes.providerBar }} />
@@ -338,7 +376,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                         variant="contained"
                                         color="primary"
                                         className={classes.swapButton}
-                                        onClick={() => setStatus(ClaimStatus.Swap)}
+                                        onClick={() => setStatus(ClaimStatus.Share)}
                                         disabled={false}>
                                         {t('plugin_ito_dialog_claim_swap_approve')} USDC
                                     </Button>
@@ -352,7 +390,26 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                     </Button>
                                 </section>
                             </>
-                        )}
+                        ) : status === ClaimStatus.Share ? (
+                            <>
+                                <Box className={classes.shareWrapper}>
+                                    <div className={classes.shareImage}>
+                                        <Typography variant="body1" className={classes.shareAmount}>
+                                            {formatToken(100000)}
+                                        </Typography>
+                                        <Typography variant="body1" className={classes.shareToken}>
+                                            MSKUI
+                                        </Typography>
+                                        <Typography variant="body1" className={classes.shareText}>
+                                            YOU GOT !
+                                        </Typography>
+                                    </div>
+                                    <Button variant="contained" color="primary" className={classes.shareButton}>
+                                        {t('plugin_ito_dialog_claim_share_title')}
+                                    </Button>
+                                </Box>
+                            </>
+                        ) : null}
                     </Box>
                     <SelectSwapTokenDialog
                         onSelect={(address: string) => {
