@@ -1,6 +1,6 @@
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { v4 as uuid } from 'uuid'
 import { useReducer } from 'react'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 
 export interface ExchangeTokenAndAmount {
     amount: string
@@ -56,10 +56,8 @@ function reducer(
             return state.filter((item) => item.key !== action.key)
         case ExchangeTokenAndAmountActionType.UPDATE_AMOUNT:
             return state.map((item) => (item.key === action.key ? { ...item, amount: action.amount } : item))
-
         case ExchangeTokenAndAmountActionType.UPDATE_TOKEN:
             return state.map((item) => (item.key === action.key ? { ...item, token: action.token } : item))
-
         default:
             return state
     }

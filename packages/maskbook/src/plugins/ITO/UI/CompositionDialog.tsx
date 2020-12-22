@@ -7,7 +7,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
 import { editActivatedPostMetadata } from '../../../social-network/ui'
-import { CreateItoGuide } from './CreateItoGuide'
+import { CreateGuide } from './CreateGuide'
 import { TestForm } from './TestForm'
 
 const useStyles = makeStyles((theme) => createStyles({}))
@@ -42,7 +42,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             },
             {
                 label: t('plugin_ito_create_new'),
-                children: <CreateItoGuide onCreate={onCreateOrSelect} />,
+                children: <CreateGuide onCreate={onCreateOrSelect} />,
                 sx: { p: 0 },
             },
             {

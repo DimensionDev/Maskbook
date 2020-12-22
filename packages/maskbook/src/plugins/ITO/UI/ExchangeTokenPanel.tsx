@@ -11,8 +11,13 @@ import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { v4 as uuid } from 'uuid'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
-import { ExchangeTokenAndAmountActionType, useExchangeTokenAndAmount } from '../api/useExchangeTokenAmountstate'
+import {
+    ExchangeTokenAndAmountState,
+    ExchangeTokenAndAmountActionType,
+    useExchangeTokenAndAmount,
+} from '../hooks/useExchangeTokenAmountstate'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { isETH } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -166,7 +171,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
 
 export interface ExchangeTokenPanelGroupProps {
     originToken: EtherTokenDetailed | ERC20TokenDetailed | undefined
-    onTokenAmountChange: (data: any) => void
+    onTokenAmountChange: (data: ExchangeTokenAndAmountState[]) => void
 }
 
 export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
@@ -174,13 +179,11 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
     const { t } = useI18N()
     const { onTokenAmountChange } = props
     const { value: token } = useEtherTokenDetailed()
-    const [excludeTokensAddress, setexcludeTokensAddress] = useState<string[]>([])
+    const [excludeTokensAddress, setExcludeTokensAddress] = useState<string[]>([])
     const [exchangeTokenArray, dispatchExchangeTokenArray] = useExchangeTokenAndAmount(token)
 
     const onAdd = useCallback(() => {
-        if (exchangeTokenArray.length > ITO_EXCHANGE_RATION_MAX) {
-            return
-        }
+        if (exchangeTokenArray.length > ITO_EXCHANGE_RATION_MAX) return
         dispatchExchangeTokenArray({
             type: ExchangeTokenAndAmountActionType.ADD,
             key: uuid(),
@@ -211,16 +214,13 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
         [dispatchExchangeTokenArray],
     )
 
-    function isETH(token?: EtherTokenDetailed | ERC20TokenDetailed): boolean {
-        return token?.address === '0x0000000000000000000000000000000000000000'
-    }
     useEffect(() => {
         onTokenAmountChange(exchangeTokenArray)
         const addresses = exchangeTokenArray
-            .filter((item) => !isETH(item?.token))
+            .filter((item) => !isETH(item?.token?.address ?? ''))
             .map((item) => item?.token?.address ?? '')
-        setexcludeTokensAddress(addresses)
-    }, [exchangeTokenArray, onTokenAmountChange, setexcludeTokensAddress])
+        setExcludeTokensAddress(addresses)
+    }, [exchangeTokenArray, onTokenAmountChange, setExcludeTokensAddress])
 
     return (
         <>

@@ -7,7 +7,6 @@ export interface ITO_JSONPayload {
     limit: string
     total: string
     total_remaining: string
-    claim_remaining: string
     sender: {
         address: string
         name: string

@@ -14,12 +14,14 @@ export const CONSTANTS = {
             'http://tokenlist.dharma.eth.link',
             'https://raw.githubusercontent.com/DimensionDev/Maskbook-Token-List/gh-pages/maskbook.json',
         ],
-        [ChainId.Ropsten]: [] as string[],
+        [ChainId.Ropsten]: [
+            'https://raw.githubusercontent.com/DimensionDev/Maskbook-Token-List/gh-pages/maskbook.json',
+        ],
         [ChainId.Rinkeby]: [
             'https://raw.githubusercontent.com/DimensionDev/Maskbook-Token-List/gh-pages/maskbook.json',
         ],
-        [ChainId.Kovan]: [] as string[],
-        [ChainId.Gorli]: [] as string[],
+        [ChainId.Kovan]: [],
+        [ChainId.Gorli]: [],
     },
 
     // contracts

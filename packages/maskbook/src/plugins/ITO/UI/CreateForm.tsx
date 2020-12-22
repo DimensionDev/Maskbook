@@ -1,5 +1,8 @@
 import { createStyles, makeStyles, Box, TextField, Grid } from '@material-ui/core'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
+import BigNumber from 'bignumber.js'
+import 'date-fns'
+import { v4 as uuid } from 'uuid'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -10,14 +13,12 @@ import { ITO_CONSTANTS } from '../constants'
 import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanel'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import BigNumber from 'bignumber.js'
 import type { PoolSettings } from '../hooks/useFillCallback'
-import 'date-fns'
-import type { ExchangeTokenAndAmountState } from '../api/useExchangeTokenAmountstate'
+import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { v4 as uuid } from 'uuid'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
+import { formatBalance } from '../../Wallet/formatter'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -55,7 +56,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface CreateFormProps extends withClasses<never> {
-    onChangePoolSettings: (pollSettings: PoolSettings | undefined) => void
+    onChangePoolSettings: (pollSettings: PoolSettings) => void
     onConnectWallet: () => void
     onNext: () => void
 }
@@ -68,32 +69,34 @@ export function CreateForm(props: CreateFormProps) {
     const account = useAccount()
     const chainIdValid = useChainIdValid()
 
+    const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
     const [message, setMessage] = useState('')
-    const [totalOfPerWallet, setTotalOfPerWallet] = useState('0')
-    const [tokenAndAmounts, setTokenAndAmounts] = useState<ExchangeTokenAndAmountState[]>([])
+    const [totalOfPerWallet, setTotalOfPerWallet] = useState('')
     const [tokenAndAmount, setTokenAndAmount] = useState<ExchangeTokenAndAmountState>()
+    const [tokenAndAmounts, setTokenAndAmounts] = useState<ExchangeTokenAndAmountState[]>([])
     const [startTime, setStartTime] = useState('')
     const [endTime, setEndTime] = useState('')
 
-    const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
-
     const GMT = new Date().getTimezoneOffset() / 60
 
-    const ITOContractAddress = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    //#region approve
+    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
         tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount?.token?.address : '',
         tokenAndAmount?.amount,
-        ITOContractAddress,
+        ITO_CONTRACT_ADDRESS,
     )
 
     const onApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) {
-            return
-        }
+        if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback()
     }, [approveState, approveCallback])
-
+    const onExactApprove = useCallback(async () => {
+        if (approveState !== ApproveState.NOT_APPROVED) return
+        await approveCallback(true)
+    }, [approveState, approveCallback])
     const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
+    //#endregion
 
     const onTotalOfPerWalletChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
         const total = ev.currentTarget.value
@@ -105,20 +108,24 @@ export function CreateForm(props: CreateFormProps) {
         }
     }, [])
 
-    const [poolSettings, setPoolSettings] = useState<PoolSettings>()
-
     useEffect(() => {
-        const [first, ...last] = tokenAndAmounts
+        const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
-        setPoolSettings({
+        onChangePoolSettings({
             password: uuid(),
             name: senderName,
             title: message,
-            limit: totalOfPerWallet,
+            limit: new BigNumber(totalOfPerWallet)
+                .multipliedBy(new BigNumber(10).pow(tokenAndAmount?.token?.decimals ?? 0))
+                .toFixed(),
             token: tokenAndAmount?.token,
-            total: new BigNumber(tokenAndAmount?.amount ?? '0').toFixed(),
-            exchangeAmounts: last.map((item) => new BigNumber(item.amount).toFixed()),
-            exchangeTokens: last.map((item) => item.token!),
+            total: new BigNumber(tokenAndAmount?.amount ?? '0')
+                .multipliedBy(new BigNumber(10).pow(tokenAndAmount?.token?.decimals ?? 0))
+                .toFixed(),
+            exchangeAmounts: rest.map((item) =>
+                new BigNumber(item.amount).multipliedBy(new BigNumber(10).pow(item.token?.decimals ?? 0)).toFixed(),
+            ),
+            exchangeTokens: rest.map((item) => item.token!),
             startTime: new Date(startTime),
             endTime: new Date(endTime),
         })
@@ -127,21 +134,22 @@ export function CreateForm(props: CreateFormProps) {
         message,
         totalOfPerWallet,
         tokenAndAmount,
-        setTokenAndAmount,
         tokenAndAmounts,
+        setTokenAndAmount,
         startTime,
         endTime,
         account,
     ])
 
-    useEffect(() => {
-        onChangePoolSettings(poolSettings)
-    }, [onChangePoolSettings, poolSettings])
-
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
         tokenAndAmount?.token?.type ?? EthereumTokenType.Ether,
         tokenAndAmount?.token?.address ?? '',
+    )
+
+    // amount for displaying
+    const inputTokenAmount = new BigNumber(tokenAndAmount?.amount ?? '0').multipliedBy(
+        new BigNumber(10).pow(tokenAndAmount?.token?.decimals ?? 0),
     )
 
     const validationMessage = useMemo(() => {
@@ -177,7 +185,7 @@ export function CreateForm(props: CreateFormProps) {
     ])
 
     const handleStartTime = useCallback(
-        (timeString) => {
+        (timeString: string) => {
             const time = new Date(timeString).getTime()
             if (endTime === '' || time < new Date(endTime).getTime()) setStartTime(timeString)
         },
@@ -185,7 +193,7 @@ export function CreateForm(props: CreateFormProps) {
     )
 
     const handleEndTime = useCallback(
-        (timeString) => {
+        (timeString: string) => {
             const time = new Date(timeString).getTime()
             const now = new Date()
             if (time < now.getTime()) return
@@ -207,7 +215,7 @@ export function CreateForm(props: CreateFormProps) {
                 <TextField
                     className={classes.input}
                     label={t('plugin_item_message_label')}
-                    defaultValue="MASK"
+                    defaultValue=""
                     onChange={(e) => setMessage(e.target.value)}
                     InputLabelProps={{
                         shrink: true,
@@ -229,7 +237,7 @@ export function CreateForm(props: CreateFormProps) {
                             autoComplete: 'off',
                             autoCorrect: 'off',
                             inputMode: 'decimal',
-                            placeholder: '0',
+                            placeholder: '0.0',
                             pattern: '^[0-9]$',
                             spellCheck: false,
                         },
@@ -264,44 +272,56 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.line}>
                 <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
                     {approveRequired ? (
-                        <Grid item xs={6}>
-                            <ActionButton
-                                className={classes.button}
-                                fullWidth
-                                variant="contained"
-                                size="large"
-                                disabled={approveState === ApproveState.PENDING}
-                                onClick={onApprove}>
-                                {approveState === ApproveState.NOT_APPROVED
-                                    ? t('plugin_ito_approve', { symbol: tokenAndAmount?.token?.symbol })
-                                    : ''}
-                                {approveState === ApproveState.PENDING
-                                    ? t('plugin_ito_approve_pending', { symbol: tokenAndAmount?.token?.symbol })
-                                    : ''}
-                            </ActionButton>
+                        <>
+                            <Grid item xs={6}>
+                                <ActionButton
+                                    className={classes.button}
+                                    fullWidth
+                                    variant="contained"
+                                    size="large"
+                                    onClick={onExactApprove}>
+                                    {approveState === ApproveState.NOT_APPROVED
+                                        ? `Unlock ${formatBalance(
+                                              inputTokenAmount,
+                                              tokenAndAmount?.token?.decimals ?? 0,
+                                              2,
+                                          )} ${tokenAndAmount?.token?.symbol ?? 'Token'}`
+                                        : ''}
+                                </ActionButton>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <ActionButton
+                                    className={classes.button}
+                                    fullWidth
+                                    variant="contained"
+                                    size="large"
+                                    onClick={onApprove}>
+                                    {approveState === ApproveState.NOT_APPROVED ? `Infinite Unlock` : ''}
+                                </ActionButton>
+                            </Grid>
+                        </>
+                    ) : (
+                        <Grid item xs={12}>
+                            {!account || !chainIdValid ? (
+                                <ActionButton
+                                    className={classes.button}
+                                    fullWidth
+                                    variant="contained"
+                                    size="large"
+                                    onClick={onConnectWallet}>
+                                    {t('plugin_ito_connect_a_wallet')}
+                                </ActionButton>
+                            ) : validationMessage ? (
+                                <ActionButton className={classes.button} fullWidth variant="contained" disabled>
+                                    {validationMessage}
+                                </ActionButton>
+                            ) : (
+                                <ActionButton className={classes.button} fullWidth onClick={onNext} variant="contained">
+                                    {t('plugin_ito_next')}
+                                </ActionButton>
+                            )}
                         </Grid>
-                    ) : null}
-
-                    <Grid item xs={approveRequired ? 6 : 12}>
-                        {!account || !chainIdValid ? (
-                            <ActionButton
-                                className={classes.button}
-                                fullWidth
-                                variant="contained"
-                                size="large"
-                                onClick={onConnectWallet}>
-                                {t('plugin_ito_connect_a_wallet')}
-                            </ActionButton>
-                        ) : validationMessage ? (
-                            <ActionButton className={classes.button} fullWidth variant="contained" disabled>
-                                {validationMessage}
-                            </ActionButton>
-                        ) : (
-                            <ActionButton className={classes.button} fullWidth onClick={onNext} variant="contained">
-                                {t('plugin_ito_next')}
-                            </ActionButton>
-                        )}
-                    </Grid>
+                    )}
                 </Grid>
             </Box>
         </>

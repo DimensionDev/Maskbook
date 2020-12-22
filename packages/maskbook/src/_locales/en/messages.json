@@ -424,7 +424,7 @@
     "plugin_ito_end_times_label": "End Times GMT({{GMT}})",
     "plugin_ito_next": "Next",
     "plugin_ito_back": "Back",
-    "plugin_ito_transaction_dialog_summary": "reate ITO with {{amount}} {{symbol}}",
+    "plugin_ito_transaction_dialog_summary": "Create ITO with {{amount}} {{symbol}}",
     "plugin_ito_send_tip": "You can select Existing in ITO to view the selection after successful sending",
     "plugin_ito_approve": "Approve {{symbol}}",
     "plugin_ito_approve_pending": "Approve... {{symbol}}",
