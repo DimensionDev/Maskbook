@@ -58,7 +58,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             mainFields: ['browser', 'module', 'main'],
             aliasFields: ['browser'],
             //#endregion
-            alias: { 'async-call-rpc$': 'async-call-rpc/full' },
+            alias: { 'async-call-rpc$': 'async-call-rpc/full', lodash: 'lodash-es' },
 
             // If anyone need profiling React please checkout: https://github.com/facebook/create-react-app/blob/865ea05bc93fd2ac56b7e561181c7dc2cead3e78/packages/react-scripts/config/webpack.config.js#L304
         },
@@ -227,7 +227,6 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             options: {
                 transpileOnly: true,
                 compilerOptions: {
-                    noEmit: false,
                     importsNotUsedAsValues: 'remove',
                     jsx: env === 'production' ? 'react-jsx' : 'react-jsxdev',
                 },

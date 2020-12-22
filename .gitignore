@@ -9,7 +9,12 @@
 /reports
 /junit.xml
 
+# Cache
+*.tsbuildinfo
+.type-coverage
+
 # Build out
+dist
 /build
 /storybook-static
 /Maskbook.*.zip
