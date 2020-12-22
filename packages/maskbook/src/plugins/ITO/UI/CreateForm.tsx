@@ -275,34 +275,47 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.line}>
                 <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
                     {approveRequired ? (
-                        <>
-                            <Grid item xs={6}>
+                        approveState === ApproveState.PENDING ? (
+                            <Grid item xs={12}>
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth
                                     variant="contained"
                                     size="large"
-                                    onClick={onExactApprove}>
-                                    {approveState === ApproveState.NOT_APPROVED
-                                        ? `Unlock ${formatBalance(
-                                              inputTokenAmount,
-                                              tokenAndAmount?.token?.decimals ?? 0,
-                                              2,
-                                          )} ${tokenAndAmount?.token?.symbol ?? 'Token'}`
-                                        : ''}
+                                    disabled={approveState === ApproveState.PENDING}>
+                                    {`Unlocking ${tokenAndAmount?.token?.symbol ?? 'Token'}…`}
                                 </ActionButton>
                             </Grid>
-                            <Grid item xs={6}>
-                                <ActionButton
-                                    className={classes.button}
-                                    fullWidth
-                                    variant="contained"
-                                    size="large"
-                                    onClick={onApprove}>
-                                    {approveState === ApproveState.NOT_APPROVED ? `Infinite Unlock` : ''}
-                                </ActionButton>
-                            </Grid>
-                        </>
+                        ) : (
+                            <>
+                                <Grid item xs={6}>
+                                    <ActionButton
+                                        className={classes.button}
+                                        fullWidth
+                                        variant="contained"
+                                        size="large"
+                                        onClick={onExactApprove}>
+                                        {approveState === ApproveState.NOT_APPROVED
+                                            ? `Unlock ${formatBalance(
+                                                  inputTokenAmount,
+                                                  tokenAndAmount?.token?.decimals ?? 0,
+                                                  2,
+                                              )} ${tokenAndAmount?.token?.symbol ?? 'Token'}`
+                                            : ''}
+                                    </ActionButton>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <ActionButton
+                                        className={classes.button}
+                                        fullWidth
+                                        variant="contained"
+                                        size="large"
+                                        onClick={onApprove}>
+                                        {approveState === ApproveState.NOT_APPROVED ? `Infinite Unlock` : ''}
+                                    </ActionButton>
+                                </Grid>
+                            </>
+                        )
                     ) : (
                         <Grid item xs={12}>
                             {!account || !chainIdValid ? (
