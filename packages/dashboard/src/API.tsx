@@ -5,7 +5,6 @@ type ServiceType = typeof import('@dimensiondev/maskbook/src/extension/service')
 export let Services: ServiceType = null!
 export function setService(x: ServiceType) {
     Services = x
-    console.log(x.Welcome.queryPermission({}))
 }
 export class WebExtensionExternalChannel implements EventBasedChannel {
     private f = new Set<Function>()

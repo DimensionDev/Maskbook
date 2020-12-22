@@ -26,6 +26,8 @@ import './utils/native-rpc/index'
 import('./plugins/PluginSerivce')
 
 import tasks from './extension/content-script/tasks'
+import Services, { ServicesAdditionalConnections } from './extension/service'
+import type { EventBasedChannel } from 'async-call-rpc/full'
 Object.assign(globalThis, { tasks })
 
 if (process.env.NODE_ENV === 'development' && Flags.matrix_based_service_enabled) {
@@ -49,6 +51,10 @@ if (isEnvironment(Environment.ManifestBackground)) {
     browser.webNavigation.onCommitted.addListener(async (arg) => {
         if (arg.url === 'about:blank') return
         if (!arg.url.startsWith('http')) return
+        if (process.env.NODE_ENV === 'development') {
+            if (arg.url.includes('localhost')) return
+            if (arg.url.includes('127.0.0.1')) return
+        }
         const contains = await browser.permissions.contains({ origins: [arg.url] })
         if (!contains) return
         /**
@@ -146,3 +152,20 @@ Object.assign(window, {
     },
 })
 initAutoShareToFriends()
+
+// Listen to API request from dashboard
+if (process.env.NODE_ENV === 'development' && process.env.architecture === 'web' && process.env.target === 'chromium') {
+    browser.runtime.onConnectExternal.addListener((port) => {
+        if (!(port.name in Services)) port.disconnect()
+        ServicesAdditionalConnections[port.name].newConnection(new PortChannel(port))
+    })
+}
+class PortChannel implements EventBasedChannel {
+    constructor(public port: browser.runtime.Port) {}
+    on(listener: (data: any) => void): void | (() => void) {
+        return this.port.onMessage.addListener(listener)
+    }
+    send(data: any) {
+        this.port.postMessage(data)
+    }
+}

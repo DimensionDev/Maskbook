@@ -9,6 +9,7 @@ import Serialization from '@dimensiondev/maskbook/dist/src/utils/type-transform/
 
 // Patch for esbuild (not support JSX new transform)
 Object.assign(globalThis, { React })
+
 setService(
     new Proxy({} as any, {
         get(target, prop) {
