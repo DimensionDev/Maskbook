@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
@@ -81,6 +81,9 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
         revalidateBalance()
         revalidateAllowance()
     }, [])
+
+    // reset approve state
+    useEffect(resetCallback, [address, amount, spender])
 
     return [approveState, approveCallback, resetCallback] as const
 }
