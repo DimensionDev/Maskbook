@@ -79,11 +79,22 @@ export function CreateForm(props: CreateFormProps) {
 
     const GMT = new Date().getTimezoneOffset() / 60
 
+    // amount for displaying
+    const inputTokenAmount = new BigNumber(tokenAndAmount?.amount ?? '0').multipliedBy(
+        new BigNumber(10).pow(tokenAndAmount?.token?.decimals ?? 0),
+    )
+
+    // balance
+    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
+        tokenAndAmount?.token?.type ?? EthereumTokenType.Ether,
+        tokenAndAmount?.token?.address ?? '',
+    )
+
     //#region approve
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
         tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount?.token?.address : '',
-        tokenAndAmount?.amount,
+        inputTokenAmount.toFixed(),
         ITO_CONTRACT_ADDRESS,
     )
 
@@ -143,17 +154,6 @@ export function CreateForm(props: CreateFormProps) {
         account,
         onChangePoolSettings,
     ])
-
-    // balance
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
-        tokenAndAmount?.token?.type ?? EthereumTokenType.Ether,
-        tokenAndAmount?.token?.address ?? '',
-    )
-
-    // amount for displaying
-    const inputTokenAmount = new BigNumber(tokenAndAmount?.amount ?? '0').multipliedBy(
-        new BigNumber(10).pow(tokenAndAmount?.token?.decimals ?? 0),
-    )
 
     const validationMessage = useMemo(() => {
         if (!tokenAndAmounts || tokenAndAmounts.length === 0) return t('plugin_ito_error_enter_amount_and_token')
