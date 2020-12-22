@@ -7,6 +7,9 @@
     "build-storybook": "build-storybook",
     "start": "snowpack dev"
   },
+  "dependencies": {
+    "@dimensiondev/maskbook": "*"
+  },
   "peerDependencies": {
     "@emotion/react": "*",
     "@emotion/styled": "*",
