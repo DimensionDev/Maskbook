@@ -10,7 +10,6 @@ import type { Group } from './helpers/group'
  * Because Identifier is not a value-type record so to make it behave like a value-type,
  * please use this class instead of Map<Identifier, T>.
  */
-@serializable('IdentifierMap')
 export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<IdentifierType, T> {
     [immerable] = true
     static fromPersonaList(persona: Persona[]) {
@@ -118,6 +117,7 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
         return this.entries()
     }
 }
+serializable('IdentifierMap')(IdentifierMap)
 IdentifierMap.prototype[Symbol.toStringTag] = 'IdentifierMap'
 
 export type ReadonlyIdentifierMap<IdentifierType extends Identifier, T> = ReadonlyMap<IdentifierType, T> & {

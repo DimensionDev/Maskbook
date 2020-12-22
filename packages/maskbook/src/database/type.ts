@@ -82,7 +82,6 @@ export abstract class Identifier {
     }
 }
 
-@serializable('ProfileIdentifier')
 export class ProfileIdentifier extends Identifier {
     static readonly unknown = new ProfileIdentifier('localhost', '$unknown')
     get isUnknown() {
@@ -109,13 +108,13 @@ export class ProfileIdentifier extends Identifier {
         return new ProfileIdentifier(network, userId)
     }
 }
+serializable('ProfileIdentifier')(ProfileIdentifier)
 export enum PreDefinedVirtualGroupNames {
     friends = '_default_friends_group_',
     followers = '_followers_group_',
     following = '_following_group_',
 }
 
-@serializable('GroupIdentifier')
 export class GroupIdentifier extends Identifier {
     static getFriendsGroupIdentifier(who: ProfileIdentifier, groupId: string) {
         return new GroupIdentifier(who.network, who.userId, groupId)
@@ -152,8 +151,8 @@ export class GroupIdentifier extends Identifier {
         return new GroupIdentifier(network, belongs, groupID)
     }
 }
+serializable('GroupIdentifier')(GroupIdentifier)
 
-@serializable('PostIdentifier')
 export class PostIdentifier<T extends Identifier = Identifier> extends Identifier {
     static readonly unknown = new PostIdentifier(ProfileIdentifier.unknown, '$unknown')
     get isUnknown() {
@@ -177,8 +176,8 @@ export class PostIdentifier<T extends Identifier = Identifier> extends Identifie
         return new PostIdentifier(id.val, postId)
     }
 }
+serializable('PostIdentifier')(PostIdentifier)
 
-@serializable('PostIVIdentifier')
 export class PostIVIdentifier extends Identifier {
     constructor(public readonly network: string, public readonly postIV: string) {
         super()
@@ -192,12 +191,12 @@ export class PostIVIdentifier extends Identifier {
         return new PostIVIdentifier(network, iv)
     }
 }
+serializable('PostIVIdentifier')(PostIdentifier)
 
 /**
  * This class identify the point on an EC curve.
  * ec_key:secp256k1/CompressedPoint
  */
-@serializable('ECKeyIdentifier')
 export class ECKeyIdentifier extends Identifier {
     /**
      * @deprecated
@@ -225,7 +224,7 @@ export class ECKeyIdentifier extends Identifier {
         return new ECKeyIdentifier(curve, point)
     }
 }
-
+serializable('ECKeyIdentifier')(ECKeyIdentifier)
 export type PersonaIdentifier = ECKeyIdentifier
 // eslint-disable-next-line no-redeclare
 export const PersonaIdentifier = [ECKeyIdentifier]

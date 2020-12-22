@@ -1,6 +1,8 @@
 /// <reference types="web-ext-types" />
 /// <reference types="react/experimental" />
 /// <reference types="react-dom/experimental" />
+/// <reference path="./components/custom-ui.d.ts" />
+
 
 declare module NodeJS {
     interface ProcessEnv {
