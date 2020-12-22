@@ -14,7 +14,6 @@
         "no-bitwise": "error",
         "no-new-wrappers": "error",
         "constructor-super": "error",
-        "no-redeclare": "warn",
         "no-eval": "error",
         "no-template-curly-in-string": "error",
         "no-return-await": "error",
@@ -26,7 +25,6 @@
         "no-extra-bind": "error",
         "use-isnan": "error",
         "no-restricted-globals": ["error", "event", "name", "length", "closed"],
-        "@typescript-eslint/no-unused-vars": "off",
         "unused-imports/no-unused-imports-ts": "error"
     }
 }

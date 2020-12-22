@@ -24,7 +24,7 @@ jobs:
       - run: sudo npm install --global npm@7
       - run: npm ci
       - run: npx prettier --check .
-      - run: npx tsc --noEmit
+      - run: npx tsc -b
       - run: npm run lint:typecoverage
       - run: npm run locale-kit
       - run: npm run lint:report
