@@ -115,15 +115,17 @@ export function CreateForm(props: CreateFormProps) {
             password: uuid(),
             name: senderName,
             title: message,
-            limit: new BigNumber(totalOfPerWallet)
-                .multipliedBy(new BigNumber(10).pow(tokenAndAmount?.token?.decimals ?? 0))
-                .toFixed(),
-            token: tokenAndAmount?.token,
-            total: new BigNumber(tokenAndAmount?.amount ?? '0')
-                .multipliedBy(new BigNumber(10).pow(tokenAndAmount?.token?.decimals ?? 0))
+            limit: new BigNumber(totalOfPerWallet || '0')
+                .multipliedBy(new BigNumber(10).pow(first?.token?.decimals ?? 0))
+                .toString(),
+            token: first?.token,
+            total: new BigNumber(first?.amount || '0')
+                .multipliedBy(new BigNumber(10).pow(first?.token?.decimals ?? 0))
                 .toFixed(),
             exchangeAmounts: rest.map((item) =>
-                new BigNumber(item.amount).multipliedBy(new BigNumber(10).pow(item.token?.decimals ?? 0)).toFixed(),
+                new BigNumber(item.amount || '0')
+                    .multipliedBy(new BigNumber(10).pow(first?.token?.decimals ?? 0))
+                    .toFixed(),
             ),
             exchangeTokens: rest.map((item) => item.token!),
             startTime: new Date(startTime),
@@ -139,6 +141,7 @@ export function CreateForm(props: CreateFormProps) {
         startTime,
         endTime,
         account,
+        onChangePoolSettings,
     ])
 
     // balance

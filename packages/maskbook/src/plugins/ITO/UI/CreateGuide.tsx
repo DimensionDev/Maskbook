@@ -10,7 +10,7 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { ITO_CONSTANTS, ITO_CONTRACT_BASE_DATE } from '../constants'
+import { ITO_CONSTANTS } from '../constants'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
@@ -34,17 +34,7 @@ export function CreateGuide(props: CreateGuideProps) {
 
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
 
-    const [poolSettings, setPoolSettings] = useState<PoolSettings>({
-        password: '',
-        startTime: ITO_CONTRACT_BASE_DATE,
-        endTime: ITO_CONTRACT_BASE_DATE,
-        title: '',
-        name: '',
-        limit: '0',
-        total: '0',
-        exchangeAmounts: [],
-        exchangeTokens: [],
-    })
+    const [poolSettings, setPoolSettings] = useState<PoolSettings>()
     const onNext = useCallback(() => {
         if (step === ITOCreateFormPageStep.NewItoPage) setStep(ITOCreateFormPageStep.ConfirmItoPage)
     }, [step])
@@ -52,9 +42,8 @@ export function CreateGuide(props: CreateGuideProps) {
     const onBack = useCallback(() => {
         if (step === ITOCreateFormPageStep.ConfirmItoPage) setStep(ITOCreateFormPageStep.NewItoPage)
     }, [step])
-
     //#region blocking
-    const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings)
+    const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings!)
     //#endregion
 
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(

@@ -4,6 +4,8 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { languageSettings } from '../../../settings/settings'
 import LaunchIcon from '@material-ui/icons/Launch'
+import { formatBalance } from '../../Wallet/formatter'
+import BigNumber from 'bignumber.js'
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
@@ -78,7 +80,9 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     <Paper className={classes.label}>{t('plugin_ito_sell_total_amount')}</Paper>
                 </Grid>
                 <Grid item xs={6}>
-                    <Paper className={classes.data}>{poolSettings?.total}</Paper>
+                    <Paper className={classes.data}>
+                        {formatBalance(new BigNumber(poolSettings?.total ?? '0'), poolSettings?.token?.decimals ?? 6)}
+                    </Paper>
                 </Grid>
 
                 {poolSettings?.exchangeTokens
@@ -92,7 +96,12 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                                     </Paper>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Paper className={classes.data}>{poolSettings?.exchangeAmounts[index]}</Paper>
+                                    <Paper className={classes.data}>
+                                        {formatBalance(
+                                            new BigNumber(poolSettings?.exchangeAmounts[index]),
+                                            poolSettings?.token?.decimals ?? 6,
+                                        )}
+                                    </Paper>
                                 </Grid>
                             </>
                         )
@@ -102,7 +111,9 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     <Paper className={classes.label}>{t('plugin_ito_allocation_per_wallet')}</Paper>
                 </Grid>
                 <Grid item xs={6}>
-                    <Paper className={classes.data}>{poolSettings?.limit}</Paper>
+                    <Paper className={classes.data}>
+                        {formatBalance(new BigNumber(poolSettings?.limit ?? '0'), poolSettings?.token?.decimals ?? 6)}
+                    </Paper>
                 </Grid>
 
                 <Grid item xs={6}>
