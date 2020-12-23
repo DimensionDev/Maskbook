@@ -6,9 +6,7 @@
         {
             "type": "npm",
             "script": "ts",
-            "problemMatcher": [
-                "$tsc-watch"
-            ],
+            "problemMatcher": ["$tsc-watch"],
             "label": "Background TypeScript compiler",
             "detail": "dev -- echo Starting TypeScript compiler...",
             "isBackground": true,
