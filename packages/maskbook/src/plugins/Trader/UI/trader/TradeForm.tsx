@@ -10,7 +10,7 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../../Wallet/messages'
-import { ApproveState } from '../../../../web3/hooks/useERC20TokenApproveCallback'
+import { ApproveState, ApproveStateType } from '../../../../web3/hooks/useERC20TokenApproveCallback'
 import { TradeStrategy, TokenPanelType, TradeComputed } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
@@ -199,7 +199,8 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region UI logic
-    const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
+    const approveRequired =
+        approveState.type === ApproveStateType.NOT_APPROVED || approveState.type === ApproveStateType.PENDING
 
     // validate form return a message if an error exists
     const validationMessage = useMemo(() => {
@@ -246,14 +247,14 @@ export function TradeForm(props: TradeFormProps) {
             <div className={classes.section}>
                 <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
                     {approveRequired && !loading ? (
-                        approveState === ApproveState.PENDING ? (
+                        approveState.type === ApproveStateType.PENDING ? (
                             <Grid item xs={12}>
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth
                                     variant="contained"
                                     size="large"
-                                    disabled={approveState === ApproveState.PENDING}>
+                                    disabled={approveState.type === ApproveStateType.PENDING}>
                                     {`Unlocking ${inputToken?.symbol ?? 'Token'}…`}
                                 </ActionButton>
                             </Grid>
@@ -266,7 +267,7 @@ export function TradeForm(props: TradeFormProps) {
                                         variant="contained"
                                         size="large"
                                         onClick={onExactApprove}>
-                                        {approveState === ApproveState.NOT_APPROVED
+                                        {approveState.type === ApproveStateType.NOT_APPROVED
                                             ? `Unlock ${formatBalance(
                                                   inputTokenTradeAmount,
                                                   inputToken?.decimals ?? 0,
@@ -282,7 +283,7 @@ export function TradeForm(props: TradeFormProps) {
                                         variant="contained"
                                         size="large"
                                         onClick={onApprove}>
-                                        {approveState === ApproveState.NOT_APPROVED ? `Infinite Unlock` : ''}
+                                        {approveState.type === ApproveStateType.NOT_APPROVED ? `Infinite Unlock` : ''}
                                     </ActionButton>
                                 </Grid>
                             </>

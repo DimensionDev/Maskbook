@@ -5,6 +5,7 @@ const plugins = new Set<PluginConfig>()
 export const PluginUI: ReadonlySet<PluginConfig> = plugins
 
 import { Flags } from '../utils/flags'
+import { EthereumPluginDefine } from './Ethereum/define'
 import { WalletPluginDefine } from './Wallet/define'
 import { GitcoinPluginDefine } from './Gitcoin/define'
 import { RedPacketPluginDefine } from './RedPacket/define'
@@ -16,10 +17,11 @@ import { Election2020PluginDefine } from './Election2020/define'
 import { TransakPluginDefine } from './Transak/define'
 import { COTM_PluginDefine } from './COTM/define'
 
+plugins.add(EthereumPluginDefine)
 plugins.add(WalletPluginDefine)
-plugins.add(GitcoinPluginDefine)
 plugins.add(RedPacketPluginDefine)
 plugins.add(FileServicePluginDefine)
+if (Flags.gitcoin_enabled) plugins.add(GitcoinPluginDefine)
 if (Flags.poll_enabled) plugins.add(PollsPluginDefine)
 if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
 if (Flags.transak_enabled) plugins.add(TransakPluginDefine)

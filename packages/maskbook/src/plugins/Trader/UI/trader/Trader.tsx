@@ -8,7 +8,7 @@ import { TradeForm } from './TradeForm'
 import { TradeRoute } from '../uniswap/TradeRoute'
 import { TradeSummary } from '../trader/TradeSummary'
 import { ConfirmDialog } from './ConfirmDialog'
-import { useERC20TokenApproveCallback, ApproveState } from '../../../../web3/hooks/useERC20TokenApproveCallback'
+import { useERC20TokenApproveCallback, ApproveStateType } from '../../../../web3/hooks/useERC20TokenApproveCallback'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { TradeActionType } from '../../trader/useTradeState'
 import { TokenPanelType, TradeComputed, TradeProvider } from '../../types'
@@ -16,7 +16,6 @@ import { CONSTANTS } from '../../../../web3/constants'
 import { TRADE_CONSTANTS } from '../../constants'
 import { sleep } from '../../../../utils/utils'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import { SelectERC20TokenDialog } from '../../../../web3/UI/SelectERC20TokenDialog'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../../Wallet/messages'
 import { useShareLink } from '../../../../utils/hooks/useShareLink'
@@ -29,6 +28,7 @@ import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { getActivatedUI } from '../../../../social-network/ui'
+import { EthereumMessages } from '../../../Ethereum/messages'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -209,12 +209,12 @@ export function Trader(props: TraderProps) {
         RouterV2Address,
     )
     const onApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
+        if (approveState.type !== ApproveStateType.NOT_APPROVED) return
         await approveCallback()
     }, [approveState])
 
     const onExactApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
+        if (approveState.type !== ApproveStateType.NOT_APPROVED) return
         await approveCallback(true)
     }, [approveState])
     //#endregion
@@ -250,7 +250,7 @@ export function Trader(props: TraderProps) {
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             setFreezed(false)
@@ -332,12 +332,6 @@ export function Trader(props: TraderProps) {
                     ) : null}
                 </>
             ) : null}
-            <SelectERC20TokenDialog
-                open={openSelectERC20TokenDialog}
-                excludeTokens={excludeTokens}
-                onSubmit={onSelectERC20TokenDialogSubmit}
-                onClose={onSelectERC20TokenDialogClose}
-            />
         </div>
     )
 }

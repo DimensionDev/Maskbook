@@ -1,62 +1,46 @@
-import { useState, useCallback } from 'react'
-import type { GitcoinGrantMetadata } from '../service'
-import { DonateDialog } from './DonateDialog'
-import { PreviewCard } from './PreviewCard'
-import BigNumber from 'bignumber.js'
-import { isNumber } from 'lodash-es'
-import { formatBalance } from '../../Wallet/formatter'
-import { useAccount } from '../../../web3/hooks/useAccount'
+import { useAsyncRetry } from 'react-use'
+import { PluginGitcoinRPC } from '../messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessages } from '../../Wallet/messages'
-import { PluginGitcoinRPC } from '../constants'
-import { useAsyncFn } from 'react-use'
+import { useCallback } from 'react'
+import { createERC20Token } from '../../../web3/helpers'
+import { useChainId } from '../../../web3/hooks/useChainState'
+import { useConstant } from '../../../web3/hooks/useConstant'
+import { CONSTANTS } from '../../../web3/constants'
+import { EthereumMessages } from '../../Ethereum/messages'
+import { useGrant } from '../hooks/useGrant'
+import { PreviewCard } from './PreviewCard'
 
 export interface GitcoinProps {
     url: string
 }
 
 export function Gitcoin(props: GitcoinProps) {
-    const url = props.url
-    const [{ value: data }] = useAsyncFn(() => PluginGitcoinRPC.fetchMetadata(url), [url])
-    const { transactions, daiAmount, estimatedAmount, title, image, address: donationAddress } = data?.ok
-        ? data.val
-        : ({} as GitcoinGrantMetadata)
-    const grantTitle = title ?? 'A Gitcoin Grant'
+    const [id = ''] = props.url.match(/\d+/) ?? []
+    const { value: data } = useAsyncRetry(() => PluginGitcoinRPC.fetchGrant(id), [id])
 
-    //#region the donate dialog
-    const account = useAccount()
-    const [open, setOpen] = useState(false)
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onRequest = useCallback(() => {
-        if (account) {
-            setOpen(true)
-            return
-        }
-        setSelectProviderDialogOpen({
+    console.log('DEBUG: fetch gitcoin')
+    console.log(data)
+
+    const chainId = useChainId()
+    const DAI_ADDRESS = useConstant(CONSTANTS, 'DAI_ADDRESS')
+    const ITO_CONTRACT_ADDRESS = useConstant(CONSTANTS, 'MULTICALL_ADDRESS')
+
+    const grant = useGrant(id)
+
+    //#region remote controlled dialog logic
+    const [open, setOpen] = useRemoteControlledDialog(EthereumMessages.events.unlockERC20TokenDialogUpdated)
+    const onOpen = useCallback(() => {
+        setOpen({
             open: true,
+            token: createERC20Token(chainId, '0xe379c7a6BA07575A5a49D8F8EBfD04921b86917D', 18, 'MAKB', 'MAKB'),
+            amount: '3',
+            spender: '0xdb1eec6fecc708139aae82f0a4db0385968565c5',
         })
-    }, [account, setOpen, setSelectProviderDialogOpen])
+    }, [setOpen])
     //#endregion
 
-    return (
-        <>
-            <PreviewCard
-                logo={image}
-                title={grantTitle}
-                line1={BigNumber.isBigNumber(estimatedAmount) ? `${estimatedAmount.toFixed(2)} USD` : ''}
-                line2="ESTIMATED"
-                line3={BigNumber.isBigNumber(daiAmount) ? `${formatBalance(daiAmount, 18, 18)} DAI` : ''}
-                line4={isNumber(transactions) ? `${transactions} transactions` : ''}
-                address={donationAddress}
-                originalURL={url}
-                onRequestGrant={onRequest}
-            />
-            <DonateDialog
-                address={donationAddress}
-                title={grantTitle}
-                open={!!(open && donationAddress?.length)}
-                onClose={() => setOpen(false)}
-            />
-        </>
-    )
+    console.log('DEBUG: grant')
+    console.log(grant)
+
+    return <PreviewCard id={id} onRequest={() => console.log('request')} />
 }

@@ -37,6 +37,7 @@ export const Flags = {
     trader_enabled: webOnly,
     trader_zrx_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
+    gitcoin_enabled: webOnly,
     poll_enabled: webOnly,
     election2020_enabled: webOnly,
     election2020_composition_dialog_enabled: betaOrInsiderOnly || devOnly,

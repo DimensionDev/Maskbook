@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
@@ -8,34 +8,57 @@ import { useERC20TokenBalance } from './useERC20TokenBalance'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
-export enum ApproveState {
+export enum ApproveStateType {
     UNKNOWN,
     INSUFFICIENT_BALANCE,
     NOT_APPROVED,
+    UPDATING,
     PENDING,
     APPROVED,
+}
+
+export interface ApproveState {
+    type: ApproveStateType
+    allowance: string
+    balance: string
 }
 
 export function useERC20TokenApproveCallback(address: string, amount?: string, spender?: string) {
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(address)
-    const { value: balance, retry: revalidateBalance } = useERC20TokenBalance(address)
-    const { value: allowance, retry: revalidateAllowance } = useERC20TokenAllowance(address, spender)
+    const { value: balance = '0', loading: loadingBalance, retry: revalidateBalance } = useERC20TokenBalance(address)
+    const { value: allowance = '0', loading: loadingAllowance, retry: revalidateAllowance } = useERC20TokenAllowance(
+        address,
+        spender,
+    )
 
     const [approveHash, setApproveHash] = useState('')
     const receipt = useTransactionReceipt(approveHash)
 
-    const approveState: ApproveState = useMemo(() => {
-        if (receipt?.blockHash) return ApproveState.APPROVED
-        if (!amount || !spender || !allowance || !balance) return ApproveState.UNKNOWN
-        if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) return ApproveState.INSUFFICIENT_BALANCE
-        if (approveHash && !receipt?.blockHash) return ApproveState.PENDING
-        return new BigNumber(allowance).isLessThan(amount) ? ApproveState.NOT_APPROVED : ApproveState.APPROVED
-    }, [amount, spender, allowance, balance, approveHash, receipt?.blockHash])
+    const approveStateType = useMemo(() => {
+        if (loadingBalance || loadingAllowance) return ApproveStateType.UPDATING
+        if (!amount || !spender || !allowance || !balance) return ApproveStateType.UNKNOWN
+        if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) return ApproveStateType.INSUFFICIENT_BALANCE
+        if (approveHash && !receipt?.blockHash) return ApproveStateType.PENDING
+        if (approveHash && receipt?.blockHash) return ApproveStateType.APPROVED
+        return new BigNumber(allowance).isLessThan(amount) ? ApproveStateType.NOT_APPROVED : ApproveStateType.APPROVED
+    }, [amount, spender, allowance, balance, approveHash, receipt?.blockHash, loadingBalance, loadingAllowance])
+
+    const approveState = useMemo(
+        () => ({
+            type: approveStateType,
+            address,
+            amount,
+            spender,
+            allowance,
+            balance,
+        }),
+        [approveStateType, address, spender, allowance, balance],
+    )
 
     const approveCallback = useCallback(
         async (useExact: boolean = false) => {
-            if (approveState !== ApproveState.NOT_APPROVED) return
+            if (approveStateType !== ApproveStateType.NOT_APPROVED) return
             if (!account || !spender || !erc20Contract) return
             if (!amount || new BigNumber(amount).isZero()) return
 
@@ -73,14 +96,18 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                 )
             })
         },
-        [approveState, amount, account, spender, erc20Contract],
+        [approveStateType, amount, account, spender, erc20Contract],
     )
 
     const resetCallback = useCallback(() => {
         setApproveHash('')
         revalidateBalance()
         revalidateAllowance()
-    }, [])
+    }, [revalidateBalance, revalidateAllowance])
+
+    useEffect(() => {
+        if (receipt?.blockHash) resetCallback()
+    }, [receipt?.blockHash])
 
     return [approveState, approveCallback, resetCallback] as const
 }

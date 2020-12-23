@@ -24,6 +24,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { EthereumMessages } from '../../Ethereum/messages'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -180,7 +181,7 @@ export function ElectionPacket(props: ElectionPacketProps) {
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
 
