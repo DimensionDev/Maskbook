@@ -3,7 +3,6 @@
 /// <reference types="react-dom/experimental" />
 /// <reference path="./components/custom-ui.d.ts" />
 
-
 declare module NodeJS {
     interface ProcessEnv {
         /** test means Jest. Puppeteer test does not use "test".  */
