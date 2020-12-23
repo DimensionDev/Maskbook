@@ -8,8 +8,8 @@ export const ITO_EXCHANGE_RATION_MAX = 4
 export const ITO_CONSTANTS = {
     ITO_CONTRACT_ADDRESS: {
         [ChainId.Mainnet]: '',
-        [ChainId.Ropsten]: '0x3c4bcbbeba90f1bafcc447163fd0367d4591875c',
-        [ChainId.Rinkeby]: '0x94d40a59c653574db0397000fa9a0e83e86481a1',
+        [ChainId.Ropsten]: '0xdb1eec6fecc708139aae82f0a4db0385968565c5',
+        [ChainId.Rinkeby]: '0xb190b2532b1cecee072f51c699c1dfd3888f3bb0',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },
