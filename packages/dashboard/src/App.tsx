@@ -1,4 +1,10 @@
-import { Button } from '@material-ui/core'
+import { Button, MuiThemeProvider } from '@material-ui/core'
+import { MaskLightTheme } from '@dimensiondev/maskbook-theme'
+
 export function App() {
-    return <Button>123!</Button>
+    return (
+        <MuiThemeProvider theme={MaskLightTheme}>
+            <Button>123!</Button>
+        </MuiThemeProvider>
+    )
 }

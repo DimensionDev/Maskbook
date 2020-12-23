@@ -3,7 +3,6 @@
   "compilerOptions": {
     "rootDir": "./src/",
     "outDir": "./dist/",
-    "stripInternal": true,
     "experimentalDecorators": true
   },
   "include": ["./src/"]

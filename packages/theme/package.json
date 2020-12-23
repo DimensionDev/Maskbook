@@ -2,6 +2,8 @@
   "name": "@dimensiondev/maskbook-theme",
   "private": true,
   "description": "@material-ui/core theme of design system of Mask Network",
+  "typings": "./dist/src/theme.d.ts",
+  "main": "./dist/src/theme.js",
   "scripts": {
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
