@@ -5,9 +5,8 @@
   "typings": "./dist/src/theme.d.ts",
   "main": "./dist/src/theme.js",
   "scripts": {
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "start": "npm run storybook"
+    "build-storybook": "build -- build-storybook",
+    "start": "dev -- start-storybook -p 6006"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -3,9 +3,9 @@
   "private": true,
   "description": "New dashboard of Mask Network",
   "scripts": {
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "start": "snowpack dev"
+    "storybook": "dev -- start-storybook -p 6006",
+    "build-storybook": "build -- build-storybook",
+    "start": "dev -- snowpack dev"
   },
   "dependencies": {
     "@dimensiondev/maskbook-shared": "*"

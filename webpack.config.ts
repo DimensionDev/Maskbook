@@ -11,8 +11,6 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import ReactRefreshTypeScriptTransformer from 'react-refresh-typescript'
 import WatchMissingModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin'
 import NotifierPlugin from 'webpack-notifier'
-import ForkTSCheckerPlugin from 'fork-ts-checker-webpack-plugin'
-import ForkTSCheckerNotifier from 'fork-ts-checker-notifier-webpack-plugin'
 //#endregion
 //#region Production plugins
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
@@ -241,7 +239,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     function getBuildNotificationPlugins() {
         if (env === 'production') return []
         const opt = { title: 'Maskbook', excludeWarnings: true, skipFirstNotification: true, skipSuccessful: true }
-        return [new NotifierPlugin(opt), new ForkTSCheckerPlugin(), new ForkTSCheckerNotifier(opt)]
+        return [new NotifierPlugin(opt)]
     }
     function getWebExtensionReloadPlugin() {
         const dist = env === 'production' ? src('./build') : src('./dist')
