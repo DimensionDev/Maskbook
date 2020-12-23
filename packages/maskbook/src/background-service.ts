@@ -116,7 +116,7 @@ async function getInjectedScript() {
 }
 function IgnoreError(arg: unknown): (reason: Error) => void {
     return (e) => {
-        const ignoredErrorMessages = ['non-structured-clonable data']
+        const ignoredErrorMessages = ['non-structured-clonable data', 'No tab with id']
         if (ignoredErrorMessages.some((x) => e.message.includes(x))) {
             // It's okay we don't need the result, happened on Firefox
         } else console.error('Inject error', e.message, arg, Object.entries(e))

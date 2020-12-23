@@ -3,7 +3,8 @@
     { "path": "./e2e/" },
     { "path": "./packages/maskbook/" },
     { "path": "./packages/theme/" },
-    { "path": "./packages/dashboard" }
+    { "path": "./packages/dashboard/" },
+    { "path": "./packages/shared/" }
   ],
   "compilerOptions": {
     /* Basic Options */

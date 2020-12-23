@@ -8,19 +8,7 @@
     "start": "snowpack dev"
   },
   "dependencies": {
-    "@dimensiondev/maskbook": "*"
-  },
-  "peerDependencies": {
-    "@emotion/react": "*",
-    "@emotion/styled": "*",
-    "@material-ui/core": "*",
-    "@material-ui/lab": "*",
-    "@types/react": "*",
-    "react": "*",
-    "react-dom": "*",
-    "typescript": "*",
-    "lodash": "*",
-    "@types/lodash": "*"
+    "@dimensiondev/maskbook-shared": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -34,7 +22,6 @@
     "snowpack": "^2",
     "@snowpack/plugin-dotenv": "^2.0.5",
     "@snowpack/plugin-react-refresh": "^2.3.9",
-    "@snowpack/plugin-typescript": "^1.1.1",
     "@types/snowpack-env": "^2.3.2"
   }
 }

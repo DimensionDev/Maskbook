@@ -4,5 +4,6 @@
     "rootDirs": ["./src/", "./abis/"],
     "outDir": "./dist/"
   },
-  "include": ["./src/**/*.tsx", "./src/**/*.ts", "./src/**/*.json", "./abis/*.json"]
+  "include": ["./src/**/*.tsx", "./src/**/*.ts", "./src/**/*.json", "./abis/*.json"],
+  "references": [{ "path": "../shared/" }]
 }

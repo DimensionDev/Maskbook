@@ -6,6 +6,7 @@ import {
     PostIdentifier,
     ProfileIdentifier,
     PreDefinedVirtualGroupNames,
+    ECKeyIdentifierFromJsonWebKey,
 } from '../type'
 import type { EC_Public_JsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 
@@ -59,7 +60,7 @@ test('ECKeyIdentifier', async () => {
         kty: 'EC',
     }
     const ecKeyID = 'ec_key:secp256k1/A+7HqsU+9p3fFIQvLSFiqrsdC1k|nXu7A1UmKjuLyyZy'
-    expect(ECKeyIdentifier.fromJsonWebKey(jwk).toText()).toBe(ecKeyID)
+    expect(ECKeyIdentifierFromJsonWebKey(jwk).toText()).toBe(ecKeyID)
 })
 
 test('GroupIdentifier', () => {

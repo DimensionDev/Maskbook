@@ -1,7 +1,7 @@
 /* eslint-disable import/no-deprecated */
 import type { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
 import type { BackupJSONFileVersion1 } from './version-1'
-import { ProfileIdentifier, ECKeyIdentifier, GroupIdentifier } from '../../../../database/type'
+import { ProfileIdentifier, GroupIdentifier, ECKeyIdentifierFromJsonWebKey } from '../../../../database/type'
 import type {
     AESJsonWebKey,
     EC_Public_JsonWebKey,
@@ -123,7 +123,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
 
     for (const x of json.whoami) {
         const profile = new ProfileIdentifier(x.network, x.userId).toText()
-        const persona = ECKeyIdentifier.fromJsonWebKey(x.publicKey).toText()
+        const persona = ECKeyIdentifierFromJsonWebKey(x.publicKey).toText()
         addProfile({
             identifier: profile,
             linkedPersona: persona,
@@ -142,7 +142,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
 
     for (const x of json.people || []) {
         const profile = new ProfileIdentifier(x.network, x.userId)
-        const persona = ECKeyIdentifier.fromJsonWebKey(x.publicKey).toText()
+        const persona = ECKeyIdentifierFromJsonWebKey(x.publicKey).toText()
         addProfile({
             identifier: profile.toText(),
             linkedPersona: persona,

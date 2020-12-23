@@ -8,14 +8,14 @@ export function setService(x: ServiceType) {
 }
 export class WebExtensionExternalChannel implements EventBasedChannel {
     private f = new Set<Function>()
-    private connection: browser.runtime.Port
+    private connection: any // browser.runtime.Port
     constructor(name: string, id = 'jkoeaghipilijlahjplgbfiocjhldnap') {
         // @ts-expect-error Chrome only
         this.connection = chrome.runtime.connect(id, { name })
         // @ts-expect-error Chrome only
         const err = chrome.runtime.lastError
         if (err) console.log(err)
-        this.connection.onMessage.addListener((m) => this.f.forEach((f) => f(m)))
+        this.connection.onMessage.addListener((m: any) => this.f.forEach((f) => f(m)))
     }
     on(listener: Function) {
         this.f.add(listener)

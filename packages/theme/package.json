@@ -7,18 +7,6 @@
     "build-storybook": "build-storybook",
     "start": "npm run storybook"
   },
-  "peerDependencies": {
-    "@emotion/react": "*",
-    "@emotion/styled": "*",
-    "@material-ui/core": "*",
-    "@material-ui/lab": "*",
-    "@types/react": "*",
-    "react": "*",
-    "react-dom": "*",
-    "typescript": "*",
-    "lodash": "*",
-    "@types/lodash": "*"
-  },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@storybook/addon-actions": "^6.1.9",

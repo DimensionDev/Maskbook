@@ -7,7 +7,8 @@
     "packages/maskbook",
     "packages/cli-dev-build",
     "packages/theme",
-    "packages/dashboard"
+    "packages/dashboard",
+    "packages/shared"
   ],
   "scripts": {
     "start": "dev",
@@ -128,8 +129,6 @@
     "string.prototype.matchall": "^4.0.2",
     "tiny-secp256k1": "^1.1.5",
     "ts-results": "^3.0.0",
-    "typeson": "^5.18.2",
-    "typeson-registry": "^1.0.0-alpha.38",
     "use-subscription": "^1.5.1",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
