@@ -53,7 +53,7 @@
                     "title": "name"
                 }
             },
-            "required": ["address", "message", "name"],
+            "required": ["address", "name"],
             "title": "trader"
         }
     },
@@ -69,6 +69,10 @@
         "password": {
             "type": "string",
             "title": "password"
+        },
+        "message": {
+            "type": "string",
+            "title": "message"
         },
         "limit": {
             "type": "string",
@@ -150,6 +154,7 @@
         "contract_address",
         "pid",
         "password",
+        "message",
         "limit",
         "total",
         "total_remaining",
