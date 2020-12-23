@@ -1,4 +1,10 @@
-import { AsyncCall, AsyncGeneratorCall, AsyncCallOptions } from 'async-call-rpc/full'
+import {
+    AsyncCall,
+    AsyncGeneratorCall,
+    AsyncCallOptions,
+    CallbackBasedChannel,
+    EventBasedChannel,
+} from 'async-call-rpc/full'
 import { isEnvironment, Environment, WebExtensionMessage, MessageTarget } from '@dimensiondev/holoflows-kit'
 import * as MockService from './mock-service'
 import serializer from '../utils/type-transform/Serialization'
@@ -16,6 +22,17 @@ const log: AsyncCallOptions['log'] = {
     type: 'pretty',
     requestReplay: process.env.NODE_ENV === 'development',
 }
+
+export class MultiShotChannel implements CallbackBasedChannel {
+    newConnection(e: EventBasedChannel) {
+        e.on(async (data) => e.send(await this.handler(data)))
+    }
+    private handler!: (p: unknown) => Promise<unknown | undefined>
+    setup(callback: (p: unknown) => Promise<unknown | undefined>) {
+        this.handler = callback
+    }
+}
+export const ServicesAdditionalConnections: Record<string, MultiShotChannel> = {}
 export const Services = {
     Crypto: add(() => import('./background-script/CryptoService'), 'Crypto', MockService.CryptoService),
     Identity: add(() => import('./background-script/IdentityService'), 'Identity'),
@@ -30,6 +47,7 @@ export const Services = {
     Provider: add(() => import('./background-script/ProviderService'), 'Provider'),
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
 }
+
 Object.assign(globalThis, { Services })
 export default Services
 export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', {}, true)
@@ -57,7 +75,11 @@ Object.defineProperty(BigNumber.prototype, '__debug__amount__', {
  * @param mock The mock Implementation, used in Storybook.
  */
 function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, generator = false): T {
-    const channel = message.events[key].bind(process.env.STORYBOOK ? MessageTarget.LocalOnly : MessageTarget.Broadcast)
+    let channel = ServicesAdditionalConnections[key]
+    if (!ServicesAdditionalConnections[key]) channel = ServicesAdditionalConnections[key] = new MultiShotChannel()
+    channel.newConnection(
+        message.events[key].bind(process.env.STORYBOOK ? MessageTarget.LocalOnly : MessageTarget.Broadcast),
+    )
     const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
     if (process.env.STORYBOOK) {
         // setup mock server in STORYBOOK

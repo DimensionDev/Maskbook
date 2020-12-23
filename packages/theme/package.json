@@ -1,0 +1,21 @@
+{
+  "name": "@dimensiondev/maskbook-theme",
+  "private": true,
+  "description": "@material-ui/core theme of design system of Mask Network",
+  "typings": "./dist/src/theme.d.ts",
+  "main": "./dist/src/theme.js",
+  "scripts": {
+    "build-storybook": "build -- build-storybook",
+    "start": "dev -- start-storybook -p 6006"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@storybook/addon-actions": "^6.1.9",
+    "@storybook/addon-essentials": "^6.1.9",
+    "@storybook/addon-links": "^6.1.9",
+    "@storybook/addons": "^6.1.9",
+    "@storybook/react": "^6.1.9",
+    "@storybook/theming": "^6.1.9",
+    "babel-loader": "^8.2.2"
+  }
+}

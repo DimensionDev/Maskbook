@@ -2,8 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "rootDirs": ["./src/", "./abis/"],
-    "outDir": "./dist/",
-    "experimentalDecorators": true
+    "outDir": "./dist/"
   },
-  "include": ["./src/**/*.tsx", "./src/**/*.ts", "./src/**/*.json", "./abis/*.json"]
+  "include": ["./src/**/*.tsx", "./src/**/*.ts", "./src/**/*.json", "./abis/*.json"],
+  "references": [{ "path": "../shared/" }]
 }

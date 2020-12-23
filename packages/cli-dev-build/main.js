@@ -2,7 +2,7 @@ const { spawn } = require('child_process')
 
 const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base']
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'manifest-v3']
-const knownFlags = ['-h', '--help', ...presets, ...otherFlags]
+const knownTargets = ['-h', '--help', ...presets, ...otherFlags]
 /** @param {'dev' | 'build'} mode */
 async function main(mode) {
     let args = process.argv.slice(2)
@@ -31,9 +31,11 @@ async function main(mode) {
 
     const command = ['--mode', mode === 'dev' ? 'development' : 'production']
     if (mode === 'dev') command.unshift('serve')
-    args.forEach((flag) => {
-        command.push('--env', flag)
-        if (!knownFlags.includes(flag)) throw new TypeError('Unknown flag ' + flag)
+    args.filter((x) => !x.startsWith('-')).forEach((target) => {
+        command.push('--env', target)
+        if (!knownTargets.includes(target)) {
+            throw new TypeError('Unknown target ' + target + '. Known targets: ' + knownTargets.join(','))
+        }
     })
     spawn('webpack', command, { stdio: 'inherit', shell: true })
 }

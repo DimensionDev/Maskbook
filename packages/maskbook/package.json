@@ -5,6 +5,7 @@
   "scripts": {
   },
   "dependencies": {
+    "@dimensiondev/maskbook-shared": "*"
   },
   "devDependencies": {
   }

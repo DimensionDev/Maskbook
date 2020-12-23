@@ -1,5 +1,11 @@
 {
-  "references": [{ "path": "./e2e/" }, { "path": "./packages/maskbook/" }],
+  "references": [
+    { "path": "./e2e/" },
+    { "path": "./packages/maskbook/" },
+    { "path": "./packages/theme/" },
+    { "path": "./packages/dashboard/" },
+    { "path": "./packages/shared/" }
+  ],
   "compilerOptions": {
     /* Basic Options */
     "incremental": true /* Enable incremental compilation */,
@@ -67,7 +73,8 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "useDefineForClassFields": true
+    "useDefineForClassFields": true,
+    "stripInternal": true
   },
   "files": [],
   "ts-node": {
