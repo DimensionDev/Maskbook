@@ -28,6 +28,7 @@ import { formatToken } from '../../Wallet/formatter'
 import { TOKEN_ICON_LIST_TABLE } from './ITO'
 import { SelectSwapTokenDialog } from './SelectSwapTokenDialog'
 import ITO_ShareImage from '../assets/share_ito'
+import { isSameAddress } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -362,7 +363,9 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                         <Button onClick={() => setOpenSwapTokenDialog(true)}>
                                             <CurrentSwapTokenIcon />{' '}
                                             <span className={classes.currentTokenText}>
-                                                {props.exchangeTokens.find((t) => t.address === tokenAddress)!.symbol}
+                                                {props.exchangeTokens.find((t) =>
+                                                    isSameAddress(t.address, tokenAddress),
+                                                )?.symbol ?? ''}
                                             </span>
                                             <KeyboardArrowDownIcon
                                                 className={classes.currentTokenArrow}
