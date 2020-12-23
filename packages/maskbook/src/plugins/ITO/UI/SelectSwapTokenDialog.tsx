@@ -3,9 +3,9 @@ import { DialogContent, DialogProps } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { TOKEN_ICON_LIST_TABLE } from './ITO'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

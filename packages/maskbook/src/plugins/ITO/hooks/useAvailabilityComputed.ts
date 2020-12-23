@@ -1,13 +1,13 @@
 import { compact } from 'lodash-es'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { ITO_JSONPayload, ITO_Status } from '../types'
+import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { useAvailability } from './useAvailability'
 
 /**
  * Fetch the red packet info from the chain
  * @param payload
  */
-export function useAvailabilityComputed(payload: ITO_JSONPayload) {
+export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
     const chainId = useChainId()
     const asyncResult = useAvailability(payload?.pid)
 

@@ -208,7 +208,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 payload.token = {
                     name: '',
                     symbol: '',
-                    decimals: 0,
                     ...omit(createSettings.token, ['type', 'chainId']),
                 }
 

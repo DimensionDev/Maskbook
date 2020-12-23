@@ -2,19 +2,19 @@ import { useCallback, useState } from 'react'
 import { createStyles, DialogContent, DialogProps, makeStyles, Typography } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ITO_MetaKey } from '../constants'
-import type { ITO_JSONPayload } from '../types'
+import type { JSON_PayloadInMask } from '../types'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
 import { editActivatedPostMetadata } from '../../../social-network/ui'
 import { CreateGuide } from './CreateGuide'
-import { TestForm } from './TestForm'
+import { payloadOutMask } from '../helpers'
 
 const useStyles = makeStyles((theme) => createStyles({}))
 
 export interface CompositionDialogProps extends withClasses<'root'> {
     open: boolean
-    onConfirm(payload: ITO_JSONPayload): void
+    onConfirm(payload: JSON_PayloadInMask): void
     onClose: () => void
     DialogProps?: Partial<DialogProps>
 }
@@ -24,8 +24,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const onCreateOrSelect = useCallback(
-        (payload: ITO_JSONPayload) => {
-            editActivatedPostMetadata((next) => (payload ? next.set(ITO_MetaKey, payload) : next.delete(ITO_MetaKey)))
+        (payload: JSON_PayloadInMask) => {
+            editActivatedPostMetadata((next) =>
+                payload ? next.set(ITO_MetaKey, payloadOutMask(payload)) : next.delete(ITO_MetaKey),
+            )
             props.onConfirm(payload)
         },
         [props.onConfirm],
@@ -35,11 +37,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const state = useState(0)
     const tabProps: AbstractTabProps = {
         tabs: [
-            {
-                label: 'Test',
-                children: <TestForm onCreate={onCreateOrSelect} />,
-                sx: { p: 0 },
-            },
             {
                 label: t('plugin_ito_create_new'),
                 children: <CreateGuide onCreate={onCreateOrSelect} />,

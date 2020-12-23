@@ -1,8 +1,8 @@
-import type { ITO_JSONPayload } from '../types'
+import type { JSON_PayloadInMask } from '../types'
 import { ITO } from './ITO'
 
 export interface PostInspectorProps {
-    payload: ITO_JSONPayload
+    payload: JSON_PayloadInMask
 }
 
 export function PostInspector(props: PostInspectorProps) {

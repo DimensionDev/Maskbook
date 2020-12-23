@@ -18,7 +18,7 @@ import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmoun
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
-import { formatBalance } from '../../Wallet/formatter'
+import { formatAmount, formatBalance } from '../../Wallet/formatter'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -80,8 +80,9 @@ export function CreateForm(props: CreateFormProps) {
     const GMT = new Date().getTimezoneOffset() / 60
 
     // amount for displaying
-    const inputTokenAmount = new BigNumber(tokenAndAmount?.amount ?? '0').multipliedBy(
-        new BigNumber(10).pow(tokenAndAmount?.token?.decimals ?? 0),
+    const inputTokenAmount = formatAmount(
+        new BigNumber(tokenAndAmount?.amount ?? '0'),
+        tokenAndAmount?.token?.decimals ?? 0,
     )
 
     // balance
@@ -94,7 +95,7 @@ export function CreateForm(props: CreateFormProps) {
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
         tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount?.token?.address : '',
-        inputTokenAmount.toFixed(),
+        inputTokenAmount,
         ITO_CONTRACT_ADDRESS,
     )
 
@@ -126,17 +127,11 @@ export function CreateForm(props: CreateFormProps) {
             password: uuid(),
             name: senderName,
             title: message,
-            limit: new BigNumber(totalOfPerWallet || '0')
-                .multipliedBy(new BigNumber(10).pow(first?.token?.decimals ?? 0))
-                .toString(),
+            limit: formatAmount(new BigNumber(totalOfPerWallet || '0'), first?.token?.decimals ?? 0),
             token: first?.token,
-            total: new BigNumber(first?.amount || '0')
-                .multipliedBy(new BigNumber(10).pow(first?.token?.decimals ?? 0))
-                .toFixed(),
+            total: formatAmount(new BigNumber(first?.amount || '0'), first?.token?.decimals ?? 0),
             exchangeAmounts: rest.map((item) =>
-                new BigNumber(item.amount || '0')
-                    .multipliedBy(new BigNumber(10).pow(first?.token?.decimals ?? 0))
-                    .toFixed(),
+                formatAmount(new BigNumber(item.amount || '0'), first?.token?.decimals ?? 0),
             ),
             exchangeTokens: rest.map((item) => item.token!),
             startTime: new Date(startTime),
@@ -297,7 +292,7 @@ export function CreateForm(props: CreateFormProps) {
                                         onClick={onExactApprove}>
                                         {approveState === ApproveState.NOT_APPROVED
                                             ? `Unlock ${formatBalance(
-                                                  inputTokenAmount,
+                                                  new BigNumber(inputTokenAmount),
                                                   tokenAndAmount?.token?.decimals ?? 0,
                                                   2,
                                               )} ${tokenAndAmount?.token?.symbol ?? 'Token'}`

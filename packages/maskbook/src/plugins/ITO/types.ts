@@ -1,15 +1,6 @@
-import type { ChainId, EthereumTokenType } from '../../web3/types'
+import type { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
 
-export interface ITO_Token {
-    chain_id: ChainId
-    type: EthereumTokenType.Ether | EthereumTokenType.ERC20
-    address: string
-    name?: string
-    symbol?: string
-    decimals: number
-}
-
-export interface ITO_JSONPayload {
+export interface JSON_PayloadInMask {
     contract_address: string
     pid: string // pool id
     password: string
@@ -25,9 +16,18 @@ export interface ITO_JSONPayload {
     start_time: number
     end_time: number
     creation_time: number
-    token: ITO_Token
+    token: EtherTokenDetailed | ERC20TokenDetailed
     exchange_amounts: string[]
-    exchange_tokens: ITO_Token[]
+    exchange_tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
+}
+
+type Token = Omit<JSON_PayloadInMask['token'], 'chainId'> & {
+    chain_id: ChainId
+}
+
+export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
+    token: Token
+    exchange_tokens: Token[]
 }
 
 export enum ITO_Status {

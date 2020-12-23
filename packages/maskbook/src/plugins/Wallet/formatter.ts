@@ -13,6 +13,10 @@ export function formatPrice(price: BigNumber, decimalPlaces: number = 6) {
     return price.decimalPlaces(decimalPlaces).toString()
 }
 
+export function formatAmount(amount: BigNumber, decimals: number) {
+    return amount.multipliedBy(new BigNumber(10).pow(decimals)).toFixed()
+}
+
 export function formatBalance(balance: BigNumber, decimals: number, significant: number = decimals) {
     if (!BigNumber.isBigNumber(balance)) return '0'
     const negative = balance.isNegative() // balance < 0n

@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useState } from 'react'
 import { PoolSettings, useFillCallback } from '../hooks/useFillCallback'
-import type { ITO_JSONPayload } from '../types'
+import type { JSON_PayloadInMask } from '../types'
 import { ConfirmDialog } from './ConfirmDialog'
 import { CreateForm } from './CreateForm'
 import { WalletMessages } from '../../Wallet/messages'
@@ -22,7 +22,7 @@ export enum ITOCreateFormPageStep {
 }
 
 export interface CreateGuideProps {
-    onCreate?(payload: ITO_JSONPayload): void
+    onCreate?(payload: JSON_PayloadInMask): void
 }
 
 export function CreateGuide(props: CreateGuideProps) {
@@ -74,7 +74,7 @@ export function CreateGuide(props: CreateGuideProps) {
             }
 
             // assemble JSON payload
-            const payload: ITO_JSONPayload = {
+            const payload: JSON_PayloadInMask = {
                 contract_address: ITO_CONTRACT_ADDRESS,
                 pid: FillSuccess.id,
                 password: fillSettings.password,

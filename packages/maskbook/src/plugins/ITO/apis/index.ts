@@ -1,5 +1,6 @@
 import { ITO_SUBGRAPH_URL } from '../constants'
-import type { ITO_JSONPayload } from '../types'
+import { payloadIntoMask } from '../helpers'
+import type { JSON_PayloadOutMask } from '../types'
 
 const POOL_FIELDS = `
     contract_address
@@ -50,9 +51,9 @@ export async function getPool(pid: string) {
         }),
     })
     const { data } = (await response.json()) as {
-        data: ITO_JSONPayload
+        data: JSON_PayloadOutMask
     }
-    return data
+    return payloadIntoMask(data)
 }
 
 export async function getAllPoolsAsSeller(address: string) {
@@ -74,11 +75,11 @@ export async function getAllPoolsAsSeller(address: string) {
     const { data } = (await response.json()) as {
         data: {
             sellInfos: {
-                pool: ITO_JSONPayload
+                pool: JSON_PayloadOutMask
             }[]
         }
     }
-    return data.sellInfos.map((x) => x.pool)
+    return data.sellInfos.map((x) => x.pool).map(payloadIntoMask)
 }
 
 export async function getAllPoolsAsBuyer(address: string) {
@@ -100,9 +101,9 @@ export async function getAllPoolsAsBuyer(address: string) {
     const { data } = (await response.json()) as {
         data: {
             buyInfos: {
-                pool: ITO_JSONPayload
+                pool: JSON_PayloadOutMask
             }[]
         }
     }
-    return data.buyInfos.map((x) => x.pool)
+    return data.buyInfos.map((x) => x.pool).map(payloadIntoMask)
 }

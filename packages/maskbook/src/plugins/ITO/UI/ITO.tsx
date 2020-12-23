@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
-import { ITO_JSONPayload, ITO_Status } from '../types'
+import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeStyles, createStyles, Card, Typography, Box, Link } from '@material-ui/core'
 import { getConstant } from '../../../web3/helpers'
@@ -131,7 +131,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface ITO_Props {
-    payload: ITO_JSONPayload
+    payload: JSON_PayloadInMask
 }
 
 interface TokenItemProps {
