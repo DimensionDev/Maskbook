@@ -4,14 +4,18 @@ export interface JSON_PayloadInMask {
     contract_address: string
     pid: string // pool id
     password: string
+    message: string
     limit: string
     total: string
     total_remaining: string
-    sender: {
+    seller: {
         address: string
         name: string
-        message: string
     }
+    buyers: {
+        address: string
+        name: string
+    }[]
     chain_id: ChainId
     start_time: number
     end_time: number

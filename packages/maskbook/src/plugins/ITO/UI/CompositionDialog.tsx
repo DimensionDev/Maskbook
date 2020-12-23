@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { createStyles, DialogContent, DialogProps, makeStyles, Typography } from '@material-ui/core'
+import { createStyles, DialogContent, DialogProps, makeStyles } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ITO_MetaKey } from '../constants'
 import type { JSON_PayloadInMask } from '../types'
@@ -9,6 +9,7 @@ import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/D
 import { editActivatedPostMetadata } from '../../../social-network/ui'
 import { CreateGuide } from './CreateGuide'
 import { payloadOutMask } from '../helpers'
+import { PoolList } from './PoolList'
 
 const useStyles = makeStyles((theme) => createStyles({}))
 
@@ -44,7 +45,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             },
             {
                 label: t('plugin_ito_select_existing'),
-                children: <Typography>abc2</Typography>,
+                children: <PoolList />,
                 sx: { p: 0 },
             },
         ],

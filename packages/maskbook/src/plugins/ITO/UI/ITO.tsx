@@ -153,7 +153,7 @@ const TokenItem = ({ ration, TokenIcon, tokenSymbol, sellTokenSymbol, decimals =
 
 export function ITO(props: ITO_Props) {
     const { payload } = props
-    const { token, total: payload_total, sender, exchange_amounts, exchange_tokens, limit, start_time, pid } = payload
+    const { token, total: payload_total, seller, exchange_amounts, exchange_tokens, limit, start_time, pid } = payload
     const classes = useStyles()
     const { t } = useI18N()
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
@@ -198,7 +198,7 @@ export function ITO(props: ITO_Props) {
             <Card className={classes.root}>
                 <Box className={classes.header}>
                     <Typography variant="h5" className={classes.title}>
-                        {sender.message}
+                        {payload.message}
                     </Typography>
                     {listOfStatus.includes(ITO_Status.expired) || listOfStatus.includes(ITO_Status.completed) ? (
                         <Typography variant="body2" className={classes.status}>
@@ -247,7 +247,7 @@ export function ITO(props: ITO_Props) {
                         </Typography>
                     </div>
                     <Typography variant="body1" className={classes.fromText}>
-                        {`From: @${sender.name}`}
+                        {`From: @${seller.name}`}
                     </Typography>
                 </Box>
             </Card>

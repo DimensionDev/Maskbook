@@ -78,14 +78,15 @@ export function CreateGuide(props: CreateGuideProps) {
                 contract_address: ITO_CONTRACT_ADDRESS,
                 pid: FillSuccess.id,
                 password: fillSettings.password,
+                message: FillSuccess.message,
                 limit: fillSettings.limit,
                 total: FillSuccess.total,
                 total_remaining: FillSuccess.total,
-                sender: {
+                seller: {
                     address: FillSuccess.creator,
                     name: FillSuccess.name,
-                    message: FillSuccess.message,
                 },
+                buyers: [],
                 chain_id: chainId,
                 start_time: fillSettings.startTime.getTime(),
                 end_time: fillSettings.endTime.getTime(),

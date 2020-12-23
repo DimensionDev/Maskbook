@@ -4,16 +4,12 @@ import type { JSON_PayloadOutMask } from '../types'
 
 const POOL_FIELDS = `
     contract_address
-    pid,
+    pid
     password
+    message
     limit
     total
     total_remaining
-    seller {
-        address
-        name
-        message
-    }
     chain_id
     start_time
     end_time
@@ -25,6 +21,14 @@ const POOL_FIELDS = `
         name
         symbol
         decimals
+    }
+    seller {
+        address
+        name
+    }
+    buyers {
+        address
+        name
     }
     exchange_amounts
     exchange_tokens {
@@ -63,7 +67,7 @@ export async function getAllPoolsAsSeller(address: string) {
         body: JSON.stringify({
             query: `
             {
-                sellInfos (where: { seller: ${address} }) {
+                sellInfos (where: { seller: "${address.toLowerCase()}" }) {
                     pool {
                         ${POOL_FIELDS}
                     }
@@ -89,7 +93,7 @@ export async function getAllPoolsAsBuyer(address: string) {
         body: JSON.stringify({
             query: `
             {
-                buyInfos (where: { buyer: ${address} }) {
+                buyInfos (where: { buyer: "${address.toLowerCase()}" }) {
                     pool {
                         ${POOL_FIELDS}
                     }
