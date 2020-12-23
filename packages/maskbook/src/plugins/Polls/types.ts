@@ -14,4 +14,5 @@ export enum PollStatus {
     Voted = 'Voted',
     Voting = 'Voting',
     Closed = 'Closed',
+    Error = 'Error',
 }

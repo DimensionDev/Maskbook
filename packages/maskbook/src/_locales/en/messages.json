@@ -392,5 +392,6 @@
     "plugin_poll_status_closed": "Closed",
     "plugin_poll_status_voting": "Voting",
     "plugin_poll_status_voted": "Voted.",
+    "plugin_poll_status_error": "Error!",
     "plugin_poll_deadline": "{{time}} left until vote ends"
 }

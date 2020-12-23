@@ -67,7 +67,7 @@ interface voteProps {
 
 export async function vote(props: voteProps) {
     const { poll, index } = props
-    let results = [0, 0]
+    let results = poll.results
     PollGun
         // @ts-ignore
         .get(poll.key)

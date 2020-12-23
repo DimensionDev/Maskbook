@@ -1,6 +1,7 @@
 import { makeStyles, createStyles, Card, Typography, CircularProgress, List, ListItem } from '@material-ui/core'
 import { isValid, formatDistance } from 'date-fns'
 import { zhTW, enUS, ja } from 'date-fns/locale'
+import { debounce } from 'lodash-es'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { languageSettings } from '../../../settings/settings'
@@ -105,6 +106,8 @@ export function PollCardUI(props: PollCardProps) {
                 return t('plugin_poll_status_voting')
             case PollStatus.Voted:
                 return t('plugin_poll_status_voted')
+            case PollStatus.Error:
+                return t('plugin_poll_status_error')
             default:
                 return t('plugin_poll_status_closed')
         }
@@ -117,7 +120,13 @@ export function PollCardUI(props: PollCardProps) {
                 {!status || status === PollStatus.Inactive ? null : (
                     <div className={classes.status}>
                         {status === PollStatus.Voting ? <CircularProgress size={18} /> : null}
-                        <span className={classes.statusText}>{renderPollStatusI18n(status)}</span>
+                        <span
+                            className={classes.statusText}
+                            style={{
+                                color: status === PollStatus.Error ? '#f44336' : '',
+                            }}>
+                            {renderPollStatusI18n(status)}
+                        </span>
                     </div>
                 )}
             </Typography>
@@ -126,9 +135,12 @@ export function PollCardUI(props: PollCardProps) {
                     <ListItem
                         className={classes.option}
                         key={index}
-                        onClick={() => {
-                            vote?.(poll, index)
-                        }}>
+                        onClick={debounce(
+                            async () => {
+                                vote?.(poll, index)
+                            },
+                            300,
+                        )}>
                         <div
                             style={{
                                 display: 'flex',

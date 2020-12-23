@@ -21,10 +21,15 @@ export default function PollsInPost(props: PollsInPostProps) {
             PluginPollRPC.vote({
                 poll,
                 index,
-            }).then((res) => {
-                setStatus(PollStatus.Voted)
-                setUpdatedPoll(res as PollMetaData)
-            })
+            }).then(
+                (res) => {
+                    setStatus(PollStatus.Voted)
+                    setUpdatedPoll(res as PollMetaData)
+                },
+                (reject) => {
+                    setStatus(PollStatus.Error)
+                },
+            )
         } else {
             setStatus(PollStatus.Closed)
         }
@@ -34,9 +39,14 @@ export default function PollsInPost(props: PollsInPostProps) {
         const metadata = PollMetadataReader(props.message.meta)
         if (metadata.ok) {
             const key = metadata.val.key
-            PluginPollRPC.getPollByKey({ key }).then((res) => {
-                setUpdatedPoll(res as PollMetaData)
-            })
+            PluginPollRPC.getPollByKey({ key }).then(
+                (res) => {
+                    setUpdatedPoll(res as PollMetaData)
+                },
+                (reject) => {
+                    setStatus(PollStatus.Error)
+                },
+            )
         }
     }, [props.message.meta])
 
