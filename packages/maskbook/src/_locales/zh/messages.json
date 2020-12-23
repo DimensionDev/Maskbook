@@ -392,6 +392,6 @@
     "plugin_poll_status_closed": "投票已截止",
     "plugin_poll_status_voting": "投票中",
     "plugin_poll_status_voted": "已投票.",
-    "plugin_poll_status_error": "蔙誤!",
+    "plugin_poll_status_error": "錯誤!",
     "plugin_poll_deadline": "{{time}}後截止"
 }
