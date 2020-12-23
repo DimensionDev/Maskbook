@@ -432,5 +432,13 @@
     "plugin_ito_error_enter_amount_and_token": "Enter an amount and Select a token",
     "plugin_ito_error_enter_allocation_per_walllet": "Enter allocation per wallet",
     "plugin_ito_error_exchange_time": "Incorrect exchange date",
-    "plugin_ito_error_balance": "Insufficient {{symbol}} balance"
+    "plugin_ito_error_balance": "Insufficient {{symbol}} balance",
+    "plugin_ito_list_end_date": "End date {{date}}",
+    "pluing_ito_list_sold_total": "Sold Total {{total}}",
+    "pluing_ito_list_total": "total {{total}} {{token}}",
+    "pluing_ito_list_sold_details": "Sold Details",
+    "plugin_ito_list_table_type": "Type",
+    "plugin_ito_list_table_price": "Price",
+    "plugin_ito_list_table_sold": "Sold ({{token}})",
+    "plugin_ito_list_table_got": "Got"
 }
