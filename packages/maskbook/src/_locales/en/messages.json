@@ -441,6 +441,6 @@
     "plugin_ito_list_table_price": "Price",
     "plugin_ito_list_table_sold": "Sold ({{token}})",
     "plugin_ito_list_table_got": "Got",
-    "pluing_ito_list_button_claim": "Claim",
+    "pluing_ito_list_button_claim": "Withdraw",
     "pluing_ito_list_button_send": "Send"
 }

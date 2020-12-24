@@ -14,6 +14,7 @@ import {
     TableBody,
 } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
+import { useCallback } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../Wallet/formatter'
@@ -86,18 +87,56 @@ export interface PoolInListProps {
     index: number
     data: {
         pool: JSON_PayloadInMask
+        onSend?: (pool: JSON_PayloadInMask) => void
+        onClaim?: () => void
     }
 }
 
 export function PoolInList(props: PoolInListProps) {
     const classes = useStyles()
     const { t } = useI18N()
-    const { pool } = props.data
+    const { pool, onSend, onClaim } = props.data
 
     const progress =
         100 *
         Number(new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)).div(new BigNumber(pool.total)))
 
+    const onSendClick = useCallback((): void => {
+        onSend?.(pool)
+    }, [onSend, pool])
+
+    const onWithdraw = useCallback(() => {
+        onClaim?.()
+    }, [onClaim])
+
+    const StatusButton = () => {
+        const start = pool.start_time * 1000
+        const end = pool.end_time * 1000
+        const now = Date.now()
+        const noRemain = new BigNumber(pool.total_remaining).isZero()
+
+        return (
+            <>
+                {now <= end ? (
+                    <>
+                        <ActionButton size="small" variant="contained" disabled={noRemain} onClick={onSendClick}>
+                            {now < start
+                                ? t('pluing_ito_list_button_send')
+                                : noRemain
+                                ? t('pluing_ito_list_button_claim')
+                                : t('pluing_ito_list_button_send')}
+                        </ActionButton>
+                    </>
+                ) : (
+                    <>
+                        <ActionButton size="small" variant="contained" disabled={noRemain} onClick={onWithdraw}>
+                            {t('pluing_ito_list_button_claim')}
+                        </ActionButton>
+                    </>
+                )}
+            </>
+        )
+    }
     return (
         <Card className={classes.root}>
             <Box className={classes.icon}>
@@ -116,9 +155,7 @@ export function PoolInList(props: PoolInListProps) {
                         </Typography>
                     </Box>
                     <Box className={classes.button}>
-                        <ActionButton size="small" variant="contained">
-                            {t('pluing_ito_list_button_claim')}
-                        </ActionButton>
+                        <StatusButton />
                     </Box>
                 </Box>
                 <Box className={classes.progress}>
@@ -176,10 +213,17 @@ export function PoolInList(props: PoolInListProps) {
                                             {pool.exchange_amounts[index]} {token.symbol} / {pool.token.symbol}
                                         </TableCell>
                                         <TableCell className={classes.cell} align="center" size="small">
-                                            {0}
+                                            {formatBalance(
+                                                new BigNumber(pool.exchange_volumes[0] ?? 0),
+                                                pool.token.decimals ?? 0,
+                                            )}
                                         </TableCell>
                                         <TableCell className={classes.cell} align="center" size="small">
-                                            {0} {token.symbol}
+                                            {formatBalance(
+                                                new BigNumber(pool.exchange_volumes[1] ?? 0),
+                                                pool.token.decimals ?? 0,
+                                            )}{' '}
+                                            {token.symbol}
                                         </TableCell>
                                     </TableRow>
                                 ))}

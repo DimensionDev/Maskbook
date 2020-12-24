@@ -1,6 +1,7 @@
 import { CircularProgress, createStyles, makeStyles, Typography, Box } from '@material-ui/core'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useAllPoolsAsSeller } from '../hooks/useAllPoolsAsSeller'
+import type { JSON_PayloadInMask } from '../types'
 import { PoolInList } from './PoolInList'
 
 const useStyles = makeStyles((theme) =>
@@ -15,7 +16,9 @@ const useStyles = makeStyles((theme) =>
         },
     }),
 )
-export interface PoolListProps {}
+export interface PoolListProps {
+    onSend: (payload: JSON_PayloadInMask) => void
+}
 
 export function PoolList(props: PoolListProps) {
     const classes = useStyles()
@@ -35,7 +38,9 @@ export function PoolList(props: PoolListProps) {
                     No Data
                 </Typography>
             ) : (
-                pools.value?.map((pool, index) => <PoolInList data={{ pool: pool }} index={index} />)
+                pools.value?.map((pool, index) => (
+                    <PoolInList data={{ pool: pool, onSend: props.onSend }} index={index} />
+                ))
             )}
         </>
     )
