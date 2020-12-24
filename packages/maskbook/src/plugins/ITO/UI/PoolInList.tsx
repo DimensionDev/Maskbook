@@ -88,14 +88,15 @@ const useStyles = makeStyles((theme) =>
 
 interface PoolInListProps {
     pool: JSON_PayloadInMask
+    index: number
     onSend?: (pool: JSON_PayloadInMask) => void
-    onClaim?: (payload: JSON_PayloadInMask) => void
+    onWithdraw?: (payload: JSON_PayloadInMask) => void
 }
 
 function PoolInList(props: PoolInListProps) {
     const classes = useStyles()
     const { t } = useI18N()
-    const { pool, onSend, onClaim } = props
+    const { pool, onSend, onWithdraw } = props
 
     const progress =
         100 *
@@ -109,11 +110,7 @@ function PoolInList(props: PoolInListProps) {
         return (
             <>
                 {now <= end ? (
-                    <ActionButton
-                        size="small"
-                        variant="contained"
-                        disabled={noRemain}
-                        onClick={() => onSend?.(props.data.pool)}>
+                    <ActionButton size="small" variant="contained" disabled={noRemain} onClick={() => onSend?.(pool)}>
                         {now < start
                             ? t('pluing_ito_list_button_send')
                             : noRemain
@@ -125,7 +122,7 @@ function PoolInList(props: PoolInListProps) {
                         size="small"
                         variant="contained"
                         disabled={noRemain}
-                        onClick={() => onWithdraw?.(props.data.pool)}>
+                        onClick={() => onWithdraw?.(pool)}>
                         {t('pluing_ito_list_button_claim')}
                     </ActionButton>
                 )}
@@ -245,7 +242,7 @@ export function PoolsInList(props: PoolsInListProps) {
     return (
         <>
             {pools.map((pool, index) => (
-                <PoolInList pool={pool} onSend={onSend} onClaim={onWithdraw} key={pool.pid} index={index} />
+                <PoolInList pool={pool} onSend={onSend} onWithdraw={onWithdraw} key={pool.pid} index={index} />
             ))}
         </>
     )

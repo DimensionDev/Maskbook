@@ -50,11 +50,11 @@ export function PoolList(props: PoolListProps) {
     console.log(pools)
     return (
         <>
-            {pools.loading ? (
+            {loading ? (
                 <Box className={classes.root}>
                     <CircularProgress />
                 </Box>
-            ) : pools.value?.length === 0 ? (
+            ) : pools.length === 0 ? (
                 <Typography variant="body1" color="textSecondary" className={classes.root}>
                     No Data
                 </Typography>
@@ -66,13 +66,13 @@ export function PoolList(props: PoolListProps) {
                     overscanCount={4}
                     itemSize={60}
                     itemData={{
-                        pools: pools.value,
+                        pools: pools,
                         onSend: props.onSend,
-                        onWithdraw(payload) {
+                        onWithdraw(payload: JSON_PayloadInMask) {
                             destructCallback(payload.pid)
                         },
                     }}
-                    itemCount={pools.value?.length ?? 0}
+                    itemCount={pools.length}
                     {...FixedSizeListProps}>
                     {PoolsInList}
                 </FixedSizeList>
