@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { languageSettings } from '../../../settings/settings'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../Wallet/formatter'
 import type { JSON_PayloadInMask } from '../types'
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme) =>
         deteils: {
             deisplay: 'flex',
             flexDirection: 'column',
+            paddingBottom: theme.spacing(1),
         },
         table: {
             paddingBottom: theme.spacing(1),
@@ -105,7 +107,13 @@ export function PoolInList(props: PoolInListProps) {
     const classes = useStyles()
     const { t } = useI18N()
     const { pool } = props.data
-
+    const dateTimeFormat = Intl.DateTimeFormat(languageSettings.value, {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+    })
     const progress = 100 * (Math.floor(Number(pool.total_remaining)) / Math.floor(Number(pool.total)))
     return (
         <Card className={classes.root}>
@@ -115,11 +123,13 @@ export function PoolInList(props: PoolInListProps) {
             <Box className={classes.content}>
                 <Box className={classes.header}>
                     <Box className={classes.title}>
-                        <Typography variant="body1" color="textPrimary" component="p">
+                        <Typography variant="body1" color="textPrimary">
                             {pool.message}
                         </Typography>
-                        <Typography variant="body1" color="textSecondary" component="p">
-                            {t('plugin_ito_list_end_date', { date: new Date(pool.end_time).toLocaleString() })}
+                        <Typography variant="body2" color="textSecondary">
+                            {t('plugin_ito_list_end_date', {
+                                date: dateTimeFormat.format(new Date(pool.end_time * 1000)),
+                            })}
                         </Typography>
                     </Box>
                     <Box className={classes.button}>
@@ -131,21 +141,23 @@ export function PoolInList(props: PoolInListProps) {
                 </Box>
 
                 <Box className={classes.price}>
-                    <Typography variant="body1" color="textSecondary">
-                        {t('pluing_ito_list_sold_total', {
-                            total: formatBalance(new BigNumber(pool.total_remaining), pool.token.decimals ?? 0),
-                        })}
+                    <Typography variant="body2" color="textSecondary" component="span">
+                        {t('pluing_ito_list_sold_total')}
+                        <Typography variant="body2" color="textPrimary" component="span">
+                            {formatBalance(new BigNumber(pool.total_remaining), pool.token.decimals ?? 0)}
+                        </Typography>
                     </Typography>
-                    <Typography variant="body1" color="textSecondary">
-                        {t('pluing_ito_list_total', {
-                            total: formatBalance(new BigNumber(pool.total), pool.token.decimals ?? 0),
-                            token: pool.token.symbol,
-                        })}
+                    <Typography variant="body2" color="textSecondary" component="span">
+                        {t('pluing_ito_list_total')}
+                        <Typography variant="body2" color="textPrimary" component="span">
+                            {formatBalance(new BigNumber(pool.total), pool.token.decimals ?? 0)}
+                        </Typography>{' '}
+                        {pool.token.symbol}
                     </Typography>
                 </Box>
 
                 <Box className={classes.deteils}>
-                    <Typography variant="body1" color="textSecondary">
+                    <Typography variant="body2" color="textSecondary">
                         {t('pluing_ito_list_sold_details')}
                     </Typography>
                     <TableContainer component={Paper} className={classes.table}>
@@ -153,16 +165,24 @@ export function PoolInList(props: PoolInListProps) {
                             <TableHead>
                                 <TableRow>
                                     <TableCell className={classes.cell} align="center">
-                                        {t('plugin_ito_list_table_type')}
+                                        <Typography variant="body2" color="textSecondary">
+                                            {t('plugin_ito_list_table_type')}
+                                        </Typography>
                                     </TableCell>
                                     <TableCell className={classes.cell} align="center">
-                                        {t('plugin_ito_list_table_price')}
+                                        <Typography variant="body2" color="textSecondary">
+                                            {t('plugin_ito_list_table_price')}
+                                        </Typography>
                                     </TableCell>
                                     <TableCell className={classes.cell} align="center">
-                                        {t('plugin_ito_list_table_sold', { token: pool.token.symbol })}
+                                        <Typography variant="body2" color="textSecondary">
+                                            {t('plugin_ito_list_table_sold', { token: pool.token.symbol })}
+                                        </Typography>
                                     </TableCell>
                                     <TableCell className={classes.cell} align="center">
-                                        {t('plugin_ito_list_table_got')}
+                                        <Typography variant="body2" color="textSecondary">
+                                            {t('plugin_ito_list_table_got')}
+                                        </Typography>
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
