@@ -1,6 +1,8 @@
-export const USDCIcon = ({ size = 32 }: { size?: number }) => (
-    <>
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+import { SvgIcon, SvgIconProps } from '@material-ui/core'
+
+export const USDCIcon: React.FC = (props: SvgIconProps) => (
+    <SvgIcon {...props}>
+        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0)">
                 <path
                     d="M0 12C0 15.1826 1.26428 18.2348 3.51472 20.4853C5.76516 22.7357 8.8174 24 12 24C15.1826 24 18.2348 22.7357 20.4853 20.4853C22.7357 18.2348 24 15.1826 24 12C24 8.8174 22.7357 5.76516 20.4853 3.51472C18.2348 1.26428 15.1826 0 12 0C8.8174 0 5.76516 1.26428 3.51472 3.51472C1.26428 5.76516 0 8.8174 0 12H0Z"
@@ -13,9 +15,9 @@ export const USDCIcon = ({ size = 32 }: { size?: number }) => (
             </g>
             <defs>
                 <clipPath id="clip0">
-                    <rect width={size} height={size} fill="white" />
+                    <rect width="18" height="18" fill="white" />
                 </clipPath>
             </defs>
         </svg>
-    </>
+    </SvgIcon>
 )

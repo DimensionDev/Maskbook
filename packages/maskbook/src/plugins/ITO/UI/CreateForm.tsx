@@ -1,7 +1,6 @@
 import { createStyles, makeStyles, Box, TextField, Grid } from '@material-ui/core'
-import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
+import React, { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
 import BigNumber from 'bignumber.js'
-import 'date-fns'
 import { v4 as uuid } from 'uuid'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'

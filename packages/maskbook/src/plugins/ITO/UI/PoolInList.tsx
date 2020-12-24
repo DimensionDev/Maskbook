@@ -15,10 +15,10 @@ import {
 } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../Wallet/formatter'
 import { dateTimeFormat } from '../assets/formatDate'
-import { USDCIcon } from '../assets/usdcIcon'
 import type { JSON_PayloadInMask } from '../types'
 
 const useStyles = makeStyles((theme) =>
@@ -29,10 +29,14 @@ const useStyles = makeStyles((theme) =>
             padding: theme.spacing(1),
             margin: theme.spacing(2),
         },
-        icon: {
+        iconbar: {
             display: 'flex',
             justifyContent: 'center',
             padding: theme.spacing(1),
+        },
+        icon: {
+            width: 32,
+            height: 32,
         },
         content: {
             flex: 1,
@@ -82,19 +86,16 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface PoolInListProps {
-    index: number
-    data: {
-        pool: JSON_PayloadInMask
-        onSend?: (pool: JSON_PayloadInMask) => void
-        onWithdraw?: (pool: JSON_PayloadInMask) => void
-    }
+interface PoolInListProps {
+    pool: JSON_PayloadInMask
+    onSend?: (pool: JSON_PayloadInMask) => void
+    onClaim?: (payload: JSON_PayloadInMask) => void
 }
 
-export function PoolInList(props: PoolInListProps) {
+function PoolInList(props: PoolInListProps) {
     const classes = useStyles()
     const { t } = useI18N()
-    const { pool, onSend, onWithdraw } = props.data
+    const { pool, onSend, onClaim } = props
 
     const progress =
         100 *
@@ -132,9 +133,9 @@ export function PoolInList(props: PoolInListProps) {
         )
     }
     return (
-        <Card className={classes.root}>
-            <Box className={classes.icon}>
-                <USDCIcon size={32} />
+        <Card className={classes.root} variant="outlined">
+            <Box className={classes.iconbar}>
+                <TokenIcon classes={{ icon: classes.icon }} address={pool.token.address} />
             </Box>
             <Box className={classes.content}>
                 <Box className={classes.header}>
@@ -227,5 +228,25 @@ export function PoolInList(props: PoolInListProps) {
                 </Box>
             </Box>
         </Card>
+    )
+}
+
+export interface PoolsInListProps {
+    index: number
+    data: {
+        pools: JSON_PayloadInMask[]
+        onSend?: (pool: JSON_PayloadInMask) => void
+        onWithdraw?: (payload: JSON_PayloadInMask) => void
+    }
+}
+
+export function PoolsInList(props: PoolsInListProps) {
+    const { pools, onSend, onWithdraw } = props.data
+    return (
+        <>
+            {pools.map((pool, index) => (
+                <PoolInList pool={pool} onSend={onSend} onClaim={onWithdraw} key={pool.pid} index={index} />
+            ))}
+        </>
     )
 }

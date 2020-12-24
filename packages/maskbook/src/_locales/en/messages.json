@@ -435,7 +435,7 @@
     "plugin_ito_error_balance": "Insufficient {{symbol}} balance",
     "plugin_ito_list_end_date": "End date {{date}}",
     "pluing_ito_list_sold_total": "Sold Total: ",
-    "pluing_ito_list_total": "total: ",
+    "pluing_ito_list_total": "Total: ",
     "pluing_ito_list_sold_details": "Sold Details",
     "plugin_ito_list_table_type": "Type",
     "plugin_ito_list_table_price": "Price",

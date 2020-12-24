@@ -51,7 +51,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
         <Card>
             <Grid container spacing={0}>
                 <Grid item xs={12}>
-                    <Typography variant="h3" className={classes.title} component="h3">
+                    <Typography variant="h3" className={classes.title} component="h3" color="textPrimary">
                         {poolSettings?.title}
                     </Typography>
                 </Grid>
@@ -74,7 +74,8 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 </Grid>
                 <Grid item xs={6}>
                     <Paper className={classes.data}>
-                        {formatBalance(new BigNumber(poolSettings?.total ?? '0'), poolSettings?.token?.decimals ?? 6)}
+                        {formatBalance(new BigNumber(poolSettings?.total ?? '0'), poolSettings?.token?.decimals ?? 0)}{' '}
+                        {poolSettings?.token?.symbol}
                     </Paper>
                 </Grid>
 
@@ -105,7 +106,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 </Grid>
                 <Grid item xs={6}>
                     <Paper className={classes.data}>
-                        {formatBalance(new BigNumber(poolSettings?.limit ?? '0'), poolSettings?.token?.decimals ?? 6)}
+                        {formatBalance(new BigNumber(poolSettings?.limit ?? '0'), poolSettings?.token?.decimals ?? 0)}
                     </Paper>
                 </Grid>
 
@@ -137,7 +138,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         {t('plugin_ito_send_text', {
                             total: formatBalance(
                                 new BigNumber(poolSettings?.total ?? '0'),
-                                poolSettings?.token?.decimals ?? 18,
+                                poolSettings?.token?.decimals ?? 0,
                             ),
                             symbol: poolSettings?.token?.symbol,
                         })}
