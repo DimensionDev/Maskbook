@@ -14,7 +14,6 @@ import {
     TableBody,
 } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
-import { useCallback } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../Wallet/formatter'
@@ -88,51 +87,46 @@ export interface PoolInListProps {
     data: {
         pool: JSON_PayloadInMask
         onSend?: (pool: JSON_PayloadInMask) => void
-        onClaim?: () => void
+        onWithdraw?: (pool: JSON_PayloadInMask) => void
     }
 }
 
 export function PoolInList(props: PoolInListProps) {
     const classes = useStyles()
     const { t } = useI18N()
-    const { pool, onSend, onClaim } = props.data
+    const { pool, onSend, onWithdraw } = props.data
 
     const progress =
         100 *
         Number(new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)).div(new BigNumber(pool.total)))
-
-    const onSendClick = useCallback((): void => {
-        onSend?.(pool)
-    }, [onSend, pool])
-
-    const onWithdraw = useCallback(() => {
-        onClaim?.()
-    }, [onClaim])
 
     const StatusButton = () => {
         const start = pool.start_time * 1000
         const end = pool.end_time * 1000
         const now = Date.now()
         const noRemain = new BigNumber(pool.total_remaining).isZero()
-
         return (
             <>
                 {now <= end ? (
-                    <>
-                        <ActionButton size="small" variant="contained" disabled={noRemain} onClick={onSendClick}>
-                            {now < start
-                                ? t('pluing_ito_list_button_send')
-                                : noRemain
-                                ? t('pluing_ito_list_button_claim')
-                                : t('pluing_ito_list_button_send')}
-                        </ActionButton>
-                    </>
+                    <ActionButton
+                        size="small"
+                        variant="contained"
+                        disabled={noRemain}
+                        onClick={() => onSend?.(props.data.pool)}>
+                        {now < start
+                            ? t('pluing_ito_list_button_send')
+                            : noRemain
+                            ? t('pluing_ito_list_button_claim')
+                            : t('pluing_ito_list_button_send')}
+                    </ActionButton>
                 ) : (
-                    <>
-                        <ActionButton size="small" variant="contained" disabled={noRemain} onClick={onWithdraw}>
-                            {t('pluing_ito_list_button_claim')}
-                        </ActionButton>
-                    </>
+                    <ActionButton
+                        size="small"
+                        variant="contained"
+                        disabled={noRemain}
+                        onClick={() => onWithdraw?.(props.data.pool)}>
+                        {t('pluing_ito_list_button_claim')}
+                    </ActionButton>
                 )}
             </>
         )

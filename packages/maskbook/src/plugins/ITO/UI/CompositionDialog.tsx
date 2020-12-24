@@ -45,7 +45,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             },
             {
                 label: t('plugin_ito_select_existing'),
-                children: <PoolList onSend={onCreateOrSelect} />,
+                children: <PoolList onSelect={onCreateOrSelect} />,
                 sx: { p: 0 },
             },
         ],
