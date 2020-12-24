@@ -154,6 +154,8 @@ export function useFillCallback(poolSettings: PoolSettings) {
             total,
             limit,
         ]
+        console.log('-----')
+        console.log(params)
 
         // step 1: estimate gas
         const estimatedGas = await ITO_Contract.methods

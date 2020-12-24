@@ -2,10 +2,10 @@ import { createStyles, makeStyles, Typography, Grid, Paper, Card, IconButton } f
 import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { languageSettings } from '../../../settings/settings'
 import LaunchIcon from '@material-ui/icons/Launch'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
+import { dateTimeFormat } from '../assets/formatDate'
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
@@ -46,13 +46,6 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const { poolSettings, onDone, onBack } = props
     const classes = useStyles()
     const { t } = useI18N()
-    const dateTimeFormat = Intl.DateTimeFormat(languageSettings.value, {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-    })
 
     return (
         <Card>
@@ -120,14 +113,14 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     <Paper className={classes.label}>{t('plugin_ito_begin_times')}</Paper>
                 </Grid>
                 <Grid item xs={6}>
-                    <Paper className={classes.data}>{dateTimeFormat.format(poolSettings?.startTime)}</Paper>
+                    <Paper className={classes.data}>{dateTimeFormat(poolSettings?.startTime!)}</Paper>
                 </Grid>
 
                 <Grid item xs={6}>
                     <Paper className={classes.label}>{t('plugin_ito_end_times')}</Paper>
                 </Grid>
                 <Grid item xs={6}>
-                    <Paper className={classes.data}>{dateTimeFormat.format(poolSettings?.endTime)}</Paper>
+                    <Paper className={classes.data}>{dateTimeFormat(poolSettings?.endTime!)}</Paper>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h5" className={classes.title} component="p">
