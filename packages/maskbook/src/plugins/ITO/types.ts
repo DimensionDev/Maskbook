@@ -22,6 +22,7 @@ export interface JSON_PayloadInMask {
     creation_time: number
     token: EtherTokenDetailed | ERC20TokenDetailed
     exchange_amounts: string[]
+    exchange_volumes: string[]
     exchange_tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
 }
 

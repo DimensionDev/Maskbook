@@ -136,6 +136,20 @@
                 ]
             }
         },
+        "exchange_volumes": {
+            "type": "array",
+            "title": "exchange_volumes",
+            "description": "A list of exchange ratios",
+            "additionalItems": true,
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "title": "exchange_volume"
+                    }
+                ]
+            }
+        },
         "exchange_tokens": {
             "type": "array",
             "title": "exchange_tokens",
@@ -166,6 +180,7 @@
         "seller",
         "buyers",
         "exchange_amounts",
+        "exchange_volumes",
         "exchange_tokens"
     ]
 }

@@ -133,6 +133,7 @@ export function CreateForm(props: CreateFormProps) {
             exchangeAmounts: rest.map((item) =>
                 formatAmount(new BigNumber(item.amount || '0'), first?.token?.decimals ?? 0),
             ),
+            exchangeVolumes: new Array(rest.length).fill('0'),
             exchangeTokens: rest.map((item) => item.token!),
             startTime: new Date(startTime),
             endTime: new Date(endTime),

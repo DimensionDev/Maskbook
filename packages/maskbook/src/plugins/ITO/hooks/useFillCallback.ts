@@ -20,6 +20,7 @@ export interface PoolSettings {
     limit: string
     total: string
     exchangeAmounts: string[]
+    exchangeVolumes: string[]
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     token?: EtherTokenDetailed | ERC20TokenDetailed
 }
@@ -41,6 +42,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
             total,
             limit,
             exchangeAmounts,
+            exchangeVolumes,
             exchangeTokens,
         } = poolSettings
 

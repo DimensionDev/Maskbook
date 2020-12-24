@@ -31,6 +31,7 @@ const POOL_FIELDS = `
         name
     }
     exchange_amounts
+    exchange_volumes
     exchange_tokens {
         chain_id
         type

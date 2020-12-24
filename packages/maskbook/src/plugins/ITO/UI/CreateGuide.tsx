@@ -92,8 +92,9 @@ export function CreateGuide(props: CreateGuideProps) {
                 end_time: fillSettings.endTime.getTime(),
                 creation_time: Number.parseInt(FillSuccess.creation_time, 10) * 1000,
                 token: fillSettings.token,
-                exchange_tokens: fillSettings.exchangeTokens,
                 exchange_amounts: fillSettings.exchangeAmounts,
+                exchange_volumes: fillSettings.exchangeVolumes,
+                exchange_tokens: fillSettings.exchangeTokens,
             }
 
             // output the redpacket as JSON payload
