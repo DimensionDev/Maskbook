@@ -62,7 +62,9 @@ const useStyles = makeStyles((theme) =>
         deteils: {
             deisplay: 'flex',
             flexDirection: 'column',
-            paddingBottom: theme.spacing(1),
+            '& > *': {
+                paddingBottom: theme.spacing(1),
+            },
         },
         table: {
             paddingBottom: theme.spacing(1),
@@ -133,7 +135,9 @@ export function PoolInList(props: PoolInListProps) {
                         </Typography>
                     </Box>
                     <Box className={classes.button}>
-                        <ActionButton variant="contained">Claim</ActionButton>
+                        <ActionButton size="small" variant="contained">
+                            Claim
+                        </ActionButton>
                     </Box>
                 </Box>
                 <Box className={classes.progress}>
@@ -164,22 +168,22 @@ export function PoolInList(props: PoolInListProps) {
                         <Table size="small">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell className={classes.cell} align="center">
+                                    <TableCell className={classes.cell} align="center" size="small">
                                         <Typography variant="body2" color="textSecondary">
                                             {t('plugin_ito_list_table_type')}
                                         </Typography>
                                     </TableCell>
-                                    <TableCell className={classes.cell} align="center">
+                                    <TableCell className={classes.cell} align="center" size="small">
                                         <Typography variant="body2" color="textSecondary">
                                             {t('plugin_ito_list_table_price')}
                                         </Typography>
                                     </TableCell>
-                                    <TableCell className={classes.cell} align="center">
+                                    <TableCell className={classes.cell} align="center" size="small">
                                         <Typography variant="body2" color="textSecondary">
                                             {t('plugin_ito_list_table_sold', { token: pool.token.symbol })}
                                         </Typography>
                                     </TableCell>
-                                    <TableCell className={classes.cell} align="center">
+                                    <TableCell className={classes.cell} align="center" size="small">
                                         <Typography variant="body2" color="textSecondary">
                                             {t('plugin_ito_list_table_got')}
                                         </Typography>
@@ -189,16 +193,16 @@ export function PoolInList(props: PoolInListProps) {
                             <TableBody>
                                 {pool.exchange_tokens.map((token, index) => (
                                     <TableRow>
-                                        <TableCell className={classes.cell} align="center">
+                                        <TableCell className={classes.cell} align="center" size="small">
                                             {token.symbol}
                                         </TableCell>
-                                        <TableCell className={classes.cell} align="center">
+                                        <TableCell className={classes.cell} align="center" size="small">
                                             {pool.exchange_amounts[index]} {token.symbol} / {pool.token.symbol}
                                         </TableCell>
-                                        <TableCell className={classes.cell} align="center">
+                                        <TableCell className={classes.cell} align="center" size="small">
                                             {formatBalance(new BigNumber(pool.total), pool.token.decimals ?? 0)}
                                         </TableCell>
-                                        <TableCell className={classes.cell} align="center">
+                                        <TableCell className={classes.cell} align="center" size="small">
                                             {formatBalance(
                                                 new BigNumber(pool.total_remaining),
                                                 pool.token.decimals ?? 0,
