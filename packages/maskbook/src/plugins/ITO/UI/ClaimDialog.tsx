@@ -14,6 +14,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import BigNumber from 'bignumber.js'
 import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -31,7 +32,7 @@ import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import type { JSON_PayloadInMask } from '../types'
 import { ChainId } from '../../../web3/types'
 import { ITO_CONSTANTS } from '../constants'
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { formatToken } from '../../Wallet/formatter'
 import { getSupportTokenInfo } from './ITO'
@@ -346,7 +347,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
     //#endregion
 
     //#region approve
-    console.log('claimAmount.toFixed()', claimAmount.toFixed())
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
         swapToken.type === EthereumTokenType.ERC20 ? swapToken.address : '',
@@ -383,6 +383,24 @@ export function ClaimDialog(props: ClaimDialogProps) {
         claimCallback()
     }, [claimCallback])
     //#endregion
+
+    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+        WalletMessages.events.transactionDialogUpdated,
+        (ev) => {
+            if (ev.open) return
+            // reset state
+            resetCallback()
+        },
+    )
+
+    useEffect(() => {
+        if (claimState.type === TransactionStateType.UNKNOWN) return
+        setTransactionDialogOpen({
+            open: true,
+            state: claimState,
+            summary: `${t('plugin_trader_swap')} ${tokenAmount.toFixed()} ${payload.token.symbol}`,
+        })
+    }, [claimState, setTransactionDialogOpen, tokenAmount, t, payload])
 
     console.log('claimState', claimState)
     console.log('payload', payload)
