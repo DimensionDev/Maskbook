@@ -7,7 +7,7 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectSwapTokenDialog } from './SelectSwapTokenDialog'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { getConstant, createEtherToken } from '../../../web3/helpers'
+import { createEtherToken } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
 import { useERC20TokenDetailed } from '../../../web3/hooks/useERC20TokenDetailed'
 import AddIcon from '@material-ui/icons/AddOutlined'
@@ -23,6 +23,7 @@ import {
 } from '../hooks/useExchangeTokenAmountstate'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { isETH } from '../../../web3/helpers'
+import { useConstant } from '../../../web3/hooks/useConstant'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -90,6 +91,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
     } = props
 
     const classes = useStyles()
+
     //#region select token
     const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
     const onTokenChipClick = useCallback(() => {
@@ -128,9 +130,9 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
 
     const chainId = useChainId()
 
-    const DAI_ADDRESS = getConstant(CONSTANTS, 'DAI_ADDRESS', chainId).toLowerCase()
-    const USDT_ADDRESS = getConstant(CONSTANTS, 'USDT_ADDRESS', chainId).toLowerCase()
-    const USDC_ADDRESS = getConstant(CONSTANTS, 'USDC_ADDRESS', chainId).toLowerCase()
+    const DAI_ADDRESS = useConstant(CONSTANTS, 'DAI_ADDRESS', chainId).toLowerCase()
+    const USDT_ADDRESS = useConstant(CONSTANTS, 'USDT_ADDRESS', chainId).toLowerCase()
+    const USDC_ADDRESS = useConstant(CONSTANTS, 'USDC_ADDRESS', chainId).toLowerCase()
 
     const ETH = createEtherToken(chainId)
     const { value: DAI } = useERC20TokenDetailed(DAI_ADDRESS)
