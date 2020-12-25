@@ -41,3 +41,17 @@ export enum ITO_Status {
     started = 'started',
     expired = 'expired',
 }
+
+export interface PoolRecord {
+    /** The pool ID */
+    id: string
+    /** From url */
+    from: string
+    /** The JSON payload */
+    payload: JSON_PayloadInMask
+}
+
+export interface PoolRecordInDatabase extends PoolRecord {
+    /** An unique record type in DB */
+    type: 'ito-pool'
+}

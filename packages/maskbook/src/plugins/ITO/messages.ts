@@ -14,6 +14,9 @@ type SwapTokenDialogEvent =
 
 interface ITO_Message {
     swapTokenUpdated: SwapTokenDialogEvent
+
+    poolUpdated: void
+
     rpc: unknown
 }
 

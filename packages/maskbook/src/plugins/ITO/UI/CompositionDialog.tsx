@@ -10,6 +10,7 @@ import { editActivatedPostMetadata } from '../../../social-network/ui'
 import { CreateGuide } from './CreateGuide'
 import { payloadOutMask } from '../helpers'
 import { PoolList } from './PoolList'
+import { PluginITO_RPC } from '../messages'
 
 const useStyles = makeStyles((theme) => createStyles({}))
 
@@ -30,6 +31,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 payload ? next.set(ITO_MetaKey, payloadOutMask(payload)) : next.delete(ITO_MetaKey),
             )
             props.onConfirm(payload)
+            // storing the created pool in DB, it helps retrieve the pool password later
+            PluginITO_RPC.discoverPool('', payload)
         },
         [props.onConfirm],
     )
