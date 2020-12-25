@@ -49,7 +49,7 @@ export async function getPool(pid: string) {
         body: JSON.stringify({
             query: `
             {
-                pool (id: ${pid}) {
+                pool (id: "${pid}") {
                     ${POOL_FIELDS}
                 }
             `,
