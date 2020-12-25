@@ -49,16 +49,19 @@ export async function getPool(pid: string) {
         body: JSON.stringify({
             query: `
             {
-                pool (id: "${pid}") {
+                pool (id: "${pid.toLowerCase()}") {
                     ${POOL_FIELDS}
                 }
+            }
             `,
         }),
     })
     const { data } = (await response.json()) as {
-        data: JSON_PayloadOutMask
+        data: {
+            pool: JSON_PayloadOutMask
+        }
     }
-    return payloadIntoMask(data)
+    return payloadIntoMask(data.pool)
 }
 
 export async function getAllPoolsAsSeller(address: string) {
