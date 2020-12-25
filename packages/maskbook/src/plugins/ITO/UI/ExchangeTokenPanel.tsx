@@ -4,7 +4,10 @@ import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { SelectSwapTokenDialog } from './SelectSwapTokenDialog'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
+import { useChainId } from '../../../web3/hooks/useChainState'
+import { getSupportTokenInfo } from './ITO'
 import AddIcon from '@material-ui/icons/AddOutlined'
 import RemoveIcon from '@material-ui/icons/RemoveOutlined'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
@@ -49,7 +52,7 @@ export interface ExchangetokenPanelProps {
     inputAmount: string
 
     viewBalance: boolean
-
+    isSell: boolean
     exchangeToken: EtherTokenDetailed | ERC20TokenDetailed | undefined
     onExchangeTokenChange: (token: EtherTokenDetailed | ERC20TokenDetailed, key: string) => void
 
@@ -62,7 +65,7 @@ export interface ExchangetokenPanelProps {
 
     label: string
     excludeTokensAddress?: string[]
-
+    selectedTokensAddress?: string[]
     tokenAmountPanelProps: Partial<TokenAmountPanelProps>
 }
 
@@ -74,11 +77,11 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         viewBalance,
         exchangeToken,
         onExchangeTokenChange,
-
+        isSell,
         showAdd = true,
         showRemove = false,
         label,
-
+        selectedTokensAddress = [],
         excludeTokensAddress = [],
         onRemove,
         onAdd,
@@ -86,7 +89,6 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
 
     const classes = useStyles()
     //#region select token
-
     const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
     const onTokenChipClick = useCallback(() => {
         setOpenSelectERC20TokenDialog(true)
@@ -121,6 +123,9 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         },
         [dataIndex, onAmountChange],
     )
+
+    const chainId = useChainId()
+    const { tokenList } = getSupportTokenInfo(chainId)
 
     return (
         <>
@@ -159,12 +164,21 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
                     ''
                 )}
             </Paper>
-            <SelectERC20TokenDialog
-                open={openSelectERC20TokenDialog}
-                excludeTokens={[exchangeToken?.address ?? '', ...excludeTokensAddress]}
-                onSubmit={onSelectERC20TokenDialogSubmit}
-                onClose={onSelectERC20TokenDialogClose}
-            />
+            {isSell ? (
+                <SelectERC20TokenDialog
+                    open={openSelectERC20TokenDialog}
+                    excludeTokens={[exchangeToken?.address ?? '', ...excludeTokensAddress]}
+                    onSubmit={onSelectERC20TokenDialogSubmit}
+                    onClose={onSelectERC20TokenDialogClose}
+                />
+            ) : (
+                <SelectSwapTokenDialog
+                    open={openSelectERC20TokenDialog}
+                    exchangeTokens={tokenList.filter((t) => !selectedTokensAddress.includes(t.address))}
+                    onSelect={onSelectERC20TokenDialogSubmit}
+                    onClose={onSelectERC20TokenDialogClose}
+                />
+            )}
         </>
     )
 }
@@ -180,6 +194,7 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
     const { onTokenAmountChange } = props
     const { value: token } = useEtherTokenDetailed()
     const [excludeTokensAddress, setExcludeTokensAddress] = useState<string[]>([])
+    const [selectedTokensAddress, setSelectedTokensAddress] = useState<string[]>([])
     const [exchangeTokenArray, dispatchExchangeTokenArray] = useExchangeTokenAndAmount(token)
 
     const onAdd = useCallback(() => {
@@ -219,7 +234,10 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
         const addresses = exchangeTokenArray
             .filter((item) => !isETH(item?.token?.address ?? ''))
             .map((item) => item?.token?.address ?? '')
+        const selectedAddresses = exchangeTokenArray.map((item) => item?.token?.address ?? '')
+        selectedAddresses.unshift()
         setExcludeTokensAddress(addresses)
+        setSelectedTokensAddress(selectedAddresses)
     }, [exchangeTokenArray, onTokenAmountChange, setExcludeTokensAddress])
 
     return (
@@ -230,8 +248,10 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
                         label={idx ? t('plugin_ito_swap_ration_label') : t('plugin_ito_sell_total_amount')}
                         dataIndex={item.key}
                         viewBalance={idx === 0}
+                        isSell={idx === 0}
                         inputAmount={item.amount}
                         excludeTokensAddress={excludeTokensAddress}
+                        selectedTokensAddress={selectedTokensAddress}
                         onAmountChange={onAmountChange}
                         exchangeToken={item.token}
                         onExchangeTokenChange={onTokenChange}

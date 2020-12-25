@@ -12,7 +12,6 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
     const asyncResult = useAvailability(payload?.pid)
 
     const { value: availability } = asyncResult
-    console.log('v', availability)
     if (!availability)
         return {
             ...asyncResult,

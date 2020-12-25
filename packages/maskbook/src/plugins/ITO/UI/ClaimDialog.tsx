@@ -7,28 +7,36 @@ import {
     Box,
     Link,
     Checkbox,
-    Button,
     Slider,
-    TextField,
-    Chip,
 } from '@material-ui/core'
 import classNames from 'classnames'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import BigNumber from 'bignumber.js'
+import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { WalletMessages } from '../../Wallet/messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
+import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
+import { useAccount } from '../../../web3/hooks/useAccount'
+import { useChainIdValid, useChainId } from '../../../web3/hooks/useChainState'
+import { formatEthereumAddress, formatBalance } from '../../../plugins/Wallet/formatter'
+import { useConstant } from '../../../web3/hooks/useConstant'
+import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
+import type { JSON_PayloadInMask } from '../types'
 import { ChainId } from '../../../web3/types'
-import { useState } from 'react'
+import { ITO_CONSTANTS } from '../constants'
+import { useState, useMemo, useCallback } from 'react'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { formatToken } from '../../Wallet/formatter'
-import { TOKEN_ICON_LIST_TABLE } from './ITO'
+import { getSupportTokenInfo } from './ITO'
 import { SelectSwapTokenDialog } from './SelectSwapTokenDialog'
 import ITO_ShareImage from '../assets/share_ito'
-import { isSameAddress } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -131,28 +139,49 @@ const useStyles = makeStyles((theme) =>
         exchangeAmountText: {
             color: '#fff',
         },
-        swapWrapper: {
+        swapInput: {
+            marginTop: theme.spacing(3),
+
+            '& > div': {
+                padding: theme.spacing(1.2, 2, 2),
+                display: 'flex',
+                alignItems: 'flex-end',
+            },
+
+            '& input': {
+                paddingBottom: theme.spacing(1.2),
+            },
+        },
+        swapInputChipMax: {
+            marginRight: theme.spacing(0.5),
+            borderRadius: 100,
+        },
+        swapInputChipBalance: {
+            fontSize: '1rem',
+            color: '#fff',
+            marginBottom: theme.spacing(3.5),
+        },
+        swapInputChipToken: {
+            border: 'none',
+            borderRadius: 8,
+            padding: theme.spacing(1, 0, 1, 1),
+            fontSize: 17,
+            height: 39,
+            fontWeight: 300,
+            '& svg': {
+                fontSize: 32,
+            },
+        },
+        swapChipWrapper: {
             display: 'flex',
             alignItems: 'center',
-            flexDirection: 'column',
-            marginTop: theme.spacing(2),
-            padding: theme.spacing(1, 1.5),
-            border: '2px solid #2F3336',
-            borderRadius: '15px',
         },
-        swapHeader: {
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between',
+        swapInputChipTokenIcon: {
+            fontSize: 32,
+            width: 52,
+            height: 52,
         },
-        swapBody: {
-            position: 'relative',
-            marginLeft: '4%',
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            marginTop: theme.spacing(2),
-        },
+
         swapTextField: {
             flexGrow: 1,
             '-webkit-appearance': 'none',
@@ -242,6 +271,7 @@ export interface ClaimDialogProps extends withClasses<'root'> {
     onClose: () => void
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     DialogProps?: Partial<DialogProps>
+    payload: JSON_PayloadInMask
 }
 
 enum ClaimStatus {
@@ -252,20 +282,108 @@ enum ClaimStatus {
 
 export function ClaimDialog(props: ClaimDialogProps) {
     const { t } = useI18N()
+    const { payload } = props
     const classes = useStylesExtends(useStyles(), props)
     const ui_random_address = '0xc12d099be31567ad54e4e4d0d45691c3f58f5663'
     const ui_token_chain_id = ChainId.Rinkeby
     const [agreeReminder, setAgreeReminder] = useState(false)
     const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Swap)
-    const [tokenAddress, setTokenAddress] = useState<string>(Object.keys(TOKEN_ICON_LIST_TABLE)[0])
+    const [swapToken, setSwapToken] = useState<EtherTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
+    const tokenBase = Math.pow(10, payload.token.decimals ?? 0)
+    const swapTokenBase = Math.pow(10, swapToken.decimals ?? 0)
+    const [ratio, setRatio] = useState<BigNumber>(new BigNumber(payload.exchange_amounts[0]).dividedBy(swapTokenBase))
+    const { value: tokenBalance = '0', loading: tokenBalanceLoading } = useTokenBalance(
+        swapToken.type,
+        swapToken.address,
+    )
+    const initAmount = new BigNumber(payload.limit).dividedBy(new BigNumber(10).pow(18).multipliedBy(5))
+    const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
+    const [claimAmount, setClaimAmount] = useState<BigNumber>(initAmount.multipliedBy(ratio))
     const [openSwapTokenDialog, setOpenSwapTokenDialog] = useState(false)
-    const CurrentSwapTokenIcon = TOKEN_ICON_LIST_TABLE[tokenAddress]
+    const chainId = useChainId()
+    const account = useAccount()
+    const chainIdValid = useChainIdValid()
+    const { tokenIconListTable } = getSupportTokenInfo(chainId)
+    const CurrentSwapTokenIcon = tokenIconListTable[swapToken.address]
     const ClaimTitle: EnumRecord<ClaimStatus, string> = {
         [ClaimStatus.Remind]: t('plugin_ito_dialog_claim_reminder_title'),
-        [ClaimStatus.Swap]: t('plugin_ito_dialog_claim_swap_title', { token: 'MSKUI' }),
+        [ClaimStatus.Swap]: t('plugin_ito_dialog_claim_swap_title', { token: payload.token.symbol }),
         [ClaimStatus.Share]: t('plugin_ito_dialog_claim_share_title'),
     }
 
+    const claimAmountErrText = useMemo(() => {
+        const amount = claimAmount.multipliedBy(swapTokenBase)
+        if (tokenBalanceLoading) return ''
+        return amount.isGreaterThan(new BigNumber(tokenBalance))
+            ? t('plugin_ito_error_balance', { symbol: swapToken.symbol })
+            : amount.isGreaterThan(new BigNumber(payload.limit))
+            ? t('plugin_ito_dialog_claim_swap_exceed_wallet_limit')
+            : ''
+    }, [claimAmount, tokenBalance, payload.limit, swapToken.symbol, tokenBalanceLoading, t, swapToken])
+
+    const [inputAmountForUI, setInputAmountForUI] = useState(initAmount.multipliedBy(ratio).toFixed())
+
+    const handleInputChange = useCallback(
+        (event) => {
+            const r = Number(event.target.value) / 100
+            const tAmount = new BigNumber(payload.limit).multipliedBy(r).dividedBy(tokenBase)
+            setTokenAmount(tAmount)
+            setClaimAmount(tAmount.multipliedBy(ratio))
+            setInputAmountForUI(tAmount.multipliedBy(ratio).toFixed())
+        },
+        [payload.limit, ratio],
+    )
+
+    //#region remote controlled select provider dialog
+    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const onConnect = useCallback(() => {
+        setSelectProviderDialogOpen({
+            open: true,
+        })
+    }, [setSelectProviderDialogOpen])
+    //#endregion
+
+    //#region approve
+    console.log('claimAmount.toFixed()', claimAmount.toFixed())
+    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const [approveState, approveCallback] = useERC20TokenApproveCallback(
+        swapToken.type === EthereumTokenType.ERC20 ? swapToken.address : '',
+        claimAmount.multipliedBy(swapTokenBase).toFixed(),
+        ITO_CONTRACT_ADDRESS,
+    )
+
+    const onApprove = useCallback(async () => {
+        if (approveState !== ApproveState.NOT_APPROVED) return
+        await approveCallback()
+    }, [approveState, approveCallback])
+    const onExactApprove = useCallback(async () => {
+        if (approveState !== ApproveState.NOT_APPROVED) return
+        await approveCallback(true)
+    }, [approveState, approveCallback])
+    const approveRequired =
+        (approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING) &&
+        swapToken.type !== EthereumTokenType.Ether
+    //#endregion
+
+    const sendTxValidation = useMemo(() => claimAmountErrText !== '' || tokenAmount.toFixed() === '0', [
+        claimAmountErrText,
+        tokenAmount,
+    ])
+
+    const [claimState, claimCallback, resetCallback] = useClaimCallback(
+        payload.pid,
+        payload.password,
+        claimAmount.multipliedBy(swapTokenBase).toFixed(),
+        swapToken,
+    )
+    //#region claim
+    const onSwap = useCallback(() => {
+        claimCallback()
+    }, [claimCallback])
+    //#endregion
+
+    console.log('claimState', claimState)
+    console.log('payload', payload)
     return (
         <>
             <InjectedDialog open={props.open} title={ClaimTitle[status]} onClose={props.onClose}>
@@ -316,14 +434,14 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                         {t('plugin_ito_dialog_claim_reminder_agree')}
                                     </Typography>
                                 </section>
-                                <Button
+                                <ActionButton
                                     variant="contained"
                                     color="primary"
                                     className={classes.button}
                                     onClick={() => setStatus(ClaimStatus.Swap)}
                                     disabled={!agreeReminder}>
                                     Continue
-                                </Button>
+                                </ActionButton>
                             </>
                         ) : status === ClaimStatus.Swap ? (
                             <>
@@ -332,65 +450,120 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                 </section>
                                 <section className={classes.swapLimitWrap}>
                                     <Typography variant="body1" className={classes.swapLimitText}>
-                                        0 MSKUI
+                                        0 {payload.token.symbol}
                                     </Typography>
-                                    <Slider className={classes.swapLimitSlider} />
+                                    <Slider
+                                        className={classes.swapLimitSlider}
+                                        value={Number(
+                                            tokenAmount
+                                                .multipliedBy(tokenBase)
+                                                .dividedBy(payload.limit)
+                                                .multipliedBy(100),
+                                        )}
+                                        onChange={handleInputChange}
+                                    />
                                     <Typography variant="body1" className={classes.swapLimitText}>
-                                        {formatToken(20000)} MSKUI
+                                        {formatBalance(new BigNumber(payload.limit), 18)} {payload.token.symbol}
                                     </Typography>
                                 </section>
                                 <Typography variant="body1" className={classes.exchangeText}>
                                     {t('plugin_ito_dialog_claim_swap_exchange')}{' '}
-                                    <span className={classes.exchangeAmountText}>600</span> MSKUI
+                                    <span className={classes.exchangeAmountText}>
+                                        {formatBalance(tokenAmount.multipliedBy(tokenBase), 18)}
+                                    </span>{' '}
+                                    {payload.token.symbol}
                                 </Typography>
-                                <section className={classes.swapWrapper}>
-                                    <div className={classes.swapHeader}>
-                                        <Typography variant="body1">Swap</Typography>
-                                        <Typography variant="body1">Balance: 9.0099</Typography>
-                                    </div>
-                                    <div className={classes.swapBody}>
-                                        <TextField className={classes.swapTextField} autoFocus={true} type="number" />
-                                        <Chip
-                                            size="small"
-                                            label="MAX"
-                                            clickable
-                                            className={classes.swapTextChip}
-                                            color="primary"
-                                            variant="outlined"
-                                            onClick={() => {}}
-                                        />
-
-                                        <Button onClick={() => setOpenSwapTokenDialog(true)}>
-                                            <CurrentSwapTokenIcon />{' '}
-                                            <span className={classes.currentTokenText}>
-                                                {props.exchangeTokens.find((t) =>
-                                                    isSameAddress(t.address, tokenAddress),
-                                                )?.symbol ?? ''}
-                                            </span>
-                                            <KeyboardArrowDownIcon
-                                                className={classes.currentTokenArrow}
-                                                fontSize="large"
-                                            />
-                                        </Button>
-                                    </div>
-                                </section>
+                                <TokenAmountPanel
+                                    classes={{ root: classes.swapInput }}
+                                    balance={tokenBalance}
+                                    viewBalance={true}
+                                    amount={inputAmountForUI}
+                                    token={swapToken}
+                                    onAmountChange={(value) => {
+                                        setInputAmountForUI(value)
+                                        const val = value === '' ? new BigNumber(0) : new BigNumber(Number(value))
+                                        setClaimAmount(val)
+                                        setTokenAmount(val.dividedBy(ratio))
+                                    }}
+                                    label={t('plugin_ito_dialog_claim_swap_panel_title')}
+                                    SelectTokenChip={{
+                                        loading: false,
+                                        ChipProps: {
+                                            onClick: () => setOpenSwapTokenDialog(true),
+                                            classes: {
+                                                root: classes.swapInputChipToken,
+                                                icon: classes.swapInputChipTokenIcon,
+                                            },
+                                        },
+                                    }}
+                                    MaxChipProps={{
+                                        className: classes.swapInputChipMax,
+                                    }}
+                                    swapLimit={new BigNumber(payload.limit).multipliedBy(ratio).toFixed()}
+                                    balanceClassName={classes.swapInputChipBalance}
+                                    chipWrapper={classes.swapChipWrapper}
+                                    currentIcon={<CurrentSwapTokenIcon />}
+                                    TextFieldProps={{
+                                        error: claimAmountErrText !== '',
+                                        helperText: claimAmountErrText,
+                                    }}
+                                />
                                 <section className={classes.swapButtonWrapper}>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        className={classes.swapButton}
-                                        onClick={() => setStatus(ClaimStatus.Share)}
-                                        disabled={false}>
-                                        {t('plugin_ito_dialog_claim_swap_approve')} USDC
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        className={classes.swapButton}
-                                        onClick={() => setStatus(ClaimStatus.Swap)}
-                                        disabled={true}>
-                                        {t('plugin_ito_dialog_claim_swap_send')}
-                                    </Button>
+                                    {approveRequired ? (
+                                        approveState === ApproveState.PENDING ? (
+                                            <ActionButton
+                                                variant="contained"
+                                                color="primary"
+                                                className={classes.swapButton}
+                                                disabled={approveState === ApproveState.PENDING}>
+                                                {`Unlocking ${swapToken.symbol}…`}
+                                            </ActionButton>
+                                        ) : (
+                                            <>
+                                                <ActionButton
+                                                    variant="contained"
+                                                    color="primary"
+                                                    className={classes.swapButton}
+                                                    onClick={() => {
+                                                        onApprove()
+                                                        // setStatus(ClaimStatus.Share)
+                                                    }}
+                                                    disabled={sendTxValidation}>
+                                                    {t('plugin_ito_dialog_claim_swap_approve_all')} {swapToken.symbol}
+                                                </ActionButton>
+                                                <ActionButton
+                                                    variant="contained"
+                                                    color="primary"
+                                                    className={classes.swapButton}
+                                                    onClick={() => {
+                                                        onExactApprove()
+                                                    }}
+                                                    disabled={sendTxValidation}>
+                                                    {t('plugin_ito_approve', { symbol: claimAmount.toFixed() })}{' '}
+                                                    {swapToken.symbol}
+                                                </ActionButton>
+                                            </>
+                                        )
+                                    ) : !account || !chainIdValid ? (
+                                        <ActionButton
+                                            className={classes.button}
+                                            fullWidth
+                                            variant="contained"
+                                            size="large"
+                                            onClick={onConnect}>
+                                            {t('plugin_wallet_connect_a_wallet')}
+                                        </ActionButton>
+                                    ) : (
+                                        <ActionButton
+                                            className={classes.button}
+                                            fullWidth
+                                            variant="contained"
+                                            size="large"
+                                            disabled={sendTxValidation || approveRequired}
+                                            onClick={onSwap}>
+                                            {t('plugin_trader_swap')}
+                                        </ActionButton>
+                                    )}
                                 </section>
                             </>
                         ) : status === ClaimStatus.Share ? (
@@ -407,17 +580,23 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                             YOU GOT !
                                         </Typography>
                                     </div>
-                                    <Button variant="contained" color="primary" className={classes.shareButton}>
+                                    <ActionButton variant="contained" color="primary" className={classes.shareButton}>
                                         {t('plugin_ito_dialog_claim_share_title')}
-                                    </Button>
+                                    </ActionButton>
                                 </Box>
                             </>
                         ) : null}
                     </Box>
                     <SelectSwapTokenDialog
-                        onSelect={(address: string) => {
+                        onSelect={(token: EtherTokenDetailed | ERC20TokenDetailed) => {
+                            const index = props.exchangeTokens.indexOf(token)
+                            const r = new BigNumber(payload.exchange_amounts[index]).dividedBy(swapTokenBase)
+                            setRatio(r)
                             setOpenSwapTokenDialog(false)
-                            setTokenAddress(address)
+                            setSwapToken(token)
+                            setTokenAmount(initAmount)
+                            setClaimAmount(initAmount.multipliedBy(r))
+                            setInputAmountForUI(initAmount.multipliedBy(r).toFixed())
                         }}
                         exchangeTokens={props.exchangeTokens}
                         open={openSwapTokenDialog}

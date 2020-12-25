@@ -51,6 +51,10 @@ export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyle
     token?: EtherTokenDetailed | ERC20TokenDetailed | null
     InputProps?: Partial<InputProps>
     MaxChipProps?: Partial<ChipProps>
+    balanceClassName?: string
+    chipWrapper?: string
+    swapLimit?: string
+    currentIcon?: JSX.Element
     SelectTokenChip?: Partial<SelectTokenChipProps>
     TextFieldProps?: Partial<TextFieldProps>
 }
@@ -73,6 +77,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const onChange = useCallback(
         (ev: ChangeEvent<HTMLInputElement>) => {
             const amount_ = ev.currentTarget.value.replace(/,/g, '.')
+
             if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) onAmountChange(amount_)
         },
         [onAmountChange, RE_MATCH_WHOLE_AMOUNT],
@@ -83,6 +88,8 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         <TextField
             className={classes.root}
             label={label}
+            error={props.TextFieldProps?.error}
+            helperText={props.TextFieldProps?.helperText}
             fullWidth
             required
             type="text"
@@ -114,7 +121,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                         }}>
                         {viewBalance ? (
                             <Typography
-                                className={classes.balance}
+                                className={props.balanceClassName ?? classes.balance}
                                 color="textSecondary"
                                 variant="body2"
                                 component="span">
@@ -124,6 +131,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                             ''
                         )}
                         <Box
+                            className={props.chipWrapper ?? ''}
                             sx={{
                                 display: 'flex',
                             }}>
@@ -135,13 +143,18 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     clickable
                                     color="primary"
                                     variant="outlined"
-                                    onClick={() =>
-                                        onAmountChange(formatBalance(new BigNumber(balance), token.decimals ?? 0))
-                                    }
+                                    onClick={() => {
+                                        const b = new BigNumber(balance)
+                                        const max =
+                                            props.swapLimit && new BigNumber(props.swapLimit).isLessThan(b)
+                                                ? new BigNumber(props.swapLimit)
+                                                : b
+                                        onAmountChange(formatBalance(max, token.decimals ?? 0))
+                                    }}
                                     {...props.MaxChipProps}
                                 />
                             ) : null}
-                            <SelectTokenChip token={token} {...props.SelectTokenChip} />
+                            <SelectTokenChip token={token} currentIcon={props.currentIcon} {...props.SelectTokenChip} />
                         </Box>
                     </Box>
                 ) : (

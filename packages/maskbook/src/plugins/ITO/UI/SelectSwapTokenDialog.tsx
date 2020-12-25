@@ -2,7 +2,8 @@ import { makeStyles, createStyles, ListItem, List } from '@material-ui/core'
 import { DialogContent, DialogProps } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { TOKEN_ICON_LIST_TABLE } from './ITO'
+import { getSupportTokenInfo } from './ITO'
+import { useChainId } from '../../../web3/hooks/useChainState'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) =>
 export interface SelectSwapTokenProps extends withClasses<'root'> {
     open: boolean
     onClose: () => void
-    onSelect: (address: string) => void
+    onSelect: (token: EtherTokenDetailed | ERC20TokenDetailed) => void
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     DialogProps?: Partial<DialogProps>
 }
@@ -42,6 +43,8 @@ export interface SelectSwapTokenProps extends withClasses<'root'> {
 export function SelectSwapTokenDialog(props: SelectSwapTokenProps) {
     const { t } = useI18N()
     const classes = useStyles()
+    const chainId = useChainId()
+    const { tokenIconListTable } = getSupportTokenInfo(chainId)
     return (
         <>
             <InjectedDialog
@@ -52,13 +55,10 @@ export function SelectSwapTokenDialog(props: SelectSwapTokenProps) {
                 <DialogContent>
                     <List>
                         {props.exchangeTokens.map((t, i) => {
-                            const TokenIcon = TOKEN_ICON_LIST_TABLE[t.address.toLowerCase()]
+                            const TokenIcon = tokenIconListTable[t.address.toLowerCase()]
 
                             return TokenIcon ? (
-                                <ListItem
-                                    button
-                                    className={classes.listItem}
-                                    onClick={() => props.onSelect(t.address.toLowerCase())}>
+                                <ListItem button className={classes.listItem} onClick={() => props.onSelect(t)}>
                                     <TokenIcon size={32} />
                                     <span className={classes.symbol}>{t.symbol}</span>
                                     <span className={classes.address}>{formatEthereumAddress(t.address, 6)}</span>

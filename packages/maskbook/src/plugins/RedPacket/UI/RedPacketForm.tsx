@@ -130,7 +130,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
         token?.address ?? '',
     )
     //#endregion
-
     //#region approve ERC20
     const HappyRedPacketContractAddress = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
     const [approveState, approveCallback] = useERC20TokenApproveCallback(

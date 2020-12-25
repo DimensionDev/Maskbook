@@ -5,8 +5,9 @@ import { WalletMessages } from '../../Wallet/messages'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeStyles, createStyles, Card, Typography, Box, Link } from '@material-ui/core'
-import { getConstant } from '../../../web3/helpers'
+import { getConstant, createEtherToken, createERC20Token } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
+import { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
@@ -14,26 +15,37 @@ import BackgroundImage from '../assets/background'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { EthIcon, DaiIcon, UsdcIcon, UsdtIcon } from '../assets/tokenIcon'
-import { formatBalance, formatToken } from '../../Wallet/formatter'
+import { formatBalance } from '../../Wallet/formatter'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { formatDateTime } from '../../../utils/date'
+import { formatDateTime, formatTimeDiffer } from '../../../utils/date'
 import { ClaimDialog } from './ClaimDialog'
-
-export const DAI_ADDRESS = getConstant(CONSTANTS, 'DAI_ADDRESS').toLowerCase()
-export const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS').toLowerCase()
-export const USDT_ADDRESS = getConstant(CONSTANTS, 'USDT_ADDRESS').toLowerCase()
-export const USDC_ADDRESS = getConstant(CONSTANTS, 'USDC_ADDRESS').toLowerCase()
 
 interface IconProps {
     size?: number
 }
 
-export const TOKEN_ICON_LIST_TABLE: Record<string, (props: IconProps) => JSX.Element> = {
-    [DAI_ADDRESS]: (props: IconProps) => <DaiIcon size={props.size} />,
-    [ETH_ADDRESS]: (props: IconProps) => <EthIcon size={props.size} />,
-    [USDT_ADDRESS]: (props: IconProps) => <UsdtIcon size={props.size} />,
-    [USDC_ADDRESS]: (props: IconProps) => <UsdcIcon size={props.size} />,
+export const getSupportTokenInfo = function (chainId = ChainId.Mainnet) {
+    const DAI_ADDRESS = getConstant(CONSTANTS, 'DAI_ADDRESS', chainId).toLowerCase()
+    const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS', chainId).toLowerCase()
+    const USDT_ADDRESS = getConstant(CONSTANTS, 'USDT_ADDRESS', chainId).toLowerCase()
+    const USDC_ADDRESS = getConstant(CONSTANTS, 'USDC_ADDRESS', chainId).toLowerCase()
+
+    const tokenIconListTable = {
+        [DAI_ADDRESS]: (props: IconProps) => <DaiIcon size={props.size} />,
+        [ETH_ADDRESS]: (props: IconProps) => <EthIcon size={props.size} />,
+        [USDT_ADDRESS]: (props: IconProps) => <UsdtIcon size={props.size} />,
+        [USDC_ADDRESS]: (props: IconProps) => <UsdcIcon size={props.size} />,
+    }
+
+    const ETH = createEtherToken(chainId)
+    const DAI = createERC20Token(chainId, DAI_ADDRESS, 18, 'Dai Stablecoin', 'DAI')
+    const USDT = createERC20Token(chainId, USDT_ADDRESS, 18, 'Tether', 'USDT')
+    const USDC = createERC20Token(chainId, USDC_ADDRESS, 18, 'USD Coin', 'USDC')
+
+    const tokenList: (ERC20TokenDetailed | EtherTokenDetailed)[] = [ETH, DAI, USDT, USDC]
+
+    return { tokenIconListTable, tokenList }
 }
 
 const useStyles = makeStyles((theme) =>
@@ -153,21 +165,31 @@ const TokenItem = ({ ration, TokenIcon, tokenSymbol, sellTokenSymbol, decimals =
 
 export function ITO(props: ITO_Props) {
     const { payload } = props
-    const { token, total: payload_total, seller, exchange_amounts, exchange_tokens, limit, start_time, pid } = payload
+    const {
+        token,
+        total: payload_total,
+        seller,
+        total_remaining: payload_total_remaining,
+        exchange_amounts,
+        exchange_tokens,
+        limit,
+        start_time,
+        end_time,
+        pid,
+    } = payload
     const classes = useStyles()
     const { t } = useI18N()
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
 
     const total = Number(payload_total)
-    const total_remaining = Number('0')
-    const claim_remaining = Number('0')
+    const total_remaining = Number(payload_total_remaining)
     const sold = total - total_remaining
 
     // context
     const account = useAccount()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-
+    const { tokenIconListTable } = getSupportTokenInfo(chainId)
     //#region token detailed
     const {
         value: availability,
@@ -176,7 +198,7 @@ export function ITO(props: ITO_Props) {
     } = useAvailabilityComputed(payload)
     //#ednregion
 
-    const { canFetch, canClaim, canShare, listOfStatus } = availabilityComputed
+    const { listOfStatus } = availabilityComputed
 
     //#region remote controlled select provider dialog
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
@@ -186,12 +208,10 @@ export function ITO(props: ITO_Props) {
         })
     }, [setSelectProviderDialogOpen])
     //#endregion
-
-    console.log('value', availability)
-    console.log('time', new Date().getTime(), start_time)
-    const onClaimOrShare = useCallback(async () => {
-        setOpenClaimDialog(true)
-    }, [])
+    console.log('useAvailabilityComputed', availabilityComputed)
+    console.log('payload', payload)
+    const onShare = useCallback(async () => {}, [])
+    const onClaim = useCallback(async () => setOpenClaimDialog(true), [])
 
     return (
         <div>
@@ -209,7 +229,10 @@ export function ITO(props: ITO_Props) {
                     ) : null}
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
-                    {`Sold ${formatToken(sold)} Sell Total Amount ${formatToken(total)} ${token.symbol}`}
+                    {`Sold ${formatBalance(new BigNumber(sold), 18)} Sell Total Amount ${formatBalance(
+                        new BigNumber(total),
+                        18,
+                    )} ${token.symbol}`}
                     <Link
                         className={classes.tokenLink}
                         href={`${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`}
@@ -223,7 +246,7 @@ export function ITO(props: ITO_Props) {
                 </Box>
                 <Box>
                     {exchange_tokens.map((t, i) => {
-                        const TokenIcon = TOKEN_ICON_LIST_TABLE[t.address.toLowerCase()]
+                        const TokenIcon = tokenIconListTable[t.address.toLowerCase()]
                         return TokenIcon ? (
                             <div className={classes.rationWrap}>
                                 <TokenItem
@@ -239,11 +262,20 @@ export function ITO(props: ITO_Props) {
                 </Box>
                 <Box className={classes.footer}>
                     <div>
-                        <Typography variant="body1">{`limit per: ${limit} MASK`}</Typography>
+                        {listOfStatus.includes(ITO_Status.expired) ? null : (
+                            <Typography variant="body1">{`limit per: ${formatBalance(
+                                new BigNumber(limit),
+                                18,
+                            )} MASK`}</Typography>
+                        )}
                         <Typography variant="body1">
-                            {listOfStatus.includes(ITO_Status.waited)
+                            {listOfStatus.includes(ITO_Status.expired)
+                                ? null
+                                : listOfStatus.includes(ITO_Status.waited)
                                 ? `Start Date: ${formatDateTime(new Date(start_time), true)}`
-                                : `Remaining time: `}
+                                : listOfStatus.includes(ITO_Status.started)
+                                ? `Remaining time: ${formatTimeDiffer(new Date(), new Date(end_time))}`
+                                : null}
                         </Typography>
                     </div>
                     <Typography variant="body1" className={classes.fromText}>
@@ -256,28 +288,24 @@ export function ITO(props: ITO_Props) {
                 {t('plugin_ito_wrong_provider')}
             </Typography>
 
-            {canClaim || canShare ? (
-                <Box className={classes.actionFooter}>
-                    {!account || !chainIdValid ? (
-                        <ActionButton
-                            variant="contained"
-                            size="large"
-                            onClick={onConnect}
-                            className={classes.actionButton}>
-                            {t('plugin_wallet_connect_a_wallet')}
-                        </ActionButton>
-                    ) : (
-                        <ActionButton
-                            variant="contained"
-                            size="large"
-                            onClick={onClaimOrShare}
-                            className={classes.actionButton}>
-                            {canClaim ? t('plugin_ito_enter') : t('plugin_ito_share')}
-                        </ActionButton>
-                    )}
-                </Box>
-            ) : null}
+            <Box className={classes.actionFooter}>
+                {!account || !chainIdValid ? (
+                    <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
+                        {t('plugin_wallet_connect_a_wallet')}
+                    </ActionButton>
+                ) : listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(ITO_Status.waited) ? (
+                    <ActionButton onClick={onShare} variant="contained" size="large" className={classes.actionButton}>
+                        {t('plugin_ito_share')}
+                    </ActionButton>
+                ) : listOfStatus.includes(ITO_Status.started) ? (
+                    <ActionButton onClick={onClaim} variant="contained" size="large" className={classes.actionButton}>
+                        {t('plugin_ito_enter')}
+                    </ActionButton>
+                ) : null}
+            </Box>
+
             <ClaimDialog
+                payload={payload}
                 exchangeTokens={exchange_tokens}
                 open={openClaimDialog}
                 onClose={() => setOpenClaimDialog(false)}

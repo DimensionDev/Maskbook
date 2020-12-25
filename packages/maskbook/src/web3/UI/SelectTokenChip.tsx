@@ -27,6 +27,7 @@ export interface SelectTokenChipProps {
     loading?: boolean
     readonly?: boolean
     ChipProps?: Partial<ChipProps>
+    currentIcon?: JSX.Element
 }
 
 export function SelectTokenChip(props: SelectTokenChipProps) {
@@ -50,7 +51,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
     return (
         <Chip
             className={classes.chip}
-            icon={<TokenIcon address={token.address} name={token.name} />}
+            icon={props.currentIcon ?? <TokenIcon address={token.address} name={token.name} />}
             deleteIcon={readonly ? undefined : <ExpandMoreIcon className={classes.icon} />}
             color="default"
             size="small"
