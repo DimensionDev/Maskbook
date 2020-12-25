@@ -7,7 +7,9 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectSwapTokenDialog } from './SelectSwapTokenDialog'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { getSupportTokenInfo } from './ITO'
+import { getConstant, createEtherToken } from '../../../web3/helpers'
+import { CONSTANTS } from '../../../web3/constants'
+import { useERC20TokenDetailed } from '../../../web3/hooks/useERC20TokenDetailed'
 import AddIcon from '@material-ui/icons/AddOutlined'
 import RemoveIcon from '@material-ui/icons/RemoveOutlined'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
@@ -125,7 +127,20 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
     )
 
     const chainId = useChainId()
-    const { tokenList } = getSupportTokenInfo(chainId)
+
+    const DAI_ADDRESS = getConstant(CONSTANTS, 'DAI_ADDRESS', chainId).toLowerCase()
+    const USDT_ADDRESS = getConstant(CONSTANTS, 'USDT_ADDRESS', chainId).toLowerCase()
+    const USDC_ADDRESS = getConstant(CONSTANTS, 'USDC_ADDRESS', chainId).toLowerCase()
+
+    const ETH = createEtherToken(chainId)
+    const { value: DAI } = useERC20TokenDetailed(DAI_ADDRESS)
+    const { value: USDT } = useERC20TokenDetailed(USDT_ADDRESS)
+    const { value: USDC } = useERC20TokenDetailed(USDC_ADDRESS)
+
+    const tokenList = [ETH, DAI, USDT, USDC].filter((t) => t !== undefined) as (
+        | EtherTokenDetailed
+        | ERC20TokenDetailed
+    )[]
 
     return (
         <>

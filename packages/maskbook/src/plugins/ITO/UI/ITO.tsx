@@ -5,9 +5,9 @@ import { WalletMessages } from '../../Wallet/messages'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeStyles, createStyles, Card, Typography, Box, Link } from '@material-ui/core'
-import { getConstant, createEtherToken, createERC20Token } from '../../../web3/helpers'
+import { getConstant } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
-import { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { ChainId } from '../../../web3/types'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
@@ -26,8 +26,8 @@ interface IconProps {
 }
 
 export const getSupportTokenInfo = function (chainId = ChainId.Mainnet) {
-    const DAI_ADDRESS = getConstant(CONSTANTS, 'DAI_ADDRESS', chainId).toLowerCase()
     const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS', chainId).toLowerCase()
+    const DAI_ADDRESS = getConstant(CONSTANTS, 'DAI_ADDRESS', chainId).toLowerCase()
     const USDT_ADDRESS = getConstant(CONSTANTS, 'USDT_ADDRESS', chainId).toLowerCase()
     const USDC_ADDRESS = getConstant(CONSTANTS, 'USDC_ADDRESS', chainId).toLowerCase()
 
@@ -38,14 +38,7 @@ export const getSupportTokenInfo = function (chainId = ChainId.Mainnet) {
         [USDC_ADDRESS]: (props: IconProps) => <UsdcIcon size={props.size} />,
     }
 
-    const ETH = createEtherToken(chainId)
-    const DAI = createERC20Token(chainId, DAI_ADDRESS, 18, 'Dai Stablecoin', 'DAI')
-    const USDT = createERC20Token(chainId, USDT_ADDRESS, 18, 'Tether', 'USDT')
-    const USDC = createERC20Token(chainId, USDC_ADDRESS, 18, 'USD Coin', 'USDC')
-
-    const tokenList: (ERC20TokenDetailed | EtherTokenDetailed)[] = [ETH, DAI, USDT, USDC]
-
-    return { tokenIconListTable, tokenList }
+    return { tokenIconListTable }
 }
 
 const useStyles = makeStyles((theme) =>
@@ -147,21 +140,22 @@ export interface ITO_Props {
 }
 
 interface TokenItemProps {
-    ration: string
+    ratio: BigNumber
     TokenIcon: (props: IconProps) => JSX.Element
     tokenSymbol: string
     sellTokenSymbol: string
-    decimals?: number
 }
 
-const TokenItem = ({ ration, TokenIcon, tokenSymbol, sellTokenSymbol, decimals = 18 }: TokenItemProps) => (
-    <>
-        <TokenIcon />
-        <span>
-            <b>{formatBalance(new BigNumber(Number(ration)), decimals)}</b> {tokenSymbol} / {sellTokenSymbol}
-        </span>
-    </>
-)
+const TokenItem = ({ ratio, TokenIcon, tokenSymbol, sellTokenSymbol }: TokenItemProps) => {
+    return (
+        <>
+            <TokenIcon />
+            <span>
+                <b>{ratio.toFixed()}</b> {tokenSymbol} / {sellTokenSymbol}
+            </span>
+        </>
+    )
+}
 
 export function ITO(props: ITO_Props) {
     const { payload } = props
@@ -251,8 +245,9 @@ export function ITO(props: ITO_Props) {
                         return TokenIcon ? (
                             <div className={classes.rationWrap}>
                                 <TokenItem
-                                    decimals={t.decimals}
-                                    ration={exchange_amounts[i]}
+                                    ratio={new BigNumber(exchange_amounts[i * 2]).dividedBy(
+                                        new BigNumber(exchange_amounts[i * 2 + 1]),
+                                    )}
                                     TokenIcon={TokenIcon}
                                     tokenSymbol={t.symbol!}
                                     sellTokenSymbol={token.symbol!}
@@ -273,9 +268,9 @@ export function ITO(props: ITO_Props) {
                             {listOfStatus.includes(ITO_Status.expired)
                                 ? null
                                 : listOfStatus.includes(ITO_Status.waited)
-                                ? `Start Date: ${formatDateTime(new Date(start_time), true)}`
+                                ? `Start Date: ${formatDateTime(new Date(start_time * 1000), true)}`
                                 : listOfStatus.includes(ITO_Status.started)
-                                ? `Remaining time: ${formatTimeDiffer(new Date(), new Date(end_time))}`
+                                ? `Remaining time: ${formatTimeDiffer(new Date(), new Date(end_time * 1000))}`
                                 : null}
                         </Typography>
                     </div>

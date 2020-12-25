@@ -291,7 +291,9 @@ export function ClaimDialog(props: ClaimDialogProps) {
     const [swapToken, setSwapToken] = useState<EtherTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
     const tokenBase = Math.pow(10, payload.token.decimals ?? 0)
     const swapTokenBase = Math.pow(10, swapToken.decimals ?? 0)
-    const [ratio, setRatio] = useState<BigNumber>(new BigNumber(payload.exchange_amounts[0]).dividedBy(swapTokenBase))
+    const [ratio, setRatio] = useState<BigNumber>(
+        new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(new BigNumber(payload.exchange_amounts[0 * 2 + 1])),
+    )
     const { value: tokenBalance = '0', loading: tokenBalanceLoading } = useTokenBalance(
         swapToken.type,
         swapToken.address,
@@ -591,8 +593,10 @@ export function ClaimDialog(props: ClaimDialogProps) {
                     </Box>
                     <SelectSwapTokenDialog
                         onSelect={(token: EtherTokenDetailed | ERC20TokenDetailed) => {
-                            const index = props.exchangeTokens.indexOf(token)
-                            const r = new BigNumber(payload.exchange_amounts[index]).dividedBy(swapTokenBase)
+                            const i = props.exchangeTokens.indexOf(token)
+                            const r = new BigNumber(payload.exchange_amounts[i * 2]).dividedBy(
+                                new BigNumber(payload.exchange_amounts[i * 2 + 1]),
+                            )
                             setRatio(r)
                             setOpenSwapTokenDialog(false)
                             setSwapToken(token)
