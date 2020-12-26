@@ -6,7 +6,7 @@ import { buf2hex, hex2buf } from '../../../utils/utils'
 import { addGasMargin, isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { usePoolPayload } from './usePoolPayload'
 
@@ -21,7 +21,6 @@ export function useClaimCallback(
 
     const { value: poolPayload } = usePoolPayload(id)
     const [claimState, setClaimState] = useTransactionState()
-    console.log('poolPayload', poolPayload)
     const claimCallback = useCallback(async () => {
         if (!ITO_Contract || !poolPayload || !id || !password) {
             setClaimState({
@@ -38,6 +37,7 @@ export function useClaimCallback(
         const config: Tx = {
             from: account,
             to: ITO_Contract.options.address,
+            value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
         }
 
         const params: Parameters<typeof ITO_Contract['methods']['claim']> = [

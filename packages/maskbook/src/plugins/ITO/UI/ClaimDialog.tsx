@@ -401,7 +401,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
         })
     }, [claimState, setTransactionDialogOpen, tokenAmount, t, payload])
 
-    console.log('claimState', claimState)
     console.log('payload', payload)
     return (
         <>
