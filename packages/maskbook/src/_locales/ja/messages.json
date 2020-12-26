@@ -438,14 +438,15 @@
     "plugin_ito_error_exchange_time": "",
     "plugin_ito_error_balance": "",
     "plugin_ito_list_end_date": "",
-    "pluing_ito_list_sold_total": "",
-    "pluing_ito_list_total": "",
-    "pluing_ito_list_sold_details": "",
+    "plugin_ito_list_sold_total": "",
+    "plugin_ito_list_total": "",
+    "plugin_ito_list_sold_details": "",
     "plugin_ito_list_table_type": "",
     "plugin_ito_list_table_price": "",
     "plugin_ito_list_table_sold": "",
     "plugin_ito_list_table_got": "",
-    "pluing_ito_list_button_claim": "",
-    "pluing_ito_list_button_send": "",
-    "pluing_ito_your_claimed_amount": ""
+    "plugin_ito_list_button_claim": "",
+    "plugin_ito_list_button_send": "",
+    "plugin_ito_your_claimed_amount": "",
+    "plugin_ito_you_got": ""
 }

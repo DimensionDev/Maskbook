@@ -12,6 +12,7 @@ import { CONSTANTS } from '../../../web3/constants'
 import { useERC20TokenDetailed } from '../../../web3/hooks/useERC20TokenDetailed'
 import AddIcon from '@material-ui/icons/AddOutlined'
 import RemoveIcon from '@material-ui/icons/RemoveOutlined'
+import { getSupportTokenInfo } from './ITO'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { v4 as uuid } from 'uuid'
@@ -144,6 +145,9 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         | ERC20TokenDetailed
     )[]
 
+    const { tokenIconListTable } = getSupportTokenInfo(chainId)
+    console.log('exchangeToken.address', exchangeToken?.address)
+    const CurrentSwapTokenIcon = exchangeToken ? tokenIconListTable[exchangeToken?.address.toLowerCase()] : () => <></>
     return (
         <>
             <Paper className={classes.line}>
@@ -164,6 +168,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
                     TextFieldProps={{
                         disabled: !exchangeToken,
                     }}
+                    currentIcon={<CurrentSwapTokenIcon size={18} />}
                     {...props.tokenAmountPanelProps}
                 />
                 {showAdd ? (

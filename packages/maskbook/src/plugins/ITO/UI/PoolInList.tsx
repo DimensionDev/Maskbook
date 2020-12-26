@@ -112,10 +112,10 @@ function PoolInList(props: PoolInListProps) {
                 {now <= end ? (
                     <ActionButton size="small" variant="contained" disabled={noRemain} onClick={() => onSend?.(pool)}>
                         {now < start
-                            ? t('pluing_ito_list_button_send')
+                            ? t('plugin_ito_list_button_send')
                             : noRemain
-                            ? t('pluing_ito_list_button_claim')
-                            : t('pluing_ito_list_button_send')}
+                            ? t('plugin_ito_list_button_claim')
+                            : t('plugin_ito_list_button_send')}
                     </ActionButton>
                 ) : (
                     <ActionButton
@@ -123,7 +123,7 @@ function PoolInList(props: PoolInListProps) {
                         variant="contained"
                         disabled={noRemain}
                         onClick={() => onWithdraw?.(pool)}>
-                        {t('pluing_ito_list_button_claim')}
+                        {t('plugin_ito_list_button_claim')}
                     </ActionButton>
                 )}
             </>
@@ -156,7 +156,7 @@ function PoolInList(props: PoolInListProps) {
 
                 <Box className={classes.price}>
                     <Typography variant="body2" color="textSecondary" component="span">
-                        {t('pluing_ito_list_sold_total')}
+                        {t('plugin_ito_list_sold_total')}
                         <Typography variant="body2" color="textPrimary" component="span">
                             {formatBalance(
                                 new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)),
@@ -165,7 +165,7 @@ function PoolInList(props: PoolInListProps) {
                         </Typography>
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="span">
-                        {t('pluing_ito_list_total')}
+                        {t('plugin_ito_list_total')}
                         <Typography variant="body2" color="textPrimary" component="span">
                             {formatBalance(new BigNumber(pool.total), pool.token.decimals ?? 0)}
                         </Typography>{' '}
@@ -175,7 +175,7 @@ function PoolInList(props: PoolInListProps) {
 
                 <Box className={classes.deteils}>
                     <Typography variant="body2" color="textSecondary">
-                        {t('pluing_ito_list_sold_details')}
+                        {t('plugin_ito_list_sold_details')}
                     </Typography>
                     <TableContainer component={Paper} className={classes.table}>
                         <Table size="small">

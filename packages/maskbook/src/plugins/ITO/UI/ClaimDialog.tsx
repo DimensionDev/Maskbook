@@ -30,11 +30,9 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import type { JSON_PayloadInMask } from '../types'
-import { ChainId } from '../../../web3/types'
 import { ITO_CONSTANTS } from '../constants'
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
-import { formatToken } from '../../Wallet/formatter'
 import { getSupportTokenInfo } from './ITO'
 import { SelectSwapTokenDialog } from './SelectSwapTokenDialog'
 import ITO_ShareImage from '../assets/share_ito'
@@ -65,8 +63,11 @@ const useStyles = makeStyles((theme) =>
             borderRadius: '15px',
         },
         tokenIcon: {
-            width: 40,
-            height: 40,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 39,
+            height: 39,
         },
         tokenTextWrapper: {
             display: 'flex',
@@ -273,6 +274,7 @@ export interface ClaimDialogProps extends withClasses<'root'> {
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     DialogProps?: Partial<DialogProps>
     payload: JSON_PayloadInMask
+    revalidateAvailability: () => void
 }
 
 enum ClaimStatus {
@@ -283,12 +285,10 @@ enum ClaimStatus {
 
 export function ClaimDialog(props: ClaimDialogProps) {
     const { t } = useI18N()
-    const { payload } = props
+    const { payload, revalidateAvailability } = props
     const classes = useStylesExtends(useStyles(), props)
-    const ui_random_address = '0xc12d099be31567ad54e4e4d0d45691c3f58f5663'
-    const ui_token_chain_id = ChainId.Rinkeby
     const [agreeReminder, setAgreeReminder] = useState(false)
-    const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Swap)
+    const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Remind)
     const [swapToken, setSwapToken] = useState<EtherTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2 + 1]).dividedBy(new BigNumber(payload.exchange_amounts[0 * 2])),
@@ -306,6 +306,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     const chainIdValid = useChainIdValid()
     const { tokenIconListTable } = getSupportTokenInfo(chainId)
     const CurrentSwapTokenIcon = tokenIconListTable[swapToken.address]
+    const CurrentTokenIcon = tokenIconListTable[payload.token.address]
     const ClaimTitle: EnumRecord<ClaimStatus, string> = {
         [ClaimStatus.Remind]: t('plugin_ito_dialog_claim_reminder_title'),
         [ClaimStatus.Swap]: t('plugin_ito_dialog_claim_swap_title', { token: payload.token.symbol }),
@@ -322,7 +323,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     }, [claimAmount, tokenBalance, payload.limit, swapToken.symbol, tokenBalanceLoading, t, swapToken])
 
     const [inputAmountForUI, setInputAmountForUI] = useState(formatBalance(claimAmount, swapToken.decimals ?? 0))
-    console.log('inputAmountForUI', inputAmountForUI)
+
     const handleInputChange = useCallback(
         (event) => {
             const r = Number(event.target.value) / 100
@@ -362,6 +363,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     const approveRequired =
         (approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING) &&
         swapToken.type !== EthereumTokenType.Ether
+    console.log('approveState', approveState)
     //#endregion
 
     const sendTxValidation = useMemo(() => claimAmountErrText !== '' || tokenAmount.toFixed() === '0', [
@@ -388,8 +390,9 @@ export function ClaimDialog(props: ClaimDialogProps) {
             // reset state
             resetCallback()
 
-            if (claimState.type !== TransactionStateType.CONFIRMED) return
+            if (claimState.type !== TransactionStateType.HASH) return
 
+            revalidateAvailability()
             setStatus(ClaimStatus.Share)
         },
     )
@@ -399,7 +402,9 @@ export function ClaimDialog(props: ClaimDialogProps) {
         setTransactionDialogOpen({
             open: true,
             state: claimState,
-            summary: `${t('plugin_trader_swap')} ${tokenAmount.toFixed()} ${payload.token.symbol}`,
+            summary: `${t('plugin_trader_swap')} ${formatBalance(tokenAmount, payload.token.decimals ?? 0)} ${
+                payload.token.symbol
+            }`,
         })
     }, [claimState, setTransactionDialogOpen, tokenAmount, t, payload])
 
@@ -423,21 +428,23 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                     {t('plugin_ito_dialog_claim_reminder_text3')}
                                 </Typography>
                                 <section className={classes.tokenWrapper}>
-                                    <TokenIcon address={ui_random_address} classes={{ icon: classes.tokenIcon }} />
+                                    <TokenIcon
+                                        currentIcon={<CurrentTokenIcon size={35} />}
+                                        address={payload.token.address}
+                                        classes={{ icon: classes.tokenIcon }}
+                                    />
                                     <div className={classes.tokenTextWrapper}>
                                         <Typography variant="h5" className={classes.tokenSymbol}>
-                                            Symbolic name
+                                            {payload.token.name}
                                         </Typography>
 
                                         <Link
                                             target="_blank"
                                             className={classes.tokenLink}
                                             rel="noopener noreferrer"
-                                            href={`${resolveLinkOnEtherscan(
-                                                ui_token_chain_id,
-                                            )}/token/${ui_random_address}`}>
+                                            href={`${resolveLinkOnEtherscan(chainId)}/token/${payload.token.address}`}>
                                             <Typography variant="body2">
-                                                {formatEthereumAddress(ui_random_address, 4)}(View on Etherscan)
+                                                {formatEthereumAddress(payload.token.address, 4)}(View on Etherscan)
                                             </Typography>
                                         </Link>
                                     </div>
@@ -594,13 +601,13 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                 <Box className={classes.shareWrapper}>
                                     <div className={classes.shareImage}>
                                         <Typography variant="body1" className={classes.shareAmount}>
-                                            {formatToken(100000)}
+                                            {formatBalance(tokenAmount, payload.token.decimals ?? 0)}
                                         </Typography>
                                         <Typography variant="body1" className={classes.shareToken}>
-                                            MSKUI
+                                            {payload.token.symbol}
                                         </Typography>
                                         <Typography variant="body1" className={classes.shareText}>
-                                            YOU GOT !
+                                            {t('plugin_ito_you_got')}
                                         </Typography>
                                     </div>
                                     <ActionButton variant="contained" color="primary" className={classes.shareButton}>

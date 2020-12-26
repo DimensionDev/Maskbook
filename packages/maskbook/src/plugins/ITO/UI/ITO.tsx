@@ -265,8 +265,11 @@ export function ITO(props: ITO_Props) {
                               ITO_Status.completed,
                           ) ? (
                             <Typography variant="body1">
-                                {t('pluing_ito_your_claimed_amount', {
-                                    amount: availability?.claimed,
+                                {t('plugin_ito_your_claimed_amount', {
+                                    amount: formatBalance(
+                                        new BigNumber(availability?.claimed ?? 0),
+                                        token.decimals ?? 0,
+                                    ),
                                     symbol: token.symbol,
                                 })}
                             </Typography>
@@ -318,6 +321,7 @@ export function ITO(props: ITO_Props) {
                 exchangeTokens={exchange_tokens}
                 open={openClaimDialog}
                 onClose={() => setOpenClaimDialog(false)}
+                revalidateAvailability={() => revalidateAvailability()}
             />
         </div>
     )
