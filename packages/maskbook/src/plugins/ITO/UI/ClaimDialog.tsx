@@ -290,16 +290,14 @@ export function ClaimDialog(props: ClaimDialogProps) {
     const [agreeReminder, setAgreeReminder] = useState(false)
     const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Swap)
     const [swapToken, setSwapToken] = useState<EtherTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
-    const tokenBase = Math.pow(10, payload.token.decimals ?? 0)
-    const swapTokenBase = Math.pow(10, swapToken.decimals ?? 0)
     const [ratio, setRatio] = useState<BigNumber>(
-        new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(new BigNumber(payload.exchange_amounts[0 * 2 + 1])),
+        new BigNumber(payload.exchange_amounts[0 * 2 + 1]).dividedBy(new BigNumber(payload.exchange_amounts[0 * 2])),
     )
     const { value: tokenBalance = '0', loading: tokenBalanceLoading } = useTokenBalance(
         swapToken.type,
         swapToken.address,
     )
-    const initAmount = new BigNumber(payload.limit).dividedBy(new BigNumber(10).pow(18).multipliedBy(5))
+    const initAmount = new BigNumber(payload.limit).dividedBy(2)
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
     const [claimAmount, setClaimAmount] = useState<BigNumber>(initAmount.multipliedBy(ratio))
     const [openSwapTokenDialog, setOpenSwapTokenDialog] = useState(false)
@@ -313,9 +311,10 @@ export function ClaimDialog(props: ClaimDialogProps) {
         [ClaimStatus.Swap]: t('plugin_ito_dialog_claim_swap_title', { token: payload.token.symbol }),
         [ClaimStatus.Share]: t('plugin_ito_dialog_claim_share_title'),
     }
-
+    console.log('tokenAmount', tokenAmount)
+    console.log('claimAmount', claimAmount)
     const claimAmountErrText = useMemo(() => {
-        const amount = claimAmount.multipliedBy(swapTokenBase)
+        const amount = claimAmount.dividedBy(ratio)
         if (tokenBalanceLoading) return ''
         return amount.isGreaterThan(new BigNumber(tokenBalance))
             ? t('plugin_ito_error_balance', { symbol: swapToken.symbol })
@@ -324,17 +323,17 @@ export function ClaimDialog(props: ClaimDialogProps) {
             : ''
     }, [claimAmount, tokenBalance, payload.limit, swapToken.symbol, tokenBalanceLoading, t, swapToken])
 
-    const [inputAmountForUI, setInputAmountForUI] = useState(initAmount.multipliedBy(ratio).toFixed())
-
+    const [inputAmountForUI, setInputAmountForUI] = useState(formatBalance(claimAmount, swapToken.decimals ?? 0))
+    console.log('inputAmountForUI', inputAmountForUI)
     const handleInputChange = useCallback(
         (event) => {
             const r = Number(event.target.value) / 100
-            const tAmount = new BigNumber(payload.limit).multipliedBy(r).dividedBy(tokenBase)
+            const tAmount = new BigNumber(payload.limit).multipliedBy(r)
             setTokenAmount(tAmount)
             setClaimAmount(tAmount.multipliedBy(ratio))
-            setInputAmountForUI(tAmount.multipliedBy(ratio).toFixed())
+            setInputAmountForUI(formatBalance(tAmount.multipliedBy(ratio), swapToken.decimals ?? 0))
         },
-        [payload.limit, ratio],
+        [payload.limit, ratio, swapToken],
     )
 
     //#region remote controlled select provider dialog
@@ -350,7 +349,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
         swapToken.type === EthereumTokenType.ERC20 ? swapToken.address : '',
-        claimAmount.multipliedBy(swapTokenBase).toFixed(),
+        claimAmount.toFixed(),
         ITO_CONTRACT_ADDRESS,
     )
 
@@ -375,7 +374,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     const [claimState, claimCallback, resetCallback] = useClaimCallback(
         payload.pid,
         payload.password,
-        claimAmount.multipliedBy(swapTokenBase).toFixed(),
+        claimAmount.toFixed(),
         swapToken,
     )
     //#region claim
@@ -474,22 +473,18 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                     </Typography>
                                     <Slider
                                         className={classes.swapLimitSlider}
-                                        value={Number(
-                                            tokenAmount
-                                                .multipliedBy(tokenBase)
-                                                .dividedBy(payload.limit)
-                                                .multipliedBy(100),
-                                        )}
+                                        value={Number(tokenAmount.dividedBy(payload.limit).multipliedBy(100))}
                                         onChange={handleInputChange}
                                     />
                                     <Typography variant="body1" className={classes.swapLimitText}>
-                                        {formatBalance(new BigNumber(payload.limit), 18)} {payload.token.symbol}
+                                        {formatBalance(new BigNumber(payload.limit), payload.token.decimals ?? 0)}{' '}
+                                        {payload.token.symbol}
                                     </Typography>
                                 </section>
                                 <Typography variant="body1" className={classes.exchangeText}>
                                     {t('plugin_ito_dialog_claim_swap_exchange')}{' '}
                                     <span className={classes.exchangeAmountText}>
-                                        {formatBalance(tokenAmount.multipliedBy(tokenBase), 18)}
+                                        {formatBalance(tokenAmount, payload.token.decimals ?? 0)}
                                     </span>{' '}
                                     {payload.token.symbol}
                                 </Typography>
@@ -501,7 +496,12 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                     token={swapToken}
                                     onAmountChange={(value) => {
                                         setInputAmountForUI(value)
-                                        const val = value === '' ? new BigNumber(0) : new BigNumber(Number(value))
+                                        const val =
+                                            value === ''
+                                                ? new BigNumber(0)
+                                                : new BigNumber(Number(value)).multipliedBy(
+                                                      Math.pow(10, swapToken.decimals),
+                                                  )
                                         setClaimAmount(val)
                                         setTokenAmount(val.dividedBy(ratio))
                                     }}
@@ -612,15 +612,15 @@ export function ClaimDialog(props: ClaimDialogProps) {
                     <SelectSwapTokenDialog
                         onSelect={(token: EtherTokenDetailed | ERC20TokenDetailed) => {
                             const i = props.exchangeTokens.indexOf(token)
-                            const r = new BigNumber(payload.exchange_amounts[i * 2]).dividedBy(
-                                new BigNumber(payload.exchange_amounts[i * 2 + 1]),
+                            const r = new BigNumber(payload.exchange_amounts[i * 2 + 1]).dividedBy(
+                                new BigNumber(payload.exchange_amounts[i * 2]),
                             )
                             setRatio(r)
                             setOpenSwapTokenDialog(false)
                             setSwapToken(token)
                             setTokenAmount(initAmount)
                             setClaimAmount(initAmount.multipliedBy(r))
-                            setInputAmountForUI(initAmount.multipliedBy(r).toFixed())
+                            setInputAmountForUI(formatBalance(initAmount.multipliedBy(r), token.decimals ?? 0))
                         }}
                         exchangeTokens={props.exchangeTokens}
                         open={openSwapTokenDialog}

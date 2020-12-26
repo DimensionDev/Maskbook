@@ -224,7 +224,10 @@ export function ITO(props: ITO_Props) {
                     ) : null}
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
-                    {`Sold ${formatBalance(sold, 18)} Sell Total Amount ${formatBalance(total, 18)} ${token.symbol}`}
+                    {`Sold ${formatBalance(sold, token.decimals ?? 0)} Sell Total Amount ${formatBalance(
+                        total,
+                        token.decimals ?? 0,
+                    )} ${token.symbol}`}
                     <Link
                         className={classes.tokenLink}
                         href={`${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`}
@@ -245,9 +248,9 @@ export function ITO(props: ITO_Props) {
                         return TokenIcon ? (
                             <div className={classes.rationWrap}>
                                 <TokenItem
-                                    ratio={new BigNumber(exchange_amounts[i * 2]).dividedBy(
-                                        new BigNumber(exchange_amounts[i * 2 + 1]),
-                                    )}
+                                    ratio={new BigNumber(exchange_amounts[i * 2 + 1])
+                                        .dividedBy(new BigNumber(exchange_amounts[i * 2]))
+                                        .multipliedBy(Math.pow(10, token.decimals - exchange_tokens[i].decimals))}
                                     TokenIcon={TokenIcon}
                                     tokenSymbol={t.symbol!}
                                     sellTokenSymbol={token.symbol!}
@@ -261,8 +264,8 @@ export function ITO(props: ITO_Props) {
                         {listOfStatus.includes(ITO_Status.expired) ? null : (
                             <Typography variant="body1">{`limit per: ${formatBalance(
                                 new BigNumber(limit),
-                                18,
-                            )} MASK`}</Typography>
+                                token.decimals ?? 0,
+                            )} ${token.symbol}`}</Typography>
                         )}
                         <Typography variant="body1">
                             {listOfStatus.includes(ITO_Status.expired)
