@@ -311,8 +311,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
         [ClaimStatus.Swap]: t('plugin_ito_dialog_claim_swap_title', { token: payload.token.symbol }),
         [ClaimStatus.Share]: t('plugin_ito_dialog_claim_share_title'),
     }
-    console.log('tokenAmount', tokenAmount)
-    console.log('claimAmount', claimAmount)
     const claimAmountErrText = useMemo(() => {
         const amount = claimAmount.dividedBy(ratio)
         if (tokenBalanceLoading) return ''
@@ -389,6 +387,10 @@ export function ClaimDialog(props: ClaimDialogProps) {
             if (ev.open) return
             // reset state
             resetCallback()
+
+            if (claimState.type !== TransactionStateType.CONFIRMED) return
+
+            setStatus(ClaimStatus.Share)
         },
     )
 

@@ -203,8 +203,6 @@ export function ITO(props: ITO_Props) {
         })
     }, [setSelectProviderDialogOpen])
     //#endregion
-    console.log('useAvailabilityComputed', availabilityComputed)
-    console.log('payload', payload)
     const onShare = useCallback(async () => {}, [])
     const onClaim = useCallback(async () => setOpenClaimDialog(true), [])
 
@@ -219,7 +217,9 @@ export function ITO(props: ITO_Props) {
                         <Typography variant="body2" className={classes.status}>
                             {listOfStatus.includes(ITO_Status.expired)
                                 ? t('plugin_ito_expired')
-                                : t('plugin_ito_completed')}
+                                : listOfStatus.includes(ITO_Status.completed)
+                                ? t('plugin_ito_completed')
+                                : null}
                         </Typography>
                     ) : null}
                 </Box>
@@ -261,21 +261,30 @@ export function ITO(props: ITO_Props) {
                 </Box>
                 <Box className={classes.footer}>
                     <div>
-                        {listOfStatus.includes(ITO_Status.expired) ? null : (
-                            <Typography variant="body1">{`limit per: ${formatBalance(
-                                new BigNumber(limit),
-                                token.decimals ?? 0,
-                            )} ${token.symbol}`}</Typography>
+                        {listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(
+                              ITO_Status.completed,
+                          ) ? (
+                            <Typography variant="body1">
+                                {t('pluing_ito_your_claimed_amount', {
+                                    amount: availability?.claimed,
+                                    symbol: token.symbol,
+                                })}
+                            </Typography>
+                        ) : (
+                            <>
+                                <Typography variant="body1">{`limit per: ${formatBalance(
+                                    new BigNumber(limit),
+                                    token.decimals ?? 0,
+                                )} ${token.symbol}`}</Typography>
+                                <Typography variant="body1">
+                                    {listOfStatus.includes(ITO_Status.waited)
+                                        ? `Start Date: ${formatDateTime(new Date(start_time * 1000), true)}`
+                                        : listOfStatus.includes(ITO_Status.started)
+                                        ? `Remaining time: ${formatTimeDiffer(new Date(), new Date(end_time * 1000))}`
+                                        : null}
+                                </Typography>
+                            </>
                         )}
-                        <Typography variant="body1">
-                            {listOfStatus.includes(ITO_Status.expired)
-                                ? null
-                                : listOfStatus.includes(ITO_Status.waited)
-                                ? `Start Date: ${formatDateTime(new Date(start_time * 1000), true)}`
-                                : listOfStatus.includes(ITO_Status.started)
-                                ? `Remaining time: ${formatTimeDiffer(new Date(), new Date(end_time * 1000))}`
-                                : null}
-                        </Typography>
                     </div>
                     <Typography variant="body1" className={classes.fromText}>
                         {`From: @${seller.name}`}
@@ -283,16 +292,17 @@ export function ITO(props: ITO_Props) {
                 </Box>
             </Card>
 
-            <Typography variant="body1" className={classes.textProviderErr}>
+            {/* <Typography variant="body1" className={classes.textProviderErr}>
                 {t('plugin_ito_wrong_provider')}
-            </Typography>
+            </Typography> */}
 
             <Box className={classes.actionFooter}>
                 {!account || !chainIdValid ? (
                     <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
-                ) : listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(ITO_Status.waited) ? (
+                ) : listOfStatus.includes(ITO_Status.expired) ||
+                  listOfStatus.includes(ITO_Status.completed) ? null : listOfStatus.includes(ITO_Status.waited) ? (
                     <ActionButton onClick={onShare} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_ito_share')}
                     </ActionButton>
