@@ -19,9 +19,9 @@ import { formatBalance } from '../../Wallet/formatter'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatDateTime, formatTimeDiffer } from '../../../utils/date'
-import { ClaimDialog } from './ClaimDialog'
+import { ClaimGuide } from './ClaimGuide'
 
-interface IconProps {
+export interface IconProps {
     size?: number
 }
 
@@ -171,7 +171,6 @@ export function ITO(props: ITO_Props) {
         end_time,
         pid,
     } = payload
-    console.log('payload!!', payload)
     const classes = useStyles()
     const { t } = useI18N()
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
@@ -316,7 +315,7 @@ export function ITO(props: ITO_Props) {
                 ) : null}
             </Box>
 
-            <ClaimDialog
+            <ClaimGuide
                 payload={payload}
                 exchangeTokens={exchange_tokens}
                 open={openClaimDialog}
