@@ -435,6 +435,7 @@
     "plugin_ito_error_select_token": "",
     "plugin_ito_error_enter_amount_and_token": "",
     "plugin_ito_error_allocation_absence": "",
+    "plugin_ito_error_allocation_invalid": "",
     "plugin_ito_error_exchange_time": "",
     "plugin_ito_error_balance": "",
     "plugin_ito_list_end_date": "",

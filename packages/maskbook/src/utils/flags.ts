@@ -40,9 +40,9 @@ export const Flags = {
     poll_enabled: webOnly,
     election2020_enabled: webOnly,
     ITO_enabled: webOnly,
-    election2020_composition_dialog_enabled: betaOrInsiderOnly || devOnly,
+    election2020_composition_dialog_enabled: false,
     COTM_enabled: webOnly,
-    COTM_composition_dialog_enabled: betaOrInsiderOnly || devOnly,
+    COTM_composition_dialog_enabled: false,
     // Note: the server has closed
     matrix_based_service_enabled: false,
     metamask_support_enabled: webOnly,
