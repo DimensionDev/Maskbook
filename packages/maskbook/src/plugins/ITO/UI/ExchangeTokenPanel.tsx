@@ -146,8 +146,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
     )[]
 
     const { tokenIconListTable } = getSupportTokenInfo(chainId)
-    console.log('exchangeToken.address', exchangeToken?.address)
-    const CurrentSwapTokenIcon = exchangeToken ? tokenIconListTable[exchangeToken?.address.toLowerCase()] : () => <></>
+    const CurrentSwapTokenIcon = exchangeToken ? tokenIconListTable[exchangeToken?.address.toLowerCase()] : undefined
     return (
         <>
             <Paper className={classes.line}>
@@ -168,7 +167,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
                     TextFieldProps={{
                         disabled: !exchangeToken,
                     }}
-                    currentIcon={<CurrentSwapTokenIcon size={18} />}
+                    currentIcon={CurrentSwapTokenIcon ? <CurrentSwapTokenIcon size={18} /> : undefined}
                     {...props.tokenAmountPanelProps}
                 />
                 {showAdd ? (

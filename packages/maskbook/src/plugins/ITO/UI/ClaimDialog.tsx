@@ -390,7 +390,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
             // reset state
             resetCallback()
 
-            if (claimState.type !== TransactionStateType.HASH) return
+            if (claimState.type !== TransactionStateType.CONFIRMED) return
 
             revalidateAvailability()
             setStatus(ClaimStatus.Share)
@@ -429,7 +429,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                 </Typography>
                                 <section className={classes.tokenWrapper}>
                                     <TokenIcon
-                                        currentIcon={<CurrentTokenIcon size={35} />}
+                                        currentIcon={CurrentTokenIcon ? <CurrentTokenIcon size={35} /> : undefined}
                                         address={payload.token.address}
                                         classes={{ icon: classes.tokenIcon }}
                                     />

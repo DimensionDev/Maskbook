@@ -321,7 +321,7 @@ export function ITO(props: ITO_Props) {
                 exchangeTokens={exchange_tokens}
                 open={openClaimDialog}
                 onClose={() => setOpenClaimDialog(false)}
-                revalidateAvailability={() => revalidateAvailability()}
+                revalidateAvailability={revalidateAvailability}
             />
         </div>
     )

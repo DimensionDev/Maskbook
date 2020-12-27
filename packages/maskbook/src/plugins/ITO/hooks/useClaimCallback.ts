@@ -1,12 +1,13 @@
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
+import type { TransactionReceipt } from 'web3-core'
 import type { Tx } from '../../../contracts/types'
 import { buf2hex, hex2buf } from '../../../utils/utils'
 import { addGasMargin, isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { usePoolPayload } from './usePoolPayload'
 
@@ -65,13 +66,14 @@ export function useClaimCallback(
             })
 
         // step 2-1: blocking
-        return new Promise<string>((resolve, reject) => {
-            const onSucceed = (hash: string) => {
+        return new Promise<void>((resolve, reject) => {
+            const onSucceed = (no = 0, receipt: TransactionReceipt) => {
                 setClaimState({
-                    type: TransactionStateType.HASH,
-                    hash,
+                    type: TransactionStateType.CONFIRMED,
+                    no,
+                    receipt,
                 })
-                resolve(hash)
+                no !== 0 && resolve()
             }
             const onFailed = (error: Error) => {
                 setClaimState({
@@ -80,16 +82,14 @@ export function useClaimCallback(
                 })
                 reject(error)
             }
-            ITO_Contract.methods.claim(...params).send(
-                {
-                    gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
-                    ...config,
-                },
-                async (error: Error | null, hash: string) => {
-                    if (hash) onSucceed(hash)
-                    else if (error) onFailed(error)
-                },
-            )
+            const promiEvent = ITO_Contract.methods.claim(...params).send({
+                gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                ...config,
+            })
+
+            promiEvent.on(TransactionEventType.ERROR, onFailed)
+            promiEvent.on(TransactionEventType.CONFIRMATION, onSucceed)
+            promiEvent.on(TransactionEventType.RECEIPT, onSucceed)
         })
     }, [ITO_Contract, id, password, account, poolPayload, total, token.address])
 
