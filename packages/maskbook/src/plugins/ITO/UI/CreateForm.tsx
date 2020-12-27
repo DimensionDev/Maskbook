@@ -161,10 +161,7 @@ export function CreateForm(props: CreateFormProps) {
             return t('plugin_ito_error_balance', {
                 symbol: tokenAndAmount?.token?.symbol,
             })
-        if (
-            !totalOfPerWallet ||
-            new BigNumber(totalOfPerWallet).isZero()
-        )
+        if (!totalOfPerWallet || new BigNumber(totalOfPerWallet).isZero())
             return t('plugin_ito_error_allocation_absence')
 
         if (new BigNumber(totalOfPerWallet).isGreaterThan(new BigNumber(tokenAndAmount?.amount ?? '0')))

@@ -275,7 +275,7 @@ export function ITO(props: ITO_Props) {
                             </Typography>
                         ) : (
                             <>
-                                    <Typography variant="body1">{`Limit per: ${formatBalance(
+                                <Typography variant="body1">{`Limit per: ${formatBalance(
                                     new BigNumber(limit),
                                     token.decimals ?? 0,
                                 )} ${token.symbol}`}</Typography>
