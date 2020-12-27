@@ -12,7 +12,7 @@
             "isBackground": true,
             "group": "build",
             "presentation": {
-                "reveal": "silent"
+                "reveal": "never"
             },
             "runOptions": { "instanceLimit": 1, "runOn": "folderOpen" }
         },
