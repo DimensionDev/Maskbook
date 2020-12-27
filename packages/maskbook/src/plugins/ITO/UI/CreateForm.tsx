@@ -161,12 +161,14 @@ export function CreateForm(props: CreateFormProps) {
             return t('plugin_ito_error_balance', {
                 symbol: tokenAndAmount?.token?.symbol,
             })
-
         if (
-            new BigNumber(totalOfPerWallet).isZero() ||
-            new BigNumber(totalOfPerWallet).isGreaterThan(new BigNumber(tokenAndAmount?.amount ?? '0'))
+            !totalOfPerWallet ||
+            new BigNumber(totalOfPerWallet).isZero()
         )
-            return t('plugin_ito_error_enter_allocation_per_walllet')
+            return t('plugin_ito_error_allocation_absence')
+
+        if (new BigNumber(totalOfPerWallet).isGreaterThan(new BigNumber(tokenAndAmount?.amount ?? '0')))
+            return t('plugin_ito_error_allocation_invalid')
 
         if (startTime === '' || endTime === '' || startTime >= endTime) return t('plugin_ito_error_exchange_time')
 
