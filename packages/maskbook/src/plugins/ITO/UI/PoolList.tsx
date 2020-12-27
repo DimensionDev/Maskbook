@@ -5,7 +5,7 @@ import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { useAllPoolsAsSeller } from '../hooks/useAllPoolsAsSeller'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import type { JSON_PayloadInMask } from '../types'
-import { PoolsInList } from './PoolInList'
+import { PoolInList } from './PoolInList'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -46,8 +46,6 @@ export function PoolList(props: PoolListProps) {
     })
     //#endregion
 
-    console.log('DEBUG: pool list')
-    console.log(pools)
     return (
         <>
             {loading ? (
@@ -64,9 +62,9 @@ export function PoolList(props: PoolListProps) {
                     width="100%"
                     height={500}
                     overscanCount={4}
-                    itemSize={60}
+                    itemSize={229}
                     itemData={{
-                        pools: pools,
+                        pools,
                         onSend: props.onSend,
                         onWithdraw(payload: JSON_PayloadInMask) {
                             destructCallback(payload.pid)
@@ -74,7 +72,7 @@ export function PoolList(props: PoolListProps) {
                     }}
                     itemCount={pools.length}
                     {...FixedSizeListProps}>
-                    {PoolsInList}
+                    {PoolInList}
                 </FixedSizeList>
             )}
         </>

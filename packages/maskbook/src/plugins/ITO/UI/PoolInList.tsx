@@ -23,11 +23,15 @@ import type { JSON_PayloadInMask } from '../types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
+        top: {
+            boxSizing: 'border-box',
+            paddingTop: theme.spacing(1),
+            paddingBottom: theme.spacing(1),
+        },
         root: {
             borderRadius: 10,
             display: 'flex',
             padding: theme.spacing(1),
-            margin: theme.spacing(2),
         },
         iconbar: {
             display: 'flex',
@@ -86,17 +90,21 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-interface PoolInListProps {
-    pool: JSON_PayloadInMask
+export interface PoolInListProps {
     index: number
-    onSend?: (pool: JSON_PayloadInMask) => void
-    onWithdraw?: (payload: JSON_PayloadInMask) => void
+    style: any
+    data: {
+        pools: JSON_PayloadInMask[]
+        onSend?: (pool: JSON_PayloadInMask) => void
+        onWithdraw?: (payload: JSON_PayloadInMask) => void
+    }
 }
 
-function PoolInList(props: PoolInListProps) {
+export function PoolInList({ data, index, style }: PoolInListProps) {
     const classes = useStyles()
     const { t } = useI18N()
-    const { pool, onSend, onWithdraw } = props
+    const { pools, onSend, onWithdraw } = data
+    const pool = pools[index]
 
     const progress =
         100 *
@@ -130,120 +138,102 @@ function PoolInList(props: PoolInListProps) {
         )
     }
     return (
-        <Card className={classes.root} variant="outlined">
-            <Box className={classes.iconbar}>
-                <TokenIcon classes={{ icon: classes.icon }} address={pool.token.address} />
-            </Box>
-            <Box className={classes.content}>
-                <Box className={classes.header}>
-                    <Box className={classes.title}>
-                        <Typography variant="body1" color="textPrimary">
-                            {pool.message}
+        <div className={classes.top} style={style}>
+            <Card className={classes.root} variant="outlined">
+                <Box className={classes.iconbar}>
+                    <TokenIcon classes={{ icon: classes.icon }} address={pool.token.address} />
+                </Box>
+                <Box className={classes.content}>
+                    <Box className={classes.header}>
+                        <Box className={classes.title}>
+                            <Typography variant="body1" color="textPrimary">
+                                {pool.message}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                                {t('plugin_ito_list_end_date', {
+                                    date: dateTimeFormat(new Date(pool.end_time * 1000)),
+                                })}
+                            </Typography>
+                        </Box>
+                        <Box className={classes.button}>
+                            <StatusButton />
+                        </Box>
+                    </Box>
+                    <Box className={classes.progress}>
+                        <LinearProgress variant="determinate" value={progress} />
+                    </Box>
+
+                    <Box className={classes.price}>
+                        <Typography variant="body2" color="textSecondary" component="span">
+                            {t('plugin_ito_list_sold_total')}
+                            <Typography variant="body2" color="textPrimary" component="span">
+                                {formatBalance(
+                                    new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)),
+                                    pool.token.decimals ?? '0',
+                                )}
+                            </Typography>
                         </Typography>
+                        <Typography variant="body2" color="textSecondary" component="span">
+                            {t('plugin_ito_list_total')}
+                            <Typography variant="body2" color="textPrimary" component="span">
+                                {formatBalance(new BigNumber(pool.total), pool.token.decimals ?? 0)}
+                            </Typography>{' '}
+                            {pool.token.symbol}
+                        </Typography>
+                    </Box>
+
+                    <Box className={classes.deteils}>
                         <Typography variant="body2" color="textSecondary">
-                            {t('plugin_ito_list_end_date', {
-                                date: dateTimeFormat(new Date(pool.end_time * 1000)),
-                            })}
+                            {t('plugin_ito_list_sold_details')}
                         </Typography>
-                    </Box>
-                    <Box className={classes.button}>
-                        <StatusButton />
-                    </Box>
-                </Box>
-                <Box className={classes.progress}>
-                    <LinearProgress variant="determinate" value={progress} />
-                </Box>
-
-                <Box className={classes.price}>
-                    <Typography variant="body2" color="textSecondary" component="span">
-                        {t('plugin_ito_list_sold_total')}
-                        <Typography variant="body2" color="textPrimary" component="span">
-                            {formatBalance(
-                                new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)),
-                                pool.token.decimals ?? '0',
-                            )}
-                        </Typography>
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="span">
-                        {t('plugin_ito_list_total')}
-                        <Typography variant="body2" color="textPrimary" component="span">
-                            {formatBalance(new BigNumber(pool.total), pool.token.decimals ?? 0)}
-                        </Typography>{' '}
-                        {pool.token.symbol}
-                    </Typography>
-                </Box>
-
-                <Box className={classes.deteils}>
-                    <Typography variant="body2" color="textSecondary">
-                        {t('plugin_ito_list_sold_details')}
-                    </Typography>
-                    <TableContainer component={Paper} className={classes.table}>
-                        <Table size="small">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell className={classes.table_title} align="center" size="small">
-                                        {t('plugin_ito_list_table_type')}
-                                    </TableCell>
-                                    <TableCell className={classes.table_title} align="center" size="small">
-                                        {t('plugin_ito_list_table_price')}
-                                    </TableCell>
-                                    <TableCell className={classes.table_title} align="center" size="small">
-                                        {t('plugin_ito_list_table_sold', { token: pool.token.symbol })}
-                                    </TableCell>
-                                    <TableCell className={classes.table_title} align="center" size="small">
-                                        {t('plugin_ito_list_table_got')}
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {pool.exchange_tokens.map((token, index) => (
+                        <TableContainer component={Paper} className={classes.table}>
+                            <Table size="small">
+                                <TableHead>
                                     <TableRow>
-                                        <TableCell className={classes.cell} align="center" size="small">
-                                            {token.symbol}
+                                        <TableCell className={classes.table_title} align="center" size="small">
+                                            {t('plugin_ito_list_table_type')}
                                         </TableCell>
-                                        <TableCell className={classes.cell} align="center" size="small">
-                                            {pool.exchange_amounts[index]} {token.symbol} / {pool.token.symbol}
+                                        <TableCell className={classes.table_title} align="center" size="small">
+                                            {t('plugin_ito_list_table_price')}
                                         </TableCell>
-                                        <TableCell className={classes.cell} align="center" size="small">
-                                            {formatBalance(
-                                                new BigNumber(pool.exchange_volumes[0] ?? 0),
-                                                pool.token.decimals ?? 0,
-                                            )}
+                                        <TableCell className={classes.table_title} align="center" size="small">
+                                            {t('plugin_ito_list_table_sold', { token: pool.token.symbol })}
                                         </TableCell>
-                                        <TableCell className={classes.cell} align="center" size="small">
-                                            {formatBalance(
-                                                new BigNumber(pool.exchange_volumes[1] ?? 0),
-                                                pool.token.decimals ?? 0,
-                                            )}{' '}
-                                            {token.symbol}
+                                        <TableCell className={classes.table_title} align="center" size="small">
+                                            {t('plugin_ito_list_table_got')}
                                         </TableCell>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                </TableHead>
+                                <TableBody>
+                                    {pool.exchange_tokens.map((token, index) => (
+                                        <TableRow>
+                                            <TableCell className={classes.cell} align="center" size="small">
+                                                {token.symbol}
+                                            </TableCell>
+                                            <TableCell className={classes.cell} align="center" size="small">
+                                                {pool.exchange_amounts[index]} {token.symbol} / {pool.token.symbol}
+                                            </TableCell>
+                                            <TableCell className={classes.cell} align="center" size="small">
+                                                {formatBalance(
+                                                    new BigNumber(pool.exchange_volumes[0] ?? 0),
+                                                    pool.token.decimals ?? 0,
+                                                )}
+                                            </TableCell>
+                                            <TableCell className={classes.cell} align="center" size="small">
+                                                {formatBalance(
+                                                    new BigNumber(pool.exchange_volumes[1] ?? 0),
+                                                    pool.token.decimals ?? 0,
+                                                )}{' '}
+                                                {token.symbol}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Box>
                 </Box>
-            </Box>
-        </Card>
-    )
-}
-
-export interface PoolsInListProps {
-    index: number
-    data: {
-        pools: JSON_PayloadInMask[]
-        onSend?: (pool: JSON_PayloadInMask) => void
-        onWithdraw?: (payload: JSON_PayloadInMask) => void
-    }
-}
-
-export function PoolsInList(props: PoolsInListProps) {
-    const { pools, onSend, onWithdraw } = props.data
-    return (
-        <>
-            {pools.map((pool, index) => (
-                <PoolInList pool={pool} onSend={onSend} onWithdraw={onWithdraw} key={pool.pid} index={index} />
-            ))}
-        </>
+            </Card>
+        </div>
     )
 }
