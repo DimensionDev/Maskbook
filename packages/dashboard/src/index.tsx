@@ -6,6 +6,7 @@ import { setService, WebExtensionExternalChannel } from './API'
 import { App } from './App'
 import { AsyncCall } from 'async-call-rpc'
 import { serializer } from '@dimensiondev/maskbook-shared'
+import { StylesProvider } from '@material-ui/core/styles'
 
 // Patch for esbuild (not support JSX new transform)
 Object.assign(globalThis, { React })
@@ -23,7 +24,11 @@ setService(
     }),
 )
 
-ReactDOM.unstable_createRoot(document.getElementById('root')!).render(<App />)
+ReactDOM.unstable_createRoot(document.getElementById('root')!).render(
+    <StylesProvider injectFirst>
+        <App />
+    </StylesProvider>,
+)
 
 if (!import.meta.hot) {
     throw new Error('This app is not used to run as an isolated web site currently')
