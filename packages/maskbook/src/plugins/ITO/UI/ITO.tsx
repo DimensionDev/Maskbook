@@ -258,8 +258,8 @@ export function ITO(props: ITO_Props) {
                         return TokenIcon ? (
                             <div className={classes.rationWrap}>
                                 <TokenItem
-                                    ratio={new BigNumber(exchange_amounts[i * 2 + 1])
-                                        .dividedBy(new BigNumber(exchange_amounts[i * 2]))
+                                    ratio={new BigNumber(exchange_amounts[i * 2])
+                                        .dividedBy(new BigNumber(exchange_amounts[i * 2 + 1]))
                                         .multipliedBy(Math.pow(10, token.decimals - exchange_tokens[i].decimals))}
                                     TokenIcon={TokenIcon}
                                     tokenSymbol={t.symbol!}

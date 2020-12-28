@@ -116,7 +116,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
         const exchangeAmounts_ = exchangeAmounts.map((x, i) => {
             const amount = new BigNumber(x)
             const divisor = gcd(ONE_TOKEN, amount)
-            return [ONE_TOKEN.dividedToIntegerBy(divisor), amount.dividedToIntegerBy(divisor)] as const
+            return [amount.dividedToIntegerBy(divisor), ONE_TOKEN.dividedToIntegerBy(divisor)] as const
         })
         const totalAmount = new BigNumber(total)
         const invalidTokenAt = exchangeAmounts_.findIndex(([tokenAmountA, tokenAmountB]) =>
@@ -154,8 +154,6 @@ export function useFillCallback(poolSettings: PoolSettings) {
             total,
             limit,
         ]
-        console.log('-----')
-        console.log(params)
 
         // step 1: estimate gas
         const estimatedGas = await ITO_Contract.methods

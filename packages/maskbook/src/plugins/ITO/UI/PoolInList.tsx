@@ -171,7 +171,8 @@ export function PoolInList({ data, index, style }: PoolInListProps) {
                                     new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)),
                                     pool.token.decimals ?? '0',
                                 )}
-                            </Typography>
+                            </Typography>{' '}
+                            {pool.token.symbol}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="span">
                             {t('plugin_ito_list_total')}
@@ -211,7 +212,8 @@ export function PoolInList({ data, index, style }: PoolInListProps) {
                                                 {token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
-                                                {pool.exchange_amounts[index]} {token.symbol} / {pool.token.symbol}
+                                                {pool.exchange_amounts[index * 2 + 1]} {token.symbol} /{' '}
+                                                {pool.token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 {formatBalance(
