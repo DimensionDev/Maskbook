@@ -351,7 +351,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                 }}
                                 disabled={sendTxValidation}>
                                 {t('plugin_wallet_token_unlock', {
-                                    balance: claimAmount.toFixed(),
+                                    balance: formatBalance(claimAmount, swapToken.decimals ?? 0),
                                     symbol: swapToken.symbol ?? 'Token',
                                 })}{' '}
                             </ActionButton>
