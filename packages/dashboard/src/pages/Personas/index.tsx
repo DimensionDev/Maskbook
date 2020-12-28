@@ -1,9 +1,9 @@
 import { Button, Typography } from '@material-ui/core'
 import { DashboardFrame } from '../../components/DashboardFrame'
 
-export default function Wallets() {
+export default function Personas() {
     return (
-        <DashboardFrame title="Wallets" primaryAction={<Button>Create a new wallet</Button>}>
+        <DashboardFrame title="Personas" primaryAction={<Button>Create a new wallet</Button>}>
             <Typography>Hi</Typography>
         </DashboardFrame>
     )
