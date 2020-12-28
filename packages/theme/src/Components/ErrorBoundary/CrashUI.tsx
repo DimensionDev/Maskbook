@@ -18,8 +18,8 @@ export type CrashUIProps = ErrorBoundaryError & {
 export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
     const classes = useStyle()
     const [showStack, setShowStack] = useState(false)
-    const { getBody, getTitle, getMailtoTarget, use_i18n } = useContext(ErrorBoundaryContext)
-    const t = use_i18n()
+    const { getBody, getTitle, getMailtoTarget, useErrorBoundaryI18n } = useContext(ErrorBoundaryContext)
+    const t = useErrorBoundaryI18n()
     const reportTitle = getTitle(error)
     const reportBody = getBody(error)
     const githubLink = useMemo(() => {

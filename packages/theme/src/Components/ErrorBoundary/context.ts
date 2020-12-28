@@ -4,8 +4,8 @@ export interface ErrorBoundaryError {
     message: string
     stack: string
 }
-export const ErrorBoundaryContext = createContext({
-    use_i18n() {
+export const ErrorBoundaryContextDefault = {
+    useErrorBoundaryI18n() {
         return {
             crash_title_of: (subject: string): string => `${subject} has an error`,
             try_to_recover: (): string => `Try to recover`,
@@ -30,4 +30,5 @@ Error stack:
     getMailtoTarget(): string {
         return 'info@dimension.im'
     },
-})
+}
+export const ErrorBoundaryContext = createContext(ErrorBoundaryContextDefault)
