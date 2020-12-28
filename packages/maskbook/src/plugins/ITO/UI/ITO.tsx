@@ -207,7 +207,7 @@ export function ITO(props: ITO_Props) {
 
     return (
         <div>
-            <Card className={classes.root}>
+            <Card className={classes.root} elevation={0}>
                 <Box className={classes.header}>
                     <Typography variant="h5" className={classes.title}>
                         {payload.message}
@@ -223,10 +223,11 @@ export function ITO(props: ITO_Props) {
                     ) : null}
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
-                    {`Sold ${formatBalance(sold, token.decimals ?? 0)} Sell Total Amount ${formatBalance(
+                    {`Sold ${formatBalance(sold, token.decimals ?? 0)} ${token.symbol} within ${formatBalance(
                         total,
                         token.decimals ?? 0,
                     )} ${token.symbol}`}
+                    .
                     <Link
                         className={classes.tokenLink}
                         href={`${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`}
