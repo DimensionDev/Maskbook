@@ -1,16 +1,8 @@
-import {
-    makeStyles,
-    useMediaQuery,
-    Toolbar,
-    Theme,
-    Typography,
-    AppBar,
-    Grid,
-    Box,
-} from '@material-ui/core'
+import { makeStyles, useMediaQuery, Toolbar, Theme, Typography, AppBar, Grid, Box } from '@material-ui/core'
 import Color from 'color'
 import clz from 'classnames'
 import { Navigation } from './Navigation'
+import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
 
 const useStyles = makeStyles((theme) => ({
     root: { backgroundColor: theme.palette.background.paper },
@@ -56,11 +48,13 @@ export function DashboardFrame(props: DashboardFrameProps) {
                             {right}
                         </Toolbar>
                     </AppBar>
-                    <Grid item xs className={classes.containment}>
-                        <div className={clz(classes.shapeHelper, classes.shape)}>
-                            <div className={clz(classes.container, classes.shape)}>{props.children}</div>
-                        </div>
-                    </Grid>
+                    <ErrorBoundary>
+                        <Grid item xs className={classes.containment}>
+                            <div className={clz(classes.shapeHelper, classes.shape)}>
+                                <div className={clz(classes.container, classes.shape)}>{props.children}</div>
+                            </div>
+                        </Grid>
+                    </ErrorBoundary>
                 </Grid>
             </Grid>
         </>
