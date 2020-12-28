@@ -26,7 +26,7 @@ import './utils/native-rpc/index'
 import('./plugins/PluginSerivce')
 
 import tasks from './extension/content-script/tasks'
-import Services, { ServicesAdditionalConnections } from './extension/service'
+import Services, { BackgroundServicesAdditionalConnections } from './extension/service'
 import type { EventBasedChannel } from 'async-call-rpc/full'
 Object.assign(globalThis, { tasks })
 
@@ -157,7 +157,7 @@ initAutoShareToFriends()
 if (process.env.NODE_ENV === 'development' && process.env.architecture === 'web' && process.env.target === 'chromium') {
     browser.runtime.onConnectExternal.addListener((port) => {
         if (!(port.name in Services)) port.disconnect()
-        ServicesAdditionalConnections[port.name].newConnection(new PortChannel(port))
+        BackgroundServicesAdditionalConnections[port.name].newConnection(new PortChannel(port))
     })
 }
 class PortChannel implements EventBasedChannel {

@@ -25,14 +25,17 @@ const log: AsyncCallOptions['log'] = {
 
 export class MultiShotChannel implements CallbackBasedChannel {
     newConnection(e: EventBasedChannel) {
-        e.on(async (data) => e.send(await this.handler(data)))
+        e.on(async (data) => {
+            const result = await this.handler(data)
+            result && e.send(result)
+        })
     }
     private handler!: (p: unknown) => Promise<unknown | undefined>
     setup(callback: (p: unknown) => Promise<unknown | undefined>) {
         this.handler = callback
     }
 }
-export const ServicesAdditionalConnections: Record<string, MultiShotChannel> = {}
+export const BackgroundServicesAdditionalConnections: Record<string, MultiShotChannel> = {}
 export const Services = {
     Crypto: add(() => import('./background-script/CryptoService'), 'Crypto', MockService.CryptoService),
     Identity: add(() => import('./background-script/IdentityService'), 'Identity'),
@@ -75,11 +78,18 @@ Object.defineProperty(BigNumber.prototype, '__debug__amount__', {
  * @param mock The mock Implementation, used in Storybook.
  */
 function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, generator = false): T {
-    let channel = ServicesAdditionalConnections[key]
-    if (!ServicesAdditionalConnections[key]) channel = ServicesAdditionalConnections[key] = new MultiShotChannel()
-    channel.newConnection(
-        message.events[key].bind(process.env.STORYBOOK ? MessageTarget.LocalOnly : MessageTarget.Broadcast),
+    let channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(
+        process.env.STORYBOOK ? MessageTarget.LocalOnly : MessageTarget.Broadcast,
     )
+
+    const isBackground = isEnvironment(Environment.ManifestBackground)
+    if (isBackground) {
+        const serverChannel =
+            BackgroundServicesAdditionalConnections[key] ||
+            (BackgroundServicesAdditionalConnections[key] = new MultiShotChannel())
+        serverChannel.newConnection(channel)
+        channel = serverChannel
+    }
     const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
     if (process.env.STORYBOOK) {
         // setup mock server in STORYBOOK
@@ -94,7 +104,6 @@ function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, gene
             { key, serializer: serializer, log: log, channel, strict: false },
         )
     }
-    const isBackground = isEnvironment(Environment.ManifestBackground)
     // Only background script need to provide it's implementation.
     const localImplementation = isBackground
         ? // Set original impl back to the globalThis, it will help debugging.
