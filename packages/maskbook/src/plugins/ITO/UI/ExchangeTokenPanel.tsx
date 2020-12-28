@@ -131,9 +131,9 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
 
     const chainId = useChainId()
 
-    const DAI_ADDRESS = useConstant(CONSTANTS, 'DAI_ADDRESS', chainId).toLowerCase()
-    const USDT_ADDRESS = useConstant(CONSTANTS, 'USDT_ADDRESS', chainId).toLowerCase()
-    const USDC_ADDRESS = useConstant(CONSTANTS, 'USDC_ADDRESS', chainId).toLowerCase()
+    const DAI_ADDRESS = useConstant(CONSTANTS, 'MSKA_ADDRESS', chainId).toLowerCase()
+    const USDT_ADDRESS = useConstant(CONSTANTS, 'MSKB_ADDRESS', chainId).toLowerCase()
+    const USDC_ADDRESS = useConstant(CONSTANTS, 'MSKC_ADDRESS', chainId).toLowerCase()
 
     const ETH = createEtherToken(chainId)
     const { value: DAI } = useERC20TokenDetailed(DAI_ADDRESS)

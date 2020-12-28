@@ -43,6 +43,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
 
     const chainId = useChainId()
+    if (!payload) return null
     const { tokenIconListTable } = getSupportTokenInfo(chainId)
     const CurrentTokenIcon = tokenIconListTable[payload.token.address]
     const ClaimTitle: EnumRecord<ClaimStatus, string> = {

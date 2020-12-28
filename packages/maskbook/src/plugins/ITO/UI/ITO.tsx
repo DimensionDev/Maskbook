@@ -27,9 +27,9 @@ export interface IconProps {
 
 export const getSupportTokenInfo = function (chainId = ChainId.Mainnet) {
     const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS', chainId).toLowerCase()
-    const DAI_ADDRESS = getConstant(CONSTANTS, 'DAI_ADDRESS', chainId).toLowerCase()
-    const USDT_ADDRESS = getConstant(CONSTANTS, 'USDT_ADDRESS', chainId).toLowerCase()
-    const USDC_ADDRESS = getConstant(CONSTANTS, 'USDC_ADDRESS', chainId).toLowerCase()
+    const DAI_ADDRESS = getConstant(CONSTANTS, 'MSKA_ADDRESS', chainId).toLowerCase()
+    const USDT_ADDRESS = getConstant(CONSTANTS, 'MSKB_ADDRESS', chainId).toLowerCase()
+    const USDC_ADDRESS = getConstant(CONSTANTS, 'MSKC_ADDRESS', chainId).toLowerCase()
 
     const tokenIconListTable = {
         [DAI_ADDRESS]: (props: IconProps) => <DaiIcon size={props.size} />,
