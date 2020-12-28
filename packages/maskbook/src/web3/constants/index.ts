@@ -27,7 +27,7 @@ export const CONSTANTS = {
     // contracts
     BALANCE_CHECKER_ADDRESS: {
         [ChainId.Mainnet]: '0xb1f8e55c7f64d203c1400b9d8555d050f94adf39',
-        [ChainId.Ropsten]: '0xb1f8e55c7f64d203c1400b9d8555d050f94adf39',
+        [ChainId.Ropsten]: '0x1604c587BF77702c2e944a15fAACE246B72ff6f6',
         [ChainId.Rinkeby]: '0xe3AE8Ae4160680C7Ac0FB0A79F519d7D7eAe06aB',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',

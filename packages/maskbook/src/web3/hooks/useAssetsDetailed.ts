@@ -1,4 +1,4 @@
-import type { AssetDetailed, EtherTokenDetailed, ERC20TokenDetailed } from '../types'
+import { AssetDetailed, EtherTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../types'
 import { useTokensBalance } from './useTokensBalance'
 import { useAssetsDetailedMerged } from './useAssetsDetailedMerged'
 
@@ -8,7 +8,9 @@ import { useAssetsDetailedMerged } from './useAssetsDetailedMerged'
  * @param tokens
  */
 export function useAssetsDetailed(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
-    const { value: listOfBalance = [] } = useTokensBalance(tokens.map((x) => x.address))
+    const { value: listOfBalance = [] } = useTokensBalance(
+        tokens.filter((x) => x.type === EthereumTokenType.ERC20).map((y) => y.address),
+    )
     return useAssetsDetailedMerged(
         // the length not matched in the case of error occurs
         listOfBalance.length === tokens.length
