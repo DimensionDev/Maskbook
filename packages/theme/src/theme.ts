@@ -1,6 +1,6 @@
 import { createMuiTheme, PaletteMode, ThemeOptions } from '@material-ui/core'
 import * as Changes from './changes'
-import * as Components from './components'
+import * as Components from './component-changes'
 import { merge } from 'lodash-es'
 import type { PaletteOptions } from '@material-ui/core/styles/createPalette'
 
@@ -31,3 +31,4 @@ function MaskTheme(mode: PaletteMode) {
 }
 export const MaskLightTheme = MaskTheme('light')
 export const MaskDarkTheme = MaskTheme('dark')
+export * from './Components'
