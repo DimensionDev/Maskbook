@@ -2,7 +2,7 @@
 
 ## Feature Set
 
-- [ ] Create ITO packet
+- [x] Able to manipulate ITO packets on Twitter.
 
 ## Related discussion
 
