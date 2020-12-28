@@ -73,7 +73,7 @@ export function useClaimCallback(
                     no,
                     receipt,
                 })
-                no !== 0 && resolve()
+                resolve()
             }
             const onFailed = (error: Error) => {
                 setClaimState({

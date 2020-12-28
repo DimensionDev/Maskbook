@@ -168,7 +168,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     const claimAmountErrText = useMemo(() => {
         const amount = claimAmount.dividedBy(ratio)
         if (tokenBalanceLoading) return ''
-        return amount.isGreaterThan(new BigNumber(tokenBalance))
+        return claimAmount.isGreaterThan(new BigNumber(tokenBalance))
             ? t('plugin_ito_error_balance', { symbol: swapToken.symbol })
             : amount.isGreaterThan(new BigNumber(payload.limit))
             ? t('plugin_ito_dialog_claim_swap_exceed_wallet_limit')
@@ -293,6 +293,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                         value === ''
                             ? new BigNumber(0)
                             : new BigNumber(Number(value)).multipliedBy(Math.pow(10, swapToken.decimals))
+                    console.log('setClaimAmount', val.toFixed())
                     setClaimAmount(val)
                     setTokenAmount(val.dividedBy(ratio))
                 }}
