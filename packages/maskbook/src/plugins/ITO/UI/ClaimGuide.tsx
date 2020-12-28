@@ -35,9 +35,9 @@ interface ClaimGuideProps extends Pick<ClaimDialogProps, 'exchangeTokens' | 'pay
 
 export function ClaimGuide(props: ClaimGuideProps) {
     const { t } = useI18N()
-    const { payload, exchangeTokens, revalidateAvailability } = props
+    const { payload, exchangeTokens, revalidateAvailability, onClose } = props
     const classes = useStyles()
-    const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Remind)
+    const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Share)
 
     const initAmount = new BigNumber(payload.limit).dividedBy(2)
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
@@ -82,7 +82,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
                                     />
                                 )
                             case ClaimStatus.Share:
-                                return <ShareDialog token={payload.token} tokenAmount={tokenAmount} />
+                                return <ShareDialog token={payload.token} tokenAmount={tokenAmount} onClose={onClose} />
                             default:
                                 return null
                         }

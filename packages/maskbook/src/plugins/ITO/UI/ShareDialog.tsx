@@ -6,6 +6,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import ITO_ShareImage from '../assets/share_ito'
+import { usePostLink } from '../../../components/DataSource/usePostInfo'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -55,19 +56,21 @@ const useStyles = makeStyles((theme) =>
 export interface ShareDialogProps extends withClasses<'root'> {
     token: EtherTokenDetailed | ERC20TokenDetailed
     tokenAmount: BigNumber
+    onClose: () => void
 }
 
 export function ShareDialog(props: ShareDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const { token, tokenAmount } = props
-
+    const postLink = usePostLink()
+    const amount = formatBalance(tokenAmount, token.decimals ?? 0)
     return (
         <>
             <Box className={classes.shareWrapper}>
                 <div className={classes.shareImage}>
                     <Typography variant="body1" className={classes.shareAmount}>
-                        {formatBalance(tokenAmount, token.decimals ?? 0)}
+                        {amount}
                     </Typography>
                     <Typography variant="body1" className={classes.shareToken}>
                         {token.symbol}
@@ -76,7 +79,22 @@ export function ShareDialog(props: ShareDialogProps) {
                         {t('plugin_ito_you_got')}
                     </Typography>
                 </div>
-                <ActionButton variant="contained" color="primary" className={classes.shareButton}>
+                <ActionButton
+                    onClick={() => {
+                        props.onClose()
+                        window.open(
+                            `https://twitter.com/intent/tweet?text=${t('plugin_ito_claim_success_share', {
+                                link: encodeURIComponent(postLink),
+                                amount,
+                                symbol: token.symbol,
+                            })}`,
+                            '_blank',
+                            'noopener noreferrer',
+                        )
+                    }}
+                    variant="contained"
+                    color="primary"
+                    className={classes.shareButton}>
                     {t('plugin_ito_dialog_claim_share_title')}
                 </ActionButton>
             </Box>
