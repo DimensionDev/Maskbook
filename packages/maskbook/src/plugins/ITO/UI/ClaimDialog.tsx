@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) =>
             marginTop: theme.spacing(2),
         },
         swapLimitText: {
-            color: '#fff',
+            color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
             fontSize: '14px',
             width: 'fit-content',
         },
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) =>
                 width: '28px',
                 height: '28px',
                 marginTop: '-12px',
-                background: '#fff',
+                background: theme.palette.mode === 'dark' ? '#fff' : '2CA4EF, 100%',
             },
             '& .MuiSlider-rail': {
                 height: '5px',
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) =>
             color: '#6F767C',
         },
         exchangeAmountText: {
-            color: '#fff',
+            color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
         },
         swapInput: {
             marginTop: theme.spacing(3),
@@ -90,7 +90,7 @@ const useStyles = makeStyles((theme) =>
         },
         swapInputChipBalance: {
             fontSize: '1rem',
-            color: '#fff',
+            color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
             marginBottom: theme.spacing(3.5),
         },
         swapInputChipToken: {

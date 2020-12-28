@@ -19,12 +19,15 @@ const useStyles = makeStyles((theme) =>
         shareAmount: {
             fontSize: 23,
             marginTop: 140,
+            color: '#fff',
         },
         shareToken: {
             fontSize: 23,
+            color: '#fff',
         },
         shareText: {
             fontSize: 24,
+            color: '#fff',
             marginTop: 80,
         },
         shareButton: {

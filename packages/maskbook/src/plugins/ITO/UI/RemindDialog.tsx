@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) =>
             alignItems: 'center',
             marginTop: theme.spacing(2),
             padding: '1rem 2rem',
-            background: '#17191D',
+            background: theme.palette.mode === 'dark' ? '#17191D' : '#F7F9FA',
             borderRadius: '15px',
         },
         tokenIcon: {
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) =>
             marginLeft: '1rem',
         },
         tokenSymbol: {
-            color: '#fff',
+            color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
             fontSize: '18px',
             cursor: 'default',
         },
@@ -67,6 +67,7 @@ const useStyles = makeStyles((theme) =>
         button: {
             width: 'fit-content',
             margin: '0 auto',
+            padding: '6px 48px',
         },
     }),
 )
