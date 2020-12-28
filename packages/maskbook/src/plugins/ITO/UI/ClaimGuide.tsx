@@ -37,7 +37,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
     const { t } = useI18N()
     const { payload, exchangeTokens, revalidateAvailability, onClose } = props
     const classes = useStyles()
-    const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Share)
+    const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Remind)
 
     const initAmount = new BigNumber(payload.limit).dividedBy(2)
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)

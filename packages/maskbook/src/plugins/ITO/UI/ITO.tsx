@@ -21,6 +21,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { formatDateTime, formatTimeDiffer } from '../../../utils/date'
 import { ClaimGuide } from './ClaimGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import { useShareLink } from '../../../utils/hooks/useShareLink'
 
 export interface IconProps {
     size?: number
@@ -186,6 +187,11 @@ export function ITO(props: ITO_Props) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     const { tokenIconListTable } = getSupportTokenInfo(chainId)
+    const shareLink = useShareLink(
+        t('plugin_ito_claim_foreshow_share', {
+            link: postLink,
+        }),
+    )
     //#region token detailed
     const {
         value: availability,
@@ -205,13 +211,7 @@ export function ITO(props: ITO_Props) {
     }, [setSelectProviderDialogOpen])
     //#endregion
     const onShare = useCallback(async () => {
-        window.open(
-            `https://twitter.com/intent/tweet?text=${t('plugin_ito_claim_foreshow_share', {
-                link: encodeURIComponent(postLink),
-            })}`,
-            '_blank',
-            'noopener noreferrer',
-        )
+        window.open(shareLink, '_blank', 'noopener noreferrer')
     }, [])
     const onClaim = useCallback(async () => setOpenClaimDialog(true), [])
 

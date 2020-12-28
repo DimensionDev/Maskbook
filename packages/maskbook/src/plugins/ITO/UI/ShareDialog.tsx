@@ -7,6 +7,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import ITO_ShareImage from '../assets/share_ito'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import { useShareLink } from '../../../utils/hooks/useShareLink'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -65,6 +66,13 @@ export function ShareDialog(props: ShareDialogProps) {
     const { token, tokenAmount } = props
     const postLink = usePostLink()
     const amount = formatBalance(tokenAmount, token.decimals ?? 0)
+    const shareLink = useShareLink(
+        t('plugin_ito_claim_success_share', {
+            link: postLink,
+            amount,
+            symbol: token.symbol,
+        }),
+    )
     return (
         <>
             <Box className={classes.shareWrapper}>
@@ -82,15 +90,7 @@ export function ShareDialog(props: ShareDialogProps) {
                 <ActionButton
                     onClick={() => {
                         props.onClose()
-                        window.open(
-                            `https://twitter.com/intent/tweet?text=${t('plugin_ito_claim_success_share', {
-                                link: encodeURIComponent(postLink),
-                                amount,
-                                symbol: token.symbol,
-                            })}`,
-                            '_blank',
-                            'noopener noreferrer',
-                        )
+                        window.open(shareLink, '_blank', 'noopener noreferrer')
                     }}
                     variant="contained"
                     color="primary"
