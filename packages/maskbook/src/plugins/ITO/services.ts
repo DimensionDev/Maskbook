@@ -22,7 +22,7 @@ export async function getAllPoolsAsSeller(address: string) {
             ...x,
             pool: {
                 ...x.pool,
-                pid: pool.payload.pid,
+                password: pool.payload.password,
             },
         }
     })
