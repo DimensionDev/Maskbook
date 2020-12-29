@@ -256,7 +256,7 @@ export function ITO(props: ITO_Props) {
                     {exchange_tokens.map((t, i) => {
                         const TokenIcon = tokenIconListTable[t.address.toLowerCase()]
                         return TokenIcon ? (
-                            <div className={classes.rationWrap}>
+                            <div className={classes.rationWrap} key={i}>
                                 <TokenItem
                                     price={formatBalance(
                                         new BigNumber(exchange_amounts[i * 2])

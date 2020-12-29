@@ -75,7 +75,7 @@ export function useClaimCallback(
 
         // step 2-1: blocking
         return new Promise<void>((resolve, reject) => {
-            const onSucceed = (no = 0, receipt: TransactionReceipt) => {
+            const onSucceed = (no: number, receipt: TransactionReceipt) => {
                 setClaimState({
                     type: TransactionStateType.CONFIRMED,
                     no,
@@ -97,7 +97,7 @@ export function useClaimCallback(
 
             promiEvent.on(TransactionEventType.ERROR, onFailed)
             promiEvent.on(TransactionEventType.CONFIRMATION, onSucceed)
-            promiEvent.on(TransactionEventType.RECEIPT, onSucceed)
+            promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => onSucceed(0, receipt))
         })
     }, [ITO_Contract, id, password, account, payload, total, token.address])
 

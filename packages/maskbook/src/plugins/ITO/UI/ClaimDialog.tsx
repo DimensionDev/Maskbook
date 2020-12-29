@@ -243,6 +243,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
+
             // reset state
             resetCallback()
 
@@ -297,7 +298,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
                         value === ''
                             ? new BigNumber(0)
                             : new BigNumber(Number(value)).multipliedBy(Math.pow(10, swapToken.decimals))
-                    console.log('setClaimAmount', val.toFixed())
                     setClaimAmount(val)
                     setTokenAmount(val.dividedBy(ratio))
                 }}
