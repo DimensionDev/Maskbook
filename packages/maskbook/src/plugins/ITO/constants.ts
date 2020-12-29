@@ -13,8 +13,13 @@ export const ITO_CONSTANTS = {
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },
+    SUBGRAPH_URL: {
+        [ChainId.Mainnet]: '',
+        [ChainId.Ropsten]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+    },
 }
 
 export const ITO_CONTRACT_BASE_DATE = new Date(2020, 11, 1, 8, 0, 0, 0)
-
-export const ITO_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito'

@@ -1,5 +1,6 @@
 import { omit } from 'lodash-es'
-import { ITO_SUBGRAPH_URL } from '../constants'
+import { getConstant } from '../../../web3/helpers'
+import { ITO_CONSTANTS } from '../constants'
 import { payloadIntoMask } from '../helpers'
 import type { JSON_PayloadOutMask } from '../types'
 
@@ -43,7 +44,7 @@ const POOL_FIELDS = `
 `
 
 export async function getPool(pid: string) {
-    const response = await fetch(ITO_SUBGRAPH_URL, {
+    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL'), {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({
@@ -65,7 +66,7 @@ export async function getPool(pid: string) {
 }
 
 export async function getAllPoolsAsSeller(address: string) {
-    const response = await fetch(ITO_SUBGRAPH_URL, {
+    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL'), {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({
@@ -103,7 +104,7 @@ export async function getAllPoolsAsSeller(address: string) {
 }
 
 export async function getAllPoolsAsBuyer(address: string) {
-    const response = await fetch(ITO_SUBGRAPH_URL, {
+    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL'), {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({
