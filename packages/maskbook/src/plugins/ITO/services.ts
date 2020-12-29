@@ -1,9 +1,33 @@
 import type { JSON_PayloadInMask, PoolRecord } from './types'
-import * as database from './database'
 import { PluginITO_Messages } from './messages'
 
-export * from './apis'
-export * from './database'
+import * as subgraph from './apis'
+import * as database from './database'
+
+export async function getPool(pid: string) {
+    const poolFromChain = await subgraph.getPool(pid)
+    const poolFromDB = await database.getPoolFromDB(pid)
+    if (poolFromDB?.payload.password) poolFromChain.password = poolFromDB.payload.password
+    return poolFromChain
+}
+
+export function getAllPoolsAsBuyer(address: string) {
+    return subgraph.getAllPoolsAsBuyer(address)
+}
+
+export async function getAllPoolsAsSeller(address: string) {
+    const poolsFromChain = await subgraph.getAllPoolsAsSeller(address)
+    const poolsFromDB = await database.getPoolsFromDB(poolsFromChain.map((x) => x.pid))
+
+    return poolsFromChain.map((x) => {
+        const pool = poolsFromDB.find((y) => y.payload.pid === x.pid)
+        if (!pool) return x
+        return {
+            ...x,
+            pid: pool.payload.pid,
+        }
+    })
+}
 
 export async function discoverPool(from: string, payload: JSON_PayloadInMask) {
     if (!payload.pid) return

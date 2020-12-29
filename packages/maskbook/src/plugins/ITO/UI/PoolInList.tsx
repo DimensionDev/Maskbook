@@ -203,7 +203,7 @@ export function PoolInList({ data, index, style }: PoolInListProps) {
                                 </TableHead>
                                 <TableBody>
                                     {pool.exchange_tokens.map((token, index) => (
-                                        <TableRow>
+                                        <TableRow key={index}>
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 {token.symbol}
                                             </TableCell>

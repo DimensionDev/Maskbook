@@ -20,10 +20,10 @@ export function useClaimCallback(
     const account = useAccount()
     const ITO_Contract = useITO_Contract()
 
-    const { value: poolPayload } = usePoolPayload(id)
+    const { value: payload } = usePoolPayload(id)
     const [claimState, setClaimState] = useTransactionState()
     const claimCallback = useCallback(async () => {
-        if (!ITO_Contract || !poolPayload || !id || !password) {
+        if (!ITO_Contract || !payload || !id || !password) {
             setClaimState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -41,6 +41,14 @@ export function useClaimCallback(
             value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
         }
 
+        if (!new BigNumber(total).isPositive()) {
+            setClaimState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Invalid claim amount'),
+            })
+            return
+        }
+
         const params: Parameters<typeof ITO_Contract['methods']['claim']> = [
             id,
             Web3Utils.soliditySha3(
@@ -49,7 +57,7 @@ export function useClaimCallback(
             )!,
             account,
             Web3Utils.sha3(account)!,
-            poolPayload.exchange_tokens.findIndex((x) => isSameAddress(x.address, token.address)),
+            payload.exchange_tokens.findIndex((x) => isSameAddress(x.address, token.address)),
             total,
         ]
 
@@ -91,7 +99,7 @@ export function useClaimCallback(
             promiEvent.on(TransactionEventType.CONFIRMATION, onSucceed)
             promiEvent.on(TransactionEventType.RECEIPT, onSucceed)
         })
-    }, [ITO_Contract, id, password, account, poolPayload, total, token.address])
+    }, [ITO_Contract, id, password, account, payload, total, token.address])
 
     const resetCallback = useCallback(() => {
         setClaimState({
