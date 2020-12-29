@@ -93,7 +93,11 @@ export interface PoolInListProps {
     index: number
     style: any
     data: {
-        pools: JSON_PayloadInMask[]
+        pools: {
+            pool: JSON_PayloadInMask
+            exchange_in_volumes: string[]
+            exchange_out_volumes: string[]
+        }[]
         onSend?: (pool: JSON_PayloadInMask) => void
         onWithdraw?: (payload: JSON_PayloadInMask) => void
     }
@@ -103,7 +107,7 @@ export function PoolInList({ data, index, style }: PoolInListProps) {
     const classes = useStyles()
     const { t } = useI18N()
     const { pools, onSend, onWithdraw } = data
-    const pool = pools[index]
+    const { pool, exchange_in_volumes, exchange_out_volumes } = pools[index]
 
     const progress =
         100 *
@@ -194,7 +198,7 @@ export function PoolInList({ data, index, style }: PoolInListProps) {
                                             {t('plugin_ito_list_table_price')}
                                         </TableCell>
                                         <TableCell className={classes.table_title} align="center" size="small">
-                                            {t('plugin_ito_list_table_sold', { token: pool.token.symbol })}
+                                            {t('plugin_ito_list_table_sold')}
                                         </TableCell>
                                         <TableCell className={classes.table_title} align="center" size="small">
                                             {t('plugin_ito_list_table_got')}
@@ -228,14 +232,15 @@ export function PoolInList({ data, index, style }: PoolInListProps) {
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 {formatBalance(
-                                                    new BigNumber(pool.exchange_volumes[0]),
+                                                    new BigNumber(exchange_in_volumes[index]),
                                                     pool.token.decimals,
                                                     6,
-                                                )}
+                                                )}{' '}
+                                                {pool.token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 {formatBalance(
-                                                    new BigNumber(pool.exchange_volumes[1]),
+                                                    new BigNumber(exchange_out_volumes[index]),
                                                     pool.token.decimals,
                                                     6,
                                                 )}{' '}

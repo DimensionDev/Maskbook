@@ -11,22 +11,25 @@ export async function getPool(pid: string) {
     return poolFromChain
 }
 
-export function getAllPoolsAsBuyer(address: string) {
-    return subgraph.getAllPoolsAsBuyer(address)
-}
-
 export async function getAllPoolsAsSeller(address: string) {
     const poolsFromChain = await subgraph.getAllPoolsAsSeller(address)
-    const poolsFromDB = await database.getPoolsFromDB(poolsFromChain.map((x) => x.pid))
+    const poolsFromDB = await database.getPoolsFromDB(poolsFromChain.map((x) => x.pool.pid))
 
     return poolsFromChain.map((x) => {
-        const pool = poolsFromDB.find((y) => y.payload.pid === x.pid)
+        const pool = poolsFromDB.find((y) => y.payload.pid === x.pool.pid)
         if (!pool) return x
         return {
             ...x,
-            pid: pool.payload.pid,
+            pool: {
+                ...x.pool,
+                pid: pool.payload.pid,
+            },
         }
     })
+}
+
+export function getAllPoolsAsBuyer(address: string) {
+    return subgraph.getAllPoolsAsBuyer(address)
 }
 
 export async function discoverPool(from: string, payload: JSON_PayloadInMask) {

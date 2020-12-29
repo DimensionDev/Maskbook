@@ -444,7 +444,7 @@
     "plugin_ito_list_sold_details": "Sold Details",
     "plugin_ito_list_table_type": "Type",
     "plugin_ito_list_table_price": "Price",
-    "plugin_ito_list_table_sold": "Sold ({{token}})",
+    "plugin_ito_list_table_sold": "Sold",
     "plugin_ito_list_table_got": "Got",
     "plugin_ito_list_button_claim": "Withdraw",
     "plugin_ito_list_button_send": "Send",

@@ -22,17 +22,16 @@ export interface JSON_PayloadInMask {
     creation_time: number
     token: EtherTokenDetailed | ERC20TokenDetailed
     exchange_amounts: string[]
-    exchange_volumes: string[]
     exchange_tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
 }
 
-type Token = Omit<JSON_PayloadInMask['token'], 'chainId'> & {
+type TokenOutMask = Omit<JSON_PayloadInMask['token'], 'chainId'> & {
     chain_id: ChainId
 }
 
 export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
-    token: Token
-    exchange_tokens: Token[]
+    token: TokenOutMask
+    exchange_tokens: TokenOutMask[]
 }
 
 export enum ITO_Status {

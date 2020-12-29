@@ -1,3 +1,4 @@
+import { omit } from 'lodash-es'
 import { ITO_SUBGRAPH_URL } from '../constants'
 import { payloadIntoMask } from '../helpers'
 import type { JSON_PayloadOutMask } from '../types'
@@ -31,7 +32,6 @@ const POOL_FIELDS = `
         name
     }
     exchange_amounts
-    exchange_volumes
     exchange_tokens {
         chain_id
         type
@@ -74,6 +74,8 @@ export async function getAllPoolsAsSeller(address: string) {
                 sellInfos (where: { seller: "${address.toLowerCase()}" }) {
                     pool {
                         ${POOL_FIELDS}
+                        exchange_in_volumes
+                        exchange_out_volumes
                     }
                 }
             }
@@ -83,11 +85,21 @@ export async function getAllPoolsAsSeller(address: string) {
     const { data } = (await response.json()) as {
         data: {
             sellInfos: {
-                pool: JSON_PayloadOutMask
+                pool: JSON_PayloadOutMask & {
+                    exchange_in_volumes: string[]
+                    exchange_out_volumes: string[]
+                }
             }[]
         }
     }
-    return data.sellInfos.map((x) => x.pool).map(payloadIntoMask)
+    return data.sellInfos.map((x) => {
+        const pool = payloadIntoMask(omit(x.pool, ['exchange_in_volumes', 'exchange_out_volumes']))
+        return {
+            pool,
+            exchange_in_volumes: x.pool.exchange_in_volumes,
+            exchange_out_volumes: x.pool.exchange_out_volumes,
+        }
+    })
 }
 
 export async function getAllPoolsAsBuyer(address: string) {
@@ -100,6 +112,8 @@ export async function getAllPoolsAsBuyer(address: string) {
                 buyInfos (where: { buyer: "${address.toLowerCase()}" }) {
                     pool {
                         ${POOL_FIELDS}
+                        exchange_in_volumes
+                        exchange_out_volumes
                     }
                 }
             }
@@ -109,9 +123,19 @@ export async function getAllPoolsAsBuyer(address: string) {
     const { data } = (await response.json()) as {
         data: {
             buyInfos: {
-                pool: JSON_PayloadOutMask
+                pool: JSON_PayloadOutMask & {
+                    exchange_in_volumes: string[]
+                    exchange_out_volumes: string[]
+                }
             }[]
         }
     }
-    return data.buyInfos.map((x) => x.pool).map(payloadIntoMask)
+    return data.buyInfos.map((x) => {
+        const pool = payloadIntoMask(omit(x.pool, ['exchange_in_volumes', 'exchange_out_volumes']))
+        return {
+            pool,
+            exchange_in_volumes: x.pool.exchange_in_volumes,
+            exchange_out_volumes: x.pool.exchange_out_volumes,
+        }
+    })
 }
