@@ -417,7 +417,7 @@
     "plugin_ito_select_existing": "Select Existing",
     "plugin_ito_display_name": "ITO Composition Dialog",
     "plugin_ito_sell_token": "Sell Token",
-    "plugin_ito_sell_total_amount": "Sell Total amount",
+    "plugin_ito_sell_total_amount": "Sell Total Amount",
     "plugin_ito_allocation_per_wallet": "Allocation Per Wallet",
     "plugin_ito_begin_times": "Begin Times {{zone}}",
     "plugin_ito_end_times": "End Times {{zone}}",

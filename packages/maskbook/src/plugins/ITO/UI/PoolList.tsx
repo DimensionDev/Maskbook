@@ -1,5 +1,4 @@
 import { CircularProgress, createStyles, makeStyles, Typography, Box } from '@material-ui/core'
-import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { useAllPoolsAsSeller } from '../hooks/useAllPoolsAsSeller'
@@ -57,23 +56,17 @@ export function PoolList(props: PoolListProps) {
                     No Data
                 </Typography>
             ) : (
-                <FixedSizeList
-                    className={classes.list}
-                    width="100%"
-                    height={500}
-                    overscanCount={4}
-                    itemSize={230}
-                    itemData={{
-                        pools,
-                        onSend: props.onSend,
-                        onWithdraw(payload: JSON_PayloadInMask) {
-                            destructCallback(payload.pid)
-                        },
-                    }}
-                    itemCount={pools.length}
-                    {...FixedSizeListProps}>
-                    {PoolInList}
-                </FixedSizeList>
+                <div className={classes.list}>
+                    {pools.map((x) => (
+                        <PoolInList
+                            {...x}
+                            onSend={props.onSend}
+                            onWithdraw={(payload: JSON_PayloadInMask) => {
+                                destructCallback(payload.pid)
+                            }}
+                        />
+                    ))}
+                </div>
             )}
         </>
     )

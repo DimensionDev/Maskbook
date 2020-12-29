@@ -90,24 +90,17 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface PoolInListProps {
-    index: number
-    style: any
-    data: {
-        pools: {
-            pool: JSON_PayloadInMask
-            exchange_in_volumes: string[]
-            exchange_out_volumes: string[]
-        }[]
-        onSend?: (pool: JSON_PayloadInMask) => void
-        onWithdraw?: (payload: JSON_PayloadInMask) => void
-    }
+    pool: JSON_PayloadInMask
+    exchange_in_volumes: string[]
+    exchange_out_volumes: string[]
+    onSend?: (pool: JSON_PayloadInMask) => void
+    onWithdraw?: (payload: JSON_PayloadInMask) => void
 }
 
-export function PoolInList({ data, index, style }: PoolInListProps) {
-    const classes = useStyles()
+export function PoolInList(props: PoolInListProps) {
     const { t } = useI18N()
-    const { pools, onSend, onWithdraw } = data
-    const { pool, exchange_in_volumes, exchange_out_volumes } = pools[index]
+    const classes = useStyles()
+    const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onWithdraw } = props
 
     const progress =
         100 *
@@ -141,7 +134,7 @@ export function PoolInList({ data, index, style }: PoolInListProps) {
         )
     }
     return (
-        <div className={classes.top} style={style}>
+        <div className={classes.top}>
             <Card className={classes.root} variant="outlined">
                 <Box className={classes.iconbar}>
                     <TokenIcon classes={{ icon: classes.icon }} address={pool.token.address} />

@@ -50,7 +50,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const { t } = useI18N()
 
     return (
-        <Card>
+        <Card elevation={0}>
             <Grid container spacing={0}>
                 <Grid item xs={12}>
                     <Typography variant="h3" className={classes.title} component="h3" color="textPrimary">
@@ -58,7 +58,9 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                    <Paper className={classes.label}>{t('plugin_ito_sell_token')}</Paper>
+                    <Paper className={classes.label}>
+                        <Typography>{t('plugin_ito_sell_token')}</Typography>
+                    </Paper>
                 </Grid>
                 <Grid item xs={6}>
                     <Paper className={classes.data} style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -72,12 +74,19 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 </Grid>
 
                 <Grid item xs={6}>
-                    <Paper className={classes.label}>{t('plugin_ito_sell_total_amount')}</Paper>
+                    <Paper className={classes.label}>
+                        <Typography>{t('plugin_ito_sell_total_amount')}</Typography>
+                    </Paper>
                 </Grid>
                 <Grid item xs={6}>
                     <Paper className={classes.data}>
-                        {formatBalance(new BigNumber(poolSettings?.total ?? '0'), poolSettings?.token?.decimals ?? 0)}{' '}
-                        {poolSettings?.token?.symbol}
+                        <Typography>
+                            {formatBalance(
+                                new BigNumber(poolSettings?.total ?? '0'),
+                                poolSettings?.token?.decimals ?? 0,
+                            )}{' '}
+                            {poolSettings?.token?.symbol}
+                        </Typography>
                     </Paper>
                 </Grid>
 
@@ -88,15 +97,19 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                             <Fragment key={index}>
                                 <Grid item xs={6}>
                                     <Paper className={classes.label}>
-                                        {item?.symbol}/{poolSettings?.token?.symbol}
+                                        <Typography>
+                                            {item?.symbol}/{poolSettings?.token?.symbol}
+                                        </Typography>
                                     </Paper>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Paper className={classes.data}>
-                                        {formatBalance(
-                                            new BigNumber(poolSettings?.exchangeAmounts[index]),
-                                            poolSettings?.token?.decimals ?? 6,
-                                        )}
+                                        <Typography>
+                                            {formatBalance(
+                                                new BigNumber(poolSettings?.exchangeAmounts[index]),
+                                                poolSettings?.token?.decimals ?? 6,
+                                            )}
+                                        </Typography>
                                     </Paper>
                                 </Grid>
                             </Fragment>
@@ -104,26 +117,41 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     })}
 
                 <Grid item xs={6}>
-                    <Paper className={classes.label}>{t('plugin_ito_allocation_per_wallet')}</Paper>
+                    <Paper className={classes.label}>
+                        <Typography>{t('plugin_ito_allocation_per_wallet')}</Typography>
+                    </Paper>
                 </Grid>
                 <Grid item xs={6}>
                     <Paper className={classes.data}>
-                        {formatBalance(new BigNumber(poolSettings?.limit ?? '0'), poolSettings?.token?.decimals ?? 0)}
+                        <Typography>
+                            {formatBalance(
+                                new BigNumber(poolSettings?.limit ?? '0'),
+                                poolSettings?.token?.decimals ?? 0,
+                            )}
+                        </Typography>
                     </Paper>
                 </Grid>
 
                 <Grid item xs={6}>
-                    <Paper className={classes.label}>{t('plugin_ito_begin_times')}</Paper>
+                    <Paper className={classes.label}>
+                        <Typography>{t('plugin_ito_begin_times')}</Typography>
+                    </Paper>
                 </Grid>
                 <Grid item xs={6}>
-                    <Paper className={classes.data}>{dateTimeFormat(poolSettings?.startTime!)}</Paper>
+                    <Paper className={classes.data}>
+                        <Typography>{dateTimeFormat(poolSettings?.startTime!)}</Typography>
+                    </Paper>
                 </Grid>
 
                 <Grid item xs={6}>
-                    <Paper className={classes.label}>{t('plugin_ito_end_times')}</Paper>
+                    <Paper className={classes.label}>
+                        <Typography>{t('plugin_ito_end_times')}</Typography>
+                    </Paper>
                 </Grid>
                 <Grid item xs={6}>
-                    <Paper className={classes.data}>{dateTimeFormat(poolSettings?.endTime!)}</Paper>
+                    <Paper className={classes.data}>
+                        <Typography>{dateTimeFormat(poolSettings?.endTime!)}</Typography>
+                    </Paper>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h5" className={classes.title} component="p">
