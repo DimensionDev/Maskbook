@@ -10,7 +10,6 @@ import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { useConstant } from '../../../web3/hooks/useConstant'
@@ -134,6 +133,7 @@ export interface ClaimDialogProps extends withClasses<'root'> {
     setTokenAmount: React.Dispatch<React.SetStateAction<BigNumber>>
     setStatus: React.Dispatch<React.SetStateAction<ClaimStatus>>
     chainId: ChainId
+    account: string
     token: EtherTokenDetailed | ERC20TokenDetailed
 }
 
@@ -147,6 +147,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
         setTokenAmount,
         setStatus,
         chainId,
+        account,
         token,
     } = props
     const classes = useStylesExtends(useStyles(), props)
@@ -160,7 +161,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
     )
     const [claimAmount, setClaimAmount] = useState<BigNumber>(initAmount.multipliedBy(ratio))
     const [openSwapTokenDialog, setOpenSwapTokenDialog] = useState(false)
-    const account = useAccount()
     const chainIdValid = useChainIdValid()
     const { tokenIconListTable } = getSupportTokenInfo(chainId)
     const CurrentSwapTokenIcon = tokenIconListTable[swapToken.address]

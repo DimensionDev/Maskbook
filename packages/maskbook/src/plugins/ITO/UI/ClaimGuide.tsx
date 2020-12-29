@@ -2,12 +2,13 @@ import { createStyles, DialogContent, makeStyles, Box, DialogProps } from '@mate
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useChainId } from '../../../web3/hooks/useChainState'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { getSupportTokenInfo } from './ITO'
 import { RemindDialog } from './RemindDialog'
 import { ShareDialog } from './ShareDialog'
 import { ClaimDialog, ClaimDialogProps } from './ClaimDialog'
+import { useAccount } from '../../../web3/hooks/useAccount'
+import { useChainId } from '../../../web3/hooks/useChainState'
 
 export enum ClaimStatus {
     Remind,
@@ -38,12 +39,10 @@ export function ClaimGuide(props: ClaimGuideProps) {
     const { payload, exchangeTokens, revalidateAvailability, onClose } = props
     const classes = useStyles()
     const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Remind)
-
     const initAmount = new BigNumber(payload.limit).dividedBy(2)
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
-
     const chainId = useChainId()
-    if (!payload) return null
+    const account = useAccount()
     const { tokenIconListTable } = getSupportTokenInfo(chainId)
     const CurrentTokenIcon = tokenIconListTable[payload.token.address]
     const ClaimTitle: EnumRecord<ClaimStatus, string> = {
@@ -51,6 +50,15 @@ export function ClaimGuide(props: ClaimGuideProps) {
         [ClaimStatus.Swap]: t('plugin_ito_dialog_claim_swap_title', { token: payload.token.symbol }),
         [ClaimStatus.Share]: t('plugin_ito_dialog_claim_share_title'),
     }
+
+    useEffect(() => {
+        setStatus(
+            chainId === payload.chain_id &&
+                payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
+                ? ClaimStatus.Share
+                : ClaimStatus.Remind,
+        )
+    }, [account, payload.buyers, chainId, payload.chain_id])
 
     return (
         <InjectedDialog open={props.open} title={ClaimTitle[status]} onClose={props.onClose}>
@@ -70,6 +78,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
                             case ClaimStatus.Swap:
                                 return (
                                     <ClaimDialog
+                                        account={account}
                                         initAmount={initAmount}
                                         tokenAmount={tokenAmount}
                                         setTokenAmount={setTokenAmount}

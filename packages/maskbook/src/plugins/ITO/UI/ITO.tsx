@@ -330,13 +330,15 @@ export function ITO(props: ITO_Props) {
                 ) : null}
             </Box>
 
-            <ClaimGuide
-                payload={payload}
-                exchangeTokens={exchange_tokens}
-                open={openClaimDialog}
-                onClose={() => setOpenClaimDialog(false)}
-                revalidateAvailability={revalidateAvailability}
-            />
+            {payload ? (
+                <ClaimGuide
+                    payload={payload}
+                    exchangeTokens={exchange_tokens}
+                    open={openClaimDialog}
+                    onClose={() => setOpenClaimDialog(false)}
+                    revalidateAvailability={revalidateAvailability}
+                />
+            ) : null}
         </div>
     )
 }
