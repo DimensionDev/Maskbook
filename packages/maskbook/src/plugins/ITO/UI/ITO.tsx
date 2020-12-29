@@ -152,9 +152,9 @@ const TokenItem = ({ price, TokenIcon, tokenSymbol, sellTokenSymbol }: TokenItem
     return (
         <>
             <TokenIcon />
-            <span>
-                <b>{price}</b> {tokenSymbol} / {sellTokenSymbol}
-            </span>
+            <Typography component="span">
+                <strong>{price}</strong> {tokenSymbol} / {sellTokenSymbol}
+            </Typography>
         </>
     )
 }

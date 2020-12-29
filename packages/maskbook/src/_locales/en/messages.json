@@ -404,7 +404,7 @@
     "plugin_ito_dialog_claim_reminder_text1": "Anyone can create an ERC20 token on Ethereum with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.",
     "plugin_ito_dialog_claim_reminder_text2": "This interface can load arbitrary tokens by token address. Please take extra caution and do your research when interacting with arbitrary ERC20 tokens.",
     "plugin_ito_dialog_claim_reminder_text3": "If you purchase an arbitrary token, you may be inable to sell it back.",
-    "plugin_ito_dialog_claim_reminder_agree": "I understand",
+    "plugin_ito_dialog_claim_reminder_agree": "I Understand",
     "plugin_ito_dialog_claim_swap_exchange": "In exchange for",
     "plugin_ito_dialog_claim_swap_approve_all": "Approve all",
     "plugin_ito_dialog_claim_swap_send": "Send",

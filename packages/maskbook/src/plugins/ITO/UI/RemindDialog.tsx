@@ -1,4 +1,4 @@
-import { Typography, Link, Checkbox, makeStyles, createStyles } from '@material-ui/core'
+import { Typography, Link, Checkbox, makeStyles, createStyles, FormControlLabel } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
@@ -120,16 +120,18 @@ export function RemindDialog(props: RemindDialogProps) {
                 </div>
             </section>
             <section className={classes.comfirmWrapper}>
-                <Checkbox
-                    color="primary"
-                    checked={agreeReminder}
-                    onChange={(event) => {
-                        setAgreeReminder(event.target.checked)
-                    }}
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            color="primary"
+                            checked={agreeReminder}
+                            onChange={(event) => {
+                                setAgreeReminder(event.target.checked)
+                            }}
+                        />
+                    }
+                    label={t('plugin_ito_dialog_claim_reminder_agree')}
                 />
-                <Typography variant="body1" className={classes.comfirmText}>
-                    {t('plugin_ito_dialog_claim_reminder_agree')}
-                </Typography>
             </section>
             <ActionButton
                 variant="contained"
