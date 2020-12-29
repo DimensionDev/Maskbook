@@ -448,7 +448,7 @@
     "plugin_ito_list_table_got": "Got",
     "plugin_ito_list_button_claim": "Withdraw",
     "plugin_ito_list_button_send": "Send",
-    "plugin_ito_your_claimed_amount": "You got {{amount}} {{symbol}}",
+    "plugin_ito_your_claimed_amount": "You got {{amount}} {{symbol}}.",
     "plugin_ito_you_got": "YOU GOT!",
     "plugin_ito_claim_success_share": "I just swapped {{amount}} {{symbol}} \n {{link}}",
     "plugin_ito_claim_foreshow_share": "Follow @realMaskbook (mask.io) to find more event!  \n {{link}}"

@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { createStyles, makeStyles, Typography, Grid, Paper, Card, IconButton } from '@material-ui/core'
 import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -6,6 +7,7 @@ import LaunchIcon from '@material-ui/icons/Launch'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { dateTimeFormat } from '../assets/formatDate'
+
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
@@ -83,7 +85,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     .filter((item, index) => item)
                     .map((item, index) => {
                         return (
-                            <>
+                            <Fragment key={index}>
                                 <Grid item xs={6}>
                                     <Paper className={classes.label}>
                                         {item?.symbol}/{poolSettings?.token?.symbol}
@@ -97,7 +99,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                                         )}
                                     </Paper>
                                 </Grid>
-                            </>
+                            </Fragment>
                         )
                     })}
 

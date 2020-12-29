@@ -30,12 +30,13 @@ const useStyles = makeStyles((theme) =>
         root: {
             borderRadius: 10,
             display: 'flex',
-            padding: theme.spacing(1),
+            padding: theme.spacing(2),
         },
         iconbar: {
             display: 'flex',
             justifyContent: 'center',
-            padding: theme.spacing(1),
+            paddingTop: theme.spacing(0.5),
+            paddingRight: theme.spacing(1),
         },
         icon: {
             width: 32,
@@ -48,6 +49,7 @@ const useStyles = makeStyles((theme) =>
         },
         header: {
             display: 'flex',
+            alignItems: 'center',
             paddingBottom: theme.spacing(1),
         },
         button: {
@@ -68,8 +70,6 @@ const useStyles = makeStyles((theme) =>
             paddingBottom: theme.spacing(1),
         },
         deteils: {
-            deisplay: 'flex',
-            flexDirection: 'column',
             '& > *': {
                 paddingBottom: theme.spacing(1),
             },
@@ -183,9 +183,6 @@ export function PoolInList({ data, index, style }: PoolInListProps) {
                     </Box>
 
                     <Box className={classes.deteils}>
-                        <Typography variant="body2" color="textSecondary">
-                            {t('plugin_ito_list_sold_details')}
-                        </Typography>
                         <TableContainer component={Paper} className={classes.table}>
                             <Table size="small">
                                 <TableHead>

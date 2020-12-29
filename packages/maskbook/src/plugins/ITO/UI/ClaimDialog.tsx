@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { WalletMessages } from '../../Wallet/messages'
+import { WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useClaimCallback } from '../hooks/useClaimCallback'
@@ -230,9 +230,13 @@ export function ClaimDialog(props: ClaimDialogProps) {
         swapToken,
     )
     //#region claim
-    const onSwap = useCallback(() => {
-        claimCallback()
-    }, [claimCallback])
+    const onSwap = useCallback(async () => {
+        await claimCallback()
+        if (payload.token.type === EthereumTokenType.ERC20) {
+            await WalletRPC.addERC20Token(payload.token)
+            await WalletRPC.trustERC20Token(account, payload.token)
+        }
+    }, [account, payload, claimCallback])
     //#endregion
 
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(

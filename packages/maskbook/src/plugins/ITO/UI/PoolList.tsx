@@ -62,7 +62,7 @@ export function PoolList(props: PoolListProps) {
                     width="100%"
                     height={500}
                     overscanCount={4}
-                    itemSize={229}
+                    itemSize={230}
                     itemData={{
                         pools,
                         onSend: props.onSend,

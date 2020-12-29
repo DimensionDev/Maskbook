@@ -4,6 +4,7 @@ import { ITO_MetaKey } from './constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from './types'
 import schema from './schema.json'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
+import { omit } from 'lodash-es'
 
 export const ITO_MetadataReader = createTypedMessageMetadataReader<JSON_PayloadInMask>(ITO_MetaKey, schema)
 export const renderWithITO_Metadata = createRenderWithMetadata(ITO_MetadataReader)
@@ -29,14 +30,14 @@ export function gcd(a: BigNumber, b: BigNumber) {
 
 export function tokenIntoMask(token: JSON_PayloadOutMask['token']) {
     return ({
-        ...token,
+        ...omit(token, 'chain_id'),
         chainId: token.chain_id,
     } as unknown) as EtherTokenDetailed | ERC20TokenDetailed
 }
 
 export function tokenOutMask(token: EtherTokenDetailed | ERC20TokenDetailed) {
     return {
-        ...token,
+        ...omit(token, 'chainId'),
         chain_id: token.chainId,
     } as JSON_PayloadOutMask['token']
 }
