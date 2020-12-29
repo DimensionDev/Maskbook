@@ -25,8 +25,7 @@ const useStyles = makeStyles((theme) =>
     createStyles({
         top: {
             boxSizing: 'border-box',
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(1),
+            padding: theme.spacing(1, 2, 1),
         },
         root: {
             borderRadius: 10,
@@ -212,19 +211,36 @@ export function PoolInList({ data, index, style }: PoolInListProps) {
                                                 {token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
-                                                {pool.exchange_amounts[index * 2 + 1]} {token.symbol} /{' '}
-                                                {pool.token.symbol}
+                                                {formatBalance(
+                                                    new BigNumber(pool.exchange_amounts[index * 2])
+                                                        .dividedBy(new BigNumber(pool.exchange_amounts[index * 2 + 1]))
+                                                        .multipliedBy(
+                                                            new BigNumber(10).pow(
+                                                                pool.token.decimals -
+                                                                    pool.exchange_tokens[index].decimals,
+                                                            ),
+                                                        )
+                                                        .multipliedBy(
+                                                            new BigNumber(10).pow(pool.exchange_tokens[index].decimals),
+                                                        )
+                                                        .integerValue(),
+                                                    pool.token.decimals,
+                                                    6,
+                                                )}{' '}
+                                                {token.symbol} / {pool.token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 {formatBalance(
-                                                    new BigNumber(pool.exchange_volumes[0] ?? 0),
-                                                    pool.token.decimals ?? 0,
+                                                    new BigNumber(pool.exchange_volumes[0]),
+                                                    pool.token.decimals,
+                                                    6,
                                                 )}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 {formatBalance(
-                                                    new BigNumber(pool.exchange_volumes[1] ?? 0),
-                                                    pool.token.decimals ?? 0,
+                                                    new BigNumber(pool.exchange_volumes[1]),
+                                                    pool.token.decimals,
+                                                    6,
                                                 )}{' '}
                                                 {token.symbol}
                                             </TableCell>

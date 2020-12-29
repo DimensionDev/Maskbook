@@ -142,18 +142,18 @@ export interface ITO_Props {
 }
 
 interface TokenItemProps {
-    ratio: BigNumber
     TokenIcon: (props: IconProps) => JSX.Element
+    price: string
     tokenSymbol: string
     sellTokenSymbol: string
 }
 
-const TokenItem = ({ ratio, TokenIcon, tokenSymbol, sellTokenSymbol }: TokenItemProps) => {
+const TokenItem = ({ price, TokenIcon, tokenSymbol, sellTokenSymbol }: TokenItemProps) => {
     return (
         <>
             <TokenIcon />
             <span>
-                <b>{ratio.toFixed()}</b> {tokenSymbol} / {sellTokenSymbol}
+                <b>{price}</b> {tokenSymbol} / {sellTokenSymbol}
             </span>
         </>
     )
@@ -233,9 +233,9 @@ export function ITO(props: ITO_Props) {
                     ) : null}
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
-                    {`Sold ${formatBalance(sold, token.decimals ?? 0)} ${token.symbol} within ${formatBalance(
+                    {`Sold ${formatBalance(sold, token.decimals)} ${token.symbol} within ${formatBalance(
                         total,
-                        token.decimals ?? 0,
+                        token.decimals,
                     )} ${token.symbol}`}
                     .
                     <Link
@@ -258,9 +258,16 @@ export function ITO(props: ITO_Props) {
                         return TokenIcon ? (
                             <div className={classes.rationWrap}>
                                 <TokenItem
-                                    ratio={new BigNumber(exchange_amounts[i * 2])
-                                        .dividedBy(new BigNumber(exchange_amounts[i * 2 + 1]))
-                                        .multipliedBy(Math.pow(10, token.decimals - exchange_tokens[i].decimals))}
+                                    price={formatBalance(
+                                        new BigNumber(exchange_amounts[i * 2])
+                                            .dividedBy(new BigNumber(exchange_amounts[i * 2 + 1]))
+                                            .multipliedBy(
+                                                new BigNumber(10).pow(token.decimals - exchange_tokens[i].decimals),
+                                            )
+                                            .multipliedBy(new BigNumber(10).pow(exchange_tokens[i].decimals))
+                                            .integerValue(),
+                                        exchange_tokens[i].decimals,
+                                    )}
                                     TokenIcon={TokenIcon}
                                     tokenSymbol={t.symbol!}
                                     sellTokenSymbol={token.symbol!}
@@ -276,10 +283,7 @@ export function ITO(props: ITO_Props) {
                           ) ? (
                             <Typography variant="body1">
                                 {t('plugin_ito_your_claimed_amount', {
-                                    amount: formatBalance(
-                                        new BigNumber(availability?.claimed ?? 0),
-                                        token.decimals ?? 0,
-                                    ),
+                                    amount: formatBalance(new BigNumber(availability?.claimed ?? 0), token.decimals),
                                     symbol: token.symbol,
                                 })}
                             </Typography>
@@ -287,7 +291,7 @@ export function ITO(props: ITO_Props) {
                             <>
                                 <Typography variant="body1">{`Limit per: ${formatBalance(
                                     new BigNumber(limit),
-                                    token.decimals ?? 0,
+                                    token.decimals,
                                 )} ${token.symbol}`}</Typography>
                                 <Typography variant="body1">
                                     {listOfStatus.includes(ITO_Status.waited)
