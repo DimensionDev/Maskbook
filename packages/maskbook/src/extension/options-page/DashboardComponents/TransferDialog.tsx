@@ -29,7 +29,6 @@ import { useCopyToClipboard } from 'react-use'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import { QRCode } from '../../../components/shared/qrcode'
 import { useCallback } from 'react'
-import React from 'react'
 import ShowcaseBox from './ShowcaseBox'
 import { BigNumber } from 'bignumber.js'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
@@ -270,7 +269,6 @@ export function DashboardWalletTransferDialog(
     const { wallet, token } = props.ComponentProps!
     const { t } = useI18N()
     const state = useState(0)
-    const [page, _] = state
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -294,13 +292,23 @@ export function DashboardWalletTransferDialog(
         ],
         state,
     }
+    const pageTitles = [
+        {
+            primary: t('wallet_transfer_title'),
+            secondary: '',
+            icon: <InfoIcon />,
+        },
+        {
+            primary: t('share_wallet'),
+            secondary: t('share_wallet_hint'),
+            icon: <ShareIcon />,
+        },
+    ]
 
     return (
         <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
-                primary={page === 0 ? t('wallet_transfer_title') : t('share_wallet')}
-                secondary={page === 0 ? '' : t('share_wallet_hint')}
-                icon={page === 0 ? <InfoIcon /> : <ShareIcon />}
+                {...pageTitles[state[0]]}
                 iconColor="#4EE0BC"
                 size="medium"
                 content={<AbstractTab height={345} {...tabProps} />}
