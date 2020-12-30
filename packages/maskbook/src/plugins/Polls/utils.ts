@@ -14,8 +14,8 @@ const PollMessage = createPluginMessage<{ _: unknown }>(identifier)
 export const PluginPollRPC = createPluginRPC(
     identifier,
     () => {
-    __webpack_public_path__ = browser.runtime.getURL('/')
-    const PollWorker = new OnDemandWorker(new URL('./Services.ts', import.meta.url), { name: 'Plugin/Poll' })
+        __webpack_public_path__ = browser.runtime.getURL('/')
+        const PollWorker = new OnDemandWorker(new URL('./Services.ts', import.meta.url), { name: 'Plugin/Poll' })
         return AsyncCall<typeof import('./Services')>({}, { channel: new WorkerChannel(PollWorker) })
     },
     PollMessage.events._,
