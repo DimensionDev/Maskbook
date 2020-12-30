@@ -1,5 +1,27 @@
 // Fix regenerator runtime
 globalThis.regeneratorRuntime = undefined
+globalThis.global = globalThis
+globalThis.process = new Proxy(
+    {
+        nextTick(f) {
+            Promise.resolve().then(f)
+        },
+        env: {},
+        browser: true,
+        __nwjs: undefined,
+        type: undefined,
+        versions: {},
+        [Symbol.toStringTag]: 'process',
+        binding: undefined,
+        argv: [],
+    },
+    {
+        get(_, key) {
+            if (!(key in _)) console.log('process.', key, 'is accessed. Please cover that.')
+            return _[key]
+        },
+    },
+)
 
 // Fix for globalThis !== window in content script in Firefox
 {
