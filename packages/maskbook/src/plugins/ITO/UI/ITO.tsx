@@ -20,6 +20,7 @@ import { ClaimGuide } from './ClaimGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
+import { sortTokens } from '../helpers'
 
 export interface IconProps {
     size?: number
@@ -238,24 +239,27 @@ export function ITO(props: ITO_Props) {
                     />
                 </Box>
                 <Box>
-                    {exchange_tokens.slice(0, 4).map((exchangeToken, i) => (
-                        <div className={classes.rationWrap} key={i}>
-                            <TokenItem
-                                price={formatBalance(
-                                    new BigNumber(exchange_amounts[i * 2])
-                                        .dividedBy(new BigNumber(exchange_amounts[i * 2 + 1]))
-                                        .multipliedBy(
-                                            new BigNumber(10).pow(token.decimals - exchange_tokens[i].decimals),
-                                        )
-                                        .multipliedBy(new BigNumber(10).pow(exchange_tokens[i].decimals))
-                                        .integerValue(),
-                                    exchange_tokens[i].decimals,
-                                )}
-                                token={token}
-                                exchangeToken={exchangeToken}
-                            />
-                        </div>
-                    ))}
+                    {exchange_tokens
+                        .slice(0, 4)
+                        .sort(sortTokens)
+                        .map((exchangeToken, i) => (
+                            <div className={classes.rationWrap} key={i}>
+                                <TokenItem
+                                    price={formatBalance(
+                                        new BigNumber(exchange_amounts[i * 2])
+                                            .dividedBy(new BigNumber(exchange_amounts[i * 2 + 1]))
+                                            .multipliedBy(
+                                                new BigNumber(10).pow(token.decimals - exchange_tokens[i].decimals),
+                                            )
+                                            .multipliedBy(new BigNumber(10).pow(exchange_tokens[i].decimals))
+                                            .integerValue(),
+                                        exchange_tokens[i].decimals,
+                                    )}
+                                    token={token}
+                                    exchangeToken={exchangeToken}
+                                />
+                            </div>
+                        ))}
                 </Box>
                 <Box className={classes.footer}>
                     <div>

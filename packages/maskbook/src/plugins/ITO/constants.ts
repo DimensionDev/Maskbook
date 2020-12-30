@@ -30,6 +30,20 @@ const USDT = createERC20Token(
     'Tether USD',
     'USDT',
 )
+const HUSD = createERC20Token(
+    ChainId.Mainnet,
+    getConstant(CONSTANTS, 'HUSD_ADDRESS', ChainId.Mainnet),
+    6,
+    'HUSD',
+    'HUSD',
+)
+const BUSD = createERC20Token(
+    ChainId.Mainnet,
+    getConstant(CONSTANTS, 'BUSD_ADDRESS', ChainId.Mainnet),
+    6,
+    'Binance USD',
+    'BUSD',
+)
 
 // Ropsten
 
@@ -95,7 +109,7 @@ export const ITO_CONSTANTS = {
         [ChainId.Gorli]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito',
     },
     EXCHANGE_TOKENS: {
-        [ChainId.Mainnet]: [DAI, USDC, USDT].map((x) => x.address),
+        [ChainId.Mainnet]: [DAI, USDC, USDT, HUSD, BUSD].map((x) => x.address),
         [ChainId.Ropsten]: [MSKA, MSKB, MSKC].map((x) => x.address),
         [ChainId.Rinkeby]: [MSK_A, MSK_B, MSK_C].map((x) => x.address),
         [ChainId.Kovan]: [],
