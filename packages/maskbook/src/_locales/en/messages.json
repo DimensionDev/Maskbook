@@ -452,7 +452,8 @@
     "plugin_ito_claim_only_once_remind": "Each wallet can only participate once.",
     "wallet_transfer_to_address": "To Address",
     "wallet_transfer_send": "Send",
-    "wallet_transfer_balance": "Balance",
+    "wallet_transfer_balance": "Balance {{balance}} {{symbol}}",
     "wallet_transfer_title": "Transfer",
-    "wallet_transfer_memo": "Memo"
+    "wallet_transfer_memo": "Memo",
+    "wallet_transfer_amount": "Amount "
 }
