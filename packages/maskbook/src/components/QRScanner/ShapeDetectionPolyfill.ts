@@ -5,6 +5,7 @@ import { OnDemandWorker } from '../../web-workers/OnDemandWorker'
 
 let worker: OnDemandWorker
 sideEffect.then(() => {
+    __webpack_public_path__ = browser.runtime.getURL('/')
     worker = new OnDemandWorker(new URL('../../web-workers/QRCode.ts', import.meta.url), { name: 'ShapeDetection' })
 })
 

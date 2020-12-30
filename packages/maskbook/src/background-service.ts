@@ -9,7 +9,6 @@ import './provider.worker'
 
 import * as PersonaDB from './database/Persona/Persona.db'
 import * as PersonaDBHelper from './database/Persona/helpers'
-import { initAutoShareToFriends } from './extension/background-script/Jobs/AutoShareToFriends'
 
 import * as crypto40 from './crypto/crypto-alpha-40'
 import * as crypto39 from './crypto/crypto-alpha-39'
@@ -28,6 +27,7 @@ import('./plugins/PluginSerivce')
 import tasks from './extension/content-script/tasks'
 import Services, { BackgroundServicesAdditionalConnections } from './extension/service'
 import type { EventBasedChannel } from 'async-call-rpc/full'
+import { sideEffect } from './utils/side-effects'
 Object.assign(globalThis, { tasks })
 
 if (process.env.NODE_ENV === 'development' && Flags.matrix_based_service_enabled) {
@@ -151,7 +151,9 @@ Object.assign(window, {
         post: post,
     },
 })
-initAutoShareToFriends()
+sideEffect.then(() =>
+    import('./extension/background-script/Jobs/AutoShareToFriends').then((x) => x.initAutoShareToFriends()),
+)
 
 // Listen to API request from dashboard
 if (process.env.NODE_ENV === 'development' && process.env.architecture === 'web' && process.env.target === 'chromium') {
