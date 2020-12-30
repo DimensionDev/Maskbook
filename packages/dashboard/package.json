@@ -5,10 +5,12 @@
   "scripts": {
     "storybook": "dev -- start-storybook -p 6006",
     "build-storybook": "build -- build-storybook",
-    "start": "dev -- snowpack dev"
+    "start": "dev -- snowpack dev --reload"
   },
   "dependencies": {
-    "@dimensiondev/maskbook-shared": "*"
+    "@dimensiondev/maskbook-shared": "*",
+    "color": "^3.1.3",
+    "@types/color": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

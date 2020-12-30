@@ -131,7 +131,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
             if (!entries) return null
             return entries.map((opt, index) => {
                 return (
-                    <ErrorBoundary contain={`Plugin "${plugin.pluginName}"`} key={plugin.identifier + ' ' + index}>
+                    <ErrorBoundary subject={`Plugin "${plugin.pluginName}"`} key={plugin.identifier + ' ' + index}>
                         <ClickableChip
                             label={
                                 <>

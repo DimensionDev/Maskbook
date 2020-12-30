@@ -8,15 +8,14 @@ import { Button, Paper, Divider, Typography, Box } from '@material-ui/core'
 import { useMaskbookTheme } from '../../utils/theme'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { getActivatedUI } from '../../social-network/ui'
-import { I18nextProvider } from 'react-i18next'
 import { useI18N } from '../../utils/i18n-next-ui'
-import i18nNextInstance from '../../utils/i18n-next'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getUrl, sleep } from '../../utils/utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { Alert } from '@material-ui/core'
 import { useAsyncRetry } from 'react-use'
+import { MaskbookUIRoot } from '../../UIRoot'
 
 const GlobalCss = withStyles({
     '@global': {
@@ -167,12 +166,10 @@ function PopupUI() {
 }
 
 export function Popup() {
-    return (
+    return MaskbookUIRoot(
         <ThemeProvider theme={useMaskbookTheme()}>
-            <I18nextProvider i18n={i18nNextInstance}>
-                <GlobalCss />
-                <PopupUI />
-            </I18nextProvider>
-        </ThemeProvider>
+            <GlobalCss />
+            <PopupUI />
+        </ThemeProvider>,
     )
 }

@@ -13,6 +13,7 @@ import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
 import { SnackbarProvider } from 'notistack'
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
+import { MaskbookUIRoot } from '../../UIRoot'
 
 const captureEvents: (keyof HTMLElementEventMap)[] = [
     'paste',
@@ -234,15 +235,9 @@ function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{
 type MaskbookProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
 
 function Maskbook(_props: MaskbookProps) {
-    return (
+    return MaskbookUIRoot(
         <ThemeProvider theme={getActivatedUI().useTheme()}>
-            <I18nextProvider i18n={i18nNextInstance}>
-                <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                    <StrictMode>
-                        <span {..._props} />
-                    </StrictMode>
-                </SnackbarProvider>
-            </I18nextProvider>
-        </ThemeProvider>
+            <span {..._props} />
+        </ThemeProvider>,
     )
 }
