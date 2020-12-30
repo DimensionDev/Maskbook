@@ -1,13 +1,12 @@
 import path from 'path'
 import fs, { promises } from 'fs'
 
-import {
+import webpack, {
     Configuration,
     HotModuleReplacementPlugin,
-    EnvironmentPlugin,
     ProvidePlugin,
-    RuleSetRule,
     DefinePlugin,
+    EnvironmentPlugin,
 } from 'webpack'
 // Merge declaration of Configuration defined in webpack
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
@@ -37,6 +36,9 @@ import { promisify } from 'util'
 const src = (file: string) => path.join(__dirname, file)
 const publicDir = src('./public')
 
+function EnvironmentPluginCache(def: Record<string, any>) {
+    return new EnvironmentPlugin(def)
+}
 function EnvironmentPluginNoCache(def: Record<string, any>) {
     const next = {} as any
     for (const key in def) {
@@ -73,7 +75,13 @@ function config(opts: {
         devtool: mode === 'development' ? sourceMapKind : false,
         target: ['web', 'es2018'],
         experiments: { asset: true },
-        cache: { type: 'filesystem', buildDependencies: { config: [__filename] }, version: '1' },
+        cache: {
+            type: 'filesystem',
+            buildDependencies: { config: [__filename] },
+            // In development mode we treat all envs as static. Each runtimeEnv will have it own cache. Therefor those modules won't be marked as uncacheable (and cause re-build very often).
+            // In production mode we mark them as runtime value so different targets can share a cache.
+            version: `1-node${process.version}-${mode === 'development' ? JSON.stringify(target.runtimeEnv) : 'build'}`,
+        },
         resolve: {
             extensions: ['.js', '.ts', '.tsx'],
             alias: {
@@ -129,10 +137,15 @@ function config(opts: {
         plugins: [
             new ProvidePlugin({ Buffer: ['buffer', 'Buffer'] }), // Polyfill for Node global "Buffer" variable
             new WatchMissingModulesPlugin(path.resolve('node_modules')),
-            EnvironmentPluginNoCache({ NODE_ENV: mode, NODE_DEBUG: false, ...getGitInfo(), ...target.runtimeEnv }),
+            // Note: In development mode gitInfo will share across cache (and get inaccurate result). I (@Jack-Works) think this is a valuable trade-off.
+            (mode === 'development' ? EnvironmentPluginCache : EnvironmentPluginNoCache)({
+                ...getGitInfo(),
+                ...target.runtimeEnv,
+            }),
+            new EnvironmentPlugin({ NODE_ENV: mode, NODE_DEBUG: false, STORYBOOK: false }),
             new DefinePlugin({
                 'process.browser': 'true',
-                'process.version': DefinePlugin.runtimeValue(() => JSON.stringify(process.version), true),
+                'process.version': JSON.stringify(process.version),
             }),
             ...getHotModuleReloadPlugin(),
             target.isProfile && new BundleAnalyzerPlugin(),
@@ -256,7 +269,12 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
         injectedScript.entry = { 'injected-script': src('./packages/maskbook/src/extension/injected-script/index.ts') }
         injectedScript.optimization.splitChunks = false
     }
-    return [main, isManifestV3 && manifestV3, injectedScript].filter(Boolean)
+    if (mode === 'production') return [main, isManifestV3 && manifestV3, injectedScript].filter(Boolean)
+    // TODO: multiple config seems doesn't work well therefore we start the watch mode webpack compiler manually.
+    delete injectedScript.devServer
+    // TODO: ignore the message currently
+    webpack(injectedScript, () => {}).watch({}, () => {})
+    return main
 
     function withReactDevTools(...src: string[]) {
         // ! Use Firefox Nightly or enable network.websocket.allowInsecureFromHTTPS in about:config, then remove this line (but don't commit)
@@ -359,7 +377,7 @@ function getCompilationInfo(argv: any) {
     //#endregion
 
     return {
-        runtimeEnv: { target, firefoxVariant, architecture, resolution, build, manifest, STORYBOOK: false },
+        runtimeEnv: { target, firefoxVariant, architecture, resolution, build, manifest },
         isReproducibleBuild,
         isProfile,
         webExtensionFirefoxLaunchVariant,
