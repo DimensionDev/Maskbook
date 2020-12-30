@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => {
 
 export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     amount: string
+    maxAmount?: string
     balance: string
     viewBalance?: boolean
     onAmountChange: (amount: string) => void
@@ -51,22 +52,19 @@ export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyle
     token?: EtherTokenDetailed | ERC20TokenDetailed | null
     InputProps?: Partial<InputProps>
     MaxChipProps?: Partial<ChipProps>
-    balanceClassName?: string
-    chipWrapper?: string
-    swapLimit?: string
     SelectTokenChip?: Partial<SelectTokenChipProps>
     TextFieldProps?: Partial<TextFieldProps>
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
-    const { amount, balance, token, onAmountChange, label, viewBalance = true } = props
+    const { amount, maxAmount = amount, balance, token, onAmountChange, label, viewBalance = true } = props
 
     const classes = useStylesExtends(useStyles(), props)
 
     //#region update amount by parent
     const { RE_MATCH_WHOLE_AMOUNT } = useMemo(
         () => ({
-            RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals ?? 0}}$`), // d.ddd...d
+            RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals}}$`), // d.ddd...d
         }),
         [token?.decimals],
     )
@@ -119,17 +117,16 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                         }}>
                         {viewBalance ? (
                             <Typography
-                                className={props.balanceClassName ?? classes.balance}
+                                className={classes.balance}
                                 color="textSecondary"
                                 variant="body2"
                                 component="span">
-                                Balance: {formatBalance(new BigNumber(balance), token.decimals ?? 0, 6)}
+                                Balance: {formatBalance(new BigNumber(balance), token.decimals, 6)}
                             </Typography>
                         ) : (
                             ''
                         )}
                         <Box
-                            className={props.chipWrapper ?? ''}
                             sx={{
                                 display: 'flex',
                             }}>
@@ -142,12 +139,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     color="primary"
                                     variant="outlined"
                                     onClick={() => {
-                                        const b = new BigNumber(balance)
-                                        const max =
-                                            props.swapLimit && new BigNumber(props.swapLimit).isLessThan(b)
-                                                ? new BigNumber(props.swapLimit)
-                                                : b
-                                        onAmountChange(formatBalance(max, token.decimals ?? 0))
+                                        onAmountChange(formatBalance(new BigNumber(maxAmount), token.decimals))
                                     }}
                                     {...props.MaxChipProps}
                                 />

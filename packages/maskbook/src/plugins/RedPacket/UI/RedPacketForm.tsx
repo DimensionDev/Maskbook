@@ -339,7 +339,9 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
+                includeTokens={[]}
                 excludeTokens={[token.address]}
+                selectedTokens={[]}
                 onSubmit={onSelectERC20TokenDialogSubmit}
                 onClose={onSelectERC20TokenDialogClose}
             />

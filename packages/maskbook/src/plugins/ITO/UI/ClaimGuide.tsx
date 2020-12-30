@@ -1,4 +1,4 @@
-import { createStyles, DialogContent, makeStyles, Box, DialogProps } from '@material-ui/core'
+import { createStyles, DialogContent, makeStyles, DialogProps } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -16,14 +16,12 @@ export enum ClaimStatus {
     Share,
 }
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
     createStyles({
-        wrapper: {
+        content: {
             display: 'flex',
             flexDirection: 'column',
-            width: '95%',
-            margin: '0 auto',
-            paddingBottom: '1rem',
+            padding: theme.spacing(2, 3),
         },
     }),
 )
@@ -62,41 +60,39 @@ export function ClaimGuide(props: ClaimGuideProps) {
 
     return (
         <InjectedDialog open={props.open} title={ClaimTitle[status]} onClose={props.onClose}>
-            <DialogContent>
-                <Box className={classes.wrapper}>
-                    {(() => {
-                        switch (status) {
-                            case ClaimStatus.Remind:
-                                return (
-                                    <RemindDialog
-                                        CurrentTokenIcon={CurrentTokenIcon}
-                                        token={payload.token}
-                                        chainId={chainId}
-                                        setStatus={setStatus}
-                                    />
-                                )
-                            case ClaimStatus.Swap:
-                                return (
-                                    <ClaimDialog
-                                        account={account}
-                                        initAmount={initAmount}
-                                        tokenAmount={tokenAmount}
-                                        setTokenAmount={setTokenAmount}
-                                        payload={payload}
-                                        token={payload.token}
-                                        exchangeTokens={exchangeTokens}
-                                        revalidateAvailability={revalidateAvailability}
-                                        setStatus={setStatus}
-                                        chainId={chainId}
-                                    />
-                                )
-                            case ClaimStatus.Share:
-                                return <ShareDialog token={payload.token} tokenAmount={tokenAmount} onClose={onClose} />
-                            default:
-                                return null
-                        }
-                    })()}
-                </Box>
+            <DialogContent className={classes.content}>
+                {(() => {
+                    switch (status) {
+                        case ClaimStatus.Remind:
+                            return (
+                                <RemindDialog
+                                    CurrentTokenIcon={CurrentTokenIcon}
+                                    token={payload.token}
+                                    chainId={chainId}
+                                    setStatus={setStatus}
+                                />
+                            )
+                        case ClaimStatus.Swap:
+                            return (
+                                <ClaimDialog
+                                    account={account}
+                                    initAmount={initAmount}
+                                    tokenAmount={tokenAmount}
+                                    setTokenAmount={setTokenAmount}
+                                    payload={payload}
+                                    token={payload.token}
+                                    exchangeTokens={exchangeTokens}
+                                    revalidateAvailability={revalidateAvailability}
+                                    setStatus={setStatus}
+                                    chainId={chainId}
+                                />
+                            )
+                        case ClaimStatus.Share:
+                            return <ShareDialog token={payload.token} tokenAmount={tokenAmount} onClose={onClose} />
+                        default:
+                            return null
+                    }
+                })()}
             </DialogContent>
         </InjectedDialog>
     )
