@@ -93,7 +93,6 @@ export function CreateGuide(props: CreateGuideProps) {
                 creation_time: Number.parseInt(FillSuccess.creation_time, 10) * 1000,
                 token: fillSettings.token,
                 exchange_amounts: fillSettings.exchangeAmounts,
-                exchange_volumes: fillSettings.exchangeVolumes,
                 exchange_tokens: fillSettings.exchangeTokens,
             }
 

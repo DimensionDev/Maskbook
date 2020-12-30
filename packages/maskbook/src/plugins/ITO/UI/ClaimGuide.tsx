@@ -59,7 +59,11 @@ export function ClaimGuide(props: ClaimGuideProps) {
     }, [account, payload.buyers, chainId, payload.chain_id])
 
     return (
-        <InjectedDialog open={props.open} title={ClaimTitle[status]} onClose={props.onClose}>
+        <InjectedDialog
+            open={props.open}
+            title={ClaimTitle[status]}
+            onClose={props.onClose}
+            DialogProps={{ maxWidth: status === ClaimStatus.Swap ? 'xs' : 'sm' }}>
             <DialogContent className={classes.content}>
                 {(() => {
                     switch (status) {

@@ -254,7 +254,9 @@ function DonateDialogUI(props: DonateDialogUIProps) {
             </InjectedDialog>
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
+                includeTokens={[]}
                 excludeTokens={[token.address]}
+                selectedTokens={[]}
                 onSubmit={onSelectERC20TokenDialogSubmit}
                 onClose={onSelectERC20TokenDialogClose}
             />

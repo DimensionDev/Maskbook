@@ -28,14 +28,12 @@ const useStyles = makeStyles((theme) =>
 )
 export interface PoolListProps {
     onSend: (payload: JSON_PayloadInMask) => void
-    FixedSizeListProps?: Partial<FixedSizeListProps>
 }
 
 export function PoolList(props: PoolListProps) {
     const classes = useStyles()
     const account = useAccount()
     const { value: pools = [], loading, retry } = useAllPoolsAsSeller(account)
-    const { FixedSizeListProps } = props
 
     //#region withdraw
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
