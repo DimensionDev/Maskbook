@@ -4,10 +4,10 @@ import {
     createStyles,
     FormControl,
     FormControlLabel,
-    Hidden,
     IconButton,
     Input,
     InputAdornment,
+    InputLabel,
     makeStyles,
     Paper,
     Switch,
@@ -15,10 +15,15 @@ import {
     Theme,
     Typography,
 } from '@material-ui/core'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
-import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../DashboardDialogs/Base'
+import {
+    DashboardDialogCore,
+    DashboardDialogWrapper,
+    useSnackbarCallback,
+    WrappedDialogProps,
+} from '../DashboardDialogs/Base'
 import AbstractTab, { AbstractTabProps } from './AbstractTab'
 import ImportExportIcon from '@material-ui/icons/ImportExport'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -103,8 +108,10 @@ const useTransferPageStyles = makeStyles((theme) =>
             color: theme.palette.text.primary,
             paddingLeft: theme.spacing(1),
             paddingRight: theme.spacing(1),
-
-        }
+        },
+        amount_input: {
+            paddingLeft: theme.spacing(1),
+        },
     }),
 )
 
@@ -119,48 +126,61 @@ function TransferPage(props: TransferPageProps) {
     const { wallet, token, onClose } = props
     const { t } = useI18N()
 
+    const [amount, setAmount] = useState('')
+    const [address, setAddress] = useState('')
+    const [memo, setMemo] = useState('')
+
     // balance
-    const { value: tokenBalance = '0',  } = useTokenBalance(
-        token?.type ?? EthereumTokenType.Ether,
-        token?.address ?? '',
-    )
+    const { value: tokenBalance = '0' } = useTokenBalance(token?.type ?? EthereumTokenType.Ether, token?.address ?? '')
     //#endregion
+
+    const onChangeAmount = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
+        const _amount = ev.currentTarget.value
+        if (_amount === '') setAmount('')
+        if (/^\d+[\.]?\d*$/.test(_amount)) {
+            setAmount(_amount)
+        }
+    }, [])
 
     const onSend = useCallback(() => {
         props.onClose()
-    }, [])
+    }, [props])
     return (
         <Paper className={classes.paper}>
-
             <FormControl className={classes.amount}>
-                <Box>
-                    <Input  classes={{root: classes.amount_num}}  placeholder='0.0' disableUnderline={true} startAdornment={
-                        <InputAdornment>
-                            <Typography classes={{root: classes.amount_label}} variant="body2" color="textSecondary">
-                                {token.symbol}
-                            </Typography>
-                    </InputAdornment>}></Input>
-                </Box>
+                <Input
+                    classes={{ root: classes.amount_num, input: classes.amount_input }}
+                    placeholder="0.0"
+                    disableUnderline={true}
+                    value={amount}
+                    onChange={(ev: ChangeEvent<HTMLInputElement>) => onChangeAmount(ev)}
+                    startAdornment={
+                        <Typography classes={{ root: classes.amount_label }} variant="body2" color="textSecondary">
+                            {token.symbol}
+                        </Typography>
+                    }
+                />
+                <InputLabel>Amount</InputLabel>
                 <InputAdornment position="end">
-                    <ImportExportIcon color='disabled' />
+                    <ImportExportIcon color="disabled" />
                     <Typography variant="body2" color="textSecondary">
                         {token.symbol}
                     </Typography>
                 </InputAdornment>
             </FormControl>
 
-
             <Box className={classes.box}>
-                <Typography align="center" variant="body2" color="textSecondary">
-
-                </Typography>
+                <Typography align="center" variant="body2" color="textSecondary"></Typography>
             </Box>
 
             <Box className={classes.box}>
-                <Typography align="left" variant="body2" color="textSecondary">
-                    {t('wallet_transfer_to_address')}
-                </Typography>
-                <TextField />
+                <TextField
+                    required
+                    label={t('wallet_transfer_to_address')}
+                    placeholder={t('wallet_transfer_to_address')}
+                    value={address}
+                    onChange={(ev) => setAddress(ev.target.value)}
+                />
             </Box>
             <Box className={classes.table}>
                 <Box className={classes.line}>
@@ -185,16 +205,21 @@ function TransferPage(props: TransferPageProps) {
             </Box>
 
             <Box className={classes.box}>
-                <TextField placeholder="Mome" />
+                <TextField
+                    placeholder={t('wallet_transfer_memo')}
+                    label={t('wallet_transfer_memo')}
+                    value={memo}
+                    onChange={(ev) => setMemo(ev.target.value)}
+                />
             </Box>
             <Box className={classes.box}>
-                <Button variant="outlined" color="primary" onClick={onSend}>
+                <Button variant="contained" color="primary" onClick={onSend}>
                     {t('wallet_transfer_send')}
                 </Button>
             </Box>
             <footer className={classes.footer}>
                 <Typography align="left" variant="body2" color="textPrimary">
-                    {t("wallet_transfer_balance")}
+                    {t('wallet_transfer_balance')}
                 </Typography>
                 <Typography align="right" variant="body2" color="textSecondary">
                     {formatBalance(new BigNumber(tokenBalance ?? '0'), token.decimals ?? 0)} {token.symbol}
@@ -204,7 +229,6 @@ function TransferPage(props: TransferPageProps) {
     )
 }
 
-
 const useWalletShareDialogStyle = makeStyles((theme: Theme) =>
     createStyles({
         qr: {
@@ -212,7 +236,7 @@ const useWalletShareDialogStyle = makeStyles((theme: Theme) =>
         },
         text: {
             marginBottom: theme.spacing(2),
-        }
+        },
     }),
 )
 
@@ -227,51 +251,53 @@ function SharePage(props: SharePageProps) {
 
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
-    return (<>
-        <Typography variant='subtitle1' color='textPrimary' align='center'>
-            {t('share_wallet')}
-        </Typography>
-        <Typography className={classes.text} variant='body2' color='textSecondary' align='center'>
-            {t('share_wallet_hint')}
-        </Typography>
-        <form>
-            <TextField
-                required
-                label={t('wallet_address')}
-                value={wallet.address}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton
-                                size="small"
-                                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                                    e.stopPropagation()
-                                    copyWalletAddress(wallet.address)
-                                }}>
-                                <FileCopyOutlinedIcon />
-                            </IconButton>
-                        </InputAdornment>
-                    ),
-                }}
-                variant="outlined"
-            />
-        </form>
-        <Box
-            className={classes.qr}
-            sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}>
-            <QRCode
-                text={`ethereum:${wallet.address}`}
-                options={{ width: 200 }}
-                canvasProps={{
-                    style: { display: 'block', margin: 'auto' },
-                }}
-            />
-        </Box>
-    </>)
+    return (
+        <>
+            <Typography variant="subtitle1" color="textPrimary" align="center">
+                {t('share_wallet')}
+            </Typography>
+            <Typography className={classes.text} variant="body2" color="textSecondary" align="center">
+                {t('share_wallet_hint')}
+            </Typography>
+            <form>
+                <TextField
+                    required
+                    label={t('wallet_address')}
+                    value={wallet.address}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    size="small"
+                                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                        e.stopPropagation()
+                                        copyWalletAddress(wallet.address)
+                                    }}>
+                                    <FileCopyOutlinedIcon />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                    variant="outlined"
+                />
+            </form>
+            <Box
+                className={classes.qr}
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                <QRCode
+                    text={`ethereum:${wallet.address}`}
+                    options={{ width: 150 }}
+                    canvasProps={{
+                        style: { display: 'block', margin: 'auto' },
+                    }}
+                />
+            </Box>
+        </>
+    )
 }
 export function DashboardWalletTransferDialog(
     props: WrappedDialogProps<WalletProps & { token: ERC20TokenDetailed | EtherTokenDetailed }>,
@@ -297,7 +323,7 @@ export function DashboardWalletTransferDialog(
 
     return (
         <DashboardDialogCore fullScreen={false} {...props}>
-            <DashboardDialogWrapper size="medium" primary="" content={<AbstractTab height={332} {...tabProps} />} />
+            <DashboardDialogWrapper size="medium" primary="" content={<AbstractTab height={292} {...tabProps} />} />
         </DashboardDialogCore>
     )
 }
