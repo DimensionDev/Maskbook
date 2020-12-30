@@ -12,7 +12,7 @@ import {
     Theme,
     Typography,
 } from '@material-ui/core'
-import { Share2 as ShareIcon, Info as InfoIcon } from 'react-feather'
+import { Share2 as ShareIcon, Send as SendIcon } from 'react-feather'
 import { ChangeEvent, useState } from 'react'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
@@ -29,7 +29,6 @@ import { useCopyToClipboard } from 'react-use'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import { QRCode } from '../../../components/shared/qrcode'
 import { useCallback } from 'react'
-import ShowcaseBox from './ShowcaseBox'
 import { BigNumber } from 'bignumber.js'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 
@@ -40,9 +39,6 @@ interface WalletProps {
 
 const useTransferPageStyles = makeStyles((theme) =>
     createStyles({
-        paper: {
-            padding: theme.spacing(1),
-        },
         line: {
             height: 60,
             padding: theme.spacing(1),
@@ -106,7 +102,7 @@ function TransferPage(props: TransferPageProps) {
         props.onClose()
     }, [props])
     return (
-        <Paper className={classes.paper}>
+        <Paper elevation={0}>
             <Box className={classes.box}>
                 <TextField
                     required
@@ -190,8 +186,8 @@ const useWalletShareDialogStyle = makeStyles((theme: Theme) =>
         qr: {
             marginTop: theme.spacing(3),
         },
-        text: {
-            marginBottom: theme.spacing(2),
+        form: {
+            padding: theme.spacing(1),
         },
     }),
 )
@@ -209,7 +205,7 @@ function SharePage(props: SharePageProps) {
     const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
     return (
         <>
-            <form>
+            <form className={classes.form}>
                 <TextField
                     required
                     label={t('wallet_address')}
@@ -250,43 +246,22 @@ function SharePage(props: SharePageProps) {
     )
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        wrapper: {
-            padding: 40,
-            height: '100%',
-            overFlow: 'hidden',
-        },
-        content: {
-            overFlow: 'hidden',
-        },
-    }),
-)
 export function DashboardWalletTransferDialog(
     props: WrappedDialogProps<WalletProps & { token: ERC20TokenDetailed | EtherTokenDetailed }>,
 ) {
-    const classes = useStyles()
     const { wallet, token } = props.ComponentProps!
     const { t } = useI18N()
     const state = useState(0)
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: t('wallet_transfer_title'),
-                children: (
-                    <ShowcaseBox>
-                        <TransferPage wallet={wallet} token={token} onClose={props.onClose} />
-                    </ShowcaseBox>
-                ),
+                label: t('wallet_transfer_send'),
+                children: <TransferPage wallet={wallet} token={token} onClose={props.onClose} />,
                 sx: { p: 0 },
             },
             {
-                label: t('share'),
-                children: (
-                    <ShowcaseBox>
-                        <SharePage wallet={wallet} onClose={props.onClose} />
-                    </ShowcaseBox>
-                ),
+                label: t('wallet_transfer_receive'),
+                children: <SharePage wallet={wallet} onClose={props.onClose} />,
                 sx: { p: 0 },
             },
         ],
@@ -294,24 +269,25 @@ export function DashboardWalletTransferDialog(
     }
     const pageTitles = [
         {
-            primary: t('wallet_transfer_title'),
+            primary: t('wallet_transfer_send'),
             secondary: '',
-            icon: <InfoIcon />,
+            icon: <SendIcon />,
+            iconColor: '#4EE0BC',
         },
         {
             primary: t('share_wallet'),
             secondary: t('share_wallet_hint'),
             icon: <ShareIcon />,
+            iconColor: '#4EE0BC',
         },
     ]
 
     return (
-        <DashboardDialogCore fullScreen={false} {...props}>
+        <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
                 {...pageTitles[state[0]]}
-                iconColor="#4EE0BC"
                 size="medium"
-                content={<AbstractTab height={345} {...tabProps} />}
+                content={<AbstractTab height={268} {...tabProps} />}
             />
         </DashboardDialogCore>
     )
