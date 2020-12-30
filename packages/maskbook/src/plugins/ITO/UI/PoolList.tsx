@@ -57,6 +57,7 @@ export function PoolList(props: PoolListProps) {
                 <div className={classes.list}>
                     {pools.map((x) => (
                         <PoolInList
+                            key={x.pool.pid}
                             {...x}
                             onSend={props.onSend}
                             onWithdraw={(payload: JSON_PayloadInMask) => {

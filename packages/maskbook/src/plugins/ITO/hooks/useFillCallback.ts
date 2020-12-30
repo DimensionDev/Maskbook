@@ -8,7 +8,7 @@ import { useITO_Contract } from '../contracts/useITO_Contract'
 import { EtherTokenDetailed, ERC20TokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
-import { gcd } from '../helpers'
+import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_DATE } from '../constants'
 
 export interface PoolSettings {
@@ -40,8 +40,8 @@ export function useFillCallback(poolSettings: PoolSettings) {
             token,
             total,
             limit,
-            exchangeAmounts,
-            exchangeTokens,
+            exchangeAmounts: exchangeAmountsUnsorted,
+            exchangeTokens: exchangeTokensUnsorted,
         } = poolSettings
 
         if (!token || !ITO_Contract) {
@@ -50,6 +50,16 @@ export function useFillCallback(poolSettings: PoolSettings) {
             })
             return
         }
+
+        // sort amounts and tokens
+        const sorted = exchangeAmountsUnsorted
+            .map((x, i) => ({
+                amount: x,
+                token: exchangeTokensUnsorted[i],
+            }))
+            .sort((unsortedA, unsortedB) => sortTokens(unsortedA.token, unsortedB.token))
+        const exchangeAmounts = sorted.map((x) => x.amount)
+        const exchangeTokens = sorted.map((x) => x.token)
 
         const startTime_ = Math.floor((startTime.getTime() - ITO_CONTRACT_BASE_DATE.getTime()) / 1000)
         const endTime_ = Math.floor((endTime.getTime() - ITO_CONTRACT_BASE_DATE.getTime()) / 1000)
@@ -118,15 +128,16 @@ export function useFillCallback(poolSettings: PoolSettings) {
             return
         }
 
-        // error: token amount is not enough for dividing into integral pieces
         const ONE_TOKEN = new BigNumber(1).multipliedBy(new BigNumber(10).pow(token.decimals ?? 0))
-        const exchangeAmounts_ = exchangeAmounts.map((x, i) => {
+        const exchangeAmountsDivided = exchangeAmounts.map((x, i) => {
             const amount = new BigNumber(x)
             const divisor = gcd(ONE_TOKEN, amount)
             return [amount.dividedToIntegerBy(divisor), ONE_TOKEN.dividedToIntegerBy(divisor)] as const
         })
+
+        // error: token amount is not enough for dividing into integral pieces
         const totalAmount = new BigNumber(total)
-        const invalidTokenAt = exchangeAmounts_.findIndex(([tokenAmountA, tokenAmountB]) =>
+        const invalidTokenAt = exchangeAmountsDivided.findIndex(([tokenAmountA, tokenAmountB]) =>
             totalAmount.multipliedBy(tokenAmountA).dividedToIntegerBy(tokenAmountB).isZero(),
         )
         if (invalidTokenAt >= 0) {
@@ -156,7 +167,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
             name,
             title,
             exchangeTokens.map((x) => x.address),
-            exchangeAmounts_.flatMap((x) => x).map((y) => y.toFixed()),
+            exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
             token.address,
             total,
             limit,

@@ -76,14 +76,20 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
         [approveState, amount, account, spender, erc20Contract],
     )
 
-    const resetCallback = useCallback(() => {
-        setApproveHash('')
-        revalidateBalance()
-        revalidateAllowance()
-    }, [])
+    const resetCallback = useCallback(() => {}, [])
 
     // reset approve state
-    useEffect(resetCallback, [address, amount, spender])
+    useEffect(() => {
+        setApproveHash('')
+    }, [address, amount, spender])
+
+    // revalidate balance and allowance if tx hash was cleaned
+    useEffect(() => {
+        if (!approveHash) {
+            revalidateBalance()
+            revalidateAllowance()
+        }
+    }, [approveHash])
 
     return [approveState, approveCallback, resetCallback] as const
 }

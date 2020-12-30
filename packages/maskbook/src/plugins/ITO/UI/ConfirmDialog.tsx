@@ -91,7 +91,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 </Grid>
 
                 {poolSettings?.exchangeTokens
-                    .filter((item, index) => item)
+                    .filter(Boolean)
                     .map((item, index) => {
                         return (
                             <Fragment key={index}>

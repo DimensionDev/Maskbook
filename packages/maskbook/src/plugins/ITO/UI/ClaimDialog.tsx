@@ -109,9 +109,11 @@ export function ClaimDialog(props: ClaimDialogProps) {
     )
     const [claimToken, setClaimToken] = useState<EtherTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
     const [claimAmount, setClaimAmount] = useState<BigNumber>(initAmount.multipliedBy(ratio))
-    const [openSwapTokenDialog, setOpenSwapTokenDialog] = useState(false)
-
     const [inputAmountForUI, setInputAmountForUI] = useState(formatBalance(claimAmount, claimToken.decimals))
+
+    //#region select token
+    const [openSwapTokenDialog, setOpenSwapTokenDialog] = useState(false)
+    //#endregion
 
     //#region balance
     const { value: tokenBalance = '0', loading: tokenBalanceLoading } = useTokenBalance(
@@ -151,7 +153,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     //#endregion
 
     //#region claim
-    const [claimState, claimCallback, resetCallback] = useClaimCallback(
+    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
         payload.pid,
         payload.password,
         claimAmount.toFixed(),
@@ -169,14 +171,11 @@ export function ClaimDialog(props: ClaimDialogProps) {
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-
-            // reset state
-            resetCallback()
-
             if (claimState.type !== TransactionStateType.CONFIRMED) return
 
-            revalidateAvailability()
             setStatus(ClaimStatus.Share)
+            revalidateAvailability()
+            resetClaimCallback()
         },
     )
 
@@ -329,16 +328,16 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 selectedTokens={[]}
                 open={openSwapTokenDialog}
                 onSubmit={(token: EtherTokenDetailed | ERC20TokenDetailed) => {
-                    const i = props.exchangeTokens.findIndex((x) => isSameAddress(x.address, token.address))
-                    const r = new BigNumber(payload.exchange_amounts[i * 2]).dividedBy(
-                        new BigNumber(payload.exchange_amounts[i * 2 + 1]),
+                    const at = props.exchangeTokens.findIndex((x) => isSameAddress(x.address, token.address))
+                    const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(
+                        new BigNumber(payload.exchange_amounts[at * 2 + 1]),
                     )
-                    setRatio(r)
+                    setRatio(ratio)
                     setOpenSwapTokenDialog(false)
                     setClaimToken(token)
                     setTokenAmount(initAmount)
-                    setClaimAmount(initAmount.multipliedBy(r))
-                    setInputAmountForUI(formatBalance(initAmount.multipliedBy(r), token.decimals ?? 0))
+                    setClaimAmount(initAmount.multipliedBy(ratio))
+                    setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio), token.decimals ?? 0))
                 }}
                 onClose={() => setOpenSwapTokenDialog(false)}
             />
