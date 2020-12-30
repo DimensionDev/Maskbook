@@ -27,18 +27,20 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-interface SelectERC20TokenDialogUIProps extends withClasses<never> {
+export interface SelectERC20TokenDialogProps extends withClasses<never> {
     open: boolean
+    includeTokens: string[]
     excludeTokens: string[]
+    selectedTokens: string[]
     onSubmit(token: ERC20TokenDetailed): void
     onClose(): void
 }
 
-function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
+export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const { open, excludeTokens, onSubmit, onClose } = props
+    const { open, includeTokens, excludeTokens, selectedTokens, onSubmit, onClose } = props
 
     //#region search tokens
     const [keyword, setKeyword] = useState('')
@@ -57,9 +59,11 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
                 />
                 <FixedTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    useEther={true}
+                    useEther
                     keyword={keyword}
+                    includeTokens={includeTokens}
                     excludeTokens={excludeTokens}
+                    selectedTokens={selectedTokens}
                     onSubmit={onSubmit}
                     FixedSizeListProps={{
                         height: 288,
@@ -70,10 +74,4 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
             </DialogContent>
         </InjectedDialog>
     )
-}
-
-export interface SelectERC20TokenDialogProps extends SelectERC20TokenDialogUIProps {}
-
-export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
-    return <SelectERC20TokenDialogUI {...props} />
 }

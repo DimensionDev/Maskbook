@@ -10,7 +10,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
 import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
-import { ExchangeTokenPanelGroup } from './ExchangeTokenPanel'
+import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
 import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
@@ -204,7 +204,7 @@ export function CreateForm(props: CreateFormProps) {
             <EthereumStatusBar classes={{ root: classes.bar }} />
             <Box className={classes.line} style={{ display: 'block' }}>
                 <ExchangeTokenPanelGroup
-                    originToken={tokenAndAmount?.token}
+                    token={tokenAndAmount?.token}
                     onTokenAmountChange={(arr) => setTokenAndAmounts(arr)}
                 />
             </Box>
@@ -241,7 +241,7 @@ export function CreateForm(props: CreateFormProps) {
                     }}
                 />
             </Box>
-            <Box className={classes.line} style={{ display: 'flex' }}>
+            <Box className={classes.line}>
                 <TextField
                     className={classes.date}
                     onChange={(ev) => handleStartTime(ev.target.value)}

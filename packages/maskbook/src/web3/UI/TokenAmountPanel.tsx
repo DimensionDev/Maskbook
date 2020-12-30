@@ -54,7 +54,6 @@ export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyle
     balanceClassName?: string
     chipWrapper?: string
     swapLimit?: string
-    currentIcon?: JSX.Element
     SelectTokenChip?: Partial<SelectTokenChipProps>
     TextFieldProps?: Partial<TextFieldProps>
 }
@@ -77,7 +76,6 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const onChange = useCallback(
         (ev: ChangeEvent<HTMLInputElement>) => {
             const amount_ = ev.currentTarget.value.replace(/,/g, '.')
-
             if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) onAmountChange(amount_)
         },
         [onAmountChange, RE_MATCH_WHOLE_AMOUNT],
@@ -154,7 +152,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     {...props.MaxChipProps}
                                 />
                             ) : null}
-                            <SelectTokenChip token={token} currentIcon={props.currentIcon} {...props.SelectTokenChip} />
+                            <SelectTokenChip token={token} {...props.SelectTokenChip} />
                         </Box>
                     </Box>
                 ) : (

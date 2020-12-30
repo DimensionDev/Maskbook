@@ -102,6 +102,15 @@ export function useFillCallback(poolSettings: PoolSettings) {
             return
         }
 
+        // error: exceed the max available total supply
+        if (new BigNumber(total).isGreaterThan(new BigNumber('2e128'))) {
+            setFillState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Exceed the max available total supply'),
+            })
+            return
+        }
+
         // error: The size of amounts and the size of tokens not match
         if (exchangeAmounts.length !== exchangeTokens.length) {
             setFillState({

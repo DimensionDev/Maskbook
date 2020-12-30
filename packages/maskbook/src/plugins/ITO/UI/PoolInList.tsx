@@ -225,7 +225,7 @@ export function PoolInList(props: PoolInListProps) {
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 {formatBalance(
-                                                    new BigNumber(exchange_in_volumes[index]),
+                                                    new BigNumber(exchange_out_volumes[index]),
                                                     pool.token.decimals,
                                                     6,
                                                 )}{' '}
@@ -233,7 +233,7 @@ export function PoolInList(props: PoolInListProps) {
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 {formatBalance(
-                                                    new BigNumber(exchange_out_volumes[index]),
+                                                    new BigNumber(exchange_in_volumes[index]),
                                                     pool.token.decimals,
                                                     6,
                                                 )}{' '}
