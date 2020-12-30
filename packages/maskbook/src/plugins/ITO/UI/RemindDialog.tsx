@@ -8,7 +8,6 @@ import { TokenIcon } from '../../../extension/options-page/DashboardComponents/T
 import { formatEthereumAddress } from '../../Wallet/formatter'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import type { ChainId } from '../../../web3/types'
-import type { IconProps } from './ITO'
 import { ClaimStatus } from './ClaimGuide'
 import { useState } from 'react'
 
@@ -73,7 +72,6 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface RemindDialogProps extends withClasses<'root'> {
-    CurrentTokenIcon?: (props: IconProps) => JSX.Element
     token: EtherTokenDetailed | ERC20TokenDetailed
     chainId: ChainId
     setStatus: React.Dispatch<React.SetStateAction<ClaimStatus>>
@@ -82,7 +80,7 @@ export interface RemindDialogProps extends withClasses<'root'> {
 export function RemindDialog(props: RemindDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
-    const { CurrentTokenIcon, token, chainId, setStatus } = props
+    const { token, chainId, setStatus } = props
 
     const [agreeReminder, setAgreeReminder] = useState(false)
 
@@ -98,11 +96,7 @@ export function RemindDialog(props: RemindDialogProps) {
                 {t('plugin_ito_dialog_claim_reminder_text3')}
             </Typography>
             <section className={classes.tokenWrapper}>
-                <TokenIcon
-                    currentIcon={CurrentTokenIcon ? <CurrentTokenIcon size={35} /> : undefined}
-                    address={token.address}
-                    classes={{ icon: classes.tokenIcon }}
-                />
+                <TokenIcon address={token.address} classes={{ icon: classes.tokenIcon }} />
                 <div className={classes.tokenTextWrapper}>
                     <Typography variant="h5" className={classes.tokenSymbol}>
                         {token.name}

@@ -3,7 +3,6 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useState, useEffect } from 'react'
-import { getSupportTokenInfo } from './ITO'
 import { RemindDialog } from './RemindDialog'
 import { ShareDialog } from './ShareDialog'
 import { ClaimDialog, ClaimDialogProps } from './ClaimDialog'
@@ -41,8 +40,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
     const chainId = useChainId()
     const account = useAccount()
-    const { tokenIconListTable } = getSupportTokenInfo(chainId)
-    const CurrentTokenIcon = tokenIconListTable[payload.token.address]
+
     const ClaimTitle: EnumRecord<ClaimStatus, string> = {
         [ClaimStatus.Remind]: t('plugin_ito_dialog_claim_reminder_title'),
         [ClaimStatus.Swap]: t('plugin_ito_dialog_claim_swap_title', { token: payload.token.symbol }),
@@ -68,14 +66,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
                 {(() => {
                     switch (status) {
                         case ClaimStatus.Remind:
-                            return (
-                                <RemindDialog
-                                    CurrentTokenIcon={CurrentTokenIcon}
-                                    token={payload.token}
-                                    chainId={chainId}
-                                    setStatus={setStatus}
-                                />
-                            )
+                            return <RemindDialog token={payload.token} chainId={chainId} setStatus={setStatus} />
                         case ClaimStatus.Swap:
                             return (
                                 <ClaimDialog

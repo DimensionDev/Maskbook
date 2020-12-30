@@ -1,20 +1,17 @@
 import { useCallback, useState } from 'react'
+import { makeStyles, createStyles, Card, Typography, Box, Link } from '@material-ui/core'
 import { BigNumber } from 'bignumber.js'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { makeStyles, createStyles, Card, Typography, Box, Link } from '@material-ui/core'
-import { getConstant } from '../../../web3/helpers'
-import { CONSTANTS } from '../../../web3/constants'
-import { ChainId } from '../../../web3/types'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import BackgroundImage from '../assets/background'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import { EthIcon, DaiIcon, UsdcIcon, UsdtIcon } from '../assets/tokenIcon'
 import { formatBalance } from '../../Wallet/formatter'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -22,25 +19,10 @@ import { formatDateTime, formatTimeDiffer } from '../../../utils/date'
 import { ClaimGuide } from './ClaimGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
+import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 
 export interface IconProps {
     size?: number
-}
-
-export const getSupportTokenInfo = function (chainId = ChainId.Mainnet) {
-    const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS', chainId).toLowerCase()
-    const DAI_ADDRESS = getConstant(CONSTANTS, 'MSKA_ADDRESS', chainId).toLowerCase()
-    const USDT_ADDRESS = getConstant(CONSTANTS, 'MSKB_ADDRESS', chainId).toLowerCase()
-    const USDC_ADDRESS = getConstant(CONSTANTS, 'MSKC_ADDRESS', chainId).toLowerCase()
-
-    const tokenIconListTable = {
-        [DAI_ADDRESS]: (props: IconProps) => <DaiIcon size={props.size} />,
-        [ETH_ADDRESS]: (props: IconProps) => <EthIcon size={props.size} />,
-        [USDT_ADDRESS]: (props: IconProps) => <UsdtIcon size={props.size} />,
-        [USDC_ADDRESS]: (props: IconProps) => <UsdcIcon size={props.size} />,
-    }
-
-    return { tokenIconListTable }
 }
 
 const useStyles = makeStyles((theme) =>
@@ -87,6 +69,10 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             alignItems: 'center',
             color: '#fff',
+        },
+        tokenIcon: {
+            width: 24,
+            height: 24,
         },
         totalIcon: {
             marginLeft: theme.spacing(1),
@@ -142,18 +128,18 @@ export interface ITO_Props {
 }
 
 interface TokenItemProps {
-    TokenIcon: (props: IconProps) => JSX.Element
     price: string
-    tokenSymbol: string
-    sellTokenSymbol: string
+    token: EtherTokenDetailed | ERC20TokenDetailed
+    exchangeToken: EtherTokenDetailed | ERC20TokenDetailed
 }
 
-const TokenItem = ({ price, TokenIcon, tokenSymbol, sellTokenSymbol }: TokenItemProps) => {
+const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
+    const classes = useStyles()
     return (
         <>
-            <TokenIcon />
+            <TokenIcon classes={{ icon: classes.tokenIcon }} address={exchangeToken.address} />
             <Typography component="span">
-                <strong>{price}</strong> {tokenSymbol} / {sellTokenSymbol}
+                <strong>{price}</strong> {exchangeToken.symbol} / {token.symbol}
             </Typography>
         </>
     )
@@ -186,7 +172,6 @@ export function ITO(props: ITO_Props) {
     const postLink = usePostLink()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-    const { tokenIconListTable } = getSupportTokenInfo(chainId)
     const shareLink = useShareLink(
         t('plugin_ito_claim_foreshow_share', {
             link: postLink,
@@ -253,28 +238,24 @@ export function ITO(props: ITO_Props) {
                     />
                 </Box>
                 <Box>
-                    {exchange_tokens.map((t, i) => {
-                        const TokenIcon = tokenIconListTable[t.address.toLowerCase()]
-                        return TokenIcon ? (
-                            <div className={classes.rationWrap} key={i}>
-                                <TokenItem
-                                    price={formatBalance(
-                                        new BigNumber(exchange_amounts[i * 2])
-                                            .dividedBy(new BigNumber(exchange_amounts[i * 2 + 1]))
-                                            .multipliedBy(
-                                                new BigNumber(10).pow(token.decimals - exchange_tokens[i].decimals),
-                                            )
-                                            .multipliedBy(new BigNumber(10).pow(exchange_tokens[i].decimals))
-                                            .integerValue(),
-                                        exchange_tokens[i].decimals,
-                                    )}
-                                    TokenIcon={TokenIcon}
-                                    tokenSymbol={t.symbol!}
-                                    sellTokenSymbol={token.symbol!}
-                                />
-                            </div>
-                        ) : null
-                    })}
+                    {exchange_tokens.slice(0, 4).map((exchangeToken, i) => (
+                        <div className={classes.rationWrap} key={i}>
+                            <TokenItem
+                                price={formatBalance(
+                                    new BigNumber(exchange_amounts[i * 2])
+                                        .dividedBy(new BigNumber(exchange_amounts[i * 2 + 1]))
+                                        .multipliedBy(
+                                            new BigNumber(10).pow(token.decimals - exchange_tokens[i].decimals),
+                                        )
+                                        .multipliedBy(new BigNumber(10).pow(exchange_tokens[i].decimals))
+                                        .integerValue(),
+                                    exchange_tokens[i].decimals,
+                                )}
+                                token={token}
+                                exchangeToken={exchangeToken}
+                            />
+                        </div>
+                    ))}
                 </Box>
                 <Box className={classes.footer}>
                     <div>
@@ -308,10 +289,6 @@ export function ITO(props: ITO_Props) {
                     </Typography>
                 </Box>
             </Card>
-
-            {/* <Typography variant="body1" className={classes.textProviderErr}>
-                {t('plugin_ito_wrong_provider')}
-            </Typography> */}
 
             <Box className={classes.actionFooter}>
                 {!account || !chainIdValid ? (

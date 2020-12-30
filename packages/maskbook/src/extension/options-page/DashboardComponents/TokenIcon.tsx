@@ -39,23 +39,18 @@ export interface TokenIconProps extends withClasses<KeysInferFromUseStyles<typeo
     name?: string
     address: string
     AvatarProps?: Partial<AvatarProps>
-    currentIcon?: JSX.Element
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, name, currentIcon } = props
+    const { address, name } = props
     const classes = useStylesExtends(useStyles(), props)
     const tokenBlockie = useBlockie(props.address)
 
     return (
         <Avatar className={classes.icon} src={resolveTokenIconURL(address)} {...props.AvatarProps}>
-            {currentIcon ? (
-                (() => currentIcon)()
-            ) : (
-                <Avatar className={classes.icon} src={tokenBlockie}>
-                    {name?.substr(0, 1).toLocaleUpperCase()}
-                </Avatar>
-            )}
+            <Avatar className={classes.icon} src={tokenBlockie}>
+                {name?.substr(0, 1).toLocaleUpperCase()}
+            </Avatar>
         </Avatar>
     )
 }
