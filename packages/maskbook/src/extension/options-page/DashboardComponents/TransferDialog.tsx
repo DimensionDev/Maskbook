@@ -1,3 +1,7 @@
+import { ChangeEvent, useMemo, useState, useCallback, useEffect } from 'react'
+import { Send as SendIcon } from 'react-feather'
+import { BigNumber } from 'bignumber.js'
+import { EthereumAddress } from 'wallet.ts'
 import {
     Box,
     Button,
@@ -9,8 +13,6 @@ import {
     Theme,
     Typography,
 } from '@material-ui/core'
-import { Send as SendIcon } from 'react-feather'
-import { ChangeEvent, useState } from 'react'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import {
@@ -25,9 +27,11 @@ import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useCopyToClipboard } from 'react-use'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import { QRCode } from '../../../components/shared/qrcode'
-import { useCallback } from 'react'
-import { BigNumber } from 'bignumber.js'
-import { formatBalance } from '../../../plugins/Wallet/formatter'
+import { formatBalance, formatEthereumAddress } from '../../../plugins/Wallet/formatter'
+import { useTokenTransferCallback } from '../../../web3/hooks/useTokenTransferCallback'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
+import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 
 interface WalletProps {
     wallet: WalletRecord
@@ -40,7 +44,7 @@ const useTransferTabStyles = makeStyles((theme) =>
             padding: theme.spacing(1),
         },
         button: {
-            marginTop: theme.spacing(2),
+            marginTop: theme.spacing(3),
         },
     }),
 )
@@ -66,14 +70,64 @@ function TransferTab(props: TransferTabProps) {
     const onChangeAmount = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
         const _amount = ev.currentTarget.value
         if (_amount === '') setAmount('')
-        if (/^\d+[\.]?\d*$/.test(_amount)) {
-            setAmount(_amount)
-        }
+        if (/^\d+[\.]?\d*$/.test(_amount)) setAmount(_amount)
     }, [])
 
-    const onSend = useCallback(() => {
-        props.onClose()
-    }, [props])
+    // validation
+    const validationMessage = useMemo(() => {
+        if (!amount || new BigNumber(amount).isZero()) return t('wallet_transfer_error_amount_absence')
+        if (!address) return t('wallet_transfer_error_address_absence')
+        if (!EthereumAddress.isValid(address)) return t('wallet_transfer_error_invalid_address')
+        if (new BigNumber(amount).isGreaterThan(new BigNumber(tokenBalance)))
+            return t('wallet_transfer_error_insufficent_balance', {
+                token: token.symbol,
+            })
+        return ''
+    }, [amount, address, tokenBalance, token])
+
+    //#region transfer tokens
+    const transferAmount = new BigNumber(amount || '0').multipliedBy(new BigNumber(10).pow(token.decimals ?? 0))
+    const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
+        token.type,
+        token.address,
+        transferAmount.toFixed(),
+        address,
+        memo,
+    )
+
+    const onTransfer = useCallback(async () => {
+        await transferCallback()
+    }, [onClose, transferCallback])
+    //#endregion
+
+    //#region remote controlled transaction dialog
+    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+        WalletMessages.events.transactionDialogUpdated,
+        (ev) => {
+            if (ev.open) return
+
+            // reset state
+            resetTransferCallback()
+
+            if (transferState.type !== TransactionStateType.CONFIRMED) return
+
+            // reset form
+            setAmount('')
+            setAddress('')
+            setMemo('')
+        },
+    )
+
+    // open the transaction dialog
+    useEffect(() => {
+        if (transferState.type === TransactionStateType.UNKNOWN) return
+        setTransactionDialogOpen({
+            open: true,
+            state: transferState,
+            summary: `Transfer ${formatBalance(transferAmount, token.decimals ?? 0)} ${token.symbol} to ${formatEthereumAddress(address, 4)}.`
+        })
+    }, [transferState /* update tx dialog only if state changed */])
+    //#endregion
 
     return (
         <div className={classes.root}>
@@ -105,13 +159,19 @@ function TransferTab(props: TransferTabProps) {
                 onChange={(ev) => setAddress(ev.target.value)}
             />
             <TextField
-                placeholder={t('wallet_transfer_memo')}
                 label={t('wallet_transfer_memo')}
+                placeholder={t('wallet_transfer_memo_placeholder')}
                 value={memo}
+                disabled={token.type === EthereumTokenType.ERC20}
                 onChange={(ev) => setMemo(ev.target.value)}
             />
-            <Button className={classes.button} variant="contained" color="primary" onClick={onSend}>
-                {t('wallet_transfer_send')}
+            <Button
+                className={classes.button}
+                variant="contained"
+                color="primary"
+                disabled={!!validationMessage || transferState.type === TransactionStateType.WAIT_FOR_CONFIRMING}
+                onClick={onTransfer}>
+                {validationMessage || t('wallet_transfer_send')}
             </Button>
         </div>
     )
@@ -211,7 +271,7 @@ export function DashboardWalletTransferDialog(
     return (
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
-                primary={t('wallet_transfer_menu')}
+                primary={t('wallet_transfer_title')}
                 icon={<SendIcon />}
                 iconColor="#4EE0BC"
                 size="medium"

@@ -1,81 +1,96 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
+import { EthereumAddress } from 'wallet.ts'
+import type { TransactionReceipt } from 'web3-core'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
-import { useTransactionReceipt } from './useTransaction'
-import { useERC20TokenBalance } from './useERC20TokenBalance'
-
-export enum TransferStateType {
-    UNKNOWN,
-    INSUFFICIENT_BALANCE,
-    NOT_TRANSFERRED,
-    PENDING,
-    TRANSFERRED,
-}
+import { TransactionStateType, useTransactionState } from './useTransactionState'
+import { TransactionEventType } from '../types'
 
 export function useERC20TokenTransferCallback(address: string, amount?: string, recipient?: string) {
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(address)
-    const { value: balance, retry: revalidateBalance } = useERC20TokenBalance(address)
-
-    const [transferHash, setTransferHash] = useState('')
-    const receipt = useTransactionReceipt(transferHash)
-
-    const transferStateType: TransferStateType = useMemo(() => {
-        if (receipt?.blockHash) return TransferStateType.TRANSFERRED
-        if (!amount || !balance) return TransferStateType.UNKNOWN
-        if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) return TransferStateType.INSUFFICIENT_BALANCE
-        if (transferHash && !receipt?.blockHash) return TransferStateType.PENDING
-        return TransferStateType.NOT_TRANSFERRED
-    }, [amount, balance, transferHash, receipt?.blockHash])
+    const [transferState, setTransferState] = useTransactionState()
 
     const transferCallback = useCallback(async () => {
-        if (transferStateType !== TransferStateType.NOT_TRANSFERRED) return
-        if (!account || !recipient || !erc20Contract) return
-        if (!amount || new BigNumber(amount).isZero()) return
+        if (!account || !recipient || !amount || new BigNumber(amount).isZero() || !erc20Contract) {
+            setTransferState({
+                type: TransactionStateType.UNKNOWN,
+            })
+            return
+        }
 
+        // error: invalid recipient address
+        if (!EthereumAddress.isValid(recipient)) {
+            setTransferState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Invalid recipient address'),
+            })
+            return
+        }
+
+        // error: insufficent balance
+        const balance = await erc20Contract.methods.balanceOf(account).call()
+
+        if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) {
+            setTransferState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Insufficent balance'),
+            })
+            return
+        }
+
+        // pre-step: start waiting for provider to confirm tx
+        setTransferState({
+            type: TransactionStateType.WAIT_FOR_CONFIRMING,
+        })
+
+        // step 1: estimate gas
         const estimatedGas = await erc20Contract.methods.transfer(recipient, amount).estimateGas({
             from: account,
             to: erc20Contract.options.address,
         })
 
-        return new Promise<string>((resolve, reject) => {
-            erc20Contract.methods.transfer(recipient, amount).send(
-                {
-                    gas: estimatedGas,
-                    from: account,
-                    to: erc20Contract.options.address,
-                },
-                (error, hash) => {
-                    if (error) reject(error)
-                    else {
-                        resolve(hash)
-                        setTransferHash(hash)
-                    }
-                },
-            )
+        // step 2: blocking
+        return new Promise<void>(async (resolve, reject) => {
+            const promiEvent = erc20Contract.methods.transfer(recipient, amount).send({
+                gas: estimatedGas,
+                from: account,
+                to: erc20Contract.options.address,
+            })
+            promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                setTransferState({
+                    type: TransactionStateType.CONFIRMED,
+                    no: 0,
+                    receipt,
+                })
+            })
+            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                setTransferState({
+                    type: TransactionStateType.CONFIRMED,
+                    no,
+                    receipt,
+                })
+                resolve()
+            })
+            promiEvent.on(TransactionEventType.ERROR, (error) => {
+                setTransferState({
+                    type: TransactionStateType.FAILED,
+                    error,
+                })
+                reject(error)
+            })
         })
-    }, [transferStateType, account, address, amount, recipient])
+    }, [account, address, amount, recipient, erc20Contract])
 
     const resetCallback = useCallback(() => {
-        setTransferHash('')
-        revalidateBalance()
+        setTransferState({
+            type: TransactionStateType.UNKNOWN,
+        })
     }, [])
 
-    // reset transfer state
-    useEffect(() => {
-        setTransferHash('')
-    }, [address, amount, recipient])
-
-    // revalidate balance if tx hash was cleaned
-    useEffect(() => {
-        if (!transferHash) revalidateBalance()
-    }, [transferHash])
-
     return [
-        {
-            type: transferStateType,
-        },
+        transferState,
         transferCallback,
         resetCallback,
     ] as const

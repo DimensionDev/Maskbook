@@ -249,6 +249,7 @@
     "share_wallet": "暗号通貨ウォレットを共有する",
     "share_wallet_hint": "Eメールや QR コードで暗号通貨ウォレットを共有することができます。",
     "submit": "送信",
+    "transfer": "",
     "unknown_time": "不明な時間",
     "username": "ユーザー名",
     "version_of_stable": "バージョン {{version}}",
@@ -451,10 +452,15 @@
     "plugin_ito_claim_foreshow_share": "",
     "plugin_ito_claim_only_once_remind": "",
     "wallet_transfer_to_address": "",
-    "wallet_transfer_send": "",
     "wallet_transfer_balance": "",
     "wallet_transfer_memo": "",
+    "wallet_transfer_memo_placeholder": "",
     "wallet_transfer_amount": "",
     "wallet_transfer_receive": "",
-    "wallet_transfer_menu": ""
+    "wallet_transfer_send": "",
+    "wallet_transfer_title": "",
+    "wallet_transfer_error_amount_absence": "",
+    "wallet_transfer_error_address_absence": "",
+    "wallet_transfer_error_invalid_address": "",
+    "wallet_transfer_error_insufficent_balance": ""
 }

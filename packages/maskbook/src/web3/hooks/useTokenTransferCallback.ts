@@ -21,7 +21,7 @@ export function useTokenTransferCallback(
         case EthereumTokenType.ERC20:
             return r2
         case EthereumTokenType.ERC721:
-            return r3
+            throw new Error('Not implemented')
         default:
             unreachable(type_)
     }

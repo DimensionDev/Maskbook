@@ -52,9 +52,7 @@ export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
             }}>
             {t('buy')}
         </MenuItem>,
-        <MenuItem onClick={() => openTransferDialogOpen({ wallet, token })}>
-            {t('wallet_transfer_menu')}
-        </MenuItem>,
+        <MenuItem onClick={() => openTransferDialogOpen({ wallet, token })}>{t('transfer')}</MenuItem>,
         <MenuItem
             style={{ display: isETH(token.address) ? 'none' : 'initial' }}
             onClick={() => openHideTokenConfirmDialog({ wallet, token })}>

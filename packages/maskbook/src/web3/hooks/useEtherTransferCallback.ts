@@ -1,84 +1,101 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount } from './useAccount'
-import { useTransactionReceipt } from './useTransaction'
-import { useEtherTokenBalance } from './useEtherTokenBalance'
-import { ServicesWithProgress } from '../../extension/service'
+import Services, { ServicesWithProgress } from '../../extension/service'
 import { toHex } from 'web3-utils'
 import { StageType } from '../../utils/promiEvent'
-
-export enum TransferStateType {
-    UNKNOWN,
-    INSUFFICIENT_BALANCE,
-    NOT_TRANSFERRED,
-    PENDING,
-    TRANSFERRED,
-}
-
-export interface TransferState {
-    type: TransferStateType
-}
+import type { TransactionConfig } from 'web3-core'
+import { useChainId } from './useChainState'
+import { addGasMargin } from '../helpers'
+import { TransactionStateType, useTransactionState } from './useTransactionState'
+import { EthereumAddress } from 'wallet.ts'
 
 export function useEtherTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const account = useAccount()
-    const { value: balance, retry: revalidateBalance } = useEtherTokenBalance(account)
-
-    const [transferHash, setTransferHash] = useState('')
-    const receipt = useTransactionReceipt(transferHash)
-
-    const transferStateType: TransferStateType = useMemo(() => {
-        if (receipt?.blockHash) return TransferStateType.TRANSFERRED
-        if (!amount || !recipient || !balance) return TransferStateType.UNKNOWN
-        if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) return TransferStateType.INSUFFICIENT_BALANCE
-        if (transferHash && !receipt?.blockHash) return TransferStateType.PENDING
-        return TransferStateType.NOT_TRANSFERRED
-    }, [account, amount, recipient])
+    const chainId = useChainId()
+    const [transferState, setTransferState] = useTransactionState()
 
     const transferCallback = useCallback(async () => {
-        if (transferStateType !== TransferStateType.NOT_TRANSFERRED) return
-        if (!account || !recipient) return
-        if (!amount || new BigNumber(amount).isZero()) return
-
-        return new Promise<string>(async (resolve, reject) => {
-            const iterator = ServicesWithProgress.sendTransaction(account, {
-                from: account,
-                value: amount,
-                data: memo ? toHex(memo) : undefined,
+        if (!account || !recipient || !amount || new BigNumber(amount).isZero()) {
+            setTransferState({
+                type: TransactionStateType.UNKNOWN,
             })
-            try {
-                for await (const stage of iterator) {
-                    if (stage.type === StageType.TRANSACTION_HASH) {
-                        setTransferHash(stage.hash)
-                        resolve(stage.hash)
-                        break
-                    }
-                }
-            } catch (error) {
-                reject(error)
-            }
+            return
+        }
+
+        // error: invalid recipient address
+        if (!EthereumAddress.isValid(recipient)) {
+            setTransferState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Invalid recipient address'),
+            })
+            return
+        }
+
+        // error: insufficent balance
+        const balance = await Services.Ethereum.getBalance(account, chainId)
+
+        if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) {
+            setTransferState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Insufficent balance'),
+            })
+            return
+        }
+
+        // pre-step: start waiting for provider to confirm tx
+        setTransferState({
+            type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
-    }, [transferStateType, account, amount, recipient, memo])
+
+        const config: TransactionConfig = {
+            from: account,
+            to: recipient,
+            value: amount,
+            data: memo ? toHex(memo) : undefined,
+        }
+
+        // step 1: estimate gas
+        const estimatedGas = await Services.Ethereum.estimateGas(config, chainId)
+        const iterator = ServicesWithProgress.sendTransaction(account, {
+            // the esitmated gas limit is too low with arbitrary message to be encoded as data
+            gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+            ...config,
+        })
+
+        // step 2: blocking
+        try {
+            for await (const stage of iterator) {
+                switch (stage.type) {
+                    case StageType.RECEIPT:
+                        setTransferState({
+                            type: TransactionStateType.CONFIRMED,
+                            no: 0,
+                            receipt: stage.receipt,
+                        })
+                        break
+                    case StageType.CONFIRMATION:
+                        setTransferState({
+                            type: TransactionStateType.CONFIRMED,
+                            no: stage.no,
+                            receipt: stage.receipt,
+                        })
+                        break
+                }
+            }
+        } catch (error) {
+            setTransferState({
+                type: TransactionStateType.FAILED,
+                error,
+            })
+        }
+    }, [account, amount, chainId, recipient, memo])
 
     const resetCallback = useCallback(() => {
-        setTransferHash('')
-        revalidateBalance()
+        setTransferState({
+            type: TransactionStateType.UNKNOWN,
+        })
     }, [])
 
-    // reset transfer state
-    useEffect(() => {
-        setTransferHash('')
-    }, [amount, recipient, memo])
-
-    // revalidate balance if tx hash was cleaned
-    useEffect(() => {
-        if (!transferHash) revalidateBalance()
-    }, [transferHash])
-
-    return [
-        {
-            type: transferStateType,
-        },
-        transferCallback,
-        resetCallback,
-    ] as const
+    return [transferState, transferCallback, resetCallback] as const
 }
