@@ -6,7 +6,7 @@ import { WalletMessages } from '../../Wallet/messages'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { resolveLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveChainName, resolveLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import BackgroundImage from '../assets/background'
@@ -201,6 +201,7 @@ export function ITO(props: ITO_Props) {
     }, [])
     const onClaim = useCallback(async () => setOpenClaimDialog(true), [])
 
+    if (payload.chain_id !== chainId) return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
     return (
         <div>
             <Card className={classes.root} elevation={0}>
