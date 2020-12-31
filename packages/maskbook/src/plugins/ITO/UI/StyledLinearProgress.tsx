@@ -8,6 +8,6 @@ export const StyledLinearProgress = withStyles({
     },
     bar: {
         borderRadius: 5,
-        backgroundColor: '#6BB9FF',
+        backgroundColor: '#fff',
     },
 })(LinearProgress)
