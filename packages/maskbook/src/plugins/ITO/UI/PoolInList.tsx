@@ -82,8 +82,9 @@ const useStyles = makeStyles((theme) =>
         cell: {
             border: '1px solid rgba(224, 224, 224, 1)',
             color: theme.palette.text.primary,
+            wordBreak: 'break-word',
         },
-        table_title: {
+        head: {
             border: '1px solid rgba(224, 224, 224, 1)',
             color: theme.palette.text.secondary,
         },
@@ -182,19 +183,19 @@ export function PoolInList(props: PoolInListProps) {
 
                     <Box className={classes.deteils}>
                         <TableContainer component={Paper} className={classes.table}>
-                            <Table size="small">
+                            <Table size="small" stickyHeader>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell className={classes.table_title} align="center" size="small">
+                                        <TableCell className={classes.head} align="center" size="small">
                                             {t('plugin_ito_list_table_type')}
                                         </TableCell>
-                                        <TableCell className={classes.table_title} align="center" size="small">
+                                        <TableCell className={classes.head} align="center" size="small">
                                             {t('plugin_ito_list_table_price')}
                                         </TableCell>
-                                        <TableCell className={classes.table_title} align="center" size="small">
+                                        <TableCell className={classes.head} align="center" size="small">
                                             {t('plugin_ito_list_table_sold')}
                                         </TableCell>
-                                        <TableCell className={classes.table_title} align="center" size="small">
+                                        <TableCell className={classes.head} align="center" size="small">
                                             {t('plugin_ito_list_table_got')}
                                         </TableCell>
                                     </TableRow>
