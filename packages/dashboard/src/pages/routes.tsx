@@ -1,5 +1,6 @@
 import { Route, Switch, Redirect } from 'react-router'
 import { lazy, Suspense } from 'react'
+import { DashboardFrame } from '../components/DashboardFrame'
 export enum Routes {
     Welcome = '/welcome',
     Personas = '/personas',
@@ -20,9 +21,11 @@ export function Pages() {
         <Suspense fallback="loading...">
             <Switch>
                 <Route path={Routes.Welcome} children={<Welcome />} />
-                <Route path={Routes.Personas} children={<Personas />} exact />
-                <Route path={Routes.Wallets} children={<Wallets />} />
-                <Route path={Routes.Settings} children={<Settings />} exact />
+                <DashboardFrame>
+                    <Route path={Routes.Personas} children={<Personas />} exact />
+                    <Route path={Routes.Wallets} children={<Wallets />} />
+                    <Route path={Routes.Settings} children={<Settings />} exact />
+                </DashboardFrame>
                 <Route path="/" exact>
                     <Redirect to={Routes.Personas} />
                 </Route>

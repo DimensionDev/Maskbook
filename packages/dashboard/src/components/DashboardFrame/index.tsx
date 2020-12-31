@@ -24,16 +24,10 @@ const useStyles = makeStyles((theme) => ({
     },
     container: { backgroundColor: theme.palette.background.paper },
 }))
-export interface DashboardFrameProps extends React.PropsWithChildren<{}> {
-    title: React.ReactNode | string
-    primaryAction?: React.ReactNode
-}
-
+export interface DashboardFrameProps extends React.PropsWithChildren<{}> {}
 export function DashboardFrame(props: DashboardFrameProps) {
     const classes = useStyles()
     const menuStyle = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
-    const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
-    const right = props.primaryAction
     return (
         <>
             <Grid container className={classes.root}>
@@ -41,22 +35,37 @@ export function DashboardFrame(props: DashboardFrameProps) {
                     <Navigation />
                 </Grid>
                 <Grid container direction="column" item xs={10}>
-                    <AppBar position="relative" color="inherit" elevation={0}>
-                        <Toolbar component={Grid} container>
-                            {left}
-                            <Box sx={{ flex: 1 }} />
-                            {right}
-                        </Toolbar>
-                    </AppBar>
-                    <ErrorBoundary>
-                        <Grid item xs className={classes.containment}>
-                            <div className={clz(classes.shapeHelper, classes.shape)}>
-                                <div className={clz(classes.container, classes.shape)}>{props.children}</div>
-                            </div>
-                        </Grid>
-                    </ErrorBoundary>
+                    <ErrorBoundary>{props.children}</ErrorBoundary>
                 </Grid>
             </Grid>
+        </>
+    )
+}
+
+export interface PageFrameProps extends React.PropsWithChildren<{}> {
+    title: React.ReactNode | string
+    primaryAction?: React.ReactNode
+}
+export function PageFrame(props: PageFrameProps) {
+    const classes = useStyles()
+    const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
+    const right = props.primaryAction
+    return (
+        <>
+            <AppBar position="relative" color="inherit" elevation={0}>
+                <Toolbar component={Grid} container>
+                    {left}
+                    <Box sx={{ flex: 1 }} />
+                    {right}
+                </Toolbar>
+            </AppBar>
+            <ErrorBoundary>
+                <Grid item xs className={classes.containment}>
+                    <div className={clz(classes.shapeHelper, classes.shape)}>
+                        <div className={clz(classes.container, classes.shape)}>{props.children}</div>
+                    </div>
+                </Grid>
+            </ErrorBoundary>
         </>
     )
 }
