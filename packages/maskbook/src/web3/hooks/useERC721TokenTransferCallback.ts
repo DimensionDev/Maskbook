@@ -1,1 +1,3 @@
-export function useERC721TokenTransferCallback(address: string, amount?: string, receiver?: string) {}
+export function useERC721TokenTransferCallback(address: string, id?: string, recipient?: string) {
+    // todo
+}

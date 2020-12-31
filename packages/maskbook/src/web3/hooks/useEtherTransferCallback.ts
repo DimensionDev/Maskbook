@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount } from './useAccount'
-import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { useTransactionReceipt } from './useTransaction'
-import { useERC20TokenBalance } from './useERC20TokenBalance'
+import { useEtherTokenBalance } from './useEtherTokenBalance'
+import { ServicesWithProgress } from '../../extension/service'
+import { toHex } from 'web3-utils'
+import { StageType } from '../../utils/promiEvent'
 
 export enum TransferStateType {
     UNKNOWN,
@@ -13,49 +15,49 @@ export enum TransferStateType {
     TRANSFERRED,
 }
 
-export function useERC20TokenTransferCallback(address: string, amount?: string, recipient?: string) {
+export interface TransferState {
+    type: TransferStateType
+}
+
+export function useEtherTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const account = useAccount()
-    const erc20Contract = useERC20TokenContract(address)
-    const { value: balance, retry: revalidateBalance } = useERC20TokenBalance(address)
+    const { value: balance, retry: revalidateBalance } = useEtherTokenBalance(account)
 
     const [transferHash, setTransferHash] = useState('')
     const receipt = useTransactionReceipt(transferHash)
 
     const transferStateType: TransferStateType = useMemo(() => {
         if (receipt?.blockHash) return TransferStateType.TRANSFERRED
-        if (!amount || !balance) return TransferStateType.UNKNOWN
+        if (!amount || !recipient || !balance) return TransferStateType.UNKNOWN
         if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) return TransferStateType.INSUFFICIENT_BALANCE
         if (transferHash && !receipt?.blockHash) return TransferStateType.PENDING
         return TransferStateType.NOT_TRANSFERRED
-    }, [amount, balance, transferHash, receipt?.blockHash])
+    }, [account, amount, recipient])
 
     const transferCallback = useCallback(async () => {
         if (transferStateType !== TransferStateType.NOT_TRANSFERRED) return
-        if (!account || !recipient || !erc20Contract) return
+        if (!account || !recipient) return
         if (!amount || new BigNumber(amount).isZero()) return
 
-        const estimatedGas = await erc20Contract.methods.transfer(recipient, amount).estimateGas({
-            from: account,
-            to: erc20Contract.options.address,
-        })
-
-        return new Promise<string>((resolve, reject) => {
-            erc20Contract.methods.transfer(recipient, amount).send(
-                {
-                    gas: estimatedGas,
-                    from: account,
-                    to: erc20Contract.options.address,
-                },
-                (error, hash) => {
-                    if (error) reject(error)
-                    else {
-                        resolve(hash)
-                        setTransferHash(hash)
+        return new Promise<string>(async (resolve, reject) => {
+            const iterator = ServicesWithProgress.sendTransaction(account, {
+                from: account,
+                value: amount,
+                data: memo ? toHex(memo) : undefined,
+            })
+            try {
+                for await (const stage of iterator) {
+                    if (stage.type === StageType.TRANSACTION_HASH) {
+                        setTransferHash(stage.hash)
+                        resolve(stage.hash)
+                        break
                     }
-                },
-            )
+                }
+            } catch (error) {
+                reject(error)
+            }
         })
-    }, [transferStateType, account, address, amount, recipient])
+    }, [transferStateType, account, amount, recipient, memo])
 
     const resetCallback = useCallback(() => {
         setTransferHash('')
@@ -65,7 +67,7 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
     // reset transfer state
     useEffect(() => {
         setTransferHash('')
-    }, [address, amount, recipient])
+    }, [amount, recipient, memo])
 
     // revalidate balance if tx hash was cleaned
     useEffect(() => {
