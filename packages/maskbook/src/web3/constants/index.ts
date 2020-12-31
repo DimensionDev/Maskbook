@@ -111,6 +111,20 @@ export const CONSTANTS = {
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },
+    MSKD_ADDRESS: {
+        [ChainId.Mainnet]: '',
+        [ChainId.Ropsten]: '0x49A6D6FE38405e21C4402CcEacd23636AbE301bf',
+        [ChainId.Rinkeby]: '0x57b9bD626507421d82C7542e2877D72fE7815aFd',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+    },
+    MSKE_ADDRESS: {
+        [ChainId.Mainnet]: '',
+        [ChainId.Ropsten]: '0xE8f4dDB8c8b655B4e161d3480522d1d576561A4D',
+        [ChainId.Rinkeby]: '0xB46e44E06B89798Af11b8fE456b4796dc9026cE0',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+    },
     DAI_ADDRESS: {
         [ChainId.Mainnet]: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
         [ChainId.Ropsten]: '0x31f42841c2db5173425b5223809cf3a38fede360',

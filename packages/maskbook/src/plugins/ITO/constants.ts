@@ -68,29 +68,19 @@ const MSKC = createERC20Token(
     'Mask Token C',
     'MSKC',
 )
-
-// Rinkeby
-
-const MSK_A = createERC20Token(
+const MSKD = createERC20Token(
     ChainId.Ropsten,
-    getConstant(CONSTANTS, 'MSKA_ADDRESS', ChainId.Rinkeby),
+    getConstant(CONSTANTS, 'MSKD_ADDRESS', ChainId.Ropsten),
     18,
-    'Mask Token A',
-    'MSKA',
+    'Mask Token D',
+    'MSKD',
 )
-const MSK_B = createERC20Token(
-    ChainId.Rinkeby,
-    getConstant(CONSTANTS, 'MSKB_ADDRESS', ChainId.Rinkeby),
+const MSKE = createERC20Token(
+    ChainId.Ropsten,
+    getConstant(CONSTANTS, 'MSKE_ADDRESS', ChainId.Ropsten),
     18,
-    'Mask Token B',
-    'MSKB',
-)
-const MSK_C = createERC20Token(
-    ChainId.Rinkeby,
-    getConstant(CONSTANTS, 'MSKC_ADDRESS', ChainId.Rinkeby),
-    18,
-    'Mask Token C',
-    'MSKC',
+    'Mask Token E',
+    'MSKE',
 )
 
 export const ITO_CONSTANTS = {
@@ -110,8 +100,8 @@ export const ITO_CONSTANTS = {
     },
     EXCHANGE_TOKENS: {
         [ChainId.Mainnet]: [DAI, USDC, USDT, HUSD, BUSD].map((x) => x.address),
-        [ChainId.Ropsten]: [MSKA, MSKB, MSKC].map((x) => x.address),
-        [ChainId.Rinkeby]: [MSK_A, MSK_B, MSK_C].map((x) => x.address),
+        [ChainId.Ropsten]: [MSKA, MSKB, MSKC, MSKD, MSKE].map((x) => x.address),
+        [ChainId.Rinkeby]: [],
         [ChainId.Kovan]: [],
         [ChainId.Gorli]: [],
     },
