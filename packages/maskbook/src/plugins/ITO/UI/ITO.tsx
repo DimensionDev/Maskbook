@@ -178,12 +178,6 @@ export function ITO(props: ITO_Props) {
     const postLink = usePostLink()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-    const shareLink = useShareLink(
-        t('plugin_ito_claim_foreshow_share', {
-            link: postLink,
-        }),
-    )
-
     //#region token detailed
     const {
         value: availability,
@@ -199,8 +193,6 @@ export function ITO(props: ITO_Props) {
     const noRemain = total_remaining.isZero()
 
     const canWithdraw = isAccountSeller && listOfStatus.includes(ITO_Status.expired) && !noRemain
-    console.log('canWithdraw', canWithdraw)
-    console.log('noRemain', payload.total_remaining)
     //#region remote controlled select provider dialog
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {
@@ -211,8 +203,30 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     //#region buy info
-    const { value: buyInfo } = usePoolBuyInfo(pid.toLowerCase(), account.toLowerCase())
+    const { value: buyInfo, retry: retryBuyInfo } = usePoolBuyInfo(pid.toLowerCase(), account.toLowerCase())
+    console.log('buyInfo', buyInfo)
+    const shareSuccessLink = useShareLink(
+        t('plugin_ito_claim_success_share', {
+            link: postLink,
+            amount: formatBalance(new BigNumber(buyInfo ? buyInfo.amount_bought : '0'), buyInfo?.token.decimals ?? 0),
+            symbol: token.symbol,
+        }),
+    )
+
+    useEffect(() => {
+        retryBuyInfo()
+    }, [account, chainId, chainIdValid])
+
+    const onShareSuccess = useCallback(async () => {
+        window.open(shareSuccessLink, '_blank', 'noopener noreferrer')
+    }, [shareSuccessLink, buyInfo])
     //#endregion
+
+    const shareLink = useShareLink(
+        t('plugin_ito_claim_foreshow_share', {
+            link: postLink,
+        }),
+    )
 
     const onShare = useCallback(async () => {
         window.open(shareLink, '_blank', 'noopener noreferrer')
@@ -354,7 +368,16 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_list_button_claim')}
                     </ActionButton>
-                ) : listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(ITO_Status.waited) ? (
+                ) : listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(ITO_Status.completed) &&
+                  buyInfo ? (
+                    <ActionButton
+                        onClick={onShareSuccess}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
+                        {t('plugin_ito_share')}
+                    </ActionButton>
+                ) : listOfStatus.includes(ITO_Status.waited) ? (
                     <ActionButton onClick={onShare} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_ito_share')}
                     </ActionButton>
