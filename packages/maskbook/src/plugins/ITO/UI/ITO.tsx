@@ -22,6 +22,7 @@ import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { sortTokens } from '../helpers'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
+import { usePoolBuyInfo } from '../hooks/usePoolBuyInfo'
 
 export interface IconProps {
     size?: number
@@ -197,6 +198,19 @@ export function ITO(props: ITO_Props) {
         })
     }, [setSelectProviderDialogOpen])
     //#endregion
+
+    //#region buy info
+    const { value: buyInfo } = usePoolBuyInfo(
+        '0x14df8206bc1fc11a9679a00e726a06026fbed55a303c7a3029b0a29cfea66165',
+        '0x66b57885e8e9d84742fabda0ce6e3496055b012d',
+    )
+
+    console.log('DEBUG: buyInfo')
+    console.log({
+        buyInfo,
+    })
+    //#endregion
+
     const onShare = useCallback(async () => {
         window.open(shareLink, '_blank', 'noopener noreferrer')
     }, [])

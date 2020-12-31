@@ -41,10 +41,21 @@ export function useClaimCallback(
             value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
         }
 
+        // error: invalid claim amount
         if (!new BigNumber(total).isPositive()) {
             setClaimState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Invalid claim amount'),
+            })
+            return
+        }
+
+        // error: invalid token
+        const claimTokenAt = payload.exchange_tokens.findIndex((x) => isSameAddress(x.address, token.address))
+        if (claimTokenAt === -1) {
+            setClaimState({
+                type: TransactionStateType.FAILED,
+                error: new Error(`Unknown ${token.symbol} token`),
             })
             return
         }
@@ -57,7 +68,7 @@ export function useClaimCallback(
             )!,
             account,
             Web3Utils.sha3(account)!,
-            payload.exchange_tokens.findIndex((x) => isSameAddress(x.address, token.address)),
+            claimTokenAt,
             total,
         ]
 

@@ -58,6 +58,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
                 token: exchangeTokensUnsorted[i],
             }))
             .sort((unsortedA, unsortedB) => sortTokens(unsortedA.token, unsortedB.token))
+
         const exchangeAmounts = sorted.map((x) => x.amount)
         const exchangeTokens = sorted.map((x) => x.token)
 

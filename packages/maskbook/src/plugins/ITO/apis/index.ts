@@ -4,6 +4,20 @@ import { ITO_CONSTANTS } from '../constants'
 import { payloadIntoMask } from '../helpers'
 import type { JSON_PayloadOutMask } from '../types'
 
+const BUYER_FIELDS = `
+    address
+    name
+`
+
+const TOKEN_FIELDS = `
+    chain_id
+    type
+    address
+    name
+    symbol
+    decimals
+`
+
 const POOL_FIELDS = `
     contract_address
     pid
@@ -17,12 +31,7 @@ const POOL_FIELDS = `
     end_time
     creation_time
     token {
-        chain_id
-        type
-        address
-        name
-        symbol
-        decimals
+        ${TOKEN_FIELDS}
     }
     seller {
         address
@@ -34,14 +43,55 @@ const POOL_FIELDS = `
     }
     exchange_amounts
     exchange_tokens {
-        chain_id
-        type
-        address
-        name
-        symbol
-        decimals
+        ${TOKEN_FIELDS}
     }
 `
+
+export async function getBuyInfo(pid: string, buyer: string) {
+    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL'), {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify({
+            query: `
+            {
+                buyInfos (where: { pool: "${pid.toLowerCase()}", buyer: "${buyer.toLowerCase()}" }) {
+                    pool {
+                        ${POOL_FIELDS}
+                    }
+                    buyer {
+                        ${BUYER_FIELDS}
+                    }
+                    token {
+                        ${TOKEN_FIELDS}
+                    }
+                    amount_sold
+                    amount_bought
+                }
+            }
+            `,
+        }),
+    })
+    const { data } = (await response.json()) as {
+        data: {
+            buyInfos: {
+                pool: JSON_PayloadOutMask
+                buyer: {
+                    address: string
+                    name: string
+                }
+                token: JSON_PayloadOutMask['token']
+                amount_sold: string
+                amount_bought: string
+            }[]
+        }
+    }
+    const buyInfo = data.buyInfos[0]
+    if (!buyInfo) return
+    return {
+        ...buyInfo,
+        pool: payloadIntoMask(buyInfo.pool),
+    }
+}
 
 export async function getPool(pid: string) {
     const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL'), {
