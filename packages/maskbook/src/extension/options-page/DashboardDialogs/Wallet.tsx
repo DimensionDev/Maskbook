@@ -540,14 +540,12 @@ export function DashboardWalletHideTokenConfirmDialog(
 ) {
     const { t } = useI18N()
     const { wallet, token } = props.ComponentProps!
-
-    if (isETH(token.address)) return null
-
     const onConfirm = useSnackbarCallback(
         () => WalletRPC.blockERC20Token(wallet.address, token as ERC20TokenDetailed),
         [wallet.address],
         props.onClose,
     )
+    if (isETH(token.address)) return null
     return (
         <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
@@ -670,7 +668,7 @@ export function DashboardWalletHistoryDialog(
 //#endregion
 
 //#region red packet detail dialog
-const useRedPacketDetailStyles = makeStyles((theme: Theme) =>
+const useRedPacketDetailDialogStyles = makeStyles((theme: Theme) =>
     createStyles({
         sayThanks: {
             display: 'block',
@@ -694,7 +692,7 @@ export function DashboardWalletRedPacketDetailDialog(
     const { t } = useI18N()
     const { wallet, payload } = props.ComponentProps!
 
-    const classes = useRedPacketDetailStyles()
+    const classes = useRedPacketDetailDialogStyles()
 
     const account = useAccount()
     const redPacket = useRedPacketFromDB(payload.rpid)
