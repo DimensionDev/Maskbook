@@ -58,7 +58,11 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     return (
         <>
-            <InjectedDialog open={props.open} title={t('plugin_ito_display_name')} onClose={props.onClose}>
+            <InjectedDialog
+                open={props.open}
+                title={t('plugin_ito_display_name')}
+                onClose={props.onClose}
+                disableBackdropClick>
                 <DialogContent>
                     <AbstractTab height={540} {...tabProps} />
                 </DialogContent>

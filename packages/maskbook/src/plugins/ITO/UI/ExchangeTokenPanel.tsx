@@ -159,6 +159,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
             </Paper>
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
+                disableSearchBar
                 includeTokens={isSell ? [] : [ETH_ADDRESS, ...includeTokensAddress, ...EXCHANGE_TOKENS]}
                 excludeTokens={excludeTokensAddress}
                 selectedTokens={[exchangeToken?.address ?? '', ...selectedTokensAddress]}

@@ -32,6 +32,7 @@ export interface SelectERC20TokenDialogProps extends withClasses<never> {
     includeTokens: string[]
     excludeTokens: string[]
     selectedTokens: string[]
+    disableSearchBar?: boolean
     onSubmit(token: ERC20TokenDetailed): void
     onClose(): void
 }
@@ -40,7 +41,7 @@ export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const { open, includeTokens, excludeTokens, selectedTokens, onSubmit, onClose } = props
+    const { open, disableSearchBar = false, includeTokens, excludeTokens, selectedTokens, onSubmit, onClose } = props
 
     //#region search tokens
     const [keyword, setKeyword] = useState('')
@@ -49,14 +50,16 @@ export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
     return (
         <InjectedDialog open={open} onClose={onClose} title="Select a Token" DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent>
-                <TextField
-                    className={classes.search}
-                    label={t('add_token_search_hint')}
-                    autoFocus
-                    fullWidth
-                    value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
-                />
+                {!disableSearchBar ? (
+                    <TextField
+                        className={classes.search}
+                        label={t('add_token_search_hint')}
+                        autoFocus
+                        fullWidth
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                    />
+                ) : null}
                 <FixedTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     useEther
@@ -66,7 +69,7 @@ export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
                     selectedTokens={selectedTokens}
                     onSubmit={onSubmit}
                     FixedSizeListProps={{
-                        height: 288,
+                        height: disableSearchBar ? 350 : 288,
                         itemSize: 52,
                         overscanCount: 4,
                     }}

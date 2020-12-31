@@ -24,6 +24,7 @@ import type { JSON_PayloadInMask } from '../types'
 const useStyles = makeStyles((theme) =>
     createStyles({
         top: {
+            width: '100%',
             boxSizing: 'border-box',
             padding: theme.spacing(1, 2, 1),
         },

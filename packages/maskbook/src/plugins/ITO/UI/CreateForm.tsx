@@ -155,7 +155,6 @@ export function CreateForm(props: CreateFormProps) {
             if (!token) return t('plugin_ito_error_select_token')
             if (new BigNumber(amount).isZero()) return t('plugin_ito_error_enter_amount')
         }
-
         if (new BigNumber(tokenAndAmount?.amount ?? '0').isGreaterThan(new BigNumber(tokenBalance)))
             return t('plugin_ito_error_balance', {
                 symbol: tokenAndAmount?.token?.symbol,

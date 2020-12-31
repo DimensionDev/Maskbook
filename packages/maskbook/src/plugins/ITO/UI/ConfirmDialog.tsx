@@ -90,31 +90,29 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </Paper>
                 </Grid>
 
-                {poolSettings?.exchangeTokens
-                    .filter(Boolean)
-                    .map((item, index) => {
-                        return (
-                            <Fragment key={index}>
-                                <Grid item xs={6}>
-                                    <Paper className={classes.label}>
-                                        <Typography>
-                                            {item?.symbol}/{poolSettings?.token?.symbol}
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Paper className={classes.data}>
-                                        <Typography>
-                                            {formatBalance(
-                                                new BigNumber(poolSettings?.exchangeAmounts[index]),
-                                                poolSettings?.token?.decimals ?? 6,
-                                            )}
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                            </Fragment>
-                        )
-                    })}
+                {poolSettings?.exchangeTokens.filter(Boolean).map((item, index) => {
+                    return (
+                        <Fragment key={index}>
+                            <Grid item xs={6}>
+                                <Paper className={classes.label}>
+                                    <Typography>
+                                        {item?.symbol}/{poolSettings?.token?.symbol}
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Paper className={classes.data}>
+                                    <Typography>
+                                        {formatBalance(
+                                            new BigNumber(poolSettings?.exchangeAmounts[index]),
+                                            poolSettings?.token?.decimals ?? 6,
+                                        )}
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </Fragment>
+                    )
+                })}
 
                 <Grid item xs={6}>
                     <Paper className={classes.label}>

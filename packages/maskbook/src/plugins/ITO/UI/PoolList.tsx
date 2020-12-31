@@ -9,20 +9,19 @@ import { PoolInList } from './PoolInList'
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
-            display: 'flex',
-            flex: 1,
-            justifyContent: 'center',
-            alignContent: 'center',
-            justifyItems: 'center',
-            alignItems: 'center',
-        },
-        list: {
             width: '100%',
+            height: '100%',
             overflow: 'auto',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
+        },
+        content: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
         },
     }),
 )
@@ -44,17 +43,17 @@ export function PoolList(props: PoolListProps) {
     //#endregion
 
     return (
-        <>
+        <div className={classes.root}>
             {loading ? (
-                <Box className={classes.root}>
+                <Box className={classes.content}>
                     <CircularProgress />
                 </Box>
             ) : pools.length === 0 ? (
-                <Typography variant="body1" color="textSecondary" className={classes.root}>
+                <Typography variant="body1" color="textSecondary" className={classes.content}>
                     No Data
                 </Typography>
             ) : (
-                <div className={classes.list}>
+                <div className={classes.content}>
                     {pools.map((x) => (
                         <PoolInList
                             key={x.pool.pid}
@@ -67,6 +66,6 @@ export function PoolList(props: PoolListProps) {
                     ))}
                 </div>
             )}
-        </>
+        </div>
     )
 }

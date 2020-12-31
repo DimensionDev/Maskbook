@@ -1,5 +1,5 @@
-import { useCallback } from 'react'
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import BigNumber from 'bignumber.js'
 import { PoolSettings, useFillCallback } from '../hooks/useFillCallback'
 import type { JSON_PayloadInMask } from '../types'
 import { ConfirmDialog } from './ConfirmDialog'
@@ -12,8 +12,6 @@ import { useChainId } from '../../../web3/hooks/useChainState'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
 import { formatBalance } from '../../Wallet/formatter'
-import BigNumber from 'bignumber.js'
-import { useEffect } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 export enum ITOCreateFormPageStep {
