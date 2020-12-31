@@ -3,17 +3,15 @@ import { jssPreset, StylesProvider as JSSStylesProvider, ThemeProvider } from '@
 import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
 import createEmotionCache, { EmotionCache } from '@emotion/cache'
 import ReactDOM from 'react-dom'
-import { useMemo, StrictMode } from 'react'
+import { useMemo } from 'react'
 import type {} from 'react/experimental'
 import type {} from 'react-dom/experimental'
 import { getActivatedUI } from '../../social-network/ui'
-import { I18nextProvider } from 'react-i18next'
-import i18nNextInstance from '../i18n-next'
 import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
-import { SnackbarProvider } from 'notistack'
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 import { MaskbookUIRoot } from '../../UIRoot'
+import { applyWorkaround } from '@dimensiondev/maskbook-shared'
 
 const captureEvents: (keyof HTMLElementEventMap)[] = [
     'paste',
@@ -199,6 +197,7 @@ function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{
         const head = shadow.appendChild(document.createElement('head'))
         const JSSInsertionPoint = head.appendChild(document.createElement('div'))
         const EmotionInsertionPoint = head.appendChild(document.createElement('div'))
+        applyWorkaround(shadow, JSSInsertionPoint)
         // JSS
         const jss = createJSS({
             ...jssPreset(),
