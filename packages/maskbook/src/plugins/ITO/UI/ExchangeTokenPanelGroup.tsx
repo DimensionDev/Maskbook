@@ -73,7 +73,7 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
                         label={idx ? t('plugin_ito_swap_ration_label') : t('plugin_ito_sell_total_amount')}
                         key={idx}
                         dataIndex={item.key}
-                        viewBalance={idx === 0}
+                        disableBalance={idx !== 0}
                         isSell={idx === 0}
                         inputAmount={item.amount}
                         selectedTokensAddress={selectedTokensAddress}

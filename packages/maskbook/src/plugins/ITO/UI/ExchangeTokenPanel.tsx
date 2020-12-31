@@ -42,7 +42,7 @@ export interface ExchangetokenPanelProps {
     onAmountChange: (amount: string, key: string) => void
     inputAmount: string
 
-    viewBalance: boolean
+    disableBalance: boolean
     isSell: boolean
     exchangeToken: EtherTokenDetailed | ERC20TokenDetailed | undefined
     onExchangeTokenChange: (token: EtherTokenDetailed | ERC20TokenDetailed, key: string) => void
@@ -66,7 +66,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         onAmountChange,
         dataIndex,
         inputAmount,
-        viewBalance,
+        disableBalance,
         exchangeToken,
         onExchangeTokenChange,
         isSell,
@@ -131,8 +131,8 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
                     classes={{ root: classes.input }}
                     label={label}
                     amount={inputAmountForUI}
-                    viewBalance={viewBalance}
-                    balance={viewBalance ? tokenBalance : '0'}
+                    disableBalance={disableBalance}
+                    balance={disableBalance ? '0' : tokenBalance}
                     token={exchangeToken}
                     onAmountChange={onAmountChangeForUI}
                     SelectTokenChip={{
