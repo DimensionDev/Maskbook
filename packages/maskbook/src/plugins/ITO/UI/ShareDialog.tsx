@@ -16,26 +16,29 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            marginTop: theme.spacing(2),
+            margin: theme.spacing(2, 0),
         },
         shareAmount: {
-            fontSize: 23,
-            marginTop: 140,
+            fontSize: 36,
+            marginTop: 90,
             color: '#fff',
         },
         shareToken: {
-            fontSize: 23,
+            marginTop: 5,
+            fontSize: 24,
             color: '#fff',
         },
         shareText: {
+            marginTop: 20,
             fontSize: 24,
             color: '#fff',
-            marginTop: 80,
         },
         shareButton: {
             width: 'fit-content',
-            padding: theme.spacing(1, 8),
+            backgroundColor: '#FBD363 !important',
+            padding: theme.spacing(0.5, 6),
             marginTop: theme.spacing(2),
+            minHeight: 28,
         },
         shareImage: {
             display: 'flex',
@@ -86,17 +89,17 @@ export function ShareDialog(props: ShareDialogProps) {
                     <Typography variant="body1" className={classes.shareText}>
                         {t('plugin_ito_congratulations')}
                     </Typography>
+                    <ActionButton
+                        onClick={() => {
+                            props.onClose()
+                            window.open(shareLink, '_blank', 'noopener noreferrer')
+                        }}
+                        variant="contained"
+                        color="primary"
+                        className={classes.shareButton}>
+                        {t('plugin_ito_dialog_claim_share_title')}
+                    </ActionButton>
                 </div>
-                <ActionButton
-                    onClick={() => {
-                        props.onClose()
-                        window.open(shareLink, '_blank', 'noopener noreferrer')
-                    }}
-                    variant="contained"
-                    color="primary"
-                    className={classes.shareButton}>
-                    {t('plugin_ito_dialog_claim_share_title')}
-                </ActionButton>
             </Box>
         </>
     )
