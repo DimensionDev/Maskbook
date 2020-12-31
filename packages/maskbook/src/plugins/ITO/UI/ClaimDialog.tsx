@@ -227,7 +227,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
             </Typography>
             <TokenAmountPanel
                 amount={inputAmountForUI}
-                maxAmount={BigNumber.min(payload.limit, tokenBalance).toFixed()}
+                maxAmount={BigNumber.min(new BigNumber(payload.limit).multipliedBy(ratio), tokenBalance).toFixed()}
                 balance={tokenBalance}
                 token={claimToken}
                 onAmountChange={(value) => {

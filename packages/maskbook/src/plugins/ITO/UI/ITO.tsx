@@ -21,6 +21,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { sortTokens } from '../helpers'
+import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 
 export interface IconProps {
     size?: number
@@ -241,7 +242,7 @@ export function ITO(props: ITO_Props) {
                 </Box>
                 <Box>
                     {exchange_tokens
-                        .slice(0, 4)
+                        .slice(0, ITO_EXCHANGE_RATION_MAX)
                         .sort(sortTokens)
                         .map((exchangeToken, i) => (
                             <div className={classes.rationWrap} key={i}>
