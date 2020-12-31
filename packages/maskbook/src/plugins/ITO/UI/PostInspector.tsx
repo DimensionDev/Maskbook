@@ -8,13 +8,14 @@ export interface PostInspectorProps {
 
 export function PostInspector(props: PostInspectorProps) {
     const { pid, password } = props.payload
-    const { value: poolPayload } = usePoolPayload(pid)
+    const { value: poolPayload, loading, retry } = usePoolPayload(pid)
     return poolPayload ? (
         <ITO
             payload={{
                 ...poolPayload,
                 password: password || poolPayload.password,
             }}
+            retryPayload={retry}
         />
     ) : null
 }

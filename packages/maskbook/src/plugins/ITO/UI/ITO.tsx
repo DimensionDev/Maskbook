@@ -1,7 +1,8 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { makeStyles, createStyles, Card, Typography, Box, Link } from '@material-ui/core'
 import { BigNumber } from 'bignumber.js'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -23,6 +24,7 @@ import { TokenIcon } from '../../../extension/options-page/DashboardComponents/T
 import { sortTokens } from '../helpers'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import { usePoolBuyInfo } from '../hooks/usePoolBuyInfo'
+import { useDestructCallback } from '../hooks/useDestructCallback'
 
 export interface IconProps {
     size?: number
@@ -128,6 +130,7 @@ const useStyles = makeStyles((theme) =>
 
 export interface ITO_Props {
     payload: JSON_PayloadInMask
+    retryPayload: () => void
 }
 
 interface TokenItemProps {
@@ -149,7 +152,7 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 }
 
 export function ITO(props: ITO_Props) {
-    const { payload } = props
+    const { payload, retryPayload } = props
     const {
         token,
         total: payload_total,
@@ -180,6 +183,7 @@ export function ITO(props: ITO_Props) {
             link: postLink,
         }),
     )
+
     //#region token detailed
     const {
         value: availability,
@@ -190,6 +194,13 @@ export function ITO(props: ITO_Props) {
 
     const { listOfStatus } = availabilityComputed
 
+    const isAccountSeller =
+        payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
+    const noRemain = total_remaining.isZero()
+
+    const canWithdraw = isAccountSeller && listOfStatus.includes(ITO_Status.expired) && !noRemain
+    console.log('canWithdraw', canWithdraw)
+    console.log('noRemain', payload.total_remaining)
     //#region remote controlled select provider dialog
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {
@@ -200,21 +211,41 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     //#region buy info
-    const { value: buyInfo } = usePoolBuyInfo(
-        '0x14df8206bc1fc11a9679a00e726a06026fbed55a303c7a3029b0a29cfea66165',
-        '0x66b57885e8e9d84742fabda0ce6e3496055b012d',
-    )
-
-    console.log('DEBUG: buyInfo')
-    console.log({
-        buyInfo,
-    })
+    const { value: buyInfo } = usePoolBuyInfo(pid.toLowerCase(), account.toLowerCase())
     //#endregion
 
     const onShare = useCallback(async () => {
         window.open(shareLink, '_blank', 'noopener noreferrer')
     }, [])
     const onClaim = useCallback(async () => setOpenClaimDialog(true), [])
+
+    //#region withdraw
+    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
+    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+        WalletMessages.events.transactionDialogUpdated,
+        (ev) => {
+            if (ev.open) return
+            if (destructState.type !== TransactionStateType.CONFIRMED) return
+            resetDestructCallback()
+        },
+    )
+
+    useEffect(() => {
+        if (destructState.type === TransactionStateType.UNKNOWN) return
+        setTransactionDialogOpen({
+            open: true,
+            state: destructState,
+            summary: `${t('plugin_ito_list_button_claim')} ${formatBalance(total_remaining, token.decimals ?? 0)} ${
+                token.symbol
+            }`,
+        })
+        retryPayload()
+    }, [destructState])
+
+    const onWithdraw = useCallback(async () => {
+        destructCallback(payload.pid)
+    }, [destructCallback, payload.pid])
+    //#endregion
 
     if (payload.chain_id !== chainId) return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
     return (
@@ -315,8 +346,15 @@ export function ITO(props: ITO_Props) {
                     <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
-                ) : listOfStatus.includes(ITO_Status.expired) ||
-                  listOfStatus.includes(ITO_Status.completed) ? null : listOfStatus.includes(ITO_Status.waited) ? (
+                ) : canWithdraw ? (
+                    <ActionButton
+                        onClick={onWithdraw}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
+                        {t('plugin_ito_list_button_claim')}
+                    </ActionButton>
+                ) : listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(ITO_Status.waited) ? (
                     <ActionButton onClick={onShare} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_ito_share')}
                     </ActionButton>
