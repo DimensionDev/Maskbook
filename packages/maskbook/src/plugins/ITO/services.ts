@@ -3,6 +3,7 @@ import { PluginITO_Messages } from './messages'
 
 import * as subgraph from './apis'
 import * as database from './database'
+import { getChainId } from '../../extension/background-script/EthereumService'
 
 export async function getPool(pid: string) {
     const poolFromChain = await subgraph.getPool(pid)
@@ -12,24 +13,28 @@ export async function getPool(pid: string) {
 }
 
 export async function getAllPoolsAsSeller(address: string) {
+    const chainId = await getChainId()
     const poolsFromChain = await subgraph.getAllPoolsAsSeller(address)
     const poolsFromDB = await database.getPoolsFromDB(poolsFromChain.map((x) => x.pool.pid))
-
-    return poolsFromChain.map((x) => {
-        const pool = poolsFromDB.find((y) => y.payload.pid === x.pool.pid)
-        if (!pool) return x
-        return {
-            ...x,
-            pool: {
-                ...x.pool,
-                password: pool.payload.password,
-            },
-        }
-    })
+    return poolsFromChain
+        .map((x) => {
+            const pool = poolsFromDB.find((y) => y.payload.pid === x.pool.pid)
+            if (!pool) return x
+            return {
+                ...x,
+                pool: {
+                    ...x.pool,
+                    password: pool.payload.password,
+                },
+            }
+        })
+        .filter((x) => x.pool.chain_id === chainId)
 }
 
-export function getAllPoolsAsBuyer(address: string) {
-    return subgraph.getAllPoolsAsBuyer(address)
+export async function getAllPoolsAsBuyer(address: string) {
+    const chainId = await getChainId()
+    const pools = await subgraph.getAllPoolsAsBuyer(address)
+    return pools.filter((x) => x.pool.chain_id === chainId)
 }
 
 export async function discoverPool(from: string, payload: JSON_PayloadInMask) {
