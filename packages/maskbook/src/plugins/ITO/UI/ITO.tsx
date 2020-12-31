@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) =>
             position: 'relative',
             color: theme.palette.common.white,
             flexDirection: 'column',
-            height: 340,
+            height: 360,
             boxSizing: 'border-box',
             backgroundAttachment: 'local',
             backgroundPosition: '0 0',

@@ -84,7 +84,7 @@ export function ShareDialog(props: ShareDialogProps) {
                         {token.symbol}
                     </Typography>
                     <Typography variant="body1" className={classes.shareText}>
-                        {t('plugin_ito_you_got')}
+                        {t('plugin_ito_congratulations')}
                     </Typography>
                 </div>
                 <ActionButton
