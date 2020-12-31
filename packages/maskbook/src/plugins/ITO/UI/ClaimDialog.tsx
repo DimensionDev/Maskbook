@@ -235,7 +235,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                     const val =
                         value === ''
                             ? new BigNumber(0)
-                            : new BigNumber(Number(value)).multipliedBy(Math.pow(10, claimToken.decimals))
+                            : new BigNumber(value).multipliedBy(new BigNumber(10).pow(claimToken.decimals))
                     setClaimAmount(val)
                     setTokenAmount(val.dividedBy(ratio))
                 }}
