@@ -15,8 +15,9 @@ For general introductions, see [Mask.io](https://mask.io/).
 
 ## Downloads
 
-- [Maskbook on Chrome Web Store][crext]
-- [Maskbook on Firefox Addon Store][fxaddon] (Works on Firefox for Android too!)
+- [Mask Network on Chrome Web Store][crext]
+- [Mask Network on Firefox Addon Store][fxaddon] (Works on Firefox for Android too!)
+
 - (Beta!) [Mask Network for iOS][ios]
 - (Beta!) [Mask Network for Android][android]
 
