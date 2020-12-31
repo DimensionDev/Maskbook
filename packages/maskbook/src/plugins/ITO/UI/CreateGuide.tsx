@@ -127,7 +127,14 @@ export function CreateGuide(props: CreateGuideProps) {
 
     switch (step) {
         case ITOCreateFormPageStep.NewItoPage:
-            return <CreateForm onNext={onNext} onConnectWallet={onConnect} onChangePoolSettings={setPoolSettings} />
+            return (
+                <CreateForm
+                    onNext={onNext}
+                    origin={poolSettings}
+                    onConnectWallet={onConnect}
+                    onChangePoolSettings={setPoolSettings}
+                />
+            )
         case ITOCreateFormPageStep.ConfirmItoPage:
             return <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={fillCallback} />
         default:

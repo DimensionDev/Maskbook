@@ -63,17 +63,22 @@ function reducer(
     }
 }
 
-export function useExchangeTokenAndAmount(token?: EtherTokenDetailed | ERC20TokenDetailed) {
-    return useReducer(reducer, [
-        {
-            key: uuid(),
-            amount: '',
-            token,
-        },
-        {
-            key: uuid(),
-            amount: '',
-            token,
-        },
-    ])
+export function useExchangeTokenAndAmount(arrState?: ExchangeTokenAndAmountState[]) {
+    return useReducer(
+        reducer,
+        arrState && arrState.length > 0
+            ? arrState
+            : [
+                  {
+                      key: uuid(),
+                      amount: '',
+                      token: undefined,
+                  },
+                  {
+                      key: uuid(),
+                      amount: '',
+                      token: undefined,
+                  },
+              ],
+    )
 }

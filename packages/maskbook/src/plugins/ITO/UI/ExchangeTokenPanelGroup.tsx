@@ -3,7 +3,6 @@ import { makeStyles, createStyles } from '@material-ui/core'
 import { v4 as uuid } from 'uuid'
 
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import {
     ExchangeTokenAndAmountState,
@@ -17,6 +16,7 @@ const useStyles = makeStyles((theme) => createStyles({}))
 
 export interface ExchangeTokenPanelGroupProps {
     token: EtherTokenDetailed | ERC20TokenDetailed | undefined
+    origin: ExchangeTokenAndAmountState[]
     onTokenAmountChange: (data: ExchangeTokenAndAmountState[]) => void
 }
 
@@ -24,9 +24,8 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
     const classes = useStyles()
     const { t } = useI18N()
     const { onTokenAmountChange } = props
-    const { value: token } = useEtherTokenDetailed()
     const [selectedTokensAddress, setSelectedTokensAddress] = useState<string[]>([])
-    const [exchangeTokenArray, dispatchExchangeTokenArray] = useExchangeTokenAndAmount(token)
+    const [exchangeTokenArray, dispatchExchangeTokenArray] = useExchangeTokenAndAmount(props.origin)
 
     const onAdd = useCallback(() => {
         if (exchangeTokenArray.length > ITO_EXCHANGE_RATION_MAX) return

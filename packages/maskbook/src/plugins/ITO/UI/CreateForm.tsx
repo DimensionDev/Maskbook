@@ -18,6 +18,7 @@ import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { formatAmount, formatBalance } from '../../Wallet/formatter'
+import { datetimeISOString } from '../assets/formatDate'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -58,10 +59,11 @@ export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
     onConnectWallet: () => void
     onNext: () => void
+    origin?: PoolSettings
 }
 
 export function CreateForm(props: CreateFormProps) {
-    const { onChangePoolSettings, onNext, onConnectWallet } = props
+    const { onChangePoolSettings, onNext, onConnectWallet, origin } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -69,12 +71,33 @@ export function CreateForm(props: CreateFormProps) {
     const chainIdValid = useChainIdValid()
 
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
-    const [message, setMessage] = useState('')
-    const [totalOfPerWallet, setTotalOfPerWallet] = useState('')
+    const [message, setMessage] = useState(origin?.title ?? '')
+    const [totalOfPerWallet, setTotalOfPerWallet] = useState(
+        formatBalance(new BigNumber(origin?.limit ?? '0'), origin?.token?.decimals ?? 0),
+    )
     const [tokenAndAmount, setTokenAndAmount] = useState<ExchangeTokenAndAmountState>()
-    const [tokenAndAmounts, setTokenAndAmounts] = useState<ExchangeTokenAndAmountState[]>([])
-    const [startTime, setStartTime] = useState('')
-    const [endTime, setEndTime] = useState('')
+    const TAS: ExchangeTokenAndAmountState[] = []
+    if (origin?.token && origin?.total) {
+        TAS.push({
+            token: origin?.token,
+            amount: formatBalance(new BigNumber(origin?.total ?? '0'), origin?.token.decimals ?? 0),
+            key: uuid(),
+        })
+    }
+    if (origin?.exchangeTokens && origin?.exchangeAmounts) {
+        origin?.exchangeTokens.map((i, x) =>
+            TAS.push({
+                amount: formatBalance(new BigNumber(origin?.exchangeAmounts[x] ?? '0'), i?.decimals ?? 0),
+                token: i,
+                key: uuid(),
+            }),
+        )
+    }
+
+    const [tokenAndAmounts, setTokenAndAmounts] = useState<ExchangeTokenAndAmountState[]>(TAS)
+
+    const [startTime, setStartTime] = useState(datetimeISOString(origin?.startTime!))
+    const [endTime, setEndTime] = useState(datetimeISOString(origin?.endTime!))
 
     const GMT = new Date().getTimezoneOffset() / 60
 
@@ -114,8 +137,6 @@ export function CreateForm(props: CreateFormProps) {
         if (total === '') setTotalOfPerWallet('')
         if (/^\d+[\.]?\d*$/.test(total)) {
             setTotalOfPerWallet(total)
-        } else {
-            setTotalOfPerWallet('')
         }
     }, [])
 
@@ -126,11 +147,11 @@ export function CreateForm(props: CreateFormProps) {
             password: uuid(),
             name: senderName,
             title: message,
-            limit: formatAmount(new BigNumber(totalOfPerWallet || '0'), first?.token?.decimals ?? 0),
+            limit: formatAmount(new BigNumber(totalOfPerWallet ?? '0'), first?.token?.decimals ?? 0),
             token: first?.token,
-            total: formatAmount(new BigNumber(first?.amount || '0'), first?.token?.decimals ?? 0),
+            total: formatAmount(new BigNumber(first?.amount ?? '0'), first?.token?.decimals ?? 0),
             exchangeAmounts: rest.map((item) =>
-                formatAmount(new BigNumber(item.amount || '0'), item?.token?.decimals ?? 0),
+                formatAmount(new BigNumber(item.amount ?? '0'), item?.token?.decimals ?? 0),
             ),
             exchangeTokens: rest.map((item) => item.token!),
             startTime: new Date(startTime),
@@ -153,7 +174,9 @@ export function CreateForm(props: CreateFormProps) {
         if (!tokenAndAmounts || tokenAndAmounts.length === 0) return t('plugin_ito_error_enter_amount_and_token')
         for (const { amount, token } of tokenAndAmounts) {
             if (!token) return t('plugin_ito_error_select_token')
-            if (new BigNumber(amount).isZero()) return t('plugin_ito_error_enter_amount')
+            if (amount === '') return t('plugin_ito_error_enter_amount')
+            const _amount = formatBalance(new BigNumber(amount ?? '0'), token.decimals ?? 0)
+            if (new BigNumber(_amount).isZero()) return t('plugin_ito_error_enter_amount')
         }
         if (new BigNumber(tokenAndAmount?.amount ?? '0').isGreaterThan(new BigNumber(tokenBalance)))
             return t('plugin_ito_error_balance', {
@@ -203,6 +226,7 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.line} style={{ display: 'block' }}>
                 <ExchangeTokenPanelGroup
                     token={tokenAndAmount?.token}
+                    origin={tokenAndAmounts}
                     onTokenAmountChange={(arr) => setTokenAndAmounts(arr)}
                 />
             </Box>
@@ -210,7 +234,7 @@ export function CreateForm(props: CreateFormProps) {
                 <TextField
                     className={classes.input}
                     label={t('plugin_item_message_label')}
-                    defaultValue=""
+                    value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     InputLabelProps={{
                         shrink: true,
