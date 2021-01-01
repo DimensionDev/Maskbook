@@ -198,7 +198,7 @@
     "jest-esm-transformer": "^1.0.0",
     "jest-junit": "^12.0.0",
     "jest-puppeteer": "^4.4.0",
-    "jest-webextension-mock": "^3.7.4",
+    "jest-webextension-mock": "^3.7.6",
     "lint-staged": "^10.5.3",
     "npm-run-all": "^4.1.5",
     "only-allow": "^1.0.0",
