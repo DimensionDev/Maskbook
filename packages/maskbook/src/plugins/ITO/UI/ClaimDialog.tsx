@@ -190,6 +190,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     //#endregion
 
     const validationMessage = useMemo(() => {
+        if (claimAmount.isEqualTo(0)) return t('plugin_ito_error_enter_amount')
         if (claimAmount.isGreaterThan(new BigNumber(tokenBalance)))
             return t('plugin_ito_error_balance', { symbol: claimToken.symbol })
         if (claimAmount.dividedBy(ratio).isGreaterThan(new BigNumber(payload.limit)))
@@ -272,7 +273,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                         {approveState === ApproveState.NOT_APPROVED
                                             ? t('plugin_wallet_token_unlock', {
                                                   balance: formatBalance(
-                                                      new BigNumber(tokenAmount),
+                                                      new BigNumber(claimAmount),
                                                       claimToken.decimals,
                                                       2,
                                                   ),

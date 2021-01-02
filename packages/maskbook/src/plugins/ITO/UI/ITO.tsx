@@ -204,7 +204,6 @@ export function ITO(props: ITO_Props) {
 
     //#region buy info
     const { value: buyInfo, retry: retryBuyInfo } = usePoolBuyInfo(pid.toLowerCase(), account.toLowerCase())
-    console.log('buyInfo', buyInfo)
     const shareSuccessLink = useShareLink(
         t('plugin_ito_claim_success_share', {
             link: postLink,
