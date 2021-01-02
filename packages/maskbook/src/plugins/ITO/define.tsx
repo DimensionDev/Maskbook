@@ -55,7 +55,7 @@ export const ITO_PluginDefine: PluginConfig = {
         const payload = ITO_MetadataReader(props.message.meta)
         if (!payload.ok) return null
         return (
-            <MaskbookPluginWrapper pluginName="NFT">
+            <MaskbookPluginWrapper pluginName="ITO">
                 <Suspense fallback={<SnackbarContent message="Maskbook is loading this plugin..." />}>
                     <PostInspector payload={payload.val} />
                 </Suspense>
