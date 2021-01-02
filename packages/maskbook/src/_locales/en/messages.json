@@ -451,6 +451,6 @@
     "plugin_ito_list_button_send": "Send",
     "plugin_ito_your_claimed_amount": "You got {{amount}} {{symbol}}.",
     "plugin_ito_congratulations": "Congratulations!",
-    "plugin_ito_claim_success_share": "I just swapped {{amount}} {{symbol}} \n {{link}}",
+    "plugin_ito_claim_success_share": "I just finished my first #ITO \"{{name}}\" with @realmaskbook to swap ${{symbol}}. Install mask.io and start your Intial Twitter Offering! \n {{link}}",
     "plugin_ito_claim_foreshow_share": "Follow @realMaskbook (mask.io) to find more event!  \n {{link}}"
 }

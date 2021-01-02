@@ -206,8 +206,8 @@ export function ITO(props: ITO_Props) {
     const { value: buyInfo, retry: retryBuyInfo } = usePoolBuyInfo(pid.toLowerCase(), account.toLowerCase())
     const shareSuccessLink = useShareLink(
         t('plugin_ito_claim_success_share', {
+            name: payload.message,
             link: postLink,
-            amount: formatBalance(new BigNumber(buyInfo ? buyInfo.amount_bought : '0'), buyInfo?.token.decimals ?? 0),
             symbol: token.symbol,
         }),
     )
@@ -270,10 +270,10 @@ export function ITO(props: ITO_Props) {
                     </Typography>
                     {listOfStatus.includes(ITO_Status.expired) || listOfStatus.includes(ITO_Status.completed) ? (
                         <Typography variant="body2" className={classes.status}>
-                            {listOfStatus.includes(ITO_Status.expired)
-                                ? t('plugin_ito_expired')
-                                : listOfStatus.includes(ITO_Status.completed)
+                            {listOfStatus.includes(ITO_Status.completed) && buyInfo
                                 ? t('plugin_ito_completed')
+                                : listOfStatus.includes(ITO_Status.expired)
+                                ? t('plugin_ito_expired')
                                 : null}
                         </Typography>
                     ) : null}
@@ -367,8 +367,7 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_list_button_claim')}
                     </ActionButton>
-                ) : listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(ITO_Status.completed) &&
-                  buyInfo ? (
+                ) : listOfStatus.includes(ITO_Status.completed) && buyInfo ? (
                     <ActionButton
                         onClick={onShareSuccess}
                         variant="contained"
@@ -376,7 +375,7 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_share')}
                     </ActionButton>
-                ) : listOfStatus.includes(ITO_Status.waited) ? (
+                ) : listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(ITO_Status.waited) ? (
                     <ActionButton onClick={onShare} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_ito_share')}
                     </ActionButton>

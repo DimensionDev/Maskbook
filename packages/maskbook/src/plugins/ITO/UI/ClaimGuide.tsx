@@ -83,7 +83,14 @@ export function ClaimGuide(props: ClaimGuideProps) {
                                 />
                             )
                         case ClaimStatus.Share:
-                            return <ShareDialog token={payload.token} tokenAmount={tokenAmount} onClose={onClose} />
+                            return (
+                                <ShareDialog
+                                    poolName={payload.message}
+                                    token={payload.token}
+                                    tokenAmount={tokenAmount}
+                                    onClose={onClose}
+                                />
+                            )
                         default:
                             return null
                     }
