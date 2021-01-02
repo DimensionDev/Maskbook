@@ -175,13 +175,14 @@ export function CreateForm(props: CreateFormProps) {
         for (const { amount, token } of tokenAndAmounts) {
             if (!token) return t('plugin_ito_error_select_token')
             if (amount === '') return t('plugin_ito_error_enter_amount')
-            const _amount = formatBalance(new BigNumber(amount ?? '0'), token.decimals ?? 0)
-            if (new BigNumber(_amount).isZero()) return t('plugin_ito_error_enter_amount')
+            if (new BigNumber(amount).isZero()) return t('plugin_ito_error_enter_amount')
         }
+
         if (new BigNumber(tokenAndAmount?.amount ?? '0').isGreaterThan(new BigNumber(tokenBalance)))
             return t('plugin_ito_error_balance', {
                 symbol: tokenAndAmount?.token?.symbol,
             })
+
         if (!totalOfPerWallet || new BigNumber(totalOfPerWallet).isZero())
             return t('plugin_ito_error_allocation_absence')
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core'
+import { makeStyles, createStyles, InputAdornment } from '@material-ui/core'
 import { v4 as uuid } from 'uuid'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
@@ -99,7 +99,11 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
                             TokenAmountPanelProps={{
                                 InputProps: idx
                                     ? {
-                                          startAdornment: props.token ? `1${props.token?.symbol}=` : '',
+                                          startAdornment: props.token ? (
+                                              <InputAdornment position="start">1{props.token?.symbol}=</InputAdornment>
+                                          ) : (
+                                              ''
+                                          ),
                                       }
                                     : {},
                             }}
