@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core'
 import { v4 as uuid } from 'uuid'
-
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import {
@@ -12,7 +12,14 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ExchangeTokenPanel } from './ExchangeTokenPanel'
 
-const useStyles = makeStyles((theme) => createStyles({}))
+const useStyles = makeStyles((theme) =>
+    createStyles({
+        arrow: {
+            display: 'flex',
+            justifyContent: 'center',
+        },
+    }),
+)
 
 export interface ExchangeTokenPanelGroupProps {
     token: EtherTokenDetailed | ERC20TokenDetailed | undefined
@@ -68,31 +75,41 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
         <>
             {exchangeTokenArray.map((item, idx) => {
                 return (
-                    <ExchangeTokenPanel
-                        label={idx ? t('plugin_ito_swap_ration_label') : t('plugin_ito_sell_total_amount')}
-                        key={idx}
-                        dataIndex={item.key}
-                        disableBalance={idx !== 0}
-                        isSell={idx === 0}
-                        inputAmount={item.amount}
-                        selectedTokensAddress={selectedTokensAddress}
-                        onAmountChange={onAmountChange}
-                        exchangeToken={item.token}
-                        onExchangeTokenChange={onTokenChange}
-                        showRemove={idx > 0 && idx < exchangeTokenArray.length && exchangeTokenArray.length !== 2}
-                        showAdd={idx === exchangeTokenArray.length - 1 && idx < ITO_EXCHANGE_RATION_MAX}
-                        onRemove={() =>
-                            dispatchExchangeTokenArray({ type: ExchangeTokenAndAmountActionType.REMOVE, key: item.key })
-                        }
-                        onAdd={onAdd}
-                        TokenAmountPanelProps={{
-                            InputProps: idx
-                                ? {
-                                      startAdornment: props.token ? `1${props.token?.symbol}=` : '',
-                                  }
-                                : {},
-                        }}
-                    />
+                    <>
+                        <ExchangeTokenPanel
+                            label={idx ? t('plugin_ito_swap_ration_label') : t('plugin_ito_sell_total_amount')}
+                            key={idx}
+                            dataIndex={item.key}
+                            disableBalance={idx !== 0}
+                            isSell={idx === 0}
+                            inputAmount={item.amount}
+                            selectedTokensAddress={selectedTokensAddress}
+                            onAmountChange={onAmountChange}
+                            exchangeToken={item.token}
+                            onExchangeTokenChange={onTokenChange}
+                            showRemove={idx > 0 && idx < exchangeTokenArray.length && exchangeTokenArray.length !== 2}
+                            showAdd={idx === exchangeTokenArray.length - 1 && idx < ITO_EXCHANGE_RATION_MAX}
+                            onRemove={() =>
+                                dispatchExchangeTokenArray({
+                                    type: ExchangeTokenAndAmountActionType.REMOVE,
+                                    key: item.key,
+                                })
+                            }
+                            onAdd={onAdd}
+                            TokenAmountPanelProps={{
+                                InputProps: idx
+                                    ? {
+                                          startAdornment: props.token ? `1${props.token?.symbol}=` : '',
+                                      }
+                                    : {},
+                            }}
+                        />
+                        {idx === 0 ? (
+                            <div className={classes.arrow}>
+                                <ArrowDownwardIcon color="disabled" />
+                            </div>
+                        ) : null}
+                    </>
                 )
             })}
         </>

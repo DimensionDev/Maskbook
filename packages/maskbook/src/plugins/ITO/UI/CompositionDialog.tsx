@@ -64,7 +64,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 title={t('plugin_ito_display_name')}
                 onClose={props.onClose}>
                 <DialogContent>
-                    <AbstractTab height={540} {...tabProps} />
+                    <AbstractTab height={565} {...tabProps} />
                 </DialogContent>
             </InjectedDialog>
         </>
