@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { makeStyles, createStyles, Typography, MenuItem, Link } from '@material-ui/core'
-import { InjectedMenu } from '../../../../components/shared/injectedMenu'
+import { ShadowRootMenu } from '../../../../utils/shadow-root/ShadowRootComponents'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -42,13 +42,13 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
                     {options[selectedIndex].name}
                 </Typography>
             </Link>
-            <InjectedMenu open={!!anchorEl} onClose={onClose} anchorEl={anchorEl}>
+            <ShadowRootMenu open={!!anchorEl} onClose={onClose} anchorEl={anchorEl}>
                 {options.map((x, i) => (
                     <MenuItem selected={selectedIndex === i} key={x.value} onClick={() => onSelect(x)}>
                         {x.name}
                     </MenuItem>
                 ))}
-            </InjectedMenu>
+            </ShadowRootMenu>
         </>
     )
 }

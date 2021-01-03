@@ -15,7 +15,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { InjectedDialog } from './InjectedDialog'
 import { Autocomplete } from '@material-ui/core'
 import { editMetadata, isDataMatchJSONSchema, metadataSchemaStoreReadonly } from '../../protocols/typed-message'
-import { ShadowRootPopper } from '../../utils/shadow-root/ShadowRootPopper'
+import { ShadowRootPopper } from '../../utils/shadow-root/ShadowRootComponents'
 import { useState } from 'react'
 
 export interface DebugMetadataInspectorProps {

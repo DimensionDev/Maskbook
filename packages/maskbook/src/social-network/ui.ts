@@ -18,7 +18,6 @@ import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 import { editMetadata } from '../protocols/typed-message'
 import type { ReadonlyIdentifierMap } from '../database/IdentifierMap'
 import { Flags } from '../utils/flags'
-import type { InjectedMenuProps } from '../components/shared/injectedMenu'
 
 if (!process.env.STORYBOOK) {
     assertEnvironment.oneOf(Environment.ContentScript, Environment.ManifestOptions, Environment.ManifestBrowserAction)
@@ -284,7 +283,6 @@ export interface SocialNetworkUICustomUI {
         >
     }
     componentOverwrite?: {
-        InjectedMenu?: ComponentOverwriteConfig<InjectedMenuProps>
         InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps>
     }
 }
