@@ -172,7 +172,10 @@ function config(opts: {
         output: {
             path: dist,
             filename: 'js/[name].js',
-            chunkFilename: 'js/[name].chunk.js',
+            // In some cases webpack will emit files starts with "_" which is reserved in web extension.
+            chunkFilename: 'js/chunk.[name].js',
+            hotUpdateChunkFilename: 'hot.[id].[fullhash].js',
+            hotUpdateMainFilename: 'hot.[runtime].[fullhash].json',
             globalObject: 'globalThis',
             publicPath: '/',
         },
