@@ -1,5 +1,4 @@
 import { Typography, Paper, makeStyles } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import type { TokenDetails } from '../types'
 
 const useStyles = makeStyles((theme) => ({
@@ -28,12 +27,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function NFTCardUI(props: TokenDetails) {
-    const { t } = useI18N()
     const classes = useStyles()
 
     return (
         <Paper className={classes.root}>
-            {props.mediaUrl && <img src={props.mediaUrl} width="100%" />}
+            {props.imageUrl && <img src={props.imageUrl.toString()} width="100%" />}
             <div className={classes.meta}>
                 <Typography component="p" color="textPrimary">
                     {props.name}

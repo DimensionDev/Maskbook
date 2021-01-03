@@ -9,7 +9,7 @@ export const NFTPluginsDefine: PluginConfig = {
     stage: PluginStage.Beta,
     scope: PluginScope.Internal,
     successDecryptionInspector: function Comp(props) {
-        const nftUrl: String = getRelevantUrl("")
+        const nftUrl: URL = getRelevantUrl('')
         return <NFTInPost nftUrl={nftUrl} />
-    }
+    },
 }

@@ -1,9 +1,10 @@
 export interface NFTInPostProps {
-    nftUrl: string
+    nftUrl: URL
 }
 
 export interface TokenDetails {
-    name: string | null,
-    description: string | null,
-    mediaUrl: string | null
+    name?: string
+    description?: string
+    imageUrl?: URL
+    animationUrl?: URL
 }
