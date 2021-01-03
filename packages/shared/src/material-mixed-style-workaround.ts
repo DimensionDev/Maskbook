@@ -1,14 +1,14 @@
 export function applyWorkaround(insertPoint: Node, container: Node) {
     const shadowMap = new WeakMap<HTMLStyleElement, HTMLStyleElement>()
     const workaround = document.createElement('div')
-    workaround.setAttribute('data-workaround', 'true')
+    workaround.setAttribute('data-css-order-workaround', 'true')
     insertPoint.insertBefore(workaround, null)
     container.insertBefore = new Proxy(container.insertBefore, {
         apply(f, target, [dom, before]) {
             if (target === container && dom instanceof HTMLStyleElement) {
                 if (shadowMap.has(before)) before = shadowMap.get(before)
                 const meta = dom.getAttribute('data-meta')
-                if (meta && meta.startsWith('makeStyle')) {
+                if (meta && meta.includes('makeStyle')) {
                     workaround.appendChild(dom)
                     const shadow = document.createElement('style')
                     shadowMap.set(dom, shadow)

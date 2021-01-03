@@ -1,5 +1,10 @@
 import { create as createJSS, SheetsRegistry as JSSSheetsRegistry } from 'jss'
-import { jssPreset, StylesProvider as JSSStylesProvider, ThemeProvider } from '@material-ui/core/styles'
+import {
+    jssPreset,
+    StylesProvider as JSSStylesProvider,
+    ThemeProvider,
+    createGenerateClassName,
+} from '@material-ui/core/styles'
 import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
 import createEmotionCache, { EmotionCache } from '@emotion/cache'
 import ReactDOM from 'react-dom'
@@ -183,7 +188,8 @@ export function useSheetsRegistryStyles(_current: Node | null) {
             subscribe: (callback: () => void) => registry?.reg.addListener(callback) ?? (() => 0),
         }
     }, [_current])
-    return useSubscription(jssSubscription) + '\n' + useSubscription(emotionSubscription)
+    // TODO: reorder those styles
+    return [useSubscription(jssSubscription), useSubscription(emotionSubscription)].join('\n')
 }
 const initOnceMap = new WeakMap<ShadowRoot, unknown>()
 function initOnce<T>(keyBy: ShadowRoot, init: () => T): T {
@@ -192,12 +198,20 @@ function initOnce<T>(keyBy: ShadowRoot, init: () => T): T {
     initOnceMap.set(keyBy, val)
     return val
 }
+function createElement(key: keyof HTMLElementTagNameMap, kind: string) {
+    const e = document.createElement(key)
+    e.setAttribute('data-' + kind, 'true')
+    return e
+}
 function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{ shadow: ShadowRoot }>) {
-    const { jss, JSSRegistry, JSSSheetsManager, emotionCache } = initOnce(shadow, () => {
-        const head = shadow.appendChild(document.createElement('head'))
-        const JSSInsertionPoint = head.appendChild(document.createElement('div'))
-        const EmotionInsertionPoint = head.appendChild(document.createElement('div'))
-        applyWorkaround(shadow, JSSInsertionPoint)
+    const { jss, JSSRegistry, JSSSheetsManager, emotionCache, generateClassName } = initOnce(shadow, () => {
+        const head = shadow.appendChild(createElement('head', 'css-container'))
+        const JSSInsertionContainer = head.appendChild(createElement('div', 'jss-area'))
+        const JSSInsertionPoint = JSSInsertionContainer.appendChild(createElement('div', 'jss-insert-point'))
+        const EmotionInsertionPoint = head.appendChild(createElement('div', 'emotion-area'))
+        applyWorkaround(shadow, JSSInsertionContainer)
+        // emotion doesn't allow numbers appears in the key
+        const instanceID = Math.random().toString(36).slice(2).replace(/[0-9]/g, 'x')
         // JSS
         const jss = createJSS({
             ...jssPreset(),
@@ -209,19 +223,20 @@ function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{
         // Emotion
         const emotionCache = createEmotionCache({
             container: EmotionInsertionPoint,
-            // emotion doesn't allow numbers appears in the key
-            key: 'emo-' + Math.random().toString(36).slice(2).replace(/[0-9]/g, 'x'),
+            key: 'emo-' + instanceID,
             speedy: false,
             // TODO: support speedy mode which use insertRule https://github.com/emotion-js/emotion/blob/master/packages/sheet/src/index.js
         })
         emotionRegistryMap.set(shadow, new EmotionInformativeSheetsRegistry(emotionCache))
-        return { jss, JSSRegistry, JSSSheetsManager, emotionCache }
+        const generateClassName = createGenerateClassName({ seed: instanceID })
+        return { jss, JSSRegistry, JSSSheetsManager, emotionCache, generateClassName }
     })
     return (
         // ! sheetsManager: Material-ui uses this to detect if the style has been rendered
         // ! sheetsRegistry: We use this to get styles as a whole string
         <EmotionCacheProvider value={emotionCache}>
             <JSSStylesProvider
+                generateClassName={generateClassName}
                 sheetsRegistry={JSSRegistry}
                 jss={jss}
                 sheetsManager={JSSSheetsManager}
