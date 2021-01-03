@@ -89,9 +89,5 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
         })
     }, [])
 
-    return [
-        transferState,
-        transferCallback,
-        resetCallback,
-    ] as const
+    return [transferState, transferCallback, resetCallback] as const
 }

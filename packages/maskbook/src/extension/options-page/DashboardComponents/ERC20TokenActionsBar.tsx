@@ -32,14 +32,12 @@ export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
     const { t } = useI18N()
     const account = useAccount()
     const classes = useStylesExtends(useStyles(), props)
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     //#region remote controlled buy dialog
     const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     //#endregion
 
     const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialog)
-
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu(
         <MenuItem

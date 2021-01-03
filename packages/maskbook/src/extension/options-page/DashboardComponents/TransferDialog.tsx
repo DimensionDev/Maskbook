@@ -124,7 +124,9 @@ function TransferTab(props: TransferTabProps) {
         setTransactionDialogOpen({
             open: true,
             state: transferState,
-            summary: `Transfer ${formatBalance(transferAmount, token.decimals ?? 0)} ${token.symbol} to ${formatEthereumAddress(address, 4)}.`
+            summary: `Transfer ${formatBalance(transferAmount, token.decimals ?? 0)} ${
+                token.symbol
+            } to ${formatEthereumAddress(address, 4)}.`,
         })
     }, [transferState /* update tx dialog only if state changed */])
     //#endregion
