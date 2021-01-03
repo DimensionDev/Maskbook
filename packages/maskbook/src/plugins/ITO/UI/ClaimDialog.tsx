@@ -529,7 +529,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                                         // setStatus(ClaimStatus.Share)
                                                     }}
                                                     disabled={sendTxValidation}>
-                                                    {t('plugin_ito_dialog_claim_swap_approve_all')} {swapToken.symbol}
+                                                    {t('plugin_wallet_token_infinite_unlock')} {swapToken.symbol}
                                                 </ActionButton>
                                                 <ActionButton
                                                     variant="contained"
@@ -539,8 +539,10 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                                         onExactApprove()
                                                     }}
                                                     disabled={sendTxValidation}>
-                                                    {t('plugin_ito_approve', { symbol: claimAmount.toFixed() })}{' '}
-                                                    {swapToken.symbol}
+                                                    {t('plugin_wallet_token_unlock', {
+                                                        balance: claimAmount.toFixed(),
+                                                        symbol: swapToken.symbol ?? 'Token',
+                                                    })}{' '}
                                                 </ActionButton>
                                             </>
                                         )

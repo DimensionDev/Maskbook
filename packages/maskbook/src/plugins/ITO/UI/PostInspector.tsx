@@ -7,5 +7,7 @@ export interface PostInspectorProps {
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    return <ITO payload={props.payload} />
+    const { pid } = props.payload
+    const { value: poolPayload } = usePoolPayload(pid)
+    return poolPayload ? <ITO payload={poolPayload} /> : null
 }

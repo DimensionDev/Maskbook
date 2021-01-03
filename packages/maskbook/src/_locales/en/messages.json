@@ -292,6 +292,8 @@
     "plugin_wallet_qr_code_with_wallet_connect": "Scan QR code with a WalletConnect-compatible wallet",
     "plugin_wallet_wrong_network": "Wrong Network",
     "plugin_wallet_metamask_unlock": "Unlock MetaMask",
+    "plugin_wallet_token_unlock": "Unlock {{balance}} {{symbol}}",
+    "plugin_wallet_token_infinite_unlock": "Infinite Unlock",
     "plugin_wallet_connect_dialog_title": "WalletConnect",
     "plugin_wallet_connect_to_mask": "Create wallet with Mask",
     "plugin_wallet_connect_to_metamask": "Connect to your MetaMask Wallet",

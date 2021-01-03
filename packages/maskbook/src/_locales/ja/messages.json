@@ -292,6 +292,8 @@
     "plugin_wallet_qr_code_with_wallet_connect": "WalletConnect対応のQRコードを読みこむ",
     "plugin_wallet_wrong_network": "ネットワークが間違っています",
     "plugin_wallet_metamask_unlock": "MetaMaskのロックを解除する",
+    "plugin_wallet_token_unlock": "",
+    "plugin_wallet_token_infinite_unlock": "",
     "plugin_wallet_connect_dialog_title": "WalletConnect",
     "plugin_wallet_connect_to_mask": "Mask でウォレットを作成する",
     "plugin_wallet_connect_to_metamask": "MetaMaskウォレットに接続する",

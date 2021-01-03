@@ -177,13 +177,14 @@ export function ITO(props: ITO_Props) {
         end_time,
         pid,
     } = payload
+    console.log('payload!!', payload)
     const classes = useStyles()
     const { t } = useI18N()
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
 
-    const total = Number(payload_total)
-    const total_remaining = Number(payload_total_remaining)
-    const sold = total - total_remaining
+    const total = new BigNumber(payload_total)
+    const total_remaining = new BigNumber(payload_total_remaining)
+    const sold = total.minus(total_remaining)
 
     // context
     const account = useAccount()
@@ -229,10 +230,7 @@ export function ITO(props: ITO_Props) {
                     ) : null}
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
-                    {`Sold ${formatBalance(new BigNumber(sold), 18)} Sell Total Amount ${formatBalance(
-                        new BigNumber(total),
-                        18,
-                    )} ${token.symbol}`}
+                    {`Sold ${formatBalance(sold, 18)} Sell Total Amount ${formatBalance(total, 18)} ${token.symbol}`}
                     <Link
                         className={classes.tokenLink}
                         href={`${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`}
@@ -242,7 +240,10 @@ export function ITO(props: ITO_Props) {
                     </Link>
                 </Typography>
                 <Box className={classes.progressWrap}>
-                    <StyledLinearProgress variant="determinate" value={(sold * 100) / total} />
+                    <StyledLinearProgress
+                        variant="determinate"
+                        value={Number(sold.multipliedBy(100).dividedBy(total))}
+                    />
                 </Box>
                 <Box>
                     {exchange_tokens.map((t, i) => {

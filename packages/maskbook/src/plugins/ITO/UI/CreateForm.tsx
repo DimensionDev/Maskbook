@@ -291,11 +291,14 @@ export function CreateForm(props: CreateFormProps) {
                                         size="large"
                                         onClick={onExactApprove}>
                                         {approveState === ApproveState.NOT_APPROVED
-                                            ? `Unlock ${formatBalance(
-                                                  new BigNumber(inputTokenAmount),
-                                                  tokenAndAmount?.token?.decimals ?? 0,
-                                                  2,
-                                              )} ${tokenAndAmount?.token?.symbol ?? 'Token'}`
+                                            ? t('plugin_wallet_token_unlock', {
+                                                  balance: formatBalance(
+                                                      new BigNumber(inputTokenAmount),
+                                                      tokenAndAmount?.token?.decimals ?? 0,
+                                                      2,
+                                                  ),
+                                                  symbol: tokenAndAmount?.token?.symbol ?? 'Token',
+                                              })
                                             : ''}
                                     </ActionButton>
                                 </Grid>
@@ -306,7 +309,9 @@ export function CreateForm(props: CreateFormProps) {
                                         variant="contained"
                                         size="large"
                                         onClick={onApprove}>
-                                        {approveState === ApproveState.NOT_APPROVED ? `Infinite Unlock` : ''}
+                                        {approveState === ApproveState.NOT_APPROVED
+                                            ? t('plugin_wallet_token_infinite_unlock')
+                                            : ''}
                                     </ActionButton>
                                 </Grid>
                             </>

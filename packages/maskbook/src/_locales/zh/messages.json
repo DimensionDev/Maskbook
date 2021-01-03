@@ -292,6 +292,8 @@
     "plugin_wallet_qr_code_with_wallet_connect": "使用 WalletConnect 兼容的錢包掃描 QR 碼",
     "plugin_wallet_wrong_network": "錯誤的網絡",
     "plugin_wallet_metamask_unlock": "解鎖 MetaMask",
+    "plugin_wallet_token_unlock": "",
+    "plugin_wallet_token_infinite_unlock": "",
     "plugin_wallet_connect_dialog_title": "",
     "plugin_wallet_connect_to_mask": "",
     "plugin_wallet_connect_to_metamask": "",
