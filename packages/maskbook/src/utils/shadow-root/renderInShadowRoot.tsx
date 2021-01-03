@@ -157,6 +157,10 @@ class JSSInformativeSheetsRegistry extends JSSSheetsRegistry {
 
 const jssRegistryMap = new WeakMap<ShadowRoot, JSSInformativeSheetsRegistry>()
 const emotionRegistryMap = new WeakMap<ShadowRoot, EmotionInformativeSheetsRegistry>()
+function concatStyleSheets(prev: string, style: JSSInformativeSheetsRegistry['registry'][0]) {
+    if (!style.attached) return prev
+    return prev + '\n' + style.toString()
+}
 export function useSheetsRegistryStyles(_current: Node | null) {
     const jssSubscription = useMemo(() => {
         let registry: JSSInformativeSheetsRegistry | null | undefined = null
@@ -169,7 +173,17 @@ export function useSheetsRegistryStyles(_current: Node | null) {
             }
         }
         return {
-            getCurrentValue: () => registry?.toString(),
+            getCurrentValue: () => {
+                if (!registry) return []
+                return [
+                    registry.registry
+                        .filter((x) => !x.options.meta?.includes('makeStyle'))
+                        .reduce(concatStyleSheets, ''),
+                    registry.registry
+                        .filter((x) => x.options.meta?.includes('makeStyle'))
+                        .reduce(concatStyleSheets, ''),
+                ]
+            },
             subscribe: (callback: () => void) => registry?.reg.addListener(callback) ?? (() => 0),
         }
     }, [_current])
@@ -188,8 +202,9 @@ export function useSheetsRegistryStyles(_current: Node | null) {
             subscribe: (callback: () => void) => registry?.reg.addListener(callback) ?? (() => 0),
         }
     }, [_current])
-    // TODO: reorder those styles
-    return [useSubscription(jssSubscription), useSubscription(emotionSubscription)].join('\n')
+    const [libJSS, devJSS] = useSubscription(jssSubscription)
+    // Order: dev jss > dev emotion > lib emotion > lib jss
+    return [libJSS, useSubscription(emotionSubscription), devJSS].filter(Boolean).join('\n')
 }
 const initOnceMap = new WeakMap<ShadowRoot, unknown>()
 function initOnce<T>(keyBy: ShadowRoot, init: () => T): T {
