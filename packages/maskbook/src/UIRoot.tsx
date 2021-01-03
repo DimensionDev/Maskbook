@@ -25,7 +25,7 @@ export function MaskbookUIRoot(JSX: JSX.Element) {
                     return `<!--Thanks for the crash report!
 Please write down what you're doing when the crash happened, that will help us to fix it easier!-->
 
-I was ________, then Maskbook report an error.
+I was ________, then Mask report an error.
 
 > ${message}
 

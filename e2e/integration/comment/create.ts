@@ -70,7 +70,7 @@ describe(`${CREATE_COMMENT_STORY_URL}#Story:CreateComment(?br=wip)-BasicWorkflow
                 })
             }
 
-            // wait maskbook inject comment form
+            // wait mask inject comment form
             await snsPostPage.waitForSelector(sns.commentBoxSelector)
 
             // input comment

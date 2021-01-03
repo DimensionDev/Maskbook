@@ -29,7 +29,7 @@ export function RequestPermission(props: RequestPermissionProps) {
     const classes = useStyles()
     return (
         <Card className={classes.root}>
-            <DialogTitle>Maskbook needs the following permissions</DialogTitle>
+            <DialogTitle>Mask needs the following permissions</DialogTitle>
             <DialogContent>
                 <List dense subheader={<ListSubheader>Sites</ListSubheader>}>
                     {props.permission.origins?.map((x) => (

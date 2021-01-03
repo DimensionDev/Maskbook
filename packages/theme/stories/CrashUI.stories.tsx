@@ -12,6 +12,6 @@ export const Default = of({
         type: 'TypeError',
         message: 'Message',
         stack: new Error().stack,
-        subject: 'Maskbook',
+        subject: 'Mask',
     },
 })

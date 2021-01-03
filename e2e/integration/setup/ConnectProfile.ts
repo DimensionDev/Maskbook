@@ -64,7 +64,7 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             // dimiss dialogs
             await sns.dimissDialog(snsPage)
 
-            // wait maskbook inject setup guide
+            // wait mask inject setup guide
             await snsPage.waitForSelector(sns.setupGuideSelector)
 
             // validate username
@@ -90,7 +90,7 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             // redirect to news feed page
             await snsPage.waitForSelector(sns.composeEditorSelector)
 
-            // wait maskbook inject setup guide
+            // wait mask inject setup guide
             await snsPage.waitForSelector(sns.setupGuideSelector)
 
             // click the 'create' button
@@ -100,7 +100,7 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             await (createButton as any).click()
             await snsPage.waitForTimeout(500)
 
-            // wait for maskbook inject post dialog modal
+            // wait for mask inject post dialog modal
             await snsPage.waitForSelector(sns.postDialogModalSelector)
 
             // validate content of the compose dialog

@@ -7,7 +7,7 @@ enableMapSet()
 const metadataSchemaStore = new Map<string, object>()
 export const metadataSchemaStoreReadonly = metadataSchemaStore as ReadonlyMap<string, object>
 /**
- * Register your metadata with a JSON Schema so Maskbook can validate the schema for you.
+ * Register your metadata with a JSON Schema so Mask can validate the schema for you.
  * @param key Metadata key
  * @param jsonSchema JSON Schema to validate the metadata
  */

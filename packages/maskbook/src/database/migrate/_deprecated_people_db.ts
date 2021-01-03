@@ -2,7 +2,7 @@
 /// <reference path="../global.d.ts" />
 /**
  * @deprecated
- * This database is deprecated since Maskbook 1.8.10
+ * This database is deprecated since Mask 1.8.10
  * Do not store new data in it.
  */
 /**
