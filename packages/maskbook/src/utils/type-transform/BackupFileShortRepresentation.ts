@@ -74,7 +74,7 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
         '🤔',
     ) as BackupJSONFileLatestShort
 
-    if (version !== '1') throw new Error(`QR Code cannot be shared between different version of Maskbook`)
+    if (version !== '1') throw new Error(`QR Code cannot be shared between different version of Mask`)
 
     const localKeyJWK = {
         alg: 'A256GCM',

@@ -43,7 +43,7 @@ export function safari(manifest: Manifest) {
     manifest.permissions.push('<all_urls>')
 }
 export function development(manifest: Manifest) {
-    manifest.name = 'Maskbook (development)'
+    manifest.name = 'Mask Network (development)'
     // required by Webpack HMR
     manifest.web_accessible_resources.push('*.json', '*.js')
     // 8097 is react devtools

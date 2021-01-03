@@ -204,7 +204,7 @@ async function* decryptFromPayloadWithProgress_raw(
         if (author.equals(whoAmI)) {
             // if the decryption process goes here,
             // that means it is failed to decrypt by local identities.
-            // If remove this if block, Maskbook will search the key
+            // If remove this if block, Mask will search the key
             // for the post even that post by myself.
             if (lastError instanceof DOMException) return handleDOMException(lastError)
             console.error(lastError)
@@ -232,7 +232,7 @@ async function* decryptFromPayloadWithProgress_raw(
                 console.debug(e)
                 // TODO: Replace this error with:
                 // You do not have the necessary private key to decrypt this message.
-                // What to do next: You can ask your friend to visit your profile page, so that their Maskbook extension will detect and add you to recipients.
+                // What to do next: You can ask your friend to visit your profile page, so that their Mask extension will detect and add you to recipients.
                 // ? after the auto-share with friends is done.
                 yield makeError(e)
             } else {

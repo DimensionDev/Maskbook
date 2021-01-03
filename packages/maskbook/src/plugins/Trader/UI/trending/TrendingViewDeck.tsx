@@ -304,7 +304,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                         color="textSecondary"
                         target="_blank"
                         rel="noopener noreferrer"
-                        title="Mask Network"
+                        title="Mask"
                         href="https://mask.io">
                         <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
                     </Link>

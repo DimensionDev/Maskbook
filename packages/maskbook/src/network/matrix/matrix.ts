@@ -54,7 +54,7 @@ export async function createMatrixRoom(
     visibility: 'public' | 'private',
     /** Suggest not to set? */
     room_alias_name?: string,
-    topic = 'Hi, this room is created by Maskbook and used for internal communication',
+    topic = 'Hi, this room is created by Mask and used for internal communication',
 ) {
     const room: string = (await any(client).createRoom({ room_alias_name, visibility })).room_id
     await client.setRoomTopic(room, topic, undefined!).catch(() => {})

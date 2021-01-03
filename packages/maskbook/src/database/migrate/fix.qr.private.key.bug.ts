@@ -4,7 +4,7 @@ import { deletePersona } from '../Persona/helpers'
 
 /**
  * There is a bug that when use QR to import key, the private ket lost its secret.
- * If the JsonWebKey has no "d" field, remove the key and set maskbook as not setup.
+ * If the JsonWebKey has no "d" field, remove the key and set mask as not setup.
  *
  * remove this after Mar 1 2020
  */

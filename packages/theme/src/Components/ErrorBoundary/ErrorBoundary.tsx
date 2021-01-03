@@ -22,7 +22,7 @@ export class ErrorBoundary extends Component<Partial<CrashUIProps>> {
         if (!this.state.error) return <>{this.props.children}</>
         return (
             <CrashUI
-                subject="Maskbook"
+                subject="Mask"
                 onRetry={() => this.setState({ error: null })}
                 {...this.props}
                 {...this.normalizedError}

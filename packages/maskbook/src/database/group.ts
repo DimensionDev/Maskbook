@@ -85,7 +85,7 @@ export async function createOrUpdateUserGroupDatabase(
 }
 
 /**
- * Delete a user group that stored in the Maskbook
+ * Delete a user group that stored in the Mask
  * @param group Group ID
  */
 export async function deleteUserGroupDatabase(group: GroupIdentifier, t?: GroupTransaction): Promise<void> {
@@ -94,7 +94,7 @@ export async function deleteUserGroupDatabase(group: GroupIdentifier, t?: GroupT
 }
 
 /**
- * Update a user group that stored in the Maskbook
+ * Update a user group that stored in the Mask
  * @param group Group ID
  * @param type
  */
@@ -146,7 +146,7 @@ export async function updateUserGroupDatabase(
 }
 
 /**
- * Query a user group that stored in the Maskbook
+ * Query a user group that stored in the Mask
  * @param group Group ID
  */
 export async function queryUserGroupDatabase(
@@ -160,7 +160,7 @@ export async function queryUserGroupDatabase(
 }
 
 /**
- * Query user groups that stored in the Maskbook
+ * Query user groups that stored in the Mask
  * @param query Query ID
  */
 export async function queryUserGroupsDatabase(

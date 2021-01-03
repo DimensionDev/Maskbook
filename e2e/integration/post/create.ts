@@ -62,17 +62,17 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                     await snsFeedPage.waitForTimeout(500)
                 }
 
-                // wait maskbook inject post dialog hint
+                // wait mask inject post dialog hint
                 await snsFeedPage.waitForSelector(sns.postDialogHintSelector)
 
-                // click the hint button open maskbook post composing view
+                // click the hint button open mask post composing view
                 const hintButton = await snsFeedPage.waitForFunction(
                     `document.querySelector('${sns.postDialogHintSelector}').shadowRoot.querySelector('button')`,
                 )
                 await (hintButton as any).click()
                 await snsFeedPage.waitForTimeout(500)
 
-                // wait maskbook inject post dialog modal
+                // wait mask inject post dialog modal
                 await snsFeedPage.waitForSelector(sns.postDialogModalSelector)
 
                 // type plain text

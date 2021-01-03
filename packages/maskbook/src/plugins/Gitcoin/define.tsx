@@ -34,7 +34,7 @@ export const GitcoinPluginDefine: PluginConfig = {
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     return (
         <MaskbookPluginWrapper pluginName="Gitcoin">
-            <Suspense fallback={<SnackbarContent message="Maskbook is loading this plugin..." />}>
+            <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <Gitcoin url={props.url} />
             </Suspense>
         </MaskbookPluginWrapper>

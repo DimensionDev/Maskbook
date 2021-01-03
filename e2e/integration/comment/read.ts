@@ -65,7 +65,7 @@ describe(`${READ_COMMENT_STORY_URL}#Story:ReadComment(?br=wip)-BasicWorkflow`, (
                     })
                 }
 
-                // wait maskbook decrypt comment
+                // wait mask decrypt comment
                 await snsPostPage.waitForSelector(sns.commentSelector)
                 const commentField = await snsPostPage.waitForFunction(
                     `document.querySelector('${sns.commentSelector}').shadowRoot.querySelector('[data-testid="comment_field"]')`,

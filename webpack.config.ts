@@ -291,7 +291,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     }
     function getBuildNotificationPlugins() {
         if (mode === 'production') return []
-        const opt = { title: 'Maskbook', excludeWarnings: true, skipFirstNotification: true, skipSuccessful: true }
+        const opt = { title: 'Mask', excludeWarnings: true, skipFirstNotification: true, skipSuccessful: true }
         return [new NotifierPlugin(opt)]
     }
     function getManifestPlugin() {
