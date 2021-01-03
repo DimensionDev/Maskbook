@@ -17,12 +17,14 @@ import { Election2020PluginDefine } from './Election2020/define'
 import { TransakPluginDefine } from './Transak/define'
 import { COTM_PluginDefine } from './COTM/define'
 import { ITO_PluginDefine } from './ITO/define'
+import { NFTPluginsDefine } from './NFT/define'
 
 plugins.add(EthereumPluginDefine)
 plugins.add(WalletPluginDefine)
 plugins.add(RedPacketPluginDefine)
 plugins.add(FileServicePluginDefine)
 plugins.add(ITO_PluginDefine)
+plugins.add(NFTPluginsDefine)
 if (Flags.gitcoin_enabled) plugins.add(GitcoinPluginDefine)
 if (Flags.poll_enabled) plugins.add(PollsPluginDefine)
 if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
