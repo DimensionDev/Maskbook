@@ -3,7 +3,7 @@ import '../../setup.ui'
 
 import { useCallback, memo } from 'react'
 import { noop } from 'lodash-es'
-import { ThemeProvider, makeStyles, Theme, withStyles } from '@material-ui/core/styles'
+import { ThemeProvider, makeStyles, Theme, withStyles, StylesProvider } from '@material-ui/core/styles'
 import { Button, Paper, Divider, Typography, Box } from '@material-ui/core'
 import { useMaskbookTheme } from '../../utils/theme'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
@@ -168,8 +168,10 @@ function PopupUI() {
 export function Popup() {
     return MaskbookUIRoot(
         <ThemeProvider theme={useMaskbookTheme()}>
-            <GlobalCss />
-            <PopupUI />
+            <StylesProvider injectFirst>
+                <GlobalCss />
+                <PopupUI />
+            </StylesProvider>
         </ThemeProvider>,
     )
 }

@@ -3,7 +3,7 @@ import '../../setup.ui'
 
 import { useState } from 'react'
 import { useAsync } from 'react-use'
-import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card } from '@material-ui/core'
+import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card, StylesProvider } from '@material-ui/core'
 import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
@@ -229,19 +229,21 @@ function DashboardPluginUI() {
 
 export function Dashboard() {
     return MaskbookUIRoot(
-        <ThemeProvider theme={useMaskbookTheme()}>
-            <DashboardSnackbarProvider>
-                <NoSsr>
-                    <Router>
-                        <CssBaseline />
-                        <DashboardBlurContextUI>
-                            <DashboardUI />
-                            <DashboardPluginUI />
-                        </DashboardBlurContextUI>
-                    </Router>
-                </NoSsr>
-            </DashboardSnackbarProvider>
-        </ThemeProvider>,
+        <StylesProvider injectFirst>
+            <ThemeProvider theme={useMaskbookTheme()}>
+                <DashboardSnackbarProvider>
+                    <NoSsr>
+                        <Router>
+                            <CssBaseline />
+                            <DashboardBlurContextUI>
+                                <DashboardUI />
+                                <DashboardPluginUI />
+                            </DashboardBlurContextUI>
+                        </Router>
+                    </NoSsr>
+                </DashboardSnackbarProvider>
+            </ThemeProvider>
+        </StylesProvider>,
     )
 }
 

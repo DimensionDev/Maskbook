@@ -25,11 +25,17 @@ export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX
     const { current: style } = useRef<HTMLStyleElement>(document.createElement('style'))
     const css = useSheetsRegistryStyles(findMountingShadowRef.current)
 
-    useInterval(() => {
+    // If you're debugging this hook you may want to use this code instead of the following useEffect.
+    // useInterval(() => {
+    //     if (!mountingRef) return
+    //     if (container.children.length === 0) mountingRef.remove()
+    //     else if (mountingRef.parentElement !== PortalShadowRoot()) PortalShadowRoot().appendChild(mountingRef)
+    // }, 500)
+
+    useEffect(() => {
         if (!mountingRef) return
-        if (container.children.length === 0) mountingRef.remove()
         else if (mountingRef.parentElement !== PortalShadowRoot()) PortalShadowRoot().appendChild(mountingRef)
-    }, 500)
+    }, [mountingRef])
 
     useEffect(() => {
         if (style.innerHTML !== css) style.innerHTML = css

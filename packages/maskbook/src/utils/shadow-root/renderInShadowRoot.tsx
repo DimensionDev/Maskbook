@@ -16,7 +16,6 @@ import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 import { MaskbookUIRoot } from '../../UIRoot'
-import { applyWorkaround } from '@dimensiondev/maskbook-shared'
 
 const captureEvents: (keyof HTMLElementEventMap)[] = [
     'paste',
@@ -173,17 +172,7 @@ export function useSheetsRegistryStyles(_current: Node | null) {
             }
         }
         return {
-            getCurrentValue: () => {
-                if (!registry) return []
-                return [
-                    registry.registry
-                        .filter((x) => !x.options.meta?.includes('makeStyle'))
-                        .reduce(concatStyleSheets, ''),
-                    registry.registry
-                        .filter((x) => x.options.meta?.includes('makeStyle'))
-                        .reduce(concatStyleSheets, ''),
-                ]
-            },
+            getCurrentValue: () => registry?.toString(),
             subscribe: (callback: () => void) => registry?.reg.addListener(callback) ?? (() => 0),
         }
     }, [_current])
@@ -202,9 +191,7 @@ export function useSheetsRegistryStyles(_current: Node | null) {
             subscribe: (callback: () => void) => registry?.reg.addListener(callback) ?? (() => 0),
         }
     }, [_current])
-    const [libJSS, devJSS] = useSubscription(jssSubscription)
-    // Order: dev jss > dev emotion > lib emotion > lib jss
-    return [libJSS, useSubscription(emotionSubscription), devJSS].filter(Boolean).join('\n')
+    return [useSubscription(emotionSubscription), useSubscription(jssSubscription)].filter(Boolean).join('\n')
 }
 const initOnceMap = new WeakMap<ShadowRoot, unknown>()
 function initOnce<T>(keyBy: ShadowRoot, init: () => T): T {
@@ -221,10 +208,9 @@ function createElement(key: keyof HTMLElementTagNameMap, kind: string) {
 function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{ shadow: ShadowRoot }>) {
     const { jss, JSSRegistry, JSSSheetsManager, emotionCache, generateClassName } = initOnce(shadow, () => {
         const head = shadow.appendChild(createElement('head', 'css-container'))
+        const EmotionInsertionPoint = head.appendChild(createElement('div', 'emotion-area'))
         const JSSInsertionContainer = head.appendChild(createElement('div', 'jss-area'))
         const JSSInsertionPoint = JSSInsertionContainer.appendChild(createElement('div', 'jss-insert-point'))
-        const EmotionInsertionPoint = head.appendChild(createElement('div', 'emotion-area'))
-        applyWorkaround(shadow, JSSInsertionContainer)
         // emotion doesn't allow numbers appears in the key
         const instanceID = Math.random().toString(36).slice(2).replace(/[0-9]/g, 'x')
         // JSS
