@@ -32,9 +32,11 @@ export function gcd(a: BigNumber, b: BigNumber) {
 
 export function sortTokens(tokenA: { address: string }, tokenB: { address: string }) {
     const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS')
-    if (isSameAddress(tokenA.address, ETH_ADDRESS)) return -1
-    if (isSameAddress(tokenA.address, ETH_ADDRESS)) return 1
-    return tokenA.address < tokenB.address ? -1 : 1
+    const addressA = tokenA.address.toLowerCase()
+    const addressB = tokenB.address.toLowerCase()
+    if (isSameAddress(addressA, ETH_ADDRESS)) return -1
+    if (isSameAddress(addressB, ETH_ADDRESS)) return 1
+    return addressA < addressB ? -1 : 1
 }
 
 export function tokenIntoMask(token: JSON_PayloadOutMask['token']) {
