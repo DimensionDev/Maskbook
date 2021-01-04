@@ -80,6 +80,7 @@ export interface ClaimDialogProps extends withClasses<'root'> {
     payload: JSON_PayloadInMask
     revalidateAvailability: () => void
     retryBuyInfo: () => void
+    retryPayload: () => void
     initAmount: BigNumber
     tokenAmount: BigNumber
     setTokenAmount: React.Dispatch<React.SetStateAction<BigNumber>>
@@ -95,6 +96,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
         payload,
         revalidateAvailability,
         retryBuyInfo,
+        retryPayload,
         initAmount,
         tokenAmount,
         setTokenAmount,
@@ -177,6 +179,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 return
 
             setStatus(ClaimStatus.Share)
+            retryPayload()
             revalidateAvailability()
             retryBuyInfo()
             resetClaimCallback()

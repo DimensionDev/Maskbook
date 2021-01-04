@@ -214,6 +214,8 @@ export function ITO(props: ITO_Props) {
 
     useEffect(() => {
         retryBuyInfo()
+        retryPayload()
+        revalidateAvailability()
     }, [account, chainId, chainIdValid])
 
     const onShareSuccess = useCallback(async () => {
@@ -398,6 +400,7 @@ export function ITO(props: ITO_Props) {
                     onClose={() => setOpenClaimDialog(false)}
                     revalidateAvailability={revalidateAvailability}
                     retryBuyInfo={retryBuyInfo}
+                    retryPayload={retryPayload}
                 />
             ) : null}
         </div>
