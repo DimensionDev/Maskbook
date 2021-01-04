@@ -206,7 +206,7 @@ export default function DashboardContactsRouter() {
                     </AutoResize>
                 </div>
             </section>
-            {}
+            {searchContactDialog}
         </DashboardRouterContainer>
     )
 }
