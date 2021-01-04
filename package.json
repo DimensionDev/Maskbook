@@ -111,7 +111,7 @@
     "loglevel": "^1.7.0",
     "matrix-js-sdk": "^9.3.0",
     "metamask-extension-provider": "^2.0.0",
-    "notistack": "^1.0.2",
+    "notistack": "^1.0.3",
     "promievent": "^0.1.4",
     "pvtsutils": "^1.0.14",
     "qrcode": "^1.4.4",
