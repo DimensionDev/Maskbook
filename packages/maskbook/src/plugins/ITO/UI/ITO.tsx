@@ -271,9 +271,10 @@ export function ITO(props: ITO_Props) {
                         {payload.message}
                     </Typography>
                     {listOfStatus.includes(ITO_Status.expired) ||
-                    (listOfStatus.includes(ITO_Status.completed) && buyInfo) ? (
+                    (listOfStatus.includes(ITO_Status.completed) && buyInfo) ||
+                    total_remaining.isEqualTo(0) ? (
                         <Typography variant="body2" className={classes.status}>
-                            {listOfStatus.includes(ITO_Status.completed) && buyInfo
+                            {(listOfStatus.includes(ITO_Status.completed) && buyInfo) || total_remaining.isEqualTo(0)
                                 ? t('plugin_ito_completed')
                                 : listOfStatus.includes(ITO_Status.expired)
                                 ? t('plugin_ito_expired')
@@ -358,7 +359,7 @@ export function ITO(props: ITO_Props) {
             </Card>
 
             <Box className={classes.actionFooter}>
-                {!account || !chainIdValid ? (
+                {total_remaining.isEqualTo(0) && !buyInfo ? null : !account || !chainIdValid ? (
                     <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>

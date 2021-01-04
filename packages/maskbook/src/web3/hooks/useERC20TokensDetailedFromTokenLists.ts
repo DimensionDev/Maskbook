@@ -5,7 +5,7 @@ import { useAsync } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { isSameAddress } from '../helpers'
 import { useChainId } from './useChainState'
-import { EthereumTokenType, ERC20TokenDetailed } from '../types'
+import { EthereumTokenType, ERC20TokenDetailed, EtherTokenDetailed } from '../types'
 import { useERC20TokenDetailed } from './useERC20TokenDetailed'
 
 export enum TokenListsState {
@@ -46,7 +46,7 @@ export function useERC20TokensDetailedFromTokenLists(lists: string[], keyword: s
             ...(EthereumAddress.isValid(keyword)
                 ? allTokens.filter((token) => isSameAddress(token.address, keyword))
                 : []),
-            ...fuse.search(keyword).map((x) => x.item),
+            ...fuse.search(keyword).map((x) => x.item as EtherTokenDetailed | ERC20TokenDetailed),
         ]
     }, [keyword, fuse, allTokens])
     //#endregion

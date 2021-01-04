@@ -173,7 +173,8 @@ export function ClaimDialog(props: ClaimDialogProps) {
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-            if (claimState.type !== TransactionStateType.CONFIRMED) return
+            if (claimState.type !== TransactionStateType.CONFIRMED && claimState.type !== TransactionStateType.RECEIPT)
+                return
 
             setStatus(ClaimStatus.Share)
             revalidateAvailability()
