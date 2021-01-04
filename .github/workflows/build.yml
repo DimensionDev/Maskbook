@@ -23,7 +23,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: sudo npm install --global npm@7
-      - run: npm ci
+      - run: npm ci --force
       - run: npm run build-ci
       - name: Upload `Maskbook.base.zip`
         uses: actions/upload-artifact@v2

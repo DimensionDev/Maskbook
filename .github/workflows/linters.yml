@@ -22,7 +22,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: sudo npm install --global npm@7
-      - run: npm ci
+      - run: npm ci --force
       - run: npx prettier --check .
       - run: npx tsc -b
       - run: npm run lint:typecoverage
@@ -48,7 +48,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: sudo npm install --global npm@7
-      - run: npm ci
+      - run: npm ci --force
       - run: npm run build-storybook
       - uses: actions/upload-artifact@v2
         with:
