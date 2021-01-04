@@ -227,11 +227,11 @@ export function CreateForm(props: CreateFormProps) {
     const x = usePortalShadowRoot((container) => (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DateTimePicker
-                onChange ={() => {}}
+                onChange={() => {}}
                 renderInput={(props) => <TextField {...props} />}
                 value={new Date()}
-                DialogProps={{container}}
-                                />
+                DialogProps={{ container }}
+            />
         </LocalizationProvider>
     ))
     return (
@@ -277,9 +277,7 @@ export function CreateForm(props: CreateFormProps) {
                     }}
                 />
             </Box>
-            <Box className={classes.line}>
-                    {x}
-            </Box>
+            <Box className={classes.line}>{x}</Box>
             <Box className={classes.line}>
                 <TextField
                     className={classes.date}

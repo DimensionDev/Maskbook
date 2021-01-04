@@ -25,7 +25,8 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-interface ClaimGuideProps extends Pick<ClaimDialogProps, 'exchangeTokens' | 'payload' | 'revalidateAvailability'> {
+interface ClaimGuideProps
+    extends Pick<ClaimDialogProps, 'exchangeTokens' | 'payload' | 'revalidateAvailability' | 'retryBuyInfo'> {
     open: boolean
     onClose: () => void
     DialogProps?: Partial<DialogProps>
@@ -33,7 +34,7 @@ interface ClaimGuideProps extends Pick<ClaimDialogProps, 'exchangeTokens' | 'pay
 
 export function ClaimGuide(props: ClaimGuideProps) {
     const { t } = useI18N()
-    const { payload, exchangeTokens, revalidateAvailability, onClose } = props
+    const { payload, exchangeTokens, revalidateAvailability, retryBuyInfo, onClose } = props
     const classes = useStyles()
     const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Remind)
     const initAmount = new BigNumber(payload.limit).dividedBy(2)
@@ -78,6 +79,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
                                     token={payload.token}
                                     exchangeTokens={exchangeTokens}
                                     revalidateAvailability={revalidateAvailability}
+                                    retryBuyInfo={retryBuyInfo}
                                     setStatus={setStatus}
                                     chainId={chainId}
                                 />

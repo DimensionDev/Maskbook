@@ -268,7 +268,8 @@ export function ITO(props: ITO_Props) {
                     <Typography variant="h5" className={classes.title}>
                         {payload.message}
                     </Typography>
-                    {listOfStatus.includes(ITO_Status.expired) || listOfStatus.includes(ITO_Status.completed) ? (
+                    {listOfStatus.includes(ITO_Status.expired) ||
+                    (listOfStatus.includes(ITO_Status.completed) && buyInfo) ? (
                         <Typography variant="body2" className={classes.status}>
                             {listOfStatus.includes(ITO_Status.completed) && buyInfo
                                 ? t('plugin_ito_completed')
@@ -393,6 +394,7 @@ export function ITO(props: ITO_Props) {
                     open={openClaimDialog}
                     onClose={() => setOpenClaimDialog(false)}
                     revalidateAvailability={revalidateAvailability}
+                    retryBuyInfo={retryBuyInfo}
                 />
             ) : null}
         </div>

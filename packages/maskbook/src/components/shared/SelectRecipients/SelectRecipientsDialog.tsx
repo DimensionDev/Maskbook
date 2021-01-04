@@ -51,7 +51,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             threshold: 0,
         })
 
-        return search === '' ? items : fuse.search(search).map((item) => item.item)
+        return search === '' ? items : fuse.search(search).map((item) => item.item as Profile)
     }, [search, items])
     const LIST_ITEM_HEIGHT = 56
 

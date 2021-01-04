@@ -137,7 +137,9 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     color="primary"
                                     variant="outlined"
                                     onClick={() => {
-                                        onAmountChange(formatBalance(new BigNumber(maxAmount ?? balance), token.decimals))
+                                        onAmountChange(
+                                            formatBalance(new BigNumber(maxAmount ?? balance), token.decimals),
+                                        )
                                     }}
                                     {...props.MaxChipProps}
                                 />
