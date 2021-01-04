@@ -13,6 +13,10 @@ To develop Mask Network, you need to have ...
 - Node 15 or higher
 - NPM 7 (! generally NPM on your system is NPM6 !)
 
+### Recommends
+
+- [Setup git merge driver for NPM](https://www.npmjs.com/package/npm-merge-driver) which can resolve conflicts in `package-lock.json`.
+
 ### Workarounds
 
 NPM7 currently has [a bug that cannot install the dependencies correctly when workspace is used](https://github.com/npm/cli/issues/2430). We recommend you to use `npm ci` to install. Although it is slower but less error-prone.
