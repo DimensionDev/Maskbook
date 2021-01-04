@@ -46,7 +46,7 @@ export function useERC20TokensDetailedFromTokenLists(lists: string[], keyword: s
             ...(EthereumAddress.isValid(keyword)
                 ? allTokens.filter((token) => isSameAddress(token.address, keyword))
                 : []),
-            ...fuse.search(keyword).map((x) => x.item as ERC20TokenDetailed),
+            ...fuse.search(keyword).map((x) => x.item),
         ]
     }, [keyword, fuse, allTokens])
     //#endregion

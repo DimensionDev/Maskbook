@@ -130,7 +130,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
                 <TokenAmountPanel
                     classes={{ root: classes.input }}
                     label={label}
-                    amount={inputAmountForUI || '0'}
+                    amount={inputAmountForUI}
                     disableBalance={disableBalance}
                     balance={disableBalance ? '0' : tokenBalance}
                     token={exchangeToken}
