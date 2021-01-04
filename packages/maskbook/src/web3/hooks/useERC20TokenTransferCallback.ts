@@ -54,9 +54,9 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
         // step 2: blocking
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = erc20Contract.methods.transfer(recipient, amount).send({
-                gas: estimatedGas,
                 from: account,
                 to: erc20Contract.options.address,
+                gas: estimatedGas,
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                 setTransferState({
