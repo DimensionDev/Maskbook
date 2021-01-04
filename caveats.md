@@ -23,7 +23,7 @@ NPM7 currently has [a bug that cannot install the dependencies correctly when wo
 
 If you have a fatal error of cannot install `fsevents` on Linux or Windows like this:
 
-```text
+```plain
 npm ERR! code EBADPLATFORM
 npm ERR! notsup Unsupported platform for fsevents@2.1.3: wanted {"os":"darwin"} (current: {"os":"win32","arch":"x64"})
 npm ERR! notsup Valid OS:    darwin
@@ -83,7 +83,7 @@ It's important to select the correct context when you're debugging, otherwise yo
 
 You may see continuous growing errors saying
 
-```text
+```plain
 WebSocket connection to 'ws://localhost:8097/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
 ```
 
