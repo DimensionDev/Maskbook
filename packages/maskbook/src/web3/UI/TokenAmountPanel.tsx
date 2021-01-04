@@ -57,7 +57,7 @@ export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyle
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
-    const { amount, maxAmount = amount, balance, token, onAmountChange, label, disableBalance = false } = props
+    const { amount, maxAmount, balance, token, onAmountChange, label, disableBalance = false } = props
 
     const classes = useStylesExtends(useStyles(), props)
 
@@ -137,7 +137,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     color="primary"
                                     variant="outlined"
                                     onClick={() => {
-                                        onAmountChange(formatBalance(new BigNumber(maxAmount), token.decimals))
+                                        onAmountChange(formatBalance(new BigNumber(maxAmount ?? balance), token.decimals))
                                     }}
                                     {...props.MaxChipProps}
                                 />
