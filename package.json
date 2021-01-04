@@ -174,7 +174,7 @@
     "@types/rimraf": "^3.0.0",
     "@types/webpack-dev-server": "^3.11.1",
     "@typescript-eslint/eslint-plugin": "^4.11.1-alpha.0",
-    "@typescript-eslint/parser": "^4.11.1-alpha.0",
+    "@typescript-eslint/parser": "^4.11.1",
     "babel-loader": "^8.1.0",
     "chrome-launcher": "^0.13.4",
     "copy-webpack-plugin": "^7.0.0",
