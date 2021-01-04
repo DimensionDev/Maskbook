@@ -217,7 +217,7 @@
     "storybook-addon-i18n": "^5.1.13",
     "ts-generator": "^0.0.8",
     "ts-jest": "26.4.4",
-    "ts-loader": "^8.0.12",
+    "ts-loader": "^8.0.13",
     "ts-node": "^9.1.1",
     "ttypescript": "^1.5.12",
     "type-coverage": "^2.14.3",
