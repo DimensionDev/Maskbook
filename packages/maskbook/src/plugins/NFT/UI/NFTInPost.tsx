@@ -11,7 +11,7 @@ export default function NFTInPost(props: NFTInPostProps) {
         const [address, tokenId] = parseNftUrl(props.nftUrl)
 
         if (address && tokenId) {
-            const link = new window.URL('https://api.opensea.io/api/v1/assets')
+            const link = new URL('https://api.opensea.io/api/v1/assets')
             link.searchParams.set('asset_contract_address', address)
             link.searchParams.set('token_ids', tokenId)
 
@@ -25,7 +25,6 @@ export default function NFTInPost(props: NFTInPostProps) {
                         if (asset.name) updatedTokenDetails.name = asset.name
                         if (asset.description) updatedTokenDetails.description = asset.description
                         if (asset.image_url) updatedTokenDetails.imageUrl = new window.URL(asset.image_url)
-                        if (asset.animation_url) updatedTokenDetails.animationUrl = new window.URL(asset.animation_url)
 
                         setTokenDetails(updatedTokenDetails)
                     }
@@ -33,7 +32,7 @@ export default function NFTInPost(props: NFTInPostProps) {
         }
     }, [])
 
-    return tokenDetails.animationUrl || tokenDetails.imageUrl ? (
+    return tokenDetails.imageUrl ? (
         <div>
             <MaskbookPluginWrapper width={400} pluginName="NFT">
                 <NFTCardUI {...tokenDetails} />

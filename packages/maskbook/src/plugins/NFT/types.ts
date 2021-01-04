@@ -6,5 +6,4 @@ export interface TokenDetails {
     name?: string
     description?: string
     imageUrl?: URL
-    animationUrl?: URL
 }

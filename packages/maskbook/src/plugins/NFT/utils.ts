@@ -4,23 +4,44 @@
 //
 // TODO: discuss about the superrare url format
 
-export function getRelevantUrl(textContent: string): URL {
-    return new URL('https://opensea.io/assets/0x1986f4c2e3ad5fe9778da67b1b836cf53b9e20cd/380/')
+import {
+    openseaHostname,
+    openseaPathnameRegexMatcher,
+    raribleHostname,
+    rariblePathnameRegexMatcher,
+    urlRegexMatcher,
+} from './constants'
+
+function checkUrl(url: URL): boolean {
+    if (url.hostname === openseaHostname && openseaPathnameRegexMatcher.test(url.pathname)) return true
+    else if (url.hostname === raribleHostname && rariblePathnameRegexMatcher.test(url.pathname)) return true
+
+    return false
+}
+
+export function getRelevantUrl(textContent: string): URL | null {
+    const urls = urlRegexMatcher.exec(textContent)
+
+    if (urls) {
+        for (let url of urls) {
+            let _url = new URL(url)
+            if (checkUrl(_url)) return _url
+        }
+    }
+
+    return null
 }
 
 export function parseNftUrl(nftUrl: URL): [string, string] | any {
     let address = null,
         tokenId = null
 
-    if (nftUrl.hostname === 'opensea.io') {
-        let tokens = nftUrl.pathname.split('/')
-        address = tokens[tokens.length - 3]
-        tokenId = tokens[tokens.length - 2]
-    } else if (nftUrl.hostname === 'app.rarible.com') {
-        let tokens = nftUrl.pathname.split('/')
-        tokens = tokens[tokens.length - 2].split(':')
-        address = tokens[0]
-        tokenId = tokens[1]
+    if (nftUrl.hostname === openseaHostname && openseaPathnameRegexMatcher.test(nftUrl.pathname)) {
+        address = RegExp.$1
+        tokenId = RegExp.$2
+    } else if (nftUrl.hostname === raribleHostname && rariblePathnameRegexMatcher.test(nftUrl.pathname)) {
+        address = RegExp.$1
+        tokenId = RegExp.$2
     }
 
     return [address, tokenId]

@@ -2,10 +2,10 @@
 
 ## Feature Set
 
-- [ ] Detect URL
+- [x] Detect URL
 - [x] Fetch Metadata for NFT token
 - [x] Display Images
-- [ ] Display Videos
+- [x] Display Videos (not necessary as almost all assets have an imageUrl)
 
 ## Pull Request
 
