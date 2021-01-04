@@ -128,7 +128,7 @@
     "react-use": "^15.3.4",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.6",
-    "stream-browserify": "^2.0.2",
+    "stream-browserify": "^3.0.0",
     "stream-http": "^2.8.3",
     "string.prototype.matchall": "^4.0.2",
     "tiny-secp256k1": "^1.1.5",
