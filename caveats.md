@@ -61,23 +61,23 @@ If you need to develop in other environments (for example, Firefox), please run 
 
 This project supports Hot Module Reload which fasten the development process. Every time you find HMR not working please open <https://localhost:8080> and ignore the HTTPs certificate error.
 
-To disable HMR, set an environment variable `NO_HMR` to *true*.
+To disable HMR, set an environment variable `NO_HMR` to _true_.
 
 ### Debug tricks for Chromium-based devtools
 
 #### Debug Background Service
 
-To debug *background service*, click links right after **Inspect views**
+To debug _background service_, click links right after **Inspect views**
 
 ![An image displaying Chrome extension manage page](https://user-images.githubusercontent.com/5390719/103509131-5ce0cb00-4e9d-11eb-9aec-b24b9888b863.png)
 
 #### Debug Content Script
 
-To debug *content script*, open the devtools in the web page, then you can select context as the following picture describes.
+To debug _content script_, open the devtools in the web page, then you can select context as the following picture describes.
 
 ![An image displaying how to select Mask Network as the debug context](https://user-images.githubusercontent.com/5390719/103509436-1a6bbe00-4e9e-11eb-9b18-bde021337944.png)
 
-It's important to select the correct context when you're debugging, otherwise you cannot access all the global variables, *save as temp variables* also fails.
+It's important to select the correct context when you're debugging, otherwise you cannot access all the global variables, _save as temp variables_ also fails.
 
 #### "WebSocket connection to 'ws://localhost:8097/' failed"
 
