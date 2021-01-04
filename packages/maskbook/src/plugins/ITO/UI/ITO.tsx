@@ -225,6 +225,7 @@ export function ITO(props: ITO_Props) {
         t('plugin_ito_claim_foreshow_share', {
             link: postLink,
             name: token.name,
+            symbol: token.symbol ?? 'token'
         }),
     )
 
