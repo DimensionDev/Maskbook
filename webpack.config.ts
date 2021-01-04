@@ -135,7 +135,11 @@ function config(opts: {
             //#endregion
         },
         plugins: [
-            new ProvidePlugin({ Buffer: ['buffer', 'Buffer'] }), // Polyfill for Node global "Buffer" variable
+            new ProvidePlugin({
+                // Polyfill for Node global "Buffer" variable
+                Buffer: ['buffer', 'Buffer'],
+                'process.nextTick': 'next-tick',
+            }),
             new WatchMissingModulesPlugin(path.resolve('node_modules')),
             // Note: In development mode gitInfo will share across cache (and get inaccurate result). I (@Jack-Works) think this is a valuable trade-off.
             (mode === 'development' ? EnvironmentPluginCache : EnvironmentPluginNoCache)({
@@ -146,6 +150,9 @@ function config(opts: {
             new DefinePlugin({
                 'process.browser': 'true',
                 'process.version': JSON.stringify(process.version),
+                // MetaMaskInpageProvider => extension-port-stream => readable-stream depends on stdin and stdout
+                'process.stdout': '/* stdout */ null',
+                'process.stderr': '/* stdin */ null',
             }),
             ...getHotModuleReloadPlugin(),
             target.isProfile && new BundleAnalyzerPlugin(),
