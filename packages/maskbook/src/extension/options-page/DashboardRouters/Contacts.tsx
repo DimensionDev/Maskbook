@@ -35,7 +35,33 @@ const useStyles = makeStyles((theme) =>
                 marginLeft: theme.spacing(-2),
                 marginRight: theme.spacing(-2),
             },
+            display: 'flex',
         },
+        fixed: {
+            height: '100%',
+            width: '100%',
+            ['@media (max-width: 320px)']: {
+                height: 400,
+
+            },
+            ['@media (max-width: 360px)']: {
+                height: 491,
+            },
+            ['@media (max-width: 375px)']: {
+                height: 581,
+
+            },
+            ['@media (max-width: 411px)']: {
+                height: 602,
+            },
+            ['@media (max-width: 414px)']: {
+                height: 607,
+
+            },
+            ['@media (max-width: 540px)'] : {
+                height: 581,
+            },
+        }
     }),
 )
 
@@ -151,34 +177,36 @@ export default function DashboardContactsRouter() {
                 {t('people_in_database')}
             </Typography>
             <section className={classes.list}>
-                <AutoResize>
-                    {(sizeProps) => (
-                        <FixedSizeList
-                            overscanCount={5}
-                            onItemsRendered={(data) => {
-                                if (isEmpty || isReachingEnd) return
-                                if (isPagePending) return
-                                if (data.visibleStopIndex === data.overscanStopIndex) nextPage()
-                            }}
-                            itemSize={64}
-                            itemCount={items.length}
-                            {...sizeProps}>
-                            {({ index, style }) =>
-                                items[index] ? (
-                                    <ContactLine
-                                        style={style as any}
-                                        key={index}
-                                        contact={items[index]}
-                                        onUpdated={mutate}
-                                        onDeleted={mutate}
-                                    />
-                                ) : null
-                            }
-                        </FixedSizeList>
-                    )}
-                </AutoResize>
+                <div className={classes.fixed}>
+                    <AutoResize>
+                        {(sizeProps) => (
+                            <FixedSizeList
+                                overscanCount={5}
+                                onItemsRendered={(data) => {
+                                    if (isEmpty || isReachingEnd) return
+                                    if (isPagePending) return
+                                    if (data.visibleStopIndex === data.overscanStopIndex) nextPage()
+                                }}
+                                itemSize={64}
+                                itemCount={items.length}
+                                {...sizeProps}>
+                                {({ index, style }) =>
+                                    items[index] ? (
+                                        <ContactLine
+                                            style={style as any}
+                                            key={index}
+                                            contact={items[index]}
+                                            onUpdated={mutate}
+                                            onDeleted={mutate}
+                                        />
+                                    ) : null
+                                }
+                            </FixedSizeList>
+                        )}
+                    </AutoResize>
+                </div>
             </section>
-            {searchContactDialog}
+            {}
         </DashboardRouterContainer>
     )
 }
