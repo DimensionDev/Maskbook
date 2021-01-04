@@ -2,22 +2,50 @@
 
 Hi, Welcome to the Mask Network. Here is some note for developing Mask Network.
 
-## Git conventions
+## Setup
 
-`master` branch is our developing branch, `released` branch points to the latest version. [Git flow](https://github.com/nvie/gitflow) is recommended but not enforced.
+This section is going to help you to set up the development environment of Mask Network.
 
-Please use [Conventional Commits](https://www.conventionalcommits.org) when committing.
+### Requirements
 
-## Developing
+To develop Mask Network, you need to have ...
+
+- Node 15 or higher
+- NPM 7 (! generally NPM on your system is NPM6 !)
+
+### Workarounds
+
+NPM7 currently has [a bug that cannot install the dependencies correctly when workspace is used](https://github.com/npm/cli/issues/2430). We recommend you to use `npm ci` to install. Although it is slower but less error-prone.
+
+If you have a fatal error of cannot install `fsevents` on Linux or Windows like this:
+
+```text
+npm ERR! code EBADPLATFORM
+npm ERR! notsup Unsupported platform for fsevents@2.1.3: wanted {"os":"darwin"} (current: {"os":"win32","arch":"x64"})
+npm ERR! notsup Valid OS:    darwin
+npm ERR! notsup Valid Arch:  undefined
+npm ERR! notsup Actual OS:   win32
+npm ERR! notsup Actual Arch: x64
+```
+
+This is [another bug of NPM7](https://github.com/npm/cli/issues/2291). Please use `npm ci --force` as a workaround.
+
+## Development
+
+### Start the dev server
+
+`npm start` is a preset of development command for Chromium-based browsers.
+
+If you need to develop in other environments (for example, Firefox), please run `npm run go`, it is an interactive CLI tool to help you to learn out how to compose the build flags.
 
 ### Load extension into Chrome
 
 - Open `chrome://extensions`
-- Enable developer mode
+- Switch on "**Developer mode**"
 - Click "**Load unpacked version**"
 - Select
-  - `dist` folder (in **development mode**)
-  - `build` folder (after a **production mode** build).
+  - `project_root/dist` folder (in **development mode**)
+  - `project_root/build` folder (after a **production mode** build).
 
 ### Load extension into Firefox
 
@@ -25,15 +53,51 @@ Please use [Conventional Commits](https://www.conventionalcommits.org) when comm
 - Click "**Load Temporary Add-on**"
 - Select any file in the `dist` folder
 
-## Hot Module Reload
+### Hot Module Reload
 
-You can use an environment variable `NO_HMR` to close HMR totally.
+This project supports Hot Module Reload which fasten the development process. Every time you find HMR not working please open <https://localhost:8080> and ignore the HTTPs certificate error.
 
-If you found HMR doesn't work, please open <https://localhost:8080> and ignore the HTTPs certificate error.
+To disable HMR, set an environment variable `NO_HMR` to *true*.
 
-## Pull Request
+### Debug tricks for Chromium-based devtools
 
-### How to synchronize upstream
+#### Debug Background Service
+
+To debug *background service*, click links right after **Inspect views**
+
+![An image displaying Chrome extension manage page](https://user-images.githubusercontent.com/5390719/103509131-5ce0cb00-4e9d-11eb-9aec-b24b9888b863.png)
+
+#### Debug Content Script
+
+To debug *content script*, open the devtools in the web page, then you can select context as the following picture describes.
+
+![An image displaying how to select Mask Network as the debug context](https://user-images.githubusercontent.com/5390719/103509436-1a6bbe00-4e9e-11eb-9b18-bde021337944.png)
+
+It's important to select the correct context when you're debugging, otherwise you cannot access all the global variables, *save as temp variables* also fails.
+
+#### "WebSocket connection to 'ws://localhost:8097/' failed"
+
+You may see continuous growing errors saying
+
+```text
+WebSocket connection to 'ws://localhost:8097/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+```
+
+If that annoys you, you can filter thoes out with `-WebSocket` in the devtools message filter.
+
+#### Use React Devtools
+
+React devtools is also an browser extension so unfortunately it doesn't work with Mask Network out of the box. You need [the standalone version of React Devtools](https://github.com/facebook/react/tree/master/packages/react-devtools#:~:text=Chrome%20extension,instead)
+
+## Contribute your working
+
+### Git conversions
+
+`master` branch is our developing branch, `released` branch points to the latest released version. [Git flow](https://github.com/nvie/gitflow) is recommended but not enforced.
+
+Please use [Conventional Commits](https://www.conventionalcommits.org) when committing.
+
+### Synchronize upstream
 
 - <https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork>
 - <https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork>
@@ -41,5 +105,5 @@ If you found HMR doesn't work, please open <https://localhost:8080> and ignore t
 ## Caveats for Library
 
 - `lodash`, List of unavailable functions.
-  1. `_.chain`
+  1. `_.chain` (not friendly to tree-shake).
   2. `_.template` (see [#1865](https://github.com/DimensionDev/Maskbook/issues/1865))
