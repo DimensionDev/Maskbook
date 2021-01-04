@@ -19,6 +19,9 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { formatAmount, formatBalance } from '../../Wallet/formatter'
 import { datetimeISOString } from '../assets/formatDate'
+import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
+import { DateTimePicker, LocalizationProvider } from '@material-ui/lab'
+import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -221,6 +224,16 @@ export function CreateForm(props: CreateFormProps) {
         [startTime],
     )
 
+    const x = usePortalShadowRoot((container) => (
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DateTimePicker
+                onChange ={() => {}}
+                renderInput={(props) => <TextField {...props} />}
+                value={new Date()}
+                DialogProps={{container}}
+                                />
+        </LocalizationProvider>
+    ))
     return (
         <>
             <EthereumStatusBar classes={{ root: classes.bar }} />
@@ -263,6 +276,9 @@ export function CreateForm(props: CreateFormProps) {
                         },
                     }}
                 />
+            </Box>
+            <Box className={classes.line}>
+                    {x}
             </Box>
             <Box className={classes.line}>
                 <TextField
