@@ -203,7 +203,10 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     //#region buy info
-    const { value: buyInfo, retry: retryBuyInfo } = usePoolBuyInfo(pid.toLowerCase(), account.toLowerCase())
+    const { retry: retryBuyInfo } = usePoolBuyInfo(pid.toLowerCase(), account.toLowerCase())
+    const isBuyer =
+        chainId === payload.chain_id &&
+        payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
     const shareSuccessLink = useShareLink(
         t('plugin_ito_claim_success_share', {
             name: payload.message,
@@ -220,7 +223,7 @@ export function ITO(props: ITO_Props) {
 
     const onShareSuccess = useCallback(async () => {
         window.open(shareSuccessLink, '_blank', 'noopener noreferrer')
-    }, [shareSuccessLink, buyInfo])
+    }, [shareSuccessLink])
     //#endregion
 
     const shareLink = useShareLink(
@@ -273,10 +276,10 @@ export function ITO(props: ITO_Props) {
                         {payload.message}
                     </Typography>
                     {listOfStatus.includes(ITO_Status.expired) ||
-                    (listOfStatus.includes(ITO_Status.completed) && buyInfo) ||
+                    (listOfStatus.includes(ITO_Status.completed) && isBuyer) ||
                     total_remaining.isEqualTo(0) ? (
                         <Typography variant="body2" className={classes.status}>
-                            {(listOfStatus.includes(ITO_Status.completed) && buyInfo) || total_remaining.isEqualTo(0)
+                            {(listOfStatus.includes(ITO_Status.completed) && isBuyer) || total_remaining.isEqualTo(0)
                                 ? t('plugin_ito_completed')
                                 : listOfStatus.includes(ITO_Status.expired)
                                 ? t('plugin_ito_expired')
@@ -361,7 +364,7 @@ export function ITO(props: ITO_Props) {
             </Card>
 
             <Box className={classes.actionFooter}>
-                {total_remaining.isEqualTo(0) && !buyInfo ? null : !account || !chainIdValid ? (
+                {total_remaining.isEqualTo(0) && !isBuyer ? null : !account || !chainIdValid ? (
                     <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
@@ -373,7 +376,7 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_list_button_claim')}
                     </ActionButton>
-                ) : listOfStatus.includes(ITO_Status.completed) && buyInfo ? (
+                ) : listOfStatus.includes(ITO_Status.completed) && isBuyer ? (
                     <ActionButton
                         onClick={onShareSuccess}
                         variant="contained"
@@ -395,6 +398,7 @@ export function ITO(props: ITO_Props) {
             {payload ? (
                 <ClaimGuide
                     payload={payload}
+                    isBuyer={isBuyer}
                     exchangeTokens={exchange_tokens}
                     open={openClaimDialog}
                     onClose={() => setOpenClaimDialog(false)}

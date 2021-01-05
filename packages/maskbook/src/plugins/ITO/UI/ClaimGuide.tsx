@@ -31,13 +31,14 @@ interface ClaimGuideProps
         'exchangeTokens' | 'payload' | 'revalidateAvailability' | 'retryBuyInfo' | 'retryPayload'
     > {
     open: boolean
+    isBuyer: boolean
     onClose: () => void
     DialogProps?: Partial<DialogProps>
 }
 
 export function ClaimGuide(props: ClaimGuideProps) {
     const { t } = useI18N()
-    const { payload, exchangeTokens, revalidateAvailability, retryBuyInfo, retryPayload, onClose } = props
+    const { payload, exchangeTokens, isBuyer, revalidateAvailability, retryBuyInfo, retryPayload, onClose } = props
     const classes = useStyles()
     const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Remind)
     const maxSwapAmount = BigNumber.min(new BigNumber(payload.limit), new BigNumber(payload.total_remaining))
@@ -53,13 +54,8 @@ export function ClaimGuide(props: ClaimGuideProps) {
     }
 
     useEffect(() => {
-        setStatus(
-            chainId === payload.chain_id &&
-                payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
-                ? ClaimStatus.Share
-                : ClaimStatus.Remind,
-        )
-    }, [account, payload.buyers, chainId, payload.chain_id])
+        setStatus(isBuyer ? ClaimStatus.Share : ClaimStatus.Remind)
+    }, [account, isBuyer, chainId, payload.chain_id])
 
     return (
         <InjectedDialog
