@@ -1,42 +1,42 @@
-import { useEffect, useState } from 'react'
+import { useAsync } from 'react-use'
+import Services from '../../../extension/service'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import type { NFTInPostProps, TokenDetails } from '../types'
 import { parseNftUrl } from '../utils'
 import NFTCardUI from './NFTCardUI'
+import { openseaAssetsApiUrl } from '../constants'
 
 export default function NFTInPost(props: NFTInPostProps) {
-    const [tokenDetails, setTokenDetails] = useState<TokenDetails>({})
+    const tokenDetailsResponse = useAsync(
+        async function () {
+            let updatedTokenDetails: TokenDetails = {}
+            const [address, tokenId] = parseNftUrl(props.nftUrl)
 
-    useEffect(function () {
-        const [address, tokenId] = parseNftUrl(props.nftUrl)
+            // if nftUrl is invalid
+            if (!(address && tokenId)) return updatedTokenDetails
 
-        if (address && tokenId) {
-            const link = new URL('https://api.opensea.io/api/v1/assets')
+            const link = new URL(openseaAssetsApiUrl)
             link.searchParams.set('asset_contract_address', address)
             link.searchParams.set('token_ids', tokenId)
 
-            fetch(link.toString())
-                .then((res) => res.json())
-                .then((res) => {
-                    if (res.assets.length > 0) {
-                        let asset = res.assets[0]
+            try {
+                const response = await Services.Helper.fetch(link.toString())
+                const { assets } = JSON.parse(await response.text())
 
-                        let updatedTokenDetails: TokenDetails = {}
-                        if (asset.name) updatedTokenDetails.name = asset.name
-                        if (asset.description) updatedTokenDetails.description = asset.description
-                        if (asset.image_url) updatedTokenDetails.imageUrl = new window.URL(asset.image_url)
+                // if `assets` is an empty array, finally block will return the empty `updatedTokenDetails`
+                if (assets[0].name) updatedTokenDetails.name = assets[0].name
+                if (assets[0].description) updatedTokenDetails.description = assets[0].description
+                if (assets[0].image_url) updatedTokenDetails.imageUrl = new URL(assets[0].image_url)
+            } finally {
+                return updatedTokenDetails
+            }
+        },
+        [props.nftUrl],
+    )
 
-                        setTokenDetails(updatedTokenDetails)
-                    }
-                })
-        }
-    }, [])
-
-    return tokenDetails.imageUrl ? (
-        <div>
-            <MaskbookPluginWrapper width={400} pluginName="NFT">
-                <NFTCardUI {...tokenDetails} />
-            </MaskbookPluginWrapper>
-        </div>
+    return !tokenDetailsResponse.loading && !tokenDetailsResponse.error && tokenDetailsResponse.value?.imageUrl ? (
+        <MaskbookPluginWrapper width={400} pluginName="NFT">
+            <NFTCardUI {...tokenDetailsResponse.value} />
+        </MaskbookPluginWrapper>
     ) : null
 }

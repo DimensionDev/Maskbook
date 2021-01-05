@@ -4,45 +4,34 @@
 //
 // TODO: discuss about the superrare url format
 
-import {
-    openseaHostname,
-    openseaPathnameRegexMatcher,
-    raribleHostname,
-    rariblePathnameRegexMatcher,
-    urlRegexMatcher,
-} from './constants'
+import { parseURL } from '../../utils/utils'
+import { openseaHostname, openseaPathnameRegexMatcher, raribleHostname, rariblePathnameRegexMatcher } from './constants'
 
 function checkUrl(url: URL): boolean {
     if (url.hostname === openseaHostname && openseaPathnameRegexMatcher.test(url.pathname)) return true
-    else if (url.hostname === raribleHostname && rariblePathnameRegexMatcher.test(url.pathname)) return true
+    if (url.hostname === raribleHostname && rariblePathnameRegexMatcher.test(url.pathname)) return true
 
     return false
 }
 
 export function getRelevantUrl(textContent: string): URL | null {
-    const urls = urlRegexMatcher.exec(textContent)
-
-    if (urls) {
-        for (let url of urls) {
-            let _url = new URL(url)
-            if (checkUrl(_url)) return _url
-        }
+    const urls = parseURL(textContent)
+    for (let url of urls) {
+        let _url = new URL(url)
+        if (checkUrl(_url)) return _url
     }
-
     return null
 }
 
 export function parseNftUrl(nftUrl: URL): [string, string] | any {
-    let address = null,
-        tokenId = null
+    let regexMatcher = null
 
-    if (nftUrl.hostname === openseaHostname && openseaPathnameRegexMatcher.test(nftUrl.pathname)) {
-        address = RegExp.$1
-        tokenId = RegExp.$2
-    } else if (nftUrl.hostname === raribleHostname && rariblePathnameRegexMatcher.test(nftUrl.pathname)) {
-        address = RegExp.$1
-        tokenId = RegExp.$2
-    }
+    if (nftUrl.hostname === openseaHostname) regexMatcher = openseaPathnameRegexMatcher
+    else if (nftUrl.hostname === raribleHostname) regexMatcher = rariblePathnameRegexMatcher
 
-    return [address, tokenId]
+    if (!regexMatcher) return [null, null]
+    const matches = regexMatcher.exec(nftUrl.pathname)
+
+    if (!matches) return [null, null]
+    return [matches[1], matches[2]]
 }
