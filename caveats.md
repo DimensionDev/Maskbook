@@ -21,19 +21,6 @@ To develop Mask Network, you need to have ...
 
 NPM7 currently has [a bug that cannot install the dependencies correctly when workspace is used](https://github.com/npm/cli/issues/2430). We recommend you to use `npm ci` to install. Although it is slower but less error-prone.
 
-If you have a fatal error of cannot install `fsevents` on Linux or Windows like this:
-
-```plain
-npm ERR! code EBADPLATFORM
-npm ERR! notsup Unsupported platform for fsevents@2.1.3: wanted {"os":"darwin"} (current: {"os":"win32","arch":"x64"})
-npm ERR! notsup Valid OS:    darwin
-npm ERR! notsup Valid Arch:  undefined
-npm ERR! notsup Actual OS:   win32
-npm ERR! notsup Actual Arch: x64
-```
-
-This is [another bug of NPM7](https://github.com/npm/cli/issues/2291). Please use `npm ci --force` as a workaround.
-
 ## Development
 
 ### Start the dev server
