@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) =>
         status: {
             background: 'rgba(20, 23, 26, 0.6)',
             padding: '5px 16px',
-            borderRadius: '10px',
+            borderRadius: 10,
         },
         totalText: {
             display: 'flex',

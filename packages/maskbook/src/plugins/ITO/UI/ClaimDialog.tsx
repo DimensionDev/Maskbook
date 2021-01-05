@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) =>
         },
         swapLimitText: {
             color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
-            fontSize: '14px',
+            fontSize: 14,
             width: 'fit-content',
         },
         swapLimitSlider: {
@@ -55,10 +55,10 @@ const useStyles = makeStyles((theme) =>
                 background: theme.palette.mode === 'dark' ? '#fff' : '2CA4EF, 100%',
             },
             '& .MuiSlider-rail': {
-                height: '5px',
+                height: 5,
             },
             '& .MuiSlider-track': {
-                height: '5px',
+                height: 5,
             },
         },
         exchangeText: {

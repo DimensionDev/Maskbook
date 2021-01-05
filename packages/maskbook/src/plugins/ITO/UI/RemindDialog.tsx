@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) =>
             marginTop: theme.spacing(2),
             padding: '1rem 2rem',
             background: theme.palette.mode === 'dark' ? '#17191D' : '#F7F9FA',
-            borderRadius: '15px',
+            borderRadius: 15,
         },
         tokenIcon: {
             display: 'flex',
@@ -40,17 +40,17 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            height: '45px',
+            height: 45,
             marginLeft: '1rem',
         },
         tokenSymbol: {
             color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
-            fontSize: '18px',
+            fontSize: 18,
             cursor: 'default',
         },
         tokenLink: {
             color: '#6F767C',
-            fontSize: '15px',
+            fontSize: 15,
             '&:hover': {
                 textDecoration: 'none',
             },
