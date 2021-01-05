@@ -243,9 +243,10 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             new CopyPlugin({ patterns: [{ from: publicDir, to: dist }] }),
             getManifestPlugin(),
             ...getBuildNotificationPlugins(),
-            // Define "browser" globally in platform that don't have "browser"
-            !target.FirefoxEngine && !target.iOS && new ProvidePlugin({ browser: 'webextension-polyfill' }),
         )
+        // Define "browser" globally in platform that don't have "browser"
+        if (!target.FirefoxEngine && !target.iOS)
+            main.plugins!.push(new ProvidePlugin({ browser: 'webextension-polyfill' }))
         main.entry = {
             'options-page': withReactDevTools(src('./packages/maskbook/src/extension/options-page/index.tsx')),
             'content-script': withReactDevTools(src('./packages/maskbook/src/content-script.ts')),
