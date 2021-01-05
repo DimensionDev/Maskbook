@@ -14,7 +14,7 @@ storiesOf('Plugin: Gitcoin', module).add(
             background-position: 0 0, 15px 15px;
         }`}
             </style>
-            <PreviewCard id="479" onRequest={action('Request Grant')} />
+            <PreviewCard id="479" />
         </div>
     ),
     figmaLink('https://www.figma.com/file/6YeqA0eCTz67I1HVFXOd4X/Plugin%3A-Gitcoin'),
