@@ -231,7 +231,7 @@ function ReceiveTab(props: ReceiveTabProps) {
                     variant="outlined"
                 />
             </form>
-            <Box className={classes.qr}>
+            <div className={classes.qr}>
                 <QRCode
                     text={`ethereum:${wallet.address}`}
                     options={{ width: 200 }}
@@ -239,7 +239,7 @@ function ReceiveTab(props: ReceiveTabProps) {
                         style: { display: 'block', margin: 'auto' },
                     }}
                 />
-            </Box>
+            </div>
         </>
     )
 }
