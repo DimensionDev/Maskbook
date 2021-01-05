@@ -192,7 +192,7 @@
     "expect-puppeteer": "^4.4.0",
     "fake-indexeddb": "^3.1.2",
     "file-loader": "^6.2.0",
-    "html-webpack-plugin": "^4.5.0",
+    "html-webpack-plugin": "^5.0.0-beta.4",
     "husky": "^5.0.6",
     "jest": "26.6.3",
     "jest-environment-jsdom-fourteen": "^1.0.1",

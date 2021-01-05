@@ -240,7 +240,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     {
         main.plugins!.push(
             new WebExtensionTarget(), // See https://github.com/crimx/webpack-target-webextension,
-            new CopyPlugin({ patterns: [{ from: publicDir, to: dist, globOptions: { ignore: ['index.html'] } }] }),
+            new CopyPlugin({ patterns: [{ from: publicDir, to: dist }] }),
             getManifestPlugin(),
             ...getBuildNotificationPlugins(),
             // Define "browser" globally in platform that don't have "browser"
@@ -259,12 +259,12 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
         }
         main.plugins!.push(
             getHTMLPlugin({ chunks: ['options-page'], filename: 'index.html' }),
-            isManifestV3 ? undefined : getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }),
             getHTMLPlugin({ chunks: ['popup'], filename: 'popup.html' }),
             getHTMLPlugin({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
             getHTMLPlugin({ chunks: ['debug'], filename: 'debug.html' }),
         ) // generate pages for each entry
-        main.plugins = main.plugins.filter(Boolean)
+        if (!isManifestV3)
+            main.plugins!.push(getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }))
     }
     // Modify ManifestV3
     {
@@ -434,11 +434,12 @@ function toArray(x: string | string[]) {
     return typeof x === 'string' ? [x] : x
 }
 
+const templateContent = fs.readFileSync(src('./scripts/template.html'), 'utf8')
 function getHTMLPlugin(options: HTMLPlugin.Options = {}) {
-    const templateContent = fs.readFileSync(src('./scripts/template.html'), 'utf8')
     return new HTMLPlugin({
         templateContent,
         inject: 'body',
+        scriptLoading: 'defer',
         ...options,
     })
 }
