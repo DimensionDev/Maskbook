@@ -447,5 +447,6 @@
     "plugin_ito_your_claimed_amount": "",
     "plugin_ito_congratulations": "",
     "plugin_ito_claim_success_share": "",
-    "plugin_ito_claim_foreshow_share": ""
+    "plugin_ito_claim_foreshow_share": "",
+    "plugin_ito_claim_only_once_remind": ""
 }

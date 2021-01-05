@@ -72,6 +72,9 @@ const useStyles = makeStyles((theme) =>
             justifyContent: 'center',
             marginTop: theme.spacing(2),
         },
+        remindText: {
+            marginTop: theme.spacing(1),
+        },
     }),
 )
 
@@ -260,6 +263,9 @@ export function ClaimDialog(props: ClaimDialogProps) {
                     helperText: validationMessage,
                 }}
             />
+            <Typography className={classes.remindText} variant="body1" color="textSecondary">
+                {t('plugin_ito_claim_only_once_remind')}
+            </Typography>
             <section className={classes.swapButtonWrapper}>
                 <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
                     {approveRequired ? (
