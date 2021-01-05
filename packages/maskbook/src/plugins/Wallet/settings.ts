@@ -1,4 +1,5 @@
 import { createGlobalSettings } from '../../settings/createSettings'
+import { i18n } from '../../utils/i18n-next'
 import { GasPriceServerType, ProviderType } from '../../web3/types'
 import { PLUGIN_IDENTIFIER } from './constants'
 
@@ -31,7 +32,8 @@ export const currentSelectedGasPriceServerSettings = createGlobalSettings<GasPri
     `${PLUGIN_IDENTIFIER}+selectedGasPriceServer`,
     GasPriceServerType.GasNow,
     {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
+        primary: () => i18n.t('plugin_wallet_settings_gas_price_server_title'),
+        secondary: () => i18n.t('plugin_wallet_settings_gas_price_server_description'),
     },
 )
 

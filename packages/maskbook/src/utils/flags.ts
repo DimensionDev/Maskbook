@@ -29,6 +29,7 @@ export const Flags = {
     requires_injected_script_run_directly: process.env.target === 'firefox',
     // TODO: document why it enabled on app
     support_eth_network_switch: appOnly || betaOrInsiderOnly,
+    support_gas_price_server_switch: appOnly || betaOrInsiderOnly,
     //#region Experimental features
     image_payload_marked_as_beta: appOnly,
     /** Prohibit the use of test networks in production */

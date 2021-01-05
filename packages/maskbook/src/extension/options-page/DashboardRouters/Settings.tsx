@@ -28,6 +28,7 @@ import PaletteIcon from '@material-ui/icons/Palette'
 import LanguageIcon from '@material-ui/icons/Language'
 import WifiIcon from '@material-ui/icons/Wifi'
 import LaunchIcon from '@material-ui/icons/Launch'
+import LocalOfferIcon from '@material-ui/icons/LocalOffer'
 import DashboardRouterContainer from './Container'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useModal } from '../DashboardDialogs/Base'
@@ -36,8 +37,9 @@ import { Flags } from '../../../utils/flags'
 import { currentDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
 import { resolveDataProviderName, resolveTradeProviderName } from '../../../plugins/Trader/pipes'
 import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
-import { ChainId } from '../../../web3/types'
+import { ChainId, GasPriceServerType } from '../../../web3/types'
 import { extendsTheme } from '../../../utils/theme'
+import { currentSelectedGasPriceServerSettings } from '../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -185,6 +187,14 @@ export default function DashboardSettingsRouter() {
                                         enumObject={ChainId}
                                         icon={<WifiIcon />}
                                         value={currentMaskbookChainIdSettings}
+                                    />
+                                ) : null}
+                                {Flags.support_gas_price_server_switch ? (
+                                    <SettingsUIEnum
+                                        classes={listStyle}
+                                        enumObject={GasPriceServerType}
+                                        icon={<LocalOfferIcon />}
+                                        value={currentSelectedGasPriceServerSettings}
                                     />
                                 ) : null}
                                 {/* TODO: A singe 'Plugins' tab should be added for listing plugin bio and settings. */}
