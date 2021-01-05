@@ -1,6 +1,5 @@
 import { useCallback } from 'react'
-import { makeStyles, createStyles, Card, Typography, Button,  Grid, Avatar } from '@material-ui/core'
-import CheckIcon from '@material-ui/icons/Check'
+import { makeStyles, createStyles, Card, Typography, Button,  Grid, Avatar ,SvgIconProps, SvgIcon } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useGrant } from '../hooks/useGrant'
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
@@ -25,6 +24,10 @@ const useStyles = makeStyles((theme) => createStyles({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
+        "& > :last-child": {
+            marginTop: 4,
+            marginLeft: 4,
+        }
     },
     description: {
         paddingTop: theme.spacing(1),
@@ -79,6 +82,16 @@ interface PreviewCardProps {
     onRequest(): void
 }
 
+export const VerifiedIcon: React.FC = (props: SvgIconProps) => (
+    <SvgIcon {...props}>
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="18" height="18" rx="9" fill="#1C68F3"/>
+            <path d="M13 7L7.5 12L5 9.72727" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+
+    </SvgIcon>
+)
+
 export function PreviewCard(props: PreviewCardProps) {
     const { t } = useI18N()
     const classes = useStyles()
@@ -113,7 +126,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 {/*
                 <Icon color="primary" fontSize="small">check_circle</Icon>
                 */}
-                {grant.verified ? (<CheckIcon fontSize="small" color='secondary' />): null}
+                {grant.verified ? (<VerifiedIcon />) : null}
             </div>
             <div className={classes.description}>
                 <Typography variant='body1' color='textSecondary' className={classes.text}>
