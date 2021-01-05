@@ -27,7 +27,7 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
 
     const isStarted = payload.start_time * 1000 < new Date().getTime()
     const isExpired = availability.expired
-    const isCompleted = Number(availability.claimed) > 0
+    const isCompleted = Number(availability.swapped) > 0
 
     return {
         ...asyncResult,

@@ -24,7 +24,7 @@ export class ITO extends Contract {
             remaining: string
             started: boolean
             expired: boolean
-            claimed: string
+            swapped: string
             exchanged_tokens: string[]
             0: string[]
             1: string
@@ -33,15 +33,6 @@ export class ITO extends Contract {
             4: string
             5: string[]
         }>
-
-        claim(
-            id: string | number[],
-            verification: string | number[],
-            _recipient: string,
-            validation: string | number[],
-            _exchange_addr_i: number | string,
-            input_total: number | string,
-        ): TransactionObject<string>
 
         contract_creator(): TransactionObject<string>
 
@@ -59,17 +50,26 @@ export class ITO extends Contract {
             _total_tokens: number | string,
             _limit: number | string,
         ): TransactionObject<void>
+
+        swap(
+            id: string | number[],
+            verification: string | number[],
+            _recipient: string,
+            validation: string | number[],
+            _exchange_addr_i: number | string,
+            input_total: number | string,
+        ): TransactionObject<string>
     }
     events: {
-        ClaimSuccess: ContractEvent<{
+        DestructSuccess: ContractEvent<{
             id: string
-            claimer: string
-            claimed_value: string
             token_address: string
+            remaining_balance: string
+            exchanged_values: string[]
             0: string
             1: string
             2: string
-            3: string
+            3: string[]
         }>
         FillSuccess: ContractEvent<{
             total: string
@@ -87,19 +87,19 @@ export class ITO extends Contract {
             5: string
             6: string
         }>
-        RefundSuccess: ContractEvent<{
+        SwapSuccess: ContractEvent<{
             id: string
-            token_address: string
-            remaining_balance: string
+            swapper: string
+            from_address: string
+            to_address: string
+            from_value: string
+            to_value: string
             0: string
             1: string
             2: string
-        }>
-        Test: ContractEvent<{
-            a: string
-            b: string
-            0: string
-            1: string
+            3: string
+            4: string
+            5: string
         }>
         allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
     }

@@ -337,7 +337,7 @@ export function ITO(props: ITO_Props) {
                           ) ? (
                             <Typography variant="body1">
                                 {t('plugin_ito_your_claimed_amount', {
-                                    amount: formatBalance(new BigNumber(availability?.claimed ?? 0), token.decimals),
+                                    amount: formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals),
                                     symbol: token.symbol,
                                 })}
                             </Typography>

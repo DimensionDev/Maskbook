@@ -60,7 +60,7 @@ export function useClaimCallback(
             return
         }
 
-        const params: Parameters<typeof ITO_Contract['methods']['claim']> = [
+        const params: Parameters<typeof ITO_Contract['methods']['swap']> = [
             id,
             Web3Utils.soliditySha3(
                 Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 6))}`),
@@ -74,7 +74,7 @@ export function useClaimCallback(
 
         // step 1: estimate gas
         const estimatedGas = await ITO_Contract.methods
-            .claim(...params)
+            .swap(...params)
             .estimateGas(config)
             .catch((error: Error) => {
                 setClaimState({
@@ -101,7 +101,7 @@ export function useClaimCallback(
                 })
                 reject(error)
             }
-            const promiEvent = ITO_Contract.methods.claim(...params).send({
+            const promiEvent = ITO_Contract.methods.swap(...params).send({
                 gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                 ...config,
             })
