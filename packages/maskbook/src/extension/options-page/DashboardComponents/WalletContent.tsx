@@ -95,7 +95,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const [menu, openMenu] = useMenu(
         <MenuItem onClick={() => openWalletShare({ wallet })}>{t('share')}</MenuItem>,
         <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
-        wallet._private_key_ || wallet.mnemonic ? (
+        wallet._private_key_ || wallet.mnemonic.length ? (
             <MenuItem onClick={() => openWalletBackup({ wallet })}>{t('backup')}</MenuItem>
         ) : undefined,
         <MenuItem onClick={() => openWalletDelete({ wallet })} className={color.error} data-testid="delete_button">
