@@ -185,6 +185,9 @@ const useReceiveTab = makeStyles((theme: Theme) =>
     createStyles({
         qr: {
             marginTop: theme.spacing(2),
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
         },
         form: {
             padding: theme.spacing(1),
@@ -228,13 +231,7 @@ function ReceiveTab(props: ReceiveTabProps) {
                     variant="outlined"
                 />
             </form>
-            <Box
-                className={classes.qr}
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}>
+            <Box className={classes.qr}>
                 <QRCode
                     text={`ethereum:${wallet.address}`}
                     options={{ width: 200 }}
