@@ -41,7 +41,10 @@ export function ClaimGuide(props: ClaimGuideProps) {
     const { payload, exchangeTokens, isBuyer, revalidateAvailability, retryBuyInfo, retryPayload, onClose } = props
     const classes = useStyles()
     const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Remind)
-    const maxSwapAmount = useMemo(() => BigNumber.min(new BigNumber(payload.limit), new BigNumber(payload.total_remaining)), [payload.limit, payload.total_remaining])
+    const maxSwapAmount = useMemo(
+        () => BigNumber.min(new BigNumber(payload.limit), new BigNumber(payload.total_remaining)),
+        [payload.limit, payload.total_remaining],
+    )
     const initAmount = maxSwapAmount.dividedBy(2)
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
     const chainId = useChainId()
