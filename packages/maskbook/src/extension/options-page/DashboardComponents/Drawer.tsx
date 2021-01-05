@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerHeader: {
         color: 'white',
-        padding: theme.spacing(5.5, 2, 4, 4),
+        padding: theme.spacing(5.5, 10, 4, 4),
         backgroundColor: 'var(--drawerHeader)',
     },
     drawerBody: {
