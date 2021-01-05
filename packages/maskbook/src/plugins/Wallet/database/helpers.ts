@@ -1,11 +1,11 @@
 import type { IDBPSafeTransaction } from '../../../database/helpers/openDB'
-import type { WalletDB } from '../database/Wallet.db'
+import type { WalletDB } from './Wallet.db'
 import type {
     WalletRecord,
     ERC20TokenRecord,
     WalletRecordInDatabase,
     ERC20TokenRecordInDatabase,
-} from '../database/types'
+} from './types'
 import { resolveChainId } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
 import { ChainId } from '../../../web3/types'

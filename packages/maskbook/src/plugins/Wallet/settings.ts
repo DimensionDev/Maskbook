@@ -1,5 +1,5 @@
 import { createGlobalSettings } from '../../settings/createSettings'
-import { ProviderType } from '../../web3/types'
+import { GasPriceServerType, ProviderType } from '../../web3/types'
 import { PLUGIN_IDENTIFIER } from './constants'
 
 /**
@@ -19,6 +19,17 @@ export const currentSelectedWalletAddressSettings = createGlobalSettings<string>
 export const currentSelectedWalletProviderSettings = createGlobalSettings<ProviderType>(
     `${PLUGIN_IDENTIFIER}+selectedWalletProvider`,
     ProviderType.Maskbook,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
+/**
+ * The selected gas price server
+ */
+export const currentSelectedGasPriceServerSettings = createGlobalSettings<GasPriceServerType>(
+    `${PLUGIN_IDENTIFIER}+selectedGasPriceServer`,
+    GasPriceServerType.GasNow,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
