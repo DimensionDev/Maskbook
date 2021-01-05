@@ -1,6 +1,21 @@
 // Fix regenerator runtime
 globalThis.regeneratorRuntime = undefined
 
+{
+    // Workaround for https://github.com/crimx/webpack-target-webextension/issues/9
+    const orig = Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, 'src')
+    Object.defineProperty(HTMLScriptElement.prototype, 'src', {
+        ...orig,
+        set(src) {
+            try {
+                const root = (typeof browser === 'object' ? browser : chrome).runtime.getURL('/')
+                if (src.startsWith(root)) src = src.slice(root.length)
+            } catch {}
+            return orig.set.call(this, src)
+        },
+    })
+}
+
 // Fix for globalThis !== window in content script in Firefox
 {
     const fix = () => {
