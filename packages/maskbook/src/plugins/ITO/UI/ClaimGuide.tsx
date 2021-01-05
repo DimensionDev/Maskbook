@@ -2,7 +2,7 @@ import { createStyles, DialogContent, makeStyles, DialogProps } from '@material-
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { RemindDialog } from './RemindDialog'
 import { ShareDialog } from './ShareDialog'
 import { ClaimDialog, ClaimDialogProps } from './ClaimDialog'
@@ -41,7 +41,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
     const { payload, exchangeTokens, isBuyer, revalidateAvailability, retryBuyInfo, retryPayload, onClose } = props
     const classes = useStyles()
     const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Remind)
-    const maxSwapAmount = BigNumber.min(new BigNumber(payload.limit), new BigNumber(payload.total_remaining))
+    const maxSwapAmount = useMemo(() => BigNumber.min(new BigNumber(payload.limit), new BigNumber(payload.total_remaining)), [payload.limit, payload.total_remaining])
     const initAmount = maxSwapAmount.dividedBy(2)
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
     const chainId = useChainId()
