@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import type { GasPrice } from '../../plugins/Wallet/types'
 
 const GAS_NOW_API = 'https://www.gasnow.org/api/v3/gas/price'
@@ -40,23 +41,23 @@ export async function getGasPrice(): Promise<GasPrice[]> {
     return [
         {
             title: 'rapid',
-            wait: 120,
-            gasPrice: _LastGasNowResponseData!.rapid,
+            wait: 15,
+            gasPrice: new BigNumber(_LastGasNowResponseData!.rapid).div(100000000).toFixed(),
         },
         {
             title: 'fast',
-            wait: 30,
-            gasPrice: _LastGasNowResponseData!.fast,
+            wait: 60,
+            gasPrice: new BigNumber(_LastGasNowResponseData!.fast).div(1000000000).toFixed(),
         },
         {
             title: 'slow',
-            wait: 1800,
-            gasPrice: _LastGasNowResponseData!.slow,
+            wait: 600,
+            gasPrice: new BigNumber(_LastGasNowResponseData!.slow).div(1000000000).toFixed(),
         },
         {
             title: 'standard',
-            wait: 300,
-            gasPrice: _LastGasNowResponseData!.standard,
+            wait: 180,
+            gasPrice: new BigNumber(_LastGasNowResponseData!.standard).div(1000000000).toFixed(),
         },
     ] as GasPrice[]
 }
