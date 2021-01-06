@@ -19,7 +19,13 @@ export const QRCodeModel: React.FC<{ uri: string }> = ({ uri }) => {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const style = { height: '80%', display: 'block', margin: 'auto' }
+    const style: React.CSSProperties = {
+        height: '80%',
+        width: '80%',
+        objectFit: 'scale-down',
+        display: 'block',
+        margin: 'auto',
+    }
     return (
         <Grid className={classes.container}>
             <Typography className={classes.tip} color="textSecondary">
