@@ -2,12 +2,10 @@ import { v4 as uuid } from 'uuid'
 import { useReducer } from 'react'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 
-export interface ExchangeTokenAndAmount {
+export interface ExchangeTokenAndAmountState {
+    key: string
     amount: string
     token?: EtherTokenDetailed | ERC20TokenDetailed
-}
-export interface ExchangeTokenAndAmountState extends ExchangeTokenAndAmount {
-    key: string
 }
 
 export enum ExchangeTokenAndAmountActionType {
@@ -38,6 +36,7 @@ export type ExchangeTokenAndAmountAction =
           token?: EtherTokenDetailed | ERC20TokenDetailed
           key: string
       }
+
 function reducer(
     state: ExchangeTokenAndAmountState[],
     action: ExchangeTokenAndAmountAction,

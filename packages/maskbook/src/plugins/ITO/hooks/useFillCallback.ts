@@ -5,7 +5,7 @@ import type { TransactionReceipt } from 'web3-core'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import { EtherTokenDetailed, ERC20TokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
+import { EtherTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '../../../web3/types'
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { gcd, sortTokens } from '../helpers'
@@ -21,7 +21,7 @@ export interface PoolSettings {
     total: string
     exchangeAmounts: string[]
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
-    token?: EtherTokenDetailed | ERC20TokenDetailed
+    token?: ERC20TokenDetailed
 }
 
 export function useFillCallback(poolSettings: PoolSettings) {
@@ -159,7 +159,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
         const config: Tx = {
             from: account,
             to: ITO_Contract.options.address,
-            value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
+            value: '0',
         }
         const params: Parameters<typeof ITO_Contract['methods']['fill_pool']> = [
             Web3Utils.sha3(password)!,

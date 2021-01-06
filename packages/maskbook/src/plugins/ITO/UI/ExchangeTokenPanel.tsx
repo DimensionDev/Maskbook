@@ -100,7 +100,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
 
     //#endregion
 
-    // balance
+    //#region balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
         exchangeToken?.type ?? EthereumTokenType.Ether,
         exchangeToken?.address ?? '',
@@ -161,7 +161,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
                 open={openSelectERC20TokenDialog}
                 disableSearchBar={!isSell}
                 includeTokens={isSell ? [] : [ETH_ADDRESS, ...includeTokensAddress, ...EXCHANGE_TOKENS]}
-                excludeTokens={excludeTokensAddress}
+                excludeTokens={isSell ? [ETH_ADDRESS, ...excludeTokensAddress] : excludeTokensAddress}
                 selectedTokens={[exchangeToken?.address ?? '', ...selectedTokensAddress]}
                 onSubmit={onSelectERC20TokenDialogSubmit}
                 onClose={onSelectERC20TokenDialogClose}

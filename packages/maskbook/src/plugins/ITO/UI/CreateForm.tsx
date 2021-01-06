@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { EthereumTokenType } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
@@ -155,7 +155,7 @@ export function CreateForm(props: CreateFormProps) {
             name: senderName,
             title: message,
             limit: formatAmount(new BigNumber(totalOfPerWallet || '0'), first?.token?.decimals ?? 0),
-            token: first?.token,
+            token: first?.token as ERC20TokenDetailed,
             total: formatAmount(new BigNumber(first?.amount || '0'), first?.token?.decimals ?? 0),
             exchangeAmounts: rest.map((item) =>
                 formatAmount(new BigNumber(item.amount || '0'), item?.token?.decimals ?? 0),
@@ -178,7 +178,7 @@ export function CreateForm(props: CreateFormProps) {
     ])
 
     const validationMessage = useMemo(() => {
-        if (!tokenAndAmounts || tokenAndAmounts.length === 0) return t('plugin_ito_error_enter_amount_and_token')
+        if (tokenAndAmounts.length === 0) return t('plugin_ito_error_enter_amount_and_token')
         for (const { amount, token } of tokenAndAmounts) {
             if (!token) return t('plugin_ito_error_select_token')
             if (amount === '') return t('plugin_ito_error_enter_amount')
