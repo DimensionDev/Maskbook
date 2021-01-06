@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) =>
 interface ClaimGuideProps
     extends Pick<
         ClaimDialogProps,
-    'exchangeTokens' | 'payload' | 'revalidateAvailability' | 'retryTradeInfo' | 'retryPayload'
+        'exchangeTokens' | 'payload' | 'revalidateAvailability' | 'retryTradeInfo' | 'retryPayload'
     > {
     open: boolean
     isBuyer: boolean

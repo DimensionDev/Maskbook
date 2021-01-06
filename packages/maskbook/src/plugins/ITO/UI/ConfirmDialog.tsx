@@ -1,5 +1,5 @@
-import { Fragment } from 'react'
-import { createStyles, makeStyles, Typography, Grid, Paper, Card, IconButton } from '@material-ui/core'
+import { Fragment, useCallback } from 'react'
+import { createStyles, makeStyles, Typography, Grid, Paper, Card, IconButton, Link } from '@material-ui/core'
 import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -7,6 +7,8 @@ import LaunchIcon from '@material-ui/icons/Launch'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { dateTimeFormat } from '../assets/formatDate'
+import { isETH } from '../../../web3/helpers'
+import { resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -48,7 +50,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const { poolSettings, onDone, onBack } = props
     const classes = useStyles()
     const { t } = useI18N()
-
+    const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
     return (
         <Card elevation={0}>
             <Grid container spacing={0}>
@@ -67,9 +69,16 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Typography variant="body1" component="span" style={{ marginLeft: 2 }}>
                             {poolSettings?.token?.symbol}
                         </Typography>
-                        <IconButton style={{ padding: 0 }}>
-                            <LaunchIcon fontSize="small" />
-                        </IconButton>
+                        {isETH(poolSettings?.token?.address!) ? null : (
+                            <Link
+                                style={{ padding: 0 }}
+                                href={resolveTokenLinkOnEtherscan(poolSettings?.token!)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={stop}>
+                                <LaunchIcon fontSize="small" />
+                            </Link>
+                        )}
                     </Paper>
                 </Grid>
 

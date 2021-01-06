@@ -218,7 +218,7 @@ export function ITO(props: ITO_Props) {
 
     console.log('DEBUG: tradeInfo')
     console.log({
-        tradeInfo
+        tradeInfo,
     })
 
     useEffect(() => {

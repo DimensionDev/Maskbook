@@ -80,8 +80,8 @@ export async function getTradeinfo(pid: string, trader: string) {
                     amount
                 }
             }
-            `
-        })
+            `,
+        }),
     })
     const { data } = (await response.json()) as {
         data: {
