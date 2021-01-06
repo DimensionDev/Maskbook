@@ -220,6 +220,7 @@ export function ITO(props: ITO_Props) {
         // should not revalidate if never validated before
         if (!availability || !tradeInfo) return
         retryTradeInfo()
+        retryPayload()
         revalidateAvailability()
     }, [account, chainId, chainIdValid])
 
