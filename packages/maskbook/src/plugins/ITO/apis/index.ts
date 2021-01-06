@@ -115,7 +115,7 @@ export async function getTradeinfo(pid: string, trader: string) {
     }
     return {
         buyInfo: first(data.buyInfos),
-        sellinfo: first(data.sellInfos),
+        sellInfo: first(data.sellInfos),
         destructInfo: first(data.destructInfos),
         pool: payloadIntoMask(data.pool),
     }
