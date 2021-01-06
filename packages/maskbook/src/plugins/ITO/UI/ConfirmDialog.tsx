@@ -105,7 +105,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                                     <Typography>
                                         {formatBalance(
                                             new BigNumber(poolSettings?.exchangeAmounts[index]),
-                                            poolSettings?.token?.decimals ?? 6,
+                                            item?.decimals ?? 0,
                                         )}
                                     </Typography>
                                 </Paper>
