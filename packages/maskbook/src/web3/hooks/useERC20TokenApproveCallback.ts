@@ -85,6 +85,8 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
 
     // revalidate balance and allowance if tx hash was cleaned
     useEffect(() => {
+        // should not revalidate if never validated before
+        if (!allowance || !balance) return
         if (!approveHash) {
             revalidateBalance()
             revalidateAllowance()

@@ -203,7 +203,7 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     //#region buy info
-    const { retry: retryBuyInfo } = usePoolBuyInfo(pid, account)
+    const { value: buyInfo, retry: retryBuyInfo } = usePoolBuyInfo(pid, account)
     const isBuyer =
         chainId === payload.chain_id &&
         payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
@@ -216,6 +216,8 @@ export function ITO(props: ITO_Props) {
     )
 
     useEffect(() => {
+        // should not revalidate if never validated before
+        if (!availability || !buyInfo) return
         retryBuyInfo()
         revalidateAvailability()
     }, [account, chainId, chainIdValid])
