@@ -38,6 +38,11 @@ const useStyles = makeStyles((theme) =>
         button: {
             padding: theme.spacing(2),
         },
+        link: {
+            padding: 0,
+            marginLeft: theme.spacing(0.5),
+            marginTop: 2,
+        },
     }),
 )
 export interface ConfirmDialogProps {
@@ -66,12 +71,12 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 </Grid>
                 <Grid item xs={6}>
                     <Paper className={classes.data} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Typography variant="body1" component="span" style={{ marginLeft: 2 }}>
+                        <Typography variant="body1" component="span">
                             {poolSettings?.token?.symbol}
                         </Typography>
                         {isETH(poolSettings?.token?.address!) ? null : (
                             <Link
-                                style={{ padding: 0 }}
+                                className={classes.link}
                                 href={resolveTokenLinkOnEtherscan(poolSettings?.token!)}
                                 target="_blank"
                                 rel="noopener noreferrer"

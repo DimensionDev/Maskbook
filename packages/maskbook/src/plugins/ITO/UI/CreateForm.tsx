@@ -80,7 +80,9 @@ export function CreateForm(props: CreateFormProps) {
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
-        formatBalance(new BigNumber(origin?.limit ?? '0'), origin?.token?.decimals ?? 0),
+        new BigNumber(origin?.limit || '0').isZero()
+            ? ''
+            : formatBalance(new BigNumber(origin?.limit || '0'), origin?.token?.decimals ?? 0),
     )
     const [tokenAndAmount, setTokenAndAmount] = useState<ExchangeTokenAndAmountState>()
     const TAS: ExchangeTokenAndAmountState[] = []

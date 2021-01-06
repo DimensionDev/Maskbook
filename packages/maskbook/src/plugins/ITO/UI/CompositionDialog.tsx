@@ -62,13 +62,19 @@ export function CompositionDialog(props: CompositionDialogProps) {
     }
     //#endregion
 
+    const onClose = useCallback(() => {
+        const [, setValue] = state
+        setValue(0)
+        props.onClose()
+    }, [props, state])
+
     return (
         <>
             <InjectedDialog
                 disableBackdropClick
                 open={props.open}
                 title={t('plugin_ito_display_name')}
-                onClose={props.onClose}>
+                onClose={onClose}>
                 <DialogContent>
                     <AbstractTab height={565} {...tabProps} />
                 </DialogContent>
