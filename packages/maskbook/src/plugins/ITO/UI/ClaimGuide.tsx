@@ -45,7 +45,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
         () => BigNumber.min(new BigNumber(payload.limit), new BigNumber(payload.total_remaining)),
         [payload.limit, payload.total_remaining],
     )
-    const initAmount = useMemo(() => maxSwapAmount.dividedBy(2), [maxSwapAmount])
+    const initAmount = new BigNumber(0)
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
     const chainId = useChainId()
     const account = useAccount()

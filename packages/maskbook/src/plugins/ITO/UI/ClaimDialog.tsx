@@ -293,11 +293,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                         onClick={onExactApprove}>
                                         {approveState === ApproveState.NOT_APPROVED
                                             ? t('plugin_wallet_token_unlock', {
-                                                  balance: formatBalance(
-                                                      new BigNumber(claimAmount),
-                                                      claimToken.decimals,
-                                                      2,
-                                                  ),
+                                                  balance: formatBalance(claimAmount, claimToken.decimals, 2),
                                                   symbol: claimToken?.symbol ?? 'Token',
                                               })
                                             : ''}
