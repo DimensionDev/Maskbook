@@ -51,7 +51,12 @@ export async function discoverPool(from: string, payload: JSON_PayloadInMask) {
     const record: PoolRecord = {
         id: payload.pid,
         from: record_?.from || from,
-        payload: record_?.payload ?? payload,
+        payload: {
+            ...record_?.payload,
+            ...payload,
+            // reverse password if given payload hasn't got a password
+            password: payload.password || (record_?.payload.password ?? ''),
+        },
     }
     database.addPoolIntoDB(record)
     PluginITO_Messages.events.poolUpdated.sendToAll(undefined)

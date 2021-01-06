@@ -5,8 +5,8 @@ import { PostInspector } from './UI/PostInspector'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { formatBalance } from '../Wallet/formatter'
 import { ITO_MetaKey, ITO_PluginID } from './constants'
-import type { JSON_PayloadInMask } from './types'
-import { ITO_MetadataReader } from './helpers'
+import type { JSON_PayloadOutMask } from './types'
+import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { SnackbarContent } from '@material-ui/core'
 import { Flags } from '../../utils/flags'
@@ -57,7 +57,7 @@ export const ITO_PluginDefine: PluginConfig = {
         return (
             <MaskbookPluginWrapper pluginName="ITO">
                 <Suspense fallback={<SnackbarContent message="Maskbook is loading this plugin..." />}>
-                    <PostInspector payload={payload.val} />
+                    <PostInspector payload={payloadIntoMask(payload.val)} />
                 </Suspense>
             </MaskbookPluginWrapper>
         )
@@ -65,7 +65,7 @@ export const ITO_PluginDefine: PluginConfig = {
     postDialogMetadataBadge: new Map([
         [
             ITO_MetaKey,
-            (payload: JSON_PayloadInMask) => {
+            (payload: JSON_PayloadOutMask) => {
                 return (
                     <LabelWrapper
                         iconSize={14}

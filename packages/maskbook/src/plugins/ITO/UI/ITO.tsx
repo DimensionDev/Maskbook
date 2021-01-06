@@ -236,10 +236,9 @@ export function ITO(props: ITO_Props) {
             symbol: token.symbol ?? 'token',
         }),
     )
-
     const onShare = useCallback(async () => {
         window.open(shareLink, '_blank', 'noopener noreferrer')
-    }, [])
+    }, [shareLink])
     const onClaim = useCallback(async () => setOpenClaimDialog(true), [])
 
     //#region withdraw

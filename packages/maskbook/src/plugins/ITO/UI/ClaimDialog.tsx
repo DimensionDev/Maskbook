@@ -118,7 +118,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     )
     const [claimToken, setClaimToken] = useState<EtherTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
     const [claimAmount, setClaimAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
-    const [inputAmountForUI, setInputAmountForUI] = useState(formatBalance(claimAmount, claimToken.decimals))
+    const [inputAmountForUI, setInputAmountForUI] = useState(claimAmount.isZero() ? '' : formatBalance(claimAmount, claimToken.decimals))
 
     //#region select token
     const [openSwapTokenDialog, setOpenSwapTokenDialog] = useState(false)
@@ -182,7 +182,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
             if (ev.open) return
             if (claimState.type !== TransactionStateType.CONFIRMED && claimState.type !== TransactionStateType.RECEIPT)
                 return
-
             setStatus(ClaimStatus.Share)
             retryPayload()
             revalidateAvailability()
@@ -269,7 +268,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
             </Typography>
             <section className={classes.swapButtonWrapper}>
                 <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                    {approveRequired ? (
+                    {approveRequired && !validationMessage ? (
                         approveState === ApproveState.PENDING ? (
                             <Grid item xs={12}>
                                 <ActionButton
@@ -284,8 +283,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                         ) : (
                             <>
                                 <Grid item xs={6}>
-                                    <ActionButton
-                                        disabled={Boolean(validationMessage)}
+                                        <ActionButton
                                         className={classes.button}
                                         fullWidth
                                         variant="contained"
@@ -300,8 +298,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                     </ActionButton>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <ActionButton
-                                        disabled={Boolean(validationMessage)}
+                                        <ActionButton
                                         className={classes.button}
                                         fullWidth
                                         variant="contained"

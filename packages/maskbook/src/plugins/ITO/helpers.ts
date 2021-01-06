@@ -8,7 +8,7 @@ import { omit } from 'lodash-es'
 import { getConstant, isSameAddress } from '../../web3/helpers'
 import { CONSTANTS } from '../../web3/constants'
 
-export const ITO_MetadataReader = createTypedMessageMetadataReader<JSON_PayloadInMask>(ITO_MetaKey, schema)
+export const ITO_MetadataReader = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_MetaKey, schema)
 export const renderWithITO_Metadata = createRenderWithMetadata(ITO_MetadataReader)
 
 /**

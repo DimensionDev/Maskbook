@@ -54,12 +54,16 @@ export function CreateGuide(props: CreateGuideProps) {
             resetFillCallback()
 
             // the settings is not available
-            if (!fillSettings?.token) return
+            if (!fillSettings.token) return
 
-            // TODO:
             // earily return happended
-            // we should guide user to select the red packet in the existing list
-            if (fillState.type !== TransactionStateType.CONFIRMED) return
+            if (fillState.type !== TransactionStateType.CONFIRMED) {
+                prompt(
+                    "The transaction has not finished yet. You can still find it in the select existing list for a moment later. Please keep the password and you will need it for sharing the pool.",
+                    fillSettings.password,
+                )
+                return
+            }
 
             const { receipt } = fillState
             const FillSuccess = (receipt.events?.FillSuccess.returnValues ?? {}) as {
@@ -115,7 +119,7 @@ export function CreateGuide(props: CreateGuideProps) {
                 symbol: poolSettings.token.symbol,
             }),
         })
-    }, [fillState, poolSettings, setTransactionDialogOpen, t])
+    }, [fillState, poolSettings, setTransactionDialogOpen])
 
     //#region connect wallet
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)

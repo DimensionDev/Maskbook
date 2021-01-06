@@ -28,7 +28,6 @@ export function useFillCallback(poolSettings: PoolSettings) {
     const account = useAccount()
     const ITO_Contract = useITO_Contract()
     const [fillState, setFillState] = useTransactionState()
-    const [fillSettings, setFillSettings] = useState<PoolSettings | null>(null)
 
     const fillCallback = useCallback(async () => {
         const {
@@ -193,7 +192,6 @@ export function useFillCallback(poolSettings: PoolSettings) {
                 ...config,
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                setFillSettings(poolSettings)
                 setFillState({
                     type: TransactionStateType.CONFIRMED,
                     no: 0,
@@ -201,7 +199,6 @@ export function useFillCallback(poolSettings: PoolSettings) {
                 })
             })
             promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                setFillSettings(poolSettings)
                 setFillState({
                     type: TransactionStateType.CONFIRMED,
                     no,
@@ -225,5 +222,5 @@ export function useFillCallback(poolSettings: PoolSettings) {
         })
     }, [])
 
-    return [fillSettings, fillState, fillCallback, resetCallback] as const
+    return [poolSettings, fillState, fillCallback, resetCallback] as const
 }

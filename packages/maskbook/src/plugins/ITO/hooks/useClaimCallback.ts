@@ -23,9 +23,17 @@ export function useClaimCallback(
     const { value: payload } = usePoolPayload(id)
     const [claimState, setClaimState] = useTransactionState()
     const claimCallback = useCallback(async () => {
-        if (!ITO_Contract || !payload || !id || !password) {
+        if (!ITO_Contract || !payload || !id) {
             setClaimState({
                 type: TransactionStateType.UNKNOWN,
+            })
+            return
+        }
+
+        if (!password) {
+            setClaimState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Failed to swap token.'),
             })
             return
         }
@@ -45,7 +53,7 @@ export function useClaimCallback(
         if (!new BigNumber(total).isPositive()) {
             setClaimState({
                 type: TransactionStateType.FAILED,
-                error: new Error('Invalid claim amount'),
+                error: new Error('Invalid claim amount.'),
             })
             return
         }
@@ -55,7 +63,7 @@ export function useClaimCallback(
         if (claimTokenAt === -1) {
             setClaimState({
                 type: TransactionStateType.FAILED,
-                error: new Error(`Unknown ${token.symbol} token`),
+                error: new Error(`Unknown ${token.symbol} token.`),
             })
             return
         }

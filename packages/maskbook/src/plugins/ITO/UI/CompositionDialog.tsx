@@ -11,6 +11,7 @@ import { CreateGuide } from './CreateGuide'
 import { payloadOutMask } from '../helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
+import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles((theme) => createStyles({}))
 
@@ -27,6 +28,11 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const onCreateOrSelect = useCallback(
         (payload: JSON_PayloadInMask) => {
+            if (!payload.password) payload.password = prompt('Please enter the password of the pool:', '') ?? ''
+            if (!payload.password) {
+                alert('Unable to share a pool without a password. You can withdraw the pool if you have lost it.')
+                return
+            }
             editActivatedPostMetadata((next) =>
                 payload ? next.set(ITO_MetaKey, payloadOutMask(payload)) : next.delete(ITO_MetaKey),
             )
