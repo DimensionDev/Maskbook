@@ -12,3 +12,12 @@ export const Entry: React.FC = () => (
         <Redirect to={FileRouter.upload} />
     </MemoryRouter>
 )
+
+export const SiaEntry: React.FC = () => (
+    <MemoryRouter>
+        <Route path={FileRouter.upload} component={Upload} />
+        <Route path={FileRouter.uploading} component={Uploading} />
+        <Route path={FileRouter.uploaded} component={Uploaded} />
+        <Redirect to={FileRouter.upload} />
+    </MemoryRouter>
+)

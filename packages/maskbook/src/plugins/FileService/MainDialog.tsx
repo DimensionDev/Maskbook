@@ -5,9 +5,10 @@ import { useState } from 'react'
 import { useBeforeUnload } from 'react-use'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { InjectedDialog } from '../../components/shared/InjectedDialog'
+import type { AbstractTabProps } from '../../extension/options-page/DashboardComponents/AbstractTab'
 import { editActivatedPostMetadata } from '../../social-network/ui'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { Entry } from './components'
+import { Entry, SiaEntry } from './components'
 import { META_KEY_1 } from './constants'
 import { Exchange } from './hooks/Exchange'
 import type { FileInfo } from './types'
@@ -60,12 +61,36 @@ const FileServiceDialog: React.FC<Props> = (props) => {
         }
         snackbar.enqueueSnackbar(t('plugin_file_service_uploading_on_cancal'))
     }
+
+    const tabProps: AbstractTabProps = {
+        tabs: [
+            {
+                label: t('plugin_file_service_arweave'),
+                children: (
+                    <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
+                        <Entry />
+                    </Exchange>
+                ),
+                sx: { p: 0 },
+            },
+            {
+                label: t('plugin_file_service_skynet'),
+                children: (
+                    <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
+                        <SiaEntry />
+                    </Exchange>
+                ),
+                sx: { p: 0 },
+            },
+        ],
+        state,
+    }
+}
+
     return (
         <InjectedDialog open={props.open} title={t('plugin_file_service_display_name')} onClose={onDecline}>
             <DialogContent>
-                <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
-                    <Entry />
-                </Exchange>
+
             </DialogContent>
             <DialogActions classes={{ root: classes.actions }}>
                 <Button

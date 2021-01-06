@@ -358,6 +358,8 @@
     "plugin_file_service_error_101": "The input is not a single file.",
     "plugin_file_service_error_102": "The file is too large; limit is {{limit}}.",
     "plugin_file_service_on_change_file": "Change File",
+    "plugin_file_service_arweave": "Save on Arweave",
+    "plugin_file_service_skynet": "Save on Skynet",
     "plugin_trader_swap": "Swap",
     "plugin_trader_no_data": "No Data",
     "plugin_trader_tab_market": "General",

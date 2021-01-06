@@ -8,13 +8,18 @@ type TaggedTypes = FileInfo
 const Database = createPluginDatabase<TaggedTypes>(identifier)
 
 export async function getRecentFiles() {
-    const files: FileInfo[] = await asyncIteratorToArray(Database.iterate('arweave'))
+    const skynet: FileInfo[] = await asyncIteratorToArray(Database.iterate('skynet'))
+    const arweave: FileInfo[] = await asyncIteratorToArray(Database.iterate('arweave'))
+
+    const files = _.concat(arweave ?? [], skynet ?? [])
     files.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
     return files.slice(0, 4)
 }
 
 export async function getFileInfo(checksum: string) {
-    return Database.get('arweave', checksum)
+    return (
+        Database.get('arweave', checksum) ? checksum == 'arweave' : Database.get('skynet', checksum)
+    );
 }
 
 export async function setFileInfo(info: FileInfo) {
