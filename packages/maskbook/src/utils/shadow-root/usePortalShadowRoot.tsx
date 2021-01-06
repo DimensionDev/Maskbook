@@ -21,6 +21,7 @@ function bind(f: Function, thisArg: unknown, hook: Function) {
  * const picker = usePortalShadowRoot((container) => (
  *      <DatePicker
  *          DialogProps={{ container }}
+ *          PopperProps={{ container }}
  *          value={new Date()}
  *          onChange={() => {}}
  *          renderInput={(props) => <TextField {...props} />}
