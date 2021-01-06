@@ -52,8 +52,12 @@ const useStyles = makeStyles((theme) =>
             padding: 12,
         },
         date: {
-            flex: 1,
-            padding: theme.spacing(1),
+            margin: theme.spacing(1),
+            display: 'flex',
+            '& > * ': {
+                flex: 1,
+                padding: theme.spacing(1),
+            },
         },
     }),
 )
@@ -83,14 +87,14 @@ export function CreateForm(props: CreateFormProps) {
     if (origin?.token && origin?.total) {
         TAS.push({
             token: origin?.token,
-            amount: formatBalance(new BigNumber(origin?.total ?? '0'), origin?.token.decimals ?? 0),
+            amount: formatBalance(new BigNumber(origin?.total || '0'), origin?.token.decimals ?? 0),
             key: uuid(),
         })
     }
     if (origin?.exchangeTokens && origin?.exchangeAmounts) {
         origin?.exchangeTokens.map((i, x) =>
             TAS.push({
-                amount: formatBalance(new BigNumber(origin?.exchangeAmounts[x] ?? '0'), i?.decimals ?? 0),
+                amount: formatBalance(new BigNumber(origin?.exchangeAmounts[x] || '0'), i?.decimals ?? 0),
                 token: i,
                 key: uuid(),
             }),
@@ -99,14 +103,14 @@ export function CreateForm(props: CreateFormProps) {
 
     const [tokenAndAmounts, setTokenAndAmounts] = useState<ExchangeTokenAndAmountState[]>(TAS)
 
-    const [startTime, setStartTime] = useState(datetimeISOString(origin?.startTime!))
-    const [endTime, setEndTime] = useState(datetimeISOString(origin?.endTime!))
+    const [startTime, setStartTime] = useState(origin?.startTime || new Date())
+    const [endTime, setEndTime] = useState(origin?.endTime || new Date())
 
     const GMT = new Date().getTimezoneOffset() / 60
 
     // amount for displaying
     const inputTokenAmount = formatAmount(
-        new BigNumber(tokenAndAmount?.amount ?? '0'),
+        new BigNumber(tokenAndAmount?.amount || '0'),
         tokenAndAmount?.token?.decimals ?? 0,
     )
 
@@ -150,15 +154,15 @@ export function CreateForm(props: CreateFormProps) {
             password: uuid(),
             name: senderName,
             title: message,
-            limit: formatAmount(new BigNumber(totalOfPerWallet ?? '0'), first?.token?.decimals ?? 0),
+            limit: formatAmount(new BigNumber(totalOfPerWallet || '0'), first?.token?.decimals ?? 0),
             token: first?.token,
-            total: formatAmount(new BigNumber(first?.amount ?? '0'), first?.token?.decimals ?? 0),
+            total: formatAmount(new BigNumber(first?.amount || '0'), first?.token?.decimals ?? 0),
             exchangeAmounts: rest.map((item) =>
-                formatAmount(new BigNumber(item.amount ?? '0'), item?.token?.decimals ?? 0),
+                formatAmount(new BigNumber(item.amount || '0'), item?.token?.decimals ?? 0),
             ),
             exchangeTokens: rest.map((item) => item.token!),
-            startTime: new Date(startTime),
-            endTime: new Date(endTime),
+            startTime: startTime,
+            endTime: endTime,
         })
     }, [
         senderName,
@@ -192,7 +196,7 @@ export function CreateForm(props: CreateFormProps) {
         if (new BigNumber(totalOfPerWallet).isGreaterThan(new BigNumber(tokenAndAmount?.amount ?? '0')))
             return t('plugin_ito_error_allocation_invalid')
 
-        if (startTime === '' || endTime === '' || startTime >= endTime) return t('plugin_ito_error_exchange_time')
+        if (startTime >= endTime) return t('plugin_ito_error_exchange_time')
 
         return ''
     }, [
@@ -207,29 +211,40 @@ export function CreateForm(props: CreateFormProps) {
     ])
 
     const handleStartTime = useCallback(
-        (timeString: string) => {
-            const time = new Date(timeString).getTime()
-            if (endTime === '' || time < new Date(endTime).getTime()) setStartTime(timeString)
+        (date: Date) => {
+            const time = date.getTime()
+            if (time < endTime.getTime()) setStartTime(date)
         },
         [endTime],
     )
 
     const handleEndTime = useCallback(
-        (timeString: string) => {
-            const time = new Date(timeString).getTime()
-            const now = new Date()
-            if (time < now.getTime()) return
-            if (startTime === '' || time > new Date(startTime).getTime()) setEndTime(timeString)
+        (date: Date) => {
+            const time = date.getTime()
+            const now = Date.now()
+            if (time < now) return
+            if (time > startTime.getTime()) setEndTime(date)
         },
         [startTime],
     )
 
-    const x = usePortalShadowRoot((container) => (
+    const StartTime = usePortalShadowRoot((container) => (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DateTimePicker
-                onChange={() => {}}
-                renderInput={(props) => <TextField {...props} />}
-                value={new Date()}
+                onChange={(date: Date | null) => handleStartTime(date!)}
+                renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
+                value={startTime}
+                DialogProps={{ container }}
+                PopperProps={{ container }}
+            />
+        </LocalizationProvider>
+    ))
+    const EndTime = usePortalShadowRoot((container) => (
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DateTimePicker
+                onChange={(date: Date | null) => handleEndTime(date!)}
+                renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
+                value={endTime}
                 DialogProps={{ container }}
                 PopperProps={{ container }}
             />
@@ -278,31 +293,8 @@ export function CreateForm(props: CreateFormProps) {
                     }}
                 />
             </Box>
-            <Box className={classes.line}>{x}</Box>
-            <Box className={classes.line}>
-                <TextField
-                    className={classes.date}
-                    onChange={(ev) => handleStartTime(ev.target.value)}
-                    label={t('plugin_ito_begin_times_label', { GMT })}
-                    type="datetime-local"
-                    value={startTime}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    required={true}
-                />
-
-                <TextField
-                    required={true}
-                    className={classes.date}
-                    onChange={(ev) => handleEndTime(ev.target.value)}
-                    label={t('plugin_ito_end_times_label', { GMT })}
-                    type="datetime-local"
-                    value={endTime}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
+            <Box className={classes.date}>
+                {StartTime} {EndTime}
             </Box>
             <Box className={classes.line}>
                 <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
