@@ -1,6 +1,6 @@
 import { SvgIcon, SvgIconProps } from '@material-ui/core'
 
-export const TrustIcon: React.FC = (props: SvgIconProps) => (
+export const TrustIcon: React.FC<SvgIconProps> = (props) => (
     <SvgIcon {...props}>
         <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="128" height="128" rx="24" fill="#3375BB" />
@@ -14,7 +14,7 @@ export const TrustIcon: React.FC = (props: SvgIconProps) => (
     </SvgIcon>
 )
 
-export const IMTokenIcon: React.FC = (props: SvgIconProps) => (
+export const IMTokenIcon: React.FC<SvgIconProps> = (props) => (
     <SvgIcon {...props}>
         <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="128" height="128" rx="24" fill="url(#paint0_linear)" />
@@ -32,7 +32,7 @@ export const IMTokenIcon: React.FC = (props: SvgIconProps) => (
     </SvgIcon>
 )
 
-export const RainbowIcon: React.FC = (props: SvgIconProps) => (
+export const RainbowIcon: React.FC<SvgIconProps> = (props) => (
     <SvgIcon {...props}>
         <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="128" height="128" fill="url(#paint0_linear)" rx="24" />
@@ -88,7 +88,7 @@ export const RainbowIcon: React.FC = (props: SvgIconProps) => (
     </SvgIcon>
 )
 
-export const MetaMaskIcon: React.FC = (props: SvgIconProps) => (
+export const MetaMaskIcon: React.FC<SvgIconProps> = (props) => (
     <SvgIcon {...props}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 128 128">
             <rect width="128" height="128" fill="#fff" rx="24" />
