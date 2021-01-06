@@ -192,8 +192,6 @@ export function ITO(props: ITO_Props) {
         payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
     const noRemain = total_remaining.isZero()
 
-    const canWithdraw = isAccountSeller && listOfStatus.includes(ITO_Status.expired) && !noRemain
-
     //#region remote controlled select provider dialog
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {
@@ -215,11 +213,8 @@ export function ITO(props: ITO_Props) {
             symbol: token.symbol,
         }),
     )
-
-    console.log('DEBUG: tradeInfo')
-    console.log({
-        tradeInfo,
-    })
+    const canWithdraw =
+        isAccountSeller && !tradeInfo?.destructInfo && (listOfStatus.includes(ITO_Status.expired) || noRemain)
 
     useEffect(() => {
         // should not revalidate if never validated before
@@ -259,12 +254,25 @@ export function ITO(props: ITO_Props) {
 
     useEffect(() => {
         if (destructState.type === TransactionStateType.UNKNOWN) return
+        let summary = t('plugin_ito_list_button_claim')
+        if (!noRemain) {
+            summary += ' ' + formatBalance(total_remaining, token.decimals ?? 0) + ' ' + token.symbol
+        }
+        availability?.exchange_addrs.forEach((addr, i) => {
+            const token = payload.exchange_tokens.find((t) => t.address.toLowerCase() === addr.toLowerCase())
+            const comma = noRemain && i === 0 ? ' ' : ', '
+            if (token) {
+                summary +=
+                    comma +
+                    formatBalance(new BigNumber(availability?.exchanged_tokens[i]), token.decimals ?? 0) +
+                    ' ' +
+                    token.symbol
+            }
+        })
         setTransactionDialogOpen({
             open: true,
             state: destructState,
-            summary: `${t('plugin_ito_list_button_claim')} ${formatBalance(total_remaining, token.decimals ?? 0)} ${
-                token.symbol
-            }`,
+            summary,
         })
         retryPayload()
     }, [destructState])
