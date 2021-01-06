@@ -380,12 +380,7 @@ export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<Pe
     const deletePersona = useSnackbarCallback(
         () => Services.Identity.deletePersona(persona.identifier, 'delete even with private'),
         [],
-        () => {
-            props.onClose()
-            if (personas.length === 1) {
-                location.reload()
-            }
-        },
+        () => (personas.length === 1 ? location.reload() : props.onClose()),
     )
     return (
         <DashboardDialogCore fullScreen={false} {...props}>
