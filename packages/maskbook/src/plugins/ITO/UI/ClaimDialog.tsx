@@ -208,7 +208,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
         if (claimAmount.dividedBy(ratio).isGreaterThan(maxSwapAmount))
             return t('plugin_ito_dialog_claim_swap_exceed_wallet_limit')
         return ''
-    }, [claimAmount, tokenBalance, maxSwapAmount, tokenBalanceLoading, t, claimToken, ratio])
+    }, [claimAmount, tokenBalance, maxSwapAmount, claimToken, ratio])
 
     return (
         <>
@@ -257,10 +257,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
                     ChipProps: {
                         onClick: () => setOpenSwapTokenDialog(true),
                     },
-                }}
-                TextFieldProps={{
-                    error: Boolean(validationMessage),
-                    helperText: validationMessage,
                 }}
             />
             <Typography className={classes.remindText} variant="body1" color="textSecondary">
