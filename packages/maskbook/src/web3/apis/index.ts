@@ -4,13 +4,14 @@ import * as gasstation from './gasstation'
 import { GasPriceProviderType } from '../types'
 import { unreachable } from '../../utils/utils'
 
-export function getGasPrices(provider: GasPriceProviderType): GasPrice[] {
+export async function getGasPrices(provider: GasPriceProviderType): Promise<GasPrice[]> {
     switch (provider) {
-        case GasPriceProviderType.GasNow:
-            return gasnow.getGasPrice()
+        case GasPriceProviderType.GasNow: {
+            return await gasnow.getGasPrice()
+        }
         case GasPriceProviderType.GasStation:
-            return gasstation.getGasPrice()
+            return await gasstation.getGasPrice()
         default:
-            unreachable(provider)
+            return unreachable(provider)
     }
 }
