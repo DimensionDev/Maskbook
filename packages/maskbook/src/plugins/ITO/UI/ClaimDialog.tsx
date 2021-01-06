@@ -118,7 +118,9 @@ export function ClaimDialog(props: ClaimDialogProps) {
     )
     const [claimToken, setClaimToken] = useState<EtherTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
     const [claimAmount, setClaimAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
-    const [inputAmountForUI, setInputAmountForUI] = useState(claimAmount.isZero() ? '' : formatBalance(claimAmount, claimToken.decimals))
+    const [inputAmountForUI, setInputAmountForUI] = useState(
+        claimAmount.isZero() ? '' : formatBalance(claimAmount, claimToken.decimals),
+    )
 
     //#region select token
     const [openSwapTokenDialog, setOpenSwapTokenDialog] = useState(false)
@@ -283,7 +285,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                         ) : (
                             <>
                                 <Grid item xs={6}>
-                                        <ActionButton
+                                    <ActionButton
                                         className={classes.button}
                                         fullWidth
                                         variant="contained"
@@ -298,7 +300,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                     </ActionButton>
                                 </Grid>
                                 <Grid item xs={6}>
-                                        <ActionButton
+                                    <ActionButton
                                         className={classes.button}
                                         fullWidth
                                         variant="contained"

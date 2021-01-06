@@ -419,8 +419,6 @@
     "plugin_ito_end_times": "End Times {{zone}}",
     "plugin_ito_swap_ration_label": "Swap Ration",
     "plugin_item_message_label": "Title",
-    "plugin_ito_begin_times_label": "Begin Times GMT ({{GMT}})",
-    "plugin_ito_end_times_label": "End Times GMT({{GMT}})",
     "plugin_ito_next": "Next",
     "plugin_ito_back": "Back",
     "plugin_ito_transaction_dialog_summary": "Create ITO with {{amount}} {{symbol}}",

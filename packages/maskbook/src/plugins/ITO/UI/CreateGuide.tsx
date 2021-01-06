@@ -59,7 +59,7 @@ export function CreateGuide(props: CreateGuideProps) {
             // earily return happended
             if (fillState.type !== TransactionStateType.CONFIRMED) {
                 prompt(
-                    "The transaction has not finished yet. You can still find it in the select existing list for a moment later. Please keep the password and you will need it for sharing the pool.",
+                    'The transaction has not finished yet. You can still find it in the select existing list for a moment later. Please keep the password and you will need it for sharing the pool.',
                     fillSettings.password,
                 )
                 return
