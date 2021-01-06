@@ -223,10 +223,15 @@ export function ClaimDialog(props: ClaimDialogProps) {
                     className={classes.swapLimitSlider}
                     value={Number(tokenAmount.dividedBy(maxSwapAmount).multipliedBy(100))}
                     onChange={(_, newValue) => {
-                        const tAmount = maxSwapAmount.multipliedBy((newValue as number) / 100)
+                        let tAmount = maxSwapAmount.multipliedBy((newValue as number) / 100)
+                        const swapAmount = formatBalance(tAmount.multipliedBy(ratio), claimToken.decimals)
+                        tAmount = new BigNumber(swapAmount)
+                            .dividedBy(ratio)
+                            .multipliedBy(Math.pow(10, claimToken.decimals))
+                        if (tAmount.isGreaterThan(maxSwapAmount)) return
                         setTokenAmount(tAmount)
                         setClaimAmount(tAmount.multipliedBy(ratio))
-                        setInputAmountForUI(formatBalance(tAmount.multipliedBy(ratio), claimToken.decimals))
+                        setInputAmountForUI(swapAmount)
                     }}
                 />
                 <Typography variant="body1" className={classes.swapLimitText}>
