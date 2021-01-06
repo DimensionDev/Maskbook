@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import { makeStyles, createStyles, InputAdornment } from '@material-ui/core'
 import { v4 as uuid } from 'uuid'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
@@ -75,10 +75,9 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
         <>
             {exchangeTokenArray.map((item, idx) => {
                 return (
-                    <>
+                    <Fragment key={idx}>
                         <ExchangeTokenPanel
                             label={idx ? t('plugin_ito_swap_ration_label') : t('plugin_ito_sell_total_amount')}
-                            key={idx}
                             dataIndex={item.key}
                             disableBalance={idx !== 0}
                             isSell={idx === 0}
@@ -113,7 +112,7 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
                                 <ArrowDownwardIcon color="disabled" />
                             </div>
                         ) : null}
-                    </>
+                    </Fragment>
                 )
             })}
         </>
