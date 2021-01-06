@@ -20,9 +20,7 @@ export const QRCodeModel: React.FC<{ uri: string }> = ({ uri }) => {
     const classes = useStyles()
 
     const style: React.CSSProperties = {
-        height: '80%',
-        width: '80%',
-        objectFit: 'scale-down',
+        width: `fit-content(80%)`,
         display: 'block',
         margin: 'auto',
     }
