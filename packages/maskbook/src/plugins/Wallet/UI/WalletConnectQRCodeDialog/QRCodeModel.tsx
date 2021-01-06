@@ -1,7 +1,5 @@
 import { createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
-import { useCopyToClipboard } from 'react-use'
 import { QRCode } from '../../../../components/shared/qrcode'
-import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) =>
@@ -20,11 +18,6 @@ const useStyles = makeStyles((theme) =>
 export const QRCodeModel: React.FC<{ uri: string }> = ({ uri }) => {
     const { t } = useI18N()
     const classes = useStyles()
-
-    //#region copy to clipboard
-    const [, copyToClipboard] = useCopyToClipboard()
-    const onCopy = useSnackbarCallback(async () => uri && copyToClipboard(uri), [uri])
-    //#endregion
 
     const style = { height: '80%', display: 'block', margin: 'auto' }
     return (
