@@ -5,15 +5,11 @@ import * as subgraph from './apis'
 import * as database from './database'
 import { getChainId } from '../../extension/background-script/EthereumService'
 
-export async function getBuyInfo(pid: string, buyer: string) {
-    const buyInfo = await subgraph.getBuyInfo(pid, buyer)
+export async function getTradeInfo(pid: string, trader: string) {
+    const tradeInfo = await subgraph.getTradeinfo(pid, trader)
     const poolFromDB = await database.getPoolFromDB(pid)
-    if (buyInfo && poolFromDB?.payload.password) buyInfo.pool.password = poolFromDB.payload.password
-    return buyInfo
-}
-
-export async function getSellInfo(pid: string, seller: string) {
-    // to be implemented
+    if (tradeInfo && poolFromDB?.payload.password) tradeInfo.pool.password = poolFromDB.payload.password
+    return tradeInfo
 }
 
 export async function getPool(pid: string) {

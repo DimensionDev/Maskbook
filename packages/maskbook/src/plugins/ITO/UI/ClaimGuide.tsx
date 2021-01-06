@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) =>
 interface ClaimGuideProps
     extends Pick<
         ClaimDialogProps,
-        'exchangeTokens' | 'payload' | 'revalidateAvailability' | 'retryBuyInfo' | 'retryPayload'
+    'exchangeTokens' | 'payload' | 'revalidateAvailability' | 'retryTradeInfo' | 'retryPayload'
     > {
     open: boolean
     isBuyer: boolean
@@ -38,7 +38,7 @@ interface ClaimGuideProps
 
 export function ClaimGuide(props: ClaimGuideProps) {
     const { t } = useI18N()
-    const { payload, exchangeTokens, isBuyer, revalidateAvailability, retryBuyInfo, retryPayload, onClose } = props
+    const { payload, exchangeTokens, isBuyer, revalidateAvailability, retryTradeInfo, retryPayload, onClose } = props
     const classes = useStyles()
     const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Remind)
     const maxSwapAmount = useMemo(
@@ -83,7 +83,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
                                     token={payload.token}
                                     exchangeTokens={exchangeTokens}
                                     revalidateAvailability={revalidateAvailability}
-                                    retryBuyInfo={retryBuyInfo}
+                                    retryTradeInfo={retryTradeInfo}
                                     retryPayload={retryPayload}
                                     setStatus={setStatus}
                                     chainId={chainId}

@@ -1,10 +1,10 @@
-import { omit } from 'lodash-es'
+import { first, omit } from 'lodash-es'
 import { getConstant } from '../../../web3/helpers'
 import { ITO_CONSTANTS } from '../constants'
 import { payloadIntoMask } from '../helpers'
 import type { JSON_PayloadOutMask } from '../types'
 
-const BUYER_FIELDS = `
+const TRADER_FIELDS = `
     address
     name
 `
@@ -47,19 +47,19 @@ const POOL_FIELDS = `
     }
 `
 
-export async function getBuyInfo(pid: string, buyer: string) {
+export async function getTradeinfo(pid: string, trader: string) {
     const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL'), {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({
             query: `
             {
-                buyInfos (where: { pool: "${pid.toLowerCase()}", buyer: "${buyer.toLowerCase()}" }) {
-                    pool {
-                        ${POOL_FIELDS}
-                    }
+                pool (id: "${pid.toLowerCase()}") {
+                    ${POOL_FIELDS}
+                }
+                buyInfos (where: { pool: "${pid.toLowerCase()}", buyer: "${trader.toLowerCase()}" }) {
                     buyer {
-                        ${BUYER_FIELDS}
+                        ${TRADER_FIELDS}
                     }
                     token {
                         ${TOKEN_FIELDS}
@@ -67,14 +67,26 @@ export async function getBuyInfo(pid: string, buyer: string) {
                     amount_sold
                     amount_bought
                 }
+                sellInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" }) {
+                    seller {
+                        ${TRADER_FIELDS}
+                    }
+                    amount
+                }
+                destructInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" }) {
+                    seller {
+                        ${TRADER_FIELDS}
+                    }
+                    amount
+                }
             }
-            `,
-        }),
+            `
+        })
     })
     const { data } = (await response.json()) as {
         data: {
+            pool: JSON_PayloadOutMask
             buyInfos: {
-                pool: JSON_PayloadOutMask
                 buyer: {
                     address: string
                     name: string
@@ -83,13 +95,29 @@ export async function getBuyInfo(pid: string, buyer: string) {
                 amount_sold: string
                 amount_bought: string
             }[]
+            sellInfos: {
+                buyer: {
+                    address: string
+                    name: string
+                }
+                token: JSON_PayloadOutMask['token']
+                amount: string
+            }[]
+            destructInfos: {
+                buyer: {
+                    address: string
+                    name: string
+                }
+                token: JSON_PayloadOutMask['token']
+                amount: string
+            }[]
         }
     }
-    const buyInfo = data.buyInfos[0]
-    if (!buyInfo) return
     return {
-        ...buyInfo,
-        pool: payloadIntoMask(buyInfo.pool),
+        buyInfo: first(data.buyInfos),
+        sellinfo: first(data.sellInfos),
+        destructInfo: first(data.destructInfos),
+        pool: payloadIntoMask(data.pool),
     }
 }
 

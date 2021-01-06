@@ -82,7 +82,7 @@ export interface ClaimDialogProps extends withClasses<'root'> {
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     payload: JSON_PayloadInMask
     revalidateAvailability: () => void
-    retryBuyInfo: () => void
+    retryTradeInfo: () => void
     retryPayload: () => void
     initAmount: BigNumber
     tokenAmount: BigNumber
@@ -99,7 +99,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     const {
         payload,
         revalidateAvailability,
-        retryBuyInfo,
+        retryTradeInfo,
         retryPayload,
         initAmount,
         tokenAmount,
@@ -186,7 +186,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
             setStatus(ClaimStatus.Share)
             retryPayload()
             revalidateAvailability()
-            retryBuyInfo()
+            retryTradeInfo()
             resetClaimCallback()
         },
     )

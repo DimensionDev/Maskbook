@@ -23,7 +23,7 @@ import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { sortTokens } from '../helpers'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
-import { usePoolBuyInfo } from '../hooks/usePoolBuyInfo'
+import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 
 export interface IconProps {
@@ -193,6 +193,7 @@ export function ITO(props: ITO_Props) {
     const noRemain = total_remaining.isZero()
 
     const canWithdraw = isAccountSeller && listOfStatus.includes(ITO_Status.expired) && !noRemain
+
     //#region remote controlled select provider dialog
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(() => {
@@ -203,7 +204,7 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     //#region buy info
-    const { value: buyInfo, retry: retryBuyInfo } = usePoolBuyInfo(pid, account)
+    const { value: tradeInfo, retry: retryTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
         chainId === payload.chain_id &&
         payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
@@ -215,10 +216,15 @@ export function ITO(props: ITO_Props) {
         }),
     )
 
+    console.log('DEBUG: tradeInfo')
+    console.log({
+        tradeInfo
+    })
+
     useEffect(() => {
         // should not revalidate if never validated before
-        if (!availability || !buyInfo) return
-        retryBuyInfo()
+        if (!availability || !tradeInfo) return
+        retryTradeInfo()
         revalidateAvailability()
     }, [account, chainId, chainIdValid])
 
@@ -405,7 +411,7 @@ export function ITO(props: ITO_Props) {
                     open={openClaimDialog}
                     onClose={() => setOpenClaimDialog(false)}
                     revalidateAvailability={revalidateAvailability}
-                    retryBuyInfo={retryBuyInfo}
+                    retryTradeInfo={retryTradeInfo}
                     retryPayload={retryPayload}
                 />
             ) : null}
