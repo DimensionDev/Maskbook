@@ -179,7 +179,11 @@ export function ITO(props: ITO_Props) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     //#region token detailed
-    const { value: availability, computed: availabilityComputed } = useAvailabilityComputed(payload)
+    const {
+        value: availability,
+        computed: availabilityComputed,
+        loading: loadingAvailability,
+    } = useAvailabilityComputed(payload)
     //#ednregion
 
     const { listOfStatus } = availabilityComputed
@@ -198,7 +202,7 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     //#region buy info
-    const { value: tradeInfo } = usePoolTradeInfo(pid, account)
+    const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
         chainId === payload.chain_id &&
         payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
@@ -344,9 +348,7 @@ export function ITO(props: ITO_Props) {
                 </Box>
                 <Box className={classes.footer}>
                     <div>
-                        {listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(
-                              ITO_Status.completed,
-                          ) ? (
+                        {listOfStatus.includes(ITO_Status.completed) ? (
                             <Typography variant="body1">
                                 {t('plugin_ito_your_claimed_amount', {
                                     amount: formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals),
@@ -360,7 +362,7 @@ export function ITO(props: ITO_Props) {
                                           symbol: tradeInfo?.buyInfo?.token.symbol,
                                       })}
                             </Typography>
-                        ) : (
+                        ) : listOfStatus.includes(ITO_Status.expired) ? null : (
                             <>
                                 <Typography variant="body1">{`Limit per: ${formatBalance(
                                     new BigNumber(limit),
@@ -383,7 +385,9 @@ export function ITO(props: ITO_Props) {
             </Card>
 
             <Box className={classes.actionFooter}>
-                {total_remaining.isEqualTo(0) && !isBuyer ? null : !account || !chainIdValid ? (
+                {(total_remaining.isEqualTo(0) && !isBuyer) ||
+                loadingTradeInfo ||
+                loadingAvailability ? null : !account || !chainIdValid ? (
                     <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
