@@ -9,7 +9,8 @@ import { EtherTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '..
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { gcd, sortTokens } from '../helpers'
-import { ITO_CONTRACT_BASE_DATE } from '../constants'
+import { ITO_CONSTANTS, ITO_CONTRACT_BASE_DATE } from '../constants'
+import { useConstant } from '../../../web3/hooks/useConstant'
 
 export interface PoolSettings {
     password: string
@@ -27,6 +28,7 @@ export interface PoolSettings {
 export function useFillCallback(poolSettings: PoolSettings) {
     const account = useAccount()
     const ITO_Contract = useITO_Contract()
+    const DEFAULT_QUALIFICATION_ADDRESS = useConstant(ITO_CONSTANTS, 'DEFAULT_QUALIFICATION_ADDRESS')
     const [fillState, setFillState] = useTransactionState()
 
     const fillCallback = useCallback(async () => {
@@ -171,6 +173,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
             token.address,
             total,
             limit,
+            DEFAULT_QUALIFICATION_ADDRESS,
         ]
 
         // step 1: estimate gas
@@ -214,7 +217,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
                 reject(error)
             })
         })
-    }, [account, ITO_Contract, poolSettings])
+    }, [account, ITO_Contract, DEFAULT_QUALIFICATION_ADDRESS, poolSettings])
 
     const resetCallback = useCallback(() => {
         setFillState({

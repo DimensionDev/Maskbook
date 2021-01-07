@@ -20,6 +20,7 @@ const TOKEN_FIELDS = `
 
 const POOL_FIELDS = `
     contract_address
+    qualification_address
     pid
     password
     message

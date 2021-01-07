@@ -49,6 +49,7 @@ export class ITO extends Contract {
             _token_addr: string,
             _total_tokens: number | string,
             _limit: number | string,
+            _qualification: string,
         ): TransactionObject<void>
 
         swap(
@@ -56,9 +57,11 @@ export class ITO extends Contract {
             verification: string | number[],
             _recipient: string,
             validation: string | number[],
-            _exchange_addr_i: number | string,
+            exchange_addr_i: number | string,
             input_total: number | string,
         ): TransactionObject<string>
+
+        withdraw(id: string | number[], addr_i: number | string): TransactionObject<void>
     }
     events: {
         DestructSuccess: ContractEvent<{
@@ -100,6 +103,14 @@ export class ITO extends Contract {
             3: string
             4: string
             5: string
+        }>
+        WithdrawSuccess: ContractEvent<{
+            id: string
+            token_address: string
+            withdraw_balance: string
+            0: string
+            1: string
+            2: string
         }>
         allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
     }
