@@ -47,7 +47,7 @@ const POOL_FIELDS = `
     }
 `
 
-export async function getTradeinfo(pid: string, trader: string) {
+export async function getTradeInfo(pid: string, trader: string) {
     const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL'), {
         method: 'POST',
         mode: 'cors',

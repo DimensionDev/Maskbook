@@ -6,7 +6,7 @@ import * as database from './database'
 import { getChainId } from '../../extension/background-script/EthereumService'
 
 export async function getTradeInfo(pid: string, trader: string) {
-    const tradeInfo = await subgraph.getTradeinfo(pid, trader)
+    const tradeInfo = await subgraph.getTradeInfo(pid, trader)
     const poolFromDB = await database.getPoolFromDB(pid)
     if (tradeInfo && poolFromDB?.payload.password) tradeInfo.pool.password = poolFromDB.payload.password
     return tradeInfo
