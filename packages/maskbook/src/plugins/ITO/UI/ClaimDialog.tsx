@@ -62,6 +62,8 @@ const useStyles = makeStyles((theme) =>
             },
         },
         exchangeText: {
+            textAlign: 'right',
+            fontSize: 10,
             margin: theme.spacing(1, 0, 3),
         },
         exchangeAmountText: {
@@ -73,6 +75,7 @@ const useStyles = makeStyles((theme) =>
             marginTop: theme.spacing(2),
         },
         remindText: {
+            fontSize: 10,
             marginTop: theme.spacing(1),
         },
     }),
@@ -225,6 +228,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 {t('plugin_ito_dialog_claim_swap_exchange')}{' '}
                 <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals ?? 0)}</span>{' '}
                 {token.symbol}
+                {'.'}
             </Typography>
             <TokenAmountPanel
                 amount={inputAmountForUI}

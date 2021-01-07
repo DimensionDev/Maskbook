@@ -92,8 +92,11 @@ export function RemindDialog(props: RemindDialogProps) {
             <Typography variant="body1" className={classes.reminderText}>
                 {t('plugin_ito_dialog_claim_reminder_text2')}
             </Typography>
-            <Typography variant="body1" className={classNames(classes.reminderText, classes.reminderTextLast)}>
+            <Typography variant="body1" className={classes.reminderText}>
                 {t('plugin_ito_dialog_claim_reminder_text3')}
+            </Typography>
+            <Typography variant="body1" className={classNames(classes.reminderText, classes.reminderTextLast)}>
+                {t('plugin_ito_dialog_claim_reminder_text4')}
             </Typography>
             <section className={classes.tokenWrapper}>
                 <TokenIcon address={token.address} classes={{ icon: classes.tokenIcon }} />
