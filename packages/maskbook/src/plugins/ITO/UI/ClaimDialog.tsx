@@ -81,9 +81,6 @@ const useStyles = makeStyles((theme) =>
 export interface ClaimDialogProps extends withClasses<'root'> {
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     payload: JSON_PayloadInMask
-    revalidateAvailability: () => void
-    retryTradeInfo: () => void
-    retryPayload: () => void
     initAmount: BigNumber
     tokenAmount: BigNumber
     maxSwapAmount: BigNumber
@@ -96,19 +93,7 @@ export interface ClaimDialogProps extends withClasses<'root'> {
 
 export function ClaimDialog(props: ClaimDialogProps) {
     const { t } = useI18N()
-    const {
-        payload,
-        revalidateAvailability,
-        retryTradeInfo,
-        retryPayload,
-        initAmount,
-        tokenAmount,
-        maxSwapAmount,
-        setTokenAmount,
-        setStatus,
-        account,
-        token,
-    } = props
+    const { payload, initAmount, tokenAmount, maxSwapAmount, setTokenAmount, setStatus, account, token } = props
 
     const classes = useStylesExtends(useStyles(), props)
     const chainIdValid = useChainIdValid()
@@ -185,9 +170,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
             if (claimState.type !== TransactionStateType.CONFIRMED && claimState.type !== TransactionStateType.RECEIPT)
                 return
             setStatus(ClaimStatus.Share)
-            retryPayload()
-            revalidateAvailability()
-            retryTradeInfo()
             resetClaimCallback()
         },
     )

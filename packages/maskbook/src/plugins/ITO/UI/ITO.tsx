@@ -179,11 +179,7 @@ export function ITO(props: ITO_Props) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     //#region token detailed
-    const {
-        value: availability,
-        computed: availabilityComputed,
-        retry: revalidateAvailability,
-    } = useAvailabilityComputed(payload)
+    const { value: availability, computed: availabilityComputed } = useAvailabilityComputed(payload)
     //#ednregion
 
     const { listOfStatus } = availabilityComputed
@@ -202,7 +198,7 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     //#region buy info
-    const { value: tradeInfo, retry: retryTradeInfo } = usePoolTradeInfo(pid, account)
+    const { value: tradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
         chainId === payload.chain_id &&
         payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
@@ -219,9 +215,7 @@ export function ITO(props: ITO_Props) {
     useEffect(() => {
         // should not revalidate if never validated before
         if (!availability || !tradeInfo) return
-        retryTradeInfo()
         retryPayload()
-        revalidateAvailability()
     }, [account, chainId, chainIdValid])
 
     const onShareSuccess = useCallback(async () => {
@@ -418,8 +412,6 @@ export function ITO(props: ITO_Props) {
                     exchangeTokens={exchange_tokens}
                     open={openClaimDialog}
                     onClose={() => setOpenClaimDialog(false)}
-                    revalidateAvailability={revalidateAvailability}
-                    retryTradeInfo={retryTradeInfo}
                     retryPayload={retryPayload}
                 />
             ) : null}

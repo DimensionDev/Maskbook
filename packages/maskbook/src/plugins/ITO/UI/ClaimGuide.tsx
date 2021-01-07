@@ -2,7 +2,7 @@ import { createStyles, DialogContent, makeStyles, DialogProps } from '@material-
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { RemindDialog } from './RemindDialog'
 import { ShareDialog } from './ShareDialog'
 import { ClaimDialog, ClaimDialogProps } from './ClaimDialog'
@@ -25,20 +25,21 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-interface ClaimGuideProps
-    extends Pick<
-        ClaimDialogProps,
-        'exchangeTokens' | 'payload' | 'revalidateAvailability' | 'retryTradeInfo' | 'retryPayload'
-    > {
+interface ClaimGuideProps extends Pick<ClaimDialogProps, 'exchangeTokens' | 'payload'> {
     open: boolean
     isBuyer: boolean
+    retryPayload: () => void
     onClose: () => void
     DialogProps?: Partial<DialogProps>
 }
 
 export function ClaimGuide(props: ClaimGuideProps) {
     const { t } = useI18N()
-    const { payload, exchangeTokens, isBuyer, revalidateAvailability, retryTradeInfo, retryPayload, onClose } = props
+    const { payload, exchangeTokens, isBuyer, open, retryPayload, onClose } = props
+    const onCloseShareDialog = useCallback(() => {
+        retryPayload()
+        onClose()
+    }, [retryPayload, onClose])
     const classes = useStyles()
     const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Remind)
     const maxSwapAmount = useMemo(
@@ -62,9 +63,9 @@ export function ClaimGuide(props: ClaimGuideProps) {
 
     return (
         <InjectedDialog
-            open={props.open}
+            open={open}
             title={ClaimTitle[status]}
-            onClose={props.onClose}
+            onClose={status === ClaimStatus.Share ? onCloseShareDialog : onClose}
             DialogProps={{ maxWidth: status === ClaimStatus.Swap ? 'xs' : 'sm' }}>
             <DialogContent className={classes.content}>
                 {(() => {
@@ -82,9 +83,6 @@ export function ClaimGuide(props: ClaimGuideProps) {
                                     payload={payload}
                                     token={payload.token}
                                     exchangeTokens={exchangeTokens}
-                                    revalidateAvailability={revalidateAvailability}
-                                    retryTradeInfo={retryTradeInfo}
-                                    retryPayload={retryPayload}
                                     setStatus={setStatus}
                                     chainId={chainId}
                                 />
@@ -95,7 +93,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
                                     poolName={payload.message}
                                     token={payload.token}
                                     tokenAmount={tokenAmount}
-                                    onClose={onClose}
+                                    onClose={onCloseShareDialog}
                                 />
                             )
                         default:
