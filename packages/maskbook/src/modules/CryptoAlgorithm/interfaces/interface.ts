@@ -1,6 +1,6 @@
 /**
  * Design goal:
- * - Minimal set of Crypto operations that Maskbook needs
+ * - Minimal set of Crypto operations that Mask needs
  * - Independent of Web Crypto API
  * - Easy to implement for other languages (to WASM)
  * - Run in Web Worker to speed up

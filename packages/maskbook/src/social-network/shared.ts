@@ -8,7 +8,7 @@ export interface SocialNetworkWorkerAndUIDefinition {
      * Latest = v38
      *
      * When creating new posts,
-     * Maskbook will use the latest declared version in `acceptablePayload`
+     * Mask will use the latest declared version in `acceptablePayload`
      */
     acceptablePayload: ('latest' | 'v38' | 'v39' | 'v40')[]
     /**
@@ -16,7 +16,7 @@ export interface SocialNetworkWorkerAndUIDefinition {
      */
     internalName: string
     /**
-     * If using Maskbook on this network is dangerous, set it to true (not supported yet)
+     * If using Mask on this network is dangerous, set it to true (not supported yet)
      */
     isDangerousNetwork: boolean
     /**
@@ -43,8 +43,8 @@ export interface SocialNetworkWorkerAndUIDefinition {
      */
     getHomePage(): string
     /**
-     * @param env The env that Maskbook running in
-     * @param preference Users settings about Maskbook
+     * @param env The env that Mask running in
+     * @param preference Users settings about Mask
      *
      * This function should init the provider.
      *
@@ -70,7 +70,7 @@ export interface SocialNetworkWorkerAndUIDefinition {
     payloadEncoder?: (payload: string) => string
     payloadDecoder?: (text: string) => string | null
     /**
-     * This provider is not ready for production, Maskbook will not use it in production
+     * This provider is not ready for production, Mask will not use it in production
      */
     notReadyForProduction?: boolean
     /**
@@ -87,12 +87,12 @@ export interface SocialNetworkWorkerAndUIDefinition {
 export type SocialNetworkWorkerAndUI = Required<SocialNetworkWorkerAndUIDefinition>
 
 /**
- * Users settings about Maskbook
+ * Users settings about Mask
  */
 export interface Preference {}
 
 /**
- * The env that Maskbook running in
+ * The env that Mask running in
  */
 export interface Env {
     platform: 'desktop' | 'mobile'

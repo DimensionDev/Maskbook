@@ -39,7 +39,7 @@ export interface SocialNetworkUIDefinition
     friendlyName: string
     /**
      * This function should
-     * - Check if Maskbook has the permission to the site
+     * - Check if Mask has the permission to the site
      */
     hasPermission(): Promise<boolean>
     /**
@@ -52,7 +52,7 @@ export interface SocialNetworkUIDefinition
      * 1. Jump to a new page
      * 2. On that page, shouldDisplayWelcome should return true
      *
-     * So Maskbook will display a Welcome banner
+     * So Mask will display a Welcome banner
      *
      * If this network is a decentralized network and you don't know which page to open
      * leave a string like `Open the Mastodon instance you want to connect`
@@ -88,7 +88,7 @@ export interface SocialNetworkUIInformationCollector {
     resolveLastRecognizedIdentity(): void
     /**
      * This function should inspect the profile page and collect info
-     * like avatar, nickname, friendship relation and Maskbook Key
+     * like avatar, nickname, friendship relation and Mask Key
      */
     collectPeople(): void
     /**
@@ -117,7 +117,7 @@ export interface SocialNetworkUIInjections {
     /**
      * This is an optional function.
      *
-     * This function should inject a hint at their bio if they are known by Maskbook
+     * This function should inject a hint at their bio if they are known by Mask
      */
     injectKnownIdentity?: (() => void) | 'disabled'
     /**
@@ -234,7 +234,7 @@ export interface SocialNetworkUITasks {
  */
 export interface SocialNetworkUIDataSources {
     /**
-     * My Maskbook friends at this network
+     * My Mask friends at this network
      */
     readonly friendsRef?: ValueRef<ReadonlyIdentifierMap<ProfileIdentifier, Profile>>
     /**
@@ -254,7 +254,7 @@ export interface SocialNetworkUIDataSources {
      */
     readonly currentIdentity?: ValueRef<Profile | null>
     /**
-     * Posts that Maskbook detects
+     * Posts that Mask detects
      */
     readonly posts?: ObservableWeakMap<object, PostInfo>
     /**
