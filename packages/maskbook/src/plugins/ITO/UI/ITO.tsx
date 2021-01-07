@@ -203,7 +203,7 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     //#region buy info
-    const { retry: retryBuyInfo } = usePoolBuyInfo(pid.toLowerCase(), account.toLowerCase())
+    const { retry: retryBuyInfo } = usePoolBuyInfo(pid, account)
     const isBuyer =
         chainId === payload.chain_id &&
         payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
@@ -217,7 +217,6 @@ export function ITO(props: ITO_Props) {
 
     useEffect(() => {
         retryBuyInfo()
-        retryPayload()
         revalidateAvailability()
     }, [account, chainId, chainIdValid])
 
@@ -268,6 +267,7 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     if (payload.chain_id !== chainId) return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
+
     return (
         <div>
             <Card className={classes.root} elevation={0}>
