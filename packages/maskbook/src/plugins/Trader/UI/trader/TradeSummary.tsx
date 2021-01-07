@@ -85,14 +85,11 @@ export function TradeSummary(props: TradeSummaryProps) {
                                       outputAmount
                                           .dividedBy(inputAmount)
                                           .multipliedBy(
-                                              new BigNumber(10).pow(
-                                                  (inputToken.decimals ?? 0) - (outputToken.decimals ?? 0),
-                                              ),
+                                              new BigNumber(10).pow(inputToken.decimals - outputToken.decimals),
                                           )
-                                          .multipliedBy(new BigNumber(10).pow(outputToken.decimals ?? 0))
+                                          .multipliedBy(new BigNumber(10).pow(outputToken.decimals))
                                           .integerValue(),
-                                      outputToken.decimals ?? 0,
-                                      6,
+                                      outputToken.decimals,
                                   )}{' '}
                                   {outputToken.symbol}
                                   {' per '}
@@ -104,14 +101,11 @@ export function TradeSummary(props: TradeSummaryProps) {
                                       inputAmount
                                           .dividedBy(outputAmount)
                                           .multipliedBy(
-                                              new BigNumber(10).pow(
-                                                  (outputToken.decimals ?? 0) - (inputToken.decimals ?? 0),
-                                              ),
+                                              new BigNumber(10).pow(outputToken.decimals - inputToken.decimals),
                                           )
-                                          .multipliedBy(new BigNumber(10).pow(inputToken.decimals ?? 0))
+                                          .multipliedBy(new BigNumber(10).pow(inputToken.decimals))
                                           .integerValue(),
-                                      inputToken.decimals ?? 0,
-                                      6,
+                                      inputToken.decimals,
                                   )}{' '}
                                   {inputToken.symbol}
                                   {' per '}
@@ -134,7 +128,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                   title: 'Minimum received',
                   children: (
                       <Typography className={classes.title}>
-                          {formatBalance(minimumReceived, outputToken.decimals ?? 0, 6)} {outputToken.symbol}
+                          {formatBalance(minimumReceived, outputToken.decimals, 6)} {outputToken.symbol}
                       </Typography>
                   ),
               }
@@ -144,7 +138,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                   title: 'Maximum sold',
                   children: (
                       <Typography className={classes.title}>
-                          {formatBalance(maximumSold, inputToken.decimals ?? 0, 6)} {inputToken.symbol}
+                          {formatBalance(maximumSold, inputToken.decimals, 6)} {inputToken.symbol}
                       </Typography>
                   ),
               }
@@ -172,7 +166,7 @@ export function TradeSummary(props: TradeSummaryProps) {
             title: 'Liquidity Provider Fee',
             children: (
                 <Typography className={classes.title}>
-                    {formatBalance(fee, inputToken.decimals ?? 0, 6)} {inputToken.symbol}
+                    {formatBalance(fee, inputToken.decimals, 6)} {inputToken.symbol}
                 </Typography>
             ),
         },

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { createEetherToken, createERC20Token } from '../../../web3/helpers'
+import { createEtherToken, createERC20Token } from '../../../web3/helpers'
 import type { TradeComputed } from '../types'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 
@@ -18,7 +18,7 @@ export function useTradeApproveComputed(
         return {
             approveToken:
                 token.name === 'ETH'
-                    ? createEetherToken(chainId)
+                    ? createEtherToken(chainId)
                     : createERC20Token(
                           chainId,
                           token.address,

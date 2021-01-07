@@ -74,7 +74,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const HAPPY_RED_PACKET_ADDRESS = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
-    const { onCreate } = props
 
     // context
     const account = useAccount()
@@ -131,7 +130,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
         token?.address ?? '',
     )
     //#endregion
-
     //#region approve ERC20
     const HappyRedPacketContractAddress = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
@@ -209,12 +207,11 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 payload.token = {
                     name: '',
                     symbol: '',
-                    decimals: 0,
                     ...omit(createSettings.token, ['type', 'chainId']),
                 }
 
             // output the redpacket as JSON payload
-            onCreate?.(payload)
+            props.onCreate?.(payload)
 
             // always reset amount
             setRawAmount('0')
@@ -314,6 +311,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     defaultValue={t('plugin_red_packet_best_wishes')}
                 />
             </div>
+
             {!account || !chainIdValid ? (
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" onClick={onConnect}>
                     {t('plugin_wallet_connect_a_wallet')}
@@ -335,13 +333,15 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 </ActionButton>
             ) : (
                 <ActionButton className={classes.button} fullWidth onClick={createCallback}>
-                    {`Send ${formatBalance(totalAmount, token.decimals ?? 0, token.decimals ?? 0)} ${token.symbol}`}
+                    {`Send ${formatBalance(totalAmount, token.decimals ?? 0)} ${token.symbol}`}
                 </ActionButton>
             )}
 
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
+                includeTokens={[]}
                 excludeTokens={[token.address]}
+                selectedTokens={[]}
                 onSubmit={onSelectERC20TokenDialogSubmit}
                 onClose={onSelectERC20TokenDialogClose}
             />
