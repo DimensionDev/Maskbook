@@ -58,6 +58,6 @@ export async function discoverPool(from: string, payload: JSON_PayloadInMask) {
             password: payload.password || (record_?.payload.password ?? ''),
         },
     }
-    database.addPoolIntoDB(record)
+    await database.addPoolIntoDB(record)
     PluginITO_Messages.events.poolUpdated.sendToAll(undefined)
 }
