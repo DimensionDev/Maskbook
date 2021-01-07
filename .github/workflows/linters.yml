@@ -49,8 +49,9 @@ jobs:
             ${{ runner.os }}-node-
       - run: sudo npm install --global npm@7
       - run: npm ci
-      - run: npm run build-storybook
-      - uses: actions/upload-artifact@v2
-        with:
-          name: storybook
-          path: ./storybook-static
+      # > ! [Storybook in our project breaks currently](https://github.com/DimensionDev/Maskbook/issues/2187) !
+      # - run: npm run build-storybook
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: storybook
+      #     path: ./storybook-static
