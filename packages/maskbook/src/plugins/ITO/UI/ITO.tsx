@@ -211,7 +211,9 @@ export function ITO(props: ITO_Props) {
     )
     const canWithdraw =
         isAccountSeller && !tradeInfo?.destructInfo && (listOfStatus.includes(ITO_Status.expired) || noRemain)
-
+    const refundAmount = tradeInfo?.buyInfo
+        ? new BigNumber(tradeInfo?.buyInfo.amount).minus(new BigNumber(tradeInfo?.buyInfo.amount_sold))
+        : new BigNumber(0)
     useEffect(() => {
         // should not revalidate if never validated before
         if (!availability || !tradeInfo) return
@@ -350,6 +352,13 @@ export function ITO(props: ITO_Props) {
                                     amount: formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals),
                                     symbol: token.symbol,
                                 })}
+                                {refundAmount.isEqualTo(0)
+                                    ? '.'
+                                    : ', ' +
+                                      t('plugin_ito_your_refund_amount', {
+                                          amount: formatBalance(refundAmount, tradeInfo?.buyInfo?.token.decimals ?? 0),
+                                          symbol: tradeInfo?.buyInfo?.token.symbol,
+                                      })}
                             </Typography>
                         ) : (
                             <>
