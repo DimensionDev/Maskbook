@@ -64,6 +64,7 @@ export async function getTradeInfo(pid: string, trader: string) {
                     token {
                         ${TOKEN_FIELDS}
                     }
+                    amount
                     amount_sold
                     amount_bought
                 }
@@ -92,6 +93,7 @@ export async function getTradeInfo(pid: string, trader: string) {
                     name: string
                 }
                 token: JSON_PayloadOutMask['token']
+                amount: string
                 amount_sold: string
                 amount_bought: string
             }[]
