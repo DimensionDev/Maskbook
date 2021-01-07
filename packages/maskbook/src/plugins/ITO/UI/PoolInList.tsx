@@ -108,6 +108,11 @@ export function PoolInList(props: PoolInListProps) {
         100 *
         Number(new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)).div(new BigNumber(pool.total)))
 
+    console.log('DEBUG: pool')
+    console.log({
+        pool
+    })
+
     const StatusButton = () => {
         const start = pool.start_time * 1000
         const end = pool.end_time * 1000
@@ -146,6 +151,11 @@ export function PoolInList(props: PoolInListProps) {
                         <Box className={classes.title}>
                             <Typography variant="body1" color="textPrimary">
                                 {pool.message}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                                {t('plugin_ito_list_start_date', {
+                                    date: dateTimeFormat(new Date(pool.start_time * 1000)),
+                                })}
                             </Typography>
                             <Typography variant="body2" color="textSecondary">
                                 {t('plugin_ito_list_end_date', {

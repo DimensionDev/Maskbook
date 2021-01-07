@@ -114,4 +114,4 @@ export const ITO_CONSTANTS = {
     },
 }
 
-export const ITO_CONTRACT_BASE_DATE = new Date(2020, 11, 1, 8, 0, 0, 0)
+export const ITO_CONTRACT_BASE_TIMESTAMP = 1609372800000
