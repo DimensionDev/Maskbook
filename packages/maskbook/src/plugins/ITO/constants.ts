@@ -86,7 +86,7 @@ const MSKE = createERC20Token(
 export const ITO_CONSTANTS = {
     ITO_CONTRACT_ADDRESS: {
         [ChainId.Mainnet]: '',
-        [ChainId.Ropsten]: '0x0c2Fb8166419c6A81aA41e53515c0fcB676D1686',
+        [ChainId.Ropsten]: '0xF4C36D2a5C991E323d32F7d8D7EFe27cE71FfbaB',
         [ChainId.Rinkeby]: '0x62C7e68a14C3692fb26a13637d3b399A47c50107',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
