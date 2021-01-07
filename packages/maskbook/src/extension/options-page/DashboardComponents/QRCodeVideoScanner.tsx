@@ -22,7 +22,7 @@ export function QRCodeVideoScanner({
     const videoRef = useRef<HTMLVideoElement | null>(null)
 
     useQRCodeVideoScan(videoRef, scanning, deviceId, onScan, onError)
-    return nativeAPI?.type === 'iOS' ? (
+    return nativeAPI ? (
         <NativeQRScanner onScan={onScan} onQuit={onQuit} />
     ) : (
         <div style={{ position: 'relative' }}>

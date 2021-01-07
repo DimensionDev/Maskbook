@@ -10,13 +10,14 @@ export interface WebviewAPIs {
     getSettings(key: 'launchPageSettings'): Promise<LaunchPage>
     getConnectedPersonas(): Promise<string>
 }
-export interface SharedNativeAPIs {}
+export interface SharedNativeAPIs {
+    scanQRCode(): Promise<string>
+}
 /**
  * JSON RPC calls that can be called if it is running on iOS.
  * JS = client, iOS = server
  */
 export interface iOSNativeAPIs extends SharedNativeAPIs {
-    scanQRCode(): Promise<string>
     log(...args: any[]): Promise<void>
 }
 /**
