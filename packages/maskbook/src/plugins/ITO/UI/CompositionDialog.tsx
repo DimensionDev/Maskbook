@@ -28,7 +28,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const onCreateOrSelect = useCallback(
         (payload: JSON_PayloadInMask) => {
-            if (!payload.password) payload.password = prompt('Please enter the password of the pool:', '') ?? ''
+            const hasPassword = !!payload.password
+            if (!hasPassword) payload.password = prompt('Please enter the password of the pool:', '') ?? ''
             if (!payload.password) {
                 alert('Unable to share a pool without a password. You can withdraw the pool if you have lost it.')
                 return
@@ -38,7 +39,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             )
             props.onConfirm(payload)
             // storing the created pool in DB, it helps retrieve the pool password later
-            PluginITO_RPC.discoverPool('', payload)
+            if (hasPassword) PluginITO_RPC.discoverPool('', payload)
         },
         [props.onConfirm],
     )
