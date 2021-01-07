@@ -110,7 +110,7 @@ export function PoolInList(props: PoolInListProps) {
 
     console.log('DEBUG: pool')
     console.log({
-        pool
+        pool,
     })
 
     const StatusButton = () => {

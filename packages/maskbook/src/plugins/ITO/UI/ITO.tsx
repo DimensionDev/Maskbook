@@ -364,13 +364,13 @@ export function ITO(props: ITO_Props) {
                             </Typography>
                         ) : listOfStatus.includes(ITO_Status.expired) ? null : (
                             <>
-                                    <Typography variant="body1">{`Limit per wallet: ${formatBalance(
+                                <Typography variant="body1">{`Limit per wallet: ${formatBalance(
                                     new BigNumber(limit),
                                     token.decimals,
                                 )} ${token.symbol}`}</Typography>
                                 <Typography variant="body1">
                                     {listOfStatus.includes(ITO_Status.waited)
-                                            ? `Start date: ${formatDateTime(new Date(start_time * 1000), true)}`
+                                        ? `Start date: ${formatDateTime(new Date(start_time * 1000), true)}`
                                         : listOfStatus.includes(ITO_Status.started)
                                         ? `Remaining time: ${formatTimeDiffer(new Date(), new Date(end_time * 1000))}`
                                         : null}
