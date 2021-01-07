@@ -87,7 +87,7 @@ export async function getTradeInfo(pid: string, trader: string) {
     })
     const { data } = (await response.json()) as {
         data: {
-            pool: JSON_PayloadOutMask
+            pool: JSON_PayloadOutMask | null
             buyInfos: {
                 buyer: {
                     address: string
@@ -116,6 +116,7 @@ export async function getTradeInfo(pid: string, trader: string) {
             }[]
         }
     }
+    if (!data.pool) throw new Error('Failed to load trade info.')
     return {
         buyInfo: first(data.buyInfos),
         sellInfo: first(data.sellInfos),
@@ -140,9 +141,10 @@ export async function getPool(pid: string) {
     })
     const { data } = (await response.json()) as {
         data: {
-            pool: JSON_PayloadOutMask
+            pool: JSON_PayloadOutMask | null
         }
     }
+    if (!data.pool) throw new Error('Failed to load payload.')
     return payloadIntoMask(data.pool)
 }
 
