@@ -139,7 +139,8 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                             {formatBalance(
                                 new BigNumber(poolSettings?.limit ?? '0'),
                                 poolSettings?.token?.decimals ?? 0,
-                            )}
+                            )}{' '}
+                            {poolSettings?.token?.symbol}
                         </Typography>
                     </Paper>
                 </Grid>
