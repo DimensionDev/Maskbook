@@ -236,7 +236,11 @@ export function PoolInList(props: PoolInListProps) {
                                 <TableBody>
                                     {pool.exchange_tokens.map((token, index) => (
                                         <TableRow key={index}>
-                                            <TableCell className={classes.cell} align="center" size="small" style={{ whiteSpace: 'nowrap' }}>
+                                            <TableCell
+                                                className={classes.cell}
+                                                align="center"
+                                                size="small"
+                                                style={{ whiteSpace: 'nowrap' }}>
                                                 {token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">

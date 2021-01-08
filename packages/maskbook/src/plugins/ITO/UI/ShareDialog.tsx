@@ -72,7 +72,6 @@ export function ShareDialog(props: ShareDialogProps) {
     const amount = formatBalance(tokenAmount, token.decimals ?? 0)
     const shareLink = useShareLink(
         t('plugin_ito_claim_success_share', {
-            name: props.poolName,
             link: postLink,
             symbol: token.symbol,
         }),

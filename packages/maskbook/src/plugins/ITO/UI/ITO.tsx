@@ -208,7 +208,6 @@ export function ITO(props: ITO_Props) {
         payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
     const shareSuccessLink = useShareLink(
         t('plugin_ito_claim_success_share', {
-            name: payload.message,
             link: postLink,
             symbol: token.symbol,
         }),
@@ -281,8 +280,6 @@ export function ITO(props: ITO_Props) {
         destructCallback(payload.pid)
     }, [destructCallback, payload.pid])
     //#endregion
-
-    if (payload.chain_id !== chainId) return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
 
     return (
         <div>
