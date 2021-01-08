@@ -12,7 +12,7 @@ import {
     Theme,
     Typography,
 } from '@material-ui/core'
-import { Share2 as ShareIcon, Send as SendIcon } from 'react-feather'
+import { Send as SendIcon } from 'react-feather'
 import { ChangeEvent, useState } from 'react'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
@@ -267,25 +267,13 @@ export function DashboardWalletTransferDialog(
         ],
         state,
     }
-    const pageTitles = [
-        {
-            primary: t('wallet_transfer_send'),
-            secondary: '',
-            icon: <SendIcon />,
-            iconColor: '#4EE0BC',
-        },
-        {
-            primary: t('share_wallet'),
-            secondary: t('share_wallet_hint'),
-            icon: <ShareIcon />,
-            iconColor: '#4EE0BC',
-        },
-    ]
 
     return (
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
-                {...pageTitles[state[0]]}
+                primary={t('wallet_transfer_menu')}
+                icon={<SendIcon />}
+                iconColor="#4EE0BC"
                 size="medium"
                 content={<AbstractTab height={268} {...tabProps} />}
             />
