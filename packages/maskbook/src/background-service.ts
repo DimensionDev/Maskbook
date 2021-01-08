@@ -10,5 +10,5 @@ import './extension/service' // setup Services.*
 import './utils/native-rpc' // setup Android and iOS API server
 import './provider.worker' // TODO: HMR setup social network providers
 import './extension/background-script/Jobs' // start jobs
-import './plugins/PluginSerivce' // TODO: HMR setup plugins
+import './plugins/PluginSerivce' // setup plugins
 import './utils/debug/general'

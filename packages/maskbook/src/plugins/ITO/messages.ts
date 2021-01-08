@@ -20,5 +20,6 @@ interface ITO_Message {
     rpc: unknown
 }
 
+if (module.hot) module.hot.accept()
 export const PluginITO_Messages = createPluginMessage<ITO_Message>(ITO_PluginID)
 export const PluginITO_RPC = createPluginRPC(ITO_PluginID, () => import('./services'), PluginITO_Messages.events.rpc)

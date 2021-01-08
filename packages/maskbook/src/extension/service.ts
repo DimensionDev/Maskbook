@@ -10,6 +10,7 @@ import {
 } from 'async-call-rpc/full'
 import { isEnvironment, Environment, WebExtensionMessage, MessageTarget } from '@dimensiondev/holoflows-kit'
 import { serializer } from '@dimensiondev/maskbook-shared'
+import { getLocalImplementation } from '../utils/getLocalImplementation'
 
 const SERVICE_HMR_EVENT = 'service-hmr'
 const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services' })
@@ -86,33 +87,9 @@ function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, gene
         channel = serverChannel
     }
     const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
-    // Only background script need to provide it's implementation.
-    const localImplementation: any = {}
-    async function install_service(mod: () => Promise<any>, hmrLog = false) {
-        const result = await mod()
-        for (const method of Object.keys(result)) {
-            if (hmrLog) {
-                if (!(method in result)) console.log(`[HMR] Service.${key}.${method} added.`)
-                else if (result[method] !== localImplementation[method])
-                    console.log(`[HMR] Service.${key}.${method} updated.`)
-            }
-            Object.defineProperty(localImplementation, method, {
-                configurable: true,
-                enumerable: true,
-                value: result[method],
-            })
-        }
-        for (const method of Object.keys(localImplementation)) {
-            if (!(method in result)) {
-                hmrLog && console.log(`[HMR] Service.${key}.${method} removed.`)
-                delete localImplementation[method]
-            }
-        }
-        // ? Set impl back to the globalThis, it will help debugging.
-        Reflect.set(globalThis, key + 'Service', localImplementation)
-    }
-    if (isBackground) install_service(impl)
-    module.hot && setTimeout(() => document.addEventListener(SERVICE_HMR_EVENT, () => install_service(impl, true)))
+    const load = () => getLocalImplementation(`Services.${key}`, impl, channel)
+    const localImplementation = load()
+    module.hot && document.addEventListener(SERVICE_HMR_EVENT, load)
     const service = RPC(localImplementation, {
         key,
         serializer,
@@ -120,6 +97,7 @@ function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, gene
         channel,
         preferLocalImplementation: isBackground,
         strict: isBackground,
+        thenable: false,
     })
     Reflect.set(globalThis, key + 'Service', service)
     return service as any
