@@ -62,6 +62,9 @@ const useStyles = makeStyles((theme) =>
             flexDirection: 'column',
             paddingBottom: theme.spacing(1),
         },
+        date: {
+            fontSize: 12,
+        },
         progress: {
             paddingBottom: theme.spacing(1),
         },
@@ -152,12 +155,12 @@ export function PoolInList(props: PoolInListProps) {
                             <Typography variant="body1" color="textPrimary">
                                 {pool.message}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography className={classes.date} variant="body2" color="textSecondary">
                                 {t('plugin_ito_list_start_date', {
                                     date: dateTimeFormat(new Date(pool.start_time * 1000)),
                                 })}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography className={classes.date} variant="body2" color="textSecondary">
                                 {t('plugin_ito_list_end_date', {
                                     date: dateTimeFormat(new Date(pool.end_time * 1000)),
                                 })}
