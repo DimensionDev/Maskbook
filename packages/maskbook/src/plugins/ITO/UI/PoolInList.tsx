@@ -180,7 +180,7 @@ export function PoolInList(props: PoolInListProps) {
                             <Typography variant="body2" color="textPrimary" component="span">
                                 {formatBalance(
                                     new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)),
-                                    pool.token.decimals ?? '0',
+                                    pool.token.decimals ?? 0,
                                 )}
                             </Typography>{' '}
                             {pool.token.symbol}

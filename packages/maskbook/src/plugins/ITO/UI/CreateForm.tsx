@@ -235,6 +235,7 @@ export function CreateForm(props: CreateFormProps) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <MobileDateTimePicker
                 showTodayButton
+                ampm={false}
                 label={t('plugin_ito_list_start_date', { date: GMT })}
                 onChange={(date: Date | null) => handleStartTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
@@ -247,6 +248,7 @@ export function CreateForm(props: CreateFormProps) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <MobileDateTimePicker
                 showTodayButton
+                ampm={false}
                 label={t('plugin_ito_list_end_date', { date: GMT })}
                 onChange={(date: Date | null) => handleEndTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
