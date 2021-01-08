@@ -450,6 +450,7 @@
     "plugin_ito_claim_foreshow_share": "{{symbol}}({{name}}) is launching a new event, come and join it! Follow @realMaskbook (mask.io) to find more event! \n {{link}}",
     "plugin_ito_claim_only_once_remind": "Each wallet can only participate once.",
     "plugin_ito_password": "Password: {{password}}",
+    "plugin_ito_swap_title": "{{amount}} {{token}} per {{swap}} ",
     "wallet_transfer_to_address": "To Address",
     "wallet_transfer_balance": "Balance {{balance}} {{symbol}}",
     "wallet_transfer_memo": "Memo",

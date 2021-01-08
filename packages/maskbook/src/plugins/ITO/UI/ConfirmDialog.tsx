@@ -1,4 +1,4 @@
-import { Fragment, useCallback } from 'react'
+import { Fragment, useCallback, useState } from 'react'
 import { createStyles, makeStyles, Typography, Grid, Paper, Card, IconButton, Link } from '@material-ui/core'
 import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -9,6 +9,52 @@ import BigNumber from 'bignumber.js'
 import { dateTimeFormat } from '../assets/formatDate'
 import { isETH } from '../../../web3/helpers'
 import { resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { SwapIcon } from '../assets/exchange'
+
+const useSwapItemStyles = makeStyles((theme) => createStyles({
+    root: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    icon: {
+
+    },
+}))
+interface SwapItemProps {
+    token?: EtherTokenDetailed | ERC20TokenDetailed
+    swapAmount?: string
+    swap?: EtherTokenDetailed | ERC20TokenDetailed
+}
+
+function SwapItem (props: SwapItemProps) {
+    const {token, swap, swapAmount} = props
+    const [ exchange, setExchange] = useState(false)
+    const classes = useSwapItemStyles()
+    const { t } = useI18N()
+
+    const amount_ = formatBalance(new BigNumber(swapAmount || '0'), swap?.decimals ?? 0)
+
+    return (
+        <div className = {classes.root}>
+            <Typography variant='body2' color='textPrimary'>
+                {t('plugin_ito_swap_title', {
+                    token: exchange ? swap?.symbol : token?.symbol,
+                    swap: exchange ? token?.symbol : swap?.symbol,
+                    amount: exchange ? amount_ : new BigNumber(1).div(amount_).toFixed()
+                })}
+            </Typography>
+            <div className={classes.icon} onClick={() => setExchange(!exchange)}>
+                <IconButton >
+                    <SwapIcon />
+                </IconButton>
+
+            </div>
+        </div>
+    )
+}
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -107,22 +153,8 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 {poolSettings?.exchangeTokens.filter(Boolean).map((item, index) => {
                     return (
                         <Fragment key={index}>
-                            <Grid item xs={6}>
-                                <Paper className={classes.label}>
-                                    <Typography>
-                                        {item?.symbol}/{poolSettings?.token?.symbol}
-                                    </Typography>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Paper className={classes.data}>
-                                    <Typography>
-                                        {formatBalance(
-                                            new BigNumber(poolSettings?.exchangeAmounts[index]),
-                                            item?.decimals ?? 0,
-                                        )}
-                                    </Typography>
-                                </Paper>
+                            <Grid item xs={12}>
+                                <SwapItem token={poolSettings.token} swap={item} swapAmount={poolSettings?.exchangeAmounts[index]} />
                             </Grid>
                         </Fragment>
                     )
