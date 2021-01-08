@@ -131,11 +131,6 @@ export function PoolInList(props: PoolInListProps) {
         100 *
         Number(new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)).div(new BigNumber(pool.total)))
 
-    console.log('DEBUG: pool')
-    console.log({
-        pool,
-    })
-
     const StatusButton = () => {
         return (
             <>
