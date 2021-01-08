@@ -1,5 +1,6 @@
 export interface FileInfo {
-    type: 'arweave' | 'skynet'
+    provider: 'arweave' | 'skynet'
+    type: 'file'
     id: string
 
     name: string

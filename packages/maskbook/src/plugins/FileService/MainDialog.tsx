@@ -90,7 +90,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
     return (
         <InjectedDialog open={props.open} title={t('plugin_file_service_display_name')} onClose={onDecline}>
             <DialogContent>
-
+                <AbstractTab height={450} {...tabProps} />
             </DialogContent>
             <DialogActions classes={{ root: classes.actions }}>
                 <Button
