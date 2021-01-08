@@ -12,45 +12,44 @@ import { resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { SwapIcon } from '../assets/exchange'
 
-const useSwapItemStyles = makeStyles((theme) => createStyles({
-    root: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-    },
-    icon: {
-
-    },
-}))
+const useSwapItemStyles = makeStyles((theme) =>
+    createStyles({
+        root: {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+        },
+        icon: {},
+    }),
+)
 interface SwapItemProps {
     token?: EtherTokenDetailed | ERC20TokenDetailed
     swapAmount?: string
     swap?: EtherTokenDetailed | ERC20TokenDetailed
 }
 
-function SwapItem (props: SwapItemProps) {
-    const {token, swap, swapAmount} = props
-    const [ exchange, setExchange] = useState(false)
+function SwapItem(props: SwapItemProps) {
+    const { token, swap, swapAmount } = props
+    const [exchange, setExchange] = useState(false)
     const classes = useSwapItemStyles()
     const { t } = useI18N()
 
     const amount_ = formatBalance(new BigNumber(swapAmount || '0'), swap?.decimals ?? 0)
 
     return (
-        <div className = {classes.root}>
-            <Typography variant='body2' color='textPrimary'>
+        <div className={classes.root}>
+            <Typography variant="body1" color="textPrimary">
                 {t('plugin_ito_swap_title', {
                     token: exchange ? swap?.symbol : token?.symbol,
                     swap: exchange ? token?.symbol : swap?.symbol,
-                    amount: exchange ? amount_ : new BigNumber(1).div(amount_).toFixed()
+                    amount: exchange ? amount_ : new BigNumber(1).div(amount_).toFixed(),
                 })}
             </Typography>
             <div className={classes.icon} onClick={() => setExchange(!exchange)}>
-                <IconButton >
+                <IconButton>
                     <SwapIcon />
                 </IconButton>
-
             </div>
         </div>
     )
@@ -154,7 +153,11 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     return (
                         <Fragment key={index}>
                             <Grid item xs={12}>
-                                <SwapItem token={poolSettings.token} swap={item} swapAmount={poolSettings?.exchangeAmounts[index]} />
+                                <SwapItem
+                                    token={poolSettings.token}
+                                    swap={item}
+                                    swapAmount={poolSettings?.exchangeAmounts[index]}
+                                />
                             </Grid>
                         </Fragment>
                     )
