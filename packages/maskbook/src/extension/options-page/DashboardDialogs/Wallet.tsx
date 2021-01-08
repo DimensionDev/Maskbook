@@ -38,13 +38,13 @@ import { sleep, checkInputLengthExceed } from '../../../utils/utils'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import { QRCode } from '../../../components/shared/qrcode'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
 import { RedPacketInboundList, RedPacketOutboundList } from '../../../plugins/RedPacket/UI/RedPacketList'
 import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
 import { useRedPacketFromDB } from '../../../plugins/RedPacket/hooks/useRedPacket'
 import WalletLine from './WalletLine'
-import { isSameAddress } from '../../../web3/helpers'
+import { isETH, isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
@@ -612,10 +612,13 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
 
 //#region hide wallet token
 export function DashboardWalletHideTokenConfirmDialog(
-    props: WrappedDialogProps<WalletProps & { token: ERC20TokenDetailed }>,
+    props: WrappedDialogProps<WalletProps & { token: ERC20TokenDetailed | EtherTokenDetailed }>,
 ) {
     const { t } = useI18N()
     const { wallet, token } = props.ComponentProps!
+
+    if (isETH(token.address)) return null
+
     const onConfirm = useSnackbarCallback(
         () => WalletRPC.blockERC20Token(wallet.address, token),
         [wallet.address],

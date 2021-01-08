@@ -1,7 +1,7 @@
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { CONSTANTS } from '../../../web3/constants'
-import { isSameAddress } from '../../../web3/helpers'
+import { isETH } from '../../../web3/helpers'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
@@ -9,10 +9,11 @@ import { DashboardWalletHideTokenConfirmDialog } from '../DashboardDialogs/Walle
 import { useMenu } from '../../../utils/hooks/useMenu'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import type { ERC20TokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { useAccount } from '../../../web3/hooks/useAccount'
+import { DashboardWalletTransferDialog } from './TransferDialog'
 
 const useStyles = makeStyles((theme) => ({
     more: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 
 export interface ERC20TokenActionsBarProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     wallet: WalletRecord
-    token: ERC20TokenDetailed
+    token: ERC20TokenDetailed | EtherTokenDetailed
 }
 
 export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
@@ -37,6 +38,8 @@ export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
     const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     //#endregion
 
+    const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialog)
+
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu(
         <MenuItem
@@ -49,10 +52,14 @@ export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
             }}>
             {t('buy')}
         </MenuItem>,
-        <MenuItem onClick={() => openHideTokenConfirmDialog({ wallet, token })}>{t('hide')}</MenuItem>,
+        <MenuItem onClick={() => openTransferDialogOpen({ wallet, token })}>Transfer</MenuItem>,
+        <>
+            {isETH(token.address) ? null : (
+                <MenuItem onClick={() => openHideTokenConfirmDialog({ wallet, token })}>{t('hide')}</MenuItem>
+            )}
+        </>,
     )
 
-    if (isSameAddress(token.address, ETH_ADDRESS)) return null
     return (
         <>
             <IconButton className={classes.more} size="small" onClick={openMenu}>
@@ -60,6 +67,7 @@ export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
             </IconButton>
             {menu}
             {hideTokenConfirmDialog}
+            {transeferDialog}
         </>
     )
 }

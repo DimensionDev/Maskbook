@@ -102,7 +102,7 @@ export default function DashboardWalletsRouter() {
 
     // show create dialog
     useEffect(() => {
-        if (create) openWalletCreate()
+        if (create) openWalletCreate()  
     }, [create, openWalletCreate])
 
     // show error dialog
