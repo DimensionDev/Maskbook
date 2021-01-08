@@ -50,6 +50,22 @@ export const Services = {
     Provider: add(() => import('./background-script/ProviderService'), 'Provider'),
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
 }
+const SERVICE_HMR_EVENT = 'service-hmr'
+if (module.hot && isEnvironment(Environment.ManifestBackground)) {
+    module.hot.accept(
+        [
+            './background-script/CryptoService',
+            './background-script/IdentityService',
+            './background-script/UserGroupService',
+            './background-script/WelcomeService',
+            './background-script/SteganographyService',
+            './background-script/HelperService',
+            './background-script/ProviderService',
+            './background-script/EthereumService',
+        ],
+        () => document.dispatchEvent(new Event(SERVICE_HMR_EVENT)),
+    )
+}
 
 Object.assign(globalThis, { Services })
 export default Services
@@ -105,10 +121,32 @@ function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, gene
         )
     }
     // Only background script need to provide it's implementation.
-    const localImplementation = isBackground
-        ? // Set original impl back to the globalThis, it will help debugging.
-          impl().then((impl) => (Reflect.set(globalThis, key + 'Service', impl), impl))
-        : {}
+    const localImplementation: any = {}
+    async function install_service(mod: () => Promise<any>, hmrLog = false) {
+        const result = await mod()
+        for (const method of Object.keys(result)) {
+            if (hmrLog) {
+                if (!(method in result)) console.log(`[HMR] Service.${key}.${method} added.`)
+                else if (result[method] !== localImplementation[method])
+                    console.log(`[HMR] Service.${key}.${method} updated.`)
+            }
+            Object.defineProperty(localImplementation, method, {
+                configurable: true,
+                enumerable: true,
+                value: result[method],
+            })
+        }
+        for (const method of Object.keys(localImplementation)) {
+            if (!(method in result)) {
+                hmrLog && console.log(`[HMR] Service.${key}.${method} removed.`)
+                delete localImplementation[method]
+            }
+        }
+        // ? Set impl back to the globalThis, it will help debugging.
+        Reflect.set(globalThis, key + 'Service', localImplementation)
+    }
+    if (isBackground) install_service(impl)
+    module.hot && setTimeout(() => document.addEventListener(SERVICE_HMR_EVENT, () => install_service(impl, true)))
     const service = RPC(localImplementation, {
         key,
         serializer,
