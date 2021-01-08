@@ -208,7 +208,6 @@ export function ITO(props: ITO_Props) {
         payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
     const shareSuccessLink = useShareLink(
         t('plugin_ito_claim_success_share', {
-            name: payload.message,
             link: postLink,
             symbol: token.symbol,
         }),
@@ -254,7 +253,7 @@ export function ITO(props: ITO_Props) {
 
     useEffect(() => {
         if (destructState.type === TransactionStateType.UNKNOWN) return
-        let summary = t('plugin_ito_list_button_claim')
+        let summary = t('plugin_ito_withdraw')
         if (!noRemain) {
             summary += ' ' + formatBalance(total_remaining, token.decimals ?? 0) + ' ' + token.symbol
         }
@@ -282,8 +281,6 @@ export function ITO(props: ITO_Props) {
     }, [destructCallback, payload.pid])
     //#endregion
 
-    if (payload.chain_id !== chainId) return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
-
     return (
         <div>
             <Card className={classes.root} elevation={0}>
@@ -304,11 +301,11 @@ export function ITO(props: ITO_Props) {
                     ) : null}
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
-                    {`Sold ${formatBalance(sold, token.decimals)} ${token.symbol} within ${formatBalance(
-                        total,
-                        token.decimals,
-                    )} ${token.symbol}`}
-                    .
+                    {t('plugin_ito_swapped_status', {
+                        remain: formatBalance(sold, token.decimals ?? 0),
+                        total: formatBalance(total, token.decimals ?? 0),
+                        token: token.symbol,
+                    })}
                     <Link
                         className={classes.tokenLink}
                         href={`${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`}
@@ -364,10 +361,12 @@ export function ITO(props: ITO_Props) {
                             </Typography>
                         ) : listOfStatus.includes(ITO_Status.expired) ? null : (
                             <>
-                                <Typography variant="body1">{`Limit per wallet: ${formatBalance(
-                                    new BigNumber(limit),
-                                    token.decimals,
-                                )} ${token.symbol}`}</Typography>
+                                <Typography variant="body1">
+                                    {t('plugin_ito_allocation_per_wallet', {
+                                        limit: `: ${formatBalance(new BigNumber(limit), token.decimals)}`,
+                                        token: token.symbol,
+                                    })}
+                                </Typography>
                                 <Typography variant="body1">
                                     {listOfStatus.includes(ITO_Status.waited)
                                         ? `Start date: ${formatDateTime(new Date(start_time * 1000), true)}`
@@ -397,7 +396,7 @@ export function ITO(props: ITO_Props) {
                         variant="contained"
                         size="large"
                         className={classes.actionButton}>
-                        {t('plugin_ito_list_button_claim')}
+                        {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : listOfStatus.includes(ITO_Status.completed) && isBuyer ? (
                     <ActionButton

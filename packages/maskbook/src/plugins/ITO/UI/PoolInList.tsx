@@ -15,11 +15,15 @@ import {
 } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useAccount } from '../../../web3/hooks/useAccount'
+import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
+import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
+import { debugModeSetting } from '../../../settings/settings'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../Wallet/formatter'
 import { dateTimeFormat } from '../assets/formatDate'
-import type { JSON_PayloadInMask } from '../types'
+import { JSON_PayloadInMask, ITO_Status } from '../types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -61,6 +65,9 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             flexDirection: 'column',
             paddingBottom: theme.spacing(1),
+        },
+        date: {
+            fontSize: 12,
         },
         progress: {
             paddingBottom: theme.spacing(1),
@@ -104,42 +111,46 @@ export function PoolInList(props: PoolInListProps) {
     const classes = useStyles()
     const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onWithdraw } = props
 
+    const account = useAccount()
+    const {
+        value: availability,
+        computed: availabilityComputed,
+        loading: loadingAvailability,
+    } = useAvailabilityComputed(pool)
+    const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)
+
+    const noRemain = new BigNumber(pool.total_remaining).isZero()
+    const { listOfStatus } = availabilityComputed
+
+    const isWithdrawn = tradeInfo?.destructInfo
+
+    const canWithdraw = !isWithdrawn && (listOfStatus.includes(ITO_Status.expired) || noRemain)
+
+    const canSend = !listOfStatus.includes(ITO_Status.expired) && !noRemain
     const progress =
         100 *
         Number(new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)).div(new BigNumber(pool.total)))
 
-    console.log('DEBUG: pool')
-    console.log({
-        pool,
-    })
-
     const StatusButton = () => {
-        const start = pool.start_time * 1000
-        const end = pool.end_time * 1000
-        const now = Date.now()
-        const noRemain = new BigNumber(pool.total_remaining).isZero()
         return (
             <>
-                {now <= end ? (
-                    <ActionButton size="small" variant="contained" disabled={noRemain} onClick={() => onSend?.(pool)}>
-                        {now < start
-                            ? t('plugin_ito_list_button_send')
-                            : noRemain
-                            ? t('plugin_ito_list_button_claim')
-                            : t('plugin_ito_list_button_send')}
+                {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
+                    <ActionButton size="small" variant="contained" onClick={() => onWithdraw?.(pool)}>
+                        {t('plugin_ito_withdraw')}
                     </ActionButton>
-                ) : (
-                    <ActionButton
-                        size="small"
-                        variant="contained"
-                        disabled={noRemain}
-                        onClick={() => onWithdraw?.(pool)}>
-                        {t('plugin_ito_list_button_claim')}
+                ) : canSend ? (
+                    <ActionButton size="small" variant="contained" onClick={() => onSend?.(pool)}>
+                        {t('plugin_ito_list_button_send')}
                     </ActionButton>
-                )}
+                ) : isWithdrawn ? (
+                    <ActionButton size="small" variant="contained" disabled={true}>
+                        {t('plugin_ito_withdrawn')}
+                    </ActionButton>
+                ) : null}
             </>
         )
     }
+
     return (
         <div className={classes.top}>
             <Card className={classes.root} variant="outlined">
@@ -152,16 +163,23 @@ export function PoolInList(props: PoolInListProps) {
                             <Typography variant="body1" color="textPrimary">
                                 {pool.message}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography className={classes.date} variant="body2" color="textSecondary">
                                 {t('plugin_ito_list_start_date', {
                                     date: dateTimeFormat(new Date(pool.start_time * 1000)),
                                 })}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography className={classes.date} variant="body2" color="textSecondary">
                                 {t('plugin_ito_list_end_date', {
                                     date: dateTimeFormat(new Date(pool.end_time * 1000)),
                                 })}
                             </Typography>
+                            {debugModeSetting.value ? (
+                                <Typography className={classes.date} variant="body2" color="textSecondary">
+                                    {t('plugin_ito_password', {
+                                        password: pool.password === '' ? 'no password' : pool.password,
+                                    })}
+                                </Typography>
+                            ) : null}
                         </Box>
                         <Box className={classes.button}>
                             <StatusButton />
@@ -176,8 +194,8 @@ export function PoolInList(props: PoolInListProps) {
                             {t('plugin_ito_list_sold_total')}
                             <Typography variant="body2" color="textPrimary" component="span">
                                 {formatBalance(
-                                    new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)),
-                                    pool.token.decimals ?? '0',
+                                    exchange_out_volumes.reduce((acculator, x) => acculator.plus(x), new BigNumber(0)),
+                                    pool.token.decimals ?? 0,
                                 )}
                             </Typography>{' '}
                             {pool.token.symbol}
@@ -193,7 +211,7 @@ export function PoolInList(props: PoolInListProps) {
 
                     <Box className={classes.deteils}>
                         <TableContainer component={Paper} className={classes.table}>
-                            <Table size="small" stickyHeader>
+                            <Table size="small">
                                 <TableHead>
                                     <TableRow>
                                         <TableCell className={classes.head} align="center" size="small">
@@ -213,7 +231,11 @@ export function PoolInList(props: PoolInListProps) {
                                 <TableBody>
                                     {pool.exchange_tokens.map((token, index) => (
                                         <TableRow key={index}>
-                                            <TableCell className={classes.cell} align="center" size="small">
+                                            <TableCell
+                                                className={classes.cell}
+                                                align="center"
+                                                size="small"
+                                                style={{ whiteSpace: 'nowrap' }}>
                                                 {token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
@@ -230,7 +252,7 @@ export function PoolInList(props: PoolInListProps) {
                                                             new BigNumber(10).pow(pool.exchange_tokens[index].decimals),
                                                         )
                                                         .integerValue(),
-                                                    pool.token.decimals,
+                                                    token.decimals,
                                                     6,
                                                 )}{' '}
                                                 {token.symbol} / {pool.token.symbol}
@@ -246,7 +268,7 @@ export function PoolInList(props: PoolInListProps) {
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 {formatBalance(
                                                     new BigNumber(exchange_in_volumes[index]),
-                                                    pool.token.decimals,
+                                                    token.decimals,
                                                     6,
                                                 )}{' '}
                                                 {token.symbol}

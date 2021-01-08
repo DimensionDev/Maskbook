@@ -18,9 +18,8 @@ import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { formatAmount, formatBalance } from '../../Wallet/formatter'
-import { datetimeISOString } from '../assets/formatDate'
 import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
-import { DateTimePicker, LocalizationProvider } from '@material-ui/lab'
+import { DateTimePicker, LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 
 const useStyles = makeStyles((theme) =>
@@ -77,7 +76,9 @@ export function CreateForm(props: CreateFormProps) {
     const account = useAccount()
     const chainIdValid = useChainIdValid()
 
-    const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
+    const currentIdentity = useCurrentIdentity()
+    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
+
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
         new BigNumber(origin?.limit || '0').isZero()
@@ -108,7 +109,7 @@ export function CreateForm(props: CreateFormProps) {
     const [startTime, setStartTime] = useState(origin?.startTime || new Date())
     const [endTime, setEndTime] = useState(origin?.endTime || new Date())
 
-    const GMT = new Date().getTimezoneOffset() / 60
+    const GMT = (new Date().getTimezoneOffset() / 60) * -1
 
     // amount for displaying
     const inputTokenAmount = formatAmount(
@@ -232,23 +233,27 @@ export function CreateForm(props: CreateFormProps) {
 
     const StartTime = usePortalShadowRoot((container) => (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DateTimePicker
+            <MobileDateTimePicker
+                showTodayButton
+                ampm={false}
+                label={t('plugin_ito_begin_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
                 onChange={(date: Date | null) => handleStartTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
                 value={startTime}
                 DialogProps={{ container }}
-                PopperProps={{ container }}
             />
         </LocalizationProvider>
     ))
     const EndTime = usePortalShadowRoot((container) => (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DateTimePicker
+            <MobileDateTimePicker
+                showTodayButton
+                ampm={false}
+                label={t('plugin_ito_end_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
                 onChange={(date: Date | null) => handleEndTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
                 value={endTime}
                 DialogProps={{ container }}
-                PopperProps={{ container }}
             />
         </LocalizationProvider>
     ))

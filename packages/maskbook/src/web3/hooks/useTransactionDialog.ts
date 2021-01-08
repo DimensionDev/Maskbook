@@ -7,8 +7,9 @@ export function useTransactionDialog(
     transactionDialogEvent: {
         shareLink?: string
         summary?: string
-    },
+    } | null,
     transactionState: TransactionState,
+    transactionStateType: TransactionStateType,
     resetTransactionState: () => void,
 ) {
     // close the transaction dialog
@@ -16,6 +17,7 @@ export function useTransactionDialog(
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
+            if (transactionState.type !== transactionStateType) return
             resetTransactionState()
         },
     )

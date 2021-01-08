@@ -5,6 +5,7 @@ import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { Typography } from '@material-ui/core'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO } from './ITO'
+import { resolveChainName } from '../../../web3/pipes'
 
 export interface PostInspectorProps {
     payload: JSON_PayloadInMask
@@ -21,6 +22,8 @@ export function PostInspector(props: PostInspectorProps) {
 
     useEffect(() => retry(), [account, chainId, isChainValid])
 
+    if (props.payload.chain_id !== chainId)
+        return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
     if (loading) return <Typography>Loading pool info…</Typography>
     if (error) return <Typography>Failed to load pool info.</Typography>
     if (!poolPayload) return null
