@@ -20,7 +20,7 @@ import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { formatAmount, formatBalance } from '../../Wallet/formatter'
 import { datetimeISOString } from '../assets/formatDate'
 import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
-import { DateTimePicker, LocalizationProvider } from '@material-ui/lab'
+import { DateTimePicker, LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 
 const useStyles = makeStyles((theme) =>
@@ -232,23 +232,25 @@ export function CreateForm(props: CreateFormProps) {
 
     const StartTime = usePortalShadowRoot((container) => (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DateTimePicker
+            <MobileDateTimePicker
+                showTodayButton
+                label={t('plugin_ito_list_start_date', {date: GMT})}
                 onChange={(date: Date | null) => handleStartTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
                 value={startTime}
                 DialogProps={{ container }}
-                PopperProps={{ container }}
             />
         </LocalizationProvider>
     ))
     const EndTime = usePortalShadowRoot((container) => (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DateTimePicker
+            <MobileDateTimePicker
+                showTodayButton
+                label={t('plugin_ito_list_end_date', {date: GMT})}
                 onChange={(date: Date | null) => handleEndTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
                 value={endTime}
                 DialogProps={{ container }}
-                PopperProps={{ container }}
             />
         </LocalizationProvider>
     ))
