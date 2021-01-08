@@ -109,7 +109,7 @@ export function CreateForm(props: CreateFormProps) {
     const [startTime, setStartTime] = useState(origin?.startTime || new Date())
     const [endTime, setEndTime] = useState(origin?.endTime || new Date())
 
-    const GMT = `(UTC ${new Date().getTimezoneOffset() / 60})`
+    const GMT = (new Date().getTimezoneOffset() / 60) * -1
 
     // amount for displaying
     const inputTokenAmount = formatAmount(
@@ -236,7 +236,7 @@ export function CreateForm(props: CreateFormProps) {
             <MobileDateTimePicker
                 showTodayButton
                 ampm={false}
-                label={t('plugin_ito_begin_time', { zone: GMT })}
+                label={t('plugin_ito_begin_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
                 onChange={(date: Date | null) => handleStartTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
                 value={startTime}
@@ -249,7 +249,7 @@ export function CreateForm(props: CreateFormProps) {
             <MobileDateTimePicker
                 showTodayButton
                 ampm={false}
-                label={t('plugin_ito_end_time', { zone: GMT })}
+                label={t('plugin_ito_end_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
                 onChange={(date: Date | null) => handleEndTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
                 value={endTime}
