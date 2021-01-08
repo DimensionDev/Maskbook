@@ -16,6 +16,7 @@ import {
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
+import { debugModeSetting } from '../../../settings/settings'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../Wallet/formatter'
 import { dateTimeFormat } from '../assets/formatDate'
@@ -143,6 +144,7 @@ export function PoolInList(props: PoolInListProps) {
             </>
         )
     }
+
     return (
         <div className={classes.top}>
             <Card className={classes.root} variant="outlined">
@@ -165,6 +167,13 @@ export function PoolInList(props: PoolInListProps) {
                                     date: dateTimeFormat(new Date(pool.end_time * 1000)),
                                 })}
                             </Typography>
+                            {debugModeSetting.value ? (
+                                <Typography className={classes.date} variant="body2" color="textSecondary">
+                                    {t('plugin_ito_password', {
+                                        password: pool.password === '' ? 'no password' : pool.password,
+                                    })}
+                                </Typography>
+                            ) : null}
                         </Box>
                         <Box className={classes.button}>
                             <StatusButton />
