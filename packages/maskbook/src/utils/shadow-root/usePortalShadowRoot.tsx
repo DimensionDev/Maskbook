@@ -1,8 +1,17 @@
 import { useRef, useEffect, forwardRef } from 'react'
 import { useSheetsRegistryStyles } from './renderInShadowRoot'
 import { PortalShadowRoot } from './ShadowRootPortal'
-import { useInterval } from 'react-use'
+import { useUpdate } from 'react-use'
 
+function bind(f: Function, thisArg: unknown, hook: Function) {
+    return (...args: any) => {
+        try {
+            return f.apply(thisArg, args)
+        } finally {
+            hook()
+        }
+    }
+}
 /**
  * Render to a portal in our application needs this hook. It will provide a wrapped container that provides ShadowRoot isolation and CSS support for it.
  *
@@ -12,46 +21,45 @@ import { useInterval } from 'react-use'
  * const picker = usePortalShadowRoot((container) => (
  *      <DatePicker
  *          DialogProps={{ container }}
+ *          PopperProps={{ container }}
  *          value={new Date()}
  *          onChange={() => {}}
  *          renderInput={(props) => <TextField {...props} />}
  *      />
  * ))
  */
-export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX.Element) {
+export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX.Element, hint = '') {
     const findMountingShadowRef = useRef<HTMLDivElement>(null)
-    const { current: mountingRef } = useRef(document.createElement('div'))
-    const { current: container } = useRef(document.createElement('div'))
-    const { current: style } = useRef<HTMLStyleElement>(document.createElement('style'))
+    const update = useUpdate()
+    const { root, container, style } = useEffectRef(() => {
+        const root = document.createElement('div')
+        const container = root.appendChild(document.createElement('div'))
+        container.appendChild = bind(container.appendChild, container, update)
+        container.removeChild = bind(container.removeChild, container, update)
+        const style = root.appendChild(document.createElement('style'))
+        return { root, container, style }
+    })
     const css = useSheetsRegistryStyles(findMountingShadowRef.current)
-
-    // If you're debugging this hook you may want to use this code instead of the following useEffect.
-    // useInterval(() => {
-    //     if (!mountingRef) return
-    //     if (container.children.length === 0) mountingRef.remove()
-    //     else if (mountingRef.parentElement !== PortalShadowRoot()) PortalShadowRoot().appendChild(mountingRef)
-    // }, 500)
+    const containerInUse = container.children.length !== 0
 
     useEffect(() => {
-        if (!mountingRef) return
-        else if (mountingRef.parentElement !== PortalShadowRoot()) PortalShadowRoot().appendChild(mountingRef)
-    }, [mountingRef])
+        if (!containerInUse) return root.remove()
+        const shadow = PortalShadowRoot()
+        if (root.parentElement === shadow) return
+        shadow.appendChild(root)
+    }, [containerInUse, root])
 
     useEffect(() => {
         if (style.innerHTML !== css) style.innerHTML = css
     }, [style, css])
 
-    useParent(mountingRef, style)
-    useParent(mountingRef, container)
-
     return <div ref={findMountingShadowRef}>{renderer(container)}</div>
 }
 
-function useParent(parent: HTMLElement, child: HTMLElement) {
-    useEffect(() => {
-        if (child.parentElement === parent) return
-        parent.appendChild(child)
-    })
+function useEffectRef<T>(f: () => T): T {
+    const ref = useRef<T>(undefined!)
+    if (!ref.current) ref.current = f()
+    return ref.current
 }
 
 export function createShadowRootForwardedComponent<

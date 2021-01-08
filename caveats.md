@@ -2,6 +2,8 @@
 
 Hi, Welcome to the Mask Network. Here is some note for developing Mask Network.
 
+> ! [Storybook in our project breaks currently](https://github.com/DimensionDev/Maskbook/issues/2187) !
+
 ## Setup
 
 This section is going to help you to set up the development environment of Mask Network.

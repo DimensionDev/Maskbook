@@ -4,7 +4,7 @@ import { unreachable } from '../utils/utils'
 export function resolveProviderName(providerType: ProviderType) {
     switch (providerType) {
         case ProviderType.Maskbook:
-            return 'Maskbook'
+            return 'Mask'
         case ProviderType.MetaMask:
             return 'MetaMask'
         case ProviderType.WalletConnect:

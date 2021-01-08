@@ -70,15 +70,15 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
             setShareLink('')
         }
     })
-    const onShare = useCallback(() => {
-        if (shareLink) window.open(shareLink, '_blank', 'noopener noreferrer')
-        onClose()
-    }, [shareLink])
     const onClose = useCallback(() => {
         setOpen({
             open: false,
         })
     }, [setOpen])
+    const onShare = useCallback(() => {
+        if (shareLink) window.open(shareLink, '_blank', 'noopener noreferrer')
+        onClose()
+    }, [shareLink, onClose])
     //#endregion
 
     if (!state) return null

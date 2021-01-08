@@ -1,5 +1,5 @@
 import { useAssetsDetailedDebank } from './useAssetsDetailedDebank'
-import { useAssetsDetailed } from './useAssetsDetailed'
+import { useAssetsDetailedChain } from './useAssetsDetailedChain'
 import { useAssetsDetailedMerged } from './useAssetsDetailedMerged'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
@@ -9,7 +9,7 @@ import { useEtherTokenDetailed } from './useEtherTokenDetailed'
 export function useAssetsDetailedCallback(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
     const wallet = useWallet()
     const { value: etherTokenDetailed } = useEtherTokenDetailed()
-    const assetsDetailedChain = useAssetsDetailed(etherTokenDetailed ? [etherTokenDetailed, ...tokens] : tokens)
+    const assetsDetailedChain = useAssetsDetailedChain(etherTokenDetailed ? [etherTokenDetailed, ...tokens] : tokens)
     const assetsDetailedDebank = useAssetsDetailedDebank()
 
     // should place debank detailed tokens at the first place

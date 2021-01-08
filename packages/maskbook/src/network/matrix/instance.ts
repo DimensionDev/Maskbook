@@ -17,7 +17,6 @@ sideEffect.then(() => matrixAccount.readyPromise).then(console.trace)
 sideEffect
     .then(() => matrixAccount.readyPromise)
     .then(() => {
-        if (!Flags.matrix_based_service_enabled) throw 'Not enabled in prod'
         const [username_, password_] = matrixAccount.value
         const username = username_ || 'maskbook-bot-' + uuid()
         const password = password_ || uuid()

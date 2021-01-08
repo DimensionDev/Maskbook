@@ -4,7 +4,7 @@ import { useHistory } from 'react-router'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { FileRouter } from '../constants'
 import type { FileInfo } from '../types'
-import { formatDateTime } from '../utils'
+import { formatDateTime } from '../../../utils/date'
 
 const useStyles = makeStyles((theme) => ({
     container: {

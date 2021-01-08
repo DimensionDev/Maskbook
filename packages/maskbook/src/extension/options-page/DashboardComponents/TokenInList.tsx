@@ -8,6 +8,7 @@ import { CONSTANTS } from '../../../web3/constants'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import { resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { isSameAddress } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -64,25 +65,24 @@ export interface TokenInListProps {
     style: any
     data: {
         tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
-        excludeTokens: string[]
-        selected: string
+        selected: string[]
         onSelect(address: string): void
     }
 }
 
 export function TokenInList({ data, index, style }: TokenInListProps) {
-    const token = data.tokens[index]
     const classes = useStyles()
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
+
+    const token = data.tokens[index]
     if (!token) return null
     const { address, name, symbol } = token
     return (
         <ListItem
             button
             style={style}
-            disabled={data.excludeTokens.includes(address)}
-            selected={data.selected === address}
+            disabled={data.selected.some((x) => isSameAddress(x, address))}
             onClick={() => data.onSelect(address)}>
             <ListItemIcon>
                 <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} />

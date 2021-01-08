@@ -92,6 +92,6 @@ export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage',
 })
 
 sideEffect.then(() => {
-    // reset it to false after Maskbook startup
+    // reset it to false after Mask startup
     currentImportingBackup.value = false
 })

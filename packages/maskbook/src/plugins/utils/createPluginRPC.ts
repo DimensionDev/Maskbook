@@ -1,5 +1,6 @@
 import { Environment, isEnvironment, MessageTarget, UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { AsyncCall, AsyncCallLogLevel, AsyncGeneratorCall } from 'async-call-rpc/full'
+import { getLocalImplementation } from '../../utils/getLocalImplementation'
 import serialization from '../../utils/type-transform/Serialization'
 const log: AsyncCallLogLevel = {
     beCalled: true,
@@ -9,9 +10,13 @@ const log: AsyncCallLogLevel = {
     sendLocalStack: true,
     type: 'pretty',
 }
-export function createPluginRPC<T>(key: string, impl: () => T | Promise<T>, message: UnboundedRegistry<unknown>) {
+export function createPluginRPC<T extends object>(
+    key: string,
+    impl: () => T | Promise<T>,
+    message: UnboundedRegistry<unknown>,
+) {
     const isBackground = isEnvironment(Environment.ManifestBackground)
-    return AsyncCall<T>(isBackground ? impl() : {}, {
+    return AsyncCall<T>(getLocalImplementation(`Plugin(${key})`, impl, message), {
         key,
         channel: message.bind(MessageTarget.Broadcast),
         preferLocalImplementation: isBackground,
@@ -21,12 +26,17 @@ export function createPluginRPC<T>(key: string, impl: () => T | Promise<T>, mess
             unknownMessage: true,
         },
         log,
+        thenable: false,
     })
 }
 
-export function createPluginRPCGenerator<T>(impl: () => Promise<T>, message: UnboundedRegistry<any>) {
+export function createPluginRPCGenerator<T extends object>(
+    key: string,
+    impl: () => Promise<T>,
+    message: UnboundedRegistry<any>,
+) {
     const isBackground = isEnvironment(Environment.ManifestBackground)
-    return AsyncGeneratorCall<T>(isBackground ? impl() : {}, {
+    return AsyncGeneratorCall<T>(getLocalImplementation(`Plugin(${key})`, impl, message), {
         channel: message.bind(MessageTarget.Broadcast),
         preferLocalImplementation: isBackground,
         serializer: serialization,
@@ -35,5 +45,6 @@ export function createPluginRPCGenerator<T>(impl: () => Promise<T>, message: Unb
             unknownMessage: true,
         },
         log,
+        thenable: false,
     })
 }

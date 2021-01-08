@@ -91,6 +91,6 @@ interface WalletMessage {
     tokensUpdated: void
     rpc: unknown
 }
-
+if (module.hot) module.hot.accept()
 export const WalletMessages = createPluginMessage<WalletMessage>(PLUGIN_IDENTIFIER)
 export const WalletRPC = createPluginRPC(PLUGIN_IDENTIFIER, () => import('./services'), WalletMessages.events.rpc)

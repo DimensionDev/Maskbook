@@ -15,7 +15,7 @@ import classNames from 'classnames'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency } from '../../../plugins/Wallet/formatter'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { CurrencyType, AssetDetailed, EthereumTokenType } from '../../../web3/types'
+import { CurrencyType, AssetDetailed } from '../../../web3/types'
 import { getTokenUSDValue } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
@@ -142,9 +142,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                         display: 'flex',
                                         justifyContent: 'flex-end',
                                     }}>
-                                    {x.token.type === EthereumTokenType.ERC20 ? (
-                                        <ERC20TokenActionsBar wallet={wallet} token={x.token} />
-                                    ) : null}
+                                    <ERC20TokenActionsBar wallet={wallet} token={x.token} />
                                 </Box>,
                             ]
                                 .filter(Boolean)

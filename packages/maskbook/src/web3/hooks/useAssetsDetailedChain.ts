@@ -2,15 +2,10 @@ import type { AssetDetailed, EtherTokenDetailed, ERC20TokenDetailed } from '../t
 import { useTokensBalance } from './useTokensBalance'
 import { useAssetsDetailedMerged } from './useAssetsDetailedMerged'
 
-/**
- * Fetch tokens detailed (balance only) from chain
- * @param address
- * @param tokens
- */
-export function useAssetsDetailed(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
-    const { value: listOfBalance = [] } = useTokensBalance(tokens.map((x) => x.address))
+export function useAssetsDetailedChain(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
+    const { value: listOfBalance = [] } = useTokensBalance(tokens.map((y) => y.address))
     return useAssetsDetailedMerged(
-        // the length not matched in the case of error occurs
+        // the length not matched in case of error occurs
         listOfBalance.length === tokens.length
             ? listOfBalance.map(
                   (balance, idx) =>

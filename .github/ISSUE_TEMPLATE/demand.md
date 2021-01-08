@@ -9,8 +9,8 @@ assignees:
 ## Catalogue
 
 - [ ] UI/UX
-- [ ] Maskbook Core Feature
-- [ ] Maskbook Plugin Feature
+- [ ] Mask Core Feature
+- [ ] Mask Plugin Feature
 - [ ] Security/Cryptography Feature
 - [ ] Other
   - /_List it here_/
