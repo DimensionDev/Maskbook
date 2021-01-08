@@ -216,7 +216,7 @@ export function PoolInList(props: PoolInListProps) {
 
                     <Box className={classes.deteils}>
                         <TableContainer component={Paper} className={classes.table}>
-                            <Table size="small" stickyHeader>
+                            <Table size="small">
                                 <TableHead>
                                     <TableRow>
                                         <TableCell className={classes.head} align="center" size="small">
