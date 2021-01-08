@@ -113,6 +113,7 @@ const useStyles = makeStyles((theme) => {
             flexDirection: 'column',
             overflow: 'hidden',
             position: 'relative',
+            height: '100vh',
         },
         contentPadded: {
             '& > *': {
