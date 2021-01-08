@@ -85,25 +85,25 @@ const MSKE = createERC20Token(
 
 export const ITO_CONSTANTS = {
     ITO_CONTRACT_ADDRESS: {
-        [ChainId.Mainnet]: '',
+        [ChainId.Mainnet]: '0xaaea10a15129c9f064685b4185ec2a0d69e34957',
         [ChainId.Ropsten]: '0x8fA0f77597AeAAC87c1fDca5f5314B4E825FE1c4',
         [ChainId.Rinkeby]: '0x62C7e68a14C3692fb26a13637d3b399A47c50107',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },
     DEFAULT_QUALIFICATION_ADDRESS: {
-        [ChainId.Mainnet]: '',
+        [ChainId.Mainnet]: '0x919931df4c9e943612ef565b334791e26dc26b3f',
         [ChainId.Ropsten]: '0x0ac13391f146604a9d32521e536b97b2fe1c5f90',
         [ChainId.Rinkeby]: '0x88AA0AB3B7cDE263073e1cBa1D06473adeC1b38E',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },
     SUBGRAPH_URL: {
-        [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito',
+        [ChainId.Mainnet]: 'https://thegraph.com/explorer/subgraph/dimensiondev/mask-ito-mainnet',
         [ChainId.Ropsten]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito',
-        [ChainId.Rinkeby]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito',
-        [ChainId.Kovan]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito',
-        [ChainId.Gorli]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
     },
     EXCHANGE_TOKENS: {
         [ChainId.Mainnet]: [DAI, USDC, USDT, HUSD, BUSD].map((x) => x.address),
