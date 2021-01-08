@@ -11,6 +11,7 @@ import { isETH } from '../../../web3/helpers'
 import { resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { SwapIcon } from '../assets/exchange'
+import RepeatIcon from '@material-ui/icons/Repeat'
 
 const useSwapItemStyles = makeStyles((theme) =>
     createStyles({
@@ -48,7 +49,7 @@ function SwapItem(props: SwapItemProps) {
             </Typography>
             <div className={classes.icon} onClick={() => setExchange(!exchange)}>
                 <IconButton>
-                    <SwapIcon />
+                    <RepeatIcon fontSize="small" />
                 </IconButton>
             </div>
         </div>
