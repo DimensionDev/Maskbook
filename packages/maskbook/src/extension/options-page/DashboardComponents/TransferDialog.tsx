@@ -65,7 +65,10 @@ function TransferTab(props: TransferTabProps) {
     const [memo, setMemo] = useState('')
 
     // balance
-    const { value: tokenBalance = '0' } = useTokenBalance(token?.type ?? EthereumTokenType.Ether, token?.address ?? '')
+    const { value: tokenBalance = '0', retry: retryTokenBalance } = useTokenBalance(
+        token?.type ?? EthereumTokenType.Ether,
+        token?.address ?? '',
+    )
 
     const onChangeAmount = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
         const _amount = ev.currentTarget.value
@@ -115,6 +118,9 @@ function TransferTab(props: TransferTabProps) {
             setAmount('')
             setAddress('')
             setMemo('')
+
+            // revalidate
+            retryTokenBalance()
         },
     )
 
