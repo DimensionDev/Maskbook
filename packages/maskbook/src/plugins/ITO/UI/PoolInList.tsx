@@ -230,7 +230,7 @@ export function PoolInList(props: PoolInListProps) {
                                                             new BigNumber(10).pow(pool.exchange_tokens[index].decimals),
                                                         )
                                                         .integerValue(),
-                                                    pool.token.decimals,
+                                                    token.decimals,
                                                     6,
                                                 )}{' '}
                                                 {token.symbol} / {pool.token.symbol}
