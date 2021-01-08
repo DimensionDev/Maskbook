@@ -41,9 +41,9 @@ function SwapItem(props: SwapItemProps) {
         <div className={classes.root}>
             <Typography variant="body1" color="textPrimary">
                 {t('plugin_ito_swap_title', {
-                    token: exchange ? swap?.symbol : token?.symbol,
-                    swap: exchange ? token?.symbol : swap?.symbol,
-                    amount: exchange ? amount_ : new BigNumber(1).div(amount_).toFixed(),
+                    swap: exchange ? swap?.symbol : token?.symbol,
+                    token: exchange ? token?.symbol : swap?.symbol,
+                    amount: exchange ? new BigNumber(1).div(amount_).toFixed() : amount_,
                 })}
             </Typography>
             <div className={classes.icon} onClick={() => setExchange(!exchange)}>
