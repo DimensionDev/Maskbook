@@ -35,8 +35,8 @@ async function appendShare(
     }
 }
 
-export function initAutoShareToFriends() {
-    MaskMessage.events.profileJoinedGroup.on(async (data) => {
+export default function () {
+    const undo1 = MaskMessage.events.profileJoinedGroup.on(async (data) => {
         if (currentImportingBackup.value) return
         if (data.group.isReal) return
         const group = await Services.UserGroup.queryUserGroup(data.group)
@@ -74,7 +74,7 @@ export function initAutoShareToFriends() {
         )
         console.groupEnd()
     })
-    MaskMessage.events.linkedProfilesChanged.on(async (events) => {
+    const undo2 = MaskMessage.events.linkedProfilesChanged.on(async (events) => {
         if (currentImportingBackup.value) return
         const mine = await Services.Identity.queryMyProfiles()
         for (const e of events) {
@@ -84,4 +84,8 @@ export function initAutoShareToFriends() {
             )
         }
     })
+    return () => {
+        undo1()
+        undo2()
+    }
 }

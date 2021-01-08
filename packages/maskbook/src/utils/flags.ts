@@ -43,8 +43,6 @@ export const Flags = {
     election2020_composition_dialog_enabled: false,
     COTM_enabled: webOnly,
     COTM_composition_dialog_enabled: false,
-    // Note: the server has closed
-    matrix_based_service_enabled: false,
     metamask_support_enabled: webOnly,
     //#endregion
 
@@ -59,5 +57,5 @@ export const Flags = {
 } as const
 
 if (process.env.NODE_ENV === 'development') {
-    console.log('Run with flags:', Flags)
+    console.log('Mask network starts with flags:', Flags)
 }
