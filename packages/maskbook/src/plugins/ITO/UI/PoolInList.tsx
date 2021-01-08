@@ -199,7 +199,7 @@ export function PoolInList(props: PoolInListProps) {
                             {t('plugin_ito_list_sold_total')}
                             <Typography variant="body2" color="textPrimary" component="span">
                                 {formatBalance(
-                                    new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)),
+                                    exchange_out_volumes.reduce((acculator, x) => acculator.plus(x), new BigNumber(0)),
                                     pool.token.decimals ?? 0,
                                 )}
                             </Typography>{' '}
