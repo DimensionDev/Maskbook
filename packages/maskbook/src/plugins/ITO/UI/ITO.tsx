@@ -304,11 +304,11 @@ export function ITO(props: ITO_Props) {
                     ) : null}
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
-                    {`Sold ${formatBalance(sold, token.decimals)} ${token.symbol} within ${formatBalance(
-                        total,
-                        token.decimals,
-                    )} ${token.symbol}`}
-                    .
+                    {t('plugin_ito_swapped_status', {
+                        remain: formatBalance(sold, token.decimals ?? 0),
+                        total: formatBalance(total, token.decimals ?? 0),
+                        token: token.symbol,
+                    })}
                     <Link
                         className={classes.tokenLink}
                         href={`${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`}
@@ -364,10 +364,12 @@ export function ITO(props: ITO_Props) {
                             </Typography>
                         ) : listOfStatus.includes(ITO_Status.expired) ? null : (
                             <>
-                                <Typography variant="body1">{`Limit per wallet: ${formatBalance(
-                                    new BigNumber(limit),
-                                    token.decimals,
-                                )} ${token.symbol}`}</Typography>
+                                <Typography variant="body1">
+                                    {t('plugin_ito_allocation_per_wallet', {
+                                        limit: `: ${formatBalance(new BigNumber(limit), token.decimals)}`,
+                                        token: token.symbol,
+                                    })}
+                                </Typography>
                                 <Typography variant="body1">
                                     {listOfStatus.includes(ITO_Status.waited)
                                         ? `Start date: ${formatDateTime(new Date(start_time * 1000), true)}`

@@ -152,7 +152,16 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 {poolSettings?.exchangeTokens.filter(Boolean).map((item, index) => {
                     return (
                         <Fragment key={index}>
-                            <Grid item xs={12}>
+                            {index === 0 ? (
+                                <Grid item xs={6}>
+                                    <Paper className={classes.label}>
+                                        <Typography variant="body1" color="textSecondary">
+                                            {t('plugin_ito_sell_price')}
+                                        </Typography>
+                                    </Paper>
+                                </Grid>
+                            ) : null}
+                            <Grid item xs={index === 0 ? 6 : 12}>
                                 <SwapItem
                                     token={poolSettings.token}
                                     swap={item}
@@ -182,7 +191,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
                 <Grid item xs={6}>
                     <Paper className={classes.label}>
-                        <Typography>{t('plugin_ito_begin_times')}</Typography>
+                        <Typography>{t('plugin_ito_begin_time')}</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>
@@ -193,7 +202,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
                 <Grid item xs={6}>
                     <Paper className={classes.label}>
-                        <Typography>{t('plugin_ito_end_times')}</Typography>
+                        <Typography>{t('plugin_ito_end_time')}</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>
