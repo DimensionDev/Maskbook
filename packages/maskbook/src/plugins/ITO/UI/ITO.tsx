@@ -254,7 +254,7 @@ export function ITO(props: ITO_Props) {
 
     useEffect(() => {
         if (destructState.type === TransactionStateType.UNKNOWN) return
-        let summary = t('plugin_ito_list_button_claim')
+        let summary = t('plugin_ito_withdraw')
         if (!noRemain) {
             summary += ' ' + formatBalance(total_remaining, token.decimals ?? 0) + ' ' + token.symbol
         }
@@ -397,7 +397,7 @@ export function ITO(props: ITO_Props) {
                         variant="contained"
                         size="large"
                         className={classes.actionButton}>
-                        {t('plugin_ito_list_button_claim')}
+                        {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : listOfStatus.includes(ITO_Status.completed) && isBuyer ? (
                     <ActionButton

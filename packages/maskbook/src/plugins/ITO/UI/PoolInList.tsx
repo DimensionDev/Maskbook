@@ -15,12 +15,15 @@ import {
 } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useAccount } from '../../../web3/hooks/useAccount'
+import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
+import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { debugModeSetting } from '../../../settings/settings'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../Wallet/formatter'
 import { dateTimeFormat } from '../assets/formatDate'
-import type { JSON_PayloadInMask } from '../types'
+import { JSON_PayloadInMask, ITO_Status } from '../types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -108,6 +111,22 @@ export function PoolInList(props: PoolInListProps) {
     const classes = useStyles()
     const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onWithdraw } = props
 
+    const account = useAccount()
+    const {
+        value: availability,
+        computed: availabilityComputed,
+        loading: loadingAvailability,
+    } = useAvailabilityComputed(pool)
+    const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)
+
+    const noRemain = new BigNumber(pool.total_remaining).isZero()
+    const { listOfStatus } = availabilityComputed
+
+    const isWithdrawn = tradeInfo?.destructInfo
+
+    const canWithdraw = !isWithdrawn && (listOfStatus.includes(ITO_Status.expired) || noRemain)
+
+    const canSend = !listOfStatus.includes(ITO_Status.expired) && !noRemain
     const progress =
         100 *
         Number(new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)).div(new BigNumber(pool.total)))
@@ -118,29 +137,21 @@ export function PoolInList(props: PoolInListProps) {
     })
 
     const StatusButton = () => {
-        const start = pool.start_time * 1000
-        const end = pool.end_time * 1000
-        const now = Date.now()
-        const noRemain = new BigNumber(pool.total_remaining).isZero()
         return (
             <>
-                {now <= end ? (
-                    <ActionButton size="small" variant="contained" disabled={noRemain} onClick={() => onSend?.(pool)}>
-                        {now < start
-                            ? t('plugin_ito_list_button_send')
-                            : noRemain
-                            ? t('plugin_ito_list_button_claim')
-                            : t('plugin_ito_list_button_send')}
+                {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
+                    <ActionButton size="small" variant="contained" onClick={() => onWithdraw?.(pool)}>
+                        {t('plugin_ito_withdraw')}
                     </ActionButton>
-                ) : (
-                    <ActionButton
-                        size="small"
-                        variant="contained"
-                        disabled={noRemain}
-                        onClick={() => onWithdraw?.(pool)}>
-                        {t('plugin_ito_list_button_claim')}
+                ) : canSend ? (
+                    <ActionButton size="small" variant="contained" onClick={() => onSend?.(pool)}>
+                        {t('plugin_ito_list_button_send')}
                     </ActionButton>
-                )}
+                ) : isWithdrawn ? (
+                    <ActionButton size="small" variant="contained" disabled={true}>
+                        {t('plugin_ito_withdrawn')}
+                    </ActionButton>
+                ) : null}
             </>
         )
     }
