@@ -1,6 +1,7 @@
 import { CircularProgress, createStyles, makeStyles, Typography, Box } from '@material-ui/core'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
+import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { useAllPoolsAsSeller } from '../hooks/useAllPoolsAsSeller'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import type { JSON_PayloadInMask } from '../types'
@@ -36,7 +37,7 @@ export function PoolList(props: PoolListProps) {
 
     //#region withdraw
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
-    useTransactionDialog({}, destructState, () => {
+    useTransactionDialog(null, destructState, TransactionStateType.CONFIRMED, () => {
         retry()
         resetDestructCallback()
     })

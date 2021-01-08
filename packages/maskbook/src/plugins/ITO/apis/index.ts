@@ -1,4 +1,5 @@
 import { first, omit } from 'lodash-es'
+import { getChainId } from '../../../extension/background-script/EthereumService'
 import { getConstant } from '../../../web3/helpers'
 import { ITO_CONSTANTS } from '../constants'
 import { payloadIntoMask } from '../helpers'
@@ -49,7 +50,7 @@ const POOL_FIELDS = `
 `
 
 export async function getTradeInfo(pid: string, trader: string) {
-    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL'), {
+    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({
@@ -126,7 +127,7 @@ export async function getTradeInfo(pid: string, trader: string) {
 }
 
 export async function getPool(pid: string) {
-    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL'), {
+    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({
@@ -149,7 +150,7 @@ export async function getPool(pid: string) {
 }
 
 export async function getAllPoolsAsSeller(address: string) {
-    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL'), {
+    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({
@@ -187,7 +188,7 @@ export async function getAllPoolsAsSeller(address: string) {
 }
 
 export async function getAllPoolsAsBuyer(address: string) {
-    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL'), {
+    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({
