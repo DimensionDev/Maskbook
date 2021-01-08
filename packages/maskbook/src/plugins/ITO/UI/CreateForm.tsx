@@ -18,7 +18,6 @@ import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { formatAmount, formatBalance } from '../../Wallet/formatter'
-import { datetimeISOString } from '../assets/formatDate'
 import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
 import { DateTimePicker, LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
@@ -77,7 +76,9 @@ export function CreateForm(props: CreateFormProps) {
     const account = useAccount()
     const chainIdValid = useChainIdValid()
 
-    const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
+    const currentIdentity = useCurrentIdentity()
+    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
+
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
         new BigNumber(origin?.limit || '0').isZero()
