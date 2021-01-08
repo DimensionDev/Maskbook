@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDirs": ["./src/", "./abis/"],
+    "outDir": "./dist/"
+  },
+  "include": ["./src/**/*.tsx", "./src/**/*.ts", "./src/**/*.json", "./abis/*.json"],
+  "references": [{ "path": "../shared/" }, { "path": "../theme/" }]
+}

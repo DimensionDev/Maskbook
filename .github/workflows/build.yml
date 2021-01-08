@@ -1,0 +1,57 @@
+name: Build
+
+on:
+  push:
+    branches: [master, released]
+  pull_request:
+    branches: [master, released]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    continue-on-error: false
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v2-beta
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: sudo npm install --global npm@7
+      - run: npm ci
+      - run: npm run build-ci
+      - name: Upload `Maskbook.base.zip`
+        uses: actions/upload-artifact@v2
+        with:
+          name: Maskbook.base.zip
+          path: Maskbook.base.zip
+      - name: Upload `Maskbook.iOS.zip`
+        uses: actions/upload-artifact@v2
+        with:
+          name: Maskbook.iOS.zip
+          path: Maskbook.iOS.zip
+      - name: Upload `Maskbook.chromium.zip`
+        uses: actions/upload-artifact@v2
+        with:
+          name: Maskbook.chromium.zip
+          path: Maskbook.chromium.zip
+      - name: Upload `Maskbook.chromium-beta.zip`
+        uses: actions/upload-artifact@v2
+        with:
+          name: Maskbook.chromium-beta.zip
+          path: Maskbook.chromium-beta.zip
+      - name: Upload `Maskbook.firefox.zip`
+        uses: actions/upload-artifact@v2
+        with:
+          name: Maskbook.firefox.zip
+          path: Maskbook.firefox.zip
+      - name: Upload `Maskbook.gecko.zip`
+        uses: actions/upload-artifact@v2
+        with:
+          name: Maskbook.gecko.zip
+          path: Maskbook.gecko.zip

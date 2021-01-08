@@ -44,7 +44,9 @@ const useStyles = makeStyles((theme) => {
 
 export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     amount: string
+    maxAmount?: string
     balance: string
+    disableBalance?: boolean
     onAmountChange: (amount: string) => void
     label: string
     token?: EtherTokenDetailed | ERC20TokenDetailed | null
@@ -55,14 +57,14 @@ export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyle
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
-    const { amount, balance, token, onAmountChange, label } = props
+    const { amount, maxAmount, balance, token, onAmountChange, label, disableBalance = false } = props
 
     const classes = useStylesExtends(useStyles(), props)
 
     //#region update amount by parent
     const { RE_MATCH_WHOLE_AMOUNT } = useMemo(
         () => ({
-            RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals ?? 0}}$`), // d.ddd...d
+            RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals}}$`), // d.ddd...d
         }),
         [token?.decimals],
     )
@@ -82,6 +84,8 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         <TextField
             className={classes.root}
             label={label}
+            error={props.TextFieldProps?.error}
+            helperText={props.TextFieldProps?.helperText}
             fullWidth
             required
             type="text"
@@ -111,14 +115,20 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                             justifyContent: 'center',
                             alignItems: 'flex-end',
                         }}>
-                        <Typography className={classes.balance} color="textSecondary" variant="body2" component="span">
-                            Balance: {formatBalance(new BigNumber(balance), token.decimals ?? 0, 6)}
-                        </Typography>
+                        {!disableBalance ? (
+                            <Typography
+                                className={classes.balance}
+                                color="textSecondary"
+                                variant="body2"
+                                component="span">
+                                Balance: {formatBalance(new BigNumber(balance), token.decimals, 6)}
+                            </Typography>
+                        ) : null}
                         <Box
                             sx={{
                                 display: 'flex',
                             }}>
-                            {balance !== '0' ? (
+                            {balance !== '0' && !disableBalance ? (
                                 <Chip
                                     className={classes.max}
                                     size="small"
@@ -126,9 +136,11 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     clickable
                                     color="primary"
                                     variant="outlined"
-                                    onClick={() =>
-                                        onAmountChange(formatBalance(new BigNumber(balance), token.decimals ?? 0))
-                                    }
+                                    onClick={() => {
+                                        onAmountChange(
+                                            formatBalance(new BigNumber(maxAmount ?? balance), token.decimals),
+                                        )
+                                    }}
                                     {...props.MaxChipProps}
                                 />
                             ) : null}
@@ -144,9 +156,15 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                             justifyContent: 'center',
                             alignItems: 'flex-end',
                         }}>
-                        <Typography className={classes.balance} color="textSecondary" variant="body2" component="span">
-                            -
-                        </Typography>
+                        {!disableBalance ? (
+                            <Typography
+                                className={classes.balance}
+                                color="textSecondary"
+                                variant="body2"
+                                component="span">
+                                -
+                            </Typography>
+                        ) : null}
                         <SelectTokenChip token={token} {...props.SelectTokenChip} />
                     </Box>
                 ),

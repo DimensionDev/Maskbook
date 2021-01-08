@@ -334,7 +334,9 @@ export function Trader(props: TraderProps) {
             ) : null}
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
+                includeTokens={[]}
                 excludeTokens={excludeTokens}
+                selectedTokens={[]}
                 onSubmit={onSelectERC20TokenDialogSubmit}
                 onClose={onSelectERC20TokenDialogClose}
             />

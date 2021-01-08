@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
-import { Menu } from '@material-ui/core'
-import { PortalShadowRoot } from '../shadow-root/ShadowRootPortal'
+import { ShadowRootMenu } from '../shadow-root/ShadowRootComponents'
 
 /**
  * A util hooks for easier to use `<Menu>`s.
@@ -11,14 +10,9 @@ export function useMenu(...menus: (JSX.Element | undefined)[]) {
     const anchorElRef = useRef<HTMLElement>()
     const close = () => setOpen(false)
     return [
-        <Menu
-            container={PortalShadowRoot}
-            open={open}
-            anchorEl={anchorElRef.current}
-            onClose={close}
-            onClick={close}
-            children={menus}
-        />,
+        <ShadowRootMenu open={open} anchorEl={anchorElRef.current} onClose={close} onClick={close}>
+            {menus}
+        </ShadowRootMenu>,
         useCallback((anchorElOrEvent: HTMLElement | { currentTarget: HTMLElement }) => {
             if (anchorElOrEvent instanceof HTMLElement) anchorElRef.current = anchorElOrEvent
             else anchorElRef.current = anchorElOrEvent.currentTarget

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
@@ -31,7 +31,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
         if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) return ApproveState.INSUFFICIENT_BALANCE
         if (approveHash && !receipt?.blockHash) return ApproveState.PENDING
         return new BigNumber(allowance).isLessThan(amount) ? ApproveState.NOT_APPROVED : ApproveState.APPROVED
-    }, [amount, spender, allowance, balance, approveHash, receipt?.blockHash])
+    }, [address, amount, spender, allowance, balance, approveHash, receipt?.blockHash])
 
     const approveCallback = useCallback(
         async (useExact: boolean = false) => {
@@ -76,11 +76,22 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
         [approveState, amount, account, spender, erc20Contract],
     )
 
-    const resetCallback = useCallback(() => {
+    const resetCallback = useCallback(() => {}, [])
+
+    // reset approve state
+    useEffect(() => {
         setApproveHash('')
-        revalidateBalance()
-        revalidateAllowance()
-    }, [])
+    }, [address, amount, spender])
+
+    // revalidate balance and allowance if tx hash was cleaned
+    useEffect(() => {
+        // should not revalidate if never validated before
+        if (!allowance || !balance) return
+        if (!approveHash) {
+            revalidateBalance()
+            revalidateAllowance()
+        }
+    }, [approveHash])
 
     return [approveState, approveCallback, resetCallback] as const
 }

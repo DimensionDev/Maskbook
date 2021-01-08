@@ -58,7 +58,7 @@ export function getAllConstants<T extends Web3Constants, K extends keyof T>(cons
 }
 //#endregion
 
-export function createEetherToken(chainId: ChainId) {
+export function createEtherToken(chainId: ChainId) {
     return {
         type: EthereumTokenType.Ether,
         chainId,

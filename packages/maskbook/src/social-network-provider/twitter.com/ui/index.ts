@@ -29,7 +29,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         },
         zh: {
             additional_post_box__encrypted_post_pre: [
-                '此推文已被 Maskbook（@realmaskbook）加密。📪🔑',
+                '此推文已被 Mask（@realmaskbook）加密。📪🔑',
                 '請安裝 {{encrypted}} 進行解密。',
             ].join('\n\n'),
         },

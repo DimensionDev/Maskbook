@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import { IdentifierMap } from '../../IdentifierMap'
-import { ProfileIdentifier, ECKeyIdentifier } from '../../type'
+import { ProfileIdentifier, ECKeyIdentifierFromJsonWebKey } from '../../type'
 import {
     PersonaRecord,
     ProfileRecord,
@@ -32,7 +32,7 @@ export async function createPersonaRecord(name: string = uuid(), password: strin
     const { key, mnemonicRecord: mnemonic } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
     const { publicKey, privateKey } = key
     const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
-    const identifier = ECKeyIdentifier.fromJsonWebKey(publicKey)
+    const identifier = ECKeyIdentifierFromJsonWebKey(publicKey)
 
     return {
         nickname: name,

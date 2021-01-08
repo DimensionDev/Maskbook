@@ -6,6 +6,7 @@
     "dev": "./dev.js"
   },
   "dependencies": {
-    "inquirer": "^7.3.3"
+    "inquirer": "^7.3.3",
+    "proper-lockfile": "^4.1.1"
   }
 }

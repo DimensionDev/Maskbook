@@ -30,7 +30,7 @@ export function PostInspector(props: PostInspectorProps) {
     const postContent = usePostInfoDetails('postContent')
     const encryptedPost = usePostInfoDetails('postPayload')
     const postId = usePostInfoDetails('postIdentifier')
-    const decryptedPayload = usePostInfoDetails('decryptedPayload')
+    const decryptedPayloadForImage = usePostInfoDetails('decryptedPayloadForImage')
     const postImages = usePostInfoDetails('postMetadataImages')
     const isDebugging = useValueRef(debugModeSetting)
     const whoAmI = useCurrentIdentity()
@@ -71,9 +71,9 @@ export function PostInspector(props: PostInspectorProps) {
                 onDecrypted={props.onDecrypted}
                 requestAppendRecipients={
                     // So should not create new data on version -40
-                    (encryptedPost.ok && encryptedPost.val.version !== -40) || decryptedPayload
+                    (encryptedPost.ok && encryptedPost.val.version !== -40) || decryptedPayloadForImage
                         ? async (profile) => {
-                              const val = (postImages ? decryptedPayload : encryptedPost.val) as
+                              const val = (postImages ? decryptedPayloadForImage : encryptedPost.val) as
                                   | PayloadAlpha40_Or_Alpha39
                                   | PayloadAlpha38
 
@@ -122,7 +122,7 @@ function PluginPostInspector() {
     return (
         <>
             {[...PluginUI.values()].map((x) => (
-                <ErrorBoundary contain={`Plugin "${x.pluginName}"`} key={x.identifier}>
+                <ErrorBoundary subject={`Plugin "${x.pluginName}"`} key={x.identifier}>
                     <PluginPostInspectorForEach config={x} />
                 </ErrorBoundary>
             ))}

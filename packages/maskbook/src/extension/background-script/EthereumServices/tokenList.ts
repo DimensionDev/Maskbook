@@ -38,7 +38,10 @@ export async function fetchERC20TokensFromTokenList(
     return tokens
         .filter(
             (x) =>
-                x.chainId === chainId && (process.env.NODE_ENV === 'production' ? chainId === ChainId.Mainnet : true),
+                x.chainId === chainId &&
+                (process.env.NODE_ENV === 'production' && process.env.build === 'stable'
+                    ? chainId === ChainId.Mainnet
+                    : true),
         )
         .map((x) => ({
             type: EthereumTokenType.ERC20,

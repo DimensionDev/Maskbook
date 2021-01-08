@@ -13,6 +13,10 @@ export function formatPrice(price: BigNumber, decimalPlaces: number = 6) {
     return price.decimalPlaces(decimalPlaces).toString()
 }
 
+export function formatAmount(amount: BigNumber, decimals: number) {
+    return amount.multipliedBy(new BigNumber(10).pow(decimals)).toFixed()
+}
+
 export function formatBalance(balance: BigNumber, decimals: number, significant: number = decimals) {
     if (!BigNumber.isBigNumber(balance)) return '0'
     const negative = balance.isNegative() // balance < 0n
@@ -40,7 +44,12 @@ export function formatBalance(balance: BigNumber, decimals: number, significant:
 }
 
 export function formatCurrency(balance: number, sign: string = '$') {
-    return `${sign}${balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, `${sign}&,`)}`
+    const fixedBalance = balance > 1 ? balance.toFixed(2) : balance.toPrecision(2)
+    return `${sign}${fixedBalance.replace(/\d(?=(\d{3})+\.)/g, `${sign}&,`)}`
+}
+
+export function formatToken(balance: number) {
+    return formatCurrency(balance).replace('$', '')
 }
 
 export function formatEthereumAddress(address: string, size = 0) {

@@ -6,5 +6,7 @@ scripts/
 e2e
 packages/maskbook/src/plugins/Wallet/contracts
 packages/maskbook/src/contracts
+# we need to find out how to lint mono repos
+packages/components
 webpack.config.ts
 public/

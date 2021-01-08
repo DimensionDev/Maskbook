@@ -14,7 +14,6 @@ import {
     DashboardWalletDeleteConfirmDialog,
     DashboardWalletRenameDialog,
     DashboardWalletRedPacketDetailDialog,
-    DashboardWalletShareDialog,
 } from '../DashboardDialogs/Wallet'
 import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -85,7 +84,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const color = useColorStyles()
     const xsMatched = useMatchXS()
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
-    const [walletShare, , openWalletShare] = useModal(DashboardWalletShareDialog)
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
@@ -93,7 +91,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const [menu, openMenu] = useMenu(
-        <MenuItem onClick={() => openWalletShare({ wallet })}>{t('share')}</MenuItem>,
         <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
         wallet._private_key_ || wallet.mnemonic.length ? (
             <MenuItem onClick={() => openWalletBackup({ wallet })}>{t('backup')}</MenuItem>
@@ -223,7 +220,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                 </Box>
             ) : null}
             {addToken}
-            {walletShare}
             {walletHistory}
             {walletBackup}
             {walletDelete}

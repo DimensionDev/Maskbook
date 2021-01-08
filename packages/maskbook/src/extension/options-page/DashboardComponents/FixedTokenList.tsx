@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
+import { makeStyles, createStyles, Typography } from '@material-ui/core'
 import {
     TokenListsState,
     useERC20TokensDetailedFromTokenLists,
 } from '../../../web3/hooks/useERC20TokensDetailedFromTokenLists'
-import { makeStyles, createStyles, Typography } from '@material-ui/core'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../web3/constants'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -23,14 +23,24 @@ const useStyles = makeStyles((theme) =>
 export interface FixedTokenListProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     useEther?: boolean
     keyword?: string
+    includeTokens?: string[]
     excludeTokens?: string[]
+    selectedTokens?: string[]
     onSubmit?(token: EtherTokenDetailed | ERC20TokenDetailed): void
     FixedSizeListProps?: Partial<FixedSizeListProps>
 }
 
 export function FixedTokenList(props: FixedTokenListProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const { keyword, excludeTokens, useEther = false, onSubmit, FixedSizeListProps } = props
+    const {
+        keyword,
+        includeTokens = [],
+        excludeTokens = [],
+        selectedTokens = [],
+        useEther = false,
+        onSubmit,
+        FixedSizeListProps,
+    } = props
 
     //#region search tokens
     const ERC20_TOKEN_LISTS = useConstant(CONSTANTS, 'ERC20_TOKEN_LISTS')
@@ -45,6 +55,14 @@ export function FixedTokenList(props: FixedTokenListProps) {
     //#region UI helpers
     const renderList = useCallback(
         (tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) => {
+            let tokens_ = tokens
+            tokens_ = includeTokens.length
+                ? tokens_.filter((x) => includeTokens.some((y) => isSameAddress(y, x.address)))
+                : tokens_
+            tokens_ = excludeTokens.length
+                ? tokens_.filter((x) => !excludeTokens.some((y) => isSameAddress(y, x.address)))
+                : tokens_
+
             return (
                 <FixedSizeList
                     className={classes.list}
@@ -53,23 +71,22 @@ export function FixedTokenList(props: FixedTokenListProps) {
                     overscanCount={4}
                     itemSize={50}
                     itemData={{
-                        tokens,
-                        excludeTokens,
-                        selected: address,
+                        tokens: tokens_,
+                        selected: [address, ...selectedTokens],
                         onSelect(address: string) {
-                            const token = tokens.find((token) => isSameAddress(token.address, address))
+                            const token = tokens_.find((token) => isSameAddress(token.address, address))
                             if (!token) return
                             setAddress(token.address)
                             onSubmit?.(token)
                         },
                     }}
-                    itemCount={tokens.length}
+                    itemCount={tokens_.length}
                     {...FixedSizeListProps}>
                     {TokenInList}
                 </FixedSizeList>
             )
         },
-        [address, excludeTokens, TokenInList, onSubmit],
+        [address, includeTokens, excludeTokens, selectedTokens, TokenInList, onSubmit],
     )
     const renderPlaceholder = useCallback(
         (message: string) => (

@@ -27,18 +27,21 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-interface SelectERC20TokenDialogUIProps extends withClasses<never> {
+export interface SelectERC20TokenDialogProps extends withClasses<never> {
     open: boolean
+    includeTokens: string[]
     excludeTokens: string[]
+    selectedTokens: string[]
+    disableSearchBar?: boolean
     onSubmit(token: ERC20TokenDetailed): void
     onClose(): void
 }
 
-function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
+export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const { open, excludeTokens, onSubmit, onClose } = props
+    const { open, disableSearchBar = false, includeTokens, excludeTokens, selectedTokens, onSubmit, onClose } = props
 
     //#region search tokens
     const [keyword, setKeyword] = useState('')
@@ -47,22 +50,26 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
     return (
         <InjectedDialog open={open} onClose={onClose} title="Select a Token" DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent>
-                <TextField
-                    className={classes.search}
-                    label={t('add_token_search_hint')}
-                    autoFocus
-                    fullWidth
-                    value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
-                />
+                {!disableSearchBar ? (
+                    <TextField
+                        className={classes.search}
+                        label={t('add_token_search_hint')}
+                        autoFocus
+                        fullWidth
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                    />
+                ) : null}
                 <FixedTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    useEther={true}
+                    useEther
                     keyword={keyword}
+                    includeTokens={includeTokens}
                     excludeTokens={excludeTokens}
+                    selectedTokens={selectedTokens}
                     onSubmit={onSubmit}
                     FixedSizeListProps={{
-                        height: 288,
+                        height: disableSearchBar ? 350 : 288,
                         itemSize: 52,
                         overscanCount: 4,
                     }}
@@ -70,10 +77,4 @@ function SelectERC20TokenDialogUI(props: SelectERC20TokenDialogUIProps) {
             </DialogContent>
         </InjectedDialog>
     )
-}
-
-export interface SelectERC20TokenDialogProps extends SelectERC20TokenDialogUIProps {}
-
-export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
-    return <SelectERC20TokenDialogUI {...props} />
 }

@@ -1,26 +1,33 @@
 {
+  "references": [
+    { "path": "./e2e/" },
+    { "path": "./packages/maskbook/" },
+    { "path": "./packages/theme/" },
+    { "path": "./packages/dashboard/" },
+    { "path": "./packages/shared/" }
+  ],
   "compilerOptions": {
     /* Basic Options */
-    // "incremental": true,                   /* Enable incremental compilation */
+    "incremental": true /* Enable incremental compilation */,
     "target": "ES2019" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */,
     "module": "ESNext" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */,
     "lib": ["DOM", "DOM.Iterable", "ES2020"] /* Specify library files to be included in the compilation. */,
     "allowJs": true /* Allow javascript files to be compiled. */,
     // "checkJs": true,                       /* Report errors in .js files. */
     "jsx": "react-jsx" /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */,
-    // "declaration": true,                   /* Generates corresponding '.d.ts' file. */
-    // "declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
-    // "sourceMap": true,                     /* Generates corresponding '.map' file. */
+    "declaration": true /* Generates corresponding '.d.ts' file. */,
+    "declarationMap": true /* Generates a sourcemap for each corresponding '.d.ts' file. */,
+    "sourceMap": true /* Generates corresponding '.map' file. */,
     // "outFile": "./",                       /* Concatenate and emit output to single file. */
     // "outDir": "./",                        /* Redirect output structure to the directory. */
     // "rootDir": "./",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
-    // "composite": true,                     /* Enable project compilation */
-    // "tsBuildInfoFile": "./",               /* Specify file to store incremental compilation information */
+    "composite": true /* Enable project compilation */,
+    // "tsBuildInfoFile": ".",               /* Specify file to store incremental compilation information */
     // "removeComments": true,                /* Do not emit comments to output. */
-    "noEmit": true /* Do not emit outputs. */,
+    // "noEmit": true /* Do not emit outputs. */,
     // "importHelpers": true,                 /* Import emit helpers from 'tslib'. */
     // "downlevelIteration": true,            /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
-    // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
+    "isolatedModules": true /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */,
 
     /* Strict Type-Checking Options */
     "strict": true /* Enable all strict type-checking options. */,
@@ -44,9 +51,7 @@
     "moduleResolution": "node" /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */,
     // "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
     // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
-    "rootDirs": [
-      "./packages/maskbook/src"
-    ] /* List of root folders whose combined content represents the structure of the project at runtime. */,
+    // "rootDirs": [] /* List of root folders whose combined content represents the structure of the project at runtime. */,
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
     // "types": [],                           /* Type declaration files to be included in compilation. */
     // "allowSyntheticDefaultImports": true,  /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
@@ -61,17 +66,17 @@
     // "inlineSources": true,                 /* Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set. */
 
     /* Experimental Options */
-    "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
+    // "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
 
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "useDefineForClassFields": true
+    "useDefineForClassFields": true,
+    "stripInternal": true
   },
-  "include": ["./packages/maskbook/src/", "./e2e/"],
+  "files": [],
   "ts-node": {
     "compilerOptions": {
       "module": "CommonJS",

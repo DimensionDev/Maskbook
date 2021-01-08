@@ -46,6 +46,7 @@ import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { PluginStage } from '../../plugins/types'
 import { Election2020MetadataReader } from '../../plugins/Election2020/helpers'
 import { COTM_MetadataReader } from '../../plugins/COTM/helpers'
+import { Flags } from '../../utils/flags'
 
 const defaultTheme = {}
 
@@ -130,7 +131,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
             if (!entries) return null
             return entries.map((opt, index) => {
                 return (
-                    <ErrorBoundary contain={`Plugin "${plugin.pluginName}"`} key={plugin.identifier + ' ' + index}>
+                    <ErrorBoundary subject={`Plugin "${plugin.pluginName}"`} key={plugin.identifier + ' ' + index}>
                         <ClickableChip
                             label={
                                 <>
@@ -186,21 +187,18 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 flexWrap: 'wrap',
                             }}>
                             <SelectRecipientsUI
-                                disabled={props.onlyMyself || props.shareToEveryone}
                                 items={props.availableShareTarget}
                                 selected={props.currentShareTarget}
                                 onSetSelected={props.onSetSelected}
                                 {...props.SelectRecipientsUIProps}>
                                 <ClickableChip
                                     checked={props.shareToEveryone}
-                                    disabled={props.onlyMyself}
                                     label={t('post_dialog__select_recipients_share_to_everyone')}
                                     data-testid="_everyone_group_"
                                     onClick={() => props.onShareToEveryoneChanged(!props.shareToEveryone)}
                                 />
                                 <ClickableChip
                                     checked={props.onlyMyself}
-                                    disabled={props.shareToEveryone}
                                     label={t('post_dialog__select_recipients_only_myself')}
                                     data-testid="_only_myself_group_"
                                     onClick={() => props.onOnlyMyselfChanged(!props.onlyMyself)}
@@ -217,7 +215,14 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             }}>
                             <ClickableChip
                                 checked={props.imagePayload}
-                                label={t('post_dialog__image_payload')}
+                                label={
+                                    <>
+                                        {t('post_dialog__image_payload')}
+                                        {Flags.image_payload_marked_as_beta && (
+                                            <sup className={classes.sup}>(Beta)</sup>
+                                        )}
+                                    </>
+                                }
                                 onClick={() => props.onImagePayloadSwitchChanged(!props.imagePayload)}
                                 data-testid="image_chip"
                             />

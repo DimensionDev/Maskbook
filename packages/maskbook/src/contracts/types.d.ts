@@ -25,7 +25,7 @@ export interface TransactionObject<T> {
     call(options?: EstimateGasOptions): Promise<T>
     send(
         options?: EstimateGasOptions,
-        callback: (error: Error | null, hash: string) => void,
+        callback?: (error: Error | null, hash: string) => void,
     ): PromiEvent<TransactionReceipt>
     estimateGas(options?: EstimateGasOptions): Promise<number>
     encodeABI(): string

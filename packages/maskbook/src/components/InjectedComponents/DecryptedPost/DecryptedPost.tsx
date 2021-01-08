@@ -69,6 +69,7 @@ export function DecryptPost(props: DecryptPostProps) {
         .unwrapOr(undefined)
     const current = usePostInfo()
     const currentPostBy = usePostInfoDetails('postBy')
+    const decryptedPayloadForImage = usePostInfoDetails('decryptedPayloadForImage')
     const postBy = or(authorInPayload, currentPostBy)
     const postMetadataImages = usePostInfoDetails('postMetadataImages')
     const Success = props.successComponent || DecryptPostSuccess
@@ -96,9 +97,11 @@ export function DecryptPost(props: DecryptPostProps) {
 
     // pass 1:
     // decrypt post content and image attachments
-    const sharedPublic = deconstructedPayload
-        .andThen((x) => (x.version === -38 ? Ok(!!x.sharedPublic) : Err.EMPTY))
-        .unwrapOr(false)
+    const decryptedPayloadForImageAlpha38 = decryptedPayloadForImage?.version === -38 ? decryptedPayloadForImage : null
+    const sharedPublic =
+        deconstructedPayload.andThen((x) => (x.version === -38 ? Ok(!!x.sharedPublic) : Err.EMPTY)).unwrapOr(false) ||
+        decryptedPayloadForImageAlpha38?.sharedPublic
+
     useEffect(() => {
         const signal = new AbortController()
         async function makeProgress(
@@ -115,7 +118,10 @@ export function DecryptPost(props: DecryptPostProps) {
                 if (signal.signal.aborted)
                     return decryptionProcess.return?.({ type: 'error', internal: true, error: 'aborted' })
                 if (process.done) {
-                    if (process.value.type === 'success') current.iv.value = process.value.iv
+                    if (process.value.type === 'success') {
+                        current.iv.value = process.value.iv
+                        current.decryptedPayloadForImage.value = process.value.decryptedPayloadForImage
+                    }
                     return refreshProgress(process.value)
                 }
                 const status = process.value
@@ -132,7 +138,7 @@ export function DecryptPost(props: DecryptPostProps) {
                     if (status.progress === 'intermediate_success') refreshProgress(status.data)
                     else if (status.progress === 'iv_decrypted') current.iv.value = status.iv
                     else if (status.progress === 'payload_decrypted')
-                        current.decryptedPayload.value = status.decryptedPayload
+                        current.decryptedPayloadForImage.value = status.decryptedPayloadForImage
                 }
             }
         }

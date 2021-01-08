@@ -61,7 +61,7 @@ describe(`${READ_POST_STORY_URL}#Story:ReadPost(?br=wip)-BasicWorkflow`, () => {
                 // dismiss dialogs
                 await sns.dimissDialog(snsPostPage)
 
-                // wait maskbook decrypt the payload
+                // wait mask decrypt the payload
                 await snsPostPage.waitForSelector(sns.postAffixingCanvasSelector)
 
                 // validate the payload
@@ -69,7 +69,7 @@ describe(`${READ_POST_STORY_URL}#Story:ReadPost(?br=wip)-BasicWorkflow`, () => {
                     `document.querySelector('${sns.postAffixingCanvasSelector}').shadowRoot.querySelector('.post-inspector [data-testid="text_payload"]')`,
                 )
                 const content = await (textPayload as any).evaluate((e: HTMLElement) => e.textContent)
-                expect(content.includes(text) || content.includes('Maskbook does not find the post key.')).toBeTruthy()
+                expect(content.includes(text) || content.includes('Mask does not find the post key.')).toBeTruthy()
 
                 // take screenshot
                 await helpers.screenshot(snsPostPage, `${sns.name}_post_read_${description}`)

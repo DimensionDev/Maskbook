@@ -56,7 +56,7 @@ export default function MaskbookPluginWrapper(props: PluginWrapperProps) {
                 <div className={classes.header}>
                     <MaskbookIcon className={classes.icon}></MaskbookIcon>
                     <div className={classes.title}>
-                        <Typography variant="overline">Maskbook Plugin</Typography>
+                        <Typography variant="overline">Mask Plugin</Typography>
                         <Typography variant="h6">{pluginName}</Typography>
                     </div>
                 </div>

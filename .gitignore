@@ -9,7 +9,12 @@
 /reports
 /junit.xml
 
+# Cache
+*.tsbuildinfo
+.type-coverage
+
 # Build out
+dist
 /build
 /storybook-static
 /Maskbook.*.zip
@@ -160,3 +165,6 @@ common/deploy/
 common/temp/
 common/autoinstallers/*/.npmrc
 **/.rush/temp/
+
+# husky
+.husky

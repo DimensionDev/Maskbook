@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js'
-import useSWR from 'swr'
+import { useAsyncFn } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
-import { createEetherToken } from '../helpers'
+import { createEtherToken } from '../helpers'
 import { ChainId, CurrencyType, EthereumTokenType, AssetDetailed } from '../types'
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainState'
@@ -47,13 +47,11 @@ async function fetcher(address: string, chainId: ChainId) {
 export function useAssetsDetailedDebank(): AssetDetailed[] {
     const account = useAccount()
     const chainId = useChainId()
-    const { data = [] } = useSWR([account, chainId], {
-        fetcher,
-    })
+    const [{ value: data = [] }] = useAsyncFn(() => fetcher(account, chainId), [account, chainId])
     return data.map((x) => ({
         token:
             x.id === 'eth'
-                ? createEetherToken(chainId)
+                ? createEtherToken(chainId)
                 : {
                       // distinguish token type
                       type: EthereumTokenType.ERC20,

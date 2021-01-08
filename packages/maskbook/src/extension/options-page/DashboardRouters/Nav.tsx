@@ -8,7 +8,7 @@ export interface DashboardNavRouterProps {
 
 export default function DashboardNavRouter(props: DashboardNavRouterProps) {
     return (
-        <DashboardRouterContainer title="Maskbook" compact>
+        <DashboardRouterContainer title="Mask" compact>
             <ThemeProvider theme={navTheme}>{props.children}</ThemeProvider>
         </DashboardRouterContainer>
     )

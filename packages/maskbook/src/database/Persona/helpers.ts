@@ -1,4 +1,4 @@
-import { ProfileIdentifier, PersonaIdentifier, ECKeyIdentifier } from '../type'
+import { ProfileIdentifier, PersonaIdentifier, ECKeyIdentifierFromJsonWebKey } from '../type'
 import type { Profile, Persona } from './types'
 import {
     ProfileRecord,
@@ -184,7 +184,7 @@ export async function createPersonaByJsonWebKey(options: {
     mnemonic?: PersonaRecord['mnemonic']
     uninitialized?: boolean
 }): Promise<PersonaIdentifier> {
-    const identifier = ECKeyIdentifier.fromJsonWebKey(options.publicKey)
+    const identifier = ECKeyIdentifierFromJsonWebKey(options.publicKey)
     const record: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -211,7 +211,7 @@ export async function createProfileWithPersona(
         mnemonic?: PersonaRecord['mnemonic']
     },
 ): Promise<void> {
-    const ec_id = ECKeyIdentifier.fromJsonWebKey(keys.publicKey)
+    const ec_id = ECKeyIdentifierFromJsonWebKey(keys.publicKey)
     const rec: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),

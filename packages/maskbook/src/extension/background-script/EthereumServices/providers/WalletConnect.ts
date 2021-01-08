@@ -31,6 +31,12 @@ export async function createConnector() {
     // create a new connector
     connector = new WalletConnect({
         bridge: 'https://bridge.walletconnect.org',
+        clientMeta: {
+            name: 'Mask Netowrk',
+            description: 'Mask Network',
+            url: 'https://mask.io',
+            icons: ['https://mask.io/apple-touch-icon.png'],
+        },
     })
     connector.on('connect', onConnect)
     connector.on('session_update', onUpdate)
