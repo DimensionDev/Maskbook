@@ -236,7 +236,7 @@ export function PoolInList(props: PoolInListProps) {
                                 <TableBody>
                                     {pool.exchange_tokens.map((token, index) => (
                                         <TableRow key={index}>
-                                            <TableCell className={classes.cell} align="center" size="small">
+                                            <TableCell className={classes.cell} align="center" size="small" style={{ whiteSpace: 'nowrap' }}>
                                                 {token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
@@ -269,7 +269,7 @@ export function PoolInList(props: PoolInListProps) {
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 {formatBalance(
                                                     new BigNumber(exchange_in_volumes[index]),
-                                                    pool.token.decimals,
+                                                    token.decimals,
                                                     6,
                                                 )}{' '}
                                                 {token.symbol}
