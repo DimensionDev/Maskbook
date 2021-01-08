@@ -99,7 +99,7 @@ export const ITO_CONSTANTS = {
         [ChainId.Gorli]: '',
     },
     SUBGRAPH_URL: {
-        [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/dimensiondev/mask-ito-mainnet',
+        [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/dimensiondev/mask-ito',
         [ChainId.Ropsten]: 'https://api.thegraph.com/subgraphs/dimensiondev/mask-ito',
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
