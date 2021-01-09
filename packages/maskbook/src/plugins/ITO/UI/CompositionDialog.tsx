@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import Web3Utils from 'web3-utils'
 import { createStyles, DialogContent, DialogProps, makeStyles } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ITO_MetaKey } from '../constants'
@@ -11,7 +12,9 @@ import { CreateGuide } from './CreateGuide'
 import { payloadOutMask } from '../helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
-import { useSnackbar } from 'notistack'
+import Services from '../../../extension/service'
+import { useChainId } from '../../../web3/hooks/useChainState'
+import { useAccount } from '../../../web3/hooks/useAccount'
 
 const useStyles = makeStyles((theme) => createStyles({}))
 
@@ -26,12 +29,18 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
+    const account = useAccount()
+    const chainId = useChainId()
+
     const onCreateOrSelect = useCallback(
-        (payload: JSON_PayloadInMask) => {
+        async (payload: JSON_PayloadInMask) => {
             const hasPassword = !!payload.password
-            if (!hasPassword) payload.password = prompt('Please enter the password of the pool:', '') ?? ''
+            if (!hasPassword) {
+                alert('The password have been lost. Please sign it again.')
+                payload.password = await Services.Ethereum.sign(Web3Utils.sha3(payload.message) ?? '', account, chainId)
+            }
             if (!payload.password) {
-                alert('Unable to share a pool without a password. You can withdraw the pool if you have lost it.')
+                alert('Failed to sign the password.')
                 return
             }
             editActivatedPostMetadata((next) =>
@@ -41,7 +50,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             // storing the created pool in DB, it helps retrieve the pool password later
             if (hasPassword) PluginITO_RPC.discoverPool('', payload)
         },
-        [props.onConfirm],
+        [account, chainId, props.onConfirm],
     )
 
     //#region tabs

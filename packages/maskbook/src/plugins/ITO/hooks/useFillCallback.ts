@@ -11,6 +11,8 @@ import { addGasMargin } from '../../../web3/helpers'
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONSTANTS, ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
 import { useConstant } from '../../../web3/hooks/useConstant'
+import Services from '../../../extension/service'
+import { useChainId } from '../../../web3/hooks/useChainState'
 
 export interface PoolSettings {
     password: string
@@ -25,13 +27,22 @@ export interface PoolSettings {
     token?: ERC20TokenDetailed
 }
 
-export function useFillCallback(poolSettings: PoolSettings) {
+export function useFillCallback(poolSettings?: PoolSettings) {
     const account = useAccount()
+    const chainId = useChainId()
     const ITO_Contract = useITO_Contract()
     const DEFAULT_QUALIFICATION_ADDRESS = useConstant(ITO_CONSTANTS, 'DEFAULT_QUALIFICATION_ADDRESS')
     const [fillState, setFillState] = useTransactionState()
+    const [fillSettings, setFillSettings] = useState(poolSettings)
 
     const fillCallback = useCallback(async () => {
+        if (!poolSettings) {
+            setFillState({
+                type: TransactionStateType.UNKNOWN,
+            })
+            return
+        }
+
         const {
             password,
             startTime,
@@ -130,14 +141,13 @@ export function useFillCallback(poolSettings: PoolSettings) {
             return
         }
 
+        // error: token amount is not enough for dividing into integral pieces
         const ONE_TOKEN = new BigNumber(1).multipliedBy(new BigNumber(10).pow(token.decimals ?? 0))
         const exchangeAmountsDivided = exchangeAmounts.map((x, i) => {
             const amount = new BigNumber(x)
             const divisor = gcd(ONE_TOKEN, amount)
             return [amount.dividedToIntegerBy(divisor), ONE_TOKEN.dividedToIntegerBy(divisor)] as const
         })
-
-        // error: token amount is not enough for dividing into integral pieces
         const totalAmount = new BigNumber(total)
         const invalidTokenAt = exchangeAmountsDivided.findIndex(([tokenAmountA, tokenAmountB]) =>
             totalAmount.multipliedBy(tokenAmountA).dividedToIntegerBy(tokenAmountB).isZero(),
@@ -152,6 +162,27 @@ export function useFillCallback(poolSettings: PoolSettings) {
             return
         }
 
+        // error: unable to sign password
+        let signedPassword = ''
+        try {
+            signedPassword = await Services.Ethereum.sign(password, account, chainId)
+        } catch (e) {
+            signedPassword = ''
+        }
+        if (!signedPassword) {
+            setFillState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Failed to sign password.'),
+            })
+            return
+        }
+
+        // the given settings is valid
+        setFillSettings({
+            ...poolSettings,
+            password: signedPassword,
+        })
+
         // pre-step: start waiting for provider to confirm tx
         setFillState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
@@ -163,7 +194,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
             value: '0',
         }
         const params: Parameters<typeof ITO_Contract['methods']['fill_pool']> = [
-            Web3Utils.sha3(password)!,
+            Web3Utils.sha3(signedPassword)!,
             startTime_,
             endTime_,
             name,
@@ -217,7 +248,7 @@ export function useFillCallback(poolSettings: PoolSettings) {
                 reject(error)
             })
         })
-    }, [account, ITO_Contract, DEFAULT_QUALIFICATION_ADDRESS, poolSettings])
+    }, [account, chainId, ITO_Contract, DEFAULT_QUALIFICATION_ADDRESS, poolSettings])
 
     const resetCallback = useCallback(() => {
         setFillState({
@@ -225,5 +256,5 @@ export function useFillCallback(poolSettings: PoolSettings) {
         })
     }, [])
 
-    return [poolSettings, fillState, fillCallback, resetCallback] as const
+    return [fillSettings, fillState, fillCallback, resetCallback] as const
 }
