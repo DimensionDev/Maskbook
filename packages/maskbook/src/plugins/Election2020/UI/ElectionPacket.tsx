@@ -4,8 +4,6 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import classNames from 'classnames'
 import { ElectionCard } from './ElectionCard'
 import type { Election2020JSONPayload } from '../types'
-import FlagImage from '../assets/Flag'
-import FireworksImage from '../assets/Fireworks'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ELECTION_2020_CONSTANTS } from '../constants'
 import { resolveCandidateName, resolveCandidateBriefName, resolveStateName } from '../pipes'
@@ -24,6 +22,9 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { getUrl } from '../../../utils/utils'
+import { useBase64 } from '../../../utils/hooks/useBase64'
+import type { CSSProperties } from '@material-ui/core/styles/withStyles'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) =>
                 content: '""',
                 width: '90%',
                 height: 260,
-                backgroundImage: `url(${FlagImage})`,
+                backgroundImage: 'var(--flag-image)',
                 backgroundSize: 'contain',
                 backgroundRepeat: 'no-repeat',
 
@@ -60,7 +61,7 @@ const useStyles = makeStyles((theme) =>
                 content: '""',
                 width: '100%',
                 height: 260,
-                backgroundImage: `url(${FireworksImage})`,
+                backgroundImage: 'var(--fireworks-image)',
                 backgroundSize: 'contain',
                 backgroundRepeat: 'no-repeat',
                 top: 0,
@@ -72,7 +73,7 @@ const useStyles = makeStyles((theme) =>
         content: {
             zIndex: 1,
             position: 'relative',
-            paddingBottom: `${theme.spacing(2)}px !important`,
+            paddingBottom: `${theme.spacing(2)} !important`,
         },
         footer: {
             paddingTop: theme.spacing(2),
@@ -157,6 +158,10 @@ export function ElectionPacket(props: ElectionPacketProps) {
         retry: revalidateTokensOfOwner,
     } = useElectionTokensOfOwner(payload.state, electionToken)
 
+    // fetch images
+    const { value: FireworksImage } = useBase64(getUrl('/Election2020/fireworks.jpg'))
+    const { value: FlagImage } = useBase64(getUrl('/Election2020/flag.jpg'))
+
     // context
     const account = useAccount()
     const chainId = useChainId()
@@ -225,7 +230,10 @@ export function ElectionPacket(props: ElectionPacketProps) {
         return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
     return (
         <>
-            <Card className={classes.root} elevation={0}>
+            <Card className={classes.root} elevation={0} style={{
+                '--fireworks-image': `url(${FireworksImage})`,
+                '--flag-image': `url(${FlagImage})`,
+            } as CSSProperties}>
                 <CardHeader className={classes.header}></CardHeader>
                 <CardContent className={classes.content}>
                     <Typography
