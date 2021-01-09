@@ -230,10 +230,15 @@ export function ElectionPacket(props: ElectionPacketProps) {
         return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
     return (
         <>
-            <Card className={classes.root} elevation={0} style={{
-                '--fireworks-image': `url(${FireworksImage})`,
-                '--flag-image': `url(${FlagImage})`,
-            } as CSSProperties}>
+            <Card
+                className={classes.root}
+                elevation={0}
+                style={
+                    {
+                        '--fireworks-image': `url(${FireworksImage})`,
+                        '--flag-image': `url(${FlagImage})`,
+                    } as CSSProperties
+                }>
                 <CardHeader className={classes.header}></CardHeader>
                 <CardContent className={classes.content}>
                     <Typography
