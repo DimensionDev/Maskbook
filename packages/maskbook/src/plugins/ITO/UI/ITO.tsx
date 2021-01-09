@@ -25,6 +25,7 @@ import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { useBase64 } from '../../../utils/hooks/useBase64'
+import { getUrl } from '../../../utils/utils'
 
 export interface IconProps {
     size?: number
@@ -179,7 +180,7 @@ export function ITO(props: ITO_Props) {
     const chainIdValid = useChainIdValid()
 
     // assets
-    const { value: PoolBackground } = useBase64(new URL('../assets/pool-background.jpg', import.meta.url).toString())
+    const { value: PoolBackground } = useBase64(getUrl('/ITO/pool-background.jpg'))
 
     //#region token detailed
     const {
