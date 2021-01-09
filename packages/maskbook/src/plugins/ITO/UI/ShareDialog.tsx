@@ -5,9 +5,10 @@ import type BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
-import ITO_ShareImage from '../assets/share_ito'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
+import { useBase64 } from '../../../utils/hooks/useBase64'
+import { getUrl } from '../../../utils/utils'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -48,7 +49,6 @@ const useStyles = makeStyles((theme) =>
             backgroundPosition: '0',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
-            background: `url(${ITO_ShareImage})`,
             width: 475,
             height: 341,
             backgroundColor: '#332C61',
@@ -76,10 +76,11 @@ export function ShareDialog(props: ShareDialogProps) {
             symbol: token.symbol,
         }),
     )
+    const { value: ShareBackground } = useBase64(getUrl('/ITO/dialog-background.jpg'))
     return (
         <>
             <Box className={classes.shareWrapper}>
-                <div className={classes.shareImage}>
+                <div className={classes.shareImage} style={{ backgroundImage: `url(${ShareBackground})` }}>
                     <Typography variant="body1" className={classes.shareAmount}>
                         {amount}
                     </Typography>

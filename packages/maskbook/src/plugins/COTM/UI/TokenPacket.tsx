@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) =>
         content: {
             zIndex: 1,
             position: 'relative',
-            paddingBottom: `${theme.spacing(2)}px !important`,
+            paddingBottom: `${theme.spacing(2)} !important`,
         },
         footer: {
             paddingTop: theme.spacing(2),
