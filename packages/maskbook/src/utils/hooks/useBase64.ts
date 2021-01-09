@@ -1,9 +1,12 @@
 import { useAsyncRetry } from 'react-use'
 import Services from '../../extension/service'
+import { memoizePromise } from '../memoize'
+
+const memoizedFetch = memoizePromise(Services.Helper.fetch, (url) => url)
 
 export function useBase64(url: string) {
     return useAsyncRetry(async () => {
-        const blob = await Services.Helper.fetch(url)
+        const blob = await memoizedFetch(url)
         return new Promise<string>((resolve, reject) => {
             const reader = new FileReader()
             reader.onloadend = () => {
