@@ -7,10 +7,9 @@ import { WalletMessages } from '../../Wallet/messages'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { resolveChainName, resolveLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import BackgroundImage from '../assets/background'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { formatBalance } from '../../Wallet/formatter'
@@ -25,6 +24,8 @@ import { sortTokens } from '../helpers'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
+import { useBase64 } from '../../../utils/hooks/useBase64'
+import { getUrl } from '../../../utils/utils'
 
 export interface IconProps {
     size?: number
@@ -42,7 +43,6 @@ const useStyles = makeStyles((theme) =>
             backgroundPosition: '0 0',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
-            background: `url(${BackgroundImage})`,
             borderRadius: theme.spacing(1),
             paddingLeft: theme.spacing(4),
             paddingRight: theme.spacing(1),
@@ -178,6 +178,10 @@ export function ITO(props: ITO_Props) {
     const postLink = usePostLink()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
+
+    // assets
+    const { value: PoolBackground } = useBase64(getUrl('/ITO/pool-background.jpg'))
+
     //#region token detailed
     const {
         value: availability,
@@ -283,7 +287,7 @@ export function ITO(props: ITO_Props) {
 
     return (
         <div>
-            <Card className={classes.root} elevation={0}>
+            <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${PoolBackground})` }}>
                 <Box className={classes.header}>
                     <Typography variant="h5" className={classes.title}>
                         {payload.message}
