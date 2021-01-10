@@ -34,11 +34,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
-            const hasPassword = !!payload.password
-            if (!hasPassword) {
-                alert('The password have been lost. Please sign it again.')
-                payload.password = await Services.Ethereum.sign(Web3Utils.sha3(payload.message) ?? '', account, chainId)
-            }
+            if (!payload.password) payload.password = await Services.Ethereum.sign(Web3Utils.sha3(payload.message) ?? '', account, chainId)
             if (!payload.password) {
                 alert('Failed to sign the password.')
                 return
@@ -48,7 +44,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             )
             props.onConfirm(payload)
             // storing the created pool in DB, it helps retrieve the pool password later
-            if (hasPassword) PluginITO_RPC.discoverPool('', payload)
+            PluginITO_RPC.discoverPool('', payload)
         },
         [account, chainId, props.onConfirm],
     )
