@@ -42,7 +42,7 @@ export function CreateGuide(props: CreateGuideProps) {
     }, [step])
 
     //#region blocking
-    const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings!)
+    const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings)
     //#endregion
 
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
@@ -54,16 +54,10 @@ export function CreateGuide(props: CreateGuideProps) {
             resetFillCallback()
 
             // the settings is not available
-            if (!fillSettings.token) return
+            if (!fillSettings?.token) return
 
             // earily return happended
-            if (fillState.type !== TransactionStateType.CONFIRMED) {
-                prompt(
-                    'The transaction has not finished yet. You can still find it in the select existing list for a moment later. Please keep the password and you will need it for sharing the pool.',
-                    fillSettings.password,
-                )
-                return
-            }
+            if (fillState.type !== TransactionStateType.CONFIRMED) return
 
             const { receipt } = fillState
             const FillSuccess = (receipt.events?.FillSuccess.returnValues ?? {}) as {

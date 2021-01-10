@@ -8,7 +8,6 @@ import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { useBase64 } from '../../../utils/hooks/useBase64'
-import { getUrl } from '../../../utils/utils'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -76,7 +75,7 @@ export function ShareDialog(props: ShareDialogProps) {
             symbol: token.symbol,
         }),
     )
-    const { value: ShareBackground } = useBase64(getUrl('/ITO/dialog-background.jpg'))
+    const { value: ShareBackground } = useBase64(new URL('../assets/share-background.jpg', import.meta.url).toString())
     return (
         <>
             <Box className={classes.shareWrapper}>

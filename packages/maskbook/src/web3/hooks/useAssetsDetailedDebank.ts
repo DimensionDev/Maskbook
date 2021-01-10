@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { useAsyncFn } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
 import { createEtherToken } from '../helpers'
@@ -47,7 +47,7 @@ async function fetcher(address: string, chainId: ChainId) {
 export function useAssetsDetailedDebank(): AssetDetailed[] {
     const account = useAccount()
     const chainId = useChainId()
-    const [{ value: data = [] }] = useAsyncFn(() => fetcher(account, chainId), [account, chainId])
+    const { value: data = [] } = useAsyncRetry(() => fetcher(account, chainId), [account, chainId])
     return data.map((x) => ({
         token:
             x.id === 'eth'
