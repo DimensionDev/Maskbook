@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 
 const ENV = {
@@ -9,17 +10,26 @@ const ENV = {
 const URL = ENV[process.env.NODE_ENV]
 
 export function useTransakGetPriceFroETH(amount: string) {
-    return useAsync(async () => {
-        const params = new URLSearchParams()
-        params.append('fiatCurrency', 'USD')
-        params.append('cryptoCurrency', 'ETH')
-        params.append('isBuyOrSell', 'SELL')
-        params.append('paymentMethod', 'credit_debit_card')
-        params.append('cryptoAmount', amount)
+    const [loading, setLoading] = useState(true)
+    const [value, setValue] = useState()
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true)
+            const params = new URLSearchParams()
+            params.append('fiatCurrency', 'USD')
+            params.append('cryptoCurrency', 'ETH')
+            params.append('isBuyOrSell', 'SELL')
+            params.append('paymentMethod', 'credit_debit_card')
+            params.append('cryptoAmount', amount)
 
-        const response = await fetch(`${URL}?${params.toString()}`, { method: 'GET' })
-            .then((res) => res.json())
-            .then((res) => res.response)
-        return response
-    })
+            const response = await fetch(`${URL}?${params.toString()}`, { method: 'GET' })
+            const json = await response.json()
+            setLoading(false)
+            setValue(json.response)
+            return json
+        }
+        fetchData()
+    }, [amount])
+
+    return { loading, value }
 }
