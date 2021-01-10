@@ -34,7 +34,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
-            if (!payload.password) payload.password = await Services.Ethereum.sign(Web3Utils.sha3(payload.message) ?? '', account, chainId)
+            if (!payload.password)
+                payload.password = await Services.Ethereum.sign(Web3Utils.sha3(payload.message) ?? '', account, chainId)
             if (!payload.password) {
                 alert('Failed to sign the password.')
                 return
