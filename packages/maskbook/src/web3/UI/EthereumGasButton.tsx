@@ -29,8 +29,7 @@ interface CalcETHAmountProps {
 function CalcETHAmount(props: CalcETHAmountProps) {
     const { amount } = props
     const { loading, value: fiat } = useTransakGetPriceFroETH(amount)
-    console.log(loading)
-    console.log(fiat)
+
     return (
         <>
             {loading ? (
@@ -108,12 +107,17 @@ function GasPriceItem(props: GasPriceItemProps) {
     const [amountForUI, setAmountForUI] = useState(gasPrice.gasPrice)
     const classes = useGasPriceItemStyles({ hover })
     const [eth, setETH] = useState(CalcETH(gasPrice.gasPrice))
+    const [ focuse, setFocuse ] = useState(false)
     const handleHoverIn = useCallback(() => {
         setHover(true)
+        if (gasPrice.title === 'Custom') {
+            setFocuse(true)
+        }
     }, [])
 
     const handleHoverOut = useCallback(() => {
         setHover(false)
+        setFocuse(false)
     }, [])
 
     const handleAmount = useCallback(
@@ -131,6 +135,9 @@ function GasPriceItem(props: GasPriceItemProps) {
 
     const onClick = useCallback(() => {
         onChange?.(gasPrice)
+        if (gasPrice.title === 'Custom') {
+            setFocuse(true)
+        }
     }, [gasPrice, onChange])
 
     return (
@@ -162,6 +169,7 @@ function GasPriceItem(props: GasPriceItemProps) {
                     </Typography>
                 ) : (
                     <TextField
+                        autoFocus={focuse}
                         className={classes.text}
                         size="small"
                         variant="outlined"
