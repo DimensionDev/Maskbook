@@ -107,13 +107,13 @@ function GasPriceItem(props: GasPriceItemProps) {
     const [amountForUI, setAmountForUI] = useState(gasPrice.gasPrice)
     const classes = useGasPriceItemStyles({ hover })
     const [eth, setETH] = useState(CalcETH(gasPrice.gasPrice))
-    const [ focuse, setFocuse ] = useState(false)
+    const [focuse, setFocuse] = useState(false)
     const handleHoverIn = useCallback(() => {
         setHover(true)
         if (gasPrice.title === 'Custom') {
             setFocuse(true)
         }
-    }, [])
+    }, [gasPrice.title])
 
     const handleHoverOut = useCallback(() => {
         setHover(false)
@@ -122,13 +122,16 @@ function GasPriceItem(props: GasPriceItemProps) {
 
     const handleAmount = useCallback(
         (amount: string) => {
-            setAmountForUI(amount)
-            setETH(CalcETH(amount || '0'))
-            onChange?.({
-                ...gasPrice,
-                gasPrice: amount,
-                eth: eth,
-            })
+            if (amount === '') setAmountForUI('')
+            if (/^\d+[\.]?\d*$/.test(amount)) {
+                setAmountForUI(amount)
+                setETH(CalcETH(amount || '0'))
+                onChange?.({
+                    ...gasPrice,
+                    gasPrice: amount,
+                    eth: eth,
+                })
+            }
         },
         [eth, gasPrice, onChange],
     )
@@ -190,9 +193,9 @@ function GasPriceItem(props: GasPriceItemProps) {
                 <Typography variant="body2" color="textSecondary">
                     {`${eth} ETH`}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">
+                <div>
                     <CalcETHAmount amount={eth} />
-                </Typography>
+                </div>
             </div>
         </div>
     )
@@ -234,6 +237,7 @@ export function GasPricesList(props: GasPricesListProps) {
             {gasPrices.map((item, index) => (
                 <Fragment key={index}>
                     <GasPriceItem
+                        key={index}
                         active={selected === index}
                         gasPrice={item}
                         onChange={(gasPrice: GasPrice) => handleOnChange(index, gasPrice)}
@@ -334,7 +338,7 @@ export function EthereumGasButton(props: EthereumGasButtonProps) {
 
         setGasPricesForUI([...gasPrices?.filter((item) => item.title === 'Standard' || item.title === 'Fast'), custom])
         setGasPrice(gasPrices?.[0] ?? custom)
-    }, [gasPrices])
+    }, [gasPrices, setGasPricesForUI, setGasPrice])
 
     const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
         setOpen(!open)
