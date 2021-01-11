@@ -88,6 +88,7 @@ export interface ClaimDialogProps extends withClasses<'root'> {
     tokenAmount: BigNumber
     maxSwapAmount: BigNumber
     setTokenAmount: React.Dispatch<React.SetStateAction<BigNumber>>
+    setActualSwapAmount: React.Dispatch<React.SetStateAction<BigNumber>>
     setStatus: React.Dispatch<React.SetStateAction<ClaimStatus>>
     chainId: ChainId
     account: string
@@ -96,7 +97,17 @@ export interface ClaimDialogProps extends withClasses<'root'> {
 
 export function ClaimDialog(props: ClaimDialogProps) {
     const { t } = useI18N()
-    const { payload, initAmount, tokenAmount, maxSwapAmount, setTokenAmount, setStatus, account, token } = props
+    const {
+        payload,
+        initAmount,
+        tokenAmount,
+        maxSwapAmount,
+        setTokenAmount,
+        setActualSwapAmount,
+        setStatus,
+        account,
+        token,
+    } = props
 
     const classes = useStylesExtends(useStyles(), props)
     const chainIdValid = useChainIdValid()
@@ -172,6 +183,9 @@ export function ClaimDialog(props: ClaimDialogProps) {
             if (ev.open) return
             if (claimState.type !== TransactionStateType.CONFIRMED && claimState.type !== TransactionStateType.RECEIPT)
                 return
+            const { receipt } = claimState
+            const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as { to_value: string }
+            setActualSwapAmount(new BigNumber(to_value))
             setStatus(ClaimStatus.Share)
             resetClaimCallback()
         },

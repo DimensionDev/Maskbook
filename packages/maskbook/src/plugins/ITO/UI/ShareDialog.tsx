@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) =>
 
 export interface ShareDialogProps extends withClasses<'root'> {
     token: EtherTokenDetailed | ERC20TokenDetailed
-    tokenAmount: BigNumber
+    actualSwapAmount: BigNumber
     poolName: string
     onClose: () => void
 }
@@ -66,9 +66,9 @@ export interface ShareDialogProps extends withClasses<'root'> {
 export function ShareDialog(props: ShareDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
-    const { token, tokenAmount } = props
+    const { token, actualSwapAmount } = props
     const postLink = usePostLink()
-    const amount = formatBalance(tokenAmount, token.decimals ?? 0)
+    const amount = formatBalance(actualSwapAmount, token.decimals ?? 0)
     const shareLink = useShareLink(
         t('plugin_ito_claim_success_share', {
             link: postLink,
