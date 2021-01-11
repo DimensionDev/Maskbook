@@ -23,6 +23,7 @@ import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { ClaimStatus } from './ClaimGuide'
 import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
 import { isSameAddress } from '../../../web3/helpers'
+import type { EventLog, TransactionReceipt } from 'web3-core'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -92,11 +93,22 @@ export interface ClaimDialogProps extends withClasses<'root'> {
     chainId: ChainId
     account: string
     token: EtherTokenDetailed | ERC20TokenDetailed
+    onSwapResult?: (receipt: TransactionReceipt) => void
 }
 
 export function ClaimDialog(props: ClaimDialogProps) {
     const { t } = useI18N()
-    const { payload, initAmount, tokenAmount, maxSwapAmount, setTokenAmount, setStatus, account, token } = props
+    const {
+        payload,
+        initAmount,
+        tokenAmount,
+        maxSwapAmount,
+        setTokenAmount,
+        setStatus,
+        account,
+        token,
+        onSwapResult,
+    } = props
 
     const classes = useStylesExtends(useStyles(), props)
     const chainIdValid = useChainIdValid()
@@ -164,7 +176,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
             await WalletRPC.addERC20Token(payload.token)
             await WalletRPC.trustERC20Token(account, payload.token)
         }
-    }, [account, payload, claimCallback])
+    }, [claimCallback, payload.token, claimState, account, onSwapResult])
 
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
@@ -173,6 +185,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
             if (claimState.type !== TransactionStateType.CONFIRMED && claimState.type !== TransactionStateType.RECEIPT)
                 return
             setStatus(ClaimStatus.Share)
+            onSwapResult?.(claimState.receipt!)
             resetClaimCallback()
         },
     )

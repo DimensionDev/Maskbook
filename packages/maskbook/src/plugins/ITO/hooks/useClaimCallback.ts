@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
-import type { TransactionReceipt } from 'web3-core'
+import type { EventLog, TransactionReceipt } from 'web3-core'
 import type { Tx } from '../../../contracts/types'
 import { buf2hex, hex2buf } from '../../../utils/utils'
 import { addGasMargin, isSameAddress } from '../../../web3/helpers'
@@ -22,6 +22,7 @@ export function useClaimCallback(
 
     const { value: payload } = usePoolPayload(id)
     const [claimState, setClaimState] = useTransactionState()
+
     const claimCallback = useCallback(async () => {
         if (!ITO_Contract || !payload || !id) {
             setClaimState({

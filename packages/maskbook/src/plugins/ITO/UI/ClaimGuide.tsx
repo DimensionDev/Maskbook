@@ -8,6 +8,7 @@ import { ShareDialog } from './ShareDialog'
 import { ClaimDialog, ClaimDialogProps } from './ClaimDialog'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainState'
+import type { EventLog, TransactionReceipt } from 'web3-core'
 
 export enum ClaimStatus {
     Remind,
@@ -61,6 +62,8 @@ export function ClaimGuide(props: ClaimGuideProps) {
         setStatus(isBuyer ? ClaimStatus.Share : ClaimStatus.Remind)
     }, [account, isBuyer, chainId, payload.chain_id])
 
+    const [receipt, setReceipt] = useState<TransactionReceipt | undefined>()
+
     return (
         <InjectedDialog
             open={open}
@@ -85,6 +88,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
                                     exchangeTokens={exchangeTokens}
                                     setStatus={setStatus}
                                     chainId={chainId}
+                                    onSwapResult={setReceipt}
                                 />
                             )
                         case ClaimStatus.Share:
@@ -92,7 +96,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
                                 <ShareDialog
                                     poolName={payload.message}
                                     token={payload.token}
-                                    tokenAmount={tokenAmount}
+                                    tokenAmount={receipt?.events?.SwapSuccess.returnValues.to_value}
                                     onClose={onCloseShareDialog}
                                 />
                             )

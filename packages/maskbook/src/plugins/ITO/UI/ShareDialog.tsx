@@ -1,7 +1,7 @@
 import { createStyles, makeStyles, Typography, Box } from '@material-ui/core'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import type BigNumber from 'bignumber.js'
+import BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) =>
 
 export interface ShareDialogProps extends withClasses<'root'> {
     token: EtherTokenDetailed | ERC20TokenDetailed
-    tokenAmount: BigNumber
+    tokenAmount: string
     poolName: string
     onClose: () => void
 }
@@ -68,7 +68,7 @@ export function ShareDialog(props: ShareDialogProps) {
     const classes = useStylesExtends(useStyles(), {})
     const { token, tokenAmount } = props
     const postLink = usePostLink()
-    const amount = formatBalance(tokenAmount, token.decimals ?? 0)
+    const amount = formatBalance(new BigNumber(tokenAmount || '0'), token.decimals ?? 0)
     const shareLink = useShareLink(
         t('plugin_ito_claim_success_share', {
             link: postLink,
