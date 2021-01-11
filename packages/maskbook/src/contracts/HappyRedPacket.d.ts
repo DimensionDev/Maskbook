@@ -17,33 +17,12 @@ export class HappyRedPacket extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
     clone(): HappyRedPacket
     methods: {
-        check_availability(
-            id: string | number[],
-        ): TransactionObject<{
-            token_address: string
-            balance: string
-            total: string
-            claimed: string
-            expired: boolean
-            ifclaimed: boolean
-            0: string
-            1: string
-            2: string
-            3: string
-            4: boolean
-            5: boolean
-        }>
-
-        check_claimed_list(id: string | number[]): TransactionObject<string[]>
-
         claim(
             id: string | number[],
             password: string,
             _recipient: string,
             validation: string | number[],
         ): TransactionObject<string>
-
-        contract_creator(): TransactionObject<string>
 
         create_red_packet(
             _hash: string | number[],
@@ -60,8 +39,6 @@ export class HappyRedPacket extends Contract {
 
         refund(id: string | number[]): TransactionObject<void>
 
-        toBytes(a: string): TransactionObject<string>
-
         transfer_token(
             token_type: number | string,
             token_address: string,
@@ -69,6 +46,23 @@ export class HappyRedPacket extends Contract {
             recipient_address: string,
             amount: number | string,
         ): TransactionObject<void>
+
+        check_availability(
+            id: string | number[],
+        ): TransactionObject<{
+            token_address: string
+            balance: string
+            total: string
+            claimed: string
+            expired: boolean
+            0: string
+            1: string
+            2: string
+            3: string
+            4: boolean
+        }>
+
+        toBytes(a: string): TransactionObject<string>
     }
     events: {
         ClaimSuccess: ContractEvent<{
@@ -92,6 +86,14 @@ export class HappyRedPacket extends Contract {
             2: string
             3: string
             4: string
+        }>
+        Failure: ContractEvent<{
+            id: string
+            hash1: string
+            hash2: string
+            0: string
+            1: string
+            2: string
         }>
         RefundSuccess: ContractEvent<{
             id: string

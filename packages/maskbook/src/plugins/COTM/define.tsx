@@ -24,7 +24,7 @@ export const COTM_PluginDefine: PluginConfig = {
         if (!payload.ok) return null
         return (
             <MaskbookPluginWrapper pluginName="🇳🇱 #CreativityOnTheMove">
-                <Suspense fallback={<SnackbarContent message="Maskbook is loading this plugin..." />}>
+                <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                     <TokenPacket payload={payload.val} />
                 </Suspense>
             </MaskbookPluginWrapper>

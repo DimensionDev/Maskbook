@@ -296,8 +296,8 @@ export interface PostRecord {
      */
     recipientGroups: GroupIdentifier[]
     /**
-     * When does Maskbook find this post.
-     * For your own post, it is when Maskbook created this post.
+     * When does Mask find this post.
+     * For your own post, it is when Mask created this post.
      * For others post, it is when you see it first time.
      */
     foundAt: Date

@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js'
-import { useAsyncFn } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
-import { createEetherToken } from '../helpers'
+import { createEtherToken } from '../helpers'
 import { ChainId, CurrencyType, EthereumTokenType, AssetDetailed } from '../types'
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainState'
@@ -44,31 +44,33 @@ async function fetcher(address: string, chainId: ChainId) {
  * Fetch tokens detailed info from debank API
  * @param address
  */
-export function useAssetsDetailedDebank(): AssetDetailed[] {
+export function useAssetsDetailedDebank() {
     const account = useAccount()
     const chainId = useChainId()
-    const [{ value: data = [] }] = useAsyncFn(() => fetcher(account, chainId), [account, chainId])
-    return data.map((x) => ({
-        token:
-            x.id === 'eth'
-                ? createEetherToken(chainId)
-                : {
-                      // distinguish token type
-                      type: EthereumTokenType.ERC20,
-                      address: formatChecksumAddress(x.id),
-                      chainId: ChainId.Mainnet,
-                      name: x.name,
-                      symbol: x.symbol,
-                      decimals: x.decimals,
-                  },
-        balance: new BigNumber(x.balance).toFixed(),
-        price: {
-            [CurrencyType.USD]: new BigNumber(x.price).toFixed(),
-        },
-        value: {
-            [CurrencyType.USD]: new BigNumber(x.price)
-                .multipliedBy(new BigNumber(x.balance).dividedBy(new BigNumber(10).pow(x.decimals)))
-                .toFixed(),
-        },
-    }))
+    return useAsyncRetry(async () => {
+        const data = await fetcher(account, chainId)
+        return data.map((x) => ({
+            token:
+                x.id === 'eth'
+                    ? createEtherToken(chainId)
+                    : {
+                          // distinguish token type
+                          type: EthereumTokenType.ERC20,
+                          address: formatChecksumAddress(x.id),
+                          chainId: ChainId.Mainnet,
+                          name: x.name,
+                          symbol: x.symbol,
+                          decimals: x.decimals,
+                      },
+            balance: new BigNumber(x.balance).toFixed(),
+            price: {
+                [CurrencyType.USD]: new BigNumber(x.price).toFixed(),
+            },
+            value: {
+                [CurrencyType.USD]: new BigNumber(x.price)
+                    .multipliedBy(new BigNumber(x.balance).dividedBy(new BigNumber(10).pow(x.decimals)))
+                    .toFixed(),
+            },
+        })) as AssetDetailed[]
+    }, [account, chainId])
 }

@@ -1,4 +1,4 @@
-import { ProfileIdentifier, Identifier, ECKeyIdentifier, PersonaIdentifier } from '../../database/type'
+import { ProfileIdentifier, Identifier, PersonaIdentifier, ECKeyIdentifierFromJsonWebKey } from '../../database/type'
 import { compressSecp256k1Key, decompressSecp256k1Key } from './SECP256k1-Compression'
 import type { BackupJSONFileLatest } from './BackupFormat/JSON/latest'
 import type { ProfileRecord } from '../../database/Persona/Persona.db'
@@ -74,7 +74,7 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
         '🤔',
     ) as BackupJSONFileLatestShort
 
-    if (version !== '1') throw new Error(`QR Code cannot be shared between different version of Maskbook`)
+    if (version !== '1') throw new Error(`QR Code cannot be shared between different version of Mask`)
 
     const localKeyJWK = {
         alg: 'A256GCM',
@@ -87,7 +87,7 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
     const privateJWK = decompressSecp256k1Key(privateKey, 'private')
 
     const profileID = network && userID ? new ProfileIdentifier(network, userID) : undefined
-    const ECID = ECKeyIdentifier.fromJsonWebKey(publicJWK)
+    const ECID = ECKeyIdentifierFromJsonWebKey(publicJWK)
     return sanitizeBackupFile({
         _meta_: {
             createdAt: 0,

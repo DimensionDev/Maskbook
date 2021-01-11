@@ -253,8 +253,8 @@ function parseText(string: string, allowTextEnlarge: boolean) {
 
     const result = []
     while (current.length) {
-        const search1 = current.search('\n')
-        const search2 = links[0] ? current.search(links[0].string) : -1
+        const search1 = current.indexOf('\n')
+        const search2 = links[0] ? current.indexOf(links[0].string) : -1
         // ? if rest is normal
         if (search1 === -1 && search2 === -1) {
             result.push(<ParseText text={current} fontSize={fontSize} />)

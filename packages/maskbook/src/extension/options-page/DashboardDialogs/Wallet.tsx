@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react'
-import { useAsync, useCopyToClipboard } from 'react-use'
+import { useAsync } from 'react-use'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import {
     CreditCard as CreditCardIcon,
@@ -7,7 +7,6 @@ import {
     Clock as ClockIcon,
     Info as InfoIcon,
     Trash2 as TrashIcon,
-    Share2 as ShareIcon,
 } from 'react-feather'
 import {
     Button,
@@ -19,11 +18,8 @@ import {
     FormControlLabel,
     Checkbox,
     Theme,
-    InputAdornment,
-    IconButton,
     Chip,
 } from '@material-ui/core'
-import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { useHistory } from 'react-router-dom'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
@@ -36,15 +32,14 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { DashboardRoute } from '../Route'
 import { sleep, checkInputLengthExceed } from '../../../utils/utils'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
-import { QRCode } from '../../../components/shared/qrcode'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
 import { RedPacketInboundList, RedPacketOutboundList } from '../../../plugins/RedPacket/UI/RedPacketList'
 import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
 import { useRedPacketFromDB } from '../../../plugins/RedPacket/hooks/useRedPacket'
 import WalletLine from './WalletLine'
-import { isSameAddress } from '../../../web3/helpers'
+import { isETH, isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
@@ -351,77 +346,6 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
 }
 //#endregion
 
-//#region wallet share dialog
-const useWalletShareDialogStyle = makeStyles((theme: Theme) =>
-    createStyles({
-        qr: {
-            marginTop: theme.spacing(3),
-        },
-    }),
-)
-
-export function DashboardWalletShareDialog(props: WrappedDialogProps<WalletProps>) {
-    const { t } = useI18N()
-    const classes = useWalletShareDialogStyle()
-    const { wallet } = props.ComponentProps!
-
-    const [, copyToClipboard] = useCopyToClipboard()
-    const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
-
-    return (
-        <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper
-                icon={<ShareIcon />}
-                iconColor="#4EE0BC"
-                primary={t('share_wallet')}
-                secondary={t('share_wallet_hint')}
-                content={
-                    <>
-                        <form>
-                            <TextField
-                                required
-                                label={t('wallet_address')}
-                                value={wallet.address}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                size="small"
-                                                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                                                    e.stopPropagation()
-                                                    copyWalletAddress(wallet.address)
-                                                }}>
-                                                <FileCopyOutlinedIcon />
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                variant="outlined"
-                            />
-                        </form>
-                        <Box
-                            className={classes.qr}
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}>
-                            <QRCode
-                                text={`ethereum:${wallet.address}`}
-                                options={{ width: 200 }}
-                                canvasProps={{
-                                    style: { display: 'block', margin: 'auto' },
-                                }}
-                            />
-                        </Box>
-                    </>
-                }
-            />
-        </DashboardDialogCore>
-    )
-}
-//#endregion
-
 //#region wallet add ERC20 token dialog
 export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
@@ -463,7 +387,7 @@ export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<Wal
                 }
                 footer={
                     <DebounceButton disabled={!token} variant="contained" onClick={onSubmit}>
-                        {t('import')}
+                        {t('add_token')}
                     </DebounceButton>
                 }
             />
@@ -612,15 +536,16 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
 
 //#region hide wallet token
 export function DashboardWalletHideTokenConfirmDialog(
-    props: WrappedDialogProps<WalletProps & { token: ERC20TokenDetailed }>,
+    props: WrappedDialogProps<WalletProps & { token: ERC20TokenDetailed | EtherTokenDetailed }>,
 ) {
     const { t } = useI18N()
     const { wallet, token } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
-        () => WalletRPC.blockERC20Token(wallet.address, token),
+        () => WalletRPC.blockERC20Token(wallet.address, token as ERC20TokenDetailed),
         [wallet.address],
         props.onClose,
     )
+    if (isETH(token.address)) return null
     return (
         <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
@@ -743,7 +668,7 @@ export function DashboardWalletHistoryDialog(
 //#endregion
 
 //#region red packet detail dialog
-const useRedPacketDetailStyles = makeStyles((theme: Theme) =>
+const useRedPacketDetailDialogStyles = makeStyles((theme: Theme) =>
     createStyles({
         sayThanks: {
             display: 'block',
@@ -767,7 +692,7 @@ export function DashboardWalletRedPacketDetailDialog(
     const { t } = useI18N()
     const { wallet, payload } = props.ComponentProps!
 
-    const classes = useRedPacketDetailStyles()
+    const classes = useRedPacketDetailDialogStyles()
 
     const account = useAccount()
     const redPacket = useRedPacketFromDB(payload.rpid)

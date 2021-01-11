@@ -1,18 +1,21 @@
 import path from 'path'
 import fs, { promises } from 'fs'
 
-import { Configuration, HotModuleReplacementPlugin, EnvironmentPlugin, ProvidePlugin, RuleSetRule } from 'webpack'
+import webpack, {
+    Configuration,
+    HotModuleReplacementPlugin,
+    ProvidePlugin,
+    DefinePlugin,
+    EnvironmentPlugin,
+} from 'webpack'
 // Merge declaration of Configuration defined in webpack
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 
 //#region Development plugins
-import WebExtensionHotLoadPlugin from '@dimensiondev/webpack-web-ext-plugin'
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import ReactRefreshTypeScriptTransformer from 'react-refresh-typescript'
 import WatchMissingModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin'
 import NotifierPlugin from 'webpack-notifier'
-import ForkTSCheckerPlugin from 'fork-ts-checker-webpack-plugin'
-import ForkTSCheckerNotifier from 'fork-ts-checker-notifier-webpack-plugin'
 //#endregion
 //#region Production plugins
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
@@ -22,7 +25,6 @@ import CopyPlugin from 'copy-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
 import WebExtensionTarget from 'webpack-target-webextension'
 import ManifestPlugin from 'webpack-extension-manifest-plugin'
-import Webpack5AssetModuleTransformer from './scripts/transformers/webpack-5-asset-module-backport'
 //#endregion
 
 import git from '@nice-labs/git-rev'
@@ -34,33 +36,69 @@ import { promisify } from 'util'
 const src = (file: string) => path.join(__dirname, file)
 const publicDir = src('./public')
 
-export default async function (cli_env: Record<string, boolean> = {}, argv: { mode?: 'production' | 'development' }) {
-    const target = getCompilationInfo(cli_env)
-    const env: 'production' | 'development' = argv.mode ?? 'production'
-    const dist = env === 'production' ? src('./build') : src('./dist')
+function EnvironmentPluginCache(def: Record<string, any>) {
+    return new EnvironmentPlugin(def)
+}
+function EnvironmentPluginNoCache(def: Record<string, any>) {
+    const next = {} as any
+    for (const key in def) {
+        // Mark the usage site as not cachable
+        next['process.env.' + key] = DefinePlugin.runtimeValue(
+            () => (def[key] === undefined ? 'undefined' : JSON.stringify(def[key])),
+            true,
+        )
+    }
+    return new DefinePlugin(next)
+}
 
-    if (env === 'production') await promisify(rimraf)(dist)
-
+function config(opts: {
+    name: string
+    target: Target
+    mode: Configuration['mode']
+    dist: string
+    disableHMR?: boolean
+    disableReactHMR?: boolean
+    hmrPort?: number
+    noEval?: boolean
+}) {
+    const { disableReactHMR, mode, target, name, noEval, dist, hmrPort } = opts
+    let { disableHMR } = opts
     const isManifestV3 = target.runtimeEnv.manifest === 3
-    const enableHMR = env === 'development' && !Boolean(process.env.NO_HMR) && !isManifestV3
+    if (mode === 'production') disableHMR = true
+    if (mode === 'none') throw new TypeError('env cannot be none in this config')
 
-    /** On iOS, eval is async. */
-    const sourceMapKind: Configuration['devtool'] = target.iOS ? false : 'eval-source-map'
-    const ProcessEnvPlugin = new EnvironmentPlugin({ NODE_ENV: env, ...getGitInfo(), ...target.runtimeEnv })
+    /** On iOS, eval is async (it is hooked by webextension-shim). */
+    const sourceMapKind: Configuration['devtool'] = target.iOS || isManifestV3 || noEval ? false : 'eval-source-map'
     const config: Configuration = {
-        name: 'main',
-        mode: env,
-        devtool: env === 'development' ? sourceMapKind : false,
-        entry: {}, // ? Defined later
+        name,
+        mode,
+        devtool: mode === 'development' ? sourceMapKind : false,
+        target: ['web', 'es2018'],
+        experiments: { asset: true },
+        cache: {
+            type: 'filesystem',
+            buildDependencies: { config: [__filename] },
+            // In development mode we treat all envs as static. Each runtimeEnv will have it own cache. Therefor those modules won't be marked as uncacheable (and cause re-build very often).
+            // In production mode we mark them as runtime value so different targets can share a cache.
+            version: `1-node${process.version}-${mode === 'development' ? JSON.stringify(target.runtimeEnv) : 'build'}`,
+        },
         resolve: {
             extensions: ['.js', '.ts', '.tsx'],
-            //#region requirements of https://github.com/crimx/webpack-target-webextension
-            mainFields: ['browser', 'module', 'main'],
-            aliasFields: ['browser'],
-            //#endregion
-            alias: { 'async-call-rpc$': 'async-call-rpc/full', lodash: 'lodash-es' },
-
-            // If anyone need profiling React please checkout: https://github.com/facebook/create-react-app/blob/865ea05bc93fd2ac56b7e561181c7dc2cead3e78/packages/react-scripts/config/webpack.config.js#L304
+            alias: {
+                // If anyone need profiling React please checkout: https://github.com/facebook/create-react-app/blob/396892/packages/react-scripts/config/webpack.config.js#L338
+                'async-call-rpc$': 'async-call-rpc/full',
+                lodash: 'lodash-es',
+                // Strange...
+                '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
+                'xhr2-cookies': require.resolve('./scripts/package-overrides/xhr2-cookies'),
+            },
+            // Polyfill those Node built-ins
+            fallback: {
+                http: 'stream-http',
+                https: 'https-browserify',
+                stream: 'stream-browserify',
+                crypto: 'crypto-browserify',
+            },
         },
         module: {
             // So it will not be conflict with the ProviderPlugin below.
@@ -70,8 +108,25 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             rules: [
                 // Opt in source map
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
-                { parser: { requireEnsure: false, amd: false, system: false } },
-                getTypeScriptLoader(),
+                // TypeScript
+                {
+                    test: /\.(ts|tsx)$/,
+                    parser: { worker: ['OnDemandWorker', '...'] },
+                    include: src('./packages/maskbook/src'),
+                    loader: require.resolve('ts-loader'),
+                    options: {
+                        transpileOnly: true,
+                        compilerOptions: {
+                            importsNotUsedAsValues: 'remove',
+                            jsx: mode === 'production' ? 'react-jsx' : 'react-jsxdev',
+                        },
+                        getCustomTransformers: () => ({
+                            before: [!disableHMR && !disableReactHMR && ReactRefreshTypeScriptTransformer()].filter(
+                                Boolean,
+                            ),
+                        }),
+                    },
+                },
             ],
             //#region Dismiss warning in gun
             wrappedContextCritical: false,
@@ -79,19 +134,28 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             unknownContextCritical: false,
             //#endregion
         },
-        // ModuleNotFoundPlugin & ModuleScopePlugin not included please leave a comment if someone need it.
         plugins: [
-            ProcessEnvPlugin,
-            new WatchMissingModulesPlugin(path.resolve('node_modules')),
-            // copy assets
-            new CopyPlugin({
-                patterns: [{ from: publicDir, to: dist, globOptions: { ignore: ['index.html'] } }],
+            new ProvidePlugin({
+                // Polyfill for Node global "Buffer" variable
+                Buffer: ['buffer', 'Buffer'],
+                'process.nextTick': 'next-tick',
             }),
-            getManifestPlugin(),
-            ...getBuildNotificationPlugins(),
-            ...getWebExtensionReloadPlugin(),
-            ...getSSRPlugin(),
+            new WatchMissingModulesPlugin(path.resolve('node_modules')),
+            // Note: In development mode gitInfo will share across cache (and get inaccurate result). I (@Jack-Works) think this is a valuable trade-off.
+            (mode === 'development' ? EnvironmentPluginCache : EnvironmentPluginNoCache)({
+                ...getGitInfo(),
+                ...target.runtimeEnv,
+            }),
+            new EnvironmentPlugin({ NODE_ENV: mode, NODE_DEBUG: false, STORYBOOK: false }),
+            new DefinePlugin({
+                'process.browser': 'true',
+                'process.version': JSON.stringify(process.version),
+                // MetaMaskInpageProvider => extension-port-stream => readable-stream depends on stdin and stdout
+                'process.stdout': '/* stdout */ null',
+                'process.stderr': '/* stdin */ null',
+            }),
             ...getHotModuleReloadPlugin(),
+            target.isProfile && new BundleAnalyzerPlugin(),
         ].filter(Boolean),
         optimization: {
             minimize: false,
@@ -102,7 +166,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
                 chunks: 'all',
                 cacheGroups: {
                     // per-npm-package splitting
-                    vendor: {
+                    defaultVendors: {
                         test: /[\\/]node_modules[\\/]/,
                         name(module) {
                             const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
@@ -113,26 +177,28 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             },
         },
         output: {
-            futureEmitAssets: true,
             path: dist,
             filename: 'js/[name].js',
-            chunkFilename: 'js/[name].chunk.js',
+            // In some cases webpack will emit files starts with "_" which is reserved in web extension.
+            chunkFilename: 'js/chunk.[name].js',
+            hotUpdateChunkFilename: 'hot.[id].[fullhash].js',
+            hotUpdateMainFilename: 'hot.[runtime].[fullhash].json',
             globalObject: 'globalThis',
+            publicPath: '/',
         },
-        target: WebExtensionTarget(nodeConfig), // See https://github.com/crimx/webpack-target-webextension,
-        // @ts-ignore sometimes ts don't merge declaration for unknown reason and report
-        // Object literal may only specify known properties, and 'devServer' does not exist in type 'Configuration'.ts(2322)
+        ignoreWarnings: [/Failed to parse source map/],
         devServer: {
             // Have to write disk cause plugin cannot be loaded over network
             writeToDisk: true,
             compress: false,
-            hot: enableHMR,
-            hotOnly: enableHMR,
+            hot: !disableHMR,
+            hotOnly: !disableHMR,
+            port: hmrPort,
             // WDS does not support chrome-extension:// browser-extension://
             disableHostCheck: true,
             // Workaround of https://github.com/webpack/webpack-cli/issues/1955
-            injectClient: (config) => enableHMR && config.name !== 'injected-script',
-            injectHot: (config) => enableHMR && config.name !== 'injected-script',
+            injectClient: (config) => !disableHMR && config.name !== 'injected-script',
+            injectHot: (config) => !disableHMR && config.name !== 'injected-script',
             headers: {
                 // We're doing CORS request for HMR
                 'Access-Control-Allow-Origin': '*',
@@ -141,138 +207,100 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             https: true,
         } as DevServerConfiguration,
     }
-    //#region Define entries
-    if (!target.FirefoxEngine && !target.iOS) {
-        // Define "browser" globally in platform that don't have "browser"
-        config.plugins!.push(new ProvidePlugin({ browser: 'webextension-polyfill' }))
+    return config
+    function getHotModuleReloadPlugin() {
+        if (disableHMR) return []
+        // overlay is not working in our environment
+        return [
+            new HotModuleReplacementPlugin(),
+            !disableReactHMR && new ReactRefreshWebpackPlugin({ overlay: false }),
+        ].filter(Boolean)
     }
-    config.entry = {
-        'options-page': withReactDevTools(src('./packages/maskbook/src/extension/options-page/index.tsx')),
-        'content-script': withReactDevTools(src('./packages/maskbook/src/content-script.ts')),
-        'background-service': src('./packages/maskbook/src/background-service.ts'),
-        popup: withReactDevTools(src('./packages/maskbook/src/extension/popup-page/index.tsx')),
-        debug: src('./packages/maskbook/src/extension/debug-page'),
-    }
-    if (isManifestV3) delete config.entry['background-script']
-    for (const entry in config.entry) {
-        config.entry[entry] = iOSWebExtensionShimHack(...toArray(config.entry[entry]))
-    }
-    config.plugins!.push(
-        // @ts-ignore
-        getHTMLPlugin({ chunks: ['options-page'], filename: 'index.html' }),
-        isManifestV3 ? undefined : getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }),
-        getHTMLPlugin({ chunks: ['popup'], filename: 'popup.html' }),
-        getHTMLPlugin({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
-        getHTMLPlugin({ chunks: ['debug'], filename: 'debug.html' }),
-    ) // generate pages for each entry
-    config.plugins = config.plugins.filter(Boolean)
-    //#endregion
+}
 
-    if (target.isProfile) config.plugins!.push(new BundleAnalyzerPlugin())
-    function getChildConfig(name: string, entry: string, modifier?: (x: Configuration) => void): Configuration {
-        const c: Configuration = {
-            name,
-            entry: { [name]: entry },
-            devtool: false,
-            output: config.output,
-            module: { rules: [getTypeScriptLoader(false)] },
-            resolve: config.resolve,
-            // We're not using this server, only need it write to disk.
-            devServer: {
-                writeToDisk: true,
-                hot: false,
-                injectClient: false,
-                injectHot: false,
-                port: 35938 + ~~(Math.random() * 1000),
-                overlay: false,
-            },
-            optimization: { splitChunks: false, minimize: false },
-            plugins: [ProcessEnvPlugin],
+export default async function (cli_env: Record<string, boolean> = {}, argv: { mode?: 'production' | 'development' }) {
+    const target = getCompilationInfo(cli_env)
+    const mode: 'production' | 'development' = argv.mode ?? 'production'
+    const dist = mode === 'production' ? src('./build') : src('./dist')
+    if (mode === 'production') await promisify(rimraf)(src('./build'))
+    const disableHMR = Boolean(process.env.NO_HMR)
+    const isManifestV3 = target.runtimeEnv.manifest === 3
+
+    const shared = { mode, target, dist }
+    const main = config({ ...shared, disableHMR, name: 'main' })
+    const manifestV3 = config({ ...shared, disableHMR: true, name: 'background-worker', hmrPort: 35938 })
+    const injectedScript = config({
+        ...shared,
+        disableHMR: true,
+        name: 'injected-script',
+        noEval: true,
+        hmrPort: 35939,
+    })
+    // Modify Main
+    {
+        main.plugins!.push(
+            new WebExtensionTarget(), // See https://github.com/crimx/webpack-target-webextension,
+            new CopyPlugin({ patterns: [{ from: publicDir, to: dist }] }),
+            getManifestPlugin(),
+            ...getBuildNotificationPlugins(),
+        )
+        // Define "browser" globally in platform that don't have "browser"
+        if (!target.FirefoxEngine && !target.iOS)
+            main.plugins!.push(new ProvidePlugin({ browser: 'webextension-polyfill' }))
+        main.entry = {
+            'options-page': withReactDevTools(src('./packages/maskbook/src/extension/options-page/index.tsx')),
+            'content-script': withReactDevTools(src('./packages/maskbook/src/content-script.ts')),
+            popup: withReactDevTools(src('./packages/maskbook/src/extension/popup-page/index.tsx')),
+            'background-service': src('./packages/maskbook/src/background-service.ts'),
+            debug: src('./packages/maskbook/src/extension/debug-page'),
         }
-        if (modifier) modifier(c)
-        return c
+        if (isManifestV3) delete main.entry['background-script']
+        for (const entry in main.entry) {
+            main.entry[entry] = iOSWebExtensionShimHack(...toArray(main.entry[entry] as any))
+        }
+        main.plugins!.push(
+            getHTMLPlugin({ chunks: ['options-page'], filename: 'index.html' }),
+            getHTMLPlugin({ chunks: ['popup'], filename: 'popup.html' }),
+            getHTMLPlugin({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
+            getHTMLPlugin({ chunks: ['debug'], filename: 'debug.html' }),
+        ) // generate pages for each entry
+        if (!isManifestV3)
+            main.plugins!.push(getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }))
     }
-    return [
-        config,
-        getChildConfig('injected-script', src('./packages/maskbook/src/extension/injected-script/index.ts')),
-        isManifestV3 &&
-            getChildConfig('background-worker', src('./packages/maskbook/src/background-worker.ts'), (x) => {
-                x.target = 'webworker'
-                x.output = {
-                    futureEmitAssets: true,
-                    path: dist,
-                    // ? Service workers must registered at the / root
-                    filename: 'manifest-v3.entry.js',
-                    chunkFilename: 'js/[name]-worker.chunk.js',
-                    globalObject: 'globalThis',
-                }
-            }),
-    ].filter(Boolean)
+    // Modify ManifestV3
+    {
+        manifestV3.entry = { 'background-worker': src('./packages/maskbook/src/background-worker.ts') }
+        manifestV3.target = ['worker', 'es2018']
+        main.plugins!.push(new WebExtensionTarget())
+        // ? Service workers must registered at the / root
+        manifestV3.output.filename = 'manifest-v3.entry.js'
+    }
+    // Modify injectedScript
+    {
+        injectedScript.entry = { 'injected-script': src('./packages/maskbook/src/extension/injected-script/index.ts') }
+        injectedScript.optimization.splitChunks = false
+    }
+    if (mode === 'production') return [main, isManifestV3 && manifestV3, injectedScript].filter(Boolean)
+    // TODO: multiple config seems doesn't work well therefore we start the watch mode webpack compiler manually.
+    delete injectedScript.devServer
+    // TODO: ignore the message currently
+    webpack(injectedScript, () => {}).watch({}, () => {})
+    return main
 
     function withReactDevTools(...src: string[]) {
         // ! Use Firefox Nightly or enable network.websocket.allowInsecureFromHTTPS in about:config, then remove this line (but don't commit)
         if (target.FirefoxEngine) return src
-        if (env === 'development') return ['react-devtools', ...src]
+        if (mode === 'development') return ['react-devtools', ...src]
         return src
     }
     function iOSWebExtensionShimHack(...path: string[]) {
         if (!target.iOS && !target.Android) return path
         return [...path, src('./packages/maskbook/src/polyfill/permissions.js')]
     }
-    function getTypeScriptLoader(hmr = enableHMR): RuleSetRule {
-        return {
-            test: /\.(ts|tsx)$/,
-            include: src('./packages/maskbook/src'),
-            loader: require.resolve('ts-loader'),
-            options: {
-                transpileOnly: true,
-                compilerOptions: {
-                    importsNotUsedAsValues: 'remove',
-                    jsx: env === 'production' ? 'react-jsx' : 'react-jsxdev',
-                },
-                getCustomTransformers: () => ({
-                    before: [Webpack5AssetModuleTransformer(), hmr && ReactRefreshTypeScriptTransformer()].filter(
-                        Boolean,
-                    ),
-                }),
-            },
-        }
-    }
     function getBuildNotificationPlugins() {
-        if (env === 'production') return []
-        const opt = { title: 'Maskbook', excludeWarnings: true, skipFirstNotification: true, skipSuccessful: true }
-        return [new NotifierPlugin(opt), new ForkTSCheckerPlugin(), new ForkTSCheckerNotifier(opt)]
-    }
-    function getWebExtensionReloadPlugin() {
-        const dist = env === 'production' ? src('./build') : src('./dist')
-        if (env === 'production') return []
-        let args: ConstructorParameters<typeof WebExtensionHotLoadPlugin>[0] | undefined = undefined
-        if (target.Firefox && enableHMR) return [] // ! stuck on 99% [0] after emitting cause HMR not working
-        if (target.Firefox) {
-            if (target.webExtensionFirefoxLaunchVariant === 'firefox-desktop') {
-                args = {
-                    sourceDir: dist,
-                    target: 'firefox-desktop',
-                    firefoxProfile: src('.firefox'),
-                    keepProfileChanges: true,
-                    // --firefox=nightly
-                    firefox: typeof target.Firefox === 'string' ? target.Firefox : undefined,
-                }
-            } else if (target.webExtensionFirefoxLaunchVariant === 'firefox-android') {
-                args = {
-                    sourceDir: dist,
-                    target: 'firefox-android',
-                }
-            }
-        } else if (target.Chromium)
-            args = {
-                sourceDir: dist,
-                target: 'chromium',
-                chromiumProfile: src('.chrome'),
-                keepProfileChanges: true,
-            }
-        if (args) return [new WebExtensionHotLoadPlugin(args)]
-        return []
+        if (mode === 'production') return []
+        const opt = { title: 'Mask', excludeWarnings: true, skipFirstNotification: true, skipSuccessful: true }
+        return [new NotifierPlugin(opt)]
     }
     function getManifestPlugin() {
         const manifest = require('./packages/maskbook/src/manifest.json')
@@ -282,7 +310,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
         else if (target.iOS) modifiers.safari(manifest)
         else if (target.E2E) modifiers.E2E(manifest)
 
-        if (env === 'development') modifiers.development(manifest)
+        if (mode === 'development') modifiers.development(manifest)
         else modifiers.production(manifest)
 
         if (isManifestV3) modifiers.manifestV3(manifest)
@@ -291,19 +319,6 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
         else if (target.runtimeEnv.build === 'insider') modifiers.nightly(manifest)
 
         return new ManifestPlugin({ config: { base: manifest } })
-    }
-    function getHotModuleReloadPlugin() {
-        if (!enableHMR) return []
-        // overlay is not working in our environment
-        return [new HotModuleReplacementPlugin(), new ReactRefreshWebpackPlugin({ overlay: false })]
-    }
-
-    function getSSRPlugin() {
-        if (env === 'development') return []
-        return [
-            // TODO: Help wanted
-            // new SSRPlugin('popup.html', src('./packages/maskbook/src/extension/popup-page/index.tsx'), 'Mask Network'),
-        ]
     }
 }
 
@@ -373,7 +388,7 @@ function getCompilationInfo(argv: any) {
     //#endregion
 
     return {
-        runtimeEnv: { target, firefoxVariant, architecture, resolution, build, manifest, STORYBOOK: false },
+        runtimeEnv: { target, firefoxVariant, architecture, resolution, build, manifest },
         isReproducibleBuild,
         isProfile,
         webExtensionFirefoxLaunchVariant,
@@ -420,27 +435,14 @@ function toArray(x: string | string[]) {
     return typeof x === 'string' ? [x] : x
 }
 
+const templateContent = fs.readFileSync(src('./scripts/template.html'), 'utf8')
 function getHTMLPlugin(options: HTMLPlugin.Options = {}) {
-    const templateContent = fs.readFileSync(src('./scripts/template.html'), 'utf8')
     return new HTMLPlugin({
         templateContent,
         inject: 'body',
+        scriptLoading: 'defer',
         ...options,
     })
-}
-const nodeConfig: Configuration['node'] = {
-    module: 'empty',
-    dgram: 'empty',
-    dns: 'mock',
-    fs: 'empty',
-    http2: 'empty',
-    net: 'empty',
-    tls: 'empty',
-    child_process: 'empty',
-    Buffer: true,
-    process: 'mock',
-    global: true,
-    setImmediate: true,
 }
 // Cleanup old HMR files
 promises.readdir(path.join(__dirname, './dist')).then(

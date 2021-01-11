@@ -210,7 +210,9 @@ export function pollingTask(
         delay?: number
     } = {},
 ) {
+    let canceled = false
     const runTask = async () => {
+        if (canceled) return
         let stop = false
         try {
             stop = await task()
@@ -222,6 +224,7 @@ export function pollingTask(
         }
     }
     runTask()
+    return () => (canceled = true)
 }
 export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
     const x = new Uint8Array(a)

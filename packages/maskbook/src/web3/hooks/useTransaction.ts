@@ -22,7 +22,10 @@ export function useTransactionReceipt(hash: string) {
     const chainId = useChainId()
     const blockNumber = useBlockNumber(chainId)
     useAsync(async () => {
-        if (!hash) return
+        if (!hash) {
+            setReceipt(null)
+            return
+        }
         if (receipt?.transactionHash === hash) return
         setReceipt(await Services.Ethereum.getTransactionReceipt(hash, await Services.Ethereum.getChainId(account)))
     }, [account, hash, receipt, blockNumber])

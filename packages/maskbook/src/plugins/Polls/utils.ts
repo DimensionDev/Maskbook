@@ -10,12 +10,13 @@ import { WorkerChannel } from 'async-call-rpc/utils/web/worker'
 
 export const PollMetadataReader = createTypedMessageMetadataReader<PollMetaData>(POLL_META_KEY_1, schema)
 export const renderWithPollMetadata = createRenderWithMetadata(PollMetadataReader)
+if (module.hot) module.hot.accept()
 const PollMessage = createPluginMessage<{ _: unknown }>(identifier)
 export const PluginPollRPC = createPluginRPC(
     identifier,
     () => {
         const PollWorker = new OnDemandWorker(new URL('./Services.ts', import.meta.url), { name: 'Plugin/Poll' })
-        return AsyncCall<typeof import('./Services')>({}, { channel: new WorkerChannel(PollWorker) })
+        return AsyncCall<typeof import('./Services')>({}, { channel: new WorkerChannel(PollWorker), thenable: false })
     },
     PollMessage.events._,
 )

@@ -8,7 +8,7 @@ import {
     PersonRecordPublicPrivate,
 } from './_deprecated_people_db'
 import * as persona from '../Persona/Persona.db'
-import { ECKeyIdentifier, ProfileIdentifier } from '../type'
+import { ECKeyIdentifier, ECKeyIdentifierFromCryptoKey, ProfileIdentifier } from '../type'
 import { IdentifierMap } from '../IdentifierMap'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
@@ -71,7 +71,7 @@ async function migrateHelper_importPersonaFromPersonRecord(
             if (value.privateKey) jwkMap.set(value.privateKey, await CryptoKeyToJsonWebKey(value.privateKey))
 
             if (value.publicKey) {
-                attachRelationMap.set(value.identifier, await ECKeyIdentifier.fromCryptoKey(value.publicKey))
+                attachRelationMap.set(value.identifier, await ECKeyIdentifierFromCryptoKey(value.publicKey))
             }
         }),
     )

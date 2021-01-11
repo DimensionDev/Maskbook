@@ -41,6 +41,7 @@ import {
 } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useValueRef } from '../../../../utils/hooks/useValueRef'
+import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -167,6 +168,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     //#region buy
     const account = useAccount()
+    const isAllowanceCoin = useTransakAllowanceCoin(coin)
     const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
 
     const onBuyButtonClicked = useCallback(() => {
@@ -246,7 +248,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             </CoinMenu>
                         ) : null}
 
-                        {account && trending.coin.symbol && Flags.transak_enabled ? (
+                        {account && trending.coin.symbol && isAllowanceCoin && Flags.transak_enabled ? (
                             <Button
                                 className={classes.buy}
                                 startIcon={<MonetizationOnOutlinedIcon />}
@@ -302,7 +304,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                         color="textSecondary"
                         target="_blank"
                         rel="noopener noreferrer"
-                        title="Mask Network"
+                        title="Mask"
                         href="https://mask.io">
                         <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
                     </Link>

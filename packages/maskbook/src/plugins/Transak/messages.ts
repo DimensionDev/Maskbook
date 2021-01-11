@@ -15,4 +15,5 @@ interface PluginTransakMessage {
     buyTokenDialogUpdated: BuyTokenDialogEvent
 }
 
+if (module.hot) module.hot.accept()
 export const PluginTransakMessages = createPluginMessage<PluginTransakMessage>(PLUGIN_IDENTIFIER)

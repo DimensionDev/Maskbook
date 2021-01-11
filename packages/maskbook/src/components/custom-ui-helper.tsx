@@ -1,3 +1,4 @@
+/// <reference path="./custom-ui.d.ts" />
 import { safeGetActiveUI } from '../utils/safeRequire'
 
 // Priority: classes from props > configHooks > defaultStyles

@@ -1,0 +1,9 @@
+{
+  "name": "@dimensiondev/maskbook-shared",
+  "dependencies": {
+    "typeson": "^5.18.2",
+    "typeson-registry": "^1.0.0-alpha.38"
+  },
+  "typings": "./dist/index.d.ts",
+  "main": "./dist/index.js"
+}

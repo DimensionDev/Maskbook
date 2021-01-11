@@ -1,18 +1,21 @@
 import { create as createJSS, SheetsRegistry as JSSSheetsRegistry } from 'jss'
-import { jssPreset, StylesProvider as JSSStylesProvider, ThemeProvider } from '@material-ui/core/styles'
+import {
+    jssPreset,
+    StylesProvider as JSSStylesProvider,
+    ThemeProvider,
+    createGenerateClassName,
+} from '@material-ui/core/styles'
 import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
 import createEmotionCache, { EmotionCache } from '@emotion/cache'
 import ReactDOM from 'react-dom'
-import { useMemo, StrictMode } from 'react'
+import { useMemo } from 'react'
 import type {} from 'react/experimental'
 import type {} from 'react-dom/experimental'
 import { getActivatedUI } from '../../social-network/ui'
-import { I18nextProvider } from 'react-i18next'
-import i18nNextInstance from '../i18n-next'
 import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
-import { SnackbarProvider } from 'notistack'
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
+import { MaskbookUIRoot } from '../../UIRoot'
 
 const captureEvents: (keyof HTMLElementEventMap)[] = [
     'paste',
@@ -153,6 +156,10 @@ class JSSInformativeSheetsRegistry extends JSSSheetsRegistry {
 
 const jssRegistryMap = new WeakMap<ShadowRoot, JSSInformativeSheetsRegistry>()
 const emotionRegistryMap = new WeakMap<ShadowRoot, EmotionInformativeSheetsRegistry>()
+function concatStyleSheets(prev: string, style: JSSInformativeSheetsRegistry['registry'][0]) {
+    if (!style.attached) return prev
+    return prev + '\n' + style.toString()
+}
 export function useSheetsRegistryStyles(_current: Node | null) {
     const jssSubscription = useMemo(() => {
         let registry: JSSInformativeSheetsRegistry | null | undefined = null
@@ -184,7 +191,7 @@ export function useSheetsRegistryStyles(_current: Node | null) {
             subscribe: (callback: () => void) => registry?.reg.addListener(callback) ?? (() => 0),
         }
     }, [_current])
-    return useSubscription(jssSubscription) + '\n' + useSubscription(emotionSubscription)
+    return [useSubscription(emotionSubscription), useSubscription(jssSubscription)].filter(Boolean).join('\n')
 }
 const initOnceMap = new WeakMap<ShadowRoot, unknown>()
 function initOnce<T>(keyBy: ShadowRoot, init: () => T): T {
@@ -193,11 +200,19 @@ function initOnce<T>(keyBy: ShadowRoot, init: () => T): T {
     initOnceMap.set(keyBy, val)
     return val
 }
+function createElement(key: keyof HTMLElementTagNameMap, kind: string) {
+    const e = document.createElement(key)
+    e.setAttribute('data-' + kind, 'true')
+    return e
+}
 function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{ shadow: ShadowRoot }>) {
-    const { jss, JSSRegistry, JSSSheetsManager, emotionCache } = initOnce(shadow, () => {
-        const head = shadow.appendChild(document.createElement('head'))
-        const JSSInsertionPoint = head.appendChild(document.createElement('div'))
-        const EmotionInsertionPoint = head.appendChild(document.createElement('div'))
+    const { jss, JSSRegistry, JSSSheetsManager, emotionCache, generateClassName } = initOnce(shadow, () => {
+        const head = shadow.appendChild(createElement('head', 'css-container'))
+        const EmotionInsertionPoint = head.appendChild(createElement('div', 'emotion-area'))
+        const JSSInsertionContainer = head.appendChild(createElement('div', 'jss-area'))
+        const JSSInsertionPoint = JSSInsertionContainer.appendChild(createElement('div', 'jss-insert-point'))
+        // emotion doesn't allow numbers appears in the key
+        const instanceID = Math.random().toString(36).slice(2).replace(/[0-9]/g, 'x')
         // JSS
         const jss = createJSS({
             ...jssPreset(),
@@ -209,19 +224,20 @@ function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{
         // Emotion
         const emotionCache = createEmotionCache({
             container: EmotionInsertionPoint,
-            // emotion doesn't allow numbers appears in the key
-            key: 'emo-' + Math.random().toString(36).slice(2).replace(/[0-9]/g, 'x'),
+            key: 'emo-' + instanceID,
             speedy: false,
             // TODO: support speedy mode which use insertRule https://github.com/emotion-js/emotion/blob/master/packages/sheet/src/index.js
         })
         emotionRegistryMap.set(shadow, new EmotionInformativeSheetsRegistry(emotionCache))
-        return { jss, JSSRegistry, JSSSheetsManager, emotionCache }
+        const generateClassName = createGenerateClassName({ seed: instanceID })
+        return { jss, JSSRegistry, JSSSheetsManager, emotionCache, generateClassName }
     })
     return (
         // ! sheetsManager: Material-ui uses this to detect if the style has been rendered
         // ! sheetsRegistry: We use this to get styles as a whole string
         <EmotionCacheProvider value={emotionCache}>
             <JSSStylesProvider
+                generateClassName={generateClassName}
                 sheetsRegistry={JSSRegistry}
                 jss={jss}
                 sheetsManager={JSSSheetsManager}
@@ -234,15 +250,9 @@ function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{
 type MaskbookProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
 
 function Maskbook(_props: MaskbookProps) {
-    return (
+    return MaskbookUIRoot(
         <ThemeProvider theme={getActivatedUI().useTheme()}>
-            <I18nextProvider i18n={i18nNextInstance}>
-                <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                    <StrictMode>
-                        <span {..._props} />
-                    </StrictMode>
-                </SnackbarProvider>
-            </I18nextProvider>
-        </ThemeProvider>
+            <span {..._props} />
+        </ThemeProvider>,
     )
 }

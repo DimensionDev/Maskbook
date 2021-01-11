@@ -1,5 +1,5 @@
 import { decompressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
-import { ProfileIdentifier, ECKeyIdentifier } from '../../../database/type'
+import { ECKeyIdentifierFromJsonWebKey, ProfileIdentifier } from '../../../database/type'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { createProfileWithPersona, queryPersonaRecord } from '../../../database'
 
@@ -22,7 +22,7 @@ export async function verifyOthersProve(bio: string | { raw: string }, others: P
     // throw new Error(i18n.t('service_key_parse_failed'))
     // if privateKey, we should possibly not recreate it
     const hasPrivate =
-        (await queryPersonaRecord(ECKeyIdentifier.fromJsonWebKey(publicKey)))?.privateKey ||
+        (await queryPersonaRecord(ECKeyIdentifierFromJsonWebKey(publicKey)))?.privateKey ||
         (await queryPersonaRecord(others))?.privateKey
     if (!hasPrivate) await createProfileWithPersona(others, { connectionConfirmState: 'pending' }, { publicKey })
     // TODO: unhandled case: if the profile is connected but a different key.

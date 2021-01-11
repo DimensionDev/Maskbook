@@ -15,12 +15,14 @@ import classNames from 'classnames'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency } from '../../../plugins/Wallet/formatter'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { CurrencyType, AssetDetailed, EthereumTokenType } from '../../../web3/types'
+import { CurrencyType, AssetDetailed } from '../../../web3/types'
 import { getTokenUSDValue } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenActionsBar } from './ERC20TokenActionsBar'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
+import { useContext } from 'react'
+import { DashboardWalletsContext } from '../DashboardRouters/Wallets'
 
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
@@ -57,12 +59,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export interface WalletAssetsTableProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     wallet: WalletRecord
-    detailedTokens: AssetDetailed[]
 }
 
 export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const { t } = useI18N()
-    const { wallet, detailedTokens } = props
+    const { wallet } = props
+    const { detailedTokens } = useContext(DashboardWalletsContext)
 
     const classes = useStylesExtends(useStyles(), props)
     const LABELS = [t('wallet_assets'), t('wallet_price'), t('wallet_balance'), t('wallet_value'), ''] as const
@@ -142,9 +144,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                         display: 'flex',
                                         justifyContent: 'flex-end',
                                     }}>
-                                    {x.token.type === EthereumTokenType.ERC20 ? (
-                                        <ERC20TokenActionsBar wallet={wallet} token={x.token} />
-                                    ) : null}
+                                    <ERC20TokenActionsBar wallet={wallet} token={x.token} />
                                 </Box>,
                             ]
                                 .filter(Boolean)

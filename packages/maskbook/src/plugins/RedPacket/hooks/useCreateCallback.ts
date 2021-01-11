@@ -1,14 +1,13 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
+import type { TransactionReceipt } from 'web3-core'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed, TransactionEventType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
-import type { TransactionReceipt } from 'web3-core'
-
 export interface RedPacketSettings {
     password: string
     shares: number

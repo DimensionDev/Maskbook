@@ -35,9 +35,10 @@ export function useERC20TokensFromDB(): ERC20TokenDetailed[] {
  */
 export function useTrustedERC20TokensFromDB() {
     const wallet = useWallet()
-    const erc20Tokens = useERC20TokensFromDB()
+    const tokens = useERC20TokensFromDB()
+
     if (!wallet) return []
-    return erc20Tokens.filter(
+    return tokens.filter(
         (x) => wallet.erc20_token_whitelist.has(x.address) && !wallet.erc20_token_blacklist.has(x.address),
     )
 }

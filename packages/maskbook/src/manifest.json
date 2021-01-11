@@ -1,6 +1,6 @@
 {
-    "name": "Maskbook",
-    "version": "1.22.2",
+    "name": "Mask Network",
+    "version": "1.23.2",
     "manifest_version": 2,
     "permissions": ["storage", "downloads", "webNavigation", "activeTab"],
     "optional_permissions": ["<all_urls>", "notifications"],

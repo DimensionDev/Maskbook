@@ -52,21 +52,21 @@ const MSKA = createERC20Token(
     ChainId.Rinkeby,
     getConstant(CONSTANTS, 'MSKA_ADDRESS', ChainId.Rinkeby),
     18,
-    'Maskbook A',
+    'Mask A',
     'MSKA',
 )
 const MSKB = createERC20Token(
     ChainId.Rinkeby,
     getConstant(CONSTANTS, 'MSKB_ADDRESS', ChainId.Rinkeby),
     18,
-    'Maskbook B',
+    'Mask B',
     'MSKB',
 )
 const MSKC = createERC20Token(
     ChainId.Rinkeby,
     getConstant(CONSTANTS, 'MSKC_ADDRESS', ChainId.Rinkeby),
     18,
-    'Maskbook C',
+    'Mask C',
     'MSKC',
 )
 

@@ -1,0 +1,46 @@
+// This file contains recommended task for this project.
+// You can copy this file as "tasks.json" to make it work.
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "ts",
+            "problemMatcher": ["$tsc-watch"],
+            "label": "Background TypeScript compiler",
+            "detail": "dev -- echo Starting TypeScript compiler...",
+            "isBackground": true,
+            "group": "build",
+            "presentation": {
+                "reveal": "never"
+            },
+            "runOptions": { "instanceLimit": 1, "runOn": "folderOpen" }
+        },
+        {
+            "type": "npm",
+            "script": "start",
+            "isBackground": true,
+            "group": "build",
+            "path": "packages/dashboard/",
+            "label": "Develop dashboard",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "start",
+            "isBackground": true,
+            "group": "build",
+            "path": "packages/theme/",
+            "label": "Develop theme",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "start",
+            "isBackground": true,
+            "group": "build",
+            "label": "Develop main extension",
+            "problemMatcher": []
+        }
+    ]
+}

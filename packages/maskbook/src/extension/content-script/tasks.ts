@@ -61,7 +61,7 @@ export default function tasks(...args: Parameters<typeof realTasks>) {
     if (disableOpenNewTabInBackgroundSettings.value && Number.isNaN(Number(tabIdOrUri))) {
         if (!options || !options.active)
             throw new Error(
-                `You have disabled "Disable fetching public keys in the background" in the settings so Maskbook can not perform this action`,
+                `You have disabled "Disable fetching public keys in the background" in the settings so Mask can not perform this action`,
             )
     }
     // in the background

@@ -1,4 +1,4 @@
-import { useAsync } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import { useBalanceCheckerContract } from '../contracts/useBalanceChecker'
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainState'
@@ -12,11 +12,11 @@ export function useTokensBalance(listOfAddress: string[]) {
     const account = useAccount()
     const chainId = useChainId()
     const balanceCheckerContract = useBalanceCheckerContract()
-    return useAsync(async () => {
-        if (!account || !balanceCheckerContract || !listOfAddress.length) return []
+    return useAsyncRetry(async () => {
+        if (!account || !balanceCheckerContract) return []
         return balanceCheckerContract.methods.balances([account], listOfAddress).call({
             // cannot check the sender's balance in the same contract
             from: undefined,
         })
-    }, [account, chainId /* re-calc when switch the chain */, listOfAddress.join(), balanceCheckerContract])
+    }, [account, chainId, listOfAddress.join(), balanceCheckerContract])
 }

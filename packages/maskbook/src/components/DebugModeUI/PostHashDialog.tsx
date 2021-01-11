@@ -36,14 +36,14 @@ function PostHashDialog(props: SimpleDialogProps) {
                     Appear in this list is not related to if you have shared this post to someone or not.
                 </DialogContentText>
                 <DialogContentText>
-                    The "Magic Code" and the Fingerprint should be the same on your friend's Maskbook and your Maskbook.
+                    The "Magic Code" and the Fingerprint should be the same on your friend's Mask and your Mask.
                 </DialogContentText>
                 <DialogContentText>
-                    If Fingerprint is not the same, it means at least one of Maskbook doesn't get the correct key of the
+                    If Fingerprint is not the same, it means at least one of Mask doesn't get the correct key of the
                     receiver.
                 </DialogContentText>
                 <DialogContentText>
-                    If MagicCode is not the same, it means at least one of Maskbook calculate the post hash wrong.
+                    If MagicCode is not the same, it means at least one of Mask calculate the post hash wrong.
                 </DialogContentText>
                 <List dense>
                     {props.friends.map((one) => {

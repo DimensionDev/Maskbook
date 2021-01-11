@@ -25,7 +25,7 @@ export const Election2020PluginDefine: PluginConfig = {
         if (!payload.ok) return null
         return (
             <MaskbookPluginWrapper pluginName="NFT">
-                <Suspense fallback={<SnackbarContent message="Maskbook is loading this plugin..." />}>
+                <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                     <ElectionPacket payload={payload.val} />
                 </Suspense>
             </MaskbookPluginWrapper>

@@ -37,6 +37,7 @@ interface PluginTraderMessage {
     rpc: unknown
 }
 
+if (module.hot) module.hot.accept()
 export const PluginTraderMessages = createPluginMessage<PluginTraderMessage>(PLUGIN_IDENTIFIER)
 export const PluginTraderRPC = createPluginRPC(
     PLUGIN_IDENTIFIER,

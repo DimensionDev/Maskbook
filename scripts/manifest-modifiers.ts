@@ -7,7 +7,6 @@ export function manifestV3(manifest: Manifest) {
     manifest.permissions = manifest.permissions.filter((x) => !x.startsWith('http'))
     manifest.optional_permissions = manifest.optional_permissions.filter((x) => x !== '<all_urls>')
     manifest.host_permissions = ['<all_urls>']
-    isDev && manifest.host_permissions.push('https://localhost:8080/*', 'http://localhost:8087/*')
     if (manifest.content_security_policy) {
         const old = manifest.content_security_policy.replace("'unsafe-eval'", '')
         manifest.content_security_policy = { extension_pages: old }
@@ -44,13 +43,12 @@ export function safari(manifest: Manifest) {
     manifest.permissions.push('<all_urls>')
 }
 export function development(manifest: Manifest) {
-    manifest.name = 'Maskbook (development)'
+    manifest.name += ' (development)'
     // required by Webpack HMR
     manifest.web_accessible_resources.push('*.json', '*.js')
     // 8097 is react devtools
     // connect-src is used by firefox
     manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; connect-src * https://localhost:8080/ http://localhost:8097; object-src 'self';`
-    manifest.permissions.push('https://localhost:8080/*', 'http://localhost:8087/*')
     manifest.key = // ID：jkoeaghipilijlahjplgbfiocjhldnap
         'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoz51rhO1w+wD' +
         '0EKZJEFJaSMkIcIj0qRadfi0tqcl5nbpuJAsafvLe3MaTbW9LhbixTg9' +
@@ -59,6 +57,10 @@ export function development(manifest: Manifest) {
         'p01fbORDknWt8suJmEMz7S0O5+u13+34NvxYzUNeLJF9gYrd4zzrAFYI' +
         'TDEYcqr0OMZvVrKz7IkJasER1uJyoGj4gFJeXNGE8y4Sqb150wBju70l' +
         'KNKlNevWDRJKasG9CjagAD2+BAfqNyltn7KwK7jAyL1w6d6mOwIDAQAB'
+    manifest.externally_connectable = {
+        ids: ['*'],
+        matches: ['*://localhost:*/', '*://127.0.0.1:*/'],
+    }
 }
 export function production(manifest: Manifest) {}
 export function E2E(manifest: Manifest) {

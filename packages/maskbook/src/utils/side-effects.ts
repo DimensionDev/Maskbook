@@ -25,3 +25,19 @@ try {
         invokeSideEffect()
     }
 }
+
+export function startEffect(
+    hot: __WebpackModuleApi.Hot | undefined,
+    f: (abortController: AbortController) => () => void,
+) {
+    const ac = new AbortController()
+    if (!hot) {
+        f(ac)
+        return
+    }
+    hot.dispose(f(ac))
+    hot.dispose(() => ac.abort())
+}
+export function startEffects(hot: __WebpackModuleApi.Hot | undefined) {
+    return startEffect.bind(null, hot)
+}

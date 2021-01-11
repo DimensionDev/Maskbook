@@ -3,7 +3,7 @@ import '../../setup.ui'
 
 import { useState } from 'react'
 import { useAsync } from 'react-use'
-import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card } from '@material-ui/core'
+import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card, StylesProvider } from '@material-ui/core'
 import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
@@ -11,10 +11,8 @@ import CreditCardIcon from '@material-ui/icons/CreditCard'
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined'
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import { HashRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom'
-import { I18nextProvider } from 'react-i18next'
 
 import { useI18N } from '../../utils/i18n-next-ui'
-import i18nNextInstance from '../../utils/i18n-next'
 import { useMaskbookTheme } from '../../utils/theme'
 
 import FooterLine from './DashboardComponents/FooterLine'
@@ -42,6 +40,7 @@ import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/PluginUI'
 import { ErrorBoundary, withErrorBoundary } from '../../components/shared/ErrorBoundary'
+import { MaskbookUIRoot } from '../../UIRoot'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.mode === 'dark'
@@ -219,7 +218,7 @@ function DashboardPluginUI() {
     return (
         <ThemeProvider theme={useMaskbookTheme()}>
             {[...PluginUI.values()].map((x) => (
-                <ErrorBoundary key={x.identifier} contain={`Plugin "${x.pluginName}"`}>
+                <ErrorBoundary key={x.identifier} subject={`Plugin "${x.pluginName}"`}>
                     <PluginDashboardInspectorForEach config={x} />
                 </ErrorBoundary>
             ))}
@@ -229,24 +228,22 @@ function DashboardPluginUI() {
 //#endregion
 
 export function Dashboard() {
-    return (
-        <ErrorBoundary>
-            <I18nextProvider i18n={i18nNextInstance}>
-                <ThemeProvider theme={useMaskbookTheme()}>
-                    <DashboardSnackbarProvider>
-                        <NoSsr>
-                            <Router>
-                                <CssBaseline />
-                                <DashboardBlurContextUI>
-                                    <DashboardUI />
-                                    <DashboardPluginUI />
-                                </DashboardBlurContextUI>
-                            </Router>
-                        </NoSsr>
-                    </DashboardSnackbarProvider>
-                </ThemeProvider>
-            </I18nextProvider>
-        </ErrorBoundary>
+    return MaskbookUIRoot(
+        <StylesProvider injectFirst>
+            <ThemeProvider theme={useMaskbookTheme()}>
+                <DashboardSnackbarProvider>
+                    <NoSsr>
+                        <Router>
+                            <CssBaseline />
+                            <DashboardBlurContextUI>
+                                <DashboardUI />
+                                <DashboardPluginUI />
+                            </DashboardBlurContextUI>
+                        </Router>
+                    </NoSsr>
+                </DashboardSnackbarProvider>
+            </ThemeProvider>
+        </StylesProvider>,
     )
 }
 

@@ -113,6 +113,9 @@ const useStyles = makeStyles((theme) => {
             flexDirection: 'column',
             overflow: 'hidden',
             position: 'relative',
+            [theme.breakpoints.down('sm')]: {
+                height: '100vh',
+            },
         },
         contentPadded: {
             '& > *': {

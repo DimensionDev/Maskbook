@@ -123,8 +123,8 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     <ImageListItem>
                         <Provider
                             logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
-                            name="Maskbook"
-                            description={t('plugin_wallet_connect_to_maskbook')}
+                            name="Mask"
+                            description={t('plugin_wallet_connect_to_mask')}
                             onClick={() => onConnect(ProviderType.Maskbook)}
                         />
                     </ImageListItem>

@@ -29,26 +29,26 @@ assignees: Jack-Works, jk234ert
 
 - [ ] Chrome
 
-  - Maskbook Version:
+  - Mask Version:
   - Browser Version:
 
 - [ ] Firefox
 
-  - Maskbook Version:
+  - Mask Version:
   - Browser Version:
 
 - [ ] Android
 
-  - Maskbook Version:
+  - Mask Version:
   - Android Version:
 
 - [ ] iOS
-  - Maskbook Version:
+  - Mask Version:
   - iOS Version:
 
 ### Build Variant
 
-- Where do you get Maskbook?
+- Where do you get Mask?
   - [ ] Store
   - [ ] ZIP
   - [ ] Self-Compiled

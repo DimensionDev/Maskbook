@@ -267,11 +267,14 @@ export function TradeForm(props: TradeFormProps) {
                                         size="large"
                                         onClick={onExactApprove}>
                                         {approveState === ApproveState.NOT_APPROVED
-                                            ? `Unlock ${formatBalance(
-                                                  inputTokenTradeAmount,
-                                                  inputToken?.decimals ?? 0,
-                                                  2,
-                                              )} ${inputToken?.symbol ?? 'Token'}`
+                                            ? t('plugin_wallet_token_unlock', {
+                                                  balance: formatBalance(
+                                                      new BigNumber(inputTokenTradeAmount),
+                                                      inputToken?.decimals ?? 0,
+                                                      2,
+                                                  ),
+                                                  symbol: inputToken?.symbol ?? 'Token',
+                                              })
                                             : ''}
                                     </ActionButton>
                                 </Grid>
@@ -282,7 +285,9 @@ export function TradeForm(props: TradeFormProps) {
                                         variant="contained"
                                         size="large"
                                         onClick={onApprove}>
-                                        {approveState === ApproveState.NOT_APPROVED ? `Infinite Unlock` : ''}
+                                        {approveState === ApproveState.NOT_APPROVED
+                                            ? t('plugin_wallet_token_infinite_unlock')
+                                            : ''}
                                     </ActionButton>
                                 </Grid>
                             </>

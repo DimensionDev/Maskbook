@@ -1,10 +1,8 @@
 import { MaskMessage } from '../../../utils/messages'
 import type { ProfileIdentifier } from '../../../database/type'
 import { queryPostsDB, PostRecord, RecipientReason } from '../../../database/post'
-import { appendShareTarget } from '../CryptoService'
-import { queryUserGroup } from '../UserGroupService'
-import { queryMyProfiles } from '../IdentityService'
 import { currentImportingBackup } from '../../../settings/settings'
+import { Services } from '../../service'
 
 interface ShareTarget {
     share: ProfileIdentifier[]
@@ -28,17 +26,20 @@ async function appendShare(
             return
         }
 
-        appendShareTarget(-38, post.postCryptoKey, post.identifier.postIV, share, whoAmI, reason).then(() => {
-            console.log('Post ', postID, ' shared')
-        }, console.error)
+        Services.Crypto.appendShareTarget(-38, post.postCryptoKey, post.identifier.postIV, share, whoAmI, reason).then(
+            () => {
+                console.log('Post ', postID, ' shared')
+            },
+            console.error,
+        )
     }
 }
 
-export function initAutoShareToFriends() {
-    MaskMessage.events.profileJoinedGroup.on(async (data) => {
+export default function () {
+    const undo1 = MaskMessage.events.profileJoinedGroup.on(async (data) => {
         if (currentImportingBackup.value) return
         if (data.group.isReal) return
-        const group = await queryUserGroup(data.group)
+        const group = await Services.UserGroup.queryUserGroup(data.group)
         if (!group) return
         // if (group.groupName !== PreDefinedVirtualGroupNames.friends) return
 
@@ -73,9 +74,9 @@ export function initAutoShareToFriends() {
         )
         console.groupEnd()
     })
-    MaskMessage.events.linkedProfilesChanged.on(async (events) => {
+    const undo2 = MaskMessage.events.linkedProfilesChanged.on(async (events) => {
         if (currentImportingBackup.value) return
-        const mine = await queryMyProfiles()
+        const mine = await Services.Identity.queryMyProfiles()
         for (const e of events) {
             appendShare(
                 (rec) => !!e.after && mine.some((q) => rec.postBy.equals(q.identifier)) && rec.recipients.has(e.of),
@@ -83,4 +84,8 @@ export function initAutoShareToFriends() {
             )
         }
     })
+    return () => {
+        undo1()
+        undo2()
+    }
 }

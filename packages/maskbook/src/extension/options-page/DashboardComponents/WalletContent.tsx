@@ -14,7 +14,6 @@ import {
     DashboardWalletDeleteConfirmDialog,
     DashboardWalletRenameDialog,
     DashboardWalletRedPacketDetailDialog,
-    DashboardWalletShareDialog,
 } from '../DashboardDialogs/Wallet'
 import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -73,11 +72,10 @@ const useStyles = makeStyles((theme) =>
 
 interface WalletContentProps {
     wallet: WalletRecord
-    detailedTokens: AssetDetailed[]
 }
 
 export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(function WalletContent(
-    { wallet, detailedTokens }: WalletContentProps,
+    { wallet }: WalletContentProps,
     ref,
 ) {
     const classes = useStyles()
@@ -85,7 +83,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const color = useColorStyles()
     const xsMatched = useMatchXS()
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
-    const [walletShare, , openWalletShare] = useModal(DashboardWalletShareDialog)
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
@@ -93,9 +90,8 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const [menu, openMenu] = useMenu(
-        <MenuItem onClick={() => openWalletShare({ wallet })}>{t('share')}</MenuItem>,
         <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
-        wallet._private_key_ || wallet.mnemonic ? (
+        wallet._private_key_ || wallet.mnemonic.length ? (
             <MenuItem onClick={() => openWalletBackup({ wallet })}>{t('backup')}</MenuItem>
         ) : undefined,
         <MenuItem onClick={() => openWalletDelete({ wallet })} className={color.error} data-testid="delete_button">
@@ -187,11 +183,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
 
             <Box className={classes.content}>
                 {tabIndex === 0 ? (
-                    <WalletAssetsTable
-                        classes={{ container: classes.assetsTable }}
-                        wallet={wallet}
-                        detailedTokens={detailedTokens}
-                    />
+                    <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
                 ) : null}
                 {Flags.COTM_enabled && tabIndex === 1 ? <COTM_TokenAlbum /> : null}
                 {Flags.election2020_enabled && tabIndex === 1 ? <ElectionTokenAlbum /> : null}
@@ -223,7 +215,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                 </Box>
             ) : null}
             {addToken}
-            {walletShare}
             {walletHistory}
             {walletBackup}
             {walletDelete}
