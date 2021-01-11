@@ -7,7 +7,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
-import { useBase64 } from '../../../utils/hooks/useBase64'
+import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -64,6 +64,7 @@ export interface ShareDialogProps extends withClasses<'root'> {
 }
 
 export function ShareDialog(props: ShareDialogProps) {
+    const ShareBackground = getAssetAsBlobURL(new URL('../assets/share-background.jpg', import.meta.url))
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const { token, tokenAmount } = props
@@ -75,7 +76,6 @@ export function ShareDialog(props: ShareDialogProps) {
             symbol: token.symbol,
         }),
     )
-    const { value: ShareBackground } = useBase64(new URL('../assets/share-background.jpg', import.meta.url).toString())
     return (
         <>
             <Box className={classes.shareWrapper}>
