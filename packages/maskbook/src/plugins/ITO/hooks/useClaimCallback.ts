@@ -68,6 +68,26 @@ export function useClaimCallback(
             return
         }
 
+        // step 1: check remaining
+        try {
+            const availability = await ITO_Contract.methods.check_availability(id).call({
+                from: account,
+            })
+            if (new BigNumber(availability.remaining).isZero()) {
+                setClaimState({
+                    type: TransactionStateType.FAILED,
+                    error: new Error('Out of Stock')
+                })
+                return
+            }
+        } catch (e) {
+            setClaimState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Failed to check availability.')
+            })
+            return
+        }
+
         const params: Parameters<typeof ITO_Contract['methods']['swap']> = [
             id,
             Web3Utils.soliditySha3(
@@ -80,7 +100,7 @@ export function useClaimCallback(
             total,
         ]
 
-        // step 1: estimate gas
+        // step 2-1: estimate gas
         const estimatedGas = await ITO_Contract.methods
             .swap(...params)
             .estimateGas(config)
@@ -92,7 +112,7 @@ export function useClaimCallback(
                 throw error
             })
 
-        // step 2-1: blocking
+        // step 2-2: blocking
         return new Promise<void>((resolve, reject) => {
             const onSucceed = (no: number, receipt: TransactionReceipt) => {
                 setClaimState({
