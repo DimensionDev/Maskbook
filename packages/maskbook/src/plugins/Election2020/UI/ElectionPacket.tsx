@@ -22,7 +22,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useBase64 } from '../../../utils/hooks/useBase64'
+import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import type { CSSProperties } from '@material-ui/core/styles/withStyles'
 
 const useStyles = makeStyles((theme) =>
@@ -138,6 +138,10 @@ export interface ElectionPacketProps {
 }
 
 export function ElectionPacket(props: ElectionPacketProps) {
+    // fetch images
+    const FireworksImage = getAssetAsBlobURL(new URL('../assets/fireworks.jpg', import.meta.url))
+    const FlagImage = getAssetAsBlobURL(new URL('../assets/flag.jpg', import.meta.url))
+
     const { payload } = props
 
     const { t } = useI18N()
@@ -156,10 +160,6 @@ export function ElectionPacket(props: ElectionPacketProps) {
         loading: loadingTokensOfOwner,
         retry: revalidateTokensOfOwner,
     } = useElectionTokensOfOwner(payload.state, electionToken)
-
-    // fetch images
-    const { value: FireworksImage } = useBase64(new URL('../assets/fireworks.jpg', import.meta.url).toString())
-    const { value: FlagImage } = useBase64(new URL('../assets/flag.jpg', import.meta.url).toString())
 
     // context
     const account = useAccount()

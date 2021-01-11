@@ -24,7 +24,7 @@ import { sortTokens } from '../helpers'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
-import { useBase64 } from '../../../utils/hooks/useBase64'
+import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 
 export interface IconProps {
     size?: number
@@ -151,6 +151,8 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 }
 
 export function ITO(props: ITO_Props) {
+    // assets
+    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
     const { payload, retryPayload } = props
     const {
         token,
@@ -177,9 +179,6 @@ export function ITO(props: ITO_Props) {
     const postLink = usePostLink()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-
-    // assets
-    const { value: PoolBackground } = useBase64(new URL('../assets/pool-background.jpg', import.meta.url).toString())
 
     //#region token detailed
     const {
