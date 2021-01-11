@@ -8,6 +8,7 @@ import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed, TransactionE
 import { useAccount } from '../../../web3/hooks/useAccount'
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
+
 export interface RedPacketSettings {
     password: string
     shares: number

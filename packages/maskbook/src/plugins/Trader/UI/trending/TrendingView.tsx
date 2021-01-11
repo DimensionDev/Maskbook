@@ -20,6 +20,10 @@ import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
+import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
+import { useChainId } from '../../../../web3/hooks/useChainState'
+import { TRADE_CONSTANTS, UST } from '../../constants'
+import { ChainId } from '../../../../web3/types'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -61,10 +65,13 @@ export interface TrendingViewProps {
 
 export function TrendingView(props: TrendingViewProps) {
     const { name, tagType, dataProviders, tradeProviders } = props
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     const { t } = useI18N()
     const classes = useStyles()
+
+    const chainId = useChainId()
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
+    const UST_ADDRESS = useConstant(TRADE_CONSTANTS, 'UST_ADDRESS')
 
     //#region trending
     const dataProvider = useCurrentDataProvider(dataProviders)
@@ -140,6 +147,10 @@ export function TrendingView(props: TrendingViewProps) {
     const { coin, market, tickers } = trending
     const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
     const swapTabIndex = dataProvider !== DataProvider.UNISWAP ? 3 : 1
+    const fromToken = chainId === ChainId.Mainnet && coin.is_mirrored ? UST : createEtherToken(chainId)
+    const toToken = canSwap
+        ? createERC20Token(chainId, coin.eth_address ?? '', coin.decimals ?? 0, coin.name, coin.symbol)
+        : undefined
 
     return (
         <TrendingViewDeck
@@ -188,13 +199,12 @@ export function TrendingView(props: TrendingViewProps) {
             {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
                 <TickersTable tickers={tickers} dataProvider={dataProvider} />
             ) : null}
-            {tabIndex === swapTabIndex && canSwap ? (
+            {tabIndex === swapTabIndex && canSwap && toToken ? (
                 <TradeView
                     classes={{ root: classes.tradeViewRoot }}
                     TraderProps={{
-                        address: coin.eth_address ?? ETH_ADDRESS,
-                        name: coin.name,
-                        symbol: coin.symbol,
+                        fromToken,
+                        toToken,
                     }}
                 />
             ) : null}
