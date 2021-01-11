@@ -72,11 +72,10 @@ const useStyles = makeStyles((theme) =>
 
 interface WalletContentProps {
     wallet: WalletRecord
-    detailedTokens: AssetDetailed[]
 }
 
 export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(function WalletContent(
-    { wallet, detailedTokens }: WalletContentProps,
+    { wallet }: WalletContentProps,
     ref,
 ) {
     const classes = useStyles()
@@ -184,11 +183,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
 
             <Box className={classes.content}>
                 {tabIndex === 0 ? (
-                    <WalletAssetsTable
-                        classes={{ container: classes.assetsTable }}
-                        wallet={wallet}
-                        detailedTokens={detailedTokens}
-                    />
+                    <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
                 ) : null}
                 {Flags.COTM_enabled && tabIndex === 1 ? <COTM_TokenAlbum /> : null}
                 {Flags.election2020_enabled && tabIndex === 1 ? <ElectionTokenAlbum /> : null}

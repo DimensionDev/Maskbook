@@ -21,6 +21,8 @@ import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenActionsBar } from './ERC20TokenActionsBar'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
+import { useContext } from 'react'
+import { DashboardWalletsContext } from '../DashboardRouters/Wallets'
 
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
@@ -57,12 +59,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export interface WalletAssetsTableProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     wallet: WalletRecord
-    detailedTokens: AssetDetailed[]
 }
 
 export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const { t } = useI18N()
-    const { wallet, detailedTokens } = props
+    const { wallet } = props
+    const { detailedTokens } = useContext(DashboardWalletsContext)
 
     const classes = useStylesExtends(useStyles(), props)
     const LABELS = [t('wallet_assets'), t('wallet_price'), t('wallet_balance'), t('wallet_value'), ''] as const
