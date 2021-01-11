@@ -76,14 +76,14 @@ export function useClaimCallback(
             if (new BigNumber(availability.remaining).isZero()) {
                 setClaimState({
                     type: TransactionStateType.FAILED,
-                    error: new Error('Out of Stock')
+                    error: new Error('Out of Stock'),
                 })
                 return
             }
         } catch (e) {
             setClaimState({
                 type: TransactionStateType.FAILED,
-                error: new Error('Failed to check availability.')
+                error: new Error('Failed to check availability.'),
             })
             return
         }
