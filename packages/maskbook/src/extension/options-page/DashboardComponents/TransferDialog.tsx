@@ -34,6 +34,7 @@ import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { useContext } from 'react'
 import { DashboardWalletsContext } from '../DashboardRouters/Wallets'
+import { EthereumMessages } from '../../../plugins/Ethereum/messages'
 
 interface WalletProps {
     wallet: WalletRecord
@@ -107,7 +108,7 @@ function TransferTab(props: TransferTabProps) {
 
     //#region remote controlled transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             resetTransferCallback()

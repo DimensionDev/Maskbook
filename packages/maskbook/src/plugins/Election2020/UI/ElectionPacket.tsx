@@ -24,6 +24,7 @@ import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import type { CSSProperties } from '@material-ui/core/styles/withStyles'
+import { EthereumMessages } from '../../Ethereum/messages'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -184,7 +185,7 @@ export function ElectionPacket(props: ElectionPacketProps) {
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
 

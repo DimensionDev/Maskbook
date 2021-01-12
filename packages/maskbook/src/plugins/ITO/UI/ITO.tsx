@@ -25,6 +25,7 @@ import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
+import { EthereumMessages } from '../../Ethereum/messages'
 
 export interface IconProps {
     size?: number
@@ -245,7 +246,7 @@ export function ITO(props: ITO_Props) {
     //#region withdraw
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (destructState.type !== TransactionStateType.CONFIRMED) return

@@ -14,7 +14,6 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { useERC20TokenApproveCallback, ApproveState } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { GITCOIN_CONSTANT } from '../constants'
-import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -27,6 +26,8 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { Flags } from '../../../utils/flags'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { getActivatedUI } from '../../../social-network/ui'
+import { EthereumMessages } from '../../Ethereum/messages'
+import { SelectERC20TokenDialog } from '../../Ethereum/UI/SelectERC20TokenDialog'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -149,7 +150,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (donateState.type === TransactionStateType.HASH) setRawAmount('0')
