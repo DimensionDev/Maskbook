@@ -87,12 +87,12 @@ export function ShareDialog(props: ShareDialogProps) {
                         {token.symbol}
                     </Typography>
                     <Typography variant="body1" className={classes.shareText}>
-                        {t('plugin_ito_congratulations')}
+                        {actualSwapAmount.isZero() ? t('plugin_ito_out_of_stock_hit') : t('plugin_ito_congratulations')}
                     </Typography>
                     <ActionButton
                         onClick={() => {
                             props.onClose()
-                            window.open(shareLink, '_blank', 'noopener noreferrer')
+                            actualSwapAmount.isZero() ? void 0 : window.open(shareLink, '_blank', 'noopener noreferrer')
                         }}
                         variant="contained"
                         color="primary"

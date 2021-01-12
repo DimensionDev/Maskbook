@@ -12,7 +12,7 @@ import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import { formatBalance } from '../../Wallet/formatter'
+import { formatAmount, formatBalance } from '../../Wallet/formatter'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatDateTime, formatTimeDiffer } from '../../../utils/date'
@@ -151,6 +151,30 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
     )
 }
 
+function _format(amount: BigNumber, token: EtherTokenDetailed | ERC20TokenDetailed): string {
+    if (amount.isZero()) {
+        return '0'
+    }
+    const _amount = formatBalance(amount, token.decimals)
+    const [number, decimal] = _amount.split('.')
+
+    if (!decimal) return number
+
+    if (number.length <= 6) {
+        if (decimal.length >= 6) {
+            return `${number}.${decimal.slice(0, 6)}`
+        }
+        return `${number}.${decimal.padEnd(6, '0')}`
+    } else if (number.length >= 12) {
+        return number
+    }
+
+    if (decimal.length > 12 - number.length) {
+        return `${number}.${decimal.slice(0, 12 - number.length)}`
+    }
+    return `${number}.${decimal.padEnd(12 - number.length, '0')}`
+}
+
 export function ITO(props: ITO_Props) {
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
@@ -220,6 +244,8 @@ export function ITO(props: ITO_Props) {
     const refundAmount = tradeInfo?.buyInfo
         ? new BigNumber(tradeInfo?.buyInfo.amount).minus(new BigNumber(tradeInfo?.buyInfo.amount_sold))
         : new BigNumber(0)
+    // out of stock
+    const refundAllAmount = tradeInfo?.buyInfo && new BigNumber(tradeInfo?.buyInfo.amount_sold).isZero()
     useEffect(() => {
         // should not revalidate if never validated before
         if (!availability || !tradeInfo) return
@@ -291,22 +317,25 @@ export function ITO(props: ITO_Props) {
                     <Typography variant="h5" className={classes.title}>
                         {payload.message}
                     </Typography>
-                    {listOfStatus.includes(ITO_Status.expired) ||
-                    (listOfStatus.includes(ITO_Status.completed) && isBuyer) ||
-                    total_remaining.isEqualTo(0) ? (
-                        <Typography variant="body2" className={classes.status}>
-                            {(listOfStatus.includes(ITO_Status.completed) && isBuyer) || total_remaining.isEqualTo(0)
-                                ? t('plugin_ito_completed')
-                                : listOfStatus.includes(ITO_Status.expired)
-                                ? t('plugin_ito_expired')
-                                : null}
-                        </Typography>
-                    ) : null}
+
+                    <Typography variant="body2" className={classes.status}>
+                        {listOfStatus.includes(ITO_Status.waited)
+                            ? t('plugin_ito_status_no_start')
+                            : listOfStatus.includes(ITO_Status.expired)
+                            ? t('plugin_ito_expired')
+                            : listOfStatus.includes(ITO_Status.started)
+                            ? t('plugin_ito_status_ongoing')
+                            : listOfStatus.includes(ITO_Status.started) && total_remaining.isEqualTo(0)
+                            ? t('plugin_ito_status_out_of_stock')
+                            : (listOfStatus.includes(ITO_Status.completed) && isBuyer) || total_remaining.isEqualTo(0)
+                            ? t('plugin_ito_completed')
+                            : null}
+                    </Typography>
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
                     {t('plugin_ito_swapped_status', {
-                        remain: formatBalance(sold, token.decimals ?? 0),
-                        total: formatBalance(total, token.decimals ?? 0),
+                        remain: _format(sold, token),
+                        total: _format(total, token),
                         token: token.symbol,
                     })}
                     <Link
@@ -349,20 +378,42 @@ export function ITO(props: ITO_Props) {
                 <Box className={classes.footer}>
                     <div>
                         {listOfStatus.includes(ITO_Status.completed) ? (
+                            <>
+                                <Typography variant="body1">
+                                    {refundAllAmount
+                                        ? t('plugin_ito_out_of_stock_hit')
+                                        : `${t('plugin_ito_your_claimed_amount', {
+                                              amount: formatBalance(
+                                                  new BigNumber(availability?.swapped ?? 0),
+                                                  token.decimals,
+                                              ),
+                                              symbol: token.symbol,
+                                          })} ${
+                                              refundAmount.isEqualTo(0)
+                                                  ? '.'
+                                                  : ', ' +
+                                                    t('plugin_ito_your_refund_amount', {
+                                                        amount: formatBalance(
+                                                            refundAmount,
+                                                            tradeInfo?.buyInfo?.token.decimals ?? 0,
+                                                        ),
+                                                        symbol: tradeInfo?.buyInfo?.token.symbol,
+                                                    })
+                                          }`}
+                                </Typography>
+                                <Typography variant="body1">
+                                    {t('plugin_ito_swap_end_date', {
+                                        date: formatDateTime(new Date(end_time * 1000), true),
+                                    })}
+                                </Typography>
+                            </>
+                        ) : listOfStatus.includes(ITO_Status.expired) ? (
                             <Typography variant="body1">
-                                {t('plugin_ito_your_claimed_amount', {
-                                    amount: formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals),
-                                    symbol: token.symbol,
+                                {t('plugin_ito_swap_end_date', {
+                                    date: formatDateTime(new Date(end_time * 1000), true),
                                 })}
-                                {refundAmount.isEqualTo(0)
-                                    ? '.'
-                                    : ', ' +
-                                      t('plugin_ito_your_refund_amount', {
-                                          amount: formatBalance(refundAmount, tradeInfo?.buyInfo?.token.decimals ?? 0),
-                                          symbol: tradeInfo?.buyInfo?.token.symbol,
-                                      })}
                             </Typography>
-                        ) : listOfStatus.includes(ITO_Status.expired) ? null : (
+                        ) : (
                             <>
                                 <Typography variant="body1">
                                     {t('plugin_ito_allocation_per_wallet', {
@@ -374,7 +425,9 @@ export function ITO(props: ITO_Props) {
                                     {listOfStatus.includes(ITO_Status.waited)
                                         ? `Start date: ${formatDateTime(new Date(start_time * 1000), true)}`
                                         : listOfStatus.includes(ITO_Status.started)
-                                        ? `Remaining time: ${formatTimeDiffer(new Date(), new Date(end_time * 1000))}`
+                                        ? t('plugin_ito_swap_end_date', {
+                                              date: formatDateTime(new Date(end_time * 1000), true),
+                                          })
                                         : null}
                                 </Typography>
                             </>
