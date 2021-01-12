@@ -37,6 +37,15 @@ export async function getCurrenies(dataProvider: DataProvider): Promise<Currency
                     description: 'Unite State Dollar',
                 },
             ]
+        case DataProvider.IDEX:
+            return [
+                {
+                    id: 'usd',
+                    name: 'USD',
+                    symbol: '$',
+                    description: 'Unite State Dollar',
+                },
+            ]
         default:
             unreachable(dataProvider)
     }
@@ -71,23 +80,37 @@ export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<C
                     description: 'Unite State Dollar',
                 },
             ]
+        case DataProvider.IDEX:
+            return [
+                {
+                    id: 'usd',
+                    name: 'USD',
+                    symbol: '$',
+                    description: 'Unite State Dollar',
+                },
+            ]
+        default:
+            unreachable(dataProvider)
     }
 }
 
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     if (dataProvider === DataProvider.COIN_GECKO) return coinGeckoAPI.getAllCoins()
     if (dataProvider === DataProvider.UNISWAP) return uniswapAPI.getAllCoins()
-
-    // for cmc we should filter inactive coins out
-    const { data: coins } = await coinMarketCapAPI.getAllCoins()
-    return coins
-        .filter((x) => x.status === 'active')
-        .map((y) => ({
-            id: String(y.id),
-            name: y.name,
-            symbol: y.symbol,
-            eth_address: y.platform?.name === 'Ethereum' ? y.platform.token_address : undefined,
-        }))
+    if (dataProvider === DataProvider.COIN_MARKET_CAP) {
+        // for cmc we should filter inactive coins out
+        const { data: coins } = await coinMarketCapAPI.getAllCoins()
+        return coins
+            .filter((x) => x.status === 'active')
+            .map((y) => ({
+                id: String(y.id),
+                name: y.name,
+                symbol: y.symbol,
+                eth_address: y.platform?.name === 'Ethereum' ? y.platform.token_address : undefined,
+            }))
+    }
+    if (dataProvider === DataProvider.IDEX) throw new Error('to be implemented')
+    unreachable(dataProvider)
 }
 
 //#region check a specific coin is available on specific dataProvider
@@ -322,6 +345,8 @@ export async function getCoinInfo(id: string, currency: Currency, dataProvider: 
                 tickers: [],
                 lastUpdated: '',
             } as Trending
+        case DataProvider.IDEX:
+            throw new Error('to be implemented')
         default:
             unreachable(dataProvider)
     }
@@ -356,24 +381,29 @@ export async function getPriceStats(
         const stats = await coinGeckoAPI.getPriceStats(id, currency.id, days === Days.MAX ? 11430 : days)
         return stats.prices
     }
-    const interval = (() => {
-        if (days === 0) return '1d' // max
-        if (days > 365) return '1d' // 1y
-        if (days > 90) return '2h' // 3m
-        if (days > 30) return '1h' // 1m
-        if (days > 7) return '15m' // 1w
-        return '5m'
-    })()
-    const endDate = new Date()
-    const startDate = new Date()
-    startDate.setDate(startDate.getDate() - days)
-    const stats = await coinMarketCapAPI.getHistorical(
-        id,
-        currency.name.toUpperCase(),
-        days === Days.MAX ? BTC_FIRST_LEGER_DATE : startDate,
-        endDate,
-        interval,
-    )
-    if (stats.data.is_active === 0) return []
-    return Object.entries(stats.data).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
+    if (dataProvider === DataProvider.COIN_MARKET_CAP) {
+        const interval = (() => {
+            if (days === 0) return '1d' // max
+            if (days > 365) return '1d' // 1y
+            if (days > 90) return '2h' // 3m
+            if (days > 30) return '1h' // 1m
+            if (days > 7) return '15m' // 1w
+            return '5m'
+        })()
+        const endDate = new Date()
+        const startDate = new Date()
+        startDate.setDate(startDate.getDate() - days)
+        const stats = await coinMarketCapAPI.getHistorical(
+            id,
+            currency.name.toUpperCase(),
+            days === Days.MAX ? BTC_FIRST_LEGER_DATE : startDate,
+            endDate,
+            interval,
+        )
+        if (stats.data.is_active === 0) return []
+        return Object.entries(stats.data).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
+    }
+    if (dataProvider === DataProvider.UNISWAP) throw new Error('to be implemented')
+    if (dataProvider === DataProvider.IDEX) throw new Error('to be implemented')
+    unreachable(dataProvider)
 }

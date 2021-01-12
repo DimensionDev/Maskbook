@@ -2,9 +2,9 @@
 
 ## Feature Set
 
-- [x] View trending info of a cryptocurrency with cash tag
+- [x] View trending info of a cryptocurrency with cash tag (coingecko, cmc and idex)
 - [ ] \[TODO\] View trending info of a stock with cash tag
-- [x] Do trading between different ERC20 tokens
+- [x] Do trading between different ERC20 tokens (uniswap and 0x)
 
 ## Files
 

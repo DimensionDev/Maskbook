@@ -73,6 +73,7 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
 const coinGeckoSettings = createInternalSettings(`${PLUGIN_IDENTIFIER}+currentCoinGeckoSettings`, '')
 const coinMarketCapSettings = createInternalSettings(`${PLUGIN_IDENTIFIER}+currentCoinMarketCapSettings`, '')
 const coinUniswapSettings = createInternalSettings(`${PLUGIN_IDENTIFIER}+currentCoinUniswapSettings`, '')
+const coinIDEXSettings = createInternalSettings(`${PLUGIN_IDENTIFIER}+currentCoinIDEXSettings`, '')
 
 /**
  * The general settings of specific data provider
@@ -85,6 +86,8 @@ export function getCurrentDataProviderGeneralSettings(dataProvider: DataProvider
             return coinMarketCapSettings
         case DataProvider.UNISWAP:
             return coinUniswapSettings
+        case DataProvider.IDEX:
+            return coinIDEXSettings
         default:
             unreachable(dataProvider)
     }
@@ -104,6 +107,10 @@ const coinUniswapPreferredCoinId = createInternalSettings<string>(
     `${PLUGIN_IDENTIFIER}+currentCoinUniswapPreferredCoinId`,
     '{}',
 )
+const coinIDEXPreferredCoinId = createInternalSettings<string>(
+    `${PLUGIN_IDENTIFIER}+currentCoinIDEXPreferredCoinId`,
+    '{}',
+)
 
 export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
     switch (dataProvider) {
@@ -113,6 +120,8 @@ export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
             return coinMarketCapPreferredCoinId
         case DataProvider.UNISWAP:
             return coinUniswapPreferredCoinId
+        case DataProvider.IDEX:
+            return coinIDEXPreferredCoinId
         default:
             unreachable(dataProvider)
     }

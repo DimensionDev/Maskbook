@@ -27,6 +27,8 @@ export function resolveDataProviderName(dataProvider: DataProvider) {
             return 'CoinMarketCap'
         case DataProvider.UNISWAP:
             return 'Uniswap'
+        case DataProvider.IDEX:
+            return 'IDEX'
         default:
             unreachable(dataProvider)
     }
@@ -40,6 +42,8 @@ export function resolveDataProviderLink(dataProvider: DataProvider) {
             return 'https://coinmarketcap.com/'
         case DataProvider.UNISWAP:
             return 'https://uniswap.org/'
+        case DataProvider.IDEX:
+            return 'https://www.dextools.io/'
         default:
             unreachable(dataProvider)
     }
