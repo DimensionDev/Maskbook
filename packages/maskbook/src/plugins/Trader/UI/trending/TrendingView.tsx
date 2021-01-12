@@ -68,10 +68,7 @@ export function TrendingView(props: TrendingViewProps) {
 
     const { t } = useI18N()
     const classes = useStyles()
-
     const chainId = useChainId()
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-    const UST_ADDRESS = useConstant(TRADE_CONSTANTS, 'UST_ADDRESS')
 
     //#region trending
     const dataProvider = useCurrentDataProvider(dataProviders)

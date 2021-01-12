@@ -74,17 +74,16 @@ export function SearchResultView(props: SearchResultViewProps) {
 
     const { t } = useI18N()
     const classes = useStyles()
-
     const chainId = useChainId()
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     //#region trending
     const dataProvider = useCurrentDataProvider(dataProviders)
     //#endregion
+
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP ? 1 : 0)
     //#region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
-    //#endregion
+    //#endregion                                                                                                                   
 
     //#region merge trending
     const coinId = usePreferredCoinId(name, dataProvider)
