@@ -12,7 +12,6 @@ import { useERC20TokenApproveCallback, ApproveState } from '../../../../web3/hoo
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { TradeActionType } from '../../trader/useTradeState'
 import { TokenPanelType, TradeComputed, TradeProvider } from '../../types'
-import { CONSTANTS } from '../../../../web3/constants'
 import { TRADE_CONSTANTS } from '../../constants'
 import { sleep } from '../../../../utils/utils'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
@@ -20,7 +19,6 @@ import { SelectERC20TokenDialog } from '../../../../web3/UI/SelectERC20TokenDial
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../../Wallet/messages'
 import { useShareLink } from '../../../../utils/hooks/useShareLink'
-import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 import { formatBalance } from '../../../Wallet/formatter'
 import { TradePairViewer } from '../uniswap/TradePairViewer'
 import { useValueRef } from '../../../../utils/hooks/useValueRef'
@@ -51,15 +49,12 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface TraderProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    address: string
-    name: string
-    symbol: string
+    fromToken: EtherTokenDetailed | ERC20TokenDetailed
+    toToken?: EtherTokenDetailed | ERC20TokenDetailed
 }
 
 export function Trader(props: TraderProps) {
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-
-    const { address, name, symbol } = props
+    const { fromToken, toToken } = props
     const classes = useStylesExtends(useStyles(), props)
 
     const provider = useValueRef(currentTradeProviderSettings)
@@ -71,39 +66,16 @@ export function Trader(props: TraderProps) {
     } = useTradeStateComputed(provider)
     const { inputToken, outputToken } = tradeStore
 
-    const [inputTokenAddress, setInputTokenAddress] = useState(ETH_ADDRESS)
-    const [outputTokenAddress, setOutputTokenAddress] = useState(address === ETH_ADDRESS ? '' : address)
-
-    const isEtherInput = inputTokenAddress === ETH_ADDRESS
-    const isEtherOutput = outputTokenAddress === ETH_ADDRESS
-
-    const asyncInputTokenDetailed = useTokenDetailed(
-        isEtherInput ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
-        isEtherInput ? ETH_ADDRESS : inputTokenAddress,
-        {
-            name,
-            symbol,
-        },
-    )
-    const asyncOutputTokenDetailed = useTokenDetailed(
-        isEtherOutput ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
-        isEtherOutput ? ETH_ADDRESS : outputTokenAddress,
-        {
-            name,
-            symbol,
-        },
-    )
-
     useEffect(() => {
         dispatchTradeStore({
             type: TradeActionType.UPDATE_INPUT_TOKEN,
-            token: asyncInputTokenDetailed.value,
+            token: fromToken,
         })
         dispatchTradeStore({
             type: TradeActionType.UPDATE_OUTPUT_TOKEN,
-            token: asyncOutputTokenDetailed.value,
+            token: toToken,
         })
-    }, [asyncInputTokenDetailed.value, asyncOutputTokenDetailed.value])
+    }, [fromToken, toToken])
     //#endregion
 
     //#region switch tokens

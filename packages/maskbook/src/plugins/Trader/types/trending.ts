@@ -25,6 +25,7 @@ export interface Coin {
     name: string
     symbol: string
     decimals?: number
+    is_mirrored?: boolean
     platform_url?: string
     tags?: string[]
     tech_docs_urls?: string[]
