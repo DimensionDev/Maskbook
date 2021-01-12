@@ -1,7 +1,7 @@
 import { Button, ButtonProps, CircularProgress, createStyles, makeStyles, Menu, MenuItem } from '@material-ui/core'
 import React, { useState } from 'react'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
-import { useGasPrice } from '../hooks/useGasPrice'
+import { useGasPrices } from '../hooks/useGasPrices'
 import { usePortalShadowRoot } from '../../utils/shadow-root/usePortalShadowRoot'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 
@@ -18,7 +18,7 @@ export interface EthereumGasMenuButtonProps extends withClasses<KeysInferFromUse
 
 export function EthereumGasMenuButton(props: EthereumGasMenuButtonProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const { loading, value: gasPrices } = useGasPrice()
+    const { loading, value: gasPrices } = useGasPrices()
     const [selectedIndex, setSelectedIndex] = useState(0)
     const { ButtonProps, onChange } = props
 

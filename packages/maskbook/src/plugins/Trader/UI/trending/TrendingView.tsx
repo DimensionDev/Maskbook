@@ -17,7 +17,7 @@ import { TrendingViewSkeleton } from './TrendingViewSkeleton'
 import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
-import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
+import { useCurrentCoinId } from '../../trending/useCurrentCoinId'
 import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { UST } from '../../constants'
@@ -82,7 +82,7 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region merge trending
-    const coinId = usePreferredCoinId(name, dataProvider)
+    const coinId = useCurrentCoinId(name, dataProvider)
     const trendingById = useTrendingById(coinId, dataProvider)
     const trendingByKeyword = useTrendingByKeyword(tagType, coinId ? '' : name, dataProvider)
     const {

@@ -3,7 +3,7 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { getCurrentPreferredCoinIdSettings } from '../settings'
 import type { DataProvider } from '../types'
 
-export function usePreferredCoinId(keyword: string, dataProvider: DataProvider) {
+export function useCurrentCoinId(keyword: string, dataProvider: DataProvider) {
     const keyword_ = keyword.toLowerCase()
     const settings = useValueRef(getCurrentPreferredCoinIdSettings(dataProvider))
 

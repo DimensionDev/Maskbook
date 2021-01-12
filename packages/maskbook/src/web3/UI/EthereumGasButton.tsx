@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core'
 import React, { Fragment, useCallback, useEffect, useState } from 'react'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
-import { useGasPrice } from '../hooks/useGasPrice'
+import { useGasPrices } from '../hooks/useGasPrices'
 import { usePortalShadowRoot } from '../../utils/shadow-root/usePortalShadowRoot'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import type { GasPrice } from '../../plugins/Wallet/types'
@@ -129,7 +129,6 @@ function GasPriceItem(props: GasPriceItemProps) {
                 onChange?.({
                     ...gasPrice,
                     gasPrice: amount,
-                    eth: eth,
                 })
             }
         },
@@ -321,7 +320,7 @@ export interface EthereumGasButtonProps extends withClasses<KeysInferFromUseStyl
 
 export function EthereumGasButton(props: EthereumGasButtonProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const { loading, value: gasPrices = [] } = useGasPrice()
+    const { loading, value: gasPrices = [] } = useGasPrices()
     const { ButtonProps, onChange } = props
 
     const [open, setOpen] = useState(false)
@@ -332,8 +331,6 @@ export function EthereumGasButton(props: EthereumGasButtonProps) {
         const custom = {
             title: 'Custom',
             gasPrice: '0',
-            eth: '0',
-            usd: '0',
         } as GasPrice
 
         setGasPricesForUI([...gasPrices?.filter((item) => item.title === 'Standard' || item.title === 'Fast'), custom])

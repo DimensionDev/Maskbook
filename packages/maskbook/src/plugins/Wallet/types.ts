@@ -5,7 +5,5 @@ export interface GasPrice {
     description?: string
     gasPrice: string
     wait: number
-    usd?: string
-    eth?: string
     estimated?: Record<keyof CurrencyType, string>
 }

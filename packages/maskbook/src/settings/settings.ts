@@ -4,6 +4,7 @@ import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { ChainId } from '../web3/types'
 import { Appearance, Language, LaunchPage } from './types'
+import type { GasPrice } from '../plugins/Wallet/types'
 
 /**
  * Does the debug mode on
@@ -65,7 +66,7 @@ export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>
 //#endregion
 
 //#region gas price
-export const currentCustomizedGasPriceSettings = createGlobalSettings<string>('gas price', '0', {
+export const currentGasPriceSettings = createGlobalSettings<string>('gas price', '0', {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 //#endregion

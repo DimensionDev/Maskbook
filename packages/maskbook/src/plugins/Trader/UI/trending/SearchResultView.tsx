@@ -17,7 +17,7 @@ import { TrendingViewError } from './TrendingViewError'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
-import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
+import { useCurrentCoinId } from '../../trending/useCurrentCoinId'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
 import { ChainId, EthereumTokenType } from '../../../../web3/types'
@@ -86,7 +86,7 @@ export function SearchResultView(props: SearchResultViewProps) {
     //#endregion
 
     //#region merge trending
-    const coinId = usePreferredCoinId(name, dataProvider)
+    const coinId = useCurrentCoinId(name, dataProvider)
     const trendingById = useTrendingById(coinId, dataProvider)
     const trendingByKeyword = useTrendingByKeyword(tagType, coinId ? '' : name, dataProvider)
     const {
