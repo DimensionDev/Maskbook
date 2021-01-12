@@ -21,7 +21,7 @@ import ActionButton from '../../extension/options-page/DashboardComponents/Actio
 import { GAS_CUSTOM_WAIT, GAS_LIMIT } from '../constants'
 import SpacedButtonGroup from '../../extension/options-page/DashboardComponents/SpacedButtonGroup'
 import BigNumber from 'bignumber.js'
-import { useTransakGetPriceFroETH } from '../hooks/useTransakGetPriceFroETH'
+import { useTransakGetPriceForETH } from '../hooks/useTransakGetPriceForETH'
 
 interface CalcETHAmountProps {
     amount: string

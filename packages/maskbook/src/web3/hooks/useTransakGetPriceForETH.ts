@@ -9,7 +9,7 @@ const ENV = {
 
 const URL = ENV[process.env.NODE_ENV]
 
-export function useTransakGetPriceFroETH(amount: string) {
+export function useTransakGetPriceForETH(amount: string) {
     const [loading, setLoading] = useState(true)
     const [value, setValue] = useState<{ fiatAmount: string }>()
     useEffect(() => {
