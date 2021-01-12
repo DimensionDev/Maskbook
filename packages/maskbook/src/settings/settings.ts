@@ -64,6 +64,12 @@ export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>
 )
 //#endregion
 
+//#region gas price
+export const currentCustomizedGasPriceSettings = createGlobalSettings<string>('gas price', '0', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+//#endregion
+
 //#region language
 const lang: string = i18nNextInstance.language
 export const languageSettings = createGlobalSettings<Language>(

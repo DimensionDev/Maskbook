@@ -1,19 +1,25 @@
 import type { GasPrice } from '../../plugins/Wallet/types'
 import * as gasnow from './gasnow'
 import * as gasstation from './gasstation'
-import { GasPriceProviderType } from '../types'
+import { ChainId, GasPriceProviderType } from '../types'
 import { unreachable } from '../../utils/utils'
+import { getGasPrice } from '../../extension/background-script/EthereumService'
 
-export async function getGasPrices(provider: GasPriceProviderType): Promise<GasPrice[]> {
+export async function getGasPrices(provider: GasPriceProviderType, chainId: ChainId): Promise<GasPrice[]> {
     switch (provider) {
-        case GasPriceProviderType.GasNow: {
-            return await gasnow.getGasPrice()
-        }
-        case GasPriceProviderType.GasStation: {
-            return await gasstation.getGasPrice()
-        }
-        default: {
+        case GasPriceProviderType.Default:
+            return [
+                {
+                    title: 'Normal',
+                    wait: 15,
+                    gasPrice: await getGasPrice(chainId),
+                },
+            ]
+        case GasPriceProviderType.GasNow:
+            return gasnow.getGasPrice()
+        case GasPriceProviderType.GasStation:
+            return gasstation.getGasPrice()
+        default:
             return unreachable(provider)
-        }
     }
 }
