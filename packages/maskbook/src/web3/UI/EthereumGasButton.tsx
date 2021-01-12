@@ -28,7 +28,7 @@ interface CalcETHAmountProps {
 }
 function CalcETHAmount(props: CalcETHAmountProps) {
     const { amount } = props
-    const { loading, value: fiat } = useTransakGetPriceFroETH(amount)
+    const { loading, value: fiat } = useTransakGetPriceForETH(amount)
 
     return (
         <>
