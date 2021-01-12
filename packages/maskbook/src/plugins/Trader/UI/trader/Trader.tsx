@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => {
 
 export interface TraderProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     fromToken: EtherTokenDetailed | ERC20TokenDetailed
-    toToken: EtherTokenDetailed | ERC20TokenDetailed
+    toToken?: EtherTokenDetailed | ERC20TokenDetailed
 }
 
 export function Trader(props: TraderProps) {

@@ -11,8 +11,6 @@ import { Days, PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
 import { useCurrentTradeProvider } from '../../trending/useCurrentTradeProvider'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { useConstant } from '../../../../web3/hooks/useConstant'
-import { CONSTANTS } from '../../../../web3/constants'
 import { TradeView } from '../trader/TradeView'
 import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewError } from './TrendingViewError'
@@ -22,8 +20,9 @@ import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
-import { ChainId } from '../../../../web3/types'
+import { ChainId, EthereumTokenType } from '../../../../web3/types'
 import { UST } from '../../constants'
+import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -83,7 +82,7 @@ export function SearchResultView(props: SearchResultViewProps) {
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP ? 1 : 0)
     //#region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
-    //#endregion                                                                                                                   
+    //#endregion
 
     //#region merge trending
     const coinId = usePreferredCoinId(name, dataProvider)
@@ -97,6 +96,10 @@ export function SearchResultView(props: SearchResultViewProps) {
     //#endregion
 
     //#region swap
+    const { value: coinDetailed } = useTokenDetailed(
+        trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
+        trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.eth_address ?? '',
+    )
     const tradeProvider = useCurrentTradeProvider(tradeProviders)
     //#endregion
 
@@ -138,7 +141,7 @@ export function SearchResultView(props: SearchResultViewProps) {
     //#endregion
 
     //#region display loading skeleton
-    if (loadingTrending || !currency || !trending)
+    if (loadingTrending || !currency || !trending || !coinDetailed)
         return (
             <TrendingViewSkeleton
                 classes={{ footer: classes.skeletonFooter }}
@@ -151,8 +154,14 @@ export function SearchResultView(props: SearchResultViewProps) {
     const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
     const swapTabIndex = dataProvider !== DataProvider.UNISWAP ? 3 : 1
     const fromToken = chainId === ChainId.Mainnet && coin.is_mirrored ? UST : createEtherToken(chainId)
-    const toToken = canSwap
-        ? createERC20Token(chainId, coin.eth_address ?? '', coin.decimals ?? 0, coin.name, coin.symbol)
+    const toToken = trending.coin.eth_address
+        ? createERC20Token(
+              chainId,
+              coinDetailed.address,
+              coinDetailed.decimals,
+              coinDetailed.name ?? '',
+              coinDetailed.symbol ?? '',
+          )
         : undefined
 
     return (
@@ -199,7 +208,7 @@ export function SearchResultView(props: SearchResultViewProps) {
             {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
                 <TickersTable tickers={tickers} dataProvider={dataProvider} />
             ) : null}
-            {tabIndex === swapTabIndex && canSwap && toToken ? (
+            {tabIndex === swapTabIndex && canSwap ? (
                 <TradeView
                     TraderProps={{
                         fromToken,
