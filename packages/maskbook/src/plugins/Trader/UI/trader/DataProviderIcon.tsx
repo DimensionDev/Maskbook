@@ -2,6 +2,7 @@ import { createStyles, makeStyles } from '@material-ui/core'
 import { CoinMarketCapIcon } from '../../../../resources/CoinMarketCapIcon'
 import { CoinGeckoIcon } from '../../../../resources/CoinGeckoIcon'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
+import { DEXTIcon } from '../../../../resources/DEXTIcon'
 import { unreachable } from '../../../../utils/utils'
 import { DataProvider } from '../../types'
 
@@ -18,6 +19,11 @@ const useStyles = makeStyles((theme) => {
             verticalAlign: 'bottom',
         },
         uniswap: {
+            width: 16,
+            height: 16,
+            verticalAlign: 'bottom',
+        },
+        dext: {
             width: 16,
             height: 16,
             verticalAlign: 'bottom',
@@ -39,6 +45,8 @@ export function DataProviderIcon(props: DataProviderIconProps) {
             return <CoinMarketCapIcon classes={{ root: classes.cmc }} viewBox="0 0 16 16" />
         case DataProvider.UNISWAP:
             return <UniswapIcon classes={{ root: classes.uniswap }} viewBox="0 0 16 16" />
+        case DataProvider.DEXT:
+            return <DEXTIcon classes={{ root: classes.dext }} viewBox="0 0 16 16" />
         default:
             unreachable(props.provider)
     }

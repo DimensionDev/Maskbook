@@ -6,6 +6,7 @@ export enum DataProvider {
     COIN_GECKO,
     COIN_MARKET_CAP,
     UNISWAP,
+    DEXT,
 }
 
 export enum TagType {
