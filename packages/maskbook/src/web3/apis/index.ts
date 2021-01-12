@@ -9,9 +9,11 @@ export async function getGasPrices(provider: GasPriceProviderType): Promise<GasP
         case GasPriceProviderType.GasNow: {
             return await gasnow.getGasPrice()
         }
-        case GasPriceProviderType.GasStation:
+        case GasPriceProviderType.GasStation: {
             return await gasstation.getGasPrice()
-        default:
+        }
+        default: {
             return unreachable(provider)
+        }
     }
 }

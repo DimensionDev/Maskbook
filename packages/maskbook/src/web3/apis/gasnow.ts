@@ -13,6 +13,10 @@ interface GasNowData {
 }
 var _LastGasNowResponseData: GasNowData | null = null
 
+function format(price: string): string {
+    return Math.round(new BigNumber(price || '0').div(1000000000).toNumber()).toFixed()
+}
+
 async function GetGasNowPrice(name: string) {
     const params = new URLSearchParams()
     params.append('utm_source', name)
@@ -31,7 +35,7 @@ async function GetGasNowPrice(name: string) {
 }
 export async function getGasPrice(): Promise<GasPrice[]> {
     const timestamp = Date.now() / 1000
-    if (_LastGasNowResponseData && timestamp - _LastGasNowResponseData.timestamp > WAIT_TIME) {
+    if (!_LastGasNowResponseData || timestamp - _LastGasNowResponseData.timestamp > WAIT_TIME) {
         const { data: gasPrice } = await GetGasNowPrice('maskbook')
         _LastGasNowResponseData = gasPrice
     }
@@ -42,22 +46,22 @@ export async function getGasPrice(): Promise<GasPrice[]> {
         {
             title: 'rapid',
             wait: 15,
-            gasPrice: new BigNumber(_LastGasNowResponseData!.rapid).div(100000000).toFixed(),
+            gasPrice: format(_LastGasNowResponseData!.rapid),
         },
         {
             title: 'fast',
             wait: 60,
-            gasPrice: new BigNumber(_LastGasNowResponseData!.fast).div(1000000000).toFixed(),
+            gasPrice: format(_LastGasNowResponseData!.fast),
         },
         {
             title: 'slow',
             wait: 600,
-            gasPrice: new BigNumber(_LastGasNowResponseData!.slow).div(1000000000).toFixed(),
+            gasPrice: format(_LastGasNowResponseData!.slow),
         },
         {
             title: 'standard',
             wait: 180,
-            gasPrice: new BigNumber(_LastGasNowResponseData!.standard).div(1000000000).toFixed(),
+            gasPrice: format(_LastGasNowResponseData!.standard),
         },
     ] as GasPrice[]
 }

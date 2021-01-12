@@ -19,19 +19,20 @@ async function GetGasStationPrice() {
     params.append('api-key', KEY)
 
     try {
-        const response = await fetch(`${API_URL}?${params.toString()}`)
-        return response.json() as Promise<{
-            data: GasStationData
-        }>
+        const response = await fetch(`${API_URL}?${params.toString()}`, {
+            mode: 'cors',
+            headers: {
+                Accept: 'application/json',
+            },
+        })
+        return response.json() as Promise<GasStationData>
     } catch (e) {
-        return {
-            data: null,
-        }
+        return null
     }
 }
 
 export async function getGasPrice(): Promise<GasPrice[]> {
-    const { data: gasPrice } = await GetGasStationPrice()
+    const gasPrice = await GetGasStationPrice()
     if (!gasPrice) return []
 
     return [

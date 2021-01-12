@@ -256,6 +256,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     if (!token) return null
     return (
         <>
+            <SelectGasPriceDialog />
             <EthereumStatusBar classes={{ root: classes.bar }} />
             <div className={classes.line}>
                 <FormControl className={classes.input} variant="outlined">
