@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { makeStyles, createStyles, Theme, DialogContent, TextField } from '@material-ui/core'
-import { useI18N } from '../../utils/i18n-next-ui'
-import { useStylesExtends } from '../../components/custom-ui-helper'
-import { FixedTokenList } from '../../extension/options-page/DashboardComponents/FixedTokenList'
-import { InjectedDialog } from '../../components/shared/InjectedDialog'
-import type { ERC20TokenDetailed } from '../types'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { FixedTokenList } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
+import type { ERC20TokenDetailed } from '../../../web3/types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

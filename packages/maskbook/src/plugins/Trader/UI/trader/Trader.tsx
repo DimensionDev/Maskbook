@@ -15,7 +15,6 @@ import { TokenPanelType, TradeComputed, TradeProvider } from '../../types'
 import { TRADE_CONSTANTS } from '../../constants'
 import { sleep } from '../../../../utils/utils'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import { SelectERC20TokenDialog } from '../../../../web3/UI/SelectERC20TokenDialog'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../../Wallet/messages'
 import { useShareLink } from '../../../../utils/hooks/useShareLink'
@@ -27,6 +26,8 @@ import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { getActivatedUI } from '../../../../social-network/ui'
+import { EthereumMessages } from '../../../Ethereum/messages'
+import { SelectERC20TokenDialog } from '../../../Ethereum/UI/SelectERC20TokenDialog'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -222,7 +223,7 @@ export function Trader(props: TraderProps) {
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             setFreezed(false)

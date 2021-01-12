@@ -12,6 +12,7 @@ export enum ApproveState {
     UNKNOWN,
     INSUFFICIENT_BALANCE,
     NOT_APPROVED,
+    UPDATING,
     PENDING,
     APPROVED,
 }
@@ -19,8 +20,11 @@ export enum ApproveState {
 export function useERC20TokenApproveCallback(address: string, amount?: string, spender?: string) {
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(address)
-    const { value: balance, retry: revalidateBalance } = useERC20TokenBalance(address)
-    const { value: allowance, retry: revalidateAllowance } = useERC20TokenAllowance(address, spender)
+    const { value: balance = '0', loading: loadingBalance, retry: revalidateBalance } = useERC20TokenBalance(address)
+    const { value: allowance = '0', loading: loadingAllowance, retry: revalidateAllowance } = useERC20TokenAllowance(
+        address,
+        spender,
+    )
 
     const [approveHash, setApproveHash] = useState('')
     const receipt = useTransactionReceipt(approveHash)
@@ -83,14 +87,13 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
         setApproveHash('')
     }, [address, amount, spender])
 
-    // revalidate balance and allowance if tx hash was cleaned
     useEffect(() => {
         // should not revalidate if never validated before
         if (!allowance || !balance) return
-        if (!approveHash) {
-            revalidateBalance()
-            revalidateAllowance()
-        }
+        // revalidate balance and allowance if tx hash was cleaned
+        if (approveHash) return
+        revalidateBalance()
+        revalidateAllowance()
     }, [approveHash])
 
     return [approveState, approveCallback, resetCallback] as const

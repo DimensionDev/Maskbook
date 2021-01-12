@@ -13,6 +13,7 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
 import { formatBalance } from '../../Wallet/formatter'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { EthereumMessages } from '../../Ethereum/messages'
 
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',
@@ -46,7 +47,7 @@ export function CreateGuide(props: CreateGuideProps) {
     //#endregion
 
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
 

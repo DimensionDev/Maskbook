@@ -21,8 +21,9 @@ import type { JSON_PayloadInMask } from '../types'
 import { ITO_CONSTANTS } from '../constants'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { ClaimStatus } from './ClaimGuide'
-import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
 import { isSameAddress } from '../../../web3/helpers'
+import { SelectERC20TokenDialog } from '../../Ethereum/UI/SelectERC20TokenDialog'
+import { EthereumMessages } from '../../Ethereum/messages'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -178,7 +179,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     }, [account, payload, claimCallback])
 
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (claimState.type !== TransactionStateType.CONFIRMED && claimState.type !== TransactionStateType.RECEIPT)

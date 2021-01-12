@@ -23,6 +23,7 @@ import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { first } from 'lodash-es'
 import { useMintFromServerCallback } from '../hooks/useMintFromServerCallback'
+import { EthereumMessages } from '../../Ethereum/messages'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -142,7 +143,7 @@ export function TokenPacket(props: TokenPacketProps) {
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
 
