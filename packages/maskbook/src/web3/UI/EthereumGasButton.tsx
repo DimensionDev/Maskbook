@@ -73,10 +73,6 @@ const useGasPriceItemStyles = makeStyles((theme) => {
             display: 'flex',
             alignItems: 'center',
             height: 34,
-            '& > *: last-child': {
-                flex: 1,
-                paddingRight: theme.spacing(1),
-            },
         },
         eth: {
             marginTop: theme.spacing(1),
@@ -85,7 +81,7 @@ const useGasPriceItemStyles = makeStyles((theme) => {
             borderRadius: 5,
             marginRight: 5,
             '& > *:first-child': {
-                borderRadius: 5,
+                borderRadius: theme.shape.borderRadius,
             },
         },
     })
@@ -99,7 +95,7 @@ interface GasPriceItemProps {
     onChange?: (gasPrice: GasPrice) => void
 }
 function CalcETH(amount: string) {
-    return new BigNumber(amount).multipliedBy('0.00000002').multipliedBy(GAS_LIMIT).toFixed()
+    return new BigNumber(amount).div(1e9).multipliedBy(GAS_LIMIT).toFixed()
 }
 
 function GasPriceItem(props: GasPriceItemProps) {
