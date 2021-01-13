@@ -152,27 +152,17 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 }
 
 function _format(amount: BigNumber, token: EtherTokenDetailed | ERC20TokenDetailed): string {
-    if (amount.isZero()) {
+    const _amount = new BigNumber(formatBalance(amount, token.decimals))
+    if (_amount.isZero()) {
         return '0'
     }
-    const _amount = formatBalance(amount, token.decimals)
-    const [number, decimal] = _amount.split('.')
-
-    if (!decimal) return number
-
-    if (number.length <= 6) {
-        if (decimal.length >= 6) {
-            return `${number}.${decimal.slice(0, 6)}`
-        }
-        return `${number}.${decimal.padEnd(6, '0')}`
-    } else if (number.length >= 12) {
-        return number
+    const __format = (balance: BigNumber): string => {
+        const len = balance.precision(true) - balance.decimalPlaces()
+        return len <= 6 ? balance.toPrecision(len + 6) : len >= 12 ? balance.toPrecision(len) : balance.toPrecision(12)
     }
 
-    if (decimal.length > 12 - number.length) {
-        return `${number}.${decimal.slice(0, 12 - number.length)}`
-    }
-    return `${number}.${decimal.padEnd(12 - number.length, '0')}`
+    console.log(__format(_amount))
+    return __format(_amount)
 }
 
 export function ITO(props: ITO_Props) {
