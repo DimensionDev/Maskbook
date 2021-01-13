@@ -27,7 +27,8 @@ storiesOf('Plugin: File Service', module)
                         name: text('File name', 'file.png'),
                         payloadTxID: text('Payload TxID', 'Payload TxID'),
                         size: number('File Size', 2333),
-                        type: 'arweave',
+                        type: 'file',
+                        provider: 'arweave',
                     }}
                 />
             </div>
