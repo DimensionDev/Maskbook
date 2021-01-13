@@ -53,7 +53,8 @@ export async function uploadLandingPage(metadata: LandingPageMetadata) {
     const encodedMetadata = JSON.stringify({
         name: metadata.name,
         size: metadata.size,
-        link: `https://arweave.net/${metadata.txId}`,
+        // link: `https://arweave.net/${metadata.txId}`,
+        link: `https://coldcdn.com/api/cdn/bronil/${metadata.txId}`,
         signed: await makeFileKeySigned(metadata.key),
         createdAt: new Date().toISOString(),
     })

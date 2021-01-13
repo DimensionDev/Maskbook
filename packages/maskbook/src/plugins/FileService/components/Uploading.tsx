@@ -79,6 +79,7 @@ export const Uploading: React.FC = () => {
             }),
             300000, // ≈ 5 minutes
         )
+        console.log("landingTxID", landingTxID, "payloadTxID", payloadTxID, "key", state.key)
         const item: FileInfo = {
             type: 'arweave',
             id: state.checksum,
