@@ -6,6 +6,7 @@ import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { TransactionEventType } from '../types'
+import { currentGasPriceSettings } from '../../settings/settings'
 
 export function useERC20TokenTransferCallback(address: string, amount?: string, recipient?: string) {
     const account = useAccount()
@@ -49,6 +50,7 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
         const estimatedGas = await erc20Contract.methods.transfer(recipient, amount).estimateGas({
             from: account,
             to: erc20Contract.options.address,
+            gasPrice: currentGasPriceSettings.value,
         })
 
         // step 2: blocking
@@ -57,6 +59,7 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
                 from: account,
                 to: erc20Contract.options.address,
                 gas: estimatedGas,
+                gasPrice: currentGasPriceSettings.value,
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                 setTransferState({

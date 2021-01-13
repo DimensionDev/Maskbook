@@ -16,6 +16,7 @@ import { sleep } from '../../../utils/utils'
 import { getTransactionReceipt } from './network'
 import { getChainId } from './chainState'
 import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
+import { currentGasPriceSettings } from '../../../settings/settings'
 
 //#region tracking wallets
 let wallets: WalletRecord[] = []
@@ -85,7 +86,7 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
                     from,
                     ...config,
                 }),
-            config.gasPrice ?? web3.eth.getGasPrice(),
+            config.gasPrice ?? currentGasPriceSettings.value,
         ] as const)
         return () =>
             web3.eth.sendTransaction({

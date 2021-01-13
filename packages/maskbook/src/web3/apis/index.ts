@@ -10,9 +10,9 @@ export async function getGasPrices(provider: GasPriceProviderType, chainId: Chai
         case GasPriceProviderType.Default:
             return [
                 {
-                    title: 'Normal',
+                    title: 'Standard',
                     wait: 15,
-                    gasPrice: await getGasPrice(chainId),
+                    gasPrice: gasnow.gweiToGwei((await getGasPrice(chainId)) || '0'),
                 },
             ]
         case GasPriceProviderType.GasNow:

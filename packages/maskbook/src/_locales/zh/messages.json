@@ -76,6 +76,7 @@
     "decrypted_postbox_title": "此消息使用 Mask 解密：",
     "dismiss": "",
     "delete": "刪除",
+    "default": "",
     "delete_contact": "刪除聯絡人",
     "delete_contact_confirmation": "您要刪除 <strong>{{contact}}</strong> 嗎？ 此操作無法還原。",
     "delete_persona": "刪除角色",

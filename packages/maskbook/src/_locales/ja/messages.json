@@ -76,6 +76,7 @@
     "decrypted_postbox_title": "Mask で暗号化されています:",
     "dismiss": "却下",
     "delete": "削除",
+    "default": "",
     "delete_contact": "連絡先を削除する",
     "delete_contact_confirmation": "<strong>{{contact}}</strong> を削除しますか? この操作は取り消せません。",
     "delete_persona": "人格を削除する",

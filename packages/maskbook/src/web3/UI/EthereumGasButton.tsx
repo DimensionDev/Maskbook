@@ -22,6 +22,7 @@ import { GAS_CUSTOM_WAIT, GAS_LIMIT } from '../constants'
 import SpacedButtonGroup from '../../extension/options-page/DashboardComponents/SpacedButtonGroup'
 import BigNumber from 'bignumber.js'
 import { useTransakGetPriceForETH } from '../hooks/useTransakGetPriceForETH'
+import { currentGasPriceSettings } from '../../settings/settings'
 
 interface CalcETHAmountProps {
     amount: string
@@ -271,7 +272,7 @@ function EthereumGasDialog(props: EthereumGasDialogProps) {
     const { t } = useI18N()
     const classes = useDialogStyles()
     const { gasPrices = [], onClose, onSubmit } = props
-    const [gasPrice, setGasPrice] = useState<GasPrice>()
+    const [gasPrice, setGasPrice] = useState<GasPrice | null>(gasPrices && gasPrices.length > 0 ? gasPrices[0] : null)
     const [selected, setSeleted] = useState(0)
 
     const onChange = (index: number, gasPrice: GasPrice) => {
@@ -282,6 +283,11 @@ function EthereumGasDialog(props: EthereumGasDialogProps) {
         onSubmit?.(gasPrice!)
         onClose()
     }, [gasPrice, onClose, onSubmit])
+
+    const handleDefault = useCallback(() => {
+        gasPrices && gasPrices.length > 0 ? onSubmit?.(gasPrices[0]) : void 0
+        onClose()
+    }, [gasPrices, onClose, onSubmit])
 
     return (
         <InjectedDialog open={props.open} title={t('gas_price_dialog_title')} onClose={onClose}>
@@ -295,8 +301,8 @@ function EthereumGasDialog(props: EthereumGasDialogProps) {
             </DialogContent>
             <DialogActions className={classes.dialogAction}>
                 <SpacedButtonGroup>
-                    <ActionButton variant="contained" onClick={onClose}>
-                        {t('cancel')}
+                    <ActionButton variant="contained" onClick={handleDefault}>
+                        {t('default')}
                     </ActionButton>
                     <ActionButton variant="contained" onClick={handleClick}>
                         {t('confirm')}
@@ -315,13 +321,12 @@ const useStyles = makeStyles((theme) =>
 
 export interface EthereumGasButtonProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     ButtonProps?: Partial<ButtonProps>
-    onChange?: (gasPrice: GasPrice) => void
 }
 
 export function EthereumGasButton(props: EthereumGasButtonProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { loading, value: gasPrices = [] } = useGasPrices()
-    const { ButtonProps, onChange } = props
+    const { ButtonProps } = props
 
     const [open, setOpen] = useState(false)
     const [gasPrice, setGasPrice] = useState<GasPrice | undefined>()
@@ -355,14 +360,14 @@ export function EthereumGasButton(props: EthereumGasButtonProps) {
                 )
                 setGasPrice(gasPrice)
             }
-
-            onChange?.(gasPrice)
+            //return wei
+            currentGasPriceSettings.value = new BigNumber(gasPrice.gasPrice).multipliedBy(1000000000).toFixed()
             onClose()
         },
-        [gasPricesForUI, onChange, onClose],
+        [gasPricesForUI, onClose],
     )
 
-    return usePortalShadowRoot((container) => (
+    return (
         <>
             <Button
                 variant="outlined"
@@ -374,5 +379,5 @@ export function EthereumGasButton(props: EthereumGasButtonProps) {
             </Button>
             <EthereumGasDialog open={open} onClose={onClose} gasPrices={gasPricesForUI} onSubmit={onSubmit} />
         </>
-    ))
+    )
 }

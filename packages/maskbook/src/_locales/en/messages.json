@@ -76,6 +76,7 @@
     "decrypted_postbox_title": "Decrypted by Mask:",
     "dismiss": "Dismiss",
     "delete": "Delete",
+    "default": "Default",
     "delete_contact": "Delete Contact",
     "delete_contact_confirmation": "Do you want to delete <strong>{{contact}}</strong>? This operation cannot be reverted.",
     "delete_persona": "Delete Persona",

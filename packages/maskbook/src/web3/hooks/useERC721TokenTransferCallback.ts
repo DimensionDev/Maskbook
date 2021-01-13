@@ -8,6 +8,7 @@ import { TransactionStateType, useTransactionState } from './useTransactionState
 import { TransactionEventType } from '../types'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { isSameAddress } from '../helpers'
+import { currentGasPriceSettings } from '../../settings/settings'
 
 export function useERC721TokenTransferCallback(address: string, tokenId?: string, recipient?: string) {
     const account = useAccount()
@@ -51,6 +52,7 @@ export function useERC721TokenTransferCallback(address: string, tokenId?: string
         const estimatedGas = await erc721Contract.methods.transferFrom(account, recipient, tokenId).estimateGas({
             from: account,
             to: erc721Contract.options.address,
+            gasPrice: currentGasPriceSettings.value,
         })
 
         // step 2: blocking
@@ -59,6 +61,7 @@ export function useERC721TokenTransferCallback(address: string, tokenId?: string
                 from: account,
                 to: erc721Contract.options.address,
                 gas: estimatedGas,
+                gasPrice: currentGasPriceSettings.value,
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                 setTransferState({
