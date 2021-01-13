@@ -1,5 +1,4 @@
 import { storiesOf } from '@storybook/react'
-import { text } from '@storybook/addon-knobs'
 import { figmaLink } from './utils'
 import { action } from '@storybook/addon-actions'
 import { PreviewCard } from '../plugins/Gitcoin/UI/PreviewCard'
@@ -15,15 +14,7 @@ storiesOf('Plugin: Gitcoin', module).add(
             background-position: 0 0, 15px 15px;
         }`}
             </style>
-            <PreviewCard
-                title={text('Title', `This is a really long long long long long title`)}
-                line1={text('Line 1', `12,345 DAI`)}
-                line2={text('Line 2', `ESTIMATED`)}
-                line3={text('Line 3', `2,345 DAI`)}
-                line4={text('Line 4', `233 contributors`)}
-                onRequestGrant={action('Request Grant')}
-                originalURL={text('originalURL', '')}
-            />
+            <PreviewCard id="479" onRequest={action('Request Grant')} />
         </div>
     ),
     figmaLink('https://www.figma.com/file/6YeqA0eCTz67I1HVFXOd4X/Plugin%3A-Gitcoin'),
