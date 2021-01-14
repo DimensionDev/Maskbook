@@ -11,18 +11,16 @@ export function useImageFailover(imgCdnPairs: ImgCdnPair[]) {
             const image = new Image()
             let imgCdnPair: ImgCdnPair
             image.addEventListener('error', () => {
-                setImageSrc()
+                if (imgCdnPairs.length === 0) resolve('')
+                imgCdnPair = imgCdnPairs.shift()!
+                image.src = imgCdnPair.img
             })
             image.addEventListener('load', () => {
                 resolve(imgCdnPair.cdn)
             })
-            setImageSrc()
-
-            function setImageSrc() {
-                if (imgCdnPairs.length === 0) resolve('')
-                imgCdnPair = imgCdnPairs.shift()!
-                image.src = imgCdnPair.img
-            }
+            if (imgCdnPairs.length === 0) resolve('')
+            imgCdnPair = imgCdnPairs.shift()!
+            image.src = imgCdnPair.img
         })
     })
 }
