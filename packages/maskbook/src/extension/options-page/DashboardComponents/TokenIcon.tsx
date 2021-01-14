@@ -6,7 +6,7 @@ import { useBlockie } from '../../../web3/hooks/useBlockie'
 import { formatChecksumAddress } from '../../../plugins/Wallet/formatter'
 
 //#region fix icon image
-const TRUST_WALLET_ASSETS = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum'
+const TRUST_WALLET_ASSETS = 'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum'
 const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS')
 const ICON_MAP = {
     [ETH_ADDRESS]: `${TRUST_WALLET_ASSETS}/info/logo.png`,
