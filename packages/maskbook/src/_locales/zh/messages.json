@@ -350,7 +350,7 @@
     "plugin_file_service_unencrypted": "文檔未被加密",
     "plugin_file_service_signing_failed": "服務當前不可用，請稍後重試",
     "plugin_file_service_on_encrypt_it": "上傳前加密",
-    "plugin_file_service_use_cdn": "使用加速鏈接",
+    "plugin_file_service_use_cdn": "使用 Meson 加速",
     "plugin_file_service_legal_text": "使用本插件意味著同意<terms>使用條款</terms>與<policy>隱私政策</policy>",
     "plugin_file_service_legal_terms_link": "https://legal.mask.io/arweave/file-service/plugin-terms.html",
     "plugin_file_service_legal_policy_link": "https://legal.mask.io/arweave/file-service/privacy-policy-uploader.html",
