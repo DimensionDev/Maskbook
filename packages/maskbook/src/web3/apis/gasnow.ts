@@ -14,7 +14,7 @@ interface GasNowData {
 var _LastGasNowResponseData: GasNowData | null = null
 
 export function gweiToGwei(price: string): string {
-    return Math.round(new BigNumber(price || '0').div(1000000000).toNumber()).toFixed()
+    return Math.round(new BigNumber(price || '0').div(1e9).toNumber()).toFixed()
 }
 
 async function GetGasNowPrice(name: string) {
@@ -44,24 +44,14 @@ export async function getGasPrice(): Promise<GasPrice[]> {
 
     return [
         {
-            title: 'Rapid',
-            wait: 15,
-            gasPrice: gweiToGwei(_LastGasNowResponseData!.rapid),
+            title: 'Standard',
+            wait: 3,
+            gasPrice: gweiToGwei(_LastGasNowResponseData!.standard),
         },
         {
             title: 'Fast',
-            wait: 60,
+            wait: 1,
             gasPrice: gweiToGwei(_LastGasNowResponseData!.fast),
-        },
-        {
-            title: 'Slow',
-            wait: 600,
-            gasPrice: gweiToGwei(_LastGasNowResponseData!.slow),
-        },
-        {
-            title: 'Standard',
-            wait: 180,
-            gasPrice: gweiToGwei(_LastGasNowResponseData!.standard),
         },
     ] as GasPrice[]
 }

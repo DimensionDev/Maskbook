@@ -9,6 +9,12 @@ export function useGasPrices() {
     const selectedGasPriceServer = useValueRef(currentSelectedGasPriceServerSettings)
     return useAsyncRetry(async () => {
         const gasPrices = await getGasPrices(selectedGasPriceServer, chainId)
-        return gasPrices.reverse()
+        // custom gas price
+        gasPrices.push({
+            title: 'Custom',
+            wait: 5,
+            gasPrice: '0',
+        })
+        return gasPrices
     }, [chainId, selectedGasPriceServer])
 }

@@ -1,6 +1,6 @@
 import { ChainId } from '../types'
 
-export const GAS_CUSTOM_WAIT = 60
+export const GAS_CUSTOM_WAIT = 5
 export const GAS_LIMIT = 21000
 
 export const MIN_AMOUNT_LENGTH = 1

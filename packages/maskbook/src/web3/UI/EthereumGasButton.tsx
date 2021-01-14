@@ -37,7 +37,7 @@ function CalcETHAmount(props: CalcETHAmountProps) {
                 <CircularProgress size="0.5rem" />
             ) : (
                 <Typography variant="body2" color="textSecondary">
-                    &#8776; ${fiat?.fiatAmount ?? '0'}
+                    &#8776; ${fiat}
                 </Typography>
             )}
         </>
@@ -129,7 +129,7 @@ function GasPriceItem(props: GasPriceItemProps) {
                 })
             }
         },
-        [eth, gasPrice, onChange],
+        [gasPrice, onChange],
     )
 
     const onClick = useCallback(() => {
@@ -184,7 +184,7 @@ function GasPriceItem(props: GasPriceItemProps) {
             </div>
             <div className={classes.eth}>
                 <Typography variant="body2" color="textPrimary">
-                    {`${(gasPrice.title === 'Custom' ? GAS_CUSTOM_WAIT : Number(gasPrice.wait)) / 60} min`}
+                    {`${gasPrice.title === 'Custom' ? GAS_CUSTOM_WAIT : gasPrice.wait} min`}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
                     {`${eth} ETH`}
@@ -260,7 +260,7 @@ const useDialogStyles = makeStyles((theme) =>
 interface EthereumGasDialogProps {
     gasPrices?: GasPrice[]
     open: boolean
-    onSubmit?: (gasPrice: GasPrice) => void
+    onSubmit?: (gasPrice?: GasPrice) => void
     onClose: () => void
 }
 
@@ -281,7 +281,7 @@ function EthereumGasDialog(props: EthereumGasDialogProps) {
     }, [gasPrice, onClose, onSubmit])
 
     const handleDefault = useCallback(() => {
-        gasPrices && gasPrices.length > 0 ? onSubmit?.(gasPrices[0]) : void 0
+        onSubmit?.(gasPrices && gasPrices.length > 0 ? gasPrices[0] : undefined)
         onClose()
     }, [gasPrices, onClose, onSubmit])
 
@@ -325,18 +325,13 @@ export function EthereumGasButton(props: EthereumGasButtonProps) {
     const { ButtonProps } = props
 
     const [open, setOpen] = useState(false)
-    const [gasPrice, setGasPrice] = useState<GasPrice | undefined>()
+    const [gasPrice, setGasPrice] = useState<GasPrice>()
     const [gasPricesForUI, setGasPricesForUI] = useState<GasPrice[]>([])
 
     useEffect(() => {
-        const custom = {
-            title: 'Custom',
-            gasPrice: '0',
-        } as GasPrice
-
-        setGasPricesForUI([...gasPrices?.filter((item) => item.title === 'Standard' || item.title === 'Fast'), custom])
-        setGasPrice(gasPrices?.[0] ?? custom)
-    }, [gasPrices, setGasPricesForUI, setGasPrice])
+        setGasPricesForUI(gasPrices)
+        setGasPrice(gasPrices[0])
+    }, [gasPrices])
 
     const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
         setOpen(!open)
@@ -347,7 +342,7 @@ export function EthereumGasButton(props: EthereumGasButtonProps) {
     }, [])
 
     const onSubmit = useCallback(
-        (gasPrice: GasPrice) => {
+        (gasPrice?: GasPrice) => {
             if (gasPrice) {
                 setGasPricesForUI(
                     gasPricesForUI.map((item) =>
@@ -355,9 +350,11 @@ export function EthereumGasButton(props: EthereumGasButtonProps) {
                     ),
                 )
                 setGasPrice(gasPrice)
+
+                //return wei
+                currentGasPriceSettings.value = new BigNumber(gasPrice.gasPrice).multipliedBy(1e9).toFixed()
             }
-            //return wei
-            currentGasPriceSettings.value = new BigNumber(gasPrice.gasPrice).multipliedBy(1000000000).toFixed()
+
             onClose()
         },
         [gasPricesForUI, onClose],
