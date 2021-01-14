@@ -11,6 +11,8 @@ import { Days, PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
 import { useCurrentTradeProvider } from '../../trending/useCurrentTradeProvider'
 import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useConstant } from '../../../../web3/hooks/useConstant'
+import { CONSTANTS } from '../../../../web3/constants'
 import { TradeView } from '../trader/TradeView'
 import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewError } from './TrendingViewError'
@@ -70,6 +72,7 @@ export interface SearchResultViewProps {
 
 export function SearchResultView(props: SearchResultViewProps) {
     const { name, tagType, dataProviders, tradeProviders } = props
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     const { t } = useI18N()
     const classes = useStyles()
@@ -153,15 +156,9 @@ export function SearchResultView(props: SearchResultViewProps) {
     const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
     const swapTabIndex = dataProvider !== DataProvider.UNISWAP ? 3 : 1
     const fromToken = chainId === ChainId.Mainnet && coin.is_mirrored ? UST : createEtherToken(chainId)
-    const { decimals, name: tokenName, symbol } = coinDetailed ?? trending.coin
+    const { decimals } = coinDetailed ?? trending.coin
     const toToken = trending.coin.eth_address
-        ? createERC20Token(
-              chainId,
-              coinDetailed ? coinDetailed.address : trending.coin.eth_address,
-              decimals ?? 0,
-              tokenName ?? '',
-              symbol ?? '',
-          )
+        ? createERC20Token(chainId, coin.eth_address ?? ETH_ADDRESS, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
         : undefined
 
     return (
