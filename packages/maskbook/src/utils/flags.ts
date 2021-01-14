@@ -40,7 +40,6 @@ export const Flags = {
     gitcoin_enabled: webOnly,
     poll_enabled: webOnly,
     election2020_enabled: webOnly,
-    ITO_enabled: webOnly,
     election2020_composition_dialog_enabled: false,
     COTM_enabled: webOnly,
     COTM_composition_dialog_enabled: false,
