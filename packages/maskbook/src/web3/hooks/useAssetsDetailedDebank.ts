@@ -7,7 +7,7 @@ import { ChainId, CurrencyType, EthereumTokenType, AssetDetailed } from '../type
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainState'
 
-namespace Debank {
+export namespace Debank {
     export interface BalanceRecord {
         balance: number
         decimals: number

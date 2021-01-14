@@ -1,6 +1,6 @@
 import { useEffect, createContext, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
-import type { AssetDetailed } from '../../../web3/types'
+import type { AssetDetailed, EtherToken } from '../../../web3/types'
 import { Button } from '@material-ui/core'
 import { makeStyles, createStyles, ThemeProvider } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -24,6 +24,7 @@ import { useAssetsDetailedCallback } from '../../../web3/hooks/useAssetsDetailed
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { extendsTheme } from '../../../utils/theme'
+import { useAssetsStableCoinDetailedDebank } from '../../../web3/hooks/useAssetsStableCoinDetailedDebank'
 
 //#region theme
 const walletsTheme = extendsTheme((theme) => ({
@@ -87,6 +88,7 @@ const useStyles = makeStyles((theme) =>
 
 export const DashboardWalletsContext = createContext<{
     detailedTokens: AssetDetailed[]
+    stableCoinTokens: EtherToken[]
     retryDetailedTokens: () => void
 }>(null!)
 
@@ -105,7 +107,7 @@ export default function DashboardWalletsRouter() {
     const selectedWallet = useWallet()
     const tokens = useTrustedERC20TokensFromDB()
     const { value: detailedTokens, retry: retryDetailedTokens } = useAssetsDetailedCallback(tokens)
-
+    const { value: stableCoinTokens = [] } = useAssetsStableCoinDetailedDebank()
     // show create dialog
     useEffect(() => {
         if (create) openWalletCreate()
@@ -152,7 +154,7 @@ export default function DashboardWalletsRouter() {
     //#endregion
 
     return (
-        <DashboardWalletsContext.Provider value={{ detailedTokens, retryDetailedTokens }}>
+        <DashboardWalletsContext.Provider value={{ detailedTokens, stableCoinTokens, retryDetailedTokens }}>
             <DashboardRouterContainer
                 empty={!selectedWallet}
                 title={t('my_wallets')}
