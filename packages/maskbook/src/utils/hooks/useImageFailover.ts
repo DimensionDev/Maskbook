@@ -5,21 +5,22 @@ interface ImgCdnPair {
     cdn: string
 }
 
-export function useImageFailover(imgCdnPairs: ImgCdnPair[]) {
+export function useImageFailover(imgCdnPairs: readonly ImgCdnPair[]) {
     return useAsync(() => {
         return new Promise((resolve) => {
             const image = new Image()
+            const innerImgCdnPairs = [...imgCdnPairs]
             let imgCdnPair: ImgCdnPair
             image.addEventListener('error', () => {
-                if (imgCdnPairs.length === 0) resolve('')
-                imgCdnPair = imgCdnPairs.shift()!
+                if (innerImgCdnPairs.length === 0) resolve('')
+                imgCdnPair = innerImgCdnPairs.shift()!
                 image.src = imgCdnPair.img
             })
             image.addEventListener('load', () => {
                 resolve(imgCdnPair.cdn)
             })
-            if (imgCdnPairs.length === 0) resolve('')
-            imgCdnPair = imgCdnPairs.shift()!
+            if (innerImgCdnPairs.length === 0) resolve('')
+            imgCdnPair = innerImgCdnPairs.shift()!
             image.src = imgCdnPair.img
         })
     })
