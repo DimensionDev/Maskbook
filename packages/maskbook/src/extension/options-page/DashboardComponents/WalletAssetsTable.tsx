@@ -128,7 +128,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                         justifyContent: 'flex-end',
                     }}>
                     <Typography className={classes.price} color="textPrimary" component="span">
-                        {formatCurrency(getTokenUSDValue(x), '$')}
+                        {formatCurrency(Number(getTokenUSDValue(x).toFixed(2)), '$')}
                     </Typography>
                 </Box>,
                 <Box
