@@ -84,8 +84,6 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         <TextField
             className={classes.root}
             label={label}
-            error={props.TextFieldProps?.error}
-            helperText={props.TextFieldProps?.helperText}
             fullWidth
             required
             type="text"
