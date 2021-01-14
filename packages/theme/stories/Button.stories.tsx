@@ -7,7 +7,7 @@ export default meta({
     argTypes: MuiArgs.button,
 })
 
-export const Default = of({
+export const ButtonExample = of({
     args: {
         children: 'A button?',
         variant: 'contained',

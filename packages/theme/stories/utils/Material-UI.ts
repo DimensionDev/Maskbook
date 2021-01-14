@@ -12,10 +12,14 @@ function enumIn<T>(
     return enums as ArgTypes
 }
 export const MuiArgs = {
-    button: enumIn<ButtonProps>({
-        variant: (e) => e(['contained', 'outlined', 'text']),
-        size: (e) => e(['small', 'medium', 'large']),
-    }),
+    button: {
+        disabled: { type: 'boolean' },
+        ...enumIn<ButtonProps>({
+            variant: (e) => e(['contained', 'outlined', 'text']),
+            size: (e) => e(['small', 'medium', 'large']),
+            color: (e) => e(['inherit', 'primary', 'secondary', 'error' as any]),
+        }),
+    },
     textField: enumIn<TextFieldProps>({
         size: (e) => e(['small', 'medium']),
         variant: (e: any) => e(['outlined', 'standard', 'filled'] as TextFieldProps['variant'][]),
