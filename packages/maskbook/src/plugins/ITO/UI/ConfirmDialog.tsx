@@ -216,7 +216,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </Typography>
                 </Grid>
                 <Grid item xs={6} className={classes.button}>
-                    <ActionButton fullWidth variant="contained" onClick={onBack}>
+                    <ActionButton fullWidth variant="outlined" onClick={onBack}>
                         {t('plugin_ito_back')}
                     </ActionButton>
                 </Grid>
