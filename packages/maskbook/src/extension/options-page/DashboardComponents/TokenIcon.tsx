@@ -9,7 +9,7 @@ import { useImageFailover } from '../../../utils/hooks/useImageFailover'
 //#region fix icon image
 const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS')
 
-const CDNS = [
+const iconSourceList = [
     'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum',
     'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum',
 ]
@@ -52,7 +52,7 @@ export function TokenIcon(props: TokenIconProps) {
     const classes = useStylesExtends(useStyles(), props)
     const tokenBlockie = useBlockie(props.address)
 
-    const { value: trustWalletAssets, loading } = useImageFailover(CDNS, IMG_SUFFIX)
+    const { value: trustWalletAssets, loading } = useImageFailover(iconSourceList, IMG_SUFFIX)
     return (
         <Avatar
             className={classes.icon}
