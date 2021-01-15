@@ -1,17 +1,12 @@
 import { useAsync } from 'react-use'
 import { findAvailableImageURL } from '@dimensiondev/kit'
 
-interface ImgCdnPair {
-    img: string
-    cdn: string
-}
-
-export function useImageFailover(imgCdnPairs: readonly ImgCdnPair[]) {
+export function useImageFailover(cdns: readonly string[], imgSuffix: string) {
     return useAsync(async () => {
         try {
-            const img = await findAvailableImageURL(imgCdnPairs.map((v) => v.img))
-            const result = imgCdnPairs.find((v) => v.img === img) as ImgCdnPair
-            return result.cdn
+            const imgs = cdns.map((v) => v + imgSuffix)
+            const img = await findAvailableImageURL(imgs)
+            return cdns[imgs.indexOf(img)]
         } catch {
             return ''
         }
