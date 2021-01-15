@@ -27,6 +27,9 @@ import { DashboardWalletsContext } from '../DashboardRouters/Wallets'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
+const MAX_TOKENS_LENGTH = 5
+const MIN_VALUE = 5
+
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
         '&::-webkit-scrollbar': {
@@ -76,9 +79,9 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const classes = useStylesExtends(useStyles(), props)
     const LABELS = [t('wallet_assets'), t('wallet_price'), t('wallet_balance'), t('wallet_value'), ''] as const
 
-    const [viewLength, setViewLength] = useState(5)
+    const [viewLength, setViewLength] = useState(MAX_TOKENS_LENGTH)
     const [more, setMore] = useState(false)
-    const [price, setPrice] = useState(5)
+    const [price, setPrice] = useState(MIN_VALUE)
 
     const chainIdValid = useChainIdValid()
     if (!chainIdValid) return null
@@ -157,8 +160,8 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
             className={classes.lessButton}
             onClick={() => {
                 setMore(!more)
-                setViewLength(more ? 5 : detailedTokens.length)
-                setPrice(more ? 5 : 0)
+                setViewLength(more ? MAX_TOKENS_LENGTH : detailedTokens.length)
+                setPrice(more ? MIN_VALUE : 0)
             }}>
             <IconButton>{more ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>
         </div>

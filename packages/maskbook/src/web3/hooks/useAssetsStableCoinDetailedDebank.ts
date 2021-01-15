@@ -18,6 +18,6 @@ export function useAssetsStableCoinDetailedDebank() {
         const data = await fetcher()
         return data.map((x) =>
             createERC20Token(chainId, formatChecksumAddress(x.id), x.decimals, x.name, x.symbol),
-        ) as ERC20TokenDetailed[]
+        )
     }, [chainId])
 }
