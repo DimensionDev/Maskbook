@@ -12,7 +12,7 @@ import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import { formatAmount, formatBalance } from '../../Wallet/formatter'
+import { formatAmount, formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatDateTime, formatTimeDiffer } from '../../../utils/date'
@@ -149,20 +149,6 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
             </Typography>
         </>
     )
-}
-
-function _format(amount: BigNumber, token: EtherTokenDetailed | ERC20TokenDetailed): string {
-    const _amount = new BigNumber(formatBalance(amount, token.decimals))
-    if (_amount.isZero()) {
-        return '0'
-    }
-    const __format = (balance: BigNumber): string => {
-        const len = balance.precision(true) - balance.decimalPlaces()
-        return len <= 6 ? balance.toPrecision(len + 6) : len >= 12 ? balance.toPrecision(len) : balance.toPrecision(12)
-    }
-
-    console.log(__format(_amount))
-    return __format(_amount)
 }
 
 export function ITO(props: ITO_Props) {
@@ -324,8 +310,8 @@ export function ITO(props: ITO_Props) {
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
                     {t('plugin_ito_swapped_status', {
-                        remain: _format(sold, token),
-                        total: _format(total, token),
+                        remain: formatAmountPrecision(formatBalance(sold, token.decimals)),
+                        total: formatAmountPrecision(formatBalance(total, token.decimals)),
                         token: token.symbol,
                     })}
                     <Link

@@ -106,3 +106,23 @@ export function formatElapsed(from: number) {
         years: Math.round(elapsed / msPerYear),
     })
 }
+
+export function formatAmountPrecision(amount: string, decimalPlaces = 6, precision = 12): string {
+    const _amount = new BigNumber(amount)
+    const _decimalPlaces = decimalPlaces < 0 ? 6 : decimalPlaces
+    const _precision = precision < 0 ? 12 : precision
+    if (_amount.isZero()) {
+        return '0'
+    }
+
+    const __format = (balance: BigNumber): string => {
+        const len = balance.precision(true) - balance.decimalPlaces()
+        return len <= _decimalPlaces
+            ? balance.toPrecision(len + _decimalPlaces)
+            : len >= _precision
+            ? balance.toPrecision(len)
+            : balance.toPrecision(_precision)
+    }
+
+    return __format(_amount)
+}
