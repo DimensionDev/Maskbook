@@ -1,4 +1,5 @@
 import { useAsync } from 'react-use'
+import { findAvailableImageURL } from '@dimensiondev/kit'
 
 interface ImgCdnPair {
     img: string
@@ -6,22 +7,13 @@ interface ImgCdnPair {
 }
 
 export function useImageFailover(imgCdnPairs: readonly ImgCdnPair[]) {
-    return useAsync(() => {
-        return new Promise((resolve) => {
-            const image = new Image()
-            const innerImgCdnPairs = [...imgCdnPairs]
-            let imgCdnPair: ImgCdnPair
-            image.addEventListener('error', () => {
-                if (innerImgCdnPairs.length === 0) resolve('')
-                imgCdnPair = innerImgCdnPairs.shift()!
-                image.src = imgCdnPair.img
-            })
-            image.addEventListener('load', () => {
-                resolve(imgCdnPair.cdn)
-            })
-            if (innerImgCdnPairs.length === 0) resolve('')
-            imgCdnPair = innerImgCdnPairs.shift()!
-            image.src = imgCdnPair.img
-        })
+    return useAsync(async () => {
+        try {
+            const img = await findAvailableImageURL(imgCdnPairs.map((v) => v.img))
+            const result = imgCdnPairs.find((v) => v.img === img) as ImgCdnPair
+            return result.cdn
+        } catch {
+            return ''
+        }
     })
 }
