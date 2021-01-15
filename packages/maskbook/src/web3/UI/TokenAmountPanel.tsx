@@ -47,9 +47,9 @@ export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyle
     maxAmount?: string
     balance: string
     disableBalance?: boolean
-    onAmountChange: (amount: string) => void
     label: string
     token?: EtherTokenDetailed | ERC20TokenDetailed | null
+    onAmountChange: (amount: string) => void
     InputProps?: Partial<InputProps>
     MaxChipProps?: Partial<ChipProps>
     SelectTokenChip?: Partial<SelectTokenChipProps>
