@@ -1,6 +1,6 @@
 import { useEffect, createContext, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
-import type { AssetDetailed, EtherToken } from '../../../web3/types'
+import type { AssetDetailed, ERC20TokenDetailed, EtherToken } from '../../../web3/types'
 import { Button } from '@material-ui/core'
 import { makeStyles, createStyles, ThemeProvider } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) =>
 
 export const DashboardWalletsContext = createContext<{
     detailedTokens: AssetDetailed[]
-    stableCoinTokens: EtherToken[]
+    stableCoinTokens: ERC20TokenDetailed[]
     retryDetailedTokens: () => void
 }>(null!)
 

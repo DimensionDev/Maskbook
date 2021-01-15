@@ -16,8 +16,8 @@ import classNames from 'classnames'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency } from '../../../plugins/Wallet/formatter'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { CurrencyType, AssetDetailed } from '../../../web3/types'
-import { getTokenUSDValue } from '../../../web3/helpers'
+import { CurrencyType, AssetDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import { getTokenUSDValue, isSameAddress } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenActionsBar } from './ERC20TokenActionsBar'
@@ -116,7 +116,11 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                     <Typography className={classes.name} color="textPrimary" component="span">
                         {new BigNumber(
                             formatBalance(new BigNumber(x.balance), x.token.decimals ?? 0, x.token.decimals ?? 0),
-                        ).toFixed(stableCoinTokens.some((y) => y.address === x.token.address) ? 2 : 6)}
+                        ).toFixed(
+                            stableCoinTokens.some((y: ERC20TokenDetailed) => isSameAddress(y.address, x.token.address))
+                                ? 2
+                                : 6,
+                        )}
                     </Typography>
                     <Typography className={classes.symbol} color="textSecondary" component="span">
                         {x.token.symbol}
