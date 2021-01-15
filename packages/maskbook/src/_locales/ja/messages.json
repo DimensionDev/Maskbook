@@ -330,7 +330,6 @@
     "plugin_red_packet_description_failover": "{{amount}} {{symbol}} / {{shares}} 株",
     "plugin_gitcoin_readme": "このサービスを利用するにあたり、寄付金額の 5% が <fund>Gitcoin grants development fund</fund> に寄付されます",
     "plugin_gitcoin_readme_fund_link": "https://gitcoin.co/grants/86/gitcoin-sustainability-fund",
-    "plugin_gitcoin_preview_card_fund": "この Grant に寄付する",
     "plugin_gitcoin_connect_a_wallet": "",
     "plugin_gitcoin_select_a_token": "トークンを選択する",
     "plugin_gitcoin_enter_an_amount": "量を決める",
