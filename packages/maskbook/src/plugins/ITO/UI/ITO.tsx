@@ -450,7 +450,7 @@ export function ITO(props: ITO_Props) {
             </Card>
 
             <Box className={classes.actionFooter}>
-                {(total_remaining.isZeror() && !isBuyer) || loadingTradeInfo || loadingAvailability ? null : !account ||
+                {(total_remaining.isZero() && !isBuyer) || loadingTradeInfo || loadingAvailability ? null : !account ||
                   !chainIdValid ? (
                     <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
