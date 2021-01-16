@@ -215,12 +215,9 @@ export function CreateForm(props: CreateFormProps) {
         totalOfPerWallet,
     ])
 
-    const handleStartTime = useCallback(
-        (date: Date) => {
-            setStartTime(date)
-        },
-        [],
-    )
+    const handleStartTime = useCallback((date: Date) => {
+        setStartTime(date)
+    }, [])
 
     const handleEndTime = useCallback(
         (date: Date) => {

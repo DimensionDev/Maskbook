@@ -121,9 +121,11 @@ export function formatAmountPrecision(amount: string, decimalPlaces = 6, precisi
     }
 
     const len = _amount.precision() - _amount.decimalPlaces()
-    return len <= _decimalPlaces
-        ? _amount.toPrecision(len + _decimalPlaces)
-        : len >= _precision
-        ? _amount.toPrecision(len)
-        : _amount.toPrecision(_precision)
+    if (len <= _decimalPlaces) {
+        return _amount.toPrecision(len + _decimalPlaces)
+    } else if (len >= _precision) {
+        return _amount.toPrecision(len)
+    }
+
+    return _amount.toPrecision(_precision)
 }
