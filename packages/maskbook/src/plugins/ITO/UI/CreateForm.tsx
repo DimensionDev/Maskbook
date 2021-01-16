@@ -217,10 +217,9 @@ export function CreateForm(props: CreateFormProps) {
 
     const handleStartTime = useCallback(
         (date: Date) => {
-            const time = date.getTime()
-            if (time < endTime.getTime()) setStartTime(date)
+            setStartTime(date)
         },
-        [endTime],
+        [],
     )
 
     const handleEndTime = useCallback(
