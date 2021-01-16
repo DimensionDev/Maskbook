@@ -108,21 +108,22 @@ export function formatElapsed(from: number) {
 }
 
 export function formatAmountPrecision(amount: string, decimalPlaces = 6, precision = 12): string {
-    const _amount = new BigNumber(amount)
+    const _amount = new BigNumber(amount || '0')
     const _decimalPlaces = decimalPlaces < 0 ? 6 : decimalPlaces
     const _precision = precision < 0 ? 12 : precision
+
     if (_amount.isZero()) {
         return '0'
     }
 
-    const __format = (balance: BigNumber): string => {
-        const len = balance.precision(true) - balance.decimalPlaces()
-        return len <= _decimalPlaces
-            ? balance.toPrecision(len + _decimalPlaces)
-            : len >= _precision
-            ? balance.toPrecision(len)
-            : balance.toPrecision(_precision)
+    if (_amount.isLessThan(1)) {
+        return _amount.toFixed(_precision)
     }
 
-    return __format(_amount)
+    const len = _amount.precision() - _amount.decimalPlaces()
+    return len <= _decimalPlaces
+        ? _amount.toPrecision(len + _decimalPlaces)
+        : len >= _precision
+        ? _amount.toPrecision(len)
+        : _amount.toPrecision(_precision)
 }
