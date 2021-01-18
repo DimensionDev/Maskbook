@@ -17,7 +17,7 @@ export function PageInspector(props: PageInspectorProps) {
                     name={name}
                     tagType={type}
                     dataProviders={dataProviders}
-                    tradeProviders={[TradeProvider.UNISWAP, TradeProvider.ZRX]}
+                    tradeProviders={[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.ZRX]}
                     onUpdate={reposition}
                 />
             )

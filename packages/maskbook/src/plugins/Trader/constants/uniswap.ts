@@ -1,4 +1,3 @@
-import { JSBI, Percent } from '@uniswap/sdk'
 import { ChainId, ERC20TokenDetailed } from '../../../web3/types'
 import { AMPL, COMP, DAI, MKR, MSKA, MSKB, MSKC, USDC, USDT, WETH, WETH_ONLY } from './trader'
 
@@ -6,7 +5,7 @@ import { AMPL, COMP, DAI, MKR, MSKA, MSKB, MSKC, USDC, USDT, WETH, WETH_ONLY } f
  * Some tokens can only be swapped via certain pairs,
  * so we override the list of bases that are considered for these tokens.
  */
-export const CUSTOM_BASES: {
+export const UNISWAP_CUSTOM_BASES: {
     readonly [chainId in ChainId]?: {
         [tokenAddress: string]: ERC20TokenDetailed[]
     }
@@ -16,7 +15,7 @@ export const CUSTOM_BASES: {
     },
 }
 
-export const BASE_AGAINST_TOKENS: {
+export const UNISWAP_BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
     ...WETH_ONLY,

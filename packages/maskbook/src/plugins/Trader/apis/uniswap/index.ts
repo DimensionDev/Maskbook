@@ -3,13 +3,11 @@ import stringify from 'json-stable-stringify'
 import { ChainId as UniswapChainId, Token, Fetcher, Route } from '@uniswap/sdk'
 import { getConstant } from '../../../../web3/helpers'
 import { CONSTANTS } from '../../../../web3/constants'
-import { THEGRAPH_UNISWAP_V2 } from '../../constants'
 import PREDICTION_MARKET_TOKENS from './prediction_market_tokens.json'
 import { getChainId } from '../../../../extension/background-script/EthereumService'
 import { ChainId } from '../../../../web3/types'
 import type { Coin } from '../../types'
 
-const DAI_ADDRESS = getConstant(CONSTANTS, 'DAI_ADDRESS')
 interface QueryPairsResponse {
     data: {
         pairs: {
@@ -26,9 +24,9 @@ interface QueryPairsResponse {
     }
 }
 
-export async function queryPairs(ids: string[]) {
+export async function queryPairs(from: string, ids: string[]) {
     if (!ids.length) return []
-    const response = await fetch(THEGRAPH_UNISWAP_V2, {
+    const response = await fetch(from, {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({
@@ -64,6 +62,7 @@ export function getAllCoins() {
 
 export async function getMidPriceOnDAI(coin: Coin) {
     if ((await getChainId()) !== ChainId.Mainnet) return 0
+    const DAI_ADDRESS = getConstant(CONSTANTS, 'DAI_ADDRESS', ChainId.Mainnet)
     const PMTK = new Token(UniswapChainId.MAINNET, coin.eth_address!, coin.decimals ?? 18, coin.symbol, coin.name)
     const DAI = new Token(UniswapChainId.MAINNET, DAI_ADDRESS, 18, 'DAI', 'DAI')
     try {

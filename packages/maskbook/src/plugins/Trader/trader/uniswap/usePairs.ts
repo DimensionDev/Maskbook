@@ -12,7 +12,7 @@ export enum PairState {
 
 export type TokenPair = [UniswapToken, UniswapToken]
 
-export function useUniswapPairs(tokens: readonly TokenPair[]) {
+export function usePairs(from: string, tokens: readonly TokenPair[]) {
     const listOfPairAddress = useMemo(
         () =>
             tokens.map(([tokenA, tokenB]) =>
@@ -29,8 +29,8 @@ export function useUniswapPairs(tokens: readonly TokenPair[]) {
     const { value: results = [], ...asyncResults } = useAsyncRetry(async () => {
         const listOfAddress = listOfPairAddress.filter(Boolean) as string[]
         if (!listOfAddress.length) return []
-        return PluginTraderRPC.queryPairs(listOfAddress)
-    }, [[...new Set(listOfPairAddress).values()].join(), blockNumber])
+        return PluginTraderRPC.queryPairs(from, listOfAddress)
+    }, [[...new Set(listOfPairAddress).values()].join(), from, blockNumber])
 
     const pairs = useMemo(() => {
         return listOfPairAddress.map((address, i) => {

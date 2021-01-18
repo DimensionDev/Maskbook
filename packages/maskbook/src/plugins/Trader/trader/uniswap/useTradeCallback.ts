@@ -7,6 +7,7 @@ import { addGasMargin } from '../../../../web3/helpers'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract'
 import type { TradeComputed } from '../../types'
+import type { RouterV2 } from '../../../../contracts/RouterV2'
 
 interface SuccessfulCall {
     parameters: SwapParameters
@@ -20,10 +21,10 @@ interface FailedCall {
 
 export function useTradeCallback(
     trade: TradeComputed<Trade> | null,
+    routerV2Contract: RouterV2 | null,
     allowedSlippage = SLIPPAGE_TOLERANCE_DEFAULT,
     ddl = DEFAULT_TRANSACTION_DEADLINE,
 ) {
-    const routerV2Contract = useRouterV2Contract()
     const tradeParameters = useTradeParameters(trade, allowedSlippage, ddl)
 
     const [tradeState, setTradeState] = useState<TransactionState>({

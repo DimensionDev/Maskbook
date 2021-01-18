@@ -174,7 +174,7 @@ export function Trader(props: TraderProps) {
     //#endregion
 
     //#region approve
-    const RouterV2Address = useConstant(TRADE_CONSTANTS, 'ROUTER_V2_ADDRESS')
+    const RouterV2Address = useConstant(TRADE_CONSTANTS, 'UNISWAP_V2_ROUTER_ADDRESS')
     const { approveToken, approveAmount } = useTradeApproveComputed(trade, inputToken)
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
         approveToken?.address ?? '',

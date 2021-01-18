@@ -2,13 +2,21 @@ import { useMemo } from 'react'
 import { flatMap } from 'lodash-es'
 import type { Pair } from '@uniswap/sdk'
 import { toUniswapChainId, toUniswapToken } from '../../helpers'
-import { useUniswapPairs, TokenPair, PairState } from './usePairs'
-import { BASE_AGAINST_TOKENS, CUSTOM_BASES } from '../../constants'
+import { usePairs, TokenPair, PairState } from './usePairs'
 import { useChainId } from '../../../../web3/hooks/useChainState'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import type { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 import { useUniswapToken } from './useUniswapToken'
 
 export function useAllCommonPairs(
+    from: string,
+    againstTokens: {
+        [key in ChainId]: ERC20TokenDetailed[]
+    },
+    customTokens: {
+        [key in ChainId]?: {
+            [tokenAddress: string]: ERC20TokenDetailed[]
+        }
+    },
     tokenA?: EtherTokenDetailed | ERC20TokenDetailed,
     tokenB?: EtherTokenDetailed | ERC20TokenDetailed,
 ) {
@@ -16,7 +24,7 @@ export function useAllCommonPairs(
     const uniswapTokenA = useUniswapToken(tokenA)
     const uniswapTokenB = useUniswapToken(tokenB)
 
-    const bases = useMemo(() => BASE_AGAINST_TOKENS[chainId].map((t) => toUniswapToken(t.chainId, t)), [chainId])
+    const bases = useMemo(() => againstTokens[chainId].map((t) => toUniswapToken(t.chainId, t)), [chainId, againstTokens[chainId].length])
     const basePairs = useMemo(
         () =>
             flatMap(bases, (base) => bases.map((otherBase) => [base, otherBase] as TokenPair)).filter(
@@ -44,7 +52,7 @@ export function useAllCommonPairs(
                       .filter(([t0, t1]) => t0!.address !== t1!.address)
                       .filter(([uniswapTokenA, uniswapTokenB]) => {
                           if (!chainId) return true
-                          const customBases = CUSTOM_BASES[chainId]
+                          const customBases = customTokens[chainId]
                           if (!customBases) return true
                           const customBasesA = customBases[uniswapTokenA.address]
                           const customBasesB = customBases[uniswapTokenB.address]
@@ -68,9 +76,9 @@ export function useAllCommonPairs(
                           return true
                       })
                 : [],
-        [[uniswapTokenA?.address, uniswapTokenB?.address].sort().join(), bases, basePairs, chainId],
+        [[uniswapTokenA?.address, uniswapTokenB?.address].sort().join(), bases, basePairs, chainId, Object.keys(customTokens[chainId] ?? {})],
     )
-    const { value: allPairs, ...asyncResult } = useUniswapPairs(allPairCombinations as TokenPair[])
+    const { value: allPairs, ...asyncResult } = usePairs(from, allPairCombinations as TokenPair[])
 
     // only pass along valid pairs, non-duplicated pairs
     const allPairs_ = useMemo(

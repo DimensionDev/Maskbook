@@ -140,7 +140,7 @@ export const CONSTANTS = {
         [ChainId.Gorli]: '',
     },
     OBK_ADDRESS: {
-        [ChainId.Mainnet]: '0x75231f58b43240c9718dd58b4967c5114342a86c',
+        [ChainId.Mainnet]: '0x75231F58b43240C9718Dd58B4967c5114342a86c',
         [ChainId.Ropsten]: '',
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
