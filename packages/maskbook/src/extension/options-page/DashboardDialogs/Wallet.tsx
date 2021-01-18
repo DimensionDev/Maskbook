@@ -291,7 +291,6 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                     name,
                     passphrase,
                 })
-                setAsSelectedWallet(address)
             }
             if (state[0] === 1) {
                 const address = await WalletRPC.importNewWallet({
@@ -299,21 +298,15 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                     mnemonic: mnemonic.split(' '),
                     passphrase: '',
                 })
-                setAsSelectedWallet(address)
             }
             if (state[0] === 2) {
                 const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privKey)
-                setAsSelectedWallet(address)
                 if (!privateKeyValid) throw new Error(t('import_failed'))
                 await WalletRPC.importNewWallet({
                     name,
                     address,
                     _private_key_: privKey,
                 })
-            }
-            function setAsSelectedWallet(address: string) {
-                if (!address) return
-                currentSelectedWalletAddressSettings.value = address
             }
         },
         [state[0], name, passphrase, mnemonic, privKey],

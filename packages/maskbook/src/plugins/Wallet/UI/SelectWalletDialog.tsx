@@ -16,6 +16,7 @@ import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSett
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ProviderType } from '../../../web3/types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { selectMaskbookWallet } from '../helpers'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -48,8 +49,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const onSelect = useCallback(
         (wallet: WalletRecord) => {
             onClose()
-            currentSelectedWalletAddressSettings.value = wallet.address
-            currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
+            selectMaskbookWallet(wallet)
         },
         [onClose],
     )
