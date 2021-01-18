@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => {
             marginBottom: theme.spacing(1),
         },
         status: {
+            marginTop: theme.spacing(0.5),
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
