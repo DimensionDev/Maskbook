@@ -54,6 +54,7 @@ export const Button: Theme = (mode, colors): ThemeOptions => ({
                         '&[disabled]': { borderColor: button.light(), color: button.main() },
                     },
                 },
+                { props: { variant: 'text' }, style: { '&:hover': { boxShadow: 'unset' } } },
                 {
                     props: { color: 'primary' },
                     style: { [button.main]: colors.primary, [button.contrast]: colors.primaryContrastText },
@@ -74,3 +75,16 @@ export const Button: Theme = (mode, colors): ThemeOptions => ({
         },
     },
 })
+
+export const Dialog: Theme = {
+    components: {
+        MuiDialog: {
+            styleOverrides: {
+                paper: { minHeight: 200, minWidth: 440 },
+            },
+        },
+        MuiDialogActions: {
+            styleOverrides: { root: { justifyContent: 'center', paddingBottom: 16 } },
+        },
+    },
+}
