@@ -3,7 +3,7 @@ import { story, MuiArgs, matrix } from './utils'
 
 const { meta, of } = story(DialogExample)
 export default meta({
-    title: 'Dialog',
+    title: 'Atoms/Dialog',
     parameters: {},
 })
 
