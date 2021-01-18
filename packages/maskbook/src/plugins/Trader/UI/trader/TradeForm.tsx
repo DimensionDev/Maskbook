@@ -11,7 +11,7 @@ import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../../Wallet/messages'
 import { ApproveState } from '../../../../web3/hooks/useERC20TokenApproveCallback'
-import { TradeStrategy, TokenPanelType, TradeComputed } from '../../types'
+import { TradeStrategy, TokenPanelType, TradeComputed, WarningLevel } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useChainIdValid } from '../../../../web3/hooks/useChainState'
@@ -21,7 +21,6 @@ import { PluginTraderMessages } from '../../messages'
 import { toBips } from '../../helpers'
 import { formatBalance, formatPercentage } from '../../../Wallet/formatter'
 import { resolveUniswapWarningLevel } from '../../pipes'
-import { WarningLevel } from '../../types/uniswap'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({

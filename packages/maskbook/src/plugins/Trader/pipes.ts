@@ -1,14 +1,13 @@
 import type BigNumber from 'bignumber.js'
-import { Currency, DataProvider, TradeProvider, ZrxTradePool } from './types'
+import { Currency, DataProvider, TradeProvider, WarningLevel, ZrxTradePool } from './types'
 import { unreachable } from '../../utils/utils'
-import { WarningLevel } from './types/uniswap'
 import {
     BIPS_BASE,
-    UNISWAP_PRICE_IMPACT_HIGH,
-    UNISWAP_PRICE_IMPACT_LOW,
-    UNISWAP_PRICE_IMPACT_MEDIUM,
-    UNISWAP_PRICE_IMPACT_NON_EXPERT_BLOCKED,
-    UNISWAP_PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN,
+    PRICE_IMPACT_HIGH,
+    PRICE_IMPACT_LOW,
+    PRICE_IMPACT_MEDIUM,
+    PRICE_IMPACT_NON_EXPERT_BLOCKED,
+    PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN,
 } from './constants'
 
 export function resolveCurrencyName(currency: Currency) {
@@ -94,12 +93,11 @@ export function resolveDaysName(days: number) {
 
 export function resolveUniswapWarningLevel(priceImpact: BigNumber) {
     const priceImpact_ = priceImpact.multipliedBy(BIPS_BASE)
-    if (priceImpact_.isGreaterThan(UNISWAP_PRICE_IMPACT_NON_EXPERT_BLOCKED)) return WarningLevel.BLOCKED
-    if (priceImpact_.isGreaterThan(UNISWAP_PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN))
-        return WarningLevel.CONFIRMATION_REQUIRED
-    if (priceImpact_.isGreaterThan(UNISWAP_PRICE_IMPACT_HIGH)) return WarningLevel.HIGH
-    if (priceImpact_.isGreaterThan(UNISWAP_PRICE_IMPACT_MEDIUM)) return WarningLevel.MEDIUM
-    if (priceImpact_.isGreaterThan(UNISWAP_PRICE_IMPACT_LOW)) return WarningLevel.LOW
+    if (priceImpact_.isGreaterThan(PRICE_IMPACT_NON_EXPERT_BLOCKED)) return WarningLevel.BLOCKED
+    if (priceImpact_.isGreaterThan(PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN)) return WarningLevel.CONFIRMATION_REQUIRED
+    if (priceImpact_.isGreaterThan(PRICE_IMPACT_HIGH)) return WarningLevel.HIGH
+    if (priceImpact_.isGreaterThan(PRICE_IMPACT_MEDIUM)) return WarningLevel.MEDIUM
+    if (priceImpact_.isGreaterThan(PRICE_IMPACT_LOW)) return WarningLevel.LOW
     return
 }
 

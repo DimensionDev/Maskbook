@@ -8,6 +8,14 @@ export enum TradeProvider {
     SUSHISWAP,
 }
 
+export enum WarningLevel {
+    LOW = 1,
+    MEDIUM,
+    HIGH,
+    CONFIRMATION_REQUIRED,
+    BLOCKED,
+}
+
 // ZRX supported source swap list
 // Learn more https://github.com/0xProject/0x-monorepo/blob/development/packages/asset-swapper/src/utils/market_operation_utils/types.ts#L27
 export enum ZrxTradePool {
