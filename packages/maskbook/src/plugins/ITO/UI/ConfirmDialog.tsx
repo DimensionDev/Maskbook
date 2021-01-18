@@ -224,10 +224,8 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     <ActionButton fullWidth variant="contained" onClick={onDone}>
                         {t('plugin_ito_send_text', {
                             total: formatAmountPrecision(
-                                formatBalance(
-                                    new BigNumber(poolSettings?.total ?? '0'),
-                                    poolSettings?.token?.decimals ?? 0,
-                                ),
+                                new BigNumber(poolSettings?.total ?? '0'),
+                                poolSettings?.token?.decimals,
                             ),
                             symbol: poolSettings?.token?.symbol,
                         })}

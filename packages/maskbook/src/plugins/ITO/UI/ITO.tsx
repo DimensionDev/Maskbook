@@ -394,8 +394,8 @@ export function ITO(props: ITO_Props) {
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
                     {t('plugin_ito_swapped_status', {
-                        remain: formatAmountPrecision(formatBalance(sold, token.decimals)),
-                        total: formatAmountPrecision(formatBalance(total, token.decimals)),
+                        remain: formatAmountPrecision(sold, token.decimals),
+                        total: formatAmountPrecision(total, token.decimals),
                         token: token.symbol,
                     })}
                     <Link

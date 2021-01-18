@@ -107,8 +107,13 @@ export function formatElapsed(from: number) {
     })
 }
 
-export function formatAmountPrecision(amount: string, decimalPlaces = 6, precision = 12): string {
-    const _amount = new BigNumber(amount || '0')
+export function formatAmountPrecision(
+    amount: BigNumber,
+    token_decimals?: number,
+    decimalPlaces = 6,
+    precision = 12,
+): string {
+    const _amount = new BigNumber(formatBalance(amount, token_decimals ?? 0))
     const _decimalPlaces = decimalPlaces < 0 ? 6 : decimalPlaces
     const _precision = precision < 0 ? 12 : precision
 

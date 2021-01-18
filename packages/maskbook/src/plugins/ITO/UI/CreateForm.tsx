@@ -327,11 +327,8 @@ export function CreateForm(props: CreateFormProps) {
                                         {approveState === ApproveState.NOT_APPROVED
                                             ? t('plugin_wallet_token_unlock', {
                                                   balance: formatAmountPrecision(
-                                                      formatBalance(
-                                                          new BigNumber(inputTokenAmount),
-                                                          tokenAndAmount?.token?.decimals ?? 0,
-                                                          2,
-                                                      ),
+                                                      new BigNumber(inputTokenAmount),
+                                                      tokenAndAmount?.token?.decimals,
                                                   ),
                                                   symbol: tokenAndAmount?.token?.symbol ?? 'Token',
                                               })
