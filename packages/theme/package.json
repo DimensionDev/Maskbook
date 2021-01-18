@@ -17,6 +17,7 @@
     "@storybook/react": "^6.1.9",
     "@storybook/theming": "^6.1.9",
     "babel-loader": "^8.2.2",
+    "storybook-addon-matrix": "^1.6.0",
     "@pmmmwh/react-refresh-webpack-plugin": "=0.4.2"
   },
   "comments": [

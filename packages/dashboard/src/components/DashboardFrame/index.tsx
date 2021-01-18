@@ -59,13 +59,13 @@ export function PageFrame(props: PageFrameProps) {
                     {right}
                 </Toolbar>
             </AppBar>
-            <ErrorBoundary>
-                <Grid item xs className={classes.containment}>
-                    <div className={clz(classes.shapeHelper, classes.shape)}>
-                        <div className={clz(classes.container, classes.shape)}>{props.children}</div>
+            <Grid item xs className={classes.containment}>
+                <div className={clz(classes.shapeHelper, classes.shape)}>
+                    <div className={clz(classes.container, classes.shape)}>
+                        <ErrorBoundary>{props.children}</ErrorBoundary>
                     </div>
-                </Grid>
-            </ErrorBoundary>
+                </div>
+            </Grid>
         </>
     )
 }

@@ -15,9 +15,7 @@ export const MuiArgs = {
     button: {
         disabled: { type: 'boolean' },
         ...enumIn<ButtonProps>({
-            variant: (e) => e(['contained', 'outlined', 'text']),
             size: (e) => e(['small', 'medium', 'large']),
-            color: (e) => e(['inherit', 'primary', 'secondary', 'error' as any]),
         }),
     },
     textField: enumIn<TextFieldProps>({
