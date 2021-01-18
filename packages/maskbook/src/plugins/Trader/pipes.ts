@@ -51,6 +51,8 @@ export function resolveTradeProviderName(tradeProvider: TradeProvider) {
             return 'Uniswap V2'
         case TradeProvider.ZRX:
             return '0x'
+        case TradeProvider.SUSHISWAP:
+            return 'SushiSwap'
         default:
             unreachable(tradeProvider)
     }
@@ -62,6 +64,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider) {
             return 'https://uniswap.org/'
         case TradeProvider.ZRX:
             return 'https://0x.org/'
+        case TradeProvider.SUSHISWAP:
+            return 'https://sushiswapclassic.org/'
         default:
             unreachable(tradeProvider)
     }
@@ -73,6 +77,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://info.uniswap.org/pair/${address}`
         case TradeProvider.ZRX:
             return ''
+        case TradeProvider.SUSHISWAP:
+            return `https://analytics.sushiswap.fi/pairs/${address}`
         default:
             unreachable(tradeProvider)
     }

@@ -5,7 +5,7 @@ export enum TradeProvider {
     UNISWAP,
     ZRX, // 0x
     // ONE_INCH,
-    // SUSHISWAP,
+    SUSHISWAP,
 }
 
 // ZRX supported source swap list

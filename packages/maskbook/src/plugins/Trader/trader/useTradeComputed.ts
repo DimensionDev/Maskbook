@@ -30,6 +30,9 @@ export function useTradeComputed(
     )
     const uniswap = useUniswapTradeComputed(uniswap_.value)
 
+    // sushiswap
+    const sushiswap = null
+
     // zrx
     const zrx_ = useZrxTrade(
         strategy,
@@ -47,6 +50,11 @@ export function useTradeComputed(
                 value: uniswap,
             }
         case TradeProvider.ZRX:
+            return {
+                ...zrx_,
+                value: zrx,
+            }
+        case TradeProvider.SUSHISWAP:
             return {
                 ...zrx_,
                 value: zrx,
