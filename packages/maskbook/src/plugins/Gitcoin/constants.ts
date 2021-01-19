@@ -34,4 +34,4 @@ export const GITCOIN_CONSTANT = {
 }
 
 // proxy for: https://gitcoin.co/grants/v1/api/grant/
-export const GITCOIN_API_GRANTS_V1 = 'https://gitcoin.provide.maskbook.com/grants/v1/api/grant/'
+export const GITCOIN_API_GRANTS_V1 = 'https://gitcoin-agent.r2d2.to/grants/v1/api/grant/'
