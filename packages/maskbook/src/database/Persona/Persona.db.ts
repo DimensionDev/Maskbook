@@ -107,7 +107,8 @@ export async function consistentPersonaDBWriteAccess(
     tryToAutoFix = true,
 ) {
     // TODO: collect all changes on this transaction then only perform consistency check on those records.
-    let t = createTransaction(await db(), 'readwrite')('profiles', 'personas')
+    const database = await db()
+    let t = createTransaction(database, 'readwrite')('profiles', 'personas')
     let finished = false
     const finish = () => (finished = true)
     t.addEventListener('abort', finish)
@@ -125,7 +126,7 @@ export async function consistentPersonaDBWriteAccess(
             console.warn('The transaction ends too early! There MUST be a bug in the program!')
             console.trace()
             // start a new transaction to check consistency
-            t = createTransaction(await db(), 'readwrite')('profiles', 'personas')
+            t = createTransaction(database, 'readwrite')('profiles', 'personas')
         }
         try {
             await assertPersonaDBConsistency(tryToAutoFix ? 'fix' : 'throw', 'full check', t)
