@@ -18,7 +18,7 @@ import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmoun
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
-import { formatAmount, formatBalance } from '../../Wallet/formatter'
+import { formatAmount, formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
 import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
 import { DateTimePicker, LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
@@ -215,13 +215,9 @@ export function CreateForm(props: CreateFormProps) {
         totalOfPerWallet,
     ])
 
-    const handleStartTime = useCallback(
-        (date: Date) => {
-            const time = date.getTime()
-            if (time < endTime.getTime()) setStartTime(date)
-        },
-        [endTime],
-    )
+    const handleStartTime = useCallback((date: Date) => {
+        setStartTime(date)
+    }, [])
 
     const handleEndTime = useCallback(
         (date: Date) => {
@@ -330,10 +326,9 @@ export function CreateForm(props: CreateFormProps) {
                                         onClick={onExactApprove}>
                                         {approveState === ApproveState.NOT_APPROVED
                                             ? t('plugin_wallet_token_unlock', {
-                                                  balance: formatBalance(
+                                                  balance: formatAmountPrecision(
                                                       new BigNumber(inputTokenAmount),
-                                                      tokenAndAmount?.token?.decimals ?? 0,
-                                                      2,
+                                                      tokenAndAmount?.token?.decimals,
                                                   ),
                                                   symbol: tokenAndAmount?.token?.symbol ?? 'Token',
                                               })

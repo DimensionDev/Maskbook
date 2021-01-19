@@ -4,7 +4,7 @@ import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import LaunchIcon from '@material-ui/icons/Launch'
-import { formatBalance } from '../../Wallet/formatter'
+import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { dateTimeFormat } from '../assets/formatDate'
 import { isETH } from '../../../web3/helpers'
@@ -153,7 +153,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     return (
                         <Fragment key={index}>
                             {index === 0 ? (
-                                <Grid item xs={6}>
+                                <Grid item xs={1}>
                                     <Paper className={classes.label}>
                                         <Typography variant="body1" color="textSecondary">
                                             {t('plugin_ito_sell_price')}
@@ -161,7 +161,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                                     </Paper>
                                 </Grid>
                             ) : null}
-                            <Grid item xs={index === 0 ? 6 : 12}>
+                            <Grid item xs={index === 0 ? 11 : 12}>
                                 <SwapItem
                                     token={poolSettings.token}
                                     swap={item}
@@ -223,9 +223,9 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 <Grid item xs={6} className={classes.button}>
                     <ActionButton fullWidth variant="contained" onClick={onDone}>
                         {t('plugin_ito_send_text', {
-                            total: formatBalance(
+                            total: formatAmountPrecision(
                                 new BigNumber(poolSettings?.total ?? '0'),
-                                poolSettings?.token?.decimals ?? 0,
+                                poolSettings?.token?.decimals,
                             ),
                             symbol: poolSettings?.token?.symbol,
                         })}
