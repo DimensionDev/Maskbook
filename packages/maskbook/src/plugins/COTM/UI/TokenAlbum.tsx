@@ -4,6 +4,7 @@ import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetail
 import { COTM_CONSTANTS } from '../constants'
 import { useAllTokensOfOwner } from '../hooks/useAllTokensOfOwner'
 import { TokenCard } from './TokenCard'
+import { useEffect } from 'react'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -27,15 +28,21 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface TokenAlbumProps {}
+export interface TokenAlbumProps {
+    setCollectiblesLoading: (loading: boolean) => void
+}
 
 export function TokenAlbum(props: TokenAlbumProps) {
     const classes = useStyles(props)
 
     // fetch the NFT token
     const COTM_TOKEN_ADDRESS = useConstant(COTM_CONSTANTS, 'COTM_TOKEN_ADDRESS')
-    const { value: COTM_Token } = useERC721TokenDetailed(COTM_TOKEN_ADDRESS)
+    const { value: COTM_Token, loading: loadingCOTMToken } = useERC721TokenDetailed(COTM_TOKEN_ADDRESS)
     const tokens = useAllTokensOfOwner(COTM_Token)
+
+    useEffect(() => {
+        props.setCollectiblesLoading(loadingCOTMToken || tokens.loading)
+    }, [props, loadingCOTMToken, tokens.loading])
 
     if (!tokens.value.length) return null
     return (

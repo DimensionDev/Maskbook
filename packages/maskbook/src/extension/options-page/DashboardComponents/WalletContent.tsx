@@ -1,6 +1,17 @@
 import { forwardRef, useCallback, useState } from 'react'
 import { truncate } from 'lodash-es'
-import { Button, Box, IconButton, MenuItem, Tabs, Tab, Typography, Avatar, Alert } from '@material-ui/core'
+import {
+    Button,
+    Box,
+    IconButton,
+    MenuItem,
+    Tabs,
+    Tab,
+    Typography,
+    Avatar,
+    Alert,
+    CircularProgress,
+} from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
@@ -113,6 +124,9 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     }, [])
     //#endregion
 
+    //#collectibles loading
+    const [collectiblesLoading, setCollectiblesLoading] = useState({ electionLoading: false, tokenLoading: false })
+
     return (
         <div className={classes.root} ref={ref}>
             {!chainIdValid ? (
@@ -187,13 +201,29 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
             <Box className={classes.content}>
                 {tabIndex === 0 ? (
                     <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
+                ) : (collectiblesLoading.tokenLoading || collectiblesLoading.electionLoading) ? (
+                    <div style={{ textAlign: 'center' }}>
+                        <CircularProgress />
+                    </div>
                 ) : (
                     <Typography variant="body1" color="textSecondary">
                         {t('wallet_no_collectables')}
                     </Typography>
                 )}
-                {Flags.COTM_enabled && tabIndex === 1 ? <COTM_TokenAlbum /> : null}
-                {Flags.election2020_enabled && tabIndex === 1 ? <ElectionTokenAlbum /> : null}
+                {Flags.COTM_enabled && tabIndex === 1 ? (
+                    <COTM_TokenAlbum
+                        setCollectiblesLoading={(tokenLoading) =>
+                            setCollectiblesLoading({ ...collectiblesLoading, tokenLoading })
+                        }
+                    />
+                ) : null}
+                {Flags.election2020_enabled && tabIndex === 1 ? (
+                    <ElectionTokenAlbum
+                        setCollectiblesLoading={(electionLoading) =>
+                            setCollectiblesLoading({ ...collectiblesLoading, electionLoading })
+                        }
+                    />
+                ) : null}
             </Box>
 
             {!xsMatched ? (
