@@ -12,7 +12,7 @@ import { isSameAddress } from '../../../web3/helpers'
 import { getNonce, resetNonce, commitNonce } from './nonce'
 import { TransactionEventType } from '../../../web3/types'
 import { ProviderType } from '../../../web3/types'
-import { sleep, unreachable } from '../../../utils/utils'
+import { sleep } from '../../../utils/utils'
 import { getTransactionReceipt } from './network'
 import { getChainId } from './chainState'
 import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
@@ -136,16 +136,12 @@ export async function sendSignedTransaction(from: string, config: TransactionCon
 }
 
 /**
- * Call transaction on different providers with a given account
+ * Call transaction on Maskbook instance to ignore the variant chain ids of external providers
  * same as `eth_call`
  * @param from
  * @param config
  */
 
 export async function callTransaction(config: TransactionConfig) {
-    const provider = currentSelectedWalletProviderSettings.value
-    if (provider === ProviderType.Maskbook) return Maskbook.createWeb3().eth.call(config)
-    if (provider === ProviderType.MetaMask) return MetaMask.createWeb3().eth.call(config)
-    if (provider === ProviderType.WalletConnect) return WalletConnect.createWeb3().eth.call(config)
-    unreachable(provider)
+    return Maskbook.createWeb3(await getChainId()).eth.call(config)
 }

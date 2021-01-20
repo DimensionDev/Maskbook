@@ -301,7 +301,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                         )
                     ) : (
                         <Grid item xs={12}>
-                            {!account || !chainIdValid ? (
+                            {!account ? (
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth
@@ -309,6 +309,15 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                     size="large"
                                     onClick={onConnect}>
                                     {t('plugin_wallet_connect_a_wallet')}
+                                </ActionButton>
+                            ) : !chainIdValid ? (
+                                <ActionButton
+                                    className={classes.button}
+                                    disabled
+                                    fullWidth
+                                    variant="contained"
+                                    size="large">
+                                    {t('plugin_wallet_invalid_network')}
                                 </ActionButton>
                             ) : (
                                 <ActionButton

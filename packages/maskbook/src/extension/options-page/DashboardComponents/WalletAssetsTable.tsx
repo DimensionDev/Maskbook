@@ -20,19 +20,18 @@ import { getTokenUSDValue } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenActionsBar } from './ERC20TokenActionsBar'
-import { useChainIdValid } from '../../../web3/hooks/useChainState'
 
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-        padding: theme.spacing(0, 3),
+        padding: theme.spacing(0),
     },
     table: {},
     head: {},
     cell: {
-        paddingLeft: theme.spacing(1),
+        paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1.5),
         whiteSpace: 'nowrap',
     },
@@ -67,8 +66,6 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const classes = useStylesExtends(useStyles(), props)
     const LABELS = [t('wallet_assets'), t('wallet_price'), t('wallet_balance'), t('wallet_value'), ''] as const
 
-    const chainIdValid = useChainIdValid()
-    if (!chainIdValid) return null
     if (!detailedTokens.length) return null
 
     return (
@@ -99,7 +96,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                         name={x.token.name}
                                         address={x.token.address}
                                     />
-                                    <Typography className={classes.name}>{x.token.name}</Typography>
+                                    <Typography className={classes.name}>{x.token.symbol}</Typography>
                                 </Box>,
                                 <Box
                                     sx={{

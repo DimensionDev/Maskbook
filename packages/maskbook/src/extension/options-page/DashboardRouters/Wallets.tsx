@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
 import { Button } from '@material-ui/core'
 import { makeStyles, createStyles, ThemeProvider } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -87,8 +86,7 @@ const useStyles = makeStyles((theme) =>
 export default function DashboardWalletsRouter() {
     const classes = useStyles()
     const { t } = useI18N()
-    const history = useHistory()
-    const { create, error, rpid } = useQueryParams(['create', 'error', 'rpid'])
+    const { create, error } = useQueryParams(['create', 'error', 'rpid'])
 
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
     const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)

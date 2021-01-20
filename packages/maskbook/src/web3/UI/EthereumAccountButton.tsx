@@ -1,6 +1,5 @@
 import { useCallback } from 'react'
 import { makeStyles, Theme, createStyles, Button, ButtonProps } from '@material-ui/core'
-import ErrorIcon from '@material-ui/icons/Error'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import { useStylesExtends } from '../../components/custom-ui-helper'
@@ -10,7 +9,7 @@ import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { useChainId, useChainIdValid } from '../hooks/useChainState'
+import { useChainId } from '../hooks/useChainState'
 import { resolveChainColor } from '../pipes'
 import { ChainId } from '../types'
 import { useValueRef } from '../../utils/hooks/useValueRef'
@@ -43,7 +42,6 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
     const selectedWallet = useWallet()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
 
@@ -67,27 +65,22 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
             className={classes.root}
             variant="outlined"
             startIcon={
-                chainIdValid && selectedWallet ? (
+                selectedWallet ? (
                     <ProviderIcon
                         classes={{ icon: classes.providerIcon }}
                         size={18}
                         providerType={selectedWalletProvider}
                     />
-                ) : !chainIdValid ? (
-                    <ErrorIcon />
-                ) : (
-                    void 0
-                )
+                ) : null
             }
-            color={!chainIdValid ? 'secondary' : 'primary'}
+            color="primary"
             onClick={onOpen}
             {...props.ButtonProps}>
-            {chainIdValid
-                ? selectedWallet?.address
-                    ? formatEthereumAddress(selectedWallet.address, 4)
-                    : t('plugin_wallet_connect_a_wallet')
-                : t('plugin_wallet_wrong_network')}
-            {chainIdValid && chainId !== ChainId.Mainnet ? (
+            {selectedWallet?.name ?? ''}
+            {selectedWallet?.address
+                ? ` (${formatEthereumAddress(selectedWallet.address, 4)})`
+                : t('plugin_wallet_on_connect')}
+            {chainId !== ChainId.Mainnet ? (
                 <FiberManualRecordIcon
                     className={classes.chainIcon}
                     style={{

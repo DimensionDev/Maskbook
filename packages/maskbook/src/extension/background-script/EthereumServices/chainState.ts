@@ -15,9 +15,10 @@ import {
 } from '../../../settings/settings'
 import { pollingTask, unreachable } from '../../../utils/utils'
 import { isSameAddress } from '../../../web3/helpers'
-import { ProviderType } from '../../../web3/types'
+import { ChainId, ProviderType } from '../../../web3/types'
 import { getBlockNumber } from './network'
 import { startEffects } from '../../../utils/side-effects'
+import { Flags } from '../../../utils/flags'
 
 const effect = startEffects(module.hot)
 
@@ -69,9 +70,10 @@ revalidateWallets()
 
 /**
  * Get the chain id which is using by the given (or default) wallet
+ * It will always yield Mainnet in production mode
  * @param address
  */
-export async function getChainId(address?: string) {
+export async function getUnsafeChainId(address?: string) {
     const address_ = currentSelectedWalletAddressSettings.value
     const provider = currentSelectedWalletProviderSettings.value
     const wallet =
@@ -83,4 +85,15 @@ export async function getChainId(address?: string) {
     if (provider === ProviderType.MetaMask) return currentMetaMaskChainIdSettings.value
     if (provider === ProviderType.WalletConnect) return currentWalletConnectChainIdSettings.value
     unreachable(provider)
+}
+
+/**
+ * Get the chain id which is using by the given (or default) wallet
+ * @param address
+ */
+export async function getChainId(address?: string) {
+    const unsafeChainId = await getUnsafeChainId(address)
+    return unsafeChainId !== ChainId.Mainnet && Flags.wallet_network_strict_mode_enabled
+        ? ChainId.Mainnet
+        : unsafeChainId
 }
