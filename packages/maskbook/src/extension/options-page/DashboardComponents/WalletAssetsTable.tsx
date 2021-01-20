@@ -16,18 +16,20 @@ import classNames from 'classnames'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency } from '../../../plugins/Wallet/formatter'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { CurrencyType, AssetDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
-import { getTokenUSDValue, isSameAddress } from '../../../web3/helpers'
+import { CurrencyType, AssetDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import { getTokenUSDValue, isETH, isSameAddress } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenActionsBar } from './ERC20TokenActionsBar'
-import { useContext, useState } from 'react'
+import { useChainIdValid } from '../../../web3/hooks/useChainState'
+import { useContext, useState, useEffect } from 'react'
 import { DashboardWalletsContext } from '../DashboardRouters/Wallets'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { isEqualWith } from 'lodash-es'
 
 const MAX_TOKENS_LENGTH = 5
-const MIN_VALUE = 5
+const MIN_VALUE = 1
 
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
@@ -81,10 +83,25 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const classes = useStylesExtends(useStyles(), props)
     const LABELS = [t('wallet_assets'), t('wallet_price'), t('wallet_balance'), t('wallet_value'), ''] as const
 
-    const [viewLength, setViewLength] = useState(MAX_TOKENS_LENGTH)
     const [more, setMore] = useState(false)
     const [price, setPrice] = useState(MIN_VALUE)
 
+    const chainIdValid = useChainIdValid()
+
+    const haveETH = detailedTokens.some((x) => isETH(x.token.address))
+    const [viewLength, setViewLength] = useState(haveETH ? MAX_TOKENS_LENGTH - 1 : MAX_TOKENS_LENGTH)
+
+    useEffect(() => {
+        setViewLength(
+            detailedTokens.length > MAX_TOKENS_LENGTH
+                ? haveETH
+                    ? MAX_TOKENS_LENGTH - 1
+                    : MAX_TOKENS_LENGTH
+                : detailedTokens.length,
+        )
+    }, [detailedTokens.length, haveETH])
+
+    if (!chainIdValid) return null
     if (!detailedTokens.length) return null
 
     const viewDetailed = (x: AssetDetailed) => (
@@ -157,12 +174,21 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
             className={classes.lessButton}
             onClick={() => {
                 setMore(!more)
-                setViewLength(more ? MAX_TOKENS_LENGTH : detailedTokens.length)
+                setViewLength(more ? (haveETH ? MAX_TOKENS_LENGTH - 1 : MAX_TOKENS_LENGTH) : detailedTokens.length)
                 setPrice(more ? MIN_VALUE : 0)
+                console.log(viewLength)
             }}>
-            <IconButton>{more ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>
+            {detailedTokens.length > MAX_TOKENS_LENGTH ? (
+                <IconButton>{more ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>
+            ) : null}
         </div>
     )
+
+    const filterETH = (a: AssetDetailed) => isETH(a.token.address)
+    const excludeETH = (a: AssetDetailed) => !isETH(a.token.address)
+    const excludeZero = (a: AssetDetailed) => new BigNumber(a.value?.[CurrencyType.USD] || '0').isGreaterThan(0)
+    const filter = (a: AssetDetailed) =>
+        Number(price) !== 0 ? new BigNumber(a.value?.[CurrencyType.USD] || '0').isGreaterThan(price) : true
 
     return (
         <>
@@ -181,14 +207,13 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
+                        {detailedTokens.filter(filterETH).map((x) => viewDetailed(x))}
                         {detailedTokens
-                            .filter((x) =>
-                                Number(price) !== 0
-                                    ? new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(price) ||
-                                      x.token.type === EthereumTokenType.Ether
-                                    : true,
-                            )
-                            .map((y, idx) => (idx < viewLength ? viewDetailed(y) : null))}
+                            .filter(excludeETH)
+                            .filter(excludeZero)
+                            .sort(sort)
+                            .filter(filter)
+                            .map((x, idx) => (idx < viewLength ? viewDetailed(x) : null))}
                     </TableBody>
                 </Table>
             </TableContainer>
