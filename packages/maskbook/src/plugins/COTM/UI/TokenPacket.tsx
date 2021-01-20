@@ -238,7 +238,7 @@ export function TokenPacket(props: TokenPacketProps) {
                 </CardContent>
             </Card>
             <Box className={classes.footer}>
-                {!account || !chainIdValid ? (
+                {!account ? (
                     <ActionButton variant="contained" size="large" onClick={onConnect}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>

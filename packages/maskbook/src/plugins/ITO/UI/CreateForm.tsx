@@ -356,7 +356,7 @@ export function CreateForm(props: CreateFormProps) {
                         )
                     ) : (
                         <Grid item xs={12}>
-                            {!account || !chainIdValid ? (
+                            {!account ? (
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth
@@ -364,6 +364,10 @@ export function CreateForm(props: CreateFormProps) {
                                     size="large"
                                     onClick={onConnectWallet}>
                                     {t('plugin_ito_connect_a_wallet')}
+                                </ActionButton>
+                            ) : !chainIdValid ? (
+                                <ActionButton className={classes.button} fullWidth variant="contained" disabled>
+                                    {t('plugin_wallet_invalid_network')}
                                 </ActionButton>
                             ) : validationMessage ? (
                                 <ActionButton className={classes.button} fullWidth variant="contained" disabled>
