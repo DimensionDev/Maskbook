@@ -1,5 +1,5 @@
 import type BigNumber from 'bignumber.js'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 
 export enum TradeProvider {
     UNISWAP,
@@ -66,4 +66,19 @@ export enum TradeStrategy {
 export enum TokenPanelType {
     Input,
     Output,
+}
+
+export interface TradeContext {
+    GRAPH_API: string
+    INIT_CODE_HASH: string
+    ROUTER_CONTRACT_ADDRESS: string
+    FACTORY_CONTRACT_ADDRESS: string
+    AGAINST_TOKENS: {
+        [key in ChainId]: ERC20TokenDetailed[]
+    }
+    CUSTOM_TOKENS: {
+        [key in ChainId]?: {
+            [key: string]: ERC20TokenDetailed[]
+        }
+    }
 }

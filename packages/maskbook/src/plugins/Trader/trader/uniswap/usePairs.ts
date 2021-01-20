@@ -1,8 +1,10 @@
-import { useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { Pair, Pair as UniswapPair, Token as UniswapToken, TokenAmount } from '@uniswap/sdk'
+import { Pair, Token as UniswapToken, TokenAmount } from '@uniswap/sdk'
 import { useBlockNumber, useChainId } from '../../../../web3/hooks/useChainState'
 import { PluginTraderRPC } from '../../messages'
+import { getPairAddress } from '../../helpers'
+import { TradeContext } from '../useTradeContext'
 
 export enum PairState {
     NOT_EXISTS,
@@ -12,25 +14,34 @@ export enum PairState {
 
 export type TokenPair = [UniswapToken, UniswapToken]
 
-export function usePairs(from: string, tokens: readonly TokenPair[]) {
+export function usePairs(tokens: readonly TokenPair[]) {
+    const chainId = useChainId()
+    const context = useContext(TradeContext)
+
     const listOfPairAddress = useMemo(
         () =>
             tokens.map(([tokenA, tokenB]) =>
-                tokenA && tokenB && !tokenA.equals(tokenB) ? UniswapPair.getAddress(tokenA, tokenB) : undefined,
+                tokenA && tokenB && !tokenA.equals(tokenB)
+                    ? getPairAddress(
+                          context?.FACTORY_CONTRACT_ADDRESS ?? '',
+                          context?.INIT_CODE_HASH ?? '',
+                          tokenA,
+                          tokenB,
+                      )
+                    : undefined,
             ),
-        [tokens],
+        [context, tokens],
     )
 
     // auto refresh pair reserves for each block
-    const chainId = useChainId()
     const blockNumber = useBlockNumber(chainId)
 
     // get reserves for each pair
     const { value: results = [], ...asyncResults } = useAsyncRetry(async () => {
         const listOfAddress = listOfPairAddress.filter(Boolean) as string[]
         if (!listOfAddress.length) return []
-        return PluginTraderRPC.queryPairs(from, listOfAddress)
-    }, [[...new Set(listOfPairAddress).values()].join(), from, blockNumber])
+        return PluginTraderRPC.queryPairs(context?.GRAPH_API ?? '', listOfAddress)
+    }, [[...new Set(listOfPairAddress).values()].join(), blockNumber, context])
 
     const pairs = useMemo(() => {
         return listOfPairAddress.map((address, i) => {

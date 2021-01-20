@@ -1,3 +1,4 @@
+import { INIT_CODE_HASH } from '@uniswap/sdk'
 import { ChainId, ERC20TokenDetailed } from '../../../web3/types'
 import { AMPL, COMP, DAI, MKR, MSKA, MSKB, MSKC, USDC, USDT, WETH, WETH_ONLY } from './trader'
 
@@ -24,3 +25,5 @@ export const UNISWAP_BASE_AGAINST_TOKENS: {
 }
 
 export const THEGRAPH_UNISWAP_V2 = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2'
+
+export const UNISWAP_INIT_CODE_HASH = INIT_CODE_HASH

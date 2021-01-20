@@ -1,4 +1,4 @@
-import { ChainId, ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import BigNumber from 'bignumber.js'
 import {
     Token as UniswapToken,
     ChainId as UniswapChainId,
@@ -11,10 +11,10 @@ import {
     ETHER,
 } from '@uniswap/sdk'
 import { WETH } from '../constants'
+import { ChainId, ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
 import { getConstant } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
-import BigNumber from 'bignumber.js'
 
 export function toUniswapChainId(chainId: ChainId): UniswapChainId {
     switch (chainId) {

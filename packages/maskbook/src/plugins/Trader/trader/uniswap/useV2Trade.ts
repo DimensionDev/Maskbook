@@ -5,18 +5,9 @@ import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { TradeStrategy } from '../../types'
 import { useAllCommonPairs } from './useAllCommonPairs'
-import type { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 
 export function useV2Trade(
-    from: string,
-    againstTokens: {
-        [key in ChainId]: ERC20TokenDetailed[]
-    },
-    customTokens: {
-        readonly [key in ChainId]?: {
-            [tokenAddress: string]: ERC20TokenDetailed[]
-        }
-    },
     strategy: TradeStrategy = TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
@@ -24,7 +15,7 @@ export function useV2Trade(
     outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
 ) {
     const isExactIn = strategy === TradeStrategy.ExactIn
-    const { value: pairs, ...asyncResult } = useAllCommonPairs(from, againstTokens, customTokens, inputToken, outputToken)
+    const { value: pairs, ...asyncResult } = useAllCommonPairs(inputToken, outputToken)
     const bestTradeExactIn = useBestTradeExactIn(inputAmount, inputToken, outputToken, pairs)
     const bestTradeExactOut = useBestTradeExactOut(outputAmount, inputToken, outputToken, pairs)
     if ((new BigNumber(inputAmount).isZero() && new BigNumber(outputAmount).isZero()) || !inputToken || !outputToken)

@@ -6,7 +6,6 @@ import { useV2TradeComputed as useUniswapTradeComputed } from './uniswap/useV2Tr
 import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
 import { useTrade as useZrxTrade } from './0x/useTrade'
 import { unreachable } from '../../../utils/utils'
-import { THEGRAPH_UNISWAP_V2, THEGRAPH_SUSHISWAP_FORK, UNISWAP_BASE_AGAINST_TOKENS, SUSHISWAP_BASE_AGAINST_TOKENS, SUSHISWAP_CUSTOM_BASES, UNISWAP_CUSTOM_BASES } from '../constants'
 
 export function useTradeComputed(
     provider: TradeProvider,
@@ -23,9 +22,6 @@ export function useTradeComputed(
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
 
     const uniswap_ = useUniswapTrade(
-        THEGRAPH_UNISWAP_V2,
-        UNISWAP_BASE_AGAINST_TOKENS,
-        UNISWAP_CUSTOM_BASES,
         strategy,
         provider === TradeProvider.UNISWAP ? inputAmount_ : '0',
         provider === TradeProvider.UNISWAP ? outputAmount_ : '0',
@@ -36,9 +32,6 @@ export function useTradeComputed(
 
     // sushiswap
     const sushiswap_ = useUniswapTrade(
-        THEGRAPH_SUSHISWAP_FORK,
-        SUSHISWAP_BASE_AGAINST_TOKENS,
-        SUSHISWAP_CUSTOM_BASES,
         strategy,
         provider === TradeProvider.SUSHISWAP ? inputAmount_ : '0',
         provider === TradeProvider.SUSHISWAP ? outputAmount_ : '0',

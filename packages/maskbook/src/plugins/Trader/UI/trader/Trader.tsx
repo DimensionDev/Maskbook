@@ -297,10 +297,10 @@ export function Trader(props: TraderProps) {
                         inputToken={inputToken}
                         outputToken={outputToken}
                     />
-                    {provider === TradeProvider.UNISWAP ? (
+                    {provider === TradeProvider.UNISWAP || provider === TradeProvider.SUSHISWAP ? (
                         <>
                             <TradeRoute classes={{ root: classes.router }} trade={trade} />
-                            <TradePairViewer trade={trade as TradeComputed<Trade>} />
+                            <TradePairViewer trade={trade as TradeComputed<Trade>} provider={provider} />
                         </>
                     ) : null}
                 </>

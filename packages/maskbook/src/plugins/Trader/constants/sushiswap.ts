@@ -23,3 +23,5 @@ export const SUSHISWAP_BASE_AGAINST_TOKENS: {
 }
 
 export const THEGRAPH_SUSHISWAP_FORK = 'https://api.thegraph.com/subgraphs/name/zippoxer/sushiswap-subgraph-fork'
+
+export const SUSHISWAP_INIT_CODE_HASH = '0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303'

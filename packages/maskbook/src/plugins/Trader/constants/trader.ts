@@ -11,8 +11,22 @@ export const TRADE_CONSTANTS = {
         [ChainId.Kovan]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
         [ChainId.Gorli]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
     },
+    UNISWAP_FACTORY_ADDRESS: {
+        [ChainId.Mainnet]: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+        [ChainId.Ropsten]: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+        [ChainId.Rinkeby]: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+        [ChainId.Kovan]: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+        [ChainId.Gorli]: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+    },
     SUSHISWAP_ROUTER_ADDRESS: {
         [ChainId.Mainnet]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
+        [ChainId.Ropsten]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
+        [ChainId.Rinkeby]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
+        [ChainId.Kovan]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
+        [ChainId.Gorli]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
+    },
+    SUSHISWAP_FACTORY_ADDRESS: {
+        [ChainId.Mainnet]: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac',
         [ChainId.Ropsten]: '',
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
