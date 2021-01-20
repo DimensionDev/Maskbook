@@ -1,5 +1,5 @@
 import { ChainId, ERC20Token, ERC721Token, EtherToken, ProviderType } from './types'
-import { unreachable } from '../utils/utils'
+import { safeUnreachable } from '../utils/utils'
 
 export function resolveProviderName(providerType: ProviderType) {
     switch (providerType) {
@@ -10,7 +10,8 @@ export function resolveProviderName(providerType: ProviderType) {
         case ProviderType.WalletConnect:
             return 'WalletConnect'
         default:
-            unreachable(providerType)
+            safeUnreachable(providerType)
+            return 'Unknown'
     }
 }
 
@@ -44,7 +45,8 @@ export function resolveChainName(chainId: ChainId) {
         case ChainId.Gorli:
             return 'Gorli'
         default:
-            unreachable(chainId)
+            safeUnreachable(chainId)
+            return 'Unknown'
     }
 }
 
@@ -78,7 +80,8 @@ export function resolveLinkOnEtherscan(chainId: ChainId) {
         case ChainId.Gorli:
             return 'https://goerli.etherscan.io'
         default:
-            unreachable(chainId)
+            safeUnreachable(chainId)
+            return 'https://etherscan.io'
     }
 }
 
