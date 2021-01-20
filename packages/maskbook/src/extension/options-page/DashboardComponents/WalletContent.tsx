@@ -187,7 +187,11 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
             <Box className={classes.content}>
                 {tabIndex === 0 ? (
                     <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
-                ) : null}
+                ) : (
+                    <Typography variant="body1" color="textSecondary">
+                        {t('wallet_no_collectables')}
+                    </Typography>
+                )}
                 {Flags.COTM_enabled && tabIndex === 1 ? <COTM_TokenAlbum /> : null}
                 {Flags.election2020_enabled && tabIndex === 1 ? <ElectionTokenAlbum /> : null}
             </Box>

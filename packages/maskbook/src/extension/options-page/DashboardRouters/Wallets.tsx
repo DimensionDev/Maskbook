@@ -89,6 +89,7 @@ const useStyles = makeStyles((theme) =>
 export const DashboardWalletsContext = createContext<{
     detailedTokens: AssetDetailed[]
     stableCoinTokens: ERC20TokenDetailed[]
+    loading: boolean
     retryDetailedTokens: () => void
 }>(null!)
 
@@ -105,7 +106,7 @@ export default function DashboardWalletsRouter() {
 
     const selectedWallet = useWallet()
     const tokens = useTrustedERC20TokensFromDB()
-    const { value: detailedTokens, retry: retryDetailedTokens } = useAssetsDetailedCallback(tokens)
+    const { loading, value: detailedTokens, retry: retryDetailedTokens } = useAssetsDetailedCallback(tokens)
     const { value: stableCoinTokens = [] } = useAssetsStableCoinDetailedDebank()
     // show create dialog
     useEffect(() => {
@@ -153,7 +154,7 @@ export default function DashboardWalletsRouter() {
     //#endregion
 
     return (
-        <DashboardWalletsContext.Provider value={{ detailedTokens, stableCoinTokens, retryDetailedTokens }}>
+        <DashboardWalletsContext.Provider value={{ loading, detailedTokens, stableCoinTokens, retryDetailedTokens }}>
             <DashboardRouterContainer
                 empty={!selectedWallet}
                 title={t('my_wallets')}

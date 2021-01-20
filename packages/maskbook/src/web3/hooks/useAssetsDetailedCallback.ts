@@ -9,11 +9,11 @@ import { useCallback } from 'react'
 
 export function useAssetsDetailedCallback(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
     const wallet = useWallet()
-    const { value: etherTokenDetailed, retry: retryEtherTokenDetailed } = useEtherTokenDetailed()
+    const { loading: ethloading, value: etherTokenDetailed, retry: retryEtherTokenDetailed } = useEtherTokenDetailed()
     const { value: assetsDetailedChain = [], retry: retryAssetsDetailedChain } = useAssetsDetailedChain(
         etherTokenDetailed ? [etherTokenDetailed, ...tokens] : tokens,
     )
-    const { value: assetsDetailedDebank = [], retry: retryAssetsDetailedDebank } = useAssetsDetailedDebank()
+    const { loading, value: assetsDetailedDebank = [], retry: retryAssetsDetailedDebank } = useAssetsDetailedDebank()
 
     const retryDetailedTokens = useCallback(() => {
         retryEtherTokenDetailed()
@@ -27,6 +27,7 @@ export function useAssetsDetailedCallback(tokens: (EtherTokenDetailed | ERC20Tok
 
     // filter out tokens in blacklist
     return {
+        loading: loading && ethloading,
         value: assetsDetailed.filter((x) => !wallet?.erc20_token_blacklist.has(formatChecksumAddress(x.token.address))),
         retry: retryDetailedTokens,
     }

@@ -10,6 +10,7 @@ import {
     TableRow,
     Theme,
     Typography,
+    CircularProgress,
 } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
@@ -78,7 +79,7 @@ export interface WalletAssetsTableProps extends withClasses<KeysInferFromUseStyl
 export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const { t } = useI18N()
     const { wallet } = props
-    const { detailedTokens, stableCoinTokens } = useContext(DashboardWalletsContext)
+    const { loading, detailedTokens, stableCoinTokens } = useContext(DashboardWalletsContext)
 
     const classes = useStylesExtends(useStyles(), props)
     const LABELS = [t('wallet_assets'), t('wallet_price'), t('wallet_balance'), t('wallet_value'), ''] as const
@@ -176,7 +177,6 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                 setMore(!more)
                 setViewLength(more ? (haveETH ? MAX_TOKENS_LENGTH - 1 : MAX_TOKENS_LENGTH) : detailedTokens.length)
                 setPrice(more ? MIN_VALUE : 0)
-                console.log(viewLength)
             }}>
             {detailedTokens.length > MAX_TOKENS_LENGTH ? (
                 <IconButton>{more ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>
@@ -192,32 +192,44 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
 
     return (
         <>
-            <TableContainer className={classes.container}>
-                <Table className={classes.table} component="table" size="medium" stickyHeader>
-                    <TableHead className={classes.head}>
-                        <TableRow>
-                            {LABELS.map((x, i) => (
-                                <TableCell
-                                    className={classNames(classes.head, classes.cell)}
-                                    key={i}
-                                    align={i === 0 ? 'left' : 'right'}>
-                                    {x}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {detailedTokens.filter(filterETH).map((x) => viewDetailed(x))}
-                        {detailedTokens
-                            .filter(excludeETH)
-                            .filter(excludeZero)
-                            .sort(sort)
-                            .filter(filter)
-                            .map((x, idx) => (idx < viewLength ? viewDetailed(x) : null))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <LessButton />
+            {loading ? (
+                <div style={{ textAlign: 'center' }}>
+                    <CircularProgress />
+                </div>
+            ) : detailedTokens.length === 0 ? (
+                <Typography variant="body1" color="textSecondary">
+                    {t('wallet_no_asset')}
+                </Typography>
+            ) : (
+                <>
+                    <TableContainer className={classes.container}>
+                        <Table className={classes.table} component="table" size="medium" stickyHeader>
+                            <TableHead>
+                                <TableRow>
+                                    {LABELS.map((x, i) => (
+                                        <TableCell
+                                            className={classNames(classes.head, classes.cell)}
+                                            key={i}
+                                            align={i === 0 ? 'left' : 'right'}>
+                                            {x}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {detailedTokens.filter(filterETH).map((x) => viewDetailed(x))}
+                                {detailedTokens
+                                    .filter(excludeETH)
+                                    .filter(excludeZero)
+                                    .sort(sort)
+                                    .filter(filter)
+                                    .map((x, idx) => (idx < viewLength ? viewDetailed(x) : null))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <LessButton />
+                </>
+            )}
         </>
     )
 }
