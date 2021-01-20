@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            marginTop: theme.spacing(0.5),
         },
         reverseIcon: {
             cursor: 'pointer',
