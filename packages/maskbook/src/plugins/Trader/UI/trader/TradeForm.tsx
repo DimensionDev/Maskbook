@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            marginTop: theme.spacing(0.5),
         },
         reverseIcon: {
             cursor: 'pointer',
@@ -294,7 +295,7 @@ export function TradeForm(props: TradeFormProps) {
                         )
                     ) : (
                         <Grid item xs={12}>
-                            {!account || !chainIdValid ? (
+                            {!account ? (
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth
@@ -302,6 +303,15 @@ export function TradeForm(props: TradeFormProps) {
                                     size="large"
                                     onClick={onConnect}>
                                     {t('plugin_wallet_connect_a_wallet')}
+                                </ActionButton>
+                            ) : !chainIdValid ? (
+                                <ActionButton
+                                    className={classes.button}
+                                    fullWidth
+                                    disabled
+                                    variant="contained"
+                                    size="large">
+                                    {t('plugin_wallet_invalid_network')}
                                 </ActionButton>
                             ) : (
                                 <ActionButton

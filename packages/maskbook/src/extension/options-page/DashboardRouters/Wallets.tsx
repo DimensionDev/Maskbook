@@ -95,8 +95,7 @@ export const DashboardWalletsContext = createContext<{
 export default function DashboardWalletsRouter() {
     const classes = useStyles()
     const { t } = useI18N()
-    const history = useHistory()
-    const { create, error, rpid } = useQueryParams(['create', 'error', 'rpid'])
+    const { create, error } = useQueryParams(['create', 'error', 'rpid'])
 
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
     const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)

@@ -26,6 +26,7 @@ import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
+        root: {},
         header: {},
         body: {
             minHeight: 303,
@@ -136,6 +137,7 @@ export function TrendingView(props: TrendingViewProps) {
                         .
                     </span>
                 }
+                TrendingCardProps={{ classes: { root: classes.root } }}
             />
         )
     //#endregion

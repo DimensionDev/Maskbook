@@ -278,6 +278,7 @@
     "relative_time_years_ago": "{{years}}年前",
     "plugin_wallet_select_a_token": "トークンを選択",
     "plugin_wallet_connect_a_wallet": "ウォレットと接続",
+    "plugin_wallet_invalid_network": "",
     "plugin_wallet_select_a_wallet": "ウォレットを選択",
     "plugin_wallet_transaction_wait_for_confirmation": "確認を待っています",
     "plugin_wallet_transaction_submitted": "取引は送信されました。",

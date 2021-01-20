@@ -1,8 +1,6 @@
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { CONSTANTS } from '../../../web3/constants'
 import { isETH } from '../../../web3/helpers'
-import { useConstant } from '../../../web3/hooks/useConstant'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog } from '../DashboardDialogs/Wallet'
@@ -14,6 +12,7 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { DashboardWalletTransferDialog } from './TransferDialog'
+import { useChainIdValid } from '../../../web3/hooks/useChainState'
 
 const useStyles = makeStyles((theme) => ({
     more: {
@@ -33,6 +32,8 @@ export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
     const account = useAccount()
     const classes = useStylesExtends(useStyles(), props)
 
+    const chainIdValid = useChainIdValid()
+
     //#region remote controlled buy dialog
     const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     //#endregion
@@ -50,7 +51,9 @@ export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
             }}>
             {t('buy')}
         </MenuItem>,
-        <MenuItem onClick={() => openTransferDialogOpen({ wallet, token })}>{t('transfer')}</MenuItem>,
+        <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ wallet, token })}>
+            {t('transfer')}
+        </MenuItem>,
         <MenuItem
             style={{ display: isETH(token.address) ? 'none' : 'initial' }}
             onClick={() => openHideTokenConfirmDialog({ wallet, token })}>

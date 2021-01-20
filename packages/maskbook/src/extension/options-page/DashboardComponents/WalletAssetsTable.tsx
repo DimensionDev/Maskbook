@@ -21,7 +21,6 @@ import { getTokenUSDValue, isSameAddress } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenActionsBar } from './ERC20TokenActionsBar'
-import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useContext, useState } from 'react'
 import { DashboardWalletsContext } from '../DashboardRouters/Wallets'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
@@ -35,12 +34,12 @@ const useStyles = makeStyles((theme: Theme) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-        padding: theme.spacing(0, 2),
+        padding: theme.spacing(0),
     },
     table: {},
     head: {},
     cell: {
-        paddingLeft: theme.spacing(1),
+        paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1.5),
         whiteSpace: 'nowrap',
     },
@@ -83,8 +82,6 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const [more, setMore] = useState(false)
     const [price, setPrice] = useState(MIN_VALUE)
 
-    const chainIdValid = useChainIdValid()
-    if (!chainIdValid) return null
     if (!detailedTokens.length) return null
 
     const sort = (a: AssetDetailed, b: AssetDetailed): number =>

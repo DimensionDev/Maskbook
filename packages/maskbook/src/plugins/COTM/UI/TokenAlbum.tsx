@@ -1,5 +1,4 @@
 import { createStyles, makeStyles } from '@material-ui/core'
-import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
 import { COTM_CONSTANTS } from '../constants'
@@ -38,8 +37,6 @@ export function TokenAlbum(props: TokenAlbumProps) {
     const { value: COTM_Token } = useERC721TokenDetailed(COTM_TOKEN_ADDRESS)
     const tokens = useAllTokensOfOwner(COTM_Token)
 
-    const chainIdValid = useChainIdValid()
-    if (!chainIdValid) return null
     if (!tokens.value.length) return null
     return (
         <div className={classes.root}>

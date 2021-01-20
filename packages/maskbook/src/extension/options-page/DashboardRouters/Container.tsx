@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => {
     return createStyles<string, { isSetup: boolean }>({
         wrapper: {
             flex: 1,
+            width: '100%',
             height: '100%',
             [theme.breakpoints.up('sm')]: {
                 display: Flags.has_native_nav_bar ? 'inline' : 'grid',

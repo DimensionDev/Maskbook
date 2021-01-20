@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useState } from 'react'
 import { truncate } from 'lodash-es'
-import { Button, Box, IconButton, MenuItem, Tabs, Tab, Typography, Avatar } from '@material-ui/core'
+import { Button, Box, IconButton, MenuItem, Tabs, Tab, Typography, Avatar, Alert } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
@@ -26,9 +26,8 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { Flags } from '../../../utils/flags'
 import { ElectionTokenAlbum } from '../../../plugins/Election2020/UI/ElectionTokenAlbum'
-import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
-import { useBlockie } from '../../../web3/hooks/useBlockie'
 import { TokenAlbum as COTM_TokenAlbum } from '../../../plugins/COTM/UI/TokenAlbum'
+import { useChainIdValid } from '../../../web3/hooks/useChainState'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -41,8 +40,11 @@ const useStyles = makeStyles((theme) =>
                 overflow: 'auto',
             },
         },
+        alert: {
+            marginTop: theme.spacing(2),
+        },
         caption: {
-            padding: theme.spacing(3, 2, 0, 2),
+            padding: theme.spacing(2, 0),
         },
         header: {
             borderBottom: `1px solid ${theme.palette.divider}`,
@@ -82,6 +84,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const { t } = useI18N()
     const color = useColorStyles()
     const xsMatched = useMatchXS()
+    const chainIdValid = useChainIdValid()
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
@@ -110,20 +113,36 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     }, [])
     //#endregion
 
-    const blockie = useBlockie(wallet.address)
-
     return (
         <div className={classes.root} ref={ref}>
+            {!chainIdValid ? (
+                <Alert className={classes.alert} severity="warning">
+                    {t('plugin_wallet_wrong_network_tip')}
+                </Alert>
+            ) : null}
             <Box
                 className={classes.caption}
                 sx={{
                     display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'space-between',
                 }}>
-                <Avatar src={blockie} />
-                <Typography className={classes.title} variant="h5" color="textPrimary">
-                    {wallet.name ? truncate(wallet.name, { length: WALLET_OR_PERSONA_NAME_MAX_LEN }) : wallet.address}
-                </Typography>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                    }}>
+                    <Tabs
+                        className={classes.tabs}
+                        value={tabIndex}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        onChange={onTabChange}>
+                        <Tab label="Token"></Tab>
+                        <Tab label="Collectibles"></Tab>
+                    </Tabs>
+                </Box>
+
                 {!xsMatched ? (
                     <Box
                         sx={{
@@ -152,34 +171,18 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                                 {t('buy_now')}
                             </Button>
                         ) : null}
+                        <IconButton
+                            className={classes.moreButton}
+                            size="small"
+                            onClick={openMenu}
+                            data-testid="setting_icon">
+                            <MoreVertOutlinedIcon />
+                        </IconButton>
                     </Box>
                 ) : null}
-                <IconButton className={classes.moreButton} size="small" onClick={openMenu} data-testid="setting_icon">
-                    <MoreVertOutlinedIcon />
-                </IconButton>
-                {menu}
             </Box>
 
-            <Box
-                className={xsMatched ? classes.header : ''}
-                sx={{
-                    pt: xsMatched ? 2 : 3,
-                    pb: 2,
-                    pl: 3,
-                    pr: 2,
-                    display: 'flex',
-                    alignItems: 'center',
-                }}>
-                <Tabs
-                    className={classes.tabs}
-                    value={tabIndex}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    onChange={onTabChange}>
-                    <Tab label="Token"></Tab>
-                    <Tab label="Collectibles"></Tab>
-                </Tabs>
-            </Box>
+            {menu}
 
             <Box className={classes.content}>
                 {tabIndex === 0 ? (
