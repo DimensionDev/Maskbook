@@ -313,9 +313,13 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 />
             </div>
 
-            {!account || !chainIdValid ? (
+            {!account ? (
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" onClick={onConnect}>
                     {t('plugin_wallet_connect_a_wallet')}
+                </ActionButton>
+            ) : !chainIdValid ? (
+                <ActionButton className={classes.button} disabled fullWidth variant="contained" size="large">
+                    {t('plugin_wallet_invalid_network')}
                 </ActionButton>
             ) : approveRequired ? (
                 <ActionButton

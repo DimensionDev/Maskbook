@@ -16,7 +16,7 @@ import classNames from 'classnames'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency } from '../../../plugins/Wallet/formatter'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { CurrencyType, AssetDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import { CurrencyType, AssetDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { getTokenUSDValue, isSameAddress } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
@@ -37,7 +37,9 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: theme.spacing(0),
     },
     table: {},
-    head: {},
+    head: {
+        backgroundColor: theme.palette.mode === 'light' ? theme.palette.common.white : 'var(--drawerBody)',
+    },
     cell: {
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1.5),
@@ -63,6 +65,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     lessButton: {
         display: 'flex',
         justifyContent: 'center',
+        marginTop: theme.spacing(1),
     },
 }))
 
@@ -84,9 +87,6 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
 
     if (!detailedTokens.length) return null
 
-    const sort = (a: AssetDetailed, b: AssetDetailed): number =>
-        new BigNumber(b.value?.[CurrencyType.USD] ?? 0).minus(a.value?.[CurrencyType.USD] ?? 0).toNumber()
-
     const viewDetailed = (x: AssetDetailed) => (
         <TableRow className={classes.cell} key={x.token.address}>
             {[
@@ -95,7 +95,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                         display: 'flex',
                     }}>
                     <TokenIcon classes={{ icon: classes.coin }} name={x.token.name} address={x.token.address} />
-                    <Typography className={classes.name}>{x.token.name}</Typography>
+                    <Typography className={classes.name}>{x.token.symbol}</Typography>
                 </Box>,
                 <Box
                     sx={{
@@ -164,14 +164,11 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         </div>
     )
 
-    const filter = (a: AssetDetailed) =>
-        Number(price) !== 0 ? new BigNumber(a.value?.[CurrencyType.USD] || '0').isGreaterThan(price) : true
-
     return (
         <>
             <TableContainer className={classes.container}>
                 <Table className={classes.table} component="table" size="medium" stickyHeader>
-                    <TableHead>
+                    <TableHead className={classes.head}>
                         <TableRow>
                             {LABELS.map((x, i) => (
                                 <TableCell
@@ -185,9 +182,13 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                     </TableHead>
                     <TableBody>
                         {detailedTokens
-                            .sort(sort)
-                            .filter(filter)
-                            .map((x, idx) => (idx < viewLength ? viewDetailed(x) : null))}
+                            .filter((x) =>
+                                Number(price) !== 0
+                                    ? new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(price) ||
+                                      x.token.type === EthereumTokenType.Ether
+                                    : true,
+                            )
+                            .map((y, idx) => (idx < viewLength ? viewDetailed(y) : null))}
                     </TableBody>
                 </Table>
             </TableContainer>
