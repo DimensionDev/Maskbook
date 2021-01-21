@@ -114,6 +114,7 @@ const useStyles = makeStyles((theme) => {
             },
         },
         footMenu: {
+            color: theme.palette.text.secondary,
             fontSize: 10,
             display: 'flex',
             alignItems: 'center',
@@ -349,7 +350,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     : findIndex(getEnumAsArray(TradeProvider), (x) => x.value === tradeProvider)
                             }
                             onChange={onTradeProviderChange}
-                        />
+                        ><ArrowDropDownIcon /></FootnoteMenu>
                     </div>
                 ) : null}
             </CardActions>

@@ -16,7 +16,10 @@ export function useV2Trade(
 ) {
     const isExactIn = strategy === TradeStrategy.ExactIn
     const isTradable = !new BigNumber(inputAmount).isZero() || !new BigNumber(outputAmount).isZero()
-    const { value: pairs, ...asyncResult } = useAllCommonPairs(isTradable ? inputToken : undefined, isTradable ? outputToken : undefined)
+    const { value: pairs, ...asyncResult } = useAllCommonPairs(
+        isTradable ? inputToken : undefined,
+        isTradable ? outputToken : undefined,
+    )
     const bestTradeExactIn = useBestTradeExactIn(inputAmount, inputToken, outputToken, pairs)
     const bestTradeExactOut = useBestTradeExactOut(outputAmount, inputToken, outputToken, pairs)
 
