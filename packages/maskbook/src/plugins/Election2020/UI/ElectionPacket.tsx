@@ -291,9 +291,13 @@ export function ElectionPacket(props: ElectionPacketProps) {
                 </CardContent>
             </Card>
             <Box className={classes.footer}>
-                {!account || !chainIdValid ? (
+                {!account ? (
                     <ActionButton variant="contained" size="large" onClick={onConnect}>
                         {t('plugin_wallet_connect_a_wallet')}
+                    </ActionButton>
+                ) : !chainIdValid ? (
+                    <ActionButton disabled variant="contained" size="large">
+                        {t('plugin_wallet_invalid_network')}
                     </ActionButton>
                 ) : remaining > 0 && tokensOfOwner.length === 0 ? (
                     <ActionButton onClick={mintCallback} variant="contained">

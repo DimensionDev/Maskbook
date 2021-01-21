@@ -331,7 +331,6 @@
     "plugin_red_packet_description_failover": "{{amount}} {{symbol}} / {{shares}} 份",
     "plugin_gitcoin_readme": "在使用本服務時，你的捐贈的 5% 將會被用於支持 <fund>Gitcoin grants development fund</fund>",
     "plugin_gitcoin_readme_fund_link": "https://gitcoin.co/grants/86/gitcoin-sustainability-fund",
-    "plugin_gitcoin_connect_a_wallet": "",
     "plugin_gitcoin_select_a_token": "",
     "plugin_gitcoin_enter_an_amount": "",
     "plugin_gitcoin_grant_not_available": "",

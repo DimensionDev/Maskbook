@@ -185,7 +185,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                             .filter((x) =>
                                 Number(price) !== 0
                                     ? new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(price) ||
-                                    x.token.type === EthereumTokenType.Ether
+                                      x.token.type === EthereumTokenType.Ether
                                     : true,
                             )
                             .map((y, idx) => (idx < viewLength ? viewDetailed(y) : null))}
