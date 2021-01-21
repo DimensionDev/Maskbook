@@ -201,7 +201,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
             <Box className={classes.content}>
                 {tabIndex === 0 ? (
                     <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
-                ) : (collectiblesLoading.tokenLoading || collectiblesLoading.electionLoading) ? (
+                ) : collectiblesLoading.tokenLoading || collectiblesLoading.electionLoading ? (
                     <div style={{ textAlign: 'center' }}>
                         <CircularProgress />
                     </div>

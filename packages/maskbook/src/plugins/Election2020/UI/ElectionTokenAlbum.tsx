@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface ElectionTokenAlbumProps {
-    setCollectiblesLoading: (loading:boolean) => void
+    setCollectiblesLoading: (loading: boolean) => void
 }
 
 export function ElectionTokenAlbum(props: ElectionTokenAlbumProps) {
@@ -38,7 +38,7 @@ export function ElectionTokenAlbum(props: ElectionTokenAlbumProps) {
 
     // fetch the NFT token
     const ELECTION_TOKEN_ADDRESS = useConstant(ELECTION_2020_CONSTANTS, 'ELECTION_TOKEN_ADDRESS')
-    const { value: electionToken, loading:loadingTokenDetail } = useERC721TokenDetailed(ELECTION_TOKEN_ADDRESS)
+    const { value: electionToken, loading: loadingTokenDetail } = useERC721TokenDetailed(ELECTION_TOKEN_ADDRESS)
     const tokens = useAllElectionTokensOfOwner(electionToken)
 
     const chainIdValid = useChainIdValid()
