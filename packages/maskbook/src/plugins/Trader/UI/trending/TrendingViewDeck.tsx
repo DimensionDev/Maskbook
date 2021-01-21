@@ -349,8 +349,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     ? 0
                                     : findIndex(getEnumAsArray(TradeProvider), (x) => x.value === tradeProvider)
                             }
-                            onChange={onTradeProviderChange}
-                        ><ArrowDropDownIcon /></FootnoteMenu>
+                            onChange={onTradeProviderChange}>
+                            <ArrowDropDownIcon />
+                        </FootnoteMenu>
                     </div>
                 ) : null}
             </CardActions>

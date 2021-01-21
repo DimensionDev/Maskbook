@@ -21,8 +21,8 @@ export function useERC721TokenDetailed(address: string, token?: Partial<ERC721To
     )
 
     // validate
-    const [results, _, callback] = useSingleContractMultipleData(erc721TokenContract, names, callDatas)
-    const asyncResult = useAsyncRetry(callback, [erc721TokenContract, names, callDatas])
+    const [results, calls, _, callback] = useSingleContractMultipleData(erc721TokenContract, names, callDatas)
+    const asyncResult = useAsyncRetry(() => callback(calls), [erc721TokenContract, names, callDatas])
 
     // compose
     const token_ = useMemo(() => {

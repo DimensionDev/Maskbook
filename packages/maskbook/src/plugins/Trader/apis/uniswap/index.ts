@@ -24,7 +24,7 @@ interface QueryPairsResponse {
     }
 }
 
-export async function queryPairs(from: string, ids: string[]) {
+export async function queryPairsFromSubgraph(from: string, ids: string[]) {
     if (!ids.length) return []
     const response = await fetch(from, {
         method: 'POST',

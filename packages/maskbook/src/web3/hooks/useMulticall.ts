@@ -42,36 +42,39 @@ export type MulticalState =
  * The basic hook for fetching data from Multicall contract
  * @param calls
  */
-export function useMulticallCallback(calls: Call[]) {
+export function useMulticallCallback() {
     const multicallContract = useMulticallContract()
     const [multicallState, setMulticallState] = useState<MulticalState>({
         type: MulticalStateType.UNKNOWN,
     })
-    const multicallCallback = useCallback(async () => {
-        if (calls.length === 0 || !multicallContract) {
-            setMulticallState({
-                type: MulticalStateType.UNKNOWN,
-            })
-            return
-        }
-        try {
-            setMulticallState({
-                type: MulticalStateType.PENDING,
-            })
+    const multicallCallback = useCallback(
+        async (calls_: Call[]) => {
+            if (calls_.length === 0 || !multicallContract) {
+                setMulticallState({
+                    type: MulticalStateType.UNKNOWN,
+                })
+                return
+            }
+            try {
+                setMulticallState({
+                    type: MulticalStateType.PENDING,
+                })
 
-            const { blockNumber, returnData } = await multicallContract.methods.aggregate(calls).call()
+                const { returnData } = await multicallContract.methods.aggregate(calls_).call()
 
-            setMulticallState({
-                type: MulticalStateType.SUCCEED,
-                results: returnData,
-            })
-        } catch (error) {
-            setMulticallState({
-                type: MulticalStateType.FAILED,
-                error,
-            })
-        }
-    }, [calls, multicallContract])
+                setMulticallState({
+                    type: MulticalStateType.SUCCEED,
+                    results: returnData,
+                })
+            } catch (error) {
+                setMulticallState({
+                    type: MulticalStateType.FAILED,
+                    error,
+                })
+            }
+        },
+        [multicallContract],
+    )
     return [multicallState, multicallCallback] as const
 }
 //#endregion
@@ -105,7 +108,7 @@ export function useMutlicallStateDecoded<
                 }
             }
         })
-    }, [contracts.map((x) => x.options.address).join(','), names, state])
+    }, [contracts.map((x) => x.options.address).join(','), names.join(''), state])
 }
 //#endregion
 
@@ -120,10 +123,10 @@ export function useSingleContractMultipleData<T extends Contract, K extends keyo
             target: contract.options.address,
             callData: contract.methods[names[i]](...data).encodeABI() as string,
         }))
-    }, [contract, names, callDatas])
-    const [state, callback] = useMulticallCallback(calls)
+    }, [contract?.options.address, names.join(''), callDatas.flatMap(x => x).join('')])
+    const [state, callback] = useMulticallCallback()
     const results = useMutlicallStateDecoded(new Array(calls.length).fill(contract) as T[], names, state)
-    return [results, state, callback] as const
+    return [results, calls, state, callback] as const
 }
 
 export function useMutlipleContractSingleData<T extends Contract, K extends keyof T['methods']>(
@@ -135,13 +138,13 @@ export function useMutlipleContractSingleData<T extends Contract, K extends keyo
         () =>
             contracts.map((contract, i) => ({
                 target: contract.options.address,
-                callData: contracts[0].methods[names[i]](callData).encodeABI() as string,
+                callData: contract.methods[names[i]].apply(null, callData).encodeABI() as string,
             })),
-        [contracts, names, callData],
+        [contracts.map(x => x.options.address).join(''), names.join(''), callData.join('')],
     )
-    const [state, callback] = useMulticallCallback(calls)
+    const [state, callback] = useMulticallCallback()
     const results = useMutlicallStateDecoded(contracts, names, state)
-    return [results, state, callback] as const
+    return [results, calls, state, callback] as const
 }
 
 export function useMultipleContractMultipleData<T extends Contract, K extends keyof T['methods']>(
@@ -153,11 +156,11 @@ export function useMultipleContractMultipleData<T extends Contract, K extends ke
         () =>
             contracts.map((contract, i) => ({
                 target: contract.options.address,
-                callData: contracts[0].methods[names[i]](callDatas[i]).encodeABI() as string,
+                callData: contract.methods[names[i]](callDatas[i]).encodeABI() as string,
             })),
-        [contracts, names, callDatas],
+        [contracts.map(x => x.options.address).join(''), names.join(''), callDatas.flatMap(x => x).join('')],
     )
-    const [state, callback] = useMulticallCallback(calls)
+    const [state, callback] = useMulticallCallback()
     const results = useMutlicallStateDecoded(contracts, names, state)
-    return [results, state, callback] as const
+    return [results, calls, state, callback] as const
 }

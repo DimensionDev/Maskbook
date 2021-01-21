@@ -1,6 +1,6 @@
 import { INIT_CODE_HASH } from '@uniswap/sdk'
 import { ChainId, ERC20TokenDetailed } from '../../../web3/types'
-import { AMPL, COMP, DAI, MKR, MSKA, MSKB, MSKC, USDC, USDT, WETH, WETH_ONLY } from './trader'
+import { AMPL, COMP, DAI, MKR, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WETH, WETH_ONLY } from './trader'
 
 /**
  * Some tokens can only be swapped via certain pairs,
@@ -20,7 +20,7 @@ export const UNISWAP_BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
     ...WETH_ONLY,
-    [ChainId.Mainnet]: [...WETH_ONLY[ChainId.Mainnet], ...[DAI, USDC, USDT, COMP, MKR]],
+    [ChainId.Mainnet]: [...WETH_ONLY[ChainId.Mainnet], ...[DAI, USDC, USDT, COMP, MKR, WBTC]],
     [ChainId.Rinkeby]: [...WETH_ONLY[ChainId.Rinkeby], ...[MSKA, MSKB, MSKC]],
 }
 

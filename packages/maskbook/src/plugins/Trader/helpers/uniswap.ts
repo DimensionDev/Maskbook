@@ -13,8 +13,9 @@ import {
 import { WETH } from '../constants'
 import { ChainId, ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
-import { getConstant } from '../../../web3/helpers'
+import { getConstant, isETH } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
+import { formatEthereumAddress } from '../../Wallet/formatter'
 
 export function toUniswapChainId(chainId: ChainId): UniswapChainId {
     switch (chainId) {
@@ -38,13 +39,19 @@ export function toUniswapPercent(numerator: number, denominator: number) {
 }
 
 export function toUniswapCurrency(chainId: ChainId, token: EtherTokenDetailed | ERC20TokenDetailed): UniswapCurrency {
-    if (token.address === getConstant(CONSTANTS, 'ETH_ADDRESS')) return ETHER
+    if (isETH(token.address)) return ETHER
     return toUniswapToken(chainId, token)
 }
 
 export function toUniswapToken(chainId: ChainId, token: EtherTokenDetailed | ERC20TokenDetailed): UniswapToken {
-    if (token.address === getConstant(CONSTANTS, 'ETH_ADDRESS')) return toUniswapToken(chainId, WETH[chainId])
-    return new UniswapToken(toUniswapChainId(chainId), token.address, token.decimals ?? 0, token.symbol, token.name)
+    if (isETH(token.address)) return toUniswapToken(chainId, WETH[chainId])
+    return new UniswapToken(
+        toUniswapChainId(chainId),
+        formatEthereumAddress(token.address),
+        token.decimals ?? 0,
+        token.symbol,
+        token.name,
+    )
 }
 
 export function toUniswapCurrencyAmount(
@@ -52,7 +59,7 @@ export function toUniswapCurrencyAmount(
     token: EtherTokenDetailed | ERC20TokenDetailed,
     amount: string,
 ) {
-    return token.address === getConstant(CONSTANTS, 'ETH_ADDRESS')
+    return isETH(token.address)
         ? UniswapCurrencyAmount.ether(JSBI.BigInt(amount))
         : new TokenAmount(toUniswapToken(chainId, token), JSBI.BigInt(amount))
 }
@@ -88,7 +95,7 @@ export function uniswapTokenTo(token: UniswapToken) {
         name: token.name,
         symbol: token.symbol,
         decimals: token.decimals,
-        address: token.address,
+        address: formatEthereumAddress(token.address),
         chainId: uniswapChainIdTo(token.chainId),
     } as EtherTokenDetailed | ERC20TokenDetailed
 }
