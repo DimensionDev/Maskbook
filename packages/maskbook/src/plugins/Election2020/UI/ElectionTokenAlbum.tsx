@@ -1,11 +1,11 @@
-import { createStyles, makeStyles } from '@material-ui/core'
-import { useChainIdValid } from '../../../web3/hooks/useChainState'
+import { createStyles, makeStyles, Typography } from '@material-ui/core'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
+import { getERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
 import { ELECTION_2020_CONSTANTS } from '../constants'
 import { useAllElectionTokensOfOwner } from '../hooks/useAllElectionTokensOfOwner'
 import { ElectionCard } from './ElectionCard'
-import { useEffect } from 'react'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { Suspense } from 'react'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface ElectionTokenAlbumProps {
-    setCollectiblesLoading: (loading: boolean) => void
+    setCollectiblesLoading?: (loading: boolean) => void
 }
 
 export function ElectionTokenAlbum(props: ElectionTokenAlbumProps) {
@@ -38,26 +38,27 @@ export function ElectionTokenAlbum(props: ElectionTokenAlbumProps) {
 
     // fetch the NFT token
     const ELECTION_TOKEN_ADDRESS = useConstant(ELECTION_2020_CONSTANTS, 'ELECTION_TOKEN_ADDRESS')
-    const { value: electionToken, loading: loadingTokenDetail } = useERC721TokenDetailed(ELECTION_TOKEN_ADDRESS)
-    const tokens = useAllElectionTokensOfOwner(electionToken)
+    const electionToken = getERC721TokenDetailed(ELECTION_TOKEN_ADDRESS)
+    const tokens = useAllElectionTokensOfOwner(electionToken!)
 
-    const chainIdValid = useChainIdValid()
-
-    useEffect(() => {
-        props.setCollectiblesLoading(loadingTokenDetail || tokens.loading)
-    }, [props, loadingTokenDetail, tokens.loading])
-
-    if (!chainIdValid) return null
-    if (!tokens.value.length) return null
+    const { t } = useI18N()
     return (
-        <div className={classes.root}>
-            <div className={classes.content}>
-                {tokens.value.map((token) => (
-                    <section className={classes.tile} key={token.tokenId}>
-                        <ElectionCard token={token} canViewOnEtherscan />
-                    </section>
-                ))}
-            </div>
-        </div>
+        <>
+            {tokens.value.length === 0 ? (
+                <Typography variant="body1" color="textSecondary">
+                    {t('wallet_no_collectables', { name: 'Election' })}
+                </Typography>
+            ) : (
+                <div className={classes.root}>
+                    <div className={classes.content}>
+                        {tokens.value.map((token) => (
+                            <section className={classes.tile} key={token.tokenId}>
+                                <ElectionCard token={token} canViewOnEtherscan />
+                            </section>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </>
     )
 }

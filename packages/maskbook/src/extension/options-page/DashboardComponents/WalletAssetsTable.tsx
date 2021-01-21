@@ -10,6 +10,7 @@ import {
     TableRow,
     Theme,
     Typography,
+    SnackbarContent,
     CircularProgress,
 } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
@@ -23,11 +24,10 @@ import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenActionsBar } from './ERC20TokenActionsBar'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, Suspense } from 'react'
 import { DashboardWalletsContext } from '../DashboardRouters/Wallets'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { isEqualWith } from 'lodash-es'
 
 const MAX_TOKENS_LENGTH = 5
 const MIN_VALUE = 1
@@ -191,12 +191,8 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         Number(price) !== 0 ? new BigNumber(a.value?.[CurrencyType.USD] || '0').isGreaterThan(price) : true
 
     return (
-        <>
-            {loading ? (
-                <div style={{ textAlign: 'center' }}>
-                    <CircularProgress />
-                </div>
-            ) : detailedTokens.length === 0 ? (
+        <Suspense fallback={<SnackbarContent message="Loading assets ..." />}>
+            {detailedTokens.length === 0 ? (
                 <Typography variant="body1" color="textSecondary">
                     {t('wallet_no_asset')}
                 </Typography>
@@ -230,6 +226,6 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                     <LessButton />
                 </>
             )}
-        </>
+        </Suspense>
     )
 }

@@ -265,7 +265,7 @@
     "wallet_balance": "Balance",
     "wallet_value": "Value",
     "wallet_no_asset": "No Assets Found",
-    "wallet_no_collectables": "No Collectables Found",
+    "wallet_no_collectables": "No Collectables ({{name}}) Found",
     "wallet_confirmation_hint": "I confirm that I need to create a wallet.",
     "wallet_new": "New Wallet",
     "wallet_notification": "This will create a new wallet other than the default wallet. You are responsible for keeping the private key to the wallet safe. Please also note that Mask won't be able to pay for your transactions on Ethereum.",
