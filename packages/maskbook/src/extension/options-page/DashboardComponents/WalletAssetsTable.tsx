@@ -16,7 +16,7 @@ import classNames from 'classnames'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency } from '../../../plugins/Wallet/formatter'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { CurrencyType, AssetDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import { CurrencyType, AssetDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { getTokenUSDValue, isSameAddress } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
@@ -96,7 +96,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                         display: 'flex',
                     }}>
                     <TokenIcon classes={{ icon: classes.coin }} name={x.token.name} address={x.token.address} />
-                    <Typography className={classes.name}>{x.token.name}</Typography>
+                    <Typography className={classes.name}>{x.token.symbol}</Typography>
                 </Box>,
                 <Box
                     sx={{
@@ -166,7 +166,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     )
 
     const filter = (a: AssetDetailed) =>
-        Number(price) !== 0 ? new BigNumber(a.value?.[CurrencyType.USD] || '0').isGreaterThan(price) : true
+        Number(price) !== 0 ? new BigNumber(a.value?.[CurrencyType.USD] || '0').isGreaterThan(price) || a.token.type === EthereumTokenType.Ether : true
 
     return (
         <>
