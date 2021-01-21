@@ -43,6 +43,7 @@ export function TradePairViewer(props: TradePairViewerProps) {
         trade.trade_?.route.pairs[0].token1,
     )
     if (!address) return null
+    if (trade.trade_?.route.pairs.length !== 1) return null
 
     return (
         <div className={classes.root}>
