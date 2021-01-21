@@ -15,10 +15,12 @@ export function useV2Trade(
     outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
 ) {
     const isExactIn = strategy === TradeStrategy.ExactIn
-    const { value: pairs, ...asyncResult } = useAllCommonPairs(inputToken, outputToken)
+    const isTradable = !new BigNumber(inputAmount).isZero() || !new BigNumber(outputAmount).isZero()
+    const { value: pairs, ...asyncResult } = useAllCommonPairs(isTradable ? inputToken : undefined, isTradable ? outputToken : undefined)
     const bestTradeExactIn = useBestTradeExactIn(inputAmount, inputToken, outputToken, pairs)
     const bestTradeExactOut = useBestTradeExactOut(outputAmount, inputToken, outputToken, pairs)
-    if ((new BigNumber(inputAmount).isZero() && new BigNumber(outputAmount).isZero()) || !inputToken || !outputToken)
+
+    if (!isTradable || !inputToken || !outputToken)
         return {
             ...asyncResult,
             error: void 0,

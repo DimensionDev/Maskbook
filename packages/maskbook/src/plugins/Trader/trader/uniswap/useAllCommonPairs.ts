@@ -4,7 +4,7 @@ import type { Pair } from '@uniswap/sdk'
 import { toUniswapChainId, toUniswapToken } from '../../helpers'
 import { usePairs, TokenPair, PairState } from './usePairs'
 import { useChainId } from '../../../../web3/hooks/useChainState'
-import type { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 import { useUniswapToken } from './useUniswapToken'
 import { TradeContext } from '../useTradeContext'
 
