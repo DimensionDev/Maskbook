@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     lessButton: {
         display: 'flex',
         justifyContent: 'center',
+        marginTop: theme.spacing(1),
     },
 }))
 
