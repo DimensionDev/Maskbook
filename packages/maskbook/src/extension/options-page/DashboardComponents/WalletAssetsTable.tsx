@@ -37,7 +37,9 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: theme.spacing(0),
     },
     table: {},
-    head: {},
+    head: {
+        backgroundColor: theme.palette.mode === 'light' ? theme.palette.common.white : 'var(--drawerBody)',
+    },
     cell: {
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1.5),
@@ -84,9 +86,6 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const [price, setPrice] = useState(MIN_VALUE)
 
     if (!detailedTokens.length) return null
-
-    const sort = (a: AssetDetailed, b: AssetDetailed): number =>
-        new BigNumber(b.value?.[CurrencyType.USD] ?? 0).minus(a.value?.[CurrencyType.USD] ?? 0).toNumber()
 
     const viewDetailed = (x: AssetDetailed) => (
         <TableRow className={classes.cell} key={x.token.address}>
@@ -165,14 +164,11 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         </div>
     )
 
-    const filter = (a: AssetDetailed) =>
-        Number(price) !== 0 ? new BigNumber(a.value?.[CurrencyType.USD] || '0').isGreaterThan(price) || a.token.type === EthereumTokenType.Ether : true
-
     return (
         <>
             <TableContainer className={classes.container}>
                 <Table className={classes.table} component="table" size="medium" stickyHeader>
-                    <TableHead>
+                    <TableHead className={classes.head}>
                         <TableRow>
                             {LABELS.map((x, i) => (
                                 <TableCell
@@ -186,9 +182,13 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                     </TableHead>
                     <TableBody>
                         {detailedTokens
-                            .sort(sort)
-                            .filter(filter)
-                            .map((x, idx) => (idx < viewLength ? viewDetailed(x) : null))}
+                            .filter((x) =>
+                                Number(price) !== 0
+                                    ? new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(price) ||
+                                    x.token.type === EthereumTokenType.Ether
+                                    : true,
+                            )
+                            .map((y, idx) => (idx < viewLength ? viewDetailed(y) : null))}
                     </TableBody>
                 </Table>
             </TableContainer>
