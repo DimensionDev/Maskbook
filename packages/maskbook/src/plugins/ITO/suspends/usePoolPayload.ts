@@ -9,12 +9,12 @@ let isLoading = true
 export function usePoolPayload(pid: string) {
     if (isLoading) throw suspender(pid)
     return {
-        payload: payloadRef.value!,
-        retry: () => retry(pid)
+        payload: useValueRef(payloadRef)!,
+        retry: () => retry(pid),
     }
 }
 
-async function retry (pid: string) {
+async function retry(pid: string) {
     isLoading = true
     if (isLoading) throw suspender(pid)
     return

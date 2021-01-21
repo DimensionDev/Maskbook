@@ -12,7 +12,7 @@ import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import { formatAmount, formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
+import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatDateTime, formatTimeDiffer } from '../../../utils/date'
@@ -165,7 +165,8 @@ export function ITO(props: ITO_Props) {
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
     const { pid } = props
-    const { payload, retry } = usePoolPayload(pid)
+    const { payload, retry: retryPoolPayload } = usePoolPayload(pid)
+    console.log('payload', payload)
     const {
         token,
         total: payload_total,
@@ -189,6 +190,7 @@ export function ITO(props: ITO_Props) {
         value: availability,
         computed: availabilityComputed,
         loading: loadingAvailability,
+        retry: retryAvailability,
     } = useAvailabilityComputed(payload)
     //#ednregion
 
@@ -208,7 +210,7 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     //#region buy info
-    const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pid, account)
+    const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
         chainId === payload.chain_id &&
         payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
@@ -241,10 +243,7 @@ export function ITO(props: ITO_Props) {
     const onShare = useCallback(async () => {
         window.open(shareLink, '_blank', 'noopener noreferrer')
     }, [shareLink])
-    const onClaim = useCallback(async () => {
-        retry()
-        setOpenClaimDialog(true)
-    }, [])
+    const onClaim = useCallback(async () => setOpenClaimDialog(true), [])
 
     //#region withdraw
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
@@ -284,6 +283,12 @@ export function ITO(props: ITO_Props) {
         destructCallback(payload.pid)
     }, [destructCallback, payload.pid])
     //#endregion
+
+    const retryITOCard = useCallback(() => {
+        retryPoolPayload()
+        retryPoolTradeInfo()
+        retryAvailability()
+    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
 
     const swapStatusText = useMemo(() => {
         if (listOfStatus.includes(ITO_Status.waited)) return t('plugin_ito_status_no_start')
@@ -482,17 +487,14 @@ export function ITO(props: ITO_Props) {
                     </ActionButton>
                 ) : null}
             </Box>
-
-            {payload ? (
-                <ClaimGuide
-                    payload={payload}
-                    isBuyer={isBuyer}
-                    exchangeTokens={exchange_tokens}
-                    open={openClaimDialog}
-                    onClose={() => setOpenClaimDialog(false)}
-                    retryPayload={retry}
-                />
-            ) : null}
+            <ClaimGuide
+                payload={payload}
+                isBuyer={isBuyer}
+                exchangeTokens={exchange_tokens}
+                open={openClaimDialog}
+                onClose={() => setOpenClaimDialog(false)}
+                retryPayload={retryITOCard}
+            />
         </div>
     )
 }
