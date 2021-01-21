@@ -47,9 +47,9 @@ export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyle
     maxAmount?: string
     balance: string
     disableBalance?: boolean
-    onAmountChange: (amount: string) => void
     label: string
     token?: EtherTokenDetailed | ERC20TokenDetailed | null
+    onAmountChange: (amount: string) => void
     InputProps?: Partial<InputProps>
     MaxChipProps?: Partial<ChipProps>
     SelectTokenChip?: Partial<SelectTokenChipProps>
@@ -84,8 +84,6 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         <TextField
             className={classes.root}
             label={label}
-            error={props.TextFieldProps?.error}
-            helperText={props.TextFieldProps?.helperText}
             fullWidth
             required
             type="text"

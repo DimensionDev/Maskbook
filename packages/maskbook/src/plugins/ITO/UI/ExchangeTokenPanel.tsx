@@ -7,11 +7,11 @@ import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { ITO_CONSTANTS } from '../constants'
 import { CONSTANTS } from '../../../web3/constants'
+import { SelectERC20TokenDialog } from '../../Ethereum/UI/SelectERC20TokenDialog'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -132,7 +132,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
                     label={label}
                     amount={inputAmountForUI}
                     disableBalance={disableBalance}
-                    balance={disableBalance ? '0' : tokenBalance}
+                    balance={disableBalance || loadingTokenBalance ? '0' : tokenBalance}
                     token={exchangeToken}
                     onAmountChange={onAmountChangeForUI}
                     SelectTokenChip={{

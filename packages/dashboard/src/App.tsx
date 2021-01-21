@@ -8,7 +8,7 @@ export function App() {
         <StrictMode>
             <StylesProvider injectFirst>
                 <ErrorBoundary>
-                    <MuiThemeProvider theme={MaskDarkTheme}>
+                    <MuiThemeProvider theme={MaskLightTheme}>
                         <CssBaseline />
                         <HashRouter>
                             <Pages />

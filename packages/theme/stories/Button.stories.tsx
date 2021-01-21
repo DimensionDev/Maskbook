@@ -1,16 +1,20 @@
-import { Button } from '@material-ui/core'
-import { story, MuiArgs } from './utils'
+import { Button as MuiButton, ButtonProps } from '@material-ui/core'
+import { story, MuiArgs, matrix } from './utils'
 
-const { meta, of } = story(Button)
+const { meta, of } = story(MuiButton)
 export default meta({
-    title: 'Button',
+    title: 'Atoms/Button',
     argTypes: MuiArgs.button,
+    parameters: {
+        ...matrix<ButtonProps>({
+            variant: ['contained', 'outlined', 'text'],
+            color: ['inherit', 'primary', 'secondary', 'error' as any],
+        }),
+    },
 })
 
-export const Default = of({
+export const Button = of({
     args: {
         children: 'A button?',
-        variant: 'contained',
-        size: 'medium',
     },
 })

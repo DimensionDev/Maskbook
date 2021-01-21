@@ -16,7 +16,7 @@
 # Build out
 dist
 /build
-/storybook-static
+storybook-static
 /Maskbook.*.zip
 
 # Environment files

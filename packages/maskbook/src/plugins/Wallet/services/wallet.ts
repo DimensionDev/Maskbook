@@ -13,6 +13,7 @@ import { formatChecksumAddress } from '../formatter'
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
 import { isSameAddress } from '../../../web3/helpers'
 import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
+import { selectMaskbookWallet } from '../helpers'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -155,9 +156,11 @@ export async function importNewWallet(
     if (rec._private_key_) record._private_key_ = rec._private_key_
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet', 'ERC20Token')
-        await t.objectStore('Wallet').add(WalletRecordIntoDB(record))
+        if (!(await t.objectStore('Wallet').get(record.address)))
+            await t.objectStore('Wallet').add(WalletRecordIntoDB(record))
     }
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
+    selectMaskbookWallet(record)
     return address
     async function getWalletAddress() {
         if (rec.address) return rec.address

@@ -48,6 +48,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
     )
     const initAmount = new BigNumber(0)
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
+    const [actualSwapAmount, setActualSwapAmount] = useState<BigNumber>(new BigNumber(0))
     const chainId = useChainId()
     const account = useAccount()
 
@@ -80,6 +81,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
                                     tokenAmount={tokenAmount}
                                     maxSwapAmount={maxSwapAmount}
                                     setTokenAmount={setTokenAmount}
+                                    setActualSwapAmount={setActualSwapAmount}
                                     payload={payload}
                                     token={payload.token}
                                     exchangeTokens={exchangeTokens}
@@ -92,7 +94,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
                                 <ShareDialog
                                     poolName={payload.message}
                                     token={payload.token}
-                                    tokenAmount={tokenAmount}
+                                    actualSwapAmount={actualSwapAmount}
                                     onClose={onCloseShareDialog}
                                 />
                             )

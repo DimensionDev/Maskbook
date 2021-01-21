@@ -11,8 +11,6 @@ import { Days, PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
 import { useCurrentTradeProvider } from '../../trending/useCurrentTradeProvider'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { useConstant } from '../../../../web3/hooks/useConstant'
-import { CONSTANTS } from '../../../../web3/constants'
 import { TradeView } from '../trader/TradeView'
 import { TrendingViewError } from './TrendingViewError'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton'
@@ -20,6 +18,11 @@ import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
+import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
+import { useChainId } from '../../../../web3/hooks/useChainState'
+import { UST } from '../../constants'
+import { ChainId, EthereumTokenType } from '../../../../web3/types'
+import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -62,10 +65,10 @@ export interface TrendingViewProps {
 
 export function TrendingView(props: TrendingViewProps) {
     const { name, tagType, dataProviders, tradeProviders } = props
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     const { t } = useI18N()
     const classes = useStyles()
+    const chainId = useChainId()
 
     //#region trending
     const dataProvider = useCurrentDataProvider(dataProviders)
@@ -89,6 +92,10 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region swap
+    const { value: coinDetailed } = useTokenDetailed(
+        trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
+        trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.eth_address ?? '',
+    )
     const tradeProvider = useCurrentTradeProvider(tradeProviders)
     //#endregion
 
@@ -136,12 +143,22 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region display loading skeleton
-    if (loadingTrending || !currency || !trending) return <TrendingViewSkeleton />
+    if (loadingTrending || !currency || !trending || !coinDetailed) return <TrendingViewSkeleton />
     //#endregion
 
     const { coin, market, tickers } = trending
     const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
     const swapTabIndex = dataProvider !== DataProvider.UNISWAP ? 3 : 1
+    const fromToken = chainId === ChainId.Mainnet && coin.is_mirrored ? UST : createEtherToken(chainId)
+    const toToken = trending.coin.eth_address
+        ? createERC20Token(
+              chainId,
+              coinDetailed.address,
+              coinDetailed.decimals,
+              coinDetailed.name ?? '',
+              coinDetailed.symbol ?? '',
+          )
+        : undefined
 
     return (
         <TrendingViewDeck
@@ -194,9 +211,8 @@ export function TrendingView(props: TrendingViewProps) {
                 <TradeView
                     classes={{ root: classes.tradeViewRoot }}
                     TraderProps={{
-                        address: coin.eth_address ?? ETH_ADDRESS,
-                        name: coin.name,
-                        symbol: coin.symbol,
+                        fromToken,
+                        toToken,
                     }}
                 />
             ) : null}

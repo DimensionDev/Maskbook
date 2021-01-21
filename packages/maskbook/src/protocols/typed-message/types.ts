@@ -71,3 +71,9 @@ export function isTypedMessageEmpty(x: TypedMessage): x is TypedMessageEmpty {
 export function isTypedMessageSuspended(x: TypedMessage): x is TypedMessageSuspended {
     return x.type === 'suspended'
 }
+
+export function getTypedMessageContent(message: TypedMessage): string {
+    if (isTypedMessageText(message)) return message.content
+    if (isTypedMessageAnchor(message)) return message.href
+    return ''
+}

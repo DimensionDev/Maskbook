@@ -287,33 +287,26 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
     const onSubmit = useSnackbarCallback(
         async () => {
             if (state[0] === 0) {
-                const address = await WalletRPC.createNewWallet({
+                await WalletRPC.createNewWallet({
                     name,
                     passphrase,
                 })
-                setAsSelectedWallet(address)
             }
             if (state[0] === 1) {
-                const address = await WalletRPC.importNewWallet({
+                await WalletRPC.importNewWallet({
                     name,
                     mnemonic: mnemonic.split(' '),
                     passphrase: '',
                 })
-                setAsSelectedWallet(address)
             }
             if (state[0] === 2) {
                 const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privKey)
-                setAsSelectedWallet(address)
                 if (!privateKeyValid) throw new Error(t('import_failed'))
                 await WalletRPC.importNewWallet({
                     name,
                     address,
                     _private_key_: privKey,
                 })
-            }
-            function setAsSelectedWallet(address: string) {
-                if (!address) return
-                currentSelectedWalletAddressSettings.value = address
             }
         },
         [state[0], name, passphrase, mnemonic, privKey],
@@ -352,18 +345,6 @@ export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<Wal
     const { wallet } = props.ComponentProps!
     const [token, setToken] = useState<ERC20TokenDetailed | null>(null)
 
-    const [tabState, setTabState] = useState(0)
-    const state = useMemo(
-        () =>
-            [
-                tabState,
-                (state: number) => {
-                    setToken(null)
-                    return setTabState(state)
-                },
-            ] as const,
-        [tabState],
-    )
     const onSubmit = useSnackbarCallback(
         async () => {
             if (!token) return
@@ -632,9 +613,8 @@ export function DashboardWalletHistoryDialog(
     props: WrappedDialogProps<WalletProps & { onRedPacketClicked: (payload: RedPacketJSONPayload) => void }>,
 ) {
     const { t } = useI18N()
-    const classes = useHistoryDialogStyles()
 
-    const { wallet, onRedPacketClicked } = props.ComponentProps!
+    const { onRedPacketClicked } = props.ComponentProps!
 
     const state = useState(0)
     const tabProps: AbstractTabProps = {
@@ -689,7 +669,6 @@ const useRedPacketDetailDialogStyles = makeStyles((theme: Theme) =>
 export function DashboardWalletRedPacketDetailDialog(
     props: WrappedDialogProps<WalletProps & { payload: RedPacketJSONPayload }>,
 ) {
-    const { t } = useI18N()
     const { wallet, payload } = props.ComponentProps!
 
     const classes = useRedPacketDetailDialogStyles()

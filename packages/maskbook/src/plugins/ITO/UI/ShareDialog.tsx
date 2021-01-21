@@ -7,7 +7,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
-import { useBase64 } from '../../../utils/hooks/useBase64'
+import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -58,24 +58,24 @@ const useStyles = makeStyles((theme) =>
 
 export interface ShareDialogProps extends withClasses<'root'> {
     token: EtherTokenDetailed | ERC20TokenDetailed
-    tokenAmount: BigNumber
+    actualSwapAmount: BigNumber
     poolName: string
     onClose: () => void
 }
 
 export function ShareDialog(props: ShareDialogProps) {
+    const ShareBackground = getAssetAsBlobURL(new URL('../assets/share-background.jpg', import.meta.url))
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
-    const { token, tokenAmount } = props
+    const { token, actualSwapAmount } = props
     const postLink = usePostLink()
-    const amount = formatBalance(tokenAmount, token.decimals ?? 0)
+    const amount = formatBalance(actualSwapAmount, token.decimals ?? 0)
     const shareLink = useShareLink(
         t('plugin_ito_claim_success_share', {
             link: postLink,
             symbol: token.symbol,
         }),
     )
-    const { value: ShareBackground } = useBase64(new URL('../assets/share-background.jpg', import.meta.url).toString())
     return (
         <>
             <Box className={classes.shareWrapper}>
@@ -87,12 +87,12 @@ export function ShareDialog(props: ShareDialogProps) {
                         {token.symbol}
                     </Typography>
                     <Typography variant="body1" className={classes.shareText}>
-                        {t('plugin_ito_congratulations')}
+                        {actualSwapAmount.isZero() ? t('plugin_ito_out_of_stock_hit') : t('plugin_ito_congratulations')}
                     </Typography>
                     <ActionButton
                         onClick={() => {
                             props.onClose()
-                            window.open(shareLink, '_blank', 'noopener noreferrer')
+                            actualSwapAmount.isZero() ? void 0 : window.open(shareLink, '_blank', 'noopener noreferrer')
                         }}
                         variant="contained"
                         color="primary"

@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState, useEffect, useMemo } from 'react'
 import { makeStyles, createStyles, Card, Typography, Box, Link } from '@material-ui/core'
 import { BigNumber } from 'bignumber.js'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
@@ -12,7 +12,7 @@ import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import { formatBalance } from '../../Wallet/formatter'
+import { formatAmount, formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatDateTime, formatTimeDiffer } from '../../../utils/date'
@@ -24,7 +24,8 @@ import { sortTokens } from '../helpers'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
-import { useBase64 } from '../../../utils/hooks/useBase64'
+import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
+import { EthereumMessages } from '../../Ethereum/messages'
 
 export interface IconProps {
     size?: number
@@ -151,6 +152,8 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 }
 
 export function ITO(props: ITO_Props) {
+    // assets
+    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
     const { payload, retryPayload } = props
     const {
         token,
@@ -177,9 +180,6 @@ export function ITO(props: ITO_Props) {
     const postLink = usePostLink()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-
-    // assets
-    const { value: PoolBackground } = useBase64(new URL('../assets/pool-background.jpg', import.meta.url).toString())
 
     //#region token detailed
     const {
@@ -220,6 +220,8 @@ export function ITO(props: ITO_Props) {
     const refundAmount = tradeInfo?.buyInfo
         ? new BigNumber(tradeInfo?.buyInfo.amount).minus(new BigNumber(tradeInfo?.buyInfo.amount_sold))
         : new BigNumber(0)
+    // out of stock
+    const refundAllAmount = tradeInfo?.buyInfo && new BigNumber(tradeInfo?.buyInfo.amount_sold).isZero()
     useEffect(() => {
         // should not revalidate if never validated before
         if (!availability || !tradeInfo) return
@@ -246,7 +248,7 @@ export function ITO(props: ITO_Props) {
     //#region withdraw
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (destructState.type !== TransactionStateType.CONFIRMED) return
@@ -284,6 +286,100 @@ export function ITO(props: ITO_Props) {
     }, [destructCallback, payload.pid])
     //#endregion
 
+    const swapStatusText = useMemo(() => {
+        if (listOfStatus.includes(ITO_Status.waited)) return t('plugin_ito_status_no_start')
+        if (listOfStatus.includes(ITO_Status.expired)) return t('plugin_ito_expired')
+        if ((listOfStatus.includes(ITO_Status.completed) && isBuyer) || total_remaining.isZero()) {
+            return t('plugin_ito_completed')
+        } else if (listOfStatus.includes(ITO_Status.started)) {
+            if (total_remaining.isZero()) {
+                return t('plugin_ito_status_out_of_stock')
+            }
+            return t('plugin_ito_status_ongoing')
+        }
+
+        return ''
+    }, [isBuyer, listOfStatus, t, total_remaining])
+
+    const swapResultText = useMemo(() => {
+        if (refundAllAmount) {
+            return t('plugin_ito_out_of_stock_hit')
+        }
+
+        const _text = t('plugin_ito_your_claimed_amount', {
+            amount: formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals),
+            symbol: token.symbol,
+        })
+
+        if (refundAmount.isZero()) {
+            return `${_text}.`
+        }
+
+        return `${_text}, ${t('plugin_ito_your_refund_amount', {
+            amount: formatBalance(refundAmount, tradeInfo?.buyInfo?.token.decimals ?? 0),
+            symbol: tradeInfo?.buyInfo?.token.symbol,
+        })}`
+    }, [
+        availability?.swapped,
+        refundAllAmount,
+        refundAmount,
+        t,
+        token.decimals,
+        token.symbol,
+        tradeInfo?.buyInfo?.token.decimals,
+        tradeInfo?.buyInfo?.token.symbol,
+    ])
+
+    const footerStartTime = useMemo(
+        () => (
+            <Typography variant="body1">
+                {t('plugin_ito_list_start_date', { date: formatDateTime(new Date(start_time * 1000), true) })}
+            </Typography>
+        ),
+        [start_time, t],
+    )
+
+    const footerEndTime = useMemo(
+        () => (
+            <Typography variant="body1">
+                {t('plugin_ito_swap_end_date', {
+                    date: formatDateTime(new Date(end_time * 1000), true),
+                })}
+            </Typography>
+        ),
+        [end_time, t],
+    )
+
+    const footerComplete = useMemo(
+        () => (
+            <>
+                <Typography variant="body1">{swapResultText}</Typography>
+                {footerEndTime}
+            </>
+        ),
+        [footerEndTime, swapResultText],
+    )
+
+    const footerNormal = useMemo(
+        () => (
+            <>
+                <Typography variant="body1">
+                    {t('plugin_ito_allocation_per_wallet', {
+                        limit: `: ${formatBalance(new BigNumber(limit), token.decimals)}`,
+                        token: token.symbol,
+                    })}
+                </Typography>
+
+                {listOfStatus.includes(ITO_Status.waited)
+                    ? footerStartTime
+                    : listOfStatus.includes(ITO_Status.started)
+                    ? footerEndTime
+                    : null}
+            </>
+        ),
+        [footerEndTime, footerStartTime, limit, listOfStatus, t, token.decimals, token.symbol],
+    )
+
     return (
         <div>
             <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${PoolBackground})` }}>
@@ -291,22 +387,15 @@ export function ITO(props: ITO_Props) {
                     <Typography variant="h5" className={classes.title}>
                         {payload.message}
                     </Typography>
-                    {listOfStatus.includes(ITO_Status.expired) ||
-                    (listOfStatus.includes(ITO_Status.completed) && isBuyer) ||
-                    total_remaining.isEqualTo(0) ? (
-                        <Typography variant="body2" className={classes.status}>
-                            {(listOfStatus.includes(ITO_Status.completed) && isBuyer) || total_remaining.isEqualTo(0)
-                                ? t('plugin_ito_completed')
-                                : listOfStatus.includes(ITO_Status.expired)
-                                ? t('plugin_ito_expired')
-                                : null}
-                        </Typography>
-                    ) : null}
+
+                    <Typography variant="body2" className={classes.status}>
+                        {swapStatusText}
+                    </Typography>
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
                     {t('plugin_ito_swapped_status', {
-                        remain: formatBalance(sold, token.decimals ?? 0),
-                        total: formatBalance(total, token.decimals ?? 0),
+                        remain: formatAmountPrecision(sold, token.decimals),
+                        total: formatAmountPrecision(total, token.decimals),
                         token: token.symbol,
                     })}
                     <Link
@@ -348,37 +437,11 @@ export function ITO(props: ITO_Props) {
                 </Box>
                 <Box className={classes.footer}>
                     <div>
-                        {listOfStatus.includes(ITO_Status.completed) ? (
-                            <Typography variant="body1">
-                                {t('plugin_ito_your_claimed_amount', {
-                                    amount: formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals),
-                                    symbol: token.symbol,
-                                })}
-                                {refundAmount.isEqualTo(0)
-                                    ? '.'
-                                    : ', ' +
-                                      t('plugin_ito_your_refund_amount', {
-                                          amount: formatBalance(refundAmount, tradeInfo?.buyInfo?.token.decimals ?? 0),
-                                          symbol: tradeInfo?.buyInfo?.token.symbol,
-                                      })}
-                            </Typography>
-                        ) : listOfStatus.includes(ITO_Status.expired) ? null : (
-                            <>
-                                <Typography variant="body1">
-                                    {t('plugin_ito_allocation_per_wallet', {
-                                        limit: `: ${formatBalance(new BigNumber(limit), token.decimals)}`,
-                                        token: token.symbol,
-                                    })}
-                                </Typography>
-                                <Typography variant="body1">
-                                    {listOfStatus.includes(ITO_Status.waited)
-                                        ? `Start date: ${formatDateTime(new Date(start_time * 1000), true)}`
-                                        : listOfStatus.includes(ITO_Status.started)
-                                        ? `Remaining time: ${formatTimeDiffer(new Date(), new Date(end_time * 1000))}`
-                                        : null}
-                                </Typography>
-                            </>
-                        )}
+                        {listOfStatus.includes(ITO_Status.completed)
+                            ? footerComplete
+                            : listOfStatus.includes(ITO_Status.expired)
+                            ? footerEndTime
+                            : footerNormal}
                     </div>
                     <Typography variant="body1" className={classes.fromText}>
                         {`From: @${seller.name}`}
@@ -387,9 +450,8 @@ export function ITO(props: ITO_Props) {
             </Card>
 
             <Box className={classes.actionFooter}>
-                {(total_remaining.isEqualTo(0) && !isBuyer) ||
-                loadingTradeInfo ||
-                loadingAvailability ? null : !account || !chainIdValid ? (
+                {(total_remaining.isZero() && !isBuyer) || loadingTradeInfo || loadingAvailability ? null : !account ||
+                  !chainIdValid ? (
                     <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>

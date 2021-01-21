@@ -68,7 +68,27 @@ export function useClaimCallback(
             return
         }
 
-        const params: Parameters<typeof ITO_Contract['methods']['swap']> = [
+        // step 1: check remaining
+        try {
+            const availability = await ITO_Contract.methods.check_availability(id).call({
+                from: account,
+            })
+            if (new BigNumber(availability.remaining).isZero()) {
+                setClaimState({
+                    type: TransactionStateType.FAILED,
+                    error: new Error('Out of Stock'),
+                })
+                return
+            }
+        } catch (e) {
+            setClaimState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Failed to check availability.'),
+            })
+            return
+        }
+
+        const swapParams: Parameters<typeof ITO_Contract['methods']['swap']> = [
             id,
             Web3Utils.soliditySha3(
                 Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 6))}`),
@@ -80,9 +100,9 @@ export function useClaimCallback(
             total,
         ]
 
-        // step 1: estimate gas
+        // step 2-1: estimate gas
         const estimatedGas = await ITO_Contract.methods
-            .swap(...params)
+            .swap(...swapParams)
             .estimateGas(config)
             .catch((error: Error) => {
                 setClaimState({
@@ -92,7 +112,7 @@ export function useClaimCallback(
                 throw error
             })
 
-        // step 2-1: blocking
+        // step 2-2: blocking
         return new Promise<void>((resolve, reject) => {
             const onSucceed = (no: number, receipt: TransactionReceipt) => {
                 setClaimState({
@@ -109,7 +129,7 @@ export function useClaimCallback(
                 })
                 reject(error)
             }
-            const promiEvent = ITO_Contract.methods.swap(...params).send({
+            const promiEvent = ITO_Contract.methods.swap(...swapParams).send({
                 gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                 ...config,
             })

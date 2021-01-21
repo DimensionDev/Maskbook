@@ -48,12 +48,12 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
                         )
                     }
                 }
-
-                for (const x of data.wallets) {
-                    const record = WalletRecordFromJSONFormat(x)
-                    if (record.mnemonic || record._private_key_) await importNewWallet(record)
-                }
             })
+        }
+
+        for (const x of data.wallets) {
+            const record = WalletRecordFromJSONFormat(x)
+            if (record.mnemonic || record._private_key_) await importNewWallet(record)
         }
 
         for (const x of data.posts) {

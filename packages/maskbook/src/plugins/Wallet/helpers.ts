@@ -1,6 +1,8 @@
 import stringify from 'json-stable-stringify'
 import type { WalletRecord, ERC20TokenRecord } from './database/types'
+import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from './settings'
 import { isSameAddress } from '../../web3/helpers'
+import { ProviderType } from '../../web3/types'
 
 function serializeWalletRecord(record: WalletRecord) {
     return stringify({
@@ -28,4 +30,9 @@ export function TokenComparer(a: ERC20TokenRecord | null, b: ERC20TokenRecord | 
 export function TokenArrayComparer(a: ERC20TokenRecord[], b: ERC20TokenRecord[]) {
     if (a.length !== b.length) return false
     return a.every((token, index) => TokenComparer(token, b[index]))
+}
+
+export function selectMaskbookWallet(wallet: WalletRecord) {
+    currentSelectedWalletAddressSettings.value = wallet.address
+    currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
 }

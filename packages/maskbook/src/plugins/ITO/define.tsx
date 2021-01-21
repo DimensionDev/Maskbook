@@ -80,6 +80,6 @@ export const ITO_PluginDefine: PluginConfig = {
             },
         ],
     ]),
-    PageComponent: Flags.ITO_enabled ? ITO_CompositionUI : undefined,
-    postDialogEntries: Flags.ITO_enabled ? [ITO_CompositionEntry] : undefined,
+    PageComponent: ITO_CompositionUI,
+    postDialogEntries: [ITO_CompositionEntry],
 }

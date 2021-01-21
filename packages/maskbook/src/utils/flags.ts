@@ -32,14 +32,15 @@ export const Flags = {
     //#region Experimental features
     image_payload_marked_as_beta: appOnly,
     /** Prohibit the use of test networks in production */
-    wallet_network_strict_mode_enabled: process.env.NODE_ENV === 'production' && !betaOrInsiderOnly,
+    wallet_network_strict_mode_enabled:
+        (process.env.NODE_ENV === 'production' && !betaOrInsiderOnly) || Math.random() < 1000,
     transak_enabled: webOnly,
     trader_enabled: webOnly,
     trader_zrx_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
+    gitcoin_enabled: webOnly,
     poll_enabled: webOnly,
     election2020_enabled: webOnly,
-    ITO_enabled: webOnly,
     election2020_composition_dialog_enabled: false,
     COTM_enabled: webOnly,
     COTM_composition_dialog_enabled: false,

@@ -32,6 +32,9 @@ import { useTokenTransferCallback } from '../../../web3/hooks/useTokenTransferCa
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
+import { useContext } from 'react'
+import { DashboardWalletsContext } from '../DashboardRouters/Wallets'
+import { EthereumMessages } from '../../../plugins/Ethereum/messages'
 
 interface WalletProps {
     wallet: WalletRecord
@@ -60,10 +63,10 @@ function TransferTab(props: TransferTabProps) {
     const { wallet, token, onClose } = props
     const { t } = useI18N()
 
+    const { retryDetailedTokens } = useContext(DashboardWalletsContext)
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
-
     // balance
     const { value: tokenBalance = '0', retry: retryTokenBalance } = useTokenBalance(
         token?.type ?? EthereumTokenType.Ether,
@@ -105,21 +108,13 @@ function TransferTab(props: TransferTabProps) {
 
     //#region remote controlled transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-
-            // reset state
             resetTransferCallback()
-
             if (transferState.type !== TransactionStateType.CONFIRMED) return
-
-            // reset form
-            setAmount('')
-            setAddress('')
-            setMemo('')
-
-            // revalidate
+            onClose()
+            retryDetailedTokens()
             retryTokenBalance()
         },
     )

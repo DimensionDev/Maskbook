@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { WalletMessages } from '../../plugins/Wallet/messages'
+import { EthereumMessages } from '../../plugins/Ethereum/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { TransactionState, TransactionStateType } from './useTransactionState'
 
@@ -14,7 +14,7 @@ export function useTransactionDialog(
 ) {
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (transactionState.type !== transactionStateType) return

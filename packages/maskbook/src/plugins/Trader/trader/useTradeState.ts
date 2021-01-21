@@ -65,7 +65,6 @@ function reducer(state: TradeState, action: SwapAction): TradeState {
                 inputTokenBalance: state.outputTokenBalance,
                 outputTokenBalance: state.inputTokenBalance,
             }
-
         case TradeActionType.UPDATE_INPUT_TOKEN:
             return {
                 ...state,

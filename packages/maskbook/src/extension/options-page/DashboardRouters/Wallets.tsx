@@ -1,4 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, createContext, useContext } from 'react'
+import { useHistory } from 'react-router-dom'
+import type { AssetDetailed, ERC20TokenDetailed, EtherToken } from '../../../web3/types'
 import { Button } from '@material-ui/core'
 import { makeStyles, createStyles, ThemeProvider } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -22,6 +24,7 @@ import { useAssetsDetailedCallback } from '../../../web3/hooks/useAssetsDetailed
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { extendsTheme } from '../../../utils/theme'
+import { useAssetsStableCoinDetailedDebank } from '../../../web3/hooks/useAssetsStableCoinDetailedDebank'
 
 //#region theme
 const walletsTheme = extendsTheme((theme) => ({
@@ -83,6 +86,12 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
+export const DashboardWalletsContext = createContext<{
+    detailedTokens: AssetDetailed[]
+    stableCoinTokens: ERC20TokenDetailed[]
+    retryDetailedTokens: () => void
+}>(null!)
+
 export default function DashboardWalletsRouter() {
     const classes = useStyles()
     const { t } = useI18N()
@@ -96,8 +105,8 @@ export default function DashboardWalletsRouter() {
 
     const selectedWallet = useWallet()
     const tokens = useTrustedERC20TokensFromDB()
-    const detailedTokens = useAssetsDetailedCallback(tokens)
-
+    const { value: detailedTokens, retry: retryDetailedTokens } = useAssetsDetailedCallback(tokens)
+    const { value: stableCoinTokens = [] } = useAssetsStableCoinDetailedDebank()
     // show create dialog
     useEffect(() => {
         if (create) openWalletCreate()
@@ -144,36 +153,36 @@ export default function DashboardWalletsRouter() {
     //#endregion
 
     return (
-        <DashboardRouterContainer
-            empty={!selectedWallet}
-            title={t('my_wallets')}
-            actions={[
-                <EthereumStatusBar BoxProps={{ sx: { justifyContent: 'flex-end' } }} />,
-                <Button
-                    variant="contained"
-                    onClick={openWalletCreate}
-                    endIcon={<AddCircleIcon />}
-                    data-testid="create_button">
-                    {t('plugin_wallet_on_create')}
-                </Button>,
-            ]}
-            floatingButtons={floatingButtons}>
-            <ThemeProvider theme={walletsTheme}>
-                <div className={classes.root}>
-                    <div className={classes.content}>
-                        <div className={classes.wrapper}>
-                            {selectedWallet ? (
-                                <WalletContent wallet={selectedWallet} detailedTokens={detailedTokens} />
-                            ) : null}
+        <DashboardWalletsContext.Provider value={{ detailedTokens, stableCoinTokens, retryDetailedTokens }}>
+            <DashboardRouterContainer
+                empty={!selectedWallet}
+                title={t('my_wallets')}
+                actions={[
+                    <EthereumStatusBar BoxProps={{ sx: { justifyContent: 'flex-end' } }} />,
+                    <Button
+                        variant="contained"
+                        onClick={openWalletCreate}
+                        endIcon={<AddCircleIcon />}
+                        data-testid="create_button">
+                        {t('plugin_wallet_on_create')}
+                    </Button>,
+                ]}
+                floatingButtons={floatingButtons}>
+                <ThemeProvider theme={walletsTheme}>
+                    <div className={classes.root}>
+                        <div className={classes.content}>
+                            <div className={classes.wrapper}>
+                                {selectedWallet ? <WalletContent wallet={selectedWallet} /> : null}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </ThemeProvider>
-            {addToken}
-            {walletHistory}
-            {walletCreate}
-            {walletError}
-            {walletRedPacketDetail}
-        </DashboardRouterContainer>
+                </ThemeProvider>
+                {addToken}
+                {walletHistory}
+                {walletCreate}
+                {walletError}
+                {walletRedPacketDetail}
+            </DashboardRouterContainer>
+        </DashboardWalletsContext.Provider>
     )
 }

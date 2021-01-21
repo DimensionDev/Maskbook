@@ -27,7 +27,6 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { SelectERC20TokenDialog } from '../../../web3/UI/SelectERC20TokenDialog'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useERC20TokenApproveCallback, ApproveState } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { useCreateCallback } from '../hooks/useCreateCallback'
@@ -39,6 +38,8 @@ import { WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
+import { EthereumMessages } from '../../Ethereum/messages'
+import { SelectERC20TokenDialog } from '../../Ethereum/UI/SelectERC20TokenDialog'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -160,7 +161,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#region remote controlled transaction dialog
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
+        EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
 
@@ -312,9 +313,13 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 />
             </div>
 
-            {!account || !chainIdValid ? (
+            {!account ? (
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" onClick={onConnect}>
                     {t('plugin_wallet_connect_a_wallet')}
+                </ActionButton>
+            ) : !chainIdValid ? (
+                <ActionButton className={classes.button} disabled fullWidth variant="contained" size="large">
+                    {t('plugin_wallet_invalid_network')}
                 </ActionButton>
             ) : approveRequired ? (
                 <ActionButton
@@ -336,7 +341,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     {`Send ${formatBalance(totalAmount, token.decimals ?? 0)} ${token.symbol}`}
                 </ActionButton>
             )}
-
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
                 includeTokens={[]}

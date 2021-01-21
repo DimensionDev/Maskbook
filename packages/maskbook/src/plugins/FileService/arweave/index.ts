@@ -3,7 +3,7 @@ import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 import Arweave from 'arweave/web'
 import type Transaction from 'arweave/web/lib/transaction'
 import { isEmpty, isNil } from 'lodash-es'
-import { landing } from '../constants'
+import { landing, mesonPrefix } from '../constants'
 import { sign } from './remote-signing'
 import token from './token.json'
 
@@ -47,13 +47,18 @@ export interface LandingPageMetadata {
     size: number
     type: string
     txId: string
+    useCDN: boolean
 }
 
 export async function uploadLandingPage(metadata: LandingPageMetadata) {
+    let linkPrefix: string = 'https://arweave.net'
+    if (metadata.useCDN) {
+        linkPrefix = mesonPrefix
+    }
     const encodedMetadata = JSON.stringify({
         name: metadata.name,
         size: metadata.size,
-        link: `https://arweave.net/${metadata.txId}`,
+        link: `${linkPrefix}/${metadata.txId}`,
         signed: await makeFileKeySigned(metadata.key),
         createdAt: new Date().toISOString(),
     })

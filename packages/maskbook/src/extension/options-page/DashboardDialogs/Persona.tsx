@@ -23,6 +23,7 @@ import { useHistory } from 'react-router-dom'
 import { RestoreFromQRCodeImageBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'
 import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQRCodeCameraBox'
 import { SetupStep } from '../SetupStep'
+import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
 
 //#region persona create dialog
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
@@ -375,10 +376,11 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
 export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<PersonaProps>) {
     const { t } = useI18N()
     const { persona } = props.ComponentProps!
+    const personas = useMyPersonas()
     const deletePersona = useSnackbarCallback(
         () => Services.Identity.deletePersona(persona.identifier, 'delete even with private'),
         [],
-        props.onClose,
+        () => (personas.length === 1 ? location.reload() : props.onClose()),
     )
     return (
         <DashboardDialogCore fullScreen={false} {...props}>

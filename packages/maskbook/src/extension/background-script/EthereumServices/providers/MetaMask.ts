@@ -22,7 +22,7 @@ async function onAccountsChanged(accounts: string[]) {
 }
 
 function onChainIdChanged(id: string) {
-    const chainId = Number.parseInt(id.replace(/^0x/, ''), 10) as ChainId
+    const chainId = Number.parseInt(id.replace(/^0x/, ''), 16) as ChainId
     currentMetaMaskChainIdSettings.value = chainId === 0 ? ChainId.Mainnet : chainId
 }
 

@@ -12,14 +12,15 @@ import {
 } from '@material-ui/core'
 import WarningIcon from '@material-ui/icons/Warning'
 import DoneIcon from '@material-ui/icons/Done'
-import { useStylesExtends } from '../../components/custom-ui-helper'
-import { useI18N } from '../../utils/i18n-next-ui'
-import { useChainId } from '../hooks/useChainState'
-import { TransactionState, TransactionStateType } from '../hooks/useTransactionState'
-import { resolveTransactionLinkOnEtherscan } from '../pipes'
-import { InjectedDialog } from '../../components/shared/InjectedDialog'
-import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessages } from '../../plugins/Wallet/messages'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { useChainId } from '../../../web3/hooks/useChainState'
+import { TransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
+import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { WalletMessages } from '../../Wallet/messages'
+import { EthereumMessages } from '../messages'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -60,7 +61,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
     const [state, setState] = useState<TransactionState | null>(null)
     const [shareLink, setShareLink] = useState('')
     const [summary, setSummary] = useState('')
-    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, (ev) => {
+    const [open, setOpen] = useRemoteControlledDialog(EthereumMessages.events.transactionDialogUpdated, (ev) => {
         if (ev.open) {
             setState(ev.state)
             setSummary(ev.summary ?? '')

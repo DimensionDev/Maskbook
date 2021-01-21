@@ -12,6 +12,7 @@ const useStyle = makeStyles({
     buttons: { display: 'flex', gap: '8px' },
 })
 export type CrashUIProps = ErrorBoundaryError & {
+    /** The component part in the boundary */
     subject: string
     onRetry: () => void
 }

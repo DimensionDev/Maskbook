@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: 250,
+        height: 260,
     },
     upload: {
         flex: 1,
@@ -29,7 +29,20 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         height: 'fit-content',
     },
+    checkItems: {
+        display: 'flex',
+        justifyContent: 'start',
+        alignItems: 'center',
+        height: 'fit-content',
+    },
     encrypted: {
+        userSelect: 'none',
+        '& span': {
+            fontSize: 12,
+            lineHeight: 1.75,
+        },
+    },
+    usedCDN: {
         userSelect: 'none',
         '& span': {
             fontSize: 12,
@@ -52,6 +65,7 @@ export const Upload: React.FC = () => {
     const classes = useStyles()
     const history = useHistory()
     const [encrypted, setEncrypted] = useState(true)
+    const [useCDN, setUseCDN] = useState(false)
     const recent = useAsync(() => PluginFileServiceRPC.getRecentFiles(), [])
     const onFile = async (file: File) => {
         let key: string | undefined = undefined
@@ -69,6 +83,7 @@ export const Upload: React.FC = () => {
                 type: file.type,
                 block,
                 checksum,
+                useCDN,
             })
         } else {
             history.replace(FileRouter.uploaded, item)
@@ -80,12 +95,19 @@ export const Upload: React.FC = () => {
                 <UploadDropArea maxFileSize={MAX_FILE_SIZE} onFile={onFile} />
                 <RecentFiles files={recent.value ?? []} />
             </section>
-            <section className={classes.legal}>
+            <section className={classes.checkItems}>
                 <FormControlLabel
                     control={<Checkbox checked={encrypted} onChange={(event, checked) => setEncrypted(checked)} />}
                     className={classes.encrypted}
                     label={t('plugin_file_service_on_encrypt_it')}
                 />
+                <FormControlLabel
+                    control={<Checkbox checked={useCDN} onChange={(event, checked) => setUseCDN(checked)} />}
+                    className={classes.usedCDN}
+                    label={t('plugin_file_service_use_cdn')}
+                />
+            </section>
+            <section className={classes.legal}>
                 <Typography className={classes.legalText}>
                     <Trans
                         i18nKey="plugin_file_service_legal_text"

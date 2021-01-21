@@ -16,6 +16,13 @@
     "@storybook/addons": "^6.1.9",
     "@storybook/react": "^6.1.9",
     "@storybook/theming": "^6.1.9",
-    "babel-loader": "^8.2.2"
-  }
+    "babel-loader": "^8.2.2",
+    "storybook-addon-matrix": "^1.6.0",
+    "@pmmmwh/react-refresh-webpack-plugin": "=0.4.2"
+  },
+  "comments": [
+    "I set @pmmmwh/react-refresh-webpack-plugin to an incompatible version with the top level",
+    "so it won't be hoisted",
+    "and can resolve to webpack 4 when it starts by the storybook."
+  ]
 }

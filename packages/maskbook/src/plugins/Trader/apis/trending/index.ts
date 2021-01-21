@@ -7,6 +7,7 @@ import { Days } from '../../UI/trending/PriceChartDaysControl'
 import { getEnumAsArray } from '../../../../utils/enum'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import { resolveCoinId, resolveCoinAddress, resolveAlias } from './hotfix'
+import MIRRORED_KEYWORDS from './mirrored.json'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
@@ -123,6 +124,10 @@ function isBlockedKeyword(type: TagType, keyword: string) {
     return true
 }
 
+function isMirroredKeyword(symbol: string) {
+    return MIRRORED_KEYWORDS.some((x) => x.toUpperCase() === symbol.toUpperCase())
+}
+
 export async function checkAvailabilityOnDataProvider(keyword: string, type: TagType, dataProvider: DataProvider) {
     if (isBlockedKeyword(type, keyword)) return false
     const keyword_ = resolveAlias(keyword, dataProvider)
@@ -179,6 +184,7 @@ export async function getCoinInfo(id: string, currency: Currency, dataProvider: 
                     id,
                     name: info.name,
                     symbol: info.symbol.toUpperCase(),
+                    is_mirrored: isMirroredKeyword(info.symbol),
 
                     // TODO:
                     // use current language setting
@@ -236,6 +242,7 @@ export async function getCoinInfo(id: string, currency: Currency, dataProvider: 
                     id,
                     name: coinInfo.name,
                     symbol: coinInfo.symbol,
+                    is_mirrored: isMirroredKeyword(coinInfo.symbol),
                     announcement_urls: coinInfo.urls.announcement?.filter(Boolean),
                     tech_docs_urls: coinInfo.urls.technical_doc?.filter(Boolean),
                     message_board_urls: coinInfo.urls.message_board?.filter(Boolean),
