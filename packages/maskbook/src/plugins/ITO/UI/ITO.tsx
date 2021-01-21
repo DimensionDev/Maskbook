@@ -165,7 +165,7 @@ export function ITO(props: ITO_Props) {
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
     const { pid } = props
-    const { payload } = usePoolPayload(pid)
+    const { payload, retry } = usePoolPayload(pid)
     const {
         token,
         total: payload_total,
@@ -241,7 +241,10 @@ export function ITO(props: ITO_Props) {
     const onShare = useCallback(async () => {
         window.open(shareLink, '_blank', 'noopener noreferrer')
     }, [shareLink])
-    const onClaim = useCallback(async () => setOpenClaimDialog(true), [])
+    const onClaim = useCallback(async () => {
+        retry()
+        setOpenClaimDialog(true)
+    }, [])
 
     //#region withdraw
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
@@ -487,7 +490,7 @@ export function ITO(props: ITO_Props) {
                     exchangeTokens={exchange_tokens}
                     open={openClaimDialog}
                     onClose={() => setOpenClaimDialog(false)}
-                    retryPayload={() => {}}
+                    retryPayload={retry}
                 />
             ) : null}
         </div>
