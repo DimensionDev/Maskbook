@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
-import { JSON_PayloadInMask, ITO_Status } from '../types'
+import { ITO_Status } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
@@ -26,6 +26,8 @@ import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
+import { usePoolPayload } from '../suspends/usePoolPayload'
+import { resolveChainName } from '../../../web3/pipes'
 
 export interface IconProps {
     size?: number
@@ -129,8 +131,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface ITO_Props {
-    payload: JSON_PayloadInMask
-    retryPayload: () => void
+    pid: string
 }
 
 interface TokenItemProps {
@@ -152,9 +153,19 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 }
 
 export function ITO(props: ITO_Props) {
+    // context
+    const account = useAccount()
+    const postLink = usePostLink()
+    const chainId = useChainId()
+    const chainIdValid = useChainIdValid()
+    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
+    const [openClaimDialog, setOpenClaimDialog] = useState(false)
+
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
-    const { payload, retryPayload } = props
+
+    const { pid } = props
+    const { payload } = usePoolPayload(pid)
     const {
         token,
         total: payload_total,
@@ -165,21 +176,13 @@ export function ITO(props: ITO_Props) {
         limit,
         start_time,
         end_time,
-        pid,
     } = payload
     const classes = useStyles()
     const { t } = useI18N()
-    const [openClaimDialog, setOpenClaimDialog] = useState(false)
 
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(payload_total_remaining)
     const sold = total.minus(total_remaining)
-
-    // context
-    const account = useAccount()
-    const postLink = usePostLink()
-    const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
 
     //#region token detailed
     const {
@@ -222,11 +225,6 @@ export function ITO(props: ITO_Props) {
         : new BigNumber(0)
     // out of stock
     const refundAllAmount = tradeInfo?.buyInfo && new BigNumber(tradeInfo?.buyInfo.amount_sold).isZero()
-    useEffect(() => {
-        // should not revalidate if never validated before
-        if (!availability || !tradeInfo) return
-        retryPayload()
-    }, [account, chainId, chainIdValid])
 
     const onShareSuccess = useCallback(async () => {
         window.open(shareSuccessLink, '_blank', 'noopener noreferrer')
@@ -246,7 +244,6 @@ export function ITO(props: ITO_Props) {
     const onClaim = useCallback(async () => setOpenClaimDialog(true), [])
 
     //#region withdraw
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
@@ -278,7 +275,6 @@ export function ITO(props: ITO_Props) {
             state: destructState,
             summary,
         })
-        retryPayload()
     }, [destructState])
 
     const onWithdraw = useCallback(async () => {
@@ -379,6 +375,8 @@ export function ITO(props: ITO_Props) {
         ),
         [footerEndTime, footerStartTime, limit, listOfStatus, t, token.decimals, token.symbol],
     )
+
+    if (payload.chain_id !== chainId) return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
 
     return (
         <div>
@@ -489,7 +487,7 @@ export function ITO(props: ITO_Props) {
                     exchangeTokens={exchange_tokens}
                     open={openClaimDialog}
                     onClose={() => setOpenClaimDialog(false)}
-                    retryPayload={retryPayload}
+                    retryPayload={() => {}}
                 />
             ) : null}
         </div>

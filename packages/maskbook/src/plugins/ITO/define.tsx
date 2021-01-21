@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import BigNumber from 'bignumber.js'
 import { makeStyles, createStyles } from '@material-ui/core'
-import { PostInspector } from './UI/PostInspector'
+import { ITO } from './UI/ITO'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { formatBalance } from '../Wallet/formatter'
 import { ITO_MetaKey, ITO_PluginID } from './constants'
@@ -13,6 +13,7 @@ import { Flags } from '../../utils/flags'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import { CompositionDialog } from './UI/CompositionDialog'
 import { ItoLabelIcon } from './assets/ItoLabelIcon'
+import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
 
 interface LabelWrapperProps {
     iconSize: number
@@ -57,7 +58,7 @@ export const ITO_PluginDefine: PluginConfig = {
         return (
             <MaskbookPluginWrapper pluginName="ITO">
                 <Suspense fallback={<SnackbarContent message="Maskbook is loading this plugin..." />}>
-                    <PostInspector payload={payloadIntoMask(payload.val)} />
+                    <ITO pid={payloadIntoMask(payload.val).pid} />
                 </Suspense>
             </MaskbookPluginWrapper>
         )
