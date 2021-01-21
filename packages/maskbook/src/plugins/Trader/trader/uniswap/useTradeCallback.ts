@@ -5,7 +5,6 @@ import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { addGasMargin } from '../../../../web3/helpers'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract'
 import type { TradeComputed } from '../../types'
 import type { RouterV2 } from '../../../../contracts/RouterV2'
 

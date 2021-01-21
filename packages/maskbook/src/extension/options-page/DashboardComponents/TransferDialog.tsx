@@ -60,13 +60,14 @@ interface TransferTabProps {
 
 function TransferTab(props: TransferTabProps) {
     const classes = useTransferTabStyles()
-    const { wallet, token, onClose } = props
+    const { token, onClose } = props
     const { t } = useI18N()
 
     const { retryDetailedTokens } = useContext(DashboardWalletsContext)
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
+
     // balance
     const { value: tokenBalance = '0', retry: retryTokenBalance } = useTokenBalance(
         token?.type ?? EthereumTokenType.Ether,
@@ -79,20 +80,8 @@ function TransferTab(props: TransferTabProps) {
         if (/^\d+[\.]?\d*$/.test(_amount)) setAmount(_amount)
     }, [])
 
-    // validation
-    const validationMessage = useMemo(() => {
-        if (!amount || new BigNumber(amount).isZero()) return t('wallet_transfer_error_amount_absence')
-        if (!address) return t('wallet_transfer_error_address_absence')
-        if (!EthereumAddress.isValid(address)) return t('wallet_transfer_error_invalid_address')
-        if (new BigNumber(amount).isGreaterThan(new BigNumber(tokenBalance)))
-            return t('wallet_transfer_error_insufficent_balance', {
-                token: token.symbol,
-            })
-        return ''
-    }, [amount, address, tokenBalance, token])
-
     //#region transfer tokens
-    const transferAmount = new BigNumber(amount || '0').multipliedBy(new BigNumber(10).pow(token.decimals ?? 0))
+    const transferAmount = new BigNumber(amount || '0').multipliedBy(new BigNumber(10).pow(token.decimals))
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         token.type,
         token.address,
@@ -130,6 +119,19 @@ function TransferTab(props: TransferTabProps) {
             } to ${formatEthereumAddress(address, 4)}.`,
         })
     }, [transferState /* update tx dialog only if state changed */])
+    //#endregion
+
+    //#region validation
+    const validationMessage = useMemo(() => {
+        if (!transferAmount || new BigNumber(transferAmount).isZero()) return t('wallet_transfer_error_amount_absence')
+        if (new BigNumber(transferAmount).isGreaterThan(new BigNumber(tokenBalance)))
+            return t('wallet_transfer_error_insufficent_balance', {
+                token: token.symbol,
+            })
+        if (!address) return t('wallet_transfer_error_address_absence')
+        if (!EthereumAddress.isValid(address)) return t('wallet_transfer_error_invalid_address')
+        return ''
+    }, [transferAmount, address, tokenBalance, token])
     //#endregion
 
     return (
