@@ -20,7 +20,7 @@ export function useClaimCallback(
     const account = useAccount()
     const ITO_Contract = useITO_Contract()
 
-    const { value: payload } = usePoolPayload(id)
+    const { payload } = usePoolPayload(id)
     const [claimState, setClaimState] = useTransactionState()
     const claimCallback = useCallback(async () => {
         if (!ITO_Contract || !payload || !id) {

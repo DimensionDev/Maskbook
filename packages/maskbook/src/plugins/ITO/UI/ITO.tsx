@@ -26,7 +26,7 @@ import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { usePoolPayload } from '../suspends/usePoolPayload'
+import { usePoolPayload } from '../hooks/usePoolPayload'
 import { resolveChainName } from '../../../web3/pipes'
 
 export interface IconProps {
