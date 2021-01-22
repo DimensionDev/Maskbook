@@ -123,7 +123,7 @@ export function useSingleContractMultipleData<T extends Contract, K extends keyo
             target: contract.options.address,
             callData: contract.methods[names[i]](...data).encodeABI() as string,
         }))
-    }, [contract?.options.address, names.join(''), callDatas.flatMap(x => x).join('')])
+    }, [contract?.options.address, names.join(''), callDatas.flatMap((x) => x).join('')])
     const [state, callback] = useMulticallCallback()
     const results = useMutlicallStateDecoded(new Array(calls.length).fill(contract) as T[], names, state)
     return [results, calls, state, callback] as const
@@ -138,9 +138,9 @@ export function useMutlipleContractSingleData<T extends Contract, K extends keyo
         () =>
             contracts.map((contract, i) => ({
                 target: contract.options.address,
-                callData: contract.methods[names[i]].apply(null, callData).encodeABI() as string,
+                callData: contract.methods[names[i]](...callData).encodeABI() as string,
             })),
-        [contracts.map(x => x.options.address).join(''), names.join(''), callData.join('')],
+        [contracts.map((x) => x.options.address).join(''), names.join(''), callData.join('')],
     )
     const [state, callback] = useMulticallCallback()
     const results = useMutlicallStateDecoded(contracts, names, state)
@@ -158,7 +158,7 @@ export function useMultipleContractMultipleData<T extends Contract, K extends ke
                 target: contract.options.address,
                 callData: contract.methods[names[i]](callDatas[i]).encodeABI() as string,
             })),
-        [contracts.map(x => x.options.address).join(''), names.join(''), callDatas.flatMap(x => x).join('')],
+        [contracts.map((x) => x.options.address).join(''), names.join(''), callDatas.flatMap((x) => x).join('')],
     )
     const [state, callback] = useMulticallCallback()
     const results = useMutlicallStateDecoded(contracts, names, state)

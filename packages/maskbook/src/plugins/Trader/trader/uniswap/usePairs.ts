@@ -5,7 +5,7 @@ import { useBlockNumber, useChainId } from '../../../../web3/hooks/useChainState
 import { PluginTraderRPC } from '../../messages'
 import { getPairAddress } from '../../helpers'
 import { TradeContext } from '../useTradeContext'
-import { usePairContracts } from './usePairContract'
+import { usePairContracts } from '../../contracts/uniswap/usePairContract'
 import { useMutlipleContractSingleData } from '../../../../web3/hooks/useMulticall'
 
 export enum PairState {
@@ -20,23 +20,13 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
     const chainId = useChainId()
     const context = useContext(TradeContext)
 
-    const listOfPairAddress = useMemo(
-        () =>
-        {
-            console.log('DEBUG: context')
-            console.log(context)
-
-            return tokenPairs.map(([tokenA, tokenB]) =>
-                tokenA && tokenB && !tokenA.equals(tokenB) ? getPairAddress(
-                    context?.FACTORY_CONTRACT_ADDRESS ?? '',
-                    context?.INIT_CODE_HASH ?? '',
-                    tokenA,
-                    tokenB,
-                ) : undefined,
-            )
-        },
-        [context, tokenPairs],
-    )
+    const listOfPairAddress = useMemo(() => {
+        return tokenPairs.map(([tokenA, tokenB]) =>
+            tokenA && tokenB && !tokenA.equals(tokenB)
+                ? getPairAddress(context?.FACTORY_CONTRACT_ADDRESS ?? '', context?.INIT_CODE_HASH ?? '', tokenA, tokenB)
+                : undefined,
+        )
+    }, [context, tokenPairs])
 
     useEffect(() => {
         console.log('DEBUG: list of address')
@@ -53,10 +43,7 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
         new Array(contracts.length).fill('getReserves'),
         [],
     )
-    const asyncResults = useAsyncRetry(() => callback(calls), [
-        calls,
-        blockNumber,
-    ])
+    const asyncResults = useAsyncRetry(() => callback(calls), [calls, blockNumber])
 
     // compose reserves from multicall results
     const listOfReserves = useMemo(() => {
@@ -70,10 +57,10 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
                 }
             })
             .filter(Boolean) as {
-                id: string
-                reserve0: string
-                reserve1: string
-            }[]
+            id: string
+            reserve0: string
+            reserve1: string
+        }[]
     }, [results, contracts])
 
     // compose pairs from list of reserves
@@ -82,7 +69,8 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
             const tokenA = tokenPairs[i][0]
             const tokenB = tokenPairs[i][1]
             if (!tokenA || !tokenB || tokenA.equals(tokenB)) return [PairState.INVALID, null]
-            const { reserve0, reserve1 } = listOfReserves.find((x) => x.id.toLowerCase() === address?.toLowerCase()) ?? {}
+            const { reserve0, reserve1 } =
+                listOfReserves.find((x) => x.id.toLowerCase() === address?.toLowerCase()) ?? {}
             if (!reserve0 || !reserve1) return [PairState.NOT_EXISTS, null]
             const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
             return [
