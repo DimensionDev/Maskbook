@@ -10,7 +10,8 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useMaskI18N",
                 "namespace": "mask",
-                "trans": "MaskTrans"
+                "trans": "MaskTrans",
+                "sourceMap": "inline"
             }
         }
     ]
