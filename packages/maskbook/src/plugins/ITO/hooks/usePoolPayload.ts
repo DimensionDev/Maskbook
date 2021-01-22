@@ -3,13 +3,13 @@ import { PluginITO_RPC } from '../messages'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { JSON_PayloadInMask } from '../types'
 
-let payloadRef = new ValueRef<JSON_PayloadInMask | null>(null)
+let storage = new Map<string, ValueRef<JSON_PayloadInMask>>()
 let isLoading = true
 
 export function usePoolPayload(pid: string) {
     if (isLoading) throw suspender(pid)
     return {
-        payload: useValueRef(payloadRef)!,
+        payload: useValueRef(storage.get(pid)!),
         retry: () => retry(pid),
     }
 }
@@ -22,7 +22,7 @@ async function retry(pid: string) {
 
 async function suspender(pid: string) {
     try {
-        payloadRef.value = await PluginITO_RPC.getPool(pid)
+        storage.set(pid, new ValueRef(await PluginITO_RPC.getPool(pid)))
         setTimeout(() => (isLoading = false), 0)
     } catch (error) {
         throw error
