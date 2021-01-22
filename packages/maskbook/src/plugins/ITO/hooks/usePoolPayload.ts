@@ -1,14 +1,12 @@
-import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { PluginITO_RPC } from '../messages'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { JSON_PayloadInMask } from '../types'
 
-const storage = new Map<string, ValueRef<JSON_PayloadInMask>>()
+const storage = new Map<string, JSON_PayloadInMask>()
 
 export function usePoolPayload(pid: string) {
     if (!storage.has(pid)) throw suspender(pid)
     return {
-        payload: useValueRef(storage.get(pid)!),
+        payload: storage.get(pid)!,
         retry: () => retry(pid),
     }
 }
@@ -21,7 +19,7 @@ async function retry(pid: string) {
 
 async function suspender(pid: string) {
     try {
-        storage.set(pid, new ValueRef(await PluginITO_RPC.getPool(pid)))
+        storage.set(pid, await PluginITO_RPC.getPool(pid))
     } catch (error) {
         throw error
     }
