@@ -82,7 +82,8 @@ export const Uploading: React.FC = () => {
             300000, // ≈ 5 minutes
         )
         const item: FileInfo = {
-            type: 'arweave',
+            type: 'file',
+            provider: 'arweave',
             id: state.checksum,
 
             name: state.name,

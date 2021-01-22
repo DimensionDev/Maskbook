@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const Preview: React.FC<Props> = ({ info }) => {
+export function Preview({ info }: { info: FileInfo }) {
     const { t } = useI18N()
     const classes = useStyles()
     const fileKey = info.key ? (
