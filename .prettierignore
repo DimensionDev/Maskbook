@@ -2,6 +2,8 @@
 package.json
 package-lock.json
 
+*generated*
+
 # VSCode personal settings
 .vscode/launch.json
 .vscode/tasks.json
