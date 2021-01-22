@@ -224,11 +224,11 @@ export const postContentMessageParser = (node: HTMLElement) => {
 export const postImagesParser = async (node: HTMLElement): Promise<string[]> => {
     // TODO: Support steganography in legacy twitter
     if (isMobilePost(node)) return []
-    const isQuotedTweet = !!node.closest('[role="blockquote"]')
+    const isQuotedTweet = !!node.closest('[role="link"]')
     const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
     if (!imgNodes.length) return []
     const imgUrls = Array.from(imgNodes)
-        .filter((node) => isQuotedTweet || !node.closest('[role="blockquote"]'))
+        .filter((node) => isQuotedTweet || !node.closest('[role="link"]'))
         .flatMap((node) => canonifyImgUrl(node.getAttribute('src') ?? ''))
         .filter(Boolean)
     if (!imgUrls.length) return []
