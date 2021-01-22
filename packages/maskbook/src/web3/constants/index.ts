@@ -174,6 +174,20 @@ export const CONSTANTS = {
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },
+    RUNE_ADDRESS: {
+        [ChainId.Mainnet]: '0x3155BA85D5F96b2d030a4966AF206230e46849cb',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+    },
+    YFI_ADDRESS: {
+        [ChainId.Mainnet]: '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+    },
     ETH_ADDRESS: {
         [ChainId.Mainnet]: '0x0000000000000000000000000000000000000000',
         [ChainId.Ropsten]: '0x0000000000000000000000000000000000000000',

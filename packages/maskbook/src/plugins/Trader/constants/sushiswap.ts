@@ -1,5 +1,5 @@
 import { ChainId, ERC20TokenDetailed } from '../../../web3/types'
-import { AMPL, SUSHI, DAI, YAM, WBTC, MSKA, MSKB, MSKC, USDC, USDT, WETH, WETH_ONLY } from './trader'
+import { AMPL, SUSHI, DAI, YAM, WBTC, MSKA, MSKB, MSKC, USDC, USDT, WETH, WETH_ONLY, RUNE } from './trader'
 
 /**
  * Some tokens can only be swapped via certain pairs,
@@ -18,7 +18,7 @@ export const SUSHISWAP_BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
     ...WETH_ONLY,
-    [ChainId.Mainnet]: [...WETH_ONLY[ChainId.Mainnet], ...[DAI, USDC, USDT, SUSHI, YAM, WBTC]],
+    [ChainId.Mainnet]: [...WETH_ONLY[ChainId.Mainnet], ...[DAI, USDC, USDT, SUSHI, YAM, WBTC, RUNE]],
     [ChainId.Rinkeby]: [...WETH_ONLY[ChainId.Rinkeby], ...[MSKA, MSKB, MSKC]],
 }
 

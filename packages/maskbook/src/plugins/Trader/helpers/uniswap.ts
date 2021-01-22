@@ -13,8 +13,7 @@ import {
 import { WETH } from '../constants'
 import { ChainId, ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
-import { getConstant, isETH } from '../../../web3/helpers'
-import { CONSTANTS } from '../../../web3/constants'
+import { isETH } from '../../../web3/helpers'
 import { formatEthereumAddress } from '../../Wallet/formatter'
 
 export function toUniswapChainId(chainId: ChainId): UniswapChainId {

@@ -128,7 +128,6 @@ export const AMPL = createERC20Token(
     'Ampleforth',
     'AMPL',
 )
-
 export const UST = createERC20Token(
     ChainId.Mainnet,
     getConstant(CONSTANTS, 'UST_ADDRESS'),
@@ -145,6 +144,8 @@ export const SUSHI = createERC20Token(
 )
 export const YAM = createERC20Token(ChainId.Mainnet, getConstant(CONSTANTS, 'YAM_ADDRESS'), 18, 'YAM', 'YAM')
 export const WBTC = createERC20Token(ChainId.Mainnet, getConstant(CONSTANTS, 'WBTC_ADDRESS'), 18, 'Wrapped BTC', 'WBTC')
+export const RUNE = createERC20Token(ChainId.Mainnet, getConstant(CONSTANTS, 'RUNE_ADDRESS'), 18, 'RUNE.ETH', 'RUNE')
+export const YFI = createERC20Token(ChainId.Mainnet, getConstant(CONSTANTS, 'YFI_ADDRESS'), 18, 'Yearn', 'YFI')
 
 // Rinkeby
 export const MSKA = createERC20Token(
