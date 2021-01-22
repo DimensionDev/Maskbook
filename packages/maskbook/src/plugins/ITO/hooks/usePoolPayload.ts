@@ -4,10 +4,10 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { JSON_PayloadInMask } from '../types'
 
 let storage = new Map<string, ValueRef<JSON_PayloadInMask>>()
-let isLoading = true
+let storageOfLoading = new Map<string, boolean>()
 
 export function usePoolPayload(pid: string) {
-    if (isLoading) throw suspender(pid)
+    if (!storageOfLoading.has(pid) || storageOfLoading.get(pid)) throw suspender(pid)
     return {
         payload: useValueRef(storage.get(pid)!),
         retry: () => retry(pid),
@@ -15,15 +15,15 @@ export function usePoolPayload(pid: string) {
 }
 
 async function retry(pid: string) {
-    isLoading = true
-    if (isLoading) throw suspender(pid)
+    storageOfLoading.set(pid, true)
+    if (storageOfLoading.get(pid)) throw suspender(pid)
     return
 }
 
 async function suspender(pid: string) {
     try {
         storage.set(pid, new ValueRef(await PluginITO_RPC.getPool(pid)))
-        setTimeout(() => (isLoading = false), 0)
+        storageOfLoading.set(pid, false)
     } catch (error) {
         throw error
     }
