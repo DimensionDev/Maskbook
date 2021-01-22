@@ -1,3 +1,4 @@
+import { unstable_useTransition } from 'react'
 import { createStyles, DialogContent, makeStyles, DialogProps } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import BigNumber from 'bignumber.js'
@@ -36,10 +37,13 @@ interface ClaimGuideProps extends Pick<ClaimDialogProps, 'exchangeTokens' | 'pay
 export function ClaimGuide(props: ClaimGuideProps) {
     const { t } = useI18N()
     const { payload, exchangeTokens, isBuyer, open, retryPayload, onClose } = props
+    const [startTransition] = unstable_useTransition({ busyDelayMs: 1000 })
     const onCloseShareDialog = useCallback(() => {
-        retryPayload()
-        onClose()
-    }, [retryPayload, onClose])
+        startTransition(() => {
+            onClose()
+            retryPayload()
+        })
+    }, [retryPayload, startTransition, onClose])
     const classes = useStyles()
     const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Remind)
     const maxSwapAmount = useMemo(
