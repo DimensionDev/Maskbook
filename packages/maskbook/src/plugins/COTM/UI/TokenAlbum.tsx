@@ -1,11 +1,10 @@
 import { createStyles, makeStyles, Typography } from '@material-ui/core'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { getERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
 import { COTM_CONSTANTS } from '../constants'
 import { useAllTokensOfOwner } from '../hooks/useAllTokensOfOwner'
 import { TokenCard } from './TokenCard'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { Suspense } from 'react'
+import { getERC721TokenDetailed } from '../../../web3/suspends/getERC721TokenDetailed'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

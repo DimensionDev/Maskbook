@@ -20,5 +20,6 @@
             "url": "/.vscode/schema/locale.json"
         }
     ],
-    "cSpell.words": ["Reificated"]
+    "cSpell.words": ["Reificated"],
+    "i18n-ally.localesPaths": "packages/maskbook/src/plugins/Trader/messages"
 }

@@ -189,10 +189,16 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const excludeZero = (a: AssetDetailed) => new BigNumber(a.value?.[CurrencyType.USD] || '0').isGreaterThan(0)
     const filter = (a: AssetDetailed) =>
         Number(price) !== 0 ? new BigNumber(a.value?.[CurrencyType.USD] || '0').isGreaterThan(price) : true
+    const sort = (a: AssetDetailed, b: AssetDetailed): number =>
+        new BigNumber(b.value?.[CurrencyType.USD] ?? 0).minus(a.value?.[CurrencyType.USD] ?? 0).toNumber()
 
     return (
-        <Suspense fallback={<SnackbarContent message="Loading assets ..." />}>
-            {detailedTokens.length === 0 ? (
+        <>
+            {loading ? (
+                <div style={{ textAlign: 'center' }}>
+                    <CircularProgress size="small" />
+                </div>
+            ) : detailedTokens.length === 0 ? (
                 <Typography variant="body1" color="textSecondary">
                     {t('wallet_no_asset')}
                 </Typography>
@@ -226,6 +232,6 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                     <LessButton />
                 </>
             )}
-        </Suspense>
+        </>
     )
 }

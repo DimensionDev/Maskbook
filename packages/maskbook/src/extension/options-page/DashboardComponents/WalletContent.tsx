@@ -202,7 +202,12 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                 {tabIndex === 0 ? (
                     <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
                 ) : (
-                    <Suspense fallback={<div>Loading ...</div>}>
+                    <Suspense
+                        fallback={
+                            <Typography variant="body1" color="textSecondary">
+                                {t('loading')}
+                            </Typography>
+                        }>
                         {Flags.COTM_enabled ? <COTM_TokenAlbum /> : null}
                         {Flags.election2020_enabled ? <ElectionTokenAlbum /> : null}
                     </Suspense>
