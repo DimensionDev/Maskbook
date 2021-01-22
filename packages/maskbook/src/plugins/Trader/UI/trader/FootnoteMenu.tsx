@@ -4,10 +4,14 @@ import { ShadowRootMenu } from '../../../../utils/shadow-root/ShadowRootComponen
 
 const useStyles = makeStyles((theme) =>
     createStyles({
+        link: {
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer',
+        },
         title: {
             fontSize: 10,
             color: theme.palette.text.secondary,
-            cursor: 'pointer',
         },
     }),
 )
@@ -20,11 +24,12 @@ export interface FootnoteMenuOption {
 export interface FootnoteMenuProps {
     options: FootnoteMenuOption[]
     selectedIndex?: number
+    children?: React.ReactNode
     onChange?: (option: FootnoteMenuOption) => void
 }
 
 export function FootnoteMenu(props: FootnoteMenuProps) {
-    const { options, selectedIndex = -1, onChange } = props
+    const { children, options, selectedIndex = -1, onChange } = props
 
     const classes = useStyles()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -37,10 +42,11 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
 
     return (
         <>
-            <Link color="inherit" underline="none" onClick={onOpen}>
+            <Link className={classes.link} color="inherit" underline="none" onClick={onOpen}>
                 <Typography className={classes.title} variant="subtitle2">
                     {options[selectedIndex].name}
                 </Typography>
+                {children}
             </Link>
             <ShadowRootMenu open={!!anchorEl} onClose={onClose} anchorEl={anchorEl}>
                 {options.map((x, i) => (

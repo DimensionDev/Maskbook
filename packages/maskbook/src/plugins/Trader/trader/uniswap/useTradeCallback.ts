@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import type { SwapParameters, Trade } from '@uniswap/sdk'
-import { SLIPPAGE_TOLERANCE_DEFAULT, UNISWAP_DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
+import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { addGasMargin } from '../../../../web3/helpers'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract'
 import type { TradeComputed } from '../../types'
+import type { RouterV2 } from '../../../../contracts/RouterV2'
 
 interface SuccessfulCall {
     parameters: SwapParameters
@@ -20,10 +20,10 @@ interface FailedCall {
 
 export function useTradeCallback(
     trade: TradeComputed<Trade> | null,
-    allowedSlippage: number = SLIPPAGE_TOLERANCE_DEFAULT,
-    ddl: number = UNISWAP_DEFAULT_TRANSACTION_DEADLINE,
+    routerV2Contract: RouterV2 | null,
+    allowedSlippage = SLIPPAGE_TOLERANCE_DEFAULT,
+    ddl = DEFAULT_TRANSACTION_DEADLINE,
 ) {
-    const routerV2Contract = useRouterV2Contract()
     const tradeParameters = useTradeParameters(trade, allowedSlippage, ddl)
 
     const [tradeState, setTradeState] = useState<TransactionState>({

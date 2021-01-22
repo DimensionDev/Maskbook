@@ -23,6 +23,7 @@ import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
 import { ChainId, EthereumTokenType } from '../../../../web3/types'
 import { UST } from '../../constants'
 import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
+import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -102,6 +103,7 @@ export function SearchResultView(props: SearchResultViewProps) {
     )
     const tradeProvider = useCurrentTradeProvider(tradeProviders)
     //#endregion
+
     //#region stats
     const [days, setDays] = useState(Days.ONE_WEEK)
     const { value: stats = [], loading: loadingStats } = usePriceStats({
@@ -110,6 +112,10 @@ export function SearchResultView(props: SearchResultViewProps) {
         currency: trending?.currency,
         days,
     })
+    //#endregion
+
+    //#region trader context
+    const tradeContext = useTradeContext(tradeProvider)
     //#endregion
 
     //#region no available providers
@@ -159,57 +165,64 @@ export function SearchResultView(props: SearchResultViewProps) {
         : undefined
 
     return (
-        <TrendingViewDeck
-            classes={{ header: classes.header, body: classes.body, footer: classes.footer, content: classes.content }}
-            stats={stats}
-            coins={coins}
-            currency={currency}
-            trending={trending}
-            dataProvider={dataProvider}
-            tradeProvider={tradeProvider}
-            showDataProviderIcon={tabIndex !== swapTabIndex}
-            showTradeProviderIcon={tabIndex === swapTabIndex}
-            TrendingCardProps={{ classes: { root: classes.root } }}>
-            <Tabs
-                className={classes.tabs}
-                textColor="primary"
-                variant="fullWidth"
-                value={tabIndex}
-                onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
-                TabIndicatorProps={{
-                    style: {
-                        display: 'none',
-                    },
-                }}>
-                <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />
-                {dataProvider !== DataProvider.UNISWAP ? (
-                    <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
+        <TradeContext.Provider value={tradeContext}>
+            <TrendingViewDeck
+                classes={{
+                    header: classes.header,
+                    body: classes.body,
+                    footer: classes.footer,
+                    content: classes.content,
+                }}
+                stats={stats}
+                coins={coins}
+                currency={currency}
+                trending={trending}
+                dataProvider={dataProvider}
+                tradeProvider={tradeProvider}
+                showDataProviderIcon={tabIndex !== swapTabIndex}
+                showTradeProviderIcon={tabIndex === swapTabIndex}
+                TrendingCardProps={{ classes: { root: classes.root } }}>
+                <Tabs
+                    className={classes.tabs}
+                    textColor="primary"
+                    variant="fullWidth"
+                    value={tabIndex}
+                    onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
+                    TabIndicatorProps={{
+                        style: {
+                            display: 'none',
+                        },
+                    }}>
+                    <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />
+                    {dataProvider !== DataProvider.UNISWAP ? (
+                        <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
+                    ) : null}
+                    {dataProvider !== DataProvider.UNISWAP ? (
+                        <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
+                    ) : null}
+                    {canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null}
+                </Tabs>
+                {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
+                {tabIndex === 1 && dataProvider !== DataProvider.UNISWAP ? (
+                    <>
+                        {market ? <PriceChangedTable market={market} /> : null}
+                        <PriceChart coin={coin} stats={stats} loading={loadingStats}>
+                            <PriceChartDaysControl days={days} onDaysChange={setDays} />
+                        </PriceChart>
+                    </>
                 ) : null}
-                {dataProvider !== DataProvider.UNISWAP ? (
-                    <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
+                {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
+                    <TickersTable tickers={tickers} dataProvider={dataProvider} />
                 ) : null}
-                {canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null}
-            </Tabs>
-            {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
-            {tabIndex === 1 && dataProvider !== DataProvider.UNISWAP ? (
-                <>
-                    {market ? <PriceChangedTable market={market} /> : null}
-                    <PriceChart coin={coin} stats={stats} loading={loadingStats}>
-                        <PriceChartDaysControl days={days} onDaysChange={setDays} />
-                    </PriceChart>
-                </>
-            ) : null}
-            {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
-                <TickersTable tickers={tickers} dataProvider={dataProvider} />
-            ) : null}
-            {tabIndex === swapTabIndex && canSwap ? (
-                <TradeView
-                    TraderProps={{
-                        fromToken,
-                        toToken,
-                    }}
-                />
-            ) : null}
-        </TrendingViewDeck>
+                {tabIndex === swapTabIndex && canSwap ? (
+                    <TradeView
+                        TraderProps={{
+                            fromToken,
+                            toToken,
+                        }}
+                    />
+                ) : null}
+            </TrendingViewDeck>
+        </TradeContext.Provider>
     )
 }

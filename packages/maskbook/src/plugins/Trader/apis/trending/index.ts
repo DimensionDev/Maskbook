@@ -101,13 +101,17 @@ const coinNamespace = new Map<
 >()
 
 async function updateCache(dataProvider: DataProvider) {
-    const coins = await getCoins(dataProvider)
-    const coinsGrouped = groupBy(coins, (x) => x.symbol.toLowerCase())
-    coinNamespace.set(dataProvider, {
-        supportedSymbolsSet: new Set<string>(Object.keys(coinsGrouped)),
-        supportedSymbolIdsMap: new Map(Object.entries(coinsGrouped).map(([symbol, coins]) => [symbol, coins])),
-        lastUpdated: new Date(),
-    })
+    try {
+        const coins = await getCoins(dataProvider)
+        const coinsGrouped = groupBy(coins, (x) => x.symbol.toLowerCase())
+        coinNamespace.set(dataProvider, {
+            supportedSymbolsSet: new Set<string>(Object.keys(coinsGrouped)),
+            supportedSymbolIdsMap: new Map(Object.entries(coinsGrouped).map(([symbol, coins]) => [symbol, coins])),
+            lastUpdated: new Date(),
+        })
+    } catch (e) {
+        console.error('failed to update cache')
+    }
 }
 
 function isCacheExipred(dataProvider: DataProvider) {
