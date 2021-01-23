@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import type { provider as Provider } from 'web3-core'
 import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
-import createMetaMaskProvider from 'metamask-extension-provider'
+import createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
 import { ChainId } from '../../../../web3/types'
 import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
@@ -42,9 +42,9 @@ export function createProvider() {
         provider.off('error', onError)
     }
     provider = createMetaMaskProvider()
-    provider.on('accountsChanged', onAccountsChanged)
-    provider.on('chainChanged', onChainIdChanged)
-    provider.on('error', onError)
+    provider.on('accountsChanged', onAccountsChanged as (...args: unknown[]) => void)
+    provider.on('chainChanged', onChainIdChanged as (...args: unknown[]) => void)
+    provider.on('error', onError as (...args: unknown[]) => void)
     return provider
 }
 

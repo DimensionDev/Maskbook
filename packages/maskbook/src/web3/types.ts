@@ -1,4 +1,4 @@
-import type createMetaMaskProvider from 'metamask-extension-provider'
+import type createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
 
 export enum ProviderType {
     Maskbook = 'Maskbook',
@@ -11,7 +11,7 @@ export enum CurrencyType {
 }
 
 export interface MetaMaskInpageProvider extends ReturnType<typeof createMetaMaskProvider> {
-    _metamask?: { isUnlocked: () => Promise<boolean> }
+    _metamask: { isUnlocked: () => Promise<boolean> }
 }
 
 //#region Ether
