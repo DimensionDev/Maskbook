@@ -1,10 +1,11 @@
-import { useCallback, useState, useEffect, useMemo } from 'react'
+import { Component, useCallback, useState, useEffect, useMemo } from 'react'
+import classNames from 'classnames'
 import { makeStyles, createStyles, Card, Typography, Box, Link } from '@material-ui/core'
 import { BigNumber } from 'bignumber.js'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
-import { ITO_Status } from '../types'
+import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
@@ -15,7 +16,7 @@ import { StyledLinearProgress } from './StyledLinearProgress'
 import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { formatDateTime, formatTimeDiffer } from '../../../utils/date'
+import { formatDateTime } from '../../../utils/date'
 import { ClaimGuide } from './ClaimGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
@@ -127,11 +128,31 @@ const useStyles = makeStyles((theme) =>
             color: '#EB5757',
             marginTop: theme.spacing(1),
         },
+        loadingITO: {
+            marginTop: 260,
+            textAlign: 'center',
+            fontSize: 24,
+        },
+        loadingITO_Button: {
+            color: '#fff',
+            borderColor: '#fff !important',
+            margin: theme.spacing(1, 'auto'),
+            minHeight: 35,
+            '&:hover': {
+                background: 'none',
+            },
+        },
+        loadingWrap: {
+            display: 'flex',
+            justifyContent: 'center',
+        },
     }),
 )
 
 export interface ITO_Props {
     pid: string
+    payload: JSON_PayloadInMask
+    retryPoolPayload: () => Promise<void>
 }
 
 interface TokenItemProps {
@@ -166,7 +187,6 @@ export function ITO(props: ITO_Props) {
 
     const { pid } = props
     const { payload, retry: retryPoolPayload } = usePoolPayload(pid)
-    console.log('payload', payload)
     const {
         token,
         total: payload_total,
@@ -497,4 +517,68 @@ export function ITO(props: ITO_Props) {
             />
         </div>
     )
+}
+
+export function ITO_Loading() {
+    const { t } = useI18N()
+    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
+    const classes = useStyles()
+
+    return (
+        <div>
+            <Card
+                className={classNames(classes.root, classes.loadingWrap)}
+                elevation={0}
+                style={{ backgroundImage: `url(${PoolBackground})` }}>
+                <Typography variant="body1" className={classes.loadingITO}>
+                    {t('plugin_ito_loading')}
+                </Typography>
+            </Card>
+        </div>
+    )
+}
+
+function ITO_LoadingFailUI({ retryPoolPayload }: { retryPoolPayload: () => void }) {
+    const { t } = useI18N()
+    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
+    const classes = useStyles()
+    return (
+        <Card
+            className={classNames(classes.root, classes.loadingWrap)}
+            elevation={0}
+            style={{ backgroundImage: `url(${PoolBackground})` }}>
+            <Typography variant="body1" className={classes.loadingITO}>
+                {t('plugin_ito_loading_failed')}
+            </Typography>
+            <ActionButton
+                onClick={retryPoolPayload}
+                variant="outlined"
+                size="large"
+                color="primary"
+                className={classes.loadingITO_Button}>
+                {t('plugin_ito_loading_try_again')}
+            </ActionButton>
+        </Card>
+    )
+}
+
+export class ITO_LoadingFail extends Component<{ retryPoolPayload: () => Promise<void> }> {
+    static getDerivedStateFromError(error: unknown) {
+        console.log('getDerivedStateFromError')
+        return { error }
+    }
+    state: { error: Error | null } = { error: null }
+    render() {
+        if (this.state.error) {
+            return (
+                <ITO_LoadingFailUI
+                    retryPoolPayload={() => {
+                        this.setState({ error: null })
+                        this.props.retryPoolPayload()
+                    }}
+                />
+            )
+        }
+        return this.props.children
+    }
 }
