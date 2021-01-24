@@ -93,7 +93,7 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region swap
-    const { value: coinDetailed } = useTokenDetailed(
+    const { value: coinDetailed, loading: loadingTokenDetailed } = useTokenDetailed(
         trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
         trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.eth_address ?? '',
     )
@@ -148,21 +148,16 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region display loading skeleton
-    if (loadingTrending || !currency || !trending || !coinDetailed) return <TrendingViewSkeleton />
+    if (loadingTrending || !currency || !trending || loadingTokenDetailed) return <TrendingViewSkeleton />
     //#endregion
 
     const { coin, market, tickers } = trending
     const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
     const swapTabIndex = dataProvider !== DataProvider.UNISWAP ? 3 : 1
     const fromToken = chainId === ChainId.Mainnet && coin.is_mirrored ? UST : createEtherToken(chainId)
+    const { decimals } = coinDetailed ?? trending.coin
     const toToken = trending.coin.eth_address
-        ? createERC20Token(
-              chainId,
-              coinDetailed.address,
-              coinDetailed.decimals,
-              coinDetailed.name ?? '',
-              coinDetailed.symbol ?? '',
-          )
+        ? createERC20Token(chainId, coin.eth_address!, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
         : undefined
 
     return (
