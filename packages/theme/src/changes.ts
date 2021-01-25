@@ -1,5 +1,14 @@
 import type { ThemeOptions } from '@material-ui/core'
 
+export const Font: ThemeOptions = {
+    typography: {
+        // TODO: lang=JP? offer different font list for different lang target?
+        // Firefox doesn't support "system-ui" so we need fallback
+        fontFamily: `system-ui, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Helvetica, Arial,
+        PingFang TC, Hiragino Sans TC, Source Han Sans TC, Noto Sans CJK TC, Microsoft JhengHei UI, Microsoft JhengHei, sans-serif;`,
+    },
+}
+
 /**
  * ? lg changed to 1440, other values untouched (default value)
  */
@@ -40,7 +49,7 @@ export const BorderRadius: ThemeOptions = {
                     borderTopRightRadius: 4,
                     borderBottomLeftRadius: 4,
                     borderBottomRightRadius: 4,
-                 },
+                },
                 // Medium has no style class
                 root: {
                     borderTopLeftRadius: 6,
