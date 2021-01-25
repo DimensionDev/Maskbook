@@ -88,3 +88,29 @@ export const Dialog: Theme = {
         },
     },
 }
+
+export const TextField: Theme = {
+    components: {
+        MuiFilledInput: {
+            // alternative way, but less beauty
+            // defaultProps: { disableUnderline: false },
+            styleOverrides: {
+                underline: {
+                    '&:before': { display: 'none' },
+                },
+            },
+        },
+        MuiFormHelperText: {
+            styleOverrides: {
+                contained: {
+                    paddingLeft: 14,
+                    paddingRight: 14,
+                    marginLeft: 0,
+                    marginRight: 0,
+                    borderLeft: '2px solid',
+                },
+                root: {},
+            },
+        },
+    },
+}

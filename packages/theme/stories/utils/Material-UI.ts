@@ -18,10 +18,12 @@ export const MuiArgs = {
             size: (e) => e(['small', 'medium', 'large']),
         }),
     },
-    textField: enumIn<TextFieldProps>({
-        size: (e) => e(['small', 'medium']),
-        variant: (e: any) => e(['outlined', 'standard', 'filled'] as TextFieldProps['variant'][]),
-    }),
+    textField: {
+        disabled: { type: 'boolean' },
+        ...enumIn<TextFieldProps>({
+            size: (e) => e(['small', 'medium']),
+        }),
+    },
     select: enumIn<SelectProps>({
         size: (e) => e(['medium', 'small']),
         variant: (e) => e(['filled', 'outlined', 'standard']),

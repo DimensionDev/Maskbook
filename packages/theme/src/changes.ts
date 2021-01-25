@@ -33,6 +33,24 @@ export const BorderRadius: ThemeOptions = {
                 // No large for InputBase
             },
         },
+        MuiFilledInput: {
+            styleOverrides: {
+                sizeSmall: {
+                    borderTopLeftRadius: 4,
+                    borderTopRightRadius: 4,
+                    borderBottomLeftRadius: 4,
+                    borderBottomRightRadius: 4,
+                 },
+                // Medium has no style class
+                root: {
+                    borderTopLeftRadius: 6,
+                    borderTopRightRadius: 6,
+                    borderBottomLeftRadius: 6,
+                    borderBottomRightRadius: 6,
+                },
+                // No large for InputBase
+            },
+        },
     },
 }
 /**
@@ -48,7 +66,6 @@ export const NoAutoTextTransform: ThemeOptions = {
 export const DefaultVariants: ThemeOptions = {
     components: {
         MuiButton: { defaultProps: { variant: 'contained' } },
-        MuiTextField: { defaultProps: { variant: 'outlined' } },
-        MuiSelect: { defaultProps: { variant: 'outlined' } },
+        MuiTextField: { defaultProps: {} },
     },
 }
