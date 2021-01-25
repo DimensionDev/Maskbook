@@ -114,6 +114,7 @@ const useStyles = makeStyles((theme) => {
             },
         },
         footMenu: {
+            color: theme.palette.text.secondary,
             fontSize: 10,
             display: 'flex',
             alignItems: 'center',
@@ -205,6 +206,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         return dataProvider === DataProvider.UNISWAP
             ? x.value === DataProvider.UNISWAP
             : x.value !== DataProvider.UNISWAP
+    })
+    const tradeProviderOptions = getEnumAsArray(TradeProvider).filter((x) => {
+        return dataProvider === DataProvider.UNISWAP ? x.value === TradeProvider.ZRX : true
     })
 
     return (
@@ -331,28 +335,23 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     <div className={classes.footMenu}>
                         <Typography className={classes.footnote}>Supported by</Typography>
                         <FootnoteMenu
-                            options={getEnumAsArray(TradeProvider)
-                                .filter((x) => {
-                                    return dataProvider === DataProvider.UNISWAP ? x.value === TradeProvider.ZRX : true
-                                })
-                                .map((x) => ({
-                                    name: (
-                                        <>
-                                            <TradeProviderIcon provider={x.value} />
-                                            <span className={classes.footName}>
-                                                {resolveTradeProviderName(x.value)}
-                                            </span>
-                                        </>
-                                    ),
-                                    value: x.value,
-                                }))}
+                            options={tradeProviderOptions.map((x) => ({
+                                name: (
+                                    <>
+                                        <TradeProviderIcon provider={x.value} />
+                                        <span className={classes.footName}>{resolveTradeProviderName(x.value)}</span>
+                                    </>
+                                ),
+                                value: x.value,
+                            }))}
                             selectedIndex={
                                 dataProvider === DataProvider.UNISWAP
                                     ? 0
                                     : findIndex(getEnumAsArray(TradeProvider), (x) => x.value === tradeProvider)
                             }
-                            onChange={onTradeProviderChange}
-                        />
+                            onChange={onTradeProviderChange}>
+                            <ArrowDropDownIcon />
+                        </FootnoteMenu>
                     </div>
                 ) : null}
             </CardActions>

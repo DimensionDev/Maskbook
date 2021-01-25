@@ -53,6 +53,7 @@ const zrxSettings = createInternalSettings<string>(
         pools: getEnumAsArray(ZrxTradePool).map((x) => x.value),
     }),
 )
+const sushiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sushiswap`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -63,6 +64,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return uniswapSettings
         case TradeProvider.ZRX:
             return zrxSettings
+        case TradeProvider.SUSHISWAP:
+            return sushiswapSettings
         default:
             unreachable(tradeProvider)
     }

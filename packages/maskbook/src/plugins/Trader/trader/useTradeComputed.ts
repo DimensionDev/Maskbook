@@ -15,16 +15,16 @@ export function useTradeComputed(
     inputToken?: EtherTokenDetailed | ERC20TokenDetailed,
     outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
 ) {
-    // uniswap
     const inputTokenProduct = new BigNumber(10).pow(inputToken?.decimals ?? 0)
     const outputTokenProduct = new BigNumber(10).pow(outputToken?.decimals ?? 0)
     const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
 
+    // uniswap & sushiswap
     const uniswap_ = useUniswapTrade(
         strategy,
-        provider === TradeProvider.UNISWAP ? inputAmount_ : '0',
-        provider === TradeProvider.UNISWAP ? outputAmount_ : '0',
+        provider === TradeProvider.UNISWAP || provider === TradeProvider.SUSHISWAP ? inputAmount_ : '0',
+        provider === TradeProvider.UNISWAP || provider === TradeProvider.SUSHISWAP ? outputAmount_ : '0',
         inputToken,
         outputToken,
     )
@@ -50,6 +50,11 @@ export function useTradeComputed(
             return {
                 ...zrx_,
                 value: zrx,
+            }
+        case TradeProvider.SUSHISWAP:
+            return {
+                ...uniswap_,
+                value: uniswap,
             }
         default:
             unreachable(provider)

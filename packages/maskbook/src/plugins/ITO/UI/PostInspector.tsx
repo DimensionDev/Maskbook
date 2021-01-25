@@ -1,37 +1,15 @@
+import { ITO, ITO_LoadingFail } from './ITO'
 import { usePoolPayload } from '../hooks/usePoolPayload'
-import { useEffect } from 'react'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useChainState'
-import { Typography } from '@material-ui/core'
-import type { JSON_PayloadInMask } from '../types'
-import { ITO } from './ITO'
-import { resolveChainName } from '../../../web3/pipes'
 
 export interface PostInspectorProps {
-    payload: JSON_PayloadInMask
+    pid: string
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    const account = useAccount()
-    const chainId = useChainId()
-
-    const { pid, password } = props.payload
-    const { value: poolPayload, retry, loading, error } = usePoolPayload(pid)
-
-    useEffect(() => retry(), [account, chainId])
-
-    if (props.payload.chain_id !== chainId)
-        return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
-    if (loading) return <Typography>Loading pool info…</Typography>
-    if (error) return <Typography>Failed to load pool info.</Typography>
-    if (!poolPayload) return null
+    const { payload, retry: retryPoolPayload } = usePoolPayload(props.pid)
     return (
-        <ITO
-            payload={{
-                ...poolPayload,
-                password: password || poolPayload.password,
-            }}
-            retryPayload={retry}
-        />
+        <ITO_LoadingFail retryPoolPayload={retryPoolPayload}>
+            <ITO pid={props.pid} payload={payload} retryPoolPayload={retryPoolPayload} />
+        </ITO_LoadingFail>
     )
 }

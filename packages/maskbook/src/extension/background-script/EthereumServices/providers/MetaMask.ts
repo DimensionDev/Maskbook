@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import type { provider as Provider } from 'web3-core'
 import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
-import createMetaMaskProvider from 'metamask-extension-provider'
+import createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
 import { ChainId } from '../../../../web3/types'
 import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
@@ -35,30 +35,30 @@ function onError(error: string) {
         currentSelectedWalletAddressSettings.value = ''
 }
 
-export function createProvider() {
+export async function createProvider() {
     if (provider) {
         provider.off('accountsChanged', onAccountsChanged)
         provider.off('chainChanged', onChainIdChanged)
         provider.off('error', onError)
     }
-    provider = createMetaMaskProvider()
-    provider.on('accountsChanged', onAccountsChanged)
-    provider.on('chainChanged', onChainIdChanged)
-    provider.on('error', onError)
+    provider = await createMetaMaskProvider()
+    provider.on('accountsChanged', onAccountsChanged as (...args: unknown[]) => void)
+    provider.on('chainChanged', onChainIdChanged as (...args: unknown[]) => void)
+    provider.on('error', onError as (...args: unknown[]) => void)
     return provider
 }
 
 // MetaMask provider can be wrapped into web3 lib directly.
 // https://github.com/MetaMask/extension-provider
-export function createWeb3() {
-    provider = createProvider()
+export async function createWeb3() {
+    provider = await createProvider()
     if (!web3) web3 = new Web3(provider as Provider)
     else web3.setProvider(provider as Provider)
     return web3
 }
 
 export async function requestAccounts() {
-    const web3 = createWeb3()
+    const web3 = await createWeb3()
     const accounts = await web3.eth.requestAccounts()
     await updateWalletInDB(first(accounts) ?? '', true)
     return accounts

@@ -1,0 +1,18 @@
+{
+    "$schema": "./node_modules/@magic-works/i18n-codegen/schema.json",
+    "version": 1,
+    "list": [
+        {
+            "input": "./packages/maskbook/src/_locales/en/messages.json",
+            "output": "./packages/maskbook/src/_locales/en/i18n_generated",
+            "parser": "i18next",
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useMaskI18N",
+                "namespace": "mask",
+                "trans": "MaskTrans",
+                "sourceMap": "inline"
+            }
+        }
+    ]
+}

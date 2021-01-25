@@ -95,7 +95,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 '.tweet', // timeline page for legacy twitter
                 '.main-tweet', // detail page for legacy twitter
                 'article > div', // new twitter
-                '[role="blockquote"]', // retweet in new twitter
+                'div[role="link"]', // retweet in new twitter
             ].join(),
         )
     }
@@ -145,7 +145,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
         })
         .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
-            const isQuotedTweet = tweetNode?.getAttribute('role') === 'blockquote'
+            const isQuotedTweet = tweetNode?.getAttribute('role') === 'link'
             return tweetNode
                 ? `${isQuotedTweet ? 'QUOTED' : ''}${postIdParser(tweetNode)}${node.innerText.replace(/\s/gm, '')}`
                 : node.innerText

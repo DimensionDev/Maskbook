@@ -5,7 +5,6 @@
     // List of extensions which should be recommended for users of this workspace.
     "recommendations": [
         "esbenp.prettier-vscode",
-        "antfu.i18n-ally",
         "dbaeumer.vscode-eslint",
         "editorconfig.editorconfig",
         "aaron-bond.better-comments",

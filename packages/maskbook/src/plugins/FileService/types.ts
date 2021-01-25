@@ -1,5 +1,6 @@
 export interface FileInfo {
-    type: 'arweave'
+    type: 'file'
+    provider: 'arweave'
     id: string
 
     name: string
@@ -9,4 +10,7 @@ export interface FileInfo {
     key: string | undefined
     payloadTxID: string
     landingTxID: string
+}
+export type FileInfoV1 = Omit<FileInfo, 'type' | 'provider'> & {
+    type: 'arweave'
 }

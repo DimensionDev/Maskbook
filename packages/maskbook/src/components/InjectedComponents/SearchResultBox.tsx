@@ -28,7 +28,7 @@ export function SearchResultBox(props: SearchResultBoxProps) {
                 name={name}
                 tagType={type_}
                 dataProviders={dataProviders}
-                tradeProviders={[TradeProvider.UNISWAP, TradeProvider.ZRX]}
+                tradeProviders={[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.ZRX]}
             />
         </div>
     )

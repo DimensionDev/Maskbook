@@ -1,10 +1,11 @@
-import { useCallback, useState, useEffect, useMemo } from 'react'
+import { Component, useCallback, useState, useEffect, useMemo } from 'react'
+import classNames from 'classnames'
 import { makeStyles, createStyles, Card, Typography, Box, Link } from '@material-ui/core'
 import { BigNumber } from 'bignumber.js'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
-import { JSON_PayloadInMask, ITO_Status } from '../types'
+import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
@@ -12,10 +13,10 @@ import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import { formatAmount, formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
+import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { formatDateTime, formatTimeDiffer } from '../../../utils/date'
+import { formatDateTime } from '../../../utils/date'
 import { ClaimGuide } from './ClaimGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
@@ -26,6 +27,8 @@ import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
+import { usePoolPayload } from '../hooks/usePoolPayload'
+import { resolveChainName } from '../../../web3/pipes'
 
 export interface IconProps {
     size?: number
@@ -125,12 +128,31 @@ const useStyles = makeStyles((theme) =>
             color: '#EB5757',
             marginTop: theme.spacing(1),
         },
+        loadingITO: {
+            marginTop: 260,
+            textAlign: 'center',
+            fontSize: 24,
+        },
+        loadingITO_Button: {
+            color: '#fff',
+            borderColor: '#fff !important',
+            margin: theme.spacing(1, 'auto'),
+            minHeight: 35,
+            '&:hover': {
+                background: 'none',
+            },
+        },
+        loadingWrap: {
+            display: 'flex',
+            justifyContent: 'center',
+        },
     }),
 )
 
 export interface ITO_Props {
+    pid: string
     payload: JSON_PayloadInMask
-    retryPayload: () => void
+    retryPoolPayload: () => Promise<void>
 }
 
 interface TokenItemProps {
@@ -152,9 +174,19 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 }
 
 export function ITO(props: ITO_Props) {
+    // context
+    const account = useAccount()
+    const postLink = usePostLink()
+    const chainId = useChainId()
+    const chainIdValid = useChainIdValid()
+    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
+    const [openClaimDialog, setOpenClaimDialog] = useState(false)
+
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
-    const { payload, retryPayload } = props
+
+    const { pid } = props
+    const { payload, retry: retryPoolPayload } = usePoolPayload(pid)
     const {
         token,
         total: payload_total,
@@ -165,27 +197,20 @@ export function ITO(props: ITO_Props) {
         limit,
         start_time,
         end_time,
-        pid,
     } = payload
     const classes = useStyles()
     const { t } = useI18N()
-    const [openClaimDialog, setOpenClaimDialog] = useState(false)
 
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(payload_total_remaining)
     const sold = total.minus(total_remaining)
-
-    // context
-    const account = useAccount()
-    const postLink = usePostLink()
-    const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
 
     //#region token detailed
     const {
         value: availability,
         computed: availabilityComputed,
         loading: loadingAvailability,
+        retry: retryAvailability,
     } = useAvailabilityComputed(payload)
     //#ednregion
 
@@ -205,7 +230,7 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     //#region buy info
-    const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pid, account)
+    const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
         chainId === payload.chain_id &&
         payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
@@ -222,11 +247,6 @@ export function ITO(props: ITO_Props) {
         : new BigNumber(0)
     // out of stock
     const refundAllAmount = tradeInfo?.buyInfo && new BigNumber(tradeInfo?.buyInfo.amount_sold).isZero()
-    useEffect(() => {
-        // should not revalidate if never validated before
-        if (!availability || !tradeInfo) return
-        retryPayload()
-    }, [account, chainId, chainIdValid])
 
     const onShareSuccess = useCallback(async () => {
         window.open(shareSuccessLink, '_blank', 'noopener noreferrer')
@@ -246,7 +266,6 @@ export function ITO(props: ITO_Props) {
     const onClaim = useCallback(async () => setOpenClaimDialog(true), [])
 
     //#region withdraw
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
@@ -278,13 +297,18 @@ export function ITO(props: ITO_Props) {
             state: destructState,
             summary,
         })
-        retryPayload()
     }, [destructState])
 
     const onWithdraw = useCallback(async () => {
         destructCallback(payload.pid)
     }, [destructCallback, payload.pid])
     //#endregion
+
+    const retryITOCard = useCallback(() => {
+        retryPoolPayload()
+        retryPoolTradeInfo()
+        retryAvailability()
+    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
 
     const swapStatusText = useMemo(() => {
         if (listOfStatus.includes(ITO_Status.waited)) return t('plugin_ito_status_no_start')
@@ -379,6 +403,8 @@ export function ITO(props: ITO_Props) {
         ),
         [footerEndTime, footerStartTime, limit, listOfStatus, t, token.decimals, token.symbol],
     )
+
+    if (payload.chain_id !== chainId) return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
 
     return (
         <div>
@@ -481,17 +507,78 @@ export function ITO(props: ITO_Props) {
                     </ActionButton>
                 ) : null}
             </Box>
-
-            {payload ? (
-                <ClaimGuide
-                    payload={payload}
-                    isBuyer={isBuyer}
-                    exchangeTokens={exchange_tokens}
-                    open={openClaimDialog}
-                    onClose={() => setOpenClaimDialog(false)}
-                    retryPayload={retryPayload}
-                />
-            ) : null}
+            <ClaimGuide
+                payload={payload}
+                isBuyer={isBuyer}
+                exchangeTokens={exchange_tokens}
+                open={openClaimDialog}
+                onClose={() => setOpenClaimDialog(false)}
+                retryPayload={retryITOCard}
+            />
         </div>
     )
+}
+
+export function ITO_Loading() {
+    const { t } = useI18N()
+    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
+    const classes = useStyles()
+
+    return (
+        <div>
+            <Card
+                className={classNames(classes.root, classes.loadingWrap)}
+                elevation={0}
+                style={{ backgroundImage: `url(${PoolBackground})` }}>
+                <Typography variant="body1" className={classes.loadingITO}>
+                    {t('plugin_ito_loading')}
+                </Typography>
+            </Card>
+        </div>
+    )
+}
+
+function ITO_LoadingFailUI({ retryPoolPayload }: { retryPoolPayload: () => void }) {
+    const { t } = useI18N()
+    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
+    const classes = useStyles()
+    return (
+        <Card
+            className={classNames(classes.root, classes.loadingWrap)}
+            elevation={0}
+            style={{ backgroundImage: `url(${PoolBackground})` }}>
+            <Typography variant="body1" className={classes.loadingITO}>
+                {t('plugin_ito_loading_failed')}
+            </Typography>
+            <ActionButton
+                onClick={retryPoolPayload}
+                variant="outlined"
+                size="large"
+                color="primary"
+                className={classes.loadingITO_Button}>
+                {t('plugin_ito_loading_try_again')}
+            </ActionButton>
+        </Card>
+    )
+}
+
+export class ITO_LoadingFail extends Component<{ retryPoolPayload: () => Promise<void> }> {
+    static getDerivedStateFromError(error: unknown) {
+        console.log('getDerivedStateFromError')
+        return { error }
+    }
+    state: { error: Error | null } = { error: null }
+    render() {
+        if (this.state.error) {
+            return (
+                <ITO_LoadingFailUI
+                    retryPoolPayload={() => {
+                        this.setState({ error: null })
+                        this.props.retryPoolPayload()
+                    }}
+                />
+            )
+        }
+        return this.props.children
+    }
 }

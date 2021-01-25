@@ -23,6 +23,7 @@ import { useChainId } from '../../../../web3/hooks/useChainState'
 import { UST } from '../../constants'
 import { ChainId, EthereumTokenType } from '../../../../web3/types'
 import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
+import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -92,7 +93,7 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region swap
-    const { value: coinDetailed } = useTokenDetailed(
+    const { value: coinDetailed, loading: loadingTokenDetailed } = useTokenDetailed(
         trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
         trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.eth_address ?? '',
     )
@@ -107,6 +108,10 @@ export function TrendingView(props: TrendingViewProps) {
         currency: trending?.currency,
         days,
     })
+    //#endregion
+
+    //#region trader context
+    const tradeContext = useTradeContext(tradeProvider)
     //#endregion
 
     //#region api ready callback
@@ -143,79 +148,76 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region display loading skeleton
-    if (loadingTrending || !currency || !trending || !coinDetailed) return <TrendingViewSkeleton />
+    if (loadingTrending || !currency || !trending || loadingTokenDetailed) return <TrendingViewSkeleton />
     //#endregion
 
     const { coin, market, tickers } = trending
     const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
     const swapTabIndex = dataProvider !== DataProvider.UNISWAP ? 3 : 1
     const fromToken = chainId === ChainId.Mainnet && coin.is_mirrored ? UST : createEtherToken(chainId)
+    const { decimals } = coinDetailed ?? trending.coin
     const toToken = trending.coin.eth_address
-        ? createERC20Token(
-              chainId,
-              coinDetailed.address,
-              coinDetailed.decimals,
-              coinDetailed.name ?? '',
-              coinDetailed.symbol ?? '',
-          )
+        ? createERC20Token(chainId, coin.eth_address!, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
         : undefined
 
     return (
-        <TrendingViewDeck
-            classes={{ header: classes.header, body: classes.body, footer: classes.footer }}
-            stats={stats}
-            coins={coins}
-            currency={currency}
-            trending={trending}
-            dataProvider={dataProvider}
-            tradeProvider={tradeProvider}
-            showDataProviderIcon={tabIndex !== swapTabIndex}
-            showTradeProviderIcon={tabIndex === swapTabIndex}>
-            <Tabs
-                className={classes.tabs}
-                textColor="primary"
-                variant="fullWidth"
-                value={tabIndex}
-                onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
-                TabIndicatorProps={{
-                    style: {
-                        display: 'none',
-                    },
-                }}>
-                <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />
-                {dataProvider !== DataProvider.UNISWAP ? (
-                    <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
+        <TradeContext.Provider value={tradeContext}>
+            <TrendingViewDeck
+                classes={{ header: classes.header, body: classes.body, footer: classes.footer }}
+                stats={stats}
+                coins={coins}
+                currency={currency}
+                trending={trending}
+                dataProvider={dataProvider}
+                tradeProvider={tradeProvider}
+                showDataProviderIcon={tabIndex !== swapTabIndex}
+                showTradeProviderIcon={tabIndex === swapTabIndex}>
+                <Tabs
+                    className={classes.tabs}
+                    textColor="primary"
+                    variant="fullWidth"
+                    value={tabIndex}
+                    onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
+                    TabIndicatorProps={{
+                        style: {
+                            display: 'none',
+                        },
+                    }}>
+                    <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />
+                    {dataProvider !== DataProvider.UNISWAP ? (
+                        <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
+                    ) : null}
+                    {dataProvider !== DataProvider.UNISWAP ? (
+                        <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
+                    ) : null}
+                    {canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null}
+                </Tabs>
+                {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
+                {tabIndex === 1 && dataProvider !== DataProvider.UNISWAP ? (
+                    <>
+                        {market ? <PriceChangedTable market={market} /> : null}
+                        <PriceChart
+                            classes={{ root: classes.priceChartRoot }}
+                            coin={coin}
+                            stats={stats}
+                            loading={loadingStats}>
+                            <PriceChartDaysControl days={days} onDaysChange={setDays} />
+                        </PriceChart>
+                    </>
                 ) : null}
-                {dataProvider !== DataProvider.UNISWAP ? (
-                    <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
+                {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
+                    <TickersTable tickers={tickers} dataProvider={dataProvider} />
                 ) : null}
-                {canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null}
-            </Tabs>
-            {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
-            {tabIndex === 1 && dataProvider !== DataProvider.UNISWAP ? (
-                <>
-                    {market ? <PriceChangedTable market={market} /> : null}
-                    <PriceChart
-                        classes={{ root: classes.priceChartRoot }}
-                        coin={coin}
-                        stats={stats}
-                        loading={loadingStats}>
-                        <PriceChartDaysControl days={days} onDaysChange={setDays} />
-                    </PriceChart>
-                </>
-            ) : null}
-            {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
-                <TickersTable tickers={tickers} dataProvider={dataProvider} />
-            ) : null}
-            {tabIndex === swapTabIndex && canSwap ? (
-                <TradeView
-                    classes={{ root: classes.tradeViewRoot }}
-                    TraderProps={{
-                        fromToken,
-                        toToken,
-                    }}
-                />
-            ) : null}
-        </TrendingViewDeck>
+                {tabIndex === swapTabIndex && canSwap ? (
+                    <TradeView
+                        classes={{ root: classes.tradeViewRoot }}
+                        TraderProps={{
+                            fromToken,
+                            toToken,
+                        }}
+                    />
+                ) : null}
+            </TrendingViewDeck>
+        </TradeContext.Provider>
     )
 }

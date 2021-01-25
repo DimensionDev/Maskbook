@@ -6,6 +6,6 @@ import { TRADE_CONSTANTS } from '../../constants'
 import type { RouterV2 } from '../../../../contracts/RouterV2'
 
 export function useRouterV2Contract() {
-    const address = useConstant(TRADE_CONSTANTS, 'UNISWAP_V2_ROUTER_ADDRESS')
+    const address = useConstant(TRADE_CONSTANTS, 'SUSHISWAP_ROUTER_ADDRESS')
     return useContract<RouterV2>(address, RouterV2ABI as AbiItem[])
 }
