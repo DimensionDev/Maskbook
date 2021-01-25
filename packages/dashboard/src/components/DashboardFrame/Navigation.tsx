@@ -1,18 +1,21 @@
 import {
+    Box,
+    Collapse,
+    IconButton,
     List,
     ListItem,
-    Box,
-    ListItemText,
     ListItemIcon,
-    Collapse,
+    ListItemProps,
+    ListItemText,
     makeStyles,
     Theme,
-    ListItemProps,
+    Toolbar,
+    useMediaQuery,
 } from '@material-ui/core'
-import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@material-ui/icons'
-import { useState } from 'react'
-import { useRouteMatch } from 'react-router'
 import { Link, LinkProps } from 'react-router-dom'
+import { useRouteMatch } from 'react-router'
+import { useState } from 'react'
+import { AccountBalanceWallet, ExpandLess, ExpandMore, Masks, Menu as MenuIcon, Settings } from '@material-ui/icons'
 import { Routes } from '../../pages/routes'
 
 const useStyle = makeStyles((theme: Theme) => ({
@@ -38,57 +41,62 @@ function ListItemLink({ nested, ...props }: LinkProps & ListItemProps & { nested
 }
 
 export interface NavigationProps {}
+
 export function Navigation({}: NavigationProps) {
     const classes = useStyle()
     const [expanded, setExpanded] = useState(true)
+    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down('lg'))
+
+    const routerMatch = useRouteMatch(Routes.Wallets)
     return (
-        <List>
-            <ListItem component={Box} sx={{ justifyContent: 'center', marginBottom: 2 }}>
-                <img height={40} alt="Mask Logo" src="https://mask.io/assets/icons/logo.svg" />
-            </ListItem>
-            <ListItemLink to={Routes.Personas}>
-                <ListItemIcon>
-                    <Masks />
-                </ListItemIcon>
-                <ListItemText primary="Personas" />
-            </ListItemLink>
-            <ListItem
-                button
-                selected={!!useRouteMatch(Routes.Wallets)}
-                classes={{ selected: classes.selected }}
-                onClick={() => setExpanded((e) => !e)}>
-                <ListItemIcon>
-                    <AccountBalanceWallet />
-                </ListItemIcon>
-                <ListItemText>Wallets</ListItemText>
-                {expanded ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={expanded}>
-                <List disablePadding>
-                    <ListItemLink nested to={Routes.WalletsTransfer}>
-                        <ListItemText primary="Transfer" />
-                    </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsSwap}>
-                        <ListItemText primary="Swap" />
-                    </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsRedPacket}>
-                        <ListItemText primary="Red packet" />
-                    </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsSell}>
-                        <ListItemText primary="Sell" />
-                    </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsHistory}>
-                        <ListItemText primary="History" />
-                    </ListItemLink>
-                </List>
-            </Collapse>
-            <ListItemLink to={Routes.Settings}>
-                <ListItemIcon>
-                    <Settings />
-                </ListItemIcon>
-                <ListItemText primary="Settings" />
-            </ListItemLink>
-        </List>
+        <>
+
+            <List>
+                {!matches && <Toolbar />}
+                <ListItemLink to={Routes.Personas}>
+                    <ListItemIcon>
+                        <Masks />
+                    </ListItemIcon>
+                    <ListItemText primary="Personas" />
+                </ListItemLink>
+                <ListItem
+                    button
+                    selected={!!routerMatch}
+                    classes={{ selected: classes.selected }}
+                    onClick={() => setExpanded((e) => !e)}>
+                    <ListItemIcon>
+                        <AccountBalanceWallet />
+                    </ListItemIcon>
+                    <ListItemText>Wallets</ListItemText>
+                    {expanded ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                <Collapse in={expanded}>
+                    <List disablePadding>
+                        <ListItemLink nested to={Routes.WalletsTransfer}>
+                            <ListItemText primary="Transfer" />
+                        </ListItemLink>
+                        <ListItemLink nested to={Routes.WalletsSwap}>
+                            <ListItemText primary="Swap" />
+                        </ListItemLink>
+                        <ListItemLink nested to={Routes.WalletsRedPacket}>
+                            <ListItemText primary="Red packet" />
+                        </ListItemLink>
+                        <ListItemLink nested to={Routes.WalletsSell}>
+                            <ListItemText primary="Sell" />
+                        </ListItemLink>
+                        <ListItemLink nested to={Routes.WalletsHistory}>
+                            <ListItemText primary="History" />
+                        </ListItemLink>
+                    </List>
+                </Collapse>
+                <ListItemLink to={Routes.Settings}>
+                    <ListItemIcon>
+                        <Settings />
+                    </ListItemIcon>
+                    <ListItemText primary="Settings" />
+                </ListItemLink>
+            </List>
+        </>
     )
 }
 

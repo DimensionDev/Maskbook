@@ -1,70 +1,87 @@
-import { makeStyles, useMediaQuery, Toolbar, Theme, Typography, AppBar, Grid, Box } from '@material-ui/core'
-import Color from 'color'
-import clz from 'classnames'
-import { Navigation } from './Navigation'
+import {
+    AppBar,
+    Box,
+    Grid,
+    makeStyles,
+    Toolbar,
+    Typography,
+    Drawer,
+    useMediaQuery,
+    Theme,
+    IconButton,
+} from '@material-ui/core'
+import { Menu as MenuIcon } from '@material-ui/icons'
 import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
+import { Navigation } from './Navigation'
+import { useState } from 'react'
 
-const useStyles = makeStyles((theme) => ({
-    root: { backgroundColor: theme.palette.background.paper },
-    temporaryDrawerPaper: {
-        backgroundColor: new Color(theme.palette.background.paper).alpha(0.8).toString(),
-        backdropFilter: 'blur(4px)',
-    },
-    permanentDrawer: { height: '100vh' },
-    containment: { overflow: 'auto', contain: 'strict' },
-    shape: {
-        height: '100%',
-        padding: theme.spacing(2),
-        borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
-        borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
-    },
-    shapeHelper: {
-        backgroundColor: theme.palette.background.default,
-        paddingBottom: 0,
-    },
-    container: { backgroundColor: theme.palette.background.paper },
-}))
-export interface DashboardFrameProps extends React.PropsWithChildren<{}> {}
-export function DashboardFrame(props: DashboardFrameProps) {
-    const classes = useStyles()
-    const menuStyle = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
-    return (
-        <>
-            <Grid container className={classes.root}>
-                <Grid item xs={2} className={classes.permanentDrawer}>
-                    <Navigation />
-                </Grid>
-                <Grid container direction="column" item xs={10}>
-                    <ErrorBoundary>{props.children}</ErrorBoundary>
-                </Grid>
-            </Grid>
-        </>
-    )
-}
-
-export interface PageFrameProps extends React.PropsWithChildren<{}> {
+export interface DashboardFrameProps extends React.PropsWithChildren<{}> {
     title: React.ReactNode | string
     primaryAction?: React.ReactNode
 }
-export function PageFrame(props: PageFrameProps) {
+
+const useStyles = makeStyles((theme) => ({
+    appBar: {},
+    drawer: {
+        width: 232,
+    },
+    drawerPaper: {
+        width: 232,
+        top: theme.mixins.toolbar.minHeight,
+        paddingTop: 60,
+        background: 'rgba(255,255,255,0.8)',
+        backdropFilter: 'blur(4px)',
+    },
+}))
+
+export function DashboardFrame(props: DashboardFrameProps) {
     const classes = useStyles()
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
+    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down('lg'))
+
+    const [open, setOpen] = useState(false)
+
+    console.log(open)
     return (
         <>
-            <AppBar position="relative" color="inherit" elevation={0}>
+            <AppBar position="relative" color="inherit" elevation={0} className={classes.appBar}>
                 <Toolbar component={Grid} container>
-                    {left}
-                    <Box sx={{ flex: 1 }} />
-                    {right}
+                    <Grid item xs={2} container alignItems="center">
+                        {matches && (
+                            <IconButton onClick={() => setOpen(!open)}>
+                                <MenuIcon />
+                            </IconButton>
+                        )}
+                        <img height={40} alt="Mask Logo" src="https://mask.io/assets/icons/logo.svg" />
+                    </Grid>
+                    <Grid item xs={10} container>
+                        {left}
+                        <Box sx={{ flex: 1 }} />
+                        {right}
+                    </Grid>
                 </Toolbar>
             </AppBar>
-            <Grid item xs className={classes.containment}>
-                <div className={clz(classes.shapeHelper, classes.shape)}>
-                    <div className={clz(classes.container, classes.shape)}>
-                        <ErrorBoundary>{props.children}</ErrorBoundary>
-                    </div>
-                </div>
+            <Grid container>
+                {!matches ? (
+                    <Grid xs={2} item>
+                        <Navigation />
+                    </Grid>
+                ) : (
+                    <Drawer
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        BackdropProps={{ invisible: true }}
+                        PaperProps={{ elevation: 0 }}
+                        variant="temporary"
+                        className={classes.drawer}
+                        classes={{ paper: classes.drawerPaper }}>
+                        <Navigation />
+                    </Drawer>
+                )}
+                <Grid xs={matches ? 12 : 10} item>
+                    <ErrorBoundary>{props.children}</ErrorBoundary>
+                </Grid>
             </Grid>
         </>
     )
