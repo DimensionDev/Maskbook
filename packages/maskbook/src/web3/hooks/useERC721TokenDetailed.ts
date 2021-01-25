@@ -5,7 +5,7 @@ import { EthereumTokenType, ERC721TokenDetailed } from '../types'
 import { useChainId } from './useChainState'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
-import { MulticalStateType, useSingleContractMultipleData } from './useMulticall'
+import { useSingleContractMultipleData } from './useMulticall'
 
 export function useERC721TokenDetailed(address: string, token?: Partial<ERC721TokenDetailed>) {
     const chainId = useChainId()
