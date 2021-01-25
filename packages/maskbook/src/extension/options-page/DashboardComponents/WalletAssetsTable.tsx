@@ -102,9 +102,6 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         )
     }, [detailedTokens.length, haveETH])
 
-    if (!chainIdValid) return null
-    if (!detailedTokens.length) return null
-
     const viewDetailed = (x: AssetDetailed) => (
         <TableRow className={classes.cell} key={x.token.address}>
             {[
