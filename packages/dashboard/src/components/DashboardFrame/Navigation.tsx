@@ -45,7 +45,7 @@ export interface NavigationProps {}
 export function Navigation({}: NavigationProps) {
     const classes = useStyle()
     const [expanded, setExpanded] = useState(true)
-    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down('lg'))
+    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down(1184))
 
     const routerMatch = useRouteMatch(Routes.Wallets)
     return (

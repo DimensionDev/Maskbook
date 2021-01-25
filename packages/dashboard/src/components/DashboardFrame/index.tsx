@@ -38,11 +38,10 @@ export function DashboardFrame(props: DashboardFrameProps) {
     const classes = useStyles()
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
-    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down('lg'))
+    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down(1184))
 
     const [open, setOpen] = useState(false)
 
-    console.log(open)
     return (
         <>
             <AppBar position="relative" color="inherit" elevation={0} className={classes.appBar}>
