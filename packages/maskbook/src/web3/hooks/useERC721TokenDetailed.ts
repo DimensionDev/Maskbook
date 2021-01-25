@@ -12,13 +12,8 @@ export function useERC721TokenDetailed(address: string, token?: Partial<ERC721To
     const erc721TokenContract = useERC721TokenContract(address)
 
     // compose calls
-    const { names, callDatas } = useMemo(
-        () => ({
-            names: ['name', 'symbol', 'baseURI'] as 'name'[],
-            callDatas: new Array(3).fill([]),
-        }),
-        [],
-    )
+    const names = ['name', 'symbol', 'baseURI'] as 'name'[]
+    const callDatas = new Array(3).fill([])
 
     // validate
     const [results, calls, _, callback] = useSingleContractMultipleData(erc721TokenContract, names, callDatas)

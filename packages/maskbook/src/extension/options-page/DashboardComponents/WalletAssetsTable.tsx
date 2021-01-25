@@ -76,6 +76,12 @@ export interface WalletAssetsTableProps extends withClasses<KeysInferFromUseStyl
     wallet: WalletRecord
 }
 
+const filterETH = (a: AssetDetailed) => isETH(a.token.address)
+const excludeETH = (a: AssetDetailed) => !isETH(a.token.address)
+const excludeZero = (a: AssetDetailed) => new BigNumber(a.value?.[CurrencyType.USD] || '0').isGreaterThan(0)
+const sort = (a: AssetDetailed, b: AssetDetailed): number =>
+    new BigNumber(b.value?.[CurrencyType.USD] ?? 0).minus(a.value?.[CurrencyType.USD] ?? 0).toNumber()
+
 export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const { t } = useI18N()
     const { wallet } = props
@@ -87,20 +93,14 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const [more, setMore] = useState(false)
     const [price, setPrice] = useState(MIN_VALUE)
 
-    const chainIdValid = useChainIdValid()
-
     const haveETH = detailedTokens.some((x) => isETH(x.token.address))
-    const [viewLength, setViewLength] = useState(haveETH ? MAX_TOKENS_LENGTH - 1 : MAX_TOKENS_LENGTH)
-
-    useEffect(() => {
-        setViewLength(
-            detailedTokens.length > MAX_TOKENS_LENGTH
-                ? haveETH
-                    ? MAX_TOKENS_LENGTH - 1
-                    : MAX_TOKENS_LENGTH
-                : detailedTokens.length,
-        )
-    }, [detailedTokens.length, haveETH])
+    const [viewLength, setViewLength] = useState(
+        detailedTokens.length > MAX_TOKENS_LENGTH
+            ? haveETH
+                ? MAX_TOKENS_LENGTH - 1
+                : MAX_TOKENS_LENGTH
+            : detailedTokens.length,
+    )
 
     const viewDetailed = (x: AssetDetailed) => (
         <TableRow className={classes.cell} key={x.token.address}>
@@ -181,13 +181,8 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         </div>
     )
 
-    const filterETH = (a: AssetDetailed) => isETH(a.token.address)
-    const excludeETH = (a: AssetDetailed) => !isETH(a.token.address)
-    const excludeZero = (a: AssetDetailed) => new BigNumber(a.value?.[CurrencyType.USD] || '0').isGreaterThan(0)
     const filter = (a: AssetDetailed) =>
         Number(price) !== 0 ? new BigNumber(a.value?.[CurrencyType.USD] || '0').isGreaterThan(price) : true
-    const sort = (a: AssetDetailed, b: AssetDetailed): number =>
-        new BigNumber(b.value?.[CurrencyType.USD] ?? 0).minus(a.value?.[CurrencyType.USD] ?? 0).toNumber()
 
     return (
         <>
