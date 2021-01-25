@@ -19,8 +19,11 @@ async function retry(pid: string) {
 
 async function suspender(pid: string) {
     try {
-        storage.set(pid, await PluginITO_RPC.getPool(pid))
+        throw new Error('222')
+        // storage.set(pid, await PluginITO_RPC.getPool(pid))
     } catch (error) {
-        storage.set(pid, {} as JSON_PayloadInMask)
+        console.log(error, error)
+        throw error
+        // storage.set(pid, {} as JSON_PayloadInMask)
     }
 }
