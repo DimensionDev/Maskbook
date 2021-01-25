@@ -6,13 +6,14 @@ import { useChainId } from './useChainState'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { useSingleContractMultipleData } from './useMulticall'
+import type { ERC721 } from '../../contracts/ERC721'
 
 export function useERC721TokenDetailed(address: string, token?: Partial<ERC721TokenDetailed>) {
     const chainId = useChainId()
     const erc721TokenContract = useERC721TokenContract(address)
 
     // compose calls
-    const names = ['name', 'symbol', 'baseURI'] as 'name'[]
+    const names = ['name', 'symbol', 'baseURI'] as (keyof ERC721['methods'])[]
     const callDatas = new Array(3).fill([])
 
     // validate
