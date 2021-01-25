@@ -124,9 +124,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     }, [])
     //#endregion
 
-    //#collectibles loading
-    const [collectiblesLoading, setCollectiblesLoading] = useState({ electionLoading: false, tokenLoading: false })
-
     return (
         <div className={classes.root} ref={ref}>
             {!chainIdValid ? (

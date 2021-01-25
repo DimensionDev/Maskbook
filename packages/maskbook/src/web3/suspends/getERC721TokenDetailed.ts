@@ -18,9 +18,10 @@ async function ERC721TokenDetailed_(address: string, token?: Partial<ERC721Token
         }),
         [],
     )
-    const [results, _, callback] = useSingleContractMultipleData(erc721TokenContract, names, callDatas)
+    const [results, calls, _, callback] = useSingleContractMultipleData(erc721TokenContract, names, callDatas)
 
-    await callback()
+    await callback(calls)
+
     // compose
     const [name, symbol, baseURI] = results.map((x) => (x.error ? undefined : x.value))
     token_ = {
