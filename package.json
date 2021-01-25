@@ -12,10 +12,12 @@
   ],
   "scripts": {
     "start": "dev",
+    "start-e2e": "env target=E2E dev",
     "ts": "dev -- echo Starting TypeScript compiler...",
     "go": "dev --help",
     "start:storybook": "dev -- start-storybook -p 9009 -s public --quiet",
     "build": "build",
+    "build-e2e": "env target=E2E build",
     "build-ci": "node --max_old_space_size=4096 -r ts-node/register/transpile-only scripts/ci-build.ts",
     "build-storybook": "build -- build-storybook -s public --quiet",
     "build-ios": "run-s build:ios:webpack build:ios:ext:prebuilt",
