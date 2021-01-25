@@ -97,7 +97,10 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
             })
     }
 
-    if (provider === ProviderType.MetaMask) return () => MetaMask.createWeb3().eth.sendTransaction(config)
+    if (provider === ProviderType.MetaMask) {
+        const web3 = await MetaMask.createWeb3()
+        return () => web3.eth.sendTransaction(config)
+    }
     if (provider === ProviderType.WalletConnect) return () => WalletConnect.createWeb3().eth.sendTransaction(config)
     throw new Error(`cannot send transaction for wallet ${wallet.address}`)
 }

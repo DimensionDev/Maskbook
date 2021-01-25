@@ -15,3 +15,5 @@ type EnumRecord<T extends number | string, U> = {
 }
 
 type Primitive = string | boolean | number
+
+type UnboxPromise<T> = T extends Promise<infer R> ? R : never

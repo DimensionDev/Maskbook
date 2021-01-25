@@ -35,13 +35,13 @@ function onError(error: string) {
         currentSelectedWalletAddressSettings.value = ''
 }
 
-export function createProvider() {
+export async function createProvider() {
     if (provider) {
         provider.off('accountsChanged', onAccountsChanged)
         provider.off('chainChanged', onChainIdChanged)
         provider.off('error', onError)
     }
-    provider = createMetaMaskProvider()
+    provider = await createMetaMaskProvider()
     provider.on('accountsChanged', onAccountsChanged as (...args: unknown[]) => void)
     provider.on('chainChanged', onChainIdChanged as (...args: unknown[]) => void)
     provider.on('error', onError as (...args: unknown[]) => void)
@@ -50,15 +50,15 @@ export function createProvider() {
 
 // MetaMask provider can be wrapped into web3 lib directly.
 // https://github.com/MetaMask/extension-provider
-export function createWeb3() {
-    provider = createProvider()
+export async function createWeb3() {
+    provider = await createProvider()
     if (!web3) web3 = new Web3(provider as Provider)
     else web3.setProvider(provider as Provider)
     return web3
 }
 
 export async function requestAccounts() {
-    const web3 = createWeb3()
+    const web3 = await createWeb3()
     const accounts = await web3.eth.requestAccounts()
     await updateWalletInDB(first(accounts) ?? '', true)
     return accounts

@@ -47,7 +47,7 @@
     "@dimensiondev/holoflows-kit": "0.8.0-20201215084554-2f9e757",
     "@dimensiondev/kit": "0.0.0-20210115033306-5d4304b",
     "@dimensiondev/matrix-js-sdk-type": "=1.0.0-20200731085604-dc2de92",
-    "@dimensiondev/metamask-extension-provider": "^3.0.0-20210124061741-516a8bd",
+    "@dimensiondev/metamask-extension-provider": "^3.0.0-20210125122006-86e9bae",
     "@dimensiondev/stego-js": "=0.11.1-20201027083223-8ab41be",
     "@emotion/cache": "^11",
     "@emotion/react": "^11.1.2",

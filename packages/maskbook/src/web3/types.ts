@@ -10,7 +10,7 @@ export enum CurrencyType {
     USD = 'usd',
 }
 
-export interface MetaMaskInpageProvider extends ReturnType<typeof createMetaMaskProvider> {
+export interface MetaMaskInpageProvider extends UnboxPromise<ReturnType<typeof createMetaMaskProvider>> {
     _metamask: { isUnlocked: () => Promise<boolean> }
 }
 
