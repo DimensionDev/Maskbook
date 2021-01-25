@@ -21,6 +21,6 @@ async function suspender(pid: string) {
     try {
         storage.set(pid, await PluginITO_RPC.getPool(pid))
     } catch (error) {
-        throw error
+        storage.set(pid, {} as JSON_PayloadInMask)
     }
 }
