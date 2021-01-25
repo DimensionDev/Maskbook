@@ -32,6 +32,19 @@ const useStyles = makeStyles((theme) => ({
         background: 'rgba(255,255,255,0.8)',
         backdropFilter: 'blur(4px)',
     },
+    logo: {
+        [theme.breakpoints.down(1184)]: {
+            flexBasis: 232,
+            maxWidth: 232,
+        },
+    },
+    title: {
+        minHeight: 40,
+        alignItems: 'center',
+        [theme.breakpoints.down(1184)]: {
+            flex: 1,
+        },
+    },
 }))
 
 export function DashboardFrame(props: DashboardFrameProps) {
@@ -46,7 +59,7 @@ export function DashboardFrame(props: DashboardFrameProps) {
         <>
             <AppBar position="relative" color="inherit" elevation={0} className={classes.appBar}>
                 <Toolbar component={Grid} container>
-                    <Grid item xs={2} container alignItems="center">
+                    <Grid item xs={2} container alignItems="center" className={classes.logo}>
                         {matches && (
                             <IconButton onClick={() => setOpen(!open)}>
                                 <MenuIcon />
@@ -54,7 +67,7 @@ export function DashboardFrame(props: DashboardFrameProps) {
                         )}
                         <img height={40} alt="Mask Logo" src="https://mask.io/assets/icons/logo.svg" />
                     </Grid>
-                    <Grid item xs={10} container>
+                    <Grid item xs={10} container className={classes.title}>
                         {left}
                         <Box sx={{ flex: 1 }} />
                         {right}
