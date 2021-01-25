@@ -1,5 +1,5 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Box } from '@material-ui/core'
-import { MaskDialogTitle } from '../src/Components/Dialogs/DialogTitle'
+import { Button, DialogActions, DialogContent, DialogContentText, Box } from '@material-ui/core'
+import { MaskDialog } from '../src/Components/Dialogs'
 export interface DialogExampleProps {
     withExit: boolean
     withBack: boolean
@@ -9,10 +9,7 @@ const f = () => {}
 export function DialogExample(props: DialogExampleProps) {
     const { withBack, withExit, withLeftAction } = props
     return (
-        <Dialog open>
-            <MaskDialogTitle onBack={withBack ? f : void 0} onClose={withExit ? f : void 0}>
-                Modal-S
-            </MaskDialogTitle>
+        <MaskDialog title="Modal" onBack={withBack ? f : void 0} onClose={withExit ? f : void 0} open>
             <DialogContent>
                 <DialogContentText>Text</DialogContentText>
             </DialogContent>
@@ -26,6 +23,6 @@ export function DialogExample(props: DialogExampleProps) {
                 <Button color="secondary">Cancel</Button>
                 <Button>Confirm</Button>
             </DialogActions>
-        </Dialog>
+        </MaskDialog>
     )
 }

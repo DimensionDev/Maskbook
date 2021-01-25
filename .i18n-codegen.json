@@ -13,6 +13,30 @@
                 "trans": "MaskTrans",
                 "sourceMap": "inline"
             }
+        },
+        {
+            "input": "./packages/theme/src/locales/en.json",
+            "output": "./packages/theme/src/locales/i18n_generated",
+            "parser": "i18next",
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useMaskThemeI18N",
+                "namespace": "theme",
+                "trans": "ThemeTrans",
+                "sourceMap": "inline"
+            }
+        },
+        {
+            "input": "./packages/dashboard/src/locales/en.json",
+            "output": "./packages/dashboard/src/locales/i18n_generated",
+            "parser": "i18next",
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useDashboardI18N",
+                "namespace": "theme",
+                "trans": "DashboardTrans",
+                "sourceMap": "inline"
+            }
         }
     ]
 }
