@@ -95,7 +95,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 '.tweet', // timeline page for legacy twitter
                 '.main-tweet', // detail page for legacy twitter
                 'article > div', // new twitter
-                '[role="link"]', // retweet in new twitter
+                'div[role="link"]', // retweet in new twitter
             ].join(),
         )
     }
