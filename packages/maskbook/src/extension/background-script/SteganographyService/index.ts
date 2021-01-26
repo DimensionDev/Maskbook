@@ -72,18 +72,17 @@ export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImag
     const { template } = options
     const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
     const mask = await getMaskBuf(template === 'v2' || template === 'v4' ? template : 'transparent')
-    return encodeArrayBuffer(
-        await encode(_buf, mask, {
-            ...defaultOptions,
-            version: AlgorithmVersion.V1,
-            fakeMaskPixels: false,
-            cropEdgePixels: template !== 'v2' && template !== 'v3' && template !== 'v4',
-            exhaustPixels: true,
-            grayscaleAlgorithm: template === 'v3' ? GrayscaleAlgorithm.LUMINANCE : GrayscaleAlgorithm.NONE,
-            transformAlgorithm: TransformAlgorithm.FFT1D,
-            ...options,
-        }),
-    )
+    const encodedOptions: EncodeOptions = {
+        ...defaultOptions,
+        version: AlgorithmVersion.V2,
+        fakeMaskPixels: false,
+        cropEdgePixels: template !== 'v2' && template !== 'v3' && template !== 'v4',
+        exhaustPixels: true,
+        grayscaleAlgorithm: template === 'v3' ? GrayscaleAlgorithm.LUMINANCE : GrayscaleAlgorithm.NONE,
+        transformAlgorithm: TransformAlgorithm.FFT1D,
+        ...options,
+    }
+    return encodeArrayBuffer(await encode(_buf, mask, encodedOptions))
 }
 
 type DecodeImageOptions = PartialRequired<Required<DecodeOptions>, 'pass'>
@@ -93,12 +92,18 @@ export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImag
     const _dimension = getDimension(_buf)
     const preset = dimensionPreset.find((d) => isSameDimension(d, _dimension))
     if (!preset) return ''
-    return decode(_buf, await getMaskBuf(preset.mask), {
+    const _options: DecodeOptions = {
         ...defaultOptions,
-        version: AlgorithmVersion.V1,
+        version: AlgorithmVersion.V2,
         transformAlgorithm: TransformAlgorithm.FFT1D,
         ...options,
-    })
+    }
+    try {
+        return await decode(_buf, await getMaskBuf(preset.mask), _options)
+    } catch {
+        _options.version = AlgorithmVersion.V1
+        return decode(_buf, await getMaskBuf(preset.mask), _options)
+    }
 }
 
 export async function decodeImageUrl(url: string, options: DecodeImageOptions) {
