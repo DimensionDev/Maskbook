@@ -70,8 +70,8 @@ const useStyles = makeStyles((theme) => ({
             paddingLeft: theme.spacing(7),
         },
         [theme.breakpoints.down(1184)]: {
-            flexBasis: 232 - Number(theme.spacing(2.5)),
-            maxWidth: 232 - Number(theme.spacing(2.5)),
+            flexBasis: 212,
+            maxWidth: 212,
         },
     },
     title: {
