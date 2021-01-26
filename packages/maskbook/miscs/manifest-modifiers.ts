@@ -1,4 +1,4 @@
-import base from '../packages/maskbook/src/manifest.json'
+import base from '../src/manifest.json'
 type Manifest = typeof base & { [key: string]: any }
 export function manifestV3(manifest: Manifest) {
     const isDev = manifest.content_security_policy

@@ -30,10 +30,11 @@ import ManifestPlugin from 'webpack-extension-manifest-plugin'
 import git from '@nice-labs/git-rev'
 import rimraf from 'rimraf'
 
-import * as modifiers from './scripts/manifest-modifiers'
+import * as modifiers from './miscs/manifest-modifiers'
 import { promisify } from 'util'
 
 const src = (file: string) => path.join(__dirname, file)
+const root = (file: string) => path.join(__dirname, '../../', file)
 const publicDir = src('./public')
 
 function EnvironmentPluginCache(def: Record<string, any>) {
@@ -90,7 +91,7 @@ function config(opts: {
                 lodash: 'lodash-es',
                 // Strange...
                 '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
-                'xhr2-cookies': require.resolve('./scripts/package-overrides/xhr2-cookies'),
+                'xhr2-cookies': require.resolve('./miscs/package-overrides/xhr2-cookies'),
             },
             // Polyfill those Node built-ins
             fallback: {
@@ -98,6 +99,8 @@ function config(opts: {
                 https: 'https-browserify',
                 stream: 'stream-browserify',
                 crypto: 'crypto-browserify',
+                buffer: 'buffer',
+                'text-encoding': '@sinonjs/text-encoding',
             },
         },
         module: {
@@ -112,7 +115,7 @@ function config(opts: {
                 {
                     test: /\.(ts|tsx)$/,
                     parser: { worker: ['OnDemandWorker', '...'] },
-                    include: src('./packages/maskbook/src'),
+                    include: src('./src'),
                     loader: require.resolve('ts-loader'),
                     options: {
                         transpileOnly: true,
@@ -187,6 +190,7 @@ function config(opts: {
             publicPath: '/',
         },
         ignoreWarnings: [/Failed to parse source map/],
+        // @ts-ignore
         devServer: {
             // Have to write disk cause plugin cannot be loaded over network
             writeToDisk: true,
@@ -221,8 +225,8 @@ function config(opts: {
 export default async function (cli_env: Record<string, boolean> = {}, argv: { mode?: 'production' | 'development' }) {
     const target = getCompilationInfo(cli_env)
     const mode: 'production' | 'development' = argv.mode ?? 'production'
-    const dist = mode === 'production' ? src('./build') : src('./dist')
-    if (mode === 'production') await promisify(rimraf)(src('./build'))
+    const dist = mode === 'production' ? root('./build') : root('./dist')
+    if (mode === 'production') await promisify(rimraf)(root('./build'))
     const disableHMR = Boolean(process.env.NO_HMR)
     const isManifestV3 = target.runtimeEnv.manifest === 3
 
@@ -248,11 +252,11 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
         if (!target.FirefoxEngine && !target.iOS)
             main.plugins!.push(new ProvidePlugin({ browser: 'webextension-polyfill' }))
         main.entry = {
-            'options-page': withReactDevTools(src('./packages/maskbook/src/extension/options-page/index.tsx')),
-            'content-script': withReactDevTools(src('./packages/maskbook/src/content-script.ts')),
-            popup: withReactDevTools(src('./packages/maskbook/src/extension/popup-page/index.tsx')),
-            'background-service': src('./packages/maskbook/src/background-service.ts'),
-            debug: src('./packages/maskbook/src/extension/debug-page'),
+            'options-page': withReactDevTools(src('./src/extension/options-page/index.tsx')),
+            'content-script': withReactDevTools(src('./src/content-script.ts')),
+            popup: withReactDevTools(src('./src/extension/popup-page/index.tsx')),
+            'background-service': src('./src/background-service.ts'),
+            debug: src('./src/extension/debug-page'),
         }
         if (isManifestV3) delete main.entry['background-script']
         for (const entry in main.entry) {
@@ -269,7 +273,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     }
     // Modify ManifestV3
     {
-        manifestV3.entry = { 'background-worker': src('./packages/maskbook/src/background-worker.ts') }
+        manifestV3.entry = { 'background-worker': src('./src/background-worker.ts') }
         manifestV3.target = ['worker', 'es2018']
         main.plugins!.push(new WebExtensionTarget())
         // ? Service workers must registered at the / root
@@ -277,7 +281,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     }
     // Modify injectedScript
     {
-        injectedScript.entry = { 'injected-script': src('./packages/maskbook/src/extension/injected-script/index.ts') }
+        injectedScript.entry = { 'injected-script': src('./src/extension/injected-script/index.ts') }
         injectedScript.optimization.splitChunks = false
     }
     if (mode === 'production') return [main, isManifestV3 && manifestV3, injectedScript].filter(Boolean)
@@ -290,12 +294,12 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     function withReactDevTools(...x: string[]) {
         // ! Use Firefox Nightly or enable network.websocket.allowInsecureFromHTTPS in about:config, then remove this line (but don't commit)
         if (target.FirefoxEngine) return x
-        if (mode === 'development') return [src('./scripts/react-devtools.js'), ...x]
+        if (mode === 'development') return [src('./miscs/package-overrides/react-devtools'), ...x]
         return x
     }
     function iOSWebExtensionShimHack(...path: string[]) {
         if (!target.iOS && !target.Android) return path
-        return [...path, src('./packages/maskbook/src/polyfill/permissions.js')]
+        return [...path, src('./src/polyfill/permissions.js')]
     }
     function getBuildNotificationPlugins() {
         if (mode === 'production') return []
@@ -303,7 +307,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
         return [new NotifierPlugin(opt)]
     }
     function getManifestPlugin() {
-        const manifest = require('./packages/maskbook/src/manifest.json')
+        const manifest = require('./src/manifest.json')
         if (target.Chromium) modifiers.chromium(manifest)
         else if (target.Firefox) modifiers.firefox(manifest)
         else if (target.Android) modifiers.geckoview(manifest)
@@ -435,7 +439,7 @@ function toArray(x: string | string[]) {
     return typeof x === 'string' ? [x] : x
 }
 
-const templateContent = fs.readFileSync(src('./scripts/template.html'), 'utf8')
+const templateContent = fs.readFileSync(src('./miscs/template.html'), 'utf8')
 function getHTMLPlugin(options: HTMLPlugin.Options = {}) {
     return new HTMLPlugin({
         templateContent,
