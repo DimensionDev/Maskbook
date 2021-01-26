@@ -70,7 +70,7 @@ type EncodeImageOptions = {
 
 export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImageOptions) {
     const { template } = options
-    const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
+    buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
     const mask = await getMaskBuf(template === 'v2' || template === 'v4' ? template : 'transparent')
     const encodedOptions: EncodeOptions = {
         ...defaultOptions,
@@ -82,15 +82,15 @@ export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImag
         transformAlgorithm: TransformAlgorithm.FFT1D,
         ...options,
     }
-    return encodeArrayBuffer(await encode(_buf, mask, encodedOptions))
+    return encodeArrayBuffer(await encode(buf, mask, encodedOptions))
 }
 
 type DecodeImageOptions = PartialRequired<Required<DecodeOptions>, 'pass'>
 
 export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImageOptions) {
-    const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
-    const _dimension = getDimension(_buf)
-    const preset = dimensionPreset.find((d) => isSameDimension(d, _dimension))
+    buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
+    const dimension = getDimension(buf)
+    const preset = dimensionPreset.find((d) => isSameDimension(d, dimension))
     if (!preset) return ''
     const _options: DecodeOptions = {
         ...defaultOptions,
@@ -99,10 +99,10 @@ export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImag
         ...options,
     }
     try {
-        return await decode(_buf, await getMaskBuf(preset.mask), _options)
+        return await decode(buf, await getMaskBuf(preset.mask), _options)
     } catch {
         _options.version = AlgorithmVersion.V1
-        return decode(_buf, await getMaskBuf(preset.mask), _options)
+        return decode(buf, await getMaskBuf(preset.mask), _options)
     }
 }
 
