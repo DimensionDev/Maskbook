@@ -24,17 +24,27 @@ export interface DashboardFrameProps extends React.PropsWithChildren<{}> {
 
 const useStyles = makeStyles((theme) => ({
     appBar: {},
+    toolbar: {
+        [theme.breakpoints.up(1184)]: {
+            paddingLeft: theme.spacing(0),
+        },
+        [theme.breakpoints.down(1184)]: {
+            paddingLeft: theme.spacing(2.5),
+        },
+    },
     root: {
         backgroundColor: theme.palette.background.paper,
         height: `calc(100vh - ${theme.mixins.toolbar.minHeight}px)`,
     },
     temporaryDrawer: {
         width: 232,
+        // Or theme.xxx.width?
+        // like width: theme.layout.navigation.width,
     },
     temporaryPaper: {
         width: 232,
         top: theme.mixins.toolbar.minHeight,
-        paddingTop: 60,
+        paddingTop: theme.spacing(7.5),
         background: new Color(theme.palette.background.paper).alpha(0.8).toString(),
         backdropFilter: 'blur(4px)',
     },
@@ -50,23 +60,31 @@ const useStyles = makeStyles((theme) => ({
     },
     shapeHelper: {
         backgroundColor: theme.palette.background.default,
-        paddingBottom: 0,
+        paddingBottom: theme.spacing(0),
     },
     container: {
         backgroundColor: theme.palette.background.paper,
     },
     logo: {
+        [theme.breakpoints.up(1184)]: {
+            paddingLeft: theme.spacing(7),
+        },
         [theme.breakpoints.down(1184)]: {
-            flexBasis: 232,
-            maxWidth: 232,
+            flexBasis: 232 - Number(theme.spacing(2.5)),
+            maxWidth: 232 - Number(theme.spacing(2.5)),
         },
     },
     title: {
         minHeight: 40,
         alignItems: 'center',
+        paddingLeft: theme.spacing(4.25),
         [theme.breakpoints.down(1184)]: {
             flex: 1,
         },
+    },
+    menuButton: {
+        paddingLeft: theme.spacing(0),
+        paddingRight: theme.spacing(1.5),
     },
 }))
 
@@ -81,10 +99,10 @@ export function DashboardFrame(props: DashboardFrameProps) {
     return (
         <>
             <AppBar position="relative" color="inherit" elevation={0} className={classes.appBar}>
-                <Toolbar component={Grid} container>
+                <Toolbar component={Grid} container className={classes.toolbar}>
                     <Grid item xs={2} container alignItems="center" className={classes.logo}>
                         {matches && (
-                            <IconButton onClick={() => setOpen(!open)}>
+                            <IconButton onClick={() => setOpen(!open)} className={classes.menuButton}>
                                 <MenuIcon />
                             </IconButton>
                         )}

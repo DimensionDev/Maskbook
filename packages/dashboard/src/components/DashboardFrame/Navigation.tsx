@@ -50,7 +50,6 @@ export function Navigation({}: NavigationProps) {
     const routerMatch = useRouteMatch(Routes.Wallets)
     return (
         <>
-
             <List>
                 {!matches && <Toolbar />}
                 <ListItemLink to={Routes.Personas}>
