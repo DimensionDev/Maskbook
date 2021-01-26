@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
             paddingLeft: theme.spacing(0),
         },
         [theme.breakpoints.down(1184)]: {
-            paddingLeft: theme.spacing(2.5),
+            paddingLeft: theme.spacing(1),
         },
     },
     root: {
@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     menuButton: {
-        paddingLeft: theme.spacing(0),
+        paddingLeft: theme.spacing(1.5),
         paddingRight: theme.spacing(1.5),
     },
 }))
@@ -102,7 +102,7 @@ export function DashboardFrame(props: DashboardFrameProps) {
                 <Toolbar component={Grid} container className={classes.toolbar}>
                     <Grid item xs={2} container alignItems="center" className={classes.logo}>
                         {matches && (
-                            <IconButton onClick={() => setOpen(!open)} className={classes.menuButton}>
+                            <IconButton onClick={() => setOpen(!open)} className={classes.menuButton} >
                                 <MenuIcon />
                             </IconButton>
                         )}
