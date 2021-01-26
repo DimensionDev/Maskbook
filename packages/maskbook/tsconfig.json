@@ -5,5 +5,6 @@
     "outDir": "./dist/"
   },
   "include": ["./src/**/*.tsx", "./src/**/*.ts", "./src/**/*.json", "./abis/*.json"],
-  "references": [{ "path": "../shared/" }, { "path": "../theme/" }]
+  "references": [{ "path": "../shared/" }, { "path": "../theme/" }],
+  "ts-node": { "transpileOnly": true, "compilerOptions": { "module": "CommonJS" } }
 }

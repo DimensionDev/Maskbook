@@ -1,4 +1,5 @@
 const { spawn } = require('child_process')
+const { resolve } = require('path')
 
 const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base']
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'manifest-v3']
@@ -29,7 +30,12 @@ async function main(mode) {
         if (!confirm) return
     }
 
-    const command = ['--mode', mode === 'dev' ? 'development' : 'production']
+    const command = [
+        '--mode',
+        mode === 'dev' ? 'development' : 'production',
+        '-c',
+        resolve(__dirname, '../maskbook/webpack.config.ts'),
+    ]
     if (mode === 'dev') command.unshift('serve')
     args.filter((x) => !x.startsWith('-')).forEach((target) => {
         command.push('--env', target)

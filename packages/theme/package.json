@@ -8,6 +8,9 @@
     "build-storybook": "build -- build-storybook",
     "start": "dev -- start-storybook -p 6006"
   },
+  "dependencies": {
+    "lodash-es": "^4.17.20"
+  },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@storybook/addon-actions": "^6.1.9",
