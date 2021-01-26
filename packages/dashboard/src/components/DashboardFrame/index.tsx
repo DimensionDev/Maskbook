@@ -10,11 +10,11 @@ import {
     Theme,
     IconButton,
 } from '@material-ui/core'
-import { Menu as MenuIcon } from '@material-ui/icons'
+import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
 import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
 import clz from 'classnames'
 import { Navigation } from './Navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Color from 'color'
 
 export interface DashboardFrameProps extends React.PropsWithChildren<{}> {
@@ -96,14 +96,18 @@ export function DashboardFrame(props: DashboardFrameProps) {
 
     const [open, setOpen] = useState(false)
 
+    useEffect(() => {
+        setOpen(false)
+    }, [matches])
+
     return (
         <>
             <AppBar position="relative" color="inherit" elevation={0} className={classes.appBar}>
                 <Toolbar component={Grid} container className={classes.toolbar}>
                     <Grid item xs={2} container alignItems="center" className={classes.logo}>
                         {matches && (
-                            <IconButton onClick={() => setOpen(!open)} className={classes.menuButton} >
-                                <MenuIcon />
+                            <IconButton onClick={() => setOpen(!open)} className={classes.menuButton}>
+                                {open ? <CloseIcon /> : <MenuIcon />}
                             </IconButton>
                         )}
                         <img height={40} alt="Mask Logo" src="https://mask.io/assets/icons/logo.svg" />
