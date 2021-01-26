@@ -4,7 +4,7 @@ import { COTM_CONSTANTS } from '../constants'
 import { useAllTokensOfOwner } from '../hooks/useAllTokensOfOwner'
 import { TokenCard } from './TokenCard'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { getERC721TokenDetailed } from '../../../web3/suspends/getERC721TokenDetailed'
+import { useAsyncERC721TokenDetailed } from '../../../web3/suspends/getERC721TokenDetailed'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -37,7 +37,7 @@ export function TokenAlbum(props: TokenAlbumProps) {
 
     // fetch the NFT token
     const COTM_TOKEN_ADDRESS = useConstant(COTM_CONSTANTS, 'COTM_TOKEN_ADDRESS')
-    const COTM_Token = getERC721TokenDetailed(COTM_TOKEN_ADDRESS)
+    const COTM_Token = useAsyncERC721TokenDetailed(COTM_TOKEN_ADDRESS)
     const tokens = useAllTokensOfOwner(COTM_Token)
     const { t } = useI18N()
     return (
