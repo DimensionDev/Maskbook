@@ -1,12 +1,12 @@
 /* eslint-disable no-bitwise */
-import { imgType } from '@dimensiondev/stego-js/cjs/helper'
+import { getImageType } from '@dimensiondev/stego-js'
 
 export function getDimension(buf: ArrayBuffer) {
     const fallback = {
         width: 0,
         height: 0,
     }
-    switch (imgType(new Uint8Array(buf))) {
+    switch (getImageType(new Uint8Array(buf))) {
         case 'image/jpeg':
             return getDimensionAsJPEG(buf) ?? fallback
         case 'image/png':

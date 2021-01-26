@@ -1,13 +1,16 @@
-import { encode, decode } from '@dimensiondev/stego-js/cjs/dom'
-import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'
-import { TransformAlgorithm } from '@dimensiondev/stego-js/cjs/transform'
-import type { EncodeOptions, DecodeOptions } from '@dimensiondev/stego-js/cjs/stego'
-import { getUrl, downloadUrl } from '../../utils/utils'
-import { memoizePromise } from '../../utils/memoize'
-import { getDimension } from '../../utils/image'
-import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
-
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+import { decodeArrayBuffer, encodeArrayBuffer, memoizePromise } from '@dimensiondev/kit'
+import {
+    AlgorithmVersion,
+    DecodeOptions,
+    EncodeOptions,
+    GrayscaleAlgorithm,
+    TransformAlgorithm,
+} from '@dimensiondev/stego-js'
+import { getDimension } from '../../../utils/image'
+import { downloadUrl, getUrl } from '../../../utils/utils'
+import { decode, encode } from './api'
+
 assertEnvironment(Environment.ManifestBackground)
 
 type Template = 'v1' | 'v2' | 'v3' | 'v4' | 'eth' | 'dai' | 'okb'
@@ -46,7 +49,7 @@ const dimensionPreset: (Dimension & { mask: Mask })[] = [
     },
 ]
 
-const defaultOptions = {
+const defaultOptions: Pick<EncodeOptions, 'size' | 'narrow' | 'copies' | 'tolerance'> = {
     size: 8,
     narrow: 0,
     copies: 3,
@@ -68,9 +71,11 @@ type EncodeImageOptions = {
 export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImageOptions) {
     const { template } = options
     const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
+    const mask = await getMaskBuf(template === 'v2' || template === 'v4' ? template : 'transparent')
     return encodeArrayBuffer(
-        await encode(_buf, await getMaskBuf(template === 'v2' || template === 'v4' ? template : 'transparent'), {
+        await encode(_buf, mask, {
             ...defaultOptions,
+            version: AlgorithmVersion.V1,
             fakeMaskPixels: false,
             cropEdgePixels: template !== 'v2' && template !== 'v3' && template !== 'v4',
             exhaustPixels: true,
@@ -90,6 +95,7 @@ export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImag
     if (!preset) return ''
     return decode(_buf, await getMaskBuf(preset.mask), {
         ...defaultOptions,
+        version: AlgorithmVersion.V1,
         transformAlgorithm: TransformAlgorithm.FFT1D,
         ...options,
     })

@@ -3,7 +3,7 @@ import { untilDocumentReady } from '../../../utils/dom'
 import { getUrl, downloadUrl, pasteImageToActiveElements } from '../../../utils/utils'
 import Services from '../../../extension/service'
 import { decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
-import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'
+import { GrayscaleAlgorithm } from '@dimensiondev/stego-js'
 import { MaskMessage } from '../../../utils/messages'
 
 export async function uploadToPostBoxFacebook(
