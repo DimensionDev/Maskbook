@@ -1,0 +1,6 @@
+packages:
+  - 'packages/cli-dev-build'
+  - 'packages/dashboard'
+  - 'packages/maskbook'
+  - 'packages/shared'
+  - 'packages/theme'

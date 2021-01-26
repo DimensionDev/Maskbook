@@ -3,13 +3,6 @@
   "version": "1.22.3",
   "private": true,
   "license": "AGPL-3.0-or-later",
-  "workspaces": [
-    "packages/maskbook",
-    "packages/cli-dev-build",
-    "packages/theme",
-    "packages/dashboard",
-    "packages/shared"
-  ],
   "scripts": {
     "start": "dev",
     "start-e2e": "env target=E2E dev",
@@ -31,7 +24,7 @@
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
-    "preinstall": "npx --yes only-allow npm"
+    "preinstall": "npx --yes only-allow pnpm"
   },
   "husky": {
     "hooks": {
@@ -80,8 +73,14 @@
     "type-coverage": "^2.14.8",
     "typescript": "^4.1.3"
   },
+  "pnpm": {
+    "overrides": {
+      "react": "=0.0.0-experimental-94c0244ba",
+      "react-dom": "=0.0.0-experimental-94c0244ba"
+    }
+  },
   "engines": {
     "node": ">=14.4.0",
-    "npm": ">=7"
+    "pnpm": ">=5"
   }
 }

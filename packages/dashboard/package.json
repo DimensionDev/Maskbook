@@ -27,7 +27,6 @@
     "snowpack": "^2",
     "@snowpack/plugin-dotenv": "^2.0.5",
     "@snowpack/plugin-react-refresh": "^2.3.9",
-    "@types/snowpack-env": "^2.3.2",
-    "@pmmmwh/react-refresh-webpack-plugin": "=0.4.2"
+    "@types/snowpack-env": "^2.3.2"
   }
 }
