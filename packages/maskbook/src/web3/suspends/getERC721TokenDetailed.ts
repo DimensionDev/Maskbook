@@ -33,6 +33,7 @@ async function ERC721TokenDetailed_(address: string, token?: Partial<ERC721Token
 }
 
 export function getERC721TokenDetailed(address: string, token?: Partial<ERC721TokenDetailed>) {
-    if (!cache.has(address)) throw ERC721TokenDetailed_(address, token)
+    token = cache.get(address)
+    if (!token) throw ERC721TokenDetailed_(address, token)
     return cache.get(address)!
 }
