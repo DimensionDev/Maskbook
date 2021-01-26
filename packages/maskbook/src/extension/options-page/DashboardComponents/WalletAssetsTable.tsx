@@ -181,7 +181,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         </div>
     )
 
-    const filter = (a: AssetDetailed) =>
+    const filterPriceValue = (a: AssetDetailed) =>
         Number(price) !== 0 ? new BigNumber(a.value?.[CurrencyType.USD] || '0').isGreaterThan(price) : true
 
     return (
@@ -216,7 +216,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                     .filter(excludeETH)
                                     .filter(excludeZero)
                                     .sort(sort)
-                                    .filter(filter)
+                                    .filter(filterPriceValue)
                                     .map((x, idx) => (idx < viewLength ? viewDetailed(x) : null))}
                             </TableBody>
                         </Table>

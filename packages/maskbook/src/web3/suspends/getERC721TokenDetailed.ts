@@ -5,7 +5,7 @@ import { useChainId } from '../hooks/useChainState'
 import { useSingleContractMultipleData } from '../hooks/useMulticall'
 import { ERC721TokenDetailed, EthereumTokenType } from '../types'
 
-let token_: ERC721TokenDetailed | undefined = undefined
+const cache = new Map<string, ERC721TokenDetailed | undefined>()
 async function ERC721TokenDetailed_(address: string, token?: Partial<ERC721TokenDetailed>) {
     const chainId = useChainId()
     const erc721TokenContract = useERC721TokenContract(address)
@@ -20,7 +20,7 @@ async function ERC721TokenDetailed_(address: string, token?: Partial<ERC721Token
 
     // compose
     const [name, symbol, baseURI] = results.map((x) => (x.error ? undefined : x.value))
-    token_ = {
+    const token_ = {
         type: EthereumTokenType.ERC721,
         address: formatChecksumAddress(address),
         chainId,
@@ -28,11 +28,11 @@ async function ERC721TokenDetailed_(address: string, token?: Partial<ERC721Token
         symbol: symbol ?? token?.symbol ?? '',
         baseURI: baseURI ?? token?.baseURI ?? '',
     } as ERC721TokenDetailed
-
+    cache.set(address, token_)
     return
 }
 
 export function getERC721TokenDetailed(address: string, token?: Partial<ERC721TokenDetailed>) {
-    if (!token_) throw ERC721TokenDetailed_(address)
-    return token_
+    if (!cache.has(address)) throw ERC721TokenDetailed_(address, token)
+    return cache.get(address)!
 }
