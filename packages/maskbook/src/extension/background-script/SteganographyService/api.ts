@@ -9,7 +9,6 @@ import { OnDemandWorker } from '../../../web-workers/OnDemandWorker'
 export let StegoWorker: OnDemandWorker | undefined
 
 if (process.env.architecture) {
-    __webpack_public_path__ = browser.runtime.getURL('/')
     StegoWorker = new OnDemandWorker(new URL('./worker.ts', import.meta.url), { name: 'StegoWorker' })
 }
 
