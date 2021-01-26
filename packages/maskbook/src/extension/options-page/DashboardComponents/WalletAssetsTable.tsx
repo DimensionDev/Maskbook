@@ -93,7 +93,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const [more, setMore] = useState(false)
     const [price, setPrice] = useState(MIN_VALUE)
 
-    const haveETH = detailedTokens.some((x) => isETH(x.token.address))
+    const haveETH = detailedTokens.some(filterETH)
     const [viewLength, setViewLength] = useState(
         detailedTokens.length > MAX_TOKENS_LENGTH
             ? haveETH
