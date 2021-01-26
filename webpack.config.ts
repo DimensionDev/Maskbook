@@ -287,11 +287,11 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     webpack(injectedScript, () => {}).watch({}, () => {})
     return main
 
-    function withReactDevTools(...src: string[]) {
+    function withReactDevTools(...x: string[]) {
         // ! Use Firefox Nightly or enable network.websocket.allowInsecureFromHTTPS in about:config, then remove this line (but don't commit)
-        if (target.FirefoxEngine) return src
-        if (mode === 'development') return ['react-devtools', ...src]
-        return src
+        if (target.FirefoxEngine) return x
+        if (mode === 'development') return [src('./scripts/react-devtools.js'), ...x]
+        return x
     }
     function iOSWebExtensionShimHack(...path: string[]) {
         if (!target.iOS && !target.Android) return path

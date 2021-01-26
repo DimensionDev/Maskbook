@@ -208,7 +208,7 @@
     "prettier": "^2.1.2",
     "puppeteer": "^5.5.0",
     "react-dev-utils": "^11.0.1",
-    "react-devtools": "^4.10.1",
+    "react-devtools-core": "^4.10.1",
     "react-docgen-typescript-loader": "^3.7.2",
     "react-refresh": "^0.9.0",
     "react-refresh-typescript": "^1.1.0",
