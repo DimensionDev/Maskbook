@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import type { ERC721 } from '../../contracts/ERC721'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { useChainId } from '../hooks/useChainState'
@@ -11,13 +11,9 @@ async function ERC721TokenDetailed_(address: string, token?: Partial<ERC721Token
     const erc721TokenContract = useERC721TokenContract(address)
 
     // compose calls
-    const { names, callDatas } = useMemo(
-        () => ({
-            names: ['name', 'symbol', 'baseURI'] as 'name'[],
-            callDatas: new Array(3).fill([]),
-        }),
-        [],
-    )
+    const names = ['name', 'symbol', 'baseURI'] as (keyof ERC721['methods'])[]
+    const callDatas = new Array(3).fill([])
+
     const [results, calls, _, callback] = useSingleContractMultipleData(erc721TokenContract, names, callDatas)
 
     await callback(calls)
