@@ -12,8 +12,10 @@ import {
 } from '@material-ui/core'
 import { Menu as MenuIcon } from '@material-ui/icons'
 import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
+import clz from 'classnames'
 import { Navigation } from './Navigation'
 import { useState } from 'react'
+import Color from 'color'
 
 export interface DashboardFrameProps extends React.PropsWithChildren<{}> {
     title: React.ReactNode | string
@@ -22,15 +24,36 @@ export interface DashboardFrameProps extends React.PropsWithChildren<{}> {
 
 const useStyles = makeStyles((theme) => ({
     appBar: {},
-    drawer: {
+    root: {
+        backgroundColor: theme.palette.background.paper,
+        height: `calc(100vh - ${theme.mixins.toolbar.minHeight}px)`,
+    },
+    temporaryDrawer: {
         width: 232,
     },
-    drawerPaper: {
+    temporaryPaper: {
         width: 232,
         top: theme.mixins.toolbar.minHeight,
         paddingTop: 60,
-        background: 'rgba(255,255,255,0.8)',
+        background: new Color(theme.palette.background.paper).alpha(0.8).toString(),
         backdropFilter: 'blur(4px)',
+    },
+    containment: {
+        overflow: 'auto',
+        contain: 'strict',
+    },
+    shape: {
+        height: '100%',
+        padding: theme.spacing(2),
+        borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
+        borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
+    },
+    shapeHelper: {
+        backgroundColor: theme.palette.background.default,
+        paddingBottom: 0,
+    },
+    container: {
+        backgroundColor: theme.palette.background.paper,
     },
     logo: {
         [theme.breakpoints.down(1184)]: {
@@ -74,7 +97,7 @@ export function DashboardFrame(props: DashboardFrameProps) {
                     </Grid>
                 </Toolbar>
             </AppBar>
-            <Grid container>
+            <Grid container className={classes.root}>
                 {!matches ? (
                     <Grid xs={2} item>
                         <Navigation />
@@ -86,13 +109,17 @@ export function DashboardFrame(props: DashboardFrameProps) {
                         BackdropProps={{ invisible: true }}
                         PaperProps={{ elevation: 0 }}
                         variant="temporary"
-                        className={classes.drawer}
-                        classes={{ paper: classes.drawerPaper }}>
+                        // className={classes.temporaryDrawer}
+                        classes={{ paper: classes.temporaryPaper }}>
                         <Navigation />
                     </Drawer>
                 )}
-                <Grid xs={matches ? 12 : 10} item>
-                    <ErrorBoundary>{props.children}</ErrorBoundary>
+                <Grid item xs className={clz(classes.containment)}>
+                    <div className={clz(classes.shapeHelper, classes.shape)}>
+                        <div className={clz(classes.container, classes.shape)}>
+                            <ErrorBoundary>{props.children}</ErrorBoundary>
+                        </div>
+                    </div>
                 </Grid>
             </Grid>
         </>
