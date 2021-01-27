@@ -12,7 +12,7 @@ declare module 'typeson' {
             sync?: true
             throwOnBadSyncType?: true
         })
-        register(register: unknown[] | Record<string, CustomRegister<any, any> | NewableFunction>): Typeson
+        register(register: any): Typeson
         encapsulate(data: unknown): object
         revive<T>(data: unknown): T
         stringify(...args: Parameters<JSON['stringify']>): Promise<string> | string

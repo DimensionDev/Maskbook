@@ -16,9 +16,9 @@ export function serialize<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q) =>
         typeson.register({
             [name]:
                 ser && des
-                    ? [(x) => x instanceof constructor, ser, des]
+                    ? [(x: unknown) => x instanceof constructor, ser, des]
                     : [
-                          (x) => x instanceof constructor,
+                          (x: unknown) => x instanceof constructor,
                           (x: unknown) => {
                               const y = Object.assign({}, x)
                               Object.getOwnPropertySymbols(y).forEach((x) => Reflect.deleteProperty(y, x))
@@ -36,19 +36,16 @@ export function serialize<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q) =>
 }
 
 // @ts-ignore
+import structuredClone from 'typeson-registry/presets/structured-cloning' // @ts-ignore
 import builtins from 'typeson-registry/dist/presets/builtin' // @ts-ignore
-import blob from 'typeson-registry/dist/types/blob' // @ts-ignore
-import file from 'typeson-registry/dist/types/file' // @ts-ignore
-import fileList from 'typeson-registry/dist/types/filelist' // @ts-ignore
-import imageBitMap from 'typeson-registry/dist/types/imagebitmap' // @ts-ignore
 import num from 'typeson-registry/dist/presets/special-numbers'
 const typeson = new Typeson({})
-typeson.register(builtins)
-typeson.register(num)
-typeson.register([blob, file, fileList, imageBitMap, num])
 serialize('Ok')(Ok)
 serialize('Err')(Err)
 serialize('BigNumber')(BigNumber)
+typeson.register(num)
+typeson.register(builtins)
+typeson.register(structuredClone)
 export const serializer: Serialization = {
     serialization(from: unknown) {
         return typeson.encapsulate(from)
