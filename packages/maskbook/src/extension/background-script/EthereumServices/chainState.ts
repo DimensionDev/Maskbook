@@ -23,7 +23,7 @@ import { Flags } from '../../../utils/flags'
 const effect = startEffects(module.hot)
 
 //#region tracking chain state
-const revalidateChainState = debounce(
+export const updateChainState = debounce(
     async () => {
         const wallets = await getWallets()
         const chainIds = uniq(await Promise.all(wallets.map((x) => getChainId(x.address))))
@@ -35,7 +35,8 @@ const revalidateChainState = debounce(
                 })),
             ),
         )
-        return false // never stop
+        // reset the polling if chain state updated successfully
+        if (typeof resetPoolTask === 'function') resetPoolTask()
     },
     300,
     {
@@ -44,19 +45,28 @@ const revalidateChainState = debounce(
 )
 
 // polling the newest block state from the chain
-effect(() =>
-    pollingTask(revalidateChainState as any, {
-        delay: 30 /* seconds */ * 1000 /* milliseconds */,
-    }),
-)
+let resetPoolTask: () => void
+effect(() => {
+    const { reset } = pollingTask(
+        async () => {
+            await updateChainState()
+            return false // never stop the polling
+        },
+        {
+            delay: 30 /* seconds */ * 1000 /* milliseconds */,
+        },
+    )
+    resetPoolTask = reset
+    return reset
+})
 
 // revalidate ChainState if the chainId of current provider was changed
-effect(() => currentMaskbookChainIdSettings.addListener(revalidateChainState))
-effect(() => currentMetaMaskChainIdSettings.addListener(revalidateChainState))
-effect(() => currentWalletConnectChainIdSettings.addListener(revalidateChainState))
+effect(() => currentMaskbookChainIdSettings.addListener(updateChainState))
+effect(() => currentMetaMaskChainIdSettings.addListener(updateChainState))
+effect(() => currentWalletConnectChainIdSettings.addListener(updateChainState))
 
 // revaldiate if the current wallet was changed
-effect(() => WalletMessages.events.walletsUpdated.on(revalidateChainState))
+effect(() => WalletMessages.events.walletsUpdated.on(updateChainState))
 //#endregion
 
 //#region tracking wallets
