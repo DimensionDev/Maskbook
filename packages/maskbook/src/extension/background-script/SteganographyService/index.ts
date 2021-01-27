@@ -1,5 +1,5 @@
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { decodeArrayBuffer, encodeArrayBuffer, memoizePromise } from '@dimensiondev/kit'
+import { decodeArrayBuffer, memoizePromise } from '@dimensiondev/kit'
 import {
     AlgorithmVersion,
     DecodeOptions,
@@ -68,9 +68,8 @@ type EncodeImageOptions = {
     template?: Template
 } & PartialRequired<Required<EncodeOptions>, 'text' | 'pass'>
 
-export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImageOptions) {
+export async function encodeImage(buf: ArrayBuffer, options: EncodeImageOptions): Promise<ArrayBuffer> {
     const { template } = options
-    buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
     const mask = await getMaskBuf(template === 'v2' || template === 'v4' ? template : 'transparent')
     const encodedOptions: EncodeOptions = {
         ...defaultOptions,
@@ -82,12 +81,12 @@ export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImag
         transformAlgorithm: TransformAlgorithm.FFT1D,
         ...options,
     }
-    return encodeArrayBuffer(await encode(buf, mask, encodedOptions))
+    return encode(buf, mask, encodedOptions)
 }
 
 type DecodeImageOptions = PartialRequired<Required<DecodeOptions>, 'pass'>
 
-export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImageOptions) {
+export async function decodeImage(buf: ArrayBuffer, options: DecodeImageOptions): Promise<string> {
     buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
     const dimension = getDimension(buf)
     const preset = dimensionPreset.find((d) => isSameDimension(d, dimension))
@@ -106,6 +105,6 @@ export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImag
     }
 }
 
-export async function decodeImageUrl(url: string, options: DecodeImageOptions) {
+export async function decodeImageUrl(url: string, options: DecodeImageOptions): Promise<string> {
     return decodeImage(await (await downloadUrl(url)).arrayBuffer(), options)
 }

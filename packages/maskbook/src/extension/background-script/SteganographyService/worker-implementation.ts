@@ -1,6 +1,6 @@
 import { algorithms, DecodeOptions, EncodeOptions } from '@dimensiondev/stego-js'
 
-export function encode(image: ImageData, mask: ImageData, options: EncodeOptions) {
+export async function encode(image: ImageData, mask: ImageData, options: EncodeOptions) {
     return algorithms[options.version].encode(image, mask, options)
 }
 

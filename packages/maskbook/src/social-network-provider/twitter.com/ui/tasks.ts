@@ -86,13 +86,11 @@ const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text,
         ),
     ).then((x) => x.arrayBuffer())
     const secretImage = new Uint8Array(
-        decodeArrayBuffer(
-            await Services.Steganography.encodeImage(encodeArrayBuffer(blankImage), {
-                text,
-                pass: lastRecognizedIdentity.value ? lastRecognizedIdentity.value.identifier.toText() : '',
-                template,
-            }),
-        ),
+        await Services.Steganography.encodeImage(blankImage, {
+            text,
+            pass: lastRecognizedIdentity.value ? lastRecognizedIdentity.value.identifier.toText() : '',
+            template,
+        }),
     )
     pasteImageToActiveElements(secretImage)
     await untilDocumentReady()

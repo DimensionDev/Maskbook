@@ -20,11 +20,9 @@ const options: AsyncCallOptions = {
 const StegoAPI = AsyncCall<typeof import('./worker-implementation')>({}, options)
 
 export async function encode(image: ArrayBuffer, mask: ArrayBuffer, options: EncodeOptions) {
-    const { data, height, width } = await StegoAPI.encode(
-        cutImage(await toImageData(image)),
-        cutImage(await toImageData(mask)),
-        options,
-    )
+    const a = cutImage(await toImageData(image))
+    const b = cutImage(await toImageData(mask))
+    const { data, height, width } = await StegoAPI.encode(a, b, options)
     return toBuffer(data, height, width)
 }
 

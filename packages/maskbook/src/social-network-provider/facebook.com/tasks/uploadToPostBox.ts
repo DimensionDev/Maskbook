@@ -20,15 +20,13 @@ export async function uploadToPostBoxFacebook(
         ),
     ).then((x) => x.arrayBuffer())
     const secretImage = new Uint8Array(
-        decodeArrayBuffer(
-            await Services.Steganography.encodeImage(new Uint8Array(blankImage), {
-                text,
-                pass: lastRecognizedIdentity.value ? lastRecognizedIdentity.value.identifier.toText() : '',
-                template,
-                // ! the color image cannot compression resistance in Facebook
-                grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
-            }),
-        ),
+        await Services.Steganography.encodeImage(blankImage, {
+            text,
+            pass: lastRecognizedIdentity.value ? lastRecognizedIdentity.value.identifier.toText() : '',
+            template,
+            // ! the color image cannot compression resistance in Facebook
+            grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
+        }),
     )
     pasteImageToActiveElements(secretImage)
     await untilDocumentReady()
