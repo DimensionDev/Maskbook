@@ -473,6 +473,6 @@ export async function getPriceStats(
     }
 }
 
-export async function getPrice(coinId: string) {
+export async function getPrice(coinId: number) {
     return await coinMarketCapAPI.getPrice(coinId)
 }

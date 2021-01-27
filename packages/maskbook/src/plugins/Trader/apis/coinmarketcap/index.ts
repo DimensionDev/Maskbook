@@ -275,7 +275,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
 //#endregion
 
 //#region get price
-export async function getPrice(coinId: string) {
+export async function getPrice(coinId: number) {
     const priceState = await getPriceStat(coinId)
     return (priceState as unknown) as Promise<PriceState>
 }

@@ -10,44 +10,70 @@ export interface PriceState {
     v: number
 }
 
-function openWebSocket() {
-    return new Promise<WebSocket>((resolve, reject) => {
-        try {
-            const client = new WebSocket(CMC_LATEST_BASE_URL)
-            return resolve(client)
-        } catch (error) {
-            return reject(error)
-        }
-    })
+let webSocket: WebSocket | null = null
+let timeout = 250
+let connectInterval: any = null
+
+function checkWebSocket(coinId: number) {
+    if (!webSocket || webSocket.readyState === WebSocket.CLOSED) {
+        openWebSocket(coinId)
+    }
 }
 
-export function getPriceStat(coinId: string) {
+function openWebSocket(coinId: number): void {
+    if (!webSocket || webSocket.readyState === WebSocket.CLOSED) {
+        try {
+            const socket = new WebSocket(CMC_LATEST_BASE_URL)
+            socket.onopen = () => {
+                webSocket = socket
+                if (!connectInterval) {
+                    clearTimeout(connectInterval)
+                }
+
+                const params = {
+                    method: 'subscribe',
+                    id: 'price',
+                    data: {
+                        cryptoIds: [coinId],
+                    },
+                }
+                webSocket.send(JSON.stringify(params))
+            }
+
+            socket.onerror = (error) => {
+                console.error(error)
+                webSocket?.close()
+                webSocket = null
+            }
+
+            socket.onclose = () => {
+                webSocket = null
+                connectInterval = setTimeout(checkWebSocket, timeout, coinId)
+            }
+        } catch (error) {
+            console.error(error)
+            webSocket = null
+        }
+    }
+}
+
+export function getPriceStat(coinId: number) {
+    openWebSocket(coinId)
     return new Promise<PriceState>((resolve, reject) => {
-        openWebSocket()
-            .then((client) => {
-                client.onopen = () => {
-                    const params = {
-                        method: 'subscribe',
-                        id: 'price',
-                        data: {
-                            cryptoIds: [coinId],
-                        },
-                    }
-                    client.send(JSON.stringify(params))
+        if (webSocket) {
+            webSocket.onmessage = (ev) => {
+                if (typeof ev.data !== 'string') {
+                    return
                 }
-                client.onmessage = (ev) => {
-                    if (typeof ev.data !== 'string') {
-                        return
-                    }
-                    try {
-                        const prices = JSON.parse(ev.data)
-                        resolve(prices['d']['cr'])
-                    } catch (error) {
-                        console.log(error)
-                        reject(error)
-                    }
+                try {
+                    const prices = JSON.parse(ev.data)
+                    console.log(ev.data)
+                    resolve(prices['d']['cr'])
+                } catch (error) {
+                    console.log(error)
+                    reject(error)
                 }
-            })
-            .catch((error) => reject(error))
+            }
+        }
     })
 }
