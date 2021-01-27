@@ -22,7 +22,8 @@ async function onAccountsChanged(accounts: string[]) {
 }
 
 function onChainIdChanged(id: string) {
-    const chainId = Number.parseInt(id.replace(/^0x/, ''), 16) as ChainId
+    // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
+    const chainId = Number.parseInt(id, 16) as ChainId
     currentMetaMaskChainIdSettings.value = chainId === 0 ? ChainId.Mainnet : chainId
 }
 
@@ -59,11 +60,17 @@ export async function createWeb3() {
 
 export async function requestAccounts() {
     const web3 = await createWeb3()
+
+    // update accounts
     const accounts = await web3.eth.requestAccounts()
     await updateWalletInDB(first(accounts) ?? '', true)
+
+    // update chain id
+    const chainId = await web3.eth.getChainId()
+    onChainIdChanged(chainId.toString(16))
+
     return accounts
 }
-
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {
     const provider_ = currentSelectedWalletProviderSettings.value
 
