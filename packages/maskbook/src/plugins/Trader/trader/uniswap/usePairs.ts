@@ -28,11 +28,6 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
         )
     }, [context, tokenPairs])
 
-    useEffect(() => {
-        console.log('DEBUG: list of address')
-        console.log(listOfPairAddress)
-    }, [listOfPairAddress.join('')])
-
     // auto refresh pair reserves for each block
     const blockNumber = useBlockNumber(chainId)
 

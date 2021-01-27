@@ -28,6 +28,7 @@ import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { getActivatedUI } from '../../../../social-network/ui'
 import { EthereumMessages } from '../../../Ethereum/messages'
 import { SelectERC20TokenDialog } from '../../../Ethereum/UI/SelectERC20TokenDialog'
+import { EthereumBlockNumber } from '../../../../web3/UI/EthereumBlockNumber'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -305,6 +306,7 @@ export function Trader(props: TraderProps) {
                     ) : null}
                 </>
             ) : null}
+            <EthereumBlockNumber />
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
                 includeTokens={[]}
