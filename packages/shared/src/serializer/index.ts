@@ -1,4 +1,5 @@
 /// <reference path="./typeson.d.ts" />
+import 'regenerator-runtime'
 import Typeson from 'typeson'
 import type { Serialization } from 'async-call-rpc'
 import { Ok, Err } from 'ts-results'
@@ -16,9 +17,9 @@ export function serialize<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q) =>
         typeson.register({
             [name]:
                 ser && des
-                    ? [(x) => x instanceof constructor, ser, des]
+                    ? [(x: any) => x instanceof constructor, ser, des]
                     : [
-                          (x) => x instanceof constructor,
+                          (x: any) => x instanceof constructor,
                           (x: unknown) => {
                               const y = Object.assign({}, x)
                               Object.getOwnPropertySymbols(y).forEach((x) => Reflect.deleteProperty(y, x))
@@ -37,28 +38,26 @@ export function serialize<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q) =>
 
 // @ts-ignore
 import builtins from 'typeson-registry/dist/presets/builtin' // @ts-ignore
-import blob from 'typeson-registry/dist/types/blob' // @ts-ignore
-import file from 'typeson-registry/dist/types/file' // @ts-ignore
-import fileList from 'typeson-registry/dist/types/filelist' // @ts-ignore
-import imageBitMap from 'typeson-registry/dist/types/imagebitmap' // @ts-ignore
 import num from 'typeson-registry/dist/presets/special-numbers'
+import blobBased from './blob-based'
 const typeson = new Typeson({})
-typeson.register(builtins)
-typeson.register(num)
-typeson.register([blob, file, fileList, imageBitMap, num])
+typeson.register(blobBased)
 serialize('Ok')(Ok)
 serialize('Err')(Err)
 serialize('BigNumber')(BigNumber)
+typeson.register(num)
+typeson.register(builtins)
 export const serializer: Serialization = {
     serialization(from: unknown) {
-        return typeson.encapsulate(from)
+        return typeson.encapsulate(from, {}, { sync: false, throwOnBadSyncType: false })
     },
-    deserialization(to: string) {
+    async deserialization(to: string) {
         try {
-            return typeson.revive(to)
+            return await typeson.revive(to, { sync: false, throwOnBadSyncType: false })
         } catch (e) {
             console.error(e)
-            return {}
+            throw e
         }
     },
 }
+console.log(serializer)

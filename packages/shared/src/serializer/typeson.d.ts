@@ -6,15 +6,18 @@ declare module 'typeson' {
     ]
     export class Undefined {}
     export default class Typeson {
+        static Promise: typeof globalThis.Promise
         constructor(options?: {
             cyclic?: boolean
             encapsulateObserver?: (...args: unknown[]) => void
             sync?: true
             throwOnBadSyncType?: true
         })
-        register(register: unknown[] | Record<string, CustomRegister<any, any> | NewableFunction>): Typeson
-        encapsulate(data: unknown): object
-        revive<T>(data: unknown): T
+        register(register: any): Typeson
+        encapsulate(data: unknown, state?: any, opts?: any): object
+        revive<T>(data: unknown, state?: any, opts?: any): T
+        encapsulateAsync(data: unknown, state?: any, opts?: any): Promise<object>
+        reviveAsync<T>(data: unknown, state?: any, opts?: any): Promise<T>
         stringify(...args: Parameters<JSON['stringify']>): Promise<string> | string
         stringifySync(...args: Parameters<JSON['stringify']>): string
         stringifyAsync(...args: Parameters<JSON['stringify']>): Promise<string>
