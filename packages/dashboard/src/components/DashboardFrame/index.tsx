@@ -1,24 +1,29 @@
 import {
-    makeStyles,
-    useMediaQuery,
-    Toolbar,
-    Theme,
-    Typography,
     AppBar,
-    Grid,
     Box,
-    IconButton,
+    Grid,
+    makeStyles,
+    Toolbar,
+    Typography,
     Drawer,
+    useMediaQuery,
+    Theme,
+    IconButton,
 } from '@material-ui/core'
 import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
-import Color from 'color'
+import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
 import clz from 'classnames'
 import { Navigation } from './Navigation'
-import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import Color from 'color'
+
+export interface DashboardFrameProps extends React.PropsWithChildren<{}> {
+    title: React.ReactNode | string
+    primaryAction?: React.ReactNode
+}
 
 const useStyles = makeStyles((theme) => ({
-    root: { backgroundColor: theme.palette.background.paper },
+    appBar: {},
     toolbar: {
         [theme.breakpoints.up(1184)]: {
             paddingLeft: theme.spacing(0),
@@ -27,40 +32,12 @@ const useStyles = makeStyles((theme) => ({
             paddingLeft: theme.spacing(1),
         },
     },
-    logo: {
-        flexBasis: 212,
-        maxWidth: 212,
+    root: {
+        backgroundColor: theme.palette.background.paper,
+        height: `calc(100vh - ${theme.mixins.toolbar.minHeight}px)`,
     },
-    menuButton: {
-        paddingLeft: theme.spacing(1.5),
-        paddingRight: theme.spacing(1.5),
-    },
-    title: {
-        minHeight: 40,
-        alignItems: 'center',
-        paddingLeft: theme.spacing(4.25),
-        [theme.breakpoints.down(1184)]: {
-            flex: 1,
-        },
-    },
-    drawerRoot: {
-        top: `${theme.mixins.toolbar.minHeight}px!important`,
-    },
-    drawerBackdropRoot: {
-        top: theme.mixins.toolbar.minHeight,
-    },
-    temporaryDrawerPaper: {
-        backgroundColor: new Color(theme.palette.background.paper).alpha(0.8).toString(),
-        backdropFilter: 'blur(4px)',
-    },
-    permanentDrawer: {
-        height: '100vh',
-        [theme.breakpoints.up(1184)]: {
-            minWidth: 232,
-        },
-    },
-    rightContainer: {
-        flex: 1,
+    temporaryDrawer: {
+        width: 232,
     },
     temporaryPaper: {
         width: 232,
@@ -72,9 +49,6 @@ const useStyles = makeStyles((theme) => ({
     containment: {
         overflow: 'auto',
         contain: 'strict',
-        [theme.breakpoints.down(1184)]: {
-            minHeight: '100vh',
-        },
     },
     shape: {
         height: '100%',
@@ -84,41 +58,35 @@ const useStyles = makeStyles((theme) => ({
     },
     shapeHelper: {
         backgroundColor: theme.palette.background.default,
-        paddingBottom: 0,
+        paddingBottom: theme.spacing(0),
     },
     container: {
         backgroundColor: theme.palette.background.paper,
     },
+    logo: {
+        [theme.breakpoints.up(1184)]: {
+            paddingLeft: theme.spacing(7),
+        },
+        [theme.breakpoints.down(1184)]: {
+            flexBasis: 212,
+            maxWidth: 212,
+        },
+    },
+    title: {
+        minHeight: 40,
+        alignItems: 'center',
+        paddingLeft: theme.spacing(4.25),
+        [theme.breakpoints.down(1184)]: {
+            flex: 1,
+        },
+    },
+    menuButton: {
+        paddingLeft: theme.spacing(1.5),
+        paddingRight: theme.spacing(1.5),
+    },
 }))
 
-export interface DashboardFrameProps extends React.PropsWithChildren<{}> {}
-
 export function DashboardFrame(props: DashboardFrameProps) {
-    const classes = useStyles()
-    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down(1184))
-
-    return (
-        <>
-            <Grid container className={classes.root}>
-                {!matches && (
-                    <Grid item xs={2} className={classes.permanentDrawer}>
-                        <Navigation />
-                    </Grid>
-                )}
-                <Grid container direction="column" item xs={matches ? 12 : 10} className={classes.rightContainer}>
-                    <ErrorBoundary>{props.children}</ErrorBoundary>
-                </Grid>
-            </Grid>
-        </>
-    )
-}
-
-export interface PageFrameProps extends React.PropsWithChildren<{}> {
-    title: React.ReactNode | string
-    primaryAction?: React.ReactNode
-}
-
-export function PageFrame(props: PageFrameProps) {
     const classes = useStyles()
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
@@ -132,47 +100,46 @@ export function PageFrame(props: PageFrameProps) {
 
     return (
         <>
-            <AppBar position="relative" color="inherit" elevation={0}>
+            <AppBar position="relative" color="inherit" elevation={0} className={classes.appBar}>
                 <Toolbar component={Grid} container className={classes.toolbar}>
-                    {matches && (
-                        <Grid item xs={2} container alignItems="center" className={classes.logo}>
+                    <Grid item xs={2} container alignItems="center" className={classes.logo}>
+                        {matches && (
                             <IconButton onClick={() => setOpen(!open)} className={classes.menuButton}>
                                 {open ? <CloseIcon /> : <MenuIcon />}
                             </IconButton>
-
-                            <img height={40} alt="Mask Logo" src="https://mask.io/assets/icons/logo.svg" />
-                        </Grid>
-                    )}
-                    <Grid item xs={matches ? 10 : 12} container className={classes.title}>
+                        )}
+                        <img height={40} alt="Mask Logo" src="https://mask.io/assets/icons/logo.svg" />
+                    </Grid>
+                    <Grid item xs={10} container className={classes.title}>
                         {left}
                         <Box sx={{ flex: 1 }} />
                         {right}
                     </Grid>
                 </Toolbar>
             </AppBar>
-            <Grid item xs className={classes.containment}>
-                {matches && (
+            <Grid container className={classes.root}>
+                {!matches ? (
+                    <Grid xs={2} item>
+                        <Navigation />
+                    </Grid>
+                ) : (
                     <Drawer
                         open={open}
                         onClose={() => setOpen(false)}
                         BackdropProps={{ invisible: true }}
                         PaperProps={{ elevation: 0 }}
                         variant="temporary"
-                        ModalProps={{
-                            BackdropProps: {
-                                classes: { root: classes.drawerBackdropRoot },
-                            },
-                        }}
-                        // className={classes.temporaryDrawer}
-                        classes={{ paper: classes.temporaryPaper, root: classes.drawerRoot }}>
+                        classes={{ paper: classes.temporaryPaper }}>
                         <Navigation />
                     </Drawer>
                 )}
-                <div className={clz(classes.shapeHelper, classes.shape)}>
-                    <div className={clz(classes.container, classes.shape)}>
-                        <ErrorBoundary>{props.children}</ErrorBoundary>
+                <Grid item xs className={clz(classes.containment)}>
+                    <div className={clz(classes.shapeHelper, classes.shape)}>
+                        <div className={clz(classes.container, classes.shape)}>
+                            <ErrorBoundary>{props.children}</ErrorBoundary>
+                        </div>
                     </div>
-                </div>
+                </Grid>
             </Grid>
         </>
     )
