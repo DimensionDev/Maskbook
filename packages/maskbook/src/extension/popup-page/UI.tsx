@@ -37,8 +37,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     container: {
         lineHeight: 1.75,
         padding: 20,
-        borderRadius: 0,
-        boxShadow: 'none',
+        borderRadius: '0 !important',
         userSelect: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -114,7 +113,7 @@ function PopupUI() {
     })
 
     return (
-        <Paper className={classes.container}>
+        <Paper className={classes.container} elevation={0}>
             <Trademark />
             {hasPermission === false ? (
                 <Alert severity="error" variant="outlined" action={null}>
