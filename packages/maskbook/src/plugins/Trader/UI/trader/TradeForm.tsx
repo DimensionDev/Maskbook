@@ -2,9 +2,10 @@ import { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import { noop } from 'lodash-es'
 import BigNumber from 'bignumber.js'
-import { makeStyles, createStyles, Typography, Grid, IconButton } from '@material-ui/core'
+import { makeStyles, createStyles, Typography, Grid, IconButton, Tooltip } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import TuneIcon from '@material-ui/icons/Tune'
+import RefreshOutlined from '@material-ui/icons/RefreshOutlined'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useAccount } from '../../../../web3/hooks/useAccount'
@@ -42,6 +43,13 @@ const useStyles = makeStyles((theme) => {
             alignItems: 'center',
             justifyContent: 'space-between',
         },
+        label: {
+            flex: 1,
+            textAlign: 'left',
+        },
+        icon: {
+            marginLeft: theme.spacing(0.5),
+        },
         reverseIcon: {
             cursor: 'pointer',
         },
@@ -74,6 +82,7 @@ export interface TradeFormProps extends withClasses<KeysInferFromUseStyles<typeo
     onInputAmountChange: (amount: string) => void
     onOutputAmountChange: (amount: string) => void
     onReverseClick?: () => void
+    onRefreshClick?: () => void
     onTokenChipClick?: (token: TokenPanelType) => void
     onApprove: () => void
     onExactApprove: () => void
@@ -96,6 +105,7 @@ export function TradeForm(props: TradeFormProps) {
         onInputAmountChange,
         onOutputAmountChange,
         onReverseClick = noop,
+        onRefreshClick = noop,
         onTokenChipClick = noop,
         onApprove,
         onExactApprove,
@@ -235,10 +245,16 @@ export function TradeForm(props: TradeFormProps) {
             ))}
             <div className={classes.section}>
                 <div className={classes.status}>
-                    <Typography color="textSecondary" variant="body2">
+                    <Typography className={classes.label} color="textSecondary" variant="body2">
                         Slippage Tolerance: {formatPercentage(toBips(currentSlippageTolerance.value))}
                     </Typography>
-                    <IconButton size="small" onClick={() => setSwapSettingsDialogOpen({ open: true })}>
+                    <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
+                        <RefreshOutlined fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                        className={classes.icon}
+                        size="small"
+                        onClick={() => setSwapSettingsDialogOpen({ open: true })}>
                         <TuneIcon fontSize="small" />
                     </IconButton>
                 </div>

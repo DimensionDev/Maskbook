@@ -1,8 +1,7 @@
-import { useContext, useEffect, useMemo, useRef } from 'react'
+import { useContext, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Pair, Token as UniswapToken, TokenAmount } from '@uniswap/sdk'
-import { useBlockNumber, useChainId } from '../../../../web3/hooks/useChainState'
-import { PluginTraderRPC } from '../../messages'
+import { useChainId } from '../../../../web3/hooks/useChainState'
 import { getPairAddress } from '../../helpers'
 import { TradeContext } from '../useTradeContext'
 import { usePairContracts } from '../../contracts/uniswap/usePairContract'
@@ -28,14 +27,6 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
         )
     }, [context, tokenPairs])
 
-    useEffect(() => {
-        console.log('DEBUG: list of address')
-        console.log(listOfPairAddress)
-    }, [listOfPairAddress.join('')])
-
-    // auto refresh pair reserves for each block
-    const blockNumber = useBlockNumber(chainId)
-
     // get reserves for each pair
     const contracts = usePairContracts([...new Set(listOfPairAddress.filter(Boolean) as string[])])
     const [results, calls, _, callback] = useMutlipleContractSingleData(
@@ -43,7 +34,7 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
         new Array(contracts.length).fill('getReserves'),
         [],
     )
-    const asyncResults = useAsyncRetry(() => callback(calls), [calls, blockNumber])
+    const asyncResults = useAsyncRetry(() => callback(calls), [calls])
 
     // compose reserves from multicall results
     const listOfReserves = useMemo(() => {
