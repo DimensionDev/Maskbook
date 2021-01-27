@@ -4,9 +4,13 @@ name: E2E
 # events but only for the master branch
 on:
   push:
-    branches: [master, released]
+    # branches: [master, released]
+    branches-ignore:
+      - '**'
   pull_request:
-    branches: [master, released]
+    # branches: [master, released]
+    branches-ignore:
+      - '**'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
