@@ -5,6 +5,8 @@ export interface GasPrice {
     description?: string
     gasPrice: string
     wait: number
+    usd?: string
+    eth?: string
     estimated?: {
         [key in CurrencyType]: string
     }

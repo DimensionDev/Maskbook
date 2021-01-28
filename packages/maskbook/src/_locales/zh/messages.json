@@ -483,5 +483,7 @@
     "wallet_transfer_error_amount_absence": "輸入金額",
     "wallet_transfer_error_address_absence": "輸入收款人地址",
     "wallet_transfer_error_invalid_address": "無效的收款人地址",
-    "wallet_transfer_error_insufficent_balance": "{{symbol}} 餘額不足"
+    "wallet_transfer_error_insufficent_balance": "{{symbol}} 餘額不足",
+    "gas_price_dialog_title": "",
+    "gas_price_dialog_hit": ""
 }

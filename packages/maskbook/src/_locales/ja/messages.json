@@ -483,5 +483,7 @@
     "wallet_transfer_error_amount_absence": "",
     "wallet_transfer_error_address_absence": "",
     "wallet_transfer_error_invalid_address": "",
-    "wallet_transfer_error_insufficent_balance": ""
+    "wallet_transfer_error_insufficent_balance": "",
+    "gas_price_dialog_title": "",
+    "gas_price_dialog_hit": ""
 }

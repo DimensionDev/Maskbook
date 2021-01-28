@@ -483,5 +483,7 @@
     "wallet_transfer_error_amount_absence": "Enter an amount",
     "wallet_transfer_error_address_absence": "Enter recipient address",
     "wallet_transfer_error_invalid_address": "Invalid recipient address",
-    "wallet_transfer_error_insufficent_balance": "Insufficient {{symbol}} balance"
+    "wallet_transfer_error_insufficent_balance": "Insufficient {{symbol}} balance",
+    "gas_price_dialog_title": "Set Gas Price",
+    "gas_price_dialog_hit": "Select the network fee you are willing to pay. The higher the fee, the better chances and faster your transaction will go through"
 }

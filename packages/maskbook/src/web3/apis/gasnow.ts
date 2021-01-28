@@ -44,22 +44,22 @@ export async function getGasPrice(): Promise<GasPrice[]> {
 
     return [
         {
-            title: 'rapid',
+            title: 'Rapid',
             wait: 15,
             gasPrice: format(_LastGasNowResponseData!.rapid),
         },
         {
-            title: 'fast',
+            title: 'Fast',
             wait: 60,
             gasPrice: format(_LastGasNowResponseData!.fast),
         },
         {
-            title: 'slow',
+            title: 'Slow',
             wait: 600,
             gasPrice: format(_LastGasNowResponseData!.slow),
         },
         {
-            title: 'standard',
+            title: 'Standard',
             wait: 180,
             gasPrice: format(_LastGasNowResponseData!.standard),
         },

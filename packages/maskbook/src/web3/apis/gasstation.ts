@@ -37,22 +37,22 @@ export async function getGasPrice(): Promise<GasPrice[]> {
 
     return [
         {
-            title: 'rapid',
+            title: 'Rapid',
             gasPrice: gasPrice.fastest,
             wait: gasPrice.fastestWait,
         },
         {
-            title: 'fast',
+            title: 'Fast',
             gasPrice: gasPrice.fast,
             wait: gasPrice.fastWait,
         },
         {
-            title: 'standard',
+            title: 'Standard',
             gasPrice: gasPrice.average,
             wait: gasPrice.avgWait,
         },
         {
-            title: 'slow',
+            title: 'Slow',
             gasPrice: gasPrice.safeLow,
             wait: gasPrice.safeLowWait,
         },
