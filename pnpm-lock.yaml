@@ -80,6 +80,7 @@ importers:
     dependencies:
       '@dimensiondev/maskbook': link:../maskbook
       '@dimensiondev/maskbook-shared': link:../shared
+      '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
       '@dimensiondev/maskbook-theme': link:../theme
       '@types/color': 3.0.1
       async-call-rpc: 5.0.0
@@ -101,6 +102,7 @@ importers:
       '@babel/core': ^7.12.9
       '@dimensiondev/maskbook': '*'
       '@dimensiondev/maskbook-shared': '*'
+      '@dimensiondev/maskbook-storybook-shared': '*'
       '@dimensiondev/maskbook-theme': '*'
       '@snowpack/plugin-dotenv': ^2.0.5
       '@snowpack/plugin-react-refresh': ^2.3.9
@@ -463,8 +465,16 @@ importers:
       ts-results: ^3.1.1
       typeson: ^5.18.2
       typeson-registry: ^1.0.0-alpha.38
+  packages/storybook-shared:
+    devDependencies:
+      '@storybook/addons': 6.1.15
+      '@storybook/react': 6.1.15
+    specifiers:
+      '@storybook/addons': ^6
+      '@storybook/react': ^6
   packages/theme:
     dependencies:
+      '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
       lodash-es: 4.17.20
     devDependencies:
       '@babel/core': 7.12.10
@@ -478,6 +488,7 @@ importers:
       storybook-addon-matrix: 1.6.0
     specifiers:
       '@babel/core': ^7.12.9
+      '@dimensiondev/maskbook-storybook-shared': '*'
       '@storybook/addon-actions': ^6.1.9
       '@storybook/addon-essentials': ^6.1.9
       '@storybook/addon-links': ^6.1.9
@@ -5350,6 +5361,39 @@ packages:
       webpack-cli: '*'
     resolution:
       integrity: sha512-A50F8dDZxyLGa/dE3q0Zxt7T5r9UbomoSclqw7oJTO9GI76QOu7GfsoWrEL2gTEDAmqXreLVQqGuTLQhBz0rlA==
+  /@storybook/react/6.1.15:
+    dependencies:
+      '@babel/preset-flow': 7.12.1
+      '@babel/preset-react': 7.12.10
+      '@pmmmwh/react-refresh-webpack-plugin': 0.4.2_133f2312fd2dfba9fc3b3697533854a6
+      '@storybook/addons': 6.1.15
+      '@storybook/core': 6.1.15
+      '@storybook/node-logger': 6.1.15
+      '@storybook/semver': 7.3.2
+      '@types/webpack-env': 1.16.0
+      babel-plugin-add-react-displayname: 0.0.5
+      babel-plugin-named-asset-import: 0.3.7
+      babel-plugin-react-docgen: 4.2.1
+      core-js: 3.8.3
+      global: 4.4.0
+      lodash: 4.17.20
+      prop-types: 15.7.2
+      react-dev-utils: 10.2.1
+      react-docgen-typescript-plugin: 0.6.3
+      react-refresh: 0.8.3
+      regenerator-runtime: 0.13.7
+      ts-dedent: 2.0.0
+      webpack: 4.46.0
+    dev: true
+    engines:
+      node: '>=8.0.0'
+    hasBin: true
+    peerDependencies:
+      '@babel/core': ^7.11.5
+      react: ^16.8.0 || ^17.0.0
+      react-dom: ^16.8.0 || ^17.0.0
+    resolution:
+      integrity: sha512-7WoYLOZuAlzgQsL9oy4JCr9NcB4NBCuxslPSncN5l/7ewGXgfVXTAOMOfw+EVNrtUeVJU2fC8gFiHVl0SJpTZw==
   /@storybook/react/6.1.15_@babel+core@7.12.10:
     dependencies:
       '@babel/core': 7.12.10

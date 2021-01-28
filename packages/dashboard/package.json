@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@dimensiondev/maskbook": "*",
+    "@dimensiondev/maskbook-storybook-shared": "*",
     "@dimensiondev/maskbook-shared": "*",
     "@dimensiondev/maskbook-theme": "*",
     "@types/color": "^3.0.1",
