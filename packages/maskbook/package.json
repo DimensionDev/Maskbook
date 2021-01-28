@@ -11,7 +11,7 @@
     "@dimensiondev/maskbook-theme": "*",
     "@dimensiondev/matrix-js-sdk-type": "=1.0.0-20200731085604-dc2de92",
     "@dimensiondev/metamask-extension-provider": "^3.0.0-20210125122006-86e9bae",
-    "@dimensiondev/stego-js": "=0.13.0-20201224101931-64ee02e",
+    "@dimensiondev/stego-js": "=0.13.0-20210127113811-f24cb8f",
     "@ethersproject/address": "^5.0.4",
     "@ethersproject/contracts": "^5.0.4",
     "@ethersproject/networks": "^5.0.4",
