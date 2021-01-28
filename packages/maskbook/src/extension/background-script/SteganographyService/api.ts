@@ -4,12 +4,11 @@ import type { AsyncCallOptions } from 'async-call-rpc'
 import { AsyncCall } from 'async-call-rpc/full'
 import { WorkerChannel } from 'async-call-rpc/utils/web/worker'
 import { serialization } from '../../../utils/type-transform/Serialization'
-import { OnDemandWorker } from '../../../web-workers/OnDemandWorker'
 
-export let StegoWorker: OnDemandWorker | undefined
+export let StegoWorker: Worker | undefined
 
 if (process.env.architecture) {
-    StegoWorker = new OnDemandWorker(new URL('./worker.ts', import.meta.url), { name: 'StegoWorker' })
+    StegoWorker = new Worker(new URL('./worker.ts', import.meta.url), { name: 'StegoWorker' })
 }
 
 const options: AsyncCallOptions = {
