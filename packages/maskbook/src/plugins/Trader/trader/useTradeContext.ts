@@ -5,7 +5,11 @@ import {
     SUSHISWAP_BASE_AGAINST_TOKENS,
     SUSHISWAP_CUSTOM_BASES,
     SUSHISWAP_INIT_CODE_HASH,
+    SASHIMISWAP_BASE_AGAINST_TOKENS,
+    SASHIMISWAP_CUSTOM_BASES,
+    SASHIMISWAP_INIT_CODE_HASH,
     THEGRAPH_SUSHISWAP_FORK,
+    THEGRAPH_SASHIMISWAP,
     THEGRAPH_UNISWAP_V2,
     TRADE_CONSTANTS,
     UNISWAP_BASE_AGAINST_TOKENS,
@@ -37,6 +41,15 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     FACTORY_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'SUSHISWAP_FACTORY_ADDRESS', chainId),
                     AGAINST_TOKENS: SUSHISWAP_BASE_AGAINST_TOKENS,
                     CUSTOM_TOKENS: SUSHISWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.SASHIMISWAP:
+                return {
+                    GRAPH_API: THEGRAPH_SASHIMISWAP,
+                    INIT_CODE_HASH: SASHIMISWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'SASHIMISWAP_ROUTER_ADDRESS', chainId),
+                    FACTORY_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'SASHIMISWAP_FACTORY_ADDRESS', chainId),
+                    AGAINST_TOKENS: SASHIMISWAP_BASE_AGAINST_TOKENS,
+                    CUSTOM_TOKENS: SASHIMISWAP_CUSTOM_BASES,
                 }
             default:
                 return null

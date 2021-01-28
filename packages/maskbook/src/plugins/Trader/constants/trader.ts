@@ -32,6 +32,20 @@ export const TRADE_CONSTANTS = {
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },
+    SASHIMISWAP_ROUTER_ADDRESS: {
+        [ChainId.Mainnet]: ' 0x31db862df7be09718a860c46ab17ca57966e69ed',
+        [ChainId.Ropsten]: '0xe4fe6a45f354e845f954cddee6084603cedb9410',
+        [ChainId.Rinkeby]: '0xe4fe6a45f354e845f954cddee6084603cedb9410',
+        [ChainId.Kovan]: '0xe4fe6a45f354e845f954cddee6084603cedb9410',
+        [ChainId.Gorli]: '0xe4fe6a45f354e845f954cddee6084603cedb9410',
+    },
+    SASHIMISWAP_FACTORY_ADDRESS: {
+        [ChainId.Mainnet]: '0xF028F723ED1D0fE01cC59973C49298AA95c57472',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+    },
 }
 
 // WETH

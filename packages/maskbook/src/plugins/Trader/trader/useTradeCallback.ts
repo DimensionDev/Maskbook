@@ -5,11 +5,13 @@ import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback'
 import { useTradeCallback as useUniswapCallback } from './uniswap/useTradeCallback'
 import { useRouterV2Contract as useUniswapRouterV2Contract } from '../contracts/uniswap/useRouterV2Contract'
 import { useRouterV2Contract as useSushiSwapRouterV2Contract } from '../contracts/sushiswap/useRouterV2Contract'
+import { useRouterV2Contract as useSashimiSwapRouterV2Contract } from '../contracts/sashimi/useRouterV2Contract'
 
 export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeComputed<unknown> | null) {
     // create contract instances for uniswap and sushiswap
     const uniswapRouterV2Contract = useUniswapRouterV2Contract()
     const sushiswapRouterV2Contract = useSushiSwapRouterV2Contract()
+    const sashimiswapRouterV2Contract = useSashimiSwapRouterV2Contract()
 
     // create trade callbacks
     const uniswap = useUniswapCallback(
@@ -23,6 +25,10 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         provider === TradeProvider.SUSHISWAP ? (tradeComputed as TradeComputed<Trade>) : null,
         sushiswapRouterV2Contract,
     )
+    const sashimiswap = useUniswapCallback(
+        provider === TradeProvider.SASHIMISWAP ? (tradeComputed as TradeComputed<Trade>) : null,
+        sushiswapRouterV2Contract,
+    )
     switch (provider) {
         case TradeProvider.UNISWAP:
             return uniswap
@@ -30,6 +36,8 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
             return zrx
         case TradeProvider.SUSHISWAP:
             return sushiswap
+        case TradeProvider.SASHIMISWAP:
+            return sashimiswap
         default:
             unreachable(provider)
     }

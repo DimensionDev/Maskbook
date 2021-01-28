@@ -23,8 +23,8 @@ export function useTradeComputed(
     // uniswap & sushiswap
     const uniswap_ = useUniswapTrade(
         strategy,
-        provider === TradeProvider.UNISWAP || provider === TradeProvider.SUSHISWAP ? inputAmount_ : '0',
-        provider === TradeProvider.UNISWAP || provider === TradeProvider.SUSHISWAP ? outputAmount_ : '0',
+        provider === TradeProvider.UNISWAP || provider === TradeProvider.SUSHISWAP || provider === TradeProvider.SASHIMISWAP  ? inputAmount_ : '0',
+        provider === TradeProvider.UNISWAP || provider === TradeProvider.SUSHISWAP || provider === TradeProvider.SASHIMISWAP ? outputAmount_ : '0',
         inputToken,
         outputToken,
     )
@@ -50,6 +50,11 @@ export function useTradeComputed(
             return {
                 ...zrx_,
                 value: zrx,
+            }
+        case TradeProvider.SUSHISWAP:
+            return {
+                ...uniswap_,
+                value: uniswap,
             }
         case TradeProvider.SUSHISWAP:
             return {

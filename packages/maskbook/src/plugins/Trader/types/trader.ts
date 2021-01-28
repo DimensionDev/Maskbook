@@ -6,6 +6,7 @@ export enum TradeProvider {
     ZRX, // 0x
     // ONE_INCH,
     SUSHISWAP,
+    SASHIMISWAP
 }
 
 export enum WarningLevel {
@@ -39,6 +40,7 @@ export enum ZrxTradePool {
     Swerve = 'Swerve',
     SnowSwap = 'SnowSwap',
     SushiSwap = 'SushiSwap',
+    SashimiSwap = 'SashimiSwap',
     CryptoCom = 'CryptoCom',
     Dodo = 'DODO',
 }
