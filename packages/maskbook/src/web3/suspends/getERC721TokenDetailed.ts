@@ -1,9 +1,13 @@
+import type { ERC721 } from '../../contracts/ERC721'
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
+import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
+import { useChainId } from '../hooks/useChainState'
+import { useSingleContractMultipleData } from '../hooks/useMulticall'
 
 import { ChainId, ERC721TokenDetailed, EthereumTokenType } from '../types'
 
 const cache = new Map<string, ERC721TokenDetailed | undefined>()
-async function getERC721TokenDetailed_(
+async function getERC721TokenDetailed(
     chainId: ChainId,
     address: string,
     results: any[],
@@ -23,17 +27,28 @@ async function getERC721TokenDetailed_(
         baseURI: baseURI ?? token?.baseURI ?? '',
     } as ERC721TokenDetailed
 
-    if (!cache.has(address)) cache.set(address, token_)
+    if (!cache.has(address)) {
+        try {
+            cache.set(address, token_)
+        } catch (error) {
+            throw error
+        }
+    }
 }
 
-export function getERC721TokenDetailed(
-    chainId: ChainId,
+export function useAsyncERC721TokenDetailed(
     address: string,
-    results: any[],
-    callback: (calls_: any[]) => Promise<void>,
-    calls: any[],
     token?: Partial<ERC721TokenDetailed>,
 ) {
-    if (!cache.has(address)) throw getERC721TokenDetailed_(chainId, address, results, callback, calls, token)
-    return cache.get(address)!
+    const chainId = useChainId()
+    const erc721TokenContract = useERC721TokenContract(address)
+    const names = ['name', 'symbol', 'baseURI'] as (keyof ERC721['methods'])[]
+    const callDatas = new Array(3).fill([])
+    const [results, calls, _, callback] = useSingleContractMultipleData(erc721TokenContract, names, callDatas)
+    if (!cache.has(address)) throw getERC721TokenDetailed(chainId, address, results, callback, calls, token)
+    try {
+        return cache.get(address)!
+    } catch (error) {
+        throw error
+    }
 }
