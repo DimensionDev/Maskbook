@@ -1,26 +1,22 @@
-import { useState } from 'react'
 import { PluginITO_RPC } from '../messages'
 import type { JSON_PayloadInMask } from '../types'
 
-const storage = new Map<string, JSON_PayloadInMask>()
-
-export function usePoolPayload(pid: string) {
-    const [e, set] = useState<Error | null>(null)
-
-    const payload = storage.get(pid)
-    if (payload) {
-        return {
-            payload,
-            retry: () => {
-                storage.delete(pid)
-                throw suspender(pid).catch(set)
-            },
-        }
-    }
-    if (e) throw e
-    throw suspender(pid).catch(set)
+const cache = new Map<string, [0, Promise<void>] | [1, JSON_PayloadInMask] | [2, Error]>()
+export function poolPayloadRetry() {
+    cache.forEach(([status], pid) => status === 2 && cache.delete(pid))
 }
-
+export function usePoolPayload(pid: string) {
+    const rec = cache.get(pid)
+    if (!rec) {
+        const p = suspender(pid)
+            .then((val) => void cache.set(pid, [1, val]))
+            .catch((e) => void cache.set(pid, [2, e]))
+        cache.set(pid, [0, p])
+        throw p
+    }
+    if (rec[0] === 1) return rec[1]
+    throw rec[1]
+}
 async function suspender(pid: string) {
-    storage.set(pid, await PluginITO_RPC.getPool(pid))
+    return PluginITO_RPC.getPool(pid)
 }

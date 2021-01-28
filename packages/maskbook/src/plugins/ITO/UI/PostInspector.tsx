@@ -1,15 +1,14 @@
+import { poolPayloadRetry } from '../hooks/usePoolPayload'
 import { ITO, ITO_LoadingFail } from './ITO'
-import { usePoolPayload } from '../hooks/usePoolPayload'
 
 export interface PostInspectorProps {
     pid: string
 }
-
+const { log } = console
 export function PostInspector(props: PostInspectorProps) {
-    const { retry: retryPoolPayload } = usePoolPayload(props.pid)
-
+    log('post inspector')
     return (
-        <ITO_LoadingFail retryPoolPayload={retryPoolPayload}>
+        <ITO_LoadingFail retryPoolPayload={poolPayloadRetry}>
             <ITO pid={props.pid} />
         </ITO_LoadingFail>
     )

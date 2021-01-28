@@ -184,7 +184,7 @@ export function ITO(props: ITO_Props) {
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
     const { pid } = props
-    const { payload, retry: retryPoolPayload } = usePoolPayload(pid)
+    const payload = usePoolPayload(pid)
 
     const {
         token,
@@ -304,10 +304,9 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     const retryITOCard = useCallback(() => {
-        retryPoolPayload()
         retryPoolTradeInfo()
         retryAvailability()
-    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
+    }, [retryPoolTradeInfo, retryAvailability])
 
     const swapStatusText = useMemo(() => {
         if (listOfStatus.includes(ITO_Status.waited)) return t('plugin_ito_status_no_start')
@@ -561,7 +560,7 @@ function ITO_LoadingFailUI({ retryPoolPayload }: { retryPoolPayload: () => void 
     )
 }
 
-export class ITO_LoadingFail extends Component<{ retryPoolPayload: () => Promise<void> }> {
+export class ITO_LoadingFail extends Component<{ retryPoolPayload: () => void }> {
     static getDerivedStateFromError(error: unknown) {
         return { error }
     }
