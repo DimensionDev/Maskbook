@@ -138,8 +138,8 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                         indicatorColor="primary"
                         textColor="primary"
                         onChange={onTabChange}>
-                        <Tab label="Token"></Tab>
-                        <Tab label="Collectibles"></Tab>
+                        <Tab label={t('dashboard_tab_token')}></Tab>
+                        <Tab label={t('dashboard_tab_collectibles')}></Tab>
                     </Tabs>
                 </Box>
 

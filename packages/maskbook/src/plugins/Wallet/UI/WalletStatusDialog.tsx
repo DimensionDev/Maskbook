@@ -142,11 +142,11 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     if (!selectedWallet) return null
 
     return (
-        <InjectedDialog title="Account" open={open} onClose={onClose} DialogProps={{ maxWidth: 'xs' }}>
+        <InjectedDialog title={t('wallet_status_title')} open={open} onClose={onClose} DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent className={classes.content}>
                 <section className={classes.section}>
                     <Typography className={classes.tip} color="textSecondary">
-                        Connected with {resolveProviderName(selectedWalletProvider)}
+                        {t('wallet_status_connect_with', { provider: resolveProviderName(selectedWalletProvider) })}
                     </Typography>
                     <section className={classes.actions}>
                         {selectedWalletProvider === ProviderType.WalletConnect ? (
@@ -156,7 +156,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                                 size="small"
                                 variant="outlined"
                                 onClick={onDisconnect}>
-                                Disconnect
+                                {t('wallet_status_button_disconnect')}
                             </Button>
                         ) : null}
                         <Button
@@ -165,7 +165,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                             size="small"
                             variant="outlined"
                             onClick={onChange}>
-                            Change
+                            {t('wallet_status_button_change')}
                         </Button>
                     </section>
                 </section>
@@ -181,7 +181,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                 <section className={classes.section}>
                     <Link className={classes.link} underline="none" component="button" onClick={onCopy}>
                         <Copy className={classes.linkIcon} size={14} />
-                        <Typography variant="body2">Copy Address</Typography>
+                        <Typography variant="body2">{t('wallet_status_button_copy_address')}</Typography>
                     </Link>
                     <Link
                         className={classes.link}
