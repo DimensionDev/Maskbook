@@ -1,22 +1,21 @@
 import {
-    Box,
-    Collapse,
-    IconButton,
     List,
     ListItem,
-    ListItemIcon,
-    ListItemProps,
+    Box,
     ListItemText,
+    ListItemIcon,
+    Collapse,
     makeStyles,
     Theme,
-    Toolbar,
+    ListItemProps,
     useMediaQuery,
 } from '@material-ui/core'
-import { Link, LinkProps } from 'react-router-dom'
+import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@material-ui/icons'
+import { useContext } from 'react'
 import { useRouteMatch } from 'react-router'
-import { useState } from 'react'
-import { AccountBalanceWallet, ExpandLess, ExpandMore, Masks, Menu as MenuIcon, Settings } from '@material-ui/icons'
+import { Link, LinkProps } from 'react-router-dom'
 import { Routes } from '../../pages/routes'
+import { NavigationContext } from './context'
 
 const useStyle = makeStyles((theme: Theme) => ({
     selected: {
@@ -26,6 +25,10 @@ const useStyle = makeStyles((theme: Theme) => ({
         // borderRight: '4px solid ' + theme.palette.action.selected,
     },
     nested: { paddingLeft: theme.spacing(9) },
+    logoItem: {
+        paddingLeft: theme.spacing(7),
+        marginBottom: theme.spacing(7.5),
+    },
 }))
 function ListItemLink({ nested, ...props }: LinkProps & ListItemProps & { nested?: boolean; to: string }) {
     const classes = useStyle()
@@ -41,16 +44,21 @@ function ListItemLink({ nested, ...props }: LinkProps & ListItemProps & { nested
 }
 
 export interface NavigationProps {}
-
 export function Navigation({}: NavigationProps) {
     const classes = useStyle()
-    const [expanded, setExpanded] = useState(true)
-    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down(1184))
+    const { expanded, setExpanded } = useContext(NavigationContext)
 
-    const routerMatch = useRouteMatch(Routes.Wallets)
+    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.up(1184))
     return (
         <List>
-            {!matches && <Toolbar />}
+            {matches && (
+                <ListItem
+                    component={Box}
+                    sx={{ justifyContent: 'center', marginBottom: 2 }}
+                    className={classes.logoItem}>
+                    <img height={40} alt="Mask Logo" src="https://mask.io/assets/icons/logo.svg" />
+                </ListItem>
+            )}
             <ListItemLink to={Routes.Personas}>
                 <ListItemIcon>
                     <Masks />
@@ -59,9 +67,9 @@ export function Navigation({}: NavigationProps) {
             </ListItemLink>
             <ListItem
                 button
-                selected={!!routerMatch}
+                selected={!!useRouteMatch(Routes.Wallets)}
                 classes={{ selected: classes.selected }}
-                onClick={() => setExpanded((e) => !e)}>
+                onClick={() => setExpanded && setExpanded(!expanded)}>
                 <ListItemIcon>
                     <AccountBalanceWallet />
                 </ListItemIcon>
