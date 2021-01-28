@@ -48,7 +48,7 @@ export function Navigation({}: NavigationProps) {
     const classes = useStyle()
     const { expanded, toggleNavigationExpand } = useContext(DashboardContext)
 
-    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.up(1184))
+    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     return (
         <List>
             {matches && (

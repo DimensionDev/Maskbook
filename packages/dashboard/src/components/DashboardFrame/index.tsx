@@ -21,10 +21,10 @@ import { DashboardContext } from './context'
 const useStyles = makeStyles((theme) => ({
     root: { backgroundColor: theme.palette.background.paper },
     toolbar: {
-        [theme.breakpoints.up(1184)]: {
+        [theme.breakpoints.up('lg')]: {
             paddingLeft: theme.spacing(0),
         },
-        [theme.breakpoints.down(1184)]: {
+        [theme.breakpoints.down('lg')]: {
             paddingLeft: theme.spacing(1),
         },
     },
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
         minHeight: 40,
         alignItems: 'center',
         paddingLeft: theme.spacing(4.25),
-        [theme.breakpoints.down(1184)]: {
+        [theme.breakpoints.down('lg')]: {
             flex: 1,
         },
     },
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     },
     permanentDrawer: {
         height: '100vh',
-        [theme.breakpoints.up(1184)]: {
+        [theme.breakpoints.up('lg')]: {
             minWidth: 232,
         },
     },
@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
     containment: {
         overflow: 'auto',
         contain: 'strict',
-        [theme.breakpoints.down(1184)]: {
+        [theme.breakpoints.down('lg')]: {
             minHeight: '100vh',
         },
     },
@@ -96,7 +96,7 @@ export interface DashboardFrameProps extends React.PropsWithChildren<{}> {}
 
 export function DashboardFrame(props: DashboardFrameProps) {
     const classes = useStyles()
-    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down(1184))
+    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down('lg'))
     const [navigationExpanded, setNavigationExpanded] = useState(true)
     const [drawerOpen, setDrawerOpen] = useState(false)
 
@@ -131,7 +131,7 @@ export function PageFrame(props: PageFrameProps) {
     const classes = useStyles()
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
-    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down(1184))
+    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
     return (
         <>
