@@ -2,11 +2,10 @@ import { Component, useCallback, useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
 import { makeStyles, createStyles, Card, Typography, Box, Link } from '@material-ui/core'
 import { BigNumber } from 'bignumber.js'
-import { isError } from 'lodash-es'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
-import { ITO_Status, JSON_PayloadInMask } from '../types'
+import { ITO_Status } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
@@ -186,7 +185,6 @@ export function ITO(props: ITO_Props) {
 
     const { pid } = props
     const { payload, retry: retryPoolPayload } = usePoolPayload(pid)
-    if (isError(payload)) throw new Error()
 
     const {
         token,
