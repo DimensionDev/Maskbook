@@ -6,10 +6,11 @@ export interface PostInspectorProps {
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    const { payload, retry: retryPoolPayload } = usePoolPayload(props.pid)
+    const { retry: retryPoolPayload } = usePoolPayload(props.pid)
+
     return (
         <ITO_LoadingFail retryPoolPayload={retryPoolPayload}>
-            <ITO pid={props.pid} payload={payload} retryPoolPayload={retryPoolPayload} />
+            <ITO pid={props.pid} />
         </ITO_LoadingFail>
     )
 }

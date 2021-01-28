@@ -1,7 +1,7 @@
 import { PluginITO_RPC } from '../messages'
 import type { JSON_PayloadInMask } from '../types'
 
-const storage = new Map<string, JSON_PayloadInMask>()
+const storage = new Map<string, JSON_PayloadInMask | Error>()
 
 export function usePoolPayload(pid: string) {
     if (!storage.has(pid)) throw suspender(pid)
@@ -21,6 +21,6 @@ async function suspender(pid: string) {
     try {
         storage.set(pid, await PluginITO_RPC.getPool(pid))
     } catch (error) {
-        storage.set(pid, {} as JSON_PayloadInMask)
+        storage.set(pid, new Error())
     }
 }

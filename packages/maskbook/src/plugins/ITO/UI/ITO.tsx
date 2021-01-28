@@ -2,6 +2,7 @@ import { Component, useCallback, useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
 import { makeStyles, createStyles, Card, Typography, Box, Link } from '@material-ui/core'
 import { BigNumber } from 'bignumber.js'
+import { isError } from 'lodash-es'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
@@ -27,8 +28,8 @@ import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { usePoolPayload } from '../hooks/usePoolPayload'
 import { resolveChainName } from '../../../web3/pipes'
+import { usePoolPayload } from '../hooks/usePoolPayload'
 
 export interface IconProps {
     size?: number
@@ -151,8 +152,6 @@ const useStyles = makeStyles((theme) =>
 
 export interface ITO_Props {
     pid: string
-    payload: JSON_PayloadInMask
-    retryPoolPayload: () => Promise<void>
 }
 
 interface TokenItemProps {
@@ -187,6 +186,8 @@ export function ITO(props: ITO_Props) {
 
     const { pid } = props
     const { payload, retry: retryPoolPayload } = usePoolPayload(pid)
+    if (isError(payload)) throw new Error()
+
     const {
         token,
         total: payload_total,
@@ -564,7 +565,6 @@ function ITO_LoadingFailUI({ retryPoolPayload }: { retryPoolPayload: () => void 
 
 export class ITO_LoadingFail extends Component<{ retryPoolPayload: () => Promise<void> }> {
     static getDerivedStateFromError(error: unknown) {
-        console.log('getDerivedStateFromError')
         return { error }
     }
     state: { error: Error | null } = { error: null }
