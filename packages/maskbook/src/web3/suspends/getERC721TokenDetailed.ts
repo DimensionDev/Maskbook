@@ -15,40 +15,30 @@ async function getERC721TokenDetailed(
     calls: any[],
     token?: Partial<ERC721TokenDetailed>,
 ) {
-    await callback(calls)
-    // compose
-    const [name, symbol, baseURI] = results.map((x) => (x.error ? undefined : x.value))
-    const token_ = {
-        type: EthereumTokenType.ERC721,
-        address: formatChecksumAddress(address),
-        chainId,
-        name: name ?? token?.name ?? '',
-        symbol: symbol ?? token?.symbol ?? '',
-        baseURI: baseURI ?? token?.baseURI ?? '',
-    } as ERC721TokenDetailed
-
-    if (!cache.has(address)) {
-        try {
-            cache.set(address, token_)
-        } catch (error) {
-            throw error
-        }
+    try {
+        await callback(calls)
+        // compose
+        const [name, symbol, baseURI] = results.map((x) => (x.error ? undefined : x.value))
+        const token_ = {
+            type: EthereumTokenType.ERC721,
+            address: formatChecksumAddress(address),
+            chainId,
+            name: name ?? token?.name ?? '',
+            symbol: symbol ?? token?.symbol ?? '',
+            baseURI: baseURI ?? token?.baseURI ?? '',
+        } as ERC721TokenDetailed
+        cache.set(address, token_)
+    } catch {
+        cache.set(address, {} as ERC721TokenDetailed)
     }
 }
 
-export function useAsyncERC721TokenDetailed(
-    address: string,
-    token?: Partial<ERC721TokenDetailed>,
-) {
+export function useAsyncERC721TokenDetailed(address: string, token?: Partial<ERC721TokenDetailed>) {
     const chainId = useChainId()
     const erc721TokenContract = useERC721TokenContract(address)
     const names = ['name', 'symbol', 'baseURI'] as (keyof ERC721['methods'])[]
     const callDatas = new Array(3).fill([])
     const [results, calls, _, callback] = useSingleContractMultipleData(erc721TokenContract, names, callDatas)
     if (!cache.has(address)) throw getERC721TokenDetailed(chainId, address, results, callback, calls, token)
-    try {
-        return cache.get(address)!
-    } catch (error) {
-        throw error
-    }
+    return cache.get(address)!
 }
