@@ -30,6 +30,7 @@ export const Button: Theme = (mode, colors): ThemeOptions => ({
             styleOverrides: {
                 root: {
                     opacity: 1,
+                    fontWeight: 400,
                     transitionProperty: 'background-color, color, box-shadow, opacity',
                     '&:hover': { boxShadow: '0 0 5px ' + button.main() },
                     '&[disabled]': { opacity: 0.5 },
@@ -114,3 +115,15 @@ export const TextField: Theme = {
         },
     },
 }
+
+export const List: Theme = (mode, colors) => ({
+    components: {
+        MuiListItem: {
+            styleOverrides: {
+                button: {
+                    '&:hover': mode === 'light' ? { backgroundColor: '#f5fcff' } : {},
+                },
+            },
+        },
+    },
+})
