@@ -4,7 +4,11 @@ import { ELECTION_2020_CONSTANTS } from '../constants'
 import { useAllElectionTokensOfOwner } from '../hooks/useAllElectionTokensOfOwner'
 import { ElectionCard } from './ElectionCard'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useAsyncERC721TokenDetailed } from '../../../web3/suspends/getERC721TokenDetailed'
+import { getERC721TokenDetailed } from '../../../web3/suspends/getERC721TokenDetailed'
+import { useChainId } from '../../../web3/hooks/useChainState'
+import { useERC721TokenContract } from '../../../web3/contracts/useERC721TokenContract'
+import { useSingleContractMultipleData } from '../../../web3/hooks/useMulticall'
+import type { ERC721 } from '../../../contracts/ERC721'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -37,7 +41,13 @@ export function ElectionTokenAlbum(props: ElectionTokenAlbumProps) {
 
     // fetch the NFT token
     const ELECTION_TOKEN_ADDRESS = useConstant(ELECTION_2020_CONSTANTS, 'ELECTION_TOKEN_ADDRESS')
-    const electionToken = useAsyncERC721TokenDetailed(ELECTION_TOKEN_ADDRESS)
+
+    const chainId = useChainId()
+    const erc721TokenContract = useERC721TokenContract(ELECTION_TOKEN_ADDRESS)
+    const names = ['name', 'symbol', 'baseURI'] as (keyof ERC721['methods'])[]
+    const callDatas = new Array(3).fill([])
+    const [results, calls, _, callback] = useSingleContractMultipleData(erc721TokenContract, names, callDatas)
+    const electionToken = getERC721TokenDetailed(chainId, ELECTION_TOKEN_ADDRESS, results, callback, calls)
     const tokens = useAllElectionTokensOfOwner(electionToken!)
 
     const { t } = useI18N()

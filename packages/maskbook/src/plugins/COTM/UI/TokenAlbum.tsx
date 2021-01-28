@@ -4,7 +4,11 @@ import { COTM_CONSTANTS } from '../constants'
 import { useAllTokensOfOwner } from '../hooks/useAllTokensOfOwner'
 import { TokenCard } from './TokenCard'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useAsyncERC721TokenDetailed } from '../../../web3/suspends/getERC721TokenDetailed'
+import { getERC721TokenDetailed } from '../../../web3/suspends/getERC721TokenDetailed'
+import { useChainId } from '../../../web3/hooks/useChainState'
+import { useERC721TokenContract } from '../../../web3/contracts/useERC721TokenContract'
+import { useSingleContractMultipleData } from '../../../web3/hooks/useMulticall'
+import type { ERC721 } from '../../../contracts/ERC721'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -37,7 +41,12 @@ export function TokenAlbum(props: TokenAlbumProps) {
 
     // fetch the NFT token
     const COTM_TOKEN_ADDRESS = useConstant(COTM_CONSTANTS, 'COTM_TOKEN_ADDRESS')
-    const COTM_Token = useAsyncERC721TokenDetailed(COTM_TOKEN_ADDRESS)
+    const chainId = useChainId()
+    const erc721TokenContract = useERC721TokenContract(COTM_TOKEN_ADDRESS)
+    const names = ['name', 'symbol', 'baseURI'] as (keyof ERC721['methods'])[]
+    const callDatas = new Array(3).fill([])
+    const [results, calls, _, callback] = useSingleContractMultipleData(erc721TokenContract, names, callDatas)
+    const COTM_Token = getERC721TokenDetailed(chainId, COTM_TOKEN_ADDRESS, results, callback, calls)
     const tokens = useAllTokensOfOwner(COTM_Token)
     const { t } = useI18N()
     return (
@@ -59,4 +68,7 @@ export function TokenAlbum(props: TokenAlbumProps) {
             )}
         </>
     )
+}
+function COTM_TOKEN_ADDRESS(COTM_TOKEN_ADDRESS: string) {
+    throw new Error('Function not implemented.')
 }

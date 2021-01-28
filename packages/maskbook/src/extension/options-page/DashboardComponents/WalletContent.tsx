@@ -199,15 +199,24 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                 {tabIndex === 0 ? (
                     <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
                 ) : (
-                    <Suspense
-                        fallback={
-                            <Typography variant="body1" color="textSecondary">
-                                {t('loading')}
-                            </Typography>
-                        }>
-                        {Flags.COTM_enabled ? <COTM_TokenAlbum /> : null}
-                        {Flags.election2020_enabled ? <ElectionTokenAlbum /> : null}
-                    </Suspense>
+                    <>
+                        <Suspense
+                            fallback={
+                                <Typography variant="body1" color="textSecondary">
+                                    {t('loading', { name: 'COTM' })}
+                                </Typography>
+                            }>
+                            {Flags.COTM_enabled ? <COTM_TokenAlbum /> : null}
+                        </Suspense>
+                        <Suspense
+                            fallback={
+                                <Typography variant="body1" color="textSecondary">
+                                    {t('loading', { name: 'Election' })}
+                                </Typography>
+                            }>
+                            {Flags.election2020_enabled ? <ElectionTokenAlbum /> : null}
+                        </Suspense>
+                    </>
                 )}
             </Box>
 
