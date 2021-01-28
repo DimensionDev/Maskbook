@@ -22,31 +22,11 @@ type Dimension = {
 }
 
 const dimensionPreset: (Dimension & { mask: Mask })[] = [
-    {
-        width: 1024,
-        height: 1240,
-        mask: 'v1',
-    },
-    {
-        width: 1200,
-        height: 681,
-        mask: 'v2',
-    },
-    {
-        width: 1200,
-        height: 680,
-        mask: 'transparent',
-    },
-    {
-        width: 1000,
-        height: 558,
-        mask: 'transparent',
-    },
-    {
-        width: 1000,
-        height: 560,
-        mask: 'v4',
-    },
+    { width: 1024, height: 1240, mask: 'v1' },
+    { width: 1200, height: 681, mask: 'v2' },
+    { width: 1200, height: 680, mask: 'transparent' },
+    { width: 1000, height: 558, mask: 'transparent' },
+    { width: 1000, height: 560, mask: 'v4' },
 ]
 
 const defaultOptions: Pick<EncodeOptions, 'size' | 'narrow' | 'copies' | 'tolerance'> = {
