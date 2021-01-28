@@ -7,7 +7,6 @@ import { searchResultHeadingSelector } from '../utils/selector'
 export function injectSearchResultBoxAtTwitter() {
     const watcher = new MutationObserverWatcher(searchResultHeadingSelector())
     startWatch(watcher)
-
     renderInShadowRoot(<SearchResultBoxAtTwitter />, { shadow: () => watcher.firstDOMProxy.afterShadow })
 }
 

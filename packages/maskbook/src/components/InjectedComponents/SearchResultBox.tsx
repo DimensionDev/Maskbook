@@ -1,10 +1,11 @@
 import { makeStyles } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { TagType, TradeProvider } from '../../plugins/Trader/types'
+import { TagType } from '../../plugins/Trader/types'
 import { SearchResultView } from '../../plugins/Trader/UI/trending/SearchResultView'
 import { useSearchedKeyword } from '../../plugins/Trader/trending/useSearchedKeyword'
 import { useAvailableDataProviders } from '../../plugins/Trader/trending/useAvailableDataProviders'
+import { useAvailableTraderProviders } from '../../plugins/Trader/trending/useAvailableTraderProviders'
 
 const useStyles = makeStyles({
     root: {},
@@ -20,6 +21,7 @@ export function SearchResultBox(props: SearchResultBoxProps) {
     const [_, type, name = ''] = keyword.match(/([\$\#])([\w\d]+)/) ?? []
     const type_ = type === '$' ? TagType.CASH : TagType.HASH
     const { value: dataProviders } = useAvailableDataProviders(type_, name)
+    const { value: traderProviders } = useAvailableTraderProviders(type_, name)
 
     if (!name || !dataProviders?.length) return null
     return (
@@ -28,7 +30,7 @@ export function SearchResultBox(props: SearchResultBoxProps) {
                 name={name}
                 tagType={type_}
                 dataProviders={dataProviders}
-                tradeProviders={[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.ZRX]}
+                tradeProviders={traderProviders ?? []}
             />
         </div>
     )
