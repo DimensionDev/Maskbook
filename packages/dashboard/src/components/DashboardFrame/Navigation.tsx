@@ -15,7 +15,7 @@ import { useContext } from 'react'
 import { useRouteMatch } from 'react-router'
 import { Link, LinkProps } from 'react-router-dom'
 import { Routes } from '../../pages/routes'
-import { NavigationContext } from './context'
+import { DashboardContext } from './context'
 
 const useStyle = makeStyles((theme: Theme) => ({
     selected: {
@@ -46,7 +46,7 @@ function ListItemLink({ nested, ...props }: LinkProps & ListItemProps & { nested
 export interface NavigationProps {}
 export function Navigation({}: NavigationProps) {
     const classes = useStyle()
-    const { expanded, setExpanded } = useContext(NavigationContext)
+    const { expanded, toggleNavigationExpand } = useContext(DashboardContext)
 
     const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.up(1184))
     return (
@@ -69,7 +69,7 @@ export function Navigation({}: NavigationProps) {
                 button
                 selected={!!useRouteMatch(Routes.Wallets)}
                 classes={{ selected: classes.selected }}
-                onClick={() => setExpanded && setExpanded(!expanded)}>
+                onClick={toggleNavigationExpand}>
                 <ListItemIcon>
                     <AccountBalanceWallet />
                 </ListItemIcon>

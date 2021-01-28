@@ -1,11 +1,16 @@
 import { createContext } from 'react'
 
-export interface NavigationState {
+export interface DashboardState {
     expanded: boolean
-    setExpanded?: (e: boolean) => void
+    drawerOpen: boolean
+    toggleNavigationExpand: () => void
+    toggleDrawer: () => void
 }
-export const NavigationContextDefault = {
+export const DashboardContextDefault = {
     expanded: true,
+    drawerOpen: false,
+    toggleDrawer: () => {},
+    toggleNavigationExpand: () => {},
 }
 
-export const NavigationContext = createContext<NavigationState>(NavigationContextDefault)
+export const DashboardContext = createContext<DashboardState>(DashboardContextDefault)

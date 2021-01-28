@@ -15,8 +15,8 @@ import Color from 'color'
 import clz from 'classnames'
 import { Navigation } from './Navigation'
 import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
-import { useState, useEffect } from 'react'
-import { NavigationContext } from './context'
+import { useState, useEffect, useContext } from 'react'
+import { DashboardContext } from './context'
 
 const useStyles = makeStyles((theme) => ({
     root: { backgroundColor: theme.palette.background.paper },
@@ -98,9 +98,16 @@ export function DashboardFrame(props: DashboardFrameProps) {
     const classes = useStyles()
     const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down(1184))
     const [navigationExpanded, setNavigationExpanded] = useState(true)
+    const [drawerOpen, setDrawerOpen] = useState(false)
 
     return (
-        <NavigationContext.Provider value={{ expanded: navigationExpanded, setExpanded: setNavigationExpanded }}>
+        <DashboardContext.Provider
+            value={{
+                drawerOpen,
+                expanded: navigationExpanded,
+                toggleNavigationExpand: () => setNavigationExpanded((e) => !e),
+                toggleDrawer: () => setDrawerOpen((e) => !e),
+            }}>
             <Grid container className={classes.root}>
                 {!matches && (
                     <Grid item xs={2} className={classes.permanentDrawer}>
@@ -111,7 +118,7 @@ export function DashboardFrame(props: DashboardFrameProps) {
                     <ErrorBoundary>{props.children}</ErrorBoundary>
                 </Grid>
             </Grid>
-        </NavigationContext.Provider>
+        </DashboardContext.Provider>
     )
 }
 
@@ -125,21 +132,15 @@ export function PageFrame(props: PageFrameProps) {
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
     const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down(1184))
-
-    const [open, setOpen] = useState(false)
-
-    useEffect(() => {
-        setOpen(false)
-    }, [matches])
-
+    const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
     return (
         <>
             <AppBar position="relative" color="inherit" elevation={0}>
                 <Toolbar component={Grid} container className={classes.toolbar}>
                     {matches && (
                         <Grid item xs={2} container alignItems="center" className={classes.logo}>
-                            <IconButton onClick={() => setOpen(!open)} className={classes.menuButton}>
-                                {open ? <CloseIcon /> : <MenuIcon />}
+                            <IconButton onClick={toggleDrawer} className={classes.menuButton}>
+                                {drawerOpen ? <CloseIcon /> : <MenuIcon />}
                             </IconButton>
 
                             <img height={40} alt="Mask Logo" src="https://mask.io/assets/icons/logo.svg" />
@@ -155,8 +156,8 @@ export function PageFrame(props: PageFrameProps) {
             <Grid item xs className={classes.containment}>
                 {matches && (
                     <Drawer
-                        open={open}
-                        onClose={() => setOpen(false)}
+                        open={drawerOpen}
+                        onClose={toggleDrawer}
                         BackdropProps={{ invisible: true }}
                         PaperProps={{ elevation: 0 }}
                         variant="temporary"
