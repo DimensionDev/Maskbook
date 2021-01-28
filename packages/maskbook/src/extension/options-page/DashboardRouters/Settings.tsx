@@ -37,7 +37,7 @@ import { Flags } from '../../../utils/flags'
 import { currentDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
 import { resolveDataProviderName, resolveTradeProviderName } from '../../../plugins/Trader/pipes'
 import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
-import { ChainId, GasPriceServerType } from '../../../web3/types'
+import { ChainId, GasPriceProviderType } from '../../../web3/types'
 import { extendsTheme } from '../../../utils/theme'
 import { currentSelectedGasPriceServerSettings } from '../../../plugins/Wallet/settings'
 
@@ -192,7 +192,7 @@ export default function DashboardSettingsRouter() {
                                 {Flags.support_gas_price_server_switch ? (
                                     <SettingsUIEnum
                                         classes={listStyle}
-                                        enumObject={GasPriceServerType}
+                                        enumObject={GasPriceProviderType}
                                         icon={<LocalOfferIcon />}
                                         value={currentSelectedGasPriceServerSettings}
                                     />

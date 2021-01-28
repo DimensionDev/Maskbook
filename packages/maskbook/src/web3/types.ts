@@ -1,6 +1,6 @@
 import type createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
 
-export enum GasPriceServerType {
+export enum GasPriceProviderType {
     GasNow = 'GasNow',
     GasStation = 'GasStation',
 }
