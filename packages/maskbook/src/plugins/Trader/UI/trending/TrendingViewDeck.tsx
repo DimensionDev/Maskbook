@@ -202,14 +202,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     )
     //#endregion
 
-    const dataProviderOptions = getEnumAsArray(DataProvider).filter((x) => {
-        return dataProvider === DataProvider.UNISWAP_INFO
-            ? x.value === DataProvider.UNISWAP_INFO
-            : x.value !== DataProvider.UNISWAP_INFO
-    })
-    const tradeProviderOptions = getEnumAsArray(TradeProvider).filter((x) => {
-        return dataProvider === DataProvider.UNISWAP_INFO ? x.value === TradeProvider.ZRX : true
-    })
+    const dataProviderOptions = getEnumAsArray(DataProvider)
+    const tradeProviderOptions = getEnumAsArray(TradeProvider)
 
     return (
         <TrendingCard {...TrendingCardProps}>
@@ -344,11 +338,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 ),
                                 value: x.value,
                             }))}
-                            selectedIndex={
-                                dataProvider === DataProvider.UNISWAP_INFO
-                                    ? 0
-                                    : findIndex(getEnumAsArray(TradeProvider), (x) => x.value === tradeProvider)
-                            }
+                            selectedIndex={findIndex(getEnumAsArray(TradeProvider), (x) => x.value === tradeProvider)}
                             onChange={onTradeProviderChange}>
                             <ArrowDropDownIcon />
                         </FootnoteMenu>

@@ -344,7 +344,7 @@ export async function getCoinInfo(id: string, currency: Currency, dataProvider: 
                 currency,
                 dataProvider: DataProvider.UNISWAP_INFO,
                 market: {
-                    current_price: await uniswapAPI.getMidPriceOnDAI(coin),
+                    current_price: 0,
                 },
                 coin,
                 tickers: [],
