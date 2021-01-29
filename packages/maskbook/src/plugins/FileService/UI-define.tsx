@@ -8,8 +8,6 @@ import FileServiceDialog from './MainDialog'
 import { Preview } from './Preview'
 import type { FileInfo } from './types'
 
-
-
 const [FileServiceCompositionEntry, FileServiceCompositionUI] = createCompositionDialog('📃 File Service', (props) => (
     <FileServiceDialog
         // classes={classes}
