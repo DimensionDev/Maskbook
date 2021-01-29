@@ -1,103 +1,6 @@
 [
     {
-        "constant": false,
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "id",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "string",
-                "name": "password",
-                "type": "string"
-            },
-            {
-                "internalType": "address",
-                "name": "_recipient",
-                "type": "address"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "validation",
-                "type": "bytes32"
-            }
-        ],
-        "name": "claim",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "claimed",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "_hash",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_number",
-                "type": "uint8"
-            },
-            {
-                "internalType": "bool",
-                "name": "_ifrandom",
-                "type": "bool"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_duration",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "_seed",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "string",
-                "name": "_message",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "_name",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_token_type",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "_token_addr",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_total_tokens",
-                "type": "uint256"
-            }
-        ],
-        "name": "create_red_packet",
-        "outputs": [],
-        "payable": true,
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
         "inputs": [],
-        "payable": false,
         "stateMutability": "nonpayable",
         "type": "constructor"
     },
@@ -149,6 +52,18 @@
             },
             {
                 "indexed": false,
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "message",
+                "type": "string"
+            },
+            {
+                "indexed": false,
                 "internalType": "address",
                 "name": "creator",
                 "type": "address"
@@ -180,46 +95,6 @@
             },
             {
                 "indexed": false,
-                "internalType": "bytes32",
-                "name": "hash1",
-                "type": "bytes32"
-            },
-            {
-                "indexed": false,
-                "internalType": "bytes32",
-                "name": "hash2",
-                "type": "bytes32"
-            }
-        ],
-        "name": "Failure",
-        "type": "event"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "id",
-                "type": "bytes32"
-            }
-        ],
-        "name": "refund",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "internalType": "bytes32",
-                "name": "id",
-                "type": "bytes32"
-            },
-            {
-                "indexed": false,
                 "internalType": "address",
                 "name": "token_address",
                 "type": "address"
@@ -235,42 +110,111 @@
         "type": "event"
     },
     {
-        "constant": false,
+        "inputs": [],
+        "name": "contract_creator",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
+                "internalType": "bytes32",
+                "name": "_hash",
+                "type": "bytes32"
+            },
+            {
                 "internalType": "uint256",
-                "name": "token_type",
+                "name": "_number",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "_ifrandom",
+                "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_duration",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_seed",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "string",
+                "name": "_message",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_name",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_token_type",
                 "type": "uint256"
             },
             {
                 "internalType": "address",
-                "name": "token_address",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "sender_address",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "recipient_address",
+                "name": "_token_addr",
                 "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "amount",
+                "name": "_total_tokens",
                 "type": "uint256"
             }
         ],
-        "name": "transfer_token",
+        "name": "create_red_packet",
         "outputs": [],
-        "payable": true,
         "stateMutability": "payable",
         "type": "function"
     },
     {
-        "constant": true,
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "id",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "string",
+                "name": "password",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "_recipient",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "validation",
+                "type": "bytes32"
+            }
+        ],
+        "name": "claim",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "claimed",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "bytes32",
@@ -304,31 +248,27 @@
                 "internalType": "bool",
                 "name": "expired",
                 "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "claimed_amount",
+                "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [
             {
-                "internalType": "address",
-                "name": "a",
-                "type": "address"
+                "internalType": "bytes32",
+                "name": "id",
+                "type": "bytes32"
             }
         ],
-        "name": "toBytes",
-        "outputs": [
-            {
-                "internalType": "bytes",
-                "name": "b",
-                "type": "bytes"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
+        "name": "refund",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     }
 ]
