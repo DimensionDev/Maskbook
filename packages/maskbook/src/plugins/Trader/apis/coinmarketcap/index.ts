@@ -1,6 +1,6 @@
 import { CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../../constants'
 import { Flags } from '../../../../utils/flags'
-import { getPriceStat, PriceState } from './getPriceStat'
+import { getCoinPrice, PriceState } from './getPriceStat'
 
 export interface Status {
     credit_count: number
@@ -275,8 +275,8 @@ export async function getLatestMarketPairs(id: string, currency: string) {
 //#endregion
 
 //#region get price
-export async function getPrice(coinId: number) {
-    const priceState = await getPriceStat(coinId)
-    return (priceState as unknown) as Promise<PriceState>
+export function getPrice(coinId: number) {
+    return getCoinPrice(coinId)
 }
+
 //#endregion
