@@ -37,26 +37,18 @@ const useStyles = makeStyles((theme) => ({
     },
     encrypted: {
         userSelect: 'none',
-        '& span': {
-            fontSize: 12,
-            lineHeight: 1.75,
-        },
+        '& span': { fontSize: 12, lineHeight: 1.75 },
     },
     usedCDN: {
         userSelect: 'none',
-        '& span': {
-            fontSize: 12,
-            lineHeight: 1.75,
-        },
+        '& span': { fontSize: 12, lineHeight: 1.75 },
     },
     legalText: {
         userSelect: 'none',
         fontSize: 12,
         lineHeight: 1.75,
-        color: theme.palette.text.hint,
-        '& a': {
-            textDecoration: 'none',
-        },
+        color: theme.palette.text.secondary,
+        '& a': { textDecoration: 'none', },
     },
 }))
 
