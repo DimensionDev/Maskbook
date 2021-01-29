@@ -472,7 +472,6 @@
     "wallet_status_button_disconnect": "Disconnect",
     "wallet_status_button_copy_address": "Copy Address",
     "wallet_transfer_to_address": "To Address",
-    "wallet_transfer_balance": "Balance {{balance}} {{symbol}}",
     "wallet_transfer_memo": "Memo",
     "wallet_transfer_memo_placeholder": "Optional message",
     "wallet_transfer_amount": "Amount",
