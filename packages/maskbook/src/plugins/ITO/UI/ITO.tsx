@@ -184,7 +184,7 @@ export function ITO(props: ITO_Props) {
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
     const { pid } = props
-    const payload = usePoolPayload(pid)
+    const { payload, retry: retryPoolPayload } = usePoolPayload(pid)
 
     const {
         token,
@@ -203,7 +203,6 @@ export function ITO(props: ITO_Props) {
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(payload_total_remaining)
     const sold = total.minus(total_remaining)
-
     //#region token detailed
     const {
         value: availability,
@@ -304,9 +303,10 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     const retryITOCard = useCallback(() => {
+        retryPoolPayload()
         retryPoolTradeInfo()
         retryAvailability()
-    }, [retryPoolTradeInfo, retryAvailability])
+    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
 
     const swapStatusText = useMemo(() => {
         if (listOfStatus.includes(ITO_Status.waited)) return t('plugin_ito_status_no_start')
