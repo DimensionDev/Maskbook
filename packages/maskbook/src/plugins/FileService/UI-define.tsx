@@ -1,12 +1,14 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { truncate } from 'lodash-es'
-import { PluginConfig, PluginStage, PluginScope } from '../types'
-import { identifier, META_KEY_1, pluginName } from './constants'
+import { PluginConfig, PluginScope, PluginStage } from '../types'
+import { createCompositionDialog } from '../utils/createCompositionDialog'
+import { identifier, META_KEY_1, META_KEY_2, pluginName } from './constants'
+import { FileInfoMetadataReader } from './define'
+import FileServiceDialog from './MainDialog'
 import { Preview } from './Preview'
 import type { FileInfo } from './types'
-import { createCompositionDialog } from '../utils/createCompositionDialog'
-import FileServiceDialog from './MainDialog'
-import { FileInfoMetadataReader } from './define'
+
+
 
 const [FileServiceCompositionEntry, FileServiceCompositionUI] = createCompositionDialog('📃 File Service', (props) => (
     <FileServiceDialog
@@ -28,14 +30,14 @@ export const FileServicePluginDefine: PluginConfig = {
         return <Preview info={metadata.val} />
     },
     postDialogMetadataBadge: new Map([
-        [
-            META_KEY_1,
-            (payload: FileInfo) => {
-                const name = truncate(payload.name, { length: 10 })
-                return `Attached File: ${name} (${formatFileSize(payload.size)})`
-            },
-        ],
+        [META_KEY_1, onAttachedFile],
+        [META_KEY_2, onAttachedFile],
     ]),
     PageComponent: FileServiceCompositionUI,
     postDialogEntries: [FileServiceCompositionEntry],
+}
+
+function onAttachedFile(payload: FileInfo) {
+    const name = truncate(payload.name, { length: 10 })
+    return `Attached File: ${name} (${formatFileSize(payload.size)})`
 }
