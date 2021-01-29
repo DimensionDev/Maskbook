@@ -1,14 +1,15 @@
 import {
     List,
-    ListItem,
+    ListItem as MuiListItem,
     Box,
     ListItemText,
     ListItemIcon,
     Collapse,
-    makeStyles,
     Theme,
     ListItemProps,
     useMediaQuery,
+    experimentalStyled as styled,
+    BoxProps,
 } from '@material-ui/core'
 import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@material-ui/icons'
 import { useContext } from 'react'
@@ -16,48 +17,48 @@ import { useRouteMatch } from 'react-router'
 import { Link, LinkProps } from 'react-router-dom'
 import { Routes } from '../../pages/routes'
 import { DashboardContext } from './context'
+import Logo from './Logo'
 
-const useStyle = makeStyles((theme: Theme) => ({
-    selected: {
+const ListItemLink = styled(({ nested, ...props }: LinkProps & ListItemProps & { nested?: boolean; to: string }) => (
+    <MuiListItem button component={Link} selected={!!useRouteMatch(props.to)} {...props} />
+))(({ theme, nested }) => ({
+    '&.MuiListItem-root': {
+        paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
+    },
+    '&.Mui-select': {
         backgroundColor: 'transparent',
         borderRight: '4px solid ' + (theme.palette.mode === 'light' ? theme.palette.action.selected : 'white'),
-        // Or?
-        // borderRight: '4px solid ' + theme.palette.action.selected,
-    },
-    nested: { paddingLeft: theme.spacing(9) },
-    logoItem: {
-        paddingLeft: theme.spacing(7),
-        marginBottom: theme.spacing(7.5),
     },
 }))
-function ListItemLink({ nested, ...props }: LinkProps & ListItemProps & { nested?: boolean; to: string }) {
-    const classes = useStyle()
-    return (
-        <ListItem
-            button
-            component={Link}
-            classes={{ selected: classes.selected, root: nested ? classes.nested : void 0 }}
-            selected={!!useRouteMatch(props.to)}
-            {...props}
-        />
-    )
-}
+
+const LogoItem = styled((props: ListItemProps & BoxProps) => <MuiListItem component={Box} {...props} />)(
+    ({ theme }) => ({
+        '&.MuiListItem-root': {
+            justifyContent: 'center',
+            paddingLeft: theme.spacing(7),
+            marginBottom: theme.spacing(7.5),
+        },
+    }),
+)
+
+const ListItem = styled(MuiListItem)(({ theme }) => ({
+    '&.Mui-select': {
+        backgroundColor: 'transparent',
+        borderRight: '4px solid ' + (theme.palette.mode === 'light' ? theme.palette.action.selected : 'white'),
+    },
+}))
 
 export interface NavigationProps {}
 export function Navigation({}: NavigationProps) {
-    const classes = useStyle()
     const { expanded, toggleNavigationExpand } = useContext(DashboardContext)
 
     const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     return (
         <List>
             {matches && (
-                <ListItem
-                    component={Box}
-                    sx={{ justifyContent: 'center', marginBottom: 2 }}
-                    className={classes.logoItem}>
-                    <img height={40} alt="Mask Logo" src="https://mask.io/assets/icons/logo.svg" />
-                </ListItem>
+                <LogoItem>
+                    <Logo height={40} />
+                </LogoItem>
             )}
             <ListItemLink to={Routes.Personas}>
                 <ListItemIcon>
@@ -68,7 +69,6 @@ export function Navigation({}: NavigationProps) {
             <ListItem
                 button
                 selected={!!useRouteMatch(Routes.Wallets)}
-                classes={{ selected: classes.selected }}
                 onClick={toggleNavigationExpand}>
                 <ListItemIcon>
                     <AccountBalanceWallet />
