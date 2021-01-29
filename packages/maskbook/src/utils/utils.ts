@@ -211,6 +211,7 @@ export function pollingTask(
     } = {},
 ) {
     let canceled = false
+    let timer: NodeJS.Timeout
     const runTask = async () => {
         if (canceled) return
         let stop = false
@@ -219,12 +220,16 @@ export function pollingTask(
         } catch (e) {
             console.error(e)
         }
-        if (!stop) {
-            setTimeout(runTask, delay)
-        }
+        if (!stop) timer = setTimeout(runTask, delay)
     }
     runTask()
-    return () => (canceled = true)
+    return {
+        cancel: () => (canceled = true),
+        reset: () => {
+            clearTimeout(timer)
+            timer = setTimeout(runTask, delay)
+        },
+    }
 }
 export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
     const x = new Uint8Array(a)

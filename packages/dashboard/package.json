@@ -9,8 +9,11 @@
   },
   "dependencies": {
     "@dimensiondev/maskbook-shared": "*",
+    "@dimensiondev/maskbook-theme": "*",
+    "@dimensiondev/maskbook": "*",
     "color": "^3.1.3",
-    "@types/color": "^3.0.1"
+    "@types/color": "^3.0.1",
+    "async-call-rpc": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -24,6 +27,7 @@
     "snowpack": "^2",
     "@snowpack/plugin-dotenv": "^2.0.5",
     "@snowpack/plugin-react-refresh": "^2.3.9",
-    "@types/snowpack-env": "^2.3.2"
+    "@types/snowpack-env": "^2.3.2",
+    "@pmmmwh/react-refresh-webpack-plugin": "=0.4.2"
   }
 }

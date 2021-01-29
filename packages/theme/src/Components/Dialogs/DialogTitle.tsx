@@ -5,7 +5,8 @@ import { memo } from 'react'
 const Title = styled(DialogTitle)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
-    '&[data-icon="1"]': { paddingTop: theme.spacing(1) },
+    // gap: theme.spacing(1), // ? Safari doesn't support it
+    '& > *:first-child': { marginRight: theme.spacing(1) },
 }))
 export interface MaskDialogTitleProps {
     children: string
@@ -25,7 +26,7 @@ export const MaskDialogTitle = memo((props: MaskDialogTitleProps) => {
         </IconButton>
     ) : null
     return (
-        <Title disableTypography data-icon={backButton || closeButton ? '1' : ''}>
+        <Title disableTypography>
             {backButton}
             <Typography component="h2" variant="h6">
                 {children}

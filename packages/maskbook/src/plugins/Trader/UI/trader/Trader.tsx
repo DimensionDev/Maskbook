@@ -16,7 +16,6 @@ import { TRADE_CONSTANTS } from '../../constants'
 import { sleep } from '../../../../utils/utils'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessages } from '../../../Wallet/messages'
 import { useShareLink } from '../../../../utils/hooks/useShareLink'
 import { formatBalance } from '../../../Wallet/formatter'
 import { TradePairViewer } from '../uniswap/TradePairViewer'
@@ -28,6 +27,9 @@ import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { getActivatedUI } from '../../../../social-network/ui'
 import { EthereumMessages } from '../../../Ethereum/messages'
 import { SelectERC20TokenDialog } from '../../../Ethereum/UI/SelectERC20TokenDialog'
+import { EthereumBlockNumber } from '../../../../web3/UI/EthereumBlockNumber'
+import Services from '../../../../extension/service'
+import { useAsyncRetry, useTimeoutFn } from 'react-use'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -85,6 +87,18 @@ export function Trader(props: TraderProps) {
             type: TradeActionType.SWITCH_TOKEN,
         })
     }, [])
+    //#endregion
+
+    //#region refresh pairs
+    const [, , resetTimeout] = useTimeoutFn(() => {
+        onRefreshClick()
+    }, 30 /* seconds */ * 1000 /* milliseconds */)
+
+    const onRefreshClick = useCallback(async () => {
+        await Services.Ethereum.updateChainState()
+        asyncTradeComputed.retry()
+        resetTimeout()
+    }, [asyncTradeComputed.retry, resetTimeout])
     //#endregion
 
     //#region update amount
@@ -274,6 +288,7 @@ export function Trader(props: TraderProps) {
                 onInputAmountChange={onInputAmountChange}
                 onOutputAmountChange={onOutputAmountChange}
                 onReverseClick={onReverseClick}
+                onRefreshClick={onRefreshClick}
                 onTokenChipClick={onTokenChipClick}
                 onApprove={onApprove}
                 onExactApprove={onExactApprove}
@@ -305,6 +320,7 @@ export function Trader(props: TraderProps) {
                     ) : null}
                 </>
             ) : null}
+            <EthereumBlockNumber />
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
                 includeTokens={[]}

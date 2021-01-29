@@ -2,6 +2,7 @@ import { useRef, useEffect, forwardRef } from 'react'
 import { useSheetsRegistryStyles } from './renderInShadowRoot'
 import { PortalShadowRoot } from './ShadowRootPortal'
 import { useUpdate } from 'react-use'
+import type { PopperProps } from '@material-ui/core'
 
 function bind(f: Function, thisArg: unknown, hook: Function) {
     return (...args: any) => {
@@ -67,5 +68,13 @@ export function createShadowRootForwardedComponent<
 >(Component: React.ComponentType<T>) {
     return (forwardRef((props: T, ref) => {
         return usePortalShadowRoot((container) => <Component container={container} {...props} ref={ref} />)
+    }) as any) as typeof Component
+}
+
+export function createShadowRootForwardedPopperComponent<T extends { PopperProps?: Partial<PopperProps> }>(
+    Component: React.ComponentType<T>,
+) {
+    return (forwardRef((props: T, ref) => {
+        return usePortalShadowRoot((container) => <Component PopperProps={{ container }} {...props} ref={ref} />)
     }) as any) as typeof Component
 }
