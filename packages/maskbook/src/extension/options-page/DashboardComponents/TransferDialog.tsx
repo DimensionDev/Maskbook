@@ -153,9 +153,11 @@ function TransferTab(props: TransferTabProps) {
                 SelectTokenChip={{
                     readonly: true,
                 }}
-                MaxChipStyle={{
-                    root: classes.maxChipRoot,
-                    label: classes.maxChipLabel,
+                MaxChipProps={{
+                    classes: {
+                        root: classes.maxChipRoot,
+                        label: classes.maxChipLabel,
+                    },
                 }}
             />
             <TextField

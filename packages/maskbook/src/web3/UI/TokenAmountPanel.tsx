@@ -59,16 +59,7 @@ export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyle
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
-    const {
-        amount,
-        maxAmount,
-        balance,
-        token,
-        onAmountChange,
-        label,
-        disableBalance = false,
-        MaxChipStyle = { root: '' },
-    } = props
+    const { amount, maxAmount, balance, token, onAmountChange, label, disableBalance = false, MaxChipProps } = props
 
     const classes = useStylesExtends(useStyles(), props)
 
@@ -141,8 +132,8 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                             {balance !== '0' && !disableBalance ? (
                                 <Chip
                                     classes={{
-                                        root: classNames(classes.max, MaxChipStyle.root),
-                                        ...MaxChipStyle,
+                                        root: classNames(classes.max, MaxChipProps?.classes?.root),
+                                        ...MaxChipProps?.classes,
                                     }}
                                     size="small"
                                     label="MAX"
@@ -154,7 +145,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                             formatBalance(new BigNumber(maxAmount ?? balance), token.decimals),
                                         )
                                     }}
-                                    {...props.MaxChipProps}
+                                    {...MaxChipProps}
                                 />
                             ) : null}
                             <SelectTokenChip token={token} {...props.SelectTokenChip} />
