@@ -472,7 +472,6 @@
     "wallet_status_button_disconnect": "斷開",
     "wallet_status_button_copy_address": "拷貝地址",
     "wallet_transfer_to_address": "收款地址",
-    "wallet_transfer_balance": "餘額 {{balance}} {{symbol}}",
     "wallet_transfer_memo": "附言",
     "wallet_transfer_memo_placeholder": "可選附言",
     "wallet_transfer_amount": "金額",
