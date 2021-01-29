@@ -1,5 +1,5 @@
-import { CMC_LATEST_BASE_URL } from '../../constants/trending'
 import { EventEmitter } from 'events'
+import { CMC_LATEST_BASE_URL } from '../../constants/trending'
 
 const MAX_RETRY = 3
 let webSocket: WebSocket | null = null
@@ -24,15 +24,8 @@ enum ERROR_TYPE {
     NOT_SUBSCRIBE,
 }
 
-function connectWebSocket() {
-    return new Promise<WebSocket>((resolve, reject) => {
-        try {
-            const client = new WebSocket(CMC_LATEST_BASE_URL)
-            resolve(client)
-        } catch (error) {
-            reject(error)
-        }
-    })
+async function connectWebSocket() {
+    return new WebSocket(CMC_LATEST_BASE_URL)
 }
 
 const msgData = {
@@ -44,8 +37,8 @@ const msgData = {
 }
 
 function syncPricesFromWS(coinIds: number[]) {
-    Event.addListener('unsubscribe', (msg) => {
-        WATCHED_COINS.splice(WATCHED_COINS.indexOf(msg), 1)
+    Event.addListener('unsubscribe', (msg: number) => {
+        WATCHED_COINS.splice(WATCHED_COINS.indexOf(msg, 1))
         if (WATCHED_COINS.length > 0) {
             webSocket?.send(JSON.stringify(msgData))
             return
@@ -56,7 +49,8 @@ function syncPricesFromWS(coinIds: number[]) {
             webSocket = null
         }
     })
-    Event.addListener('subscribe', (msg) => {
+
+    Event.addListener('subscribe', async (msg: number) => {
         if (webSocket && webSocket.readyState === WebSocket.OPEN) {
             if (WATCHED_COINS.some((x) => x === msg)) {
                 return
@@ -66,43 +60,41 @@ function syncPricesFromWS(coinIds: number[]) {
             webSocket.send(JSON.stringify(msgData))
             return
         }
-        connectWebSocket()
-            .then((client) => {
-                client.onopen = () => {
-                    webSocket = client
-                    coinIds.map((x) => {
-                        if (WATCHED_COINS.indexOf(x) === -1) {
-                            WATCHED_COINS.push(x)
-                        }
-                    })
+        const client = await connectWebSocket()
 
-                    if (WATCHED_COINS.length > 0) {
-                        client.send(JSON.stringify(msgData))
-                    }
-                }
-                client.onerror = (error) => {
-                    client.close()
-                    webSocket = null
-                    console.log(error)
-                }
-                client.onclose = () => {
-                    console.log('close')
-                    webSocket = null
-                }
-
-                client.onmessage = (ev) => {
-                    if (typeof ev.data !== 'string') {
-                        return
-                    }
-                    try {
-                        const jsondata = JSON.parse(ev.data)
-                        Event.emit(jsondata.id, jsondata)
-                    } catch (e) {
-                        console.error(e)
-                    }
+        client.onopen = () => {
+            webSocket = client
+            coinIds.map((x) => {
+                if (WATCHED_COINS.indexOf(x) === -1) {
+                    WATCHED_COINS.push(x)
                 }
             })
-            .catch((error) => console.log(error))
+
+            if (WATCHED_COINS.length > 0) {
+                client.send(JSON.stringify(msgData))
+            }
+        }
+        client.onerror = (error) => {
+            client.close()
+            webSocket = null
+            console.log(error)
+        }
+        client.onclose = () => {
+            console.log('close')
+            webSocket = null
+        }
+
+        client.onmessage = (ev) => {
+            if (typeof ev.data !== 'string') {
+                return
+            }
+            try {
+                const jsondata = JSON.parse(ev.data)
+                Event.emit(jsondata.id, jsondata)
+            } catch (e) {
+                console.error(e)
+            }
+        }
     })
 }
 
