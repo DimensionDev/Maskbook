@@ -8,7 +8,6 @@ import {
     IconButton,
     Drawer,
     experimentalStyled as styled,
-    ToolbarProps,
     Box,
 } from '@material-ui/core'
 import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
@@ -29,10 +28,6 @@ const LeftContainer = styled(Grid)(({ theme }) => ({
         minWidth: 232,
     },
 }))
-
-const RightContainer = styled(Grid)`
-    flex: 1;
-`
 
 export interface DashboardFrameProps extends React.PropsWithChildren<{}> {}
 
@@ -55,9 +50,9 @@ export function DashboardFrame(props: DashboardFrameProps) {
                         <Navigation />
                     </LeftContainer>
                 )}
-                <RightContainer container direction="column" item xs={isLargeScreen ? 12 : 10}>
+                <Grid container direction="column" item xs={isLargeScreen ? 12 : 10}>
                     <ErrorBoundary>{props.children}</ErrorBoundary>
-                </RightContainer>
+                </Grid>
             </Root>
         </DashboardContext.Provider>
     )
@@ -97,10 +92,6 @@ const PageTitle = styled(Grid)(({ theme }) => ({
         flex: 1,
     },
 }))
-
-const Stuff = styled('div')`
-    flex: 1;
-`
 
 const Containment = styled(Grid)(({ theme }) => ({
     overflow: 'auto',
