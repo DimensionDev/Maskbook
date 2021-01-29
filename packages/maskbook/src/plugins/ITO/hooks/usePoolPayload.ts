@@ -1,7 +1,6 @@
 import { PluginITO_RPC } from '../messages'
 import type { JSON_PayloadInMask } from '../types'
 import { useUpdate } from 'react-use'
-import { unstable_useTransition } from 'react'
 
 const cache = new Map<string, [0, Promise<void>] | [1, JSON_PayloadInMask] | [2, Error]>()
 export function poolPayloadErrorRetry() {
@@ -10,7 +9,6 @@ export function poolPayloadErrorRetry() {
 export function usePoolPayload(pid: string) {
     const rec = cache.get(pid)
     const forceUpdate = useUpdate()
-    const [startTransition] = unstable_useTransition({ busyDelayMs: 1000 })
     if (!rec) {
         const p = suspender(pid)
             .then((val) => void cache.set(pid, [1, val]))
@@ -21,11 +19,10 @@ export function usePoolPayload(pid: string) {
     if (rec[0] === 1)
         return {
             payload: rec[1],
-            retry: () =>
-                startTransition(() => {
-                    if (cache.has(pid)) cache.delete(pid)
-                    forceUpdate()
-                }),
+            retry: () => {
+                if (cache.has(pid)) cache.delete(pid)
+                forceUpdate()
+            },
         }
     throw rec[1]
 }
