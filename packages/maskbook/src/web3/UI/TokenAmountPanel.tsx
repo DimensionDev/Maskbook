@@ -10,6 +10,7 @@ import {
     ChipProps,
     TextFieldProps,
 } from '@material-ui/core'
+import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { formatBalance } from '../../plugins/Wallet/formatter'
@@ -52,12 +53,22 @@ export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyle
     onAmountChange: (amount: string) => void
     InputProps?: Partial<InputProps>
     MaxChipProps?: Partial<ChipProps>
+    MaxChipStyle?: ChipProps['classes']
     SelectTokenChip?: Partial<SelectTokenChipProps>
     TextFieldProps?: Partial<TextFieldProps>
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
-    const { amount, maxAmount, balance, token, onAmountChange, label, disableBalance = false } = props
+    const {
+        amount,
+        maxAmount,
+        balance,
+        token,
+        onAmountChange,
+        label,
+        disableBalance = false,
+        MaxChipStyle = { root: '' },
+    } = props
 
     const classes = useStylesExtends(useStyles(), props)
 
@@ -125,10 +136,14 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                         <Box
                             sx={{
                                 display: 'flex',
+                                alignItems: 'center',
                             }}>
                             {balance !== '0' && !disableBalance ? (
                                 <Chip
-                                    className={classes.max}
+                                    classes={{
+                                        root: classNames(classes.max, MaxChipStyle.root),
+                                        ...MaxChipStyle,
+                                    }}
                                     size="small"
                                     label="MAX"
                                     clickable

@@ -24,13 +24,13 @@ import {
 import AbstractTab, { AbstractTabProps } from './AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useCopyToClipboard } from 'react-use'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import { QRCode } from '../../../components/shared/qrcode'
 import { formatBalance, formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import { useTokenTransferCallback } from '../../../web3/hooks/useTokenTransferCallback'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { useContext } from 'react'
 import { DashboardWalletsContext } from '../DashboardRouters/Wallets'
@@ -48,6 +48,14 @@ const useTransferTabStyles = makeStyles((theme) =>
         },
         button: {
             marginTop: theme.spacing(3),
+        },
+        maxChipRoot: {
+            fontSize: 11,
+            height: 21,
+        },
+        maxChipLabel: {
+            paddingLeft: 6,
+            paddingRight: 6,
         },
     }),
 )
@@ -136,25 +144,19 @@ function TransferTab(props: TransferTabProps) {
 
     return (
         <div className={classes.root}>
-            <TextField
-                required
+            <TokenAmountPanel
+                amount={amount}
+                balance={tokenBalance}
                 label={t('wallet_transfer_amount')}
-                placeholder="0.0"
-                value={amount}
-                onChange={(ev: ChangeEvent<HTMLInputElement>) => onChangeAmount(ev)}
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <Typography variant="body2" color="textSecondary">
-                                {token.symbol}
-                            </Typography>
-                        </InputAdornment>
-                    ),
+                token={token}
+                onAmountChange={setAmount}
+                SelectTokenChip={{
+                    readonly: true,
                 }}
-                helperText={t('wallet_transfer_balance', {
-                    balance: formatBalance(new BigNumber(tokenBalance ?? '0'), token.decimals ?? 0),
-                    symbol: token.symbol,
-                })}
+                MaxChipStyle={{
+                    root: classes.maxChipRoot,
+                    label: classes.maxChipLabel,
+                }}
             />
             <TextField
                 required
