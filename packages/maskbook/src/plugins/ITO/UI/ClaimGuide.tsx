@@ -37,13 +37,10 @@ interface ClaimGuideProps extends Pick<ClaimDialogProps, 'exchangeTokens' | 'pay
 export function ClaimGuide(props: ClaimGuideProps) {
     const { t } = useI18N()
     const { payload, exchangeTokens, isBuyer, open, retryPayload, onClose } = props
-    const [startTransition] = unstable_useTransition({ busyDelayMs: 1000 })
     const onCloseShareDialog = useCallback(() => {
-        startTransition(() => {
-            onClose()
-            retryPayload()
-        })
-    }, [retryPayload, startTransition, onClose])
+        onClose()
+        retryPayload()
+    }, [retryPayload, onClose])
     const classes = useStyles()
     const [status, setStatus] = useState<ClaimStatus>(ClaimStatus.Remind)
     const maxSwapAmount = useMemo(

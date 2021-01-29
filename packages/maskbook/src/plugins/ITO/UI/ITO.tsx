@@ -408,7 +408,7 @@ export function ITO(props: ITO_Props) {
         <div>
             <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${PoolBackground})` }}>
                 <Box className={classes.header}>
-                    <Typography variant="h5" className={classes.title}>
+                    <Typography variant="h5" className={classes.title} onClick={retryPoolPayload}>
                         {payload.message}
                     </Typography>
 
