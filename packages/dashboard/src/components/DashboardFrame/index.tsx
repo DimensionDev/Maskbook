@@ -9,6 +9,7 @@ import {
     Drawer,
     experimentalStyled as styled,
     ToolbarProps,
+    Box,
 } from '@material-ui/core'
 import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
 import Color from 'color'
@@ -29,14 +30,14 @@ const LeftContainer = styled(Grid)(({ theme }) => ({
     },
 }))
 
-const RightContainer = styled(Grid)(({ theme }) => ({
-    flex: 1,
-}))
+const RightContainer = styled(Grid)`
+    flex: 1;
+`
 
 export interface DashboardFrameProps extends React.PropsWithChildren<{}> {}
 
 export function DashboardFrame(props: DashboardFrameProps) {
-    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down('lg'))
+    const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('lg'))
     const [navigationExpanded, setNavigationExpanded] = useState(true)
     const [drawerOpen, setDrawerOpen] = useState(false)
 
@@ -49,12 +50,12 @@ export function DashboardFrame(props: DashboardFrameProps) {
                 toggleDrawer: () => setDrawerOpen((e) => !e),
             }}>
             <Root container>
-                {!matches && (
+                {!isLargeScreen && (
                     <LeftContainer item xs={2}>
                         <Navigation />
                     </LeftContainer>
                 )}
-                <RightContainer container direction="column" item xs={matches ? 12 : 10}>
+                <RightContainer container direction="column" item xs={isLargeScreen ? 12 : 10}>
                     <ErrorBoundary>{props.children}</ErrorBoundary>
                 </RightContainer>
             </Root>
@@ -70,7 +71,7 @@ const MaskLogo = styled(Grid)`
     }
 `
 
-const Toolbar = styled((props: ToolbarProps) => <MuiToolbar {...props} />)(({ theme }) => ({
+const Toolbar = styled(MuiToolbar)(({ theme }) => ({
     [theme.breakpoints.down('lg')]: {
         '&.MuiToolbar-gutters': {
             paddingLeft: theme.spacing(1),
@@ -148,28 +149,28 @@ export interface PageFrameProps extends React.PropsWithChildren<{}> {
 export function PageFrame(props: PageFrameProps) {
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
-    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down('lg'))
+    const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
 
     return (
         <>
             <AppBar position="relative" color="inherit" elevation={0}>
                 <Toolbar>
-                    {matches && (
+                    {isLargeScreen && (
                         <MaskLogo item container alignItems="center">
                             <MenuButton onClick={toggleDrawer}>{drawerOpen ? <CloseIcon /> : <MenuIcon />}</MenuButton>
                             <Logo height={40} />
                         </MaskLogo>
                     )}
-                    <PageTitle item xs={matches ? 10 : 12} container>
+                    <PageTitle item xs={isLargeScreen ? 10 : 12} container>
                         {left}
-                        <Stuff />
+                        <Box sx={{ flex: 1 }} />
                         {right}
                     </PageTitle>
                 </Toolbar>
             </AppBar>
             <Containment item xs>
-                {matches && (
+                {isLargeScreen && (
                     <NavigationDrawer
                         open={drawerOpen}
                         onClose={toggleDrawer}

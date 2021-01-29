@@ -52,11 +52,11 @@ export interface NavigationProps {}
 export function Navigation({}: NavigationProps) {
     const { expanded, toggleNavigationExpand } = useContext(DashboardContext)
 
-    const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
+    const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
 
     return (
         <List>
-            {matches && (
+            {isLargeScreen && (
                 <LogoItem>
                     <Logo height={40} />
                 </LogoItem>
