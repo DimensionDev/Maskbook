@@ -18,12 +18,11 @@ jobs:
       - uses: actions/setup-node@v2-beta
       - uses: actions/cache@v2
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          path: ~/.pnpm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - run: sudo npm install --global npm@7
-      - run: npm ci
+      - run: npx pnpm --frozen-lockfile --store-dir ~/.pnpm/
       - run: npm run build-ci
       - name: Upload `Maskbook.base.zip`
         uses: actions/upload-artifact@v2

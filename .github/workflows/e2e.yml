@@ -37,8 +37,13 @@ jobs:
       # @v2 requires too much configurations
       - uses: actions/checkout@v1
 
-      - name: Install Dependencies
-        run: npm ci
+      - uses: actions/cache@v2
+        with:
+          path: ~/.pnpm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: npx pnpm --frozen-lockfile --store-dir ~/.pnpm/
 
       - name: Build
         run: npm run build-e2e
