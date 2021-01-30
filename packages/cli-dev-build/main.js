@@ -38,6 +38,6 @@ async function main(mode) {
             throw new TypeError('Unknown target ' + target + '. Known targets: ' + knownTargets.join(','))
         }
     })
-    spawn('webpack', command, { stdio: 'inherit', shell: true, cwd: resolve(__dirname, './maskbook/') })
+    spawn('npx', ['webpack', ...command], { stdio: 'inherit', cwd: resolve(__dirname, '../maskbook/') })
 }
 module.exports = main
