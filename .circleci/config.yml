@@ -25,7 +25,7 @@ jobs:
             - v3-maskbook-cache-pnpm
       - run:
           name: Install Dependencies
-          command: npx pnpm --frozen-lockfile --store-dir ~/.pnpm/
+          command: npx pnpm i --frozen-lockfile --store-dir ~/.pnpm/
       - save_cache:
           name: Save NPM Package Cache
           key: v3-maskbook-cache-npm
