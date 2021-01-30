@@ -22,7 +22,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: sudo npm i -g pnpm
-      - run: pnpm install --frozen-lockfile --store-dir ~/.pnpm/
+      - run: npm run ci
       - run: npx prettier --check .
       - run: npx tsc -b
       - run: npm run lint:typecoverage
@@ -48,4 +48,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: sudo npm i -g pnpm
-      - run: pnpm install --frozen-lockfile --store-dir ~/.pnpm/
+      - run: npm run ci

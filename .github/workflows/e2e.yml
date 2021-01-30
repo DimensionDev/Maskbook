@@ -44,7 +44,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: sudo npm i -g pnpm
-      - run: pnpm install --frozen-lockfile --store-dir ~/.pnpm/
+      - run: npm run ci
 
       - name: Build
         run: npm run build-e2e
