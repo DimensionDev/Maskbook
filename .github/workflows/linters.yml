@@ -21,7 +21,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - run: npx -y pnpm i --frozen-lockfile --store-dir ~/.pnpm/
+      - run: npx -y pnpm install --frozen-lockfile --store-dir ~/.pnpm/
       - run: npx prettier --check .
       - run: npx tsc -b
       - run: npm run lint:typecoverage
@@ -46,4 +46,4 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - run: npx -y pnpm i --frozen-lockfile --store-dir ~/.pnpm/
+      - run: npx -y pnpm install --frozen-lockfile --store-dir ~/.pnpm/
