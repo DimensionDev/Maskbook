@@ -108,7 +108,6 @@
   },
   "devDependencies": {
     "@dimensiondev/webextension-shim": "0.0.3-20201103060201-1bd22b9",
-    "@magic-works/commonjs-import.meta": "^1.0.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@sinonjs/text-encoding": "^0.7.1",
     "@storybook/addon-actions": "^5.3.19",
