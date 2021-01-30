@@ -22,7 +22,7 @@ jobs:
 
       # more: https://github.community/t5/GitHub-Actions/How-to-run-action-as-a-non-root-user/m-p/45733/highlight/true#M6330
       options: '--user 1000
-        -v /home/ubuntu/.cache/npm:/github/home/.npm
+        -v /home/ubuntu/.cache/pnpm:/github/home/.pnpm
         -v /home/ubuntu/.cache/alice_home:/tmp/alice_home
         -v /home/ubuntu/.cache/bob_home:/tmp/bob_home
         -v /home/ubuntu/.e2e/e2e-test:/tmp/e2e-test'
@@ -37,8 +37,14 @@ jobs:
       # @v2 requires too much configurations
       - uses: actions/checkout@v1
 
-      - name: Install Dependencies
-        run: npm ci
+      - uses: actions/cache@v2
+        with:
+          path: ~/.pnpm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: sudo npm i -g pnpm
+      - run: npm run ci
 
       - name: Build
         run: npm run build-e2e
