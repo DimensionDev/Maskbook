@@ -22,7 +22,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - run: npx -y pnpm install --frozen-lockfile --store-dir ~/.pnpm/
+      - run: npx pnpm install --frozen-lockfile --store-dir ~/.pnpm/
       - run: npm run build-ci
       - name: Upload `Maskbook.base.zip`
         uses: actions/upload-artifact@v2
