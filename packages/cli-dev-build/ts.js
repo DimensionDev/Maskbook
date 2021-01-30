@@ -6,7 +6,7 @@ const Lock = require('./process-lock')
 const { runCli } = require('@magic-works/i18n-codegen')
 
 const configFile = resolve(__dirname, '../../.i18n-codegen.json')
-const args = { stdio: 'inherit', cwd: join(__dirname, '../..') }
+const args = { stdio: 'inherit', shell: true, cwd: join(__dirname, '../..') }
 module.exports.dev = async function () {
     lock: for await (const lock of Lock()) {
         if (await lock()) break lock
