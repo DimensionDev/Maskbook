@@ -22,6 +22,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: sudo npm i -g pnpm
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - run: npm run ci
       - run: npx prettier --check .
       - run: npx tsc -b
