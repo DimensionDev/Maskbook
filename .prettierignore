@@ -4,6 +4,7 @@ package-lock.json
 pnpm-lock.yaml
 
 *generated*
+storybook-static
 
 # VSCode personal settings
 .vscode/launch.json
