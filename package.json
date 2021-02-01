@@ -27,12 +27,6 @@
     "preinstall": "npx only-allow pnpm",
     "ci": "pnpm install --frozen-lockfile --store-dir ~/.pnpm/"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && npm run locale-kit -- --sync-key",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
       "eslint --ext .ts,.tsx --fix"
