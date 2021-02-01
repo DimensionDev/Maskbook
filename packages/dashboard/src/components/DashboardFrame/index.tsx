@@ -35,7 +35,7 @@ const LeftContainer = styled(Grid)(({ theme }) => ({
 export interface DashboardFrameProps extends React.PropsWithChildren<{}> {}
 
 export function DashboardFrame(props: DashboardFrameProps) {
-    const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('lg'))
+    const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const [navigationExpanded, setNavigationExpanded] = useState(true)
     const [drawerOpen, setDrawerOpen] = useState(false)
 
@@ -48,12 +48,12 @@ export function DashboardFrame(props: DashboardFrameProps) {
                 toggleDrawer: () => setDrawerOpen((e) => !e),
             }}>
             <Root container>
-                {!isLargeScreen && (
+                {isLargeScreen && (
                     <LeftContainer item xs={2}>
                         <Navigation />
                     </LeftContainer>
                 )}
-                <Grid container direction="column" item xs={isLargeScreen ? 12 : 10}>
+                <Grid container direction="column" item xs={isLargeScreen ? 10 : 12}>
                     <ErrorBoundary>{props.children}</ErrorBoundary>
                 </Grid>
             </Root>
@@ -142,20 +142,20 @@ export interface PageFrameProps extends React.PropsWithChildren<{}> {
 export function PageFrame(props: PageFrameProps) {
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
-    const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('lg'))
+    const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
 
     return (
         <>
             <AppBar position="relative" color="inherit" elevation={0}>
                 <Toolbar>
-                    {isLargeScreen && (
+                    {!isLargeScreen && (
                         <MaskLogo item container alignItems="center">
                             <MenuButton onClick={toggleDrawer}>{drawerOpen ? <CloseIcon /> : <MenuIcon />}</MenuButton>
                             <Logo height={40} />
                         </MaskLogo>
                     )}
-                    <PageTitle item xs={isLargeScreen ? 10 : 12} container>
+                    <PageTitle item xs={isLargeScreen ? 12 : 10} container>
                         {left}
                         <Box sx={{ flex: 1 }} />
                         {right}
@@ -163,14 +163,14 @@ export function PageFrame(props: PageFrameProps) {
                 </Toolbar>
             </AppBar>
             <Containment item xs>
-                {isLargeScreen && (
+                {!isLargeScreen && (
                     <NavigationDrawer
                         open={drawerOpen}
                         onClose={toggleDrawer}
                         BackdropComponent={NavigationDrawerBackdrop}
                         BackdropProps={{ invisible: true }}
                         variant="temporary"
-                        PaperProps={{ className: 'paper', elevation: 0 }}>
+                        PaperProps={{ elevation: 0 }}>
                         <Navigation />
                     </NavigationDrawer>
                 )}
