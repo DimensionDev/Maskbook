@@ -1,36 +1,23 @@
-import BigNumber from 'bignumber.js'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useAsync } from 'react-use'
+import { currentGasPriceEthToUSD } from '../../settings/settings'
+import { getTransakGetPriceForETH } from '../apis/getTransakGetPriceForETH'
 
-const ENV = {
-    production: 'https://api.transak.com/api/v2/currencies/price',
-    development: 'https://staging-api.transak.com/api/v2/currencies/price',
-    test: 'https://development-api.transak.com/api/v2/currencies/price',
-}
+const timeout = 300
+let getTransakGetPriceForETH_Time = 0
 
-const URL = ENV[process.env.NODE_ENV]
-
-export function useTransakGetPriceForETH(amount: string) {
-    const [loading, setLoading] = useState(true)
-    const [value, setValue] = useState('0')
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true)
-            const params = new URLSearchParams()
-            params.append('fiatCurrency', 'USD')
-            params.append('cryptoCurrency', 'ETH')
-            params.append('isBuyOrSell', 'SELL')
-            params.append('paymentMethod', 'credit_debit_card')
-            params.append('cryptoAmount', '1')
-
-            const response = await fetch(`${URL}?${params.toString()}`, { method: 'GET' })
-            const json = await response.json()
-            setLoading(false)
-
-            const _amount = new BigNumber(json.response.fiatAmount).multipliedBy(amount)
-            setValue(_amount.toFixed(6))
+export function useTransakGetPriceForETH() {
+    console.log('time: ', getTransakGetPriceForETH_Time)
+    return useAsync(async () => {
+        console.log('time: ', getTransakGetPriceForETH_Time)
+        const now = Date.now()
+        if (getTransakGetPriceForETH_Time === 0 || now - getTransakGetPriceForETH_Time > timeout * 1000) {
+            const usd = await getTransakGetPriceForETH()
+            getTransakGetPriceForETH_Time = now
+            currentGasPriceEthToUSD.value = usd.toFixed(2)
+            console.log('usd:', usd)
         }
-        fetchData()
-    }, [amount])
-
-    return { loading, value }
+        console.log('use1:', currentGasPriceEthToUSD.value)
+        return currentGasPriceEthToUSD.value
+    }, [])
 }

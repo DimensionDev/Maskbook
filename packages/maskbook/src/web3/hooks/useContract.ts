@@ -11,6 +11,7 @@ import { iteratorToPromiEvent, Stage, StageType } from '../../utils/promiEvent'
 import type { EstimateGasOptions } from '../../contracts/types'
 import { decodeOutputString, decodeEvents } from '../helpers'
 import { TransactionEventType } from '../types'
+import { currentGasPriceSettings } from '../../settings/settings'
 
 function createContract<T extends Contract>(from: string, address: string, ABI: AbiItem[]) {
     if (!address || !EthereumAddress.isValid(address)) return null
@@ -33,6 +34,7 @@ function createContract<T extends Contract>(from: string, address: string, ABI: 
                                 from,
                                 to: contract.options.address,
                                 data: cached.encodeABI(),
+                                gasPrice: currentGasPriceSettings.value,
                                 ...config,
                             })
                             const result = await Services.Ethereum.callTransaction(config_)
@@ -54,6 +56,7 @@ function createContract<T extends Contract>(from: string, address: string, ABI: 
                                 from,
                                 to: contract.options.address,
                                 data: cached.encodeABI(),
+                                gasPrice: currentGasPriceSettings.value,
                                 ...config,
                             })
 
@@ -100,6 +103,7 @@ function createContract<T extends Contract>(from: string, address: string, ABI: 
                                         from,
                                         to: contract.options.address,
                                         data: cached.encodeABI(),
+                                        gasPrice: currentGasPriceSettings.value,
                                         ...config,
                                     },
                                     await Services.Ethereum.getChainId(from),

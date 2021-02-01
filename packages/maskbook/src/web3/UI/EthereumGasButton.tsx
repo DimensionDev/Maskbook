@@ -8,11 +8,12 @@ import {
     makeStyles,
     TextField,
     DialogActions,
+    ButtonBase,
+    Grid,
 } from '@material-ui/core'
 import React, { Fragment, useCallback, useEffect, useState } from 'react'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { useGasPrices } from '../hooks/useGasPrices'
-import { usePortalShadowRoot } from '../../utils/shadow-root/usePortalShadowRoot'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import type { GasPrice } from '../../plugins/Wallet/types'
 import { InjectedDialog } from '../../components/shared/InjectedDialog'
@@ -24,40 +25,28 @@ import BigNumber from 'bignumber.js'
 import { useTransakGetPriceForETH } from '../hooks/useTransakGetPriceForETH'
 import { currentGasPriceSettings } from '../../settings/settings'
 
-interface CalcETHAmountProps {
-    amount: string
-}
-function CalcETHAmount(props: CalcETHAmountProps) {
-    const { amount } = props
-    const { loading, value: fiat } = useTransakGetPriceForETH(amount)
-
-    return (
-        <>
-            {loading ? (
-                <CircularProgress size="0.5rem" />
-            ) : (
-                <Typography variant="body2" color="textSecondary">
-                    &#8776; ${fiat}
-                </Typography>
-            )}
-        </>
-    )
-}
-
 const useGasPriceItemStyles = makeStyles((theme) => {
     return createStyles<string, { hover: boolean }>({
         root: {
-            width: '30%',
+            width: '100%',
+            justifyContent: 'left',
+        },
+        content: {
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
             padding: theme.spacing(1),
+            border: '1px solid grey',
             borderRadius: 10,
             margin: theme.spacing(1),
-            border: '1px solid grey',
+            textAlign: 'left',
         },
+
         title: {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: 'cener',
             paddingBottom: theme.spacing(1),
         },
         dot: {
@@ -76,6 +65,7 @@ const useGasPriceItemStyles = makeStyles((theme) => {
         },
         eth: {
             marginTop: theme.spacing(1),
+            textAlign: 'left',
         },
         text: {
             borderRadius: 5,
@@ -92,6 +82,7 @@ interface GasPriceItemProps {
     primary?: string
     secondary?: string
     active?: boolean
+    usd?: string
     onChange?: (gasPrice: GasPrice) => void
 }
 function CalcETH(amount: string) {
@@ -99,23 +90,12 @@ function CalcETH(amount: string) {
 }
 
 function GasPriceItem(props: GasPriceItemProps) {
-    const { gasPrice, primary = 'green', secondary = 'grey', active = false, onChange } = props
+    const { gasPrice, primary = 'green', secondary = 'grey', active = false, onChange, usd } = props
     const [hover, setHover] = useState(false)
     const [amountForUI, setAmountForUI] = useState(gasPrice.gasPrice)
     const classes = useGasPriceItemStyles({ hover })
     const [eth, setETH] = useState(CalcETH(gasPrice.gasPrice))
     const [focuse, setFocuse] = useState(false)
-    const handleHoverIn = useCallback(() => {
-        setHover(true)
-        if (gasPrice.title === 'Custom') {
-            setFocuse(true)
-        }
-    }, [gasPrice.title])
-
-    const handleHoverOut = useCallback(() => {
-        setHover(false)
-        setFocuse(false)
-    }, [])
 
     const handleAmount = useCallback(
         (amount: string) => {
@@ -140,66 +120,69 @@ function GasPriceItem(props: GasPriceItemProps) {
     }, [gasPrice, onChange])
 
     return (
-        <div
-            className={classes.root}
-            style={{
-                backgroundColor: hover ? secondary : 'inherit',
-                opacity: hover ? '0.6' : '1',
-                borderColor: active || hover ? primary : 'inherit',
-            }}
-            onMouseEnter={handleHoverIn}
-            onMouseLeave={handleHoverOut}
-            onClick={onClick}>
-            <div className={classes.title}>
-                <Typography variant="body1" color="textSecondary">
-                    {gasPrice.title}
-                </Typography>
+        <Grid item xs={4}>
+            <ButtonBase className={classes.root}>
                 <div
-                    className={classes.dot}
+                    className={classes.content}
                     style={{
-                        backgroundColor: hover || active ? primary : secondary,
+                        borderColor: active || hover ? primary : 'inherit',
                     }}
-                />
-            </div>
-            <div className={classes.price}>
-                {gasPrice.title !== 'Custom' ? (
-                    <Typography variant="body1" color="textPrimary">
-                        {gasPrice.gasPrice}
-                    </Typography>
-                ) : (
-                    <TextField
-                        autoFocus={focuse}
-                        className={classes.text}
-                        size="small"
-                        variant="outlined"
-                        placeholder="0.0"
-                        margin="none"
-                        value={amountForUI}
-                        onChange={(e) => handleAmount(e.target.value)}
-                    />
-                )}
-                <Typography variant="body1" color="textPrimary">
-                    Gwei
-                </Typography>
-            </div>
-            <div className={classes.eth}>
-                <Typography variant="body2" color="textPrimary">
-                    {`${gasPrice.title === 'Custom' ? GAS_CUSTOM_WAIT : gasPrice.wait} min`}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                    {`${eth} ETH`}
-                </Typography>
-                <div>
-                    <CalcETHAmount amount={eth} />
+                    onClick={onClick}>
+                    <div className={classes.title}>
+                        <Typography variant="body1" color="textSecondary">
+                            {gasPrice.title}
+                        </Typography>
+                        <div
+                            className={classes.dot}
+                            style={{
+                                backgroundColor: hover || active ? primary : secondary,
+                            }}
+                        />
+                    </div>
+                    <div className={classes.price}>
+                        {gasPrice.title !== 'Custom' ? (
+                            <Typography variant="body1" color="textPrimary">
+                                {gasPrice.gasPrice}
+                            </Typography>
+                        ) : (
+                            <TextField
+                                autoFocus={focuse}
+                                className={classes.text}
+                                size="small"
+                                variant="outlined"
+                                placeholder="0.0"
+                                margin="none"
+                                value={amountForUI}
+                                onChange={(e) => handleAmount(e.target.value)}
+                            />
+                        )}
+                        <Typography variant="body1" color="textPrimary">
+                            Gwei
+                        </Typography>
+                    </div>
+                    <div className={classes.eth}>
+                        <Typography variant="body2" color="textPrimary">
+                            {`${gasPrice.title === 'Custom' ? GAS_CUSTOM_WAIT : gasPrice.wait} min`}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            {`${eth} ETH`}
+                        </Typography>
+                        <div>
+                            <Typography variant="body2" color="textSecondary">
+                                &#8776; ${new BigNumber(usd || '0').multipliedBy(eth).toFixed(6)}
+                            </Typography>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </ButtonBase>
+        </Grid>
     )
 }
 
 const useGasPricesLitsStyles = makeStyles((theme) =>
     createStyles({
         root: {
+            width: '100%',
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
@@ -211,12 +194,13 @@ const useGasPricesLitsStyles = makeStyles((theme) =>
 interface GasPricesListProps {
     gasPrices: GasPrice[]
     selectedIndex: number
+    usd?: string
     onChange?: (index: number, gasPrice: GasPrice) => void
 }
 
 export function GasPricesList(props: GasPricesListProps) {
     const classes = useGasPricesLitsStyles()
-    const { gasPrices = [], onChange, selectedIndex = 0 } = props
+    const { gasPrices = [], onChange, selectedIndex = 0, usd } = props
     const [selected, setSelected] = useState(selectedIndex)
 
     const handleOnChange = useCallback(
@@ -233,6 +217,7 @@ export function GasPricesList(props: GasPricesListProps) {
             {gasPrices.map((item, index) => (
                 <Fragment key={index}>
                     <GasPriceItem
+                        usd={usd}
                         key={index}
                         active={selected === index}
                         gasPrice={item}
@@ -246,13 +231,16 @@ export function GasPricesList(props: GasPricesListProps) {
 
 const useDialogStyles = makeStyles((theme) =>
     createStyles({
-        content: {},
+        content: {
+            padding: theme.spacing(2, 4),
+        },
         hit: {
             padding: theme.spacing(1),
         },
         dialogAction: {
             display: 'flex',
             justifyContent: 'center',
+            padding: theme.spacing(2, 4),
         },
     }),
 )
@@ -260,6 +248,7 @@ const useDialogStyles = makeStyles((theme) =>
 interface EthereumGasDialogProps {
     gasPrices?: GasPrice[]
     open: boolean
+    usd?: string
     onSubmit?: (gasPrice?: GasPrice) => void
     onClose: () => void
 }
@@ -267,7 +256,7 @@ interface EthereumGasDialogProps {
 function EthereumGasDialog(props: EthereumGasDialogProps) {
     const { t } = useI18N()
     const classes = useDialogStyles()
-    const { gasPrices = [], onClose, onSubmit } = props
+    const { gasPrices = [], onClose, onSubmit, usd } = props
     const [gasPrice, setGasPrice] = useState<GasPrice | null>(gasPrices && gasPrices.length > 0 ? gasPrices[0] : null)
     const [selected, setSeleted] = useState(0)
 
@@ -281,14 +270,15 @@ function EthereumGasDialog(props: EthereumGasDialogProps) {
     }, [gasPrice, onClose, onSubmit])
 
     const handleDefault = useCallback(() => {
-        onSubmit?.(gasPrices && gasPrices.length > 0 ? gasPrices[0] : undefined)
         onClose()
-    }, [gasPrices, onClose, onSubmit])
+    }, [onClose])
 
     return (
         <InjectedDialog open={props.open} title={t('gas_price_dialog_title')} onClose={onClose}>
             <DialogContent className={classes.content}>
-                <GasPricesList selectedIndex={selected} onChange={onChange} gasPrices={gasPrices} />
+                <Grid container spacing={2}>
+                    <GasPricesList usd={usd} selectedIndex={selected} onChange={onChange} gasPrices={gasPrices} />
+                </Grid>
                 <div className={classes.hit}>
                     <Typography variant="body1" color="textPrimary">
                         {t('gas_price_dialog_hit')}
@@ -297,10 +287,10 @@ function EthereumGasDialog(props: EthereumGasDialogProps) {
             </DialogContent>
             <DialogActions className={classes.dialogAction}>
                 <SpacedButtonGroup>
-                    <ActionButton variant="contained" onClick={handleDefault}>
-                        {t('default')}
+                    <ActionButton variant="contained" color="inherit" onClick={handleDefault}>
+                        {t('cancel')}
                     </ActionButton>
-                    <ActionButton variant="contained" onClick={handleClick}>
+                    <ActionButton variant="contained" color="primary" onClick={handleClick}>
                         {t('confirm')}
                     </ActionButton>
                 </SpacedButtonGroup>
@@ -321,7 +311,8 @@ export interface EthereumGasButtonProps extends withClasses<KeysInferFromUseStyl
 
 export function EthereumGasButton(props: EthereumGasButtonProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const { loading, value: gasPrices = [] } = useGasPrices()
+    const { loading: loadingGasPrice, value: gasPrices = [] } = useGasPrices()
+    const { value: usd, loading: loadingUSD } = useTransakGetPriceForETH()
     const { ButtonProps } = props
 
     const [open, setOpen] = useState(false)
@@ -365,12 +356,16 @@ export function EthereumGasButton(props: EthereumGasButtonProps) {
             <Button
                 variant="outlined"
                 {...ButtonProps}
-                endIcon={loading ? null : <ArrowDropDownIcon fontSize="small" />}
+                endIcon={loadingGasPrice && loadingUSD ? null : <ArrowDropDownIcon fontSize="small" />}
                 aria-haspopup="true"
                 onClick={handleClickListItem}>
-                {loading ? <CircularProgress size="1.5rem" /> : `${gasPrice?.gasPrice} | ${gasPrice?.title}`}
+                {loadingGasPrice && loadingUSD ? (
+                    <CircularProgress size="1.5rem" />
+                ) : (
+                    `${gasPrice?.gasPrice} | ${gasPrice?.title}`
+                )}
             </Button>
-            <EthereumGasDialog open={open} onClose={onClose} gasPrices={gasPricesForUI} onSubmit={onSubmit} />
+            <EthereumGasDialog usd={usd} open={open} onClose={onClose} gasPrices={gasPricesForUI} onSubmit={onSubmit} />
         </>
     )
 }
