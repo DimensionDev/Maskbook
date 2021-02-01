@@ -46,7 +46,7 @@ const useGasPriceItemStyles = makeStyles((theme) => {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'cener',
+            alignItems: 'center',
             paddingBottom: theme.spacing(1),
         },
         dot: {
