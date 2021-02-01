@@ -89,7 +89,7 @@ You need [the standalone version of React Devtools](https://github.com/facebook/
 
 Please use [Conventional Commits](https://www.conventionalcommits.org) when committing.
 
-### Husky not working
+### Git hook not working
 
 ```bash
 npx husky install # on project root directory
