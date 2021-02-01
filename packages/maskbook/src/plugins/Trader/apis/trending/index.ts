@@ -125,7 +125,7 @@ const coinNamespace = new Map<
         // all of supported symbols
         supportedSymbolsSet: Set<string>
 
-        // get all supported coins from symbol
+        // get all supported coins by symbol
         supportedSymbolIdsMap: Map<string, Coin[]>
         lastUpdated: Date
     }
