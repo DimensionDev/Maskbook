@@ -16,6 +16,9 @@ export async function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
             </StrictMode>,
         )
         oldChildren.forEach((x) => x.remove())
+        if (process.env.NODE_ENV === 'development') {
+            setTimeout(() => [...document.querySelectorAll('script')].forEach((x) => x.remove()), 200)
+        }
         return ''
     } else {
         const Server = await import('react-dom/server')

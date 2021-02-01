@@ -6,6 +6,9 @@ pnpm-lock.yaml
 *generated*
 storybook-static
 
+packages/storybook-shared/*.d.ts
+packages/storybook-shared/*.js
+
 # VSCode personal settings
 .vscode/launch.json
 .vscode/tasks.json
