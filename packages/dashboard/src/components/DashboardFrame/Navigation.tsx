@@ -1,7 +1,6 @@
 import {
     List,
     ListItem as MuiListItem,
-    Box,
     ListItemText,
     ListItemIcon,
     Collapse,
@@ -9,7 +8,7 @@ import {
     ListItemProps,
     useMediaQuery,
     experimentalStyled as styled,
-    BoxProps,
+    listItemClasses,
 } from '@material-ui/core'
 import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@material-ui/icons'
 import { useContext } from 'react'
@@ -19,30 +18,30 @@ import { Routes } from '../../pages/routes'
 import { DashboardContext } from './context'
 import Logo from './Logo'
 
-const ListItemLink = styled(({ nested, ...props }: LinkProps & ListItemProps & { nested?: boolean; to: string }) => (
-    <MuiListItem button component={Link} selected={!!useRouteMatch(props.to)} {...props} />
-))(({ theme, nested }) => ({
-    '&.MuiListItem-root': {
+function ListItemLinkUnStyled({ nested, ...props }: LinkProps & ListItemProps & { nested?: boolean; to: string }) {
+    return <MuiListItem button component={Link} selected={!!useRouteMatch(props.to)} {...props} />
+}
+
+const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => ({
+    [`&.${listItemClasses.root}`]: {
         paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
     },
-    '&.Mui-select': {
+    [`&.${listItemClasses.selected}`]: {
         backgroundColor: 'transparent',
         borderRight: '4px solid ' + (theme.palette.mode === 'light' ? theme.palette.action.selected : 'white'),
     },
 }))
 
-const LogoItem = styled((props: ListItemProps & BoxProps) => <MuiListItem component={Box} {...props} />)(
-    ({ theme }) => ({
-        '&.MuiListItem-root': {
-            justifyContent: 'center',
-            paddingLeft: theme.spacing(7),
-            marginBottom: theme.spacing(7.5),
-        },
-    }),
-)
+const LogoItem = (styled(MuiListItem)(({ theme }) => ({
+    [`&.${listItemClasses.root}`]: {
+        justifyContent: 'center',
+        paddingLeft: theme.spacing(7),
+        marginBottom: theme.spacing(3.5),
+    },
+})) as any) as typeof MuiListItem
 
 const ListItem = styled(MuiListItem)(({ theme }) => ({
-    '&.Mui-select': {
+    [`&.${listItemClasses.selected}`]: {
         backgroundColor: 'transparent',
         borderRight: '4px solid ' + (theme.palette.mode === 'light' ? theme.palette.action.selected : 'white'),
     },

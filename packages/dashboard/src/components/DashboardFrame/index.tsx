@@ -9,6 +9,9 @@ import {
     Drawer,
     experimentalStyled as styled,
     Box,
+    toolbarClasses,
+    Backdrop,
+    paperClasses,
 } from '@material-ui/core'
 import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
 import Color from 'color'
@@ -67,14 +70,12 @@ const MaskLogo = styled(Grid)`
 `
 
 const Toolbar = styled(MuiToolbar)(({ theme }) => ({
-    [theme.breakpoints.down('lg')]: {
-        '&.MuiToolbar-gutters': {
-            paddingLeft: theme.spacing(1),
-        },
-    },
-    [theme.breakpoints.up('lg')]: {
-        '&.MuiToolbar-gutters': {
+    [`&.${toolbarClasses.gutters}`]: {
+        [theme.breakpoints.up('lg')]: {
             paddingLeft: theme.spacing(0),
+        },
+        [theme.breakpoints.down('lg')]: {
+            paddingLeft: theme.spacing(1),
         },
     },
 }))
@@ -102,17 +103,18 @@ const Containment = styled(Grid)(({ theme }) => ({
 }))
 
 const NavigationDrawer = styled(Drawer)(({ theme }) => ({
-    top: `${theme.mixins.toolbar.minHeight}px!important`,
-    '& .paper': {
+    top: `${theme.mixins.toolbar.minHeight}px !important`,
+    // https://github.com/mui-org/material-ui/issues/20012#issuecomment-770654893
+    [`& > .${paperClasses.root}`]: {
         width: 232,
         top: theme.mixins.toolbar.minHeight,
         paddingTop: theme.spacing(7.5),
         background: new Color(theme.palette.background.paper).alpha(0.8).toString(),
         backdropFilter: 'blur(4px)',
     },
-    '& .backdrop': {
-        top: theme.mixins.toolbar.minHeight,
-    },
+}))
+const NavigationDrawerBackdrop = styled(Backdrop)(({ theme }) => ({
+    top: theme.mixins.toolbar.minHeight,
 }))
 
 const ShapeHelper = styled('div')(({ theme }) => ({
@@ -165,13 +167,9 @@ export function PageFrame(props: PageFrameProps) {
                     <NavigationDrawer
                         open={drawerOpen}
                         onClose={toggleDrawer}
+                        BackdropComponent={NavigationDrawerBackdrop}
                         BackdropProps={{ invisible: true }}
                         variant="temporary"
-                        ModalProps={{
-                            BackdropProps: {
-                                className: 'backdrop',
-                            },
-                        }}
                         PaperProps={{ className: 'paper', elevation: 0 }}>
                         <Navigation />
                     </NavigationDrawer>
