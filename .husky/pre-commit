@@ -1,6 +1,6 @@
 #!/bin/sh
 . "$(dirname $0)/_/husky.sh"
 
-lint-staged
+npx lint-staged
 npm run locale-kit -- --sync-key
-prettier --check .
+npx prettier --check .
