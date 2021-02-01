@@ -129,7 +129,7 @@ importers:
       '@dimensiondev/maskbook-theme': link:../theme
       '@dimensiondev/matrix-js-sdk-type': 1.0.0-20200731085604-dc2de92
       '@dimensiondev/metamask-extension-provider': 3.0.0-20210125122006-86e9bae
-      '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
+      '@dimensiondev/stego-js': 0.13.0-20210127113811-f24cb8f
       '@ethersproject/address': 5.0.9
       '@ethersproject/contracts': 5.0.9
       '@ethersproject/networks': 5.0.7
@@ -295,7 +295,7 @@ importers:
       '@dimensiondev/maskbook-theme': '*'
       '@dimensiondev/matrix-js-sdk-type': '=1.0.0-20200731085604-dc2de92'
       '@dimensiondev/metamask-extension-provider': ^3.0.0-20210125122006-86e9bae
-      '@dimensiondev/stego-js': '=0.11.1-20201027083223-8ab41be'
+      '@dimensiondev/stego-js': ^0.13.0-20210127113811-f24cb8f
       '@dimensiondev/webextension-shim': 0.0.3-20201120022530-b318b89
       '@ethersproject/address': ^5.0.4
       '@ethersproject/contracts': ^5.0.4
@@ -2704,16 +2704,17 @@ packages:
     resolution:
       integrity: sha512-47QS5imgwm/TQE4TrOxToPuZegsxH5fcAeZnTwAhqC/PDFha7sIb5x+/sA/NAYdYYAHpO3IVyBKRo0t+HL2XxQ==
       tarball: download/@dimensiondev/metamask-extension-provider/3.0.0-20210125122006-86e9bae/bf24ae51e642593c39426673d7e8a1e37b2b807881507a3a0c66dc831ac5e403
-  /@dimensiondev/stego-js/0.11.1-20201027083223-8ab41be:
+  /@dimensiondev/stego-js/0.13.0-20210127113811-f24cb8f:
     dependencies:
-      meow: 7.1.1
+      '@rgba-image/lanczos': 0.1.0
+      meow: 8.1.2
     dev: false
     hasBin: true
     peerDependencies:
       canvas: ^2.6.0
     resolution:
-      integrity: sha512-lm49qcX2O40Nn+AGKN6J4qrpPHaffGnvUI3mCh+obyiZxT9H5/vZv1B+SUm2bXq8r2LeLHIeW90x1lpyg1roTQ==
-      tarball: download/@dimensiondev/stego-js/0.11.1-20201027083223-8ab41be/2d41418365c7ea41e10de432e82b0707c3a3a3b70a20a3733276162eeb6c4bcd
+      integrity: sha512-7j3/wViAdHu6+wSzUl7F43uGI02ZWBuvygaiQqczuxqOPQbjB9oYGkhLMcIXPhR0B1vwTOBH9iMRApQEf3kmUA==
+      tarball: download/@dimensiondev/stego-js/0.13.0-20210127113811-f24cb8f/eb25169a92554ead069f7ebf2f16d0938998af04d5132fc448a93f9b129c5f3b
   /@dimensiondev/webextension-shim/0.0.3-20201120022530-b318b89:
     dependencies:
       async-call-rpc: 4.2.1
@@ -4180,6 +4181,30 @@ packages:
       react-dom: 15.x || 16.x || 16.4.0-alpha.0911da3
     resolution:
       integrity: sha512-+mtn9wjlB9NN2CNnnC/BRYtwdKBfSyyasPYraNAyvaV1occr/5NnB4CVzjEZipNHwYebQwcndGUmpFzxAUoqSA==
+  /@rgba-image/common/0.1.13:
+    dev: false
+    resolution:
+      integrity: sha512-AnOBmBpjSgcymTuVhTGy+RB4FfmEQqR2GeJY3d3xfvR9fl3HfhzwgVqopuh3bKSAT6KRpJr7wNmug0qr3oI7bA==
+  /@rgba-image/copy/0.1.2:
+    dependencies:
+      '@rgba-image/common': 0.1.13
+    dev: false
+    resolution:
+      integrity: sha512-N1t4aw0lvvGSToyoy6IgYOEEDDGEgFCL1ZP8PNfcT9f0EjmXBD+AbrJhMy4gTyq7kcxpQM3vO1fKXl0qGMUyEA==
+  /@rgba-image/create-image/0.1.1:
+    dependencies:
+      '@rgba-image/common': 0.1.13
+    dev: false
+    resolution:
+      integrity: sha512-ndExUNyi9Ooa/OZqiJS53vYrQ48FX7MDmMrEslDxhsorDsXpeKI9w689r4AYhT9CF9KZlBe8SmI++3BwSvvwAQ==
+  /@rgba-image/lanczos/0.1.0:
+    dependencies:
+      '@rgba-image/common': 0.1.13
+      '@rgba-image/copy': 0.1.2
+      '@rgba-image/create-image': 0.1.1
+    dev: false
+    resolution:
+      integrity: sha512-pxMl+YlolWPK8b10MOCNamtFbpyHvHQAxwhllnkhJugG5CA3qV6MSN9boPP30qPtmZwbHDCeYw0hmpI+EtlbZw==
   /@servie/events/1.0.0:
     dev: false
     resolution:
@@ -4942,30 +4967,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
-  /@storybook/client-api/5.3.21_regenerator-runtime@0.13.7:
-    dependencies:
-      '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
-      '@storybook/channel-postmessage': 5.3.21
-      '@storybook/channels': 5.3.21
-      '@storybook/client-logger': 5.3.21
-      '@storybook/core-events': 5.3.21
-      '@storybook/csf': 0.0.1
-      '@types/webpack-env': 1.16.0
-      core-js: 3.8.3
-      eventemitter3: 4.0.7
-      global: 4.4.0
-      is-plain-object: 3.0.1
-      lodash: 4.17.20
-      memoizerific: 1.11.3
-      qs: 6.9.6
-      stable: 0.1.8
-      ts-dedent: 1.2.0
-      util-deprecate: 1.0.2
-    dev: true
-    peerDependencies:
-      regenerator-runtime: '*'
-    resolution:
-      integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
   /@storybook/client-api/6.1.15:
     dependencies:
       '@storybook/addons': 6.1.15
@@ -5127,7 +5128,7 @@ packages:
       '@babel/preset-env': 7.12.11
       '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
       '@storybook/channel-postmessage': 5.3.21
-      '@storybook/client-api': 5.3.21_regenerator-runtime@0.13.7
+      '@storybook/client-api': 5.3.21
       '@storybook/client-logger': 5.3.21
       '@storybook/core-events': 5.3.21
       '@storybook/csf': 0.0.1
@@ -12842,6 +12843,20 @@ packages:
     resolution:
       integrity: sha512-/LFZOIo82WDsyyv7h7oc0MJF9ACOvDRdx9rWPZ2pgMfNWu/z8hQDBtOchuB/0BVLmuFOZjV02YwUVzNsWx/EzA==
   /follow-redirects/1.13.2:
+    dev: false
+    engines:
+      node: '>=4.0'
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    resolution:
+      integrity: sha512-6mPTgLxYm3r6Bkkg0vNM0HTjfGrOEtsfbhagQvbxDEsEkpNhw582upBaoRZylzen6krEmxXJgt9Ju6HiI4O7BA==
+  /follow-redirects/1.13.2_debug@4.3.1:
+    dependencies:
+      debug: 4.3.1_supports-color@6.1.0
+    dev: true
     engines:
       node: '>=4.0'
     peerDependencies:
@@ -13870,14 +13885,13 @@ packages:
   /hosted-git-info/2.8.8:
     resolution:
       integrity: sha512-f/wzC2QaWBs7t9IYqB4T3sR1xviIViXJRJTWBlx2Gf3g0Xi5vI7Yy4koXQ1c9OYDGHN9sBy1DQ2AB8fqZBWhUg==
-  /hosted-git-info/3.0.7:
+  /hosted-git-info/3.0.8:
     dependencies:
       lru-cache: 6.0.0
-    dev: true
     engines:
       node: '>=10'
     resolution:
-      integrity: sha512-fWqc0IcuXs+BmE9orLDyVykAG9GJtGLGuZAAqgcckPgv5xad4AcXGIv8galtQvlwutxSlaMcdw7BUtq2EIvqCQ==
+      integrity: sha512-aXpmwoOhRBrw6X3j0h5RloK4x1OzsxMPyxqIHyNfSe2pypkVTZFpEiRoSipPEPlMrh0HW/XsjkJ5WgnCirpNUw==
   /hpack.js/2.1.6:
     dependencies:
       inherits: 2.0.4
@@ -14065,7 +14079,7 @@ packages:
   /http-proxy/1.18.1_debug@4.3.1:
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.13.2
+      follow-redirects: 1.13.2_debug@4.3.1
       requires-port: 1.0.0
     dev: true
     engines:
@@ -16618,7 +16632,6 @@ packages:
   /lru-cache/6.0.0:
     dependencies:
       yallist: 4.0.0
-    dev: true
     engines:
       node: '>=10'
     resolution:
@@ -16879,24 +16892,6 @@ packages:
       node: '>= 0.10.0'
     resolution:
       integrity: sha1-htcJCzDORV1j+64S3aUaR93K+bI=
-  /meow/7.1.1:
-    dependencies:
-      '@types/minimist': 1.2.1
-      camelcase-keys: 6.2.2
-      decamelize-keys: 1.1.0
-      hard-rejection: 2.1.0
-      minimist-options: 4.1.0
-      normalize-package-data: 2.5.0
-      read-pkg-up: 7.0.1
-      redent: 3.0.0
-      trim-newlines: 3.0.0
-      type-fest: 0.13.1
-      yargs-parser: 18.1.3
-    dev: false
-    engines:
-      node: '>=10'
-    resolution:
-      integrity: sha512-GWHvA5QOcS412WCo8vwKDlTelGLsCGBVevQB5Kva961rmNfun0PCbv5+xta2kUMFJyR8/oWnn7ddeKdosbAPbA==
   /meow/8.1.2:
     dependencies:
       '@types/minimist': 1.2.1
@@ -16910,7 +16905,6 @@ packages:
       trim-newlines: 3.0.0
       type-fest: 0.18.1
       yargs-parser: 20.2.4
-    dev: true
     engines:
       node: '>=10'
     resolution:
@@ -17560,11 +17554,10 @@ packages:
       integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==
   /normalize-package-data/3.0.0:
     dependencies:
-      hosted-git-info: 3.0.7
+      hosted-git-info: 3.0.8
       resolve: 1.19.0
       semver: 7.3.4
       validate-npm-package-license: 3.0.4
-    dev: true
     engines:
       node: '>=10'
     resolution:
@@ -20929,7 +20922,6 @@ packages:
   /semver/7.3.4:
     dependencies:
       lru-cache: 6.0.0
-    dev: true
     engines:
       node: '>=10'
     hasBin: true
@@ -22247,7 +22239,7 @@ packages:
       serialize-javascript: 4.0.0
       source-map: 0.6.1
       terser: 4.8.0
-      webpack: 4.46.0
+      webpack: 4.46.0_webpack-cli@4.4.0
       webpack-sources: 1.4.3
       worker-farm: 1.7.0
     dev: true
@@ -22877,14 +22869,7 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-OdjXJxnCN1AvyLSzeKIgXTXxV+99ZuXl3Hpo9XpJAv9MBcHrrJOQ5kV7ypXOuQie+AmWG25hLbiKdwYTifzcfQ==
-  /type-fest/0.13.1:
-    dev: false
-    engines:
-      node: '>=10'
-    resolution:
-      integrity: sha512-34R7HTnG0XIJcBSn5XhDd7nNFPRcXYRZrBB2O2jdKqYODldSzBAqzsWoZYYvduky73toYS/ESqxPvkDf/F0XMg==
   /type-fest/0.18.1:
-    dev: true
     engines:
       node: '>=10'
     resolution:
@@ -24763,12 +24748,12 @@ packages:
     dependencies:
       camelcase: 5.3.1
       decamelize: 1.2.0
+    dev: true
     engines:
       node: '>=6'
     resolution:
       integrity: sha512-o50j0JeToy/4K6OZcaQmW6lyXXKhq7csREXcDwk2omFPJEwUNOVtJKvmDr9EI1fAJZUyZcRF7kxGBWmRXudrCQ==
   /yargs-parser/20.2.4:
-    dev: true
     engines:
       node: '>=10'
     resolution:
