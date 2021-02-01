@@ -28,9 +28,8 @@
     "ci": "pnpm install --frozen-lockfile --store-dir ~/.pnpm/"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "eslint --ext .ts,.tsx --fix"
-    ]
+    "*": "prettier --check",
+    "*.{ts,tsx,js,jsx}": "eslint --cache --fix"
   },
   "dependencies": {
     "@emotion/cache": "^11",
