@@ -3,4 +3,3 @@
 
 npx lint-staged
 npm run locale-kit -- --sync-key
-npx prettier --check .
