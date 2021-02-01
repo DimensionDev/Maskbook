@@ -30,12 +30,7 @@ async function main(mode) {
         if (!confirm) return
     }
 
-    const command = [
-        '--mode',
-        mode === 'dev' ? 'development' : 'production',
-        '-c',
-        resolve(__dirname, '../maskbook/webpack.config.ts'),
-    ]
+    const command = ['--mode', mode === 'dev' ? 'development' : 'production']
     if (mode === 'dev') command.unshift('serve')
     args.filter((x) => !x.startsWith('-')).forEach((target) => {
         command.push('--env', target)
@@ -43,6 +38,6 @@ async function main(mode) {
             throw new TypeError('Unknown target ' + target + '. Known targets: ' + knownTargets.join(','))
         }
     })
-    spawn('webpack', command, { stdio: 'inherit', shell: true })
+    spawn('npx', ['webpack', ...command], { stdio: 'inherit', shell: true, cwd: resolve(__dirname, '../maskbook/') })
 }
 module.exports = main

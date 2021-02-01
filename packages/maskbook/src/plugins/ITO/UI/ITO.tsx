@@ -5,7 +5,7 @@ import { BigNumber } from 'bignumber.js'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
-import { ITO_Status, JSON_PayloadInMask } from '../types'
+import { ITO_Status } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
@@ -27,8 +27,8 @@ import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { usePoolPayload } from '../hooks/usePoolPayload'
 import { resolveChainName } from '../../../web3/pipes'
+import { usePoolPayload } from '../hooks/usePoolPayload'
 
 export interface IconProps {
     size?: number
@@ -151,8 +151,6 @@ const useStyles = makeStyles((theme) =>
 
 export interface ITO_Props {
     pid: string
-    payload: JSON_PayloadInMask
-    retryPoolPayload: () => Promise<void>
 }
 
 interface TokenItemProps {
@@ -187,6 +185,7 @@ export function ITO(props: ITO_Props) {
 
     const { pid } = props
     const { payload, retry: retryPoolPayload } = usePoolPayload(pid)
+
     const {
         token,
         total: payload_total,
@@ -204,7 +203,6 @@ export function ITO(props: ITO_Props) {
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(payload_total_remaining)
     const sold = total.minus(total_remaining)
-
     //#region token detailed
     const {
         value: availability,
@@ -410,7 +408,7 @@ export function ITO(props: ITO_Props) {
         <div>
             <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${PoolBackground})` }}>
                 <Box className={classes.header}>
-                    <Typography variant="h5" className={classes.title}>
+                    <Typography variant="h5" className={classes.title} onClick={retryPoolPayload}>
                         {payload.message}
                     </Typography>
 
@@ -562,9 +560,8 @@ function ITO_LoadingFailUI({ retryPoolPayload }: { retryPoolPayload: () => void 
     )
 }
 
-export class ITO_LoadingFail extends Component<{ retryPoolPayload: () => Promise<void> }> {
+export class ITO_LoadingFail extends Component<{ retryPoolPayload: () => void }> {
     static getDerivedStateFromError(error: unknown) {
-        console.log('getDerivedStateFromError')
         return { error }
     }
     state: { error: Error | null } = { error: null }

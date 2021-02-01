@@ -6,7 +6,7 @@ import { COTM_MetadataReader } from './helpers'
 import type { COTM_JSONPayload } from './types'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import { TokenPacket } from './UI/TokenPacket'
-import { COTM_CompositionDialog as COTM_CompositionDialog } from './UI/CompositionDialog'
+import { COTM_CompositionDialog } from './UI/CompositionDialog'
 import { Flags } from '../../utils/flags'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 

@@ -4,7 +4,8 @@
     { "path": "./packages/maskbook/" },
     { "path": "./packages/theme/" },
     { "path": "./packages/dashboard/" },
-    { "path": "./packages/shared/" }
+    { "path": "./packages/shared/" },
+    { "path": "./packages/storybook-shared/" }
   ],
   "compilerOptions": {
     /* Basic Options */

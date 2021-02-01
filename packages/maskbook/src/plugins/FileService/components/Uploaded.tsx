@@ -74,7 +74,7 @@ export const Uploaded: React.FC = () => {
             </Grid>
             <Grid item>
                 <FileName name={state.name} />
-                <Typography className={classes.meta}>
+                <Typography component="section" className={classes.meta}>
                     <p className={classes.info}>
                         <span>{formatFileSize(state.size)}</span>
                         <span>{'  '}</span>

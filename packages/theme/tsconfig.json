@@ -4,5 +4,6 @@
     "rootDir": "./",
     "outDir": "./dist/"
   },
-  "include": ["./src/", "./stories"]
+  "include": ["./src/", "./stories"],
+  "references": [{ "path": "../storybook-shared/" }]
 }

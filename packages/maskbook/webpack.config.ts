@@ -172,8 +172,15 @@ function config(opts: {
                     defaultVendors: {
                         test: /[\\/]node_modules[\\/]/,
                         name(module) {
-                            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
-                            return `npm.${packageName.replace('@', '')}`
+                            const path = (module.context as string)
+                                .replace(/\\/g, '/')
+                                .match(/node_modules\/\.pnpm\/(.+)/)[1]
+                                .split('/')
+                            const pkg: string[] = [path[0]]
+                            if (path[0].startsWith('@')) pkg.push(path[1])
+                            // drop version number
+                            pkg[pkg.length - 1] = pkg[pkg.length - 1].replace(/@.+/, '')
+                            return `npm.${pkg.join('.').replace('@', '')}`
                         },
                     },
                 },
@@ -248,15 +255,12 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             getManifestPlugin(),
             ...getBuildNotificationPlugins(),
         )
-        // Define "browser" globally in platform that don't have "browser"
-        if (!target.FirefoxEngine && !target.iOS)
-            main.plugins!.push(new ProvidePlugin({ browser: 'webextension-polyfill' }))
         main.entry = {
-            'options-page': withReactDevTools(src('./src/extension/options-page/index.tsx')),
-            'content-script': withReactDevTools(src('./src/content-script.ts')),
-            popup: withReactDevTools(src('./src/extension/popup-page/index.tsx')),
-            'background-service': src('./src/background-service.ts'),
-            debug: src('./src/extension/debug-page'),
+            'options-page': withBrowserPolyfill(...withReactDevTools(src('./src/extension/options-page/index.tsx'))),
+            'content-script': withBrowserPolyfill(...withReactDevTools(src('./src/content-script.ts'))),
+            popup: withBrowserPolyfill(...withReactDevTools(src('./src/extension/popup-page/index.tsx'))),
+            'background-service': withBrowserPolyfill(src('./src/background-service.ts')),
+            debug: withBrowserPolyfill(src('./src/extension/debug-page')),
         }
         if (isManifestV3) delete main.entry['background-script']
         for (const entry in main.entry) {
@@ -300,6 +304,10 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     function iOSWebExtensionShimHack(...path: string[]) {
         if (!target.iOS && !target.Android) return path
         return [...path, src('./src/polyfill/permissions.js')]
+    }
+    function withBrowserPolyfill(...path: string[]) {
+        if (target.iOS || target.runtimeEnv.target === 'firefox') return path
+        return [src('./miscs/browser-loader.js'), ...path]
     }
     function getBuildNotificationPlugins() {
         if (mode === 'production') return []

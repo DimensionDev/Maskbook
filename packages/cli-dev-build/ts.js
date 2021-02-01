@@ -12,12 +12,12 @@ module.exports.dev = async function () {
         if (await lock()) break lock
     }
     runCli({ config: configFile, watch: true })
-    spawn('tsc', ['-b', '-w'], args)
+    spawn('npx', ['tsc', '-b', '-w'], args)
 }
 module.exports.build = function () {
     return new Promise((resolve, reject) => {
         runCli({ config: configFile })
-        const p = spawn('tsc', ['-b'], args)
+        const p = spawn('npx', ['tsc', '-b'], args)
         p.on('close', resolve)
         p.on('error', reject)
     })
