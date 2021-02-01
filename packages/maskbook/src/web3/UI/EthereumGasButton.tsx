@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core'
 import React, { Fragment, useCallback, useEffect, useState } from 'react'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
-import { useGasPrices } from '../hooks/useGasPrices'
+import { useGasPricesList } from '../hooks/useGasPricesList'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import type { GasPrice } from '../../plugins/Wallet/types'
 import { InjectedDialog } from '../../components/shared/InjectedDialog'
@@ -36,7 +36,7 @@ const useGasPriceItemStyles = makeStyles((theme) => {
             display: 'flex',
             flexDirection: 'column',
             padding: theme.spacing(1),
-            border: '1px solid grey',
+            border: `1px solid ${theme.palette.divider}`,
             borderRadius: 10,
             margin: theme.spacing(1),
             textAlign: 'left',
@@ -311,13 +311,14 @@ export interface EthereumGasButtonProps extends withClasses<KeysInferFromUseStyl
 
 export function EthereumGasButton(props: EthereumGasButtonProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const { loading: loadingGasPrice, value: gasPrices = [] } = useGasPrices()
+    const { loading: loadingGasPrice, value: gasPrices = [] } = useGasPricesList()
     const { value: usd, loading: loadingUSD } = useTransakGetPriceForETH()
     const { ButtonProps } = props
 
     const [open, setOpen] = useState(false)
     const [gasPrice, setGasPrice] = useState<GasPrice>()
     const [gasPricesForUI, setGasPricesForUI] = useState<GasPrice[]>([])
+    const { t } = useI18N()
 
     useEffect(() => {
         setGasPricesForUI(gasPrices)
@@ -361,8 +362,10 @@ export function EthereumGasButton(props: EthereumGasButtonProps) {
                 onClick={handleClickListItem}>
                 {loadingGasPrice && loadingUSD ? (
                     <CircularProgress size="1.5rem" />
-                ) : (
+                ) : gasPrices && gasPrices.length > 0 ? (
                     `${gasPrice?.gasPrice} | ${gasPrice?.title}`
+                ) : (
+                    t('plugin_trader_no_data')
                 )}
             </Button>
             <EthereumGasDialog usd={usd} open={open} onClose={onClose} gasPrices={gasPricesForUI} onSubmit={onSubmit} />

@@ -20,6 +20,6 @@ export async function getGasPrices(provider: GasPriceProviderType, chainId: Chai
         case GasPriceProviderType.GasStation:
             return gasstation.getGasPrice()
         default:
-            return unreachable(provider)
+            unreachable(provider)
     }
 }

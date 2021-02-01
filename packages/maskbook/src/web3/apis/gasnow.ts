@@ -34,7 +34,7 @@ async function GetGasNowPrice(name: string) {
     }
 }
 export async function getGasPrice(): Promise<GasPrice[]> {
-    const timestamp = Date.now() / 1000
+    const timestamp = Math.floor(Date.now() / 1000)
     if (!_LastGasNowResponseData || timestamp - _LastGasNowResponseData.timestamp > WAIT_TIME) {
         const { data: gasPrice } = await GetGasNowPrice('maskbook')
         _LastGasNowResponseData = gasPrice

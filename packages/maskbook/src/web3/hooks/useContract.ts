@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useEffect } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import type { Contract } from 'web3-eth-contract'
 import type { TransactionConfig } from 'web3-core'
@@ -12,6 +12,8 @@ import type { EstimateGasOptions } from '../../contracts/types'
 import { decodeOutputString, decodeEvents } from '../helpers'
 import { TransactionEventType } from '../types'
 import { currentGasPriceSettings } from '../../settings/settings'
+import { useGasPrice } from './useGasPrice'
+import BigNumber from 'bignumber.js'
 
 function createContract<T extends Contract>(from: string, address: string, ABI: AbiItem[]) {
     if (!address || !EthereumAddress.isValid(address)) return null
@@ -24,7 +26,6 @@ function createContract<T extends Contract>(from: string, address: string, ABI: 
                 const method = Reflect.get(target, name)
                 const methodABI = contract.options.jsonInterface.find((x) => x.type === 'function' && x.name === name)
                 const eventABIs = contract.options.jsonInterface.filter((x) => x.type === 'event')
-
                 return (...args: string[]) => {
                     const cached = method(...args)
                     return {
@@ -133,6 +134,7 @@ function createContract<T extends Contract>(from: string, address: string, ABI: 
  */
 export function useContract<T extends Contract>(address: string, ABI: AbiItem[]) {
     const account = useAccount()
+    currentGasPriceSettings.value = useGasPrice()
     return useMemo(() => createContract<T>(account, address, ABI), [address, account, ABI])
 }
 
@@ -143,6 +145,7 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
  */
 export function useContracts<T extends Contract>(listOfAddress: string[], ABI: AbiItem[]) {
     const account = useAccount()
+    currentGasPriceSettings.value = useGasPrice()
     const contracts = useMemo(() => listOfAddress.map((address) => createContract<T>(account, address, ABI)), [
         account,
         listOfAddress,

@@ -4,7 +4,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getGasPrices } from '../apis'
 import { useChainId } from './useChainState'
 
-export function useGasPrices() {
+export function useGasPricesList() {
     const chainId = useChainId()
     const selectedGasPriceServer = useValueRef(currentSelectedGasPriceServerSettings)
     return useAsyncRetry(async () => {
