@@ -1,5 +1,6 @@
 import { ChainId } from '../types'
 
+// custom gas price waiting time 5 min
 export const GAS_CUSTOM_WAIT = 5
 export const GAS_LIMIT = 21000
 

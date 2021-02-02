@@ -2,6 +2,8 @@ import BigNumber from 'bignumber.js'
 import type { GasPrice } from '../../plugins/Wallet/types'
 
 const GAS_NOW_API = 'https://www.gasnow.org/api/v3/gas/price'
+
+// Interface data is updated every 8s
 const WAIT_TIME = 8
 
 interface GasNowData {

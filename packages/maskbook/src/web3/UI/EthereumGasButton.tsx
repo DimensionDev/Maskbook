@@ -246,10 +246,10 @@ const useDialogStyles = makeStyles((theme) =>
 )
 
 interface EthereumGasDialogProps {
-    gasPrices?: GasPrice[]
+    gasPrices: GasPrice[]
     open: boolean
     usd?: string
-    onSubmit?: (gasPrice?: GasPrice) => void
+    onSubmit: (gasPrice: GasPrice) => void
     onClose: () => void
 }
 
@@ -257,7 +257,7 @@ function EthereumGasDialog(props: EthereumGasDialogProps) {
     const { t } = useI18N()
     const classes = useDialogStyles()
     const { gasPrices = [], onClose, onSubmit, usd } = props
-    const [gasPrice, setGasPrice] = useState<GasPrice | null>(gasPrices && gasPrices.length > 0 ? gasPrices[0] : null)
+    const [gasPrice, setGasPrice] = useState<GasPrice>(gasPrices[0])
     const [selected, setSeleted] = useState(0)
 
     const onChange = (index: number, gasPrice: GasPrice) => {
@@ -265,13 +265,9 @@ function EthereumGasDialog(props: EthereumGasDialogProps) {
         setSeleted(index)
     }
     const handleClick = useCallback(() => {
-        onSubmit?.(gasPrice!)
+        onSubmit(gasPrice)
         onClose()
     }, [gasPrice, onClose, onSubmit])
-
-    const handleDefault = useCallback(() => {
-        onClose()
-    }, [onClose])
 
     return (
         <InjectedDialog open={props.open} title={t('gas_price_dialog_title')} onClose={onClose}>
@@ -287,7 +283,7 @@ function EthereumGasDialog(props: EthereumGasDialogProps) {
             </DialogContent>
             <DialogActions className={classes.dialogAction}>
                 <SpacedButtonGroup>
-                    <ActionButton variant="contained" color="inherit" onClick={handleDefault}>
+                    <ActionButton variant="contained" color="inherit" onClick={onClose}>
                         {t('cancel')}
                     </ActionButton>
                     <ActionButton variant="contained" color="primary" onClick={handleClick}>
@@ -368,7 +364,15 @@ export function EthereumGasButton(props: EthereumGasButtonProps) {
                     t('plugin_trader_no_data')
                 )}
             </Button>
-            <EthereumGasDialog usd={usd} open={open} onClose={onClose} gasPrices={gasPricesForUI} onSubmit={onSubmit} />
+            {gasPrices && gasPrices.length > 0 ? (
+                <EthereumGasDialog
+                    usd={usd}
+                    open={open}
+                    onClose={onClose}
+                    gasPrices={gasPricesForUI}
+                    onSubmit={onSubmit}
+                />
+            ) : null}
         </>
     )
 }
