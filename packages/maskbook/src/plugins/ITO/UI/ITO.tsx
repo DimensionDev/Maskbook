@@ -253,6 +253,7 @@ export function ITO(props: ITO_Props) {
         payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
     const shareSuccessLink = useShareLink(
         t('plugin_ito_claim_success_share', {
+            user: seller.name,
             link: postLink,
             symbol: token.symbol,
         }),
