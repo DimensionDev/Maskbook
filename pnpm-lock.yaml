@@ -138,6 +138,7 @@ importers:
       '@ethersproject/networks': 5.0.7
       '@ethersproject/providers': 5.0.19
       '@ethersproject/solidity': 5.0.8
+      '@hookform/resolvers': 1.3.4_react-hook-form@6.15.1
       '@msgpack/msgpack': 2.3.0
       '@openzeppelin/contracts': 3.3.0
       '@popperjs/core': 2.6.0
@@ -200,6 +201,7 @@ importers:
       react-draggable: 4.4.3
       react-feather: 2.0.9
       react-highlight-words: 0.17.0
+      react-hook-form: 6.15.1
       react-i18next: 11.8.5_i18next@19.8.5
       react-middle-ellipsis: 1.1.0
       react-router: 5.2.0
@@ -226,6 +228,7 @@ importers:
       webcrypto-liner: 1.2.3
       webextension-polyfill: 0.7.0
       z-schema: 5.0.0
+      zod: 3.0.0-alpha.4
     devDependencies:
       '@dimensiondev/webextension-shim': 0.0.3-20201120022530-b318b89
       '@pmmmwh/react-refresh-webpack-plugin': 0.4.3_a16822dab3ce6e2b05b029223ee2977b
@@ -305,6 +308,7 @@ importers:
       '@ethersproject/networks': ^5.0.4
       '@ethersproject/providers': ^5.0.9
       '@ethersproject/solidity': ^5.0.4
+      '@hookform/resolvers': ^1.3.4
       '@msgpack/msgpack': ^2.3.0
       '@openzeppelin/contracts': ^3.2.0
       '@pmmmwh/react-refresh-webpack-plugin': ^0.4.3
@@ -409,6 +413,7 @@ importers:
       react-draggable: ^4.4.3
       react-feather: ^2.0.9
       react-highlight-words: ^0.17.0
+      react-hook-form: ^6.15.1
       react-i18next: ^11.8.4
       react-middle-ellipsis: ^1.1.0
       react-refresh: ^0.9.0
@@ -455,6 +460,7 @@ importers:
       webpack-notifier: ^1.12.0
       webpack-target-webextension: ^0.4.0
       z-schema: ^5.0.0
+      zod: ^3.0.0-alpha.4
   packages/shared:
     dependencies:
       async-call-rpc: 5.0.0
@@ -3308,6 +3314,14 @@ packages:
     dev: true
     resolution:
       integrity: sha512-tAag0jEcjwH+P2quUfipd7liWCNX2F8NvYjQp2wtInsZxnMlypdw0FtAOLxtvvkO+GSRRbmNi8m/5y42PQJYCQ==
+  /@hookform/resolvers/1.3.4_react-hook-form@6.15.1:
+    dependencies:
+      react-hook-form: 6.15.1
+    dev: false
+    peerDependencies:
+      react-hook-form: '>=6.6.0'
+    resolution:
+      integrity: sha512-K56VLSInXNIT/r14pkzRn1FJclqzGOWqpe3Bf0kz2Hf98ZOmRRFh4fhB7F3ofqCQ03CEQQkV44CTg7ql6nEvEg==
   /@icons/material/0.2.4:
     dev: true
     peerDependencies:
@@ -4945,30 +4959,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
-  /@storybook/client-api/5.3.21_regenerator-runtime@0.13.7:
-    dependencies:
-      '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
-      '@storybook/channel-postmessage': 5.3.21
-      '@storybook/channels': 5.3.21
-      '@storybook/client-logger': 5.3.21
-      '@storybook/core-events': 5.3.21
-      '@storybook/csf': 0.0.1
-      '@types/webpack-env': 1.16.0
-      core-js: 3.8.3
-      eventemitter3: 4.0.7
-      global: 4.4.0
-      is-plain-object: 3.0.1
-      lodash: 4.17.20
-      memoizerific: 1.11.3
-      qs: 6.9.6
-      stable: 0.1.8
-      ts-dedent: 1.2.0
-      util-deprecate: 1.0.2
-    dev: true
-    peerDependencies:
-      regenerator-runtime: '*'
-    resolution:
-      integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
   /@storybook/client-api/6.1.15:
     dependencies:
       '@storybook/addons': 6.1.15
@@ -5130,7 +5120,7 @@ packages:
       '@babel/preset-env': 7.12.11
       '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
       '@storybook/channel-postmessage': 5.3.21
-      '@storybook/client-api': 5.3.21_regenerator-runtime@0.13.7
+      '@storybook/client-api': 5.3.21
       '@storybook/client-logger': 5.3.21
       '@storybook/core-events': 5.3.21
       '@storybook/csf': 0.0.1
@@ -13137,6 +13127,20 @@ packages:
     resolution:
       integrity: sha512-/LFZOIo82WDsyyv7h7oc0MJF9ACOvDRdx9rWPZ2pgMfNWu/z8hQDBtOchuB/0BVLmuFOZjV02YwUVzNsWx/EzA==
   /follow-redirects/1.13.2:
+    dev: false
+    engines:
+      node: '>=4.0'
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    resolution:
+      integrity: sha512-6mPTgLxYm3r6Bkkg0vNM0HTjfGrOEtsfbhagQvbxDEsEkpNhw582upBaoRZylzen6krEmxXJgt9Ju6HiI4O7BA==
+  /follow-redirects/1.13.2_debug@4.3.1:
+    dependencies:
+      debug: 4.3.1_supports-color@6.1.0
+    dev: true
     engines:
       node: '>=4.0'
     peerDependencies:
@@ -14488,7 +14492,7 @@ packages:
   /http-proxy/1.18.1_debug@4.3.1:
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.13.2
+      follow-redirects: 1.13.2_debug@4.3.1
       requires-port: 1.0.0
     dev: true
     engines:
@@ -20247,6 +20251,12 @@ packages:
       react: ^0.14.0 || ^15.0.0 || ^16.0.0-0 || ^17.0.0-0
     resolution:
       integrity: sha512-uX1Qh5IGjnLuJT0Zok234QDwRC8h4hcVMnB99Cb7aquB1NlPPDiWKm0XpSZOTdSactvnClCk8LOmVlP+75dgHA==
+  /react-hook-form/6.15.1:
+    dev: false
+    peerDependencies:
+      react: ^16.8.0 || ^17
+    resolution:
+      integrity: sha512-bL0LQuQ3OlM3JYfbacKtBPLOHhmgYz8Lj6ivMrvu2M6e1wnt4sbGRtPEPYCc/8z3WDbjrMwfAfLX92OsB65pFA==
   /react-hotkeys/2.0.0:
     dependencies:
       prop-types: 15.7.2
@@ -23011,7 +23021,7 @@ packages:
       serialize-javascript: 4.0.0
       source-map: 0.6.1
       terser: 4.8.0
-      webpack: 4.46.0
+      webpack: 4.46.0_webpack-cli@4.4.0
       webpack-sources: 1.4.3
       worker-farm: 1.7.0
     dev: true
@@ -25819,6 +25829,10 @@ packages:
       node: '>= 10'
     resolution:
       integrity: sha512-a65wQ3h5gcQ/nQGWV1mSZCEzCML6EK/vyVPcrPNynySP1j3VBbQKh3nhC8CbORb+jfl2vXvh56Ul5odP1bAHqw==
+  /zod/3.0.0-alpha.4:
+    dev: false
+    resolution:
+      integrity: sha512-pOtx1/JRT4NQ3K0wlnVAFDMY6Kvsb0xIMZvAaVzZBDUFKUS6OgZtrztcpI5NqCB4KMexcbgXgKxgpOpia9SFSw==
   /zwitch/1.0.5:
     dev: true
     resolution:
