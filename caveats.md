@@ -17,11 +17,17 @@ To develop Mask Network, you need to have ...
 
 ## Development
 
+### Install
+
+`pnpm install`
+
+If you encounter with error `EACCES: permission denied, open...'`, please run `chown -R $USER /pathToYourProject/Maskbook` to solve.
+
 ### Start the development server
 
-`npm start` is a preset of development command for Chromium-based browsers.
+`pnpm start` is a preset of development command for Chromium-based browsers.
 
-If you need to develop in other environments (for example, firefox), please run `npm run go`,
+If you need to develop in other environments (for example, firefox), please run `pnpm run go`,
 it is an interactive CLI tool to help you to learn out how to compose the build flags.
 
 ### Load extension into Chrome
