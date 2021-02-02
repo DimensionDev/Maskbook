@@ -120,9 +120,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         [dataIndex, onAmountChange],
     )
 
-    const chainId = useChainId()
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-    const EXCHANGE_TOKENS = useConstant(ITO_CONSTANTS, 'EXCHANGE_TOKENS')
 
     return (
         <>
@@ -159,7 +157,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
             </Paper>
             <SelectERC20TokenDialog
                 open={openSelectERC20TokenDialog}
-                includeTokens={isSell ? [] : [ETH_ADDRESS, ...includeTokensAddress, ...EXCHANGE_TOKENS]}
+                includeTokens={[]}
                 excludeTokens={isSell ? [ETH_ADDRESS, ...excludeTokensAddress] : excludeTokensAddress}
                 selectedTokens={[exchangeToken?.address ?? '', ...selectedTokensAddress]}
                 onSubmit={onSelectERC20TokenDialogSubmit}
