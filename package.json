@@ -25,7 +25,8 @@
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
     "preinstall": "npx only-allow pnpm",
-    "ci": "pnpm install --frozen-lockfile --store-dir ~/.pnpm/"
+    "ci": "pnpm install --frozen-lockfile --store-dir ~/.pnpm/",
+    "netlify-install": "test \"$CI\" = true && npx pnpm install -r --store=node_modules/.pnpm-store || echo skiping pnpm install"
   },
   "lint-staged": {
     "*": "prettier --check",
