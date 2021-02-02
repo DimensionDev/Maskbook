@@ -35,7 +35,6 @@ export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 
 }
 
 export enum ITO_Status {
-    completed = 'completed',
     waited = 'waited',
     started = 'started',
     expired = 'expired',

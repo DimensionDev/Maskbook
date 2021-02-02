@@ -318,9 +318,7 @@ export function ITO(props: ITO_Props) {
     const swapStatusText = useMemo(() => {
         if (listOfStatus.includes(ITO_Status.waited)) return t('plugin_ito_status_no_start')
         if (listOfStatus.includes(ITO_Status.expired)) return t('plugin_ito_expired')
-        if ((listOfStatus.includes(ITO_Status.completed) && isBuyer) || total_remaining.isZero()) {
-            return t('plugin_ito_completed')
-        } else if (listOfStatus.includes(ITO_Status.started)) {
+        if (listOfStatus.includes(ITO_Status.started)) {
             if (total_remaining.isZero()) {
                 return t('plugin_ito_status_out_of_stock')
             }
@@ -328,7 +326,7 @@ export function ITO(props: ITO_Props) {
         }
 
         return ''
-    }, [isBuyer, listOfStatus, t, total_remaining])
+    }, [listOfStatus, t, total_remaining])
 
     const swapResultText = useMemo(() => {
         if (refundAllAmount) {
@@ -379,7 +377,7 @@ export function ITO(props: ITO_Props) {
         [end_time, t],
     )
 
-    const footerComplete = useMemo(
+    const footerSwapInfo = useMemo(
         () => (
             <>
                 <Typography variant="body1">{swapResultText}</Typography>
@@ -468,8 +466,8 @@ export function ITO(props: ITO_Props) {
                 </Box>
                 <Box className={classes.footer}>
                     <div>
-                        {listOfStatus.includes(ITO_Status.completed)
-                            ? footerComplete
+                        {isBuyer
+                            ? footerSwapInfo
                             : listOfStatus.includes(ITO_Status.expired)
                             ? footerEndTime
                             : footerNormal}
@@ -494,7 +492,7 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
-                ) : listOfStatus.includes(ITO_Status.completed) && isBuyer ? (
+                ) : isBuyer ? (
                     <ActionButton
                         onClick={onShareSuccess}
                         variant="contained"
