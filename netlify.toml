@@ -1,5 +1,5 @@
 [build]
-    command = "cd packages/cli-dev-build && npx gulp buildNetlify"
+    command = "npm run netlify-install && cd packages/cli-dev-build && npx gulp buildNetlify"
     publish = "packages/netlify"
 [build.environment]
     NPM_FLAGS="--prefix=/dev/null"
