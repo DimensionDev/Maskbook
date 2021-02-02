@@ -22,6 +22,9 @@ import {
 } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { useHistory } from 'react-router-dom'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as zod from 'zod'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton, { DebounceButton } from '../DashboardComponents/ActionButton'
@@ -139,17 +142,51 @@ const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
     }),
 )
 
+type FormData = {
+    name?: string
+    confirmed?: boolean
+    mnemonic_wallet_name?: string
+    mnemonic?: string
+    private_wallet_name?: string
+    private_password?: string
+}
+
 export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
     const { t } = useI18N()
     const state = useState(0)
     const classes = useWalletCreateDialogStyle()
-
-    const [name, setName] = useState('')
     const [passphrase] = useState('')
-    const [mnemonic, setMnemonic] = useState('')
-    const [privKey, setPrivKey] = useState('')
-    const [confirmed, setConfirmed] = useState(false)
+
     const [showNotification, setShowNotification] = useState(false)
+
+    const schema = useMemo(() => {
+        const walletNameValid = zod
+            .string()
+            .nonempty()
+            .max(
+                WALLET_OR_PERSONA_NAME_MAX_LEN,
+                t('input_length_exceed_prompt', {
+                    name: t('wallet_name').toLowerCase(),
+                    length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                }),
+            )
+            .optional()
+        return zod.object({
+            name: walletNameValid,
+            confirmed: zod.boolean().optional(),
+            mnemonic_wallet_name: walletNameValid,
+            mnemonic: zod.string().nonempty().optional(),
+            private_wallet_name: walletNameValid,
+            private_password: zod.string().nonempty().optional(),
+        })
+    }, [t])
+
+    const { register, errors, control, watch, handleSubmit } = useForm<FormData>({
+        mode: 'onChange',
+        resolver: zodResolver(schema),
+    })
+
+    const walletNames = watch(['name', 'mnemonic_wallet_name', 'private_wallet_name'])
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -159,19 +196,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                     <>
                         <form>
                             <TextField
-                                helperText={
-                                    checkInputLengthExceed(name)
-                                        ? t('input_length_exceed_prompt', {
-                                              name: t('wallet_name').toLowerCase(),
-                                              length: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                                          })
-                                        : undefined
-                                }
+                                helperText={errors.name?.type === zod.ZodIssueCode.too_big && errors?.name?.message}
                                 required
                                 autoFocus
+                                key="name"
+                                name="name"
+                                defaultValue={walletNames.mnemonic_wallet_name || walletNames.private_wallet_name}
                                 label={t('wallet_name')}
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                inputRef={register}
                                 variant="outlined"
                             />
                         </form>
@@ -184,9 +216,13 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             }}>
                             <FormControlLabel
                                 control={
-                                    <Checkbox
-                                        checked={confirmed}
-                                        onChange={() => setConfirmed((confirmed) => !confirmed)}
+                                    <Controller
+                                        name="confirmed"
+                                        control={control}
+                                        defaultValue={false}
+                                        render={({ onChange, value }) => (
+                                            <Checkbox onChange={(e) => onChange(e.target.checked)} checked={value} />
+                                        )}
                                     />
                                 }
                                 label={
@@ -222,25 +258,22 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                     <div>
                         <TextField
                             helperText={
-                                checkInputLengthExceed(name)
-                                    ? t('input_length_exceed_prompt', {
-                                          name: t('wallet_name').toLowerCase(),
-                                          length: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                                      })
-                                    : undefined
+                                errors.name?.type === zod.ZodIssueCode.too_big && errors?.mnemonic_wallet_name?.message
                             }
                             required
                             autoFocus
+                            defaultValue={walletNames.name || walletNames.private_wallet_name}
+                            key="mnemonic_wallet_name"
+                            name="mnemonic_wallet_name"
                             label={t('wallet_name')}
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            inputRef={register}
                             variant="outlined"
                         />
                         <TextField
                             required
                             label={t('mnemonic_words')}
-                            value={mnemonic}
-                            onChange={(e) => setMnemonic(e.target.value)}
+                            inputRef={register}
+                            name="mnemonic"
                             variant="outlined"
                         />
                     </div>
@@ -253,26 +286,23 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                     <div>
                         <TextField
                             helperText={
-                                checkInputLengthExceed(name)
-                                    ? t('input_length_exceed_prompt', {
-                                          name: t('wallet_name').toLowerCase(),
-                                          length: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                                      })
-                                    : undefined
+                                errors.name?.type === zod.ZodIssueCode.too_big && errors?.private_wallet_name?.message
                             }
                             required
                             autoFocus
+                            key="private_wallet_name"
+                            name="private_wallet_name"
+                            defaultValue={walletNames.name || walletNames.mnemonic_wallet_name}
                             label={t('wallet_name')}
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            inputRef={register}
                             variant="outlined"
                         />
                         <TextField
                             type="password"
                             required
                             label={t('private_key')}
-                            value={privKey}
-                            onChange={(e) => setPrivKey(e.target.value)}
+                            name="private_password"
+                            inputRef={register}
                             variant="outlined"
                         />
                     </div>
@@ -285,31 +315,31 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
     }
 
     const onSubmit = useSnackbarCallback(
-        async () => {
+        async (data) => {
             if (state[0] === 0) {
                 await WalletRPC.createNewWallet({
-                    name,
+                    name: data.name,
                     passphrase,
                 })
             }
             if (state[0] === 1) {
                 await WalletRPC.importNewWallet({
-                    name,
-                    mnemonic: mnemonic.split(' '),
+                    name: data.mnemonic_wallet_name,
+                    mnemonic: data.mnemonic.split(' '),
                     passphrase: '',
                 })
             }
             if (state[0] === 2) {
-                const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privKey)
+                const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(data.private_password)
                 if (!privateKeyValid) throw new Error(t('import_failed'))
                 await WalletRPC.importNewWallet({
-                    name,
+                    name: data.private_wallet_name,
                     address,
-                    _private_key_: privKey,
+                    _private_key_: data.private_password,
                 })
             }
         },
-        [state[0], name, passphrase, mnemonic, privKey],
+        [state[0], passphrase],
         props.onClose,
     )
 
@@ -323,12 +353,11 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                 footer={
                     <DebounceButton
                         variant="contained"
-                        onClick={onSubmit}
+                        onClick={handleSubmit(onSubmit)}
                         disabled={
-                            (!(state[0] === 0 && name && confirmed) &&
-                                !(state[0] === 1 && name && mnemonic) &&
-                                !(state[0] === 2 && name && privKey)) ||
-                            checkInputLengthExceed(name)
+                            !(state[0] === 0 && !errors.name && watch('confirmed')) &&
+                            !(state[0] === 1 && !errors.mnemonic_wallet_name && watch('mnemonic')?.length) &&
+                            !(state[0] === 2 && !errors.private_wallet_name && watch('private_password')?.length)
                         }>
                         {t('import')}
                     </DebounceButton>
