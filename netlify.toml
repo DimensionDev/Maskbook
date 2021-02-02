@@ -1,4 +1,5 @@
 [build]
-    command = "npm run netlify-install && cd packages/theme && npm run build-storybook"
+    command = "cd packages/cli-dev-build && npx gulp buildNetlify"
+    publish = "packages/netlify"
 [build.environment]
     NPM_FLAGS="--prefix=/dev/null"
