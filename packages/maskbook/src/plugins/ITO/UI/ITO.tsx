@@ -28,7 +28,6 @@ import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { resolveChainName } from '../../../web3/pipes'
 import { usePoolPayload } from '../hooks/usePoolPayload'
 
 export interface IconProps {
@@ -419,8 +418,6 @@ export function ITO(props: ITO_Props) {
         ),
         [footerEndTime, footerStartTime, limit, listOfStatus, t, token.decimals, token.symbol],
     )
-
-    if (payload.chain_id !== chainId) return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
 
     return (
         <div>

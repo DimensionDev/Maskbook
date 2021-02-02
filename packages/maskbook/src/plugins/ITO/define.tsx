@@ -53,11 +53,10 @@ export const ITO_PluginDefine: PluginConfig = {
     successDecryptionInspector: function Comp(props) {
         const payload = ITO_MetadataReader(props.message.meta)
         if (!payload.ok) return null
-        const { pid, password } = payloadIntoMask(payload.val)
         return (
             <MaskbookPluginWrapper pluginName="ITO">
                 <Suspense fallback={<ITO_Loading />}>
-                    <PostInspector pid={pid} password={password} />
+                    <PostInspector payload={payloadIntoMask(payload.val)} />
                 </Suspense>
             </MaskbookPluginWrapper>
         )
