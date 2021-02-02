@@ -1,2 +1,3 @@
 [build.environment]
     NPM_FLAGS="--prefix=/dev/null"
+    command = "npm run netlify-install"
