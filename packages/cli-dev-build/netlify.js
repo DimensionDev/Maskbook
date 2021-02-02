@@ -1,5 +1,5 @@
 const { series, parallel } = require('gulp')
-const { exec } = require('child_process')
+const { spawn } = require('child_process')
 
 const { join, relative } = require('path')
 const { existsSync } = require('fs')
@@ -11,9 +11,10 @@ const netlify = join(__dirname, '../netlify')
 const createBuildStorybook6 = (basePath, output, name) => {
     const f = () => {
         const r = relative(basePath, output)
-        return exec(`npx build-storybook -o ${r} -s ${r}`, {
+        return spawn(`npx`, ['build-storybook', '-o', r, '-s', r, '--quiet'], {
             cwd: basePath,
             shell: true,
+            stdio: 'inherit',
         })
     }
     f.displayName = name + '-storybook'
