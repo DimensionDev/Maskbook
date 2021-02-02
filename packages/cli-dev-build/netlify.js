@@ -5,6 +5,7 @@ const { join } = require('path')
 const root = join(__dirname, '../../')
 const dashboard = join(__dirname, '../dashboard')
 const theme = join(__dirname, '../theme')
+const output = join(__dirname, '../netlify')
 
 const createBuildStorybook6 = (basePath, output, name) => {
     const f = () =>
