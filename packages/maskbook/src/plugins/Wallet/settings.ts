@@ -24,13 +24,3 @@ export const currentSelectedWalletProviderSettings = createGlobalSettings<Provid
     },
 )
 
-/**
- * Is Metamask Locked
- */
-export const currentIsMetamaskLockedSettings = createGlobalSettings<boolean>(
-    `${PLUGIN_IDENTIFIER}+isMetamaskLocked`,
-    true,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)

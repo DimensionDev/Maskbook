@@ -10,7 +10,6 @@ import { ProviderType, MetaMaskInpageProvider } from '../../../../web3/types'
 import {
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
-    currentIsMetamaskLockedSettings,
 } from '../../../../plugins/Wallet/settings'
 
 let provider: MetaMaskInpageProvider | null = null
@@ -18,7 +17,7 @@ let web3: Web3 | null = null
 
 async function onAccountsChanged(accounts: string[]) {
     await updateWalletInDB(first(accounts) ?? '')
-    currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked()) && accounts.length === 0
+    console.log('onAccountsChanged')
 }
 
 function onChainIdChanged(id: string) {

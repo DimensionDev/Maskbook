@@ -22,14 +22,6 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { resolveChainName } from '../../../web3/pipes'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import {
-    currentIsMetamaskLockedSettings,
-    currentSelectedWalletProviderSettings,
-} from '../../../plugins/Wallet/settings'
-import { ProviderType } from '../../../web3/types'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
-import Services from '../../../extension/service'
 import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
 import { EthereumMessages } from '../../Ethereum/messages'
 
@@ -148,10 +140,6 @@ export function RedPacket(props: RedPacketProps) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
 
-    const currentSelectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
-    const isMetamaskRedpacketLocked =
-        useValueRef(currentIsMetamaskLockedSettings) && currentSelectedWalletProvider === ProviderType.MetaMask
-
     //#region token detailed
     const {
         value: availability,
@@ -225,21 +213,6 @@ export function RedPacket(props: RedPacketProps) {
         if (canClaim) await claimCallback()
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
-
-    if (isMetamaskRedpacketLocked)
-        return (
-            <Card
-                className={classNames(classes.root, {
-                    [classes.metamaskContent]: true,
-                    [classes.cursor]: true,
-                })}
-                onClick={() => Services.Ethereum.connectMetaMask()}
-                component="article"
-                elevation={0}>
-                <MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />
-                {t('plugin_wallet_metamask_unlock')}
-            </Card>
-        )
 
     // the red packet can fetch without account
     if (!availability || !tokenDetailed)
