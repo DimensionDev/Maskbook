@@ -33,6 +33,7 @@ const check = () => {
     const a = existsSync(join(addrA, './iframe.html'))
     const b = existsSync(join(addrB, './iframe.html'))
     if (a && b) return Promise.resolve()
+    console.log(a, b)
     return sleep().then(check)
 }
 exports.buildNetlify = series(build, parallel(taskA, taskB), check)
