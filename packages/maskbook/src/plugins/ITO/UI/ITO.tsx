@@ -47,6 +47,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) =>
             color: theme.palette.common.white,
             flexDirection: 'column',
             height: (props: StyleProps) => (props.tokenNumber! > 4 ? 415 : 385),
+            minHeight: 385,
             boxSizing: 'border-box',
             backgroundAttachment: 'local',
             backgroundPosition: '0 0',
@@ -66,7 +67,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) =>
             maxWidth: 470,
         },
         title: {
-            fontSize: (props: StyleProps) => (props.titleLength! > 31 ? '1.3rem' : '1.8rem'),
+            fontSize: (props: StyleProps) => (props.titleLength! > 31 ? '1.3rem' : '1.6rem'),
             fontWeight: 'bold',
             marginBottom: 4,
         },
