@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { makeStyles, createStyles, Typography } from '@material-ui/core'
+import { EthereumAddress } from 'wallet.ts'
 import {
     TokenListsState,
     useERC20TokensDetailedFromTokenLists,
@@ -100,7 +101,8 @@ export function FixedTokenList(props: FixedTokenListProps) {
 
     if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
     if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token...')
-    if (useEther && etherTokenDetailed) return renderList([etherTokenDetailed, ...erc20TokensDetailed])
+    if (useEther && etherTokenDetailed && (!keyword || 'ether'.includes(keyword.toLowerCase())))
+        return renderList([etherTokenDetailed, ...erc20TokensDetailed])
     if (erc20TokensDetailed.length) return renderList(erc20TokensDetailed)
     return renderPlaceholder('No token found')
 }

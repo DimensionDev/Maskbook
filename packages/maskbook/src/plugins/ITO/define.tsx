@@ -56,7 +56,7 @@ export const ITO_PluginDefine: PluginConfig = {
         return (
             <MaskbookPluginWrapper pluginName="ITO">
                 <Suspense fallback={<ITO_Loading />}>
-                    <PostInspector pid={payloadIntoMask(payload.val).pid} />
+                    <PostInspector payload={payloadIntoMask(payload.val)} />
                 </Suspense>
             </MaskbookPluginWrapper>
         )
