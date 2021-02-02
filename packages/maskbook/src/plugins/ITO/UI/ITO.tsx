@@ -195,7 +195,7 @@ export function ITO(props: ITO_Props) {
     const { pid, password } = props
     const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
 
-    // append the password of outcoming pool
+    // append the password from the outcoming pool
     const payload: JSON_PayloadInMask = {
         ...payload_,
         password: payload_.password || password,
