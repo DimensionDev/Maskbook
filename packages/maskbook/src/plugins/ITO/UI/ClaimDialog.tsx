@@ -176,7 +176,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
             await WalletRPC.addERC20Token(payload.token)
             await WalletRPC.trustERC20Token(account, payload.token)
         }
-    }, [account, payload, claimCallback])
+    }, [account, payload.token, claimCallback])
 
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,

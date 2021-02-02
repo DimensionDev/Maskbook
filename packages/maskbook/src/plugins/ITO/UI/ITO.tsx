@@ -5,7 +5,7 @@ import { BigNumber } from 'bignumber.js'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
-import { ITO_Status } from '../types'
+import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
@@ -156,10 +156,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) =>
     }),
 )
 
-export interface ITO_Props {
-    pid: string
-}
-
+//#region token item
 interface TokenItemProps {
     price: string
     token: EtherTokenDetailed | ERC20TokenDetailed
@@ -177,6 +174,12 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
         </>
     )
 }
+//#endregion
+
+export interface ITO_Props {
+    pid: string
+    password: string
+}
 
 export function ITO(props: ITO_Props) {
     // context
@@ -190,8 +193,14 @@ export function ITO(props: ITO_Props) {
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid } = props
-    const { payload, retry: retryPoolPayload } = usePoolPayload(pid)
+    const { pid, password } = props
+    const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
+
+    // append the password of outcoming pool
+    const payload: JSON_PayloadInMask = {
+        ...payload_,
+        password: payload_.password || password,
+    }
 
     const {
         token,
@@ -205,12 +214,14 @@ export function ITO(props: ITO_Props) {
         end_time,
         message,
     } = payload
-    const classes = useStyles({ titleLength: getTextUILength(message), tokenNumber: exchange_tokens.length })
+
     const { t } = useI18N()
+    const classes = useStyles({ titleLength: getTextUILength(message), tokenNumber: exchange_tokens.length })
 
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(payload_total_remaining)
     const sold = total.minus(total_remaining)
+
     //#region token detailed
     const {
         value: availability,
