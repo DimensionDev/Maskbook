@@ -38,7 +38,6 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
             canShare: !isStarted,
             listOfStatus: compact([
                 isStarted ? ITO_Status.started : ITO_Status.waited,
-                isCompleted ? ITO_Status.completed : undefined,
                 isExpired ? ITO_Status.expired : undefined,
             ]),
         },

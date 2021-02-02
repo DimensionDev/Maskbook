@@ -1,71 +1,185 @@
-import { makeStyles, useMediaQuery, Toolbar, Theme, Typography, AppBar, Grid, Box } from '@material-ui/core'
+import {
+    useMediaQuery,
+    Toolbar as MuiToolbar,
+    Theme,
+    Typography,
+    AppBar,
+    Grid,
+    IconButton,
+    Drawer,
+    experimentalStyled as styled,
+    Box,
+    toolbarClasses,
+    Backdrop,
+    paperClasses,
+} from '@material-ui/core'
+import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
 import Color from 'color'
-import clz from 'classnames'
-import { Navigation } from './Navigation'
 import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
+import { useState, useContext } from 'react'
+import { DashboardContext } from './context'
+import { Navigation } from './Navigation'
+import Logo from './Logo'
 
-const useStyles = makeStyles((theme) => ({
-    root: { backgroundColor: theme.palette.background.paper },
-    temporaryDrawerPaper: {
-        backgroundColor: new Color(theme.palette.background.paper).alpha(0.8).toString(),
-        backdropFilter: 'blur(4px)',
-    },
-    permanentDrawer: { height: '100vh' },
-    containment: { overflow: 'auto', contain: 'strict' },
-    shape: {
-        height: '100%',
-        padding: theme.spacing(2),
-        borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
-        borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
-    },
-    shapeHelper: {
-        backgroundColor: theme.palette.background.default,
-        paddingBottom: 0,
-    },
-    container: { backgroundColor: theme.palette.background.paper },
+const Root = styled(Grid)(({ theme }) => ({
+    backgroundColor: theme.palette.background.paper,
 }))
+
+const LeftContainer = styled(Grid)(({ theme }) => ({
+    height: '100vh',
+    [theme.breakpoints.up('lg')]: {
+        minWidth: 232,
+    },
+}))
+
 export interface DashboardFrameProps extends React.PropsWithChildren<{}> {}
+
 export function DashboardFrame(props: DashboardFrameProps) {
-    const classes = useStyles()
-    const menuStyle = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
+    const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
+    const [navigationExpanded, setNavigationExpanded] = useState(true)
+    const [drawerOpen, setDrawerOpen] = useState(false)
+
     return (
-        <>
-            <Grid container className={classes.root}>
-                <Grid item xs={2} className={classes.permanentDrawer}>
-                    <Navigation />
-                </Grid>
-                <Grid container direction="column" item xs={10}>
+        <DashboardContext.Provider
+            value={{
+                drawerOpen,
+                expanded: navigationExpanded,
+                toggleNavigationExpand: () => setNavigationExpanded((e) => !e),
+                toggleDrawer: () => setDrawerOpen((e) => !e),
+            }}>
+            <Root container>
+                {isLargeScreen && (
+                    <LeftContainer item xs={2}>
+                        <Navigation />
+                    </LeftContainer>
+                )}
+                <Grid container direction="column" item xs={isLargeScreen ? 10 : 12}>
                     <ErrorBoundary>{props.children}</ErrorBoundary>
                 </Grid>
-            </Grid>
-        </>
+            </Root>
+        </DashboardContext.Provider>
     )
 }
+
+const MaskLogo = styled(Grid)`
+    flex-basis: 212px;
+    max-width: 212px;
+    & > svg {
+        flex: 1;
+    }
+`
+
+const Toolbar = styled(MuiToolbar)(({ theme }) => ({
+    [`&.${toolbarClasses.gutters}`]: {
+        [theme.breakpoints.up('lg')]: {
+            paddingLeft: theme.spacing(0),
+        },
+        [theme.breakpoints.down('lg')]: {
+            paddingLeft: theme.spacing(1),
+        },
+    },
+}))
+
+const MenuButton = styled(IconButton)(({ theme }) => ({
+    paddingLeft: theme.spacing(1.5),
+    paddingRight: theme.spacing(1.5),
+}))
+
+const PageTitle = styled(Grid)(({ theme }) => ({
+    minHeight: 40,
+    alignItems: 'center',
+    paddingLeft: theme.spacing(4.25),
+    [theme.breakpoints.down('lg')]: {
+        flex: 1,
+    },
+}))
+
+const Containment = styled(Grid)(({ theme }) => ({
+    overflow: 'auto',
+    contain: 'strict',
+    [theme.breakpoints.down('lg')]: {
+        minHeight: '100vh',
+    },
+}))
+
+const NavigationDrawer = styled(Drawer)(({ theme }) => ({
+    top: `${theme.mixins.toolbar.minHeight}px !important`,
+    // https://github.com/mui-org/material-ui/issues/20012#issuecomment-770654893
+    [`& > .${paperClasses.root}`]: {
+        width: 232,
+        top: theme.mixins.toolbar.minHeight,
+        paddingTop: theme.spacing(7.5),
+        background: new Color(theme.palette.background.paper).alpha(0.8).toString(),
+        backdropFilter: 'blur(4px)',
+    },
+}))
+const NavigationDrawerBackdrop = styled(Backdrop)(({ theme }) => ({
+    top: theme.mixins.toolbar.minHeight,
+}))
+
+const ShapeHelper = styled('div')(({ theme }) => ({
+    height: '100%',
+    padding: theme.spacing(2),
+    borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
+    borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
+    backgroundColor: theme.palette.background.default,
+    paddingBottom: 0,
+}))
+
+const ShapeContainer = styled('div')(({ theme }) => ({
+    height: '100%',
+    padding: theme.spacing(2),
+    borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
+    borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
+    backgroundColor: theme.palette.background.paper,
+}))
 
 export interface PageFrameProps extends React.PropsWithChildren<{}> {
     title: React.ReactNode | string
     primaryAction?: React.ReactNode
 }
+
 export function PageFrame(props: PageFrameProps) {
-    const classes = useStyles()
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
+    const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
+    const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
+
     return (
         <>
             <AppBar position="relative" color="inherit" elevation={0}>
-                <Toolbar component={Grid} container>
-                    {left}
-                    <Box sx={{ flex: 1 }} />
-                    {right}
+                <Toolbar>
+                    {!isLargeScreen && (
+                        <MaskLogo item container alignItems="center">
+                            <MenuButton onClick={toggleDrawer}>{drawerOpen ? <CloseIcon /> : <MenuIcon />}</MenuButton>
+                            <Logo height={40} />
+                        </MaskLogo>
+                    )}
+                    <PageTitle item xs={isLargeScreen ? 12 : 10} container>
+                        {left}
+                        <Box sx={{ flex: 1 }} />
+                        {right}
+                    </PageTitle>
                 </Toolbar>
             </AppBar>
-            <Grid item xs className={classes.containment}>
-                <div className={clz(classes.shapeHelper, classes.shape)}>
-                    <div className={clz(classes.container, classes.shape)}>
+            <Containment item xs>
+                {!isLargeScreen && (
+                    <NavigationDrawer
+                        open={drawerOpen}
+                        onClose={toggleDrawer}
+                        BackdropComponent={NavigationDrawerBackdrop}
+                        BackdropProps={{ invisible: true }}
+                        variant="temporary"
+                        PaperProps={{ elevation: 0 }}>
+                        <Navigation />
+                    </NavigationDrawer>
+                )}
+                <ShapeHelper>
+                    <ShapeContainer>
                         <ErrorBoundary>{props.children}</ErrorBoundary>
-                    </div>
-                </div>
-            </Grid>
+                    </ShapeContainer>
+                </ShapeHelper>
+            </Containment>
         </>
     )
 }

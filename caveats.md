@@ -13,23 +13,22 @@ This section is going to help you to set up the development environment of Mask 
 To develop Mask Network, you need to have ...
 
 - Node 15 or higher
-- NPM 7 (! generally NPM on your system is NPM6 !)
-
-### Recommends
-
-- [Setup git merge driver for NPM](https://www.npmjs.com/package/npm-merge-driver) which can resolve conflicts in `package-lock.json`.
-
-### Workarounds
-
-NPM7 currently has [a bug that cannot install the dependencies correctly when workspace is used](https://github.com/npm/cli/issues/2430). We recommend you to use `npm ci` to install. Although it is slower but less error-prone.
+- [pnpm](https://pnpm.js.org) 5+
 
 ## Development
 
-### Start the dev server
+### Install
 
-`npm start` is a preset of development command for Chromium-based browsers.
+`pnpm install`
 
-If you need to develop in other environments (for example, Firefox), please run `npm run go`, it is an interactive CLI tool to help you to learn out how to compose the build flags.
+If you encounter with error `EACCES: permission denied, open...'`, please run `chown -R $USER /pathToYourProject/Maskbook` to solve.
+
+### Start the development server
+
+`pnpm start` is a preset of development command for Chromium-based browsers.
+
+If you need to develop in other environments (for example, firefox), please run `pnpm run go`,
+it is an interactive CLI tool to help you to learn out how to compose the build flags.
 
 ### Load extension into Chrome
 
@@ -48,7 +47,8 @@ If you need to develop in other environments (for example, Firefox), please run 
 
 ### Hot Module Reload
 
-This project supports Hot Module Reload which fasten the development process. Every time you find HMR not working please open <https://localhost:8080> and ignore the HTTPs certificate error.
+This project supports Hot Module Reload which fasten the development process.
+Every time you find HMR not working please open <https://localhost:8080> and ignore the HTTPs certificate error.
 
 To disable HMR, set an environment variable `NO_HMR` to _true_.
 
@@ -62,11 +62,14 @@ To debug _background service_, click links right after **Inspect views**
 
 #### Debug Content Script
 
-To debug _content script_, open the devtools in the web page, then you can select context as the following picture describes.
+To debug _content script_, open the devtools in the web page,
+then you can select context as the following picture describes.
 
 ![An image displaying how to select Mask Network as the debug context](https://user-images.githubusercontent.com/5390719/103509436-1a6bbe00-4e9e-11eb-9b18-bde021337944.png)
 
-It's important to select the correct context when you're debugging, otherwise you cannot access all the global variables, _save as temp variables_ also fails.
+It's important to select the correct context when you're debugging,
+otherwise you cannot access all the global variables,
+_save as temp variables_ also fails.
 
 #### "WebSocket connection to 'ws://localhost:8097/' failed"
 
@@ -80,15 +83,23 @@ If that annoys you, you can filter thoes out with `-WebSocket` in the devtools m
 
 #### Use React Devtools
 
-React devtools is also an browser extension so unfortunately it doesn't work with Mask Network out of the box. You need [the standalone version of React Devtools](https://github.com/facebook/react/tree/master/packages/react-devtools#:~:text=Chrome%20extension,instead)
+React devtools is also an browser extension so unfortunately it doesn't work with Mask Network out of the box.
+You need [the standalone version of React Devtools](https://github.com/facebook/react/tree/master/packages/react-devtools#:~:text=Chrome%20extension,instead)
 
 ## Contribute your working
 
 ### Git conversions
 
-`master` branch is our developing branch, `released` branch points to the latest released version. [Git flow](https://github.com/nvie/gitflow) is recommended but not enforced.
+`master` branch is our developing branch, `released` branch points to the latest released version.
+[Git flow](https://github.com/nvie/gitflow) is recommended but not enforced.
 
 Please use [Conventional Commits](https://www.conventionalcommits.org) when committing.
+
+### Git hook not working
+
+```bash
+npx husky install # on project root directory
+```
 
 ### Synchronize upstream
 

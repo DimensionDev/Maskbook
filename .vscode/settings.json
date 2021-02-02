@@ -5,6 +5,7 @@
     "editor.codeActionsOnSave": {
         "source.fixAll": true
     },
+    "editor.tabSize": 4,
     "json.schemas": [
         {
             "fileMatch": ["/packages/maskbook/src/manifest.json"],

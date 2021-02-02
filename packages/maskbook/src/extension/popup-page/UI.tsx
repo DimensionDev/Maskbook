@@ -3,7 +3,7 @@ import '../../setup.ui'
 
 import { useCallback, memo } from 'react'
 import { noop } from 'lodash-es'
-import { ThemeProvider, makeStyles, Theme, withStyles, StylesProvider } from '@material-ui/core/styles'
+import { ThemeProvider, makeStyles, Theme, withStyles, StylesProvider, jssPreset } from '@material-ui/core/styles'
 import { Button, Paper, Divider, Typography, Box } from '@material-ui/core'
 import { useMaskbookTheme } from '../../utils/theme'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
@@ -16,6 +16,7 @@ import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlled
 import { Alert } from '@material-ui/core'
 import { useAsyncRetry } from 'react-use'
 import { MaskbookUIRoot } from '../../UIRoot'
+import { create } from 'jss'
 
 const GlobalCss = withStyles({
     '@global': {
@@ -164,13 +165,18 @@ function PopupUI() {
     )
 }
 
+const jssContainer = document.body.appendChild(document.createElement('head'))
+const insertionPoint = jssContainer.appendChild(document.createElement('noscript'))
+const jss = create({ ...jssPreset(), insertionPoint })
 export function Popup() {
-    return MaskbookUIRoot(
-        <ThemeProvider theme={useMaskbookTheme()}>
-            <StylesProvider injectFirst>
+    return (
+        // injectFirst not working so use a custom entry point
+        <StylesProvider jss={jss}>
+            <Box />
+            <ThemeProvider theme={useMaskbookTheme()}>
                 <GlobalCss />
-                <PopupUI />
-            </StylesProvider>
-        </ThemeProvider>,
+                {MaskbookUIRoot(<PopupUI />)}
+            </ThemeProvider>
+        </StylesProvider>
     )
 }

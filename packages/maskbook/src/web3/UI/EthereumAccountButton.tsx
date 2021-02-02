@@ -80,7 +80,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
             {selectedWallet?.address
                 ? ` (${formatEthereumAddress(selectedWallet.address, 4)})`
                 : t('plugin_wallet_on_connect')}
-            {chainId !== ChainId.Mainnet ? (
+            {chainId !== ChainId.Mainnet && selectedWallet ? (
                 <FiberManualRecordIcon
                     className={classes.chainIcon}
                     style={{

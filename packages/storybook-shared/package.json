@@ -1,0 +1,13 @@
+{
+  "name": "@dimensiondev/maskbook-storybook-shared",
+  "private": true,
+  "types": "./index.d.ts",
+  "peerDependencies": {
+    "@storybook/addons": "^6",
+    "@storybook/react": "^6"
+  },
+  "devDependencies": {
+    "@storybook/addons": "^6",
+    "@storybook/react": "^6"
+  }
+}

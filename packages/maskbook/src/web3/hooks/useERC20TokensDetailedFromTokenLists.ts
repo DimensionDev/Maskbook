@@ -5,7 +5,7 @@ import { useAsync } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { isSameAddress } from '../helpers'
 import { useChainId } from './useChainState'
-import { EthereumTokenType, ERC20TokenDetailed, EtherTokenDetailed } from '../types'
+import { EthereumTokenType } from '../types'
 import { useERC20TokenDetailed } from './useERC20TokenDetailed'
 
 export enum TokenListsState {

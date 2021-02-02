@@ -1,6 +1,7 @@
-import { makeStyles, Typography, ThemeProvider } from '@material-ui/core'
+import { makeStyles, Typography, ThemeProvider, SnackbarContent } from '@material-ui/core'
 import { getActivatedUI } from '../social-network/ui'
 import { MaskbookIcon } from '../resources/MaskbookIcon'
+import { Suspense } from 'react'
 
 interface PluginWrapperProps {
     pluginName: string
@@ -51,17 +52,19 @@ export default function MaskbookPluginWrapper(props: PluginWrapperProps) {
     const classes = useStyles()
     const { pluginName, children } = props
     return (
-        <ThemeProvider theme={getActivatedUI().useTheme()}>
-            <div className={classes.card} onClick={(ev) => ev.stopPropagation()}>
-                <div className={classes.header}>
-                    <MaskbookIcon className={classes.icon}></MaskbookIcon>
-                    <div className={classes.title}>
-                        <Typography variant="overline">Mask Plugin</Typography>
-                        <Typography variant="h6">{pluginName}</Typography>
+        <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
+            <ThemeProvider theme={getActivatedUI().useTheme()}>
+                <div className={classes.card} onClick={(ev) => ev.stopPropagation()}>
+                    <div className={classes.header}>
+                        <MaskbookIcon className={classes.icon}></MaskbookIcon>
+                        <div className={classes.title}>
+                            <Typography variant="overline">Mask Plugin</Typography>
+                            <Typography variant="h6">{pluginName}</Typography>
+                        </div>
                     </div>
+                    <div className={classes.body}>{children}</div>
                 </div>
-                <div className={classes.body}>{children}</div>
-            </div>
-        </ThemeProvider>
+            </ThemeProvider>
+        </Suspense>
     )
 }

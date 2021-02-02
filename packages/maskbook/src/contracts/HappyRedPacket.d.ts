@@ -17,12 +17,7 @@ export class HappyRedPacket extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
     clone(): HappyRedPacket
     methods: {
-        claim(
-            id: string | number[],
-            password: string,
-            _recipient: string,
-            validation: string | number[],
-        ): TransactionObject<string>
+        contract_creator(): TransactionObject<string>
 
         create_red_packet(
             _hash: string | number[],
@@ -37,15 +32,12 @@ export class HappyRedPacket extends Contract {
             _total_tokens: number | string,
         ): TransactionObject<void>
 
-        refund(id: string | number[]): TransactionObject<void>
-
-        transfer_token(
-            token_type: number | string,
-            token_address: string,
-            sender_address: string,
-            recipient_address: string,
-            amount: number | string,
-        ): TransactionObject<void>
+        claim(
+            id: string | number[],
+            password: string,
+            _recipient: string,
+            validation: string | number[],
+        ): TransactionObject<string>
 
         check_availability(
             id: string | number[],
@@ -55,14 +47,16 @@ export class HappyRedPacket extends Contract {
             total: string
             claimed: string
             expired: boolean
+            claimed_amount: string
             0: string
             1: string
             2: string
             3: string
             4: boolean
+            5: string
         }>
 
-        toBytes(a: string): TransactionObject<string>
+        refund(id: string | number[]): TransactionObject<void>
     }
     events: {
         ClaimSuccess: ContractEvent<{
@@ -78,6 +72,8 @@ export class HappyRedPacket extends Contract {
         CreationSuccess: ContractEvent<{
             total: string
             id: string
+            name: string
+            message: string
             creator: string
             creation_time: string
             token_address: string
@@ -86,14 +82,8 @@ export class HappyRedPacket extends Contract {
             2: string
             3: string
             4: string
-        }>
-        Failure: ContractEvent<{
-            id: string
-            hash1: string
-            hash2: string
-            0: string
-            1: string
-            2: string
+            5: string
+            6: string
         }>
         RefundSuccess: ContractEvent<{
             id: string

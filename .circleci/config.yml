@@ -20,17 +20,17 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          name: Restore NPM Package Cache
+          name: Restore PNPM Package Cache
           keys:
-            - v3-maskbook-cache-npm
+            - v3-maskbook-cache-pnpm
       - run:
           name: Install Dependencies
-          command: npm ci
+          command: npx pnpm install --frozen-lockfile --store-dir ~/.pnpm/
       - save_cache:
           name: Save NPM Package Cache
           key: v3-maskbook-cache-npm
           paths:
-            - ~/.npm/
+            - ~/.pnpm/
       - persist_to_workspace:
           root: ~/
           paths:

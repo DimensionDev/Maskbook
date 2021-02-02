@@ -1,8 +1,13 @@
 .github/
 package.json
 package-lock.json
+pnpm-lock.yaml
 
 *generated*
+storybook-static
+
+packages/storybook-shared/*.d.ts
+packages/storybook-shared/*.js
 
 # VSCode personal settings
 .vscode/launch.json
@@ -167,3 +172,8 @@ common/deploy/
 common/temp/
 common/autoinstallers/*/.npmrc
 **/.rush/temp/
+
+## storybook-shared
+packages/storybook-shared/*.js
+packages/storybook-shared/*.map
+packages/storybook-shared/*.d.ts

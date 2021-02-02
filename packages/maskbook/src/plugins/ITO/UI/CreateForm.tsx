@@ -20,7 +20,8 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { formatAmount, formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
 import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
-import { DateTimePicker, LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
+import { sliceTextByUILength } from '../../../utils/getTextUILength'
+import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 
 const useStyles = makeStyles((theme) =>
@@ -270,7 +271,7 @@ export function CreateForm(props: CreateFormProps) {
                     className={classes.input}
                     label={t('plugin_item_message_label')}
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={(e) => setMessage(sliceTextByUILength(e.target.value, 90))}
                     InputLabelProps={{
                         shrink: true,
                     }}

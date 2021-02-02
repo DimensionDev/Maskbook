@@ -1,4 +1,4 @@
-import { createMuiTheme, PaletteMode } from '@material-ui/core'
+import { createMuiTheme, PaletteMode, ThemeOptions } from '@material-ui/core'
 import * as Changes from './changes'
 import * as Components from './component-changes'
 import { merge } from 'lodash-es'
@@ -13,12 +13,14 @@ const color = (mode: PaletteMode, color: Color): PaletteOptions => ({
     error: { main: color.redMain, contrastText: color.redContrastText },
     success: { main: color.greenMain },
     warning: { main: color.orangeMain },
+    divider: color.divider,
+    text: { primary: color.textPrimary, secondary: color.textSecondary },
 })
 
 function MaskTheme(mode: PaletteMode) {
     const colors = mode === 'dark' ? DarkColor : LightColor
     const theme = merge(
-        { palette: color(mode, colors) },
+        { palette: color(mode, colors) } as ThemeOptions,
         ...Object.values(Changes).map(applyColors),
         ...Object.values(Components).map(applyColors),
     )

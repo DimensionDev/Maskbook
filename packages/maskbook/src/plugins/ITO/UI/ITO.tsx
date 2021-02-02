@@ -1,6 +1,6 @@
 import { Component, useCallback, useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
-import { makeStyles, createStyles, Card, Typography, Box, Link } from '@material-ui/core'
+import { makeStyles, createStyles, Card, Typography, Box, Link, Theme } from '@material-ui/core'
 import { BigNumber } from 'bignumber.js'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -17,6 +17,7 @@ import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatDateTime } from '../../../utils/date'
+import { getTextUILength } from '../../../utils/getTextUILength'
 import { ClaimGuide } from './ClaimGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
@@ -28,19 +29,24 @@ import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { usePoolPayload } from '../hooks/usePoolPayload'
-import { resolveChainName } from '../../../web3/pipes'
 
 export interface IconProps {
     size?: number
 }
 
-const useStyles = makeStyles((theme) =>
+interface StyleProps {
+    titleLength?: number
+    tokenNumber?: number
+}
+
+const useStyles = makeStyles<Theme, StyleProps>((theme) =>
     createStyles({
         root: {
             position: 'relative',
             color: theme.palette.common.white,
             flexDirection: 'column',
-            height: 385,
+            height: (props: StyleProps) => (props.tokenNumber! > 4 ? 425 : 405),
+            minHeight: 405,
             boxSizing: 'border-box',
             backgroundAttachment: 'local',
             backgroundPosition: '0 0',
@@ -55,12 +61,12 @@ const useStyles = makeStyles((theme) =>
         header: {
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: 'end',
             width: '100%',
             maxWidth: 470,
         },
         title: {
-            fontSize: '1.8rem',
+            fontSize: (props: StyleProps) => (props.titleLength! > 31 ? '1.3rem' : '1.6rem'),
             fontWeight: 'bold',
             marginBottom: 4,
         },
@@ -149,12 +155,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface ITO_Props {
-    pid: string
-    payload: JSON_PayloadInMask
-    retryPoolPayload: () => Promise<void>
-}
-
+//#region token item
 interface TokenItemProps {
     price: string
     token: EtherTokenDetailed | ERC20TokenDetailed
@@ -162,7 +163,7 @@ interface TokenItemProps {
 }
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
-    const classes = useStyles()
+    const classes = useStyles({})
     return (
         <>
             <TokenIcon classes={{ icon: classes.tokenIcon }} address={exchangeToken.address} />
@@ -171,6 +172,12 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
             </Typography>
         </>
     )
+}
+//#endregion
+
+export interface ITO_Props {
+    pid: string
+    password: string
 }
 
 export function ITO(props: ITO_Props) {
@@ -185,8 +192,15 @@ export function ITO(props: ITO_Props) {
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid } = props
-    const { payload, retry: retryPoolPayload } = usePoolPayload(pid)
+    const { pid, password } = props
+    const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
+
+    // append the password from the outcoming pool
+    const payload: JSON_PayloadInMask = {
+        ...payload_,
+        password: payload_.password || password,
+    }
+
     const {
         token,
         total: payload_total,
@@ -197,9 +211,11 @@ export function ITO(props: ITO_Props) {
         limit,
         start_time,
         end_time,
+        message,
     } = payload
-    const classes = useStyles()
+
     const { t } = useI18N()
+    const classes = useStyles({ titleLength: getTextUILength(message), tokenNumber: exchange_tokens.length })
 
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(payload_total_remaining)
@@ -236,6 +252,7 @@ export function ITO(props: ITO_Props) {
         payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
     const shareSuccessLink = useShareLink(
         t('plugin_ito_claim_success_share', {
+            user: seller.name,
             link: postLink,
             symbol: token.symbol,
         }),
@@ -282,7 +299,7 @@ export function ITO(props: ITO_Props) {
             summary += ' ' + formatBalance(total_remaining, token.decimals ?? 0) + ' ' + token.symbol
         }
         availability?.exchange_addrs.forEach((addr, i) => {
-            const token = payload.exchange_tokens.find((t) => t.address.toLowerCase() === addr.toLowerCase())
+            const token = exchange_tokens.find((t) => t.address.toLowerCase() === addr.toLowerCase())
             const comma = noRemain && i === 0 ? ' ' : ', '
             if (token) {
                 summary +=
@@ -313,9 +330,7 @@ export function ITO(props: ITO_Props) {
     const swapStatusText = useMemo(() => {
         if (listOfStatus.includes(ITO_Status.waited)) return t('plugin_ito_status_no_start')
         if (listOfStatus.includes(ITO_Status.expired)) return t('plugin_ito_expired')
-        if ((listOfStatus.includes(ITO_Status.completed) && isBuyer) || total_remaining.isZero()) {
-            return t('plugin_ito_completed')
-        } else if (listOfStatus.includes(ITO_Status.started)) {
+        if (listOfStatus.includes(ITO_Status.started)) {
             if (total_remaining.isZero()) {
                 return t('plugin_ito_status_out_of_stock')
             }
@@ -323,7 +338,7 @@ export function ITO(props: ITO_Props) {
         }
 
         return ''
-    }, [isBuyer, listOfStatus, t, total_remaining])
+    }, [listOfStatus, t, total_remaining])
 
     const swapResultText = useMemo(() => {
         if (refundAllAmount) {
@@ -374,7 +389,7 @@ export function ITO(props: ITO_Props) {
         [end_time, t],
     )
 
-    const footerComplete = useMemo(
+    const footerSwapInfo = useMemo(
         () => (
             <>
                 <Typography variant="body1">{swapResultText}</Typography>
@@ -404,14 +419,12 @@ export function ITO(props: ITO_Props) {
         [footerEndTime, footerStartTime, limit, listOfStatus, t, token.decimals, token.symbol],
     )
 
-    if (payload.chain_id !== chainId) return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
-
     return (
         <div>
             <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${PoolBackground})` }}>
                 <Box className={classes.header}>
                     <Typography variant="h5" className={classes.title}>
-                        {payload.message}
+                        {message}
                     </Typography>
 
                     <Typography variant="body2" className={classes.status}>
@@ -463,8 +476,8 @@ export function ITO(props: ITO_Props) {
                 </Box>
                 <Box className={classes.footer}>
                     <div>
-                        {listOfStatus.includes(ITO_Status.completed)
-                            ? footerComplete
+                        {isBuyer
+                            ? footerSwapInfo
                             : listOfStatus.includes(ITO_Status.expired)
                             ? footerEndTime
                             : footerNormal}
@@ -489,7 +502,7 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
-                ) : listOfStatus.includes(ITO_Status.completed) && isBuyer ? (
+                ) : isBuyer ? (
                     <ActionButton
                         onClick={onShareSuccess}
                         variant="contained"
@@ -522,7 +535,7 @@ export function ITO(props: ITO_Props) {
 export function ITO_Loading() {
     const { t } = useI18N()
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
-    const classes = useStyles()
+    const classes = useStyles({})
 
     return (
         <div>
@@ -541,7 +554,7 @@ export function ITO_Loading() {
 function ITO_LoadingFailUI({ retryPoolPayload }: { retryPoolPayload: () => void }) {
     const { t } = useI18N()
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
-    const classes = useStyles()
+    const classes = useStyles({})
     return (
         <Card
             className={classNames(classes.root, classes.loadingWrap)}
@@ -562,9 +575,8 @@ function ITO_LoadingFailUI({ retryPoolPayload }: { retryPoolPayload: () => void 
     )
 }
 
-export class ITO_LoadingFail extends Component<{ retryPoolPayload: () => Promise<void> }> {
+export class ITO_LoadingFail extends Component<{ retryPoolPayload: () => void }> {
     static getDerivedStateFromError(error: unknown) {
-        console.log('getDerivedStateFromError')
         return { error }
     }
     state: { error: Error | null } = { error: null }
