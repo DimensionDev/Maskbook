@@ -70,6 +70,10 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                 from: account,
                 to: erc20Contract.options.address,
             }
+            const revalidate = once(() => {
+                revalidateBalance()
+                revalidateAllowance()
+            })
 
             // step 1: estimate gas
             const estimatedGas = await erc20Contract.methods
@@ -80,10 +84,19 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                     // if the current approve strategy is failed
                     // then use oppsite strategy instead
                     useExact = !useExact
-                    return erc20Contract.methods.approve(spender, amount).estimateGas({
-                        from: account,
-                        to: erc20Contract.options.address,
-                    })
+                    return erc20Contract.methods
+                        .approve(spender, amount)
+                        .estimateGas({
+                            from: account,
+                            to: erc20Contract.options.address,
+                        })
+                        .catch((e) => {
+                            setTransactionState({
+                                type: TransactionStateType.FAILED,
+                                error: new Error('Failed to send transaction.'),
+                            })
+                            throw e
+                        })
                 })
 
             // step 2: blocking
@@ -91,10 +104,6 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                 const promiEvent = erc20Contract.methods.approve(spender, useExact ? amount : MaxUint256).send({
                     gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                     ...config,
-                })
-                const revalidate = once(() => {
-                    revalidateBalance()
-                    revalidateAllowance()
                 })
                 promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                     setTransactionState({
