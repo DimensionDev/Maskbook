@@ -69,6 +69,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) =>
             fontSize: (props: StyleProps) => (props.titleLength! > 31 ? '1.3rem' : '1.6rem'),
             fontWeight: 'bold',
             marginBottom: 4,
+            marginRight: 4,
         },
         status: {
             background: 'rgba(20, 23, 26, 0.6)',
@@ -258,12 +259,15 @@ export function ITO(props: ITO_Props) {
             symbol: token.symbol,
         }),
     )
-    const canWithdraw =
-        isAccountSeller && !tradeInfo?.destructInfo && (listOfStatus.includes(ITO_Status.expired) || noRemain)
+    const canWithdraw = useMemo(
+        () => isAccountSeller && !tradeInfo?.destructInfo && (listOfStatus.includes(ITO_Status.expired) || noRemain),
+        [tradeInfo, listOfStatus, isAccountSeller, noRemain],
+    )
 
-    const refundAmount = tradeInfo?.buyInfo
+    const refundAmount = useMemo(() => tradeInfo?.buyInfo
         ? new BigNumber(tradeInfo?.buyInfo.amount).minus(new BigNumber(tradeInfo?.buyInfo.amount_sold))
         : new BigNumber(0)
+    , [tradeInfo])
     // out of stock
     const refundAllAmount = tradeInfo?.buyInfo && new BigNumber(tradeInfo?.buyInfo.amount_sold).isZero()
 
