@@ -114,6 +114,7 @@
   },
   "devDependencies": {
     "@dimensiondev/webextension-shim": "0.0.3-20201120022530-b318b89",
+    "@hookform/devtools": "^2.2.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@sinonjs/text-encoding": "^0.7.1",
     "@storybook/addon-actions": "^5.3.19",

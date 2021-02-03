@@ -234,6 +234,7 @@ importers:
       zod: 3.0.0-alpha.4
     devDependencies:
       '@dimensiondev/webextension-shim': 0.0.3-20201120022530-b318b89
+      '@hookform/devtools': 2.2.1_react-hook-form@6.15.1
       '@pmmmwh/react-refresh-webpack-plugin': 0.4.3_a16822dab3ce6e2b05b029223ee2977b
       '@sinonjs/text-encoding': 0.7.1
       '@storybook/addon-actions': 5.3.21
@@ -311,6 +312,7 @@ importers:
       '@ethersproject/networks': ^5.0.4
       '@ethersproject/providers': ^5.0.9
       '@ethersproject/solidity': ^5.0.4
+      '@hookform/devtools': ^2.2.1
       '@hookform/resolvers': ^1.3.4
       '@msgpack/msgpack': ^2.3.0
       '@openzeppelin/contracts': ^3.2.0
@@ -3326,6 +3328,22 @@ packages:
     dev: true
     resolution:
       integrity: sha512-tAag0jEcjwH+P2quUfipd7liWCNX2F8NvYjQp2wtInsZxnMlypdw0FtAOLxtvvkO+GSRRbmNi8m/5y42PQJYCQ==
+  /@hookform/devtools/2.2.1_react-hook-form@6.15.1:
+    dependencies:
+      '@emotion/core': 10.1.1
+      '@emotion/styled': 10.0.27_@emotion+core@10.1.1
+      '@types/lodash': 4.14.168
+      little-state-machine: 3.1.4
+      lodash: 4.17.20
+      react-hook-form: 6.15.1
+      react-simple-animate: 3.3.11
+    dev: true
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+      react-hook-form: '>=6.5.0'
+    resolution:
+      integrity: sha512-VQh4kqwUOpz9LCDzIP0aJ4qnD/ob8Gp09L8gDy++9XtL66z6g8kbCynUvBrJm4qbCNdH0M7/Spm3AUjJqUuFlA==
   /@hookform/resolvers/1.3.4_react-hook-form@6.15.1:
     dependencies:
       react-hook-form: 6.15.1
@@ -6517,7 +6535,6 @@ packages:
     resolution:
       integrity: sha512-BBz79DCJbD2CVYZH67MBeHZRX++HF+5p8Mo5MzjZi64Wac39S3diedJYHZtScbRVf4DjZyN6LzA0SB0zy+HSSQ==
   /@types/lodash/4.14.168:
-    dev: false
     resolution:
       integrity: sha512-oVfRvqHV/V6D1yifJbVRU3TMp8OT6o6BG+U9MkwuJ3U8/CsDHvalRpsxBqivn71ztOFZBTfJMvETbqHiaNSj7Q==
   /@types/markdown-to-jsx/6.11.3:
@@ -16881,6 +16898,13 @@ packages:
       enquirer: '>= 2.3.0 < 3'
     resolution:
       integrity: sha512-G9IFI/m65icgVlifS0wMQnvn35/8VJGzEb3crpE4NnaegQYQOn/wP7yqi9TTJQ/eoxme4UaPbffBK1XqKP/DOg==
+  /little-state-machine/3.1.4:
+    dev: true
+    peerDependencies:
+      react: ^16.8.0
+      react-dom: ^16.8.0
+    resolution:
+      integrity: sha512-gYlLCj6oUME0NG34/2O0Ljy52qYYyYDJ5yiAuq2ijbaRlBKIqtQQkKkEYn0KfjYXCE693j+bdY22EyZin25Bhw==
   /load-json-file/1.1.0:
     dependencies:
       graceful-fs: 4.2.4
@@ -20527,6 +20551,13 @@ packages:
       react: ^16.0.0 || ^17.0.0
     resolution:
       integrity: sha512-rkIMcQi01/+kxiTE9D3fdS959U1g7gs+/rborw++42m1O9FAQiNI/UNRZExVUoAOprn4umcXf+pFRou8i4zuBg==
+  /react-simple-animate/3.3.11:
+    dev: true
+    peerDependencies:
+      react: ^16.8.0
+      react-dom: ^16.8.0
+    resolution:
+      integrity: sha512-kt2SKJ4Gw3klTmRbik/9R741fPiVRVlxkXvV0c3uu8NqOtdc5ITis62WcdiKH6U5QhCjXNfLW9lrbQ4cAYujyA==
   /react-sizeme/2.6.12:
     dependencies:
       element-resize-detector: 1.2.1

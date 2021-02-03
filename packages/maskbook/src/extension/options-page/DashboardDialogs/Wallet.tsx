@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useRef } from 'react'
 import { useAsync } from 'react-use'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import {
@@ -22,8 +22,10 @@ import {
 } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { useHistory } from 'react-router-dom'
-import { useFormik } from 'formik'
-import * as yup from 'yup'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { DevTool } from '@hookform/devtools'
+import * as zod from 'zod'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton, { DebounceButton } from '../DashboardComponents/ActionButton'
@@ -140,14 +142,16 @@ const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
         },
     }),
 )
+
 type FormData = {
     name: string
-    confirmed: boolean
-    mnemonic: string
-    private_password: string
+    confirmed?: boolean
+    mnemonic?: string
+    private_password?: string
 }
 
 export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
+    const name = useRef('')
     const { t } = useI18N()
     const state = useState(0)
     const classes = useWalletCreateDialogStyle()
@@ -155,55 +159,27 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
 
     const [showNotification, setShowNotification] = useState(false)
 
-    const onSubmit = useSnackbarCallback(
-        async (data) => {
-            if (state[0] === 0) {
-                await WalletRPC.createNewWallet({
-                    name: data.name,
-                    passphrase,
-                })
-            }
-            if (state[0] === 1) {
-                await WalletRPC.importNewWallet({
-                    name: data.name,
-                    mnemonic: data.mnemonic.split(' '),
-                    passphrase: '',
-                })
-            }
-            if (state[0] === 2) {
-                const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(data.private_password)
-                if (!privateKeyValid) throw new Error(t('import_failed'))
-                await WalletRPC.importNewWallet({
-                    name: data.name,
-                    address,
-                    _private_key_: data.private_password,
-                })
-            }
-        },
-        [state[0], passphrase],
-        props.onClose,
-    )
+    const schema = useMemo(() => {
+        return zod.object({
+            name: zod
+                .string()
+                .nonempty()
+                .max(
+                    WALLET_OR_PERSONA_NAME_MAX_LEN,
+                    t('input_length_exceed_prompt', {
+                        name: t('wallet_name').toLowerCase(),
+                        length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                    }),
+                ),
+            confirmed: zod.boolean().optional(),
+            mnemonic: zod.string().optional(),
+            private_password: zod.string().optional(),
+        })
+    }, [t])
 
-    const formik = useFormik<FormData>({
-        initialValues: {
-            name: '',
-            mnemonic: '',
-            confirmed: false,
-            private_password: '',
-        },
-        validationSchema: yup.object({
-            name: yup.string().max(
-                WALLET_OR_PERSONA_NAME_MAX_LEN,
-                t('input_length_exceed_prompt', {
-                    name: t('wallet_name').toLowerCase(),
-                    length: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                }),
-            ),
-            confirmed: yup.boolean(),
-            mnemonic: yup.string(),
-            private_password: yup.string(),
-        }),
-        onSubmit,
+    const { register, errors, control, watch, handleSubmit } = useForm<FormData>({
+        mode: 'onChange',
+        resolver: zodResolver(schema),
     })
 
     const tabProps: AbstractTabProps = {
@@ -214,13 +190,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                     <>
                         <form>
                             <TextField
-                                helperText={formik.errors.name}
+                                helperText={errors.name?.type === zod.ZodIssueCode.too_big && errors?.name?.message}
                                 required
                                 autoFocus
                                 name="name"
-                                value={formik.values.name}
-                                onChange={formik.handleChange}
                                 label={t('wallet_name')}
+                                inputRef={register}
+                                defaultValue={name.current}
+                                onChange={(e) => name.current = e.target.value}
                                 variant="outlined"
                             />
                         </form>
@@ -233,10 +210,13 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             }}>
                             <FormControlLabel
                                 control={
-                                    <Checkbox
+                                    <Controller
                                         name="confirmed"
-                                        onChange={formik.handleChange}
-                                        checked={formik.values.confirmed}
+                                        control={control}
+                                        defaultValue={false}
+                                        render={({ onChange, value }) => (
+                                            <Checkbox onChange={(e) => onChange(e.target.checked)} checked={value} />
+                                        )}
                                     />
                                 }
                                 label={
@@ -271,21 +251,22 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                 children: (
                     <div>
                         <TextField
-                            helperText={formik.errors.name}
+                            helperText={errors.name?.type === zod.ZodIssueCode.too_big && errors?.name?.message}
                             required
                             autoFocus
                             name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
                             label={t('wallet_name')}
+                            inputRef={register}
+                            defaultValue={name.current}
+                            onChange={(e) => name.current = e.target.value}
                             variant="outlined"
                         />
                         <TextField
                             required
-                            name="mnemonic"
-                            value={formik.values.mnemonic}
-                            onChange={formik.handleChange}
                             label={t('mnemonic_words')}
+                            inputRef={register}
+                            key='mnemonic'
+                            name="mnemonic"
                             variant="outlined"
                         />
                     </div>
@@ -297,22 +278,23 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                 children: (
                     <div>
                         <TextField
-                            helperText={formik.errors.name}
+                            helperText={errors.name?.type === zod.ZodIssueCode.too_big && errors?.name?.message}
                             required
                             autoFocus
                             name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
                             label={t('wallet_name')}
+                            inputRef={register}
+                            defaultValue={name.current}
+                            onChange={(e) => name.current = e.target.value}
                             variant="outlined"
                         />
                         <TextField
                             type="password"
                             required
-                            name="private_password"
-                            value={formik.values.private_password}
-                            onChange={formik.handleChange}
                             label={t('private_key')}
+                            key='private_password'
+                            name="private_password"
+                            inputRef={register}
                             variant="outlined"
                         />
                     </div>
@@ -324,6 +306,35 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
         height: 112,
     }
 
+    const onSubmit = useSnackbarCallback(
+        async (data) => {
+            if (state[0] === 0) {
+                await WalletRPC.createNewWallet({
+                    name: data.name,
+                    passphrase,
+                })
+            }
+            if (state[0] === 1) {
+                await WalletRPC.importNewWallet({
+                    name: data.name,
+                    mnemonic: data.mnemonic.split(' '),
+                    passphrase: '',
+                })
+            }
+            if (state[0] === 2) {
+                const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(data.private_password)
+                if (!privateKeyValid) throw new Error(t('import_failed'))
+                await WalletRPC.importNewWallet({
+                    name: data.name,
+                    address,
+                    _private_key_: data.private_password,
+                })
+            }
+        },
+        [state[0], passphrase],
+        props.onClose,
+    )
+
     return (
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
@@ -334,21 +345,17 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                 footer={
                     <DebounceButton
                         variant="contained"
-                        onClick={formik.submitForm}
+                        onClick={handleSubmit(onSubmit, errors => console.log(errors))}
                         disabled={
-                            !(state[0] === 0 && !formik.errors.name && formik.values.name && formik.values.confirmed) &&
-                            !(state[0] === 1 && !formik.errors.name && formik.values.name && formik.values.mnemonic) &&
-                            !(
-                                state[0] === 2 &&
-                                !formik.errors.name &&
-                                formik.values.name &&
-                                formik.values.private_password?.length
-                            )
+                            !(state[0] === 0 && !errors.name && watch('confirmed')) &&
+                            !(state[0] === 1 && !errors.name && watch('mnemonic')?.length) &&
+                            !(state[0] === 2 && !errors.name && watch('private_password')?.length)
                         }>
                         {t('import')}
                     </DebounceButton>
                 }
             />
+            <DevTool control={control} />
         </DashboardDialogCore>
     )
 }
@@ -459,9 +466,9 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                         helperText={
                             checkInputLengthExceed(name)
                                 ? t('input_length_exceed_prompt', {
-                                      name: t('wallet_name').toLowerCase(),
-                                      length: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                                  })
+                                    name: t('wallet_name').toLowerCase(),
+                                    length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                })
                                 : undefined
                         }
                         required
