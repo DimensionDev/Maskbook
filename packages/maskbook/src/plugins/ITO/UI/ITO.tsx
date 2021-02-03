@@ -264,10 +264,13 @@ export function ITO(props: ITO_Props) {
         [tradeInfo, listOfStatus, isAccountSeller, noRemain],
     )
 
-    const refundAmount = useMemo(() => tradeInfo?.buyInfo
-        ? new BigNumber(tradeInfo?.buyInfo.amount).minus(new BigNumber(tradeInfo?.buyInfo.amount_sold))
-        : new BigNumber(0)
-    , [tradeInfo])
+    const refundAmount = useMemo(
+        () =>
+            tradeInfo?.buyInfo
+                ? new BigNumber(tradeInfo?.buyInfo.amount).minus(new BigNumber(tradeInfo?.buyInfo.amount_sold))
+                : new BigNumber(0),
+        [tradeInfo],
+    )
     // out of stock
     const refundAllAmount = tradeInfo?.buyInfo && new BigNumber(tradeInfo?.buyInfo.amount_sold).isZero()
 
@@ -496,8 +499,9 @@ export function ITO(props: ITO_Props) {
             </Card>
 
             <Box className={classes.actionFooter}>
-                {(total_remaining.isZero() && !isBuyer && !canWithdraw) || loadingTradeInfo || loadingAvailability ? null : !account ||
-                  !chainIdValid ? (
+                {(total_remaining.isZero() && !isBuyer && !canWithdraw) ||
+                loadingTradeInfo ||
+                loadingAvailability ? null : !account || !chainIdValid ? (
                     <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
