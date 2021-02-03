@@ -272,15 +272,17 @@ export function ClaimDialog(props: ClaimDialogProps) {
             <section className={classes.swapButtonWrapper}>
                 <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
                     {approveRequired && !validationMessage ? (
-                        approveState === ApproveState.PENDING ? (
+                        approveState === ApproveState.PENDING || approveState === ApproveState.UPDATING ? (
                             <Grid item xs={12}>
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth
                                     variant="contained"
                                     size="large"
-                                    disabled={approveState === ApproveState.PENDING}>
-                                    {`Unlocking ${claimToken.symbol ?? 'Token'}…`}
+                                    disabled>
+                                    {`${approveState === ApproveState.PENDING ? 'Unlocking' : 'Updating'} ${
+                                        claimToken.symbol ?? 'Token'
+                                    }…`}
                                 </ActionButton>
                             </Grid>
                         ) : (
