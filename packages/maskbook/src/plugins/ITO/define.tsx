@@ -73,7 +73,7 @@ export const ITO_PluginDefine: PluginConfig = {
                             new BigNumber(payload.total),
                             payload.token?.decimals ?? 0,
                             payload.token?.decimals ?? 0,
-                        )} $${payload.token?.name || 'ETH'} from ${payload.seller.name}`}
+                        )} $${payload.token?.symbol ?? payload.token?.name ?? 'Token'} from ${payload.seller.name}`}
                     />
                 )
             },

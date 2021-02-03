@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) =>
 
 interface ClaimGuideProps extends Pick<ClaimDialogProps, 'exchangeTokens' | 'payload'> {
     open: boolean
+    shareSuccessLink: string
     isBuyer: boolean
     retryPayload: () => void
     onClose: () => void
@@ -36,7 +37,7 @@ interface ClaimGuideProps extends Pick<ClaimDialogProps, 'exchangeTokens' | 'pay
 
 export function ClaimGuide(props: ClaimGuideProps) {
     const { t } = useI18N()
-    const { payload, exchangeTokens, isBuyer, open, retryPayload, onClose } = props
+    const { payload, exchangeTokens, isBuyer, open, retryPayload, shareSuccessLink, onClose } = props
     const [startTransition] = unstable_useTransition({ busyDelayMs: 1000 })
     const onCloseShareDialog = useCallback(() => {
         startTransition(() => {
@@ -96,6 +97,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
                         case ClaimStatus.Share:
                             return (
                                 <ShareDialog
+                                    shareSuccessLink={shareSuccessLink}
                                     poolName={payload.message}
                                     token={payload.token}
                                     actualSwapAmount={actualSwapAmount}

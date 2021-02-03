@@ -69,10 +69,12 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) =>
             fontSize: (props: StyleProps) => (props.titleLength! > 31 ? '1.3rem' : '1.6rem'),
             fontWeight: 'bold',
             marginBottom: 4,
+            marginRight: 4,
         },
         status: {
             background: 'rgba(20, 23, 26, 0.6)',
             padding: '5px 16px',
+            whiteSpace: 'nowrap',
             borderRadius: 10,
         },
         totalText: {
@@ -257,11 +259,18 @@ export function ITO(props: ITO_Props) {
             symbol: token.symbol,
         }),
     )
-    const canWithdraw =
-        isAccountSeller && !tradeInfo?.destructInfo && (listOfStatus.includes(ITO_Status.expired) || noRemain)
-    const refundAmount = tradeInfo?.buyInfo
-        ? new BigNumber(tradeInfo?.buyInfo.amount).minus(new BigNumber(tradeInfo?.buyInfo.amount_sold))
-        : new BigNumber(0)
+    const canWithdraw = useMemo(
+        () => isAccountSeller && !tradeInfo?.destructInfo && (listOfStatus.includes(ITO_Status.expired) || noRemain),
+        [tradeInfo, listOfStatus, isAccountSeller, noRemain],
+    )
+
+    const refundAmount = useMemo(
+        () =>
+            tradeInfo?.buyInfo
+                ? new BigNumber(tradeInfo?.buyInfo.amount).minus(new BigNumber(tradeInfo?.buyInfo.amount_sold))
+                : new BigNumber(0),
+        [tradeInfo],
+    )
     // out of stock
     const refundAllAmount = tradeInfo?.buyInfo && new BigNumber(tradeInfo?.buyInfo.amount_sold).isZero()
 
@@ -282,6 +291,12 @@ export function ITO(props: ITO_Props) {
     }, [shareLink])
     const onClaim = useCallback(async () => setOpenClaimDialog(true), [])
 
+    const retryITOCard = useCallback(() => {
+        retryPoolPayload()
+        retryPoolTradeInfo()
+        retryAvailability()
+    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
+
     //#region withdraw
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
@@ -289,6 +304,7 @@ export function ITO(props: ITO_Props) {
             if (ev.open) return
             if (destructState.type !== TransactionStateType.CONFIRMED) return
             resetDestructCallback()
+            retryITOCard()
         },
     )
 
@@ -320,12 +336,6 @@ export function ITO(props: ITO_Props) {
         destructCallback(payload.pid)
     }, [destructCallback, payload.pid])
     //#endregion
-
-    const retryITOCard = useCallback(() => {
-        retryPoolPayload()
-        retryPoolTradeInfo()
-        retryAvailability()
-    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
 
     const swapStatusText = useMemo(() => {
         if (listOfStatus.includes(ITO_Status.waited)) return t('plugin_ito_status_no_start')
@@ -489,8 +499,9 @@ export function ITO(props: ITO_Props) {
             </Card>
 
             <Box className={classes.actionFooter}>
-                {(total_remaining.isZero() && !isBuyer) || loadingTradeInfo || loadingAvailability ? null : !account ||
-                  !chainIdValid ? (
+                {(total_remaining.isZero() && !isBuyer && !canWithdraw) ||
+                loadingTradeInfo ||
+                loadingAvailability ? null : !account || !chainIdValid ? (
                     <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
@@ -522,6 +533,7 @@ export function ITO(props: ITO_Props) {
             </Box>
             <ClaimGuide
                 payload={payload}
+                shareSuccessLink={shareSuccessLink}
                 isBuyer={isBuyer}
                 exchangeTokens={exchange_tokens}
                 open={openClaimDialog}
