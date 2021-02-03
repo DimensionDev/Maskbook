@@ -1,6 +1,7 @@
 import { createStyles, makeStyles, Typography, Box } from '@material-ui/core'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { JSON_PayloadInMask } from '../types'
 import type BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -8,6 +9,7 @@ import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
+import { useCallback } from 'react'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -57,6 +59,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface ShareDialogProps extends withClasses<'root'> {
+    shareSuccessLink: string
     token: EtherTokenDetailed | ERC20TokenDetailed
     actualSwapAmount: BigNumber
     poolName: string
@@ -67,15 +70,14 @@ export function ShareDialog(props: ShareDialogProps) {
     const ShareBackground = getAssetAsBlobURL(new URL('../assets/share-background.jpg', import.meta.url))
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
-    const { token, actualSwapAmount } = props
-    const postLink = usePostLink()
+    const { token, actualSwapAmount, shareSuccessLink, onClose } = props
     const amount = formatBalance(actualSwapAmount, token.decimals ?? 0)
-    const shareLink = useShareLink(
-        t('plugin_ito_claim_success_share', {
-            link: postLink,
-            symbol: token.symbol,
-        }),
-    )
+
+    const onShareSuccess = useCallback(async () => {
+        onClose()
+        window.open(shareSuccessLink, '_blank', 'noopener noreferrer')
+    }, [shareSuccessLink, onClose])
+
     return (
         <>
             <Box className={classes.shareWrapper}>
@@ -90,10 +92,7 @@ export function ShareDialog(props: ShareDialogProps) {
                         {actualSwapAmount.isZero() ? t('plugin_ito_out_of_stock_hit') : t('plugin_ito_congratulations')}
                     </Typography>
                     <ActionButton
-                        onClick={() => {
-                            props.onClose()
-                            actualSwapAmount.isZero() ? void 0 : window.open(shareLink, '_blank', 'noopener noreferrer')
-                        }}
+                        onClick={onShareSuccess}
                         variant="contained"
                         color="primary"
                         className={classes.shareButton}>

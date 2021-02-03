@@ -284,6 +284,12 @@ export function ITO(props: ITO_Props) {
     }, [shareLink])
     const onClaim = useCallback(async () => setOpenClaimDialog(true), [])
 
+    const retryITOCard = useCallback(() => {
+        retryPoolPayload()
+        retryPoolTradeInfo()
+        retryAvailability()
+    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
+
     //#region withdraw
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
@@ -291,7 +297,7 @@ export function ITO(props: ITO_Props) {
             if (ev.open) return
             if (destructState.type !== TransactionStateType.CONFIRMED) return
             resetDestructCallback()
-            retryPayload()
+            retryITOCard()
         },
     )
 
@@ -323,12 +329,6 @@ export function ITO(props: ITO_Props) {
         destructCallback(payload.pid)
     }, [destructCallback, payload.pid])
     //#endregion
-
-    const retryITOCard = useCallback(() => {
-        retryPoolPayload()
-        retryPoolTradeInfo()
-        retryAvailability()
-    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
 
     const swapStatusText = useMemo(() => {
         if (listOfStatus.includes(ITO_Status.waited)) return t('plugin_ito_status_no_start')
@@ -525,6 +525,7 @@ export function ITO(props: ITO_Props) {
             </Box>
             <ClaimGuide
                 payload={payload}
+                shareSuccessLink={shareSuccessLink}
                 isBuyer={isBuyer}
                 exchangeTokens={exchange_tokens}
                 open={openClaimDialog}
