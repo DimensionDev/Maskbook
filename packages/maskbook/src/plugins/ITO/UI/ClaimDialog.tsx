@@ -24,6 +24,7 @@ import { ClaimStatus } from './ClaimGuide'
 import { isSameAddress } from '../../../web3/helpers'
 import { SelectERC20TokenDialog } from '../../Ethereum/UI/SelectERC20TokenDialog'
 import { EthereumMessages } from '../../Ethereum/messages'
+import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -143,6 +144,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     //#endregion
 
     //#region approve
+    const { enqueueSnackbar } = useSnackbar()
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
     const [approveState, , approveCallback] = useERC20TokenApproveCallback(
         claimToken.type === EthereumTokenType.ERC20 ? claimToken.address : '',
@@ -150,14 +152,19 @@ export function ClaimDialog(props: ClaimDialogProps) {
         ITO_CONTRACT_ADDRESS,
     )
 
-    const onApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
-        await approveCallback()
-    }, [approveState, approveCallback])
-    const onExactApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
-        await approveCallback(true)
-    }, [approveState, approveCallback])
+    const onApprove = useCallback(
+        async (useExact = false) => {
+            if (approveState !== ApproveState.NOT_APPROVED) return
+            try {
+                await approveCallback(useExact)
+            } catch (e) {
+                enqueueSnackbar(e.message, {
+                    variant: 'error',
+                })
+            }
+        },
+        [approveState, approveCallback],
+    )
     const approveRequired =
         (approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING) &&
         claimToken.type !== EthereumTokenType.Ether
@@ -293,7 +300,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                                         fullWidth
                                         variant="contained"
                                         size="large"
-                                        onClick={onExactApprove}>
+                                        onClick={() => onApprove(true)}>
                                         {approveState === ApproveState.NOT_APPROVED
                                             ? t('plugin_wallet_token_unlock', {
                                                   balance: formatBalance(claimAmount, claimToken.decimals, 2),
