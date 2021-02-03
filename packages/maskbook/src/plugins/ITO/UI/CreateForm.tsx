@@ -23,6 +23,7 @@ import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowR
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
 import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
+import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -126,6 +127,7 @@ export function CreateForm(props: CreateFormProps) {
     )
 
     //#region approve
+    const { enqueueSnackbar } = useSnackbar()
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
     const [approveState, , approveCallback] = useERC20TokenApproveCallback(
         tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount?.token?.address : '',
@@ -133,14 +135,19 @@ export function CreateForm(props: CreateFormProps) {
         ITO_CONTRACT_ADDRESS,
     )
 
-    const onApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
-        await approveCallback()
-    }, [approveState, approveCallback])
-    const onExactApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
-        await approveCallback(true)
-    }, [approveState, approveCallback])
+    const onApprove = useCallback(
+        async (useExact = false) => {
+            if (approveState !== ApproveState.NOT_APPROVED) return
+            try {
+                await approveCallback(useExact)
+            } catch (e) {
+                enqueueSnackbar(e.message, {
+                    variant: 'error',
+                })
+            }
+        },
+        [approveState, approveCallback],
+    )
     const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
     //#endregion
 
@@ -326,7 +333,7 @@ export function CreateForm(props: CreateFormProps) {
                                         fullWidth
                                         variant="contained"
                                         size="large"
-                                        onClick={onExactApprove}>
+                                        onClick={() => onApprove(true)}>
                                         {approveState === ApproveState.NOT_APPROVED
                                             ? t('plugin_wallet_token_unlock', {
                                                   balance: formatAmountPrecision(
