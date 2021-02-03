@@ -305,15 +305,17 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.line}>
                 <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
                     {approveRequired ? (
-                        approveState === ApproveState.PENDING ? (
+                        approveState === ApproveState.PENDING || approveState === ApproveState.UPDATING ? (
                             <Grid item xs={12}>
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth
                                     variant="contained"
                                     size="large"
-                                    disabled={approveState === ApproveState.PENDING}>
-                                    {`Unlocking ${tokenAndAmount?.token?.symbol ?? 'Token'}…`}
+                                    disabled>
+                                    {`${approveState === ApproveState.PENDING ? 'Unlocking' : 'Updating'} ${
+                                        tokenAndAmount?.token?.symbol ?? 'Token'
+                                    }…`}
                                 </ActionButton>
                             </Grid>
                         ) : (
