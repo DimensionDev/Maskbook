@@ -290,6 +290,7 @@ export function ITO(props: ITO_Props) {
             if (ev.open) return
             if (destructState.type !== TransactionStateType.CONFIRMED) return
             resetDestructCallback()
+            retryPayload()
         },
     )
 
