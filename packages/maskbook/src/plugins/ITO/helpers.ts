@@ -67,22 +67,13 @@ export function payloadOutMask(payload: JSON_PayloadInMask) {
 
         // HOTFIX of image payload for ITO
         // remove unnecessary chunks of data to reduce the size of payload
-        token: {
-            ...tokenOutMask(payload.token),
-            name: '',
-            symbol: '',
-        },
-        seller: {
-            address: '',
-            name: '',
-        },
+        token: tokenOutMask(payload.token),
         contract_address: '',
         message: '',
         start_time: 0,
         end_time: 0,
         creation_time: 0,
         limit: '0',
-        total: '0',
         total_remaining: '0',
         buyers: [],
         exchange_amounts: [],
