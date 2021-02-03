@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) =>
             backgroundRepeat: 'no-repeat',
             width: 475,
             height: 341,
-            backgroundColor: '#332C61',
+            backgroundColor: '#FF5238',
             borderRadius: 10,
         },
     }),

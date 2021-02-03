@@ -73,6 +73,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) =>
         status: {
             background: 'rgba(20, 23, 26, 0.6)',
             padding: '5px 16px',
+            whiteSpace: 'nowrap',
             borderRadius: 10,
         },
         totalText: {
