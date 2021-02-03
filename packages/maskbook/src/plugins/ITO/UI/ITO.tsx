@@ -23,7 +23,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { sortTokens } from '../helpers'
-import { ITO_EXCHANGE_RATION_MAX } from '../constants'
+import { ITO_EXCHANGE_RATION_MAX, TIME_WAIT_BLOCKCHAIN } from '../constants'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
@@ -307,6 +307,18 @@ export function ITO(props: ITO_Props) {
             retryITOCard()
         },
     )
+
+    useEffect(() => {
+        const timeToExpired = end_time * 1000 - new Date().getTime()
+        if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired)) return
+
+        const timer = setTimeout(() => {
+            setOpenClaimDialog(false)
+            retryITOCard()
+        }, timeToExpired + TIME_WAIT_BLOCKCHAIN)
+
+        return () => clearTimeout(timer)
+    }, [listOfStatus, setOpenClaimDialog, end_time, retryITOCard])
 
     useEffect(() => {
         if (destructState.type === TransactionStateType.UNKNOWN) return
