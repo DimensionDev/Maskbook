@@ -197,7 +197,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                                 label={t('wallet_name')}
                                 inputRef={register}
                                 defaultValue={name.current}
-                                onChange={(e) => name.current = e.target.value}
+                                onChange={(e) => (name.current = e.target.value)}
                                 variant="outlined"
                             />
                         </form>
@@ -258,14 +258,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             label={t('wallet_name')}
                             inputRef={register}
                             defaultValue={name.current}
-                            onChange={(e) => name.current = e.target.value}
+                            onChange={(e) => (name.current = e.target.value)}
                             variant="outlined"
                         />
                         <TextField
                             required
                             label={t('mnemonic_words')}
                             inputRef={register}
-                            key='mnemonic'
+                            key="mnemonic"
                             name="mnemonic"
                             variant="outlined"
                         />
@@ -285,14 +285,14 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             label={t('wallet_name')}
                             inputRef={register}
                             defaultValue={name.current}
-                            onChange={(e) => name.current = e.target.value}
+                            onChange={(e) => (name.current = e.target.value)}
                             variant="outlined"
                         />
                         <TextField
                             type="password"
                             required
                             label={t('private_key')}
-                            key='private_password'
+                            key="private_password"
                             name="private_password"
                             inputRef={register}
                             variant="outlined"
@@ -345,7 +345,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                 footer={
                     <DebounceButton
                         variant="contained"
-                        onClick={handleSubmit(onSubmit, errors => console.log(errors))}
+                        onClick={handleSubmit(onSubmit, (errors) => console.log(errors))}
                         disabled={
                             !(state[0] === 0 && !errors.name && watch('confirmed')) &&
                             !(state[0] === 1 && !errors.name && watch('mnemonic')?.length) &&
@@ -466,9 +466,9 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                         helperText={
                             checkInputLengthExceed(name)
                                 ? t('input_length_exceed_prompt', {
-                                    name: t('wallet_name').toLowerCase(),
-                                    length: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                                })
+                                      name: t('wallet_name').toLowerCase(),
+                                      length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                  })
                                 : undefined
                         }
                         required
