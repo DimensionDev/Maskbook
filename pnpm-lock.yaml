@@ -179,6 +179,8 @@ importers:
       eth-contract-metadata: 1.17.0
       ethereum-blockies: 0.1.1
       event-iterator: 2.0.0
+      formik: 2.2.6
+      formik-material-ui: 3.0.1_formik@2.2.6
       fuse.js: 6.4.6
       gun: 0.2020.520
       https-browserify: 1.0.0
@@ -227,6 +229,7 @@ importers:
       web3-utils: 1.3.3
       webcrypto-liner: 1.2.3
       webextension-polyfill: 0.7.0
+      yup: 0.32.8
       z-schema: 5.0.0
       zod: 3.0.0-alpha.4
     devDependencies:
@@ -379,6 +382,8 @@ importers:
       expect-puppeteer: ^4.4.0
       fake-indexeddb: ^3.1.2
       file-loader: ^6.2.0
+      formik: ^2.2.6
+      formik-material-ui: ^3.0.1
       fuse.js: ^6.4.3
       gun: 0.2020.520
       html-webpack-plugin: ^5.0.0-beta.4
@@ -459,6 +464,7 @@ importers:
       webpack-extension-manifest-plugin: ^0.6.0
       webpack-notifier: ^1.12.0
       webpack-target-webextension: ^0.4.0
+      yup: ^0.32.8
       z-schema: ^5.0.0
       zod: ^3.0.0-alpha.4
   packages/shared:
@@ -2379,6 +2385,12 @@ packages:
       '@babel/core': ^7.0.0-0
     resolution:
       integrity: sha512-EvX/BvMMJRAA3jZgILWgbsrHwBQvllC5T8B29McyME8DvkdOxk4ujESfrMvME8IHSDvWXrmMXxPvA/lx2gqPLQ==
+  /@babel/runtime/7.12.13:
+    dependencies:
+      regenerator-runtime: 0.13.7
+    dev: false
+    resolution:
+      integrity: sha512-8+3UMPBrjFa/6TtKi/7sehPKqfAm4g6K+YQjyyFOLUTxzOngcRZTlAVY8sc2CORJYqdHQY8gRPHmn+qo15rCBw==
   /@babel/runtime/7.12.5:
     dependencies:
       regenerator-runtime: 0.13.7
@@ -10983,6 +10995,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-8cZeTb1ZKC3bdSCP6XOM1IsTczIO73fdqtwa2B0N15eAz7gmyhQo+mc5gnFuulsgN3vIQYmTgbmQVKalH1dKvQ==
+  /deepmerge/2.2.1:
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha512-R9hc1Xa/NOBi9WRVUWg19rl1UB7Tt4kuPd+thNJgFZoxXsTz7ncaPaeIm+40oSGuP33DfMb4sZt1QIGiJzC4EA==
   /deepmerge/4.2.2:
     dev: true
     engines:
@@ -13272,6 +13290,31 @@ packages:
       node: '>=0.4.x'
     resolution:
       integrity: sha1-1hcBB+nv3E7TDJ3DkBbflCtctYs=
+  /formik-material-ui/3.0.1_formik@2.2.6:
+    dependencies:
+      formik: 2.2.6
+    dev: false
+    peerDependencies:
+      '@material-ui/core': '>=4.0.0'
+      formik: '>=2.0.0'
+      react: '>=16.8.0'
+      tiny-warning: '>=1.0.2'
+    resolution:
+      integrity: sha512-N8oxZIdhY70npRv86IfF6Zaaps9RL3a37XRdq02WDroB3XZC1mXs6lA/zQ09ZYFWYJp/UjI80SKVpVa/xJOJJA==
+  /formik/2.2.6:
+    dependencies:
+      deepmerge: 2.2.1
+      hoist-non-react-statics: 3.3.2
+      lodash: 4.17.20
+      lodash-es: 4.17.20
+      react-fast-compare: 2.0.4
+      tiny-warning: 1.0.3
+      tslib: 1.14.1
+    dev: false
+    peerDependencies:
+      react: '>=16.8.0'
+    resolution:
+      integrity: sha512-Kxk2zQRafy56zhLmrzcbryUpMBvT0tal5IvcifK5+4YNGelKsnrODFJ0sZQRMQboblWNym4lAW3bt+tf2vApSA==
   /forwarded/0.1.2:
     engines:
       node: '>= 0.6'
@@ -17913,6 +17956,10 @@ packages:
   /nano-json-stream-parser/0.1.2:
     resolution:
       integrity: sha1-DMj20OK2IrR5xA1JnEbWS3Vcb18=
+  /nanoclone/0.2.1:
+    dev: false
+    resolution:
+      integrity: sha512-wynEP02LmIbLpcYw8uBKpcfF6dmg2vcpKqxeH5UcoKEYdExslsdUA4ugFauuaeYdTB76ez6gJW8XAZ6CgkXYxA==
   /nanoid/3.1.20:
     dev: true
     engines:
@@ -19560,6 +19607,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-TjNPblN4BwAWMXU8s9AEz4JmQxnD1NNL7bNOY/AKUzyamc379FWASUhc/K1pL2noVb+XmZKLL68cjzLsiOAMaA==
+  /property-expr/2.0.4:
+    dev: false
+    resolution:
+      integrity: sha512-sFPkHQjVKheDNnPvotjQmm3KD3uk1fWKUN7CrpdbwmUx3CrG3QiM8QpTSimvig5vTXmTvjz7+TDvXOI9+4rkcg==
   /property-information/5.6.0:
     dependencies:
       xtend: 4.0.2
@@ -20175,6 +20226,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-HvPuUQnLp5H7TouGq3kzBeioJmXms1wHy9EGjz2OURWBp4qZO6AfGEcnxts1D/CbwPLRAgTMPCEgYhA3sEM4vw==
+  /react-fast-compare/2.0.4:
+    dev: false
+    resolution:
+      integrity: sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
   /react-fast-compare/3.2.0:
     dev: true
     resolution:
@@ -23352,6 +23407,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-zCAOqyYT9BZtJ/+a/HylbUnfbrQ=
+  /toposort/2.0.2:
+    dev: false
+    resolution:
+      integrity: sha1-riF2gXXRVZ1IvvNUILL0li8JwzA=
   /tosource/1.0.0:
     dev: true
     engines:
@@ -25799,6 +25858,20 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+  /yup/0.32.8:
+    dependencies:
+      '@babel/runtime': 7.12.13
+      '@types/lodash': 4.14.168
+      lodash: 4.17.20
+      lodash-es: 4.17.20
+      nanoclone: 0.2.1
+      property-expr: 2.0.4
+      toposort: 2.0.2
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-SZulv5FIZ9d5H99EN5tRCRPXL0eyoYxWIP1AacCrjC9d4DfP13J1dROdKGfpfRHT3eQB6/ikBl5jG21smAfCkA==
   /z-schema/5.0.0:
     dependencies:
       lodash.get: 4.4.2
