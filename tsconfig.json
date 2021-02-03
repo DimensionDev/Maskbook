@@ -75,7 +75,8 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "useDefineForClassFields": true,
-    "stripInternal": true
+    "stripInternal": true,
+    "preserveSymlinks": true
   },
   "files": [],
   "ts-node": {
