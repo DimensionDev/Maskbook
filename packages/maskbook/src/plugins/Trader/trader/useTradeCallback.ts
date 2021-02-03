@@ -5,7 +5,7 @@ import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback'
 import { useTradeCallback as useUniswapCallback } from './uniswap/useTradeCallback'
 import { useRouterV2Contract as useUniswapRouterV2Contract } from '../contracts/uniswap/useRouterV2Contract'
 import { useRouterV2Contract as useSushiSwapRouterV2Contract } from '../contracts/sushiswap/useRouterV2Contract'
-import { useRouterV2Contract as useSashimiSwapRouterV2Contract } from '../contracts/sashimi/useRouterV2Contract'
+import { useRouterV2Contract as useSashimiSwapRouterV2Contract } from '../contracts/sashimiswap/useRouterV2Contract'
 
 export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeComputed<unknown> | null) {
     // create contract instances for uniswap and sushiswap
