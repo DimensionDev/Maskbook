@@ -22,7 +22,7 @@ export enum ApproveState {
     APPROVED,
 }
 
-export function useERC20TokenApproveCallbackV2(address: string, amount?: string, spender?: string) {
+export function useERC20TokenApproveCallback(address: string, amount?: string, spender?: string) {
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(address)
     const [transactionState, setTransactionState] = useTransactionState()
@@ -44,7 +44,7 @@ export function useERC20TokenApproveCallbackV2(address: string, amount?: string,
     }, [amount, spender, allowance, transactionState.type, loadingAllowance, loadingBalance])
 
     const approveCallback = useCallback(
-        async (useExact = false) => {
+        async (useExact: boolean = false) => {
             if (approveState === ApproveState.UNKNOWN || !amount || !spender || !erc20Contract) {
                 setTransactionState({
                     type: TransactionStateType.UNKNOWN,
@@ -123,7 +123,7 @@ export function useERC20TokenApproveCallbackV2(address: string, amount?: string,
                 })
             })
         },
-        [account, amount, balance, loadingAllowance, loadingBalance, erc20Contract, approveState],
+        [account, amount, balance, spender, loadingAllowance, loadingBalance, erc20Contract, approveState],
     )
 
     const resetCallback = useCallback(() => {
