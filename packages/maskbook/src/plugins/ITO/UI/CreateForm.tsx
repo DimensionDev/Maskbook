@@ -10,7 +10,7 @@ import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
-import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
+import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallbackV2'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
@@ -127,7 +127,7 @@ export function CreateForm(props: CreateFormProps) {
 
     //#region approve
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
-    const [approveState, approveCallback] = useERC20TokenApproveCallback(
+    const [approveState, , approveCallback] = useERC20TokenApproveCallback(
         tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount?.token?.address : '',
         inputTokenAmount,
         ITO_CONTRACT_ADDRESS,

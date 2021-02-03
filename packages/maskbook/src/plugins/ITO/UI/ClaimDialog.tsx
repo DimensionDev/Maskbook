@@ -16,7 +16,7 @@ import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import type { ChainId } from '../../../web3/types'
-import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
+import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallbackV2'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO_CONSTANTS } from '../constants'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
@@ -144,7 +144,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
 
     //#region approve
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
-    const [approveState, approveCallback] = useERC20TokenApproveCallback(
+    const [approveState, , approveCallback] = useERC20TokenApproveCallback(
         claimToken.type === EthereumTokenType.ERC20 ? claimToken.address : '',
         claimAmount.toFixed(),
         ITO_CONTRACT_ADDRESS,
