@@ -56,7 +56,7 @@ export const ITO_PluginDefine: PluginConfig = {
         return (
             <MaskbookPluginWrapper pluginName="ITO">
                 <Suspense fallback={<ITO_Loading />}>
-                    <PostInspector pid={payloadIntoMask(payload.val).pid} />
+                    <PostInspector payload={payloadIntoMask(payload.val)} />
                 </Suspense>
             </MaskbookPluginWrapper>
         )
@@ -73,7 +73,7 @@ export const ITO_PluginDefine: PluginConfig = {
                             new BigNumber(payload.total),
                             payload.token?.decimals ?? 0,
                             payload.token?.decimals ?? 0,
-                        )} $${payload.token?.name || 'ETH'} from ${payload.seller.name}`}
+                        )} $${payload.token?.symbol ?? payload.token?.name ?? 'Token'} from ${payload.seller.name}`}
                     />
                 )
             },

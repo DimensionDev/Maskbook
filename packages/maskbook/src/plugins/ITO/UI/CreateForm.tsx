@@ -10,7 +10,7 @@ import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
-import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
+import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallbackV2'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
@@ -20,7 +20,8 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { formatAmount, formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
 import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
-import { DateTimePicker, LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
+import { sliceTextByUILength } from '../../../utils/getTextUILength'
+import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 
 const useStyles = makeStyles((theme) =>
@@ -126,7 +127,7 @@ export function CreateForm(props: CreateFormProps) {
 
     //#region approve
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
-    const [approveState, approveCallback] = useERC20TokenApproveCallback(
+    const [approveState, , approveCallback] = useERC20TokenApproveCallback(
         tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount?.token?.address : '',
         inputTokenAmount,
         ITO_CONTRACT_ADDRESS,
@@ -270,7 +271,7 @@ export function CreateForm(props: CreateFormProps) {
                     className={classes.input}
                     label={t('plugin_item_message_label')}
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={(e) => setMessage(sliceTextByUILength(e.target.value, 90))}
                     InputLabelProps={{
                         shrink: true,
                     }}

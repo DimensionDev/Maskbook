@@ -28,6 +28,8 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
     const token_ = useMemo(() => {
         if (!erc20TokenContract) return
         const [name, symbol, decimals] = results.map((x) => (x.error ? undefined : x.value))
+        // not a valid erc20 token
+        if (!name && !symbol && !decimals) return
         return {
             type: EthereumTokenType.ERC20,
             address: formatChecksumAddress(address),

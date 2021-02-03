@@ -114,12 +114,12 @@ class Informative {
         this.callback.add(cb)
         return () => void this.callback.delete(cb)
     }
+    private pendingInform = false
     inform() {
-        // ? Callback must be async or React will complain:
-        // Warning: Cannot update a component from inside the function body of a different component.
-        setTimeout(() => {
-            // TODO: batch update ? aggregating multiple inform request to one callback is possible
-            for (const cb of this.callback) cb()
+        if (this.pendingInform) return
+        requestAnimationFrame(() => {
+            this.pendingInform = false
+            this.callback.forEach((x) => x())
         })
     }
 }
