@@ -3,7 +3,7 @@
        width="200" height="200" title="([I:b])" alt="([I:b])">
 </a>
 
-# Mask Network &middot;
+# Mask Network
 
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square)](https://github.com/DimensionDev/Maskbook/blob/master/LICENSE)
 [![Circle CI](https://img.shields.io/circleci/project/github/DimensionDev/Maskbook.svg?style=flat-square&logo=circleci)](https://circleci.com/gh/DimensionDev/Maskbook)
