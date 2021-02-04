@@ -3,6 +3,8 @@ import React, { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'r
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
+import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
+import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -10,20 +12,17 @@ import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
-import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallbackV2'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
 import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useChainIdValid } from '../../../web3/hooks/useChainState'
-import { formatAmount, formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
+import { formatAmount, formatBalance } from '../../Wallet/formatter'
 import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
-import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
-import { useSnackbar } from 'notistack'
+import { EthereumIfWalletConnected } from '../../../web3/UI/EthereumIfWalletConnected'
+import { EthereumIfERC20TokenApproved } from '../../../web3/UI/EthereumIfERC20TokenApproved'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -49,10 +48,7 @@ const useStyles = makeStyles((theme) =>
             fontSize: 12,
             color: theme.palette.text.secondary,
         },
-        button: {
-            margin: theme.spacing(2, 0),
-            padding: 12,
-        },
+        button: {},
         date: {
             margin: theme.spacing(1),
             display: 'flex',
@@ -66,18 +62,17 @@ const useStyles = makeStyles((theme) =>
 
 export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
-    onConnectWallet: () => void
     onNext: () => void
     origin?: PoolSettings
 }
 
 export function CreateForm(props: CreateFormProps) {
-    const { onChangePoolSettings, onNext, onConnectWallet, origin } = props
+    const { onChangePoolSettings, onNext, origin } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
-    const chainIdValid = useChainIdValid()
+    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
@@ -125,31 +120,6 @@ export function CreateForm(props: CreateFormProps) {
         tokenAndAmount?.token?.type ?? EthereumTokenType.Ether,
         tokenAndAmount?.token?.address ?? '',
     )
-
-    //#region approve
-    const { enqueueSnackbar } = useSnackbar()
-    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
-    const [approveState, , approveCallback] = useERC20TokenApproveCallback(
-        tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount?.token?.address : '',
-        inputTokenAmount,
-        ITO_CONTRACT_ADDRESS,
-    )
-
-    const onApprove = useCallback(
-        async (useExact = false) => {
-            if (approveState !== ApproveState.NOT_APPROVED) return
-            try {
-                await approveCallback(useExact)
-            } catch (e) {
-                enqueueSnackbar(e.message, {
-                    variant: 'error',
-                })
-            }
-        },
-        [approveState, approveCallback],
-    )
-    const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
-    //#endregion
 
     const onTotalOfPerWalletChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
         const total = ev.currentTarget.value
@@ -310,82 +280,24 @@ export function CreateForm(props: CreateFormProps) {
                 {StartTime} {EndTime}
             </Box>
             <Box className={classes.line}>
-                <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                    {approveRequired ? (
-                        approveState === ApproveState.PENDING || approveState === ApproveState.UPDATING ? (
-                            <Grid item xs={12}>
-                                <ActionButton
-                                    className={classes.button}
-                                    fullWidth
-                                    variant="contained"
-                                    size="large"
-                                    disabled>
-                                    {`${approveState === ApproveState.PENDING ? 'Unlocking' : 'Updating'} ${
-                                        tokenAndAmount?.token?.symbol ?? 'Token'
-                                    }…`}
-                                </ActionButton>
-                            </Grid>
-                        ) : (
-                            <>
-                                <Grid item xs={6}>
-                                    <ActionButton
-                                        className={classes.button}
-                                        fullWidth
-                                        variant="contained"
-                                        size="large"
-                                        onClick={() => onApprove(true)}>
-                                        {approveState === ApproveState.NOT_APPROVED
-                                            ? t('plugin_wallet_token_unlock', {
-                                                  balance: formatAmountPrecision(
-                                                      new BigNumber(inputTokenAmount),
-                                                      tokenAndAmount?.token?.decimals,
-                                                  ),
-                                                  symbol: tokenAndAmount?.token?.symbol ?? 'Token',
-                                              })
-                                            : ''}
-                                    </ActionButton>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <ActionButton
-                                        className={classes.button}
-                                        fullWidth
-                                        variant="contained"
-                                        size="large"
-                                        onClick={onApprove}>
-                                        {approveState === ApproveState.NOT_APPROVED
-                                            ? t('plugin_wallet_token_infinite_unlock')
-                                            : ''}
-                                    </ActionButton>
-                                </Grid>
-                            </>
-                        )
-                    ) : (
-                        <Grid item xs={12}>
-                            {!account ? (
-                                <ActionButton
-                                    className={classes.button}
-                                    fullWidth
-                                    variant="contained"
-                                    size="large"
-                                    onClick={onConnectWallet}>
-                                    {t('plugin_ito_connect_a_wallet')}
-                                </ActionButton>
-                            ) : !chainIdValid ? (
-                                <ActionButton className={classes.button} fullWidth variant="contained" disabled>
-                                    {t('plugin_wallet_invalid_network')}
-                                </ActionButton>
-                            ) : validationMessage ? (
-                                <ActionButton className={classes.button} fullWidth variant="contained" disabled>
-                                    {validationMessage}
-                                </ActionButton>
-                            ) : (
-                                <ActionButton className={classes.button} fullWidth onClick={onNext} variant="contained">
-                                    {t('plugin_ito_next')}
-                                </ActionButton>
-                            )}
-                        </Grid>
-                    )}
-                </Grid>
+                <EthereumIfWalletConnected>
+                    <EthereumIfERC20TokenApproved
+                        amount={inputTokenAmount}
+                        spender={ITO_CONTRACT_ADDRESS}
+                        token={
+                            tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined
+                        }>
+                        <ActionButton
+                            className={classes.button}
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            disabled={!!validationMessage}
+                            onClick={onNext}>
+                            {validationMessage || t('plugin_ito_next')}
+                        </ActionButton>
+                    </EthereumIfERC20TokenApproved>
+                </EthereumIfWalletConnected>
             </Box>
         </>
     )
