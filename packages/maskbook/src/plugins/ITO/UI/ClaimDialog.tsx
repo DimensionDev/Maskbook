@@ -352,6 +352,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
 
             <SelectERC20TokenDialog
                 disableSearchBar
+                tokens={props.exchangeTokens}
                 includeTokens={props.exchangeTokens.map((x) => x.address)}
                 excludeTokens={[]}
                 selectedTokens={[]}
