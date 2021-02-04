@@ -5,12 +5,19 @@
 
 # Mask Network
 
-[![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square)](https://github.com/DimensionDev/Maskbook/blob/master/LICENSE)
-[![Circle CI](https://img.shields.io/circleci/project/github/DimensionDev/Maskbook.svg?style=flat-square&logo=circleci)](https://circleci.com/gh/DimensionDev/Maskbook)
-[![Join the chat at https://gitter.im/Maskbook/community](https://badges.gitter.im/Maskbook/community.svg)](https://gitter.im/Maskbook/community)
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/jkoeaghipilijlahjplgbfiocjhldnap.svg?logo=Maskbook&logoColor=%231c68f3&style=flat-square&label=Chrome%20store)][client-chrome]
-[![Mozilla Add-on](https://img.shields.io/amo/v/maskbook?label=Firefox%20store&style=flat-square)][client-firefox]
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook.svg?type=shield)][fossa]
+[![GitHub license][badge-license]](https://github.com/DimensionDev/Maskbook/blob/master/LICENSE)
+[![Circle CI][badge-ci]](https://circleci.com/gh/DimensionDev/Maskbook)
+[![Join the chat at https://gitter.im/Maskbook/community][badge-gitter]](https://gitter.im/Maskbook/community)
+[![Chrome Web Store][badge-chrome]][client-chrome]
+[![Mozilla Add-on][badge-firefox]][client-firefox]
+[![FOSSA Status][badge-fossa]][fossa]
+
+[badge-license]: https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square
+[badge-ci]: https://img.shields.io/circleci/project/github/DimensionDev/Maskbook.svg?style=flat-square&logo=circleci
+[badge-gitter]: https://badges.gitter.im/Maskbook/community.svg
+[badge-chrome]: https://img.shields.io/chrome-web-store/v/jkoeaghipilijlahjplgbfiocjhldnap.svg?logo=Maskbook&logoColor=%231c68f3&style=flat-square&label=Chrome%20store
+[badge-firefox]: https://img.shields.io/amo/v/maskbook?label=Firefox%20store&style=flat-square
+[badge-fossa]: https://app.fossa.io/api/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook.svg?type=shield
 
 Mask Network (originally named as Maskbook) is a portal to the new, open internet. With Mask Network, you can send encrypted posts to your friends, participate in cryptocurrencies lucky-draws, and share encrypted files on the platforms you are already using.
 
