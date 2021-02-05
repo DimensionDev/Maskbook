@@ -1,6 +1,7 @@
 import { story } from '../utils'
 import TabContext from '@material-ui/lab/TabContext'
 import TabPanel from '@material-ui/lab/TabPanel'
+import { Tab } from '@material-ui/core'
 import { useState } from 'react'
 import { ButtonGroupTabList, ButtonTab } from '../../src/Components/ButtonGroupTab'
 
@@ -12,9 +13,7 @@ const { meta, of } = story(function ({ tabs }: { tabs: string[] }) {
         <TabContext value={tabs.includes(state) ? state : tabs[0]}>
             <ButtonGroupTabList onChange={(e, v) => setState(v)} aria-label="My tab?">
                 {tabs.map((x) => (
-                    <ButtonTab key={x} value={x}>
-                        {x}
-                    </ButtonTab>
+                    <Tab key={x} value={x} label={x} />
                 ))}
             </ButtonGroupTabList>
             {tabs.map((x) => (
