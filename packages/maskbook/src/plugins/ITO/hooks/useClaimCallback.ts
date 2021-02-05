@@ -38,6 +38,14 @@ export function useClaimCallback(
             return
         }
 
+        if (payload.end_time * 1000 < new Date().getTime()) {
+            setClaimState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Pool has expired.'),
+            })
+            return
+        }
+
         // pre-step: start waiting for provider to confirm tx
         setClaimState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
