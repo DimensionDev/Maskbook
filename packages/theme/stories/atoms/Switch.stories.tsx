@@ -1,5 +1,5 @@
 import { Switch as MuiSwitch, FormControlLabel } from '@material-ui/core'
-import { story, MuiArgs, matrix } from './utils'
+import { story, MuiArgs, matrix } from '../utils'
 
 function C() {
     return (

@@ -1,5 +1,5 @@
 import { Button as MuiButton, ButtonProps } from '@material-ui/core'
-import { story, MuiArgs, matrix } from './utils'
+import { story, MuiArgs, matrix } from '../utils'
 
 const { meta, of } = story(MuiButton)
 export default meta({
