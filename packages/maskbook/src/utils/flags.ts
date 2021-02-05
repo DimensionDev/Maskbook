@@ -27,7 +27,6 @@ export const Flags = {
     has_native_welcome_ui: appOnly,
     /** Firefox has a special API that can inject to the document with a higher permission. */
     requires_injected_script_run_directly: process.env.target === 'firefox',
-    // TODO: document why it enabled on app
     support_eth_network_switch: betaOrInsiderOnly,
     //#region Experimental features
     image_payload_marked_as_beta: appOnly,
