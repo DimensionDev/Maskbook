@@ -230,8 +230,8 @@ export function ClaimDialog(props: ClaimDialogProps) {
                             .dividedBy(ratio)
                             .multipliedBy(Math.pow(10, claimToken.decimals))
                         if (tAmount.isGreaterThan(maxSwapAmount)) return
-                        setTokenAmount(tAmount)
-                        setClaimAmount(tAmount.multipliedBy(ratio))
+                        setTokenAmount(tAmount.dp(0))
+                        setClaimAmount(tAmount.multipliedBy(ratio).dp(0))
                         setInputAmountForUI(swapAmount)
                     }}
                 />
