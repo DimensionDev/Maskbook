@@ -4,7 +4,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { FixedTokenList } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
-import type { ERC20TokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,6 +32,7 @@ export interface SelectERC20TokenDialogProps extends withClasses<never> {
     includeTokens: string[]
     excludeTokens: string[]
     selectedTokens: string[]
+    tokens?: (ERC20TokenDetailed | EtherTokenDetailed)[]
     disableSearchBar?: boolean
     onSubmit(token: ERC20TokenDetailed): void
     onClose(): void
@@ -41,7 +42,16 @@ export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const { open, disableSearchBar = false, includeTokens, excludeTokens, selectedTokens, onSubmit, onClose } = props
+    const {
+        open,
+        disableSearchBar = false,
+        includeTokens,
+        excludeTokens,
+        selectedTokens,
+        tokens = [],
+        onSubmit,
+        onClose,
+    } = props
 
     //#region search tokens
     const [keyword, setKeyword] = useState('')
@@ -64,6 +74,7 @@ export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     useEther
                     keyword={keyword}
+                    tokens={tokens}
                     includeTokens={includeTokens}
                     excludeTokens={excludeTokens}
                     selectedTokens={selectedTokens}

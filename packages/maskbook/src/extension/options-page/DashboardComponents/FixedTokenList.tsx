@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { uniqBy } from 'lodash-es'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { makeStyles, createStyles, Typography } from '@material-ui/core'
 import { EthereumAddress } from 'wallet.ts'
@@ -27,6 +28,7 @@ export interface FixedTokenListProps extends withClasses<KeysInferFromUseStyles<
     includeTokens?: string[]
     excludeTokens?: string[]
     selectedTokens?: string[]
+    tokens?: (ERC20TokenDetailed | EtherTokenDetailed)[]
     onSubmit?(token: EtherTokenDetailed | ERC20TokenDetailed): void
     FixedSizeListProps?: Partial<FixedSizeListProps>
 }
@@ -38,6 +40,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
         includeTokens = [],
         excludeTokens = [],
         selectedTokens = [],
+        tokens = [],
         useEther = false,
         onSubmit,
         FixedSizeListProps,
@@ -55,14 +58,15 @@ export function FixedTokenList(props: FixedTokenListProps) {
 
     //#region UI helpers
     const renderList = useCallback(
-        (tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) => {
-            let tokens_ = tokens
+        (fetchedTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) => {
+            let tokens_ = fetchedTokens
             tokens_ = includeTokens.length
                 ? tokens_.filter((x) => includeTokens.some((y) => isSameAddress(y, x.address)))
                 : tokens_
             tokens_ = excludeTokens.length
                 ? tokens_.filter((x) => !excludeTokens.some((y) => isSameAddress(y, x.address)))
                 : tokens_
+            const renderTokens = uniqBy([...tokens_, ...tokens], (x) => x.address.toLowerCase())
 
             return (
                 <FixedSizeList
@@ -72,22 +76,22 @@ export function FixedTokenList(props: FixedTokenListProps) {
                     overscanCount={4}
                     itemSize={50}
                     itemData={{
-                        tokens: tokens_,
+                        tokens: renderTokens,
                         selected: [address, ...selectedTokens],
                         onSelect(address: string) {
-                            const token = tokens_.find((token) => isSameAddress(token.address, address))
+                            const token = renderTokens.find((token) => isSameAddress(token.address, address))
                             if (!token) return
                             setAddress(token.address)
                             onSubmit?.(token)
                         },
                     }}
-                    itemCount={tokens_.length}
+                    itemCount={renderTokens.length}
                     {...FixedSizeListProps}>
                     {TokenInList}
                 </FixedSizeList>
             )
         },
-        [address, includeTokens, excludeTokens, selectedTokens, TokenInList, onSubmit],
+        [address, includeTokens, excludeTokens, selectedTokens, tokens, TokenInList, onSubmit],
     )
     const renderPlaceholder = useCallback(
         (message: string) => (
