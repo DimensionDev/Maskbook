@@ -45,6 +45,8 @@ jobs:
             ${{ runner.os }}-node-
       - run: sudo npm i -g pnpm
       - run: npm run ci
+      # Install puppeteer requires download a browser when installing which is noisy. Let's move it to CI only
+      - run: pnpm i --no-lockfile -w puppeteer@5.5.0
 
       - name: Build
         run: npm run build-e2e

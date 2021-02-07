@@ -147,7 +147,6 @@
     "jest-puppeteer": "^4.4.0",
     "jest-webextension-mock": "^3.7.6",
     "openzeppelin-solidity": "^3.2.0",
-    "puppeteer": "^5.5.0",
     "react-dev-utils": "^11.0.1",
     "react-devtools-core": "^4.10.1",
     "react-docgen-typescript-loader": "^3.7.2",
