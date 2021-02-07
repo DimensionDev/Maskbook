@@ -12,14 +12,10 @@ export const CONSTANTS = {
             'https://www.coingecko.com/tokens_list/uniswap/defi_100/v_0_0_0.json',
             'https://gateway.ipfs.io/ipns/tokens.uniswap.org',
             'http://tokenlist.dharma.eth.link',
-            'https://raw.githubusercontent.com/DimensionDev/Maskbook-Token-List/gh-pages/maskbook.json',
+            'https://dimensiondev.github.io/Mask-Token-List/mask.json',
         ],
-        [ChainId.Ropsten]: [
-            'https://raw.githubusercontent.com/DimensionDev/Maskbook-Token-List/gh-pages/maskbook.json',
-        ],
-        [ChainId.Rinkeby]: [
-            'https://raw.githubusercontent.com/DimensionDev/Maskbook-Token-List/gh-pages/maskbook.json',
-        ],
+        [ChainId.Ropsten]: ['https://dimensiondev.github.io/Mask-Token-List/mask.json'],
+        [ChainId.Rinkeby]: ['https://dimensiondev.github.io/Mask-Token-List/mask.json'],
         [ChainId.Kovan]: [],
         [ChainId.Gorli]: [],
     },

@@ -1,3 +1,4 @@
+import { memoizePromise } from '@dimensiondev/kit'
 import { formatChecksumAddress } from '../../../plugins/Wallet/formatter'
 import { EthereumTokenType, ChainId, ERC20TokenDetailed } from '../../../web3/types'
 
@@ -20,10 +21,13 @@ interface TokenList {
     }
 }
 
-async function fetchTokenList(url: string) {
-    const response = await fetch(url, { cache: 'force-cache' })
-    return response.json() as Promise<TokenList>
-}
+const fetchTokenList = memoizePromise(
+    async (url: string) => {
+        const response = await fetch(url, { cache: 'force-cache' })
+        return response.json() as Promise<TokenList>
+    },
+    (url) => url,
+)
 
 /**
  * Fetch tokens from token list
@@ -34,8 +38,7 @@ export async function fetchERC20TokensFromTokenList(
     url: string,
     chainId: ChainId = ChainId.Mainnet,
 ): Promise<ERC20TokenDetailed[]> {
-    const { tokens } = await fetchTokenList(url)
-    return tokens
+    return (await fetchTokenList(url)).tokens
         .filter(
             (x) =>
                 x.chainId === chainId &&
