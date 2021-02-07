@@ -1,13 +1,13 @@
 ### General guides
 
--   ✅ For recommendations
--   ⚠ For warnings
--   🚫 For forbiddens
--   ✅ Use [the Box component provided by the library](https://next.material-ui.com/components/box/#main-content) when the CSS is simple and only used once.
--   ✅ CSS custom variables is OK but do not abuse it. Get the variable from the theme if it is possible.
--   ✅ CSS grid is OK but you may want to use the `Grid` component. Choose the fit one based on your need.
--   🚫 DO NOT use mystery abbreviations in the `Box` component, e.g. `<Box sx={{ p: 5 }} />` (DONT) but `<Box sx={{ padding: 5 }}>` (DO, easier to read).
--   🚫 DO NOT mix two styling solution together. It may cause unknown bugs. FYI: `makeStyles` is `JSS`, `Box` and `styled` are `@emotion`.
+- ✅ For recommendations
+- ⚠ For warnings
+- 🚫 For forbiddens
+- ✅ Use [the Box component provided by the library](https://next.material-ui.com/components/box/#main-content) when the CSS is simple and only used once.
+- ✅ CSS custom variables is OK but do not abuse it. Get the variable from the theme if it is possible.
+- ✅ CSS grid is OK but you may want to use the `Grid` component. Choose the fit one based on your need.
+- 🚫 DO NOT use mystery abbreviations in the `Box` component, e.g. `<Box sx={{ p: 5 }} />` (DONT) but `<Box sx={{ padding: 5 }}>` (DO, easier to read).
+- 🚫 DO NOT mix two styling solution together. It may cause unknown bugs. FYI: `makeStyles` is `JSS`, `Box` and `styled` are `@emotion`.
 
 ### Guides on the `makeStyles` style
 
@@ -30,7 +30,7 @@ Reason: This is the recommend way of writing way in @material-ui 4.
 ```js
 const Title = style.div`
     display: flex;
-`;
+`
 ```
 
 #### ✅ You can use `styled component` in the project.
@@ -46,15 +46,15 @@ Not enforcement because it is not confirmed.
 ```js
 // ⚠ Not so good
 const Title = style(Typography)(
-    ({ theme }) => `
+  ({ theme }) => `
     marign-left: ${theme.spacing(4)};
-`
-);
+`,
+)
 
 // ✅ OK
 const Title = style(Typography)(({ theme }) => {
-    marginLeft: theme.spacing(4);
-});
+  marginLeft: theme.spacing(4)
+})
 ```
 
 #### 🚫 Direct selector to the deeper elements of the library
@@ -62,7 +62,7 @@ const Title = style(Typography)(({ theme }) => {
 ```js
 const Title = style.div`
     & .Mui-selected { display: flex; }
-`;
+`
 ```
 
 DO NOT do this.
@@ -72,12 +72,12 @@ Reason: Not type-checked. Easy to get things wrong.
 #### 🚫⚠ Calculated selector to the deeper elements of the library
 
 ```js
-import { listItemClasses } from "@material-ui/core";
+import { listItemClasses } from '@material-ui/core'
 const Title = style.div`
     & .${listItemClasses.selected} {
         display: flex;
     }
-`;
+`
 ```
 
 🚫 DO NOT use this pattern in the content script.
