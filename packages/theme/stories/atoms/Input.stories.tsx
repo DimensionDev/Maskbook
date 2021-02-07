@@ -1,5 +1,5 @@
 import { TextField as MuiInput, TextFieldProps } from '@material-ui/core'
-import { story, MuiArgs, matrix } from './utils'
+import { story, MuiArgs, matrix } from '../utils'
 
 const { meta, of } = story(MuiInput)
 export default meta({

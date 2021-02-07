@@ -1,5 +1,5 @@
 import { Radio as MuiRadio, RadioGroup, FormControlLabel, FormControlLabelProps } from '@material-ui/core'
-import { story } from './utils'
+import { story } from '../utils'
 
 const C = (props: FormControlLabelProps) => {
     return (
