@@ -22,8 +22,8 @@ import { ClaimStatus } from './ClaimGuide'
 import { isSameAddress } from '../../../web3/helpers'
 import { SelectERC20TokenDialog } from '../../Ethereum/UI/SelectERC20TokenDialog'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { EthereumIfERC20TokenApproved } from '../../../web3/UI/EthereumIfERC20TokenApproved'
-import { EthereumIfWalletConnected } from '../../../web3/UI/EthereumIfWalletConnected'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -241,8 +241,8 @@ export function ClaimDialog(props: ClaimDialogProps) {
             </Typography>
 
             <section className={classes.swapButtonWrapper}>
-                <EthereumIfWalletConnected>
-                    <EthereumIfERC20TokenApproved
+                <EthereumWalletConnectedBoundary>
+                    <EthereumERC20TokenApprovedBoundary
                         amount={claimAmount.toFixed()}
                         spender={ITO_CONTRACT_ADDRESS}
                         token={claimToken.type === EthereumTokenType.ERC20 ? claimToken : undefined}>
@@ -255,8 +255,8 @@ export function ClaimDialog(props: ClaimDialogProps) {
                             onClick={onClaim}>
                             {validationMessage || t('plugin_ito_swap')}
                         </ActionButton>
-                    </EthereumIfERC20TokenApproved>
-                </EthereumIfWalletConnected>
+                    </EthereumERC20TokenApprovedBoundary>
+                </EthereumWalletConnectedBoundary>
             </section>
 
             <SelectERC20TokenDialog

@@ -16,14 +16,14 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface EthereumIfERC20TokenApprovedProps {
+export interface EthereumERC20TokenApprovedBoundaryProps {
     amount: string
     spender: string
     token?: ERC20TokenDetailed
     children?: React.ReactNode
 }
 
-export function EthereumIfERC20TokenApproved(props: EthereumIfERC20TokenApprovedProps) {
+export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenApprovedBoundaryProps) {
     const { amount, spender, token, children = null } = props
 
     const { t } = useI18N()

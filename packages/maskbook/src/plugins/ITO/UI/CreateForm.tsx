@@ -21,8 +21,8 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { formatAmount, formatBalance } from '../../Wallet/formatter'
 import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
-import { EthereumIfWalletConnected } from '../../../web3/UI/EthereumIfWalletConnected'
-import { EthereumIfERC20TokenApproved } from '../../../web3/UI/EthereumIfERC20TokenApproved'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -280,8 +280,8 @@ export function CreateForm(props: CreateFormProps) {
                 {StartTime} {EndTime}
             </Box>
             <Box className={classes.line}>
-                <EthereumIfWalletConnected>
-                    <EthereumIfERC20TokenApproved
+                <EthereumWalletConnectedBoundary>
+                    <EthereumERC20TokenApprovedBoundary
                         amount={inputTokenAmount}
                         spender={ITO_CONTRACT_ADDRESS}
                         token={
@@ -296,8 +296,8 @@ export function CreateForm(props: CreateFormProps) {
                             onClick={onNext}>
                             {validationMessage || t('plugin_ito_next')}
                         </ActionButton>
-                    </EthereumIfERC20TokenApproved>
-                </EthereumIfWalletConnected>
+                    </EthereumERC20TokenApprovedBoundary>
+                </EthereumWalletConnectedBoundary>
             </Box>
         </>
     )

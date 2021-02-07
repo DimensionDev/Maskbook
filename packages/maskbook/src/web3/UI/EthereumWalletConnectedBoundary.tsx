@@ -13,11 +13,11 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface EthereumIfWalletConnectedProps {
+export interface EthereumWalletConnectedBoundaryProps {
     children?: React.ReactNode
 }
 
-export function EthereumIfWalletConnected(props: EthereumIfWalletConnectedProps) {
+export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
     const { children = null } = props
 
     const { t } = useI18N()
