@@ -15,7 +15,7 @@ importers:
     devDependencies:
       '@commitlint/cli': 11.0.0
       '@commitlint/config-conventional': 11.0.0
-      '@dimensiondev/maskbook-cli-dev-or-build': 'link:packages/cli-dev-build'
+      '@dimensiondev/maskbook-cli-dev-or-build': link:packages/cli-dev-build
       '@magic-works/commonjs-import.meta': 1.0.0_typescript@4.1.3
       '@magic-works/i18n-codegen': 0.0.4_typescript@4.1.3
       '@material-ui/codemod': 5.0.0-alpha.24
@@ -83,10 +83,10 @@ importers:
       proper-lockfile: ^4.1.1
   packages/dashboard:
     dependencies:
-      '@dimensiondev/maskbook': 'link:../maskbook'
-      '@dimensiondev/maskbook-shared': 'link:../shared'
-      '@dimensiondev/maskbook-storybook-shared': 'link:../storybook-shared'
-      '@dimensiondev/maskbook-theme': 'link:../theme'
+      '@dimensiondev/maskbook': link:../maskbook
+      '@dimensiondev/maskbook-shared': link:../shared
+      '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
+      '@dimensiondev/maskbook-theme': link:../theme
       '@types/color': 3.0.1
       async-call-rpc: 5.0.0
       color: 3.1.3
@@ -128,8 +128,8 @@ importers:
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/holoflows-kit': 0.8.0-20201215084554-2f9e757_webextension-polyfill@0.7.0
       '@dimensiondev/kit': 0.0.0-20210129063115-38633e4
-      '@dimensiondev/maskbook-shared': 'link:../shared'
-      '@dimensiondev/maskbook-theme': 'link:../theme'
+      '@dimensiondev/maskbook-shared': link:../shared
+      '@dimensiondev/maskbook-theme': link:../theme
       '@dimensiondev/matrix-js-sdk-type': 1.0.0-20200731085604-dc2de92
       '@dimensiondev/metamask-extension-provider': 3.0.0-20210125122006-86e9bae
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
@@ -263,10 +263,9 @@ importers:
       jest-environment-jsdom-fourteen: 1.0.1
       jest-esm-transformer: 1.0.0
       jest-junit: 12.0.0
-      jest-puppeteer: 4.4.0_puppeteer@5.5.0
+      jest-puppeteer: 4.4.0
       jest-webextension-mock: 3.7.7
       openzeppelin-solidity: 3.3.0
-      puppeteer: 5.5.0
       react-dev-utils: 11.0.1
       react-devtools-core: 4.10.1
       react-docgen-typescript-loader: 3.7.2_webpack@5.19.0
@@ -393,14 +392,13 @@ importers:
       jsqr: ^1.3.1
       jss: '*'
       jsx-jsonml-devtools-renderer: ^1.4.3
-      lodash-es: 'npm:lodash@^4.17.11'
+      lodash-es: npm:lodash@^4.17.11
       loglevel: ^1.7.0
       matrix-js-sdk: ^9.5.1
       next-tick: ^1.0.0
       notistack: ^1.0.3
       openzeppelin-solidity: ^3.2.0
       promievent: ^0.1.4
-      puppeteer: ^5.5.0
       pvtsutils: ^1.0.14
       qrcode: ^1.4.4
       react-dev-utils: ^11.0.1
@@ -479,7 +477,7 @@ importers:
       '@storybook/react': ^6
   packages/theme:
     dependencies:
-      '@dimensiondev/maskbook-storybook-shared': 'link:../storybook-shared'
+      '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
       lodash-es: 4.17.20
     devDependencies:
       '@babel/core': 7.12.10
@@ -4945,30 +4943,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
-  /@storybook/client-api/5.3.21_regenerator-runtime@0.13.7:
-    dependencies:
-      '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
-      '@storybook/channel-postmessage': 5.3.21
-      '@storybook/channels': 5.3.21
-      '@storybook/client-logger': 5.3.21
-      '@storybook/core-events': 5.3.21
-      '@storybook/csf': 0.0.1
-      '@types/webpack-env': 1.16.0
-      core-js: 3.8.3
-      eventemitter3: 4.0.7
-      global: 4.4.0
-      is-plain-object: 3.0.1
-      lodash: 4.17.20
-      memoizerific: 1.11.3
-      qs: 6.9.6
-      stable: 0.1.8
-      ts-dedent: 1.2.0
-      util-deprecate: 1.0.2
-    dev: true
-    peerDependencies:
-      regenerator-runtime: '*'
-    resolution:
-      integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
   /@storybook/client-api/6.1.15:
     dependencies:
       '@storybook/addons': 6.1.15
@@ -5130,7 +5104,7 @@ packages:
       '@babel/preset-env': 7.12.11
       '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
       '@storybook/channel-postmessage': 5.3.21
-      '@storybook/client-api': 5.3.21_regenerator-runtime@0.13.7
+      '@storybook/client-api': 5.3.21
       '@storybook/client-logger': 5.3.21
       '@storybook/core-events': 5.3.21
       '@storybook/csf': 0.0.1
@@ -7628,12 +7602,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-e5pEa2kBnBOgR4Y/p20pskXI74UEz7de8ZGVo58asOtvSVG5YAbJeELPZxOmt+Bnz3rX753YKhfIn4X4l1PPRQ==
-  /agent-base/5.1.1:
-    dev: true
-    engines:
-      node: '>= 6.0.0'
-    resolution:
-      integrity: sha512-TMeqbNl2fMW0nMjTEPOwe3J/PRFP4vqeoNuQMG0HlMrtm5QxKqdvAkZ1pRBQ/ulIyDD5Yq0nJ7YbdD8ey0TO3g==
   /aggregate-error/3.1.0:
     dependencies:
       clean-stack: 2.2.0
@@ -10233,12 +10201,12 @@ packages:
     resolution:
       integrity: sha512-V5qQZVAr9K0xu7jXg1M7qTEwuxUgqr7dUOezGaNa7i+Xn9oXAU/d1fzqD9ObuwpVQOaorO5s70ckyi1woP9lVA==
   /core-js/1.2.7:
-    deprecated: 'core-js@<3 is no longer maintained and not recommended for usage due to the number of issues. Please, upgrade your dependencies to the actual version of core-js@3.'
+    deprecated: core-js@<3 is no longer maintained and not recommended for usage due to the number of issues. Please, upgrade your dependencies to the actual version of core-js@3.
     dev: true
     resolution:
       integrity: sha1-ZSKUwUZR2yj6k70tX/KYOk8IxjY=
   /core-js/2.6.12:
-    deprecated: 'core-js@<3 is no longer maintained and not recommended for usage due to the number of issues. Please, upgrade your dependencies to the actual version of core-js@3.'
+    deprecated: core-js@<3 is no longer maintained and not recommended for usage due to the number of issues. Please, upgrade your dependencies to the actual version of core-js@3.
     dev: true
     requiresBuild: true
     resolution:
@@ -11171,10 +11139,6 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-E+B1gzkl2gqxt1IhUzwjrxBKRqx1UzC3WLONHinn8S3T6lwV/agVCyitiFOsGJ/eYuEUBvD71MZHy3Pv1G9doQ==
-  /devtools-protocol/0.0.818844:
-    dev: true
-    resolution:
-      integrity: sha512-AD1hi7iVJ8OD0aMLQU5VK0XH9LDlA1+BcPIgrAxPfaibx2DbWucuyOhc4oyQCbnvDDO68nN6/LcKfqTP343Jjg==
   /diff-sequences/26.6.2:
     dev: true
     engines:
@@ -12614,19 +12578,6 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-Nmb6QXkELsuBr24CJSkilo6UHHgbekK5UiZgfE6UHD3Eb27YC6oD+bhcT+tJ6cl8dmsgdQxnWlcry8ksBIBLpw==
-  /extract-zip/2.0.1:
-    dependencies:
-      debug: 4.3.1
-      get-stream: 5.2.0
-      yauzl: 2.10.0
-    dev: true
-    engines:
-      node: '>= 10.17.0'
-    hasBin: true
-    optionalDependencies:
-      '@types/yauzl': 2.9.1
-    resolution:
-      integrity: sha512-GDhU9ntwuKyGXdZBUgTIe+vXnWj0fppUEtMDL0+idd5Sta8TGpHssn/eusA9mrPr9qNDym6SxAYZjNvCn/9RBg==
   /extsprintf/1.3.0:
     engines:
       '0': node >=0.6.0
@@ -13143,6 +13094,20 @@ packages:
     resolution:
       integrity: sha512-/LFZOIo82WDsyyv7h7oc0MJF9ACOvDRdx9rWPZ2pgMfNWu/z8hQDBtOchuB/0BVLmuFOZjV02YwUVzNsWx/EzA==
   /follow-redirects/1.13.2:
+    dev: false
+    engines:
+      node: '>=4.0'
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    resolution:
+      integrity: sha512-6mPTgLxYm3r6Bkkg0vNM0HTjfGrOEtsfbhagQvbxDEsEkpNhw582upBaoRZylzen6krEmxXJgt9Ju6HiI4O7BA==
+  /follow-redirects/1.13.2_debug@4.3.1:
+    dependencies:
+      debug: 4.3.1_supports-color@6.1.0
+    dev: true
     engines:
       node: '>=4.0'
     peerDependencies:
@@ -14494,7 +14459,7 @@ packages:
   /http-proxy/1.18.1_debug@4.3.1:
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.13.2
+      follow-redirects: 1.13.2_debug@4.3.1
       requires-port: 1.0.0
     dev: true
     engines:
@@ -14516,15 +14481,6 @@ packages:
   /https-browserify/1.0.0:
     resolution:
       integrity: sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
-  /https-proxy-agent/4.0.0:
-    dependencies:
-      agent-base: 5.1.1
-      debug: 4.3.1
-    dev: true
-    engines:
-      node: '>= 6.0.0'
-    resolution:
-      integrity: sha512-zoDhWrkR3of1l9QAL8/scJZyLu8j/gBkcwcaQOZh7Gyh/+uJQzGVETdgT30akuwkpL8HTRfssqI3BZuV18teDg==
   /human-signals/1.1.1:
     dev: true
     engines:
@@ -15920,11 +15876,10 @@ packages:
         optional: true
     resolution:
       integrity: sha512-olV41bKSMm8BdnuMsewT4jqlZ8+3TCARAXjZGT9jcoSnrfUnRCqnMoF9XEeoWjbzObpqF9dRhHQj0Xb9QdF6/w==
-  /jest-puppeteer/4.4.0_puppeteer@5.5.0:
+  /jest-puppeteer/4.4.0:
     dependencies:
       expect-puppeteer: 4.4.0
       jest-environment-puppeteer: 4.4.0
-      puppeteer: 5.5.0
     dev: true
     peerDependencies:
       puppeteer: '>= 1.5.0 < 3'
@@ -17742,12 +17697,13 @@ packages:
     resolution:
       integrity: sha1-T7lJRB2rGCVA8f4DW6YOGUel5X4=
   /mkdirp-classic/0.5.3:
+    dev: false
     resolution:
       integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==
   /mkdirp-promise/5.0.1:
     dependencies:
       mkdirp: 1.0.4
-    deprecated: 'This package is broken and no longer maintained. ''mkdirp'' itself supports promises now, please switch to that.'
+    deprecated: This package is broken and no longer maintained. 'mkdirp' itself supports promises now, please switch to that.
     engines:
       node: '>=4'
     resolution:
@@ -19215,7 +19171,7 @@ packages:
     resolution:
       integrity: sha512-b4OViUOihwV0icb9PHmWbR+vPqaSzSAEbgLskvb7ANPATVXGiYv/TQFHQo65S53WU9i5EQ1I03YDOJW7K0bmYg==
   /popper.js/1.16.1:
-    deprecated: 'You can find the new Popper v2 at @popperjs/core, this package is dedicated to the legacy v1'
+    deprecated: You can find the new Popper v2 at @popperjs/core, this package is dedicated to the legacy v1
     dev: true
     resolution:
       integrity: sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==
@@ -19576,10 +19532,6 @@ packages:
       node: '>= 0.10'
     resolution:
       integrity: sha512-dh/frvCBVmSsDYzw6n926jv974gddhkFPfiN8hPOi30Wax25QZyZEGveluCgliBnqmuM+UJmBErbAUFIoDbjOw==
-  /proxy-from-env/1.1.0:
-    dev: true
-    resolution:
-      integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
   /prr/1.0.1:
     dev: true
     resolution:
@@ -19739,26 +19691,6 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-l1jNAspIBSFqbT+y+5FosojNpVpF94nlI+wDUpqP9enwOTfHx9f0gh5nB96vl+6yTpsJsypeNrwfzPrKuHB41A==
-  /puppeteer/5.5.0:
-    dependencies:
-      debug: 4.3.1
-      devtools-protocol: 0.0.818844
-      extract-zip: 2.0.1
-      https-proxy-agent: 4.0.0
-      node-fetch: 2.6.1
-      pkg-dir: 4.2.0
-      progress: 2.0.3
-      proxy-from-env: 1.1.0
-      rimraf: 3.0.2
-      tar-fs: 2.1.1
-      unbzip2-stream: 1.4.3
-      ws: 7.4.2
-    dev: true
-    engines:
-      node: '>=10.18.1'
-    requiresBuild: true
-    resolution:
-      integrity: sha512-OM8ZvTXAhfgFA7wBIIGlPQzvyEETzDjeRa4mZRCRHxYL+GNH5WAuYUQdja3rpWZvkX/JKqmuVgbsxDNsDFjMEg==
   /pvtsutils/1.1.1:
     dependencies:
       tslib: 2.1.0
@@ -21162,7 +21094,7 @@ packages:
       request-promise-core: 1.1.4_request@2.88.2
       stealthy-require: 1.1.1
       tough-cookie: 2.5.0
-    deprecated: 'request-promise-native has been deprecated because it extends the now deprecated request package, see https://github.com/request/request/issues/3142'
+    deprecated: request-promise-native has been deprecated because it extends the now deprecated request package, see https://github.com/request/request/issues/3142
     dev: true
     engines:
       node: '>=0.12.0'
@@ -21192,7 +21124,7 @@ packages:
       tough-cookie: 2.5.0
       tunnel-agent: 0.6.0
       uuid: 3.4.0
-    deprecated: 'request has been deprecated, see https://github.com/request/request/issues/3142'
+    deprecated: request has been deprecated, see https://github.com/request/request/issues/3142
     engines:
       node: '>= 6'
     resolution:
@@ -21300,7 +21232,7 @@ packages:
     resolution:
       integrity: sha512-C7rARubxI8bXFNB/hqcp/4iUeIXJhJZvFPFPiSPRnhU5UPxzMFIl+2E6yY6c4k9giDJAhtV+enfA+G89N6Csng==
   /resolve-url/0.2.1:
-    deprecated: 'https://github.com/lydell/resolve-url#deprecated'
+    deprecated: https://github.com/lydell/resolve-url#deprecated
     dev: true
     resolution:
       integrity: sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=
@@ -22909,6 +22841,7 @@ packages:
       mkdirp-classic: 0.5.3
       pump: 3.0.0
       tar-stream: 2.2.0
+    dev: false
     resolution:
       integrity: sha512-V0r2Y9scmbDRLCNex/+hYzvp/zyYjvFbHPNgVTKfQvVrb6guiE/fxP+XblDNR011utopbkex2nM4dHNV6GDsng==
   /tar-stream/2.2.0:
@@ -23785,13 +23718,6 @@ packages:
   /ultron/1.1.1:
     resolution:
       integrity: sha512-UIEXBNeYmKptWH6z8ZnqTeS8fV74zG0/eRU9VGkpzz+LIJNs8W/zM/L+7ctCkRrgbNnnR0xxw4bKOr0cW0N0Og==
-  /unbzip2-stream/1.4.3:
-    dependencies:
-      buffer: 5.7.1
-      through: 2.3.8
-    dev: true
-    resolution:
-      integrity: sha512-mlExGW4w71ebDJviH16lQLtZS32VKqsSfk80GCfUlwT/4/hNRFsoscrF/c++9xinkMzECL1uL9DDwXqFWkruPg==
   /unc-path-regex/0.1.2:
     dev: true
     engines:
@@ -24058,7 +23984,7 @@ packages:
     resolution:
       integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
   /urix/0.1.0:
-    deprecated: 'Please see https://github.com/lydell/urix#deprecated'
+    deprecated: Please see https://github.com/lydell/urix#deprecated
     dev: true
     resolution:
       integrity: sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
@@ -25835,5 +25761,5 @@ packages:
     dev: true
     name: html-parse-stringify2
     resolution:
-      tarball: 'https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c'
+      tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c
     version: 2.0.1
