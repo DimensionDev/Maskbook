@@ -1,7 +1,7 @@
 import { Skeleton } from '@material-ui/core'
 import { ListItem, ListItemText, makeStyles, Theme, Typography } from '@material-ui/core'
-import { useI18N } from '../../../utils'
-import type { RedPacketJSONPayload } from '../types'
+import type { RedPacketJSONPayload, History } from '../types'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { formatElapsed } from '../../Wallet/formatter'
 import { useTokenDetailed } from '@dimensiondev/web3-shared'
@@ -70,6 +70,40 @@ export function RedPacketInList(props: RedPacketInListProps) {
                     })}
                 </Typography>
             </ListItemText>
+        </ListItem>
+    )
+}
+export interface RedPacketInHistoryListProps {
+    index: number
+    style: any
+    data: {
+        payloads: History.RedPacket_InMask[]
+        onClick?: (payload: History.RedPacket_InMask) => void
+    }
+}
+export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
+    const { index, style, data } = props
+    const { payloads, onClick } = data
+
+    const { t } = useI18N()
+    const classes = useStyles()
+    const { value: token } = useTokenDetailed(payloads[index].token.type, payloads[index].token.address)
+
+    const payload = payloads[index]
+
+    if (!token || !payload)
+        return (
+            <ListItem style={style}>
+                <ListItemText>
+                    <Skeleton animation="wave" variant="rectangular" width="30%" height={10} />
+                    <Skeleton animation="wave" variant="rectangular" width="70%" height={10} style={{ marginTop: 8 }} />
+                </ListItemText>
+            </ListItem>
+        )
+    return (
+        <ListItem button style={style} onClick={() => onClick?.(payload)}>
+            {payload.rpid}
+            {token.symbol}
         </ListItem>
     )
 }

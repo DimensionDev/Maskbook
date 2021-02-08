@@ -1,6 +1,7 @@
 import type { ERC20TokenRecord } from '../Wallet/database/types'
 import type { EthereumTokenType } from '@dimensiondev/web3-shared'
 import type { Transaction } from 'web3-core'
+import type { TokenOutMask } from '../ITO/types'
 
 /**
  * @see https://github.com/DimensionDev/Tessercube-iOS/wiki/Red-Packet-Data-Dictionary
@@ -132,5 +133,34 @@ export namespace History {
             transaction: Transaction
             records: Log[]
         }[]
+    }
+
+    export interface RedPacket_InMask {
+        rpid: string
+        contract_address: string
+        password: string
+        shares: number
+        message: string
+        name: string
+        is_random: boolean
+        total: string
+        total_remaining: string
+        creation_time: number
+        last_updated_time: number
+        duration: number
+        chain_id: number
+        token: EthereumTokenType.Native | EthereumTokenType.ERC20
+        creator: {
+            name: string
+            address: string
+        }
+        claimers: {
+            name: string
+            address: string
+        }[]
+    }
+
+    export interface RedPacket_OutMask extends Omit<RedPacket_InMask, 'token'> {
+        token: TokenOutMask
     }
 }

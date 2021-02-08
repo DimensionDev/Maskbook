@@ -3,6 +3,7 @@ import { RED_PACKET_HISTORY_URL } from './constants'
 import { RedPacketMessage } from './messages'
 import * as database from './database'
 import { currentChainIdSettings } from '../Wallet/settings'
+import * as subgraph from './apis'
 
 export async function discoverRedPacket(from: string, payload: RedPacketJSONPayload) {
     if (!payload.rpid) return
@@ -34,4 +35,8 @@ export async function getRedPacketsFromChain(from: string, startBlock: number) {
     const response = await fetch(url.toString())
     if (response.status !== 200) return []
     return response.json() as Promise<History.RedPacketRecord[]>
+}
+
+export async function getAllRedPackets(address: string) {
+    return subgraph.getAllRedPackets(address)
 }
