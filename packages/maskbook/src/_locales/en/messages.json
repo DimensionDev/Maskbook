@@ -429,7 +429,6 @@
     "plugin_ito_swap": "Swap",
     "plugin_ito_send_tip": "You can find your ITOs in the Past tab.",
     "plugin_ito_send_text": "Send {{total}} {{symbol}}",
-    "plugin_ito_connect_a_wallet": "Connect a wallet",
     "plugin_ito_error_enter_amount": "Enter an amount",
     "plugin_ito_error_select_token": "Select a Token",
     "plugin_ito_error_enter_amount_and_token": "Enter an amount and Select a token",

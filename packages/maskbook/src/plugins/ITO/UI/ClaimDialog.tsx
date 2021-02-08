@@ -1,22 +1,20 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import { createStyles, makeStyles, Typography, Slider, Grid } from '@material-ui/core'
+import { createStyles, makeStyles, Typography, Slider } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { WalletMessages, WalletRPC } from '../../Wallet/messages'
+import { WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import type { ChainId } from '../../../web3/types'
-import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallbackV2'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO_CONSTANTS } from '../constants'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
@@ -24,6 +22,8 @@ import { ClaimStatus } from './ClaimGuide'
 import { isSameAddress } from '../../../web3/helpers'
 import { SelectERC20TokenDialog } from '../../Ethereum/UI/SelectERC20TokenDialog'
 import { EthereumMessages } from '../../Ethereum/messages'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -111,7 +111,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     } = props
 
     const classes = useStylesExtends(useStyles(), props)
-    const chainIdValid = useChainIdValid()
+    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
 
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(new BigNumber(payload.exchange_amounts[0 * 2 + 1])),
@@ -131,36 +131,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
         claimToken.type,
         claimToken.address,
     )
-    //#endregion
-
-    //#region remote controlled select provider dialog
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onConnect = useCallback(() => {
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setSelectProviderDialogOpen])
-    //#endregion
-
-    //#region approve
-    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
-    const [approveState, , approveCallback] = useERC20TokenApproveCallback(
-        claimToken.type === EthereumTokenType.ERC20 ? claimToken.address : '',
-        claimAmount.toFixed(),
-        ITO_CONTRACT_ADDRESS,
-    )
-
-    const onApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
-        await approveCallback()
-    }, [approveState, approveCallback])
-    const onExactApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
-        await approveCallback(true)
-    }, [approveState, approveCallback])
-    const approveRequired =
-        (approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING) &&
-        claimToken.type !== EthereumTokenType.Ether
     //#endregion
 
     //#region claim
@@ -269,85 +239,24 @@ export function ClaimDialog(props: ClaimDialogProps) {
             <Typography className={classes.remindText} variant="body1" color="textSecondary">
                 {t('plugin_ito_claim_only_once_remind')}
             </Typography>
+
             <section className={classes.swapButtonWrapper}>
-                <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                    {approveRequired && !validationMessage ? (
-                        approveState === ApproveState.PENDING ? (
-                            <Grid item xs={12}>
-                                <ActionButton
-                                    className={classes.button}
-                                    fullWidth
-                                    variant="contained"
-                                    size="large"
-                                    disabled={approveState === ApproveState.PENDING}>
-                                    {`Unlocking ${claimToken.symbol ?? 'Token'}…`}
-                                </ActionButton>
-                            </Grid>
-                        ) : (
-                            <>
-                                <Grid item xs={6}>
-                                    <ActionButton
-                                        className={classes.button}
-                                        fullWidth
-                                        variant="contained"
-                                        size="large"
-                                        onClick={onExactApprove}>
-                                        {approveState === ApproveState.NOT_APPROVED
-                                            ? t('plugin_wallet_token_unlock', {
-                                                  balance: formatBalance(claimAmount, claimToken.decimals, 2),
-                                                  symbol: claimToken?.symbol ?? 'Token',
-                                              })
-                                            : ''}
-                                    </ActionButton>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <ActionButton
-                                        className={classes.button}
-                                        fullWidth
-                                        variant="contained"
-                                        size="large"
-                                        onClick={onApprove}>
-                                        {approveState === ApproveState.NOT_APPROVED
-                                            ? t('plugin_wallet_token_infinite_unlock')
-                                            : ''}
-                                    </ActionButton>
-                                </Grid>
-                            </>
-                        )
-                    ) : (
-                        <Grid item xs={12}>
-                            {!account ? (
-                                <ActionButton
-                                    className={classes.button}
-                                    fullWidth
-                                    variant="contained"
-                                    size="large"
-                                    onClick={onConnect}>
-                                    {t('plugin_wallet_connect_a_wallet')}
-                                </ActionButton>
-                            ) : !chainIdValid ? (
-                                <ActionButton
-                                    className={classes.button}
-                                    disabled
-                                    fullWidth
-                                    variant="contained"
-                                    size="large">
-                                    {t('plugin_wallet_invalid_network')}
-                                </ActionButton>
-                            ) : (
-                                <ActionButton
-                                    className={classes.button}
-                                    fullWidth
-                                    variant="contained"
-                                    size="large"
-                                    disabled={!!validationMessage || approveRequired}
-                                    onClick={onClaim}>
-                                    {validationMessage || t('plugin_ito_swap')}
-                                </ActionButton>
-                            )}
-                        </Grid>
-                    )}
-                </Grid>
+                <EthereumWalletConnectedBoundary>
+                    <EthereumERC20TokenApprovedBoundary
+                        amount={claimAmount.toFixed()}
+                        spender={ITO_CONTRACT_ADDRESS}
+                        token={claimToken.type === EthereumTokenType.ERC20 ? claimToken : undefined}>
+                        <ActionButton
+                            className={classes.button}
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            disabled={!!validationMessage}
+                            onClick={onClaim}>
+                            {validationMessage || t('plugin_ito_swap')}
+                        </ActionButton>
+                    </EthereumERC20TokenApprovedBoundary>
+                </EthereumWalletConnectedBoundary>
             </section>
 
             <SelectERC20TokenDialog
