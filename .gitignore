@@ -171,3 +171,5 @@ common/temp/
 common/autoinstallers/*/.npmrc
 **/.rush/temp/
 
+# Mac
+.DS_Store
