@@ -20,11 +20,19 @@ export function useTradeComputed(
     const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
 
-    // uniswap & sushiswap
+    // uniswap || sushiswap || sashimiswap
     const uniswap_ = useUniswapTrade(
         strategy,
-        provider === TradeProvider.UNISWAP || provider === TradeProvider.SUSHISWAP ? inputAmount_ : '0',
-        provider === TradeProvider.UNISWAP || provider === TradeProvider.SUSHISWAP ? outputAmount_ : '0',
+        provider === TradeProvider.UNISWAP ||
+            provider === TradeProvider.SUSHISWAP ||
+            provider === TradeProvider.SASHIMISWAP
+            ? inputAmount_
+            : '0',
+        provider === TradeProvider.UNISWAP ||
+            provider === TradeProvider.SUSHISWAP ||
+            provider === TradeProvider.SASHIMISWAP
+            ? outputAmount_
+            : '0',
         inputToken,
         outputToken,
     )
@@ -52,6 +60,11 @@ export function useTradeComputed(
                 value: zrx,
             }
         case TradeProvider.SUSHISWAP:
+            return {
+                ...uniswap_,
+                value: uniswap,
+            }
+        case TradeProvider.SASHIMISWAP:
             return {
                 ...uniswap_,
                 value: uniswap,

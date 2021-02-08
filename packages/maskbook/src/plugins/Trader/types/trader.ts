@@ -6,6 +6,7 @@ export enum TradeProvider {
     ZRX, // 0x
     // ONE_INCH,
     SUSHISWAP,
+    SASHIMISWAP,
 }
 
 export enum WarningLevel {

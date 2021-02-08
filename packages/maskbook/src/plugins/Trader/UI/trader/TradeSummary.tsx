@@ -201,7 +201,9 @@ export function TradeSummary(props: TradeSummaryProps) {
             <List className={classes.list} component="ul">
                 {[
                     ...records,
-                    ...(provider === TradeProvider.UNISWAP || provider === TradeProvider.SUSHISWAP
+                    ...(provider === TradeProvider.UNISWAP ||
+                    provider === TradeProvider.SUSHISWAP ||
+                    provider === TradeProvider.SASHIMISWAP
                         ? uniswapRecords
                         : []),
                     ...(provider === TradeProvider.ZRX ? zrxRecords : []),
