@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme) => {
         balance: {
             fontSize: 12,
         },
+        inputShrinkLabel: {
+            transform: 'translate(17px, -3px) scale(0.75) !important',
+        },
     })
 })
 
@@ -176,6 +179,9 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
             }}
             InputLabelProps={{
                 shrink: true,
+                classes: {
+                    shrink: classes.inputShrinkLabel,
+                },
             }}
             {...props.TextFieldProps}
         />
