@@ -1,3 +1,4 @@
+import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
@@ -36,28 +37,9 @@ type WalletConnectQRCodeDialogEvent =
 type SelectERC20TOkenDialogEvent =
     | {
           open: true
-
-          /**
-           * Specific an array of detailed tokens that must be included in the final token list.
-           */
-          tokens?: (EtherTokenDetailed | ERC20TokenDetailed)[]
-
-          /**
-           *  Specific an array of token that only be included in the final token list.
-           */
-          whitelist?: string[]
-
-          /**
-           * Specific an array of token that must be excluded in the final token list.
-           */
-          backlist?: string[]
-
-          /**
-           * Specific an array of token address that selected in the final token list.
-           */
-          selectedTokens?: string[]
-
+          disableEther?: boolean
           disableSearchBar?: boolean
+          FixedTokenListProps?: Omit<FixedTokenListProps, 'onSubmit'>
       }
     | {
           open: false

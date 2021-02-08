@@ -25,10 +25,10 @@ const useStyles = makeStyles((theme) =>
 export interface FixedTokenListProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     useEther?: boolean
     keyword?: string
-    includeTokens?: string[]
-    excludeTokens?: string[]
-    selectedTokens?: string[]
+    whitelist?: string[]
+    blacklist?: string[]
     tokens?: (ERC20TokenDetailed | EtherTokenDetailed)[]
+    selectedTokens?: string[]
     onSubmit?(token: EtherTokenDetailed | ERC20TokenDetailed): void
     FixedSizeListProps?: Partial<FixedSizeListProps>
 }
@@ -37,8 +37,8 @@ export function FixedTokenList(props: FixedTokenListProps) {
     const classes = useStylesExtends(useStyles(), props)
     const {
         keyword,
-        includeTokens = [],
-        excludeTokens = [],
+        whitelist: includeTokens = [],
+        blacklist: excludeTokens = [],
         selectedTokens = [],
         tokens = [],
         useEther = false,
@@ -59,15 +59,12 @@ export function FixedTokenList(props: FixedTokenListProps) {
     //#region UI helpers
     const renderList = useCallback(
         (fetchedTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) => {
-            let tokens_ = fetchedTokens
-            tokens_ = includeTokens.length
-                ? tokens_.filter((x) => includeTokens.some((y) => isSameAddress(y, x.address)))
-                : tokens_
-            tokens_ = excludeTokens.length
-                ? tokens_.filter((x) => !excludeTokens.some((y) => isSameAddress(y, x.address)))
-                : tokens_
-            const renderTokens = uniqBy([...tokens_, ...tokens], (x) => x.address.toLowerCase())
-
+            const filteredTokens = fetchedTokens.filter(
+                (x) =>
+                    (!includeTokens.length || includeTokens.some((y) => isSameAddress(y, x.address))) &&
+                    (!excludeTokens.length || !excludeTokens.some((y) => isSameAddress(y, x.address))),
+            )
+            const renderTokens = uniqBy([...filteredTokens, ...tokens], (x) => x.address.toLowerCase())
             return (
                 <FixedSizeList
                     className={classes.list}
