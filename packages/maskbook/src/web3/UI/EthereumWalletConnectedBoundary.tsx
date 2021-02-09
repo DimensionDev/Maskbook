@@ -37,7 +37,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     if (!account)
         return (
-            <Grid xs={12}>
+            <Grid container>
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" onClick={onConnect}>
                     {t('plugin_wallet_connect_a_wallet')}
                 </ActionButton>
@@ -45,11 +45,11 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
         )
     if (!chainIdValid)
         return (
-            <Grid xs={12}>
+            <Grid container>
                 <ActionButton className={classes.button} disabled fullWidth variant="contained" size="large">
                     {t('plugin_wallet_invalid_network')}
                 </ActionButton>
             </Grid>
         )
-    return <Grid xs={12}>{children}</Grid>
+    return <Grid container>{children}</Grid>
 }
