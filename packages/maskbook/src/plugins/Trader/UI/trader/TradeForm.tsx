@@ -12,7 +12,7 @@ import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../../Wallet/messages'
 import { ApproveState } from '../../../../web3/hooks/useERC20TokenApproveCallback'
-import { TradeStrategy, TokenPanelType, TradeComputed, WarningLevel } from '../../types'
+import { TradeStrategy, TokenPanelType, TradeComputed, WarningLevel, TradeProvider } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useChainIdValid } from '../../../../web3/hooks/useChainState'
@@ -75,6 +75,7 @@ const useStyles = makeStyles((theme) => {
 export interface TradeFormProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     trade: TradeComputed | null
     strategy: TradeStrategy
+    provider: TradeProvider
     loading: boolean
     inputToken?: EtherTokenDetailed | ERC20TokenDetailed
     outputToken?: EtherTokenDetailed | ERC20TokenDetailed
@@ -94,6 +95,7 @@ export function TradeForm(props: TradeFormProps) {
     const { t } = useI18N()
     const {
         trade,
+        provider,
         loading,
         strategy,
         inputToken,
@@ -117,7 +119,7 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region approve token
-    const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(trade, inputToken)
+    const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(trade, provider, inputToken)
     //#endregion
 
     //#region token balance

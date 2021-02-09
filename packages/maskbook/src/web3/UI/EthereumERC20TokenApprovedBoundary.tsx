@@ -1,4 +1,4 @@
-import { createStyles, Grid, makeStyles } from '@material-ui/core'
+import { createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useSnackbar } from 'notistack'
 import { useCallback, useEffect } from 'react'
@@ -12,7 +12,22 @@ import type { ERC20TokenDetailed } from '../types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
-        button: {},
+        button: {
+            flexDirection: 'column',
+            position: 'relative',
+        },
+        buttonLabel: {
+            display: 'block',
+            fontWeight: 'inherit',
+            marginTop: theme.spacing(-0.5),
+            marginBottom: theme.spacing(1),
+        },
+        buttonAmount: {
+            fontSize: 10,
+            fontWeight: 300,
+            bottom: theme.spacing(1),
+            position: 'absolute',
+        },
     }),
 )
 
@@ -89,10 +104,12 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         variant="contained"
                         size="large"
                         onClick={() => onApprove(true)}>
-                        {t('plugin_wallet_token_unlock', {
-                            balance: formatBalance(new BigNumber(amount), token.decimals, 2),
-                            symbol: token?.symbol ?? 'Token',
-                        })}
+                        <span className={classes.buttonLabel}>{t('plugin_wallet_token_unlock')}</span>
+                        <span className={classes.buttonAmount}>{`${formatBalance(
+                            new BigNumber(amount),
+                            token.decimals,
+                            2,
+                        )} ${token?.symbol ?? 'Token'}`}</span>
                     </ActionButton>
                 </Grid>
                 <Grid item xs={6}>
