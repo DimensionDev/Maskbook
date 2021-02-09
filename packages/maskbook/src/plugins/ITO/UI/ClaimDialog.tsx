@@ -133,6 +133,14 @@ export function ClaimDialog(props: ClaimDialogProps) {
     )
     //#endregion
 
+    //#region maxAmount for TokenAmountPanel
+    const maxAmount = useMemo(() => BigNumber.min(maxSwapAmount.multipliedBy(ratio).dp(0), tokenBalance).toFixed(), [
+        maxSwapAmount,
+        ratio,
+        tokenBalance,
+    ])
+    //#endregion
+
     //#region claim
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
         payload.pid,
@@ -176,8 +184,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
         if (claimAmount.isEqualTo(0)) return t('plugin_ito_error_enter_amount')
         if (claimAmount.isGreaterThan(new BigNumber(tokenBalance)))
             return t('plugin_ito_error_balance', { symbol: claimToken.symbol })
-        if (claimAmount.dividedBy(ratio).isGreaterThan(maxSwapAmount))
-            return t('plugin_ito_dialog_claim_swap_exceed_wallet_limit')
+        if (tokenAmount.isGreaterThan(maxSwapAmount)) return t('plugin_ito_dialog_claim_swap_exceed_wallet_limit')
         return ''
     }, [claimAmount, tokenBalance, maxSwapAmount, claimToken, ratio])
 
@@ -194,15 +201,11 @@ export function ClaimDialog(props: ClaimDialogProps) {
                     className={classes.swapLimitSlider}
                     value={Number(tokenAmount.dividedBy(maxSwapAmount).multipliedBy(100))}
                     onChange={(_, newValue) => {
-                        let tAmount = maxSwapAmount.multipliedBy((newValue as number) / 100)
-                        const swapAmount = formatBalance(tAmount.multipliedBy(ratio), claimToken.decimals)
-                        tAmount = new BigNumber(swapAmount)
-                            .dividedBy(ratio)
-                            .multipliedBy(Math.pow(10, claimToken.decimals))
-                        if (tAmount.isGreaterThan(maxSwapAmount)) return
-                        setTokenAmount(tAmount.dp(0))
-                        setClaimAmount(tAmount.multipliedBy(ratio).dp(0))
-                        setInputAmountForUI(swapAmount)
+                        const tokenAmount = maxSwapAmount.multipliedBy((newValue as number) / 100)
+                        const swapAmount = tokenAmount.multipliedBy(ratio).dp(0)
+                        setTokenAmount(tokenAmount.dp(0))
+                        setClaimAmount(swapAmount)
+                        setInputAmountForUI(formatBalance(swapAmount, claimToken.decimals))
                     }}
                 />
                 <Typography variant="body1" className={classes.swapLimitText}>
@@ -217,7 +220,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
             </Typography>
             <TokenAmountPanel
                 amount={inputAmountForUI}
-                maxAmount={BigNumber.min(maxSwapAmount.multipliedBy(ratio), tokenBalance).toFixed()}
+                maxAmount={maxAmount}
                 balance={tokenBalance}
                 token={claimToken}
                 onAmountChange={(value) => {
@@ -226,8 +229,11 @@ export function ClaimDialog(props: ClaimDialogProps) {
                         value === ''
                             ? new BigNumber(0)
                             : new BigNumber(value).multipliedBy(new BigNumber(10).pow(claimToken.decimals))
-                    setClaimAmount(val)
-                    setTokenAmount(val.dividedBy(ratio))
+                    const isMax = value === formatBalance(new BigNumber(maxAmount), claimToken.decimals)
+                    const tokenAmount = isMax ? maxSwapAmount : val.dividedBy(ratio)
+                    const swapAmount = val.dp(0)
+                    setTokenAmount(tokenAmount.dp(0))
+                    setClaimAmount(swapAmount)
                 }}
                 label={t('plugin_ito_dialog_claim_swap_panel_title')}
                 SelectTokenChip={{
