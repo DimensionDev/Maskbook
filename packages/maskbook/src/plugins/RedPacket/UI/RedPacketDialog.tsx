@@ -52,8 +52,14 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         state,
     }
 
+    const onClose = useCallback(() => {
+        const [, setValue] = state
+        setValue(0)
+        props.onClose()
+    }, [props, state])
+
     return (
-        <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={props.onClose}>
+        <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={onClose}>
             <DialogContent>
                 <AbstractTab height={320} {...tabProps} />
             </DialogContent>
