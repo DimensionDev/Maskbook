@@ -1,3 +1,4 @@
+import { SelectERC20TokenDialog } from '../Ethereum/UI/SelectERC20TokenDialog'
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { SelectProviderDialog } from './UI/SelectProviderDialog'
@@ -15,6 +16,7 @@ export const WalletPluginDefine: PluginConfig = {
             <>
                 <SelectWalletDialog />
                 <SelectProviderDialog />
+                <SelectERC20TokenDialog />
                 <WalletStatusDialog />
                 <WalletConnectQRCodeDialog />
             </>
@@ -25,6 +27,7 @@ export const WalletPluginDefine: PluginConfig = {
             <>
                 <SelectWalletDialog />
                 <SelectProviderDialog />
+                <SelectERC20TokenDialog />
                 <WalletStatusDialog />
                 <WalletConnectQRCodeDialog />
             </>

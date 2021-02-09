@@ -13,7 +13,6 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { isSameAddress } from '../../../web3/helpers'
 import { TokenInList } from './TokenInList'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -23,7 +22,6 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface FixedTokenListProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    useEther?: boolean
     keyword?: string
     whitelist?: string[]
     blacklist?: string[]
@@ -41,7 +39,6 @@ export function FixedTokenList(props: FixedTokenListProps) {
         blacklist: excludeTokens = [],
         selectedTokens = [],
         tokens = [],
-        useEther = false,
         onSubmit,
         FixedSizeListProps,
     } = props
@@ -49,7 +46,6 @@ export function FixedTokenList(props: FixedTokenListProps) {
     //#region search tokens
     const ERC20_TOKEN_LISTS = useConstant(CONSTANTS, 'ERC20_TOKEN_LISTS')
     const [address, setAddress] = useState('')
-    const { value: etherTokenDetailed } = useEtherTokenDetailed()
     const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(
         ERC20_TOKEN_LISTS,
         keyword,
@@ -57,53 +53,44 @@ export function FixedTokenList(props: FixedTokenListProps) {
     //#endregion
 
     //#region UI helpers
-    const renderList = useCallback(
-        (fetchedTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) => {
-            const filteredTokens = fetchedTokens.filter(
-                (x) =>
-                    (!includeTokens.length || includeTokens.some((y) => isSameAddress(y, x.address))) &&
-                    (!excludeTokens.length || !excludeTokens.some((y) => isSameAddress(y, x.address))),
-            )
-            const renderTokens = uniqBy([...filteredTokens, ...tokens], (x) => x.address.toLowerCase())
-            return (
-                <FixedSizeList
-                    className={classes.list}
-                    width="100%"
-                    height={100}
-                    overscanCount={4}
-                    itemSize={50}
-                    itemData={{
-                        tokens: renderTokens,
-                        selected: [address, ...selectedTokens],
-                        onSelect(address: string) {
-                            const token = renderTokens.find((token) => isSameAddress(token.address, address))
-                            if (!token) return
-                            setAddress(token.address)
-                            onSubmit?.(token)
-                        },
-                    }}
-                    itemCount={renderTokens.length}
-                    {...FixedSizeListProps}>
-                    {TokenInList}
-                </FixedSizeList>
-            )
-        },
-        [address, includeTokens, excludeTokens, selectedTokens, tokens, TokenInList, onSubmit],
-    )
-    const renderPlaceholder = useCallback(
-        (message: string) => (
-            <Typography className={classes.placeholder} color="textSecondary">
-                {message}
-            </Typography>
-        ),
-        [],
+    const renderPlaceholder = (message: string) => (
+        <Typography className={classes.placeholder} color="textSecondary">
+            {message}
+        </Typography>
     )
     //#endregion
 
     if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
     if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token...')
-    if (useEther && etherTokenDetailed && (!keyword || 'ether'.includes(keyword.toLowerCase())))
-        return renderList([etherTokenDetailed, ...erc20TokensDetailed])
-    if (erc20TokensDetailed.length) return renderList(erc20TokensDetailed)
-    return renderPlaceholder('No token found')
+    if (!erc20TokensDetailed.length) return renderPlaceholder('No token found')
+
+    const filteredTokens = erc20TokensDetailed.filter(
+        (x) =>
+            (!includeTokens.length || includeTokens.some((y) => isSameAddress(y, x.address))) &&
+            (!excludeTokens.length || !excludeTokens.some((y) => isSameAddress(y, x.address))),
+    )
+    const renderTokens = uniqBy([...tokens, ...filteredTokens], (x) => x.address.toLowerCase())
+
+    return (
+        <FixedSizeList
+            className={classes.list}
+            width="100%"
+            height={100}
+            overscanCount={4}
+            itemSize={50}
+            itemData={{
+                tokens: renderTokens,
+                selected: [address, ...selectedTokens],
+                onSelect(address: string) {
+                    const token = renderTokens.find((token) => isSameAddress(token.address, address))
+                    if (!token) return
+                    setAddress(token.address)
+                    onSubmit?.(token)
+                },
+            }}
+            itemCount={renderTokens.length}
+            {...FixedSizeListProps}>
+            {TokenInList}
+        </FixedSizeList>
+    )
 }

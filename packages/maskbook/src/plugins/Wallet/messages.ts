@@ -4,7 +4,7 @@ import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
 
-type SelectProviderDialogEvent =
+export type SelectProviderDialogEvent =
     | {
           open: true
       }
@@ -13,19 +13,15 @@ type SelectProviderDialogEvent =
           address?: string
       }
 
-type SelectWalletDialogEvent =
-    | {
-          open: true
-      }
-    | {
-          open: false
-      }
-
-type WalletStatusDialogEvent = {
+export type SelectWalletDialogEvent = {
     open: boolean
 }
 
-type WalletConnectQRCodeDialogEvent =
+export type WalletStatusDialogEvent = {
+    open: boolean
+}
+
+export type WalletConnectQRCodeDialogEvent =
     | {
           open: true
           uri: string
@@ -34,15 +30,17 @@ type WalletConnectQRCodeDialogEvent =
           open: false
       }
 
-type SelectERC20TOkenDialogEvent =
+export type SelectERC20TokenDialogEvent =
     | {
           open: true
+          uuid: string
           disableEther?: boolean
           disableSearchBar?: boolean
           FixedTokenListProps?: Omit<FixedTokenListProps, 'onSubmit'>
       }
     | {
           open: false
+          uuid: string
 
           /**
            * The selected detailed token.
@@ -69,7 +67,7 @@ interface WalletMessage {
     /**
      * Select ERC20 token dialog
      */
-    selectERC20TokenDialogUpdated: SelectERC20TOkenDialogEvent
+    selectERC20TokenDialogUpdated: SelectERC20TokenDialogEvent
 
     /**
      * WalletConnect QR Code dialog

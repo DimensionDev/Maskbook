@@ -7,6 +7,7 @@ import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
+import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,22 +31,25 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export interface SelectERC20TokenDialogProps extends withClasses<never> {
-    open: boolean
-    includeTokens: string[]
-    excludeTokens: string[]
-    selectedTokens: string[]
+    open?: boolean
+    includeTokens?: string[]
+    excludeTokens?: string[]
+    selectedTokens?: string[]
     tokens?: (ERC20TokenDetailed | EtherTokenDetailed)[]
     disableSearchBar?: boolean
-    onSubmit(token: ERC20TokenDetailed): void
-    onClose(): void
+    onSubmit?: (token: ERC20TokenDetailed) => void
+    onClose?: () => void
 }
 
 export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region search tokens
+    const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
+
+    //#region ether token
+    const { value: etherTokenDetailed } = useEtherTokenDetailed()
     //#endregion
 
     //#region remote controlled dialog
@@ -55,6 +59,7 @@ export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
 
     const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectERC20TokenDialogUpdated, (ev) => {
         if (!ev.open) return
+        setId(ev.uuid)
         setDisableEther(ev.disableEther ?? true)
         setDisableSearchBar(ev.disableSearchBar ?? false)
         setFixedTokenListProps(ev.FixedTokenListProps ?? null)
@@ -63,16 +68,18 @@ export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
         (token: EtherTokenDetailed | ERC20TokenDetailed) => {
             setOpen({
                 open: false,
+                uuid: id,
                 token,
             })
         },
-        [setOpen],
+        [id, setOpen],
     )
     const onClose = useCallback(() => {
         setOpen({
             open: false,
+            uuid: id,
         })
-    }, [setOpen])
+    }, [id, setOpen])
     //#endregion
 
     return (
@@ -94,10 +101,19 @@ export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
                 ) : null}
                 <FixedTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    useEther
                     keyword={keyword}
                     onSubmit={onSubmit}
-                    {...FixedTokenListProps}
+                    {...{
+                        ...FixedTokenListProps,
+                        tokens: [
+                            ...(!disableEther &&
+                            etherTokenDetailed &&
+                            (!keyword || 'ether'.includes(keyword.toLowerCase()))
+                                ? [etherTokenDetailed]
+                                : []),
+                            ...(FixedTokenListProps?.tokens ?? []),
+                        ],
+                    }}
                     FixedSizeListProps={{
                         height: disableSearchBar ? 350 : 288,
                         itemSize: 52,

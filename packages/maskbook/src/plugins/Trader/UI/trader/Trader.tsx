@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/sdk'
+import { v4 as uuid } from 'uuid'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../../web3/types'
 import { useConstant } from '../../../../web3/hooks/useConstant'
@@ -30,6 +31,7 @@ import { SelectERC20TokenDialog } from '../../../Ethereum/UI/SelectERC20TokenDia
 import { EthereumBlockNumber } from '../../../../web3/UI/EthereumBlockNumber'
 import Services from '../../../../extension/service'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
+import { SelectERC20TokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -161,29 +163,38 @@ export function Trader(props: TraderProps) {
     const trade = freezed ? tradeCached_.current : tradeComputed
     //#endregion
 
-    //#region select erc20 tokens
+    //#region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
-    const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
-    const [focusedTokenPanelType, setfocusedTokenPanelType] = useState(TokenPanelType.Input)
-    const onTokenChipClick = useCallback((type: TokenPanelType) => {
-        setOpenSelectERC20TokenDialog(true)
-        setfocusedTokenPanelType(type)
-    }, [])
-    const onSelectERC20TokenDialogClose = useCallback(() => {
-        setOpenSelectERC20TokenDialog(false)
-    }, [])
-    const onSelectERC20TokenDialogSubmit = useCallback(
-        (token: EtherTokenDetailed | ERC20TokenDetailed) => {
-            dispatchTradeStore({
-                type:
-                    focusedTokenPanelType === TokenPanelType.Input
-                        ? TradeActionType.UPDATE_INPUT_TOKEN
-                        : TradeActionType.UPDATE_OUTPUT_TOKEN,
-                token,
+    const [focusedTokenPanelType, setFocusedTokenPanelType] = useState(TokenPanelType.Input)
+    const [, setOpenSelectERC20TokenDialog] = useRemoteControlledDialog(
+        WalletMessages.events.selectERC20TokenDialogUpdated,
+        useCallback(
+            (ev: SelectERC20TokenDialogEvent) => {
+                if (ev.open || !ev.token || ev.uuid !== String(focusedTokenPanelType)) return
+                dispatchTradeStore({
+                    type:
+                        focusedTokenPanelType === TokenPanelType.Input
+                            ? TradeActionType.UPDATE_INPUT_TOKEN
+                            : TradeActionType.UPDATE_OUTPUT_TOKEN,
+                    token: ev.token,
+                })
+            },
+            [dispatchTradeStore, focusedTokenPanelType],
+        ),
+    )
+    const onTokenChipClick = useCallback(
+        (type: TokenPanelType) => {
+            setFocusedTokenPanelType(type)
+            setOpenSelectERC20TokenDialog({
+                open: true,
+                uuid: String(type),
+                disableEther: false,
+                FixedTokenListProps: {
+                    selectedTokens: excludeTokens,
+                },
             })
-            onSelectERC20TokenDialogClose()
         },
-        [focusedTokenPanelType, onSelectERC20TokenDialogClose],
+        [excludeTokens.join()],
     )
     //#endregion
 
@@ -323,14 +334,6 @@ export function Trader(props: TraderProps) {
                 </>
             ) : null}
             <EthereumBlockNumber />
-            <SelectERC20TokenDialog
-                open={openSelectERC20TokenDialog}
-                includeTokens={[]}
-                excludeTokens={excludeTokens}
-                selectedTokens={[]}
-                onSubmit={onSelectERC20TokenDialogSubmit}
-                onClose={onSelectERC20TokenDialogClose}
-            />
         </div>
     )
 }
