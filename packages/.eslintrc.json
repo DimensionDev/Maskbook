@@ -7,7 +7,7 @@
         "project": "./tsconfig.eslint.json"
     },
     "extends": ["plugin:import/typescript"],
-    "plugins": ["@typescript-eslint", "import", "react-hooks"],
+    "plugins": ["@typescript-eslint", "lodash", "import", "react-hooks"],
     "rules": {
         "import/no-deprecated": "warn",
         "no-restricted-imports": [
@@ -16,6 +16,7 @@
         ],
         "react-hooks/exhaustive-deps": "warn",
         "react-hooks/rules-of-hooks": "error",
+        "lodash/import-scope": ["error", "member"],
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/no-for-in-array": "error"
     }

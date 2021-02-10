@@ -23,6 +23,7 @@ importers:
       eslint: 7.18.0
       eslint-config-prettier: 7.2.0_eslint@7.18.0
       eslint-plugin-import: 2.22.1_eslint@7.18.0
+      eslint-plugin-lodash: 7.1.0_eslint@7.18.0
       eslint-plugin-prettier: 3.3.1_23a112576b8ab4365b1ec4ba623342d0
       eslint-plugin-react-hooks: 4.2.0_eslint@7.18.0
       eslint-plugin-unused-imports: 1.0.1
@@ -56,6 +57,7 @@ importers:
       eslint: ^7.15.0
       eslint-config-prettier: ^7.0.0
       eslint-plugin-import: ^2.22.1
+      eslint-plugin-lodash: ^7.1.0
       eslint-plugin-prettier: ^3.3.0
       eslint-plugin-react-hooks: ^4.2.0
       eslint-plugin-unused-imports: ^1.0.0
@@ -11962,6 +11964,17 @@ packages:
       eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0
     resolution:
       integrity: sha512-8K7JjINHOpH64ozkAhpT3sd+FswIZTfMZTjdx052pnWrgRCVfp8op9tbjpAk3DdUeI/Ba4C8OjdC0r90erHEOw==
+  /eslint-plugin-lodash/7.1.0_eslint@7.18.0:
+    dependencies:
+      eslint: 7.18.0
+    dev: true
+    engines:
+      node: '>=10'
+    peerDependencies:
+      eslint: '>=2'
+      lodash: '>=4'
+    resolution:
+      integrity: sha512-BRkEI/+ZjmeDCM1DfzR+NVwYkC/+ChJhaOSm3Xm7rer/fs89TKU6AMtkQiDdqQel1wZ4IJM+B6hlep9xwVKaMQ==
   /eslint-plugin-no-unsanitized/3.1.4_eslint@7.14.0:
     dependencies:
       eslint: 7.14.0
