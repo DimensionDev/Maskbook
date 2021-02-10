@@ -1,16 +1,21 @@
+import { useCallback, useEffect } from 'react'
+import BigNumber from 'bignumber.js'
 import { Skeleton } from '@material-ui/core'
 import classNames from 'classnames'
 import { ListItem, ListItemText, makeStyles, Theme, Typography, Box } from '@material-ui/core'
-import type { RedPacketJSONPayload, History } from '../types'
+import type { RedPacketJSONPayload, RedPacket_InMask_Record } from '../types'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { formatElapsed } from '../../Wallet/formatter'
-import { useTokenDetailed } from '@dimensiondev/web3-shared'
+import { useTokenDetailed, useAccount, TransactionStateType } from '@dimensiondev/web3-shared'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { StyledLinearProgress } from '../../ITO/UI/StyledLinearProgress'
-import BigNumber from 'bignumber.js'
+import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
+import { useRefundCallback } from '../hooks/useRefundCallback'
+import { EthereumMessages } from '../../Ethereum/messages'
 
 const useStyles = makeStyles((theme: Theme) => ({
     primary: {
@@ -134,13 +139,56 @@ export function RedPacketInList(props: RedPacketInListProps) {
     )
 }
 export interface RedPacketInHistoryListProps {
-    payload: History.RedPacket_InMask
+    key: string
+    data: RedPacket_InMask_Record
+    onSelect: (payload: RedPacketJSONPayload) => void
+    onClose: () => void
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
-    const { payload } = props
-
+    const account = useAccount()
+    const { data, onSelect, onClose } = props
+    const { history: payload, record } = data
     const { t } = useI18N()
     const classes = useStyles()
+
+    const {
+        value: availability,
+        computed: { canRefund, canSend },
+        retry: revalidateAvailability,
+    } = useAvailabilityComputed(account, record.payload)
+
+    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(account, payload.rpid)
+
+    //#region remote controlled transaction dialog
+    const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
+        EthereumMessages.events.transactionDialogUpdated,
+        (ev) => {
+            if (ev.open) return
+            resetRefundCallback()
+            revalidateAvailability()
+        },
+    )
+
+    useEffect(() => {
+        if (refundState.type === TransactionStateType.UNKNOWN) return
+        if (!availability) return
+        setTransactionDialogOpen({
+            open: true,
+            state: refundState,
+            summary: `Refunding red packet for ${formatBalance(
+                new BigNumber(availability.balance),
+                payload.token.decimals ?? 0,
+                payload.token.decimals ?? 0,
+            )} ${payload.token.symbol}`,
+        })
+    }, [refundState /* update tx dialog only if state changed */])
+    //#endregion
+
+    const onSendOrRefund = useCallback(async () => {
+        if (canRefund) await refundCallback()
+        if (canSend) onSelect(record.payload)
+        onClose()
+    }, [onSelect, onClose, refundCallback, canRefund, canSend, record])
 
     return (
         <ListItem className={classes.root}>
@@ -175,13 +223,19 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                 })}
                             </Typography>
                         </div>
-                        <ActionButton className={classes.actionButton} variant="contained" size="large">
-                            {t('plugin_red_packet_history_send')}
-                        </ActionButton>
+                        {canRefund || canSend ? (
+                            <ActionButton
+                                onClick={onSendOrRefund}
+                                className={classes.actionButton}
+                                variant="contained"
+                                size="large">
+                                {canSend ? t('plugin_red_packet_history_send') : t('plugin_red_packet_refund')}
+                            </ActionButton>
+                        ) : null}
                     </section>
                     <StyledLinearProgress
-                        barColor="rgba(44, 164, 239)"
-                        backgroundColor="rgba(44, 164, 239, 0.2)"
+                        barcolor="rgba(44, 164, 239)"
+                        backgroundcolor="rgba(44, 164, 239, 0.2)"
                         variant="determinate"
                         value={100 * (1 - Number(payload.total_remaining) / Number(payload.total))}
                     />

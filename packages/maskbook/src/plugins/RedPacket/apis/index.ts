@@ -59,9 +59,9 @@ export async function getAllRedPackets(address: string) {
 
     const {
         data: { redPackets },
-    } = await response.json()
+    } = (await response.json()) as { data: { redPackets: History.RedPacket_OutMask[] } }
 
-    return redPackets.map(
-        (x: History.RedPacket_OutMask) => ({ ...x, token: tokenIntoMask(x.token) } as History.RedPacket_InMask),
-    )
+    return redPackets
+        .map((x) => ({ ...x, token: tokenIntoMask(x.token) } as History.RedPacket_InMask))
+        .sort((a, b) => b.creation_time - a.creation_time)
 }

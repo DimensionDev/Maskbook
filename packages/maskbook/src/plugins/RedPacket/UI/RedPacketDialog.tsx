@@ -34,6 +34,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const state = useState(0)
+
+    const onClose = useCallback(() => {
+        const [, setValue] = state
+        setValue(0)
+        props.onClose()
+    }, [props, state])
+
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -45,18 +52,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             },
             {
                 label: t('plugin_red_packet_select_existing'),
-                children: <RedPacketBacklogList onSelect={onCreateOrSelect} />,
+                children: <RedPacketBacklogList onSelect={onCreateOrSelect} onClose={onClose} />,
                 sx: { p: 0 },
             },
         ],
         state,
     }
-
-    const onClose = useCallback(() => {
-        const [, setValue] = state
-        setValue(0)
-        props.onClose()
-    }, [props, state])
 
     return (
         <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={onClose}>

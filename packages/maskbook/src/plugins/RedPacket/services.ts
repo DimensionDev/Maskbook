@@ -1,4 +1,4 @@
-import type { RedPacketRecord, RedPacketJSONPayload, History } from './types'
+import type { RedPacketRecord, RedPacketJSONPayload, RedPacket_InMask_Record, History } from './types'
 import { RED_PACKET_HISTORY_URL } from './constants'
 import { RedPacketMessage } from './messages'
 import * as database from './database'
@@ -38,5 +38,17 @@ export async function getRedPacketsFromChain(from: string, startBlock: number) {
 }
 
 export async function getAllRedPackets(address: string) {
-    return subgraph.getAllRedPackets(address)
+    const chainId = await getChainId()
+    const redPacketsFromChain = await subgraph.getAllRedPackets(address)
+    const redPacketsFromDB = await database.getRedPacketsHistory(redPacketsFromChain.map((x) => x.rpid))
+    return redPacketsFromChain.reduce((acc, history) => {
+        const record = redPacketsFromDB.find((y) => y.payload.rpid === history.rpid)
+        if (history.chain_id === chainId && record) {
+            acc.push({
+                history,
+                record,
+            })
+        }
+        return acc
+    }, [] as RedPacket_InMask_Record[])
 }

@@ -36,6 +36,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             canFetch: parsedChainId === chainId,
             canClaim: !isExpired && !isEmpty && !isClaimed && parsedChainId === chainId && payload.password,
             canRefund: isExpired && !isEmpty && isCreator && parsedChainId === chainId,
+            canSend: !isEmpty && !isExpired && !isRefunded && isCreator && parsedChainId === chainId,
             listOfStatus: compact([
                 isClaimed ? RedPacketStatus.claimed : undefined,
                 isEmpty ? RedPacketStatus.empty : undefined,

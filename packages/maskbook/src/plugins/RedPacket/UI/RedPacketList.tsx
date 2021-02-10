@@ -1,5 +1,5 @@
 import { makeStyles, Typography, List } from '@material-ui/core'
-import type { RedPacketJSONPayload, History } from '../types'
+import type { RedPacketJSONPayload, RedPacket_InMask_Record } from '../types'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { RedPacketInList, RedPacketInHistoryList } from './RedPacketInList'
 import { useRedPacketsFromChain } from '../hooks/useRedPacket'
@@ -72,29 +72,29 @@ function RedPacketList(props: RedPacketListProps) {
 }
 
 interface RedPacketHistoryListProps {
-    loading?: boolean
-    payloads: History.RedPacket_InMask[]
-    FixedSizeListProps?: Partial<FixedSizeListProps>
-    onSelect?: (payload: RedPacketJSONPayload) => void
+    payloads: RedPacket_InMask_Record[]
+    onSelect: (payload: RedPacketJSONPayload) => void
+    onClose: () => void
 }
 
 function RedPacketHistoryList(props: RedPacketHistoryListProps) {
-    const { loading = false, payloads, FixedSizeListProps, onSelect } = props
+    const { payloads, onSelect, onClose } = props
     const classes = useStyles()
     return (
         <div className={classes.root}>
-            {loading ? (
-                <Typography className={classes.placeholder} color="textSecondary">
-                    Loading...
-                </Typography>
-            ) : payloads.length === 0 ? (
+            {payloads.length === 0 ? (
                 <Typography className={classes.placeholder} color="textSecondary">
                     No Data
                 </Typography>
             ) : (
                 <List>
-                    {payloads.map((payload) => (
-                        <RedPacketInHistoryList payload={payload} />
+                    {payloads.map((data) => (
+                        <RedPacketInHistoryList
+                            key={data.history.rpid}
+                            data={data}
+                            onSelect={onSelect}
+                            onClose={onClose}
+                        />
                     ))}
                 </List>
             )}
@@ -105,14 +105,23 @@ function RedPacketHistoryList(props: RedPacketHistoryListProps) {
 
 //#region backlog list
 export interface RedPacketBacklogListProps extends withClasses<never> {
-    onSelect?: (payload: RedPacketJSONPayload) => void
+    onSelect: (payload: RedPacketJSONPayload) => void
+    onClose: () => void
 }
 
 export function RedPacketBacklogList(props: RedPacketBacklogListProps) {
-    const { onSelect } = props
+    const { onSelect, onClose } = props
     const account = useAccount()
+    const classes = useStyles()
     const { value: payloads, loading } = useAllRedPackets(account)
-    return <RedPacketHistoryList loading={loading} payloads={payloads} onSelect={onSelect} />
+    if (loading) {
+        return (
+            <Typography className={classes.placeholder} color="textSecondary">
+                Loading...
+            </Typography>
+        )
+    }
+    return <RedPacketHistoryList payloads={payloads!} onSelect={onSelect} onClose={onClose} />
 }
 //#endregion
 

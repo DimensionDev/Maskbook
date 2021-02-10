@@ -10,6 +10,14 @@ export function getRedPackets() {
     return asyncIteratorToArray(RedPacketDatabase.iterate('red-packet'))
 }
 
+export async function getRedPacketsHistory(rpids: string[]) {
+    const records: RedPacketRecord[] = []
+    for await (const record of RedPacketDatabase.iterate('red-packet')) {
+        if (rpids.includes(record.payload.rpid)) records.push(RedPacketRecordOutDB(record))
+    }
+    return records
+}
+
 export async function getRedPacket(rpid: string) {
     const record = await RedPacketDatabase.get('red-packet', rpid)
     return record ? RedPacketRecordOutDB(record) : undefined

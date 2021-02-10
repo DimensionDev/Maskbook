@@ -57,6 +57,11 @@ export interface RedPacketJSONPayload {
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }
 
+export interface RedPacket_InMask_Record {
+    history: History.RedPacket_InMask
+    record: RedPacketRecord
+}
+
 export namespace History {
     export interface CreateInputLog {
         $name: 'create_red_packet'
