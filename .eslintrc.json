@@ -25,6 +25,10 @@
         "no-extra-bind": "error",
         "use-isnan": "error",
         "no-restricted-globals": ["error", "event", "name", "length", "closed"],
+        "no-restricted-imports": [
+            "error",
+            { "paths": [{ "name": "lodash", "message": "Please use lodash-es instead." }] }
+        ],
         "unused-imports/no-unused-imports-ts": "error"
     }
 }
