@@ -7,12 +7,17 @@
         "project": "./tsconfig.eslint.json"
     },
     "extends": ["plugin:import/typescript"],
-    "plugins": ["@typescript-eslint", "import", "react-hooks"],
+    "plugins": ["@typescript-eslint", "lodash", "import", "react-hooks"],
     "rules": {
-        "@typescript-eslint/await-thenable": "error",
         "import/no-deprecated": "warn",
-        "@typescript-eslint/no-for-in-array": "error",
+        "no-restricted-imports": [
+            "error",
+            { "paths": [{ "name": "lodash", "message": "Please use lodash-es instead." }] }
+        ],
+        "react-hooks/exhaustive-deps": "warn",
         "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "warn"
+        "lodash/import-scope": ["error", "member"],
+        "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/no-for-in-array": "error"
     }
 }
