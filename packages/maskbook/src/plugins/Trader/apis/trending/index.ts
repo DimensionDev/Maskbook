@@ -135,6 +135,8 @@ function isMirroredKeyword(symbol: string) {
 export async function checkAvailabilityOnDataProvider(keyword: string, type: TagType, dataProvider: DataProvider) {
     if (isBlockedKeyword(type, keyword)) return false
     const keyword_ = resolveAlias(keyword, dataProvider)
+    // reserve mask token
+    if (keyword.toLowerCase() === 'mask') return false
     // cache never built before update in blocking way
     if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
     // data fetched before update in nonblocking way
