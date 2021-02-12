@@ -1,9 +1,9 @@
 import { SvgIconProps, SvgIcon } from '@material-ui/core'
 
 const svg = (
-    <svg width="24" height="24" viewBox="0 0 258 258" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <svg width="24" height="24" viewBox="0 0 258 258">
         <g id="Spread" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-            <g id="pebbles-pad" transform="translate(1.000000, 1.000000)" fill="#FFFFFF">
+            <g id="pebbles-pad" transform="translate(1.000000, 1.000000)" fill="currentColor">
                 <g id="pebbles" transform="translate(17.000000, 38.000000)">
                     <g transform="translate(0.000000, 0.741803)">
                         <path
