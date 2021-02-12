@@ -33,7 +33,7 @@ export interface RedPacketAvailability {
     total: string
     claimed: string
     expired: boolean
-    claimed_amounts: number
+    ifclaimed: boolean
 }
 
 export interface RedPacketJSONPayload {
