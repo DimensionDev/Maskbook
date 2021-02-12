@@ -22,6 +22,7 @@ export function PageInspector(props: PageInspectorProps) {
                         TradeProvider.SUSHISWAP,
                         TradeProvider.ZRX,
                         TradeProvider.SASHIMISWAP,
+                        TradeProvider.BALANCER,
                     ]}
                     onUpdate={reposition}
                 />

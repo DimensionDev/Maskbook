@@ -7,6 +7,7 @@ export enum TradeProvider {
     // ONE_INCH,
     SUSHISWAP,
     SASHIMISWAP,
+    BALANCER,
 }
 
 export enum WarningLevel {

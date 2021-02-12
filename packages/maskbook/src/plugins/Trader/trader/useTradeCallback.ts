@@ -38,6 +38,8 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
             return sushiswap
         case TradeProvider.SASHIMISWAP:
             return sashimiswap
+        case TradeProvider.BALANCER:
+            return zrx
         default:
             unreachable(provider)
     }

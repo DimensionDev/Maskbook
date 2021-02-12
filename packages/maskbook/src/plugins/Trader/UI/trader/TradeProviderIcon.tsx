@@ -5,6 +5,7 @@ import { SushiSwapIcon } from '../../../../resources/SushiSwapIcon'
 import { SashimiSwapIcon } from '../../../../resources/SashimiSwapIcon'
 import { unreachable } from '../../../../utils/utils'
 import { TradeProvider } from '../../types'
+import { BalancerIcon } from '../../../../resources/BalancerIcon'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -28,6 +29,11 @@ const useStyles = makeStyles((theme) =>
             height: 16,
             verticalAlign: 'bottom',
         },
+        balancer: {
+            width: 16,
+            height: 16,
+            verticalAlign: 'bottom',
+        },
     }),
 )
 export interface TradeProviderIconProps {
@@ -45,6 +51,8 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
             return <SushiSwapIcon classes={{ root: classes.sushiswap }} />
         case TradeProvider.SASHIMISWAP:
             return <SashimiSwapIcon classes={{ root: classes.sashimiswap }} />
+        case TradeProvider.BALANCER:
+            return <BalancerIcon classes={{ root: classes.balancer }} />
         default:
             unreachable(props.provider)
     }

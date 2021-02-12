@@ -69,6 +69,11 @@ export function useTradeComputed(
                 ...uniswap_,
                 value: uniswap,
             }
+        case TradeProvider.BALANCER:
+            return {
+                ...zrx_,
+                value: zrx,
+            }
         default:
             unreachable(provider)
     }
