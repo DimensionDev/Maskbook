@@ -28,7 +28,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
 
     const isEmpty = availability.balance === '0'
     const isExpired = availability.expired
-    const isClaimed = availability.claimed_amount !== '0'
+    const isClaimed = availability.claimed
     const isRefunded = isEmpty && Number.parseInt(availability.claimed, 10) < Number.parseInt(availability.total, 10)
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
     const parsedChainId = resolveChainId(payload.network ?? '') ?? ChainId.Mainnet
