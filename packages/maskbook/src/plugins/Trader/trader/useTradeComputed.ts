@@ -4,7 +4,9 @@ import { TradeProvider, TradeStrategy } from '../types'
 import { useV2Trade as useUniswapTrade } from './uniswap/useV2Trade'
 import { useV2TradeComputed as useUniswapTradeComputed } from './uniswap/useV2TradeComputed'
 import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
+import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
 import { useTrade as useZrxTrade } from './0x/useTrade'
+import { useTrade as useBalancerTrade } from './balancer/useTrade'
 import { unreachable } from '../../../utils/utils'
 
 export function useTradeComputed(
@@ -48,6 +50,16 @@ export function useTradeComputed(
     )
     const zrx = useZrxTradeComputed(zrx_.value ?? null, strategy, inputToken, outputToken)
 
+    // balancer
+    const balancer_ = useBalancerTrade(
+        strategy,
+        provider === TradeProvider.BALANCER ? inputAmount_ : '0',
+        provider === TradeProvider.BALANCER ? outputAmount_ : '0',
+        inputToken,
+        outputToken,
+    )
+    const balancer = useBalancerTradeComputed(balancer_.value ?? null, strategy, inputToken, outputToken)
+
     switch (provider) {
         case TradeProvider.UNISWAP:
             return {
@@ -71,8 +83,8 @@ export function useTradeComputed(
             }
         case TradeProvider.BALANCER:
             return {
-                ...zrx_,
-                value: zrx,
+                ...balancer_,
+                value: balancer,
             }
         default:
             unreachable(provider)
