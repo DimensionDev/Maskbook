@@ -46,6 +46,28 @@ export const TRADE_CONSTANTS = {
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },
+    BALANCER_ETH_ADDRESS: {
+        [ChainId.Mainnet]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+        [ChainId.Ropsten]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+        [ChainId.Rinkeby]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+        [ChainId.Kovan]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+        [ChainId.Gorli]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+    },
+    BALANCER_EXCHANGE_PROXY_ADDRESS: {
+        [ChainId.Mainnet]: '0x3E66B66Fd1d0b02fDa6C811Da9E0547970DB2f21',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '0x4e67bf5bD28Dd4b570FBAFe11D0633eCbA2754Ec',
+        [ChainId.Gorli]: '',
+    },
+    BALANCER_POOLS_URL: {
+        [ChainId.Mainnet]: 'https://ipfs.fleek.co/ipns/balancer-team-bucket.storage.fleek.co/balancer-exchange/pools',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]:
+            'https://ipfs.fleek.co/ipns/balancer-team-bucket.storage.fleek.co/balancer-exchange-kovan/pools',
+        [ChainId.Gorli]: '',
+    },
 }
 
 // WETH
