@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import BigNumber from 'bignumber.js'
 import {
     makeStyles,
     createStyles,
@@ -16,8 +17,8 @@ import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { SwapQuoteResponse, TradeComputed, TradeProvider, TradeStrategy } from '../../types'
 import { formatBalance, formatPercentage } from '../../../Wallet/formatter'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
-import BigNumber from 'bignumber.js'
 import { resolveUniswapWarningLevel, resolveUniswapWarningLevelColor, resolveZrxTradePoolName } from '../../pipes'
+
 type SummaryRecord = {
     title: string
     tip?: string
@@ -66,11 +67,20 @@ export interface TradeSummaryProps extends withClasses<KeysInferFromUseStyles<ty
 
 export function TradeSummary(props: TradeSummaryProps) {
     const { trade, provider, inputToken, outputToken } = props
-    const classes = useStylesExtends(useStyles(), props)
 
+    const classes = useStylesExtends(useStyles(), props)
     const [priceReversed, setPriceReversed] = useState(false)
 
-    const { strategy, inputAmount, outputAmount, maximumSold, minimumReceived, priceImpactWithoutFee, fee } = trade
+    const {
+        strategy,
+        inputAmount,
+        outputAmount,
+        maximumSold,
+        minimumReceived,
+        priceImpact,
+        priceImpactWithoutFee,
+        fee,
+    } = trade
     const isExactIn = strategy === TradeStrategy.ExactIn
 
     const records: SummaryRecord[] = [
@@ -174,6 +184,25 @@ export function TradeSummary(props: TradeSummaryProps) {
         },
     ]
 
+    const balancerRecords: SummaryRecord[] = [
+        {
+            title: 'Price Impact',
+            children: (
+                <Typography
+                    className={classes.title}
+                    style={{
+                        color: resolveUniswapWarningLevelColor(resolveUniswapWarningLevel(priceImpact)),
+                    }}>
+                    {priceImpact.isGreaterThan('0')
+                        ? priceImpact?.isLessThan(ONE_BIPS)
+                            ? '<0.01%'
+                            : `${formatPercentage(priceImpact)}`
+                        : '-'}
+                </Typography>
+            ),
+        },
+    ]
+
     const trade_ = (trade as TradeComputed<SwapQuoteResponse>).trade_
     const zrxRecords: SummaryRecord[] = [
         {
@@ -203,11 +232,10 @@ export function TradeSummary(props: TradeSummaryProps) {
             <List className={classes.list} component="ul">
                 {[
                     ...records,
-                    ...(provider === TradeProvider.UNISWAP ||
-                    provider === TradeProvider.SUSHISWAP ||
-                    provider === TradeProvider.SASHIMISWAP
+                    ...([TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider)
                         ? uniswapRecords
                         : []),
+                    ...(provider === TradeProvider.BALANCER ? balancerRecords : []),
                     ...(provider === TradeProvider.ZRX ? zrxRecords : []),
                 ].map((record) =>
                     record ? (

@@ -58,7 +58,14 @@ export function useTradeComputed(
         inputToken,
         outputToken,
     )
-    const balancer = useBalancerTradeComputed(balancer_.value ?? null, strategy, inputToken, outputToken)
+    const balancer = useBalancerTradeComputed(
+        balancer_.value ?? null,
+        strategy,
+        provider === TradeProvider.BALANCER ? inputAmount_ : '0',
+        provider === TradeProvider.BALANCER ? outputAmount_ : '0',
+        inputToken,
+        outputToken,
+    )
 
     switch (provider) {
         case TradeProvider.UNISWAP:

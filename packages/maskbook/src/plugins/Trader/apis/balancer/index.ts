@@ -9,22 +9,34 @@ import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE, TRAD
 import { CONSTANTS } from '../../../../web3/constants'
 
 //#region the pools cache management
-const fetchedCache = new Map<ChainId, number>()
+const fetchedCache = new Map<ChainId, string>()
+
+function getCacheKeyFromDate() {
+    const date = new Date()
+    // stale all pools each 24 hours
+    return `${date.getFullYear()}_${date.getDate()}`
+}
 
 function isFetchedCacheExpired(chainId: ChainId) {
-    return (fetchedCache.get(chainId) ?? -1) !== new Date().getHours()
+    return (fetchedCache.get(chainId) ?? '') !== getCacheKeyFromDate()
 }
 
 function updateFetchedCache(chainId: ChainId) {
-    fetchedCache.set(chainId, new Date().getHours())
+    fetchedCache.set(chainId, getCacheKeyFromDate())
 }
 //#endregion
 
 const createSOR = memoize(
     (chainId: ChainId) => {
         const provider = new JsonRpcProvider(getConstant(CONSTANTS, 'INFURA_ADDRESS', chainId))
-        const poolsUrl = getConstant(TRADE_CONSTANTS, 'BALANCER_EXCHANGE_PROXY_ADDRESS', chainId)
-        return new SOR(provider, BALANCER_SOR_GAS_PRICE, BALANCER_MAX_NO_POOLS, chainId, poolsUrl)
+        const poolsUrl = getConstant(TRADE_CONSTANTS, 'BALANCER_POOLS_URL', chainId)
+        return new SOR(
+            provider,
+            BALANCER_SOR_GAS_PRICE,
+            BALANCER_MAX_NO_POOLS,
+            chainId,
+            `${poolsUrl}?timestamp=${Date.now()}`,
+        )
     },
     (chainId: ChainId) => String(chainId),
 )

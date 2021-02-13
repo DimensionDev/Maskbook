@@ -61,7 +61,7 @@ export const TRADE_CONSTANTS = {
         [ChainId.Gorli]: '',
     },
     BALANCER_POOLS_URL: {
-        [ChainId.Mainnet]: 'https://ipfs.fleek.co/ipns/balancer-team-bucket.storage.fleek.co/balancer-exchange/pools',
+        [ChainId.Mainnet]: 'https://ipfs.fleek.co/ipns/balancer-bucket.storage.fleek.co/balancer-exchange/pools',
         [ChainId.Ropsten]: '',
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]:
