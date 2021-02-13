@@ -29,14 +29,14 @@ const createSOR = memoize(
     (chainId: ChainId) => String(chainId),
 )
 
-export async function getBalancerSwaps(
-    tokenIn: string,
-    tokenOut: string,
-    swapType: BALANCER_SWAP_TYPE,
-    amount: string,
-) {
+export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALANCER_SWAP_TYPE, amount: string) {
     const chainId = await getChainId()
     const sor = createSOR(chainId)
+
+    // this calculates the cost to make a swap which is used as an input to sor to allow it to make gas efficient recommendations.
+    // can be set once and will be used for further swap calculations.
+    // defaults to 0 if not called or can be set manually using: await sor.setCostOutputToken(tokenOut, manualPriceBn)
+    await sor.setCostOutputToken(tokenOut)
 
     // this fetches all pools list from URL in constructor then onChain balances using Multicall
     if (!sor.isAllFetched) {
@@ -47,10 +47,10 @@ export async function getBalancerSwaps(
     // if sor is expired then update in the non-blocking way
     if (sor.isAllFetched && isFetchedCacheExpired(chainId)) sor.fetchPools().then(() => updateFetchedCache(chainId))
 
-    // this calculates the cost to make a swap which is used as an input to sor to allow it to make gas efficient recommendations.
-    // can be set once and will be used for further swap calculations.
-    // defaults to 0 if not called or can be set manually using: await sor.setCostOutputToken(tokenOut, manualPriceBn)
-    await sor.setCostOutputToken(tokenOut)
-
     return sor.getSwaps(tokenIn, tokenOut, swapType, new BigNumber(amount))
+}
+
+export async function updatePools(chainId: ChainId) {
+    const sor = createSOR(chainId)
+    await sor.fetchPools()
 }

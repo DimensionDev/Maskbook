@@ -3,10 +3,9 @@ import { CONSTANTS } from '../../../../web3/constants'
 import { useBlockNumber, useChainId } from '../../../../web3/hooks/useChainState'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
-import { BALANCER_SWAP_TYPE } from '../../constants'
+import { BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy } from '../../types'
-import { useSlippageTolerance } from '../0x/useSlippageTolerance'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -18,16 +17,16 @@ export function useTrade(
     const chainId = useChainId()
     const blockNumber = useBlockNumber(chainId)
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-    const slippage = useSlippageTolerance()
+    const BALANCER_ETH_ADDRESS = useConstant(TRADE_CONSTANTS, 'BALANCER_ETH_ADDRESS')
 
     return useAsyncRetry(async () => {
         if (!inputToken || !outputToken) return null
         const isExactIn = strategy === TradeStrategy.ExactIn
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
-        const sellToken = inputToken.address === ETH_ADDRESS ? 'ETH' : inputToken.address
-        const buyToken = outputToken.address === ETH_ADDRESS ? 'ETH' : outputToken.address
-        return PluginTraderRPC.getBalancerSwaps(
+        const sellToken = inputToken.address === ETH_ADDRESS ? BALANCER_ETH_ADDRESS : inputToken.address
+        const buyToken = outputToken.address === ETH_ADDRESS ? BALANCER_ETH_ADDRESS : outputToken.address
+        return PluginTraderRPC.getSwaps(
             sellToken,
             buyToken,
             isExactIn ? BALANCER_SWAP_TYPE.EXACT_IN : BALANCER_SWAP_TYPE.EXACT_OUT,
@@ -35,12 +34,12 @@ export function useTrade(
         )
     }, [
         ETH_ADDRESS,
+        BALANCER_ETH_ADDRESS,
         strategy,
         inputAmount,
         outputAmount,
         inputToken?.address,
         outputToken?.address,
-        slippage,
         blockNumber, // refresh api each block
     ])
 }
