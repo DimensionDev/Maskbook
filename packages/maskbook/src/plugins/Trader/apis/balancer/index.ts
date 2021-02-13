@@ -12,7 +12,7 @@ import { CONSTANTS } from '../../../../web3/constants'
 const fetchedCache = new Map<ChainId, number>()
 
 function isFetchedCacheExpired(chainId: ChainId) {
-    return (fetchedCache.get(chainId) ?? 0) !== new Date().getHours()
+    return (fetchedCache.get(chainId) ?? -1) !== new Date().getHours()
 }
 
 function updateFetchedCache(chainId: ChainId) {
