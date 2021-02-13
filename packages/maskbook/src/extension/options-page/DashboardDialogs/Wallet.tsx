@@ -330,7 +330,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                                 !(state[0] === 2 && name && privKey)) ||
                             checkInputLengthExceed(name)
                         }>
-                        {t('import')}
+                        {t('create')}
                     </DebounceButton>
                 }
             />
