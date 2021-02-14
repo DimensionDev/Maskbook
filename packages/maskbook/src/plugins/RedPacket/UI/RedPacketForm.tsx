@@ -34,12 +34,12 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { RedPacketJSONPayload } from '../types'
 import { resolveChainName } from '../../../web3/pipes'
-import { SelectERC20TokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { SelectERC20TokenDialog } from '../../Ethereum/UI/SelectERC20TokenDialog'
+import { SelectTokenDialog } from '../../Ethereum/UI/SelectTokenDialog'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -85,10 +85,10 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const { value: etherTokenDetailed } = useEtherTokenDetailed()
     const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
     const [id] = useState(uuid())
-    const [, setOpenSelectERC20TokenDialog] = useRemoteControlledDialog(
-        WalletMessages.events.selectERC20TokenDialogUpdated,
+    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+        WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
-            (ev: SelectERC20TokenDialogEvent) => {
+            (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return
                 setToken(ev.token)
             },
@@ -96,7 +96,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         ),
     )
     const onSelectTokenChipClick = useCallback(() => {
-        setOpenSelectERC20TokenDialog({
+        setSelectTokenDialogOpen({
             open: true,
             uuid: id,
             disableEther: false,

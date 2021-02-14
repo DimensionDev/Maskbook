@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-export interface SelectERC20TokenDialogProps extends withClasses<never> {
+export interface SelectTokenDialogProps extends withClasses<never> {
     open?: boolean
     includeTokens?: string[]
     excludeTokens?: string[]
@@ -41,7 +41,7 @@ export interface SelectERC20TokenDialogProps extends withClasses<never> {
     onClose?: () => void
 }
 
-export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
+export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -57,7 +57,7 @@ export function SelectERC20TokenDialog(props: SelectERC20TokenDialogProps) {
     const [disableSearchBar, setDisableSearchBar] = useState(false)
     const [FixedTokenListProps, setFixedTokenListProps] = useState<FixedTokenListProps | null>(null)
 
-    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectERC20TokenDialogUpdated, (ev) => {
+    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, (ev) => {
         if (!ev.open) return
         setId(ev.uuid)
         setDisableEther(ev.disableEther ?? true)

@@ -2,6 +2,8 @@ import { useState, useCallback, useMemo, useEffect } from 'react'
 import { makeStyles, createStyles, Typography, DialogContent, Link, Grid } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { Trans } from 'react-i18next'
+import { v4 as uuid } from 'uuid'
+
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { ChainId, EthereumTokenType, EtherTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
@@ -14,10 +16,10 @@ import { useDonateCallback } from '../hooks/useDonateCallback'
 import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { GITCOIN_CONSTANT } from '../constants'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { formatBalance, formatEthereumAddress } from '../../Wallet/formatter'
+import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { WalletMessages } from '../../Wallet/messages'
+import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
@@ -27,7 +29,6 @@ import { getActivatedUI } from '../../../social-network/ui'
 import { PluginGitcoinMessages } from '../messages'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -88,20 +89,27 @@ export function DonateDialog(props: DonateDialogProps) {
     //#region select token
     const { value: etherTokenDetailed } = useEtherTokenDetailed()
     const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
-    const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
-    const onTokenChipClick = useCallback(() => {
-        setOpenSelectERC20TokenDialog(true)
-    }, [])
-    const onSelectERC20TokenDialogClose = useCallback(() => {
-        setOpenSelectERC20TokenDialog(false)
-    }, [])
-    const onSelectERC20TokenDialogSubmit = useCallback(
-        (token: EtherTokenDetailed | ERC20TokenDetailed) => {
-            setToken(token)
-            onSelectERC20TokenDialogClose()
-        },
-        [onSelectERC20TokenDialogClose],
+    const [id] = useState(uuid())
+    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+        WalletMessages.events.selectTokenDialogUpdated,
+        useCallback(
+            (ev: SelectTokenDialogEvent) => {
+                if (ev.open || !ev.token || ev.uuid !== id) return
+                setToken(ev.token)
+            },
+            [id],
+        ),
     )
+    const onSelectTokenChipClick = useCallback(() => {
+        setSelectTokenDialogOpen({
+            open: true,
+            uuid: id,
+            disableEther: false,
+            FixedTokenListProps: {
+                selectedTokens: token ? [token.address] : [],
+            },
+        })
+    }, [id, token?.address])
     //#endregion
 
     //#region amount
@@ -220,7 +228,7 @@ export function DonateDialog(props: DonateDialogProps) {
                             SelectTokenChip={{
                                 loading: loadingTokenBalance,
                                 ChipProps: {
-                                    onClick: onTokenChipClick,
+                                    onClick: onSelectTokenChipClick,
                                 },
                             }}
                         />

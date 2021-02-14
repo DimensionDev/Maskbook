@@ -7,7 +7,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { SelectERC20TokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
+import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useClaimCallback } from '../hooks/useClaimCallback'
@@ -125,10 +125,10 @@ export function ClaimDialog(props: ClaimDialogProps) {
 
     //#region select token
     const [id] = useState(uuid())
-    const [, setSelectERC20TokenDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.selectERC20TokenDialogUpdated,
+    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+        WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
-            (ev: SelectERC20TokenDialogEvent) => {
+            (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return
                 const at = exchangeTokens.findIndex((x) => isSameAddress(x.address, token.address))
                 const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(
@@ -152,7 +152,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
         ),
     )
     const onSelectTokenChipClick = useCallback(() => {
-        setSelectERC20TokenDialogOpen({
+        setSelectTokenDialogOpen({
             open: true,
             uuid: id,
             disableEther: !exchangeTokens.some((x) => isETH(x.address)),

@@ -27,11 +27,11 @@ import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { getActivatedUI } from '../../../../social-network/ui'
 import { EthereumMessages } from '../../../Ethereum/messages'
-import { SelectERC20TokenDialog } from '../../../Ethereum/UI/SelectERC20TokenDialog'
+import { SelectTokenDialog } from '../../../Ethereum/UI/SelectTokenDialog'
 import { EthereumBlockNumber } from '../../../../web3/UI/EthereumBlockNumber'
 import Services from '../../../../extension/service'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
-import { SelectERC20TokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
+import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -166,10 +166,10 @@ export function Trader(props: TraderProps) {
     //#region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
     const [focusedTokenPanelType, setFocusedTokenPanelType] = useState(TokenPanelType.Input)
-    const [, setOpenSelectERC20TokenDialog] = useRemoteControlledDialog(
-        WalletMessages.events.selectERC20TokenDialogUpdated,
+    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+        WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
-            (ev: SelectERC20TokenDialogEvent) => {
+            (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== String(focusedTokenPanelType)) return
                 dispatchTradeStore({
                     type:
@@ -185,7 +185,7 @@ export function Trader(props: TraderProps) {
     const onTokenChipClick = useCallback(
         (type: TokenPanelType) => {
             setFocusedTokenPanelType(type)
-            setOpenSelectERC20TokenDialog({
+            setSelectTokenDialogOpen({
                 open: true,
                 uuid: String(type),
                 disableEther: false,

@@ -30,7 +30,7 @@ export type WalletConnectQRCodeDialogEvent =
           open: false
       }
 
-export type SelectERC20TokenDialogEvent =
+export type SelectTokenDialogEvent =
     | {
           open: true
           uuid: string
@@ -65,9 +65,9 @@ interface WalletMessage {
     walletStatusDialogUpdated: WalletStatusDialogEvent
 
     /**
-     * Select ERC20 token dialog
+     * Select token dialog
      */
-    selectERC20TokenDialogUpdated: SelectERC20TokenDialogEvent
+    selectTokenDialogUpdated: SelectTokenDialogEvent
 
     /**
      * WalletConnect QR Code dialog

@@ -11,7 +11,7 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { CONSTANTS } from '../../../web3/constants'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessages, SelectERC20TokenDialogEvent } from '../../Wallet/messages'
+import { WalletMessages, SelectTokenDialogEvent } from '../../Wallet/messages'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -84,10 +84,10 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
 
     //#region select token dialog
     const [id] = useState(uuid())
-    const [, setSelectERC20TokenDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.selectERC20TokenDialogUpdated,
+    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+        WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
-            (ev: SelectERC20TokenDialogEvent) => {
+            (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return
                 onExchangeTokenChange(ev.token, dataIndex)
             },
@@ -95,7 +95,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         ),
     )
     const onSelectTokenChipClick = useCallback(() => {
-        setSelectERC20TokenDialogOpen({
+        setSelectTokenDialogOpen({
             open: true,
             uuid: id,
             disableEther: !isSell,
