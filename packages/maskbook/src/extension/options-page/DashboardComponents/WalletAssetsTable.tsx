@@ -55,9 +55,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     name: {
         marginLeft: theme.spacing(1),
     },
-    symbol: {
-        marginLeft: theme.spacing(1),
-    },
     price: {},
     more: {
         color: theme.palette.text.primary,
@@ -121,9 +118,6 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                 ? 2
                                 : 6,
                         )}
-                    </Typography>
-                    <Typography className={classes.symbol} color="textSecondary" component="span">
-                        {x.token.symbol}
                     </Typography>
                 </Box>,
                 <Box
