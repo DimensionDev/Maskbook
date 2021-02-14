@@ -143,43 +143,41 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                     </Tabs>
                 </Box>
 
-                {!xsMatched ? (
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'flex-end',
-                        }}>
-                        {tabIndex === 0 ? (
-                            <Button
-                                className={classes.addButton}
-                                variant="text"
-                                onClick={() => openAddToken({ wallet })}
-                                startIcon={<AddIcon />}>
-                                {t('add_token')}
-                            </Button>
-                        ) : null}
-                        {Flags.transak_enabled ? (
-                            <Button
-                                onClick={() => {
-                                    setBuyDialogOpen({
-                                        open: true,
-                                        address: wallet.address,
-                                    })
-                                }}
-                                startIcon={<MonetizationOnOutlinedIcon />}>
-                                {t('buy_now')}
-                            </Button>
-                        ) : null}
-                        <IconButton
-                            className={classes.moreButton}
-                            size="small"
-                            onClick={openMenu}
-                            data-testid="setting_icon">
-                            <MoreVertOutlinedIcon />
-                        </IconButton>
-                    </Box>
-                ) : null}
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                    }}>
+                    {!xsMatched && tabIndex === 0 ? (
+                        <Button
+                            className={classes.addButton}
+                            variant="text"
+                            onClick={() => openAddToken({ wallet })}
+                            startIcon={<AddIcon />}>
+                            {t('add_token')}
+                        </Button>
+                    ) : null}
+                    {!xsMatched && Flags.transak_enabled ? (
+                        <Button
+                            onClick={() => {
+                                setBuyDialogOpen({
+                                    open: true,
+                                    address: wallet.address,
+                                })
+                            }}
+                            startIcon={<MonetizationOnOutlinedIcon />}>
+                            {t('buy_now')}
+                        </Button>
+                    ) : null}
+                    <IconButton
+                        className={classes.moreButton}
+                        size="small"
+                        onClick={openMenu}
+                        data-testid="setting_icon">
+                        <MoreVertOutlinedIcon />
+                    </IconButton>
+                </Box>
             </Box>
 
             {menu}
