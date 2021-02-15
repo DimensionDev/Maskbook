@@ -85,7 +85,7 @@ export function Trader(props: TraderProps) {
                 ? createERC20Token(chainId, coin.eth_address!, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
                 : undefined,
         })
-    }, [])
+    }, [coin, chainId, decimals])
     //#endregion
 
     //#region switch tokens
