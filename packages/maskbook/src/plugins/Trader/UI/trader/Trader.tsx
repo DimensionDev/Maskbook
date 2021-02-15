@@ -88,18 +88,6 @@ export function Trader(props: TraderProps) {
     }, [])
     //#endregion
 
-    //#region refresh pairs
-    const [, , resetTimeout] = useTimeoutFn(() => {
-        onRefreshClick()
-    }, 30 /* seconds */ * 1000 /* milliseconds */)
-
-    const onRefreshClick = useCallback(async () => {
-        await Services.Ethereum.updateChainState()
-        asyncTradeComputed.retry()
-        resetTimeout()
-    }, [asyncTradeComputed.retry, resetTimeout])
-    //#endregion
-
     //#region update amount
     const onInputAmountChange = useCallback((amount: string) => {
         dispatchTradeStore({
@@ -216,6 +204,19 @@ export function Trader(props: TraderProps) {
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
     }, [])
+    //#endregion
+
+    //#region refresh pairs
+    const [, , resetTimeout] = useTimeoutFn(() => {
+        onRefreshClick()
+    }, 30 /* seconds */ * 1000 /* milliseconds */)
+
+    const onRefreshClick = useCallback(async () => {
+        if (approveState === ApproveState.PENDING) return
+        await Services.Ethereum.updateChainState()
+        asyncTradeComputed.retry()
+        resetTimeout()
+    }, [approveState, asyncTradeComputed.retry, resetTimeout])
     //#endregion
 
     //#region remote controlled transaction dialog
