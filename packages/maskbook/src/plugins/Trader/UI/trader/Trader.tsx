@@ -176,7 +176,7 @@ export function Trader(props: TraderProps) {
 
     //#region approve
     const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(trade, provider, inputToken)
-    const [approveState, approveCallback] = useERC20TokenApproveCallback(
+    const [approveState, , approveCallback] = useERC20TokenApproveCallback(
         approveToken?.address ?? '',
         approveAmount,
         approveAddress,
@@ -184,12 +184,11 @@ export function Trader(props: TraderProps) {
     const onApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback()
-    }, [approveState])
-
+    }, [approveState, approveCallback])
     const onExactApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback(true)
-    }, [approveState])
+    }, [approveState, approveCallback])
     //#endregion
 
     //#region blocking (swap)
