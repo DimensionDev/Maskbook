@@ -50,17 +50,17 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     }, [transactionState.type, enqueueSnackbar])
 
     // not a valid erc20 token, please given token as undefined
-    if (!token) return <Grid xs={12}>{children}</Grid>
+    if (!token) return <Grid container>{children}</Grid>
 
     if (approveState === ApproveState.UNKNOWN)
         return (
-            <Grid xs={12}>
+            <Grid container>
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" loading disabled />
             </Grid>
         )
     if (approveState === ApproveState.FAILED)
         return (
-            <Grid xs={12}>
+            <Grid container>
                 <ActionButton
                     className={classes.button}
                     fullWidth
@@ -73,7 +73,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         )
     if (approveState === ApproveState.INSUFFICIENT_BALANCE)
         return (
-            <Grid xs={12}>
+            <Grid container>
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" disabled>
                     {`Insufficent ${token.symbol ?? token.name ?? 'Token'} Balance`}
                 </ActionButton>
@@ -109,13 +109,13 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         )
     if (approveState === ApproveState.PENDING || approveState === ApproveState.UPDATING)
         return (
-            <Grid xs={12}>
+            <Grid container>
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" disabled>
                     {`${approveState === ApproveState.PENDING ? 'Unlocking' : 'Updating'} ${token.symbol ?? 'Token'}…`}
                 </ActionButton>
             </Grid>
         )
-    if (approveState === ApproveState.APPROVED) return <Grid xs={12}>{children}</Grid>
+    if (approveState === ApproveState.APPROVED) return <Grid container>{children}</Grid>
 
     unreachable(approveState)
 }

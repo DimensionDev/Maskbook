@@ -4,7 +4,7 @@ import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
 
-type SelectERC20TokenDialogEvent =
+type SelectTokenDialogEvent =
     | {
           open: true
           address?: string
@@ -42,7 +42,7 @@ interface EthereumMessage {
     /**
      * Select token dialog
      */
-    selectERC20TokenDialogUpdated: SelectERC20TokenDialogEvent
+    selectERC20TokenDialogUpdated: SelectTokenDialogEvent
 
     /**
      * Unlock token dialog

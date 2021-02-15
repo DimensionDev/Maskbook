@@ -34,12 +34,12 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { RedPacketJSONPayload } from '../types'
 import { resolveChainName } from '../../../web3/pipes'
-import { WalletMessages } from '../../Wallet/messages'
+import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { SelectERC20TokenDialog } from '../../Ethereum/UI/SelectERC20TokenDialog'
+import { SelectTokenDialog } from '../../Ethereum/UI/SelectTokenDialog'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -84,20 +84,27 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#region select token
     const { value: etherTokenDetailed } = useEtherTokenDetailed()
     const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
-    const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
-    const onTokenChipClick = useCallback(() => {
-        setOpenSelectERC20TokenDialog(true)
-    }, [])
-    const onSelectERC20TokenDialogClose = useCallback(() => {
-        setOpenSelectERC20TokenDialog(false)
-    }, [])
-    const onSelectERC20TokenDialogSubmit = useCallback(
-        (token: EtherTokenDetailed | ERC20TokenDetailed) => {
-            setToken(token)
-            onSelectERC20TokenDialogClose()
-        },
-        [onSelectERC20TokenDialogClose],
+    const [id] = useState(uuid())
+    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+        WalletMessages.events.selectTokenDialogUpdated,
+        useCallback(
+            (ev: SelectTokenDialogEvent) => {
+                if (ev.open || !ev.token || ev.uuid !== id) return
+                setToken(ev.token)
+            },
+            [id],
+        ),
     )
+    const onSelectTokenChipClick = useCallback(() => {
+        setSelectTokenDialogOpen({
+            open: true,
+            uuid: id,
+            disableEther: false,
+            FixedTokenListProps: {
+                selectedTokens: token ? [token.address] : [],
+            },
+        })
+    }, [id, token?.address])
     //#endregion
 
     //#region packet settings
@@ -131,6 +138,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         token?.address ?? '',
     )
     //#endregion
+
     //#region approve ERC20
     const HappyRedPacketContractAddress = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
     const [approveState, approveCallback] = useERC20TokenApproveCallback(
@@ -159,7 +167,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#endregion
 
     //#region remote controlled transaction dialog
-    // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
@@ -297,7 +304,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     SelectTokenChip={{
                         loading: loadingTokenBalance,
                         ChipProps: {
-                            onClick: onTokenChipClick,
+                            onClick: onSelectTokenChipClick,
                         },
                     }}
                 />
@@ -341,14 +348,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     {`Send ${formatBalance(totalAmount, token.decimals ?? 0)} ${token.symbol}`}
                 </ActionButton>
             )}
-            <SelectERC20TokenDialog
-                open={openSelectERC20TokenDialog}
-                includeTokens={[]}
-                excludeTokens={[token.address]}
-                selectedTokens={[]}
-                onSubmit={onSelectERC20TokenDialogSubmit}
-                onClose={onSelectERC20TokenDialogClose}
-            />
         </>
     )
 }

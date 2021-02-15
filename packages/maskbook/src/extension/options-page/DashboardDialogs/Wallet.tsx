@@ -92,7 +92,7 @@ export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelector
             <FixedTokenList
                 classes={{ list: classes.list, placeholder: classes.placeholder }}
                 keyword={keyword}
-                excludeTokens={excludeTokens}
+                blacklist={excludeTokens}
                 onSubmit={(token) => token.type === EthereumTokenType.ERC20 && onTokenChange?.(token)}
                 FixedSizeListProps={{
                     height: 192,
