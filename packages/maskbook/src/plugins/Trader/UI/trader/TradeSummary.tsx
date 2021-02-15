@@ -90,6 +90,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                                           .multipliedBy(new BigNumber(10).pow(outputToken.decimals))
                                           .integerValue(),
                                       outputToken.decimals,
+                                      6,
                                   )}{' '}
                                   {outputToken.symbol}
                                   {' per '}
@@ -106,6 +107,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                                           .multipliedBy(new BigNumber(10).pow(inputToken.decimals))
                                           .integerValue(),
                                       inputToken.decimals,
+                                      6,
                                   )}{' '}
                                   {inputToken.symbol}
                                   {' per '}
