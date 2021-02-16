@@ -15,6 +15,7 @@ export function useTradeApproveComputed(
     const chainId = useChainId()
     const UNISWAP_V2_ROUTER_ADDRESS = useConstant(TRADE_CONSTANTS, 'UNISWAP_V2_ROUTER_ADDRESS')
     const SUSHISWAP_ROUTER_ADDRESS = useConstant(TRADE_CONSTANTS, 'SUSHISWAP_ROUTER_ADDRESS')
+    const SASHIMISWAP_ROUTER_ADDRESS = useConstant(TRADE_CONSTANTS, 'SASHIMISWAP_ROUTER_ADDRESS')
 
     return useMemo(() => {
         if (!trade || !token)
@@ -41,6 +42,8 @@ export function useTradeApproveComputed(
                         return UNISWAP_V2_ROUTER_ADDRESS
                     case TradeProvider.SUSHISWAP:
                         return SUSHISWAP_ROUTER_ADDRESS
+                    case TradeProvider.SASHIMISWAP:
+                        return SASHIMISWAP_ROUTER_ADDRESS
                     case TradeProvider.ZRX:
                         return trade.trade_ ? (trade.trade_ as SwapQuoteResponse).allowanceTarget : ''
                     default:
