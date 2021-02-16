@@ -403,9 +403,9 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     // TODO:
                     // use dynamic seed
                     const seed = '7380309746363496'
-                    const message = 'this is a test message'
-                    console.log('content', content)
-                    const seedTypedMessage = makeTypedMessageText(message + '\nIMAGE_SEED=' + seed)
+                    let meta = new Map<string, unknown>()
+                    meta.set('image_seed', seed)
+                    const seedTypedMessage = makeTypedMessageText(String(extractTextFromTypedMessage(content).val), meta)
                     const [encrypted] = await Services.Crypto.encryptTo(
                         seedTypedMessage,
                         target.map((x) => x.identifier),
