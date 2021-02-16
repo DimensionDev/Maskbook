@@ -20,7 +20,7 @@ export function useMenu(menus: (JSX.Element | undefined)[], anchorSibling = fals
             } else {
                 element = anchorElOrEvent.currentTarget
             }
-            anchorElRef.current = anchorSibling ? (element.nextElementSibling as HTMLElement ?? undefined) : element
+            anchorElRef.current = anchorSibling ? (element.nextElementSibling as HTMLElement) ?? undefined : element
             setOpen(true)
         }, []),
     ] as const
