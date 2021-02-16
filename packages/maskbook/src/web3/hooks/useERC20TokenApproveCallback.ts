@@ -56,7 +56,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
         balance,
         allowance,
         errorBalance,
-        errorBalance,
+        errorAllowance,
         loadingAllowance,
         loadingBalance,
         transactionState.type,
