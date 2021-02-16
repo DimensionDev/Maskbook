@@ -107,6 +107,10 @@ export interface SocialNetworkUIInjections {
      */
     injectPostBox(): void
     /**
+     * This function should inject top toolbar UI
+     */
+    injectToolbar(): void
+    /**
      * This function should inject the setup prompt
      */
     injectSetupPrompt(): void
@@ -323,6 +327,7 @@ export function activateSocialNetworkUI(): void {
                 ui.init(env, {})
                 ui.resolveLastRecognizedIdentity()
                 ui.injectPostBox()
+                ui.injectToolbar()
                 ui.injectSetupPrompt()
                 ui.injectPageInspector()
                 ui.collectPeople()

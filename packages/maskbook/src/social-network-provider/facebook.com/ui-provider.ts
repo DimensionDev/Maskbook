@@ -30,6 +30,7 @@ import { useInterval } from 'react-use'
 import { MaskMessage } from '../../utils/messages'
 import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
 import { Appearance } from '../../settings/types'
+import { injectToolbarAtFacebook } from './UI/injectToolbar'
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
 export const facebookUISelf = defineSocialNetworkUI({
@@ -66,6 +67,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     },
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
     injectPostBox: injectPostBoxFacebook,
+    injectToolbar: injectToolbarAtFacebook,
     injectSetupPrompt: injectSetupPromptFacebook,
     injectPostComments: injectPostCommentsDefault(),
     injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
