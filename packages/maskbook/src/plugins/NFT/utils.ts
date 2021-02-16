@@ -16,7 +16,7 @@ function checkUrl(url: URL): boolean {
 
 export function getRelevantUrl(textContent: string): URL | null {
     const urls = parseURL(textContent)
-    const protocol = "https://"
+    const protocol = 'https://'
     for (let url of urls) {
         // url may not include protocol, but URL(url) always requires an url string with protocol
         let urlWithProtocol = url.startsWith(protocol) ? url : protocol + url
