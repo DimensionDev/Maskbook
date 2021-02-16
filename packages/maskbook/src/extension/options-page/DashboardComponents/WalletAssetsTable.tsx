@@ -79,6 +79,7 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'center',
             marginTop: theme.spacing(1),
         },
+        menuAnchorElRef: {},
     }),
 )
 
@@ -141,12 +142,15 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
 
         const [menu, openMenu] = useMenu(
-            <TokenActionsMenu
-                wallet={wallet}
-                token={x.token}
-                openTransferDialogOpen={openTransferDialogOpen}
-                openHideTokenConfirmDialog={openHideTokenConfirmDialog}
-            />,
+            [
+                <TokenActionsMenu
+                    wallet={wallet}
+                    token={x.token}
+                    openTransferDialogOpen={openTransferDialogOpen}
+                    openHideTokenConfirmDialog={openHideTokenConfirmDialog}
+                />,
+            ],
+            true,
         )
 
         return (
@@ -223,6 +227,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                             </TableCell>
                         ))}
                 </TableRow>
+                <div className={classes.menuAnchorElRef}></div>
                 {menu}
                 {hideTokenConfirmDialog}
                 {transeferDialog}

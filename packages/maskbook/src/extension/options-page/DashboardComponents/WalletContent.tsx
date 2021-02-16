@@ -92,7 +92,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
     const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
-    const [menu, openMenu] = useMenu(
+    const [menu, openMenu] = useMenu([
         <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
         wallet._private_key_ || wallet.mnemonic.length ? (
             <MenuItem onClick={() => openWalletBackup({ wallet })}>{t('backup')}</MenuItem>
@@ -100,7 +100,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
         <MenuItem onClick={() => openWalletDelete({ wallet })} className={color.error} data-testid="delete_button">
             {t('delete')}
         </MenuItem>,
-    )
+    ])
 
     //#region remote controlled buy dialog
     const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
