@@ -79,6 +79,7 @@ export const enableGroupSharingSettings = createGlobalSettings<boolean>('experim
 })
 
 export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
+export const currentImageEncryptStatus = createNetworkSettings('currentImageEncryptStatus')
 export const currentSelectedIdentity = createNetworkSettings('currentSelectedIdentity')
 
 export const currentSetupGuideStatus = createNetworkSettings('currentSetupGuideStatus')

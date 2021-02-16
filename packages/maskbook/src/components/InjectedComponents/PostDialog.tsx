@@ -19,7 +19,7 @@ import { CompositionEvent, MaskMessage } from '../../utils/messages'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
 import { useFriendsList, useCurrentGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
-import { currentImagePayloadStatus, debugModeSetting } from '../../settings/settings'
+import { currentImagePayloadStatus, currentImageEncryptStatus, debugModeSetting } from '../../settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { editActivatedPostMetadata, getActivatedUI } from '../../social-network/ui'
 import Services from '../../extension/service'
@@ -89,6 +89,7 @@ export interface PostDialogUIProps extends withClasses<never> {
     onlyMyself: boolean
     shareToEveryone: boolean
     imagePayload: boolean
+    imageEncrypt: boolean
     maxLength?: number
     availableShareTarget: Array<Profile | Group>
     currentShareTarget: Array<Profile | Group>
@@ -100,6 +101,7 @@ export interface PostDialogUIProps extends withClasses<never> {
     onOnlyMyselfChanged: (checked: boolean) => void
     onShareToEveryoneChanged: (checked: boolean) => void
     onImagePayloadSwitchChanged: (checked: boolean) => void
+    onImageEncryptSwitchChanged: (checked: boolean) => void
     onFinishButtonClicked: () => void
     onCloseButtonClicked: () => void
     onSetSelected: SelectRecipientsUIProps['onSetSelected']
@@ -244,6 +246,13 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 onClick={() => props.onImagePayloadSwitchChanged(!props.imagePayload)}
                                 data-testid="image_chip"
                             />
+                            <ClickableChip
+                                checked={props.imageEncrypt}
+                                label={t('post_dialog__image_encrypt')}
+                                onClick={() => props.onImageEncryptSwitchChanged(!props.imageEncrypt)}
+                                data-testid="image_encrypt_chip"
+                                disabled={props.imagePayload}
+                            />
                             {isDebug && (
                                 <Chip label="Post metadata inspector" onClick={() => setShowPostMetadata((e) => !e)} />
                             )}
@@ -255,8 +264,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 />
                             )}
                         </Box>
-                        {/* <Box>{props.imageEncrypt && <Dropzone onImgChange={props.onImgChange} />}</Box> */}
-                        <Box>{<Dropzone onImgChange={props.onImgChange} />}</Box>
+                        <Box>{props.imageEncrypt && <Dropzone onImgChange={props.onImgChange} />}</Box>
+                        {/* <Box>{<Dropzone onImgChange={props.onImgChange} />}</Box> */}
                     </DialogContent>
                     <DialogActions>
                         {isTypedMessageText(props.postContent) && props.maxLength ? (
@@ -323,23 +332,19 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     )
     //#endregion
     //#region Image Encrypt Payload Switch
-    // const imageEncryptStatus = useValueRef(currentImageEncryptStatus[getActivatedUI().networkIdentifier])
-    // const imageEncryptEnabled = imageEncryptStatus === 'true'
-    /*const onImageEncryptSwitchChanged = or(
+    const imageEncryptStatus = useValueRef(currentImageEncryptStatus[getActivatedUI().networkIdentifier])
+    const imageEncryptEnabled = imageEncryptStatus === 'true'
+    const onImageEncryptSwitchChanged = or(
         props.onImageEncryptSwitchChanged,
         useCallback((checked) => {
             currentImageEncryptStatus[getActivatedUI().networkIdentifier].value = String(checked)
         }, []),
-    )*/
+    )
     const [imgToEncrypt, setImgToEncrypt] = useState<ArrayBuffer | null>(null)
     const onImgChange = useCallback(async (imgFile: File) => {
         const buf = await readFileAsync(imgFile)
-        if (!buf) {
-            console.log('NO IMAGE BUFFER')
-            return
-        }
-        console.log('TODO: encrypt image')
-        // setImgToEncrypt(buf)
+        if (!buf) return
+        setImgToEncrypt(buf)
     }, [])
     //#endregion
     //#region callbacks
@@ -392,6 +397,26 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                         autoPasteFailedRecover: true,
                         relatedText,
                     })
+                } else if (imageEncryptEnabled) {
+                    if (!imgToEncrypt) return
+
+                    // TODO:
+                    // use dynamic seed
+                /*
+                const seed = '7380309746363496'
+                const seedTypedMessage = makeTypedMessageText('text', seed)
+                const [encrypted] = await Services.Crypto.encryptTo(
+                    seedTypedMessage,
+                    target.map((x) => x.identifier),
+                    currentIdentity!.identifier,
+                    shareToEveryone,
+                )
+                activeUI.taskPasteIntoPostBox(t('additional_post_box__encrypted_post_pre', { encrypted }), {
+                    autoPasteFailedRecover: true,
+                    shouldOpenPostDialog: true,
+                })
+                activeUI.taskUploadShuffledImageToPostBox(imgToEncrypt, seed, {})
+                */
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
                     if (redPacketMetadata.ok) {
@@ -492,6 +517,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             onlyMyself={onlyMyself}
             availableShareTarget={availableShareTarget}
             imagePayload={imagePayloadEnabled}
+            imageEncrypt={imageEncryptEnabled}
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
             postContent={postBoxContent}
@@ -503,6 +529,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             onShareToEveryoneChanged={onShareToEveryoneChanged}
             onOnlyMyselfChanged={onOnlyMyselfChanged}
             onImagePayloadSwitchChanged={onImagePayloadSwitchChanged}
+            onImageEncryptSwitchChanged={onImageEncryptSwitchChanged}
             onFinishButtonClicked={onFinishButtonClicked}
             onCloseButtonClicked={onCloseButtonClicked}
             {...props}
