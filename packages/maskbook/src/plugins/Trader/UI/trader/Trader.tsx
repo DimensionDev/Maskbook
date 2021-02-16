@@ -1,9 +1,9 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
+import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import { makeStyles, createStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/sdk'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../../web3/types'
-import { useConstant } from '../../../../web3/hooks/useConstant'
 import { TradeForm } from './TradeForm'
 import { TradeRoute } from '../uniswap/TradeRoute'
 import { TradeSummary } from '../trader/TradeSummary'
@@ -29,7 +29,6 @@ import { EthereumMessages } from '../../../Ethereum/messages'
 import { SelectERC20TokenDialog } from '../../../Ethereum/UI/SelectERC20TokenDialog'
 import { EthereumBlockNumber } from '../../../../web3/UI/EthereumBlockNumber'
 import Services from '../../../../extension/service'
-import { useAsyncRetry, useTimeoutFn } from 'react-use'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -87,18 +86,6 @@ export function Trader(props: TraderProps) {
             type: TradeActionType.SWITCH_TOKEN,
         })
     }, [])
-    //#endregion
-
-    //#region refresh pairs
-    const [, , resetTimeout] = useTimeoutFn(() => {
-        onRefreshClick()
-    }, 30 /* seconds */ * 1000 /* milliseconds */)
-
-    const onRefreshClick = useCallback(async () => {
-        await Services.Ethereum.updateChainState()
-        asyncTradeComputed.retry()
-        resetTimeout()
-    }, [asyncTradeComputed.retry, resetTimeout])
     //#endregion
 
     //#region update amount
@@ -188,22 +175,20 @@ export function Trader(props: TraderProps) {
     //#endregion
 
     //#region approve
-    const RouterV2Address = useConstant(TRADE_CONSTANTS, 'UNISWAP_V2_ROUTER_ADDRESS')
-    const { approveToken, approveAmount } = useTradeApproveComputed(trade, inputToken)
-    const [approveState, approveCallback] = useERC20TokenApproveCallback(
+    const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(trade, provider, inputToken)
+    const [approveState, , approveCallback] = useERC20TokenApproveCallback(
         approveToken?.address ?? '',
         approveAmount,
-        RouterV2Address,
+        approveAddress,
     )
     const onApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback()
-    }, [approveState])
-
+    }, [approveState, approveCallback])
     const onExactApprove = useCallback(async () => {
         if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback(true)
-    }, [approveState])
+    }, [approveState, approveCallback])
     //#endregion
 
     //#region blocking (swap)
@@ -218,6 +203,19 @@ export function Trader(props: TraderProps) {
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
     }, [])
+    //#endregion
+
+    //#region refresh pairs
+    const [, , resetTimeout] = useTimeoutFn(() => {
+        onRefreshClick()
+    }, 30 /* seconds */ * 1000 /* milliseconds */)
+
+    const onRefreshClick = useCallback(async () => {
+        if (approveState === ApproveState.PENDING) return
+        await Services.Ethereum.updateChainState()
+        asyncTradeComputed.retry()
+        resetTimeout()
+    }, [approveState, asyncTradeComputed.retry, resetTimeout])
     //#endregion
 
     //#region remote controlled transaction dialog

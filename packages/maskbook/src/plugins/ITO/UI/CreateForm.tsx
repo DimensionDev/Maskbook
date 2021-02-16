@@ -10,7 +10,7 @@ import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
-import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallbackV2'
+import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
@@ -141,6 +141,7 @@ export function CreateForm(props: CreateFormProps) {
         if (approveState !== ApproveState.NOT_APPROVED) return
         await approveCallback(true)
     }, [approveState, approveCallback])
+
     const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
     //#endregion
 
