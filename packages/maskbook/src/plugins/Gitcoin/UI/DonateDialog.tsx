@@ -132,7 +132,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region approve
     const BULK_CHECKOUT_ADDRESS = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
-    const [approveState, approveCallback] = useERC20TokenApproveCallback(
+    const [approveState, , approveCallback] = useERC20TokenApproveCallback(
         token?.type === EthereumTokenType.ERC20 ? token.address : '',
         amount.toFixed(),
         BULK_CHECKOUT_ADDRESS,
