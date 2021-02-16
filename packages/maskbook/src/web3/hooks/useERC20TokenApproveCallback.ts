@@ -20,6 +20,7 @@ export enum ApproveState {
     UPDATING,
     PENDING,
     APPROVED,
+    FAILED,
 }
 
 export function useERC20TokenApproveCallback(address: string, amount?: string, spender?: string) {
@@ -28,20 +29,38 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
     const [transactionState, setTransactionState] = useTransactionState()
 
     // read the approved information from the chain
-    const { value: balance = '0', loading: loadingBalance, retry: revalidateBalance } = useERC20TokenBalance(address)
-    const { value: allowance = '0', loading: loadingAllowance, retry: revalidateAllowance } = useERC20TokenAllowance(
-        address,
-        spender,
-    )
+    const {
+        value: balance = '0',
+        loading: loadingBalance,
+        error: errorBalance,
+        retry: revalidateBalance,
+    } = useERC20TokenBalance(address)
+    const {
+        value: allowance = '0',
+        loading: loadingAllowance,
+        error: errorAllowance,
+        retry: revalidateAllowance,
+    } = useERC20TokenAllowance(address, spender)
 
     // the computed approve state
     const approveState = useMemo(() => {
         if (!amount || !spender) return ApproveState.UNKNOWN
         if (loadingBalance || loadingAllowance) return ApproveState.UPDATING
+        if (errorBalance || errorAllowance) return ApproveState.FAILED
         if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) return ApproveState.INSUFFICIENT_BALANCE
         if (transactionState.type === TransactionStateType.WAIT_FOR_CONFIRMING) return ApproveState.PENDING
         return new BigNumber(allowance).isLessThan(amount) ? ApproveState.NOT_APPROVED : ApproveState.APPROVED
-    }, [amount, spender, allowance, transactionState.type, loadingAllowance, loadingBalance])
+    }, [
+        amount,
+        spender,
+        balance,
+        allowance,
+        errorBalance,
+        errorBalance,
+        loadingAllowance,
+        loadingBalance,
+        transactionState.type,
+    ])
 
     const approveCallback = useCallback(
         async (useExact: boolean = false) => {
