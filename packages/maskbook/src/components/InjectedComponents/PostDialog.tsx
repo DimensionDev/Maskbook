@@ -47,6 +47,7 @@ import { PluginStage } from '../../plugins/types'
 import { Election2020MetadataReader } from '../../plugins/Election2020/helpers'
 import { COTM_MetadataReader } from '../../plugins/COTM/helpers'
 import { Flags } from '../../utils/flags'
+import Dropzone from '../shared/Dropzone'
 
 const defaultTheme = {}
 
@@ -66,6 +67,22 @@ const useStyles = makeStyles({
     },
 })
 
+// TODO: you will want to move this elsewhere
+const readFileAsync: (file: File) => Promise<ArrayBuffer | null> = (file: File) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+            if (typeof reader.result === 'string') {
+                resolve(null)
+            } else {
+                resolve(reader.result)
+            }
+        }
+        reader.onerror = reject
+        reader.readAsArrayBuffer(file)
+    })
+}
+
 export interface PostDialogUIProps extends withClasses<never> {
     theme?: Theme
     open: boolean
@@ -77,6 +94,7 @@ export interface PostDialogUIProps extends withClasses<never> {
     currentShareTarget: Array<Profile | Group>
     currentIdentity: Profile | null
     postContent: TypedMessage
+    onImgChange: (img: File) => Promise<void>
     postBoxButtonDisabled: boolean
     onPostContentChanged: (nextMessage: TypedMessage) => void
     onOnlyMyselfChanged: (checked: boolean) => void
@@ -237,6 +255,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 />
                             )}
                         </Box>
+                        {/* <Box>{props.imageEncrypt && <Dropzone onImgChange={props.onImgChange} />}</Box> */}
+                        <Box>{<Dropzone onImgChange={props.onImgChange} />}</Box>
                     </DialogContent>
                     <DialogActions>
                         {isTypedMessageText(props.postContent) && props.maxLength ? (
@@ -296,9 +316,31 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     const onImagePayloadSwitchChanged = or(
         props.onImagePayloadSwitchChanged,
         useCallback((checked) => {
+            // TODO: if there is an image already added to the tweet, do NOT allow this. steganography will be disallowed since it's already being done on the input image(s)
+            console.log('image payload switch changed')
             currentImagePayloadStatus[getActivatedUI().networkIdentifier].value = String(checked)
         }, []),
     )
+    //#endregion
+    //#region Image Encrypt Payload Switch
+    // const imageEncryptStatus = useValueRef(currentImageEncryptStatus[getActivatedUI().networkIdentifier])
+    // const imageEncryptEnabled = imageEncryptStatus === 'true'
+    /*const onImageEncryptSwitchChanged = or(
+        props.onImageEncryptSwitchChanged,
+        useCallback((checked) => {
+            currentImageEncryptStatus[getActivatedUI().networkIdentifier].value = String(checked)
+        }, []),
+    )*/
+    const [imgToEncrypt, setImgToEncrypt] = useState<ArrayBuffer | null>(null)
+    const onImgChange = useCallback(async (imgFile: File) => {
+        const buf = await readFileAsync(imgFile)
+        if (!buf) {
+            console.log('NO IMAGE BUFFER')
+            return
+        }
+        console.log('TODO: encrypt image')
+        // setImgToEncrypt(buf)
+    }, [])
     //#endregion
     //#region callbacks
     const onRequestPost = or(
@@ -453,6 +495,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
             postContent={postBoxContent}
+            onImgChange={onImgChange}
             postBoxButtonDisabled={isPostButtonDisabled}
             maxLength={560}
             onSetSelected={setCurrentShareTarget}
