@@ -55,7 +55,6 @@ export interface ExchangetokenPanelProps {
     showAdd: boolean
 
     label: string
-    includeTokensAddress?: string[]
     excludeTokensAddress?: string[]
     selectedTokensAddress?: string[]
     TokenAmountPanelProps: Partial<TokenAmountPanelProps>
@@ -73,7 +72,6 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         showAdd = true,
         showRemove = false,
         label,
-        includeTokensAddress = [],
         excludeTokensAddress = [],
         selectedTokensAddress = [],
         onRemove,
@@ -98,7 +96,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         setSelectTokenDialogOpen({
             open: true,
             uuid: id,
-            disableEther: !isSell,
+            disableEther: isSell,
             FixedTokenListProps: {
                 blacklist: excludeTokensAddress,
                 selectedTokens: [exchangeToken?.address ?? '', ...selectedTokensAddress],
