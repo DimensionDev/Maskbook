@@ -1,9 +1,10 @@
+import { forwardRef } from 'react'
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { isETH } from '../../../web3/helpers'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
-import { DashboardWalletHideTokenConfirmDialog } from '../DashboardDialogs/Wallet'
+import { DashboardWalletHideTokenConfirmDialog, WalletProps } from '../DashboardDialogs/Wallet'
 import { useMenu } from '../../../utils/hooks/useMenu'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -27,38 +28,17 @@ export interface ERC20TokenActionsBarProps extends withClasses<never> {
 
 export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
     const { wallet, token } = props
-
-    const { t } = useI18N()
-    const account = useAccount()
     const classes = useStylesExtends(useStyles(), props)
-
-    const chainIdValid = useChainIdValid()
-
-    //#region remote controlled buy dialog
-    const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
-    //#endregion
 
     const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialog)
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu(
-        <MenuItem
-            onClick={() => {
-                setBuyDialogOpen({
-                    open: true,
-                    code: token.symbol ?? token.name,
-                    address: account,
-                })
-            }}>
-            {t('buy')}
-        </MenuItem>,
-        <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ wallet, token })}>
-            {t('transfer')}
-        </MenuItem>,
-        <MenuItem
-            style={{ display: isETH(token.address) ? 'none' : 'initial' }}
-            onClick={() => openHideTokenConfirmDialog({ wallet, token })}>
-            {t('hide')}
-        </MenuItem>,
+        <TokenActionsMenu
+            wallet={wallet}
+            token={token}
+            openTransferDialogOpen={openTransferDialogOpen}
+            openHideTokenConfirmDialog={openHideTokenConfirmDialog}
+        />,
     )
 
     return (
@@ -72,3 +52,54 @@ export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
         </>
     )
 }
+
+export interface ERC20TokenActionsMenuProps extends ERC20TokenActionsBarProps {
+    openTransferDialogOpen: (
+        props: Partial<
+            WalletProps & {
+                token: ERC20TokenDetailed | EtherTokenDetailed
+            }
+        >,
+    ) => void
+    openHideTokenConfirmDialog: (
+        props: Partial<
+            WalletProps & {
+                token: ERC20TokenDetailed | EtherTokenDetailed
+            }
+        >,
+    ) => void
+}
+
+export const TokenActionsMenu = forwardRef<HTMLDivElement, ERC20TokenActionsMenuProps>(
+    (props: ERC20TokenActionsMenuProps) => {
+        const { wallet, token, openTransferDialogOpen, openHideTokenConfirmDialog } = props
+        const account = useAccount()
+        const { t } = useI18N()
+        const chainIdValid = useChainIdValid()
+        //#region remote controlled buy dialog
+        const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
+        //#endregion
+        return (
+            <div>
+                <MenuItem
+                    onClick={() => {
+                        setBuyDialogOpen({
+                            open: true,
+                            code: token.symbol ?? token.name,
+                            address: account,
+                        })
+                    }}>
+                    {t('buy')}
+                </MenuItem>
+                <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ wallet, token })}>
+                    {t('transfer')}
+                </MenuItem>
+                <MenuItem
+                    style={{ display: isETH(token.address) ? 'none' : 'initial' }}
+                    onClick={() => openHideTokenConfirmDialog({ wallet, token })}>
+                    {t('hide')}
+                </MenuItem>
+            </div>
+        )
+    },
+)
