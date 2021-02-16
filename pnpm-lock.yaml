@@ -12,6 +12,7 @@ importers:
       '@types/react-dom': 17.0.0
       react: 0.0.0-experimental-dc27b5aaa
       react-dom: 0.0.0-experimental-dc27b5aaa_bbe24f3d390b2dd762addfb9b4a0c180
+      seedrandom: 3.0.5
     devDependencies:
       '@commitlint/cli': 11.0.0
       '@commitlint/config-conventional': 11.0.0
@@ -69,6 +70,7 @@ importers:
       prettier: ^2.1.2
       react: '=0.0.0-experimental-dc27b5aaa'
       react-dom: '=0.0.0-experimental-dc27b5aaa'
+      seedrandom: ^3.0.5
       ts-node: ^9.1.1
       ttypescript: ^1.5.12
       type-coverage: ^2.14.8
@@ -21542,6 +21544,10 @@ packages:
     requiresBuild: true
     resolution:
       integrity: sha512-UDar4sKvWAksIlfX3xIaQReADn+WFnHvbVujpcbr+9Sf/69odMwy2MUsz5CKLQgX9nsIyrjuxL2imVyoNHa3fg==
+  /seedrandom/3.0.5:
+    dev: false
+    resolution:
+      integrity: sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==
   /select-hose/2.0.0:
     dev: true
     resolution:
