@@ -6,7 +6,7 @@ import ActionButton from '../../extension/options-page/DashboardComponents/Actio
 import { formatBalance } from '../../plugins/Wallet/formatter'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { unreachable } from '../../utils/utils'
-import { ApproveState, useERC20TokenApproveCallback } from '../hooks/useERC20TokenApproveCallbackV2'
+import { ApproveState, useERC20TokenApproveCallback } from '../hooks/useERC20TokenApproveCallback'
 import { TransactionStateType } from '../hooks/useTransactionState'
 import type { ERC20TokenDetailed } from '../types'
 
@@ -67,7 +67,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     variant="contained"
                     size="large"
                     onClick={resetApproveCallback}>
-                    Failed to load {token.symbol ?? token.name ?? 'Token'}
+                    Failed to load {token.symbol ?? token.name ?? 'Token'}.
                 </ActionButton>
             </Grid>
         )
