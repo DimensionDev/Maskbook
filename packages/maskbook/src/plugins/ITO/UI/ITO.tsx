@@ -29,6 +29,7 @@ import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { usePoolPayload } from '../hooks/usePoolPayload'
+import Services from '../../../extension/service'
 
 export interface IconProps {
     size?: number
@@ -575,7 +576,13 @@ export function ITO_Loading() {
     )
 }
 
-function ITO_LoadingFailUI({ retryPoolPayload }: { retryPoolPayload: () => void }) {
+function ITO_LoadingFailUI({
+    retryPoolPayload,
+    isConnectMetaMask = false,
+}: {
+    retryPoolPayload: () => void
+    isConnectMetaMask?: boolean
+}) {
     const { t } = useI18N()
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     const classes = useStyles({})
@@ -585,7 +592,7 @@ function ITO_LoadingFailUI({ retryPoolPayload }: { retryPoolPayload: () => void 
             elevation={0}
             style={{ backgroundImage: `url(${PoolBackground})` }}>
             <Typography variant="body1" className={classes.loadingITO}>
-                {t('plugin_ito_loading_failed')}
+                {isConnectMetaMask ? '' : t('plugin_ito_loading_failed')}
             </Typography>
             <ActionButton
                 onClick={retryPoolPayload}
@@ -593,9 +600,18 @@ function ITO_LoadingFailUI({ retryPoolPayload }: { retryPoolPayload: () => void 
                 size="large"
                 color="primary"
                 className={classes.loadingITO_Button}>
-                {t('plugin_ito_loading_try_again')}
+                {isConnectMetaMask ? t('plugin_wallet_connect_to_metamask') : t('plugin_ito_loading_try_again')}
             </ActionButton>
         </Card>
+    )
+}
+
+export function ITO_ConnectMetaMask() {
+    return (
+        <ITO_LoadingFailUI
+            retryPoolPayload={async () => await Services.Ethereum.connectMetaMask()}
+            isConnectMetaMask={true}
+        />
     )
 }
 
