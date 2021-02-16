@@ -85,6 +85,8 @@ export function dispatchCustomEvents<T extends keyof CustomEvents>(
  * @param bytes
  */
 export function pasteImageToActiveElements(bytes: Uint8Array) {
+    console.log(bytes)
+    console.log(Array.from(bytes))
     return dispatchCustomEvents(document.activeElement, 'paste', { type: 'image', value: Array.from(bytes) })
 }
 

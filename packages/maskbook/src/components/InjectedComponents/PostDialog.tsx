@@ -356,7 +356,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     content,
                     target.map((x) => x.identifier),
                     currentIdentity!.identifier,
-                    !!shareToEveryone,
+                    shareToEveryone,
                 )
                 const activeUI = getActivatedUI()
                 // TODO: move into the plugin system
@@ -402,21 +402,21 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
 
                     // TODO:
                     // use dynamic seed
-                /*
-                const seed = '7380309746363496'
-                const seedTypedMessage = makeTypedMessageText('text', seed)
-                const [encrypted] = await Services.Crypto.encryptTo(
-                    seedTypedMessage,
-                    target.map((x) => x.identifier),
-                    currentIdentity!.identifier,
-                    shareToEveryone,
-                )
-                activeUI.taskPasteIntoPostBox(t('additional_post_box__encrypted_post_pre', { encrypted }), {
-                    autoPasteFailedRecover: true,
-                    shouldOpenPostDialog: true,
-                })
-                activeUI.taskUploadShuffledImageToPostBox(imgToEncrypt, seed, {})
-                */
+                    const seed = '7380309746363496'
+                    const message = 'this is a test message'
+                    console.log('content', content)
+                    const seedTypedMessage = makeTypedMessageText(message + '\nIMAGE_SEED=' + seed)
+                    const [encrypted] = await Services.Crypto.encryptTo(
+                        seedTypedMessage,
+                        target.map((x) => x.identifier),
+                        currentIdentity!.identifier,
+                        shareToEveryone,
+                    )
+                    activeUI.taskPasteIntoPostBox(t('additional_post_box__encrypted_post_pre', { encrypted }), {
+                        autoPasteFailedRecover: true,
+                        shouldOpenPostDialog: true,
+                    })
+                    activeUI.taskImageShuffleUploadToPostBox(imgToEncrypt, seed, {})
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
                     if (redPacketMetadata.ok) {
@@ -444,7 +444,17 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                 // there is nothing to write if it shared with public
                 if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayloadEnabled, t, i18n.language],
+            // [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayloadEnabled, t, i18n.language],
+            [
+                currentIdentity,
+                shareToEveryone,
+                typedMessageMetadata,
+                imagePayloadEnabled,
+                imageEncryptEnabled,
+                t,
+                i18n.language,
+                imgToEncrypt,
+            ]
         ),
     )
     const onRequestReset = or(
@@ -493,7 +503,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
         }, []),
     )
     //#endregion
-
     //#region Red Packet
     // TODO: move into the plugin system
     const hasRedPacket = RedPacketMetadataReader(postBoxContent.meta).ok

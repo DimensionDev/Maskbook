@@ -45,6 +45,7 @@ export const Services = {
     Helper: add(() => import('./background-script/HelperService'), 'Helper'),
     Provider: add(() => import('./background-script/ProviderService'), 'Provider'),
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
+    ImageShuffle: add(() => import('./background-script/ImageShuffleService'), 'ImageShuffle'),
 }
 export default Services
 export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', {}, true)

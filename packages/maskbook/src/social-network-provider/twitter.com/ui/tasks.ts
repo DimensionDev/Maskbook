@@ -75,6 +75,46 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
     worker(abortCtr).then(undefined, (e) => fail(e))
 }
 
+
+const taskImageShuffleUploadToPostBox: SocialNetworkUI['taskImageShuffleUploadToPostBox'] = async (
+    image: ArrayBuffer,
+    seed: string,
+    options: Parameters<SocialNetworkUI['taskUploadToPostBox']>[1],
+) => {
+    const { } = options
+    const shuffledImage = new Uint8Array(
+        decodeArrayBuffer(
+            await Services.ImageShuffle.shuffle(encodeArrayBuffer(image), {
+                seed,
+            }),
+        ),
+    )
+
+    // ! race conditions, thus sleep
+    await sleep(500)
+    pasteImageToActiveElements(shuffledImage)
+    await untilDocumentReady()
+    try {
+        // Need a better way to find whether the image is pasted into
+        // throw new Error('auto uploading is undefined')
+    } catch {
+        uploadFail()
+    }
+
+    async function uploadFail() {
+        console.warn('Image not uploaded to the post box')
+        // TODO
+    }
+}
+
+/*
+const taskUploadShuffledImageToPostBox = async (shuffledImage: Uint8Array) => {
+    await sleep(500)
+    pasteImageToActiveElements(shuffledImage)
+    await untilDocumentReady()
+}
+*/
+
 const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text, options) => {
     const { template = 'v2', autoPasteFailedRecover, relatedText } = options
     const { lastRecognizedIdentity } = getActivatedUI()
@@ -157,6 +197,7 @@ export const twitterUITasks: SocialNetworkUITasks = {
     taskPasteIntoPostBox,
     taskOpenComposeBox,
     taskUploadToPostBox,
+    taskImageShuffleUploadToPostBox,
     taskGetPostContent,
     taskGetProfile,
     taskGotoProfilePage,
