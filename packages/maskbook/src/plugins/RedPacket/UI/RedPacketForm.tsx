@@ -62,6 +62,12 @@ const useStyles = makeStyles((theme) =>
             margin: theme.spacing(2, 0),
             padding: 12,
         },
+        selectShrinkLabel: {
+            transform: 'translate(17px, -12px) scale(0.75) !important',
+        },
+        inputShrinkLabel: {
+            transform: 'translate(17px, -3px) scale(0.75) !important',
+        },
     }),
 )
 
@@ -254,6 +260,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         if (!token) return t('plugin_wallet_select_a_token')
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (new BigNumber(shares || '0').isZero()) return 'Enter shares'
+        if (new BigNumber(shares || '0').isGreaterThan(255)) return 'At most 255 recipients'
         if (new BigNumber(amount).isZero()) return 'Enter an amount'
         if (new BigNumber(totalAmount).isGreaterThan(new BigNumber(tokenBalance)))
             return `Insufficient ${token.symbol} balance`
@@ -266,10 +273,15 @@ export function RedPacketForm(props: RedPacketFormProps) {
             <EthereumStatusBar classes={{ root: classes.bar }} />
             <div className={classes.line}>
                 <FormControl className={classes.input} variant="outlined">
-                    <InputLabel>{t('plugin_red_packet_split_mode')}</InputLabel>
+                    <InputLabel className={classes.selectShrinkLabel}>{t('plugin_red_packet_split_mode')}</InputLabel>
                     <Select
                         value={isRandom ? 1 : 0}
-                        onChange={(e) => setIsRandom(e.target.value as number)}
+                        onChange={(e) => {
+                            // foolproof, reset amount since the meaning of amount changed:
+                            //  'total amount' <=> 'amount per share'
+                            setRawAmount('0')
+                            setIsRandom(e.target.value as number)
+                        }}
                         MenuProps={props.SelectMenuProps}>
                         <MenuItem value={0}>{t('plugin_red_packet_average')}</MenuItem>
                         <MenuItem value={1}>{t('plugin_red_packet_random')}</MenuItem>
@@ -287,7 +299,12 @@ export function RedPacketForm(props: RedPacketFormProps) {
                             spellCheck: false,
                         },
                     }}
-                    InputLabelProps={{ shrink: true }}
+                    InputLabelProps={{
+                        shrink: true,
+                        classes: {
+                            shrink: classes.inputShrinkLabel,
+                        },
+                    }}
                     label={t('plugin_red_packet_shares')}
                     value={shares}
                     onChange={onShareChange}
@@ -313,7 +330,12 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 <TextField
                     className={classes.input}
                     onChange={(e) => setMessage(e.target.value)}
-                    InputLabelProps={{ shrink: true }}
+                    InputLabelProps={{
+                        shrink: true,
+                        classes: {
+                            shrink: classes.inputShrinkLabel,
+                        },
+                    }}
                     inputProps={{ placeholder: t('plugin_red_packet_best_wishes') }}
                     label={t('plugin_red_packet_attached_message')}
                     defaultValue={t('plugin_red_packet_best_wishes')}
@@ -344,7 +366,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     {validationMessage}
                 </ActionButton>
             ) : (
-                <ActionButton className={classes.button} fullWidth onClick={createCallback}>
+                <ActionButton variant="contained" className={classes.button} fullWidth onClick={createCallback}>
                     {`Send ${formatBalance(totalAmount, token.decimals ?? 0)} ${token.symbol}`}
                 </ActionButton>
             )}
