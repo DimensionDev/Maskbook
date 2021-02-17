@@ -10,7 +10,7 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import { useClaimCallback } from '../hooks/useClaimCallback'
+import { useSwapCallback } from '../hooks/useSwapCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
@@ -186,7 +186,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     //#endregion
 
     //#region claim
-    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
+    const [claimState, claimCallback, resetClaimCallback] = useSwapCallback(
         payload.pid,
         payload.password,
         claimAmount.toFixed(),

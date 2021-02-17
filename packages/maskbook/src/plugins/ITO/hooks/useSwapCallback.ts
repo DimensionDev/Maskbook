@@ -11,7 +11,7 @@ import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType, TransactionE
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { usePoolPayload } from './usePoolPayload'
 
-export function useClaimCallback(
+export function useSwapCallback(
     id: string,
     password: string,
     total: string,
@@ -21,17 +21,17 @@ export function useClaimCallback(
     const ITO_Contract = useITO_Contract()
 
     const { payload } = usePoolPayload(id)
-    const [claimState, setClaimState] = useTransactionState()
-    const claimCallback = useCallback(async () => {
+    const [swapState, setSwapState] = useTransactionState()
+    const swapCallback = useCallback(async () => {
         if (!ITO_Contract || !payload || !id) {
-            setClaimState({
+            setSwapState({
                 type: TransactionStateType.UNKNOWN,
             })
             return
         }
 
         if (!password) {
-            setClaimState({
+            setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Failed to swap token.'),
             })
@@ -39,7 +39,7 @@ export function useClaimCallback(
         }
 
         if (payload.end_time * 1000 < new Date().getTime()) {
-            setClaimState({
+            setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Pool has expired.'),
             })
@@ -47,7 +47,7 @@ export function useClaimCallback(
         }
 
         // pre-step: start waiting for provider to confirm tx
-        setClaimState({
+        setSwapState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
@@ -57,19 +57,19 @@ export function useClaimCallback(
             value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
         }
 
-        // error: invalid claim amount
+        // error: invalid swap amount
         if (!new BigNumber(total).isPositive()) {
-            setClaimState({
+            setSwapState({
                 type: TransactionStateType.FAILED,
-                error: new Error('Invalid claim amount.'),
+                error: new Error('Invalid swap amount.'),
             })
             return
         }
 
         // error: invalid token
-        const claimTokenAt = payload.exchange_tokens.findIndex((x) => isSameAddress(x.address, token.address))
-        if (claimTokenAt === -1) {
-            setClaimState({
+        const swapTokenAt = payload.exchange_tokens.findIndex((x) => isSameAddress(x.address, token.address))
+        if (swapTokenAt === -1) {
+            setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error(`Unknown ${token.symbol} token.`),
             })
@@ -82,14 +82,14 @@ export function useClaimCallback(
                 from: account,
             })
             if (new BigNumber(availability.remaining).isZero()) {
-                setClaimState({
+                setSwapState({
                     type: TransactionStateType.FAILED,
                     error: new Error('Out of Stock'),
                 })
                 return
             }
         } catch (e) {
-            setClaimState({
+            setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Failed to check availability.'),
             })
@@ -104,7 +104,7 @@ export function useClaimCallback(
             )!,
             account,
             Web3Utils.sha3(account)!,
-            claimTokenAt,
+            swapTokenAt,
             total,
         ]
 
@@ -113,7 +113,7 @@ export function useClaimCallback(
             .swap(...swapParams)
             .estimateGas(config)
             .catch((error: Error) => {
-                setClaimState({
+                setSwapState({
                     type: TransactionStateType.FAILED,
                     error,
                 })
@@ -123,7 +123,7 @@ export function useClaimCallback(
         // step 2-2: blocking
         return new Promise<void>((resolve, reject) => {
             const onSucceed = (no: number, receipt: TransactionReceipt) => {
-                setClaimState({
+                setSwapState({
                     type: TransactionStateType.CONFIRMED,
                     no,
                     receipt,
@@ -131,7 +131,7 @@ export function useClaimCallback(
                 resolve()
             }
             const onFailed = (error: Error) => {
-                setClaimState({
+                setSwapState({
                     type: TransactionStateType.FAILED,
                     error,
                 })
@@ -149,10 +149,10 @@ export function useClaimCallback(
     }, [ITO_Contract, id, password, account, payload, total, token.address])
 
     const resetCallback = useCallback(() => {
-        setClaimState({
+        setSwapState({
             type: TransactionStateType.UNKNOWN,
         })
     }, [])
 
-    return [claimState, claimCallback, resetCallback] as const
+    return [swapState, swapCallback, resetCallback] as const
 }
