@@ -13,6 +13,8 @@ import { usePostInfo } from '../../DataSource/usePostInfo'
 import type { ProfileIdentifier } from '../../../database/type'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 import { ErrorBoundary } from '../../shared/ErrorBoundary'
+import Services from '../../../extension/service'
+import { encodeArrayBuffer, decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { content: TypedMessage }
@@ -61,7 +63,27 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
         if (meta.has('image_seed')) {
             // we are dealing with an encrypted image
             const seed = meta.get('image_seed')
-            console.log('seed', seed)
+            const isseedstr = (value: unknown): value is string =>
+                typeof value === "string" ? true : false;
+            if (isseedstr(seed)) {
+                console.log('seed', seed)
+
+                async () => {
+                    // get image
+                    const image = null
+
+                    // decrypt image
+                    const shuffledImage = new Uint8Array(
+                        decodeArrayBuffer(
+                            await Services.ImageShuffle.shuffle(encodeArrayBuffer(image), { seed, }),
+                        ),
+                    )
+
+                    // replace image
+                }
+            } else {
+                throw Error('seed string shouldn\'t be undefined here...')
+            }
         }
     }
 
