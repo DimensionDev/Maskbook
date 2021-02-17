@@ -1,10 +1,19 @@
+import { useMemo, useState } from 'react'
+import { useWindowScroll, useWindowSize } from 'react-use'
 import { makeStyles, Paper } from '@material-ui/core'
-import { useMemo } from 'react'
-import { useWindowSize } from 'react-use'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { EthereumAccountButton } from '../../web3/UI/EthereumAccountButton'
 import { EthereumMaskBalanceButton } from '../../web3/UI/EthereumMaskBalanceButton'
 import { useStylesExtends } from '../custom-ui-helper'
+
+const STICKY_POSITION = 200
+const STICKY_ANIMATION_DISTANCE = 50
+
+enum ToolbarStatus {
+    DEFAULT,
+    STICKED,
+    COLLAPSED,
+}
 
 const useStyle = makeStyles((theme) => {
     return {
@@ -13,6 +22,19 @@ const useStyle = makeStyles((theme) => {
             height: 54,
             position: 'relative',
             borderBottom: `1px solid ${theme.palette.divider}`,
+        },
+        rootSticky: {
+            transition: 'all 0.3s',
+            zIndex: 1,
+            left: '0 !important',
+            width: '100% !important',
+            position: 'fixed',
+            backgroundColor: theme.palette.background.paper,
+            boxShadow: `${
+                theme.palette.mode === 'dark'
+                    ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
+                    : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
+            }`,
         },
         content: {
             position: 'relative',
@@ -52,6 +74,15 @@ export interface ToolbarProps extends withClasses<never> {}
 export function Toolbar(props: ToolbarProps) {
     const classes = useStylesExtends(useStyle(), props)
 
+    const [float, setFloat] = useState(false)
+    const [collapsed, setCollapsed] = useState(false)
+
+    //#region compute toolbar status according to scroll position
+    const { y } = useWindowScroll()
+    const isSticky = y - STICKY_POSITION > 0
+    //#endregion
+
+    //#region resizing toolbar
     const { width: windowWidth } = useWindowSize()
     const { left, width, menuWidth, mainWidth } = useMemo(() => {
         const menu = document.querySelector<HTMLDivElement>('[role="banner"] > div:first-child > div:first-child')
@@ -65,16 +96,21 @@ export function Toolbar(props: ToolbarProps) {
             mainWidth,
         }
     }, [windowWidth])
+    //#endregion
 
     return (
         <Paper className={classes.root} elevation={0}>
-            <div className={classes.content} style={{ left, width }}>
-                <div className={classes.left} style={{ width: menuWidth }}>
-                    <MaskbookIcon classes={{ root: classes.logo }} />
-                </div>
-                <div className={classes.right} style={{ width: mainWidth }}>
-                    <EthereumMaskBalanceButton classes={{ root: classes.maskButton }} />
-                    <EthereumAccountButton classes={{ root: classes.accountButton }} />
+            <div
+                className={isSticky ? classes.rootSticky : ''}
+                style={{ opacity: isSticky ? (y - STICKY_POSITION) / STICKY_ANIMATION_DISTANCE : 1 }}>
+                <div className={classes.content} style={{ left, width }}>
+                    <div className={classes.left} style={{ width: menuWidth }}>
+                        <MaskbookIcon classes={{ root: classes.logo }} />
+                    </div>
+                    <div className={classes.right} style={{ width: mainWidth }}>
+                        <EthereumMaskBalanceButton classes={{ root: classes.maskButton }} />
+                        <EthereumAccountButton classes={{ root: classes.accountButton }} />
+                    </div>
                 </div>
             </div>
         </Paper>
