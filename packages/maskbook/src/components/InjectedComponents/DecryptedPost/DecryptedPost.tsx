@@ -137,21 +137,55 @@ export function DecryptPost(props: DecryptPostProps) {
                 if (status.type === 'progress') {
                     if (status.progress === 'intermediate_success') refreshProgress(status.data)
                     else if (status.progress === 'iv_decrypted') current.iv.value = status.iv
-                    else if (status.progress === 'payload_decrypted')
+                    else if (status.progress === 'payload_decrypted') {
                         current.decryptedPayloadForImage.value = status.decryptedPayloadForImage
+                    }
                 }
             }
+        }
+
+        function handleImages() {
+            postMetadataImages.forEach((url) => {
+                if (signal.signal.aborted) return
+
+                // TODO: deprecated? it says to use `transformedPostContent`, but that does nothing.
+                current.decryptedPostContent.addListener(content => {
+                    // this will be called when the content associated with this image is ready
+
+                    if (content && content.meta) {
+                        const meta = content.meta;
+                        if (meta.has('image_seed')) {
+                            // we are dealing with an encrypted image
+
+                            const seed = meta.get('image_seed')
+                            const isseedstr = (value: unknown): value is string =>
+                                typeof value === "string" ? true : false;
+
+                            if (isseedstr(seed)) {
+                                // seed contains the seed that the image was encrypted with... now decrypt
+                                console.log('seed', seed)
+
+                                // TODO
+                                // makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI))
+                            }
+                        }
+                    }
+                })
+
+
+            })
         }
 
         if (deconstructedPayload.ok)
             makeProgress(
                 'post text',
                 ServicesWithProgress.decryptFromText(deconstructedPayload.val, postBy, whoAmI, sharedPublic),
-            )
-        postMetadataImages.forEach((url) => {
-            if (signal.signal.aborted) return
-            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI))
-        })
+            ).then(handleImages)
+        else {
+            handleImages()
+        }
+
+
         return () => signal.abort()
     }, [
         current.iv,
