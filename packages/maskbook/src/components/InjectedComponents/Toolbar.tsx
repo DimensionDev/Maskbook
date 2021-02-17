@@ -6,14 +6,8 @@ import { EthereumAccountButton } from '../../web3/UI/EthereumAccountButton'
 import { EthereumMaskBalanceButton } from '../../web3/UI/EthereumMaskBalanceButton'
 import { useStylesExtends } from '../custom-ui-helper'
 
-const STICKY_POSITION = 200
-const STICKY_ANIMATION_DISTANCE = 50
-
-enum ToolbarStatus {
-    DEFAULT,
-    STICKED,
-    COLLAPSED,
-}
+const STICKY_POSITION = 300
+const STICKY_ANIMATION_DISTANCE = 150
 
 const useStyle = makeStyles((theme) => {
     return {
@@ -24,7 +18,6 @@ const useStyle = makeStyles((theme) => {
             borderBottom: `1px solid ${theme.palette.divider}`,
         },
         rootSticky: {
-            transition: 'all 0.3s',
             zIndex: 1,
             left: '0 !important',
             width: '100% !important',
