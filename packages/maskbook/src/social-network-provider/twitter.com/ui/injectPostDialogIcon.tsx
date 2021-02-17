@@ -35,5 +35,3 @@ function PostDialogIconAtTwitter() {
     const onIconClicked = () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'timeline', open: true })
     return <PostDialogIcon classes={classes} onClick={onIconClicked} />
 }
-
-// <div style="height: 64px"></div>
