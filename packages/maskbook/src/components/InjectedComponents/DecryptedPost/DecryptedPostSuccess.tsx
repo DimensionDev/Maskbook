@@ -55,6 +55,16 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
             {t('decrypted_postbox_add_recipients')}
         </Link>
     )
+
+    if (content.meta) {
+        const meta = content.meta;
+        if (meta.has('image_seed')) {
+            // we are dealing with an encrypted image
+            const seed = meta.get('image_seed')
+            console.log('seed', seed)
+        }
+    }
+
     return (
         <>
             {shareMenu.ShareMenu}
