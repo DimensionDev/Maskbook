@@ -42,6 +42,7 @@ export const Flags = {
     election2020_composition_dialog_enabled: false,
     COTM_enabled: webOnly,
     COTM_composition_dialog_enabled: false,
+    mask_ito_enabled: betaOrInsiderOnly,
     metamask_support_enabled: webOnly,
     //#endregion
 
