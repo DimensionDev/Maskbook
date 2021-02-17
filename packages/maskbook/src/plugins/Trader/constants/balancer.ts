@@ -8,5 +8,7 @@ export const BALANCER_SOR_GAS_PRICE = new BigNumber('25000000000')
 // This determines the max no of pools the SOR will use to swap.
 export const BALANCER_MAX_NO_POOLS = 4
 
-export const BALANCER_SWAP_EXACT_IN = 'swapExactIn'
-export const BALANCER_SWAP_EXACT_OUT = 'swapExactOut'
+export enum BALANCER_SWAP_TYPE {
+    EXACT_IN = 'swapExactIn',
+    EXACT_OUT = 'swapExactOut',
+}
