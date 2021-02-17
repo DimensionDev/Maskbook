@@ -179,7 +179,7 @@ export function DecryptPost(props: DecryptPostProps) {
                                 const image = null
 
                                 // decrypt image
-                                const shuffledImage = new Uint8Array(
+                                const deShuffledImage = new Uint8Array(
                                     decodeArrayBuffer(
                                         await Services.ImageShuffle.deshuffle(image, { seed, }),
                                     ),
