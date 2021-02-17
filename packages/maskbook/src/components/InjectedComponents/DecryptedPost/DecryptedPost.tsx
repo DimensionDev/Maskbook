@@ -19,6 +19,11 @@ import { Err, Ok } from 'ts-results'
 import { or } from '../../custom-ui-helper'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 import type { Payload } from '../../../utils/type-transform/Payload'
+import {
+    encodeArrayBuffer,
+    decodeArrayBuffer,
+} from '../../../utils/type-transform/String-ArrayBuffer'
+import Services from '../../../extension/service'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
@@ -148,10 +153,13 @@ export function DecryptPost(props: DecryptPostProps) {
             postMetadataImages.forEach((url) => {
                 if (signal.signal.aborted) return
 
-                // TODO: deprecated? it says to use `transformedPostContent`, but that does nothing.
-                current.decryptedPostContent.addListener(content => {
-                    // this will be called when the content associated with this image is ready
+                // decrypt steganography images to text
+                makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI))
 
+                // decrypt encrypted images
+                // TODO: deprecated? it says to use `transformedPostContent`, but that does nothing.
+                current.decryptedPostContent.addListener(async content => {
+                    // this will be called when the content associated with this image is ready
                     if (content && content.meta) {
                         const meta = content.meta;
                         if (meta.has('image_seed')) {
@@ -164,15 +172,25 @@ export function DecryptPost(props: DecryptPostProps) {
                             if (isseedstr(seed)) {
                                 // seed contains the seed that the image was encrypted with... now decrypt
                                 console.log('seed', seed)
+                                console.log('url', url)
 
+                                // get image
                                 // TODO
-                                // makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI))
+                                const image = null
+
+                                // decrypt image
+                                const shuffledImage = new Uint8Array(
+                                    decodeArrayBuffer(
+                                        await Services.ImageShuffle.deshuffle(image, { seed, }),
+                                    ),
+                                )
+
+                                // replace image visually
+                                // TODO
                             }
                         }
-                    }
+                    } 
                 })
-
-
             })
         }
 
