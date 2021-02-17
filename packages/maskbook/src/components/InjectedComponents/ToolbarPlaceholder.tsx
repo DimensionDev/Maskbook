@@ -7,13 +7,13 @@ export interface ToolbarPlaceholderProps {
 }
 
 export function ToolbarPlaceholder(props: ToolbarPlaceholderProps) {
-    const { expectedFactor = 1, expectedHeight = 64 } = props
+    const { expectedFactor = 1, expectedHeight = 54 } = props
     const { y } = useWindowScroll()
 
     return (
         <div
             style={{
-                height: Math.max(0, ((expectedHeight ?? 64) - y) * expectedFactor),
+                height: Math.max(0, ((expectedHeight ?? 54) - y) * expectedFactor),
                 ...props.style,
             }}
         />
