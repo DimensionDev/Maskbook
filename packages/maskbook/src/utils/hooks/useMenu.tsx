@@ -20,6 +20,9 @@ export function useMenu(menus: (JSX.Element | undefined)[], anchorSibling = fals
             } else {
                 element = anchorElOrEvent.currentTarget
             }
+
+            // when the essential content of currentTarget would be closed over,
+            //  we can set the anchorEl with currentTarget's bottom sibling to avoid it.
             anchorElRef.current = anchorSibling ? (element.nextElementSibling as HTMLElement) ?? undefined : element
             setOpen(true)
         }, []),
