@@ -3,7 +3,9 @@ import { useStylesExtends } from '../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
-        root: {},
+        root: {
+            borderRadius: 16,
+        },
     })
 })
 

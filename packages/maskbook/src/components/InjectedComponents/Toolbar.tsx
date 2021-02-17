@@ -1,10 +1,8 @@
 import { makeStyles, Paper } from '@material-ui/core'
 import { useMemo } from 'react'
 import { useWindowSize } from 'react-use'
-import { MaskbookLogo } from '../../extension/options-page/DashboardComponents/MaskbookLogo'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { EthereumAccountButton } from '../../web3/UI/EthereumAccountButton'
-import { EthereumEtherBalanceButton } from '../../web3/UI/EthereumEtherBalanceButton'
 import { EthereumMaskBalanceButton } from '../../web3/UI/EthereumMaskBalanceButton'
 import { useStylesExtends } from '../custom-ui-helper'
 
@@ -23,14 +21,29 @@ const useStyle = makeStyles((theme) => {
             alignItems: 'center',
         },
         left: {
+            display: 'flex',
+            justifyContent: 'center',
             padding: '0 10px',
             boxSizing: 'border-box',
+            ['@media (min-width: 600)']: {
+                padding: '0 5px',
+            },
         },
-        right: {},
+        right: {
+            display: 'flex',
+            alignItems: 'center',
+        },
         logo: {
             width: 36,
             height: 36,
         },
+        accountButton: {
+            marginLeft: theme.spacing(1),
+        },
+        maskButton: {
+            marginRight: theme.spacing(1),
+        },
+        etherButton: {},
     }
 })
 
@@ -60,9 +73,8 @@ export function Toolbar(props: ToolbarProps) {
                     <MaskbookIcon classes={{ root: classes.logo }} />
                 </div>
                 <div className={classes.right} style={{ width: mainWidth }}>
-                    <EthereumAccountButton />
-                    <EthereumMaskBalanceButton />
-                    <EthereumEtherBalanceButton />
+                    <EthereumMaskBalanceButton classes={{ root: classes.maskButton }} />
+                    <EthereumAccountButton classes={{ root: classes.accountButton }} />
                 </div>
             </div>
         </Paper>
