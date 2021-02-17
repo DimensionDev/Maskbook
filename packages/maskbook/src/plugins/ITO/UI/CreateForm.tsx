@@ -139,6 +139,7 @@ export function CreateForm(props: CreateFormProps) {
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
         onChangePoolSettings({
+            isMask: isMaskITO,
             // this is the raw password which should be signed by the sender
             password: Web3Utils.sha3(`${message}`) ?? '',
             name: senderName,
@@ -154,6 +155,7 @@ export function CreateForm(props: CreateFormProps) {
             endTime: endTime,
         })
     }, [
+        isMaskITO,
         senderName,
         message,
         totalOfPerWallet,
