@@ -91,7 +91,6 @@ export async function shuffle(buf: string | ArrayBuffer, { seed, blockWidth = DE
         const r = rand(0, blockNum - 1, prng) // might need to use rand(0, blockNum) depending on what the "off-by-one" error means
         swapPixelBlocks(imageData, { blockWidth, blockIx1: blockNum, blockIx2: r })
     }
-    console.log('finished shuffling')
     return encodeArrayBuffer(await img2Buf(imageData))
 }
 

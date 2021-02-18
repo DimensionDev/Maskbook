@@ -78,11 +78,6 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
     }, [message])
 
     if (imgData.isImg) {
-        console.log(imgData)
-
-        console.log(message)
-        console.log(props)
-
         return (
             <Card variant="outlined" className={classes.root} elevation={0} onClick={stop}>
                 {/* <header className={classes.content}>{header}</header> */}
