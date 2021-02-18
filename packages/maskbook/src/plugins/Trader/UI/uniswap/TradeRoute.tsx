@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import { Box, Breadcrumbs, Typography, makeStyles, createStyles, Paper, AvatarGroup } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
@@ -24,7 +23,7 @@ const useStyles = makeStyles((theme) =>
         },
         name: {
             fontSize: 12,
-            marginRight: theme.spacing(1.5),
+            marginLeft: theme.spacing(1),
         },
     }),
 )
@@ -54,14 +53,14 @@ export function TradeRoute(props: TradeRouteProps) {
                         max={8}>
                         {tokens.map((token) => {
                             return (
-                                <Fragment key={token.address}>
+                                <Box display="flex" alignItems="center" key={token.address}>
                                     <TokenIcon address={token.address} name={token.name} />
                                     {tokens.length === 1 ? (
                                         <Typography className={classes.name}>
                                             {token.symbol ?? token.name ?? formatEthereumAddress(token.address, 2)}
                                         </Typography>
                                     ) : null}
-                                </Fragment>
+                                </Box>
                             )
                         })}
                     </AvatarGroup>

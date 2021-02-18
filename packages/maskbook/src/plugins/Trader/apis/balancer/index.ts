@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { memoize, debounce } from 'lodash-es'
+import { memoize } from 'lodash-es'
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { getChainId } from '../../../../extension/background-script/EthereumService'
@@ -9,57 +9,37 @@ import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE, TRAD
 import { CONSTANTS } from '../../../../web3/constants'
 import type { Route } from '../../types'
 
-//#region the pools cache management
-const fetchedCache = new Map<ChainId, string>()
-
-function getCacheKeyFromDate() {
-    const date = new Date()
-    // stale all pools each 24 hours
-    return `${date.getFullYear()}_${date.getDate()}`
-}
-
-function isFetchedCacheExpired(chainId: ChainId) {
-    return (fetchedCache.get(chainId) ?? '') !== getCacheKeyFromDate()
-}
-
-function updateFetchedCache(chainId: ChainId) {
-    fetchedCache.set(chainId, getCacheKeyFromDate())
-}
-//#endregion
-
-const createSOR = memoize(
-    (chainId: ChainId) => {
-        const provider = new JsonRpcProvider(getConstant(CONSTANTS, 'INFURA_ADDRESS', chainId))
-        const poolsUrl = getConstant(TRADE_CONSTANTS, 'BALANCER_POOLS_URL', chainId)
-        return new SOR(
-            provider,
+//#region create cached SOR
+const createSOR_ = memoize(
+    (chainId: ChainId) =>
+        new SOR(
+            new JsonRpcProvider(getConstant(CONSTANTS, 'INFURA_ADDRESS', chainId)),
             BALANCER_SOR_GAS_PRICE,
             BALANCER_MAX_NO_POOLS,
             chainId,
-            `${poolsUrl}?timestamp=${Date.now()}`,
-        )
-    },
+            '', // set pools url later
+        ),
     (chainId: ChainId) => String(chainId),
 )
 
-export async function getPools() {
-    const chainId = await getChainId()
-    const sor = createSOR(chainId)
+function createSOR(chainId: ChainId) {
+    const sor = createSOR_(chainId)
 
-    if (!sor.isAllFetched) {
-        await sor.fetchPools()
-        updateFetchedCache(chainId)
-    }
-    return sor.onChainCache.pools
+    // update pools url when sor object was created or reused
+    sor.poolsUrl = `${getConstant(TRADE_CONSTANTS, 'BALANCER_POOLS_URL', chainId)}?timestamp=${Date.now()}`
+
+    return sor
 }
+//#endregion
 
 export async function updatePools(force = false) {
     const chainId = await getChainId()
     const sor = createSOR(chainId)
 
+    // this fetches all pools list from URL in constructor then onChain balances using Multicall
     if (!sor.isAllFetched || force) {
+        sor.poolsUrl = `${getConstant(TRADE_CONSTANTS, 'BALANCER_POOLS_URL', chainId)}?timestamp=${Date.now()}`
         await sor.fetchPools()
-        updateFetchedCache(chainId)
     }
 }
 
@@ -72,14 +52,8 @@ export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALA
     // defaults to 0 if not called or can be set manually using: await sor.setCostOutputToken(tokenOut, manualPriceBn)
     await sor.setCostOutputToken(tokenOut)
 
-    // this fetches all pools list from URL in constructor then onChain balances using Multicall
-    if (!sor.isAllFetched) {
-        await sor.fetchPools()
-        updateFetchedCache(chainId)
-    }
-
-    // if sor is expired then update in the non-blocking way
-    if (sor.isAllFetched && isFetchedCacheExpired(chainId)) sor.fetchPools().then(() => updateFetchedCache(chainId))
+    // update pools if necessary
+    updatePools()
 
     // get swaps from chain
     const [swaps, tradeAmount, spotPrice] = await sor.getSwaps(tokenIn, tokenOut, swapType, new BigNumber(amount))
