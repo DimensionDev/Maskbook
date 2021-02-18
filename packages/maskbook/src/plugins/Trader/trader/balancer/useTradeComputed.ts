@@ -22,12 +22,6 @@ export function useTradeComputed(
             ? new BigNumber(inputAmount).div(tradeAmount).times('1e18').div(spotPrice).minus(1)
             : new BigNumber(tradeAmount).div(outputAmount).times('1e18').div(spotPrice).minus(1)
 
-        console.log('DEBUG: use trade computed')
-        console.log({
-            swaps: swaps_,
-            routes,
-        })
-
         return {
             strategy,
             inputAmount: isExactIn ? new BigNumber(inputAmount) : new BigNumber(tradeAmount),

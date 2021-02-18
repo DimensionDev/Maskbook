@@ -1,31 +1,23 @@
 import classNames from 'classnames'
 import {
-    Box,
     Breadcrumbs,
-    Typography,
     makeStyles,
     createStyles,
     Paper,
-    AvatarGroup,
     TableContainer,
     Table,
     TableHead,
     TableRow,
     TableCell,
     TableBody,
-    Link,
-    Button,
-    ButtonBase,
-    Chip,
 } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
-import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { SwapResponse, TradeComputed, TradeProvider } from '../../types'
-import { formatEthereumAddress, formatPercentage } from '../../../Wallet/formatter'
-import { resolveTradePairLink } from '../../pipes'
+import type { SwapResponse, TradeComputed } from '../../types'
+import { formatPercentage } from '../../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../../utils/i18n-next-ui'
+import { TradeRouteHop } from './TradeRouteHop'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -74,7 +66,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface TradeRouteProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface TradeRouteProps extends withClasses<never> {
     trade: TradeComputed<SwapResponse>
 }
 
@@ -104,39 +96,9 @@ export function TradeRoute(props: TradeRouteProps) {
                                 <Breadcrumbs
                                     classes={{ ol: classes.list, li: classes.item }}
                                     separator={<NavigateNextIcon fontSize="small" />}>
-                                    {route.hops.map((hop) => {
-                                        return (
-                                            <div className={classes.button}>
-                                                <AvatarGroup
-                                                    sx={{
-                                                        display: 'inline-flex',
-                                                        alignItems: 'center',
-                                                    }}
-                                                    max={8}>
-                                                    <Link
-                                                        className={classes.link}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        href={resolveTradePairLink(
-                                                            TradeProvider.BALANCER,
-                                                            hop.pool.address,
-                                                        )}
-                                                        key={hop.pool.address}>
-                                                        {hop.pool.tokens.map((token) => {
-                                                            return (
-                                                                <Box
-                                                                    display="flex"
-                                                                    alignItems="center"
-                                                                    key={token.address}>
-                                                                    <TokenIcon address={token.address} />
-                                                                </Box>
-                                                            )
-                                                        })}
-                                                    </Link>
-                                                </AvatarGroup>
-                                            </div>
-                                        )
-                                    })}
+                                    {route.hops.map((hop) => (
+                                        <TradeRouteHop key={hop.pool.address} hop={hop} />
+                                    ))}
                                 </Breadcrumbs>
                             </TableCell>
                             <TableCell className={classes.cell} align="right">
