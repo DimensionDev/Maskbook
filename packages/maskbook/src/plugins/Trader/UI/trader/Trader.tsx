@@ -191,23 +191,6 @@ export function Trader(props: TraderProps) {
     )
     //#endregion
 
-    //#region approve
-    const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(trade, provider, inputToken)
-    const [approveState, , approveCallback] = useERC20TokenApproveCallback(
-        approveToken?.address ?? '',
-        approveAmount,
-        approveAddress,
-    )
-    const onApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
-        await approveCallback()
-    }, [approveState, approveCallback])
-    const onExactApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
-        await approveCallback(true)
-    }, [approveState, approveCallback])
-    //#endregion
-
     //#region blocking (swap)
     const [tradeState, tradeCallback, resetTradeCallback] = useTradeCallback(provider, trade)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
@@ -228,11 +211,10 @@ export function Trader(props: TraderProps) {
     }, 30 /* seconds */ * 1000 /* milliseconds */)
 
     const onRefreshClick = useCallback(async () => {
-        if (approveState === ApproveState.PENDING) return
         await Services.Ethereum.updateChainState()
         asyncTradeComputed.retry()
         resetTimeout()
-    }, [approveState, asyncTradeComputed.retry, resetTimeout])
+    }, [asyncTradeComputed.retry, resetTimeout])
     //#endregion
 
     //#region remote controlled transaction dialog
@@ -290,8 +272,8 @@ export function Trader(props: TraderProps) {
     return (
         <div className={classes.root}>
             <TradeForm
-                approveState={approveState}
                 trade={trade}
+                provider={provider}
                 strategy={strategy}
                 loading={asyncTradeComputed.loading}
                 inputToken={inputToken}
@@ -305,8 +287,6 @@ export function Trader(props: TraderProps) {
                 onReverseClick={onReverseClick}
                 onRefreshClick={onRefreshClick}
                 onTokenChipClick={onTokenChipClick}
-                onApprove={onApprove}
-                onExactApprove={onExactApprove}
                 onSwap={() => setOpenConfirmDialog(true)}
             />
             {trade && inputToken && outputToken ? (

@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react'
-import { makeStyles, createStyles, Typography, DialogContent, Link, Grid } from '@material-ui/core'
+import { makeStyles, createStyles, Typography, DialogContent, Link } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { Trans } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
@@ -9,12 +9,9 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { ChainId, EthereumTokenType, EtherTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useConstant } from '../../../web3/hooks/useConstant'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
+import { useChainId } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useDonateCallback } from '../hooks/useDonateCallback'
-import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
-import { GITCOIN_CONSTANT } from '../constants'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -29,6 +26,10 @@ import { getActivatedUI } from '../../../social-network/ui'
 import { PluginGitcoinMessages } from '../messages'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { useConstant } from '../../../web3/hooks/useConstant'
+import { GITCOIN_CONSTANT } from '../constants'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -67,7 +68,7 @@ export function DonateDialog(props: DonateDialogProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
+    const BULK_CHECKOUT_ADDRESS = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
 
     //#region remote controlled dialog
     const [open, setDonationDialogOpen] = useRemoteControlledDialog(
@@ -128,25 +129,6 @@ export function DonateDialog(props: DonateDialogProps) {
             open: true,
         })
     }, [setSelectProviderDialogOpen])
-    //#endregion
-
-    //#region approve
-    const BULK_CHECKOUT_ADDRESS = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
-    const [approveState, , approveCallback] = useERC20TokenApproveCallback(
-        token?.type === EthereumTokenType.ERC20 ? token.address : '',
-        amount.toFixed(),
-        BULK_CHECKOUT_ADDRESS,
-    )
-
-    const onApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
-        await approveCallback()
-    }, [approveState, approveCallback])
-    const onExactApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
-        await approveCallback(true)
-    }, [approveState, approveCallback])
-    const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
     //#endregion
 
     //#region blocking
@@ -247,87 +229,21 @@ export function DonateDialog(props: DonateDialogProps) {
                             }}
                         />
                     </Typography>
-
-                    <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                        {approveRequired ? (
-                            approveState === ApproveState.PENDING ? (
-                                <Grid item xs={12}>
-                                    <ActionButton
-                                        className={classes.button}
-                                        fullWidth
-                                        variant="contained"
-                                        size="large"
-                                        disabled={approveState === ApproveState.PENDING}>
-                                        {`Unlocking ${token.symbol ?? 'Token'}…`}
-                                    </ActionButton>
-                                </Grid>
-                            ) : (
-                                <>
-                                    <Grid item xs={6}>
-                                        <ActionButton
-                                            className={classes.button}
-                                            fullWidth
-                                            variant="contained"
-                                            size="large"
-                                            onClick={onExactApprove}>
-                                            {approveState === ApproveState.NOT_APPROVED
-                                                ? t('plugin_wallet_token_unlock', {
-                                                      balance: formatBalance(amount, token.decimals ?? 0, 2),
-                                                      symbol: token.symbol ?? 'Token',
-                                                  })
-                                                : ''}
-                                        </ActionButton>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <ActionButton
-                                            className={classes.button}
-                                            fullWidth
-                                            variant="contained"
-                                            size="large"
-                                            onClick={onApprove}>
-                                            {approveState === ApproveState.NOT_APPROVED
-                                                ? t('plugin_wallet_token_infinite_unlock')
-                                                : ''}
-                                        </ActionButton>
-                                    </Grid>
-                                </>
-                            )
-                        ) : (
-                            <Grid item xs={12}>
-                                {!account ? (
-                                    <ActionButton
-                                        className={classes.button}
-                                        fullWidth
-                                        variant="contained"
-                                        size="large"
-                                        onClick={onConnect}>
-                                        {t('plugin_wallet_connect_a_wallet')}
-                                    </ActionButton>
-                                ) : !chainIdValid ? (
-                                    <ActionButton
-                                        className={classes.button}
-                                        fullWidth
-                                        disabled
-                                        variant="contained"
-                                        size="large">
-                                        {t('plugin_wallet_invalid_network')}
-                                    </ActionButton>
-                                ) : validationMessage ? (
-                                    <ActionButton className={classes.button} fullWidth variant="contained" disabled>
-                                        {validationMessage}
-                                    </ActionButton>
-                                ) : (
-                                    <ActionButton
-                                        className={classes.button}
-                                        fullWidth
-                                        onClick={donateCallback}
-                                        variant="contained">
-                                        {t('plugin_gitcoin_donate')}
-                                    </ActionButton>
-                                )}
-                            </Grid>
-                        )}
-                    </Grid>
+                    <EthereumWalletConnectedBoundary>
+                        <EthereumERC20TokenApprovedBoundary
+                            amount={amount.toFixed()}
+                            spender={BULK_CHECKOUT_ADDRESS}
+                            token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
+                            <ActionButton
+                                className={classes.button}
+                                fullWidth
+                                disabled={!!validationMessage}
+                                onClick={donateCallback}
+                                variant="contained">
+                                {validationMessage || t('plugin_gitcoin_donate')}
+                            </ActionButton>
+                        </EthereumERC20TokenApprovedBoundary>
+                    </EthereumWalletConnectedBoundary>
                 </DialogContent>
             </InjectedDialog>
         </div>

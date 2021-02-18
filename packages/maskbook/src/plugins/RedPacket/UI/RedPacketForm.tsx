@@ -11,10 +11,11 @@ import {
 } from '@material-ui/core'
 import { omit } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
+import BigNumber from 'bignumber.js'
+
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { formatBalance } from '../../Wallet/formatter'
-import BigNumber from 'bignumber.js'
 import {
     RED_PACKET_MIN_SHARES,
     RED_PACKET_MAX_SHARES,
@@ -39,7 +40,8 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { SelectTokenDialog } from '../../Ethereum/UI/SelectTokenDialog'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -86,6 +88,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const account = useAccount()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
+    const RED_PACKET_ADDRESS = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
 
     //#region select token
     const { value: etherTokenDetailed } = useEtherTokenDetailed()
@@ -143,20 +146,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
         token?.type ?? EthereumTokenType.Ether,
         token?.address ?? '',
     )
-    //#endregion
-
-    //#region approve ERC20
-    const HappyRedPacketContractAddress = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
-    const [approveState, , approveCallback] = useERC20TokenApproveCallback(
-        token?.type === EthereumTokenType.ERC20 ? token.address : '',
-        amount.toFixed(),
-        HappyRedPacketContractAddress,
-    )
-    const onApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
-        await approveCallback()
-    }, [approveState, approveCallback])
-    const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
     //#endregion
 
     //#region blocking
@@ -341,35 +330,16 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     defaultValue={t('plugin_red_packet_best_wishes')}
                 />
             </div>
-
-            {!account ? (
-                <ActionButton className={classes.button} fullWidth variant="contained" size="large" onClick={onConnect}>
-                    {t('plugin_wallet_connect_a_wallet')}
-                </ActionButton>
-            ) : !chainIdValid ? (
-                <ActionButton className={classes.button} disabled fullWidth variant="contained" size="large">
-                    {t('plugin_wallet_invalid_network')}
-                </ActionButton>
-            ) : approveRequired ? (
-                <ActionButton
-                    className={classes.button}
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    disabled={approveState === ApproveState.PENDING}
-                    onClick={onApprove}>
-                    {approveState === ApproveState.NOT_APPROVED ? `Approve ${token.symbol}` : ''}
-                    {approveState === ApproveState.PENDING ? `Approve... ${token.symbol}` : ''}
-                </ActionButton>
-            ) : validationMessage ? (
-                <ActionButton className={classes.button} fullWidth variant="contained" disabled>
-                    {validationMessage}
-                </ActionButton>
-            ) : (
-                <ActionButton variant="contained" className={classes.button} fullWidth onClick={createCallback}>
-                    {`Send ${formatBalance(totalAmount, token.decimals ?? 0)} ${token.symbol}`}
-                </ActionButton>
-            )}
+            <EthereumWalletConnectedBoundary>
+                <EthereumERC20TokenApprovedBoundary
+                    amount={amount.toFixed()}
+                    token={token?.type === EthereumTokenType.ERC20 ? token : undefined}
+                    spender={RED_PACKET_ADDRESS}>
+                    <ActionButton className={classes.button} fullWidth onClick={createCallback}>
+                        {validationMessage || `Send ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`}
+                    </ActionButton>
+                </EthereumERC20TokenApprovedBoundary>
+            </EthereumWalletConnectedBoundary>
         </>
     )
 }
