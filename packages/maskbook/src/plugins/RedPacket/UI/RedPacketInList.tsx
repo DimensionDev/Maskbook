@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js'
 import { Skeleton } from '@material-ui/core'
 import classNames from 'classnames'
 import { ListItem, ListItemText, makeStyles, Theme, Typography, Box } from '@material-ui/core'
+import { Trans } from 'react-i18next'
 import type { RedPacketJSONPayload, RedPacket_InMask_Record } from '../types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -239,28 +240,34 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                         value={100 * (1 - Number(payload.total_remaining) / Number(payload.total))}
                     />
                     <section className={classes.footer}>
-                        <Typography
-                            variant="body1"
-                            className={classNames(classes.footerInfo, classes.message)}
-                            dangerouslySetInnerHTML={{
-                                __html: t('plugin_red_packet_history_claimed', {
+                        <Typography variant="body1" className={classNames(classes.footerInfo, classes.message)}>
+                            <Trans
+                                i18nKey="plugin_red_packet_history_claimed"
+                                components={{
+                                    strong: <strong />,
+                                }}
+                                values={{
                                     claimedShares: payload.claimers.length,
                                     shares: payload.shares,
-                                }),
-                            }}></Typography>
-                        <Typography
-                            variant="body1"
-                            className={classNames(classes.footerInfo, classes.message)}
-                            dangerouslySetInnerHTML={{
-                                __html: t('plugin_red_packet_history_total_claimed_amount', {
+                                }}
+                            />
+                        </Typography>
+                        <Typography variant="body1" className={classNames(classes.footerInfo, classes.message)}>
+                            <Trans
+                                i18nKey="plugin_red_packet_history_total_claimed_amount"
+                                components={{
+                                    strong: <strong />,
+                                }}
+                                values={{
                                     amount: formatBalance(new BigNumber(payload.total), payload.token.decimals),
                                     claimedAmount: formatBalance(
                                         new BigNumber(payload.total).minus(new BigNumber(payload.total_remaining)),
                                         payload.token.decimals,
                                     ),
                                     symbol: payload.token.symbol,
-                                }),
-                            }}></Typography>
+                                }}
+                            />
+                        </Typography>
                     </section>
                 </Box>
             </Box>
