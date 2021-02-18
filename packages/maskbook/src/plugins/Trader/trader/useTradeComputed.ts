@@ -22,17 +22,13 @@ export function useTradeComputed(
     const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
 
-    // uniswap || sushiswap || sashimiswap
+    // uniswap like providers
     const uniswap_ = useUniswapTrade(
         strategy,
-        provider === TradeProvider.UNISWAP ||
-            provider === TradeProvider.SUSHISWAP ||
-            provider === TradeProvider.SASHIMISWAP
+        [TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider)
             ? inputAmount_
             : '0',
-        provider === TradeProvider.UNISWAP ||
-            provider === TradeProvider.SUSHISWAP ||
-            provider === TradeProvider.SASHIMISWAP
+        [TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider)
             ? outputAmount_
             : '0',
         inputToken,
