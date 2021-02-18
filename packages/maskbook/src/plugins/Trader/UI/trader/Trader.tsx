@@ -216,6 +216,8 @@ export function Trader(props: TraderProps) {
 
     //#region refresh pairs
     const [, , resetTimeout] = useTimeoutFn(() => {
+        // FIXME:
+        // cannot update on refresh click callback
         onRefreshClick()
     }, 30 /* seconds */ * 1000 /* milliseconds */)
 
