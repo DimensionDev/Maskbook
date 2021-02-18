@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Box, TextField, Grid } from '@material-ui/core'
+import { createStyles, makeStyles, Box, TextField, Grid, FormControlLabel, Checkbox } from '@material-ui/core'
 import React, { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
@@ -23,11 +23,13 @@ import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowR
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         line: {
             margin: theme.spacing(1),
+            paddingBottom: theme.spacing(2),
             display: 'flex',
         },
         flow: {
@@ -77,6 +79,7 @@ export function CreateForm(props: CreateFormProps) {
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
 
+    const [isMaskITO, setIsMaskITO] = useState(false)
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
         new BigNumber(origin?.limit || '0').isZero()
@@ -129,10 +132,15 @@ export function CreateForm(props: CreateFormProps) {
         }
     }, [])
 
+    const onCheckboxChange = useCallback(() => {
+        setIsMaskITO((x) => !x)
+    }, [])
+
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
         onChangePoolSettings({
+            isMask: isMaskITO,
             // this is the raw password which should be signed by the sender
             password: Web3Utils.sha3(`${message}`) ?? '',
             name: senderName,
@@ -148,6 +156,7 @@ export function CreateForm(props: CreateFormProps) {
             endTime: endTime,
         })
     }, [
+        isMaskITO,
         senderName,
         message,
         totalOfPerWallet,
@@ -279,6 +288,16 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.date}>
                 {StartTime} {EndTime}
             </Box>
+            {Flags.mask_ito_enabled ? (
+                <Box className={classes.line} justifyContent="flex-end">
+                    <FormControlLabel
+                        control={
+                            <Checkbox checked={isMaskITO} onChange={onCheckboxChange} name="mask_ito" color="primary" />
+                        }
+                        label="Is Mask ITO?"
+                    />
+                </Box>
+            ) : null}
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary

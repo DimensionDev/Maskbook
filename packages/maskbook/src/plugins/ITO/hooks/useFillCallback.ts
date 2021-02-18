@@ -13,8 +13,11 @@ import { ITO_CONSTANTS, ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import Services from '../../../extension/service'
 import { useChainId } from '../../../web3/hooks/useChainState'
+import { useMaskITO_Contract } from '../contracts/useMaskITO_Contarct'
+import type { ITO } from '../../../contracts/ITO'
 
 export interface PoolSettings {
+    isMask: boolean
     password: string
     startTime: Date
     endTime: Date
@@ -31,6 +34,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
     const account = useAccount()
     const chainId = useChainId()
     const ITO_Contract = useITO_Contract()
+    const MaskITO_Contract = useMaskITO_Contract()
     const DEFAULT_QUALIFICATION_ADDRESS = useConstant(ITO_CONSTANTS, 'DEFAULT_QUALIFICATION_ADDRESS')
     const [fillState, setFillState] = useTransactionState()
     const [fillSettings, setFillSettings] = useState(poolSettings)
@@ -44,6 +48,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         }
 
         const {
+            isMask,
             password,
             startTime,
             endTime,
@@ -56,7 +61,9 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             exchangeTokens: exchangeTokensUnsorted,
         } = poolSettings
 
-        if (!token || !ITO_Contract) {
+        const contract = isMask ? MaskITO_Contract : ITO_Contract
+
+        if (!token || !contract) {
             setFillState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -192,10 +199,10 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         const config: Tx = {
             from: account,
-            to: ITO_Contract.options.address,
+            to: contract.options.address,
             value: '0',
         }
-        const params: Parameters<typeof ITO_Contract['methods']['fill_pool']> = [
+        const params: Parameters<ITO['methods']['fill_pool']> = [
             Web3Utils.sha3(signedPassword)!,
             startTime_,
             endTime_,
@@ -210,7 +217,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         ]
 
         // step 1: estimate gas
-        const estimatedGas = await ITO_Contract.methods
+        const estimatedGas = await contract.methods
             .fill_pool(...params)
             .estimateGas(config)
             .catch((error: Error) => {
@@ -223,7 +230,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         // step 2: blocking
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = ITO_Contract.methods.fill_pool(...params).send({
+            const promiEvent = contract.methods.fill_pool(...params).send({
                 gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                 ...config,
             })
@@ -250,7 +257,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                 reject(error)
             })
         })
-    }, [account, chainId, ITO_Contract, DEFAULT_QUALIFICATION_ADDRESS, poolSettings])
+    }, [account, chainId, ITO_Contract, MaskITO_Contract, DEFAULT_QUALIFICATION_ADDRESS, poolSettings])
 
     const resetCallback = useCallback(() => {
         setFillState({
