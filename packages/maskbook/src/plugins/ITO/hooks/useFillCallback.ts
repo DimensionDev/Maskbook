@@ -202,7 +202,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             to: contract.options.address,
             value: '0',
         }
-        const params = [
+        const params: Parameters<ITO['methods']['fill_pool']> = [
             Web3Utils.sha3(signedPassword)!,
             startTime_,
             endTime_,
@@ -214,7 +214,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             total,
             limit,
             DEFAULT_QUALIFICATION_ADDRESS,
-        ] as Parameters<ITO['methods']['fill_pool']>
+        ]
 
         // step 1: estimate gas
         const estimatedGas = await contract.methods
