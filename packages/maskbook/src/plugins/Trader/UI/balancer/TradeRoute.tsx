@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import {
     Box,
     Breadcrumbs,
@@ -13,13 +14,18 @@ import {
     TableCell,
     TableBody,
     Link,
+    Button,
+    ButtonBase,
+    Chip,
 } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { SwapResponse, TradeComputed, TradeProvider } from '../../types'
-import { formatEthereumAddress } from '../../../Wallet/formatter'
+import { formatEthereumAddress, formatPercentage } from '../../../Wallet/formatter'
 import { resolveTradePairLink } from '../../pipes'
+import BigNumber from 'bignumber.js'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -33,6 +39,10 @@ const useStyles = makeStyles((theme) =>
             margin: theme.spacing(0, 'auto', 2),
         },
         table: {},
+        head: {
+            fontWeight: 300,
+            color: theme.palette.text.secondary,
+        },
         cell: {
             border: 'none',
             padding: 0,
@@ -43,7 +53,15 @@ const useStyles = makeStyles((theme) =>
         },
         item: {
             display: 'flex',
-            padding: theme.spacing(0.5, 0),
+            padding: theme.spacing(0.25, 0),
+        },
+        button: {
+            display: 'flex',
+            borderRadius: 500,
+            padding: theme.spacing(0.25),
+            '&:hover': {
+                backgroundColor: theme.palette.background.default,
+            },
         },
         link: {
             display: 'flex',
@@ -61,6 +79,7 @@ export interface TradeRouteProps extends withClasses<KeysInferFromUseStyles<type
 }
 
 export function TradeRoute(props: TradeRouteProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     if (!props.trade.trade_) return null
@@ -70,8 +89,12 @@ export function TradeRoute(props: TradeRouteProps) {
             <Table className={classes.table} size="small">
                 <TableHead>
                     <TableRow>
-                        <TableCell className={classes.cell}>Route</TableCell>
-                        <TableCell className={classes.cell}>Portion</TableCell>
+                        <TableCell className={classNames(classes.cell, classes.head)}>
+                            {t('plugin_trader_route')}
+                        </TableCell>
+                        <TableCell className={classNames(classes.cell, classes.head)} align="right">
+                            {t('plugin_trader_portion')}
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -83,35 +106,42 @@ export function TradeRoute(props: TradeRouteProps) {
                                     separator={<NavigateNextIcon fontSize="small" />}>
                                     {route.hops.map((hop) => {
                                         return (
-                                            <AvatarGroup
-                                                sx={{
-                                                    display: 'inline-flex',
-                                                    alignItems: 'center',
-                                                }}
-                                                max={8}>
-                                                <Link
-                                                    className={classes.link}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href={resolveTradePairLink(
-                                                        TradeProvider.BALANCER,
-                                                        hop.pool.address,
-                                                    )}
-                                                    key={hop.pool.address}>
-                                                    {hop.pool.tokens.map((token) => {
-                                                        return (
-                                                            <Box display="flex" alignItems="center" key={token.address}>
-                                                                <TokenIcon address={token.address} />
-                                                            </Box>
-                                                        )
-                                                    })}
-                                                </Link>
-                                            </AvatarGroup>
+                                            <div className={classes.button}>
+                                                <AvatarGroup
+                                                    sx={{
+                                                        display: 'inline-flex',
+                                                        alignItems: 'center',
+                                                    }}
+                                                    max={8}>
+                                                    <Link
+                                                        className={classes.link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        href={resolveTradePairLink(
+                                                            TradeProvider.BALANCER,
+                                                            hop.pool.address,
+                                                        )}
+                                                        key={hop.pool.address}>
+                                                        {hop.pool.tokens.map((token) => {
+                                                            return (
+                                                                <Box
+                                                                    display="flex"
+                                                                    alignItems="center"
+                                                                    key={token.address}>
+                                                                    <TokenIcon address={token.address} />
+                                                                </Box>
+                                                            )
+                                                        })}
+                                                    </Link>
+                                                </AvatarGroup>
+                                            </div>
                                         )
                                     })}
                                 </Breadcrumbs>
                             </TableCell>
-                            <TableCell className={classes.cell}>{`${route.share * 100}%`}</TableCell>
+                            <TableCell className={classes.cell} align="right">
+                                {formatPercentage(new BigNumber(route.share))}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

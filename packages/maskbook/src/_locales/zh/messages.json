@@ -375,6 +375,8 @@
     "plugin_trader_table_volume": "交易量 （24小時）",
     "plugin_trader_table_updated": "",
     "plugin_trader_finding_price": "",
+    "plugin_trader_route": "",
+    "plugin_trader_portion": "",
     "plugin_trader_error_amount_absence": "",
     "plugin_trader_error_insufficient_balance": "",
     "plugin_trader_error_insufficient_lp": "",

@@ -37,13 +37,25 @@ export function useTradeCallback(
             })
             return
         }
+
+        // pre-step: start waiting for provider to confirm tx
+        setTradeState({
+            type: TransactionStateType.WAIT_FOR_CONFIRMING,
+        })
+
+        setTimeout(() => {
+            setTradeState({
+                type: TransactionStateType.FAILED,
+                error: new Error('To be implemented!'),
+            })
+        }, 5000)
     }, [exchangeProxyContract])
 
     const resetCallback = useCallback(() => {
         setTradeState({
             type: TransactionStateType.UNKNOWN,
         })
-    }, [account, chainId, stringify(config)])
+    }, [])
 
     return [tradeState, tradeCallback, resetCallback] as const
 }

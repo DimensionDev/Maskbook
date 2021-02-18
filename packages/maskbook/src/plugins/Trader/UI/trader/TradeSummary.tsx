@@ -55,6 +55,11 @@ const useStyles = makeStyles((theme) =>
             paddingLeft: theme.spacing(15),
             textAlign: 'right',
         },
+        emphasis: {
+            color: theme.palette.text.primary,
+            fontWeight: 300,
+            margin: `0 ${theme.spacing(0.5)}`,
+        },
     }),
 )
 
@@ -91,34 +96,38 @@ export function TradeSummary(props: TradeSummaryProps) {
                       <Typography className={classes.title}>
                           {priceReversed ? (
                               <span>
-                                  {formatBalance(
-                                      outputAmount
-                                          .dividedBy(inputAmount)
-                                          .multipliedBy(
-                                              new BigNumber(10).pow(inputToken.decimals - outputToken.decimals),
-                                          )
-                                          .multipliedBy(new BigNumber(10).pow(outputToken.decimals))
-                                          .integerValue(),
-                                      outputToken.decimals,
-                                      6,
-                                  )}{' '}
+                                  <strong className={classes.emphasis}>
+                                      {formatBalance(
+                                          outputAmount
+                                              .dividedBy(inputAmount)
+                                              .multipliedBy(
+                                                  new BigNumber(10).pow(inputToken.decimals - outputToken.decimals),
+                                              )
+                                              .multipliedBy(new BigNumber(10).pow(outputToken.decimals))
+                                              .integerValue(),
+                                          outputToken.decimals,
+                                          6,
+                                      )}
+                                  </strong>
                                   {outputToken.symbol}
                                   {' per '}
                                   {inputToken.symbol}
                               </span>
                           ) : (
                               <span>
-                                  {formatBalance(
-                                      inputAmount
-                                          .dividedBy(outputAmount)
-                                          .multipliedBy(
-                                              new BigNumber(10).pow(outputToken.decimals - inputToken.decimals),
-                                          )
-                                          .multipliedBy(new BigNumber(10).pow(inputToken.decimals))
-                                          .integerValue(),
-                                      inputToken.decimals,
-                                      6,
-                                  )}{' '}
+                                  <strong className={classes.emphasis}>
+                                      {formatBalance(
+                                          inputAmount
+                                              .dividedBy(outputAmount)
+                                              .multipliedBy(
+                                                  new BigNumber(10).pow(outputToken.decimals - inputToken.decimals),
+                                              )
+                                              .multipliedBy(new BigNumber(10).pow(inputToken.decimals))
+                                              .integerValue(),
+                                          inputToken.decimals,
+                                          6,
+                                      )}
+                                  </strong>
                                   {inputToken.symbol}
                                   {' per '}
                                   {outputToken.symbol}
@@ -140,7 +149,10 @@ export function TradeSummary(props: TradeSummaryProps) {
                   title: 'Minimum Received',
                   children: (
                       <Typography className={classes.title}>
-                          {formatBalance(minimumReceived, outputToken.decimals, 6)} {outputToken.symbol}
+                          <strong className={classes.emphasis}>
+                              {formatBalance(minimumReceived, outputToken.decimals, 6)}
+                          </strong>{' '}
+                          {outputToken.symbol}
                       </Typography>
                   ),
               }
@@ -150,7 +162,10 @@ export function TradeSummary(props: TradeSummaryProps) {
                   title: 'Maximum Sold',
                   children: (
                       <Typography className={classes.title}>
-                          {formatBalance(maximumSold, inputToken.decimals, 6)} {inputToken.symbol}
+                          <strong className={classes.emphasis}>
+                              {formatBalance(maximumSold, inputToken.decimals, 6)}
+                          </strong>{' '}
+                          {inputToken.symbol}
                       </Typography>
                   ),
               }
