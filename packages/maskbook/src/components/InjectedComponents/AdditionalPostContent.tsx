@@ -1,7 +1,7 @@
 import { makeStyles, Typography, Card, Theme, Box, CircularProgress, CircularProgressProps } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
-import { TypedMessage, makeTypedMessageText } from '../../protocols/typed-message'
+import { TypedMessage, makeTypedMessageText, extractTextFromTypedMessage } from '../../protocols/typed-message'
 import { TypedMessageRendererProps, DefaultTypedMessageRenderer } from './TypedMessageRenderer'
 import CheckIcon from '@material-ui/icons/Check'
 import CloseIcon from '@material-ui/icons/Close'
@@ -66,11 +66,42 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             {props.headerActions}
         </Typography>
     )
+
+    const imgData = useMemo(() => {
+        if (message && typeof message !== 'string') {
+            const s = extractTextFromTypedMessage(message).val
+            if (s && s.startsWith('b64Image=')) {
+                return { isImg: true, b64Str: s.replace('b64Image=', '') }
+            }
+        }
+        return { isImg: false, b64Str: '' }
+    }, [message])
+
+    if (imgData.isImg) {
+        console.log(imgData)
+
+        console.log(message)
+        console.log(props)
+
+        return (
+            <Card variant="outlined" className={classes.root} elevation={0} onClick={stop}>
+                {/* <header className={classes.content}>{header}</header> */}
+                {message ? (
+                    <main className={classes.content}>
+                        {/* <DefaultTypedMessageRenderer {...props} message={TypedMessage} allowTextEnlarge={true} /> */}
+                        <img style={{ height: '100%', width: '100%' }} src={'data:image/png;base64,' + imgData.b64Str} />
+                    </main>
+                ) : null}
+            </Card>
+        )
+    }
+
     const TypedMessage = useMemo(() => {
         if (typeof message === 'string') return makeTypedMessageText(message)
         if (typeof message === 'undefined') return makeTypedMessageText('')
         return message
     }, [message])
+
     return (
         <Card variant="outlined" className={classes.root} elevation={0} onClick={stop}>
             <header className={classes.content}>{header}</header>
