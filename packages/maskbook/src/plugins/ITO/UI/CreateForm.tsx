@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) =>
     createStyles({
         line: {
             margin: theme.spacing(1),
+            paddingBottom: theme.spacing(2),
             display: 'flex',
         },
         flow: {
