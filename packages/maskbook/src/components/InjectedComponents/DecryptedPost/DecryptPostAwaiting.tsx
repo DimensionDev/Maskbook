@@ -17,6 +17,7 @@ export const DecryptPostAwaiting = memo(function DecryptPostAwaiting(props: Decr
     const { t } = useI18N()
     const key = {
         finding_post_key: t('decrypted_postbox_decrypting_finding_post_key'),
+        extracted_seed: t('decrypted_postbox_decrypting_finding_post_key'),
         finding_person_public_key: t('decrypted_postbox_decrypting_finding_person_key'),
         init: t('decrypted_postbox_decrypting'),
         decode_post: t('decrypted_postbox_decoding'),
