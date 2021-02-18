@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface TradeRouteProps extends withClasses<never> {
+export interface TradeRouteProps extends withClasses<'root'> {
     trade: TradeComputed<SwapResponse>
 }
 
