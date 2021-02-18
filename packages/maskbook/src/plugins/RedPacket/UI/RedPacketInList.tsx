@@ -234,8 +234,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                         ) : null}
                     </section>
                     <StyledLinearProgress
-                        barcolor="rgba(44, 164, 239)"
-                        backgroundcolor="rgba(44, 164, 239, 0.2)"
+                        barColor="rgba(44, 164, 239)"
+                        backgroundColor="rgba(44, 164, 239, 0.2)"
                         variant="determinate"
                         value={100 * (1 - Number(payload.total_remaining) / Number(payload.total))}
                     />
