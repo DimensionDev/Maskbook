@@ -245,6 +245,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 }
                                 onClick={() => props.onImagePayloadSwitchChanged(!props.imagePayload)}
                                 data-testid="image_chip"
+                                disabled={props.imageEncrypt}
                             />
                             <ClickableChip
                                 checked={props.imageEncrypt}
@@ -325,8 +326,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     const onImagePayloadSwitchChanged = or(
         props.onImagePayloadSwitchChanged,
         useCallback((checked) => {
-            // TODO: if there is an image already added to the tweet, do NOT allow this. steganography will be disallowed since it's already being done on the input image(s)
-            console.log('image payload switch changed')
             currentImagePayloadStatus[getActivatedUI().networkIdentifier].value = String(checked)
         }, []),
     )
