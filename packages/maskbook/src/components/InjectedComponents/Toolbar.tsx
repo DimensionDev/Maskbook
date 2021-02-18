@@ -6,14 +6,15 @@ import { EthereumAccountButton } from '../../web3/UI/EthereumAccountButton'
 import { EthereumMaskBalanceButton } from '../../web3/UI/EthereumMaskBalanceButton'
 import { useStylesExtends } from '../custom-ui-helper'
 
-const STICKY_POSITION = 300
-const STICKY_ANIMATION_DISTANCE = 150
+export const TOOLBAR_STICKY_POSITION = 300
+export const TOOLBAR_STICKY_ANIMATION_DISTANCE = 150
+export const TOOLBAR_HEIGHT = 54
 
 const useStyle = makeStyles((theme) => {
     return {
         root: {
             borderRadius: 0,
-            height: 54,
+            height: TOOLBAR_HEIGHT,
             position: 'relative',
             borderBottom: `1px solid ${theme.palette.divider}`,
         },
@@ -31,7 +32,7 @@ const useStyle = makeStyles((theme) => {
         },
         content: {
             position: 'relative',
-            height: 54,
+            height: TOOLBAR_HEIGHT,
             display: 'flex',
             alignItems: 'center',
         },
@@ -72,7 +73,7 @@ export function Toolbar(props: ToolbarProps) {
 
     //#region compute toolbar status according to scroll position
     const { y } = useWindowScroll()
-    const isSticky = y - STICKY_POSITION > 0
+    const isSticky = y - TOOLBAR_STICKY_POSITION > 0
     //#endregion
 
     //#region resizing toolbar
@@ -95,7 +96,7 @@ export function Toolbar(props: ToolbarProps) {
         <Paper className={classes.root} elevation={0}>
             <div
                 className={isSticky ? classes.rootSticky : ''}
-                style={{ opacity: isSticky ? (y - STICKY_POSITION) / STICKY_ANIMATION_DISTANCE : 1 }}>
+                style={{ opacity: isSticky ? (y - TOOLBAR_STICKY_POSITION) / TOOLBAR_STICKY_ANIMATION_DISTANCE : 1 }}>
                 <div className={classes.content} style={{ left, width }}>
                     <div className={classes.left} style={{ width: menuWidth }}>
                         <MaskbookIcon classes={{ root: classes.logo }} />
