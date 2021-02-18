@@ -1,4 +1,5 @@
-import type { SOR } from '@balancer-labs/sor'
+import type { Swap } from '@balancer-labs/sor/dist/types'
+import type BigNumber from 'bignumber.js'
 
 export interface Route {
     share: number
@@ -21,6 +22,6 @@ export interface Asset {
 }
 
 export type SwapResponse = {
-    swaps: UnboxPromise<ReturnType<SOR['getSwaps']>>
+    swaps: [Swap[][], BigNumber, BigNumber]
     routes: Route[]
 }
