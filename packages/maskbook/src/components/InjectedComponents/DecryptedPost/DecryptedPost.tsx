@@ -19,11 +19,6 @@ import { Err, Ok } from 'ts-results'
 import { or } from '../../custom-ui-helper'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 import type { Payload } from '../../../utils/type-transform/Payload'
-import {
-    encodeArrayBuffer,
-    decodeArrayBuffer,
-} from '../../../utils/type-transform/String-ArrayBuffer'
-import Services from '../../../extension/service'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
@@ -107,90 +102,57 @@ export function DecryptPost(props: DecryptPostProps) {
         deconstructedPayload.andThen((x) => (x.version === -38 ? Ok(!!x.sharedPublic) : Err.EMPTY)).unwrapOr(false) ||
         decryptedPayloadForImageAlpha38?.sharedPublic
 
-    useEffect(() => {
-        const signal = new AbortController()
-        async function makeProgress(
-            key: string,
-            decryptionProcess: ReturnType<typeof ServicesWithProgress.decryptFromText>,
-        ) {
-            const refreshProgress = (progress: SuccessDecryption | FailureDecryption | DecryptionProgress) =>
-                dispatch({
-                    type: 'refresh',
-                    key,
-                    progress,
-                })
-            for await (const process of asyncIteratorWithResult(decryptionProcess)) {
-                if (signal.signal.aborted)
-                    return decryptionProcess.return?.({ type: 'error', internal: true, error: 'aborted' })
-                if (process.done) {
-                    if (process.value.type === 'success') {
-                        current.iv.value = process.value.iv
-                        current.decryptedPayloadForImage.value = process.value.decryptedPayloadForImage
-                    }
-                    return refreshProgress(process.value)
+    async function makeProgress(
+        key: string,
+        decryptionProcess: ReturnType<typeof ServicesWithProgress.decryptFromText>,
+        signal: AbortController,
+    ) {
+        const refreshProgress = (progress: SuccessDecryption | FailureDecryption | DecryptionProgress) =>
+            dispatch({
+                type: 'refresh',
+                key,
+                progress,
+            })
+        for await (const process of asyncIteratorWithResult(decryptionProcess)) {
+            if (signal.signal.aborted)
+                return decryptionProcess.return?.({ type: 'error', internal: true, error: 'aborted' })
+            if (process.done) {
+                if (process.value.type === 'success') {
+                    current.iv.value = process.value.iv
+                    current.decryptedPayloadForImage.value = process.value.decryptedPayloadForImage
                 }
-                const status = process.value
-                if (status.type === 'debug') {
-                    switch (status.debug) {
-                        case 'debug_finding_hash':
-                            setDebugHash(status.hash.join('-'))
-                            break
-                        default:
-                            unreachable(status.debug)
-                    }
-                } else refreshProgress(status)
-                if (status.type === 'progress') {
-                    if (status.progress === 'intermediate_success') refreshProgress(status.data)
-                    else if (status.progress === 'iv_decrypted') current.iv.value = status.iv
-                    else if (status.progress === 'payload_decrypted') {
-                        current.decryptedPayloadForImage.value = status.decryptedPayloadForImage
-                    }
+                return refreshProgress(process.value)
+            }
+            const status = process.value
+            if (status.type === 'debug') {
+                switch (status.debug) {
+                    case 'debug_finding_hash':
+                        setDebugHash(status.hash.join('-'))
+                        break
+                    default:
+                        unreachable(status.debug)
+                }
+            } else refreshProgress(status)
+            if (status.type === 'progress') {
+                if (status.progress === 'intermediate_success') refreshProgress(status.data)
+                else if (status.progress === 'iv_decrypted') current.iv.value = status.iv
+                else if (status.progress === 'payload_decrypted') {
+                    current.decryptedPayloadForImage.value = status.decryptedPayloadForImage
                 }
             }
         }
+    }
+
+    useEffect(() => {
+        const signal = new AbortController()
+
 
         function handleImages() {
             postMetadataImages.forEach((url) => {
                 if (signal.signal.aborted) return
 
                 // decrypt steganography images to text
-                makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI))
-
-                // decrypt encrypted images
-                // TODO: deprecated? it says to use `transformedPostContent`, but that does nothing.
-                current.decryptedPostContent.addListener(async content => {
-                    // this will be called when the content associated with this image is ready
-                    if (content && content.meta) {
-                        const meta = content.meta;
-                        if (meta.has('image_seed')) {
-                            // we are dealing with an encrypted image
-
-                            const seed = meta.get('image_seed')
-                            const isseedstr = (value: unknown): value is string =>
-                                typeof value === "string" ? true : false;
-
-                            if (isseedstr(seed)) {
-                                // seed contains the seed that the image was encrypted with... now decrypt
-                                console.log('seed', seed)
-                                console.log('url', url)
-
-                                // get image
-                                // TODO
-                                const image = null
-
-                                // decrypt image
-                                const deShuffledImage = new Uint8Array(
-                                    decodeArrayBuffer(
-                                        await Services.ImageShuffle.deshuffle(image, { seed, }),
-                                    ),
-                                )
-
-                                // replace image visually
-                                // TODO
-                            }
-                        }
-                    } 
-                })
+                makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI), signal)
             })
         }
 
@@ -198,6 +160,7 @@ export function DecryptPost(props: DecryptPostProps) {
             makeProgress(
                 'post text',
                 ServicesWithProgress.decryptFromText(deconstructedPayload.val, postBy, whoAmI, sharedPublic),
+                signal,
             ).then(handleImages)
         else {
             handleImages()
@@ -217,12 +180,28 @@ export function DecryptPost(props: DecryptPostProps) {
 
     // pass 2:
     // decrypt rest attachments which depend on post content
-    // const decryptedPostContent = progress.find((p) => p.key === postContent)
-    // useEffect(() => {
-    //     if (decryptedPostContent?.progress.type !== 'success') return
-    //     // TODO:
-    //     // decrypt shuffled image here
-    // }, [decryptedPostContent])
+    const decryptedPostContent = progress.find((p) => p.key === 'post text')
+    useEffect(() => {
+        if (decryptedPostContent?.progress.type !== 'success') return
+
+        const signal = new AbortController()
+        const content = decryptedPostContent.progress.content
+
+        if (deconstructedPayload.ok) {
+            postMetadataImages.forEach((url) => {
+                // go through each url & decode the image
+                makeProgress(url, ServicesWithProgress.decryptImageFromImageUrl(deconstructedPayload.val, url, postBy, whoAmI, content), signal)
+            })
+        }
+
+        return () => signal.abort()
+    }, [
+        deconstructedPayload.ok,
+        decryptedPostContent,
+        postBy.toText(),
+        whoAmI.toText(),
+        sharedPublic,
+    ])
 
     // pass 3:
     // inovke callback

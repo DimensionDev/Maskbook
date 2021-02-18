@@ -24,9 +24,11 @@ import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
 import { MaskMessage } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
 import { calculatePostKeyPartition } from '../../../network/gun/version.2/hash'
+import Services from '../../../extension/service'
 
 type Progress = (
     | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
+    | { progress: 'extracted_seed' }
     | { progress: 'intermediate_success'; data: Success }
     | { progress: 'iv_decrypted'; iv: string }
     | { progress: 'payload_decrypted'; decryptedPayloadForImage: Payload }
@@ -40,7 +42,7 @@ type DebugInfo = {
     hash: [string, string]
     type: 'debug'
 }
-type SuccessThrough = 'author_key_not_found' | 'post_key_cached' | 'normal_decrypted'
+type SuccessThrough = 'author_key_not_found' | 'post_key_cached' | 'normal_decrypted' | 'decrypted_image'
 type Success = {
     type: 'success'
     iv: string
@@ -319,6 +321,43 @@ async function* decryptFromImageUrlWithProgress_raw(
     return yield* decryptFromText(payload.val, author, whoAmI, publicShared)
 }
 
+async function* decryptImageFromImageUrlWithProgress_raw(
+    post: Payload,
+    url: string,
+    author: ProfileIdentifier,
+    whoAmI: ProfileIdentifier,
+    content: TypedMessage,
+    publicShared?: boolean,
+): ReturnOfDecryptPostContentWithProgress {
+    const cacheKey = stringify(url)
+    if (successDecryptionCache.has(cacheKey)) return successDecryptionCache.get(cacheKey)!
+    yield makeProgress('init')
+
+    // extract seed
+    if (content && content.meta) {
+        const meta = content.meta;
+        if (meta.has('image_seed')) {
+            // we are dealing with an encrypted image
+
+            const seed = meta.get('image_seed')
+            const isseedstr = (value: unknown): value is string =>
+                typeof value === "string" ? true : false;
+
+            if (isseedstr(seed)) {
+                yield makeProgress('extracted_seed')
+
+                const decryptedUrl = await Services.ImageShuffle.deshuffleImageUrl(url, { seed, })
+                const { iv, version } = post
+                const cryptoProvider = cryptoProviderTable[version]
+                const makeSuccessResult = makeSuccessResultF(url, iv, post, cryptoProvider)
+                return makeSuccessResult(decryptedUrl, ['decrypted_image'])
+            }
+        }
+    }
+
+    return makeError('could not extract seed')
+}
+
 export const decryptFromText = memorizeAsyncGenerator(
     decryptFromPayloadWithProgress_raw,
     (encrypted, author, whoAmI, publicShared = undefined) =>
@@ -330,6 +369,13 @@ export const decryptFromImageUrl = memorizeAsyncGenerator(
     decryptFromImageUrlWithProgress_raw,
     (url, author, whoAmI, publicShared = undefined) =>
         JSON.stringify([url, author.toText(), whoAmI.toText(), publicShared]),
+    1000 * 30,
+)
+
+export const decryptImageFromImageUrl = memorizeAsyncGenerator(
+    decryptImageFromImageUrlWithProgress_raw,
+    (post, url, author, whoAmI, content, publicShared = undefined) =>
+        JSON.stringify([post, url, author.toText(), whoAmI.toText(), content, publicShared]),
     1000 * 30,
 )
 
