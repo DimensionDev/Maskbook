@@ -120,5 +120,13 @@ export async function deshuffle(buf: ArrayBuffer, { seed, blockWidth = DEFAULT_B
 }
 
 export async function deshuffleImageUrl(url: string, options: DeshuffleOptions) {
-    return deshuffle(await downloadUrl(url).then((x) => x.arrayBuffer()), options)
+    const b64Image = deshuffle(await downloadUrl(url).then((x) => x.arrayBuffer()), options)
+
+    async function toUrl(b64Image: Promise<string>) {
+        const blob = new Blob([decodeArrayBuffer(await b64Image)])
+        const srcBlob = URL.createObjectURL(blob);
+        return 'BLOB_IMAGE=' + srcBlob
+    }
+
+    return toUrl(b64Image)
 }
