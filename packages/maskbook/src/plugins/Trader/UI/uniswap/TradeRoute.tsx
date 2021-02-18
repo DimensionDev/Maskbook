@@ -1,4 +1,5 @@
-import { Box, Breadcrumbs, Typography, makeStyles, createStyles, Paper } from '@material-ui/core'
+import { Fragment } from 'react'
+import { Box, Breadcrumbs, Typography, makeStyles, createStyles, Paper, AvatarGroup } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) =>
         },
         name: {
             fontSize: 12,
-            marginLeft: theme.spacing(1),
+            marginRight: theme.spacing(1.5),
         },
     }),
 )
@@ -37,23 +38,33 @@ export function TradeRoute(props: TradeRouteProps) {
 
     const { path } = props.trade
     if (!path || path.length <= 2) return null
+
     return (
         <Paper className={classes.root} variant="outlined">
             <Breadcrumbs
                 classes={{ ol: classes.list, li: classes.item }}
                 separator={<NavigateNextIcon fontSize="small" />}>
-                {path.map((token) => (
-                    <Box
-                        key={token.address}
+                {path.map((tokens, i) => (
+                    <AvatarGroup
+                        key={i}
                         sx={{
                             display: 'inline-flex',
                             alignItems: 'center',
-                        }}>
-                        <TokenIcon address={token.address} name={token.name} />
-                        <Typography className={classes.name}>
-                            {token.symbol ?? token.name ?? formatEthereumAddress(token.address, 2)}
-                        </Typography>
-                    </Box>
+                        }}
+                        max={8}>
+                        {tokens.map((token) => {
+                            return (
+                                <Fragment key={token.address}>
+                                    <TokenIcon address={token.address} name={token.name} />
+                                    {tokens.length === 1 ? (
+                                        <Typography className={classes.name}>
+                                            {token.symbol ?? token.name ?? formatEthereumAddress(token.address, 2)}
+                                        </Typography>
+                                    ) : null}
+                                </Fragment>
+                            )
+                        })}
+                    </AvatarGroup>
                 ))}
             </Breadcrumbs>
         </Paper>

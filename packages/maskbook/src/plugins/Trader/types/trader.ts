@@ -56,7 +56,7 @@ export interface TradeComputed<T = unknown> {
     minimumReceived: BigNumber
     priceImpactWithoutFee: BigNumber
     fee: BigNumber
-    path?: (EtherTokenDetailed | ERC20TokenDetailed)[]
+    path?: (PartialRequired<EtherTokenDetailed, 'address'> | PartialRequired<ERC20TokenDetailed, 'address'>)[][]
     trade_?: T
 }
 

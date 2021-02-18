@@ -33,6 +33,7 @@ import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
+import { PluginTraderRPC } from '../../messages'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -205,6 +206,13 @@ export function Trader(props: TraderProps) {
     }, [])
     //#endregion
 
+    //#region refresh pools
+    const { error: updateBalancerPoolsError, loading: updateBalancerPoolsLoading } = useAsyncRetry(async () => {
+        // force update balancer's pools.
+        if (provider === TradeProvider.BALANCER) await PluginTraderRPC.updatePools(true)
+    }, [provider])
+    //#endregion
+
     //#region refresh pairs
     const [, , resetTimeout] = useTimeoutFn(() => {
         onRefreshClick()
@@ -275,7 +283,7 @@ export function Trader(props: TraderProps) {
                 trade={trade}
                 provider={provider}
                 strategy={strategy}
-                loading={asyncTradeComputed.loading}
+                loading={asyncTradeComputed.loading || updateBalancerPoolsLoading}
                 inputToken={inputToken}
                 outputToken={outputToken}
                 inputTokenBalance={inputTokenBalance}
@@ -307,13 +315,16 @@ export function Trader(props: TraderProps) {
                         inputToken={inputToken}
                         outputToken={outputToken}
                     />
-                    {provider === TradeProvider.UNISWAP ||
-                    provider === TradeProvider.SUSHISWAP ||
-                    provider === TradeProvider.SASHIMISWAP ? (
-                        <>
-                            <TradeRoute classes={{ root: classes.router }} trade={trade} />
-                            <TradePairViewer trade={trade as TradeComputed<Trade>} provider={provider} />
-                        </>
+                    {[
+                        TradeProvider.UNISWAP,
+                        TradeProvider.SUSHISWAP,
+                        TradeProvider.SASHIMISWAP,
+                        TradeProvider.BALANCER,
+                    ].includes(provider) ? (
+                        <TradeRoute classes={{ root: classes.router }} trade={trade} />
+                    ) : null}
+                    {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider) ? (
+                        <TradePairViewer trade={trade as TradeComputed<Trade>} provider={provider} />
                     ) : null}
                 </>
             ) : null}

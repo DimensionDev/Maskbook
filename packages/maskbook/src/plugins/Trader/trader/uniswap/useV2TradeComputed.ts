@@ -17,7 +17,7 @@ export function useV2TradeComputed(trade: Trade | null): TradeComputed<Trade> | 
         nextMidPrice: uniswapPriceTo(trade.nextMidPrice),
         executionPrice: uniswapPriceTo(trade.executionPrice),
         priceImpact: uniswapPercentTo(trade.priceImpact),
-        path: trade.route.path.map(uniswapTokenTo),
+        path: trade.route.path.map((x) => [uniswapTokenTo(x)]),
         maximumSold: uniswapCurrencyAmountTo(trade.maximumAmountIn(slippage)),
         minimumReceived: uniswapCurrencyAmountTo(trade.minimumAmountOut(slippage)),
         priceImpactWithoutFee: breakdown?.priceImpactWithoutFee

@@ -15,7 +15,8 @@ export function useTradeComputed(
         if (!trade) return null
         if (!inputToken || !outputToken) return null
 
-        const [, tradeAmount, spotPrice] = trade
+        const { swaps: swaps_, routes } = trade
+        const [swaps, tradeAmount, spotPrice] = swaps_
         const isExactIn = strategy === TradeStrategy.ExactIn
         const priceImpact = isExactIn
             ? new BigNumber(inputAmount).div(tradeAmount).times('1e18').div(spotPrice).minus(1)
@@ -31,6 +32,11 @@ export function useTradeComputed(
             priceImpactWithoutFee: priceImpact.isNegative() ? new BigNumber('0.00001') : priceImpact,
             maximumSold: new BigNumber(tradeAmount),
             minimumReceived: new BigNumber(tradeAmount),
+            path: [
+                [inputToken],
+                ...routes.map((x) => x.hops[0].pool.tokens.map((y) => ({ address: y.address }))),
+                [outputToken],
+            ],
             fee: new BigNumber(0),
             trade_: trade,
         } as TradeComputed<SwapResponse>

@@ -137,7 +137,7 @@ export function TradeSummary(props: TradeSummaryProps) {
             : null,
         isExactIn
             ? {
-                  title: 'Minimum received',
+                  title: 'Minimum Received',
                   children: (
                       <Typography className={classes.title}>
                           {formatBalance(minimumReceived, outputToken.decimals, 6)} {outputToken.symbol}
@@ -147,7 +147,7 @@ export function TradeSummary(props: TradeSummaryProps) {
             : null,
         !isExactIn
             ? {
-                  title: 'Maximum sold',
+                  title: 'Maximum Sold',
                   children: (
                       <Typography className={classes.title}>
                           {formatBalance(maximumSold, inputToken.decimals, 6)} {inputToken.symbol}

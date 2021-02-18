@@ -5,7 +5,7 @@ import { useConstant } from '../../../../web3/hooks/useConstant'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 import { BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
-import { TradeStrategy } from '../../types'
+import { SwapResponse, TradeStrategy } from '../../types'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -28,7 +28,7 @@ export function useTrade(
         // the WETH address is used for looking for available pools
         const sellToken = inputToken.address === ETH_ADDRESS ? WETH_ADDRESS : inputToken.address
         const buyToken = outputToken.address === ETH_ADDRESS ? WETH_ADDRESS : outputToken.address
-        const swaps = await PluginTraderRPC.getSwaps(
+        const { swaps, routes } = await PluginTraderRPC.getSwaps(
             sellToken,
             buyToken,
             isExactIn ? BALANCER_SWAP_TYPE.EXACT_IN : BALANCER_SWAP_TYPE.EXACT_OUT,
@@ -36,7 +36,7 @@ export function useTrade(
         )
         // no pool found
         if (!swaps[0].length) return null
-        return swaps
+        return { swaps, routes } as SwapResponse
     }, [
         ETH_ADDRESS,
         WETH_ADDRESS,

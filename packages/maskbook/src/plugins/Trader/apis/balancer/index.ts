@@ -1,12 +1,13 @@
 import BigNumber from 'bignumber.js'
-import { memoize } from 'lodash-es'
+import { memoize, debounce } from 'lodash-es'
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { getChainId } from '../../../../extension/background-script/EthereumService'
-import { getConstant } from '../../../../web3/helpers'
+import { getConstant, isSameAddress } from '../../../../web3/helpers'
 import type { ChainId } from '../../../../web3/types'
 import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
 import { CONSTANTS } from '../../../../web3/constants'
+import type { Route } from '../../types'
 
 //#region the pools cache management
 const fetchedCache = new Map<ChainId, string>()
@@ -41,6 +42,27 @@ const createSOR = memoize(
     (chainId: ChainId) => String(chainId),
 )
 
+export async function getPools() {
+    const chainId = await getChainId()
+    const sor = createSOR(chainId)
+
+    if (!sor.isAllFetched) {
+        await sor.fetchPools()
+        updateFetchedCache(chainId)
+    }
+    return sor.onChainCache.pools
+}
+
+export async function updatePools(force = false) {
+    const chainId = await getChainId()
+    const sor = createSOR(chainId)
+
+    if (!sor.isAllFetched || force) {
+        await sor.fetchPools()
+        updateFetchedCache(chainId)
+    }
+}
+
 export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALANCER_SWAP_TYPE, amount: string) {
     const chainId = await getChainId()
     const sor = createSOR(chainId)
@@ -59,10 +81,63 @@ export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALA
     // if sor is expired then update in the non-blocking way
     if (sor.isAllFetched && isFetchedCacheExpired(chainId)) sor.fetchPools().then(() => updateFetchedCache(chainId))
 
-    return sor.getSwaps(tokenIn, tokenOut, swapType, new BigNumber(amount))
-}
+    // get swaps from chain
+    const [swaps, tradeAmount, spotPrice] = await sor.getSwaps(tokenIn, tokenOut, swapType, new BigNumber(amount))
 
-export async function updatePools(chainId: ChainId) {
-    const sor = createSOR(chainId)
-    await sor.fetchPools()
+    // compose routes
+    // learn more: https://github.com/balancer-labs/balancer-frontend/blob/develop/src/components/swap/Routing.vue
+    const totalSwapAmount = swaps.reduce((total, rawHops) => {
+        return total.plus(rawHops[0].swapAmount || '0')
+    }, new BigNumber(0))
+
+    const pools = sor.onChainCache.pools
+    const routes = swaps.map((rawHops) => {
+        const swapAmount = new BigNumber(rawHops[0].swapAmount || '0')
+        const share = swapAmount.div(totalSwapAmount).toNumber()
+        const hops = rawHops.map((rawHop) => {
+            const { swapAmount } = rawHop
+            const tokenIn = rawHop.tokenIn
+            const tokenOut = rawHop.tokenOut
+            const rawPool = pools.find((pool) => pool.id === rawHop.pool)
+            if (!rawPool) return {}
+            const totalWeight = new BigNumber(rawPool.totalWeight)
+            const pool = {
+                address: rawPool.id,
+                tokens: rawPool.tokens
+                    .map((token) => {
+                        const address = token.address
+                        const weight = new BigNumber(token.denormWeight)
+                        const share = weight.div(totalWeight).toNumber()
+                        return {
+                            address,
+                            share,
+                        }
+                    })
+                    .sort((a, b) => {
+                        if (isSameAddress(a.address, tokenIn) || isSameAddress(b.address, tokenOut)) return -1
+                        if (isSameAddress(a.address, tokenOut) || isSameAddress(b.address, tokenIn)) return 1
+                        return a.share - b.share
+                    })
+                    .filter((token, index, tokens) => {
+                        // Show first 2 and last 2 tokens
+                        return index < 2 || index > tokens.length - 3
+                    }),
+            }
+            return {
+                pool,
+                tokenIn,
+                tokenOut,
+                swapAmount,
+            }
+        })
+        return {
+            share,
+            hops,
+        }
+    }) as Route[]
+
+    return {
+        swaps: [swaps, tradeAmount, spotPrice] as const,
+        routes,
+    }
 }
