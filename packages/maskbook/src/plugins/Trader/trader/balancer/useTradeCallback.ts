@@ -6,18 +6,15 @@ import { useChainId } from '../../../../web3/hooks/useChainState'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import type { SwapResponse, TradeComputed } from '../../types'
 import type { ExchangeProxy } from '../../../../contracts/ExchangeProxy'
+import { SLIPPAGE_TOLERANCE_DEFAULT } from '../../constants'
 
 export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,
     exchangeProxyContract: ExchangeProxy | null,
+    allowedSlippage = SLIPPAGE_TOLERANCE_DEFAULT,
 ) {
     const account = useAccount()
     const chainId = useChainId()
-
-    console.log('DEBUG: use trade callback')
-    console.log({
-        trade,
-    })
 
     // compose transaction config
     const config = useMemo(() => {
@@ -31,7 +28,7 @@ export function useTradeCallback(
     })
 
     const tradeCallback = useCallback(async () => {
-        if (!exchangeProxyContract) {
+        if (!trade || !exchangeProxyContract) {
             setTradeState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -43,13 +40,24 @@ export function useTradeCallback(
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
+        const {
+            swaps: [swaps, tradeAmount, spotPrice],
+        } = trade.trade_ as SwapResponse
+
+        console.log('DEBUG: use trade callback')
+        console.log({
+            swaps,
+            tradeAmount,
+            spotPrice,
+        })
+
         setTimeout(() => {
             setTradeState({
                 type: TransactionStateType.FAILED,
                 error: new Error('To be implemented!'),
             })
         }, 5000)
-    }, [exchangeProxyContract])
+    }, [trade, exchangeProxyContract])
 
     const resetCallback = useCallback(() => {
         setTradeState({

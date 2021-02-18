@@ -38,7 +38,7 @@ export function useTradeComputed(
         inputToken,
         outputToken,
     )
-    const uniswap = useUniswapTradeComputed(uniswap_.value)
+    const uniswap = useUniswapTradeComputed(uniswap_.value, inputToken, outputToken)
 
     // zrx
     const zrx_ = useZrxTrade(
