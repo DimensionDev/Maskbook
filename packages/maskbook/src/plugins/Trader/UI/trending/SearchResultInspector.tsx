@@ -31,6 +31,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
                     TradeProvider.SUSHISWAP,
                     TradeProvider.ZRX,
                     TradeProvider.SASHIMISWAP,
+                    TradeProvider.BALANCER,
                 ]}
             />
         </div>
