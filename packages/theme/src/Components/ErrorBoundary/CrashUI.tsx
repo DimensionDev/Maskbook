@@ -1,53 +1,64 @@
-import { Box, Button, IconButton, makeStyles, Typography } from '@material-ui/core'
-import { Alert, AlertTitle } from '@material-ui/core'
-import { useContext, useMemo, useState } from 'react'
+import { Box, Button, IconButton, Typography } from '@material-ui/core'
+import { Alert, AlertTitle, experimentalStyled as styled } from '@material-ui/core'
+import { useMemo, useState } from 'react'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
+import { useMaskThemeI18N } from '../../locales'
+import { useContext } from 'react'
 import { ErrorBoundaryContext, ErrorBoundaryError } from './context'
 
-const useStyle = makeStyles({
-    root: { overflowX: 'auto', flex: 1, width: '100%', contain: 'paint', marginTop: 16 },
-    title: { userSelect: 'text', marginBottom: 8 },
-    stack: { userSelect: 'text', overflowX: 'auto', contain: 'strict', height: 300 },
-    buttons: { display: 'flex', gap: '8px' },
-})
 export type CrashUIProps = ErrorBoundaryError & {
+    /** Type of the Error */
+    type: string
+    /** The Error message */
+    message: string
+    /** The error stack */
+    stack: string
     /** The component part in the boundary */
     subject: string
     onRetry: () => void
 }
 export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
-    const classes = useStyle()
+    const context = useContext(ErrorBoundaryContext)
+    const t = useMaskThemeI18N()
+
     const [showStack, setShowStack] = useState(false)
-    const { getBody, getTitle, getMailtoTarget, useErrorBoundaryI18n } = useContext(ErrorBoundaryContext)
-    const t = useErrorBoundaryI18n()
-    const reportTitle = getTitle(error)
-    const reportBody = getBody(error)
+
+    // crash report, will send to GitHub
+    const reportTitle = (context.error_boundary_report_title || t.error_boundary_report_title)(error)
+    const reportBody = (context.error_boundary_report_body || t.error_boundary_report_body)({
+        stack: error.stack,
+        message: error.message,
+        build: context?.getBuildInfo?.() || '',
+    })
+    const mail = (context.error_boundary_report_mailto || t.error_boundary_report_mailto)()
+
     const githubLink = useMemo(() => {
         const url = new URLSearchParams()
         url.set('title', reportTitle)
         url.set('body', reportBody)
         return `https://github.com/DimensionDev/Maskbook/issues/new?` + url.toString()
     }, [reportBody, reportTitle])
+
     const emailLink = useMemo(() => {
-        const url = new URL(`mailto:${getMailtoTarget()}`)
+        const url = new URL(`mailto:${mail}`)
         url.searchParams.set('subject', reportTitle)
         url.searchParams.set('body', reportBody)
         return url.toString()
-    }, [getMailtoTarget, reportBody, reportTitle])
+    }, [mail, reportBody, reportTitle])
     return (
-        <div className={classes.root}>
+        <Root>
             <Alert severity="error" variant="outlined">
-                <AlertTitle>{t.crash_title_of(subject)}</AlertTitle>
-                <div className={classes.title}>
+                <AlertTitle>{t.error_boundary_crash_title({ subject })}</AlertTitle>
+                <ErrorTitle>
                     {error.type}: {error.message}
-                </div>
-                <div className={classes.buttons}>
+                </ErrorTitle>
+                <ActionArea>
                     <Button variant="contained" color="primary" onClick={onRetry}>
-                        {t.try_to_recover()}
+                        {t.error_boundary_try_to_recover()}
                     </Button>
                     <Button href={githubLink} color="primary" target="_blank">
-                        {t.report_on_github()}
+                        {t.error_boundary_report_github()}
                     </Button>
                     {/* The generated link cannot be used to open mail app */}
                     {/* <Button href={emailLink} color="primary" target="_blank">
@@ -57,15 +68,39 @@ export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
                     <IconButton color="inherit" size="small" onClick={() => setShowStack((x) => !x)}>
                         {showStack ? <ExpandMore /> : <ExpandLess />}
                     </IconButton>
-                </div>
+                </ActionArea>
                 {showStack ? (
-                    <div className={classes.stack}>
+                    <ErrorStack>
                         <Typography component="pre">
                             <code>{error.stack}</code>
                         </Typography>
-                    </div>
+                    </ErrorStack>
                 ) : null}
             </Alert>
-        </div>
+        </Root>
     )
 }
+const Root = styled('div')`
+    overflow-x: auto;
+    flex: 1;
+    width: 100%;
+    contain: paint;
+    margin-top: 16px;
+`
+
+const ErrorTitle = styled('div')`
+    user-select: text;
+    margin-bottom: 8px;
+`
+
+const ErrorStack = styled('div')`
+    user-select: text;
+    overflow-x: auto;
+    contain: strict;
+    height: 300px;
+`
+
+const ActionArea = styled('div')`
+    display: flex;
+    gap: 8px;
+`

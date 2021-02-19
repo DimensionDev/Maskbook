@@ -1,1 +1,9 @@
-{}
+{
+    "error_boundary_crash_title": "{{subject}} has an error",
+    "error_boundary_try_to_recover": "Try to recover",
+    "error_boundary_report_github": "Report on GitHub",
+    "error_boundary_report_email": "Report by Email",
+    "error_boundary_report_title": "[Crash] {{type}}: {{message}}",
+    "error_boundary_report_body": "<!--Thanks for the crash report!\nPlease write down what you're doing when the crash happened, that will help us to fix it easier!-->\n\nI was *doing something...*, then Mask report an error.\n\n> {{message}}\n\nError stack: &lt;pre&gt;{{stack}}&lt;/pre&gt;{{build}}",
+    "error_boundary_report_mailto": "info@dimension.im"
+}
