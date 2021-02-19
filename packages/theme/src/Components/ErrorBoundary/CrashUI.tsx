@@ -31,6 +31,8 @@ export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
         message: error.message,
         build: context?.getBuildInfo?.() || '',
     })
+        .replace('&lt;pre&gt;', '<pre>')
+        .replace('&lt;/pre&gt;', '</pre>')
     const mail = (context.error_boundary_report_mailto || t.error_boundary_report_mailto)()
 
     const githubLink = useMemo(() => {
