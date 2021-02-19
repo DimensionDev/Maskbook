@@ -1,19 +1,15 @@
 import {
-    DialogTitle,
     DialogContent,
     Button,
-    Dialog,
     Theme,
     createStyles,
     Typography,
-    Tooltip,
     Box,
-    TextField,
     OutlinedInput,
     Alert,
+    DialogProps,
 } from '@material-ui/core'
 import { Info as InfoIcon } from '@material-ui/icons'
-import { usePortalShadowRoot } from '../../utils/shadow-root/usePortalShadowRoot'
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { makeStyles } from '@material-ui/core/styles'
 import { useStylesExtends } from '../custom-ui-helper'
@@ -104,13 +100,18 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-interface BreakdownDialogUIProps extends withClasses<never> {}
+interface BreakdownDialogUIProps extends withClasses<never> {
+    open: boolean
+    onClose: () => void
+    DialogProps?: Partial<DialogProps>
+}
 
 function BreakdownDialogUI(props: BreakdownDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
-    return usePortalShadowRoot((container) => (
+    return (
         <InjectedDialog
-            open
+            open={props.open}
+            onClose={props.onClose}
             title="You Mask Breakdown"
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogPaper }}>
             <DialogContent className={classes.content}>
@@ -173,7 +174,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
                 </Box>
             </DialogContent>
         </InjectedDialog>
-    ))
+    )
 }
 
 export interface BreakdownDialogProps extends BreakdownDialogUIProps {}
