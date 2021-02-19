@@ -23,7 +23,6 @@ i18nNextInstance.init({
     fallbackLng: 'en',
 })
 addMaskThemeI18N(i18nNextInstance)
-console.log(i18nNextInstance)
 i18nNextInstance.languages = ['en', 'zh', 'ja']
 
 if (module.hot) {

@@ -25,15 +25,18 @@ export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
     const [showStack, setShowStack] = useState(false)
 
     // crash report, will send to GitHub
-    const reportTitle = (context.error_boundary_report_title || t.error_boundary_report_title)(error)
-    const reportBody = (context.error_boundary_report_body || t.error_boundary_report_body)({
-        stack: error.stack,
-        message: error.message,
-        build: context?.getBuildInfo?.() || '',
-    })
-        .replace('&lt;pre&gt;', '<pre>')
-        .replace('&lt;/pre&gt;', '</pre>')
-    const mail = (context.error_boundary_report_mailto || t.error_boundary_report_mailto)()
+    const reportTitle = `[Crash] ${error.type}: ${error.message}`
+    const reportBody: string = `<!--Thanks for the crash report!
+Please write down what you're doing when the crash happened, that will help us to fix it easier!-->
+
+I was *doing something...*, then Mask report an error.
+
+> ${error.message}
+
+Error stack:
+
+<pre>${error.stack}</pre>\n\n${context?.getBuildInfo?.() || ''}`
+    const mail = t.error_boundary_report_mailto()
 
     const githubLink = useMemo(() => {
         const url = new URLSearchParams()
@@ -41,13 +44,6 @@ export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
         url.set('body', reportBody)
         return `https://github.com/DimensionDev/Maskbook/issues/new?` + url.toString()
     }, [reportBody, reportTitle])
-
-    const emailLink = useMemo(() => {
-        const url = new URL(`mailto:${mail}`)
-        url.searchParams.set('subject', reportTitle)
-        url.searchParams.set('body', reportBody)
-        return url.toString()
-    }, [mail, reportBody, reportTitle])
     return (
         <Root>
             <Alert severity="error" variant="outlined">
@@ -62,10 +58,6 @@ export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
                     <Button href={githubLink} color="primary" target="_blank">
                         {t.error_boundary_report_github()}
                     </Button>
-                    {/* The generated link cannot be used to open mail app */}
-                    {/* <Button href={emailLink} color="primary" target="_blank">
-                        {t.report_by_email()}
-                    </Button> */}
                     <Box sx={{ flex: 1 }} />
                     <IconButton color="inherit" size="small" onClick={() => setShowStack((x) => !x)}>
                         {showStack ? <ExpandMore /> : <ExpandLess />}

@@ -271,8 +271,6 @@
     "untitled_wallet": "Untitled Wallet",
     "your_message": "Your message…",
     "input_length_exceed_prompt": "The length of {{name}} should be less than {{length}}.",
-    "crash_title_of": "{{who}} has an error:",
-    "crash_retry": "Try to recover",
     "relative_time_days_ago": "{{days}} days ago",
     "relative_time_hours_ago": "{{hours}} hours ago",
     "relative_time_minutes_ago": "{{minutes}} minutes ago",

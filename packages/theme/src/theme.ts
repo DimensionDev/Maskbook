@@ -24,7 +24,6 @@ function MaskTheme(mode: PaletteMode) {
         ...Object.values(Changes).map(applyColors),
         ...Object.values(Components).map(applyColors),
     )
-    console.log(theme)
     return createMuiTheme(theme)
     function applyColors(x: any) {
         if (typeof x === 'function') return x(mode, colors)
