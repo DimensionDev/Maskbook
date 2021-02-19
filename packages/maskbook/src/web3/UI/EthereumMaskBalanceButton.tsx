@@ -27,7 +27,7 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
 
     return (
         <Button className={classes.root} variant="contained" color="primary">
-            <MaskbookIcon className={classes.icon} />
+            {process.env.architecture === 'web' ? <MaskbookIcon className={classes.icon} /> : null}
             <Typography>0 MASK</Typography>
         </Button>
     )

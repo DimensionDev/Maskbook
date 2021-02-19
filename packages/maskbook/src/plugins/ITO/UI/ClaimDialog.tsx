@@ -18,7 +18,6 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import type { ChainId } from '../../../web3/types'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO_CONSTANTS } from '../constants'
-import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { ClaimStatus } from './ClaimGuide'
 import { isETH, isSameAddress } from '../../../web3/helpers'
 import { EthereumMessages } from '../../Ethereum/messages'
@@ -28,11 +27,6 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 const useStyles = makeStyles((theme) =>
     createStyles({
         button: {},
-        providerWrapper: {
-            display: 'flex',
-            flexDirection: 'row-reverse',
-            alignItems: 'center',
-        },
         providerBar: {},
         swapLimitWrap: {
             display: 'flex',
@@ -234,9 +228,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
 
     return (
         <>
-            <section className={classes.providerWrapper}>
-                <EthereumStatusBar classes={{ root: classes.providerBar }} />
-            </section>
             <section className={classes.swapLimitWrap}>
                 <Typography variant="body1" className={classes.swapLimitText}>
                     0 {token.symbol}

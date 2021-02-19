@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
-import { makeStyles, Theme, createStyles, Button, ButtonProps, Chip, Typography } from '@material-ui/core'
+import classNames from 'classnames'
+import { makeStyles, createStyles, Button, ButtonProps, Chip, Typography } from '@material-ui/core'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import BigNumber from 'bignumber.js'
@@ -19,7 +20,7 @@ import { Flags } from '../../utils/flags'
 import { useEtherTokenBalance } from '../hooks/useEtherTokenBalance'
 import { useAccount } from '../hooks/useAccount'
 
-const useStyles = makeStyles((theme: Theme) => {
+const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
             display: 'inline-flex',
@@ -34,6 +35,9 @@ const useStyles = makeStyles((theme: Theme) => {
         button: {
             borderRadius: 16,
             backgroundColor: theme.palette.background.paper,
+        },
+        buttonTransparent: {
+            backgroundColor: 'transparent',
         },
         providerIcon: {
             fontSize: 18,
@@ -50,6 +54,7 @@ const useStyles = makeStyles((theme: Theme) => {
 })
 
 export interface EthereumAccountButtonProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+    disableEther?: boolean
     ButtonProps?: Partial<ButtonProps>
 }
 
@@ -80,10 +85,12 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     if (Flags.has_native_nav_bar) return <AccountBalanceWalletIcon onClick={onOpen} />
 
     return (
-        <div className={classes.root}>
-            <Typography className={classes.balance}>{formatBalance(new BigNumber(balance), 18, 4)} ETH</Typography>
+        <div className={props.disableEther ? '' : classes.root}>
+            {!props.disableEther ? (
+                <Typography className={classes.balance}>{formatBalance(new BigNumber(balance), 18, 4)} ETH</Typography>
+            ) : null}
             <Button
-                className={classes.button}
+                className={classNames(classes.button, props.disableEther ? classes.buttonTransparent : '')}
                 variant="outlined"
                 startIcon={
                     selectedWallet ? (
