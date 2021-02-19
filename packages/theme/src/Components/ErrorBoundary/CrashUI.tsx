@@ -36,7 +36,6 @@ I was *doing something...*, then Mask report an error.
 Error stack:
 
 <pre>${error.stack}</pre>\n\n${context?.getBuildInfo?.() || ''}`
-    const mail = t.error_boundary_report_mailto()
 
     const githubLink = useMemo(() => {
         const url = new URLSearchParams()
