@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { createStyles, makeStyles, Theme, Tooltip } from '@material-ui/core'
 import { useDimension, Dimension } from '../../Trader/graphs/useDimension'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import stringify from 'json-stable-stringify'
 import * as d3 from 'd3'
+import * as d3Tip from 'd3-tip'
 import { round } from 'lodash-es'
 
 const data = [
@@ -2103,11 +2104,7 @@ export function PriceChart(props: PriceChartProps) {
             .domain([min - dist * 0.05, max + dist * 0.05])
             .range([contentHeight, 0])
 
-        graph
-            .append('g')
-            .attr('transform', `translate(0, ${contentHeight})`)
-            .call(d3.axisBottom(x).ticks(4))
-            .call((g) => g.selectAll('line').remove())
+        graph.append('g').attr('transform', `translate(0, ${contentHeight})`).call(d3.axisBottom(x).ticks(4))
 
         graph
             .append('g')
@@ -2133,8 +2130,8 @@ export function PriceChart(props: PriceChartProps) {
             .append('path')
             .datum(data)
             .attr('fill', 'none')
-            .attr('stroke', '#1C68F3')
-            .attr('stroke-width', 2)
+            .attr('stroke', 'steelblue')
+            .attr('stroke-width', 1.5)
             .attr(
                 'd',
                 // @ts-ignore
@@ -2143,6 +2140,68 @@ export function PriceChart(props: PriceChartProps) {
                     .x((d) => x((d as any).date))
                     .y((d) => y((d as any).value)),
             )
+
+        const tooltip = graph.append('g')
+        const callout = (g: d3.Selection<SVGGElement, unknown, null, undefined>, value: any) => {
+            if (!value) {
+                g.style('display', 'none')
+                return
+            }
+
+            g.style('display', null).style('pointer-events', 'none').style('font', '10px sans-serif')
+
+            const path = g.append('path').data([null]).join('path').attr('fill', 'white').attr('stroke', 'black')
+
+            const text = g
+                .append('text')
+                .data([null])
+                .join('text')
+                .call((text) =>
+                    text
+                        .selectAll('tspan')
+                        .data((value + '').split(/\n/))
+                        .join('tspan')
+                        .attr('x', 0)
+                        .attr('y', (d, i) => `${i * 1.1}em`)
+                        .style('font-weight', (_, i) => (i ? null : 'bold'))
+                        .text((d) => d),
+                )
+
+            const textBBox = text.node()?.getBBox()
+
+            if (textBBox) {
+                const { x, y, width: w, height: h } = textBBox
+
+                text.attr('transform', `translate(${-w / 2},${15 - y})`)
+                path.attr('d', `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`)
+            }
+        }
+
+        graph.on('mousemove', function (event) {
+            const bisect = (mx: any) => {
+                const date = x.invert(mx)
+                const index = d3.bisector<{ date: Date; value: number }, Date>((d) => d.date).left(data, date, 1)
+                const b = data[index]
+                return b
+            }
+
+            const { date, value } = bisect(d3.mouse(this)[0])
+
+            tooltip.attr('transform', `translate(${x(date)},${y(value)})`).call(
+                callout,
+                `${value.toLocaleString('en', {
+                    style: 'currency',
+                    currency: 'USD',
+                })}${date.toLocaleString('en', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    timeZone: 'UTC',
+                })}`,
+            )
+        })
+
+        graph.on('mouseleave', () => tooltip.call(callout, null))
     }, [svgRef, stringify(dimension)])
 
     return (
