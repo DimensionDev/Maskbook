@@ -60,6 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'space-between',
             color: '#fff',
             fontSize: 14,
+            position: 'relative',
         },
         checkAddress: {
             padding: theme.spacing(2.5),
@@ -69,7 +70,9 @@ const useStyles = makeStyles((theme: Theme) =>
         airDropIcon: {
             width: 70,
             height: 79,
-            marginLeft: theme.spacing(2.5),
+            position: 'absolute',
+            left: '17%',
+            top: 5,
         },
         checkAddressInput: {
             flex: 1,
@@ -96,6 +99,12 @@ const useStyles = makeStyles((theme: Theme) =>
         ITOAlert: {
             backgroundColor: 'rgba(255,255,255,0.2)',
             color: '#fff',
+        },
+        button: {
+            background: 'rgba(255,255,255,.2)',
+            '&.Mui-disabled': {
+                opacity: 0.5,
+            },
         },
     }),
 )
@@ -136,7 +145,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
                         <Box display="flex">
                             <Typography>Current ratio: 100%</Typography>
                             <Box display="flex" alignItems="center" marginLeft={2.5}>
-                                <Button variant="contained" disabled>
+                                <Button variant="contained" disabled className={classes.button}>
                                     Claim
                                 </Button>
                             </Box>
@@ -147,7 +156,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
                         <Box sx={{ marginTop: 1.2, display: 'flex' }}>
                             <OutlinedInput classes={{ root: classes.checkAddressInput }} />
                             <Box marginLeft={2.5} paddingY={0.5}>
-                                <Button variant="contained" sx={{ backgroundColor: '#38C5FB' }}>
+                                <Button variant="contained" className={classes.button}>
                                     Check
                                 </Button>
                             </Box>
@@ -161,7 +170,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
                             <Typography>50.00</Typography>
                         </Box>
                         <Box display="flex" alignItems="center">
-                            <Button disabled sx={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
+                            <Button disabled className={classes.button}>
                                 Claim
                             </Button>
                         </Box>
