@@ -1,6 +1,7 @@
 import { Typography } from '@material-ui/core'
 import { useEffect } from 'react'
 import type { TagType } from '../../Trader/types'
+import { PriceChart } from './PriceChart'
 
 export interface PoolDeckViewProps {
     name: string
@@ -15,5 +16,10 @@ export function PoolDeckView(props: PoolDeckViewProps) {
     }, [])
     //#endregion
 
-    return <Typography color="textPrimary">Hit! {props.name} LBP.</Typography>
+    return (
+        <Typography color="textPrimary">
+            Hit! {props.name} LBP.
+            <PriceChart />
+        </Typography>
+    )
 }
