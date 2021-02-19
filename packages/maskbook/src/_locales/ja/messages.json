@@ -375,6 +375,8 @@
     "plugin_trader_table_volume": "取引高（24時間）",
     "plugin_trader_table_updated": "更新されました",
     "plugin_trader_finding_price": "価格を確認中です…",
+    "plugin_trader_route": "",
+    "plugin_trader_portion": "",
     "plugin_trader_error_amount_absence": "量を入力してください。",
     "plugin_trader_error_insufficient_balance": "{{symbol}}の残高が足りません",
     "plugin_trader_error_insufficient_lp": "流動性が足りません。",

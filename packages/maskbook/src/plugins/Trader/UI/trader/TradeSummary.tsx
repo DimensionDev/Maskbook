@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import BigNumber from 'bignumber.js'
 import {
     makeStyles,
     createStyles,
@@ -16,8 +17,8 @@ import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { SwapQuoteResponse, TradeComputed, TradeProvider, TradeStrategy } from '../../types'
 import { formatBalance, formatPercentage } from '../../../Wallet/formatter'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
-import BigNumber from 'bignumber.js'
 import { resolveUniswapWarningLevel, resolveUniswapWarningLevelColor, resolveZrxTradePoolName } from '../../pipes'
+
 type SummaryRecord = {
     title: string
     tip?: string
@@ -54,6 +55,11 @@ const useStyles = makeStyles((theme) =>
             paddingLeft: theme.spacing(15),
             textAlign: 'right',
         },
+        emphasis: {
+            color: theme.palette.text.primary,
+            fontWeight: 300,
+            margin: `0 ${theme.spacing(0.5)}`,
+        },
     }),
 )
 
@@ -66,11 +72,20 @@ export interface TradeSummaryProps extends withClasses<KeysInferFromUseStyles<ty
 
 export function TradeSummary(props: TradeSummaryProps) {
     const { trade, provider, inputToken, outputToken } = props
-    const classes = useStylesExtends(useStyles(), props)
 
+    const classes = useStylesExtends(useStyles(), props)
     const [priceReversed, setPriceReversed] = useState(false)
 
-    const { strategy, inputAmount, outputAmount, maximumSold, minimumReceived, priceImpactWithoutFee, fee } = trade
+    const {
+        strategy,
+        inputAmount,
+        outputAmount,
+        maximumSold,
+        minimumReceived,
+        priceImpact,
+        priceImpactWithoutFee,
+        fee,
+    } = trade
     const isExactIn = strategy === TradeStrategy.ExactIn
 
     const records: SummaryRecord[] = [
@@ -81,34 +96,38 @@ export function TradeSummary(props: TradeSummaryProps) {
                       <Typography className={classes.title}>
                           {priceReversed ? (
                               <span>
-                                  {formatBalance(
-                                      outputAmount
-                                          .dividedBy(inputAmount)
-                                          .multipliedBy(
-                                              new BigNumber(10).pow(inputToken.decimals - outputToken.decimals),
-                                          )
-                                          .multipliedBy(new BigNumber(10).pow(outputToken.decimals))
-                                          .integerValue(),
-                                      outputToken.decimals,
-                                      6,
-                                  )}{' '}
+                                  <strong className={classes.emphasis}>
+                                      {formatBalance(
+                                          outputAmount
+                                              .dividedBy(inputAmount)
+                                              .multipliedBy(
+                                                  new BigNumber(10).pow(inputToken.decimals - outputToken.decimals),
+                                              )
+                                              .multipliedBy(new BigNumber(10).pow(outputToken.decimals))
+                                              .integerValue(),
+                                          outputToken.decimals,
+                                          6,
+                                      )}
+                                  </strong>
                                   {outputToken.symbol}
                                   {' per '}
                                   {inputToken.symbol}
                               </span>
                           ) : (
                               <span>
-                                  {formatBalance(
-                                      inputAmount
-                                          .dividedBy(outputAmount)
-                                          .multipliedBy(
-                                              new BigNumber(10).pow(outputToken.decimals - inputToken.decimals),
-                                          )
-                                          .multipliedBy(new BigNumber(10).pow(inputToken.decimals))
-                                          .integerValue(),
-                                      inputToken.decimals,
-                                      6,
-                                  )}{' '}
+                                  <strong className={classes.emphasis}>
+                                      {formatBalance(
+                                          inputAmount
+                                              .dividedBy(outputAmount)
+                                              .multipliedBy(
+                                                  new BigNumber(10).pow(outputToken.decimals - inputToken.decimals),
+                                              )
+                                              .multipliedBy(new BigNumber(10).pow(inputToken.decimals))
+                                              .integerValue(),
+                                          inputToken.decimals,
+                                          6,
+                                      )}
+                                  </strong>
                                   {inputToken.symbol}
                                   {' per '}
                                   {outputToken.symbol}
@@ -127,20 +146,26 @@ export function TradeSummary(props: TradeSummaryProps) {
             : null,
         isExactIn
             ? {
-                  title: 'Minimum received',
+                  title: 'Minimum Received',
                   children: (
                       <Typography className={classes.title}>
-                          {formatBalance(minimumReceived, outputToken.decimals, 6)} {outputToken.symbol}
+                          <strong className={classes.emphasis}>
+                              {formatBalance(minimumReceived, outputToken.decimals, 6)}
+                          </strong>{' '}
+                          {outputToken.symbol}
                       </Typography>
                   ),
               }
             : null,
         !isExactIn
             ? {
-                  title: 'Maximum sold',
+                  title: 'Maximum Sold',
                   children: (
                       <Typography className={classes.title}>
-                          {formatBalance(maximumSold, inputToken.decimals, 6)} {inputToken.symbol}
+                          <strong className={classes.emphasis}>
+                              {formatBalance(maximumSold, inputToken.decimals, 6)}
+                          </strong>{' '}
+                          {inputToken.symbol}
                       </Typography>
                   ),
               }
@@ -169,6 +194,25 @@ export function TradeSummary(props: TradeSummaryProps) {
             children: (
                 <Typography className={classes.title}>
                     {formatBalance(fee, inputToken.decimals, 6)} {inputToken.symbol}
+                </Typography>
+            ),
+        },
+    ]
+
+    const balancerRecords: SummaryRecord[] = [
+        {
+            title: 'Price Impact',
+            children: (
+                <Typography
+                    className={classes.title}
+                    style={{
+                        color: resolveUniswapWarningLevelColor(resolveUniswapWarningLevel(priceImpact)),
+                    }}>
+                    {priceImpact.isGreaterThan('0')
+                        ? priceImpact?.isLessThan(ONE_BIPS)
+                            ? '<0.01%'
+                            : `${formatPercentage(priceImpact)}`
+                        : '-'}
                 </Typography>
             ),
         },
@@ -203,11 +247,10 @@ export function TradeSummary(props: TradeSummaryProps) {
             <List className={classes.list} component="ul">
                 {[
                     ...records,
-                    ...(provider === TradeProvider.UNISWAP ||
-                    provider === TradeProvider.SUSHISWAP ||
-                    provider === TradeProvider.SASHIMISWAP
+                    ...([TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider)
                         ? uniswapRecords
                         : []),
+                    ...(provider === TradeProvider.BALANCER ? balancerRecords : []),
                     ...(provider === TradeProvider.ZRX ? zrxRecords : []),
                 ].map((record) =>
                     record ? (

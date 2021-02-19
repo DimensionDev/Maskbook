@@ -33,6 +33,7 @@ export function SearchResultBox(props: SearchResultBoxProps) {
                     TradeProvider.SUSHISWAP,
                     TradeProvider.ZRX,
                     TradeProvider.SASHIMISWAP,
+                    TradeProvider.BALANCER,
                 ]}
             />
         </div>

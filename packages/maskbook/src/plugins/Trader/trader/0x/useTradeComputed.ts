@@ -14,6 +14,8 @@ export function useTradeComputed(
         if (!inputToken || !outputToken) return null
         return {
             strategy,
+            inputToken,
+            outputToken,
             inputAmount: new BigNumber(trade.sellAmount),
             outputAmount: new BigNumber(trade.buyAmount),
             executionPrice: new BigNumber(trade.price),

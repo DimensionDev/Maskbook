@@ -41,14 +41,14 @@ export const CONSTANTS = {
         [ChainId.Mainnet]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
         [ChainId.Ropsten]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
         [ChainId.Rinkeby]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
-        [ChainId.Kovan]: '',
+        [ChainId.Kovan]: '0xd0A1E359811322d97991E03f863a0C30C2cF029C',
         [ChainId.Gorli]: '',
     },
     USDC_ADDRESS: {
         [ChainId.Mainnet]: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
         [ChainId.Ropsten]: '0x0D9C8723B343A8368BebE0B5E89273fF8D712e3C',
         [ChainId.Rinkeby]: '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
-        [ChainId.Kovan]: '',
+        [ChainId.Kovan]: '0x2F375e94FC336Cdec2Dc0cCB5277FE59CBf1cAe5',
         [ChainId.Gorli]: '',
     },
     USDT_ADDRESS: {
@@ -125,7 +125,7 @@ export const CONSTANTS = {
         [ChainId.Mainnet]: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
         [ChainId.Ropsten]: '0x31f42841c2db5173425b5223809cf3a38fede360',
         [ChainId.Rinkeby]: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
-        [ChainId.Kovan]: '',
+        [ChainId.Kovan]: '0x1528F3FCc26d13F7079325Fb78D9442607781c8C',
         [ChainId.Gorli]: '',
     },
     AMPL_ADDRESS: {

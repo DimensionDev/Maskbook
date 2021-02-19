@@ -216,6 +216,7 @@ export function TradeForm(props: TradeFormProps) {
 
     // validate form return a message if an error exists
     const validationMessage = useMemo(() => {
+        if (!trade) return t('plugin_trader_error_insufficient_lp')
         if (inputTokenTradeAmount.isZero() && outputTokenTradeAmount.isZero())
             return t('plugin_trader_error_amount_absence')
         if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
@@ -224,7 +225,6 @@ export function TradeForm(props: TradeFormProps) {
                 symbol: inputToken?.symbol,
             })
         if (loading) return t('plugin_trader_finding_price')
-        if (!trade) return t('plugin_trader_error_insufficient_lp')
         if (resolveUniswapWarningLevel(trade.priceImpact) === WarningLevel.BLOCKED)
             return t('plugin_trader_error_price_impact_too_high')
         return ''
