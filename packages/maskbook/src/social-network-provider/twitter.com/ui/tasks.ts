@@ -107,14 +107,6 @@ const taskImageShuffleUploadToPostBox: SocialNetworkUI['taskImageShuffleUploadTo
     }
 }
 
-/*
-const taskUploadShuffledImageToPostBox = async (shuffledImage: Uint8Array) => {
-    await sleep(500)
-    pasteImageToActiveElements(shuffledImage)
-    await untilDocumentReady()
-}
-*/
-
 const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text, options) => {
     const { template = 'v2', autoPasteFailedRecover, relatedText } = options
     const { lastRecognizedIdentity } = getActivatedUI()
