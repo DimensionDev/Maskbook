@@ -5,6 +5,6 @@ This is shared theme and components. Preview all components in this package at <
 To use this package, you must setup `i18next`.
 
 ```ts
-import { addMaskThemeI18N } from "@dimensiondev/maskbook-theme"
+import { addMaskThemeI18N } from '@dimensiondev/maskbook-theme'
 addMaskThemeI18N(your_i18next_instance)
 ```
