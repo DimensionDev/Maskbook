@@ -1,12 +1,11 @@
 import { createStyles, makeStyles, Box, TextField, Grid, FormControlLabel, Checkbox } from '@material-ui/core'
-import React, { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
+import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
 import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
@@ -35,9 +34,6 @@ const useStyles = makeStyles((theme) =>
         flow: {
             margin: theme.spacing(1),
             textAlign: 'center',
-        },
-        bar: {
-            padding: theme.spacing(0, 2, 2),
         },
         input: {
             padding: theme.spacing(1),
@@ -244,7 +240,6 @@ export function CreateForm(props: CreateFormProps) {
     ))
     return (
         <>
-            <EthereumStatusBar classes={{ root: classes.bar }} />
             <Box className={classes.line} style={{ display: 'block' }}>
                 <ExchangeTokenPanelGroup
                     token={tokenAndAmount?.token}
