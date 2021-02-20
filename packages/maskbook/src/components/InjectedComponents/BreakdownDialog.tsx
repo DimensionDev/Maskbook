@@ -10,6 +10,9 @@ import { formatBalance } from '../../plugins/Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { AirdropCard } from '../../plugins/Airdrop/UI/AirdropCard'
 import { ITO_Card } from '../../plugins/ITO/UI/ITO_Card'
+import { useERC20TokenDetailed } from '../../web3/hooks/useERC20TokenDetailed'
+
+const MASK_TOKEN_AIRDROP_TOTAL_VOLUME = new BigNumber('3e6')
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -68,6 +71,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const MASK_ADDRESS = useConstant(CONSTANTS, 'MASK_ADDRESS')
+    const { value: maskToken, error: maskTokenError, loading: maskTokenLoading } = useERC20TokenDetailed(MASK_ADDRESS)
     const { value: maskBalance = '0', error: maskBalanceError, loading: maskBalanceLoading } = useERC20TokenBalance(
         MASK_ADDRESS,
     )
@@ -85,7 +89,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
                     <span>Balance:</span>
                     <span>{formatBalance(new BigNumber(maskBalance), 18, 6)} MASK</span>
                 </Typography>
-                <AirdropCard />
+                <AirdropCard token={maskToken} totalVolume={MASK_TOKEN_AIRDROP_TOTAL_VOLUME.toFixed()} />
                 <ITO_Card />
             </DialogContent>
         </InjectedDialog>
