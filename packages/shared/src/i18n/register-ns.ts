@@ -1,6 +1,7 @@
 import type { i18n } from 'i18next'
 
 export function addI18NBundle(instance: i18n, namespace: string, langs: Record<string, object>) {
+    if (!instance.addResourceBundle) throw new TypeError('Please call instance.init() first')
     for (const lang in langs) {
         instance.addResourceBundle(lang, namespace, removeEmptyString(langs[lang]))
     }
