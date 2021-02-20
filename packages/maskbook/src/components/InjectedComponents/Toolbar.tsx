@@ -1,20 +1,15 @@
-import { useMemo, useState } from 'react'
-import { useWindowScroll, useWindowSize } from 'react-use'
 import { makeStyles, Paper } from '@material-ui/core'
+import { useCallback, useState } from 'react'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { EthereumAccountButton } from '../../web3/UI/EthereumAccountButton'
 import { EthereumMaskBalanceButton } from '../../web3/UI/EthereumMaskBalanceButton'
 import { useStylesExtends } from '../custom-ui-helper'
-
-export const TOOLBAR_STICKY_POSITION = 300
-export const TOOLBAR_STICKY_ANIMATION_DISTANCE = 150
-export const TOOLBAR_HEIGHT = 54
+import { BreakdownDialog } from './BreakdownDialog'
 
 const useStyle = makeStyles((theme) => {
     return {
         root: {
             borderRadius: 0,
-            height: TOOLBAR_HEIGHT,
             position: 'relative',
             borderBottom: `1px solid ${theme.palette.divider}`,
         },
@@ -23,22 +18,16 @@ const useStyle = makeStyles((theme) => {
             left: '0 !important',
             width: '100% !important',
             position: 'fixed',
-            backgroundColor: theme.palette.background.paper,
-            boxShadow: `${
-                theme.palette.mode === 'dark'
-                    ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
-                    : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
-            }`,
         },
         content: {
             position: 'relative',
-            height: TOOLBAR_HEIGHT,
             display: 'flex',
             alignItems: 'center',
         },
         left: {
             display: 'flex',
             justifyContent: 'center',
+            alignItems: 'center',
             padding: '0 10px',
             boxSizing: 'border-box',
             ['@media (min-width: 600)']: {
@@ -63,50 +52,44 @@ const useStyle = makeStyles((theme) => {
     }
 })
 
-export interface ToolbarProps extends withClasses<never> {}
+export interface ToolbarProps extends withClasses<'root' | 'rootSticky' | 'left' | 'right'> {
+    opacity: number
+    left: number | 'auto'
+    right: number | 'auto'
+    width: number
+    leftWidth: number
+    rightWidth: number
+    isSticky: boolean
+}
 
 export function Toolbar(props: ToolbarProps) {
+    const { opacity, left, right, width, leftWidth, rightWidth, isSticky } = props
+
     const classes = useStylesExtends(useStyle(), props)
 
-    const [float, setFloat] = useState(false)
-    const [collapsed, setCollapsed] = useState(false)
-
-    //#region compute toolbar status according to scroll position
-    const { y } = useWindowScroll()
-    const isSticky = y - TOOLBAR_STICKY_POSITION > 0
-    //#endregion
-
-    //#region resizing toolbar
-    const { width: windowWidth } = useWindowSize()
-    const { left, width, menuWidth, mainWidth } = useMemo(() => {
-        const menu = document.querySelector<HTMLDivElement>('[role="banner"] > div:first-child > div:first-child')
-        const main = document.querySelector<HTMLDivElement>('[role="main"] > div:first-child')
-        const { width: menuWidth = 0, left: menuLeft = 0 } = menu ? menu.getBoundingClientRect() : {}
-        const { width: mainWidth = 0 } = main ? main.getBoundingClientRect() : {}
-        return {
-            left: menuLeft,
-            width: menuWidth + mainWidth,
-            menuWidth,
-            mainWidth,
-        }
-    }, [windowWidth])
+    //#region breakdown dialog
+    const [breakdownDialogOpen, setBreakdownDialogOpen] = useState(false)
+    const onMaskbookIconClicked = useCallback(() => {
+        setBreakdownDialogOpen(true)
+    }, [])
     //#endregion
 
     return (
-        <Paper className={classes.root} elevation={0}>
-            <div
-                className={isSticky ? classes.rootSticky : ''}
-                style={{ opacity: isSticky ? (y - TOOLBAR_STICKY_POSITION) / TOOLBAR_STICKY_ANIMATION_DISTANCE : 1 }}>
-                <div className={classes.content} style={{ left, width }}>
-                    <div className={classes.left} style={{ width: menuWidth }}>
-                        <MaskbookIcon classes={{ root: classes.logo }} />
-                    </div>
-                    <div className={classes.right} style={{ width: mainWidth }}>
-                        <EthereumMaskBalanceButton classes={{ root: classes.maskButton }} />
-                        <EthereumAccountButton classes={{ root: classes.accountButton }} />
+        <>
+            <Paper className={classes.root} elevation={0}>
+                <div className={isSticky ? classes.rootSticky : ''} style={{ opacity }}>
+                    <div className={classes.content} style={{ left, right, width }}>
+                        <div className={classes.left} style={{ width: leftWidth }}>
+                            <MaskbookIcon classes={{ root: classes.logo }} />
+                        </div>
+                        <div className={classes.right} style={{ width: rightWidth }}>
+                            <EthereumMaskBalanceButton classes={{ root: classes.maskButton }} ButtonProps={{ onClick: onMaskbookIconClicked }} />
+                            <EthereumAccountButton classes={{ root: classes.accountButton }} />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Paper>
+            </Paper>
+            <BreakdownDialog open={breakdownDialogOpen} />
+        </>
     )
 }

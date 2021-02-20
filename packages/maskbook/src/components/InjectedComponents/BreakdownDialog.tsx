@@ -1,7 +1,6 @@
 import {
     DialogContent,
     Button,
-    Theme,
     createStyles,
     Typography,
     Box,
@@ -16,7 +15,7 @@ import { useStylesExtends } from '../custom-ui-helper'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { AirdropIcon } from '../../resources/AirdropIcon'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         dialogPaper: {
             background: 'linear-gradient(180.43deg, #04277B 26.69%, #6B94F2 99.57%)',
@@ -112,7 +111,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface BreakdownDialogUIProps extends withClasses<never> {
     open: boolean
-    onClose: () => void
+    onClose?: () => void
     DialogProps?: Partial<DialogProps>
 }
 
@@ -122,7 +121,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
         <InjectedDialog
             open={props.open}
             onClose={props.onClose}
-            title="You Mask Breakdown"
+            title="Your Mask Breakdown"
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogPaper }}>
             <DialogContent className={classes.content}>
                 <MaskbookIcon classes={{ root: classes.logo }} />

@@ -17,5 +17,5 @@ export function injectToolbarAtFacebook() {
 }
 
 function ToolbarAtFacebook() {
-    return <Toolbar />
+    return null
 }

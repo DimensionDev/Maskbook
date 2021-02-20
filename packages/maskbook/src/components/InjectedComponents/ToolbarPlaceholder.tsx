@@ -1,13 +1,12 @@
 import { useWindowScroll } from 'react-use'
-import { TOOLBAR_HEIGHT } from './Toolbar'
 
 export interface ToolbarPlaceholderProps {
-    expectedHeight?: number
+    expectedHeight: number
     style?: React.CSSProperties
 }
 
 export function ToolbarPlaceholder(props: ToolbarPlaceholderProps) {
-    const { expectedHeight = TOOLBAR_HEIGHT } = props
+    const { expectedHeight } = props
     const { y } = useWindowScroll()
 
     return (

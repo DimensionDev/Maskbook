@@ -1,4 +1,4 @@
-import { Button, createStyles, makeStyles, Typography } from '@material-ui/core'
+import { Button, ButtonProps, createStyles, makeStyles, Typography } from '@material-ui/core'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 
@@ -20,13 +20,15 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface EthereumMaskBalanceButtonProps extends withClasses<'root'> {}
+export interface EthereumMaskBalanceButtonProps extends withClasses<'root'> {
+    ButtonProps?: Partial<ButtonProps>
+}
 
 export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     return (
-        <Button className={classes.root} variant="contained" color="primary">
+        <Button className={classes.root} variant="contained" color="primary" {...props.ButtonProps}>
             {process.env.architecture === 'web' ? <MaskbookIcon className={classes.icon} /> : null}
             <Typography>0 MASK</Typography>
         </Button>
