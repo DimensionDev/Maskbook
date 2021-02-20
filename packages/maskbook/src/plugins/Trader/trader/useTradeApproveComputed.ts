@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { createERC20Token } from '../../../web3/helpers'
-import { SwapQuoteResponse, TradeComputed, TradeProvider, TradeStrategy } from '../types'
+import { SwapQuoteResponse, TradeComputed, TradeProvider } from '../types'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { TRADE_CONSTANTS } from '../constants'
@@ -34,7 +34,7 @@ export function useTradeApproveComputed(
                 token.name ?? '',
                 token.symbol ?? '',
             ),
-            approveAmount: trade.strategy === TradeStrategy.ExactIn ? trade.inputAmount : trade.outputAmount,
+            approveAmount: trade.inputAmount,
             approveAddress: (() => {
                 switch (provider) {
                     case TradeProvider.UNISWAP:
