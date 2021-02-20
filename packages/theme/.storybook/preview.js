@@ -3,9 +3,8 @@ import { ThemeProvider, StylesProvider } from '@material-ui/core'
 import { MaskDarkTheme, MaskLightTheme } from '../src/theme'
 import { withMatrix } from 'storybook-addon-matrix'
 import { addMaskThemeI18N } from '../src/locales'
-import { I18nextProvider } from 'react-i18next'
+import { I18nextProvider, initReactI18next } from 'react-i18next'
 import i18n from 'i18next'
-import { initReactI18next } from 'react-i18next'
 i18n.init({
     resources: {},
     keySeparator: false,

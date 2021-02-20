@@ -3,14 +3,21 @@ import { MaskLightTheme, MaskDarkTheme, ErrorBoundary, addMaskThemeI18N } from '
 import { HashRouter } from 'react-router-dom'
 import { Pages } from './pages/routes'
 import { StrictMode } from 'react'
-import i18nNextInstance from 'i18next'
-import { I18nextProvider } from 'react-i18next'
+import i18n from 'i18next'
+import { I18nextProvider, initReactI18next } from 'react-i18next'
+i18n.init({
+    resources: {},
+    keySeparator: false,
+    interpolation: { escapeValue: false },
+    fallbackLng: 'en',
+})
+i18n.use(initReactI18next)
+addMaskThemeI18N(i18n)
 
-addMaskThemeI18N(i18nNextInstance)
 export function App() {
     return (
         <StrictMode>
-            <I18nextProvider i18n={i18nNextInstance}>
+            <I18nextProvider i18n={i18n}>
                 <StylesProvider injectFirst>
                     <MuiThemeProvider theme={MaskLightTheme}>
                         <ErrorBoundary>
