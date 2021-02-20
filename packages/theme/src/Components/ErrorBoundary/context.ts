@@ -1,5 +1,4 @@
 import { createContext } from 'react'
-import type { useMaskThemeI18N } from '../../locales'
 export interface ErrorBoundaryError {
     /** Type of the Error */
     type: string
@@ -8,9 +7,7 @@ export interface ErrorBoundaryError {
     /** The error stack */
     stack: string
 }
-const ErrorBoundaryContextDefault: Partial<
-    {
-        getBuildInfo(): string
-    } & Pick<ReturnType<typeof useMaskThemeI18N>, 'error_boundary_report_email'>
-> = {}
-export const ErrorBoundaryContext = createContext(ErrorBoundaryContextDefault)
+/**
+ * Please provide the build info text
+ */
+export const ErrorBoundaryBuildInfoContext = createContext('')

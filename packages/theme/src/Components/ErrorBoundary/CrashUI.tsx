@@ -5,7 +5,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import { useMaskThemeI18N } from '../../locales'
 import { useContext } from 'react'
-import { ErrorBoundaryContext, ErrorBoundaryError } from './context'
+import { ErrorBoundaryBuildInfoContext, ErrorBoundaryError } from './context'
 
 export type CrashUIProps = ErrorBoundaryError & {
     /** Type of the Error */
@@ -19,7 +19,7 @@ export type CrashUIProps = ErrorBoundaryError & {
     onRetry: () => void
 }
 export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
-    const context = useContext(ErrorBoundaryContext)
+    const context = useContext(ErrorBoundaryBuildInfoContext)
     const t = useMaskThemeI18N()
 
     const [showStack, setShowStack] = useState(false)
@@ -35,7 +35,7 @@ I was *doing something...*, then Mask report an error.
 
 Error stack:
 
-<pre>${error.stack}</pre>\n\n${context?.getBuildInfo?.() || ''}`
+<pre>${error.stack}</pre>\n\n${context || ''}`
 
     const githubLink = useMemo(() => {
         const url = new URLSearchParams()
