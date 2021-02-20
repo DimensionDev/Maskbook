@@ -279,6 +279,7 @@
     "relative_time_years_ago": "{{years}} years ago",
     "plugin_wallet_select_a_token": "Select a Token",
     "plugin_wallet_connect_a_wallet": "Connect a Wallet",
+    "plugin_wallet_no_gas_fee": "No Gas Fee",
     "plugin_wallet_invalid_network": "Invalid Network",
     "plugin_wallet_select_a_wallet": "Select a Wallet",
     "plugin_wallet_transaction_wait_for_confirmation": "Waiting for confirmation…",
