@@ -125,11 +125,11 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogPaper }}>
             <DialogContent className={classes.content}>
                 <MaskbookIcon classes={{ root: classes.logo }} />
-                <Typography className={classes.amount}>200.00</Typography>
-                <Box className={classes.balance}>
+                <Typography className={classes.amount}>200.00 MASK</Typography>
+                <Typography className={classes.balance}>
                     <span>Balance:</span>
-                    <span>100</span>
-                </Box>
+                    <span>100 MASK</span>
+                </Typography>
                 <Box className={classes.airDropContainer}>
                     <Box className={classes.airdropContent}>
                         <Box display="flex">
