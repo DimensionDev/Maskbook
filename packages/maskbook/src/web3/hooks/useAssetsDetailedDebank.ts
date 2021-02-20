@@ -34,7 +34,7 @@ export namespace Debank {
 async function fetcher(address: string, chainId: ChainId) {
     if (!EthereumAddress.isValid(address)) return []
     if (chainId !== ChainId.Mainnet) return []
-    const response = await fetch(`https://api.debank.com/token/balance_list?user_addr=${address}`)
+    const response = await fetch(`https://api.debank.com/token/balance_list?user_addr=${address.toLowerCase()}`)
     const { data = [], error_code } = (await response.json()) as Debank.BalanceListResponse
     if (error_code === 0) return data
     return []
