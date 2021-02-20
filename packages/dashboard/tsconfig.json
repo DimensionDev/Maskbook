@@ -5,5 +5,10 @@
     "outDir": "./dist/"
   },
   "include": ["./src/", "./stories/"],
-  "references": [{ "path": "../theme/" }, { "path": "../maskbook/" }, { "path": "../storybook-shared/" }]
+  "references": [
+    { "path": "../theme/" },
+    { "path": "../maskbook/" },
+    { "path": "../storybook-shared/" },
+    { "path": "../icons/" }
+  ]
 }
