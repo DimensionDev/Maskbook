@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => {
             },
         },
         icon: {
-            border: `solid 1px ${theme.palette.common.white}`,
+            border: `solid 2px ${theme.palette.common.white}`,
             borderRadius: '50%',
             marginRight: theme.spacing(0.5),
         },
