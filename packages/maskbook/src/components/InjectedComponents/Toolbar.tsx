@@ -83,7 +83,10 @@ export function Toolbar(props: ToolbarProps) {
                             <MaskbookIcon classes={{ root: classes.logo }} />
                         </div>
                         <div className={classes.right} style={{ width: rightWidth }}>
-                            <EthereumMaskBalanceButton classes={{ root: classes.maskButton }} ButtonProps={{ onClick: onMaskbookIconClicked }} />
+                            <EthereumMaskBalanceButton
+                                classes={{ root: classes.maskButton }}
+                                ButtonProps={{ onClick: onMaskbookIconClicked }}
+                            />
                             <EthereumAccountButton classes={{ root: classes.accountButton }} />
                         </div>
                     </div>

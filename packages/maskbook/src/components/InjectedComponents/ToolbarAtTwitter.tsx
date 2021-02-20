@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => {
         },
         right: {
             height: TOOLBAR_HEIGHT,
-        }
+        },
     }
 })
 
