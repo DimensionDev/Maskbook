@@ -75,12 +75,12 @@ export function AirdropCard(props: AirdropCardProps) {
     const account = useAccount()
     const { value: packet, error: packetError, loading: packetLoading } = useAirdropPacket(account)
 
-    console.log({
-        token,
-        packet,
-        packetError,
-        packetLoading,
-    })
+    // console.log({
+    //     token,
+    //     packet,
+    //     packetError,
+    //     packetLoading,
+    // })
 
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(packet)
     const onClaimButtonClick = useCallback(() => {

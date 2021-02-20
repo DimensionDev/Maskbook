@@ -23,7 +23,7 @@ export function useClaimCallback(packet?: AirdropPacket) {
             return
         }
 
-        const { amount, proof } = packet
+        const { index, amount, proof } = packet
 
         // pre-step: start waiting for provider to confirm tx
         setClaimState({
@@ -37,17 +37,18 @@ export function useClaimCallback(packet?: AirdropPacket) {
 
         // step 1: merkle proof
         try {
-            const available = await AirdropContract.methods.check(account, amount, proof).call({
+            const available = await AirdropContract.methods.check(index, account, amount, proof).call({
                 from: account,
             })
             if (!available) {
                 setClaimState({
                     type: TransactionStateType.FAILED,
-                    error: new Error('Not a valid candidate'),
+                    error: new Error('Not a valid candidate.'),
                 })
                 return
             }
         } catch (e) {
+            console.log(e)
             setClaimState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Failed to check availability.'),
@@ -55,7 +56,7 @@ export function useClaimCallback(packet?: AirdropPacket) {
             return
         }
 
-        const claimParams: Parameters<typeof AirdropContract['methods']['claim']> = [1, amount, proof]
+        const claimParams: Parameters<typeof AirdropContract['methods']['claim']> = [index, amount, proof]
 
         // step 2-1: estimate gas
         const estimatedGas = await AirdropContract.methods

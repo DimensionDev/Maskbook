@@ -1,5 +1,6 @@
 export interface AirdropPacket {
     address: string
+    index: string
     amount: string
     proof: string[]
 }
