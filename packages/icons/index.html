@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Icons preview</title>
+        <style>
+            body {
+                font-family: system-ui;
+            }
+            svg {
+                outline: 1px solid red;
+                margin: 0 6px;
+            }
+            .black {
+                background: black;
+            }
+        </style>
+    </head>
+    <body>
+        <main id="brands"></main>
+        <main id="general"></main>
+        <script type="module">
+            import React from 'react'
+            window.React = React
+        </script>
+        <script type="module">
+            import { createElement as $ } from 'react'
+            import ReactDOM from 'react-dom'
+            import { IconPreview } from './utils/preview.tsx'
+            async function render(id, Icons, name) {
+                Icons = await Icons
+                ReactDOM.unstable_createRoot(document.querySelector(id)).render(
+                    $(IconPreview, { icons: Icons, title: name }),
+                )
+            }
+            render('#brands', import('./brands/'), 'brand icons (./brands)')
+            render('#general', import('./general'), 'general icons (./general)')
+        </script>
+    </body>
+</html>

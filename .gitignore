@@ -20,8 +20,9 @@ i18n_generated.d.ts.map
 
 # Build out
 dist
-/build
+build
 storybook-static
+packages/netlify/snowpack/
 /Maskbook.*.zip
 
 # Environment files
