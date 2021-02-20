@@ -58,12 +58,12 @@ const useStyles = makeStyles((theme) => {
 
 export interface TraderProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     coin: Coin
-    coinDetailed: ERC20TokenDetailed | EtherTokenDetailed | undefined
+    tokenDetailed: ERC20TokenDetailed | EtherTokenDetailed | undefined
 }
 
 export function Trader(props: TraderProps) {
-    const { coin, coinDetailed } = props
-    const { decimals } = coinDetailed ?? coin
+    const { coin, tokenDetailed } = props
+    const { decimals } = tokenDetailed ?? coin
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
 

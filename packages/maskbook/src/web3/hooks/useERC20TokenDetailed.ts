@@ -38,7 +38,7 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
             symbol: symbol ?? token?.symbol ?? '',
             decimals: decimals ? Number.parseInt(decimals, 10) : token?.decimals ?? 0,
         } as ERC20TokenDetailed
-    }, [erc20TokenContract, address, chainId, results, token?.name, token?.symbol, token?.decimals])
+    }, [erc20TokenContract, address, chainId, results, token])
 
     return {
         ...asyncResult,

@@ -18,7 +18,6 @@ import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { useChainId } from '../../../../web3/hooks/useChainState'
 import { EthereumTokenType } from '../../../../web3/types'
 import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
@@ -67,7 +66,6 @@ export function TrendingView(props: TrendingViewProps) {
 
     const { t } = useI18N()
     const classes = useStyles()
-    const chainId = useChainId()
 
     //#region trending
     const dataProvider = useCurrentDataProvider(dataProviders)
@@ -91,7 +89,7 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region swap
-    const { value: coinDetailed, loading: loadingTokenDetailed } = useTokenDetailed(
+    const { value: tokenDetailed, error: tokenDetailedError, loading: loadingTokenDetailed } = useTokenDetailed(
         trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
         trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.eth_address ?? '',
     )
@@ -206,7 +204,7 @@ export function TrendingView(props: TrendingViewProps) {
                         classes={{ root: classes.tradeViewRoot }}
                         TraderProps={{
                             coin,
-                            coinDetailed,
+                            tokenDetailed,
                         }}
                     />
                 ) : null}
