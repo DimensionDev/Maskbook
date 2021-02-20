@@ -29,7 +29,9 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     const account = useAccount()
     const chainIdValid = useChainIdValid()
-    const { value: etherBalance = '0', error: etherBalanceError, retry: retryEtherBalance } = useEtherTokenBalance(account)
+    const { value: etherBalance = '0', error: etherBalanceError, retry: retryEtherBalance } = useEtherTokenBalance(
+        account,
+    )
 
     //#region remote controlled select provider dialog
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
