@@ -91,8 +91,8 @@ export function TradeRoute(props: TradeRouteProps) {
                 </TableHead>
                 <TableBody>
                     {props.trade.trade_.routes.map((route, i) => (
-                        <TableRow>
-                            <TableCell className={classes.cell} align="left" key={i}>
+                        <TableRow key={i}>
+                            <TableCell className={classes.cell} align="left">
                                 <Breadcrumbs
                                     classes={{ ol: classes.list, li: classes.item }}
                                     separator={<NavigateNextIcon fontSize="small" />}>
