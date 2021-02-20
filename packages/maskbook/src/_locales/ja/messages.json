@@ -287,7 +287,7 @@
     "plugin_wallet_transaction_rejected": "取引は拒否されました。",
     "plugin_wallet_view_on_etherscan": "Etherscanで見る",
     "plugin_wallet_wrong_network_tip": "正しいEthereumネットワークを選択してください。",
-    "plugin_wallet_on_create": "暗号通貨ウォレットを作成",
+    "plugin_wallet_on_create": "ウォレットを作成",
     "plugin_wallet_on_connect": "ウォレットに接続しています",
     "plugin_wallet_select_provider_dialog_title": "ウォレットを接続",
     "plugin_wallet_qr_code_with_wallet_connect": "WalletConnect対応のQRコードを読みこむ",
