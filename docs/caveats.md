@@ -38,8 +38,8 @@ it is an interactive CLI tool to help you to learn out how to compose the build 
 - Switch on "**Developer mode**"
 - Click "**Load unpacked version**"
 - Select
-  - `project_root/dist` folder (in **development mode**)
-  - `project_root/build` folder (after a **production mode** build).
+  - `project_root/build` folder (in **development mode**)
+  - `project_root/dist` folder (after a **production mode** build).
 
 ### Load extension into Firefox
 
