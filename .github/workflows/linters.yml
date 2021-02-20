@@ -24,7 +24,7 @@ jobs:
       - run: sudo npm i -g pnpm
       - run: npm run ci
       - run: npx prettier --check .
-      - run: npx tsc -b
+      - run: npx build -- echo "Check tsc"
       - run: npm run lint:typecoverage
       - run: npm run locale-kit
       - run: npm run lint:report

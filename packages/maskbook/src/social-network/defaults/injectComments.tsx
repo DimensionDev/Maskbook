@@ -44,7 +44,6 @@ export function injectPostCommentsDefault<T extends string>(
                     </PostInfoContext.Provider>,
                     { shadow: () => meta.afterShadow },
                 )
-                commentRef.addListener(console.log)
                 return {
                     onNodeMutation() {
                         commentRef.value = collectNodeText(commentNode)

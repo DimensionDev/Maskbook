@@ -24,7 +24,6 @@ function MaskTheme(mode: PaletteMode) {
         ...Object.values(Changes).map(applyColors),
         ...Object.values(Components).map(applyColors),
     )
-    console.log(theme)
     return createMuiTheme(theme)
     function applyColors(x: any) {
         if (typeof x === 'function') return x(mode, colors)
@@ -34,3 +33,4 @@ function MaskTheme(mode: PaletteMode) {
 export const MaskLightTheme = MaskTheme('light')
 export const MaskDarkTheme = MaskTheme('dark')
 export * from './Components/index'
+export { addMaskThemeI18N } from './locales'

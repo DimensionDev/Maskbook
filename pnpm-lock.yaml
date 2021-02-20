@@ -10,14 +10,16 @@ importers:
       '@material-ui/system': 5.0.0-alpha.24_7565c510aa7aed787cc1ad6800cc07f7
       '@types/react': 17.0.1
       '@types/react-dom': 17.0.0
+      i18next: 19.8.9
       react: 0.0.0-experimental-dc27b5aaa
       react-dom: 0.0.0-experimental-dc27b5aaa_bbe24f3d390b2dd762addfb9b4a0c180
+      react-i18next: 11.8.7_53a974ddc56f8f7513d0cdb068653a35
     devDependencies:
       '@commitlint/cli': 11.0.0
       '@commitlint/config-conventional': 11.0.0
       '@dimensiondev/maskbook-cli-dev-or-build': link:packages/cli-dev-build
       '@magic-works/commonjs-import.meta': 1.0.0_typescript@4.1.3
-      '@magic-works/i18n-codegen': 0.0.4_typescript@4.1.3
+      '@magic-works/i18n-codegen': 0.0.5_typescript@4.1.3
       '@material-ui/codemod': 5.0.0-alpha.24
       '@nice-labs/git-rev': 3.5.0
       eslint: 7.18.0
@@ -45,7 +47,7 @@ importers:
       '@emotion/react': ^11.1.2
       '@emotion/styled': ^11
       '@magic-works/commonjs-import.meta': ^1.0.0
-      '@magic-works/i18n-codegen': ^0.0.4
+      '@magic-works/i18n-codegen': ^0.0.5
       '@material-ui/codemod': ^5.0.0-alpha.24
       '@material-ui/core': 5.0.0-alpha.24
       '@material-ui/icons': 5.0.0-alpha.24
@@ -63,12 +65,14 @@ importers:
       eslint-plugin-unused-imports: ^1.0.0
       esm: ^3.2.25
       husky: ^5.0.8
+      i18next: ^19.8.9
       lint-staged: ^10.5.3
       npm-run-all: ^4.1.5
       only-allow: ^1.0.0
       prettier: ^2.1.2
       react: '=0.0.0-experimental-dc27b5aaa'
       react-dom: '=0.0.0-experimental-dc27b5aaa'
+      react-i18next: ^11.8.7
       ts-node: ^9.1.1
       ttypescript: ^1.5.12
       type-coverage: ^2.14.8
@@ -184,7 +188,6 @@ importers:
       fuse.js: 6.4.6
       gun: 0.2020.520
       https-browserify: 1.0.0
-      i18next: 19.8.5
       idb: 5.0.8
       immer: 8.0.1
       json-stable-stringify: 1.0.1
@@ -203,7 +206,6 @@ importers:
       react-draggable: 4.4.3
       react-feather: 2.0.9
       react-highlight-words: 0.17.0
-      react-i18next: 11.8.5_i18next@19.8.5
       react-middle-ellipsis: 1.1.0
       react-router: 5.2.0
       react-router-dom: 5.2.0
@@ -382,7 +384,6 @@ importers:
       gun: 0.2020.520
       html-webpack-plugin: ^5.0.0-beta.4
       https-browserify: ^1.0.0
-      i18next: ^19.8.5
       idb: ^5.0.7
       immer: ^8.0.1
       jest: 26.6.3
@@ -411,7 +412,6 @@ importers:
       react-draggable: ^4.4.3
       react-feather: ^2.0.9
       react-highlight-words: ^0.17.0
-      react-i18next: ^11.8.4
       react-middle-ellipsis: ^1.1.0
       react-refresh: ^0.9.0
       react-refresh-typescript: ^1.1.0
@@ -481,6 +481,7 @@ importers:
       '@storybook/react': ^6
   packages/theme:
     dependencies:
+      '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
       lodash-es: 4.17.20
     devDependencies:
@@ -495,6 +496,7 @@ importers:
       storybook-addon-matrix: 1.6.0
     specifiers:
       '@babel/core': ^7.12.9
+      '@dimensiondev/maskbook-shared': '*'
       '@dimensiondev/maskbook-storybook-shared': '*'
       '@storybook/addon-actions': ^6.1.9
       '@storybook/addon-essentials': ^6.1.9
@@ -2375,6 +2377,12 @@ packages:
       '@babel/core': ^7.0.0-0
     resolution:
       integrity: sha512-EvX/BvMMJRAA3jZgILWgbsrHwBQvllC5T8B29McyME8DvkdOxk4ujESfrMvME8IHSDvWXrmMXxPvA/lx2gqPLQ==
+  /@babel/runtime/7.12.18:
+    dependencies:
+      regenerator-runtime: 0.13.7
+    dev: false
+    resolution:
+      integrity: sha512-BogPQ7ciE6SYAUPtlm9tWbgI9+2AgqSam6QivMgXgAT+fKbgppaj4ZX15MHeLC1PVF5sNk70huBu20XxWOs8Cg==
   /@babel/runtime/7.12.5:
     dependencies:
       regenerator-runtime: 0.13.7
@@ -3867,7 +3875,7 @@ packages:
       typescript: ^3.5
     resolution:
       integrity: sha512-+k8JqF+cQ0EsNGW7Mz306aV20CCwMvHANnQ+lE6XyNkXBAnlqAjrSBumCcgs/ooDGeVXwG/N9WAHgK6Io4PJ+A==
-  /@magic-works/i18n-codegen/0.0.4_typescript@4.1.3:
+  /@magic-works/i18n-codegen/0.0.5_typescript@4.1.3:
     dependencies:
       chokidar: 3.5.1
       i18next-translation-parser: 1.0.1
@@ -3879,7 +3887,7 @@ packages:
     peerDependencies:
       typescript: ^4
     resolution:
-      integrity: sha512-aPNgIQkjgf38M37HmR0hrjUBRxYMqHXUe2XWY7MvxQBDq/mpf6Vek6M1MHiz/TzXVjG7fS8/MIyGT9rdc72a9Q==
+      integrity: sha512-gJ6SFMiXOza4KaSZx8l0WleNK6UReLMR1KnSHUmIIK0Sfqq7OqNuPooBBTF1U78nG+FWaeg9S9SI42u4Lpzwpg==
   /@material-ui/codemod/5.0.0-alpha.24:
     dependencies:
       '@babel/core': 7.12.10
@@ -14776,12 +14784,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-SdB8Z8Hlx73aymNz+70+zddBdZvZ/4ACs8WteQy+e+kRM4qe714zAylN+D1gzl75iyhj0IqPllrSmRlZXCQCvg==
-  /i18next/19.8.5:
+  /i18next/19.8.9:
     dependencies:
-      '@babel/runtime': 7.12.5
+      '@babel/runtime': 7.12.18
     dev: false
     resolution:
-      integrity: sha512-mDuH/mvnNXZmvqxl3akSZuJtbX7ou7M66kzfXQTfRngTZ9cAjktlx4yVzA+gS9VPZp51eZOQAGfEDbFcnyvliw==
+      integrity: sha512-cyLeJv7tg3MP+bRNbNe9CleiBGfkCeEKr0DKY2MBPYE1vIQGu4mQ3qlTCmW1tcZi9fMqSI4G2mGBO+JwoIQSbQ==
   /iconv-lite/0.4.24:
     dependencies:
       safer-buffer: 2.1.2
@@ -20458,17 +20466,18 @@ packages:
       react: '>= 0.14.0'
     resolution:
       integrity: sha512-3n3OU8vLX/pfcJrR3xJ1zlww6KS1kEJt0Whxc4FiGV+MJrQ1mYSYI3qS/11d2MJDFm8IhOXMTFQirfu6AVOF6Q==
-  /react-i18next/11.8.5_i18next@19.8.5:
+  /react-i18next/11.8.7_53a974ddc56f8f7513d0cdb068653a35:
     dependencies:
-      '@babel/runtime': 7.12.5
+      '@babel/runtime': 7.12.18
       html-parse-stringify2: 2.0.1
-      i18next: 19.8.5
+      i18next: 19.8.9
+      react: 0.0.0-experimental-dc27b5aaa
     dev: false
     peerDependencies:
       i18next: '>= 19.0.0'
       react: '>= 16.8.0'
     resolution:
-      integrity: sha512-2jY/8NkhNv2KWBnZuhHxTn13aMxAbvhiDUNskm+1xVVnrPId78l8fA7fCyVeO3XU1kptM0t4MtvxV1Nu08cjLw==
+      integrity: sha512-IDK/a73cJN4J2C6yTqmDS/r8iikwKaN283hltqps8UiRaFVTvlSxE85HkamEFD6lULG4hFZExecXJ/hA27DW3Q==
   /react-input-autosize/3.0.0:
     dependencies:
       prop-types: 15.7.2

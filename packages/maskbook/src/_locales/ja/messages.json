@@ -271,8 +271,6 @@
     "untitled_wallet": "無題の暗号通貨ウォレット",
     "your_message": "あなたのメッセージ...",
     "input_length_exceed_prompt": "{{name}}の長さは{{length}}より短くしてください。",
-    "crash_title_of": "{{who}}にエラーが発生しました。",
-    "crash_retry": "修復する",
     "relative_time_days_ago": "{{days}}日前",
     "relative_time_hours_ago": "{{hours}}時間前",
     "relative_time_minutes_ago": "{{minutes}}分前",

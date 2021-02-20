@@ -2,8 +2,9 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "./",
-    "outDir": "./dist/"
+    "outDir": "./dist/",
+    "resolveJsonModule": true
   },
-  "include": ["./src/", "./stories"],
-  "references": [{ "path": "../storybook-shared/" }]
+  "include": ["./src/", "./stories", "./src/locales/*.json"],
+  "references": [{ "path": "../storybook-shared/" }, { "path": "../shared/" }]
 }
