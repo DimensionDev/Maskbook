@@ -265,7 +265,7 @@ export function TradeForm(props: TradeFormProps) {
             <div className={classes.section}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
-                        amount={approveAmount}
+                        amount={approveAmount.toFixed()}
                         token={approveToken?.type === EthereumTokenType.ERC20 ? approveToken : undefined}
                         spender={approveAddress}>
                         <ActionButton

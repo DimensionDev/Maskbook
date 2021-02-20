@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import type { TransactionReceipt } from 'web3-core'
+import BigNumber from 'bignumber.js'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
@@ -8,7 +9,6 @@ import type { ExchangeProxy } from '../../../../contracts/ExchangeProxy'
 import { SLIPPAGE_TOLERANCE_DEFAULT, TRADE_CONSTANTS } from '../../constants'
 import { EthereumTokenType, TransactionEventType } from '../../../../web3/types'
 import { useConstant } from '../../../../web3/hooks/useConstant'
-import BigNumber from 'bignumber.js'
 import type { Tx } from '../../../../contracts/types'
 import { addGasMargin } from '../../../../web3/helpers'
 import { useTradeAmount } from './useTradeAmount'
@@ -25,7 +25,6 @@ export function useTradeCallback(
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })
-
     const tradeAmount = useTradeAmount(trade, allowedSlippage)
 
     const tradeCallback = useCallback(async () => {
