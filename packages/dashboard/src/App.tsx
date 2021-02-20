@@ -5,6 +5,7 @@ import { Pages } from './pages/routes'
 import { StrictMode } from 'react'
 import i18n from 'i18next'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
+import { addDashboardI18N } from './locales'
 i18n.init({
     resources: {},
     keySeparator: false,
@@ -13,6 +14,7 @@ i18n.init({
 })
 i18n.use(initReactI18next)
 addMaskThemeI18N(i18n)
+addDashboardI18N(i18n)
 
 export function App() {
     return (

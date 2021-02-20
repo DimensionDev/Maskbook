@@ -1,6 +1,7 @@
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { StartupActionList, StartupActionListItem } from '../../components/StartupActionList'
 import { MaskWalletIcon, ImportWalletIcon, CloudLinkIcon } from '@dimensiondev/icons'
+import { useDashboardI18N } from '../../locales'
 
 export const Container = styled('div')`
     display: flex;
@@ -9,28 +10,29 @@ export const Container = styled('div')`
 `
 
 export function StartUp() {
+    const t = useDashboardI18N()
     return (
         <Container>
             <StartupActionList>
                 <StartupActionListItem
                     icon={<MaskWalletIcon />}
-                    title="Create A New Wallet"
-                    description="Mask network supports Eth and Polka networks "
-                    action="create"
+                    title={t.wallets_startup_create()}
+                    description={t.wallets_startup_create_desc()}
+                    action={t.wallets_startup_create_action()}
                     onClick={() => {}}
                 />
                 <StartupActionListItem
                     icon={<ImportWalletIcon />}
-                    title="Import the ETH or Polka wallet"
-                    description="Mask network supports Private Key、JSON.File and Mnemonic words."
-                    action="Import"
+                    title={t.wallets_startup_import()}
+                    description={t.wallets_startup_import_desc()}
+                    action={t.wallets_startup_import_action()}
                     onClick={() => {}}
                 />
                 <StartupActionListItem
                     icon={<CloudLinkIcon />}
-                    title="Connect plug-in Wallet"
-                    description="Mask network supports Metamask、Connect Wallet"
-                    action="Connect"
+                    title={t.wallets_startup_connect()}
+                    description={t.wallets_startup_connect_desc()}
+                    action={t.wallets_startup_connect_action()}
                     onClick={() => {}}
                 />
             </StartupActionList>

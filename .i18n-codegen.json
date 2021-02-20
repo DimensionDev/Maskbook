@@ -33,7 +33,7 @@
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useDashboardI18N",
-                "namespace": "theme",
+                "namespace": "dashboard",
                 "trans": "DashboardTrans",
                 "sourceMap": "inline"
             }
