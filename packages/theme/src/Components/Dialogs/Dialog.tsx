@@ -4,7 +4,7 @@ import { MaskDialogTitle, MaskDialogTitleProps } from './DialogTitle'
 export interface MaskDialogProps extends React.PropsWithChildren<Omit<MaskDialogTitleProps, 'children'>> {
     title: string
     open: boolean
-    DialogProps?: DialogProps
+    DialogProps?: Omit<DialogProps, 'open'>
 }
 
 /**
