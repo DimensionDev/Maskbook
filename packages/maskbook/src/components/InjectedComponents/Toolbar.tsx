@@ -72,6 +72,9 @@ export function Toolbar(props: ToolbarProps) {
     const onMaskbookIconClicked = useCallback(() => {
         setBreakdownDialogOpen(true)
     }, [])
+    const onBreakdownDialogClose = useCallback(() => {
+        setBreakdownDialogOpen(false)
+    }, [])
     //#endregion
 
     return (
@@ -92,7 +95,7 @@ export function Toolbar(props: ToolbarProps) {
                     </div>
                 </div>
             </Paper>
-            <BreakdownDialog open={breakdownDialogOpen} />
+            <BreakdownDialog open={breakdownDialogOpen} onClose={onBreakdownDialogClose} />
         </>
     )
 }

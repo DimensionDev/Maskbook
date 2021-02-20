@@ -14,6 +14,11 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useStylesExtends } from '../custom-ui-helper'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { AirdropIcon } from '../../resources/AirdropIcon'
+import { useERC20TokenBalance } from '../../web3/hooks/useERC20TokenBalance'
+import { useConstant } from '../../web3/hooks/useConstant'
+import { CONSTANTS } from '../../web3/constants'
+import { formatBalance } from '../../plugins/Wallet/formatter'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -117,6 +122,12 @@ interface BreakdownDialogUIProps extends withClasses<never> {
 
 function BreakdownDialogUI(props: BreakdownDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
+
+    const MASK_ADDRESS = useConstant(CONSTANTS, 'MASK_ADDRESS')
+    const { value: maskBalance = '0', error: maskBalanceError, loading: maskBalanceLoading } = useERC20TokenBalance(
+        MASK_ADDRESS,
+    )
+
     return (
         <InjectedDialog
             open={props.open}
@@ -128,7 +139,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
                 <Typography className={classes.amount}>200.00 MASK</Typography>
                 <Typography className={classes.balance}>
                     <span>Balance:</span>
-                    <span>100 MASK</span>
+                    <span>{formatBalance(new BigNumber(maskBalance), 18, 6)} MASK</span>
                 </Typography>
                 <Box className={classes.airDropContainer}>
                     <Box className={classes.airdropContent}>

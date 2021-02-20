@@ -1,6 +1,12 @@
-import { Button, ButtonProps, createStyles, makeStyles, Typography } from '@material-ui/core'
+import { ButtonProps, createStyles, makeStyles, Typography } from '@material-ui/core'
+import BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../components/custom-ui-helper'
+import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
+import { formatBalance } from '../../plugins/Wallet/formatter'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
+import { CONSTANTS } from '../constants'
+import { useConstant } from '../hooks/useConstant'
+import { useERC20TokenBalance } from '../hooks/useERC20TokenBalance'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -27,10 +33,22 @@ export interface EthereumMaskBalanceButtonProps extends withClasses<'root'> {
 export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps) {
     const classes = useStylesExtends(useStyles(), props)
 
+    const MASK_ADDRESS = useConstant(CONSTANTS, 'MASK_ADDRESS')
+    const { value: maskBalance = '0', error: maskBalanceError, loading: maskBalanceLoading } = useERC20TokenBalance(
+        MASK_ADDRESS,
+    )
+
     return (
-        <Button className={classes.root} variant="contained" color="primary" {...props.ButtonProps}>
-            {process.env.architecture === 'web' ? <MaskbookIcon className={classes.icon} /> : null}
-            <Typography>0 MASK</Typography>
-        </Button>
+        <ActionButton
+            className={classes.root}
+            variant="contained"
+            color="primary"
+            loading={maskBalanceLoading}
+            {...props.ButtonProps}>
+            {process.env.architecture === 'web' && !maskBalanceLoading ? (
+                <MaskbookIcon className={classes.icon} />
+            ) : null}
+            <Typography>{formatBalance(new BigNumber(maskBalance), 18, 6)} MASK</Typography>
+        </ActionButton>
     )
 }
