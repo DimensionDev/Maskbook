@@ -5,3 +5,4 @@ packages:
   - 'packages/shared'
   - 'packages/storybook-shared'
   - 'packages/theme'
+  - 'packages/icons'
