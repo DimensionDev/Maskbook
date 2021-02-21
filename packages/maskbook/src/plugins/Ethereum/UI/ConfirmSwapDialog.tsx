@@ -1,12 +1,15 @@
 import { makeNumberCaptcha } from '@dimensiondev/kit'
 import { Button, createStyles, DialogContent, Grid, makeStyles, TextField } from '@material-ui/core'
-import { FC, useCallback, useEffect, useState, MouseEvent } from 'react'
+import { FC, useCallback, useEffect, useState, Event } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumMessages } from '../messages'
 
-interface Props {}
+interface Props {
+    variable: number
+    bypass?: boolean
+}
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -35,21 +38,23 @@ const operations: Record<string, string> = {
     '/': '\u00F7', // https://unicode-table.com/en/00F7/
 }
 
-export const ConfirmSwapDialog: FC<Props> = () => {
+export const ConfirmSwapDialog: FC<Props> = ({ variable, bypass }) => {
     const classes = useStyles()
     const { t } = useI18N()
     const [value, setValue] = useState(0)
     const [problem, setProblem] = useState(makeNumberCaptcha())
 
-    const [, , , result] = problem
     const handleRefresh = () => setProblem(makeNumberCaptcha())
+
+    const result = problem[variable ?? 2]
 
     //#region remote controlled dialog
     const [open, setOpen] = useRemoteControlledDialog(EthereumMessages.events.confirmSwapDialogUpdated)
     const handleConfirm = useCallback(() => {
-        if (value !== result) return
-        setOpen({ open: false, result: true })
-    }, [value, result, setOpen])
+        if (bypass || value === result) {
+            setOpen({ open: false, result: true })
+        }
+    }, [bypass, value, result, setOpen])
     const handleClose = useCallback(() => setOpen({ open: false, result: false }), [setOpen])
     //#endregion
 
@@ -68,18 +73,23 @@ export const ConfirmSwapDialog: FC<Props> = () => {
             <DialogContent>
                 <Grid>
                     <Grid item className={classes.padding}>
-                        <Formula onClick={handleRefresh} problem={problem} variable={1} />
+                        <Formula onClick={handleRefresh} problem={problem} variable={variable ?? 2} />
                     </Grid>
                     <Grid item className={classes.padding}>
                         <TextField
                             fullWidth
+                            onPaste={onPreventDefault}
                             type="number"
                             onChange={(event) => setValue(+event.currentTarget.value)}
                             placeholder={t('plugin_wallet_captcha_hint')}
                         />
                     </Grid>
                     <Grid item className={classes.padding}>
-                        <Button disabled={value !== result} fullWidth variant="contained" onClick={handleConfirm}>
+                        <Button
+                            disabled={bypass || value !== result}
+                            fullWidth
+                            variant="contained"
+                            onClick={handleConfirm}>
                             {t('plugin_wallet_captcha_confirm')}
                         </Button>
                     </Grid>
@@ -121,7 +131,7 @@ const Formula: FC<FormulaProps> = ({ onClick, problem, variable }) => {
     )
 }
 
-function onPreventDefault(event: MouseEvent) {
+function onPreventDefault(event: Event) {
     event.preventDefault()
     event.stopPropagation()
 }
