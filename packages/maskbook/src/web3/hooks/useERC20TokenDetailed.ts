@@ -22,7 +22,7 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
 
     // validate
     const [results, calls, _, callback] = useSingleContractMultipleData(erc20TokenContract, names, callDatas)
-    const asyncResult = useAsyncRetry(() => callback(calls), [erc20TokenContract, names, callDatas])
+    const asyncResult = useAsyncRetry(() => callback(calls), [calls, callback])
 
     // compose
     const token_ = useMemo(() => {

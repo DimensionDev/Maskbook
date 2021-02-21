@@ -56,7 +56,7 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
     const onMaskbookIconClicked = useCallback(() => {
         if (maskBalanceError) maskBalanceRetry()
         if (maskTokenError) maskTokenRetry()
-        else setBreakdownDialogOpen(true)
+        setBreakdownDialogOpen(true)
     }, [maskBalanceError, maskTokenError, maskBalanceRetry, maskTokenRetry])
     const onBreakdownDialogClose = useCallback(() => {
         setBreakdownDialogOpen(false)
