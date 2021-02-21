@@ -22,7 +22,16 @@ export class Airdrop extends Contract {
             claimer: string,
             amount: number | string,
             merkleProof: (string | number[])[],
-        ): TransactionObject<boolean>
+        ): TransactionObject<{
+            available: boolean
+            start: string
+            end: string
+            claimable: string
+            0: boolean
+            1: string
+            2: string
+            3: string
+        }>
 
         claim(
             index: number | string,

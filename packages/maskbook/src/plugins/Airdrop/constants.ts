@@ -6,8 +6,8 @@ export const AirdropPluginID = 'com.maskbook.airdrop'
 export const AIRDROP_CONSTANTS = {
     AIRDROP_CONTRACT_ADDRESS: {
         [ChainId.Mainnet]: '',
-        [ChainId.Ropsten]: '0xB6b53939447c57436A44d8a1bE9f4F3cD24301f7', // proof root: 0x78526288030b951aef50b272f54f511dcf70ea79f9b34457736ca4cefbf8b236
-        [ChainId.Rinkeby]: '0x6Fa4b8B9b8Db81730ba9C86c72baa43aDcC2eA2a', // proof root: 0x78526288030b951aef50b272f54f511dcf70ea79f9b34457736ca4cefbf8b236
+        [ChainId.Ropsten]: '0x479ae9E694515aBCfB7fe6d5e327E37602e3949C', // proof root: 0xacdff1239598028edc9c789d9d852b473213362db2a8e159802bcfb19a0945da
+        [ChainId.Rinkeby]: '0x53E9Fe846c3244744f86CAc678899a0f71a9B76C', // proof root: 0xacdff1239598028edc9c789d9d852b473213362db2a8e159802bcfb19a0945da
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },

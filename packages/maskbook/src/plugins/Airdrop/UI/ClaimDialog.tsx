@@ -24,7 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
         icon: {
             width: 36,
             height: 36,
-            marginRight: theme.spacing(2.5),
+        },
+        symbol: {
+            marginLeft: theme.spacing(2.5),
         },
         token: {
             display: 'flex',
@@ -63,7 +65,9 @@ function ClaimDialogUI(props: ClaimDialogUIProps) {
                 <Box className={classes.token}>
                     <Box display="flex" alignItems="center">
                         <TokenIcon classes={{ icon: classes.icon }} name={token.name} address={token.address} />
-                        <Typography color="textPrimary">{token.symbol}</Typography>
+                        <Typography className={classes.symbol} color="textPrimary">
+                            {token.symbol}
+                        </Typography>
                     </Box>
                     <Box>
                         <Typography color="textPrimary">

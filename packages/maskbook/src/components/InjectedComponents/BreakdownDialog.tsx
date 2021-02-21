@@ -1,18 +1,14 @@
-import { DialogContent, Button, createStyles, Typography, Box, Alert, DialogProps } from '@material-ui/core'
+import { DialogContent, createStyles, Typography, DialogProps } from '@material-ui/core'
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { makeStyles } from '@material-ui/core/styles'
 import { useStylesExtends } from '../custom-ui-helper'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
-import { useERC20TokenBalance } from '../../web3/hooks/useERC20TokenBalance'
-import { useConstant } from '../../web3/hooks/useConstant'
-import { CONSTANTS } from '../../web3/constants'
 import { formatBalance } from '../../plugins/Wallet/formatter'
 import BigNumber from 'bignumber.js'
-import { AirdropCard } from '../../plugins/Airdrop/UI/AirdropCard'
 import { ITO_Card } from '../../plugins/ITO/UI/ITO_Card'
-import { useERC20TokenDetailed } from '../../web3/hooks/useERC20TokenDetailed'
-
-const MASK_TOKEN_AIRDROP_TOTAL_VOLUME = new BigNumber('3e6')
+import type { ERC20TokenDetailed } from '../../web3/types'
+import { AirdropCard } from '../../plugins/Airdrop/UI/AirdropCard'
+import { useState } from 'react'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -52,25 +48,26 @@ const useStyles = makeStyles((theme) =>
             color: '#fff',
         },
         button: {
-            background: 'rgba(255,255,255,.2)',
+            background: 'rgba(255, 255, 255, .2)',
         },
     }),
 )
 
 interface BreakdownDialogUIProps extends withClasses<never> {
     open: boolean
+    token: ERC20TokenDetailed
+    balance: string
     onClose?: () => void
     DialogProps?: Partial<DialogProps>
 }
 
 function BreakdownDialogUI(props: BreakdownDialogUIProps) {
+    const { token, balance } = props
     const classes = useStylesExtends(useStyles(), props)
 
-    const MASK_ADDRESS = useConstant(CONSTANTS, 'MASK_ADDRESS')
-    const { value: maskToken, error: maskTokenError, loading: maskTokenLoading } = useERC20TokenDetailed(MASK_ADDRESS)
-    const { value: maskBalance = '0', error: maskBalanceError, loading: maskBalanceLoading } = useERC20TokenBalance(
-        MASK_ADDRESS,
-    )
+    // the total amount to be claimed in wei
+    const [airdropAmount, setAirdropAmount] = useState('0')
+    const [ITO_Amount, setITO_Amount] = useState('0')
 
     return (
         <InjectedDialog
@@ -80,13 +77,17 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogPaper }}>
             <DialogContent className={classes.content}>
                 <MaskbookIcon classes={{ root: classes.logo }} />
-                <Typography className={classes.amount}>200.00 MASK</Typography>
+                <Typography className={classes.amount}>
+                    {formatBalance(new BigNumber(airdropAmount).plus(ITO_Amount), token.decimals, 2)} {token.symbol}
+                </Typography>
                 <Typography className={classes.balance}>
                     <span>Balance:</span>
-                    <span>{formatBalance(new BigNumber(maskBalance), 18, 6)} MASK</span>
+                    <span>
+                        {formatBalance(new BigNumber(balance), 18, 2)} {token.symbol}
+                    </span>
                 </Typography>
-                <AirdropCard token={maskToken} totalVolume={MASK_TOKEN_AIRDROP_TOTAL_VOLUME.toFixed()} />
-                <ITO_Card />
+                <AirdropCard token={token} onUpdateAmount={setAirdropAmount} />
+                {/* <ITO_Card /> */}
             </DialogContent>
         </InjectedDialog>
     )

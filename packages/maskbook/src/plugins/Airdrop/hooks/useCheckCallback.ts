@@ -1,32 +1,64 @@
+import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
+import { EthereumAddress } from 'wallet.ts'
 import { formatEthereumAddress } from '../../Wallet/formatter'
+import type { AirdropPacket } from '../apis'
 import { useAirdropContract } from '../contracts/useAirdropContract'
 import { PluginAirdropRPC } from '../messages'
 
 export enum CheckStateType {
     UNKNOWN,
     PENDING,
+    CLAIMED,
     YEP,
     NOPE,
     FAILED,
 }
 
+export type CheckState =
+    | {
+          type: CheckStateType.YEP
+          packet: AirdropPacket
+          ratio: BigNumber
+          claimable: string
+      }
+    | {
+          type: CheckStateType.UNKNOWN | CheckStateType.CLAIMED | CheckStateType.PENDING | CheckStateType.NOPE
+      }
+    | {
+          type: CheckStateType.FAILED
+          error: Error
+      }
+
 export function useCheckCallback() {
     const airdropContract = useAirdropContract()
-    const [checkStateType, setCheckStateType] = useState(CheckStateType.UNKNOWN)
+
+    const [checkState, setCheckState] = useState<CheckState>({
+        type: CheckStateType.UNKNOWN,
+    })
 
     const checkCallback = useCallback(
         async (checkAddress?: string) => {
-            if (!airdropContract || !checkAddress) {
-                setCheckStateType(CheckStateType.UNKNOWN)
+            if (!airdropContract || !checkAddress) return
+
+            // validate address
+            if (!EthereumAddress.isValid(checkAddress.trim())) {
+                setCheckState({
+                    type: CheckStateType.FAILED,
+                    error: new Error('Not a valid address.'),
+                })
                 return
             }
 
-            // skip if previous tx is pending
-            if (checkStateType === CheckStateType.PENDING) return
+            // clean previous packet at every pass
+            setCheckState({
+                type: CheckStateType.UNKNOWN,
+            })
 
             // start check with remote apis
-            setCheckStateType(CheckStateType.PENDING)
+            setCheckState({
+                type: CheckStateType.PENDING,
+            })
 
             try {
                 const address_ = formatEthereumAddress(checkAddress.trim())
@@ -34,27 +66,50 @@ export function useCheckCallback() {
                 // read airdrop packet
                 const packet = await PluginAirdropRPC.getMaskAirdropPacket(address_)
                 if (!packet) {
-                    setCheckStateType(CheckStateType.NOPE)
+                    setCheckState({
+                        type: CheckStateType.NOPE,
+                    })
                     return
                 }
 
-                // check on contract
-                if (!airdropContract) {
-                    setCheckStateType(CheckStateType.FAILED)
+                // revalidate by contract
+                const { index, address, amount, proof } = packet
+                const { available, claimable } = await airdropContract.methods
+                    .check(index, formatEthereumAddress(address), amount, proof)
+                    .call()
+
+                if (available)
+                    setCheckState({
+                        type: CheckStateType.YEP,
+                        packet,
+                        claimable,
+                        ratio: new BigNumber(claimable).div(amount),
+                    })
+                else
+                    setCheckState({
+                        type: CheckStateType.NOPE,
+                    })
+            } catch (error) {
+                if (error.message.includes('Already Claimed')) {
+                    setCheckState({
+                        type: CheckStateType.CLAIMED,
+                    })
                     return
                 }
-                const { index, address, amount, proof } = packet
-                const checked = await airdropContract.methods.check(index, address, amount, proof).call()
-                setCheckStateType(checked ? CheckStateType.YEP : CheckStateType.NOPE)
-            } catch (e) {
-                setCheckStateType(CheckStateType.FAILED)
+                setCheckState({
+                    type: CheckStateType.FAILED,
+                    error,
+                })
             }
         },
-        [airdropContract, checkStateType],
+        [airdropContract],
     )
 
     const resetCallback = useCallback(() => {
-        setCheckStateType(CheckStateType.UNKNOWN)
+        setCheckState({
+            type: CheckStateType.UNKNOWN,
+        })
     }, [])
-    return [checkStateType, checkCallback, resetCallback] as const
+
+    return [checkState, checkCallback, resetCallback] as const
 }

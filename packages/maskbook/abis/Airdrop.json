@@ -130,6 +130,21 @@
                 "internalType": "bool",
                 "name": "available",
                 "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "start",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "end",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "claimable",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",

@@ -37,21 +37,20 @@ export function useClaimCallback(packet?: AirdropPacket) {
 
         // step 1: merkle proof
         try {
-            const available = await AirdropContract.methods.check(index, account, amount, proof).call({
+            const { available } = await AirdropContract.methods.check(index, account, amount, proof).call({
                 from: account,
             })
             if (!available) {
                 setClaimState({
                     type: TransactionStateType.FAILED,
-                    error: new Error('Not a valid candidate.'),
+                    error: new Error('You have not got any reward.'),
                 })
                 return
             }
         } catch (e) {
-            console.log(e)
             setClaimState({
                 type: TransactionStateType.FAILED,
-                error: new Error('Failed to check availability.'),
+                error: new Error('Failed to claim the reward.'),
             })
             return
         }

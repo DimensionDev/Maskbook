@@ -10,6 +10,7 @@ import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { CONSTANTS } from '../constants'
 import { useConstant } from '../hooks/useConstant'
 import { useERC20TokenBalance } from '../hooks/useERC20TokenBalance'
+import { useERC20TokenDetailed } from '../hooks/useERC20TokenDetailed'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -34,20 +35,29 @@ export interface EthereumMaskBalanceButtonProps extends withClasses<'root'> {}
 export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps) {
     const classes = useStylesExtends(useStyles(), props)
 
+    //#region token detailed
     const MASK_ADDRESS = useConstant(CONSTANTS, 'MASK_ADDRESS')
+    const {
+        value: maskToken,
+        error: maskTokenError,
+        loading: maskTokenLoading,
+        retry: maskTokenRetry,
+    } = useERC20TokenDetailed(MASK_ADDRESS)
     const {
         value: maskBalance = '0',
         error: maskBalanceError,
         loading: maskBalanceLoading,
         retry: maskBalanceRetry,
     } = useERC20TokenBalance(MASK_ADDRESS)
+    //#endregion
 
     //#region breakdown dialog
     const [breakdownDialogOpen, setBreakdownDialogOpen] = useState(false)
     const onMaskbookIconClicked = useCallback(() => {
         if (maskBalanceError) maskBalanceRetry()
+        if (maskTokenError) maskTokenRetry()
         else setBreakdownDialogOpen(true)
-    }, [maskBalanceError])
+    }, [maskBalanceError, maskTokenError, maskBalanceRetry, maskTokenRetry])
     const onBreakdownDialogClose = useCallback(() => {
         setBreakdownDialogOpen(false)
     }, [])
@@ -59,15 +69,26 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
                 className={classes.root}
                 variant="contained"
                 color="primary"
-                loading={maskBalanceLoading && !maskBalanceError}
+                loading={maskBalanceLoading || maskTokenLoading}
                 onClick={onMaskbookIconClicked}>
-                {process.env.architecture === 'web' && maskBalanceError ? <RefreshIcon /> : null}
-                {process.env.architecture === 'web' && !maskBalanceLoading && !maskBalanceError ? (
+                {process.env.architecture === 'web' && (maskBalanceError || maskTokenError) ? <RefreshIcon /> : null}
+                {process.env.architecture === 'web' &&
+                !maskBalanceLoading &&
+                !maskTokenLoading &&
+                !maskBalanceError &&
+                !maskTokenError ? (
                     <MaskbookIcon className={classes.icon} />
                 ) : null}
                 <Typography>{formatBalance(new BigNumber(maskBalance), 18, 6)} MASK</Typography>
             </ActionButton>
-            <BreakdownDialog open={breakdownDialogOpen} onClose={onBreakdownDialogClose} />
+            {maskToken ? (
+                <BreakdownDialog
+                    open={breakdownDialogOpen}
+                    token={maskToken}
+                    balance={maskBalance}
+                    onClose={onBreakdownDialogClose}
+                />
+            ) : null}
         </>
     )
 }
