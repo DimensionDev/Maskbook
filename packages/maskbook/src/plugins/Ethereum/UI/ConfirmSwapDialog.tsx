@@ -9,7 +9,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 
 interface Props {}
 
-export const ConfirSwapDialog: FC<Props> = () => {
+export const ConfirmSwapDialog: FC<Props> = () => {
     const { t } = useI18N()
     const [value, setValue] = useState(0)
     const [problem, setProblem] = useState(makeNumberCaptcha())
