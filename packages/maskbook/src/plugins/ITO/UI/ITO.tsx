@@ -181,6 +181,7 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 export interface ITO_Props {
     pid: string
     password: string
+    isMask?: boolean
 }
 
 export function ITO(props: ITO_Props) {
@@ -195,13 +196,14 @@ export function ITO(props: ITO_Props) {
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid, password } = props
+    const { pid, password, isMask } = props
     const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
 
     // append the password from the outcoming pool
     const payload: JSON_PayloadInMask = {
         ...payload_,
         password: payload_.password || password,
+        isMask: isMask ?? false,
     }
 
     const {

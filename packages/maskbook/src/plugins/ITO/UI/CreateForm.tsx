@@ -71,6 +71,7 @@ export function CreateForm(props: CreateFormProps) {
 
     const account = useAccount()
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const MASK_ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'MASK_ITO_CONTRACT_ADDRESS')
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
@@ -297,7 +298,7 @@ export function CreateForm(props: CreateFormProps) {
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={inputTokenAmount}
-                        spender={ITO_CONTRACT_ADDRESS}
+                        spender={isMaskITO ? MASK_ITO_CONTRACT_ADDRESS : ITO_CONTRACT_ADDRESS}
                         token={
                             tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined
                         }>

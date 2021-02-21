@@ -23,6 +23,7 @@ export interface JSON_PayloadInMask {
     token: EtherTokenDetailed | ERC20TokenDetailed
     exchange_amounts: string[]
     exchange_tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
+    isMask?: boolean
 }
 
 type TokenOutMask = Omit<JSON_PayloadInMask['token'], 'chainId'> & {

@@ -148,6 +148,10 @@
                     }
                 ]
             }
+        },
+        "isMask": {
+            "type": "boolean",
+            "title": "isMask"
         }
     },
     "required": [
