@@ -93,7 +93,7 @@ export const ITO_CONSTANTS = {
     },
     MASK_ITO_CONTRACT_ADDRESS: {
         [ChainId.Mainnet]: '',
-        [ChainId.Ropsten]: '0x19767Fa39f10115C0414fB6EcAadE1a7bcB482BA',
+        [ChainId.Ropsten]: '0xab7b1be4233a04e5c43a810e75657eced8e5463b',
         [ChainId.Rinkeby]: '0x0aC41A27bA9F132D5687CAC986f5302Da6f5F9f6',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',

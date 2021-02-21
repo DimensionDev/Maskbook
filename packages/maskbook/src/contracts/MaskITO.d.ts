@@ -17,39 +17,6 @@ export class MaskITO extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
     clone(): MaskITO
     methods: {
-        claim(): TransactionObject<string>
-
-        destruct(id: string | number[]): TransactionObject<void>
-
-        fill_pool(
-            _hash: string | number[],
-            _start: number | string,
-            _end: number | string,
-            name: string,
-            message: string,
-            _exchange_addrs: string[],
-            _ratios: (number | string)[],
-            _token_addr: string,
-            _total_tokens: number | string,
-            _limit: number | string,
-            _qualification: string,
-        ): TransactionObject<void>
-
-        setUnlockTime(_unlock_time: number | string): TransactionObject<void>
-
-        swap(
-            id: string | number[],
-            verification: string | number[],
-            _recipient: string,
-            validation: string | number[],
-            exchange_addr_i: number | string,
-            input_total: number | string,
-        ): TransactionObject<string>
-
-        withdraw(id: string | number[], addr_i: number | string): TransactionObject<void>
-
-        withdrawBatchCreator(addrs: string[]): TransactionObject<void>
-
         check_availability(
             id: string | number[],
         ): TransactionObject<{
@@ -67,9 +34,50 @@ export class MaskITO extends Contract {
             5: string[]
         }>
 
+        check_claimable(): TransactionObject<string>
+
+        claim(): TransactionObject<string>
+
         contract_creator(): TransactionObject<string>
 
+        destruct(id: string | number[]): TransactionObject<void>
+
+        fill_pool(
+            _hash: string | number[],
+            _start: number | string,
+            _end: number | string,
+            name: string,
+            message: string,
+            _exchange_addrs: string[],
+            _ratios: (number | string)[],
+            _token_addr: string,
+            _total_tokens: number | string,
+            _limit: number | string,
+            _qualification: string,
+        ): TransactionObject<void>
+
         getUnlockTime(): TransactionObject<string>
+
+        setAdmin(future_admin: string): TransactionObject<void>
+
+        setUnlockTime(_unlock_time: number | string): TransactionObject<void>
+
+        set_bb_address(bb: string): TransactionObject<void>
+
+        swap(
+            id: string | number[],
+            verification: string | number[],
+            verification2: string | number[],
+            validation: string | number[],
+            exchange_addr_i: number | string,
+            input_total: number | string,
+        ): TransactionObject<string>
+
+        withdraw(id: string | number[], addr_i: number | string): TransactionObject<void>
+
+        withdrawBatchCreator(addrs: string[]): TransactionObject<void>
+
+        withdrawCreator(addr: string): TransactionObject<void>
     }
     events: {
         ClaimSuccess: ContractEvent<{
