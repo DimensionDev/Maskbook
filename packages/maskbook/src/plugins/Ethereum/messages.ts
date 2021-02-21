@@ -38,6 +38,16 @@ type TransactionDialogEvent =
           open: false
       }
 
+type ConfirmSwapDialogEvent =
+    | {
+          open: true
+          variableIndex: 1 | 2 | 3 | 'bypass'
+      }
+    | {
+          open: false
+          result: boolean
+      }
+
 interface EthereumMessage {
     /**
      * Select token dialog
@@ -53,6 +63,11 @@ interface EthereumMessage {
      * Transaction dialog
      */
     transactionDialogUpdated: TransactionDialogEvent
+
+    /**
+     * Confirm Swap
+     */
+    confirmSwapDialogUpdated: ConfirmSwapDialogEvent
 
     rpc: unknown
 }
