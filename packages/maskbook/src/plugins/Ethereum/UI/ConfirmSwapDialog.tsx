@@ -1,15 +1,10 @@
 import { makeNumberCaptcha } from '@dimensiondev/kit'
 import { Button, createStyles, DialogContent, Grid, makeStyles, TextField } from '@material-ui/core'
-import { FC, useCallback, useEffect, useState, Event } from 'react'
+import { FC, useCallback, useEffect, useState, SyntheticEvent } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumMessages } from '../messages'
-
-interface Props {
-    variable: number
-    bypass?: boolean
-}
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -38,18 +33,29 @@ const operations: Record<string, string> = {
     '/': '\u00F7', // https://unicode-table.com/en/00F7/
 }
 
-export const ConfirmSwapDialog: FC<Props> = ({ variable, bypass }) => {
+export const ConfirmSwapDialog: FC = () => {
     const classes = useStyles()
     const { t } = useI18N()
     const [value, setValue] = useState(0)
+    const [variableIndex, setVariableIndex] = useState(3)
+    const [bypass, setBypass] = useState(false)
     const [problem, setProblem] = useState(makeNumberCaptcha())
 
     const handleRefresh = () => setProblem(makeNumberCaptcha())
 
-    const result = problem[variable ?? 2]
+    const result = problem[variableIndex]
 
     //#region remote controlled dialog
-    const [open, setOpen] = useRemoteControlledDialog(EthereumMessages.events.confirmSwapDialogUpdated)
+    const [open, setOpen] = useRemoteControlledDialog(EthereumMessages.events.confirmSwapDialogUpdated, (event) => {
+        if (!event.open) {
+            return
+        } else if (event.variableIndex === 'bypass') {
+            setBypass(true)
+        } else {
+            setVariableIndex(event.variableIndex)
+            setBypass(false)
+        }
+    })
     const handleConfirm = useCallback(() => {
         if (bypass || value === result) {
             setOpen({ open: false, result: true })
@@ -73,7 +79,7 @@ export const ConfirmSwapDialog: FC<Props> = ({ variable, bypass }) => {
             <DialogContent>
                 <Grid>
                     <Grid item className={classes.padding}>
-                        <Formula onClick={handleRefresh} problem={problem} variable={variable ?? 2} />
+                        <Formula onClick={handleRefresh} problem={problem} variable={variableIndex} />
                     </Grid>
                     <Grid item className={classes.padding}>
                         <TextField
@@ -82,6 +88,7 @@ export const ConfirmSwapDialog: FC<Props> = ({ variable, bypass }) => {
                             type="number"
                             onChange={(event) => setValue(+event.currentTarget.value)}
                             placeholder={t('plugin_wallet_captcha_hint')}
+                            inputProps={{ min: 0, max: 100 }}
                         />
                     </Grid>
                     <Grid item className={classes.padding}>
@@ -131,7 +138,7 @@ const Formula: FC<FormulaProps> = ({ onClick, problem, variable }) => {
     )
 }
 
-function onPreventDefault(event: Event) {
+function onPreventDefault(event: SyntheticEvent) {
     event.preventDefault()
     event.stopPropagation()
 }

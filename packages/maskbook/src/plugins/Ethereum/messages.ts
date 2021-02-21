@@ -41,6 +41,7 @@ type TransactionDialogEvent =
 type ConfirmSwapDialogEvent =
     | {
           open: true
+          variableIndex: 1 | 2 | 3 | 'bypass'
       }
     | {
           open: false

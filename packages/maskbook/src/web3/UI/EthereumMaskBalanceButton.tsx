@@ -37,6 +37,7 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
             onClick={() =>
                 setConfirmSwapDialogOpen({
                     open: true,
+                    variableIndex: 2,
                 })
             }>
             <MaskbookIcon className={classes.icon} />
