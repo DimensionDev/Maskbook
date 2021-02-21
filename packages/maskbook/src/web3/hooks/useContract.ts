@@ -129,7 +129,7 @@ function createContract<T extends Contract>(from: string, address: string, ABI: 
  */
 export function useContract<T extends Contract>(address: string, ABI: AbiItem[]) {
     const account = useAccount()
-    return useMemo(() => createContract<T>(account, address, ABI), [address, account, ABI])
+    return useMemo(() => createContract<T>(account, address, ABI), [account, address, ABI])
 }
 
 /**

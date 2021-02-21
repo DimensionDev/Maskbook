@@ -86,6 +86,13 @@ export const CONSTANTS = {
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },
+    MASK_ADDRESS: {
+        [ChainId.Mainnet]: '',
+        [ChainId.Ropsten]: '0x5B966f3a32Db9C180843bCb40267A66b73E4f022',
+        [ChainId.Rinkeby]: '0xFD9Eb54f6aC885079e7bB3E207922Bb7256E3fcb',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+    },
     MSKA_ADDRESS: {
         [ChainId.Mainnet]: '',
         [ChainId.Ropsten]: '0xe54bf69054da160c597f8b5177924b9e4b81e930',

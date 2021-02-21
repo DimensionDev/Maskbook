@@ -17,7 +17,21 @@ export class Airdrop extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
     clone(): Airdrop
     methods: {
-        check(claimer: string, amount: number | string, merkleProof: (string | number[])[]): TransactionObject<boolean>
+        check(
+            index: number | string,
+            claimer: string,
+            amount: number | string,
+            merkleProof: (string | number[])[],
+        ): TransactionObject<{
+            available: boolean
+            start: string
+            end: string
+            claimable: string
+            0: boolean
+            1: string
+            2: string
+            3: string
+        }>
 
         claim(
             index: number | string,
@@ -26,6 +40,8 @@ export class Airdrop extends Contract {
         ): TransactionObject<void>
 
         recharge(_total: number | string): TransactionObject<void>
+
+        set_root(root: string | number[]): TransactionObject<void>
 
         withdraw(): TransactionObject<void>
     }
@@ -39,6 +55,12 @@ export class Airdrop extends Contract {
         Recharged: ContractEvent<{
             total: string
             timestamp: string
+            0: string
+            1: string
+        }>
+        RootChanged: ContractEvent<{
+            previous: string
+            now: string
             0: string
             1: string
         }>

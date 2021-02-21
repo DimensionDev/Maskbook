@@ -6,21 +6,24 @@ import { addGasMargin } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { TransactionEventType } from '../../../web3/types'
+import type { AirdropPacket } from '../apis'
 import { useAirdropContract } from '../contracts/useAirdropContract'
 
-export function useClaimCallback(index: number, amount: BigNumber, proof: string[]) {
+export function useClaimCallback(packet?: AirdropPacket) {
     const account = useAccount()
     const AirdropContract = useAirdropContract()
 
     const [claimState, setClaimState] = useTransactionState()
 
     const claimCallback = useCallback(async () => {
-        if (!AirdropContract) {
+        if (!AirdropContract || !packet) {
             setClaimState({
                 type: TransactionStateType.UNKNOWN,
             })
             return
         }
+
+        const { index, amount, proof } = packet
 
         // pre-step: start waiting for provider to confirm tx
         setClaimState({
@@ -32,27 +35,31 @@ export function useClaimCallback(index: number, amount: BigNumber, proof: string
             to: AirdropContract.options.address,
         }
 
+        // the claim amount will be set up later if the Merkle proof success
+        const claimParams: Parameters<typeof AirdropContract['methods']['claim']> = [index, '0', proof]
+
         // step 1: merkle proof
         try {
-            const available = await AirdropContract.methods.check(account, amount.toFixed(), proof).call({
+            const { available, claimable } = await AirdropContract.methods.check(index, account, amount, proof).call({
                 from: account,
             })
             if (!available) {
                 setClaimState({
                     type: TransactionStateType.FAILED,
-                    error: new Error('Not a valid candidate'),
+                    error: new Error('You have not got any reward.'),
                 })
                 return
             }
+
+            // set to the max claimable amount
+            claimParams[1] = claimable
         } catch (e) {
             setClaimState({
                 type: TransactionStateType.FAILED,
-                error: new Error('Failed to check availability.'),
+                error: new Error('Failed to claim the reward.'),
             })
             return
         }
-
-        const claimParams: Parameters<typeof AirdropContract['methods']['claim']> = [index, amount.toFixed(), proof]
 
         // step 2-1: estimate gas
         const estimatedGas = await AirdropContract.methods
@@ -92,7 +99,7 @@ export function useClaimCallback(index: number, amount: BigNumber, proof: string
             promiEvent.on(TransactionEventType.CONFIRMATION, onSucceed)
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => onSucceed(0, receipt))
         })
-    }, [AirdropContract, account, index, amount, proof])
+    }, [AirdropContract, account, packet])
 
     const resetCallback = useCallback(() => {
         setClaimState({

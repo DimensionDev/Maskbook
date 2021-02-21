@@ -68,6 +68,25 @@
         "inputs": [
             {
                 "indexed": false,
+                "internalType": "bytes32",
+                "name": "previous",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "now",
+                "type": "bytes32"
+            }
+        ],
+        "name": "RootChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
                 "internalType": "uint256",
                 "name": "left",
                 "type": "uint256"
@@ -84,6 +103,11 @@
     },
     {
         "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            },
             {
                 "internalType": "address",
                 "name": "claimer",
@@ -106,6 +130,21 @@
                 "internalType": "bool",
                 "name": "available",
                 "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "start",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "end",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "claimable",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -143,6 +182,19 @@
             }
         ],
         "name": "recharge",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "root",
+                "type": "bytes32"
+            }
+        ],
+        "name": "set_root",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
