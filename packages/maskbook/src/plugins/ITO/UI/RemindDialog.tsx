@@ -94,10 +94,10 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            textAlign: 'center'
+            textAlign: 'center',
         },
         moreCell: {
-            flexDirection: 'column'
+            flexDirection: 'column',
         },
         column: {
             width: '100%',
@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme) =>
         lowSpacing: {
             marginTop: 4,
             marginBottom: 4,
-        }
+        },
     }),
 )
 
@@ -126,7 +126,7 @@ export function RemindDialog(props: RemindDialogProps) {
 
     return (
         <>
-            {!isMask ?
+            {isMask ? (
                 <Box className={classes.docBox}>
                     <Typography variant="body1" className={classes.reminderText}>
                         THE OFFER AND SALE OF THE INTERESTS DESCRIBED HEREUNDER HAS NOT BEEN REGISTERED UNDER THE U.S. SECURITIES ACT OF 1933, AS AMENDED (THE “SECURITIES ACT”), OR UNDER THE SECURITIES LAWS OF ANY STATE OR FOREIGN JURISDICTION. THIS OFFERING IS BEING MADE ONLY TO “ACCREDITED INVESTORS” (AS DEFINED IN THE U.S. SECURITIES ACT AND ANY APPLICABLE STATE AND FOREIGN SECURITIES LAWS) IN RELIANCE ON REGULATION D UNDER THE SECURITIES ACT. THE INTERESTS MAY NOT BE TRANSFERRED, PLEDGED OR HYPOTHECATED EXCEPT AS PERMITTED UNDER THE U.S. SECURITIES ACT AND APPLICABLE STATE AND FOREIGN SECURITIES LAWS.
@@ -382,7 +382,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         Neither the U.S. Securities and Exchange Commission nor any state or foreign securities authorities has approved or disapproved of this offering or passed upon the adequacy or accuracy of the information herein. Any representation to the contrary is a criminal offense.
                     </Typography>
                 </Box>
-                :
+            ) : (
                 <Box className={classes.docBox}>
                     <Typography variant="body1" className={classes.reminderText}>
                         {t('plugin_ito_dialog_claim_reminder_text1')}
@@ -397,7 +397,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         {t('plugin_ito_dialog_claim_reminder_text4')}
                     </Typography>
                 </Box>
-            }
+            )}
 
             <section className={classes.tokenWrapper}>
                 <TokenIcon address={token.address} classes={{ icon: classes.tokenIcon }} />

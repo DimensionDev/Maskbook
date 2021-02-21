@@ -17,7 +17,6 @@ export async function getTradeInfo(pid: string, trader: string) {
 export async function getPool(pid: string) {
     const poolFromChain = await subgraph.getPool(pid)
     const poolFromDB = await database.getPoolFromDB(pid)
-    console.log('poolFromDB', poolFromDB)
     if (poolFromDB?.payload.password) poolFromChain.password = poolFromDB.payload.password
     if (poolFromDB?.payload.is_mask) poolFromChain.is_mask = poolFromDB.payload.is_mask
     if (poolFromDB?.payload.test_nums) poolFromChain.test_nums = poolFromDB.payload.test_nums
