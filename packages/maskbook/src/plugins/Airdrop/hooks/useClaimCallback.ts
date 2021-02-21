@@ -35,9 +35,12 @@ export function useClaimCallback(packet?: AirdropPacket) {
             to: AirdropContract.options.address,
         }
 
+        // the claim amount will be set up later if the Merkle proof success
+        const claimParams: Parameters<typeof AirdropContract['methods']['claim']> = [index, '0', proof]
+
         // step 1: merkle proof
         try {
-            const { available } = await AirdropContract.methods.check(index, account, amount, proof).call({
+            const { available, claimable } = await AirdropContract.methods.check(index, account, amount, proof).call({
                 from: account,
             })
             if (!available) {
@@ -47,6 +50,9 @@ export function useClaimCallback(packet?: AirdropPacket) {
                 })
                 return
             }
+
+            // set to the max claimable amount
+            claimParams[1] = claimable
         } catch (e) {
             setClaimState({
                 type: TransactionStateType.FAILED,
@@ -54,8 +60,6 @@ export function useClaimCallback(packet?: AirdropPacket) {
             })
             return
         }
-
-        const claimParams: Parameters<typeof AirdropContract['methods']['claim']> = [index, amount, proof]
 
         // step 2-1: estimate gas
         const estimatedGas = await AirdropContract.methods
