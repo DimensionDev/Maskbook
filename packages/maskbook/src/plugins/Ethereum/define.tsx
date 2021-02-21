@@ -1,5 +1,6 @@
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { PLUGIN_IDENTIFIER } from './constants'
+import { ConfirSwapDialog } from './UI/ConfirmSwapDialog'
 import { TransactionDialog } from './UI/TransactionDialog'
 
 export const EthereumPluginDefine: PluginConfig = {
@@ -11,6 +12,7 @@ export const EthereumPluginDefine: PluginConfig = {
         return (
             <>
                 <TransactionDialog />
+                <ConfirSwapDialog />
             </>
         )
     },
@@ -18,6 +20,7 @@ export const EthereumPluginDefine: PluginConfig = {
         return (
             <>
                 <TransactionDialog />
+                <ConfirSwapDialog />
             </>
         )
     },

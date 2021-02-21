@@ -2,34 +2,37 @@ import { makeNumberCaptcha } from '@dimensiondev/kit'
 import { css } from '@emotion/react'
 import { DialogContent, Input, Button } from '@material-ui/core'
 import { FC, useCallback, useState } from 'react'
-import { InjectedDialog } from '../../components/shared/InjectedDialog'
-import { EthereumMessages } from '../../plugins/Ethereum/messages'
-import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { useI18N } from '../../utils/i18n-next-ui'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { EthereumMessages } from '../messages'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
-interface Props {
-    onConfirm(): void
-}
+interface Props {}
 
-export const NumberCaptchaDialog: FC<Props> = ({ onConfirm }) => {
+export const ConfirSwapDialog: FC<Props> = () => {
     const { t } = useI18N()
     const [value, setValue] = useState(0)
     const [problem, setProblem] = useState(makeNumberCaptcha())
-    const [open, setOpen] = useRemoteControlledDialog(EthereumMessages.events.confirmSwap)
-    const onClose = useCallback(() => setOpen({ open: false }), [setOpen])
+
     const [operation, a, b, result] = problem
     const handleRefresh = () => setProblem(makeNumberCaptcha())
-    const handleConfirm = () => {
-        if (value === result) {
-            onConfirm()
-        } else {
-            // TODO: error handler
-        }
-    }
+
+    //#region remote controlled dialog
+    const [open, setOpen] = useRemoteControlledDialog(EthereumMessages.events.confirmSwapDialogUpdated)
+    const handleConfirm = useCallback(() => {
+        if (value !== result) return
+        setOpen({
+            open: false,
+            result: true,
+        })
+    }, [value, result, setOpen])
+    const handleClose = useCallback(() => setOpen({ open: false, result: false }), [setOpen])
+    //#endregion
+
     return (
         <InjectedDialog
             open={open}
-            onClose={onClose}
+            onClose={handleClose}
             title={t('plugin_wallet_captcha')}
             DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent>
