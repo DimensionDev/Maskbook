@@ -9,9 +9,10 @@ import { useAvailability } from './useAvailability'
  */
 export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
     const chainId = useChainId()
-    const asyncResult = useAvailability(payload?.pid)
+    const asyncResult = useAvailability(payload?.pid, payload?.isMask)
 
     const { value: availability } = asyncResult
+
     if (!availability)
         return {
             ...asyncResult,
@@ -28,6 +29,8 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
     const isStarted = payload.start_time * 1000 < new Date().getTime()
     const isExpired = availability.expired
     const isCompleted = Number(availability.swapped) > 0
+    const isUnlocked =
+        isCompleted && Boolean(availability.unlockTime) && Number(availability.unlockTime) * 1000 > new Date().getTime()
 
     return {
         ...asyncResult,
@@ -35,6 +38,7 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
             canFetch: payload.chain_id === chainId,
             canClaim: isStarted && !isExpired && !isCompleted && payload.chain_id === chainId && payload.password,
             canRefund: isExpired && payload.chain_id === chainId,
+            canClaimMaskITO: isUnlocked,
             canShare: !isStarted,
             listOfStatus: compact([
                 isStarted ? ITO_Status.started : ITO_Status.waited,
