@@ -41,7 +41,7 @@ export const ConfirmSwapDialog: FC<Props> = () => {
     const [value, setValue] = useState(0)
     const [problem, setProblem] = useState(makeNumberCaptcha())
 
-    const [operation, a, b, result] = problem
+    const [, , , result] = problem
     const handleRefresh = () => setProblem(makeNumberCaptcha())
 
     //#region remote controlled dialog
@@ -68,36 +68,56 @@ export const ConfirmSwapDialog: FC<Props> = () => {
             <DialogContent>
                 <Grid>
                     <Grid item className={classes.padding}>
-                        <section
-                            onClick={handleRefresh}
-                            onDoubleClick={onPreventDefault}
-                            onContextMenu={onPreventDefault}
-                            onDrag={onPreventDefault}
-                            onDrop={onPreventDefault}
-                            className={classes.math}>
-                            <b className={classes.value}>{a}</b>
-                            <span className={classes.value}> {operations[operation]} </span>
-                            <b className={classes.value}>{b}</b>
-                            <span> = </span>
-                            <var className={classes.value}>?</var>
-                        </section>
+                        <Formula onClick={handleRefresh} problem={problem} variable={1} />
                     </Grid>
                     <Grid item className={classes.padding}>
                         <TextField
                             fullWidth
                             type="number"
                             onChange={(event) => setValue(+event.currentTarget.value)}
-                            placeholder="Enter the answer to the above formula"
+                            placeholder={t('plugin_wallet_captcha_hint')}
                         />
                     </Grid>
                     <Grid item className={classes.padding}>
-                        <Button fullWidth variant="contained" onClick={handleConfirm}>
+                        <Button disabled={value !== result} fullWidth variant="contained" onClick={handleConfirm}>
                             {t('plugin_wallet_captcha_confirm')}
                         </Button>
                     </Grid>
                 </Grid>
             </DialogContent>
         </InjectedDialog>
+    )
+}
+
+interface FormulaProps {
+    onClick: () => void
+    problem: ReturnType<typeof makeNumberCaptcha>
+    variable: number
+}
+
+const Formula: FC<FormulaProps> = ({ onClick, problem, variable }) => {
+    const classes = useStyles()
+    const [operation] = problem
+    const makeValue = (index: number) => {
+        if (variable === index) {
+            return <var className={classes.value}>?</var>
+        }
+        return <b className={classes.value}>{problem[index]}</b>
+    }
+    return (
+        <section
+            onClick={onClick}
+            onDoubleClick={onPreventDefault}
+            onContextMenu={onPreventDefault}
+            onDrag={onPreventDefault}
+            onDrop={onPreventDefault}
+            className={classes.math}>
+            {makeValue(1)}
+            <span className={classes.value}> {operations[operation]} </span>
+            {makeValue(2)}
+            <span> = </span>
+            {makeValue(3)}
+        </section>
     )
 }
 
