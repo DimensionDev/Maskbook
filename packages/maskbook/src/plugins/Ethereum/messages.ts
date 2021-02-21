@@ -38,6 +38,15 @@ type TransactionDialogEvent =
           open: false
       }
 
+type ConfirmSwapEvent =
+    | {
+          open: true
+          // TODO
+      }
+    | {
+          open: false
+      }
+
 interface EthereumMessage {
     /**
      * Select token dialog
@@ -53,6 +62,11 @@ interface EthereumMessage {
      * Transaction dialog
      */
     transactionDialogUpdated: TransactionDialogEvent
+
+    /**
+     * Confirm Swap
+     */
+    confirmSwap: ConfirmSwapEvent
 
     rpc: unknown
 }
