@@ -17,10 +17,11 @@ const useStyles = makeStyles((theme) =>
         },
         textfield: {
             flex: 1,
-            height: 48,
-            color: '#fff',
-            '& > fieldset': {
-                borderColor: '#F3F3F4',
+            height: 56,
+            color: '#fff !important',
+            '& fieldset, & > div, & > div:hover, & > div:active': {
+                color: '#fff !important',
+                borderColor: '#F3F3F4 !important',
             },
         },
         button: {
@@ -51,7 +52,7 @@ export function AirdropCheckCard(props: AirdropCheckCardProps) {
     return (
         <Box className={classes.root}>
             <Typography>Check Address</Typography>
-            <Box sx={{ marginTop: 1.2, display: 'flex' }}>
+            <Box sx={{ marginTop: 1.2, display: 'flex', alignItems: 'center' }}>
                 <TextField
                     classes={{ root: classes.textfield }}
                     value={checkAddress}
