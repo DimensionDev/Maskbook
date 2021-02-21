@@ -351,11 +351,6 @@ async function* decryptImageFromImageUrlWithProgress_raw(
                 const { iv, version } = post
                 const cryptoProvider = cryptoProviderTable[version]
                 const makeSuccessResult = makeSuccessResultF(url, iv, post, cryptoProvider)
-
-                // now, we've successfully decrypted the image & it will be added to the DOM.
-                // create a button that can reveal the encrypted image
-                injectPostImageRevealerAtTwitter(url)
-
                 return makeSuccessResult(decryptedUrl, ['decrypted_image'])
             }
         }
