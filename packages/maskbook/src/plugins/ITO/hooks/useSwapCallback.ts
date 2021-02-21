@@ -9,7 +9,6 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
 import type { ITO } from '../../../contracts/ITO'
 import type { MaskITO } from '../../../contracts/MaskITO'
 import { usePoolPayload } from './usePoolPayload'
@@ -23,14 +22,12 @@ export function useSwapCallback(
     isMask = false,
 ) {
     const account = useAccount()
-    const ITO_Contract = useITO_Contract()
-    const MaskITO_Contract = useMaskITO_Contract()
-    const contract = isMask ? MaskITO_Contract : ITO_Contract
+    const ITO_Contract = useITO_Contract(isMask)
     const { payload } = usePoolPayload(id)
     console.log('useSwapCallback', payload, testNums)
     const [swapState, setSwapState] = useTransactionState()
     const swapCallback = useCallback(async () => {
-        if (!contract || !payload || !id) {
+        if (!ITO_Contract || !payload || !id) {
             setSwapState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -60,7 +57,7 @@ export function useSwapCallback(
 
         const config: Tx = {
             from: account,
-            to: contract.options.address,
+            to: ITO_Contract.options.address,
             value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
         }
 
@@ -85,7 +82,7 @@ export function useSwapCallback(
 
         // step 1: check remaining
         try {
-            const availability = await contract.methods.check_availability(id).call({
+            const availability = await ITO_Contract.methods.check_availability(id).call({
                 from: account,
             })
             if (new BigNumber(availability.remaining).isZero()) {
@@ -128,7 +125,7 @@ export function useSwapCallback(
                       total,
                   ] as Parameters<ITO['methods']['swap']>)
 
-        const swap = isMask && testNums ? (contract as MaskITO).methods.swap : (contract as ITO).methods.swap
+        const swap = isMask && testNums ? (ITO_Contract as MaskITO).methods.swap : (ITO_Contract as ITO).methods.swap
 
         // step 2-1: estimate gas
         const estimatedGas = await swap(...swapParams)
@@ -167,7 +164,7 @@ export function useSwapCallback(
             promiEvent.on(TransactionEventType.CONFIRMATION, onSucceed)
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => onSucceed(0, receipt))
         })
-    }, [contract, id, password, account, payload, total, token.address])
+    }, [ITO_Contract, id, password, account, payload, total, token.address])
 
     const resetCallback = useCallback(() => {
         setSwapState({

@@ -7,12 +7,13 @@ import { TransactionEventType } from '../../../web3/types'
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
+import { useITO_Contract } from '../contracts/useITO_Contract'
+import type { MaskITO } from '../../../contracts/MaskITO'
 
 export function useClaimCallback() {
     const account = useAccount()
     const chainId = useChainId()
-    const MaskITO_Contract = useMaskITO_Contract()
+    const MaskITO_Contract = useITO_Contract(true) as MaskITO | null
     const [claimState, setClaimState] = useTransactionState()
 
     const claimCallback = useCallback(async () => {
