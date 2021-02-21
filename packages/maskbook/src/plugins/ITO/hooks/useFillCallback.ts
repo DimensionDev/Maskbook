@@ -15,6 +15,7 @@ import Services from '../../../extension/service'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
 import type { ITO } from '../../../contracts/ITO'
+import type { MaskITO } from '../../../contracts/MaskITO'
 
 export interface PoolSettings {
     isMask: boolean
@@ -28,7 +29,7 @@ export interface PoolSettings {
     exchangeAmounts: string[]
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     token?: ERC20TokenDetailed
-    testNums: Number[]
+    testNums: number[]
 }
 
 export function useFillCallback(poolSettings?: PoolSettings) {
@@ -61,7 +62,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             exchangeAmounts: exchangeAmountsUnsorted,
             exchangeTokens: exchangeTokensUnsorted,
         } = poolSettings
-
+        console.log('isMask', isMask)
         const contract = isMask ? MaskITO_Contract : ITO_Contract
 
         if (!token || !contract) {
@@ -203,19 +204,33 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             to: contract.options.address,
             value: '0',
         }
-        const params: Parameters<ITO['methods']['fill_pool']> = [
-            Web3Utils.sha3(signedPassword)!,
-            startTime_,
-            endTime_,
-            name,
-            title,
-            exchangeTokens.map((x) => x.address),
-            exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
-            token.address,
-            total,
-            limit,
-            DEFAULT_QUALIFICATION_ADDRESS,
-        ]
+        let params = isMask
+            ? ([
+                  Web3Utils.sha3(signedPassword)!,
+                  startTime_,
+                  endTime_,
+                  name,
+                  title,
+                  exchangeTokens.map((x) => x.address),
+                  exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
+                  token.address,
+                  total,
+                  limit,
+                  DEFAULT_QUALIFICATION_ADDRESS,
+              ] as Parameters<MaskITO['methods']['fill_pool']>)
+            : ([
+                  Web3Utils.sha3(signedPassword)!,
+                  startTime_,
+                  endTime_,
+                  name,
+                  title,
+                  exchangeTokens.map((x) => x.address),
+                  exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
+                  token.address,
+                  total,
+                  limit,
+                  DEFAULT_QUALIFICATION_ADDRESS,
+              ] as Parameters<ITO['methods']['fill_pool']>)
 
         // step 1: estimate gas
         const estimatedGas = await contract.methods

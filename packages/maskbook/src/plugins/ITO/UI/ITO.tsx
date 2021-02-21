@@ -182,6 +182,7 @@ export interface ITO_Props {
     pid: string
     password: string
     isMask?: boolean
+    testNums?: Number[]
 }
 
 export function ITO(props: ITO_Props) {
@@ -196,7 +197,7 @@ export function ITO(props: ITO_Props) {
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid, password, isMask } = props
+    const { pid, password, isMask, testNums } = props
     const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
 
     // append the password from the outcoming pool
@@ -204,8 +205,9 @@ export function ITO(props: ITO_Props) {
         ...payload_,
         password: payload_.password || password,
         isMask: isMask ?? false,
+        testNums: (testNums as number[]) ?? undefined,
     }
-
+    console.log('payload', payload)
     const {
         token,
         total: payload_total,

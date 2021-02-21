@@ -171,7 +171,7 @@ export function CreateForm(props: CreateFormProps) {
         endTime,
         account,
         onChangePoolSettings,
-            testNums,
+        testNums,
     ])
 
     const validationMessage = useMemo(() => {

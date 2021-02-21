@@ -185,6 +185,8 @@ export function ClaimDialog(props: ClaimDialogProps) {
         payload.password,
         claimAmount.toFixed(),
         claimToken,
+        payload.testNums,
+        payload.isMask,
     )
     const onClaim = useCallback(async () => {
         await claimCallback()
