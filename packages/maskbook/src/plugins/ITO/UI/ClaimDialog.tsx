@@ -27,7 +27,9 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 
 const useStyles = makeStyles((theme) =>
     createStyles({
-        button: {},
+        button: {
+            marginTop: theme.spacing(1.5),
+        },
         providerBar: {},
         swapLimitWrap: {
             display: 'flex',
