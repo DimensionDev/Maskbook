@@ -204,8 +204,8 @@ export function ITO(props: ITO_Props) {
     const payload: JSON_PayloadInMask = {
         ...payload_,
         password: payload_.password || password,
-        isMask: isMask ?? false,
-        testNums: (testNums as number[]) ?? undefined,
+        is_mask: isMask ?? false,
+        test_nums: (testNums as number[]) ?? undefined,
     }
     console.log('payload', payload)
     const {

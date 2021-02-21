@@ -91,8 +91,8 @@ export function CreateGuide(props: CreateGuideProps) {
                 token: fillSettings.token,
                 exchange_amounts: fillSettings.exchangeAmounts,
                 exchange_tokens: fillSettings.exchangeTokens,
-                isMask: fillSettings.isMask,
-                testNums: fillSettings.testNums,
+                is_mask: fillSettings.isMask,
+                test_nums: fillSettings.testNums,
             }
 
             // output the redpacket as JSON payload

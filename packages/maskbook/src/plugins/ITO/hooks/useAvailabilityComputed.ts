@@ -9,7 +9,7 @@ import { useAvailability } from './useAvailability'
  */
 export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
     const chainId = useChainId()
-    const asyncResult = useAvailability(payload?.pid, payload?.isMask)
+    const asyncResult = useAvailability(payload?.pid, payload?.is_mask)
 
     const { value: availability } = asyncResult
 
