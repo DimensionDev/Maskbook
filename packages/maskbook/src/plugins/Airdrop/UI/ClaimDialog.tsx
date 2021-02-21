@@ -70,15 +70,13 @@ function ClaimDialogUI(props: ClaimDialogUIProps) {
                         </Typography>
                     </Box>
                     <Box>
-                        <Typography color="textPrimary">
-                            {formatBalance(new BigNumber(amount), token.decimals, 2)}
-                        </Typography>
+                        <Typography color="textPrimary">{`${amount}.00`}</Typography>
                     </Box>
                 </Box>
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" sx={{ width: '100%' }} onClick={onClaim}>
-                    Claim {formatBalance(new BigNumber(amount), token.decimals, 2)} {token.symbol}
+                    Claim {`${amount}.00`} {token.symbol}
                 </Button>
             </DialogActions>
         </InjectedDialog>
