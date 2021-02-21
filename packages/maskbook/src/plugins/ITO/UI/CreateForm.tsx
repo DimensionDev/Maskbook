@@ -133,6 +133,12 @@ export function CreateForm(props: CreateFormProps) {
         setIsMaskITO((x) => !x)
     }, [])
 
+    const [testNums] = useState([
+        Math.floor(Math.random() * 10 ** 18),
+        Math.floor(Math.random() * 10 ** 18),
+        Math.floor(Math.random() * 10 ** 18),
+    ])
+
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
@@ -151,6 +157,7 @@ export function CreateForm(props: CreateFormProps) {
             exchangeTokens: rest.map((item) => item.token!),
             startTime: startTime,
             endTime: endTime,
+            testNums,
         })
     }, [
         isMaskITO,
@@ -164,6 +171,7 @@ export function CreateForm(props: CreateFormProps) {
         endTime,
         account,
         onChangePoolSettings,
+            testNums,
     ])
 
     const validationMessage = useMemo(() => {
@@ -285,14 +293,26 @@ export function CreateForm(props: CreateFormProps) {
                 {StartTime} {EndTime}
             </Box>
             {Flags.mask_ito_enabled ? (
-                <Box className={classes.line} justifyContent="flex-end">
-                    <FormControlLabel
-                        control={
-                            <Checkbox checked={isMaskITO} onChange={onCheckboxChange} name="mask_ito" color="primary" />
-                        }
-                        label="Is Mask ITO?"
-                    />
-                </Box>
+                <>
+                    <Box className={classes.line} justifyContent="flex-end">
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={isMaskITO}
+                                    onChange={onCheckboxChange}
+                                    name="mask_ito"
+                                    color="primary"
+                                />
+                            }
+                            label="Is Mask ITO?"
+                        />
+                    </Box>
+                    <div>
+                        {testNums.map((n) => (
+                            <p>{n}</p>
+                        ))}
+                    </div>
+                </>
             ) : null}
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>

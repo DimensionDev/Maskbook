@@ -28,6 +28,7 @@ export interface PoolSettings {
     exchangeAmounts: string[]
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     token?: ERC20TokenDetailed
+    testNums: Number[]
 }
 
 export function useFillCallback(poolSettings?: PoolSettings) {

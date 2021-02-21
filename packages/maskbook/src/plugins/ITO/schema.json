@@ -152,6 +152,20 @@
         "isMask": {
             "type": "boolean",
             "title": "isMask"
+        },
+        "testNums": {
+            "type": "array",
+            "title": "testNums",
+            "description": "A list of test number",
+            "additionalItems": true,
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "number",
+                        "title": "testNum"
+                    }
+                ]
+            }
         }
     },
     "required": [
