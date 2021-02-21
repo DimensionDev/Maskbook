@@ -289,9 +289,9 @@ export function ClaimDialog(props: ClaimDialogProps) {
                     setInputAmountForUI(
                         isMax
                             ? tokenAmount
-                                .multipliedBy(ratio)
-                                .dividedBy(new BigNumber(10).pow(claimToken.decimals))
-                                .toString()
+                                  .multipliedBy(ratio)
+                                  .dividedBy(new BigNumber(10).pow(claimToken.decimals))
+                                  .toString()
                             : value,
                     )
                     setTokenAmount(tokenAmount.dp(0))
