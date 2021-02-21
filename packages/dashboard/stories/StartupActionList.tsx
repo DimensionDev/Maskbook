@@ -10,7 +10,7 @@ export const StartupActionList = of({
             <StartupActionListItem
                 icon={<CloudUpload />}
                 title="Creating a new account"
-                description="Local storage of accounts and data."
+                description="Local storage of accounts and data"
                 action="Sign Up"
                 onClick={() => {}}
             />
@@ -25,7 +25,7 @@ export const StartupActionList = of({
             <StartupActionListItem
                 icon={<Restore />}
                 title="Restore from backups"
-                description="Restoring from historical backups."
+                description="Restoring from historical backups. And very very very very very very very very very long text."
                 color="secondary"
                 action="Recovery"
                 onClick={() => {}}

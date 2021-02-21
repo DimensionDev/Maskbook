@@ -16,7 +16,8 @@ import { useRouteMatch } from 'react-router'
 import { Link, LinkProps } from 'react-router-dom'
 import { Routes } from '../../pages/routes'
 import { DashboardContext } from './context'
-import Logo from './Logo'
+import { MaskNotSquareIcon } from '@dimensiondev/icons'
+import { useDashboardI18N } from '../../locales'
 
 function ListItemLinkUnStyled({ nested, ...props }: LinkProps & ListItemProps & { nested?: boolean; to: string }) {
     return <MuiListItem button component={Link} selected={!!useRouteMatch(props.to)} {...props} />
@@ -52,43 +53,44 @@ export function Navigation({}: NavigationProps) {
     const { expanded, toggleNavigationExpand } = useContext(DashboardContext)
 
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
+    const t = useDashboardI18N()
 
     return (
         <List>
             {isLargeScreen && (
                 <LogoItem>
-                    <Logo height={40} />
+                    <MaskNotSquareIcon />
                 </LogoItem>
             )}
             <ListItemLink to={Routes.Personas}>
                 <ListItemIcon>
                     <Masks />
                 </ListItemIcon>
-                <ListItemText primary="Personas" />
+                <ListItemText primary={t.personas()} />
             </ListItemLink>
             <ListItem button selected={!!useRouteMatch(Routes.Wallets)} onClick={toggleNavigationExpand}>
                 <ListItemIcon>
                     <AccountBalanceWallet />
                 </ListItemIcon>
-                <ListItemText>Wallets</ListItemText>
+                <ListItemText>{t.wallets()}</ListItemText>
                 {expanded ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={expanded}>
                 <List disablePadding>
                     <ListItemLink nested to={Routes.WalletsTransfer}>
-                        <ListItemText primary="Transfer" />
+                        <ListItemText primary={t.wallets_transfer()} />
                     </ListItemLink>
                     <ListItemLink nested to={Routes.WalletsSwap}>
-                        <ListItemText primary="Swap" />
+                        <ListItemText primary={t.wallets_swap()} />
                     </ListItemLink>
                     <ListItemLink nested to={Routes.WalletsRedPacket}>
-                        <ListItemText primary="Red packet" />
+                        <ListItemText primary={t.wallets_red_packet()} />
                     </ListItemLink>
                     <ListItemLink nested to={Routes.WalletsSell}>
-                        <ListItemText primary="Sell" />
+                        <ListItemText primary={t.wallets_sell()} />
                     </ListItemLink>
                     <ListItemLink nested to={Routes.WalletsHistory}>
-                        <ListItemText primary="History" />
+                        <ListItemText primary={t.wallets_history()} />
                     </ListItemLink>
                 </List>
             </Collapse>
@@ -96,7 +98,7 @@ export function Navigation({}: NavigationProps) {
                 <ListItemIcon>
                     <Settings />
                 </ListItemIcon>
-                <ListItemText primary="Settings" />
+                <ListItemText primary={t.settings()} />
             </ListItemLink>
         </List>
     )

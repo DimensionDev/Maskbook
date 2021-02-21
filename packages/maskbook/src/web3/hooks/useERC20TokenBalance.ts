@@ -1,6 +1,6 @@
+import { useAsyncRetry } from 'react-use'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
-import { useAsyncRetry } from 'react-use'
 import { useChainId } from './useChainState'
 
 /**
@@ -12,7 +12,7 @@ export function useERC20TokenBalance(address: string) {
     const chainId = useChainId()
     const erc20Contract = useERC20TokenContract(address)
     return useAsyncRetry(async () => {
-        if (!account || !erc20Contract) return undefined
+        if (!account || !address || !erc20Contract) return undefined
         return erc20Contract.methods.balanceOf(account).call()
     }, [account, chainId /* re-calc when switch the chain */, address, erc20Contract])
 }

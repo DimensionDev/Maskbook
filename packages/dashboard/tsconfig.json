@@ -4,6 +4,11 @@
     "rootDir": "./",
     "outDir": "./dist/"
   },
-  "include": ["./src/", "./stories/"],
-  "references": [{ "path": "../theme/" }, { "path": "../maskbook/" }, { "path": "../storybook-shared/" }]
+  "include": ["./src/", "./stories/", "./src/locales/*.json"],
+  "references": [
+    { "path": "../theme/" },
+    { "path": "../maskbook/" },
+    { "path": "../storybook-shared/" },
+    { "path": "../icons/" }
+  ]
 }

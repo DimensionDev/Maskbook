@@ -38,7 +38,16 @@ const useStyles = makeStyles((theme) => {
             paddingLeft: theme.spacing(1),
         },
         balance: {
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            maxWidth: '80%',
             fontSize: 12,
+            top: theme.spacing(0.5),
+            position: 'absolute',
+        },
+        inputShrinkLabel: {
+            transform: 'translate(17px, -3px) scale(0.75) !important',
         },
     })
 })
@@ -128,6 +137,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
+                                marginTop: 2,
                             }}>
                             {balance !== '0' && !disableBalance ? (
                                 <Chip
@@ -159,6 +169,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                             flexDirection: 'column',
                             justifyContent: 'center',
                             alignItems: 'flex-end',
+                            marginTop: 2,
                         }}>
                         {!disableBalance ? (
                             <Typography
@@ -176,6 +187,9 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
             }}
             InputLabelProps={{
                 shrink: true,
+                classes: {
+                    shrink: classes.inputShrinkLabel,
+                },
             }}
             {...props.TextFieldProps}
         />

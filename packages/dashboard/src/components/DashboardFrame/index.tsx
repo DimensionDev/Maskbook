@@ -19,7 +19,8 @@ import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
 import { useState, useContext } from 'react'
 import { DashboardContext } from './context'
 import { Navigation } from './Navigation'
-import Logo from './Logo'
+import { MaskNotSquareIcon } from '@dimensiondev/icons'
+import { memo } from 'react'
 
 const Root = styled(Grid)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -28,13 +29,14 @@ const Root = styled(Grid)(({ theme }) => ({
 const LeftContainer = styled(Grid)(({ theme }) => ({
     height: '100vh',
     [theme.breakpoints.up('lg')]: {
+        // TODO: what is this magic number?
         minWidth: 232,
     },
 }))
 
 export interface DashboardFrameProps extends React.PropsWithChildren<{}> {}
 
-export function DashboardFrame(props: DashboardFrameProps) {
+export const DashboardFrame = memo((props: DashboardFrameProps) => {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const [navigationExpanded, setNavigationExpanded] = useState(true)
     const [drawerOpen, setDrawerOpen] = useState(false)
@@ -59,7 +61,7 @@ export function DashboardFrame(props: DashboardFrameProps) {
             </Root>
         </DashboardContext.Provider>
     )
-}
+})
 
 const MaskLogo = styled(Grid)`
     flex-basis: 212px;
@@ -139,7 +141,7 @@ export interface PageFrameProps extends React.PropsWithChildren<{}> {
     primaryAction?: React.ReactNode
 }
 
-export function PageFrame(props: PageFrameProps) {
+export const PageFrame = memo((props: PageFrameProps) => {
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
@@ -152,7 +154,7 @@ export function PageFrame(props: PageFrameProps) {
                     {!isLargeScreen && (
                         <MaskLogo item container alignItems="center">
                             <MenuButton onClick={toggleDrawer}>{drawerOpen ? <CloseIcon /> : <MenuIcon />}</MenuButton>
-                            <Logo height={40} />
+                            <MaskNotSquareIcon />
                         </MaskLogo>
                     )}
                     <PageTitle item xs={isLargeScreen ? 12 : 10} container>
@@ -182,4 +184,4 @@ export function PageFrame(props: PageFrameProps) {
             </Containment>
         </>
     )
-}
+})

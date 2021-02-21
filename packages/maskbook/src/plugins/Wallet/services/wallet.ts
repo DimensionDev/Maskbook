@@ -156,8 +156,10 @@ export async function importNewWallet(
     if (rec._private_key_) record._private_key_ = rec._private_key_
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet', 'ERC20Token')
-        if (!(await t.objectStore('Wallet').get(record.address)))
-            await t.objectStore('Wallet').add(WalletRecordIntoDB(record))
+        const record_ = await t.objectStore('Wallet').get(record.address)
+        if (!record_) await t.objectStore('Wallet').add(WalletRecordIntoDB(record))
+        else if (!record_.mnemonic.length && !record_._private_key_)
+            await t.objectStore('Wallet').put(WalletRecordIntoDB(record))
     }
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
     selectMaskbookWallet(record)

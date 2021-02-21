@@ -4,10 +4,8 @@ import { PoolSettings, useFillCallback } from '../hooks/useFillCallback'
 import type { JSON_PayloadInMask } from '../types'
 import { ConfirmDialog } from './ConfirmDialog'
 import { CreateForm } from './CreateForm'
-import { WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
@@ -26,10 +24,11 @@ export interface CreateGuideProps {
 
 export function CreateGuide(props: CreateGuideProps) {
     const { onCreate } = props
+
     const { t } = useI18N()
-    const account = useAccount()
     const chainId = useChainId()
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const MASK_ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'MASK_ITO_CONTRACT_ADDRESS')
 
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
 
@@ -73,7 +72,7 @@ export function CreateGuide(props: CreateGuideProps) {
 
             // assemble JSON payload
             const payload: JSON_PayloadInMask = {
-                contract_address: ITO_CONTRACT_ADDRESS,
+                contract_address: fillSettings.isMask ? MASK_ITO_CONTRACT_ADDRESS : ITO_CONTRACT_ADDRESS,
                 pid: FillSuccess.id,
                 password: fillSettings.password,
                 message: FillSuccess.message,
@@ -92,6 +91,8 @@ export function CreateGuide(props: CreateGuideProps) {
                 token: fillSettings.token,
                 exchange_amounts: fillSettings.exchangeAmounts,
                 exchange_tokens: fillSettings.exchangeTokens,
+                is_mask: fillSettings.isMask,
+                test_nums: fillSettings.testNums,
             }
 
             // output the redpacket as JSON payload
@@ -116,25 +117,9 @@ export function CreateGuide(props: CreateGuideProps) {
         })
     }, [fillState, poolSettings, setTransactionDialogOpen])
 
-    //#region connect wallet
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onConnect = useCallback(() => {
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setSelectProviderDialogOpen])
-    //#endregion
-
     switch (step) {
         case ITOCreateFormPageStep.NewItoPage:
-            return (
-                <CreateForm
-                    onNext={onNext}
-                    origin={poolSettings}
-                    onConnectWallet={onConnect}
-                    onChangePoolSettings={setPoolSettings}
-                />
-            )
+            return <CreateForm onNext={onNext} origin={poolSettings} onChangePoolSettings={setPoolSettings} />
         case ITOCreateFormPageStep.ConfirmItoPage:
             return <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={fillCallback} />
         default:

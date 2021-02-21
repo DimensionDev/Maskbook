@@ -5,7 +5,8 @@
     { "path": "./packages/theme/" },
     { "path": "./packages/dashboard/" },
     { "path": "./packages/shared/" },
-    { "path": "./packages/storybook-shared/" }
+    { "path": "./packages/storybook-shared/" },
+    { "path": "./packages/icons/" }
   ],
   "compilerOptions": {
     /* Basic Options */

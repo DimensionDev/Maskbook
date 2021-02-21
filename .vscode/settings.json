@@ -20,5 +20,8 @@
             "url": "/.vscode/schema/locale.json"
         }
     ],
-    "cSpell.words": ["Reificated"]
+    "cSpell.words": ["Reificated"],
+    "markdownlint.config": {
+        "no-inline-html": false
+    }
 }

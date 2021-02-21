@@ -18,6 +18,7 @@ import { TransakPluginDefine } from './Transak/define'
 import { COTM_PluginDefine } from './COTM/define'
 import { ITO_PluginDefine } from './ITO/define'
 import { NFTPluginsDefine } from './NFT/define'
+import { AirdropPluginDefine } from './Airdrop/define'
 import { sideEffect } from '../utils/side-effects'
 
 sideEffect.then(() => {
@@ -33,5 +34,6 @@ sideEffect.then(() => {
     if (Flags.transak_enabled) plugins.add(TransakPluginDefine)
     if (Flags.election2020_enabled) plugins.add(Election2020PluginDefine)
     if (Flags.COTM_enabled) plugins.add(COTM_PluginDefine)
+    if (Flags.airdrop_enabled) plugins.add(AirdropPluginDefine)
     if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)
 })

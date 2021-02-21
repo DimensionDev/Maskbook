@@ -27,8 +27,7 @@ export const Flags = {
     has_native_welcome_ui: appOnly,
     /** Firefox has a special API that can inject to the document with a higher permission. */
     requires_injected_script_run_directly: process.env.target === 'firefox',
-    // TODO: document why it enabled on app
-    support_eth_network_switch: appOnly || betaOrInsiderOnly,
+    support_eth_network_switch: betaOrInsiderOnly,
     //#region Experimental features
     image_payload_marked_as_beta: appOnly,
     /** Prohibit the use of test networks in production */
@@ -43,13 +42,17 @@ export const Flags = {
     election2020_composition_dialog_enabled: false,
     COTM_enabled: webOnly,
     COTM_composition_dialog_enabled: false,
+    mask_ito_enabled: betaOrInsiderOnly,
+    airdrop_enabled: webOnly,
+    airdrop_two_factor_verification_enabled: false,
+    airdrop_composition_dialog_enabled: false,
     metamask_support_enabled: webOnly,
     //#endregion
 
     //#region Functionality missing / broken
     /**
      * - iOS: WebExtension polyfill didn't implemented the dynamic permission API
-     * - E2E: Cannot click the "allow" button (maybe a Puppeteer bug) in the Puppeteer (maybe a bug)
+     * - E2E: Cannot click the "allow" button (maybe a bug) in the Puppeteer
      */
     no_web_extension_dynamic_permission_request: is_iOSApp || process.env.target === 'E2E',
     has_no_WebRTC: process.env.target === 'safari' || !globalThis?.navigator?.permissions?.query,

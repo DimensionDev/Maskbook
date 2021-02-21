@@ -36,7 +36,7 @@ export function PoolList(props: PoolListProps) {
     const { value: pools = [], loading, retry } = useAllPoolsAsSeller(account)
 
     //#region withdraw
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
+    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(false)
     useTransactionDialog(null, destructState, TransactionStateType.CONFIRMED, () => {
         retry()
         resetDestructCallback()

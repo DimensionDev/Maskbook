@@ -25,7 +25,8 @@
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
     "preinstall": "npx only-allow pnpm",
-    "ci": "pnpm install --frozen-lockfile --store-dir ~/.pnpm/"
+    "ci": "pnpm install --frozen-lockfile --store-dir ~/.pnpm/",
+    "netlify-install": "test \"$CI\" = true && npx pnpm install -r --store=node_modules/.pnpm-store || echo skiping pnpm install"
   },
   "lint-staged": {
     "*": "prettier --check",
@@ -39,22 +40,25 @@
     "@material-ui/icons": "5.0.0-alpha.24",
     "@material-ui/lab": "5.0.0-alpha.24",
     "@material-ui/system": "5.0.0-alpha.24",
-    "@types/react": "^17",
-    "@types/react-dom": "^17",
-    "react": "=0.0.0-experimental-94c0244ba",
-    "react-dom": "=0.0.0-experimental-94c0244ba"
+    "@types/react": "^17.0.1",
+    "@types/react-dom": "^17.0.0",
+    "i18next": "^19.8.9",
+    "react": "=0.0.0-experimental-dc27b5aaa",
+    "react-dom": "=0.0.0-experimental-dc27b5aaa",
+    "react-i18next": "^11.8.7"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "@dimensiondev/maskbook-cli-dev-or-build": "*",
     "@magic-works/commonjs-import.meta": "^1.0.0",
-    "@magic-works/i18n-codegen": "^0.0.4",
+    "@magic-works/i18n-codegen": "^0.0.5",
     "@material-ui/codemod": "^5.0.0-alpha.24",
     "@nice-labs/git-rev": "^3.5.0",
     "eslint": "^7.15.0",
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-lodash": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-unused-imports": "^1.0.0",
@@ -71,8 +75,8 @@
   },
   "pnpm": {
     "overrides": {
-      "react": "=0.0.0-experimental-94c0244ba",
-      "react-dom": "=0.0.0-experimental-94c0244ba"
+      "react": "=0.0.0-experimental-dc27b5aaa",
+      "react-dom": "=0.0.0-experimental-dc27b5aaa"
     }
   },
   "engines": {

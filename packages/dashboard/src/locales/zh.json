@@ -1,0 +1,19 @@
+{
+    "wallets": "錢包",
+    "personas": "Personas",
+    "wallets_transfer": "轉賬",
+    "wallets_swap": "Swap",
+    "wallets_red_packet": "紅包",
+    "wallets_sell": "賣出",
+    "wallets_history": "歷史記錄",
+    "settings": "設定",
+    "wallets_startup_create": "創建一個新錢包",
+    "wallets_startup_create_desc": "Mask network 支援 Eth 和 Polka 網路。",
+    "wallets_startup_create_action": "創建",
+    "wallets_startup_import": "導入 ETH 或 Polka 錢包",
+    "wallets_startup_import_desc": "Mask network 支援私鑰、JSON 文件和助記詞。",
+    "wallets_startup_import_action": "導入",
+    "wallets_startup_connect": "連結其他錢包",
+    "wallets_startup_connect_desc": "Mask network 支援 Metamask 和 Connect Wallet.",
+    "wallets_startup_connect_action": "連結"
+}

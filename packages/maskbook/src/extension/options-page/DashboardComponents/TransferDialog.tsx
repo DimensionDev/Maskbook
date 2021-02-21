@@ -106,14 +106,17 @@ function TransferTab(props: TransferTabProps) {
     //#region remote controlled transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            resetTransferCallback()
-            if (transferState.type !== TransactionStateType.CONFIRMED) return
-            onClose()
-            retryDetailedTokens()
-            retryTokenBalance()
-        },
+        useCallback(
+            (ev) => {
+                if (ev.open) return
+                resetTransferCallback()
+                if (transferState.type !== TransactionStateType.CONFIRMED) return
+                onClose()
+                retryDetailedTokens()
+                retryTokenBalance()
+            },
+            [transferState.type],
+        ),
     )
 
     // open the transaction dialog

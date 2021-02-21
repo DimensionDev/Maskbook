@@ -4,7 +4,7 @@ import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
 
-type SelectERC20TokenDialogEvent =
+type SelectTokenDialogEvent =
     | {
           open: true
           address?: string
@@ -38,11 +38,21 @@ type TransactionDialogEvent =
           open: false
       }
 
+type ConfirmSwapDialogEvent =
+    | {
+          open: true
+          variableIndex: 1 | 2 | 3 | 'bypass'
+      }
+    | {
+          open: false
+          result: boolean
+      }
+
 interface EthereumMessage {
     /**
      * Select token dialog
      */
-    selectERC20TokenDialogUpdated: SelectERC20TokenDialogEvent
+    selectERC20TokenDialogUpdated: SelectTokenDialogEvent
 
     /**
      * Unlock token dialog
@@ -53,6 +63,11 @@ interface EthereumMessage {
      * Transaction dialog
      */
     transactionDialogUpdated: TransactionDialogEvent
+
+    /**
+     * Confirm Swap
+     */
+    confirmSwapDialogUpdated: ConfirmSwapDialogEvent
 
     rpc: unknown
 }

@@ -1,6 +1,6 @@
 {
     "name": "Mask Network",
-    "version": "1.27.6",
+    "version": "1.28.0",
     "manifest_version": 2,
     "permissions": ["storage", "downloads", "webNavigation", "activeTab"],
     "optional_permissions": ["<all_urls>", "notifications"],

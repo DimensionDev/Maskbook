@@ -34,6 +34,10 @@ export class ITO extends Contract {
             5: string[]
         }>
 
+        check_claimable(): TransactionObject<string>
+
+        claim(): TransactionObject<string>
+
         contract_creator(): TransactionObject<string>
 
         destruct(id: string | number[]): TransactionObject<void>
@@ -52,18 +56,44 @@ export class ITO extends Contract {
             _qualification: string,
         ): TransactionObject<void>
 
+        getUnlockTime(): TransactionObject<string>
+
+        get_ito_list(): TransactionObject<string[]>
+
+        mask_address(): TransactionObject<string>
+
+        setAdmin(future_admin: string): TransactionObject<void>
+
+        setUnlockTime(_unlock_time: number | string): TransactionObject<void>
+
+        set_bb_address(bb: string): TransactionObject<void>
+
+        set_mask_address(mask: string): TransactionObject<void>
+
         swap(
             id: string | number[],
             verification: string | number[],
-            _recipient: string,
+            verification2: string | number[],
             validation: string | number[],
             exchange_addr_i: number | string,
             input_total: number | string,
         ): TransactionObject<string>
 
         withdraw(id: string | number[], addr_i: number | string): TransactionObject<void>
+
+        withdrawBatchCreator(addrs: string[]): TransactionObject<void>
+
+        withdrawCreator(addr: string): TransactionObject<void>
     }
     events: {
+        ClaimSuccess: ContractEvent<{
+            claimer: string
+            timestamp: string
+            to_value: string
+            0: string
+            1: string
+            2: string
+        }>
         DestructSuccess: ContractEvent<{
             id: string
             token_address: string

@@ -91,6 +91,13 @@ export const ITO_CONSTANTS = {
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },
+    MASK_ITO_CONTRACT_ADDRESS: {
+        [ChainId.Mainnet]: '0x86812da3A623ab9606976078588b80C315E55FA3',
+        [ChainId.Ropsten]: '0x677f7BbA13108649ECFF068E8B3d55631327B83a',
+        [ChainId.Rinkeby]: '0x0aC41A27bA9F132D5687CAC986f5302Da6f5F9f6',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+    },
     DEFAULT_QUALIFICATION_ADDRESS: {
         [ChainId.Mainnet]: '0x919931df4c9e943612ef565b334791e26dc26b3f',
         [ChainId.Ropsten]: '0x0ac13391f146604a9d32521e536b97b2fe1c5f90',
@@ -115,3 +122,6 @@ export const ITO_CONSTANTS = {
 }
 
 export const ITO_CONTRACT_BASE_TIMESTAMP = 1609372800000
+export const MASK_ITO_CONTRACT_BASE_TIMESTAMP = 1613088000000
+
+export const TIME_WAIT_BLOCKCHAIN = 30000

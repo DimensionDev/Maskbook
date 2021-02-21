@@ -92,7 +92,7 @@ export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelector
             <FixedTokenList
                 classes={{ list: classes.list, placeholder: classes.placeholder }}
                 keyword={keyword}
-                excludeTokens={excludeTokens}
+                blacklist={excludeTokens}
                 onSubmit={(token) => token.type === EthereumTokenType.ERC20 && onTokenChange?.(token)}
                 FixedSizeListProps={{
                     height: 192,
@@ -330,7 +330,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                                 !(state[0] === 2 && name && privKey)) ||
                             checkInputLengthExceed(name)
                         }>
-                        {t('import')}
+                        {t('create')}
                     </DebounceButton>
                 }
             />

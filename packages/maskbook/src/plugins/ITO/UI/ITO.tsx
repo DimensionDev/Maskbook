@@ -23,12 +23,13 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { sortTokens } from '../helpers'
-import { ITO_EXCHANGE_RATION_MAX } from '../constants'
+import { ITO_EXCHANGE_RATION_MAX, TIME_WAIT_BLOCKCHAIN } from '../constants'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { usePoolPayload } from '../hooks/usePoolPayload'
+import Services from '../../../extension/service'
 
 export interface IconProps {
     size?: number
@@ -180,6 +181,8 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 export interface ITO_Props {
     pid: string
     password: string
+    isMask?: boolean
+    testNums?: Number[]
 }
 
 export function ITO(props: ITO_Props) {
@@ -188,21 +191,22 @@ export function ITO(props: ITO_Props) {
     const postLink = usePostLink()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
+    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(props.isMask ?? false)
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
 
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid, password } = props
+    const { pid, password, isMask, testNums } = props
     const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
 
     // append the password from the outcoming pool
     const payload: JSON_PayloadInMask = {
         ...payload_,
         password: payload_.password || password,
+        is_mask: isMask ?? false,
+        test_nums: (testNums as number[]) ?? undefined,
     }
-
     const {
         token,
         total: payload_total,
@@ -232,7 +236,7 @@ export function ITO(props: ITO_Props) {
     } = useAvailabilityComputed(payload)
     //#ednregion
 
-    const { listOfStatus } = availabilityComputed
+    const { listOfStatus, canClaimMaskITO, unlockTime } = availabilityComputed
 
     const isAccountSeller =
         payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
@@ -309,6 +313,18 @@ export function ITO(props: ITO_Props) {
     )
 
     useEffect(() => {
+        const timeToExpired = end_time * 1000 - new Date().getTime()
+        if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired)) return
+
+        const timer = setTimeout(() => {
+            setOpenClaimDialog(false)
+            retryITOCard()
+        }, timeToExpired + TIME_WAIT_BLOCKCHAIN)
+
+        return () => clearTimeout(timer)
+    }, [listOfStatus, setOpenClaimDialog, end_time, retryITOCard])
+
+    useEffect(() => {
         if (destructState.type === TransactionStateType.UNKNOWN) return
         let summary = t('plugin_ito_withdraw')
         if (!noRemain) {
@@ -360,7 +376,7 @@ export function ITO(props: ITO_Props) {
             symbol: token.symbol,
         })
 
-        if (refundAmount.isZero()) {
+        if (refundAmount.isZero() || refundAmount.isLessThan(0)) {
             return `${_text}.`
         }
 
@@ -514,13 +530,26 @@ export function ITO(props: ITO_Props) {
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : isBuyer ? (
-                    <ActionButton
-                        onClick={onShareSuccess}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_share')}
-                    </ActionButton>
+                    canClaimMaskITO === false && isMask && unlockTime ? (
+                        <ActionButton
+                            onClick={() => undefined}
+                            variant="contained"
+                            size="large"
+                            disabled={true}
+                            className={classes.actionButton}>
+                            {t('plugin_ito_wait_unlock_time', {
+                                unlockTime: new Date(1000 * Number(unlockTime!)).toUTCString(),
+                            })}
+                        </ActionButton>
+                    ) : (
+                        <ActionButton
+                            onClick={onShareSuccess}
+                            variant="contained"
+                            size="large"
+                            className={classes.actionButton}>
+                            {t('plugin_ito_share')}
+                        </ActionButton>
+                    )
                 ) : listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(ITO_Status.waited) ? (
                     <ActionButton onClick={onShare} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_ito_share')}
@@ -563,7 +592,13 @@ export function ITO_Loading() {
     )
 }
 
-function ITO_LoadingFailUI({ retryPoolPayload }: { retryPoolPayload: () => void }) {
+function ITO_LoadingFailUI({
+    retryPoolPayload,
+    isConnectMetaMask = false,
+}: {
+    retryPoolPayload: () => void
+    isConnectMetaMask?: boolean
+}) {
     const { t } = useI18N()
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     const classes = useStyles({})
@@ -573,7 +608,7 @@ function ITO_LoadingFailUI({ retryPoolPayload }: { retryPoolPayload: () => void 
             elevation={0}
             style={{ backgroundImage: `url(${PoolBackground})` }}>
             <Typography variant="body1" className={classes.loadingITO}>
-                {t('plugin_ito_loading_failed')}
+                {isConnectMetaMask ? '' : t('plugin_ito_loading_failed')}
             </Typography>
             <ActionButton
                 onClick={retryPoolPayload}
@@ -581,9 +616,18 @@ function ITO_LoadingFailUI({ retryPoolPayload }: { retryPoolPayload: () => void 
                 size="large"
                 color="primary"
                 className={classes.loadingITO_Button}>
-                {t('plugin_ito_loading_try_again')}
+                {isConnectMetaMask ? t('plugin_wallet_connect_to_metamask') : t('plugin_ito_loading_try_again')}
             </ActionButton>
         </Card>
+    )
+}
+
+export function ITO_ConnectMetaMask() {
+    return (
+        <ITO_LoadingFailUI
+            retryPoolPayload={async () => await Services.Ethereum.connectMetaMask()}
+            isConnectMetaMask={true}
+        />
     )
 }
 

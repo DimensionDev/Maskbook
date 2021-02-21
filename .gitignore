@@ -20,8 +20,9 @@ i18n_generated.d.ts.map
 
 # Build out
 dist
-/build
+build
 storybook-static
+packages/netlify/snowpack/
 /Maskbook.*.zip
 
 # Environment files
@@ -171,3 +172,5 @@ common/temp/
 common/autoinstallers/*/.npmrc
 **/.rush/temp/
 
+# Mac
+.DS_Store

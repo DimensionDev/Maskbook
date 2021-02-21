@@ -1,41 +1,39 @@
-import { createStyles, makeStyles, Box, TextField, Grid } from '@material-ui/core'
-import React, { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
+import { createStyles, makeStyles, Box, TextField, Grid, FormControlLabel, Checkbox } from '@material-ui/core'
+import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
+import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
+import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
-import { ApproveState, useERC20TokenApproveCallback } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
 import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useChainIdValid } from '../../../web3/hooks/useChainState'
-import { formatAmount, formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
+import { formatAmount, formatBalance } from '../../Wallet/formatter'
 import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
-import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         line: {
             margin: theme.spacing(1),
+            paddingBottom: theme.spacing(2),
             display: 'flex',
         },
         flow: {
             margin: theme.spacing(1),
             textAlign: 'center',
-        },
-        bar: {
-            padding: theme.spacing(0, 2, 2),
         },
         input: {
             padding: theme.spacing(1),
@@ -48,10 +46,7 @@ const useStyles = makeStyles((theme) =>
             fontSize: 12,
             color: theme.palette.text.secondary,
         },
-        button: {
-            margin: theme.spacing(2, 0),
-            padding: 12,
-        },
+        button: {},
         date: {
             margin: theme.spacing(1),
             display: 'flex',
@@ -65,22 +60,23 @@ const useStyles = makeStyles((theme) =>
 
 export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
-    onConnectWallet: () => void
     onNext: () => void
     origin?: PoolSettings
 }
 
 export function CreateForm(props: CreateFormProps) {
-    const { onChangePoolSettings, onNext, onConnectWallet, origin } = props
+    const { onChangePoolSettings, onNext, origin } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
-    const chainIdValid = useChainIdValid()
+    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const MASK_ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'MASK_ITO_CONTRACT_ADDRESS')
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
 
+    const [isMask, setIsMask] = useState(false)
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
         new BigNumber(origin?.limit || '0').isZero()
@@ -125,26 +121,6 @@ export function CreateForm(props: CreateFormProps) {
         tokenAndAmount?.token?.address ?? '',
     )
 
-    //#region approve
-    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
-    const [approveState, , approveCallback] = useERC20TokenApproveCallback(
-        tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount?.token?.address : '',
-        inputTokenAmount,
-        ITO_CONTRACT_ADDRESS,
-    )
-
-    const onApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
-        await approveCallback()
-    }, [approveState, approveCallback])
-    const onExactApprove = useCallback(async () => {
-        if (approveState !== ApproveState.NOT_APPROVED) return
-        await approveCallback(true)
-    }, [approveState, approveCallback])
-
-    const approveRequired = approveState === ApproveState.NOT_APPROVED || approveState === ApproveState.PENDING
-    //#endregion
-
     const onTotalOfPerWalletChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
         const total = ev.currentTarget.value
         if (total === '') setTotalOfPerWallet('')
@@ -153,10 +129,21 @@ export function CreateForm(props: CreateFormProps) {
         }
     }, [])
 
+    const onCheckboxChange = useCallback(() => {
+        setIsMask((x) => !x)
+    }, [])
+
+    const [testNums] = useState([
+        Math.floor(Math.random() * 10 ** 18),
+        Math.floor(Math.random() * 10 ** 18),
+        Math.floor(Math.random() * 10 ** 18),
+    ])
+
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
         onChangePoolSettings({
+            isMask,
             // this is the raw password which should be signed by the sender
             password: Web3Utils.sha3(`${message}`) ?? '',
             name: senderName,
@@ -170,8 +157,10 @@ export function CreateForm(props: CreateFormProps) {
             exchangeTokens: rest.map((item) => item.token!),
             startTime: startTime,
             endTime: endTime,
+            testNums,
         })
     }, [
+        isMask,
         senderName,
         message,
         totalOfPerWallet,
@@ -182,6 +171,7 @@ export function CreateForm(props: CreateFormProps) {
         endTime,
         account,
         onChangePoolSettings,
+        testNums,
     ])
 
     const validationMessage = useMemo(() => {
@@ -259,7 +249,6 @@ export function CreateForm(props: CreateFormProps) {
     ))
     return (
         <>
-            <EthereumStatusBar classes={{ root: classes.bar }} />
             <Box className={classes.line} style={{ display: 'block' }}>
                 <ExchangeTokenPanelGroup
                     token={tokenAndAmount?.token}
@@ -303,81 +292,47 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.date}>
                 {StartTime} {EndTime}
             </Box>
+            {Flags.mask_ito_enabled ? (
+                <>
+                    <Box className={classes.line} justifyContent="flex-end">
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={isMask}
+                                    onChange={onCheckboxChange}
+                                    name="mask_ito"
+                                    color="primary"
+                                />
+                            }
+                            label="Is Mask ITO?"
+                        />
+                    </Box>
+                    <div>
+                        {testNums.map((n) => (
+                            <p>{n}</p>
+                        ))}
+                    </div>
+                </>
+            ) : null}
             <Box className={classes.line}>
-                <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                    {approveRequired ? (
-                        approveState === ApproveState.PENDING ? (
-                            <Grid item xs={12}>
-                                <ActionButton
-                                    className={classes.button}
-                                    fullWidth
-                                    variant="contained"
-                                    size="large"
-                                    disabled={approveState === ApproveState.PENDING}>
-                                    {`Unlocking ${tokenAndAmount?.token?.symbol ?? 'Token'}…`}
-                                </ActionButton>
-                            </Grid>
-                        ) : (
-                            <>
-                                <Grid item xs={6}>
-                                    <ActionButton
-                                        className={classes.button}
-                                        fullWidth
-                                        variant="contained"
-                                        size="large"
-                                        onClick={onExactApprove}>
-                                        {approveState === ApproveState.NOT_APPROVED
-                                            ? t('plugin_wallet_token_unlock', {
-                                                  balance: formatAmountPrecision(
-                                                      new BigNumber(inputTokenAmount),
-                                                      tokenAndAmount?.token?.decimals,
-                                                  ),
-                                                  symbol: tokenAndAmount?.token?.symbol ?? 'Token',
-                                              })
-                                            : ''}
-                                    </ActionButton>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <ActionButton
-                                        className={classes.button}
-                                        fullWidth
-                                        variant="contained"
-                                        size="large"
-                                        onClick={onApprove}>
-                                        {approveState === ApproveState.NOT_APPROVED
-                                            ? t('plugin_wallet_token_infinite_unlock')
-                                            : ''}
-                                    </ActionButton>
-                                </Grid>
-                            </>
-                        )
-                    ) : (
-                        <Grid item xs={12}>
-                            {!account ? (
-                                <ActionButton
-                                    className={classes.button}
-                                    fullWidth
-                                    variant="contained"
-                                    size="large"
-                                    onClick={onConnectWallet}>
-                                    {t('plugin_ito_connect_a_wallet')}
-                                </ActionButton>
-                            ) : !chainIdValid ? (
-                                <ActionButton className={classes.button} fullWidth variant="contained" disabled>
-                                    {t('plugin_wallet_invalid_network')}
-                                </ActionButton>
-                            ) : validationMessage ? (
-                                <ActionButton className={classes.button} fullWidth variant="contained" disabled>
-                                    {validationMessage}
-                                </ActionButton>
-                            ) : (
-                                <ActionButton className={classes.button} fullWidth onClick={onNext} variant="contained">
-                                    {t('plugin_ito_next')}
-                                </ActionButton>
-                            )}
-                        </Grid>
-                    )}
-                </Grid>
+                <EthereumWalletConnectedBoundary>
+                    <EthereumERC20TokenApprovedBoundary
+                        amount={inputTokenAmount}
+                        spender={isMask ? MASK_ITO_CONTRACT_ADDRESS : ITO_CONTRACT_ADDRESS}
+                        token={
+                            tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined
+                        }>
+                        <ActionButton
+                            className={classes.button}
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            disabled={!!validationMessage}
+                            onClick={onNext}>
+                            {validationMessage || t('plugin_ito_next')}
+                        </ActionButton>
+                    </EthereumERC20TokenApprovedBoundary>
+                </EthereumWalletConnectedBoundary>
             </Box>
         </>
     )

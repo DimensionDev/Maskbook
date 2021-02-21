@@ -18,10 +18,7 @@ import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
-import { useChainId } from '../../../../web3/hooks/useChainState'
-import { UST } from '../../constants'
-import { ChainId, EthereumTokenType } from '../../../../web3/types'
+import { EthereumTokenType } from '../../../../web3/types'
 import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 
@@ -69,7 +66,6 @@ export function TrendingView(props: TrendingViewProps) {
 
     const { t } = useI18N()
     const classes = useStyles()
-    const chainId = useChainId()
 
     //#region trending
     const dataProvider = useCurrentDataProvider(dataProviders)
@@ -93,7 +89,7 @@ export function TrendingView(props: TrendingViewProps) {
     //#endregion
 
     //#region swap
-    const { value: coinDetailed, loading: loadingTokenDetailed } = useTokenDetailed(
+    const { value: tokenDetailed, error: tokenDetailedError, loading: loadingTokenDetailed } = useTokenDetailed(
         trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
         trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.eth_address ?? '',
     )
@@ -154,11 +150,6 @@ export function TrendingView(props: TrendingViewProps) {
     const { coin, market, tickers } = trending
     const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
     const swapTabIndex = dataProvider !== DataProvider.UNISWAP ? 3 : 1
-    const fromToken = chainId === ChainId.Mainnet && coin.is_mirrored ? UST : createEtherToken(chainId)
-    const { decimals } = coinDetailed ?? trending.coin
-    const toToken = trending.coin.eth_address
-        ? createERC20Token(chainId, coin.eth_address!, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
-        : undefined
 
     return (
         <TradeContext.Provider value={tradeContext}>
@@ -212,8 +203,8 @@ export function TrendingView(props: TrendingViewProps) {
                     <TradeView
                         classes={{ root: classes.tradeViewRoot }}
                         TraderProps={{
-                            fromToken,
-                            toToken,
+                            coin,
+                            tokenDetailed,
                         }}
                     />
                 ) : null}

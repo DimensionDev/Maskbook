@@ -6,6 +6,8 @@ export enum TradeProvider {
     ZRX, // 0x
     // ONE_INCH,
     SUSHISWAP,
+    SASHIMISWAP,
+    BALANCER,
 }
 
 export enum WarningLevel {
@@ -45,6 +47,8 @@ export enum ZrxTradePool {
 
 export interface TradeComputed<T = unknown> {
     strategy: TradeStrategy
+    inputToken?: EtherTokenDetailed | ERC20TokenDetailed
+    outputToken?: EtherTokenDetailed | ERC20TokenDetailed
     inputAmount: BigNumber
     outputAmount: BigNumber
     nextMidPrice: BigNumber
@@ -54,7 +58,7 @@ export interface TradeComputed<T = unknown> {
     minimumReceived: BigNumber
     priceImpactWithoutFee: BigNumber
     fee: BigNumber
-    path?: (EtherTokenDetailed | ERC20TokenDetailed)[]
+    path?: (PartialRequired<EtherTokenDetailed, 'address'> | PartialRequired<ERC20TokenDetailed, 'address'>)[][]
     trade_?: T
 }
 

@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid'
 import { useCallback, useEffect, useState } from 'react'
 import { makeStyles, createStyles, Paper, IconButton } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/AddOutlined'
@@ -7,11 +8,10 @@ import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { useChainId } from '../../../web3/hooks/useChainState'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
-import { ITO_CONSTANTS } from '../constants'
 import { CONSTANTS } from '../../../web3/constants'
-import { SelectERC20TokenDialog } from '../../Ethereum/UI/SelectERC20TokenDialog'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { WalletMessages, SelectTokenDialogEvent } from '../../Wallet/messages'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -55,7 +55,6 @@ export interface ExchangetokenPanelProps {
     showAdd: boolean
 
     label: string
-    includeTokensAddress?: string[]
     excludeTokensAddress?: string[]
     selectedTokensAddress?: string[]
     TokenAmountPanelProps: Partial<TokenAmountPanelProps>
@@ -73,7 +72,6 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         showAdd = true,
         showRemove = false,
         label,
-        includeTokensAddress = [],
         excludeTokensAddress = [],
         selectedTokensAddress = [],
         onRemove,
@@ -82,22 +80,29 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
 
     const classes = useStyles()
 
-    //#region select token
-    const [openSelectERC20TokenDialog, setOpenSelectERC20TokenDialog] = useState(false)
-    const onTokenChipClick = useCallback(() => {
-        setOpenSelectERC20TokenDialog(true)
-    }, [])
-    const onSelectERC20TokenDialogClose = useCallback(() => {
-        setOpenSelectERC20TokenDialog(false)
-    }, [])
-    const onSelectERC20TokenDialogSubmit = useCallback(
-        (token: EtherTokenDetailed | ERC20TokenDetailed) => {
-            onExchangeTokenChange(token, dataIndex)
-            onSelectERC20TokenDialogClose()
-        },
-        [dataIndex, onExchangeTokenChange, onSelectERC20TokenDialogClose],
+    //#region select token dialog
+    const [id] = useState(uuid())
+    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+        WalletMessages.events.selectTokenDialogUpdated,
+        useCallback(
+            (ev: SelectTokenDialogEvent) => {
+                if (ev.open || !ev.token || ev.uuid !== id) return
+                onExchangeTokenChange(ev.token, dataIndex)
+            },
+            [id, dataIndex],
+        ),
     )
-
+    const onSelectTokenChipClick = useCallback(() => {
+        setSelectTokenDialogOpen({
+            open: true,
+            uuid: id,
+            disableEther: isSell,
+            FixedTokenListProps: {
+                blacklist: excludeTokensAddress,
+                selectedTokens: [exchangeToken?.address ?? '', ...selectedTokensAddress],
+            },
+        })
+    }, [id, isSell, exchangeToken, excludeTokensAddress.sort().join(), selectedTokensAddress.sort().join()])
     //#endregion
 
     //#region balance
@@ -123,46 +128,36 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     return (
-        <>
-            <Paper className={classes.line}>
-                <TokenAmountPanel
-                    classes={{ root: classes.input }}
-                    label={label}
-                    amount={inputAmountForUI}
-                    disableBalance={disableBalance}
-                    balance={disableBalance || loadingTokenBalance ? '0' : tokenBalance}
-                    token={exchangeToken}
-                    onAmountChange={onAmountChangeForUI}
-                    SelectTokenChip={{
-                        loading: false,
-                        ChipProps: {
-                            onClick: onTokenChipClick,
-                        },
-                    }}
-                    TextFieldProps={{
-                        disabled: !exchangeToken,
-                    }}
-                    {...props.TokenAmountPanelProps}
-                />
-                {showAdd ? (
-                    <IconButton onClick={onAdd} className={classes.button}>
-                        <AddIcon color="primary" />
-                    </IconButton>
-                ) : null}
-                {showRemove ? (
-                    <IconButton onClick={onRemove} className={classes.button}>
-                        <RemoveIcon color="secondary" />
-                    </IconButton>
-                ) : null}
-            </Paper>
-            <SelectERC20TokenDialog
-                open={openSelectERC20TokenDialog}
-                includeTokens={[]}
-                excludeTokens={isSell ? [ETH_ADDRESS, ...excludeTokensAddress] : excludeTokensAddress}
-                selectedTokens={[exchangeToken?.address ?? '', ...selectedTokensAddress]}
-                onSubmit={onSelectERC20TokenDialogSubmit}
-                onClose={onSelectERC20TokenDialogClose}
+        <Paper className={classes.line}>
+            <TokenAmountPanel
+                classes={{ root: classes.input }}
+                label={label}
+                amount={inputAmountForUI}
+                disableBalance={disableBalance}
+                balance={disableBalance || loadingTokenBalance ? '0' : tokenBalance}
+                token={exchangeToken}
+                onAmountChange={onAmountChangeForUI}
+                SelectTokenChip={{
+                    loading: false,
+                    ChipProps: {
+                        onClick: onSelectTokenChipClick,
+                    },
+                }}
+                TextFieldProps={{
+                    disabled: !exchangeToken,
+                }}
+                {...props.TokenAmountPanelProps}
             />
-        </>
+            {showAdd ? (
+                <IconButton onClick={onAdd} className={classes.button}>
+                    <AddIcon color="primary" />
+                </IconButton>
+            ) : null}
+            {showRemove ? (
+                <IconButton onClick={onRemove} className={classes.button}>
+                    <RemoveIcon color="secondary" />
+                </IconButton>
+            ) : null}
+        </Paper>
     )
 }

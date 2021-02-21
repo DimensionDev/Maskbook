@@ -1,6 +1,5 @@
 import { makeStyles, createStyles } from '@material-ui/core'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { EthereumStatusBar } from '../../../../web3/UI/EthereumStatusBar'
 import { Trader, TraderProps } from './Trader'
 
 const useStyles = makeStyles((theme) => {
@@ -12,11 +11,6 @@ const useStyles = makeStyles((theme) => {
             padding: theme.spacing(0, 3),
             position: 'relative',
             boxSizing: 'border-box',
-        },
-        bar: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: theme.spacing(2),
         },
         actions: {},
         settings: {
@@ -39,9 +33,6 @@ export function TradeView(props: TradeViewProps) {
     const classes = useStylesExtends(useStyles(), props)
     return (
         <div className={classes.root}>
-            <div className={classes.bar}>
-                <EthereumStatusBar />
-            </div>
             <Trader {...TraderProps} />
         </div>
     )

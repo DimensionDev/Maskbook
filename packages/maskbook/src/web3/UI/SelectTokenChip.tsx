@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import { makeStyles, Theme, createStyles, Chip, ChipProps, CircularProgress } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ErrorIcon from '@material-ui/icons/Error'
 import { noop } from 'lodash-es'
 import { TokenIcon } from '../../extension/options-page/DashboardComponents/TokenIcon'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../types'
@@ -24,13 +25,14 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export interface SelectTokenChipProps {
     token?: EtherTokenDetailed | ERC20TokenDetailed | null
+    error?: Error
     loading?: boolean
     readonly?: boolean
     ChipProps?: Partial<ChipProps>
 }
 
 export function SelectTokenChip(props: SelectTokenChipProps) {
-    const { token, loading = false, readonly = false, ChipProps } = props
+    const { token, error, loading = false, readonly = false, ChipProps } = props
     const classes = useStyles()
 
     if (loading)
@@ -46,6 +48,22 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
     if (!token)
         return (
             <Chip className={classes.chip} label="Select a token" size="small" clickable={!readonly} {...ChipProps} />
+        )
+    if (token && error)
+        return (
+            <Chip
+                className={classes.chip}
+                icon={<TokenIcon address={token.address} name={token.name} />}
+                deleteIcon={<ErrorIcon className={classes.icon} />}
+                label={token.symbol}
+                color="default"
+                size="small"
+                variant="outlined"
+                clickable={!readonly}
+                // the delete icon only visible when this callback provided
+                onDelete={noop}
+                {...ChipProps}
+            />
         )
     return (
         <Chip
