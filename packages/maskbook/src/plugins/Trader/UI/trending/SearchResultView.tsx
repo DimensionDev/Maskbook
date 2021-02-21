@@ -18,7 +18,6 @@ import { TrendingViewSkeleton } from './TrendingViewSkeleton'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { useChainId } from '../../../../web3/hooks/useChainState'
 import { EthereumTokenType } from '../../../../web3/types'
 import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
@@ -72,13 +71,13 @@ export function SearchResultView(props: SearchResultViewProps) {
 
     const { t } = useI18N()
     const classes = useStyles()
-    const chainId = useChainId()
 
     //#region trending
     const dataProvider = useCurrentDataProvider(dataProviders)
     //#endregion
 
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP ? 1 : 0)
+
     //#region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
     //#endregion
@@ -95,7 +94,7 @@ export function SearchResultView(props: SearchResultViewProps) {
     //#endregion
 
     //#region swap
-    const { value: coinDetailed, loading: loadingTokenDetailed } = useTokenDetailed(
+    const { value: tokenDetailed, error: tokenDetailedError, loading: loadingTokenDetailed } = useTokenDetailed(
         trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
         trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.eth_address ?? '',
     )
@@ -211,7 +210,7 @@ export function SearchResultView(props: SearchResultViewProps) {
                     <TradeView
                         TraderProps={{
                             coin,
-                            coinDetailed,
+                            tokenDetailed,
                         }}
                     />
                 ) : null}

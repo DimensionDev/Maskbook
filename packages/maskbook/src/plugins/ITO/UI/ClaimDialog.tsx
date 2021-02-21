@@ -27,7 +27,9 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 
 const useStyles = makeStyles((theme) =>
     createStyles({
-        button: {},
+        button: {
+            marginTop: theme.spacing(1.5),
+        },
         providerBar: {},
         swapLimitWrap: {
             display: 'flex',
@@ -141,15 +143,15 @@ export function ClaimDialog(props: ClaimDialogProps) {
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return
-                const at = exchangeTokens.findIndex((x) => isSameAddress(x.address, token.address))
+                const at = exchangeTokens.findIndex((x) => isSameAddress(x.address, ev.token!.address))
                 const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(
                     new BigNumber(payload.exchange_amounts[at * 2 + 1]),
                 )
                 setRatio(ratio)
-                setClaimToken(token)
+                setClaimToken(ev.token)
                 setTokenAmount(initAmount)
                 setClaimAmount(initAmount.multipliedBy(ratio))
-                setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio), token.decimals ?? 0))
+                setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals ?? 0))
             },
             [
                 id,
@@ -277,14 +279,21 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 balance={tokenBalance}
                 token={claimToken}
                 onAmountChange={(value) => {
-                    setInputAmountForUI(value)
                     const val =
                         value === ''
                             ? new BigNumber(0)
                             : new BigNumber(value).multipliedBy(new BigNumber(10).pow(claimToken.decimals))
                     const isMax = value === formatBalance(new BigNumber(maxAmount), claimToken.decimals)
                     const tokenAmount = isMax ? maxSwapAmount : val.dividedBy(ratio)
-                    const swapAmount = val.dp(0)
+                    const swapAmount = isMax ? tokenAmount.multipliedBy(ratio) : val.dp(0)
+                    setInputAmountForUI(
+                        isMax
+                            ? tokenAmount
+                                  .multipliedBy(ratio)
+                                  .dividedBy(new BigNumber(10).pow(claimToken.decimals))
+                                  .toString()
+                            : value,
+                    )
                     setTokenAmount(tokenAmount.dp(0))
                     setClaimAmount(swapAmount)
                 }}

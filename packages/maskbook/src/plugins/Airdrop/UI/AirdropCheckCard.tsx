@@ -17,11 +17,16 @@ const useStyles = makeStyles((theme) =>
         },
         textfield: {
             flex: 1,
-            height: 48,
-            color: '#fff',
-            '& > fieldset': {
-                borderColor: '#F3F3F4',
+            height: 56,
+            color: '#fff !important',
+            '& fieldset, & > div, & > div:hover, & > div:active': {
+                color: '#fff !important',
+                borderColor: '#F3F3F4 !important',
             },
+        },
+        helperText: {
+            color: '#fff',
+            fontSize: 12,
         },
         button: {
             background: 'rgba(255, 255, 255, .2)',
@@ -51,28 +56,46 @@ export function AirdropCheckCard(props: AirdropCheckCardProps) {
     return (
         <Box className={classes.root}>
             <Typography>Check Address</Typography>
-            <Box sx={{ marginTop: 1.2, display: 'flex' }}>
+            <Box sx={{ marginTop: 1.2, display: 'flex', alignItems: 'center' }}>
                 <TextField
                     classes={{ root: classes.textfield }}
                     value={checkAddress}
                     variant="outlined"
                     error={checkState.type === CheckStateType.FAILED}
-                    helperText={(() => {
-                        switch (checkState.type) {
-                            case CheckStateType.YEP:
-                                return `The address has ${checkState.packet.amount}.00 ${token.symbol} to claim.`
-                            case CheckStateType.NOPE:
-                                return 'The address has no reward to claim.'
-                            case CheckStateType.CLAIMED:
-                                return 'The address has already claimed the reward.'
-                            case CheckStateType.FAILED:
-                                return checkState.error.message ?? 'Failed to check the reward.'
-                            case CheckStateType.PENDING:
-                                return 'Checking in progress...'
-                            default:
-                                return ''
-                        }
-                    })()}
+                    helperText={
+                        <Typography
+                            className={classes.helperText}
+                            component="span"
+                            style={{
+                                color: (() => {
+                                    switch (checkState.type) {
+                                        case CheckStateType.YEP:
+                                            return '#77E0B5'
+                                        case CheckStateType.PENDING:
+                                            return '#ffffff'
+                                        default:
+                                            return '#FF5555'
+                                    }
+                                })(),
+                            }}>
+                            {(() => {
+                                switch (checkState.type) {
+                                    case CheckStateType.YEP:
+                                        return `The address has ${checkState.packet.amount}.00 ${token.symbol} to claim.`
+                                    case CheckStateType.NOPE:
+                                        return 'The address has no reward to claim.'
+                                    case CheckStateType.CLAIMED:
+                                        return 'The address has already claimed the reward.'
+                                    case CheckStateType.FAILED:
+                                        return checkState.error.message ?? 'Failed to check the reward.'
+                                    case CheckStateType.PENDING:
+                                        return 'Checking in progress...'
+                                    default:
+                                        return ''
+                                }
+                            })()}
+                        </Typography>
+                    }
                     onChange={(e) => setCheckAddress(e.target.value)}
                     placeholder="Enter the wallet address."
                     inputProps={{

@@ -92,8 +92,8 @@ export const ITO_CONSTANTS = {
         [ChainId.Gorli]: '',
     },
     MASK_ITO_CONTRACT_ADDRESS: {
-        [ChainId.Mainnet]: '',
-        [ChainId.Ropsten]: '0xab7b1be4233a04e5c43a810e75657eced8e5463b',
+        [ChainId.Mainnet]: '0x86812da3A623ab9606976078588b80C315E55FA3',
+        [ChainId.Ropsten]: '0x677f7BbA13108649ECFF068E8B3d55631327B83a',
         [ChainId.Rinkeby]: '0x0aC41A27bA9F132D5687CAC986f5302Da6f5F9f6',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',

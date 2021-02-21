@@ -26,6 +26,8 @@ export function useTradeComputed(
             strategy,
             inputAmount: isExactIn ? new BigNumber(inputAmount) : new BigNumber(tradeAmount),
             outputAmount: !isExactIn ? new BigNumber(outputAmount) : new BigNumber(tradeAmount),
+            inputToken,
+            outputToken,
             nextMidPrice: new BigNumber(spotPrice),
             executionPrice: new BigNumber(spotPrice),
             priceImpact: priceImpact.isNegative() ? new BigNumber('0.00001') : priceImpact,

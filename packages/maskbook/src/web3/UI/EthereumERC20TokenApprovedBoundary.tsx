@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) =>
         button: {
             flexDirection: 'column',
             position: 'relative',
+            marginTop: theme.spacing(1.5),
         },
         buttonLabel: {
             display: 'block',

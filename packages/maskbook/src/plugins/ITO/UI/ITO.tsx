@@ -191,7 +191,7 @@ export function ITO(props: ITO_Props) {
     const postLink = usePostLink()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(false)
+    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(props.isMask ?? false)
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
 
     // assets
@@ -236,7 +236,7 @@ export function ITO(props: ITO_Props) {
     } = useAvailabilityComputed(payload)
     //#ednregion
 
-    const { listOfStatus } = availabilityComputed
+    const { listOfStatus, canClaimMaskITO, unlockTime } = availabilityComputed
 
     const isAccountSeller =
         payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
@@ -376,7 +376,7 @@ export function ITO(props: ITO_Props) {
             symbol: token.symbol,
         })
 
-        if (refundAmount.isZero()) {
+        if (refundAmount.isZero() || refundAmount.isLessThan(0)) {
             return `${_text}.`
         }
 
@@ -530,13 +530,26 @@ export function ITO(props: ITO_Props) {
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : isBuyer ? (
-                    <ActionButton
-                        onClick={onShareSuccess}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_share')}
-                    </ActionButton>
+                    canClaimMaskITO === false && isMask && unlockTime ? (
+                        <ActionButton
+                            onClick={() => undefined}
+                            variant="contained"
+                            size="large"
+                            disabled={true}
+                            className={classes.actionButton}>
+                            {t('plugin_ito_wait_unlock_time', {
+                                unlockTime: new Date(1000 * Number(unlockTime!)).toUTCString(),
+                            })}
+                        </ActionButton>
+                    ) : (
+                        <ActionButton
+                            onClick={onShareSuccess}
+                            variant="contained"
+                            size="large"
+                            className={classes.actionButton}>
+                            {t('plugin_ito_share')}
+                        </ActionButton>
+                    )
                 ) : listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(ITO_Status.waited) ? (
                     <ActionButton onClick={onShare} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_ito_share')}

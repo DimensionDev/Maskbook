@@ -164,7 +164,11 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                     <Box>
                         <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                             <span>Airdrop</span>
-                            <InfoIcon fontSize="small" sx={{ marginLeft: 0.2 }} />
+                            <span
+                                title="Airdrop MASK, 20% reduction every 24 hours. Airdrop unlock time is 02/26/2021 03:00 AM (UTC+0)."
+                                style={{ lineHeight: 0.8, cursor: 'pointer' }}>
+                                <InfoIcon fontSize="small" sx={{ marginLeft: 0.2 }} />
+                            </span>
                         </Typography>
                         <Typography className={classes.amount} sx={{ marginTop: 1.5 }}>
                             {checkState.type === CheckStateType.YEP ? `${checkState.claimable}.00` : '0.00'}

@@ -93,7 +93,7 @@ export const ConfirmSwapDialog: FC = () => {
                     </Grid>
                     <Grid item className={classes.padding}>
                         <Button
-                            disabled={!bypass || value !== result}
+                            disabled={!bypass && value !== result}
                             fullWidth
                             variant="contained"
                             onClick={handleConfirm}>
