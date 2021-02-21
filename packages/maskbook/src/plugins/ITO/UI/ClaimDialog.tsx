@@ -285,7 +285,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                             : new BigNumber(value).multipliedBy(new BigNumber(10).pow(claimToken.decimals))
                     const isMax = value === formatBalance(new BigNumber(maxAmount), claimToken.decimals)
                     const tokenAmount = isMax ? maxSwapAmount : val.dividedBy(ratio)
-                    const swapAmount = val.dp(0)
+                    const swapAmount = isMax ? tokenAmount.multipliedBy(ratio) : val.dp(0)
                     setInputAmountForUI(
                         isMax
                             ? tokenAmount
