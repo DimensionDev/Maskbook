@@ -1,4 +1,4 @@
-import { Typography, Link, Checkbox, makeStyles, createStyles, FormControlLabel } from '@material-ui/core'
+import { Typography, Link, Checkbox, makeStyles, createStyles, FormControlLabel, Box } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
@@ -20,6 +20,19 @@ const useStyles = makeStyles((theme) =>
         },
         reminderTextLast: {
             marginBottom: 0,
+        },
+        docBox: {
+            height: 300,
+            overflow: "scroll",
+        },
+        center: {
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: '1.2rem',
+        },
+        bold: {
+            fontWeight: 'bold',
+            fontSize: '1.1rem',
         },
         tokenWrapper: {
             display: 'flex',
@@ -68,6 +81,29 @@ const useStyles = makeStyles((theme) =>
             margin: '0 auto',
             padding: '6px 48px',
         },
+        table: {
+            border: '1px solid #FF5555',
+            color: '#FF5555',
+        },
+        cell: {
+            width: '50%',
+            border: '1px solid #FF5555',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            textAlign: 'center'
+        },
+        moreCell: {
+            flexDirection: 'column'
+        },
+        column: {
+            width: '100%',
+            display: 'flex',
+        },
+        lowSpacing: {
+            marginTop: 4,
+            marginBottom: 4,
+        }
     }),
 )
 
@@ -75,29 +111,240 @@ export interface RemindDialogProps extends withClasses<'root'> {
     token: EtherTokenDetailed | ERC20TokenDetailed
     chainId: ChainId
     setStatus: React.Dispatch<React.SetStateAction<ClaimStatus>>
+    isMask: boolean
 }
 
 export function RemindDialog(props: RemindDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
-    const { token, chainId, setStatus } = props
+    const { token, chainId, setStatus, isMask } = props
 
     const [agreeReminder, setAgreeReminder] = useState(false)
 
     return (
         <>
-            <Typography variant="body1" className={classes.reminderText}>
-                {t('plugin_ito_dialog_claim_reminder_text1')}
-            </Typography>
-            <Typography variant="body1" className={classes.reminderText}>
-                {t('plugin_ito_dialog_claim_reminder_text2')}
-            </Typography>
-            <Typography variant="body1" className={classes.reminderText}>
-                {t('plugin_ito_dialog_claim_reminder_text3')}
-            </Typography>
-            <Typography variant="body1" className={classNames(classes.reminderText, classes.reminderTextLast)}>
-                {t('plugin_ito_dialog_claim_reminder_text4')}
-            </Typography>
+            {!isMask ?
+                <Box className={classes.docBox}>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text1')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text2')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText, classes.center)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text3')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText, classes.center)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text4')}
+                    </Typography>
+                    <Box className={classes.table}>
+                        <Box className={classes.column}>
+                            <Box className={classes.cell}>
+                                <Typography variant="body1" className={classNames(classes.reminderText)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text1')}</Typography>
+                            </Box>
+                            <Box className={classes.cell}></Box>
+                        </Box>
+                        <Box className={classes.column}>
+                            <Box className={classes.cell}>
+                                <Typography variant="body1" className={classNames(classes.reminderText)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text2')}</Typography>
+                            </Box>
+                            <Box className={classNames(classes.cell, classes.moreCell)}>
+                                <Typography variant="body1" className={classNames(classes.reminderText, classes.lowSpacing)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text4')}</Typography>
+                                <Typography variant="body1" className={classNames(classes.reminderText, classes.lowSpacing)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text5')}</Typography>
+                                <Typography variant="body1" className={classNames(classes.reminderText, classes.lowSpacing)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text6')}</Typography>
+                                <Typography variant="body1" className={classNames(classes.reminderText, classes.lowSpacing)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text7')}</Typography>
+                            </Box>
+                        </Box>
+                        <Box className={classes.column}>
+                            <Box className={classes.cell}>
+                                <Typography variant="body1" className={classNames(classes.reminderText)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text3')}</Typography>
+                            </Box>
+                            <Box className={classes.cell}></Box>
+                        </Box>
+                    </Box>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text5')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText, classes.bold)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text6')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text6_1')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText, classes.bold)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text7')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text8')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text9')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text10')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText, classes.bold)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text11')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text12')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text13')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text14')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text15')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text16')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text17')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText, classes.bold)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text18')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text19')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text20')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text21')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text22')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text23')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text24')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text25')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text26')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText, classes.bold)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text27')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text28')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text29')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text30')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text31')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text32')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text33')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text34')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text35')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text36')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text37')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text38')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text39')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text40')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text41')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text42')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text43')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text44')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText, classes.bold)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text45')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text46')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text47')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text48')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text49')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText, classes.bold)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text50')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text51')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text52')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text53')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text54')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text55')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText)}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text56')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text57')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_mask_reminder_text58')}
+                    </Typography>
+                </Box>
+                :
+                <Box className={classes.docBox}>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_reminder_text1')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_reminder_text2')}
+                    </Typography>
+                    <Typography variant="body1" className={classes.reminderText}>
+                        {t('plugin_ito_dialog_claim_reminder_text3')}
+                    </Typography>
+                    <Typography variant="body1" className={classNames(classes.reminderText, classes.reminderTextLast)}>
+                        {t('plugin_ito_dialog_claim_reminder_text4')}
+                    </Typography>
+                </Box>
+            }
+
             <section className={classes.tokenWrapper}>
                 <TokenIcon address={token.address} classes={{ icon: classes.tokenIcon }} />
                 <div className={classes.tokenTextWrapper}>
