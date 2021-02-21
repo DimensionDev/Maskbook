@@ -167,7 +167,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                             <InfoIcon fontSize="small" sx={{ marginLeft: 0.2 }} />
                         </Typography>
                         <Typography className={classes.amount} sx={{ marginTop: 1.5 }}>
-                            {packet ? `${packet.amount}.00` : '0.00'}
+                            {checkState.type === CheckStateType.YEP ? `${checkState.claimable}.00` : '0.00'}
                         </Typography>
                     </Box>
                 </Box>
