@@ -103,7 +103,16 @@ export function useSwapCallback(
             isMask && testNums
                 ? ([
                       id,
-                      Web3Utils.soliditySha3(...testNums),
+                      Web3Utils.soliditySha3(
+                          Web3Utils.hexToNumber(
+                              `0x${buf2hex(
+                                  hex2buf(
+                                      Web3Utils.soliditySha3(Web3Utils.soliditySha3(...testNums) ?? '') ?? '',
+                                  ).slice(0, 5),
+                              )}`,
+                          ),
+                          account,
+                      )!,
                       Web3Utils.soliditySha3(
                           Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 5))}`),
                           account,
