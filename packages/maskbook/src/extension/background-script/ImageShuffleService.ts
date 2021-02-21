@@ -65,26 +65,6 @@ export async function shuffle(buf: string | ArrayBuffer, { seed, blockWidth = DE
     const { width, height } = imageData
     if (width < blockWidth) throw new Error('blockWidth is larger than image width')
 
-    // TODO:
-    // use canvas to resize image
-    // if (width > optimalWidth) {
-    //     const aspectRatio = width / height
-    //     const targetHeight = optimalWidth / aspectRatio
-    //     file.resize(optimalWidth - (optimalWidth % blockWidth), targetHeight - (targetHeight % blockWidth))
-    // } else {
-    //     // TODO: you might want to avoid the throws
-    //     if (width < blockWidth) {
-    //         throw new Error('blockWidth is larger than image width')
-    //     }
-    //     // * you can still get an image with a ridiculous height
-    //     file.resize(width - (width % blockWidth), height - (height % blockWidth))
-    // }
-
-    // const aspectRatio = width / height
-    // const targetHeight = optimalWidth / aspectRatio
-    // const imgWidth = width > optimalWidth ? optimalWidth - (optimalWidth % blockWidth) : width - (width % blockWidth)
-    // const imgHegiht = width > optimalWidth ? targetHeight - (targetHeight % blockWidth) : height - (height % blockWidth)
-
     const totalBlocksNum = (width * height) / (blockWidth * blockWidth) // this will be a whole number, because we resize earlier
     const prng = seedrandom(seed)
     for (var blockNum = totalBlocksNum - 1; blockNum > 0; blockNum = blockNum - 1) {
