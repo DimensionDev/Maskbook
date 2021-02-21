@@ -87,7 +87,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
                     </span>
                 </Typography>
                 <AirdropCard token={token} onUpdateAmount={setAirdropAmount} />
-                <ITO_Card />
+                <ITO_Card token={token} onUpdateAmount={setITO_Amount} />
             </DialogContent>
         </InjectedDialog>
     )

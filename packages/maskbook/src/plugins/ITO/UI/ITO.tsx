@@ -521,18 +521,18 @@ export function ITO(props: ITO_Props) {
                     <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
-                    ) : (canClaimMaskITO === false && isMask && unlockTime) ? (
-                        <ActionButton
-                            onClick={() => undefined}
-                            variant="contained"
-                            size="large"
-                            disabled={true}
-                            className={classes.actionButton}>
-                            {t('plugin_ito_wait_unlock_time', {
-                                unlockTime: new Date(1000 * Number(unlockTime!)).toUTCString()
-                            })}
-                        </ActionButton>
-                    ) : canWithdraw ? (
+                ) : canClaimMaskITO === false && isMask && unlockTime ? (
+                    <ActionButton
+                        onClick={() => undefined}
+                        variant="contained"
+                        size="large"
+                        disabled={true}
+                        className={classes.actionButton}>
+                        {t('plugin_ito_wait_unlock_time', {
+                            unlockTime: new Date(1000 * Number(unlockTime!)).toUTCString(),
+                        })}
+                    </ActionButton>
+                ) : canWithdraw ? (
                     <ActionButton
                         onClick={onWithdraw}
                         variant="contained"
