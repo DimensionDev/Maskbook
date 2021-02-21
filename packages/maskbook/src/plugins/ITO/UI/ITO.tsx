@@ -181,6 +181,8 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 export interface ITO_Props {
     pid: string
     password: string
+    isMask?: boolean
+    testNums?: Number[]
 }
 
 export function ITO(props: ITO_Props) {
@@ -189,21 +191,22 @@ export function ITO(props: ITO_Props) {
     const postLink = usePostLink()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
+    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(false)
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
 
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid, password } = props
+    const { pid, password, isMask, testNums } = props
     const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
 
     // append the password from the outcoming pool
     const payload: JSON_PayloadInMask = {
         ...payload_,
         password: payload_.password || password,
+        is_mask: isMask ?? false,
+        test_nums: (testNums as number[]) ?? undefined,
     }
-
     const {
         token,
         total: payload_total,

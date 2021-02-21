@@ -9,12 +9,12 @@ import { EtherTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '..
 import type { Tx } from '../../../contracts/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { gcd, sortTokens } from '../helpers'
-import { ITO_CONSTANTS, ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
+import { ITO_CONSTANTS, ITO_CONTRACT_BASE_TIMESTAMP, MASK_ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import Services from '../../../extension/service'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { useMaskITO_Contract } from '../contracts/useMaskITO_Contarct'
 import type { ITO } from '../../../contracts/ITO'
+import type { MaskITO } from '../../../contracts/MaskITO'
 
 export interface PoolSettings {
     isMask: boolean
@@ -28,14 +28,15 @@ export interface PoolSettings {
     exchangeAmounts: string[]
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     token?: ERC20TokenDetailed
+    testNums: number[]
 }
 
 export function useFillCallback(poolSettings?: PoolSettings) {
     const account = useAccount()
     const chainId = useChainId()
-    const ITO_Contract = useITO_Contract()
-    const MaskITO_Contract = useMaskITO_Contract()
+    const ITO_Contract = useITO_Contract(poolSettings?.isMask ?? false)
     const DEFAULT_QUALIFICATION_ADDRESS = useConstant(ITO_CONSTANTS, 'DEFAULT_QUALIFICATION_ADDRESS')
+
     const [fillState, setFillState] = useTransactionState()
     const [fillSettings, setFillSettings] = useState(poolSettings)
 
@@ -61,9 +62,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             exchangeTokens: exchangeTokensUnsorted,
         } = poolSettings
 
-        const contract = isMask ? MaskITO_Contract : ITO_Contract
-
-        if (!token || !contract) {
+        if (!token || !ITO_Contract) {
             setFillState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -81,11 +80,12 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         const exchangeAmounts = sorted.map((x) => x.amount)
         const exchangeTokens = sorted.map((x) => x.token)
 
-        const startTime_ = Math.floor((startTime.getTime() - ITO_CONTRACT_BASE_TIMESTAMP) / 1000)
-        const endTime_ = Math.floor((endTime.getTime() - ITO_CONTRACT_BASE_TIMESTAMP) / 1000)
-        const now_ = Math.floor((Date.now() - ITO_CONTRACT_BASE_TIMESTAMP) / 1000)
+        const BASE_TIMESTAMP = isMask ? MASK_ITO_CONTRACT_BASE_TIMESTAMP : ITO_CONTRACT_BASE_TIMESTAMP
+        const startTime_ = Math.floor((startTime.getTime() - BASE_TIMESTAMP) / 1000)
+        const endTime_ = Math.floor((endTime.getTime() - BASE_TIMESTAMP) / 1000)
+        const now_ = Math.floor((Date.now() - BASE_TIMESTAMP) / 1000)
 
-        // error: the start time before 1606780800
+        // error: the start time before BASE TIMESTAMP
         if (startTime_ < 0) {
             setFillState({
                 type: TransactionStateType.FAILED,
@@ -94,7 +94,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             return
         }
 
-        // error: the end time before 1606780800
+        // error: the end time before BASE TIMESTAMP
         if (endTime_ < 0) {
             setFillState({
                 type: TransactionStateType.FAILED,
@@ -199,25 +199,39 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         const config: Tx = {
             from: account,
-            to: contract.options.address,
+            to: ITO_Contract.options.address,
             value: '0',
         }
-        const params: Parameters<ITO['methods']['fill_pool']> = [
-            Web3Utils.sha3(signedPassword)!,
-            startTime_,
-            endTime_,
-            name,
-            title,
-            exchangeTokens.map((x) => x.address),
-            exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
-            token.address,
-            total,
-            limit,
-            DEFAULT_QUALIFICATION_ADDRESS,
-        ]
+        let params = isMask
+            ? ([
+                  Web3Utils.sha3(signedPassword)!,
+                  startTime_,
+                  endTime_,
+                  name,
+                  title,
+                  exchangeTokens.map((x) => x.address),
+                  exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
+                  token.address,
+                  total,
+                  limit,
+                  DEFAULT_QUALIFICATION_ADDRESS,
+              ] as Parameters<MaskITO['methods']['fill_pool']>)
+            : ([
+                  Web3Utils.sha3(signedPassword)!,
+                  startTime_,
+                  endTime_,
+                  name,
+                  title,
+                  exchangeTokens.map((x) => x.address),
+                  exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
+                  token.address,
+                  total,
+                  limit,
+                  DEFAULT_QUALIFICATION_ADDRESS,
+              ] as Parameters<ITO['methods']['fill_pool']>)
 
         // step 1: estimate gas
-        const estimatedGas = await contract.methods
+        const estimatedGas = await ITO_Contract.methods
             .fill_pool(...params)
             .estimateGas(config)
             .catch((error: Error) => {
@@ -230,7 +244,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         // step 2: blocking
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = contract.methods.fill_pool(...params).send({
+            const promiEvent = ITO_Contract.methods.fill_pool(...params).send({
                 gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                 ...config,
             })
@@ -257,7 +271,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                 reject(error)
             })
         })
-    }, [account, chainId, ITO_Contract, MaskITO_Contract, DEFAULT_QUALIFICATION_ADDRESS, poolSettings])
+    }, [account, chainId, ITO_Contract, DEFAULT_QUALIFICATION_ADDRESS, poolSettings])
 
     const resetCallback = useCallback(() => {
         setFillState({

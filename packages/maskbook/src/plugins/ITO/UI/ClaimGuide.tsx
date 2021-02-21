@@ -77,7 +77,14 @@ export function ClaimGuide(props: ClaimGuideProps) {
                 {(() => {
                     switch (status) {
                         case ClaimStatus.Remind:
-                            return <RemindDialog token={payload.token} chainId={chainId} setStatus={setStatus} />
+                            return (
+                                <RemindDialog
+                                    isMask={payload.is_mask ?? false}
+                                    token={payload.token}
+                                    chainId={chainId}
+                                    setStatus={setStatus}
+                                />
+                            )
                         case ClaimStatus.Swap:
                             return (
                                 <ClaimDialog

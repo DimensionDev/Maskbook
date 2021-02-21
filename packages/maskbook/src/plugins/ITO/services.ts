@@ -9,6 +9,8 @@ export async function getTradeInfo(pid: string, trader: string) {
     const tradeInfo = await subgraph.getTradeInfo(pid, trader)
     const poolFromDB = await database.getPoolFromDB(pid)
     if (tradeInfo && poolFromDB?.payload.password) tradeInfo.pool.password = poolFromDB.payload.password
+    if (tradeInfo && poolFromDB?.payload.is_mask) tradeInfo.pool.is_mask = poolFromDB.payload.is_mask
+    if (tradeInfo && poolFromDB?.payload.test_nums) tradeInfo.pool.test_nums = poolFromDB.payload.test_nums
     return tradeInfo
 }
 
@@ -16,6 +18,8 @@ export async function getPool(pid: string) {
     const poolFromChain = await subgraph.getPool(pid)
     const poolFromDB = await database.getPoolFromDB(pid)
     if (poolFromDB?.payload.password) poolFromChain.password = poolFromDB.payload.password
+    if (poolFromDB?.payload.is_mask) poolFromChain.is_mask = poolFromDB.payload.is_mask
+    if (poolFromDB?.payload.test_nums) poolFromChain.test_nums = poolFromDB.payload.test_nums
     return poolFromChain
 }
 
@@ -56,6 +60,8 @@ export async function discoverPool(from: string, payload: JSON_PayloadInMask) {
             ...payload,
             // reverse password if given payload hasn't got a password
             password: payload.password || (record_?.payload.password ?? ''),
+            is_mask: payload.is_mask || (record_?.payload.is_mask ?? false),
+            test_nums: payload.test_nums || (record_?.payload.test_nums ?? undefined),
         },
     }
     await database.addPoolIntoDB(record)

@@ -28,6 +28,7 @@ export function CreateGuide(props: CreateGuideProps) {
     const { t } = useI18N()
     const chainId = useChainId()
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const MASK_ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'MASK_ITO_CONTRACT_ADDRESS')
 
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
 
@@ -71,7 +72,7 @@ export function CreateGuide(props: CreateGuideProps) {
 
             // assemble JSON payload
             const payload: JSON_PayloadInMask = {
-                contract_address: ITO_CONTRACT_ADDRESS,
+                contract_address: fillSettings.isMask ? MASK_ITO_CONTRACT_ADDRESS : ITO_CONTRACT_ADDRESS,
                 pid: FillSuccess.id,
                 password: fillSettings.password,
                 message: FillSuccess.message,
@@ -90,6 +91,8 @@ export function CreateGuide(props: CreateGuideProps) {
                 token: fillSettings.token,
                 exchange_amounts: fillSettings.exchangeAmounts,
                 exchange_tokens: fillSettings.exchangeTokens,
+                is_mask: fillSettings.isMask,
+                test_nums: fillSettings.testNums,
             }
 
             // output the redpacket as JSON payload

@@ -13,8 +13,7 @@ export interface PostInspectorProps {
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    const { chain_id, pid, password } = props.payload
-
+    const { chain_id, pid, password, is_mask, test_nums } = props.payload
     const chainId = useChainId()
     const currentSelectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
     const isMetamaskRedpacketLocked =
@@ -25,7 +24,7 @@ export function PostInspector(props: PostInspectorProps) {
 
     return (
         <ITO_LoadingFail retryPoolPayload={poolPayloadErrorRetry}>
-            <ITO pid={pid} password={password} />
+            <ITO pid={pid} password={password} isMask={is_mask} testNums={test_nums} />
         </ITO_LoadingFail>
     )
 }

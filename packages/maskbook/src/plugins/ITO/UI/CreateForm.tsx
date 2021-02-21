@@ -71,11 +71,12 @@ export function CreateForm(props: CreateFormProps) {
 
     const account = useAccount()
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const MASK_ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'MASK_ITO_CONTRACT_ADDRESS')
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
 
-    const [isMaskITO, setIsMaskITO] = useState(false)
+    const [isMask, setIsMask] = useState(false)
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
         new BigNumber(origin?.limit || '0').isZero()
@@ -129,14 +130,20 @@ export function CreateForm(props: CreateFormProps) {
     }, [])
 
     const onCheckboxChange = useCallback(() => {
-        setIsMaskITO((x) => !x)
+        setIsMask((x) => !x)
     }, [])
+
+    const [testNums] = useState([
+        Math.floor(Math.random() * 10 ** 18),
+        Math.floor(Math.random() * 10 ** 18),
+        Math.floor(Math.random() * 10 ** 18),
+    ])
 
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
         onChangePoolSettings({
-            isMask: isMaskITO,
+            isMask,
             // this is the raw password which should be signed by the sender
             password: Web3Utils.sha3(`${message}`) ?? '',
             name: senderName,
@@ -150,9 +157,10 @@ export function CreateForm(props: CreateFormProps) {
             exchangeTokens: rest.map((item) => item.token!),
             startTime: startTime,
             endTime: endTime,
+            testNums,
         })
     }, [
-        isMaskITO,
+        isMask,
         senderName,
         message,
         totalOfPerWallet,
@@ -163,6 +171,7 @@ export function CreateForm(props: CreateFormProps) {
         endTime,
         account,
         onChangePoolSettings,
+        testNums,
     ])
 
     const validationMessage = useMemo(() => {
@@ -284,20 +293,32 @@ export function CreateForm(props: CreateFormProps) {
                 {StartTime} {EndTime}
             </Box>
             {Flags.mask_ito_enabled ? (
-                <Box className={classes.line} justifyContent="flex-end">
-                    <FormControlLabel
-                        control={
-                            <Checkbox checked={isMaskITO} onChange={onCheckboxChange} name="mask_ito" color="primary" />
-                        }
-                        label="Is Mask ITO?"
-                    />
-                </Box>
+                <>
+                    <Box className={classes.line} justifyContent="flex-end">
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={isMask}
+                                    onChange={onCheckboxChange}
+                                    name="mask_ito"
+                                    color="primary"
+                                />
+                            }
+                            label="Is Mask ITO?"
+                        />
+                    </Box>
+                    <div>
+                        {testNums.map((n) => (
+                            <p>{n}</p>
+                        ))}
+                    </div>
+                </>
             ) : null}
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={inputTokenAmount}
-                        spender={ITO_CONTRACT_ADDRESS}
+                        spender={isMask ? MASK_ITO_CONTRACT_ADDRESS : ITO_CONTRACT_ADDRESS}
                         token={
                             tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined
                         }>

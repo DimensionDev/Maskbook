@@ -9,6 +9,8 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
+import type { ITO } from '../../../contracts/ITO'
+import type { MaskITO } from '../../../contracts/MaskITO'
 import { usePoolPayload } from './usePoolPayload'
 
 export function useSwapCallback(
@@ -16,10 +18,11 @@ export function useSwapCallback(
     password: string,
     total: string,
     token: PartialRequired<EtherTokenDetailed | ERC20TokenDetailed, 'address'>,
+    testNums?: number[],
+    isMask = false,
 ) {
     const account = useAccount()
-    const ITO_Contract = useITO_Contract()
-
+    const ITO_Contract = useITO_Contract(isMask)
     const { payload } = usePoolPayload(id)
     const [swapState, setSwapState] = useTransactionState()
     const swapCallback = useCallback(async () => {
@@ -96,21 +99,44 @@ export function useSwapCallback(
             return
         }
 
-        const swapParams: Parameters<typeof ITO_Contract['methods']['swap']> = [
-            id,
-            Web3Utils.soliditySha3(
-                Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 6))}`),
-                account,
-            )!,
-            account,
-            Web3Utils.sha3(account)!,
-            swapTokenAt,
-            total,
-        ]
+        const swapParams =
+            isMask && testNums
+                ? ([
+                      id,
+                      Web3Utils.soliditySha3(
+                          Web3Utils.hexToNumber(
+                              `0x${buf2hex(
+                                  hex2buf(
+                                      Web3Utils.soliditySha3(Web3Utils.soliditySha3(...testNums) ?? '') ?? '',
+                                  ).slice(0, 5),
+                              )}`,
+                          ),
+                          account,
+                      )!,
+                      Web3Utils.soliditySha3(
+                          Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 5))}`),
+                          account,
+                      )!,
+                      Web3Utils.sha3(account)!,
+                      swapTokenAt,
+                      total,
+                  ] as Parameters<MaskITO['methods']['swap']>)
+                : ([
+                      id,
+                      Web3Utils.soliditySha3(
+                          Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 6))}`),
+                          account,
+                      )!,
+                      account,
+                      Web3Utils.sha3(account)!,
+                      swapTokenAt,
+                      total,
+                  ] as Parameters<ITO['methods']['swap']>)
+
+        const swap = isMask && testNums ? (ITO_Contract as MaskITO).methods.swap : (ITO_Contract as ITO).methods.swap
 
         // step 2-1: estimate gas
-        const estimatedGas = await ITO_Contract.methods
-            .swap(...swapParams)
+        const estimatedGas = await swap(...swapParams)
             .estimateGas(config)
             .catch((error: Error) => {
                 setSwapState({
@@ -137,7 +163,7 @@ export function useSwapCallback(
                 })
                 reject(error)
             }
-            const promiEvent = ITO_Contract.methods.swap(...swapParams).send({
+            const promiEvent = swap(...swapParams).send({
                 gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                 ...config,
             })
