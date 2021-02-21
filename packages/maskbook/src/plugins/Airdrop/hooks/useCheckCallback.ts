@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
+import { Flags } from '../../../utils/flags'
 import { formatEthereumAddress } from '../../Wallet/formatter'
 import type { AirdropPacket } from '../apis'
 import { useAirdropContract } from '../contracts/useAirdropContract'
@@ -68,6 +69,17 @@ export function useCheckCallback() {
                 if (!packet) {
                     setCheckState({
                         type: CheckStateType.NOPE,
+                    })
+                    return
+                }
+
+                // if only api verification is necessary
+                if (!Flags.airdrop_two_factor_verification_enabled) {
+                    setCheckState({
+                        type: CheckStateType.YEP,
+                        packet,
+                        claimable: packet.amount,
+                        ratio: new BigNumber(1),
                     })
                     return
                 }

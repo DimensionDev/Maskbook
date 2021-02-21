@@ -12,7 +12,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { ERC20TokenDetailed } from '../../../web3/types'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { formatBalance, formatCurrency, formatPercentage } from '../../Wallet/formatter'
+import { formatBalance, formatPercentage } from '../../Wallet/formatter'
 import { useAirdropPacket } from '../hooks/useAirdropPacket'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
@@ -177,7 +177,11 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                     ) : null}
                     {packet ? (
                         <Box display="flex" alignItems="center" marginLeft={2.5}>
-                            <Button variant="contained" className={classes.button} onClick={onClaimButtonClick}>
+                            <Button
+                                className={classes.button}
+                                variant="contained"
+                                disabled
+                                onClick={onClaimButtonClick}>
                                 Claim
                             </Button>
                         </Box>
