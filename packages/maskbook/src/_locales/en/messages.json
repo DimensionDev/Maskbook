@@ -278,7 +278,6 @@
     "relative_time_seconds_ago": "{{seconds}} seconds ago",
     "relative_time_years_ago": "{{years}} years ago",
     "plugin_wallet_captcha": "Operation Confirm",
-    "plugin_wallet_captcha_refresh": "Refresh",
     "plugin_wallet_captcha_confirm": "Confirm",
     "plugin_wallet_captcha_hint": "Enter the answer to the above formula",
     "plugin_wallet_select_a_token": "Select a Token",
