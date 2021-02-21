@@ -236,7 +236,7 @@ export function ITO(props: ITO_Props) {
     } = useAvailabilityComputed(payload)
     //#ednregion
 
-    const { listOfStatus } = availabilityComputed
+    const { listOfStatus, canClaimMaskITO, unlockTime } = availabilityComputed
 
     const isAccountSeller =
         payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
@@ -376,7 +376,7 @@ export function ITO(props: ITO_Props) {
             symbol: token.symbol,
         })
 
-        if (refundAmount.isZero()) {
+        if (refundAmount.isZero() || refundAmount.isLessThan(0)) {
             return `${_text}.`
         }
 
@@ -521,7 +521,18 @@ export function ITO(props: ITO_Props) {
                     <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
-                ) : canWithdraw ? (
+                    ) : (canClaimMaskITO === false && isMask && unlockTime) ? (
+                        <ActionButton
+                            onClick={() => undefined}
+                            variant="contained"
+                            size="large"
+                            disabled={true}
+                            className={classes.actionButton}>
+                            {t('plugin_ito_wait_unlock_time', {
+                                unlockTime: new Date(1000 * Number(unlockTime!)).toUTCString()
+                            })}
+                        </ActionButton>
+                    ) : canWithdraw ? (
                     <ActionButton
                         onClick={onWithdraw}
                         variant="contained"

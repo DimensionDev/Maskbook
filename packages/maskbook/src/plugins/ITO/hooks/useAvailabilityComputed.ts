@@ -30,7 +30,7 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
     const isExpired = availability.expired
     const isCompleted = Number(availability.swapped) > 0
     const isUnlocked =
-        isCompleted && Boolean(availability.unlockTime) && Number(availability.unlockTime) * 1000 > new Date().getTime()
+        isCompleted && Boolean(availability.unlockTime) && Number(availability.unlockTime) * 1000 < new Date().getTime()
 
     return {
         ...asyncResult,
@@ -39,6 +39,7 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
             canClaim: isStarted && !isExpired && !isCompleted && payload.chain_id === chainId && payload.password,
             canRefund: isExpired && payload.chain_id === chainId,
             canClaimMaskITO: isUnlocked,
+            unlockTime: availability.unlockTime,
             canShare: !isStarted,
             listOfStatus: compact([
                 isStarted ? ITO_Status.started : ITO_Status.waited,
