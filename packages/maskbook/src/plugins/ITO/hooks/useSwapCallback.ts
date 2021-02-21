@@ -24,7 +24,6 @@ export function useSwapCallback(
     const account = useAccount()
     const ITO_Contract = useITO_Contract(isMask)
     const { payload } = usePoolPayload(id)
-    console.log('useSwapCallback', payload, testNums)
     const [swapState, setSwapState] = useTransactionState()
     const swapCallback = useCallback(async () => {
         if (!ITO_Contract || !payload || !id) {

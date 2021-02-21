@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) =>
         },
         docBox: {
             height: 300,
-            overflow: "scroll",
+            overflow: 'scroll',
         },
         center: {
             textAlign: 'center',
@@ -91,10 +91,10 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            textAlign: 'center'
+            textAlign: 'center',
         },
         moreCell: {
-            flexDirection: 'column'
+            flexDirection: 'column',
         },
         column: {
             width: '100%',
@@ -103,7 +103,7 @@ const useStyles = makeStyles((theme) =>
         lowSpacing: {
             marginTop: 4,
             marginBottom: 4,
-        }
+        },
     }),
 )
 
@@ -123,7 +123,7 @@ export function RemindDialog(props: RemindDialogProps) {
 
     return (
         <>
-            {!isMask ?
+            {!isMask ? (
                 <Box className={classes.docBox}>
                     <Typography variant="body1" className={classes.reminderText}>
                         {t('plugin_ito_dialog_claim_mask_reminder_text1')}
@@ -140,24 +140,46 @@ export function RemindDialog(props: RemindDialogProps) {
                     <Box className={classes.table}>
                         <Box className={classes.column}>
                             <Box className={classes.cell}>
-                                <Typography variant="body1" className={classNames(classes.reminderText)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text1')}</Typography>
+                                <Typography variant="body1" className={classNames(classes.reminderText)}>
+                                    {t('plugin_ito_dialog_claim_mask_reminder_table_text1')}
+                                </Typography>
                             </Box>
                             <Box className={classes.cell}></Box>
                         </Box>
                         <Box className={classes.column}>
                             <Box className={classes.cell}>
-                                <Typography variant="body1" className={classNames(classes.reminderText)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text2')}</Typography>
+                                <Typography variant="body1" className={classNames(classes.reminderText)}>
+                                    {t('plugin_ito_dialog_claim_mask_reminder_table_text2')}
+                                </Typography>
                             </Box>
                             <Box className={classNames(classes.cell, classes.moreCell)}>
-                                <Typography variant="body1" className={classNames(classes.reminderText, classes.lowSpacing)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text4')}</Typography>
-                                <Typography variant="body1" className={classNames(classes.reminderText, classes.lowSpacing)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text5')}</Typography>
-                                <Typography variant="body1" className={classNames(classes.reminderText, classes.lowSpacing)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text6')}</Typography>
-                                <Typography variant="body1" className={classNames(classes.reminderText, classes.lowSpacing)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text7')}</Typography>
+                                <Typography
+                                    variant="body1"
+                                    className={classNames(classes.reminderText, classes.lowSpacing)}>
+                                    {t('plugin_ito_dialog_claim_mask_reminder_table_text4')}
+                                </Typography>
+                                <Typography
+                                    variant="body1"
+                                    className={classNames(classes.reminderText, classes.lowSpacing)}>
+                                    {t('plugin_ito_dialog_claim_mask_reminder_table_text5')}
+                                </Typography>
+                                <Typography
+                                    variant="body1"
+                                    className={classNames(classes.reminderText, classes.lowSpacing)}>
+                                    {t('plugin_ito_dialog_claim_mask_reminder_table_text6')}
+                                </Typography>
+                                <Typography
+                                    variant="body1"
+                                    className={classNames(classes.reminderText, classes.lowSpacing)}>
+                                    {t('plugin_ito_dialog_claim_mask_reminder_table_text7')}
+                                </Typography>
                             </Box>
                         </Box>
                         <Box className={classes.column}>
                             <Box className={classes.cell}>
-                                <Typography variant="body1" className={classNames(classes.reminderText)}>{t('plugin_ito_dialog_claim_mask_reminder_table_text3')}</Typography>
+                                <Typography variant="body1" className={classNames(classes.reminderText)}>
+                                    {t('plugin_ito_dialog_claim_mask_reminder_table_text3')}
+                                </Typography>
                             </Box>
                             <Box className={classes.cell}></Box>
                         </Box>
@@ -328,7 +350,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         {t('plugin_ito_dialog_claim_mask_reminder_text58')}
                     </Typography>
                 </Box>
-                :
+            ) : (
                 <Box className={classes.docBox}>
                     <Typography variant="body1" className={classes.reminderText}>
                         {t('plugin_ito_dialog_claim_reminder_text1')}
@@ -343,7 +365,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         {t('plugin_ito_dialog_claim_reminder_text4')}
                     </Typography>
                 </Box>
-            }
+            )}
 
             <section className={classes.tokenWrapper}>
                 <TokenIcon address={token.address} classes={{ icon: classes.tokenIcon }} />

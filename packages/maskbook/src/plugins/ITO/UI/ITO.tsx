@@ -207,7 +207,6 @@ export function ITO(props: ITO_Props) {
         is_mask: isMask ?? false,
         test_nums: (testNums as number[]) ?? undefined,
     }
-    console.log('payload', payload)
     const {
         token,
         total: payload_total,
