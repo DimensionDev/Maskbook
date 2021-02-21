@@ -55,7 +55,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     taskPasteIntoPostBox() {},
     taskOpenComposeBox() {},
     taskUploadToPostBox() {},
-    taskImageShuffleUploadToPostBox() { },
+    taskImageShuffleUploadToPostBox() {},
     version: 1,
     gunNetworkHint: 'invalid-',
     taskStartSetupGuide() {},

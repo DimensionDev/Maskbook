@@ -336,18 +336,17 @@ async function* decryptImageFromImageUrlWithProgress_raw(
 
     // extract seed
     if (content && content.meta) {
-        const meta = content.meta;
+        const meta = content.meta
         if (meta.has('image_seed')) {
             // we are dealing with an encrypted image
 
             const seed = meta.get('image_seed')
-            const isseedstr = (value: unknown): value is string =>
-                typeof value === "string" ? true : false;
+            const isseedstr = (value: unknown): value is string => (typeof value === 'string' ? true : false)
 
             if (isseedstr(seed)) {
                 yield makeProgress('extracted_seed')
 
-                const decryptedUrl = await Services.ImageShuffle.deshuffleImageUrl(url, { seed, })
+                const decryptedUrl = await Services.ImageShuffle.deshuffleImageUrl(url, { seed })
                 const { iv, version } = post
                 const cryptoProvider = cryptoProviderTable[version]
                 const makeSuccessResult = makeSuccessResultF(url, iv, post, cryptoProvider)

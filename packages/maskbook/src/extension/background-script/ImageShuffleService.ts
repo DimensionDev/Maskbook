@@ -94,7 +94,7 @@ export async function shuffle(buf: string | ArrayBuffer, { seed, blockWidth = DE
     return encodeArrayBuffer(await img2Buf(imageData))
 }
 
-export interface DeshuffleOptions extends ShuffleOptions { }
+export interface DeshuffleOptions extends ShuffleOptions {}
 
 export async function deshuffle(buf: ArrayBuffer, { seed, blockWidth = DEFAULT_BLOCK_WIDTH }: DeshuffleOptions) {
     const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf

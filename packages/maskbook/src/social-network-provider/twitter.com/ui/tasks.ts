@@ -75,13 +75,12 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
     worker(abortCtr).then(undefined, (e) => fail(e))
 }
 
-
 const taskImageShuffleUploadToPostBox: SocialNetworkUI['taskImageShuffleUploadToPostBox'] = async (
     image: ArrayBuffer,
     seed: string,
     options: Parameters<SocialNetworkUI['taskUploadToPostBox']>[1],
 ) => {
-    const { } = options
+    const {} = options
     const shuffledImage = new Uint8Array(
         decodeArrayBuffer(
             await Services.ImageShuffle.shuffle(encodeArrayBuffer(image), {
