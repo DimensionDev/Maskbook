@@ -19,6 +19,7 @@ import { Err, Ok } from 'ts-results'
 import { or } from '../../custom-ui-helper'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 import type { Payload } from '../../../utils/type-transform/Payload'
+import { injectPostImageRevealerAtTwitter } from '../../../social-network-provider/twitter.com/ui/injectPostImageRevealer'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
@@ -189,8 +190,13 @@ export function DecryptPost(props: DecryptPostProps) {
 
         if (deconstructedPayload.ok) {
             postMetadataImages.forEach((url) => {
+                function setupInjection() {
+                    injectPostImageRevealerAtTwitter(url)
+                }
+
                 // go through each url & decode the image
-                makeProgress(url, ServicesWithProgress.decryptImageFromImageUrl(deconstructedPayload.val, url, postBy, whoAmI, content), signal)
+                const res = ServicesWithProgress.decryptImageFromImageUrl(deconstructedPayload.val, url, postBy, whoAmI, content)
+                makeProgress(url, res, signal).then(setupInjection)
             })
         }
 

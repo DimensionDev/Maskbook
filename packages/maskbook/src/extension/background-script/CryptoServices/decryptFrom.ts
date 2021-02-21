@@ -25,6 +25,7 @@ import { MaskMessage } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
 import { calculatePostKeyPartition } from '../../../network/gun/version.2/hash'
 import Services from '../../../extension/service'
+import { injectPostImageRevealerAtTwitter } from '../../../social-network-provider/twitter.com/ui/injectPostImageRevealer'
 
 type Progress = (
     | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
@@ -350,6 +351,11 @@ async function* decryptImageFromImageUrlWithProgress_raw(
                 const { iv, version } = post
                 const cryptoProvider = cryptoProviderTable[version]
                 const makeSuccessResult = makeSuccessResultF(url, iv, post, cryptoProvider)
+
+                // now, we've successfully decrypted the image & it will be added to the DOM.
+                // create a button that can reveal the encrypted image
+                injectPostImageRevealerAtTwitter(url)
+
                 return makeSuccessResult(decryptedUrl, ['decrypted_image'])
             }
         }
