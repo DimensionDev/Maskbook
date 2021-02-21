@@ -141,15 +141,15 @@ export function ClaimDialog(props: ClaimDialogProps) {
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return
-                const at = exchangeTokens.findIndex((x) => isSameAddress(x.address, token.address))
+                const at = exchangeTokens.findIndex((x) => isSameAddress(x.address, ev.token!.address))
                 const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(
                     new BigNumber(payload.exchange_amounts[at * 2 + 1]),
                 )
                 setRatio(ratio)
-                setClaimToken(token)
+                setClaimToken(ev.token)
                 setTokenAmount(initAmount)
                 setClaimAmount(initAmount.multipliedBy(ratio))
-                setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio), token.decimals ?? 0))
+                setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals ?? 0))
             },
             [
                 id,
