@@ -76,7 +76,6 @@ export function ToolbarAtTwitter(props: ToolbarAtTwitterProps) {
             [data-testid="sidebarColumn"] > div:first-child > div:nth-child(2) > div:first-child > div:first-child > div:first-child {
                 padding-top: 10px;
             }
-
             [data-testid="sidebarColumn"] > div:first-child > div:nth-child(2) > div:first-child > div:first-child > div:first-child > div:nth-child(2) {
                 display: none;
             }
