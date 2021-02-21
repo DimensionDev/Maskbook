@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
-import { useDimension, Dimension } from '../../hooks/useDimension'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { usePriceLineChart } from '../../hooks/usePriceLineChart'
+import { useDimension, Dimension } from '../../../hooks/useDimension'
+import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { usePriceLineChart } from '../../../hooks/usePriceLineChart'
 
 const data = [
     ['2021-02-12T03:19:18.000Z', 1771.91099631],
@@ -2050,7 +2050,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-export function PriceChart(props: PriceChartProps) {
+export function LBPPriceChart(props: PriceChartProps) {
     const classes = useStylesExtends(useStyles(props), props)
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)

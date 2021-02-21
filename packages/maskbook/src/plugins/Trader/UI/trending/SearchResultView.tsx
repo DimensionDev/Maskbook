@@ -21,6 +21,8 @@ import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
 import { EthereumTokenType } from '../../../../web3/types'
 import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
+import { LBPPriceChart } from './LBPPriceChart'
+import { LBPPanel } from './LBPPanel'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -192,7 +194,9 @@ export function SearchResultView(props: SearchResultViewProps) {
                     {dataProvider !== DataProvider.UNISWAP ? (
                         <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
                     ) : null}
+
                     {canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null}
+                    <Tab className={classes.tab} label="LBP" />
                 </Tabs>
                 {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
                 {tabIndex === 1 && dataProvider !== DataProvider.UNISWAP ? (
@@ -206,6 +210,7 @@ export function SearchResultView(props: SearchResultViewProps) {
                 {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
                     <TickersTable tickers={tickers} dataProvider={dataProvider} />
                 ) : null}
+                {tabIndex === 4 && <LBPPanel />}
                 {tabIndex === swapTabIndex && canSwap ? (
                     <TradeView
                         TraderProps={{
