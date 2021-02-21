@@ -29,6 +29,8 @@ const useStyles = makeStyles((theme) =>
             position: 'relative',
         },
         content: {
+            boxSizing: 'border-box',
+            width: '100%',
             display: 'flex',
             justifyContent: 'space-between',
             padding: theme.spacing(2.5),
@@ -84,6 +86,7 @@ export function ITO_Card(props: ITO_CardProps) {
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
+            packetRetry()
             resetClaimCallback()
         },
     )
@@ -113,7 +116,7 @@ export function ITO_Card(props: ITO_CardProps) {
     if (packetLoading)
         return (
             <Box className={classes.root}>
-                <Box>
+                <Box className={classes.content} flexDirection="column">
                     <Skeleton
                         animation="wave"
                         variant="rectangular"
@@ -128,10 +131,12 @@ export function ITO_Card(props: ITO_CardProps) {
     if (packetError)
         return (
             <Box className={classes.root} display="flex" justifyContent="center">
-                <Typography>{packetError.message}</Typography>
-                <Button className={classes.button} onClick={() => packetRetry()}>
-                    Retry
-                </Button>
+                <Box className={classes.content}>
+                    <Typography>{packetError.message}</Typography>
+                    <Button className={classes.button} onClick={() => packetRetry()}>
+                        Retry
+                    </Button>
+                </Box>
             </Box>
         )
 
@@ -146,15 +151,20 @@ export function ITO_Card(props: ITO_CardProps) {
                             : '0.00'}
                     </Typography>
                 </Box>
-                <Box display="flex" alignItems="center">
-                    <ActionButton
-                        className={classes.button}
-                        variant="contained"
-                        disabled={packet && Number.parseInt(packet.unlockTime) > Math.round(Date.now() / 1000)}
-                        onClick={onClaimButtonClick}>
-                        Claim
-                    </ActionButton>
-                </Box>
+                {packet ? (
+                    <Box display="flex" alignItems="center">
+                        <ActionButton
+                            className={classes.button}
+                            variant="contained"
+                            disabled={
+                                Number.parseInt(packet.unlockTime) > Math.round(Date.now() / 1000) ||
+                                packet.claimable === '0'
+                            }
+                            onClick={onClaimButtonClick}>
+                            Claim
+                        </ActionButton>
+                    </Box>
+                ) : null}
             </Box>
             {packet ? (
                 <Box className={classes.ITOAlertContainer}>
