@@ -5,8 +5,7 @@ export interface AirdropPacket {
     proof: string[]
 }
 
-export async function getAirdropPacket(address: string) {
-    // prod: https://service.r2d2.to/airdrop-lookup
+export async function getMaskAirdropPacket(address: string) {
     const response = await fetch('https://service.r2d2.to/airdrop-lookup', {
         method: 'POST',
         body: JSON.stringify({

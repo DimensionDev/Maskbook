@@ -4,6 +4,6 @@ import { PluginAirdropRPC } from '../messages'
 export function useAirdropPacket(address: string) {
     return useAsyncRetry(async () => {
         if (!address) return
-        return PluginAirdropRPC.getAirdropPacket(address)
+        return PluginAirdropRPC.getMaskAirdropPacket(address)
     }, [address])
 }

@@ -6,7 +6,8 @@ import { PluginAirdropRPC } from '../messages'
 export enum CheckStateType {
     UNKNOWN,
     PENDING,
-    SUCCEED,
+    YEP,
+    NOPE,
     FAILED,
 }
 
@@ -31,9 +32,9 @@ export function useCheckCallback() {
                 const address_ = formatEthereumAddress(checkAddress.trim())
 
                 // read airdrop packet
-                const packet = await PluginAirdropRPC.getAirdropPacket(address_)
+                const packet = await PluginAirdropRPC.getMaskAirdropPacket(address_)
                 if (!packet) {
-                    setCheckStateType(CheckStateType.FAILED)
+                    setCheckStateType(CheckStateType.NOPE)
                     return
                 }
 
@@ -44,7 +45,7 @@ export function useCheckCallback() {
                 }
                 const { index, address, amount, proof } = packet
                 const checked = await airdropContract.methods.check(index, address, amount, proof).call()
-                setCheckStateType(checked ? CheckStateType.SUCCEED : CheckStateType.FAILED)
+                setCheckStateType(checked ? CheckStateType.YEP : CheckStateType.NOPE)
             } catch (e) {
                 setCheckStateType(CheckStateType.FAILED)
             }
