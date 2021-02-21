@@ -10,6 +10,11 @@ const useStyles = makeStyles((theme) =>
             background: 'linear-gradient(90deg, #FE686F 0%, #F78CA0 100%);',
             marginTop: theme.spacing(2.5),
         },
+        amount: {
+            fontSize: 18,
+            zIndex: 1,
+            position: 'relative',
+        },
         content: {
             display: 'flex',
             justifyContent: 'space-between',
@@ -38,7 +43,7 @@ export function ITO_Card(props: ITO_CardProps) {
             <Box className={classes.content}>
                 <Box display="flex" flexDirection="column" justifyContent="space-between">
                     <Typography>ITO locked:</Typography>
-                    <Typography>50.00</Typography>
+                    <Typography className={classes.amount}>0.00</Typography>
                 </Box>
                 <Box display="flex" alignItems="center">
                     <Button disabled className={classes.button}>
