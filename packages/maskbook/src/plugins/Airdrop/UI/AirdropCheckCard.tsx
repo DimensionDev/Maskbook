@@ -65,6 +65,7 @@ export function AirdropCheckCard(props: AirdropCheckCardProps) {
                     helperText={
                         <Typography
                             className={classes.helperText}
+                            component="span"
                             style={{
                                 color: (() => {
                                     switch (checkState.type) {
