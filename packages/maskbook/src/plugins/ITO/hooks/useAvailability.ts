@@ -10,7 +10,7 @@ export function useAvailability(id?: string, isMask?: boolean) {
     return useAsyncRetry(async () => {
         if (!id) return null
         if (!ITO_Contract) return null
-        let availability = await ITO_Contract.methods.check_availability(id).call({
+        const availability = await ITO_Contract.methods.check_availability(id).call({
             // check availability is ok w/o account
             from,
         })
