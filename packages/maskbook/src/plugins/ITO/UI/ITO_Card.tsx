@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js'
 import { useCallback, useEffect } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { getActivatedUI } from '../../../social-network/ui'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
@@ -146,12 +147,13 @@ export function ITO_Card(props: ITO_CardProps) {
                     </Typography>
                 </Box>
                 <Box display="flex" alignItems="center">
-                    <Button
+                    <ActionButton
                         className={classes.button}
+                        variant="contained"
                         disabled={packet && Number.parseInt(packet.unlockTime) > Math.round(Date.now() / 1000)}
                         onClick={onClaimButtonClick}>
                         Claim
-                    </Button>
+                    </ActionButton>
                 </Box>
             </Box>
             {packet ? (
