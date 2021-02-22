@@ -133,9 +133,9 @@ export function ITO_Card(props: ITO_CardProps) {
             <Box className={classes.root} display="flex" justifyContent="center">
                 <Box className={classes.content}>
                     <Typography>{packetError.message}</Typography>
-                    <Button className={classes.button} onClick={() => packetRetry()}>
+                    <ActionButton className={classes.button} variant="contained" onClick={() => packetRetry()}>
                         Retry
-                    </Button>
+                    </ActionButton>
                 </Box>
             </Box>
         )
