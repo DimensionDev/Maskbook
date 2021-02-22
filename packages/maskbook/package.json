@@ -43,7 +43,7 @@
     "@uniswap/sdk": "^3.0.3-beta.1",
     "@walletconnect/client": "^1.2.2",
     "anchorme": "^2.1.2",
-    "arweave": "^1.10.3",
+    "arweave": "^1.10.11",
     "assert": "^2.0.0",
     "async-call-rpc": "^5.0.0",
     "bignumber.js": "^9.0.1",
