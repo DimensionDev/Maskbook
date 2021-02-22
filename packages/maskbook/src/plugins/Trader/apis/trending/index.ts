@@ -80,7 +80,7 @@ export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     // reserve mask
     if (dataProvider === DataProvider.COIN_GECKO) {
         const coins = await coinGeckoAPI.getAllCoins()
-        return coins.filter(x => x.symbol.toLowerCase() === 'mask')
+        return coins.filter((x) => x.symbol.toLowerCase() !== 'mask')
     }
 
     const { data: coins } = await coinMarketCapAPI.getAllCoins()
