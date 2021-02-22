@@ -17,6 +17,7 @@ import { useAirdropPacket } from '../hooks/useAirdropPacket'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
 import { ClaimDialog } from './ClaimDialog'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -148,11 +149,11 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
 
     if (packetError)
         return (
-            <Box className={classes.root} display="flex" justifyContent="center">
+            <Box className={classes.root} display="flex" justifyContent="space-between">
                 <Typography>{packetError.message}</Typography>
-                <Button className={classes.button} onClick={() => packetRetry()}>
+                <ActionButton className={classes.button} variant="contained" onClick={() => packetRetry()}>
                     Retry
-                </Button>
+                </ActionButton>
             </Box>
         )
 
@@ -181,13 +182,13 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                     ) : null}
                     {packet ? (
                         <Box display="flex" alignItems="center" marginLeft={2.5}>
-                            <Button
+                            <ActionButton
                                 className={classes.button}
                                 variant="contained"
                                 disabled
                                 onClick={onClaimButtonClick}>
                                 Claim
-                            </Button>
+                            </ActionButton>
                         </Box>
                     ) : null}
                 </Box>
