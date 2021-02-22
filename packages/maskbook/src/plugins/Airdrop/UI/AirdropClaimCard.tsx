@@ -198,6 +198,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                                         onClose={() => setShowTooltip(false)}
                                         classes={{ popper: classes.tooltipPopover, tooltip: classes.tooltip }}
                                         disableHoverListener
+                                        disableTouchListener
                                         title="Airdrop MASK, 20% reduction every 24 hours. Airdrop unlock time is 02/27/2021 03:00 AM (UTC+0)."
                                         style={{ lineHeight: 0.8, cursor: 'pointer', marginLeft: 2 }}>
                                         <InfoIcon fontSize="small" onClick={(e) => setShowTooltip(true)} />
