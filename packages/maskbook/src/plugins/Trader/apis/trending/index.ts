@@ -78,16 +78,34 @@ export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     if (dataProvider === DataProvider.COIN_GECKO) return coinGeckoAPI.getAllCoins()
     if (dataProvider === DataProvider.UNISWAP) return uniswapAPI.getAllCoins()
 
-    // for cmc we should filter inactive coins out
     const { data: coins } = await coinMarketCapAPI.getAllCoins()
-    return coins
-        .filter((x) => x.status === 'active')
-        .map((y) => ({
-            id: String(y.id),
-            name: y.name,
-            symbol: y.symbol,
-            eth_address: y.platform?.name === 'Ethereum' ? y.platform.token_address : undefined,
-        }))
+    return (
+        coins
+            // mask network
+            .map((x) =>
+                x.id === 8536
+                    ? {
+                          ...x,
+                          platform: {
+                              id: 1027,
+                              name: 'Ethereum',
+                              symbol: 'ETH',
+                              slug: 'ethereum',
+                              token_address: '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074',
+                          },
+                          status: 'active',
+                      }
+                    : x,
+            )
+            // for cmc we should filter inactive coins out
+            .filter((x) => x.status === 'active' && x.id !== 8410)
+            .map((x) => ({
+                id: String(x.id),
+                name: x.name,
+                symbol: x.symbol,
+                eth_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
+            }))
+    )
 }
 
 //#region check a specific coin is available on specific dataProvider
@@ -135,8 +153,6 @@ function isMirroredKeyword(symbol: string) {
 export async function checkAvailabilityOnDataProvider(keyword: string, type: TagType, dataProvider: DataProvider) {
     if (isBlockedKeyword(type, keyword)) return false
     const keyword_ = resolveAlias(keyword, dataProvider)
-    // reserve mask token
-    if (keyword.toLowerCase() === 'mask') return false
     // cache never built before update in blocking way
     if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
     // data fetched before update in nonblocking way
