@@ -1,7 +1,6 @@
 import { makeStyles } from '@material-ui/core'
 import { useMemo } from 'react'
-import { useEffectOnce, useWindowScroll, useWindowSize } from 'react-use'
-import { useLocation } from 'react-use'
+import { useEffectOnce, useWindowScroll, useWindowSize, useLocation } from 'react-use'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { EthereumAccountButton } from '../../web3/UI/EthereumAccountButton'
 import { EthereumMaskBalanceButton } from '../../web3/UI/EthereumMaskBalanceButton'
