@@ -5,7 +5,7 @@ import { getConstant } from '../../../../web3/helpers'
 import { CONSTANTS } from '../../../../web3/constants'
 
 //#region providers
-const SEED = Math.floor(Math.random() * 4)
+const SEED = Math.floor(Math.random() * 5)
 const providerPool = new Map<string, HttpProvider>()
 
 export function createProvider(chainId = currentMaskbookChainIdSettings.value) {
