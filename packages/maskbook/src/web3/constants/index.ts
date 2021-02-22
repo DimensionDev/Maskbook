@@ -87,7 +87,7 @@ export const CONSTANTS = {
         [ChainId.Gorli]: '',
     },
     MASK_ADDRESS: {
-        [ChainId.Mainnet]: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
+        [ChainId.Mainnet]: '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074',
         [ChainId.Ropsten]: '0x5B966f3a32Db9C180843bCb40267A66b73E4f022',
         [ChainId.Rinkeby]: '0xFD9Eb54f6aC885079e7bB3E207922Bb7256E3fcb',
         [ChainId.Kovan]: '',
@@ -200,28 +200,35 @@ export const CONSTANTS = {
     },
 
     // settings
-    PROVIDER_ADDRES:
+    PROVIDER_ADDRESS_LIST:
         process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test' || process.env.build === 'beta'
             ? {
-                  [ChainId.Mainnet]: 'https://mainnet.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
-                  [ChainId.Ropsten]: 'https://ropsten.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
-                  [ChainId.Rinkeby]: 'https://rinkeby.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
-                  [ChainId.Kovan]: 'https://kovan.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
-                  [ChainId.Gorli]: 'https://goerli.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
+                  [ChainId.Mainnet]: ['https://mainnet.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
+                  [ChainId.Ropsten]: ['https://ropsten.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
+                  [ChainId.Rinkeby]: ['https://rinkeby.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
+                  [ChainId.Kovan]: ['https://kovan.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
+                  [ChainId.Gorli]: ['https://goerli.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
               }
             : {
-                  [ChainId.Mainnet]:
+                  [ChainId.Mainnet]: [
+                      'https://damp-holy-water.quiknode.pro/d5bcb6c5e265afd11fecb0d52275afa961487a29/',
+                      'https://mainnet.infura.io/v3/50676f4e9b9d4780a34fc8a503ff7f4f',
                       'https://throbbing-blue-bird.quiknode.io/73e66978-1a45-4f91-97f3-25d59b51a00e/YScEAjYfzZqNphokjzn-Zt3sZsOd0Nav5sauA3j03se0LOseR8PQFyBfINzhYStWrg44VfLLfCFE34FR2CA_kQ==/',
-                  [ChainId.Ropsten]: 'https://ropsten.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
-                  [ChainId.Rinkeby]: 'https://rinkeby.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
-                  [ChainId.Kovan]: 'https://kovan.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
-                  [ChainId.Gorli]: 'https://goerli.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
+                      'http://api.taichi.network:10000/rpc/112c84849b6014ce1b970d8b81e9bb4a',
+                  ],
+                  [ChainId.Ropsten]: ['https://ropsten.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5'],
+                  [ChainId.Rinkeby]: ['https://rinkeby.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5'],
+                  [ChainId.Kovan]: ['https://kovan.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5'],
+                  [ChainId.Gorli]: ['https://goerli.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5'],
               },
-    PROVIDER_ADDRESS_2: {
-        [ChainId.Mainnet]: 'https://damp-holy-water.quiknode.pro/d5bcb6c5e265afd11fecb0d52275afa961487a29/',
-        [ChainId.Ropsten]: 'https://ropsten.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
-        [ChainId.Rinkeby]: 'https://rinkeby.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
-        [ChainId.Kovan]: 'https://kovan.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
-        [ChainId.Gorli]: 'https://goerli.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
+    PROVIDER_WEIGHT_LIST: {
+        [ChainId.Mainnet]:
+            process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test' || process.env.build === 'beta'
+                ? [0, 0, 0, 0, 0] // 0 - 100%
+                : [0, 0, 1, 2, 3], // 0 - 40%, 1 - 20%, 2 - 20%, 3 - 20%
+        [ChainId.Ropsten]: [0, 0, 0, 0, 0], // 0 - 100%
+        [ChainId.Rinkeby]: [0, 0, 0, 0, 0], // 0 - 100%
+        [ChainId.Kovan]: [0, 0, 0, 0, 0], // 0 - 100%
+        [ChainId.Gorli]: [0, 0, 0, 0, 0], // 0 - 100%
     },
 }

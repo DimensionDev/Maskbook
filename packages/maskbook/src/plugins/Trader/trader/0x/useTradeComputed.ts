@@ -12,18 +12,19 @@ export function useTradeComputed(
     return useMemo(() => {
         if (!trade) return null
         if (!inputToken || !outputToken) return null
+        const inputAmount = new BigNumber(trade.sellAmount)
+        const executionPrice = new BigNumber(trade.buyTokenToEthRate).dividedBy(new BigNumber(trade.sellTokenToEthRate))
+        const outputAmount = inputAmount.multipliedBy(executionPrice).dp(0)
         return {
             strategy,
             inputToken,
             outputToken,
-            inputAmount: new BigNumber(trade.sellAmount),
-            outputAmount: new BigNumber(trade.buyAmount),
-            executionPrice: new BigNumber(trade.price),
-
+            inputAmount,
+            outputAmount,
+            executionPrice,
             fee: new BigNumber(trade.minimumProtocolFee),
             maximumSold: new BigNumber(trade.sellAmount),
-            minimumReceived: new BigNumber(trade.buyAmount),
-
+            minimumReceived: outputAmount,
             priceImpactWithoutFee: new BigNumber(0),
 
             // not supported fields
@@ -32,7 +33,7 @@ export function useTradeComputed(
             // minimumProtocolFee
             priceImpact: new BigNumber(0),
 
-            trade_: trade,
+            trade_: { ...trade, buyAmount: outputAmount.toFixed() },
         } as TradeComputed<SwapQuoteResponse>
     }, [trade, strategy, inputToken, outputToken])
 }
