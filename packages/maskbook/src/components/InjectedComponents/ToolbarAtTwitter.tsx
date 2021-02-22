@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 import { useMemo } from 'react'
 import { useEffectOnce, useWindowScroll, useWindowSize } from 'react-use'
+import { useLocation } from 'react-use'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { EthereumAccountButton } from '../../web3/UI/EthereumAccountButton'
 import { EthereumMaskBalanceButton } from '../../web3/UI/EthereumMaskBalanceButton'
@@ -68,6 +69,8 @@ export interface ToolbarAtTwitterProps {}
 
 export function ToolbarAtTwitter(props: ToolbarAtTwitterProps) {
     const classes = useStyles()
+    const location = useLocation()
+    const isPhotoPage = /\/status\/\d+\/photo\/\d+$/.test(location.pathname ?? '')
 
     // inject global css
     useEffectOnce(() => {
@@ -105,7 +108,7 @@ export function ToolbarAtTwitter(props: ToolbarAtTwitterProps) {
     }, [windowWidth])
     //#endregion
 
-    return (
+    return isPhotoPage ? null : (
         <Toolbar classes={{ root: classes.root }}>
             <div
                 className={isSticky ? classes.rootSticky : ''}
