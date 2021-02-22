@@ -7,15 +7,19 @@
     "build-storybook": "build -- build-storybook",
     "start": "dev -- snowpack dev --reload"
   },
+  "main": "./dist/src/entry.js",
+  "types": "./dist/src/entry.d.ts",
   "dependencies": {
-    "@dimensiondev/maskbook": "*",
-    "@dimensiondev/maskbook-storybook-shared": "*",
-    "@dimensiondev/maskbook-shared": "*",
-    "@dimensiondev/maskbook-theme": "*",
     "@dimensiondev/icons": "*",
+    "@dimensiondev/maskbook": "*",
+    "@dimensiondev/maskbook-shared": "*",
+    "@dimensiondev/maskbook-storybook-shared": "*",
+    "@dimensiondev/maskbook-theme": "*",
     "@types/color": "^3.0.1",
     "async-call-rpc": "^5.0.0",
-    "color": "^3.1.3"
+    "color": "^3.1.3",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

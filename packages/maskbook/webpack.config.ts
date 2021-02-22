@@ -257,12 +257,14 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
         )
         main.entry = {
             'options-page': withBrowserPolyfill(...withReactDevTools(src('./src/extension/options-page/index.tsx'))),
+            'dashboard-next': withBrowserPolyfill(...withReactDevTools(src('./src/extension/dashboard/index.tsx'))),
             'content-script': withBrowserPolyfill(...withReactDevTools(src('./src/content-script.ts'))),
             popup: withBrowserPolyfill(...withReactDevTools(src('./src/extension/popup-page/index.tsx'))),
             'background-service': withBrowserPolyfill(src('./src/background-service.ts')),
             debug: withBrowserPolyfill(src('./src/extension/debug-page')),
         }
         if (isManifestV3) delete main.entry['background-script']
+        if (mode === 'production') delete main.entry['dashboard-next']
         for (const entry in main.entry) {
             main.entry[entry] = iOSWebExtensionShimHack(...toArray(main.entry[entry] as any))
         }
@@ -272,6 +274,8 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             getHTMLPlugin({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
             getHTMLPlugin({ chunks: ['debug'], filename: 'debug.html' }),
         ) // generate pages for each entry
+        if (mode === 'development')
+            main.plugins!.push(getHTMLPlugin({ chunks: ['dashboard-next'], filename: 'next.html' }))
         if (!isManifestV3)
             main.plugins!.push(getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }))
     }
