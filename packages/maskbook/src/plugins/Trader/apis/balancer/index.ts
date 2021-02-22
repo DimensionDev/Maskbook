@@ -13,7 +13,7 @@ import type { Route } from '../../types'
 const createSOR_ = memoize(
     (chainId: ChainId) =>
         new SOR(
-            new JsonRpcProvider(getConstant(CONSTANTS, 'PROVIDER_ADDRES', chainId)),
+            new JsonRpcProvider(getConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST', chainId)[0]),
             BALANCER_SOR_GAS_PRICE,
             BALANCER_MAX_NO_POOLS,
             chainId,

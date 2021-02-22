@@ -5,11 +5,10 @@ import { getConstant } from '../../../../web3/helpers'
 import { CONSTANTS } from '../../../../web3/constants'
 
 //#region providers
-const SEED = Math.random() < 0.5
 const providerPool = new Map<string, HttpProvider>()
 
 export function createProvider(chainId = currentMaskbookChainIdSettings.value) {
-    const url = getConstant(CONSTANTS, SEED ? 'PROVIDER_ADDRES' : 'PROVIDER_ADDRESS_2', chainId)
+    const url = getConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST', chainId)[0]
     const provider =
         providerPool.get(url) ??
         new Web3.providers.HttpProvider(url, {
