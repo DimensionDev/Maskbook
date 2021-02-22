@@ -3,6 +3,7 @@ import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform
 import { downloadUrl } from '../../utils/utils'
 import { buf2Img, img2Buf } from '@dimensiondev/stego-js/cjs/canvas/dom'
 
+// normal import doesn't work (not react lib?)
 const seedrandom = require('seedrandom')
 
 const DEFAULT_BLOCK_WIDTH = 8
