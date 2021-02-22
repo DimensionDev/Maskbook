@@ -12,14 +12,18 @@ export function useTradeComputed(
     return useMemo(() => {
         if (!trade) return null
         if (!inputToken || !outputToken) return null
+        const inputAmount = new BigNumber(trade.sellAmount)
+        const executionPrice = new BigNumber(trade.buyTokenToEthRate).dividedBy(
+            new BigNumber(trade.sellTokenToEthRate)
+        )
+        const outputAmount = inputAmount.multipliedBy(executionPrice).dp(0)
         return {
             strategy,
             inputToken,
             outputToken,
-            inputAmount: new BigNumber(trade.sellAmount),
-            outputAmount: new BigNumber(trade.buyAmount),
-            executionPrice: new BigNumber(trade.price),
-
+            inputAmount,
+            outputAmount,
+            executionPrice,
             fee: new BigNumber(trade.minimumProtocolFee),
             maximumSold: new BigNumber(trade.sellAmount),
             minimumReceived: new BigNumber(trade.buyAmount),

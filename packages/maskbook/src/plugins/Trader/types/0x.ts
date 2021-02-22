@@ -69,6 +69,8 @@ export interface SwapQuoteResponse {
     orders: SwapOrder[]
     estimatedGasTokenRefund: string
     allowanceTarget: string
+    buyTokenToEthRate: string
+    sellTokenToEthRate: string
 }
 
 export interface SwapValidationErrorResponse {
