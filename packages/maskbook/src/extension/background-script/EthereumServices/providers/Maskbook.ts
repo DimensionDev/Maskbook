@@ -63,15 +63,26 @@ function makeProviders(chainId: number, urls: string[]) {
 function withHTTPProvider(chainId: number, provider: HttpProvider) {
     const maxAttempts = 3
     let errorCount = 0
+    let sent = false
     return new Proxy(provider, {
         get(target, p) {
             if (p === 'send') {
                 const sender: typeof target.send = (payload, callback) => {
+                    if (payload?.method === 'eth_sendRawTransaction') {
+                        if (sent) {
+                            callback(new Error('ETH_COMPETITIVE_TRANSACTION'))
+                            return
+                        }
+                        sent = true
+                    }
                     target.send(payload, (error, result) => {
+                        if (payload?.method === 'eth_sendRawTransaction' && sent) {
+                            sent = false
+                        }
                         if (error) {
                             errorCount++
                         }
-                        if (errorCount >= maxAttempts) {
+                        if (errorCount > maxAttempts) {
                             errorCount = 0
                             providerCursor.set(chainId, (providerCursor.get(chainId) ?? 0) + 1)
                         }
