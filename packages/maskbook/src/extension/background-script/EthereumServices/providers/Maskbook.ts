@@ -50,12 +50,6 @@ function makeProviders(chainId: number, urls: string[]) {
             keepalive: true,
             keepaliveInterval: 1, // ms
         },
-        reconnect: {
-            auto: true,
-            delay: 5000, // ms
-            maxAttempts: Number.MAX_SAFE_INTEGER,
-            onTimeout: true,
-        },
     }
     return urls.map((url) => withHTTPProvider(chainId, new Web3.providers.HttpProvider(url, options)))
 }
@@ -68,7 +62,9 @@ function withHTTPProvider(chainId: number, provider: HttpProvider) {
         get(target, p) {
             if (p === 'send') {
                 const sender: typeof target.send = (payload, callback) => {
-                    if (payload?.method === 'eth_sendRawTransaction') {
+                    const method = payload?.method
+                    const isTransaction = method === 'eth_sendRawTransaction' || method === 'eth_sendTransaction'
+                    if (isTransaction) {
                         if (sent) {
                             callback(new Error('ETH_COMPETITIVE_TRANSACTION'))
                             return
@@ -76,7 +72,7 @@ function withHTTPProvider(chainId: number, provider: HttpProvider) {
                         sent = true
                     }
                     target.send(payload, (error, result) => {
-                        if (payload?.method === 'eth_sendRawTransaction' && sent) {
+                        if (isTransaction) {
                             sent = false
                         }
                         if (error) {
