@@ -5,28 +5,17 @@ import { getConstant } from '../../../../web3/helpers'
 import { CONSTANTS } from '../../../../web3/constants'
 
 //#region providers
-const providerPool = new Map<string, HttpProvider>()
+const providerPool = new Map<number, HttpProvider[]>()
+const providerCursor = new Map<number, number>()
 
 export function createProvider(chainId = currentMaskbookChainIdSettings.value) {
-    const url = getConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST', chainId)[0]
-    const provider =
-        providerPool.get(url) ??
-        new Web3.providers.HttpProvider(url, {
-            timeout: 5000, // ms
-            // @ts-ignore
-            clientConfig: {
-                keepalive: true,
-                keepaliveInterval: 1, // ms
-            },
-            reconnect: {
-                auto: true,
-                delay: 5000, // ms
-                maxAttempts: Number.MAX_SAFE_INTEGER,
-                onTimeout: true,
-            },
-        })
-    providerPool.set(url, provider)
-    return provider
+    const urls = getConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST', chainId)
+    const providers = providerPool.get(chainId) ?? makeProviders(chainId, urls)
+    if (!providerPool.has(chainId)) {
+        providerPool.set(chainId, providers)
+    }
+    const cursor = providerCursor.get(chainId) ?? 0
+    return providers[cursor % providers.length]
 }
 //#endregion
 
@@ -52,3 +41,46 @@ export function createWeb3(chainId = currentMaskbookChainIdSettings.value, privK
     return web3
 }
 //#endregion
+
+function makeProviders(chainId: number, urls: string[]) {
+    const options = {
+        timeout: 5000, // ms
+        // @ts-ignore
+        clientConfig: {
+            keepalive: true,
+            keepaliveInterval: 1, // ms
+        },
+        reconnect: {
+            auto: true,
+            delay: 5000, // ms
+            maxAttempts: Number.MAX_SAFE_INTEGER,
+            onTimeout: true,
+        },
+    }
+    return urls.map((url) => withHTTPProvider(chainId, new Web3.providers.HttpProvider(url, options)))
+}
+
+function withHTTPProvider(chainId: number, provider: HttpProvider) {
+    const maxAttempts = 3
+    let errorCount = 0
+    return new Proxy(provider, {
+        get(target, p) {
+            if (p === 'send') {
+                const sender: typeof target.send = (payload, callback) => {
+                    target.send(payload, (error, result) => {
+                        if (error) {
+                            errorCount++
+                        }
+                        if (errorCount >= maxAttempts) {
+                            errorCount = 0
+                            providerCursor.set(chainId, (providerCursor.get(chainId) ?? 0) + 1)
+                        }
+                        callback(error, result)
+                    })
+                }
+                return sender
+            }
+            return Reflect.get(target, p)
+        },
+    })
+}
