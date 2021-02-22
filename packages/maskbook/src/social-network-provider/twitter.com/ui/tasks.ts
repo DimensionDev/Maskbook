@@ -80,7 +80,7 @@ const taskImageShuffleUploadToPostBox: SocialNetworkUI['taskImageShuffleUploadTo
     seed: string,
     options: Parameters<SocialNetworkUI['taskUploadToPostBox']>[1],
 ) => {
-    const {} = options
+    const { autoPasteFailedRecover, relatedText } = options
     const shuffledImage = new Uint8Array(
         decodeArrayBuffer(
             await Services.ImageShuffle.shuffle(encodeArrayBuffer(image), {
@@ -89,20 +89,17 @@ const taskImageShuffleUploadToPostBox: SocialNetworkUI['taskImageShuffleUploadTo
         ),
     )
 
-    // ! race conditions, thus sleep
-    await sleep(500)
     pasteImageToActiveElements(shuffledImage)
     await untilDocumentReady()
-    try {
-        // Need a better way to find whether the image is pasted into
-        // throw new Error('auto uploading is undefined')
-    } catch {
-        uploadFail()
-    }
+    uploadFail()
 
     async function uploadFail() {
-        console.warn('Image not uploaded to the post box')
-        // TODO
+        if (autoPasteFailedRecover) {
+            MaskMessage.events.autoPasteFailed.sendToLocal({
+                text: relatedText,
+                image: new Blob([shuffledImage], { type: 'image/png' }),
+            })
+        }
     }
 }
 
