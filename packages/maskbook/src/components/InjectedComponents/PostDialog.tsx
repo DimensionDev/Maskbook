@@ -399,7 +399,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                 } else if (imageEncryptEnabled) {
                     if (!imgToEncrypt) return
 
-                    const seed = Math.floor(Math.random() * 99999999999999999).toString()
+                    const seed = crypto.getRandomValues(new Uint8Array(16)).join('')
                     let meta = new Map<string, unknown>()
                     meta.set('image_seed', seed)
                     const seedTypedMessage = makeTypedMessageText(String(extractTextFromTypedMessage(content).val), meta)
