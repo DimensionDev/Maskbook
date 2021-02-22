@@ -218,7 +218,7 @@ export const CONSTANTS = {
                   [ChainId.Gorli]: 'https://goerli.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
               },
     PROVIDER_ADDRESS_2: {
-        [ChainId.Mainnet]: 'https://mainnet.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
+        [ChainId.Mainnet]: 'https://damp-holy-water.quiknode.pro/d5bcb6c5e265afd11fecb0d52275afa961487a29/',
         [ChainId.Ropsten]: 'https://ropsten.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
         [ChainId.Rinkeby]: 'https://rinkeby.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
         [ChainId.Kovan]: 'https://kovan.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
