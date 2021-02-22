@@ -27,6 +27,10 @@ const useStyles = makeStyles((theme) =>
             fontSize: 14,
             position: 'relative',
         },
+        title: {
+            zIndex: 1,
+            position: 'relative',
+        },
         amount: {
             fontSize: 18,
             zIndex: 1,
@@ -163,7 +167,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                 <Box display="flex">
                     <AirdropIcon classes={{ root: classes.icon }} />
                     <Box>
-                        <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography className={classes.title} sx={{ display: 'flex', alignItems: 'center' }}>
                             <span>Airdrop</span>
                             <span
                                 title="Airdrop MASK, 20% reduction every 24 hours. Airdrop unlock time is 02/26/2021 03:00 AM (UTC+0)."

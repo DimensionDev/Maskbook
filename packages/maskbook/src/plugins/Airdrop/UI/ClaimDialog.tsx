@@ -12,8 +12,6 @@ import {
 } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
-import { formatBalance } from '../../Wallet/formatter'
-import BigNumber from 'bignumber.js'
 import type { ERC20TokenDetailed } from '../../../web3/types'
 
 const useStyles = makeStyles((theme: Theme) =>
