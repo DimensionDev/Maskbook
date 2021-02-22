@@ -39,6 +39,7 @@ const ID_ADDRESS_MAP: {
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
         '6747': '0x32a7c02e79c4ea1008dd6564b35f131428673c41',
+        '8536': '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074',
     },
     [DataProvider.COIN_GECKO]: {
         'crust-network': '0x32a7c02e79c4ea1008dd6564b35f131428673c41',

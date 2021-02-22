@@ -87,7 +87,7 @@ export const CONSTANTS = {
         [ChainId.Gorli]: '',
     },
     MASK_ADDRESS: {
-        [ChainId.Mainnet]: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
+        [ChainId.Mainnet]: '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074',
         [ChainId.Ropsten]: '0x5B966f3a32Db9C180843bCb40267A66b73E4f022',
         [ChainId.Rinkeby]: '0xFD9Eb54f6aC885079e7bB3E207922Bb7256E3fcb',
         [ChainId.Kovan]: '',
