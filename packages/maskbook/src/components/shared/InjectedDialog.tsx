@@ -47,6 +47,7 @@ export interface InjectedDialogProps extends withClasses<InjectedDialogClassKey>
     title?: React.ReactChild
     DialogProps?: Partial<DialogProps>
     disableBackdropClick?: boolean
+    disableArrowBack?: boolean
 }
 export function InjectedDialog(props: InjectedDialogProps) {
     const classes = useStyles()
@@ -96,7 +97,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             classes={{ root: dialogCloseButton }}
                             aria-label={t('post_dialog__dismiss_aria')}
                             onClick={props.onClose}>
-                            <DialogDismissIconUI />
+                            <DialogDismissIconUI disableArrowBack={props.disableArrowBack} />
                         </IconButton>
                         <Typography className={dialogTitleTypography} display="inline" variant="inherit">
                             {props.title}
