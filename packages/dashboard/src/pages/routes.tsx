@@ -1,5 +1,5 @@
 import { Route, Switch, Redirect } from 'react-router'
-import { lazy, Suspense } from 'react'
+import React, { lazy, Suspense } from 'react'
 import { DashboardFrame } from '../components/DashboardFrame'
 export enum Routes {
     Welcome = '/welcome',
@@ -21,15 +21,14 @@ export function Pages() {
         <Suspense fallback="loading...">
             <Switch>
                 <Route path={Routes.Welcome} children={<Welcome />} />
-                <DashboardFrame>
-                    <Route path={Routes.Personas} children={<Personas />} exact />
-                    <Route path={Routes.Wallets} children={<Wallets />} />
-                    <Route path={Routes.Settings} children={<Settings />} exact />
-                </DashboardFrame>
-                <Route path="/" exact>
-                    <Redirect to={Routes.Personas} />
-                </Route>
+                <Route path={Routes.Personas} children={frame(<Personas />)} exact />
+                <Route path={Routes.Wallets} children={frame(<Wallets />)} />
+                <Route path={Routes.Settings} children={frame(<Settings />)} exact />
+                <Route children={<Redirect to={Routes.Personas} />} />
             </Switch>
         </Suspense>
     )
+}
+function frame(x: React.ReactNode) {
+    return <DashboardFrame children={x} />
 }

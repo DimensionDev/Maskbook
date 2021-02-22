@@ -5,6 +5,9 @@
     "outDir": "./dist/"
   },
   "include": ["./src/**/*.tsx", "./src/**/*.ts", "./src/**/*.json", "./abis/*.json"],
+  // ! Note: maskbook/ depends dashboard/ on source-code level
+  // !       but dashboard/ depends maskbook/ on type level
+  // !       do not add dashboard/ as a reference otherwise there is a circular dependency on the type level.
   "references": [{ "path": "../shared/" }, { "path": "../theme/" }],
   "ts-node": { "transpileOnly": true, "compilerOptions": { "module": "CommonJS" } }
 }
