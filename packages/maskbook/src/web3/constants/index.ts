@@ -201,7 +201,7 @@ export const CONSTANTS = {
 
     // settings
     INFURA_ADDRESS:
-        process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
+        process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test' || process.env.build === 'beta'
             ? {
                   [ChainId.Mainnet]: 'https://mainnet.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
                   [ChainId.Ropsten]: 'https://ropsten.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195',
