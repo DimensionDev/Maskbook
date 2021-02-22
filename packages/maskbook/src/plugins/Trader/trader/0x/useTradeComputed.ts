@@ -24,8 +24,7 @@ export function useTradeComputed(
             executionPrice,
             fee: new BigNumber(trade.minimumProtocolFee),
             maximumSold: new BigNumber(trade.sellAmount),
-            minimumReceived: new BigNumber(trade.buyAmount),
-
+            minimumReceived: outputAmount,
             priceImpactWithoutFee: new BigNumber(0),
 
             // not supported fields
@@ -34,7 +33,7 @@ export function useTradeComputed(
             // minimumProtocolFee
             priceImpact: new BigNumber(0),
 
-            trade_: trade,
+            trade_: { ...trade, buyAmount: outputAmount.toFixed() },
         } as TradeComputed<SwapQuoteResponse>
     }, [trade, strategy, inputToken, outputToken])
 }
