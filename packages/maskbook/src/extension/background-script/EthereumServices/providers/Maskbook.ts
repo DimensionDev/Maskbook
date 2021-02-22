@@ -63,12 +63,12 @@ function withHTTPProvider(chainId: number, provider: HttpProvider) {
             if (p === 'send') {
                 const sender: typeof target.send = (payload, callback) => {
                     const method = payload?.method
-                    const isTransaction = method === 'eth_sendRawTransaction' || method === 'eth_sendTransaction'
+                    const isTransaction = method === 'eth_sendTransaction' || method === 'eth_sendRawTransaction'
+                    if (isTransaction && sent) {
+                        callback(new Error('ETH_COMPETITIVE_TRANSACTION'))
+                        return
+                    }
                     if (isTransaction) {
-                        if (sent) {
-                            callback(new Error('ETH_COMPETITIVE_TRANSACTION'))
-                            return
-                        }
                         sent = true
                     }
                     target.send(payload, (error, result) => {
