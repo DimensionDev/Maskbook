@@ -82,6 +82,7 @@ export async function updateExoticWalletFromSource(
         const wallet = cursor.value
         {
             if (updates.has(formatChecksumAddress(wallet.address))) {
+                // side-effect
                 await cursor.update(
                     WalletRecordIntoDB({
                         ...WalletRecordOutDB(cursor.value),
@@ -96,6 +97,7 @@ export async function updateExoticWalletFromSource(
     for (const address of updates.keys()) {
         const wallet = await walletStore.get(formatChecksumAddress(address))
         if (wallet) continue
+        // side-effect
         await walletStore.put(
             WalletRecordIntoDB({
                 address,
@@ -159,6 +161,7 @@ export async function importNewWallet(
         const record_ = await t.objectStore('Wallet').get(record.address)
         if (!record_) await t.objectStore('Wallet').add(WalletRecordIntoDB(record))
         else if (!record_.mnemonic.length && !record_._private_key_)
+            // side-effect
             await t.objectStore('Wallet').put(WalletRecordIntoDB(record))
     }
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
@@ -185,6 +188,7 @@ export async function renameWallet(address: string, name: string) {
     assert(wallet)
     wallet.name = name
     wallet.updatedAt = new Date()
+    // side-effect
     await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
@@ -193,6 +197,7 @@ export async function removeWallet(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
     if (!wallet) return
+    // side-effect
     await t.objectStore('Wallet').delete(wallet.address)
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
