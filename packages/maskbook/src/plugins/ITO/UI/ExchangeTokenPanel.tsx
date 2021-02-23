@@ -134,7 +134,6 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
                 label={label}
                 amount={inputAmountForUI}
                 disableBalance={disableBalance}
-                balance={disableBalance || loadingTokenBalance ? '0' : tokenBalance}
                 token={exchangeToken}
                 onAmountChange={onAmountChangeForUI}
                 SelectTokenChip={{

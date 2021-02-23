@@ -299,7 +299,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     classes={{ root: classes.input }}
                     label={isRandom ? 'Total Amount' : 'Amount per Share'}
                     amount={rawAmount}
-                    balance={tokenBalance}
                     token={token}
                     onAmountChange={setRawAmount}
                     SelectTokenChip={{

@@ -9,14 +9,18 @@ import {
     InputProps,
     ChipProps,
     TextFieldProps,
+    CircularProgress,
+    IconButton,
 } from '@material-ui/core'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
+import RefreshIcon from '@material-ui/icons/Refresh'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { formatBalance } from '../../plugins/Wallet/formatter'
 import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../constants'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import type { EtherTokenDetailed, ERC20TokenDetailed } from '../types'
+import { EtherTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../types'
+import { useTokenBalance } from '../hooks/useTokenBalance'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -46,6 +50,9 @@ const useStyles = makeStyles((theme) => {
             top: theme.spacing(0.5),
             position: 'absolute',
         },
+        balanceRetry: {
+            cursor: 'pointer',
+        },
         inputShrinkLabel: {
             transform: 'translate(17px, -3px) scale(0.75) !important',
         },
@@ -55,10 +62,9 @@ const useStyles = makeStyles((theme) => {
 export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     amount: string
     maxAmount?: string
-    balance: string
-    disableBalance?: boolean
     label: string
     token?: EtherTokenDetailed | ERC20TokenDetailed | null
+    disableBalance?: boolean
     onAmountChange: (amount: string) => void
     InputProps?: Partial<InputProps>
     MaxChipProps?: Partial<ChipProps>
@@ -68,9 +74,16 @@ export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyle
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
-    const { amount, maxAmount, balance, token, onAmountChange, label, disableBalance = false, MaxChipProps } = props
+    const { amount, maxAmount, token, onAmountChange, label, disableBalance = false, MaxChipProps } = props
 
     const classes = useStylesExtends(useStyles(), props)
+
+    //#region balance
+    const { value: balance = '0', loading: balanceLoading, error: balanceError, retry: balanceRetry } = useTokenBalance(
+        token?.type ?? EthereumTokenType.Ether,
+        token?.address ?? '',
+    )
+    //#endregion
 
     //#region update amount by parent
     const { RE_MATCH_WHOLE_AMOUNT } = useMemo(
@@ -125,13 +138,29 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                             alignItems: 'flex-end',
                         }}>
                         {!disableBalance ? (
-                            <Typography
-                                className={classes.balance}
-                                color="textSecondary"
-                                variant="body2"
-                                component="span">
-                                Balance: {formatBalance(new BigNumber(balance), token.decimals, 6)}
-                            </Typography>
+                            <>
+                                {balanceLoading ? (
+                                    <Typography className={classes.balance} color="textSecondary">
+                                        Balance: -
+                                    </Typography>
+                                ) : balanceError ? (
+                                    <Typography
+                                        className={classNames(classes.balance, classes.balanceRetry)}
+                                        color="textSecondary"
+                                        onClick={() => balanceRetry()}>
+                                        Click to retry.
+                                    </Typography>
+                                ) : (
+                                    <Typography
+                                        className={classNames(classes.balance, classes.balanceRetry)}
+                                        color="textSecondary"
+                                        variant="body2"
+                                        component="span"
+                                        onClick={() => balanceRetry()}>
+                                        Balance: {formatBalance(new BigNumber(balance), token.decimals, 6)}
+                                    </Typography>
+                                )}
+                            </>
                         ) : null}
                         <Box
                             sx={{

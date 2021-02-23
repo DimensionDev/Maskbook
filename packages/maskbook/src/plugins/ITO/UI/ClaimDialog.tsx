@@ -276,7 +276,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
             <TokenAmountPanel
                 amount={inputAmountForUI}
                 maxAmount={maxAmount}
-                balance={tokenBalance}
                 token={claimToken}
                 onAmountChange={(value) => {
                     const val =

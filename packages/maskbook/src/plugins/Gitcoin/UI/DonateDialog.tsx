@@ -202,7 +202,6 @@ export function DonateDialog(props: DonateDialogProps) {
                         <TokenAmountPanel
                             label="Amount"
                             amount={rawAmount}
-                            balance={tokenBalance ?? '0'}
                             token={token}
                             onAmountChange={setRawAmount}
                             SelectTokenChip={{

@@ -95,7 +95,6 @@ export function UnlockDialog(props: UnlockDialogProps) {
             <TokenAmountPanel
                 label="Amount"
                 amount={rawAmount}
-                balance={tokenBalance ?? '0'}
                 token={token}
                 onAmountChange={setRawAmount}
                 SelectTokenChip={{

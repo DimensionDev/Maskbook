@@ -163,7 +163,6 @@ export function TradeForm(props: TradeFormProps) {
                 <TokenAmountPanel
                     label={inputPanelLabel}
                     amount={inputAmount}
-                    balance={inputTokenBalanceAmount.toFixed()}
                     token={inputToken}
                     onAmountChange={onInputAmountChange}
                     TextFieldProps={{
@@ -191,7 +190,6 @@ export function TradeForm(props: TradeFormProps) {
                 <TokenAmountPanel
                     label={outputPanelLabel}
                     amount={outputAmount}
-                    balance={outputTokenBalanceAmount.toFixed()}
                     token={outputToken}
                     onAmountChange={onOutputAmountChange}
                     MaxChipProps={{ style: { display: 'none' } }}

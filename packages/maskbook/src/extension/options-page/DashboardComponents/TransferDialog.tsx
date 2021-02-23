@@ -149,7 +149,6 @@ function TransferTab(props: TransferTabProps) {
         <div className={classes.root}>
             <TokenAmountPanel
                 amount={amount}
-                balance={tokenBalance}
                 label={t('wallet_transfer_amount')}
                 token={token}
                 onAmountChange={setAmount}
