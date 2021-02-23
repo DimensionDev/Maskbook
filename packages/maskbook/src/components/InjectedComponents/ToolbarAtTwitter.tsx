@@ -1,5 +1,7 @@
-import { makeStyles } from '@material-ui/core'
-import { useMemo } from 'react'
+import { makeStyles, IconButton } from '@material-ui/core'
+import DoubleArrowIcon from '@material-ui/icons/DoubleArrow'
+import { useMemo, useState } from 'react'
+import classNames from 'classnames'
 import { useEffectOnce, useWindowScroll, useWindowSize, useLocation } from 'react-use'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { EthereumAccountButton } from '../../web3/UI/EthereumAccountButton'
@@ -61,6 +63,20 @@ const useStyles = makeStyles((theme) => {
         maskBalanceButton: {
             marginRight: theme.spacing(1),
         },
+        sizeButton: {
+            marginLeft: theme.spacing(1),
+            marginRight: theme.spacing(1),
+        },
+        rotate: {
+            transform: 'rotate(-180deg)',
+        },
+        rootStickyShrink: {
+            zIndex: 1,
+            right: '0 !important',
+            position: 'fixed',
+            backgroundColor: theme.palette.background.paper,
+            height: TOOLBAR_HEIGHT,
+        },
     }
 })
 
@@ -70,6 +86,7 @@ export function ToolbarAtTwitter(props: ToolbarAtTwitterProps) {
     const classes = useStyles()
     const location = useLocation()
     const isPhotoPage = /\/status\/\d+\/photo\/\d+$/.test(location.pathname ?? '')
+    const [isExpand, setIsExpand] = useState(true)
 
     // inject global css
     useEffectOnce(() => {
@@ -109,19 +126,43 @@ export function ToolbarAtTwitter(props: ToolbarAtTwitterProps) {
 
     return isPhotoPage ? null : (
         <Toolbar classes={{ root: classes.root }}>
-            <div
-                className={isSticky ? classes.rootSticky : ''}
-                style={{ opacity: isSticky ? (y - TOOLBAR_STICKY_POSITION) / TOOLBAR_STICKY_ANIMATION_DISTANCE : 1 }}>
-                <div className={classes.content} style={{ left, right, width }}>
-                    <div className={classes.left} style={{ width: menuWidth }}>
-                        <MaskbookIcon classes={{ root: classes.logo }} />
-                    </div>
-                    <div className={classes.right} style={{ width: mainWidth }}>
-                        <EthereumMaskBalanceButton classes={{ root: classes.maskBalanceButton }} />
-                        <EthereumAccountButton classes={{ root: classes.accountButton }} />
+            {isExpand ? (
+                <div
+                    className={isSticky ? classes.rootSticky : ''}
+                    style={{
+                        opacity: isSticky ? (y - TOOLBAR_STICKY_POSITION) / TOOLBAR_STICKY_ANIMATION_DISTANCE : 1,
+                    }}>
+                    <div className={classes.content} style={{ left, right, width }}>
+                        <div className={classes.left} style={{ width: menuWidth }}>
+                            <MaskbookIcon classes={{ root: classes.logo }} />
+                        </div>
+                        <div className={classes.right} style={{ width: mainWidth }}>
+                            <EthereumMaskBalanceButton classes={{ root: classes.maskBalanceButton }} />
+                            <EthereumAccountButton classes={{ root: classes.accountButton }} />
+                            <IconButton
+                                onClick={() => setIsExpand(false)}
+                                color="primary"
+                                className={classes.sizeButton}>
+                                <DoubleArrowIcon />
+                            </IconButton>
+                        </div>
                     </div>
                 </div>
-            </div>
+            ) : (
+                <div className={classes.rootStickyShrink}>
+                    <div className={classes.content}>
+                        <div className={classes.right}>
+                            <IconButton
+                                onClick={() => setIsExpand(true)}
+                                color="primary"
+                                className={classNames(classes.sizeButton, classes.rotate)}>
+                                <DoubleArrowIcon />
+                            </IconButton>
+                            <EthereumMaskBalanceButton classes={{ root: classes.maskBalanceButton }} />
+                        </div>
+                    </div>
+                </div>
+            )}
         </Toolbar>
     )
 }
