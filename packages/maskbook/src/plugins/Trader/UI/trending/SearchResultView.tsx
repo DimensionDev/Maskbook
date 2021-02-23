@@ -18,11 +18,12 @@ import { TrendingViewSkeleton } from './TrendingViewSkeleton'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType } from '../../../../web3/types'
+import { ChainId, EthereumTokenType } from '../../../../web3/types'
 import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { LBPPriceChart } from './LBPPriceChart'
 import { LBPPanel } from './LBPPanel'
+import { createERC20Token } from '../../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -210,7 +211,7 @@ export function SearchResultView(props: SearchResultViewProps) {
                 {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
                     <TickersTable tickers={tickers} dataProvider={dataProvider} />
                 ) : null}
-                {tabIndex === 4 && <LBPPanel onBuyClick={() => setTabIndex(swapTabIndex)} />}
+                {tabIndex === 3 && <LBPPanel token={createERC20Token(ChainId.Mainnet, '', 18, 'Mask Network', 'MASK')} onBuyClick={() => setTabIndex(swapTabIndex)} />}
                 {tabIndex === swapTabIndex && canSwap ? (
                     <TradeView
                         TraderProps={{
