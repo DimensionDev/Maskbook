@@ -9,7 +9,7 @@ export function run(cwd = ROOT_PATH, cmd: string, ...args: string[]) {
     console.log('$', cmd, args.join(' '), '# cwd:', path.relative(ROOT_PATH, cwd))
     return spawnSync(cmd, args, {
         cwd,
-        stdio: 'pipe',
+        stdio: 'inherit',
         shell: os.platform() === 'win32',
     })
 }
