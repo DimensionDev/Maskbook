@@ -210,7 +210,7 @@ export function SearchResultView(props: SearchResultViewProps) {
                 {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
                     <TickersTable tickers={tickers} dataProvider={dataProvider} />
                 ) : null}
-                {tabIndex === 4 && <LBPPanel />}
+                {tabIndex === 4 && <LBPPanel onBuyClick={() => setTabIndex(swapTabIndex)} />}
                 {tabIndex === swapTabIndex && canSwap ? (
                     <TradeView
                         TraderProps={{

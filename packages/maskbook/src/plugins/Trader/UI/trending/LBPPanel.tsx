@@ -25,7 +25,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-export interface LBPPanelProps extends withClasses<never> {}
+export interface LBPPanelProps extends withClasses<never> {
+    onBuyClick(): void
+}
+
 export function LBPPanel(props: LBPPanelProps) {
     const classes = useStylesExtends(useStyles(props), props)
 
@@ -44,7 +47,9 @@ export function LBPPanel(props: LBPPanelProps) {
             </div>
             <div className={classes.connect}>
                 <EthereumWalletConnectedBoundary>
-                    <Button variant="contained">Buy</Button>
+                    <Button variant="contained" onClick={props.onBuyClick}>
+                        Buy
+                    </Button>
                 </EthereumWalletConnectedBoundary>
             </div>
         </div>
