@@ -79,7 +79,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
             <DialogContent className={classes.content}>
                 <MaskbookIcon classes={{ root: classes.logo }} />
                 <Typography className={classes.amount}>
-                    {formatBalance(new BigNumber(airdropAmount).plus(ITO_Amount), token.decimals, 2)} {token.symbol}
+                    {formatBalance(new BigNumber(airdropAmount).plus(ITO_Amount).plus(balance), token.decimals, 2)} {token.symbol}
                 </Typography>
                 <Typography className={classes.balance}>
                     <span>Balance:</span>
