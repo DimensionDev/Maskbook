@@ -71,7 +71,7 @@ function TransferTab(props: TransferTabProps) {
     const { token, onClose } = props
     const { t } = useI18N()
 
-    const { retryDetailedTokens } = useContext(DashboardWalletsContext)
+    const { detailedTokensRetry } = useContext(DashboardWalletsContext)
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
@@ -112,7 +112,7 @@ function TransferTab(props: TransferTabProps) {
                 resetTransferCallback()
                 if (transferState.type !== TransactionStateType.CONFIRMED) return
                 onClose()
-                retryDetailedTokens()
+                detailedTokensRetry()
                 retryTokenBalance()
             },
             [transferState.type],

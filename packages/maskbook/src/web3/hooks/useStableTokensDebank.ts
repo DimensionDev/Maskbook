@@ -13,7 +13,7 @@ async function fetcher(chainId: ChainId) {
     return []
 }
 
-export function useAssetsStableCoinDetailedDebank() {
+export function useStableTokensDebank() {
     const chainId = useChainId()
     return useAsyncRetry(async () => {
         const data = await fetcher(chainId)
