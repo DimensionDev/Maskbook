@@ -23,13 +23,41 @@ const useStyles = makeStyles((theme) =>
                 color: '#fff !important',
                 borderColor: '#F3F3F4 !important',
             },
+            [theme.breakpoints.down('sm')]: {
+                width: '100%',
+            },
         },
         helperText: {
             color: '#fff',
             fontSize: 12,
         },
+        buttonContainer: {
+            marginLeft: theme.spacing(2.5),
+            padding: theme.spacing(0.5, 0),
+            [theme.breakpoints.down('sm')]: {
+                marginLeft: 0,
+                marginTop: theme.spacing(1),
+                width: '100%',
+            },
+        },
         button: {
-            background: 'rgba(255, 255, 255, .2)',
+            //TODO: https://github.com/mui-org/material-ui/issues/25011
+            '&[disabled]': {
+                color: '#fff',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                opacity: 0.5,
+            },
+            [theme.breakpoints.down('sm')]: {
+                width: '100%',
+            },
+        },
+        controller: {
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: theme.spacing(1.2),
+            [theme.breakpoints.down('sm')]: {
+                flexDirection: 'column',
+            },
         },
     }),
 )
@@ -56,7 +84,7 @@ export function AirdropCheckCard(props: AirdropCheckCardProps) {
     return (
         <Box className={classes.root}>
             <Typography>Check Address</Typography>
-            <Box sx={{ marginTop: 1.2, display: 'flex', alignItems: 'center' }}>
+            <Box className={classes.controller}>
                 <TextField
                     classes={{ root: classes.textfield }}
                     value={checkAddress}
@@ -102,7 +130,7 @@ export function AirdropCheckCard(props: AirdropCheckCardProps) {
                         maxLength: 42,
                     }}
                 />
-                <Box marginLeft={2.5} paddingY={0.5}>
+                <Box className={classes.buttonContainer}>
                     <ActionButton
                         className={classes.button}
                         variant="contained"

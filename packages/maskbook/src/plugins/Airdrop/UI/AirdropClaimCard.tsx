@@ -1,7 +1,7 @@
-import { Box, Button, createStyles, makeStyles, Skeleton, Typography } from '@material-ui/core'
+import { Box, ClickAwayListener, createStyles, makeStyles, Skeleton, Tooltip, Typography } from '@material-ui/core'
 import { Info as InfoIcon } from '@material-ui/icons'
 import BigNumber from 'bignumber.js'
-import { useState, useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { AirdropIcon } from '../../../resources/AirdropIcon'
@@ -42,9 +42,26 @@ const useStyles = makeStyles((theme) =>
             position: 'absolute',
             left: '17%',
             top: 5,
+            [theme.breakpoints.down('sm')]: {
+                display: 'none',
+            },
         },
         button: {
-            background: 'rgba(255, 255, 255, .2)',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            //TODO: https://github.com/mui-org/material-ui/issues/25011
+            '&[disabled]': {
+                color: '#fff',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                opacity: 0.5,
+            },
+        },
+        tooltipPopover: {
+            // Just meet design
+            width: 330,
+        },
+        tooltip: {
+            // Because disablePortal, the tooltip placement can't effect
+            marginTop: theme.spacing(-11),
         },
     }),
 )
@@ -56,6 +73,7 @@ export interface AirdropClaimCardProps extends withClasses<never> {
 
 export function AirdropClaimCard(props: AirdropClaimCardProps) {
     const { token, onUpdateAmount } = props
+    const [showTooltip, setShowTooltip] = useState(false)
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
@@ -169,11 +187,24 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                     <Box>
                         <Typography className={classes.title} sx={{ display: 'flex', alignItems: 'center' }}>
                             <span>Airdrop</span>
-                            <span
-                                title="Airdrop MASK, 20% reduction every 24 hours. Airdrop unlock time is 02/26/2021 03:00 AM (UTC+0)."
-                                style={{ lineHeight: 0.8, cursor: 'pointer' }}>
-                                <InfoIcon fontSize="small" sx={{ marginLeft: 0.2 }} />
-                            </span>
+                            <ClickAwayListener onClickAway={() => setShowTooltip(false)}>
+                                <div>
+                                    <Tooltip
+                                        placement="top-end"
+                                        PopperProps={{
+                                            disablePortal: true,
+                                        }}
+                                        open={showTooltip}
+                                        onClose={() => setShowTooltip(false)}
+                                        classes={{ popper: classes.tooltipPopover, tooltip: classes.tooltip }}
+                                        disableHoverListener
+                                        disableTouchListener
+                                        title="Airdrop MASK, 20% reduction every 24 hours. Airdrop unlock time is 02/27/2021 03:00 AM (UTC+0)."
+                                        style={{ lineHeight: 0.8, cursor: 'pointer', marginLeft: 2 }}>
+                                        <InfoIcon fontSize="small" onClick={(e) => setShowTooltip(true)} />
+                                    </Tooltip>
+                                </div>
+                            </ClickAwayListener>
                         </Typography>
                         <Typography className={classes.amount} sx={{ marginTop: 1.5 }}>
                             {checkState.type === CheckStateType.YEP ? `${checkState.claimable}.00` : '0.00'}
@@ -181,20 +212,22 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                     </Box>
                 </Box>
                 <Box display="flex">
-                    {checkState.type === CheckStateType.YEP ? (
-                        <Typography>Current Ratio: {formatPercentage(checkState.ratio)}</Typography>
-                    ) : null}
-                    {packet ? (
-                        <Box display="flex" alignItems="center" marginLeft={2.5}>
-                            <ActionButton
-                                className={classes.button}
-                                variant="contained"
-                                disabled
-                                onClick={onClaimButtonClick}>
-                                Claim
-                            </ActionButton>
-                        </Box>
-                    ) : null}
+                    <Box marginLeft={2.5}>
+                        {checkState.type === CheckStateType.YEP ? (
+                            <Typography>Current Ratio: {formatPercentage(checkState.ratio)}</Typography>
+                        ) : null}
+                        {packet ? (
+                            <Box display="flex" alignItems="center" justifyContent="flex-end" marginTop={1.5}>
+                                <ActionButton
+                                    className={classes.button}
+                                    variant="contained"
+                                    disabled
+                                    onClick={onClaimButtonClick}>
+                                    Claim
+                                </ActionButton>
+                            </Box>
+                        ) : null}
+                    </Box>
                 </Box>
             </Box>
             {packet ? (

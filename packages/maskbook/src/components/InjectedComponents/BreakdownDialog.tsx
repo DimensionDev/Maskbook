@@ -74,7 +74,8 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
             open={props.open}
             onClose={props.onClose}
             title="Your Mask Breakdown"
-            classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogPaper }}>
+            classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogPaper }}
+            disableArrowBack>
             <DialogContent className={classes.content}>
                 <MaskbookIcon classes={{ root: classes.logo }} />
                 <Typography className={classes.amount}>
