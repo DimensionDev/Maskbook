@@ -87,7 +87,7 @@ export interface ClaimDialogProps extends withClasses<'root'> {
     maxSwapAmount: BigNumber
     setTokenAmount: React.Dispatch<React.SetStateAction<BigNumber>>
     setActualSwapAmount: React.Dispatch<React.SetStateAction<BigNumber>>
-    setStatus: React.Dispatch<React.SetStateAction<ClaimStatus>>
+    setStatus: (status: ClaimStatus) => void
     chainId: ChainId
     account: string
     token: EtherTokenDetailed | ERC20TokenDetailed

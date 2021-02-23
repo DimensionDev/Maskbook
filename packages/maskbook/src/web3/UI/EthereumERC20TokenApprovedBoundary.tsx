@@ -1,12 +1,12 @@
 import { createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useSnackbar } from 'notistack'
-import { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import { formatBalance } from '../../plugins/Wallet/formatter'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { unreachable } from '../../utils/utils'
-import { ApproveState, useERC20TokenApproveCallback } from '../hooks/useERC20TokenApproveCallback'
+import { ApproveStateType, useERC20TokenApproveCallback } from '../hooks/useERC20TokenApproveCallback'
 import { TransactionStateType } from '../hooks/useTransactionState'
 import type { ERC20TokenDetailed } from '../types'
 
@@ -36,7 +36,7 @@ export interface EthereumERC20TokenApprovedBoundaryProps {
     amount: string
     spender: string
     token?: ERC20TokenDetailed
-    children?: React.ReactNode
+    children?: React.ReactNode | ((allowance: string) => React.ReactNode)
 }
 
 export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenApprovedBoundaryProps) {
@@ -46,18 +46,19 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
-    const [approveState, transactionState, approveCallback, resetApproveCallback] = useERC20TokenApproveCallback(
-        token?.address ?? '',
-        amount,
-        spender,
-    )
+    const [
+        { type: approveStateType, allowance },
+        transactionState,
+        approveCallback,
+        resetApproveCallback,
+    ] = useERC20TokenApproveCallback(token?.address ?? '', amount, spender)
 
     const onApprove = useCallback(
         async (useExact = false) => {
-            if (approveState !== ApproveState.NOT_APPROVED) return
+            if (approveStateType !== ApproveStateType.NOT_APPROVED) return
             await approveCallback(useExact)
         },
-        [approveState, transactionState, approveCallback],
+        [approveStateType, transactionState, approveCallback],
     )
 
     useEffect(() => {
@@ -68,13 +69,13 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     // not a valid erc20 token, please given token as undefined
     if (!token) return <Grid container>{children}</Grid>
 
-    if (approveState === ApproveState.UNKNOWN)
+    if (approveStateType === ApproveStateType.UNKNOWN)
         return (
             <Grid container>
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" loading disabled />
             </Grid>
         )
-    if (approveState === ApproveState.FAILED)
+    if (approveStateType === ApproveStateType.FAILED)
         return (
             <Grid container>
                 <ActionButton
@@ -87,7 +88,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 </ActionButton>
             </Grid>
         )
-    if (approveState === ApproveState.INSUFFICIENT_BALANCE)
+    if (approveStateType === ApproveStateType.INSUFFICIENT_BALANCE)
         return (
             <Grid container>
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" disabled>
@@ -95,7 +96,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 </ActionButton>
             </Grid>
         )
-    if (approveState === ApproveState.NOT_APPROVED)
+    if (approveStateType === ApproveStateType.NOT_APPROVED)
         return (
             <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
                 <Grid item xs={6}>
@@ -125,15 +126,18 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 </Grid>
             </Grid>
         )
-    if (approveState === ApproveState.PENDING || approveState === ApproveState.UPDATING)
+    if (approveStateType === ApproveStateType.PENDING || approveStateType === ApproveStateType.UPDATING)
         return (
             <Grid container>
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" disabled>
-                    {`${approveState === ApproveState.PENDING ? 'Unlocking' : 'Updating'} ${token.symbol ?? 'Token'}…`}
+                    {`${approveStateType === ApproveStateType.PENDING ? 'Unlocking' : 'Updating'} ${
+                        token.symbol ?? 'Token'
+                    }…`}
                 </ActionButton>
             </Grid>
         )
-    if (approveState === ApproveState.APPROVED) return <Grid container>{children}</Grid>
+    if (approveStateType === ApproveStateType.APPROVED)
+        return <Grid container>{typeof children === 'function' ? children(allowance) : children}</Grid>
 
-    unreachable(approveState)
+    unreachable(approveStateType)
 }
