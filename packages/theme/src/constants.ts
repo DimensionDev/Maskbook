@@ -1,4 +1,4 @@
-import type { ThemeOptions } from '@material-ui/core'
+import { Theme, ThemeOptions, useTheme } from '@material-ui/core'
 import { merge } from 'lodash-es'
 export const LightColor = {
     primary: '#1c68f3',
@@ -25,7 +25,7 @@ export const LightColor = {
     textPrimary: '#111432',
     textSecondary: '#7b8192',
 }
-export const DarkColor = {
+export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
     primaryContrastText: 'white',
 
@@ -65,3 +65,11 @@ export const DarkTypographyOptions: ThemeOptions['typography'] = merge(
     {} as ThemeOptions['typography'],
 )
 export type Color = typeof LightColor
+
+export function getMaskColor(theme: Theme) {
+    if (theme.palette.mode === 'dark') return DarkColor
+    return LightColor
+}
+export function useMaskColor() {
+    return getMaskColor(useTheme())
+}
