@@ -13,7 +13,7 @@ import { TransactionStateType, useTransactionState } from './useTransactionState
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
-export enum ApproveState {
+export enum ApproveStateType {
     UNKNOWN,
     INSUFFICIENT_BALANCE,
     NOT_APPROVED,
@@ -43,13 +43,13 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
     } = useERC20TokenAllowance(address, spender)
 
     // the computed approve state
-    const approveState = useMemo(() => {
-        if (!amount || !spender) return ApproveState.UNKNOWN
-        if (loadingBalance || loadingAllowance) return ApproveState.UPDATING
-        if (errorBalance || errorAllowance) return ApproveState.FAILED
-        if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) return ApproveState.INSUFFICIENT_BALANCE
-        if (transactionState.type === TransactionStateType.WAIT_FOR_CONFIRMING) return ApproveState.PENDING
-        return new BigNumber(allowance).isLessThan(amount) ? ApproveState.NOT_APPROVED : ApproveState.APPROVED
+    const approveStateType = useMemo(() => {
+        if (!amount || !spender) return ApproveStateType.UNKNOWN
+        if (loadingBalance || loadingAllowance) return ApproveStateType.UPDATING
+        if (errorBalance || errorAllowance) return ApproveStateType.FAILED
+        if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) return ApproveStateType.INSUFFICIENT_BALANCE
+        if (transactionState.type === TransactionStateType.WAIT_FOR_CONFIRMING) return ApproveStateType.PENDING
+        return new BigNumber(allowance).isLessThan(amount) ? ApproveStateType.NOT_APPROVED : ApproveStateType.APPROVED
     }, [
         amount,
         spender,
@@ -64,7 +64,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
 
     const approveCallback = useCallback(
         async (useExact: boolean = false) => {
-            if (approveState === ApproveState.UNKNOWN || !amount || !spender || !erc20Contract) {
+            if (approveStateType === ApproveStateType.UNKNOWN || !amount || !spender || !erc20Contract) {
                 setTransactionState({
                     type: TransactionStateType.UNKNOWN,
                 })
@@ -72,7 +72,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
             }
 
             // error: failed to approve token
-            if (approveState !== ApproveState.NOT_APPROVED) {
+            if (approveStateType !== ApproveStateType.NOT_APPROVED) {
                 setTransactionState({
                     type: TransactionStateType.FAILED,
                     error: new Error('Failed to approve token'),
@@ -142,7 +142,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                 })
             })
         },
-        [account, amount, balance, spender, loadingAllowance, loadingBalance, erc20Contract, approveState],
+        [account, amount, balance, spender, loadingAllowance, loadingBalance, erc20Contract, approveStateType],
     )
 
     const resetCallback = useCallback(() => {
@@ -153,5 +153,16 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
         })
     }, [revalidateBalance, revalidateAllowance])
 
-    return [approveState, transactionState, approveCallback, resetCallback] as const
+    return [
+        {
+            type: approveStateType,
+            allowance,
+            amount,
+            spender,
+            balance,
+        },
+        transactionState,
+        approveCallback,
+        resetCallback,
+    ] as const
 }

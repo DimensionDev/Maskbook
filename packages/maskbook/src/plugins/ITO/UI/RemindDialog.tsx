@@ -113,7 +113,7 @@ const useStyles = makeStyles((theme) =>
 export interface RemindDialogProps extends withClasses<'root'> {
     token: EtherTokenDetailed | ERC20TokenDetailed
     chainId: ChainId
-    setStatus: React.Dispatch<React.SetStateAction<ClaimStatus>>
+    setStatus: (status: ClaimStatus) => void
     isMask: boolean
 }
 

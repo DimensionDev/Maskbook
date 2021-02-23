@@ -1,6 +1,6 @@
 import { Component, useCallback, useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
-import { makeStyles, createStyles, Card, Typography, Box, Link, Theme } from '@material-ui/core'
+import { makeStyles, createStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
 import { BigNumber } from 'bignumber.js'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -18,7 +18,7 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatDateTime } from '../../../utils/date'
 import { getTextUILength } from '../../../utils/getTextUILength'
-import { ClaimGuide } from './ClaimGuide'
+import { ClaimGuide, ClaimStatus } from './ClaimGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
@@ -193,6 +193,7 @@ export function ITO(props: ITO_Props) {
     const chainIdValid = useChainIdValid()
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(props.isMask ?? false)
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
+    const [claimDialogStatus, setClaimDialogStatus] = useState(ClaimStatus.Remind)
 
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
@@ -293,7 +294,14 @@ export function ITO(props: ITO_Props) {
     const onShare = useCallback(async () => {
         window.open(shareLink, '_blank', 'noopener noreferrer')
     }, [shareLink])
-    const onClaim = useCallback(async () => setOpenClaimDialog(true), [])
+    const onUnlock = useCallback(async () => {
+        setClaimDialogStatus(ClaimStatus.Unlock)
+        setOpenClaimDialog(true)
+    }, [])
+    const onClaim = useCallback(async () => {
+        setClaimDialogStatus(ClaimStatus.Remind)
+        setOpenClaimDialog(true)
+    }, [])
 
     const retryITOCard = useCallback(() => {
         retryPoolPayload()
@@ -452,10 +460,11 @@ export function ITO(props: ITO_Props) {
                     <Typography variant="h5" className={classes.title}>
                         {message}
                     </Typography>
-
-                    <Typography variant="body2" className={classes.status}>
-                        {swapStatusText}
-                    </Typography>
+                    {swapStatusText ? (
+                        <Typography variant="body2" className={classes.status}>
+                            {swapStatusText}
+                        </Typography>
+                    ) : null}
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
                     {t('plugin_ito_swapped_status', {
@@ -576,9 +585,26 @@ export function ITO(props: ITO_Props) {
                         {t('plugin_ito_expired')}
                     </ActionButton>
                 ) : listOfStatus.includes(ITO_Status.waited) ? (
-                    <ActionButton onClick={onShare} variant="contained" size="large" className={classes.actionButton}>
-                        {t('plugin_ito_share')}
-                    </ActionButton>
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <ActionButton
+                                onClick={onUnlock}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {t('plugin_ito_unlock_in_advance')}
+                            </ActionButton>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <ActionButton
+                                onClick={onShare}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {t('plugin_ito_share')}
+                            </ActionButton>
+                        </Grid>
+                    </Grid>
                 ) : listOfStatus.includes(ITO_Status.started) ? (
                     <ActionButton onClick={onClaim} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_ito_enter')}
@@ -586,11 +612,13 @@ export function ITO(props: ITO_Props) {
                 ) : null}
             </Box>
             <ClaimGuide
+                status={claimDialogStatus}
                 payload={payload}
                 shareSuccessLink={shareSuccessLink}
                 isBuyer={isBuyer}
                 exchangeTokens={exchange_tokens}
                 open={openClaimDialog}
+                onUpdate={setClaimDialogStatus}
                 onClose={() => setOpenClaimDialog(false)}
                 retryPayload={retryITOCard}
             />
