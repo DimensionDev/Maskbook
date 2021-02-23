@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { createStyles, makeStyles, Theme, Tooltip } from '@material-ui/core'
+import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import { useDimension, Dimension } from '../../Trader/graphs/useDimension'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import stringify from 'json-stable-stringify'
 import * as d3 from 'd3'
-import * as d3Tip from 'd3-tip'
 import { round } from 'lodash-es'
 
 const data = [
