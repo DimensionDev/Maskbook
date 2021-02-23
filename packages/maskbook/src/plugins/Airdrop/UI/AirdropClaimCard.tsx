@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) =>
             top: 5,
             [theme.breakpoints.down('sm')]: {
                 display: 'none',
-            }
+            },
         },
         button: {
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -217,15 +217,15 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                             <Typography>Current Ratio: {formatPercentage(checkState.ratio)}</Typography>
                         ) : null}
                         {packet ? (
-                        <Box display="flex" alignItems="center" justifyContent="flex-end" marginTop={1.5}>
-                            <ActionButton
-                                className={classes.button}
-                                variant="contained"
-                                disabled
-                                onClick={onClaimButtonClick}>
-                                Claim
-                            </ActionButton>
-                        </Box>
+                            <Box display="flex" alignItems="center" justifyContent="flex-end" marginTop={1.5}>
+                                <ActionButton
+                                    className={classes.button}
+                                    variant="contained"
+                                    disabled
+                                    onClick={onClaimButtonClick}>
+                                    Claim
+                                </ActionButton>
+                            </Box>
                         ) : null}
                     </Box>
                 </Box>

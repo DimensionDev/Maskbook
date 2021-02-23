@@ -11,7 +11,7 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../../Wallet/messages'
-import { ApproveState } from '../../../../web3/hooks/useERC20TokenApproveCallback'
+import { ApproveStateType } from '../../../../web3/hooks/useERC20TokenApproveCallback'
 import { TradeStrategy, TokenPanelType, TradeComputed, WarningLevel, TradeProvider } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
