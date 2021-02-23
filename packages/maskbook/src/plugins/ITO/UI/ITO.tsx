@@ -523,9 +523,16 @@ export function ITO(props: ITO_Props) {
             </Card>
 
             <Box className={classes.actionFooter}>
-                {(total_remaining.isZero() && !isBuyer && !canWithdraw) ||
-                loadingTradeInfo ||
-                loadingAvailability ? null : !account || !chainIdValid ? (
+                {total_remaining.isZero() && !isBuyer && !canWithdraw ? (
+                    <ActionButton
+                        disabled
+                        onClick={() => undefined}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
+                        {t('plugin_ito_status_out_of_stock')}
+                    </ActionButton>
+                ) : loadingTradeInfo || loadingAvailability ? null : !account || !chainIdValid ? (
                     <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
@@ -558,7 +565,16 @@ export function ITO(props: ITO_Props) {
                             {t('plugin_ito_share')}
                         </ActionButton>
                     )
-                ) : listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(ITO_Status.waited) ? (
+                ) : listOfStatus.includes(ITO_Status.expired) ? (
+                    <ActionButton
+                        disabled
+                        onClick={() => undefined}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
+                        {t('plugin_ito_expired')}
+                    </ActionButton>
+                ) : listOfStatus.includes(ITO_Status.waited) ? (
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <ActionButton
