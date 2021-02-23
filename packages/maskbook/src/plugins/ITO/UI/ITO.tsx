@@ -460,10 +460,11 @@ export function ITO(props: ITO_Props) {
                     <Typography variant="h5" className={classes.title}>
                         {message}
                     </Typography>
-
-                    <Typography variant="body2" className={classes.status}>
-                        {swapStatusText}
-                    </Typography>
+                    {swapStatusText ? (
+                        <Typography variant="body2" className={classes.status}>
+                            {swapStatusText}
+                        </Typography>
+                    ) : null}
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
                     {t('plugin_ito_swapped_status', {
