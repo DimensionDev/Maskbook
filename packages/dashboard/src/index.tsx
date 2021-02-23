@@ -7,14 +7,20 @@ import { App } from './App'
 import { AsyncCall } from 'async-call-rpc'
 import { serializer } from '@dimensiondev/maskbook-shared'
 import { StylesProvider } from '@material-ui/core/styles'
+import { Environment } from '@dimensiondev/holoflows-kit'
 
+const servicesChannel = new WebExtensionExternalChannel('services')
 setService(
     new Proxy({} as any, {
         get(target, prop) {
             if (target[prop]) return target[prop]
             target[prop] = AsyncCall(
                 {},
-                { channel: new WebExtensionExternalChannel(String(prop)), serializer, log: 'all' },
+                {
+                    channel: servicesChannel.events[String(prop)].bind(Environment.ManifestBackground),
+                    serializer,
+                    log: 'all',
+                },
             )
             return target[prop]
         },
