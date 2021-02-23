@@ -524,7 +524,16 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_status_out_of_stock')}
                     </ActionButton>
-                ) : loadingTradeInfo || loadingAvailability ? null : !account || !chainIdValid ? (
+                ) : loadingTradeInfo || loadingAvailability ? (
+                    <ActionButton
+                        disabled
+                        onClick={() => undefined}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
+                        {t('plugin_ito_loading')}
+                    </ActionButton>
+                ) : !account || !chainIdValid ? (
                     <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
