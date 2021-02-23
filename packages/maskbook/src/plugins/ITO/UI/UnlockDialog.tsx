@@ -19,7 +19,7 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { ITO_CONSTANTS } from '../constants'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
-    return new BigNumber(allowance).isGreaterThan(`100000000e${decimals}`)
+    return new BigNumber(allowance).isGreaterThan(`100000000000e${decimals}`) // 100 billion
 }
 
 const useStyles = makeStyles((theme) =>
@@ -120,7 +120,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                     {(allowance: string) => (
                         <ActionButton className={classes.button} size="large" fullWidth disabled variant="contained">
                             {isMoreThanMillion(allowance, token.decimals)
-                                ? t('plugin_ito_amount_approved_billion', {
+                                ? t('plugin_ito_amount_approved_infinity', {
                                       symbol: token.symbol ?? 'Token',
                                   })
                                 : t('plugin_ito_amount_approved', {
