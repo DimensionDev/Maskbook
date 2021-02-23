@@ -1,4 +1,4 @@
-import { execFileSync } from 'child_process'
+import { spawnSync } from 'child_process'
 import os from 'os'
 import path from 'path'
 
@@ -7,9 +7,9 @@ export const BUILD_PATH = path.resolve(ROOT_PATH, 'build')
 
 export function run(cwd = ROOT_PATH, cmd: string, ...args: string[]) {
     console.log('$', cmd, args.join(' '), '# cwd:', path.relative(ROOT_PATH, cwd))
-    return execFileSync(cmd, args, {
+    return spawnSync(cmd, args, {
         cwd,
-        stdio: [process.stdin, process.stdout, process.stderr],
+        stdio: 'inherit',
         shell: os.platform() === 'win32',
     })
 }
