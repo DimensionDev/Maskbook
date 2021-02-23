@@ -19,7 +19,6 @@ import { COTM_PluginDefine } from './COTM/define'
 import { ITO_PluginDefine } from './ITO/define'
 import { NFTPluginsDefine } from './NFT/define'
 import { AirdropPluginDefine } from './Airdrop/define'
-import { LBP_PluginDefine } from './LBP/define'
 import { sideEffect } from '../utils/side-effects'
 
 sideEffect.then(() => {
@@ -36,6 +35,5 @@ sideEffect.then(() => {
     if (Flags.election2020_enabled) plugins.add(Election2020PluginDefine)
     if (Flags.COTM_enabled) plugins.add(COTM_PluginDefine)
     if (Flags.airdrop_enabled) plugins.add(AirdropPluginDefine)
-    if (Flags.LBP_enabled) plugins.add(LBP_PluginDefine)
     if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)
 })

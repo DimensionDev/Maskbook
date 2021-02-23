@@ -46,7 +46,6 @@ export const Flags = {
     airdrop_enabled: webOnly,
     airdrop_two_factor_verification_enabled: false,
     airdrop_composition_dialog_enabled: false,
-    LBP_enabled: webOnly,
     metamask_support_enabled: webOnly,
     //#endregion
 
