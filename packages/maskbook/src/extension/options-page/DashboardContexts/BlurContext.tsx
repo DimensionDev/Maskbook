@@ -3,6 +3,7 @@ import { makeStyles, createStyles, useTheme } from '@material-ui/core'
 import { useLocation } from 'react-router-dom'
 import { noop } from 'lodash-es'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
+import { useChainId } from '../../../web3/hooks/useChainState'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 
 const useStyles = makeStyles((theme) =>
@@ -25,11 +26,12 @@ const DashboardBlurContext = createContext<{
 
 export function useBlurContext(open: boolean) {
     const context = useContext(DashboardBlurContext)
+    const chainId = useChainId()
     useEffect(() => {
         // for options page only
         if (!isEnvironment(Environment.ManifestOptions)) return
         open ? context.blur() : context.unblur()
-    }, [context, open])
+    }, [context, open, chainId])
 }
 
 let blurRequest = 0
