@@ -107,7 +107,7 @@ export function LBPPanel(props: LBPPanelProps) {
                 ,{' '}
                 <Link href="" target="_blank" rel="noopener noreferrer">
                     Tutorial
-                </Link>
+                </Link>{' '}
                 and
                 <Link> {token.symbol} LBP Pool in Balancer</Link>.
             </Typography>

@@ -181,10 +181,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [account, trending?.coin?.symbol])
     //#endregion
 
-    //#region LBP
-
-    //#endregipn
-
     //#region sync with settings
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
         currentDataProviderSettings.value = option.value as DataProvider
@@ -266,8 +262,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 {t('buy_now')}
                             </Button>
                         ) : null}
-
-                        {}
                     </div>
                 }
                 subheader={
