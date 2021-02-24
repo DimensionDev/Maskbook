@@ -70,8 +70,11 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[]) {
             ${queries.join('\n')}
         }
     `)
-    return Object.keys(response).map((x) => ({
-        timestamp: x.slice(1),
-        blockNumber: response[x][0].number,
-    }))
+    return Object.keys(response)
+        .filter((x) => response[x].length)
+        .map((y) => ({
+            timestamp: y.slice(1),
+            blockNumber: response[y][0].number,
+        }))
+        .sort((a, z) => Number.parseInt(a.blockNumber) - Number.parseInt(z.blockNumber))
 }

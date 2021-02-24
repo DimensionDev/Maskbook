@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../messages'
 
-export function usePoolIds(address: string) {
+export function usePools(address: string) {
     return useAsyncRetry(async () => {
         if (!address) return []
-        return PluginTraderRPC.fetchPoolsByTokenAddress(address)
+        return PluginTraderRPC.fetchLBP_PoolsByTokenAddress(address)
     }, [address])
 }

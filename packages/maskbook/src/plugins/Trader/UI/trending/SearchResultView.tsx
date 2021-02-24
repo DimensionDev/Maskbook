@@ -118,6 +118,11 @@ export function SearchResultView(props: SearchResultViewProps) {
 
     //#region LBP
     const LBP = useLBP(tokenDetailed?.type === EthereumTokenType.ERC20 ? tokenDetailed : undefined)
+
+    console.log({
+        LBP,
+        tokenDetailed,
+    })
     //#endregion
 
     //#region trader context
