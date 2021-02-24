@@ -100,8 +100,9 @@ export function LBPPanel(props: LBPPanelProps) {
                 />
             </div>
             <Typography className={classes.introduce}>
-                This is the Liquidity Bootstrapping Pool for Mask Network's Mask Token. 4m Mask tokens will be placed in
-                this Liquidity Bootstrapping Pool (LBP) for 36 hrs, balanced against the initial capital of $0.8m USDC.
+                Solid blue line illustrates the historical price of MASK on the {token.symbol}'s LBP. Dashed line
+                represents the future price <strong>if no one buys MASK We do not advise </strong>
+                buying ${token.symbol} at the very beginning of the LBP offering
             </Typography>
 
             <Typography className={classes.introduce}>
