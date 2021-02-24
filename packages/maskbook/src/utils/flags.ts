@@ -47,6 +47,8 @@ export const Flags = {
     airdrop_two_factor_verification_enabled: false,
     airdrop_composition_dialog_enabled: false,
     metamask_support_enabled: webOnly,
+    /* construct LBP for all ERC20 tokens */
+    LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
     //#endregion
 
     //#region Functionality missing / broken
