@@ -140,16 +140,10 @@ export async function fetchTokenPrices(address: string, duration: number, size =
         blockNumbers.map((x) => x.blockNumber),
     )
 
-    console.log({
-        timestamps,
-        blockNumbers,
-        prices,
-    })
-
     // compose the result as timestamp and price pairs
     return prices.map((x, i) => ({
         timestamp: timestamps[i],
         blockNumber: x.blockNumber,
-        price: x.price,
+        price: Number.parseFloat(x.price),
     }))
 }

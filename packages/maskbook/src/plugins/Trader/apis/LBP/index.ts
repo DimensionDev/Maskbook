@@ -59,7 +59,7 @@ export async function fetchPoolTokenPrices(poolId: string, address: string, bloc
     )
     const response = await fetchFromBalancerPoolSubgraph<{
         [key: string]: {
-            price: number
+            price: string
         }[]
     }>(`
         query tokenPrices {
@@ -68,7 +68,7 @@ export async function fetchPoolTokenPrices(poolId: string, address: string, bloc
     `)
     return Object.keys(response)
         .map((x) => ({
-            price: response[x][0]?.price ?? 0,
+            price: response[x][0]?.price ?? '0',
             blockNumber: x.slice(1),
         }))
         .sort((a, z) => (Number.parseInt(a.blockNumber) > Number.parseInt(z.blockNumber) ? 1 : -1))

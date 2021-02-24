@@ -34,15 +34,23 @@ export function LBPPanel(props: LBPPanelProps) {
     const { token } = props
     const classes = useStylesExtends(useStyles(props), props)
 
-    const { value: prices } = usePoolTokenPrices(token.address, 6 * 30 * 24 * 60 * 60)
+    const { value: prices = [] } = usePoolTokenPrices(token.address, 6 * 30 * 24 * 60 * 60)
+    if (!prices.length) return null
 
-    console.log({
-        prices,
-    })
-
+    console.log(
+        prices.map((x) => ({
+            date: new Date(x.timestamp * 1000),
+            value: x.price,
+        })),
+    )
     return (
         <div className={classes.container}>
-            <LBPPriceChart />
+            <LBPPriceChart
+                data={prices.map((x) => ({
+                    date: new Date(x.timestamp * 1000),
+                    value: x.price,
+                }))}
+            />
             <Typography className={classes.introduce}>
                 Solid blue line illustrates the historical price of MASK on the {token.symbol}'s LBP. Dashed line
                 represents the future price <strong>if no one buys MASK We do not advise </strong>
