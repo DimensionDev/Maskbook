@@ -101,7 +101,13 @@ export function LBPPanel(props: LBPPanelProps) {
                 buying ${token.symbol} at the very beginning of the LBP offering
             </Typography>
             <Typography className={classes.introduce}>
-                <Link>What's LBP?</Link>, <Link>Tutorial</Link>
+                <Link href="https://link.medium.com/0kfZVzGx8db" target="_blank" rel="noopener noreferrer">
+                    What's LBP?
+                </Link>
+                ,{' '}
+                <Link href="" target="_blank" rel="noopener noreferrer">
+                    Tutorial
+                </Link>
                 and
                 <Link> {token.symbol} LBP Pool in Balancer</Link>.
             </Typography>
