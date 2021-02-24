@@ -17,7 +17,8 @@ import { formatEthereumAddress } from '../../../Wallet/formatter'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../../web3/constants'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { usePoolIds } from '../../LBP/usePoolIds'
+import { usePools } from '../../LBP/usePools'
+import { usePoolTokens } from '../../LBP/usePoolTokens'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -66,19 +67,22 @@ export function LBPPanel(props: LBPPanelProps) {
     const classes = useStylesExtends(useStyles(props), props)
 
     const USDC_ADDRESS = useConstant(CONSTANTS, 'USDC_ADDRESS')
-    const { value: poolIds = [], loading: poolIdsLoading, error: poolIdsError } = usePoolIds(token.address)
+    const { value: pools = [], loading: poolsLoading, error: poolsError } = usePools(token.address)
     const { value: prices = [], loading: pricesLoading, error: pricesError, retry: pricesRetry } = usePoolTokenPrices(
         token.address,
         duration,
+        150,
     )
+
+    // const { value: prcies_ = [] } = usePoolTokens(token.address, duration, 150)
 
     return (
         <div className={classes.root}>
             <div className={classes.chart}>
-                {pricesLoading || poolIdsLoading ? (
+                {pricesLoading || poolsLoading ? (
                     <CircularProgress className={classes.progress} color="primary" size={15} />
                 ) : null}
-                {pricesError || poolIdsError ? (
+                {pricesError || poolsError ? (
                     <IconButton
                         className={classes.retry}
                         size="small"
@@ -90,7 +94,7 @@ export function LBPPanel(props: LBPPanelProps) {
                 ) : null}
                 <LBPPriceChart
                     data={
-                        pricesLoading || poolIdsLoading
+                        pricesLoading || poolsLoading
                             ? []
                             : prices.map((x) => ({
                                   date: new Date(x.timestamp * 1000),
@@ -99,32 +103,36 @@ export function LBPPanel(props: LBPPanelProps) {
                     }
                 />
             </div>
-            <Typography className={classes.introduce}>
-                Solid blue line illustrates the historical price of MASK on the {token.symbol}'s LBP. Dashed line
-                represents the future price <strong>if no one buys MASK We do not advise </strong>
-                buying ${token.symbol} at the very beginning of the LBP offering
-            </Typography>
+            {pools.length ? (
+                <>
+                    <Typography className={classes.introduce}>
+                        Solid blue line illustrates the historical price of MASK on the {token.symbol}'s LBP. Dashed
+                        line represents the future price <strong>if no one buys MASK We do not advise </strong>
+                        buying ${token.symbol} at the very beginning of the LBP offering
+                    </Typography>
 
-            <Typography className={classes.introduce}>
-                <Link href="https://link.medium.com/0kfZVzGx8db" target="_blank" rel="noopener noreferrer">
-                    What's LBP?
-                </Link>
-                ,{' '}
-                <Link
-                    href={`https://news.mask.io/2021/02/24/mask-lbp-tutorial`}
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    Tutorial
-                </Link>{' '}
-                and
-                <Link
-                    href={`https://pools.balancer.exchange/#/pool/${poolIds[0]}/`}
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    {token.symbol} LBP Pool in Balancer
-                </Link>
-                .
-            </Typography>
+                    <Typography className={classes.introduce}>
+                        <Link href="https://link.medium.com/0kfZVzGx8db" target="_blank" rel="noopener noreferrer">
+                            What's LBP?
+                        </Link>
+                        ,{' '}
+                        <Link
+                            href={`https://news.mask.io/2021/02/24/mask-lbp-tutorial`}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            Tutorial
+                        </Link>{' '}
+                        and{' '}
+                        <Link
+                            href={`https://pools.balancer.exchange/#/pool/${pools[0].id}/`}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            {token.symbol} LBP Pool in Balancer
+                        </Link>
+                        .
+                    </Typography>
+                </>
+            ) : null}
             <div className={classes.connect}>
                 <Button
                     color="primary"

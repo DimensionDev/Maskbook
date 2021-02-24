@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { getLatestTimestamps } from '../../helpers/blocks'
+import { getPastTimestamps } from '../../helpers/blocks'
 import { PluginTraderRPC } from '../../messages'
 
 /**
@@ -10,7 +10,7 @@ import { PluginTraderRPC } from '../../messages'
  */
 export function useLatestBlockNumbers(duration: number, size = 50) {
     return useAsyncRetry(async () => {
-        const timestamps = getLatestTimestamps(duration, size)
+        const timestamps = getPastTimestamps(duration, size)
         return PluginTraderRPC.fetchBlockNumbersByTimestamps(timestamps)
     }, [])
 }
