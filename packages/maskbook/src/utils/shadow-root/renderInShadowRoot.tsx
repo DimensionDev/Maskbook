@@ -211,6 +211,7 @@ function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{
         function updateThemeVars() {
             applyMaskColorVars(themeCSSVars, getMaskbookTheme().palette.mode)
         }
+        updateThemeVars()
         appearanceSettings.addListener(updateThemeVars)
         matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeVars)
         const EmotionInsertionPoint = head.appendChild(createElement('div', 'emotion-area'))

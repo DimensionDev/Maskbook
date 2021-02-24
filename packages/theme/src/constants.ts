@@ -87,7 +87,7 @@ export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
         applyMaskColorVars(document.getElementById(id)!, scheme)
         return
     } else if (node instanceof HTMLStyleElement) {
-        let rule = ':root {\n'
+        let rule = ':root, :host {\n'
         for (const key in ns) {
             rule += '    --mask-' + kebabCase(key) + ': ' + (ns as any)[key] + ';\n'
         }
