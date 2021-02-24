@@ -17,21 +17,23 @@ async function fetchFromBalancerPoolSubgraph<T>(query: string) {
     return data
 }
 
-export async function queryAllPoolsByTokenAddress(address: string) {
+export async function fetchPoolsByTokenAddress(address: string) {
     const response = await fetchFromBalancerPoolSubgraph<{
         pools: {
             id: string
             swapsCount: number
             tokensList: string[]
-        }
+        }[]
     }>(`
     {
-        pools(where: {
-            rights_contains: ["canChangeWeights"],
-            tokensList_contains: ["${address.toLowerCase()}"],
+        pools(
             orderBy: swapsCount,
-            orderDirection: desc
-        }) {
+            orderDirection: desc,
+            where: {
+                rights_contains: ["canChangeWeights"],
+                tokensList_contains: ["${address.toLowerCase()}"]
+            }
+        ) {
           id
           swapsCount
           tokensList
@@ -39,16 +41,14 @@ export async function queryAllPoolsByTokenAddress(address: string) {
     }`)
     const { pools } = response
     if (!pools) throw new Error('Failed to load pools.')
-    return {
-        pools,
-    }
+    return pools
 }
 
-export async function getLatestTokenPricesList(poolId: string, address: string, blockNumbers: number[]) {
+export async function fetchPoolTokenPrices(poolId: string, address: string, blockNumbers: number[]) {
     const queries = blockNumbers.map(
         (x) => `
-        b${x}: tokenPrice(
-            poolTokenId: "${poolId.toLowerCase()}-${address.toLowerCase()}",
+        b${x}: tokenPrices (
+            where: { poolTokenId: "${poolId.toLowerCase()}-${address.toLowerCase()}" },
             block: {
                 number: ${x}
             }
@@ -60,7 +60,7 @@ export async function getLatestTokenPricesList(poolId: string, address: string, 
     return fetchFromBalancerPoolSubgraph<{
         [key: string]: {
             price: number
-        }
+        }[]
     }>(`
         query tokenPrices {
             ${queries.join('\n')}

@@ -1,8 +1,11 @@
-import { LBPPriceChart } from './LBPPriceChart'
+import { first } from 'lodash-es'
 import { Theme, createStyles, makeStyles, Link, Button, Typography } from '@material-ui/core'
+import { LBPPriceChart } from './LBPPriceChart'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { ERC20TokenDetailed } from '../../../../web3/types'
 import { useLatestBlockNumbers } from '../../trader/blocks/useLatestBlockNumber'
+import { usePoolsByTokenAddress } from '../../LBP/usePoolsByTokenAddress'
+import { usePoolTokenPrices } from '../../LBP/usePoolTokenPrices'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -34,9 +37,17 @@ export function LBPPanel(props: LBPPanelProps) {
     const { token } = props
     const classes = useStylesExtends(useStyles(props), props)
 
-    const { value: blockNumbers } = useLatestBlockNumbers(10 * 24 * 60 * 60)
+    const { value: blockNumbers = [] } = useLatestBlockNumbers(6 * 30 * 24 * 60 * 60)
+    const { value: pools = [] } = usePoolsByTokenAddress(token.address)
+    const { value: prices = [] } = usePoolTokenPrices(
+        first(pools)?.id ?? '',
+        token.address,
+        blockNumbers?.map((x) => Number.parseInt(x.blockNumber)) ?? [],
+    )
 
     console.log({
+        pools,
+        prices,
         blockNumbers,
     })
 

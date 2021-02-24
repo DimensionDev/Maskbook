@@ -64,14 +64,13 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[]) {
     const response = await fetchFromEthereumBlocksSubgraph<{
         [key: string]: {
             number: string
-        }
+        }[]
     }>(`
         query blocks {
             ${queries.join('\n')}
         }
     `)
     return Object.keys(response).map((x) => ({
-        timestamp: x,
-        blockNumber: response[`t${x}`].number,
+        blockNumber: response[x][0].number,
     }))
 }

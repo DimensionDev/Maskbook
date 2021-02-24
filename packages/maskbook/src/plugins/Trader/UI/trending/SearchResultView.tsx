@@ -213,7 +213,13 @@ export function SearchResultView(props: SearchResultViewProps) {
                 ) : null}
                 {tabIndex === 4 && (
                     <LBPPanel
-                        token={createERC20Token(ChainId.Mainnet, '', 18, 'Mask Network', 'MASK')}
+                        token={createERC20Token(
+                            ChainId.Mainnet,
+                            '0x705C71b262C511B66bAA4791cC2BE61B971bD784',
+                            18,
+                            'Mask Network',
+                            'MASK',
+                        )}
                         onBuyClick={() => setTabIndex(swapTabIndex)}
                     />
                 )}
