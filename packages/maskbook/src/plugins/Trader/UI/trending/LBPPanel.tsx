@@ -13,7 +13,10 @@ import { LBPPriceChart } from './LBPPriceChart'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { ERC20TokenDetailed } from '../../../../web3/types'
 import { usePoolTokenPrices } from '../../LBP/usePoolTokenPrices'
-import { useCallback } from 'react'
+import { formatEthereumAddress } from '../../../Wallet/formatter'
+import { useConstant } from '../../../../web3/hooks/useConstant'
+import { CONSTANTS } from '../../../../web3/constants'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -52,16 +55,19 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export interface LBPPanelProps extends withClasses<never> {
+    duration: number
     token: ERC20TokenDetailed
-    onBuyClick(): void
 }
 
 export function LBPPanel(props: LBPPanelProps) {
-    const { token } = props
+    const { token, duration } = props
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(props), props)
+
+    const USDC_ADDRESS = useConstant(CONSTANTS, 'USDC_ADDRESS')
     const { value: prices = [], loading: pricesLoading, error: pricesError, retry: pricesRetry } = usePoolTokenPrices(
         token.address,
-        3 * 24 * 60 * 60,
+        duration,
     )
 
     return (
@@ -95,13 +101,18 @@ export function LBPPanel(props: LBPPanelProps) {
                 buying ${token.symbol} at the very beginning of the LBP offering
             </Typography>
             <Typography className={classes.introduce}>
-                <Link>What's LBP</Link>, <Link>Tutorial </Link>
+                <Link>What's LBP?</Link>, <Link>Tutorial</Link>
                 and
                 <Link> {token.symbol} LBP Pool in Balancer</Link>.
             </Typography>
             <div className={classes.connect}>
-                <Button variant="contained" onClick={props.onBuyClick}>
-                    Buy
+                <Button
+                    color="primary"
+                    variant="contained"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={`https://balancer.exchange/#/swap/${formatEthereumAddress(token.address)}/${USDC_ADDRESS}`}>
+                    {t('plugin_trader_buy')}
                 </Button>
             </div>
         </div>
