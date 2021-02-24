@@ -17,6 +17,7 @@ import { formatEthereumAddress } from '../../../Wallet/formatter'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../../web3/constants'
 import { useI18N } from '../../../../utils/i18n-next-ui'
+import { usePoolIds } from '../../LBP/usePoolIds'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -65,6 +66,7 @@ export function LBPPanel(props: LBPPanelProps) {
     const classes = useStylesExtends(useStyles(props), props)
 
     const USDC_ADDRESS = useConstant(CONSTANTS, 'USDC_ADDRESS')
+    const { value: poolIds = [], loading: poolIdsLoading, error: poolIdsError } = usePoolIds(token.address)
     const { value: prices = [], loading: pricesLoading, error: pricesError, retry: pricesRetry } = usePoolTokenPrices(
         token.address,
         duration,
@@ -73,8 +75,10 @@ export function LBPPanel(props: LBPPanelProps) {
     return (
         <div className={classes.root}>
             <div className={classes.chart}>
-                {pricesLoading ? <CircularProgress className={classes.progress} color="primary" size={15} /> : null}
-                {pricesError ? (
+                {pricesLoading || poolIdsLoading ? (
+                    <CircularProgress className={classes.progress} color="primary" size={15} />
+                ) : null}
+                {pricesError || poolIdsError ? (
                     <IconButton
                         className={classes.retry}
                         size="small"
@@ -86,7 +90,7 @@ export function LBPPanel(props: LBPPanelProps) {
                 ) : null}
                 <LBPPriceChart
                     data={
-                        pricesLoading
+                        pricesLoading || poolIdsLoading
                             ? []
                             : prices.map((x) => ({
                                   date: new Date(x.timestamp * 1000),
@@ -105,11 +109,20 @@ export function LBPPanel(props: LBPPanelProps) {
                     What's LBP?
                 </Link>
                 ,{' '}
-                <Link href="" target="_blank" rel="noopener noreferrer">
+                <Link
+                    href={`https://news.mask.io/2021/02/24/mask-lbp-tutorial`}
+                    target="_blank"
+                    rel="noopener noreferrer">
                     Tutorial
                 </Link>{' '}
                 and
-                <Link> {token.symbol} LBP Pool in Balancer</Link>.
+                <Link
+                    href={`https://pools.balancer.exchange/#/pool/${poolIds[0]}/`}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    {token.symbol} LBP Pool in Balancer
+                </Link>
+                .
             </Typography>
             <div className={classes.connect}>
                 <Button
