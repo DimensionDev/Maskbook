@@ -4,6 +4,7 @@ import { Link, Typography } from '@material-ui/core'
 import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
 import { PluginTraderMessages, PluginTraderRPC } from '../messages'
 import { TagType } from '../types'
+
 export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type'> {
     readonly type: 'x-cash-trending'
     readonly name: string
