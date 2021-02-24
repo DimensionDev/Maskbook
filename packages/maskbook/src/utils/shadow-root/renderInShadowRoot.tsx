@@ -16,6 +16,9 @@ import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 import { MaskbookUIRoot } from '../../UIRoot'
+import { applyMaskColorVars } from '@dimensiondev/maskbook-theme'
+import { appearanceSettings } from '../../settings/settings'
+import { getMaskbookTheme } from '../theme'
 
 const captureEvents: (keyof HTMLElementEventMap)[] = [
     'paste',
@@ -156,10 +159,6 @@ class JSSInformativeSheetsRegistry extends JSSSheetsRegistry {
 
 const jssRegistryMap = new WeakMap<ShadowRoot, JSSInformativeSheetsRegistry>()
 const emotionRegistryMap = new WeakMap<ShadowRoot, EmotionInformativeSheetsRegistry>()
-function concatStyleSheets(prev: string, style: JSSInformativeSheetsRegistry['registry'][0]) {
-    if (!style.attached) return prev
-    return prev + '\n' + style.toString()
-}
 export function useSheetsRegistryStyles(_current: Node | null) {
     const jssSubscription = useMemo(() => {
         let registry: JSSInformativeSheetsRegistry | null | undefined = null
@@ -208,6 +207,12 @@ function createElement(key: keyof HTMLElementTagNameMap, kind: string) {
 function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{ shadow: ShadowRoot }>) {
     const { jss, JSSRegistry, JSSSheetsManager, emotionCache, generateClassName } = initOnce(shadow, () => {
         const head = shadow.appendChild(createElement('head', 'css-container'))
+        const themeCSSVars = head.appendChild(document.createElement('style'))
+        function updateThemeVars() {
+            applyMaskColorVars(themeCSSVars, getMaskbookTheme().palette.mode)
+        }
+        appearanceSettings.addListener(updateThemeVars)
+        matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeVars)
         const EmotionInsertionPoint = head.appendChild(createElement('div', 'emotion-area'))
         const JSSInsertionContainer = head.appendChild(createElement('div', 'jss-area'))
         const JSSInsertionPoint = JSSInsertionContainer.appendChild(createElement('div', 'jss-insert-point'))
