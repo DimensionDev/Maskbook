@@ -74,15 +74,14 @@ export function LBPPanel(props: LBPPanelProps) {
         150,
     )
 
-    // const { value: prcies_ = [] } = usePoolTokens(token.address, duration, 150)
+    const { value: prcies_ = [] } = usePoolTokens(token.address, duration, 150)
 
     return (
         <div className={classes.root}>
             <div className={classes.chart}>
                 {pricesLoading || poolsLoading ? (
                     <CircularProgress className={classes.progress} color="primary" size={15} />
-                ) : null}
-                {pricesError || poolsError ? (
+                ) : pricesError || poolsError ? (
                     <IconButton
                         className={classes.retry}
                         size="small"
