@@ -6,7 +6,6 @@ import ExpandMore from '@material-ui/icons/ExpandMore'
 import { useMaskThemeI18N } from '../../locales'
 import { useContext } from 'react'
 import { ErrorBoundaryBuildInfoContext, ErrorBoundaryError } from './context'
-import { MaskColorVar } from '../../constants'
 
 export type CrashUIProps = ErrorBoundaryError & {
     /** Type of the Error */
@@ -85,7 +84,6 @@ const Root = styled('div')`
 const ErrorTitle = styled('div')`
     user-select: text;
     margin-bottom: 8px;
-    color: ${MaskColorVar.greenLight};
 `
 
 const ErrorStack = styled('div')`
