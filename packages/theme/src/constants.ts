@@ -1,4 +1,5 @@
-import { Theme, ThemeOptions, useTheme } from '@material-ui/core'
+import { experimentalStyled, PaletteMode, Theme, ThemeOptions, useTheme } from '@material-ui/core'
+import { kebabCase } from 'lodash-es'
 import { merge } from 'lodash-es'
 export const LightColor = {
     primary: '#1c68f3',
@@ -73,3 +74,45 @@ export function getMaskColor(theme: Theme) {
 export function useMaskColor() {
     return getMaskColor(useTheme())
 }
+
+/**
+ * This component provides the CSS variable version of MaskColor.
+ * It must be placed on the top of every DOM tree (not the React tree) so please aware the usage of Portals.
+ */
+export const MaskColorRoot = experimentalStyled('div')((theme) => {
+    const obj: any = {}
+    const ns = theme.theme.palette.mode === 'light' ? LightColor : DarkColor
+    for (const key in ns) {
+        obj['--mask-' + kebabCase(key)] = (ns as any)[key]
+    }
+    return obj
+})
+
+export function applyMaskColorVarsToDOM(node: HTMLElement, scheme: PaletteMode) {
+    const ns = scheme === 'light' ? LightColor : DarkColor
+    for (const key in ns) {
+        node.style.setProperty('--mask-' + kebabCase(key), (ns as any)[key])
+    }
+}
+export const MaskColorVar: Record<keyof typeof LightColor, string /* & ((defaultValue?: string) => {}) */> = new Proxy(
+    { __proto__: null } as any,
+    {
+        get(target, key) {
+            if (target[key]) return target[key]
+            if (typeof key !== 'string') throw new TypeError()
+            const cssVar = kebabCase(key)
+            // ? It should always defined based on our API contract.
+            // ? So there is no need to be string & (string => string)
+            // ? Let's use the simpler way
+            target[key] = `var(--mask-${cssVar})`
+            // target[key] = (defaultValue?: string) => {
+            //     // it might be an object when used in styled components.
+            //     if (typeof defaultValue !== 'string') defaultValue = undefined
+            //     const x = `var(--mask-${cssVar}${defaultValue ? ', ' + defaultValue : ''})`
+            //     return x
+            // }
+            // target[key][Symbol.toPrimitive] = () => `var(--mask-${cssVar})`
+            return target[key]
+        },
+    },
+)
