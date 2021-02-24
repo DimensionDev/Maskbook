@@ -34,4 +34,4 @@ export const MaskLightTheme = MaskTheme('light')
 export const MaskDarkTheme = MaskTheme('dark')
 export * from './Components/index'
 export { addMaskThemeI18N } from './locales'
-export { getMaskColor, useMaskColor, MaskColorRoot, MaskColorVar, applyMaskColorVarsToDOM } from './constants'
+export { getMaskColor, useMaskColor, MaskColorVar, applyMaskColorVars } from './constants'

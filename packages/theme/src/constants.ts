@@ -75,23 +75,27 @@ export function useMaskColor() {
     return getMaskColor(useTheme())
 }
 
-/**
- * This component provides the CSS variable version of MaskColor.
- * It must be placed on the top of every DOM tree (not the React tree) so please aware the usage of Portals.
- */
-export const MaskColorRoot = experimentalStyled('div')((theme) => {
-    const obj: any = {}
-    const ns = theme.theme.palette.mode === 'light' ? LightColor : DarkColor
-    for (const key in ns) {
-        obj['--mask-' + kebabCase(key)] = (ns as any)[key]
-    }
-    return obj
-})
-
-export function applyMaskColorVarsToDOM(node: HTMLElement, scheme: PaletteMode) {
+export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
     const ns = scheme === 'light' ? LightColor : DarkColor
-    for (const key in ns) {
-        node.style.setProperty('--mask-' + kebabCase(key), (ns as any)[key])
+    if (node === document.body) {
+        const id = '#mask-style-var'
+        if (!document.getElementById(id)) {
+            const style = document.createElement('style')
+            style.id = id
+            document.head.appendChild(style)
+        }
+        applyMaskColorVars(document.getElementById(id)!, scheme)
+        return
+    } else if (node instanceof HTMLStyleElement) {
+        let rule = ':root {\n'
+        for (const key in ns) {
+            rule += '    --mask-' + kebabCase(key) + ': ' + (ns as any)[key] + ';\n'
+        }
+        node.innerHTML = rule + '}'
+    } else {
+        for (const key in ns) {
+            node.style.setProperty('--mask-' + kebabCase(key), (ns as any)[key])
+        }
     }
 }
 export const MaskColorVar: Record<keyof typeof LightColor, string /* & ((defaultValue?: string) => {}) */> = new Proxy(
