@@ -17,12 +17,11 @@ async function fetchFromBalancerPoolSubgraph<T>(query: string) {
     return data
 }
 
-export async function fetchPoolsByTokenAddress(address: string) {
+export async function fetchLBP_PoolsByTokenAddress(address: string) {
     const response = await fetchFromBalancerPoolSubgraph<{
         pools: {
             id: string
-            swapsCount: number
-            tokensList: string[]
+            createTime: number
         }[]
     }>(`
     {
@@ -35,6 +34,7 @@ export async function fetchPoolsByTokenAddress(address: string) {
             }
         ) {
           id
+          createTime
         }
     }`)
     const { pools } = response
@@ -42,7 +42,7 @@ export async function fetchPoolsByTokenAddress(address: string) {
     return pools
 }
 
-export async function fetchPoolTokenPrices(poolId: string, address: string, blockNumbers: string[]) {
+export async function fetchLBP_PoolTokenPrices(poolId: string, address: string, blockNumbers: string[]) {
     const queries = blockNumbers.map(
         (x) => `
         b${x}: tokenPrices (
@@ -69,5 +69,42 @@ export async function fetchPoolTokenPrices(poolId: string, address: string, bloc
             price: response[x][0]?.price ?? '0',
             blockNumber: x.slice(1),
         }))
-        .sort((a, z) => (Number.parseInt(a.blockNumber) > Number.parseInt(z.blockNumber) ? 1 : -1))
+        .sort((a, z) => Number.parseInt(a.blockNumber) - Number.parseInt(z.blockNumber))
+}
+
+export async function fetchLBP_PoolTokens(poolId: string, blockNumbers: string[]) {
+    const queries = blockNumbers.map(
+        (x) => `
+        b${x}: pools (
+            where: {
+                id: "${poolId.toLowerCase()}"
+            },
+            block: {
+                number: ${x}
+            }
+        ) {
+            tokens {
+                address
+                balance
+                denormWeight
+            }
+        }`,
+    )
+    const response = await fetchFromBalancerPoolSubgraph<{
+        [key: string]: {
+            tokens: {
+                address: string
+                balance: string
+                denormWeight: string
+            }[]
+        }
+    }>(`
+        query poolTokens {
+            ${queries.join('\n')}
+        }
+    `)
+    return Object.keys(response).map((x) => ({
+        tokens: response[x].tokens,
+        blockNumber: x.slice(1),
+    }))
 }
