@@ -35,8 +35,6 @@ export async function fetchPoolsByTokenAddress(address: string) {
             }
         ) {
           id
-          swapsCount
-          tokensList
         }
     }`)
     const { pools } = response

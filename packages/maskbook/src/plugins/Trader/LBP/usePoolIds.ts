@@ -4,6 +4,6 @@ import { PluginTraderRPC } from '../messages'
 export function usePoolIds(address: string) {
     return useAsyncRetry(async () => {
         if (!address) return []
-        return PluginTraderRPC.fetchLBP_PoolIdsByTokenAddress(address)
+        return PluginTraderRPC.fetchPoolsByTokenAddress(address)
     }, [address])
 }

@@ -17,7 +17,6 @@ import { formatEthereumAddress } from '../../../Wallet/formatter'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../../web3/constants'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { usePoolTokens } from '../../LBP/usePoolTokens'
 import { usePoolIds } from '../../LBP/usePoolIds'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -101,23 +100,29 @@ export function LBPPanel(props: LBPPanelProps) {
                 />
             </div>
             <Typography className={classes.introduce}>
-                Solid blue line illustrates the historical price of MASK on the {token.symbol}'s LBP. Dashed line
-                represents the future price <strong>if no one buys MASK We do not advise </strong>
-                buying ${token.symbol} at the very beginning of the LBP offering
+                This is the Liquidity Bootstrapping Pool for Mask Network's Mask Token. 4m Mask tokens will be placed in
+                this Liquidity Bootstrapping Pool (LBP) for 36 hrs, balanced against the initial capital of $0.8m USDC.
             </Typography>
+
             <Typography className={classes.introduce}>
                 <Link href="https://link.medium.com/0kfZVzGx8db" target="_blank" rel="noopener noreferrer">
                     What's LBP?
                 </Link>
                 ,{' '}
                 <Link
-                    href={`https://pools.balancer.exchange/#/pool/${poolIds[0]}/`}
+                    href={`https://news.mask.io/2021/02/24/mask-lbp-tutorial`}
                     target="_blank"
                     rel="noopener noreferrer">
                     Tutorial
                 </Link>{' '}
                 and
-                <Link> {token.symbol} LBP Pool in Balancer</Link>.
+                <Link
+                    href={`https://pools.balancer.exchange/#/pool/${poolIds[0]}/`}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    {token.symbol} LBP Pool in Balancer
+                </Link>
+                .
             </Typography>
             <div className={classes.connect}>
                 <Button

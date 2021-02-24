@@ -221,8 +221,8 @@ export function PopperView(props: PopperViewProps) {
                             chainId,
                             LBP.token.address,
                             LBP.token.decimals,
-                            LBP.token.name,
-                            LBP.token.symbol,
+                            LBP.token.name ?? '',
+                            LBP.token.symbol ?? '',
                         )}
                     />
                 ) : null}
