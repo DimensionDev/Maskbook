@@ -9,6 +9,7 @@ import {
     PRICE_IMPACT_NON_EXPERT_BLOCKED,
     PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN,
 } from './constants'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
 
 export function resolveCurrencyName(currency: Currency) {
     return [

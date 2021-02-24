@@ -35,6 +35,7 @@ export interface PluginConfig {
     scope: PluginScope
     successDecryptionInspector?: PluginInjectFunction<{ message: TypedMessage }>
     postInspector?: PluginInjectFunction<{}>
+    SearchBoxComponent?: React.ComponentType<{}>
     PageComponent?: React.ComponentType<{}>
     DashboardComponent?: React.ComponentType<{}>
     postDialogMetadataBadge?: Map<string, BadgeConvertor>

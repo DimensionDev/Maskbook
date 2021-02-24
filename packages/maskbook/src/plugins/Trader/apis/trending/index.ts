@@ -78,10 +78,7 @@ export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     if (dataProvider === DataProvider.UNISWAP) return uniswapAPI.getAllCoins()
 
     // reserve mask
-    if (dataProvider === DataProvider.COIN_GECKO) {
-        const coins = await coinGeckoAPI.getAllCoins()
-        return coins.filter((x) => x.symbol.toLowerCase() !== 'mask')
-    }
+    if (dataProvider === DataProvider.COIN_GECKO) return coinGeckoAPI.getAllCoins()
 
     const { data: coins } = await coinMarketCapAPI.getAllCoins()
     return (
@@ -240,7 +237,7 @@ export async function getCoinInfo(id: string, currency: Currency, dataProvider: 
                         (info.asset_platform_id === 'ethereum' ? info.contract_address : undefined),
                 },
                 market: Object.entries(info.market_data).reduce((accumulated, [key, value]) => {
-                    if (value && typeof value === 'object') accumulated[key] = value[currency.id]
+                    if (value && typeof value === 'object') accumulated[key] = value[currency.id] ?? 0
                     else accumulated[key] = value
                     return accumulated
                 }, {} as any),

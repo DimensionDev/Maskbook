@@ -21,6 +21,10 @@ import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
 import { EthereumTokenType } from '../../../../web3/types'
 import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
+import { LBPPanel } from './LBPPanel'
+import { createERC20Token } from '../../../../web3/helpers'
+import { useLBP } from '../../LBP/useLBP'
+import { useChainId } from '../../../../web3/hooks/useChainState'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -53,7 +57,7 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface TrendingViewProps {
+export interface PopperViewProps {
     name: string
     tagType: TagType
     dataProviders: DataProvider[]
@@ -61,7 +65,7 @@ export interface TrendingViewProps {
     onUpdate?: () => void
 }
 
-export function TrendingView(props: TrendingViewProps) {
+export function PopperView(props: PopperViewProps) {
     const { name, tagType, dataProviders, tradeProviders } = props
 
     const { t } = useI18N()
@@ -71,6 +75,7 @@ export function TrendingView(props: TrendingViewProps) {
     const dataProvider = useCurrentDataProvider(dataProviders)
     //#endregion
 
+    const chainId = useChainId()
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP ? 1 : 0)
 
     //#region multiple coins share the same symbol
@@ -106,6 +111,10 @@ export function TrendingView(props: TrendingViewProps) {
     })
     //#endregion
 
+    //#region LBP
+    const LBP = useLBP(tokenDetailed?.type === EthereumTokenType.ERC20 ? tokenDetailed : undefined)
+    //#endregion
+
     //#region trader context
     const tradeContext = useTradeContext(tradeProvider)
     //#endregion
@@ -116,7 +125,7 @@ export function TrendingView(props: TrendingViewProps) {
     }, [tabIndex, loadingTrending])
     //#endregion
 
-    //#region no available platform
+    //#region no available providers
     if (dataProviders.length === 0) return null
     //#endregion
 
@@ -147,9 +156,22 @@ export function TrendingView(props: TrendingViewProps) {
     if (loadingTrending || !currency || !trending || loadingTokenDetailed) return <TrendingViewSkeleton />
     //#endregion
 
+    //#region tabs
     const { coin, market, tickers } = trending
-    const canSwap = trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
+    const canSwap = !!trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
     const swapTabIndex = dataProvider !== DataProvider.UNISWAP ? 3 : 1
+    const tabs = [
+        <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />,
+        dataProvider !== DataProvider.UNISWAP ? (
+            <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
+        ) : null,
+        dataProvider !== DataProvider.UNISWAP ? (
+            <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
+        ) : null,
+        canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null,
+        LBP ? <Tab className={classes.tab} label="LBP" /> : null,
+    ].filter(Boolean)
+    //#endregion
 
     return (
         <TradeContext.Provider value={tradeContext}>
@@ -161,8 +183,8 @@ export function TrendingView(props: TrendingViewProps) {
                 trending={trending}
                 dataProvider={dataProvider}
                 tradeProvider={tradeProvider}
-                showDataProviderIcon={tabIndex !== swapTabIndex}
-                showTradeProviderIcon={tabIndex === swapTabIndex}>
+                showDataProviderIcon={dataProvider === DataProvider.UNISWAP ? tabIndex === 0 : tabIndex < 3}
+                showTradeProviderIcon={dataProvider === DataProvider.UNISWAP ? tabIndex === 1 : tabIndex === 3}>
                 <Tabs
                     className={classes.tabs}
                     textColor="primary"
@@ -174,14 +196,7 @@ export function TrendingView(props: TrendingViewProps) {
                             display: 'none',
                         },
                     }}>
-                    <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />
-                    {dataProvider !== DataProvider.UNISWAP ? (
-                        <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
-                    ) : null}
-                    {dataProvider !== DataProvider.UNISWAP ? (
-                        <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
-                    ) : null}
-                    {canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null}
+                    {tabs}
                 </Tabs>
                 {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
                 {tabIndex === 1 && dataProvider !== DataProvider.UNISWAP ? (
@@ -199,7 +214,19 @@ export function TrendingView(props: TrendingViewProps) {
                 {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
                     <TickersTable tickers={tickers} dataProvider={dataProvider} />
                 ) : null}
-                {tabIndex === swapTabIndex && canSwap ? (
+                {LBP && tabIndex === tabs.length - 1 ? (
+                    <LBPPanel
+                        duration={LBP.duration}
+                        token={createERC20Token(
+                            chainId,
+                            LBP.token.address,
+                            LBP.token.decimals,
+                            LBP.token.name ?? '',
+                            LBP.token.symbol ?? '',
+                        )}
+                    />
+                ) : null}
+                {tabIndex === (dataProvider !== DataProvider.UNISWAP ? 3 : 1) && canSwap ? (
                     <TradeView
                         classes={{ root: classes.tradeViewRoot }}
                         TraderProps={{

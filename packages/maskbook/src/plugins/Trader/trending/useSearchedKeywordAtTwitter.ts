@@ -16,7 +16,7 @@ const SAFE_PATHNAMES_ON_TWITTER = [
     '/i/keyboard_shortcuts',
 ]
 
-export function useSearchedKeyword() {
+export function useSearchedKeywordAtTwitter() {
     const internalName = getActivatedUI()?.internalName
     const [keyword, setKeyword] = useState('')
 
