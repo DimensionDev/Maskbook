@@ -1,1 +1,2 @@
-export * from './MnemonicConfirm'
+export * from './DesktopMnemonicConfirm'
+export * from './MnemonicReveal'

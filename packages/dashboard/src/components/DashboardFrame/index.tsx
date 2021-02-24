@@ -29,7 +29,7 @@ const Root = styled(Grid)(({ theme }) => ({
 const LeftContainer = styled(Grid)(({ theme }) => ({
     height: '100vh',
     [theme.breakpoints.up('lg')]: {
-        // TODO: what is this magic number?
+        // Just meet the design size
         minWidth: 232,
     },
 }))
