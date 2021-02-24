@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../messages'
 
-export function usePoolTokenPrices(poolId: string, address: string, blockNumbers: number[]) {
+export function usePoolTokenPrices(address: string, duration: number, size = 50) {
     return useAsyncRetry(async () => {
-        if (!poolId || !address || !blockNumbers.length) return
-        return PluginTraderRPC.fetchPoolTokenPrices(poolId, address, blockNumbers)
-    }, [poolId, address, blockNumbers[0]])
+        if (!address) return []
+        return PluginTraderRPC.fetchTokenPrices(address, duration, size)
+    }, [address, duration, size])
 }

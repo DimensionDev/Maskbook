@@ -44,7 +44,7 @@ export async function fetchPoolsByTokenAddress(address: string) {
     return pools
 }
 
-export async function fetchPoolTokenPrices(poolId: string, address: string, blockNumbers: number[]) {
+export async function fetchPoolTokenPrices(poolId: string, address: string, blockNumbers: string[]) {
     const queries = blockNumbers.map(
         (x) => `
         b${x}: tokenPrices (
@@ -57,7 +57,7 @@ export async function fetchPoolTokenPrices(poolId: string, address: string, bloc
         }
     `,
     )
-    return fetchFromBalancerPoolSubgraph<{
+    const response = await fetchFromBalancerPoolSubgraph<{
         [key: string]: {
             price: number
         }[]
@@ -66,4 +66,10 @@ export async function fetchPoolTokenPrices(poolId: string, address: string, bloc
             ${queries.join('\n')}
         }
     `)
+    return Object.keys(response)
+        .map((x) => ({
+            price: response[x][0]?.price ?? 0,
+            blockNumber: x.slice(1),
+        }))
+        .sort((a, z) => (Number.parseInt(a.blockNumber) > Number.parseInt(z.blockNumber) ? 1 : -1))
 }

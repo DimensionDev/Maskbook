@@ -71,6 +71,7 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[]) {
         }
     `)
     return Object.keys(response).map((x) => ({
+        timestamp: x.slice(1),
         blockNumber: response[x][0].number,
     }))
 }

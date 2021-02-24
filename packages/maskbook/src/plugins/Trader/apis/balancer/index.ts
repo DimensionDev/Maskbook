@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { memoize } from 'lodash-es'
+import { first, memoize } from 'lodash-es'
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { getChainId } from '../../../../extension/background-script/EthereumService'
@@ -8,6 +8,9 @@ import type { ChainId } from '../../../../web3/types'
 import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
 import { CONSTANTS } from '../../../../web3/constants'
 import type { Route } from '../../types'
+import { getLatestTimestamps } from '../../helpers/blocks'
+import { fetchBlockNumbersByTimestamps } from '../blocks'
+import { fetchPoolsByTokenAddress, fetchPoolTokenPrices } from '../LBP'
 
 //#region create cached SOR
 const createSOR_ = memoize(
@@ -115,4 +118,38 @@ export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALA
         swaps: [swaps, tradeAmount, spotPrice] as const,
         routes,
     }
+}
+
+export async function fetchTokenPrices(address: string, duration: number, size = 50) {
+    // create timestamps by given duration and size
+    const timestamps = getLatestTimestamps(duration, size)
+
+    // expand timestamps to block numbers
+    const blockNumbers = await fetchBlockNumbersByTimestamps(timestamps)
+    if (!blockNumbers.length) return []
+    const pools = await fetchPoolsByTokenAddress(address)
+
+    // use the first pool sorted by swap count (desc)
+    const pool = first(pools)
+    if (!pool) return []
+
+    // fetch the token prices in the pool
+    const prices = await fetchPoolTokenPrices(
+        pool.id,
+        address,
+        blockNumbers.map((x) => x.blockNumber),
+    )
+
+    console.log({
+        timestamps,
+        blockNumbers,
+        prices,
+    })
+
+    // compose the result as timestamp and price pairs
+    return prices.map((x, i) => ({
+        timestamp: timestamps[i],
+        blockNumber: x.blockNumber,
+        price: x.price,
+    }))
 }

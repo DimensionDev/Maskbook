@@ -15,5 +15,5 @@ export function getLatestTimestamps(duration: number, size = 50) {
         if (timestamp > 0) timestamps.push(timestamp)
         else break
     }
-    return timestamps
+    return timestamps.reverse()
 }
