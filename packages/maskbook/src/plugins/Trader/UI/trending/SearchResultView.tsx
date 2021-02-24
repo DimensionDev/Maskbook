@@ -211,7 +211,12 @@ export function SearchResultView(props: SearchResultViewProps) {
                 {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
                     <TickersTable tickers={tickers} dataProvider={dataProvider} />
                 ) : null}
-                {tabIndex === 3 && <LBPPanel token={createERC20Token(ChainId.Mainnet, '', 18, 'Mask Network', 'MASK')} onBuyClick={() => setTabIndex(swapTabIndex)} />}
+                {tabIndex === 4 && (
+                    <LBPPanel
+                        token={createERC20Token(ChainId.Mainnet, '', 18, 'Mask Network', 'MASK')}
+                        onBuyClick={() => setTabIndex(swapTabIndex)}
+                    />
+                )}
                 {tabIndex === swapTabIndex && canSwap ? (
                     <TradeView
                         TraderProps={{

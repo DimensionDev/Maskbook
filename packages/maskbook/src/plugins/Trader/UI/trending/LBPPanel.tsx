@@ -38,14 +38,14 @@ export function LBPPanel(props: LBPPanelProps) {
         <div className={classes.container}>
             <LBPPriceChart />
             <Typography className={classes.introduce}>
-                Solid blue line illustrates the historical price of MASK on the {token.symbol}'s LBP. Dashed line represents the
-                future price <strong>if no one buys MASK We do not advise </strong>
+                Solid blue line illustrates the historical price of MASK on the {token.symbol}'s LBP. Dashed line
+                represents the future price <strong>if no one buys MASK We do not advise </strong>
                 buying ${token.symbol} at the very beginning of the LBP offering
             </Typography>
             <Typography className={classes.introduce}>
                 <Link>What's LBP</Link>, <Link>Tutorial </Link>
-                    and
-                    <Link> {token.symbol} LBP Pool in Balancer.</Link>
+                and
+                <Link> {token.symbol} LBP Pool in Balancer.</Link>
             </Typography>
             <div className={classes.connect}>
                 <Button variant="contained" onClick={props.onBuyClick}>

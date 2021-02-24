@@ -203,7 +203,12 @@ export function PopperView(props: PopperViewProps) {
                 {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
                     <TickersTable tickers={tickers} dataProvider={dataProvider} />
                 ) : null}
-                {tabIndex === 4 && <LBPPanel token={createERC20Token(ChainId.Mainnet, '', 18, 'Mask Network', 'MASK')} onBuyClick={() => setTabIndex(swapTabIndex)} />}
+                {tabIndex === 4 && (
+                    <LBPPanel
+                        token={createERC20Token(ChainId.Mainnet, '', 18, 'Mask Network', 'MASK')}
+                        onBuyClick={() => setTabIndex(swapTabIndex)}
+                    />
+                )}
                 {tabIndex === swapTabIndex && canSwap ? (
                     <TradeView
                         classes={{ root: classes.tradeViewRoot }}
