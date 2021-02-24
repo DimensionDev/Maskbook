@@ -99,7 +99,7 @@ export const ITO_CONSTANTS = {
         [ChainId.Gorli]: '',
     },
     DEFAULT_QUALIFICATION_ADDRESS: {
-        [ChainId.Mainnet]: '0x919931df4c9e943612ef565b334791e26dc26b3f',
+        [ChainId.Mainnet]: '0x50af74fec996b6c84ea27d1af68867b0e1a105e4',
         [ChainId.Ropsten]: '0x0ac13391f146604a9d32521e536b97b2fe1c5f90',
         [ChainId.Rinkeby]: '0x88AA0AB3B7cDE263073e1cBa1D06473adeC1b38E',
         [ChainId.Kovan]: '',
