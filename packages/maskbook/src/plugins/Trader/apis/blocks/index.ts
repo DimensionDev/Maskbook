@@ -45,7 +45,7 @@ export async function fetchBlockNumberByTimestamp(timestamp: number) {
  * Fetches block numbers near the given timestamps.
  * @param timestamps
  */
-export async function fetchBlockNumbersByTimestamps(timestamps: string[]) {
+export async function fetchBlockNumbersByTimestamps(timestamps: number[]) {
     const queries = timestamps.map(
         (x) => `
         t${x}: blocks(

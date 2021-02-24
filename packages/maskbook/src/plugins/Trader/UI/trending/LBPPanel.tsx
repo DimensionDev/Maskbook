@@ -1,8 +1,8 @@
 import { LBPPriceChart } from './LBPPriceChart'
 import { Theme, createStyles, makeStyles, Link, Button, Typography } from '@material-ui/core'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { ERC20TokenDetailed } from '../../../../web3/types'
+import { useLatestBlockNumbers } from '../../trader/blocks/useLatestBlockNumber'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -33,6 +33,12 @@ export interface LBPPanelProps extends withClasses<never> {
 export function LBPPanel(props: LBPPanelProps) {
     const { token } = props
     const classes = useStylesExtends(useStyles(props), props)
+
+    const { value: blockNumbers } = useLatestBlockNumbers(10 * 24 * 60 * 60)
+
+    console.log({
+        blockNumbers,
+    })
 
     return (
         <div className={classes.container}>
