@@ -105,9 +105,9 @@ export function LBPPanel(props: LBPPanelProps) {
             {pools.length ? (
                 <>
                     <Typography className={classes.introduce}>
-                        Solid blue line illustrates the historical price of MASK on the {token.symbol}'s LBP. Dashed
-                        line represents the future price <strong>if no one buys MASK We do not advise </strong>
-                        buying ${token.symbol} at the very beginning of the LBP offering
+                        Solid blue line illustrates the historical price of {token.symbol ?? 'Token'} on the{' '}
+                        {token.symbol ?? 'Token'}'s LBP. The price could continue to go down if no one buys. Please make
+                        your investment decision wisely.
                     </Typography>
 
                     <Typography className={classes.introduce}>
