@@ -88,6 +88,7 @@ const useStyles = makeStyles((theme) =>
 export const DashboardWalletsContext = createContext<{
     stableTokens: ERC20TokenDetailed[]
     detailedTokens: AssetDetailed[]
+    detailedTokensError: Error | undefined
     detailedTokensLoading: boolean
     detailedTokensRetry: () => void
 }>(null!)
@@ -160,7 +161,7 @@ export default function DashboardWalletsRouter() {
 
     return (
         <DashboardWalletsContext.Provider
-            value={{ detailedTokens, stableTokens, detailedTokensLoading, detailedTokensRetry }}>
+            value={{ detailedTokens, stableTokens, detailedTokensLoading, detailedTokensError, detailedTokensRetry }}>
             <DashboardRouterContainer
                 empty={!selectedWallet}
                 title={t('my_wallets')}
