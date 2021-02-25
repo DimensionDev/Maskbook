@@ -77,8 +77,11 @@ export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<C
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     if (dataProvider === DataProvider.UNISWAP) return uniswapAPI.getAllCoins()
 
-    // reserve mask
-    if (dataProvider === DataProvider.COIN_GECKO) return coinGeckoAPI.getAllCoins()
+    if (dataProvider === DataProvider.COIN_GECKO) {
+        const coins = await coinGeckoAPI.getAllCoins()
+        // reserve mask
+        return coins.filter((x) => x.id !== 'nftx-hashmasks-index')
+    }
 
     const { data: coins } = await coinMarketCapAPI.getAllCoins()
     return (

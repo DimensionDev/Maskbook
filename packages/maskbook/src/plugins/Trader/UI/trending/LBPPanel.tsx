@@ -18,7 +18,6 @@ import { useConstant } from '../../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../../web3/constants'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { usePools } from '../../LBP/usePools'
-import { usePoolTokens } from '../../LBP/usePoolTokens'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -71,10 +70,8 @@ export function LBPPanel(props: LBPPanelProps) {
     const { value: prices = [], loading: pricesLoading, error: pricesError, retry: pricesRetry } = usePoolTokenPrices(
         token.address,
         duration,
-        150,
+        100,
     )
-
-    const { value: prcies_ = [] } = usePoolTokens(token.address, duration, 150)
 
     return (
         <div className={classes.root}>
