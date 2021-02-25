@@ -76,9 +76,13 @@ export interface WalletAssetsTableProps extends withClasses<KeysInferFromUseStyl
 export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const { t } = useI18N()
     const { wallet } = props
-    const { detailedTokens, detailedTokensLoading, detailedTokensRetry, stableTokens } = useContext(
-        DashboardWalletsContext,
-    )
+    const {
+        detailedTokens,
+        detailedTokensLoading,
+        detailedTokensError,
+        detailedTokensRetry,
+        stableTokens,
+    } = useContext(DashboardWalletsContext)
 
     const classes = useStylesExtends(useStyles(), props)
     const LABELS = [t('wallet_assets'), t('wallet_price'), t('wallet_balance'), t('wallet_value'), ''] as const
@@ -89,7 +93,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
 
     if (detailedTokensLoading) return null
 
-    if (!detailedTokens.length)
+    if (detailedTokensError)
         return (
             <Box
                 sx={{
@@ -110,6 +114,8 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                 </Button>
             </Box>
         )
+
+    if (!detailedTokens.length) return null
 
     const viewDetailed = (x: AssetDetailed) => (
         <TableRow className={classes.cell} key={x.token.address}>
