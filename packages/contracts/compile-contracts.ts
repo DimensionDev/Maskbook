@@ -5,7 +5,7 @@ import { TypeChain } from 'typechain/dist/TypeChain'
 import { run } from '../../scripts/utils'
 
 const ABIS_PATH = path.join(__dirname, 'abis')
-const GENERATED_PATH = path.join(__dirname, 'contracts')
+const GENERATED_PATH = path.join(__dirname, 'types')
 
 async function replaceFileAll(file: string, pairs: [string, string][]) {
     let content = await fs.readFile(file, 'utf-8')
@@ -45,7 +45,9 @@ async function main() {
     ])
 
     // format code
-    run(undefined, 'npx', 'prettier', GENERATED_PATH, '--write')
+    run(GENERATED_PATH, 'npx', 'prettier', '--write', '*')
+    run(ABIS_PATH, 'git', 'add', '--all')
+    run(GENERATED_PATH, 'git', 'add', '--all')
 }
 
 main()

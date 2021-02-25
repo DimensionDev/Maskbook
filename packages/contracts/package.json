@@ -2,7 +2,7 @@
   "name": "@dimensiondev/contracts",
   "private": true,
   "scripts": {
-    "compile": "ts-node compile-contracts.ts"
+    "start": "ts-node compile-contracts.ts"
   },
   "devDependencies": {
     "@typechain/web3-v1": "^2.2.0",

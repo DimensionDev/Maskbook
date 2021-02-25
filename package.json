@@ -20,7 +20,6 @@
     "lint:report": "eslint -c ./packages/.eslintrc.json packages/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml --cache",
     "lint:typecoverage": "type-coverage --strict -p packages/maskbook --cache --ignore-catch --ignore-files packages/maskbook/src/plugins/Wallet/contracts/** --ignore-files **/__tests__/** --ignore-files **\\__tests__\\** --detail --at-least 98",
     "locale-kit": "ts-node scripts/locale-kit.ts",
-    "compile-contracts": "ts-node scripts/compile-contracts.ts",
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
