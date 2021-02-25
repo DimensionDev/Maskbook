@@ -1,0 +1,11 @@
+{
+  "name": "@dimensiondev/contracts",
+  "private": true,
+  "scripts": {
+    "compile": "ts-node compile-contracts.ts"
+  },
+  "dependencies": {
+    "ts-generator": "^0.1.1",
+    "typechain": "^4.0.2"
+  }
+}
