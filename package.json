@@ -19,7 +19,7 @@
     "lint": "eslint -c ./packages/.eslintrc.json packages/ --ext .ts,.tsx --fix --cache",
     "lint:report": "eslint -c ./packages/.eslintrc.json packages/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml --cache",
     "lint:typecoverage": "type-coverage --strict -p packages/maskbook --cache --ignore-catch --ignore-files packages/maskbook/src/plugins/Wallet/contracts/** --ignore-files **/__tests__/** --ignore-files **\\__tests__\\** --detail --at-least 98",
-    "locale-kit": "ts-node scripts/locale-kit.ts",
+    "locale-kit": "locale-kit",
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
@@ -49,6 +49,7 @@
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
+    "@dimensiondev/locale-kit": "*",
     "@dimensiondev/maskbook-cli-dev-or-build": "*",
     "@magic-works/commonjs-import.meta": "^1.0.0",
     "@magic-works/i18n-codegen": "^0.0.5",
