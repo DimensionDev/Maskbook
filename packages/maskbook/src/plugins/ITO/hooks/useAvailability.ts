@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import type { MaskITO } from '../../../contracts/MaskITO'
+import type { MaskITO } from '@dimensiondev/contracts/types/MaskITO'
 
 export function useAvailability(id?: string, isMask?: boolean) {
     const from = useAccount()

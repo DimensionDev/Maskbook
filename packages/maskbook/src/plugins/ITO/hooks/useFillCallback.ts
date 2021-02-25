@@ -6,15 +6,15 @@ import { TransactionStateType, useTransactionState } from '../../../web3/hooks/u
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { EtherTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '../../../web3/types'
-import type { Tx } from '../../../contracts/types'
+import type { Tx } from '@dimensiondev/contracts/types/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONSTANTS, ITO_CONTRACT_BASE_TIMESTAMP, MASK_ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import Services from '../../../extension/service'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import type { ITO } from '../../../contracts/ITO'
-import type { MaskITO } from '../../../contracts/MaskITO'
+import type { ITO } from '@dimensiondev/contracts/types/ITO'
+import type { MaskITO } from '@dimensiondev/contracts/types/MaskITO'
 
 export interface PoolSettings {
     isMask: boolean

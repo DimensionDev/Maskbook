@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
-import type { Tx } from '../../../contracts/types'
+import type { Tx } from '@dimensiondev/contracts/types/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useCOTM_TokenContract } from '../contracts/useCOTM_TokenContract'

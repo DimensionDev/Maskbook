@@ -6,7 +6,7 @@ import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed, TransactionEventType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import type { Tx } from '../../../contracts/types'
+import type { Tx } from '@dimensiondev/contracts/types/types'
 import { addGasMargin } from '../../../web3/helpers'
 
 export interface RedPacketSettings {
@@ -118,7 +118,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                 })
                 resolve()
             })
-            promiEvent.on(TransactionEventType.ERROR, (error) => {
+            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
                 setCreateState({
                     type: TransactionStateType.FAILED,
                     error,

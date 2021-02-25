@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import type { Tx } from '../../../contracts/types'
+import type { Tx } from '@dimensiondev/contracts/types/types'
 import { addGasMargin } from '../../../web3/helpers'
 
 export function useRefundCallback(from: string, id?: string) {

@@ -4,9 +4,8 @@ import { tsGenerator } from 'ts-generator'
 import { TypeChain } from 'typechain/dist/TypeChain'
 import { run } from '../../scripts/utils'
 
-const PKG_PATH = path.join(__dirname, '..', 'maskbook')
-const ABIS_PATH = path.join(PKG_PATH, 'abis')
-const GENERATED_PATH = path.join(PKG_PATH, 'src', 'contracts')
+const ABIS_PATH = path.join(__dirname, 'abis')
+const GENERATED_PATH = path.join(__dirname, 'contracts')
 
 async function replaceFileAll(file: string, pairs: [string, string][]) {
     let content = await fs.readFile(file, 'utf-8')
