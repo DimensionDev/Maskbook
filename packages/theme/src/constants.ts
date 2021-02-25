@@ -1,4 +1,5 @@
-import { Theme, ThemeOptions, useTheme } from '@material-ui/core'
+import { experimentalStyled, PaletteMode, Theme, ThemeOptions, useTheme } from '@material-ui/core'
+import { kebabCase } from 'lodash-es'
 import { merge } from 'lodash-es'
 export const LightColor = {
     primary: '#1c68f3',
@@ -73,3 +74,49 @@ export function getMaskColor(theme: Theme) {
 export function useMaskColor() {
     return getMaskColor(useTheme())
 }
+
+export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
+    const ns = scheme === 'light' ? LightColor : DarkColor
+    if (node === document.body) {
+        const id = '#mask-style-var'
+        if (!document.getElementById(id)) {
+            const style = document.createElement('style')
+            style.id = id
+            document.head.appendChild(style)
+        }
+        applyMaskColorVars(document.getElementById(id)!, scheme)
+        return
+    } else if (node instanceof HTMLStyleElement) {
+        let rule = ':root, :host {\n'
+        for (const key in ns) {
+            rule += '    --mask-' + kebabCase(key) + ': ' + (ns as any)[key] + ';\n'
+        }
+        node.innerHTML = rule + '}'
+    } else {
+        for (const key in ns) {
+            node.style.setProperty('--mask-' + kebabCase(key), (ns as any)[key])
+        }
+    }
+}
+export const MaskColorVar: Record<keyof typeof LightColor, string /* & ((defaultValue?: string) => {}) */> = new Proxy(
+    { __proto__: null } as any,
+    {
+        get(target, key) {
+            if (target[key]) return target[key]
+            if (typeof key !== 'string') throw new TypeError()
+            const cssVar = kebabCase(key)
+            // ? It should always defined based on our API contract.
+            // ? So there is no need to be string & (string => string)
+            // ? Let's use the simpler way
+            target[key] = `var(--mask-${cssVar})`
+            // target[key] = (defaultValue?: string) => {
+            //     // it might be an object when used in styled components.
+            //     if (typeof defaultValue !== 'string') defaultValue = undefined
+            //     const x = `var(--mask-${cssVar}${defaultValue ? ', ' + defaultValue : ''})`
+            //     return x
+            // }
+            // target[key][Symbol.toPrimitive] = () => `var(--mask-${cssVar})`
+            return target[key]
+        },
+    },
+)
