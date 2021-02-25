@@ -6,3 +6,4 @@ packages:
   - 'packages/storybook-shared'
   - 'packages/theme'
   - 'packages/icons'
+  - 'packages/contracts'

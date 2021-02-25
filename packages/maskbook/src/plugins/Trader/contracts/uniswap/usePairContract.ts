@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
-import type { Pair } from '../../../../contracts/Pair'
-import PairABI from '../../../../../abis/Pair.json'
+import type { Pair } from '@dimensiondev/contracts/types/Pair'
+import PairABI from '@dimensiondev/contracts/abis/Pair.json'
 import { useContract, useContracts } from '../../../../web3/hooks/useContract'
 
 export function usePairContract(address: string) {

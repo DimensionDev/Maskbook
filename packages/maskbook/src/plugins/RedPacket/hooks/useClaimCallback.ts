@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import type { Tx } from '../../../contracts/types'
+import type { Tx } from '@dimensiondev/contracts/types/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { RedPacketRPC } from '../messages'
 

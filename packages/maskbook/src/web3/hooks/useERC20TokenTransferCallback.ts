@@ -73,7 +73,7 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
                 })
                 resolve()
             })
-            promiEvent.on(TransactionEventType.ERROR, (error) => {
+            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
                 setTransferState({
                     type: TransactionStateType.FAILED,
                     error,

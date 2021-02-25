@@ -5,7 +5,7 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
 import { addGasMargin } from '../../../web3/helpers'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import type { Tx } from '../../../contracts/types'
+import type { Tx } from '@dimensiondev/contracts/types/types'
 import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
 import { useAccount } from '../../../web3/hooks/useAccount'
 

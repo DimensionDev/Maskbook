@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 import { useCallback, useMemo } from 'react'
 import { once } from 'lodash-es'
 import type { TransactionReceipt } from 'web3-eth'
-import type { Tx } from '../../contracts/types'
+import type { Tx } from '@dimensiondev/contracts/types/types'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { addGasMargin } from '../helpers'
 import { TransactionEventType } from '../types'
@@ -132,7 +132,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                     revalidate()
                     resolve()
                 })
-                promiEvent.on(TransactionEventType.ERROR, (error) => {
+                promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
                     setTransactionState({
                         type: TransactionStateType.FAILED,
                         error,

@@ -4,11 +4,11 @@ import type { TransactionReceipt } from 'web3-core'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionEventType } from '../../../web3/types'
-import type { Tx } from '../../../contracts/types'
+import type { Tx } from '@dimensiondev/contracts/types/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import type { MaskITO } from '../../../contracts/MaskITO'
+import type { MaskITO } from '@dimensiondev/contracts/types/MaskITO'
 
 export function useClaimCallback() {
     const account = useAccount()
