@@ -25,6 +25,6 @@ Pair.d.ts 30ms
 RouterV2.d.ts 24ms
 Splitter.d.ts 5ms
 types.d.ts 14ms
-$ git add --all # cwd: packages/contracts/abis
-$ git add --all # cwd: packages/contracts/types
+$ git add . # cwd: packages/contracts/abis
+$ git add . # cwd: packages/contracts/types
 ```
