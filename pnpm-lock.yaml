@@ -17,6 +17,7 @@ importers:
     devDependencies:
       '@commitlint/cli': 11.0.0
       '@commitlint/config-conventional': 11.0.0
+      '@dimensiondev/locale-kit': link:packages/locale-kit
       '@dimensiondev/maskbook-cli-dev-or-build': link:packages/cli-dev-build
       '@magic-works/commonjs-import.meta': 1.0.0_typescript@4.1.5
       '@magic-works/i18n-codegen': 0.0.5_typescript@4.1.5
@@ -42,6 +43,7 @@ importers:
     specifiers:
       '@commitlint/cli': ^11.0.0
       '@commitlint/config-conventional': ^11.0.0
+      '@dimensiondev/locale-kit': '*'
       '@dimensiondev/maskbook-cli-dev-or-build': '*'
       '@emotion/cache': ^11
       '@emotion/react': ^11.1.2
@@ -157,6 +159,11 @@ importers:
       snowpack: 3.0.11
     specifiers:
       snowpack: ^3.0.11
+  packages/locale-kit:
+    devDependencies:
+      lodash: 4.17.21
+    specifiers:
+      lodash: ^4.17.21
   packages/maskbook:
     dependencies:
       '@balancer-labs/sor': 1.0.0
@@ -22932,7 +22939,7 @@ packages:
       serialize-javascript: 4.0.0
       source-map: 0.6.1
       terser: 4.8.0
-      webpack: 4.46.0_webpack-cli@4.5.0
+      webpack: 4.46.0
       webpack-sources: 1.4.3
       worker-farm: 1.7.0
     dev: true
