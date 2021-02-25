@@ -52,8 +52,10 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
             from: account,
             to: recipient,
             value: amount,
-            data: memo ? toHex(memo) : undefined,
         }
+
+        // add memo as data
+        if (memo) config.data = toHex(memo)
 
         // step 1: estimate gas
         const estimatedGas = await Services.Ethereum.estimateGas(config, chainId)
