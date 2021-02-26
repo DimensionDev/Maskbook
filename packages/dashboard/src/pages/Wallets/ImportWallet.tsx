@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useMemo, useState } from 'react'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { Button, createStyles, Tab, experimentalStyled as styled, makeStyles, FilledInput } from '@material-ui/core'
 import { ButtonGroupTabList } from '@dimensiondev/maskbook-theme'
@@ -72,28 +72,37 @@ export const ImportWallet = memo(() => {
     const tabClasses = useTabPanelStyles()
 
     const t = useDashboardI18N()
-    const walletTabs = [t.wallets_wallet_mnemonic(), t.wallets_wallet_json_file(), t.wallets_wallet_private_key()]
+    const walletTabs = useMemo(
+        () => ({
+            mnemonic: t.wallets_wallet_mnemonic(),
+            jsonFile: t.wallets_wallet_json_file(),
+            privateKey: t.wallets_wallet_private_key(),
+        }),
+        [t],
+    )
 
-    const [activeTab, setActiveTab] = useState(walletTabs[0])
+    const walletTabsKeys = useMemo(() => Object.keys(walletTabs), [walletTabs])
+
+    const [activeTab, setActiveTab] = useState(walletTabsKeys[0])
+
     return (
         <>
             <Container>
-                {/* // TODO: this will cause tab lost when the language switches */}
-                <TabContext value={walletTabs.includes(activeTab) ? activeTab : walletTabs[0]}>
+                <TabContext value={walletTabsKeys.includes(activeTab) ? activeTab : walletTabsKeys[0]}>
                     <ButtonGroupTabContainer>
                         <ButtonGroupTabList
                             onChange={(e, v) => setActiveTab(v)}
                             aria-label={t.wallets_import_wallet_tabs()}
                             fullWidth>
-                            {walletTabs.map((x) => (
-                                <Tab key={x} value={x} label={x} />
+                            {Object.entries(walletTabs).map(([key, value]) => (
+                                <Tab key={key} value={key} label={value} />
                             ))}
                         </ButtonGroupTabList>
                     </ButtonGroupTabContainer>
-                    <TabPanel value="Mnemonic" key="Mnemonic" classes={tabClasses}>
+                    <TabPanel value="mnemonic" key="Mnemonic" classes={tabClasses}>
                         <DesktopMnemonicConfirm onChange={() => {}} />
                     </TabPanel>
-                    <TabPanel value="Private Key" key="Private Key" classes={tabClasses}>
+                    <TabPanel value="privateKey" key="privateKey" classes={tabClasses}>
                         <PrivateKeyInput />
                         <PasswordInput placeholder={t.wallets_import_wallet_password_placeholder()} />
                     </TabPanel>
