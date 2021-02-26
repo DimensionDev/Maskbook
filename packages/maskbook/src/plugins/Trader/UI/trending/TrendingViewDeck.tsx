@@ -276,9 +276,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     ) : null}
                                     <span>
                                         {formatCurrency(
-                                            dataProvider === DataProvider.COIN_MARKET_CAP
+                                            (dataProvider === DataProvider.COIN_MARKET_CAP
                                                 ? last(stats)?.[1] ?? market.current_price
-                                                : market.current_price,
+                                                : market.current_price) ?? 0,
                                             currency.symbol,
                                         )}
                                     </span>
