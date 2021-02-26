@@ -44,7 +44,6 @@ export const Flags = {
     COTM_composition_dialog_enabled: false,
     mask_ito_enabled: betaOrInsiderOnly,
     airdrop_enabled: webOnly,
-    airdrop_two_factor_verification_enabled: false,
     airdrop_composition_dialog_enabled: false,
     metamask_support_enabled: webOnly,
     /* construct LBP for all ERC20 tokens */

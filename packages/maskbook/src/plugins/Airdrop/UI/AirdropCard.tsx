@@ -19,15 +19,16 @@ const useStyles = makeStyles(() =>
 export interface AirdropCardProps {
     token?: ERC20TokenDetailed
     onUpdateAmount: (amount: string) => void
+    onUpdateBalance: () => void
 }
 
 export function AirdropCard(props: AirdropCardProps) {
-    const { token, onUpdateAmount } = props
+    const { token, onUpdateAmount, onUpdateBalance } = props
     const classes = useStyles()
 
     return (
         <Box className={classes.root}>
-            <AirdropClaimCard token={token} onUpdateAmount={onUpdateAmount} />
+            <AirdropClaimCard token={token} onUpdateAmount={onUpdateAmount} onUpdateBalance={onUpdateBalance} />
             <Divider className={classes.divider} />
             <AirdropCheckCard token={token} />
         </Box>

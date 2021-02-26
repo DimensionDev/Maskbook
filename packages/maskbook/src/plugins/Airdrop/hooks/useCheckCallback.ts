@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { Flags } from '../../../utils/flags'
 import { formatEthereumAddress } from '../../Wallet/formatter'
 import type { AirdropPacket } from '../apis'
 import { useAirdropContract } from '../contracts/useAirdropContract'
@@ -18,13 +17,15 @@ export enum CheckStateType {
 
 export type CheckState =
     | {
-          type: CheckStateType.YEP
+          type: CheckStateType.YEP | CheckStateType.NOPE
           packet: AirdropPacket
+          start: number
+          end: number
           ratio: BigNumber
           claimable: string
       }
     | {
-          type: CheckStateType.UNKNOWN | CheckStateType.CLAIMED | CheckStateType.PENDING | CheckStateType.NOPE
+          type: CheckStateType.UNKNOWN | CheckStateType.CLAIMED | CheckStateType.PENDING
       }
     | {
           type: CheckStateType.FAILED
@@ -39,7 +40,7 @@ export function useCheckCallback() {
     })
 
     const checkCallback = useCallback(
-        async (checkAddress?: string) => {
+        async (checkAddress?: string, checkByContract = true) => {
             if (!airdropContract || !checkAddress) return
 
             // validate address
@@ -68,16 +69,19 @@ export function useCheckCallback() {
                 const packet = await PluginAirdropRPC.getMaskAirdropPacket(address_)
                 if (!packet) {
                     setCheckState({
-                        type: CheckStateType.NOPE,
+                        type: CheckStateType.FAILED,
+                        error: new Error('No reward to claim.'),
                     })
                     return
                 }
 
                 // if only api verification is necessary
-                if (!Flags.airdrop_two_factor_verification_enabled) {
+                if (!checkByContract) {
                     setCheckState({
                         type: CheckStateType.YEP,
                         packet,
+                        start: 0,
+                        end: new Date(2999, 1, 1).getTime(),
                         claimable: packet.amount,
                         ratio: new BigNumber(1),
                     })
@@ -86,21 +90,27 @@ export function useCheckCallback() {
 
                 // revalidate by contract
                 const { index, address, amount, proof } = packet
-                const { available, claimable } = await airdropContract.methods
+                const { available, claimable, start, end } = await airdropContract.methods
                     .check(index, formatEthereumAddress(address), amount, proof)
                     .call()
 
-                if (available)
-                    setCheckState({
-                        type: CheckStateType.YEP,
-                        packet,
-                        claimable,
-                        ratio: new BigNumber(claimable).div(amount),
-                    })
-                else
-                    setCheckState({
-                        type: CheckStateType.NOPE,
-                    })
+                const now = Date.now()
+                const start_ = Number.parseInt(start) * 1000
+                const end_ = Number.parseInt(end) * 1000
+                const isStart = now >= start_
+                const isEnd = now >= end_
+
+                setCheckState({
+                    type:
+                        available && new BigNumber(claimable).isGreaterThan(0) && isStart && !isEnd
+                            ? CheckStateType.YEP
+                            : CheckStateType.NOPE,
+                    packet,
+                    start: start_,
+                    end: end_,
+                    claimable,
+                    ratio: new BigNumber(claimable).div(amount),
+                })
             } catch (error) {
                 if (error.message.includes('Already Claimed')) {
                     setCheckState({

@@ -9,11 +9,14 @@ import { useChainId } from './useChainState'
 import { addGasMargin } from '../helpers'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { EthereumAddress } from 'wallet.ts'
+import { useConstant } from './useConstant'
+import { CONSTANTS } from '../constants'
 
 export function useEtherTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const account = useAccount()
     const chainId = useChainId()
     const [transferState, setTransferState] = useTransactionState()
+    const PROVIDER_ADDRESS_LIST = useConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST')
 
     const transferCallback = useCallback(async () => {
         if (!account || !recipient || !amount || new BigNumber(amount).isZero()) {
@@ -52,16 +55,21 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
             from: account,
             to: recipient,
             value: amount,
+
+            // FIXME:
+            // the ether tx will be canceled by quicknode's holy-water provider.
+            // @ts-ignore
+            __provider_url__: PROVIDER_ADDRESS_LIST[1],
         }
 
-        // add memo as data
+        // encode memo as data
         if (memo) config.data = toHex(memo)
 
         // step 1: estimate gas
         const estimatedGas = await Services.Ethereum.estimateGas(config, chainId)
         const iterator = ServicesWithProgress.sendTransaction(account, {
-            // the esitmated gas limit is too low with arbitrary message to be encoded as data
-            gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+            // the esitmated gas limit is too low with arbitrary message to be encoded as data (increase 20% gas limit)
+            gas: addGasMargin(new BigNumber(estimatedGas), 2000).toFixed(),
             ...config,
         })
 
@@ -91,7 +99,7 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
                 error,
             })
         }
-    }, [account, amount, chainId, recipient, memo])
+    }, [account, amount, chainId, recipient, memo, PROVIDER_ADDRESS_LIST])
 
     const resetCallback = useCallback(() => {
         setTransferState({
