@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Button, experimentalStyled as styled, Typography } from '@material-ui/core'
 import { SuccessIcon } from '@dimensiondev/icons'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
-
+import { useDashboardI18N } from '../../locales'
 export interface CreateSuccessfully {
     onUnlock(): void
 }
@@ -10,14 +10,15 @@ export interface CreateSuccessfully {
 export const CreateSuccessfully = memo((props: CreateSuccessfully) => {
     const { onUnlock } = props
 
+    const t = useDashboardI18N()
     return (
         <Container>
             <Icon>
                 <SuccessIcon fontSize="inherit" />
             </Icon>
-            <SuccessTitle>Success</SuccessTitle>
-            <SuccessTips>You have created your wallet successfully</SuccessTips>
-            <UnlockButton onClick={onUnlock}>Unlock Wallet</UnlockButton>
+            <SuccessTitle>{t.wallets_create_successfully_title()}</SuccessTitle>
+            <SuccessTips>{t.wallets_create_successfully_tips()}</SuccessTips>
+            <UnlockButton onClick={onUnlock}>{t.wallets_create_successfully_unlock()}</UnlockButton>
         </Container>
     )
 })

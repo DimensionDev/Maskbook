@@ -10,6 +10,7 @@ import {
     FilledInput,
 } from '@material-ui/core'
 import { memo, useState } from 'react'
+import { useDashboardI18N } from '../../locales'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -39,6 +40,8 @@ export const CreateWalletForm = memo((props: CreateWalletFormProps) => {
 
     const [selected, setSelected] = useState()
 
+    const t = useDashboardI18N()
+
     return (
         <Container>
             <FormContainer>
@@ -56,7 +59,10 @@ export const CreateWalletForm = memo((props: CreateWalletFormProps) => {
                 </Select>
             </FormContainer>
 
-            <FilledInput classes={{ root: classes.root, input: classes.input }} placeholder="Wallet Name" />
+            <FilledInput
+                classes={{ root: classes.root, input: classes.input }}
+                placeholder={t.wallets_create_wallet_input_placeholder()}
+            />
         </Container>
     )
 })

@@ -5,6 +5,7 @@ import { TabContext, TabPanel } from '@material-ui/lab'
 import { RefreshIcon } from '@dimensiondev/icons'
 import { MnemonicReveal } from '../../components/Mnemonic'
 import { MaskAlert } from '../../components/MaskAlert'
+import { useDashboardI18N } from '../../locales'
 
 const Container = styled('div')`
     display: flex;
@@ -77,10 +78,10 @@ const useTabPanelStyles = makeStyles(() =>
     }),
 )
 
-const walletTabs = ['Mnemonic', 'JSON File', 'Private Key']
-
 export function CreateWallet() {
     const tabClasses = useTabPanelStyles()
+    const t = useDashboardI18N()
+    const walletTabs = [t.wallets_wallet_mnemonic(), t.wallets_wallet_json_file(), t.wallets_wallet_private_key()]
     const [activeTab, setActiveTab] = useState(walletTabs[0])
     return (
         <>
@@ -89,7 +90,7 @@ export function CreateWallet() {
                     <ButtonGroupTabContainer>
                         <ButtonGroupTabList
                             onChange={(e, v) => setActiveTab(v)}
-                            aria-label="Create Wallet Tabs"
+                            aria-label={t.wallets_create_wallet_tabs()}
                             fullWidth>
                             {walletTabs.map((x) => (
                                 <Tab key={x} value={x} label={x} />
@@ -99,7 +100,7 @@ export function CreateWallet() {
                     <TabPanel key="Mnemonic" value="Mnemonic" classes={tabClasses}>
                         <Refresh>
                             <RefreshIcon />
-                            <span>Refresh</span>
+                            <span>{t.wallets_create_wallet_refresh()}</span>
                         </Refresh>
                         <MnemonicGeneratorContainer>
                             <MnemonicReveal words={[...Array(12).keys()].map((i) => String(i))} />
@@ -111,8 +112,8 @@ export function CreateWallet() {
                 </TabContext>
 
                 <ControlContainer>
-                    <Button color="secondary">Remember that later</Button>
-                    <Button color="primary">Verification</Button>
+                    <Button color="secondary">{t.wallets_create_wallet_remember_later()}</Button>
+                    <Button color="primary">{t.wallets_create_wallet_verification()}</Button>
                 </ControlContainer>
                 <AlertContainer>
                     <MaskAlert />

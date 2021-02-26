@@ -4,6 +4,7 @@ import { Button, createStyles, Tab, experimentalStyled as styled, makeStyles, Fi
 import { ButtonGroupTabList } from '@dimensiondev/maskbook-theme'
 import { DesktopMnemonicConfirm } from '../../components/Mnemonic'
 import { MaskAlert } from '../../components/MaskAlert'
+import { useDashboardI18N } from '../../locales'
 
 const Container = styled('div')`
     display: flex;
@@ -62,12 +63,13 @@ const useTabPanelStyles = makeStyles((theme) =>
     }),
 )
 
-const walletTabs = ['Mnemonic', 'JSON File', 'Private Key']
-
 export const ImportWallet = memo(() => {
     const tabClasses = useTabPanelStyles()
-    const [activeTab, setActiveTab] = useState(walletTabs[0])
 
+    const t = useDashboardI18N()
+    const walletTabs = [t.wallets_wallet_mnemonic(), t.wallets_wallet_json_file(), t.wallets_wallet_private_key()]
+
+    const [activeTab, setActiveTab] = useState(walletTabs[0])
     return (
         <>
             <Container>
@@ -75,7 +77,7 @@ export const ImportWallet = memo(() => {
                     <ButtonGroupTabContainer>
                         <ButtonGroupTabList
                             onChange={(e, v) => setActiveTab(v)}
-                            aria-label="Create Wallet Tabs"
+                            aria-label={t.wallets_import_wallet_tabs()}
                             fullWidth>
                             {walletTabs.map((x) => (
                                 <Tab key={x} value={x} label={x} />
@@ -87,12 +89,12 @@ export const ImportWallet = memo(() => {
                     </TabPanel>
                     <TabPanel value="Private Key" key="Private Key" classes={tabClasses}>
                         <PrivateKeyInput />
-                        <PasswordInput placeholder="Wallet Password" />
+                        <PasswordInput placeholder={t.wallets_import_wallet_password_placeholder()} />
                     </TabPanel>
                 </TabContext>
                 <ControlContainer>
-                    <Button color="secondary">Cancel</Button>
-                    <Button color="primary">Import</Button>
+                    <Button color="secondary">{t.wallets_import_wallet_cancel()}</Button>
+                    <Button color="primary">{t.wallets_import_wallet_import()}</Button>
                 </ControlContainer>
                 <AlertContainer>
                     <MaskAlert />
