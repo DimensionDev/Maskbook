@@ -5,7 +5,9 @@ export const ConnectActionList = styled('ul')(({ theme }) => ({
     flexDirection: 'column',
     listStyle: 'none',
     padding: 0,
+    // TODO: mobile
     width: 520,
+    // TODO: deep style
     [`& .${listItemClasses.root}`]: {
         marginBottom: theme.spacing(1.5),
     },

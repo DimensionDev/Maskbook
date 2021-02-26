@@ -24,16 +24,14 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-// TODO: actions,  and icon may be an img url
+// TODO: actions, and icon may be an img url
 export interface CreateWalletFormProps {
-    options: Array<{ label: string; icon: React.ReactNode; value: number }>
+    options: { label: string; icon: React.ReactNode; value: number }[]
 }
 
 export const CreateWalletForm = memo((props: CreateWalletFormProps) => {
     const { options } = props
-
     const classes = useStyles()
-
     const [selected, setSelected] = useState()
 
     return (

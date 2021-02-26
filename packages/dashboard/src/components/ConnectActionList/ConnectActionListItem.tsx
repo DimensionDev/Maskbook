@@ -22,12 +22,10 @@ const Icon = styled(ListItemIcon)`
     font-size: 48px;
 `
 
-const Container = styled(ListItem)(
-    ({ theme }) => `
+const Container = styled(ListItem)`
     border: 1px solid ${MaskColorVar.border};
     border-radius: 8px;
-`,
-)
+`
 
 const Dot = styled('div')(
     ({ theme }) => `

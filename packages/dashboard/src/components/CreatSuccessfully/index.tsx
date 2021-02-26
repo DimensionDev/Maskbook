@@ -32,21 +32,17 @@ const Container = styled('div')`
     align-items: center;
 `
 
-const SuccessTitle = styled(Typography)(
-    ({ theme }) => `
-    font-size: ${theme.typography.h5.fontSize};
-    color: ${theme.palette.success.main};
-    font-weight: ${theme.typography.fontWeightMedium};
-    margin: ${theme.spacing(2)} 0px;
-`,
-)
+const SuccessTitle = styled(Typography)(({ theme }) => ({
+    fontSize: theme.typography.h5.fontSize,
+    color: theme.palette.success.main,
+    fontWeight: theme.typography.fontWeightMedium,
+    margin: theme.spacing(2, 0),
+}))
 
-const SuccessTips = styled(Typography)(
-    ({ theme }) => `
-    font-size:${theme.typography.fontSize};
-    color: ${MaskColorVar.normalText};
-`,
-)
+const SuccessTips = styled(Typography)(({ theme }) => ({
+    fontSize: theme.typography.fontSize,
+    color: MaskColorVar.normalText,
+}))
 
 const UnlockButton = styled(Button)(
     ({ theme }) => `
