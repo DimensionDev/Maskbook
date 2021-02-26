@@ -253,6 +253,7 @@ importers:
       react-use: 15.3.8
       react-virtualized-auto-sizer: 1.0.4
       react-window: 1.8.6
+      socket.io-client: 3.1.2
       stream-browserify: 3.0.0
       stream-http: 2.8.3
       string.prototype.matchall: 4.0.4
@@ -291,6 +292,7 @@ importers:
       '@types/jest-environment-puppeteer': 4.4.1
       '@types/puppeteer': 5.4.3
       '@types/rimraf': 3.0.0
+      '@types/socket.io-client': 1.4.35
       '@types/webpack-dev-server': 3.11.1
       '@typescript-eslint/eslint-plugin': 4.16.1_@typescript-eslint+parser@4.16.1
       '@typescript-eslint/parser': 4.16.1
@@ -386,6 +388,7 @@ importers:
       '@types/react-virtualized-auto-sizer': ^1.0.0
       '@types/react-window': ^1.8.2
       '@types/rimraf': ^3.0.0
+      '@types/socket.io-client': ^1.4.35
       '@types/tiny-secp256k1': ^1.0.0
       '@types/use-subscription': ^1.0.0
       '@types/uuid': ^8.3.0
@@ -463,6 +466,7 @@ importers:
       react-virtualized-auto-sizer: ^1.0.2
       react-window: ^1.8.6
       rimraf: ^3.0.2
+      socket.io-client: ^3.1.2
       source-map-loader: ^2.0.0
       storybook-addon-designs: ^5.4.2
       storybook-addon-i18n: ^5.1.13
@@ -6287,6 +6291,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-oeUWVaAwI+xINDUx+3F2vJkl/vVB03VChFF/Gl3iQCdbcakjuoJyMOba+3BXRtnBhxZ7uBYqQBi9EpLnvSoztA==
+  /@types/component-emitter/1.2.10:
+    dev: false
+    resolution:
+      integrity: sha512-bsjleuRKWmGqajMerkzox19aGbscQX5rmmvvXl3wlIp5gMG1HgkiwPxsN5p070fBDKTNSPgojVbuY1+HWMbFhg==
   /@types/connect-history-api-fallback/1.3.3:
     dependencies:
       '@types/express-serve-static-core': 4.17.18
@@ -6948,6 +6956,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-riJuu2fR3qhBfpWJtqQtNwYJFvquiXfqdprXvZjSNmscnZbIVyHoM49ZVEM1bciKM1mWOCdjXymOYHyGh2WLtg==
+  /@types/socket.io-client/1.4.35:
+    dev: true
+    resolution:
+      integrity: sha512-MI8YmxFS+jMkIziycT5ickBWK1sZwDwy16mgH/j99Mcom6zRG/NimNGQ3vJV0uX5G6g/hEw0FG3w3b3sT5OUGw==
   /@types/source-list-map/0.1.2:
     dev: true
     resolution:
@@ -8524,7 +8536,7 @@ packages:
       integrity: sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
   /axios/0.21.1:
     dependencies:
-      follow-redirects: 1.13.3
+      follow-redirects: 1.13.2
     dev: false
     resolution:
       integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
@@ -9005,6 +9017,10 @@ packages:
       node: '>= 0.10'
     resolution:
       integrity: sha1-Szzpa/JxNPeaG0FKUcFONMO9mIA=
+  /backo2/1.0.2:
+    dev: false
+    resolution:
+      integrity: sha1-MasayLEpNjRj41s+u2n038+6eUc=
   /bail/1.0.5:
     dev: true
     resolution:
@@ -9034,9 +9050,18 @@ packages:
       integrity: sha512-5T6P4xPgpp0YDFvSWwEZ4NoE3aM4QBQXDzmVbraCkFj8zHM+mba8SyqB5DbZWyR7mYHo6Y7BdQo3MoA4m0TeQg==
   /base64-arraybuffer-es6/0.7.0:
     engines:
-      node: '>=6.0.0'
+      node: '>=0.10.0'
+    peerDependencies:
+      core-js-bundle: ^3.6.5
     resolution:
       integrity: sha512-ESyU/U1CFZDJUdr+neHRhNozeCv72Y7Vm0m1DCbjX3KBjT6eYocvAJlSk6+8+HkVwXlT1FNxhGW6q3UKAlCvvw==
+      tarball: base64-arraybuffer-es6/-/base64-arraybuffer-es6-0.7.0.tgz
+  /base64-arraybuffer/0.1.4:
+    dev: false
+    engines:
+      node: '>= 0.6.0'
+    resolution:
+      integrity: sha1-mBjHngWbE1X5fgQooBfIOOkLqBI=
   /base64-js/1.5.1:
     resolution:
       integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
@@ -10226,7 +10251,6 @@ packages:
     resolution:
       integrity: sha512-zHig5N+tPWARooBnb0Zx1MFcdfpyJrfTJ3Y5L+IFvUm8rM74hHz66z0gw0x4tijh5CorKkKUCnW82R2vmpeCRA==
   /component-emitter/1.3.0:
-    dev: true
     resolution:
       integrity: sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg==
   /compress-commons/4.0.2:
@@ -11113,7 +11137,6 @@ packages:
   /debug/4.3.1:
     dependencies:
       ms: 2.1.2
-    dev: true
     engines:
       node: '>=6.0'
     peerDependencies:
@@ -11853,6 +11876,29 @@ packages:
     dev: true
     resolution:
       integrity: sha512-mADztvcC+vCk4XEZaCz6xIPO2NHQuprv5CAEjuVAu6aZwqAj7nVNlMyl1goPFYqCCpS2OJV9jwpumJLkotZrNw==
+  /engine.io-client/4.1.2:
+    dependencies:
+      base64-arraybuffer: 0.1.4
+      component-emitter: 1.3.0
+      debug: 4.3.1
+      engine.io-parser: 4.0.2
+      has-cors: 1.1.0
+      parseqs: 0.0.6
+      parseuri: 0.0.6
+      ws: 7.4.3
+      xmlhttprequest-ssl: 1.5.5
+      yeast: 0.1.2
+    dev: false
+    resolution:
+      integrity: sha512-1mwvwKYMa0AaCy+sPgvJ/SnKyO5MJZ1HEeXfA3Rm/KHkHGiYD5bQVq8QzvIrkI01FuVtOdZC5lWdRw1BGXB2NQ==
+  /engine.io-parser/4.0.2:
+    dependencies:
+      base64-arraybuffer: 0.1.4
+    dev: false
+    engines:
+      node: '>=8.0.0'
+    resolution:
+      integrity: sha512-sHfEQv6nmtJrq6TKuIz5kyEKH/qSdK56H/A+7DnAuUPWosnIZAS2NHNcPLmyjtY3cGS/MqJdZbUjW97JU72iYg==
   /enhanced-resolve/4.5.0:
     dependencies:
       graceful-fs: 4.2.6
@@ -13328,7 +13374,11 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-/LFZOIo82WDsyyv7h7oc0MJF9ACOvDRdx9rWPZ2pgMfNWu/z8hQDBtOchuB/0BVLmuFOZjV02YwUVzNsWx/EzA==
+<<<<<<< HEAD
   /follow-redirects/1.13.3:
+=======
+  /follow-redirects/1.13.2:
+>>>>>>> NEW: Implemented voicechat plugin
     engines:
       node: '>=4.0'
     peerDependencies:
@@ -13337,7 +13387,7 @@ packages:
       debug:
         optional: true
     resolution:
-      integrity: sha512-DUgl6+HDzB0iEptNQEXLx/KhTmDb8tZUHSeLqpnjpknR70H0nC2t9N73BK6fN4hOvJ84pKlIQVQ4k5FFlBedKA==
+      integrity: sha512-6mPTgLxYm3r6Bkkg0vNM0HTjfGrOEtsfbhagQvbxDEsEkpNhw582upBaoRZylzen6krEmxXJgt9Ju6HiI4O7BA==
   /for-each/0.3.3:
     dependencies:
       is-callable: 1.2.3
@@ -14217,6 +14267,10 @@ packages:
   /has-bigints/1.0.1:
     resolution:
       integrity: sha512-LSBS2LjbNBTf6287JEbEzvJgftkF5qFkmCo9hDRpAzKhUOlJ+hx8dd4USs00SgsUNwc4617J9ki5YtEClM2ffA==
+  /has-cors/1.1.0:
+    dev: false
+    resolution:
+      integrity: sha1-XkdHk/fqmEPRu5nCPu9J/xJv/zk=
   /has-flag/3.0.0:
     engines:
       node: '>=4'
@@ -14657,7 +14711,11 @@ packages:
   /http-proxy/1.18.1_debug@4.3.1:
     dependencies:
       eventemitter3: 4.0.7
+<<<<<<< HEAD
       follow-redirects: 1.13.3
+=======
+      follow-redirects: 1.13.2
+>>>>>>> NEW: Implemented voicechat plugin
       requires-port: 1.0.0
     dev: true
     engines:
@@ -17892,7 +17950,6 @@ packages:
     resolution:
       integrity: sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
   /ms/2.1.2:
-    dev: true
     resolution:
       integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
   /ms/2.1.3:
@@ -19002,6 +19059,14 @@ packages:
     dev: true
     resolution:
       integrity: sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==
+  /parseqs/0.0.6:
+    dev: false
+    resolution:
+      integrity: sha512-jeAGzMDbfSHHA091hr0r31eYfTig+29g3GKKE/PPbEQ65X0lmMwlEoqmhzu0iztID5uJpZsFlUPDP8ThPL7M8w==
+  /parseuri/0.0.6:
+    dev: false
+    resolution:
+      integrity: sha512-AUjen8sAkGgao7UyCX6Ahv0gIK2fABKmYjvP4xmy5JaKvcbTRueIqIPHLAfq30xJddqSE033IOMUSOMCcK3Sow==
   /parseurl/1.3.3:
     engines:
       node: '>= 0.8'
@@ -22147,6 +22212,31 @@ packages:
       fsevents: 2.3.2
     resolution:
       integrity: sha512-USTcpfJ68rbuFvUygw+3n9qS1CC/tGsr/JNVc6FNk0ZRfGBE4OmB+Mmk5nWtdxi546GeCr/GvveJenYLen/WpA==
+      tarball: snowpack/-/snowpack-3.0.13.tgz
+  /socket.io-client/3.1.2:
+    dependencies:
+      '@types/component-emitter': 1.2.10
+      backo2: 1.0.2
+      component-emitter: 1.3.0
+      debug: 4.3.1
+      engine.io-client: 4.1.2
+      parseuri: 0.0.6
+      socket.io-parser: 4.0.4
+    dev: false
+    engines:
+      node: '>=10.0.0'
+    resolution:
+      integrity: sha512-fXhF8plHrd7U14A7K0JPOmZzpmGkLpIS6623DzrBZqYzI/yvlP4fA3LnxwthEVgiHmn2uJ4KjdnQD8A03PuBWQ==
+  /socket.io-parser/4.0.4:
+    dependencies:
+      '@types/component-emitter': 1.2.10
+      component-emitter: 1.3.0
+      debug: 4.3.1
+    dev: false
+    engines:
+      node: '>=10.0.0'
+    resolution:
+      integrity: sha512-t+b0SS+IxG7Rxzda2EVvyBZbvFPBCjJoyHuE0P//7OAsN23GItzDRdWa6ALxZI/8R5ygK7jAR6t028/z+7295g==
   /sockjs-client/1.4.0:
     dependencies:
       debug: 3.2.7
@@ -25749,6 +25839,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
+  /xmlhttprequest-ssl/1.5.5:
+    dev: false
+    engines:
+      node: '>=0.4.0'
+    resolution:
+      integrity: sha1-wodrBhaKrcQOV9l+gRkayPQ5iz4=
   /xtend/4.0.2:
     engines:
       node: '>=0.4'
@@ -25900,6 +25996,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-x+sXyT4RLLEIb6bY5R+wZnt5pfk=
+  /yeast/0.1.2:
+    dev: false
+    resolution:
+      integrity: sha1-AI4G2AlDIMNy28L47XagymyKxBk=
   /yn/3.1.1:
     dev: true
     engines:
