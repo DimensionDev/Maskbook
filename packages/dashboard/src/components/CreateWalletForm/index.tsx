@@ -18,26 +18,35 @@ const useStyles = makeStyles((theme) =>
             marginTop: theme.spacing(1.5),
         },
         input: {
-            paddingTop: theme.spacing(2),
-            paddingBottom: theme.spacing(2),
+            padding: theme.spacing(2, 0),
+        },
+        filled: {
+            display: 'flex',
+            padding: theme.spacing(2, 0),
         },
     }),
 )
 
-// TODO: actions, and icon may be an img url
+// TODO: actions,  and icon may be an img url
 export interface CreateWalletFormProps {
-    options: { label: string; icon: React.ReactNode; value: number }[]
+    options: Array<{ label: string; icon: React.ReactNode; value: number }>
 }
 
 export const CreateWalletForm = memo((props: CreateWalletFormProps) => {
     const { options } = props
+
     const classes = useStyles()
+
     const [selected, setSelected] = useState()
 
     return (
         <Container>
             <FormContainer>
-                <Select variant="filled" value={selected} onChange={(event) => setSelected(event.target.value)}>
+                <Select
+                    classes={{ filled: classes.filled }}
+                    variant="filled"
+                    value={selected}
+                    onChange={(event) => setSelected(event.target.value)}>
                     {options.map(({ label, icon, value }) => (
                         <MenuItem value={value}>
                             <ListItemIcon>{icon}</ListItemIcon>
@@ -47,7 +56,7 @@ export const CreateWalletForm = memo((props: CreateWalletFormProps) => {
                 </Select>
             </FormContainer>
 
-            <FilledInput classes={classes} placeholder="Wallet Name" />
+            <FilledInput classes={{ root: classes.root, input: classes.input }} placeholder="Wallet Name" />
         </Container>
     )
 })
@@ -57,18 +66,7 @@ const Container = styled('div')`
     flex-direction: column;
 `
 
-const FormContainer = styled(FormControl)(
-    ({ theme }) => `
+const FormContainer = styled(FormControl)`
+    // TODO: mobile
     width: 380px;
-    // Because can't use makeStyles override Input-base style, So do this.
-    & .MuiSelect-filled {
-        display: flex;
-        padding-top: ${theme.spacing(2)};
-        padding-bottom: ${theme.spacing(2)};
-    }
-
-    & .MuiFilledInput-root {
-        height: 100%;
-    }
-`,
-)
+`
