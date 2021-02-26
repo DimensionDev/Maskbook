@@ -11,7 +11,7 @@ export const StartupActionList = styled('ul')(
     padding: 0;
     width: 440px;
     & > * {
-        margin-bottom: theme.spacing(0.75);
+        margin-bottom: ${theme.spacing(0.75)};
     }
 `,
 )

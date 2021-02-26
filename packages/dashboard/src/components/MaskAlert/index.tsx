@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { Alert, Collapse, IconButton, experimentalStyled as styled, Typography } from '@material-ui/core'
 import { Close as CloseIcon } from '@material-ui/icons'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
@@ -26,7 +26,11 @@ export const MaskAlert = memo(() => {
             <InfoAlert
                 severity="info"
                 action={
-                    <IconButton aria-label="close" color="inherit" size="small" onClick={() => setOpenAlert(false)}>
+                    <IconButton
+                        aria-label="close"
+                        color="inherit"
+                        size="small"
+                        onClick={useCallback(() => setOpenAlert(false), [])}>
                         <CloseIcon fontSize="inherit" />
                     </IconButton>
                 }>

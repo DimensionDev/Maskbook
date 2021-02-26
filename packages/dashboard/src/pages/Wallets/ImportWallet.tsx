@@ -14,6 +14,7 @@ const Container = styled('div')`
 `
 
 const ButtonGroupTabContainer = styled('div')`
+    /* TODO: mobile */
     width: 582px;
 `
 
@@ -24,6 +25,7 @@ const ControlContainer = styled('div')(
     justify-content: center;
     grid-template-columns: repeat(2, 180px);
     gap: 24px;
+    /* TODO: mobile */
     width: 584px;
 `,
 )
@@ -37,6 +39,7 @@ const AlertContainer = styled('div')(
 
 const PrivateKeyInput = styled(FilledInput)(
     ({ theme }) => `
+    /* TODO: mobile */
     width: 582px;
     height: 182px;
     margin-top: ${theme.spacing(3)};
@@ -45,6 +48,7 @@ const PrivateKeyInput = styled(FilledInput)(
 
 const PasswordInput = styled(FilledInput)(
     ({ theme }) => `
+    /* TODO: mobile */
     width: 582px;
     margin-top: ${theme.spacing(3)};
 `,
@@ -58,6 +62,7 @@ const useTabPanelStyles = makeStyles((theme) =>
             alignItems: 'center',
             padding: 0,
             marginTop: theme.spacing(3),
+            /* TODO: mobile */
             width: 582,
         },
     }),
@@ -73,6 +78,7 @@ export const ImportWallet = memo(() => {
     return (
         <>
             <Container>
+                {/* // TODO: this will cause tab lost when the language switches */}
                 <TabContext value={walletTabs.includes(activeTab) ? activeTab : walletTabs[0]}>
                     <ButtonGroupTabContainer>
                         <ButtonGroupTabList

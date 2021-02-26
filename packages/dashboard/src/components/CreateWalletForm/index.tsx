@@ -9,12 +9,13 @@ import {
     createStyles,
     FilledInput,
 } from '@material-ui/core'
-import { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { useDashboardI18N } from '../../locales'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
+            // TODO: mobile
             width: 380,
             marginTop: theme.spacing(1.5),
         },
@@ -28,16 +29,14 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-// TODO: actions,  and icon may be an img url
+// TODO: actions, and icon may be an img url
 export interface CreateWalletFormProps {
-    options: Array<{ label: string; icon: React.ReactNode; value: number }>
+    options: { label: string; icon: React.ReactNode; value: number }[]
 }
 
-export const CreateWalletForm = memo((props: CreateWalletFormProps) => {
+export function CreateWalletForm(props: CreateWalletFormProps) {
     const { options } = props
-
     const classes = useStyles()
-
     const [selected, setSelected] = useState()
 
     const t = useDashboardI18N()
@@ -49,9 +48,9 @@ export const CreateWalletForm = memo((props: CreateWalletFormProps) => {
                     classes={{ filled: classes.filled }}
                     variant="filled"
                     value={selected}
-                    onChange={(event) => setSelected(event.target.value)}>
+                    onChange={useCallback((event) => setSelected(event.target.value), [])}>
                     {options.map(({ label, icon, value }) => (
-                        <MenuItem value={value}>
+                        <MenuItem value={value} key={label}>
                             <ListItemIcon>{icon}</ListItemIcon>
                             <Typography variant="inherit">{label}</Typography>
                         </MenuItem>
@@ -65,7 +64,7 @@ export const CreateWalletForm = memo((props: CreateWalletFormProps) => {
             />
         </Container>
     )
-})
+}
 
 const Container = styled('div')`
     display: flex;

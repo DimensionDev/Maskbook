@@ -1,6 +1,6 @@
 import { Button, createStyles, experimentalStyled as styled, FilledInput, Tab, makeStyles } from '@material-ui/core'
 import { ButtonGroupTabList, MaskColorVar } from '@dimensiondev/maskbook-theme'
-import React, { useState } from 'react'
+import { memo, useState } from 'react'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { RefreshIcon } from '@dimensiondev/icons'
 import { MnemonicReveal } from '../../components/Mnemonic'
@@ -14,6 +14,7 @@ const Container = styled('div')`
     align-items: center;
 `
 
+// TODO: mobile
 const ButtonGroupTabContainer = styled('div')`
     width: 582px;
 `
@@ -23,6 +24,7 @@ const Refresh = styled('div')(
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    /* TODO: Mobile */
     width: 584px;
     margin: ${theme.spacing(2, 0)};
     font-size: ${theme.typography.fontSize};
@@ -47,12 +49,14 @@ const ControlContainer = styled('div')(
     justify-content: center;
     grid-template-columns: repeat(2, 180px);
     gap: 24px;
+    /* TODO: Mobile */
     width: 584px;
 `,
 )
 
 const AlertContainer = styled('div')(
     ({ theme }) => `
+    /* TODO: Mobile */
     width: 676px;
     margin-top: ${theme.spacing(7)};
     color: ${MaskColorVar.textSecondary};
@@ -61,6 +65,7 @@ const AlertContainer = styled('div')(
 
 const PrivateKeyInput = styled(FilledInput)(
     ({ theme }) => `
+    /* TODO: Mobile */
     width: 582px;
     height: 182px;
     margin-top: ${theme.spacing(3)};
@@ -78,7 +83,7 @@ const useTabPanelStyles = makeStyles(() =>
     }),
 )
 
-export function CreateWallet() {
+export const CreateWallet = memo(() => {
     const tabClasses = useTabPanelStyles()
     const t = useDashboardI18N()
     const walletTabs = [t.wallets_wallet_mnemonic(), t.wallets_wallet_json_file(), t.wallets_wallet_private_key()]
@@ -86,6 +91,7 @@ export function CreateWallet() {
     return (
         <>
             <Container>
+                {/* // TODO: this will cause tab lost when the language switches */}
                 <TabContext value={walletTabs.includes(activeTab) ? activeTab : walletTabs[0]}>
                     <ButtonGroupTabContainer>
                         <ButtonGroupTabList
@@ -121,4 +127,4 @@ export function CreateWallet() {
             </Container>
         </>
     )
-}
+})

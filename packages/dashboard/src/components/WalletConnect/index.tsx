@@ -9,14 +9,12 @@ const Container = styled('div')`
     align-items: center;
 `
 
-const Tip = styled(Typography)(
-    ({ theme }) => `
-    text-align: center;
-    color: ${MaskColorVar.textSecondary};
-    font-size: ${theme.typography.body1.fontSize};
-    margin-bottom: ${theme.spacing(5)};
-`,
-)
+const Tip = styled(Typography)(({ theme }) => ({
+    textAlign: 'center',
+    color: MaskColorVar.textSecondary,
+    fontSize: theme.typography.body1.fontSize,
+    marginBottom: theme.spacing(5),
+}))
 
 export const WalletConnect = memo(() => {
     const t = useDashboardI18N()
