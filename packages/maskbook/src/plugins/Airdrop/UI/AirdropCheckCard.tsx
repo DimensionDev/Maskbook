@@ -75,7 +75,7 @@ export function AirdropCheckCard(props: AirdropCheckCardProps) {
     const [checkState, checkCallback, resetCheckCallback] = useCheckCallback()
     const onCheckButtonClick = useCallback(() => {
         if (checkState.type === CheckStateType.PENDING) return
-        checkCallback(checkAddress)
+        checkCallback(checkAddress, false)
     }, [checkState, checkAddress, checkCallback])
     //#endregion
 

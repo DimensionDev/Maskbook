@@ -10,7 +10,7 @@ const SEED = Math.floor(Math.random() * 5)
 //#region providers
 const providerPool = new Map<string, HttpProvider>()
 
-export function createProvider(chainId = currentMaskbookChainIdSettings.value, url: string) {
+export function createProvider(url: string) {
     const provider =
         providerPool.get(url) ??
         new Web3.providers.HttpProvider(url, {
@@ -51,7 +51,7 @@ export function createWeb3(chainId = currentMaskbookChainIdSettings.value, privK
         const weights = getConstant(CONSTANTS, 'PROVIDER_WEIGHT_LIST', chainId)
         url = urls[weights[SEED]]
     }
-    const provider = createProvider(chainId, url)
+    const provider = createProvider(url)
     const web3 = createWeb3Instance(provider)
     if (privKeys.length) {
         web3.eth.accounts.wallet.clear()

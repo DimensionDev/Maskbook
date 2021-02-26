@@ -10,7 +10,6 @@ import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { CONSTANTS } from '../constants'
 import { useConstant } from '../hooks/useConstant'
 import { useERC20TokenBalance } from '../hooks/useERC20TokenBalance'
-import { useERC20TokenDetailed } from '../hooks/useERC20TokenDetailed'
 import { createERC20Token } from '../helpers'
 import { useChainId } from '../hooks/useChainState'
 
@@ -40,7 +39,7 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
     //#region mask token
     const chainId = useChainId()
     const MASK_ADDRESS = useConstant(CONSTANTS, 'MASK_ADDRESS')
-    const maskToken = useMemo(() => createERC20Token(chainId, MASK_ADDRESS, 18, 'Mask Network', 'Mask'), [
+    const maskToken = useMemo(() => createERC20Token(chainId, MASK_ADDRESS, 18, 'Mask Network', 'MASK'), [
         chainId,
         MASK_ADDRESS,
     ])
@@ -85,6 +84,7 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
                     open={breakdownDialogOpen}
                     token={maskToken}
                     balance={maskBalance}
+                    onUpdateBalance={maskBalanceRetry}
                     onClose={onBreakdownDialogClose}
                 />
             ) : null}
