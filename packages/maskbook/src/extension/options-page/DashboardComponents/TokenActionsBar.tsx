@@ -26,7 +26,7 @@ export interface ERC20TokenActionsBarProps extends withClasses<never> {
     token: ERC20TokenDetailed | EtherTokenDetailed
 }
 
-export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
+export function TokenActionsBar(props: ERC20TokenActionsBarProps) {
     const { wallet, token } = props
     const classes = useStylesExtends(useStyles(), props)
 
@@ -53,7 +53,7 @@ export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
     )
 }
 
-export interface ERC20TokenActionsMenuProps extends ERC20TokenActionsBarProps {
+export interface TokenActionsMenuProps extends ERC20TokenActionsBarProps {
     openTransferDialogOpen: (
         props: Partial<
             WalletProps & {
@@ -70,8 +70,8 @@ export interface ERC20TokenActionsMenuProps extends ERC20TokenActionsBarProps {
     ) => void
 }
 
-export const TokenActionsMenu = forwardRef<HTMLDivElement, ERC20TokenActionsMenuProps>(
-    (props: ERC20TokenActionsMenuProps) => {
+export const TokenActionsMenu = forwardRef<HTMLDivElement, TokenActionsMenuProps>(
+    (props: TokenActionsMenuProps) => {
         const { wallet, token, openTransferDialogOpen, openHideTokenConfirmDialog } = props
         const account = useAccount()
         const { t } = useI18N()
@@ -95,7 +95,7 @@ export const TokenActionsMenu = forwardRef<HTMLDivElement, ERC20TokenActionsMenu
                     {t('transfer')}
                 </MenuItem>
                 <MenuItem
-                    style={{ display: isETH(token.address) ? 'none' : 'initial' }}
+                    style={isETH(token.address) ? { display: 'none' } : {}}
                     onClick={() => openHideTokenConfirmDialog({ wallet, token })}>
                     {t('hide')}
                 </MenuItem>
