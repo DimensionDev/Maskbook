@@ -18,6 +18,7 @@ import { useClaimCallback } from '../hooks/useClaimCallback'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
 import { ClaimDialog } from './ClaimDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useChainId } from '../../../web3/hooks/useChainState'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -69,21 +70,23 @@ const useStyles = makeStyles((theme) =>
 export interface AirdropClaimCardProps extends withClasses<never> {
     token?: ERC20TokenDetailed
     onUpdateAmount: (amount: string) => void
+    onUpdateBalance: () => void
 }
 
 export function AirdropClaimCard(props: AirdropClaimCardProps) {
-    const { token, onUpdateAmount } = props
+    const { token, onUpdateAmount, onUpdateBalance } = props
     const [showTooltip, setShowTooltip] = useState(false)
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
+    const chainId = useChainId()
     const { value: packet, error: packetError, loading: packetLoading, retry: packetRetry } = useAirdropPacket(account)
 
     //#region check
     const [checkState, checkCallback, resetCheckCallback] = useCheckCallback()
     useEffect(() => {
         checkCallback(account)
-    }, [account])
+    }, [account, chainId, checkCallback])
     //#endregion
 
     //#region claim callback
@@ -109,12 +112,12 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
     const postLink = usePostLink()
     const shareLink = useShareLink(
         [
-            `I just claimed ${cashTag}${token?.symbol} with ${formatBalance(
-                new BigNumber(packet?.amount ?? '0'),
-                18,
-                6,
-            )}. Follow @realMaskbook (mask.io) to claim airdrop.`,
-            '#mask_io',
+            `I just claimed ${cashTag}${token?.symbol} with ${
+                new BigNumber(packet?.amount ?? '0')
+                    .multipliedBy(checkState.type === CheckStateType.YEP ? checkState.ratio : 1)
+                    .dp(0)
+                    .toFixed() + '.00'
+            }. Follow @realMaskbook (mask.io) to claim airdrop.`,
             postLink,
         ].join('\n'),
     )
@@ -124,19 +127,21 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
+            onUpdateBalance()
+            checkCallback(account)
             resetClaimCallback()
         },
     )
 
     // open the transaction dialog
     useEffect(() => {
-        if (!packet) return
+        if (checkState.type !== CheckStateType.YEP) return
         if (claimState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialogOpen({
             open: true,
             shareLink,
             state: claimState,
-            summary: `Claiming ${formatBalance(new BigNumber(packet.amount), 18, 6)} ${token?.symbol}.`,
+            summary: `Claiming ${checkState.claimable}.00 ${token?.symbol ?? 'Token'}.`,
         })
     }, [claimState /* update tx dialog only if state changed */])
     //#endregion
@@ -144,10 +149,11 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
     //#region update parent amount
     useEffect(() => {
         if (!token) return
-        if (checkState.type === CheckStateType.YEP)
-            onUpdateAmount(
-                new BigNumber(checkState.claimable).multipliedBy(new BigNumber(10).pow(token.decimals)).toFixed(),
-            )
+        onUpdateAmount(
+            new BigNumber(checkState.type === CheckStateType.YEP ? checkState.claimable : 0)
+                .multipliedBy(new BigNumber(10).pow(token.decimals))
+                .toFixed(),
+        )
     }, [checkState, token, onUpdateAmount])
     //#endregion
 
@@ -186,28 +192,35 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                     <AirdropIcon classes={{ root: classes.icon }} />
                     <Box>
                         <Typography className={classes.title} sx={{ display: 'flex', alignItems: 'center' }}>
-                            <span>Airdrop</span>
-                            <ClickAwayListener onClickAway={() => setShowTooltip(false)}>
-                                <div>
-                                    <Tooltip
-                                        placement="top-end"
-                                        PopperProps={{
-                                            disablePortal: true,
-                                        }}
-                                        open={showTooltip}
-                                        onClose={() => setShowTooltip(false)}
-                                        classes={{ popper: classes.tooltipPopover, tooltip: classes.tooltip }}
-                                        disableHoverListener
-                                        disableTouchListener
-                                        title="Airdrop MASK, 20% reduction every 24 hours. Airdrop unlock time is 02/27/2021 03:00 AM (UTC+0)."
-                                        style={{ lineHeight: 0.8, cursor: 'pointer', marginLeft: 2 }}>
-                                        <InfoIcon fontSize="small" onClick={(e) => setShowTooltip(true)} />
-                                    </Tooltip>
-                                </div>
-                            </ClickAwayListener>
+                            <span style={{ lineHeight: 1.5 }}>Airdrop</span>
+                            {checkState.type === CheckStateType.YEP || checkState.type === CheckStateType.NOPE ? (
+                                <ClickAwayListener onClickAway={() => setShowTooltip(false)}>
+                                    <div>
+                                        <Tooltip
+                                            placement="top-end"
+                                            PopperProps={{
+                                                disablePortal: true,
+                                            }}
+                                            open={showTooltip}
+                                            onClose={() => setShowTooltip(false)}
+                                            classes={{ popper: classes.tooltipPopover, tooltip: classes.tooltip }}
+                                            disableHoverListener
+                                            disableTouchListener
+                                            title={`Airdrop MASK, 20% reduction every 24 hours. Airdrop starts at ${new Date(
+                                                checkState.start,
+                                            ).toUTCString()} and ends at ${new Date(checkState.end).toUTCString()}.`}
+                                            style={{ lineHeight: 0.8, cursor: 'pointer', marginLeft: 2 }}>
+                                            <InfoIcon fontSize="small" onClick={(e) => setShowTooltip(true)} />
+                                        </Tooltip>
+                                    </div>
+                                </ClickAwayListener>
+                            ) : null}
                         </Typography>
                         <Typography className={classes.amount} sx={{ marginTop: 1.5 }}>
-                            {checkState.type === CheckStateType.YEP ? `${checkState.claimable}.00` : '0.00'}
+                            {checkState.type === CheckStateType.YEP ||
+                            (checkState.type === CheckStateType.NOPE && checkState.start > Date.now())
+                                ? `${checkState.claimable}.00`
+                                : '0.00'}
                         </Typography>
                     </Box>
                 </Box>
@@ -216,24 +229,25 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                         {checkState.type === CheckStateType.YEP ? (
                             <Typography>Current Ratio: {formatPercentage(checkState.ratio)}</Typography>
                         ) : null}
-                        {packet ? (
-                            <Box display="flex" alignItems="center" justifyContent="flex-end" marginTop={1.5}>
-                                <ActionButton
-                                    className={classes.button}
-                                    variant="contained"
-                                    disabled
-                                    onClick={onClaimButtonClick}>
-                                    Claim
-                                </ActionButton>
-                            </Box>
-                        ) : null}
+                        <Box display="flex" alignItems="center" justifyContent="flex-end" marginTop={1.5}>
+                            <ActionButton
+                                className={classes.button}
+                                variant="contained"
+                                disabled={
+                                    checkState.type !== CheckStateType.YEP ||
+                                    new BigNumber(checkState.claimable).isZero()
+                                }
+                                onClick={onClaimButtonClick}>
+                                Claim
+                            </ActionButton>
+                        </Box>
                     </Box>
                 </Box>
             </Box>
-            {packet ? (
+            {checkState.type === CheckStateType.YEP ? (
                 <ClaimDialog
                     open={claimDialogOpen}
-                    amount={packet.amount}
+                    amount={checkState.claimable}
                     token={token}
                     onClaim={onClaimDialogClaim}
                     onClose={onClaimDialogClose}

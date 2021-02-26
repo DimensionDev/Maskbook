@@ -56,10 +56,11 @@ const useStyles = makeStyles((theme) =>
 export interface ITO_CardProps extends withClasses<never> {
     token?: ERC20TokenDetailed
     onUpdateAmount: (amount: string) => void
+    onUpdateBalance: () => void
 }
 
 export function ITO_Card(props: ITO_CardProps) {
-    const { token, onUpdateAmount } = props
+    const { token, onUpdateAmount, onUpdateBalance } = props
 
     const classes = useStylesExtends(useStyles(), props)
     const { value: packet, loading: packetLoading, error: packetError, retry: packetRetry } = useMaskITO_Packet()
@@ -91,6 +92,7 @@ export function ITO_Card(props: ITO_CardProps) {
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
+            onUpdateBalance()
             packetRetry()
             resetClaimCallback()
         },
@@ -104,7 +106,7 @@ export function ITO_Card(props: ITO_CardProps) {
             open: true,
             shareLink,
             state: claimState,
-            summary: `Claiming ${formatBalance(new BigNumber(packet.claimable), 18, 6)} ${token?.symbol}.`,
+            summary: `Claiming ${formatBalance(new BigNumber(packet.claimable), 18, 6)} ${token?.symbol ?? 'Token'}.`,
         })
     }, [claimState /* update tx dialog only if state changed */])
     //#endregion

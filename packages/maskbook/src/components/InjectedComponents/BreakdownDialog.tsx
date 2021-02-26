@@ -57,12 +57,13 @@ interface BreakdownDialogUIProps extends withClasses<never> {
     open: boolean
     token: ERC20TokenDetailed
     balance: string
+    onUpdateBalance: () => void
     onClose?: () => void
     DialogProps?: Partial<DialogProps>
 }
 
 function BreakdownDialogUI(props: BreakdownDialogUIProps) {
-    const { token, balance } = props
+    const { token, balance, onUpdateBalance } = props
     const classes = useStylesExtends(useStyles(), props)
 
     // the total amount to be claimed in wei
@@ -88,8 +89,8 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
                         {formatBalance(new BigNumber(balance), 18, 2)} {token.symbol}
                     </span>
                 </Typography>
-                <AirdropCard token={token} onUpdateAmount={setAirdropAmount} />
-                <ITO_Card token={token} onUpdateAmount={setITO_Amount} />
+                <AirdropCard token={token} onUpdateAmount={setAirdropAmount} onUpdateBalance={onUpdateBalance} />
+                <ITO_Card token={token} onUpdateAmount={setITO_Amount} onUpdateBalance={onUpdateBalance} />
             </DialogContent>
         </InjectedDialog>
     )
