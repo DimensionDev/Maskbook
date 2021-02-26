@@ -100,4 +100,3 @@ export function TokenActionsMenu(props: TokenActionsMenuProps) {
         </div>
     )
 }
-

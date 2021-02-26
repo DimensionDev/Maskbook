@@ -110,10 +110,7 @@ function ViewDetailed(props: ViewDetailedProps) {
 
     return (
         <>
-            <TableRow
-                className={classes.cell}
-                key={x.token.address}
-                onClick={isMobile ? openMenu : () => undefined}>
+            <TableRow className={classes.cell} key={x.token.address} onClick={isMobile ? openMenu : () => undefined}>
                 {[
                     <Box
                         sx={{
@@ -140,15 +137,9 @@ function ViewDetailed(props: ViewDetailedProps) {
                         }}>
                         <Typography className={classes.name} color="textPrimary" component="span">
                             {new BigNumber(
-                                formatBalance(
-                                    new BigNumber(x.balance),
-                                    x.token.decimals ?? 0,
-                                    x.token.decimals ?? 0,
-                                ),
+                                formatBalance(new BigNumber(x.balance), x.token.decimals ?? 0, x.token.decimals ?? 0),
                             ).toFixed(
-                                stableTokens.some((y: ERC20TokenDetailed) =>
-                                    isSameAddress(y.address, x.token.address),
-                                )
+                                stableTokens.some((y: ERC20TokenDetailed) => isSameAddress(y.address, x.token.address))
                                     ? 2
                                     : 6,
                             )}
@@ -171,7 +162,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                                       display: 'flex',
                                       justifyContent: 'flex-end',
                                   }}>
-                                <TokenActionsBar wallet={wallet} token={x.token} />
+                                  <TokenActionsBar wallet={wallet} token={x.token} />
                               </Box>,
                           ]),
                 ]
@@ -202,16 +193,18 @@ function LessButton(props: LessButtonProps) {
     const classes = useStylesExtends(useStyles({ isMobile }), props)
     const [more, setMore] = useState(false)
 
-    return <div className={classes.lessButton}>
-        <IconButton
-            onClick={() => {
-                setMore(!more)
-                setViewLength(more ? MAX_TOKENS_LENGTH : detailedTokens.length)
-                setPrice(more ? MIN_VALUE : 0)
-            }}>
-            {more ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        </IconButton>
-    </div>
+    return (
+        <div className={classes.lessButton}>
+            <IconButton
+                onClick={() => {
+                    setMore(!more)
+                    setViewLength(more ? MAX_TOKENS_LENGTH : detailedTokens.length)
+                    setPrice(more ? MIN_VALUE : 0)
+                }}>
+                {more ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </IconButton>
+        </div>
+    )
 }
 
 export function WalletAssetsTable(props: WalletAssetsTableProps) {
@@ -222,7 +215,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         detailedTokensLoading,
         detailedTokensError,
         detailedTokensRetry,
-        stableTokens
+        stableTokens,
     } = useContext(DashboardWalletsContext)
     const isMobile = useMatchXS()
     const classes = useStylesExtends(useStyles({ isMobile }), props)
@@ -287,11 +280,25 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                       x.token.type === EthereumTokenType.Ether
                                     : true,
                             )
-                            .map((y, idx) => (idx < viewLength ? <ViewDetailed x={y} isMobile={isMobile} stableTokens={stableTokens} wallet={wallet} /> : null))}
+                            .map((y, idx) =>
+                                idx < viewLength ? (
+                                    <ViewDetailed
+                                        x={y}
+                                        isMobile={isMobile}
+                                        stableTokens={stableTokens}
+                                        wallet={wallet}
+                                    />
+                                ) : null,
+                            )}
                     </TableBody>
                 </Table>
             </TableContainer>
-            <LessButton isMobile={isMobile} setViewLength={setViewLength} setPrice={setPrice} detailedTokens={detailedTokens} />
+            <LessButton
+                isMobile={isMobile}
+                setViewLength={setViewLength}
+                setPrice={setPrice}
+                detailedTokens={detailedTokens}
+            />
         </>
     )
 }
