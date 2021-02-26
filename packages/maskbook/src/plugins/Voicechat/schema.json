@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+        "customServer": {
+            "type": "string",
+            "title": "customServer"
+        },
+        "version": {
+            "type": "number",
+            "title": "version"
+        }
+    }
+}
