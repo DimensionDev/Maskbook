@@ -28,8 +28,8 @@ export function isETH(address: string) {
     return isSameAddress(address, getConstant(CONSTANTS, 'ETH_ADDRESS'))
 }
 
-export function addGasMargin(value: BigNumber) {
-    return value.multipliedBy(new BigNumber(10000).plus(new BigNumber(1000))).dividedToIntegerBy(new BigNumber(10000))
+export function addGasMargin(value: BigNumber, scale = 1000) {
+    return value.multipliedBy(new BigNumber(10000).plus(new BigNumber(scale))).dividedToIntegerBy(new BigNumber(10000))
 }
 
 //#region constants

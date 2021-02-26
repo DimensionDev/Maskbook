@@ -1,8 +1,8 @@
-import Web3 from 'web3'
+import { first } from 'lodash-es'
 import type { Eth } from 'web3-eth'
 import type { Personal } from 'web3-eth-personal'
 import { EthereumAddress } from 'wallet.ts'
-import type { provider as Provider, PromiEvent as PromiEventW3 } from 'web3-core'
+import type { PromiEvent as PromiEventW3 } from 'web3-core'
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
 import * as Maskbook from '../providers/Maskbook'
@@ -14,10 +14,7 @@ import {
 } from '../../../../plugins/Wallet/settings'
 import { TransactionEventType } from '../../../../web3/types'
 import { ProviderType } from '../../../../web3/types'
-import { first } from 'lodash-es'
 
-let web3: Web3 | null = null
-let provider: Provider | null = null
 let connector: WalletConnect | null = null
 
 /**
@@ -51,12 +48,7 @@ export async function createConnectorIfNeeded() {
     return createConnector()
 }
 
-export function createProvider() {
-    if (!connector?.connected) throw new Error('The connection is lost, please reconnect.')
-    return Maskbook.createProvider(currentWalletConnectChainIdSettings.value)
-}
-
-//#region hijack web3js calls and forword them to walletconnect APIs
+//#region hijack web3js calls and forword them to walletconnenct APIs
 function hijackETH(eth: Eth) {
     return new Proxy(eth, {
         get(target, name) {
@@ -123,9 +115,7 @@ function hijackPersonal(personal: Personal) {
 // Wrap promise as PromiEvent because WalletConnect returns transaction hash only
 // docs: https://docs.walletconnect.org/client-api
 export function createWeb3() {
-    provider = createProvider()
-    if (!web3) web3 = new Web3(provider)
-    else web3.setProvider(provider)
+    const web3 = Maskbook.createWeb3(currentWalletConnectChainIdSettings.value)
     return Object.assign(web3, {
         eth: hijackETH(web3.eth),
     })
