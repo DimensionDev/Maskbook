@@ -1,4 +1,5 @@
-import { Component, MouseEvent } from 'React'
+import { useEffect, useState, Component, MouseEvent } from 'React'
+import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import { querySelectorAll } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { DOMProxy } from '@dimensiondev/holoflows-kit'
@@ -6,36 +7,58 @@ import { Flags } from '../../../utils/flags'
 
 let buttonUrls = new Set<String>()
 
-class RevealEncryptedButton extends Component<{ elem: HTMLElement }, { isHidden: boolean, buttonText: string }> {
-    constructor(props: { elem: HTMLElement }) {
-        super(props)
-        this.state = { isHidden: false, buttonText: 'SHOW ENCRYPTED IMAGE' }
-        this.toggleElement()
-    }
+const heightAtHidden = '0px'
+const heightAtShow = ''
+const textAtHidden = 'SHOW ENCRYPTED IMAGE'
+const textAtShow = 'HIDE ENCRYPTED IMAGE'
 
-    toggleElement = (): void => {
-        const newHidden = !this.state.isHidden
-        this.setState({ isHidden: newHidden })
+const useRevealEncryptionButtonStyles = makeStyles((theme: Theme) => {
+    return createStyles({
+        revealButton: {
+            backgroundColor: 'transparent',
+            width: '100%',
+            color: theme.palette.text.primary,
+        }
+    })
+})
+
+
+
+function RevealEncryptionButton(props: { elem: HTMLElement }) {
+    const classes = useRevealEncryptionButtonStyles()
+
+    const [buttonText, setButtonText] = useState('SHOW ENCRYPTED IMAGE')
+    const [isHidden, setIsHidden] = useState(false)
+    const [height, setHeight] = useState('0px')
+
+    const toggleElement = (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
+        e.preventDefault()
+        const newHidden = !isHidden
+        setIsHidden(newHidden)
+
         if (newHidden) {
             // hide
-            this.props.elem.style.height = '0px'
-            this.setState({ buttonText: 'SHOW ENCRYPTED IMAGE' })
+            setHeight(heightAtHidden)
+            setButtonText(textAtHidden)
         } else {
             // show
-            this.props.elem.style.height = ''
-            this.setState({ buttonText: 'HIDE ENCRYPTED IMAGE' })
+            setHeight(heightAtShow)
+            setButtonText(textAtShow)
+
         }
     }
 
-    render() {
-        return (
-            <button
-                style={{ width: '100%', backgroundColor: "transparent", color: "rgba(29,161,242,1.00)" }}
-                onClick={this.toggleElement}>
-                {this.state.buttonText}
-            </button>
-        )
-    }
+    useEffect(() => {
+        props.elem.style.height = height
+    });
+
+    return (
+        <button
+            className={classes.revealButton}
+            onClick={toggleElement}>
+            {buttonText}
+        </button>
+    )
 }
 
 function getNParent(element: HTMLElement, n: number) {
@@ -61,7 +84,7 @@ export function injectPostImageRevealerAtTwitter(encryptedUrl: string) {
         setTimeout(() => {
             const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
             proxy.realCurrent = container.parentElement
-            renderInShadowRoot(<RevealEncryptedButton elem={container} />, { shadow: () => proxy.afterShadow })
+            renderInShadowRoot(<RevealEncryptionButton elem={container} />, { shadow: () => proxy.afterShadow })
         }, 500)
 
     }).evaluate()
