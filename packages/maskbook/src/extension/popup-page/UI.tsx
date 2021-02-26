@@ -24,7 +24,6 @@ const GlobalCss = withStyles({
             overflowX: 'hidden',
             margin: '0 auto',
             width: 340,
-            minHeight: 180,
             maxWidth: '100%',
             backgroundColor: 'transparent',
             '&::-webkit-scrollbar': {
@@ -141,7 +140,9 @@ function PopupUI() {
                     <ChooseIdentity identities={identities} />
                 </>
             )}
-            <Divider className={classes.divider} />
+            {ui.networkIdentifier === 'localhost' || identities.length === 0 ? null : (
+                <Divider className={classes.divider} />
+            )}
             <Box
                 sx={{
                     display: 'flex',
