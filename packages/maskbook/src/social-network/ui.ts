@@ -147,6 +147,12 @@ export interface SocialNetworkUIInjections {
      */
     injectPostReplacer(current: PostInfo): () => void
     /**
+     * This function should inject the image post revealer
+     * @param current The current post
+     * @returns unmount the injected components
+     */
+    injectPostImageRevealer(current: PostInfo): () => void
+    /**
      * This function should inject the post box
      * @param current The current post
      * @returns unmount the injected components
@@ -360,6 +366,7 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     const unmountFunctions = new WeakMap<object, () => void>()
     ui.posts.event.on('set', (key, value) => {
         const unmountPostReplacer = ui.injectPostReplacer(value)
+        const unmountPostImageRevealer = ui.injectPostImageRevealer ? ui.injectPostImageRevealer(value) : () => { }
         const unmountPostInspector = ui.injectPostInspector(value)
         const unmountCommentBox: () => void =
             ui.injectCommentBox === 'disabled' ? nopWithUnmount : defaultTo(ui.injectCommentBox, nopWithUnmount)(value)
@@ -370,6 +377,7 @@ function hookUIPostMap(ui: SocialNetworkUI) {
         unmountFunctions.set(key, () => {
             unmountPostInspector()
             unmountPostReplacer()
+            unmountPostImageRevealer()
             unmountCommentBox()
             unmountPostComments()
         })

@@ -15,6 +15,7 @@ import { injectPostCommentsDefault } from '../../social-network/defaults/injectC
 import { dispatchCustomEvents, selectElementContents, sleep } from '../../utils/utils'
 import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostReplacerFacebook } from './UI/injectPostReplacer'
+import { injectPostImageRevealerFacebook } from './UI/injectPostImageRevealer'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
@@ -98,6 +99,7 @@ export const facebookUISelf = defineSocialNetworkUI({
         }
     }),
     injectPostReplacer: injectPostReplacerFacebook,
+    injectPostImageRevealer: injectPostImageRevealerFacebook,
     injectPostInspector: injectPostInspectorFacebook,
     injectPageInspector: injectPageInspectorDefault(),
     collectPeople: collectPeopleFacebook,

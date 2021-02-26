@@ -33,3 +33,4 @@ export function typedMessageParse(x: string) {
     } catch {}
     return makeTypedMessageText(x)
 }
+export { typedMessageImageParse } from './crypto-alpha-40'

@@ -2,6 +2,7 @@
 import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
 import { downloadUrl } from '../../utils/utils'
 import { buf2Img, img2Buf } from '@dimensiondev/stego-js/cjs/canvas/dom'
+import { makeTypedMessageImage } from '../../protocols/typed-message/factory'
 
 // normal import doesn't work (not react lib?)
 const seedrandom = require('seedrandom')
@@ -100,11 +101,6 @@ export async function deshuffle(buf: ArrayBuffer, { seed, blockWidth = DEFAULT_B
 }
 
 export async function deshuffleImageUrl(url: string, options: DeshuffleOptions) {
-    const b64Image = deshuffle(await downloadUrl(url).then((x) => x.arrayBuffer()), options)
-
-    async function appendDelim(b64Image: Promise<string>) {
-        return 'b64Image=' + (await b64Image)
-    }
-
-    return appendDelim(b64Image)
+    const b64Image = await deshuffle(await downloadUrl(url).then((x) => x.arrayBuffer()), options)
+    return makeTypedMessageImage(b64Image)
 }

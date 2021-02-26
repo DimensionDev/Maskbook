@@ -1,9 +1,11 @@
 import { useEffect, useState, Component, MouseEvent } from 'React'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
-import { querySelectorAll } from '../utils/selector'
+import { querySelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { Flags } from '../../../utils/flags'
+import type { PostInfo } from '../../../social-network/PostInfo'
+
 
 let buttonUrls = new Set<String>()
 
@@ -24,7 +26,7 @@ const useRevealEncryptionButtonStyles = makeStyles((theme: Theme) => {
 
 
 
-function RevealEncryptionButton(props: { elem: HTMLElement }) {
+function RevealEncryptionButton(props: { elem: HTMLElement, proxy: DOMProxy<HTMLElement, HTMLSpanElement, HTMLSpanElement> }) {
     const classes = useRevealEncryptionButtonStyles()
 
     const [buttonText, setButtonText] = useState('SHOW ENCRYPTED IMAGE')
@@ -52,12 +54,15 @@ function RevealEncryptionButton(props: { elem: HTMLElement }) {
         props.elem.style.height = height
     });
 
-    return (
+    return renderInShadowRoot(
         <button
             className={classes.revealButton}
             onClick={toggleElement}>
             {buttonText}
-        </button>
+        </button>,
+        {
+            shadow: () => props.proxy.afterShadow
+        }
     )
 }
 
@@ -70,22 +75,59 @@ function getNParent(element: HTMLElement, n: number) {
     return p
 }
 
-export function injectPostImageRevealerAtTwitter(encryptedUrl: string) {
-    // make sure button only gets injected once per image
-    const stripped = encryptedUrl.split('?')[0]
-    if (buttonUrls.has(stripped)) return
-    buttonUrls.add(stripped)
+// export function injectPostImageRevealerAtTwitter(encryptedUrl: string): void {
+export function injectPostImageRevealerAtTwitter(current: PostInfo): () => void {
+    /*
+    const images = current.postMetadataImages
+    if (images.size !== 1) return
 
-    // create button
-    const res = querySelectorAll(`img[src*="${stripped}"]`)
-    res.map((element, idx, arr) => {
+    // have to loop since images = iterator
+    for (const encryptedUrl in images) {
+        const stripped = encryptedUrl.split('?')[0]
+        if (buttonUrls.has(stripped)) return
+        buttonUrls.add(stripped)
+
+        const element = querySelector(`img[src*="${stripped}"]`, true).evaluate()
+        if (!element) return
         const container = getNParent(element, 3)
         if (!container) return
-        setTimeout(() => {
+        const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
+        proxy.realCurrent = container.parentElement
+
+        // return (current: PostInfo) => RevealEncryptionButton({ current: current, proxy: proxy })
+        return (current: PostInfo) => RevealEncryptionButton({
+            elem: container,
+            proxy: proxy
+        })
+    }
+
+    return
+    */
+
+    console.log('REVEALER')
+
+    const images = current.postMetadataImages
+    if (images.size === 1) {
+        // have to loop since images = iterator
+        for (const encryptedUrl in images) {
+            const stripped = encryptedUrl.split('?')[0]
+            if (buttonUrls.has(stripped)) break
+            buttonUrls.add(stripped)
+
+            const element = querySelector(`img[src*="${stripped}"]`, true).evaluate()
+            if (!element) break
+            const container = getNParent(element, 3)
+            if (!container) break
             const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
             proxy.realCurrent = container.parentElement
-            renderInShadowRoot(<RevealEncryptionButton elem={container} />, { shadow: () => proxy.afterShadow })
-        }, 500)
 
-    }).evaluate()
+            // return (current: PostInfo) => RevealEncryptionButton({ current: current, proxy: proxy })
+            return RevealEncryptionButton({
+                elem: container,
+                proxy: proxy
+            })
+        }
+    }
+
+    return () => { }
 }

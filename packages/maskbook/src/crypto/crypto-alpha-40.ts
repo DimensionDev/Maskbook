@@ -9,7 +9,7 @@ import {
     decodeText,
 } from '../utils/type-transform/String-ArrayBuffer'
 import { memoizePromise } from '../utils/memoize'
-import { makeTypedMessageText } from '../protocols/typed-message'
+import { makeTypedMessageText, makeTypedMessageImage } from '../protocols/typed-message'
 import { i18n } from '../utils/i18n-next'
 import { CryptoWorker } from '../modules/workers'
 import type {
@@ -336,4 +336,7 @@ export function typedMessageStringify(x: any) {
 }
 export function typedMessageParse(x: string) {
     return makeTypedMessageText(x)
+}
+export function typedMessageImageParse(x: string) {
+    return makeTypedMessageImage(x)
 }

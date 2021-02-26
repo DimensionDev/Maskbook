@@ -1,7 +1,7 @@
 import { makeStyles, Typography, Card, Theme, Box, CircularProgress, CircularProgressProps } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
-import { TypedMessage, makeTypedMessageText, extractTextFromTypedMessage } from '../../protocols/typed-message'
+import { TypedMessage, TypedMessageImage, makeTypedMessageText, extractTextFromTypedMessage } from '../../protocols/typed-message'
 import { TypedMessageRendererProps, DefaultTypedMessageRenderer } from './TypedMessageRenderer'
 import CheckIcon from '@material-ui/icons/Check'
 import CloseIcon from '@material-ui/icons/Close'
@@ -23,7 +23,7 @@ export interface AdditionalContentProps
     /** this component does not accept children */
     children?: never
     /** Can handle typed message or normal string */
-    message?: TypedMessage | string
+    message?: TypedMessage | TypedMessageImage | string
 }
 const useStyles = makeStyles((theme: Theme) => ({
     root: { boxSizing: 'border-box', width: '100%', backgroundColor: 'transparent', borderColor: 'transparent' },
@@ -67,6 +67,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
         </Typography>
     )
 
+    /*
     const imgData = useMemo(() => {
         if (message && typeof message !== 'string') {
             const s = extractTextFromTypedMessage(message).val
@@ -80,16 +81,17 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
     if (imgData.isImg) {
         return (
             <Card variant="outlined" className={classes.root} elevation={0} onClick={stop}>
-                {/* <header className={classes.content}>{header}</header> */}
+                {/* <header className={classes.content}>{header}</header> }
                 {message ? (
                     <main className={classes.content}>
-                        {/* <DefaultTypedMessageRenderer {...props} message={TypedMessage} allowTextEnlarge={true} /> */}
+                        {/* <DefaultTypedMessageRenderer {...props} message={TypedMessage} allowTextEnlarge={true} /> }
                         <img style={{ height: '100%', width: '100%' }} src={'data:image/png;base64,' + imgData.b64Str} />
                     </main>
                 ) : null}
             </Card>
         )
     }
+    */
 
     const TypedMessage = useMemo(() => {
         if (typeof message === 'string') return makeTypedMessageText(message)

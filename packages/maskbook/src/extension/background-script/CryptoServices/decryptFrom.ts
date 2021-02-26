@@ -18,14 +18,13 @@ import { asyncIteratorWithResult, memorizeAsyncGenerator } from '../../../utils/
 import { sleep } from '../../../utils/utils'
 import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 import { decodeImageUrl } from '../SteganographyService'
-import type { TypedMessage } from '../../../protocols/typed-message'
+import type { TypedMessage, TypedMessageImage } from '../../../protocols/typed-message'
 import stringify from 'json-stable-stringify'
 import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
 import { MaskMessage } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
 import { calculatePostKeyPartition } from '../../../network/gun/version.2/hash'
 import Services from '../../../extension/service'
-import { injectPostImageRevealerAtTwitter } from '../../../social-network-provider/twitter.com/ui/injectPostImageRevealer'
 
 type Progress = (
     | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
@@ -48,7 +47,7 @@ type Success = {
     type: 'success'
     iv: string
     decryptedPayloadForImage: Payload
-    content: TypedMessage
+    content: TypedMessage | TypedMessageImage
     rawContent: string
     through: SuccessThrough[]
     internal: boolean
@@ -69,13 +68,14 @@ const makeSuccessResultF = (
     iv: string,
     decryptedPayloadForImage: Payload,
     cryptoProvider: typeof cryptoProviderTable[keyof typeof cryptoProviderTable],
+    isImage: boolean = false
 ) => (rawEncryptedContent: string, through: Success['through']): Success => {
     const success: Success = {
         rawContent: rawEncryptedContent,
         through,
         iv,
         decryptedPayloadForImage,
-        content: cryptoProvider.typedMessageParse(rawEncryptedContent),
+        content: isImage ? cryptoProvider.typedMessageImageParse(rawEncryptedContent) : cryptoProvider.typedMessageParse(rawEncryptedContent),
         type: 'success',
         internal: false,
     }
@@ -349,8 +349,9 @@ async function* decryptImageFromImageUrlWithProgress_raw(
                 const decryptedUrl = await Services.ImageShuffle.deshuffleImageUrl(url, { seed })
                 const { iv, version } = post
                 const cryptoProvider = cryptoProviderTable[version]
-                const makeSuccessResult = makeSuccessResultF(url, iv, post, cryptoProvider)
-                return makeSuccessResult(decryptedUrl, ['decrypted_image'])
+                const makeSuccessResult = makeSuccessResultF(url, iv, post, cryptoProvider, true)
+                if (!decryptedUrl.image || typeof decryptedUrl.image !== 'string') return makeError('could not load decrypted image url')
+                return makeSuccessResult(decryptedUrl.image, ['decrypted_image'])
             }
         }
     }
