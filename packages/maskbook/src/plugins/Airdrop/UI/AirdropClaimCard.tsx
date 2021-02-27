@@ -150,7 +150,11 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
     useEffect(() => {
         if (!token) return
         onUpdateAmount(
-            new BigNumber(checkState.type === CheckStateType.YEP ? checkState.claimable : 0)
+            new BigNumber(
+                checkState.type === CheckStateType.YEP || checkState.type === CheckStateType.NOPE
+                    ? checkState.claimable
+                    : 0,
+            )
                 .multipliedBy(new BigNumber(10).pow(token.decimals))
                 .toFixed(),
         )
@@ -217,8 +221,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                             ) : null}
                         </Typography>
                         <Typography className={classes.amount} sx={{ marginTop: 1.5 }}>
-                            {checkState.type === CheckStateType.YEP ||
-                            (checkState.type === CheckStateType.NOPE && checkState.start > Date.now())
+                            {checkState.type === CheckStateType.YEP || checkState.type === CheckStateType.NOPE
                                 ? `${checkState.claimable}.00`
                                 : '0.00'}
                         </Typography>
