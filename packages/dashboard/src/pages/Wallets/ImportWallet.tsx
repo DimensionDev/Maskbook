@@ -68,34 +68,33 @@ const useTabPanelStyles = makeStyles((theme) =>
     }),
 )
 
+type walletsType = 'mnemonic' | 'jsonFile' | 'privateKey'
+
+const walletTabs: walletsType[] = ['mnemonic', 'jsonFile', 'privateKey']
+
 export const ImportWallet = memo(() => {
     const tabClasses = useTabPanelStyles()
 
     const t = useDashboardI18N()
-    const walletTabs = useMemo(
-        () => ({
-            mnemonic: t.wallets_wallet_mnemonic(),
-            jsonFile: t.wallets_wallet_json_file(),
-            privateKey: t.wallets_wallet_private_key(),
-        }),
-        [t],
-    )
+    const walletTabsLabel = {
+        mnemonic: t.wallets_wallet_mnemonic(),
+        jsonFile: t.wallets_wallet_json_file(),
+        privateKey: t.wallets_wallet_private_key(),
+    }
 
-    const walletTabsKeys = useMemo(() => Object.keys(walletTabs), [walletTabs])
-
-    const [activeTab, setActiveTab] = useState(walletTabsKeys[0])
+    const [activeTab, setActiveTab] = useState(walletTabs[0])
 
     return (
         <>
             <Container>
-                <TabContext value={walletTabsKeys.includes(activeTab) ? activeTab : walletTabsKeys[0]}>
+                <TabContext value={walletTabs.includes(activeTab) ? activeTab : walletTabs[0]}>
                     <ButtonGroupTabContainer>
                         <ButtonGroupTabList
-                            onChange={(e, v) => setActiveTab(v)}
+                            onChange={(e, v: walletsType) => setActiveTab(v)}
                             aria-label={t.wallets_import_wallet_tabs()}
                             fullWidth>
-                            {Object.entries(walletTabs).map(([key, value]) => (
-                                <Tab key={key} value={key} label={value} />
+                            {walletTabs.map((key) => (
+                                <Tab key={key} value={key} label={walletTabsLabel[key]} />
                             ))}
                         </ButtonGroupTabList>
                     </ButtonGroupTabContainer>
