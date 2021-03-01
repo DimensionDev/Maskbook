@@ -42,13 +42,10 @@ const useStyles = makeStyles((theme) =>
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
             color: '#fff',
         },
-        button: {
-            //TODO: https://github.com/mui-org/material-ui/issues/25011
-            '&[disabled]': {
-                opacity: 0.5,
-                color: '#fff',
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            },
+        disabled: {
+            opacity: 0.5,
+            color: '#fff',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
         },
     }),
 )
@@ -140,7 +137,7 @@ export function ITO_Card(props: ITO_CardProps) {
             <Box className={classes.root} display="flex" justifyContent="center">
                 <Box className={classes.content}>
                     <Typography>{packetError.message}</Typography>
-                    <ActionButton className={classes.button} variant="contained" onClick={() => packetRetry()}>
+                    <ActionButton variant="contained" onClick={() => packetRetry()}>
                         Retry
                     </ActionButton>
                 </Box>
@@ -161,7 +158,7 @@ export function ITO_Card(props: ITO_CardProps) {
                 {packet ? (
                     <Box display="flex" alignItems="center">
                         <ActionButton
-                            className={classes.button}
+                            classes={{ root: classes.disabled }}
                             variant="contained"
                             disabled={
                                 Number.parseInt(packet.unlockTime) > Math.round(Date.now() / 1000) ||

@@ -41,15 +41,14 @@ const useStyles = makeStyles((theme) =>
             },
         },
         button: {
-            //TODO: https://github.com/mui-org/material-ui/issues/25011
-            '&[disabled]': {
-                color: '#fff',
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                opacity: 0.5,
-            },
             [theme.breakpoints.down('sm')]: {
                 width: '100%',
             },
+        },
+        disabled: {
+            color: '#fff',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            opacity: 0.5,
         },
         controller: {
             display: 'flex',
@@ -132,7 +131,7 @@ export function AirdropCheckCard(props: AirdropCheckCardProps) {
                 />
                 <Box className={classes.buttonContainer}>
                     <ActionButton
-                        className={classes.button}
+                        classes={{ root: classes.button, disabled: classes.disabled }}
                         variant="contained"
                         loading={checkState.type === CheckStateType.PENDING}
                         disabled={!checkAddress}

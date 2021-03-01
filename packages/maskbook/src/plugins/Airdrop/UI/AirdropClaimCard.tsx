@@ -48,13 +48,14 @@ const useStyles = makeStyles((theme) =>
             },
         },
         button: {
-            backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            //TODO: https://github.com/mui-org/material-ui/issues/25011
-            '&[disabled]': {
-                color: '#fff',
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                opacity: 0.5,
+            [theme.breakpoints.down('sm')]: {
+                width: '100%',
             },
+        },
+        disabled: {
+            color: '#fff',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            opacity: 0.5,
         },
         tooltipPopover: {
             // Just meet design
@@ -179,7 +180,10 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
         return (
             <Box className={classes.root} display="flex" justifyContent="space-between">
                 <Typography>{packetError.message}</Typography>
-                <ActionButton className={classes.button} variant="contained" onClick={() => packetRetry()}>
+                <ActionButton
+                    classes={{ root: classes.button, disabled: classes.disabled }}
+                    variant="contained"
+                    onClick={() => packetRetry()}>
                     Retry
                 </ActionButton>
             </Box>
