@@ -19,8 +19,8 @@ importers:
       '@commitlint/config-conventional': 11.0.0
       '@dimensiondev/locale-kit': link:packages/locale-kit
       '@dimensiondev/maskbook-cli-dev-or-build': link:packages/cli-dev-build
-      '@magic-works/commonjs-import.meta': 1.0.0_typescript@4.1.5
-      '@magic-works/i18n-codegen': 0.0.5_typescript@4.1.5
+      '@magic-works/commonjs-import.meta': 1.0.0_typescript@4.2.2
+      '@magic-works/i18n-codegen': 0.0.5_typescript@4.2.2
       '@material-ui/codemod': 5.0.0-alpha.24
       '@nice-labs/git-rev': 3.5.0
       eslint: 7.20.0
@@ -36,10 +36,10 @@ importers:
       npm-run-all: 4.1.5
       only-allow: 1.0.0
       prettier: 2.2.1
-      ts-node: 9.1.1_typescript@4.1.5
-      ttypescript: 1.5.12_ts-node@9.1.1+typescript@4.1.5
-      type-coverage: 2.15.1_typescript@4.1.5
-      typescript: 4.1.5
+      ts-node: 9.1.1_typescript@4.2.2
+      ttypescript: 1.5.12_ts-node@9.1.1+typescript@4.2.2
+      type-coverage: 2.15.1_typescript@4.2.2
+      typescript: 4.2.2
     specifiers:
       '@commitlint/cli': ^11.0.0
       '@commitlint/config-conventional': ^11.0.0
@@ -78,7 +78,7 @@ importers:
       ts-node: ^9.1.1
       ttypescript: ^1.5.12
       type-coverage: ^2.14.8
-      typescript: ^4.1.3
+      typescript: 4.2.2
   packages/cli-dev-build:
     dependencies:
       inquirer: 7.3.3
@@ -3711,20 +3711,20 @@ packages:
     dev: false
     resolution:
       integrity: sha512-cNwP4QapAls+xATU8zLLqPYa9qCbgwEyWEK7vE1oH91b3LfbUYwHtiWZ1+rv0X/mh/9cWNTo2Oi2Sah/QX0WwA==
-  /@magic-works/commonjs-import.meta/1.0.0_typescript@4.1.5:
+  /@magic-works/commonjs-import.meta/1.0.0_typescript@4.2.2:
     dependencies:
-      typescript: 4.1.5
+      typescript: 4.2.2
     dev: true
     peerDependencies:
       typescript: ^3.5
     resolution:
       integrity: sha512-+k8JqF+cQ0EsNGW7Mz306aV20CCwMvHANnQ+lE6XyNkXBAnlqAjrSBumCcgs/ooDGeVXwG/N9WAHgK6Io4PJ+A==
-  /@magic-works/i18n-codegen/0.0.5_typescript@4.1.5:
+  /@magic-works/i18n-codegen/0.0.5_typescript@4.2.2:
     dependencies:
       chokidar: 3.5.1
       i18next-translation-parser: 1.0.1
       source-map: 0.7.3
-      typescript: 4.1.5
+      typescript: 4.2.2
       yargs: 16.2.0
     dev: true
     hasBin: true
@@ -23433,14 +23433,14 @@ packages:
     dev: true
     resolution:
       integrity: sha512-vDWbsl26LIcPGmDpoVzjEP6+hvHZkBkLW7JpvwbCv/5IYPJlsbzCVXY3wsCeAxAUeTclNOUZxnLdGh3VBD/J6w==
-  /ts-node/9.1.1_typescript@4.1.5:
+  /ts-node/9.1.1_typescript@4.2.2:
     dependencies:
       arg: 4.1.3
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
       source-map-support: 0.5.19
-      typescript: 4.1.5
+      typescript: 4.2.2
       yn: 3.1.1
     dev: true
     engines:
@@ -23490,10 +23490,10 @@ packages:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
     resolution:
       integrity: sha512-RYbuQuvkhuqVeXweWT3tJLKOEJ/UUw9GjNEZGWdrLLlM+611o1gwLHBpxoFJKKl25fLprp2eVthtKs5JOrNeXg==
-  /tsutils/3.20.0_typescript@4.1.5:
+  /tsutils/3.20.0_typescript@4.2.2:
     dependencies:
       tslib: 1.14.1
-      typescript: 4.1.5
+      typescript: 4.2.2
     dev: true
     engines:
       node: '>= 6'
@@ -23505,11 +23505,11 @@ packages:
     dev: true
     resolution:
       integrity: sha1-oVe6QC2iTpv5V/mqadUk7tQpAaY=
-  /ttypescript/1.5.12_ts-node@9.1.1+typescript@4.1.5:
+  /ttypescript/1.5.12_ts-node@9.1.1+typescript@4.2.2:
     dependencies:
       resolve: 1.20.0
-      ts-node: 9.1.1_typescript@4.1.5
-      typescript: 4.1.5
+      ts-node: 9.1.1_typescript@4.2.2
+      typescript: 4.2.2
     dev: true
     hasBin: true
     peerDependencies:
@@ -23541,22 +23541,22 @@ packages:
       node: '>= 0.8.0'
     resolution:
       integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==
-  /type-coverage-core/2.15.1_typescript@4.1.5:
+  /type-coverage-core/2.15.1_typescript@4.2.2:
     dependencies:
       glob: 7.1.6
       minimatch: 3.0.4
       tslib: 2.1.0
-      tsutils: 3.20.0_typescript@4.1.5
-      typescript: 4.1.5
+      tsutils: 3.20.0_typescript@4.2.2
+      typescript: 4.2.2
     dev: true
     peerDependencies:
       typescript: 2 || 3 || 4
     resolution:
       integrity: sha512-dwdp0nnbMre0cw3H2/pXkqtLixtHrr+6JcQSASuVbDUrvWrgUcYIDccUdrsg6p2xeQmHdfaqAh4TsX8/aYFL3A==
-  /type-coverage/2.15.1_typescript@4.1.5:
+  /type-coverage/2.15.1_typescript@4.2.2:
     dependencies:
       minimist: 1.2.5
-      type-coverage-core: 2.15.1_typescript@4.1.5
+      type-coverage-core: 2.15.1_typescript@4.2.2
     dev: true
     hasBin: true
     peerDependencies:
@@ -23636,13 +23636,13 @@ packages:
     dev: true
     resolution:
       integrity: sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
-  /typescript/4.1.5:
+  /typescript/4.2.2:
     dev: true
     engines:
       node: '>=4.2.0'
     hasBin: true
     resolution:
-      integrity: sha512-6OSu9PTIzmn9TCDiovULTnET6BgXtDYL4Gg4szY+cGsc3JP1dQL8qvE8kShTRx1NIw4Q9IBHlwODjkjWEtMUyA==
+      integrity: sha512-tbb+NVrLfnsJy3M59lsDgrzWIflR4d4TIUjz+heUnHZwdF7YsrMTKoRERiIvI2lvBG95dfpLxB21WZhys1bgaQ==
   /typeson-registry/1.0.0-alpha.38:
     dependencies:
       base64-arraybuffer-es6: 0.6.0
