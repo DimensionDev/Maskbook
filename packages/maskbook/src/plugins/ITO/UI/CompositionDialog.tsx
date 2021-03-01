@@ -1,10 +1,9 @@
 import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
-import { createStyles, DialogContent, DialogProps, makeStyles } from '@material-ui/core'
+import { DialogContent, DialogProps } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ITO_MetaKey } from '../constants'
-import type { JSON_PayloadInMask } from '../types'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { JSON_PayloadInMask, DialogTabs } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
 import { editActivatedPostMetadata } from '../../../social-network/ui'
@@ -16,8 +15,6 @@ import Services from '../../../extension/service'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 
-const useStyles = makeStyles((theme) => createStyles({}))
-
 export interface CompositionDialogProps extends withClasses<'root'> {
     open: boolean
     onConfirm(payload: JSON_PayloadInMask): void
@@ -27,13 +24,12 @@ export interface CompositionDialogProps extends withClasses<'root'> {
 
 export function CompositionDialog(props: CompositionDialogProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
     const chainId = useChainId()
 
     //#region tabs
-    const state = useState(0)
+    const state = useState<DialogTabs>(DialogTabs.create)
 
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
@@ -51,7 +47,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             PluginITO_RPC.discoverPool('', payload)
 
             const [, setValue] = state
-            setValue(0)
+            setValue(DialogTabs.create)
         },
         [account, chainId, props.onConfirm, state],
     )
@@ -75,7 +71,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const onClose = useCallback(() => {
         const [, setValue] = state
-        setValue(0)
+        setValue(DialogTabs.create)
         props.onClose()
     }, [props, state])
 
