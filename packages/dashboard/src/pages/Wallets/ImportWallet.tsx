@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useState } from 'react'
+import React, { memo, useState } from 'react'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { Button, createStyles, Tab, experimentalStyled as styled, makeStyles, FilledInput } from '@material-ui/core'
 import { ButtonGroupTabList } from '@dimensiondev/maskbook-theme'
@@ -68,21 +68,20 @@ const useTabPanelStyles = makeStyles((theme) =>
     }),
 )
 
-type walletsType = 'mnemonic' | 'jsonFile' | 'privateKey'
-
-const walletTabs: walletsType[] = ['mnemonic', 'jsonFile', 'privateKey']
+const walletTabs = ['mnemonic', 'jsonFile', 'privateKey'] as const
+type TabType = typeof walletTabs[number]
 
 export const ImportWallet = memo(() => {
     const tabClasses = useTabPanelStyles()
 
     const t = useDashboardI18N()
-    const walletTabsLabel = {
+    const walletTabsLabel: Record<TabType, string> = {
         mnemonic: t.wallets_wallet_mnemonic(),
         jsonFile: t.wallets_wallet_json_file(),
         privateKey: t.wallets_wallet_private_key(),
     }
 
-    const [activeTab, setActiveTab] = useState(walletTabs[0])
+    const [activeTab, setActiveTab] = useState<TabType>(walletTabs[0])
 
     return (
         <>
@@ -90,7 +89,7 @@ export const ImportWallet = memo(() => {
                 <TabContext value={walletTabs.includes(activeTab) ? activeTab : walletTabs[0]}>
                     <ButtonGroupTabContainer>
                         <ButtonGroupTabList
-                            onChange={(e, v: walletsType) => setActiveTab(v)}
+                            onChange={(e, v: TabType) => setActiveTab(v)}
                             aria-label={t.wallets_import_wallet_tabs()}
                             fullWidth>
                             {walletTabs.map((key) => (
