@@ -47,7 +47,7 @@ declare class ClipboardItem {
     constructor(data: { [mimeType: string]: Blob })
 }
 
-type PermissionNameWithClipboard = PermissionName | 'clipboard-read' | 'clipboard-write'
+type PermissionNameWithClipboard = PermissionName
 
 interface PermissionWithClipboardDescriptor {
     name: PermissionNameWithClipboard
