@@ -55,3 +55,8 @@ export interface PoolRecordInDatabase extends PoolRecord {
     /** An unique record type in DB */
     type: 'ito-pool'
 }
+
+export enum DialogTabs {
+    create = 0,
+    past = 1,
+}
