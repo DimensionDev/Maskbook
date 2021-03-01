@@ -15,6 +15,7 @@
     "@dimensiondev/maskbook-shared": "*",
     "@dimensiondev/maskbook-storybook-shared": "*",
     "@dimensiondev/maskbook-theme": "*",
+    "@dimensiondev/icons": "*",
     "@types/color": "^3.0.1",
     "async-call-rpc": "^5.0.0",
     "color": "^3.1.3",

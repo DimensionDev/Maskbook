@@ -9,6 +9,7 @@ import {
     Typography,
 } from '@material-ui/core'
 import { memo, useLayoutEffect, useRef } from 'react'
+import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 
 export interface StartupActionListItemProps {
     icon: React.ReactNode
@@ -35,7 +36,7 @@ export const StartupActionListItem = memo((props: StartupActionListItemProps) =>
     })
     return (
         <Container button ref={listRef}>
-            <ListItemIcon>{icon}</ListItemIcon>
+            <ListItemIconContainer>{icon}</ListItemIconContainer>
             <ListItemText
                 primary={
                     <Typography variant="body1" color="textPrimary">
@@ -58,11 +59,16 @@ export const StartupActionListItem = memo((props: StartupActionListItemProps) =>
 })
 
 const Container = styled(ListItem)`
-    border: 1px solid #f3f3f4;
+    border: 1px solid ${MaskColorVar.border};
     border-radius: 6px;
 `
 // TODO: Button should use "big border radius" variant instead of a styled one
 const RoundButton = styled(Button)`
     border-radius: 20px;
     min-width: 80px;
+`
+
+const ListItemIconContainer = styled(ListItemIcon)`
+    // TODO: mobile
+    font-size: 48px;
 `

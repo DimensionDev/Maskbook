@@ -21,10 +21,19 @@ export const LightColor = {
     orangeMain: '#ffb915',
     orangeLight: '#faf0d8',
 
+    iconLight: '#a6a9b6',
+
     divider: '#f3f3f4',
+
+    border: '#F3F3F4',
 
     textPrimary: '#111432',
     textSecondary: '#7b8192',
+
+    secondaryInfoText: '#AFC3E1',
+    normalText: '#7B8192',
+
+    infoBackground: 'rgba(175, 195, 225, 0.15)',
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
@@ -46,12 +55,21 @@ export const DarkColor: typeof LightColor = {
     orangeMain: '#ffb915',
     orangeLight: '#463e3f',
 
+    iconLight: '#a6a9b6',
+
     divider: '#3e455e',
+
+    border: '#3E455E',
 
     // TODO: ?
     textPrimary: 'white',
     // TODO: ?
     textSecondary: 'ghostwhite',
+
+    secondaryInfoText: '#AFC3E1',
+    normalText: 'rgba(255, 255, 255, 0.8)',
+
+    infoBackground: 'rgba(175, 195, 225, 0.15)',
 }
 
 export const TypographyOptions: ThemeOptions['typography'] = {}

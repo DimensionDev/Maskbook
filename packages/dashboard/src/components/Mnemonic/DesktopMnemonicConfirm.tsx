@@ -11,10 +11,10 @@ const Container = styled('div')({
     },
 })
 const a12 = [...Array(12).keys()]
-export interface MnemonicConfirmProps {
+export interface DesktopMnemonicConfirmProps {
     onChange(mnemonics: (string | undefined)[]): void
 }
-export const MnemonicConfirm = memo((props: MnemonicConfirmProps) => {
+export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) => {
     const value = useRef<Readonly<Record<string, string>>>({ length: 12 as any })
     return (
         <Container>

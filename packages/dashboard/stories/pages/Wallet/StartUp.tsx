@@ -1,5 +1,5 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
-import { StartUp as C } from '../src/pages/Wallets/StartUp'
+import { StartUp as C } from '../../../src/pages/Wallets/StartUp'
 const { meta, of } = story(C)
 
 export default meta({ title: 'Pages/Wallet/Start Up' })
