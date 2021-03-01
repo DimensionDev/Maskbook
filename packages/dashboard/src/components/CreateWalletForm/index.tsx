@@ -20,11 +20,13 @@ const useStyles = makeStyles((theme) =>
             marginTop: theme.spacing(1.5),
         },
         input: {
-            padding: theme.spacing(2, 0),
+            paddingTop: theme.spacing(2),
+            paddingBottom: theme.spacing(2),
         },
         filled: {
             display: 'flex',
-            padding: theme.spacing(2, 0),
+            paddingTop: theme.spacing(2),
+            paddingBottom: theme.spacing(2),
         },
     }),
 )
