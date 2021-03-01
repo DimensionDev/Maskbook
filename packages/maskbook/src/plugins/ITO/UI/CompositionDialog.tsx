@@ -32,6 +32,9 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const account = useAccount()
     const chainId = useChainId()
 
+    //#region tabs
+    const state = useState(0)
+
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password)
@@ -46,12 +49,13 @@ export function CompositionDialog(props: CompositionDialogProps) {
             props.onConfirm(payload)
             // storing the created pool in DB, it helps retrieve the pool password later
             PluginITO_RPC.discoverPool('', payload)
+
+            const [, setValue] = state
+            setValue(0)
         },
-        [account, chainId, props.onConfirm],
+        [account, chainId, props.onConfirm, state],
     )
 
-    //#region tabs
-    const state = useState(0)
     const tabProps: AbstractTabProps = {
         tabs: [
             {
