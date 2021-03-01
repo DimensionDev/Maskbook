@@ -36,7 +36,7 @@ export const StartupActionListItem = memo((props: StartupActionListItemProps) =>
     })
     return (
         <Container button ref={listRef}>
-            <ListItemIcon>{icon}</ListItemIcon>
+            <ListItemIconContainer>{icon}</ListItemIconContainer>
             <ListItemText
                 primary={
                     <Typography variant="body1" color="textPrimary">
@@ -66,4 +66,9 @@ const Container = styled(ListItem)`
 const RoundButton = styled(Button)`
     border-radius: 20px;
     min-width: 80px;
+`
+
+const ListItemIconContainer = styled(ListItemIcon)`
+    // TODO: mobile
+    font-size: 48px;
 `
