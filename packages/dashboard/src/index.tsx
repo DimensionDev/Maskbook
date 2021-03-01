@@ -2,30 +2,25 @@
 /// <reference types="react-dom/experimental" />
 import './prepare'
 import ReactDOM from 'react-dom'
-import { setService, WebExtensionExternalChannel } from './API'
+import { setService, setPluginServices, PluginMessages, setMessages, setPluginMessages } from './API'
 import { App } from './App'
 import { AsyncCall } from 'async-call-rpc'
 import { serializer } from '@dimensiondev/maskbook-shared'
 import { StylesProvider } from '@material-ui/core/styles'
-import { Environment } from '@dimensiondev/holoflows-kit'
+import { UnboundedRegistry, WebExtensionMessage, Environment } from '@dimensiondev/holoflows-kit'
 
-const servicesChannel = new WebExtensionExternalChannel('services')
-setService(
-    new Proxy({} as any, {
-        get(target, prop) {
-            if (target[prop]) return target[prop]
-            target[prop] = AsyncCall(
-                {},
-                {
-                    channel: servicesChannel.events[String(prop)].bind(Environment.ManifestBackground),
-                    serializer,
-                    log: 'all',
-                },
-            )
-            return target[prop]
-        },
-    }),
-)
+if (!import.meta.hot) {
+    throw new Error('This app is not used to run as an isolated web site currently')
+} else {
+    import.meta.hot.accept()
+}
+class WebExtensionExternalChannel extends WebExtensionMessage<any> {
+    constructor(domain: string, id = 'jkoeaghipilijlahjplgbfiocjhldnap') {
+        super({ externalExtensionID: id, domain })
+    }
+}
+installService()
+installPluginService()
 
 ReactDOM.unstable_createRoot(document.getElementById('root')!).render(
     <StylesProvider injectFirst>
@@ -33,8 +28,43 @@ ReactDOM.unstable_createRoot(document.getElementById('root')!).render(
     </StylesProvider>,
 )
 
-if (!import.meta.hot) {
-    throw new Error('This app is not used to run as an isolated web site currently')
-} else {
-    import.meta.hot.accept()
+function installService() {
+    // @ts-ignore 2345
+    setMessages(new WebExtensionExternalChannel('mask'))
+    const servicesChannel = new WebExtensionExternalChannel('services')
+    const service = initProxy((prop) => initRPCBridge(servicesChannel.events[String(prop)]))
+    setService(service)
+}
+
+function installPluginService() {
+    const channelOf = (id: string) => new WebExtensionExternalChannel('@plugin/' + id)
+    const Wallet = channelOf('com.maskbook.wallet')
+    // @ts-ignore 2345
+    setPluginMessages({ Wallet })
+    setPluginServices({
+        Wallet: initRPCBridge(PluginMessages.Wallet.events.rpc),
+    })
+}
+
+function initRPCBridge(channel: UnboundedRegistry<any>): any {
+    return AsyncCall(
+        {},
+        {
+            channel: channel.bind(Environment.ManifestBackground),
+            serializer,
+            log: 'all',
+            thenable: false,
+        },
+    )
+}
+
+function initProxy(init: (key: string) => any) {
+    return new Proxy({} as any, {
+        get(target, prop) {
+            if (typeof prop !== 'string') throw new TypeError()
+            if (target[prop]) return target[prop]
+            target[prop] = init(prop)
+            return target[prop]
+        },
+    })
 }
