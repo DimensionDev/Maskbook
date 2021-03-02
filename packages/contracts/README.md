@@ -28,6 +28,6 @@ types.d.ts 14ms
 $ git add . # cwd: packages/contracts/abis
 $ git add . # cwd: packages/contracts/types
 
-// or compile a specific contract
+$ # or compile a specific contract
 $ npm start -- --abi ITO
 ```
