@@ -108,7 +108,7 @@ importers:
       web3-eth-contract: ^1.3.4
   packages/dashboard:
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.8.0-20210223102015-08c5613
+      '@dimensiondev/holoflows-kit': 0.8.0-20210302070358-e90c55c
       '@dimensiondev/icons': link:../icons
       '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
@@ -133,7 +133,7 @@ importers:
       snowpack: 3.0.11
     specifiers:
       '@babel/core': ^7.12.9
-      '@dimensiondev/holoflows-kit': 0.8.0-20210223102015-08c5613
+      '@dimensiondev/holoflows-kit': 0.8.0-20210302070358-e90c55c
       '@dimensiondev/icons': workspace:*
       '@dimensiondev/maskbook-shared': workspace:*
       '@dimensiondev/maskbook-storybook-shared': workspace:*
@@ -170,7 +170,7 @@ importers:
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/contracts': link:../contracts
       '@dimensiondev/dashboard': link:../dashboard
-      '@dimensiondev/holoflows-kit': 0.8.0-20210223102015-08c5613_webextension-polyfill@0.7.0
+      '@dimensiondev/holoflows-kit': 0.8.0-20210302070358-e90c55c_webextension-polyfill@0.7.0
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
       '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-theme': link:../theme
@@ -333,7 +333,7 @@ importers:
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/contracts': workspace:*
       '@dimensiondev/dashboard': workspace:*
-      '@dimensiondev/holoflows-kit': 0.8.0-20210223102015-08c5613
+      '@dimensiondev/holoflows-kit': 0.8.0-20210302070358-e90c55c
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
       '@dimensiondev/maskbook-shared': workspace:*
       '@dimensiondev/maskbook-theme': workspace:*
@@ -2737,7 +2737,7 @@ packages:
     resolution:
       integrity: sha512-tJiUcLqVGhod0QhrHelcwrhDaTlOOi9r1dsywkeaC0ue1uusblt63Rr5a8RrKIqclS/dB6zdeQxZOuFurkYBow==
       tarball: download/@dimensiondev/common-protocols/1.6.0-20201027083702-d0ae6e2/6ce508fba448b0ecafe5c35af65722219c4d8ecb30915c6cd39b494a2bbd9088
-  /@dimensiondev/holoflows-kit/0.8.0-20210223102015-08c5613:
+  /@dimensiondev/holoflows-kit/0.8.0-20210302070358-e90c55c:
     dependencies:
       '@servie/events': 1.0.0
       async-call-rpc: 4.2.1
@@ -2750,9 +2750,9 @@ packages:
     peerDependencies:
       webextension-polyfill: '*'
     resolution:
-      integrity: sha512-JSq6wJGsnEfVeKD7ebit6I9vn/DbFWbpL41r2uCDn6V6YsnhvMNRoZV7qa//P6k5v1cP5DI0bebdUlQtJn6+uQ==
-      tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210223102015-08c5613/2ea26ab884c118767f65ec16153ca231728cd926d64d55e8d9bfe222991897a9
-  /@dimensiondev/holoflows-kit/0.8.0-20210223102015-08c5613_webextension-polyfill@0.7.0:
+      integrity: sha1-uRf98X3rSkbIQrs+ze3fOloHDF8=
+      tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210302070358-e90c55c/53508fd749cc314d345050fa38cc0c233d6b1ce5a5b8aba2cf52a5a56a785c81
+  /@dimensiondev/holoflows-kit/0.8.0-20210302070358-e90c55c_webextension-polyfill@0.7.0:
     dependencies:
       '@servie/events': 1.0.0
       async-call-rpc: 4.2.1
@@ -2766,8 +2766,8 @@ packages:
     peerDependencies:
       webextension-polyfill: '*'
     resolution:
-      integrity: sha512-JSq6wJGsnEfVeKD7ebit6I9vn/DbFWbpL41r2uCDn6V6YsnhvMNRoZV7qa//P6k5v1cP5DI0bebdUlQtJn6+uQ==
-      tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210223102015-08c5613/2ea26ab884c118767f65ec16153ca231728cd926d64d55e8d9bfe222991897a9
+      integrity: sha1-uRf98X3rSkbIQrs+ze3fOloHDF8=
+      tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210302070358-e90c55c/53508fd749cc314d345050fa38cc0c233d6b1ce5a5b8aba2cf52a5a56a785c81
   /@dimensiondev/kit/0.0.0-20210221102734-0b4a937:
     dev: false
     resolution:

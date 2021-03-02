@@ -11,7 +11,7 @@
   "types": "./dist/src/entry.d.ts",
   "dependencies": {
     "@dimensiondev/icons": "workspace:*",
-    "@dimensiondev/holoflows-kit": "0.8.0-20210223102015-08c5613",
+    "@dimensiondev/holoflows-kit": "0.8.0-20210302070358-e90c55c",
     "@dimensiondev/maskbook-shared": "workspace:*",
     "@dimensiondev/maskbook-storybook-shared": "workspace:*",
     "@dimensiondev/maskbook-theme": "workspace:*",
