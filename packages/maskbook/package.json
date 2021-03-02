@@ -13,7 +13,7 @@
     "@dimensiondev/maskbook-shared": "workspace:*",
     "@dimensiondev/maskbook-theme": "workspace:*",
     "@dimensiondev/matrix-js-sdk-type": "=1.0.0-20200731085604-dc2de92",
-    "@dimensiondev/metamask-extension-provider": "^3.0.2-20210215121518-716d309",
+    "@dimensiondev/metamask-extension-provider": "3.0.2-20210215121518-716d309",
     "@dimensiondev/stego-js": "=0.11.1-20201027083223-8ab41be",
     "@ethersproject/address": "^5.0.4",
     "@ethersproject/contracts": "^5.0.4",
