@@ -12,7 +12,8 @@ async function fetchFromUniswapV2Subgraph<T>(query: string) {
             query,
         }),
     })
-    return (await response.json()) as T
+    const { data } = await response.json()
+    return data as T
 }
 
 /**
