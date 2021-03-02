@@ -1,22 +1,20 @@
-# ![](https://img.shields.io/badge/status-wip-orange.svg?style=flat-square) Mask Network Architecture Overview
-
-**Author(s)**:
-
-- [Jack Works](https://github.com/Jack-Works)
-
-**Maintainer(s)**:
-
-- [Jack Works](https://github.com/Jack-Works)
-
+---
+author: Jack-Works
+maintainer: Jack-Works
 ---
 
-**Abstract**
+# Mask Network Architecture Overview
 
-This document describes the Mask Network protocols, the subsystems, the interfaces, and how it all fits together. It delegates non-interface details to other specs as much as possible. This is meant as a top-level view of the protocol and how the system fits together.
+![WIP](https://img.shields.io/badge/status-wip-orange.svg?style=flat-square)
 
-# Subsystems
+> This document describes the Mask Network protocols, the subsystems,
+> the interfaces, and how it all fits together.
+> It delegates non-interface details to other specs as much as possible.
+> This is meant as a top-level view of the protocol and how the system fits together.
 
-## Background service:
+## Subsystems
+
+### Background service
 
 The entry point is `packages/maskbook/src/background-service.ts`
 
@@ -28,23 +26,22 @@ Services.Crypto.encrypt(...)
 
 It is sending the request to the background service.
 
-## Content scripts:
+### Content scripts
 
 The entry point is `packages/maskbook/src/content-script.ts`.
 
 All UI on the Twitter/Facebook are rendered by the content scripts.
 
-## Options page (or Dashboard):
+### Options page (or Dashboard)
 
 The entry point is `packages/maskbook/src/extension/options-page/index.tsx`.
 
 This is a normal web app that interacts with the background page.
 
-## Injected scripts:
+### Injected scripts
 
 The entry point is `packages/maskbook/src/extension/injected-script/index.ts`.
 
 Generally, you don't need to modify this. It provides the ability to change the main Realm of the web page. (Thus we can emulate some DOM events).
 
 ![Architecture overview](https://user-images.githubusercontent.com/5390719/109270562-28f4a700-7849-11eb-9a7a-b364318bdeec.png)
-
