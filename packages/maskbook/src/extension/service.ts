@@ -69,7 +69,7 @@ function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, gene
     const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
     const load = () => getLocalImplementation(`Services.${key}`, impl, channel)
     const localImplementation = load()
-    module.hot && document.addEventListener(SERVICE_HMR_EVENT, load)
+    isBackground && module.hot && document.addEventListener(SERVICE_HMR_EVENT, load)
     const service = RPC(localImplementation, {
         key,
         serializer,
@@ -79,9 +79,14 @@ function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, gene
         strict: isBackground,
         thenable: false,
     })
-    localImplementation.then((val) => {
-        Reflect.set(globalThis, key + 'Service', val)
-        if (isBackground) Reflect.set(Services, key, val)
-    })
+    if (isBackground) {
+        localImplementation.then((val) => {
+            Reflect.set(globalThis, key + 'Service', val)
+            if (isBackground) Reflect.set(Services, key, val)
+        })
+    } else {
+        Reflect.set(globalThis, key + 'Service', service)
+        if (isBackground) Reflect.set(Services, key, service)
+    }
     return service as any
 }
