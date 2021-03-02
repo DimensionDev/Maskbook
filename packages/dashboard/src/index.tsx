@@ -29,7 +29,7 @@ ReactDOM.unstable_createRoot(document.getElementById('root')!).render(
 )
 
 function installService() {
-    // @ts-ignore 2345
+    // @ts-expect-error 2345
     setMessages(new WebExtensionExternalChannel('mask'))
     const servicesChannel = new WebExtensionExternalChannel('services')
     const service = initProxy((prop) => initRPCBridge(servicesChannel.events[String(prop)]))
@@ -39,7 +39,7 @@ function installService() {
 function installPluginService() {
     const channelOf = (id: string) => new WebExtensionExternalChannel('@plugin/' + id)
     const Wallet = channelOf('com.maskbook.wallet')
-    // @ts-ignore 2345
+    // @ts-expect-error 2345
     setPluginMessages({ Wallet })
     setPluginServices({
         Wallet: initRPCBridge(PluginMessages.Wallet.events.rpc),
