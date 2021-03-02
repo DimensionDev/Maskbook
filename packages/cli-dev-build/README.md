@@ -8,24 +8,24 @@ This package provides two commands: `build` and `dev`.
 
 ## Mode 0: Interactive start
 
-```shell
-$ npx dev --help
+```bash
+npx dev --help
 ```
 
 ## Mode 1: Start development
 
-```shell
-$ npx dev [flags1] [flags2] [...]
-$ npx build [flags1] [flags2] [...]
+```bash
+npx dev [flags1] [flags2] [...]
+npx build [flags1] [flags2] [...]
 ```
 
 This command will start the webpack process with specified profiles.
 
-### Example:
+### Example
 
-```shell
-$ npx dev chromium beta
-$ npx build firefox
+```bash
+npx dev chromium beta
+npx build firefox
 ```
 
 ### Available flags
@@ -36,12 +36,12 @@ $ npx build firefox
 
 ## Mode 2: Run any command
 
-```shell
-$ npx dev -- your command
-$ npx build -- your command
+```bash
+npx dev -- your command
+npx build -- your command
 ```
 
-# What is executed before my command, exactly?
+## What is executed before my command, exactly?
 
 1. i18n code generation
 

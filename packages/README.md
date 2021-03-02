@@ -1,47 +1,49 @@
-# Code
+# Package structure
 
-## maskbook
+## Code
 
-The main repo of the extension
+- [maskbook](maskbook)
 
-## dashboard
+  The main repo of the extension
 
-Next generation dashboard of Mask Network (in development)
+- [dashboard](dashboard)
 
-## shared
+  Next generation dashboard of Mask Network (in development)
 
-Some shared data structure or utils across the project.
+- [shared](shared)
 
-## theme
+  Some shared data structure or utils across the project.
 
-Next generation theme of Mask Network, also containing components (in development)
+- [theme](theme)
 
-# Tools
+  Next generation theme of Mask Network, also containing components (in development)
 
-## cli-dev-build
+## Tools
 
-Because our project is using TypeScript project reference and code generation, to make the build process work normally, those process must run before any other commands.
+- [cli-dev-build](cli-dev-build)
 
-This package provides two command to wrap the other commands.
+  Because our project is using TypeScript project reference and code generation, to make the build process work normally, those process must run before any other commands.
 
-## locale-kit
+  This package provides two command to wrap the other commands.
 
-Tools to maintaining i18n files in the project
+- [locale-kit](locale-kit)
 
-## netlify
+  Tools to maintaining i18n files in the project
 
-Tools of building netlify previews
+- [netlify](netlify)
 
-## storybook-shared
+  Tools of building netlify previews
 
-Same, but for storybook
+- [storybook-shared](storybook-shared)
 
-# Resources
+  Same, but for storybook
 
-## contracts
+## Resources
 
-Contains generated code from the ETH contracts.
+- [contracts](contracts)
 
-# icons
+  Contains generated code from the ETH contracts.
 
-Contains SVG icons (as React component) in the project
+- [icons](icons)
+
+  Contains SVG icons (as React component) in the project
