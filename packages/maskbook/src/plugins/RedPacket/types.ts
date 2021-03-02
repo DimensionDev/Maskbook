@@ -28,13 +28,18 @@ export enum RedPacketStatus {
     refunded = 'refunded',
 }
 
+export enum DialogTabs {
+    create = 0,
+    past = 1,
+}
+
 export interface RedPacketAvailability {
     token_address: string
     balance: string
     total: string
     claimed: string
     expired: boolean
-    ifclaimed: boolean
+    claimed_amount: string
 }
 
 export interface RedPacketJSONPayload {
