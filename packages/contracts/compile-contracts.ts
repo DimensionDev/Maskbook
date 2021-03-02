@@ -16,9 +16,7 @@ async function replaceFileAll(file: string, pairs: [string, string][]) {
 }
 
 async function main() {
-    const files = process.argv.includes('--abi') ? (
-        `${process.argv[process.argv.length - 1]}.json`
-    ) : '*.json'
+    const files = process.argv.includes('--abi') ? `${process.argv[process.argv.length - 1]}.json` : '*.json'
     // compile abis to typings
     await tsGenerator(
         { cwd: ABIS_PATH },
