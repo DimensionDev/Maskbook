@@ -9,8 +9,8 @@
     "start": "dev -- start-storybook -p 6006"
   },
   "dependencies": {
-    "@dimensiondev/maskbook-storybook-shared": "*",
-    "@dimensiondev/maskbook-shared": "*",
+    "@dimensiondev/maskbook-storybook-shared": "workspace:**",
+    "@dimensiondev/maskbook-shared": "workspace:*",
     "lodash-es": "^4.17.20"
   },
   "devDependencies": {
