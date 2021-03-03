@@ -36,40 +36,45 @@ export interface HISTRORY_ITEM {
     id: string
     other_addr: string
     project_id?: string
-    receives: {
-        amount: number
-        to_addr: string
-        token_id: string
-    }[]
-    sends: {
-        amount: number
-        to_addr: string
-        token_id: string
-    }[]
-    spot_trade?: {
-        dex_id: string
-        pay_token_amount: number
-        pay_token_id: string
-        receive_token_amount: number
-        receive_token_id: string
-    }
+    receives: AmountTokenPair[]
+    sends: AmountTokenPair[]
+    spot_trade?: SpotTrade
     time_at: number
-    token_approve?: {
-        spender: string
-        token_id: string
-        value: number
-    }
-    tx?: {
-        eth_gas_fee: number
-        from_addr: string
-        name: string
-        params: string
-        // 0 - failed, 1 - succeed
-        status: 0 | 1
-        to_addr: string
-        usd_gas_fee: number
-        value: number
-    }
+    token_approve?: TokenApprove
+    tx?: Record
+}
+
+export interface AmountTokenPair {
+    amount: number
+    to_addr: string
+    token_id: string
+}
+
+export interface SpotTrade {
+    dex_id: string
+    pay_token_amount: number
+    pay_token_id: string
+    receive_token_amount: number
+    receive_token_id: string
+}
+
+export interface TokenApprove {
+    spender: string
+    token_id: string
+    value: number
+}
+
+export interface Record {
+    eth_gas_fee: number
+    from_addr: string
+    name: string
+    // Note: this is JSON string
+    params: string
+    // Note: 0 - failed, 1 - succeed
+    status: 0 | 1
+    to_addr: string
+    usd_gas_fee: number
+    value: number
 }
 
 export interface HISTORY_RESPONSE {
