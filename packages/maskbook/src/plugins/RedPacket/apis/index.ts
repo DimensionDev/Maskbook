@@ -1,8 +1,8 @@
-import { getChainId } from '../../../extension/background-script/EthereumService'
-import { getConstant } from '../../../web3/helpers'
+import { getChainId } from '../../../extension/background-script/SettingsService'
+import { getConstant } from '@dimensiondev/web3-shared'
 import { tokenIntoMask } from '../../ITO/helpers'
 import { RED_PACKET_CONSTANTS } from '../constants'
-import type { History } from '../types'
+import type { RedPacketHistoryOutMask, RedPacketHistoryInMask } from '../types'
 
 const TOKEN_FIELDS = `
     type
@@ -59,9 +59,11 @@ export async function getAllRedPackets(address: string) {
 
     const {
         data: { redPackets },
-    } = (await response.json()) as { data: { redPackets: History.RedPacket_OutMask[] } }
+    } = (await response.json()) as { data: { redPackets: RedPacketHistoryOutMask[] } }
+
+    console.log(redPackets, 'redPackets')
 
     return redPackets
-        .map((x) => ({ ...x, token: tokenIntoMask(x.token) } as History.RedPacket_InMask))
+        .map((x) => ({ ...x, token: tokenIntoMask(x.token) } as RedPacketHistoryInMask))
         .sort((a, b) => b.creation_time - a.creation_time)
 }

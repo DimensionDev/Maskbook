@@ -1,4 +1,4 @@
-import type { ChainId, FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 
 export interface JSON_PayloadInMask {
     contract_address: string
@@ -32,9 +32,11 @@ export interface JSON_PayloadInMask {
     test_nums?: number[]
 }
 
-export type TokenOutMask = Omit<JSON_PayloadInMask['token'], 'chainId'> & {
+//#region TokenOutMask
+export type TokenOutMask = Omit<NativeTokenDetailed | ERC20TokenDetailed, 'chainId'> & {
     chain_id: ChainId
 }
+//#endregion
 
 export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
     token: TokenOutMask
