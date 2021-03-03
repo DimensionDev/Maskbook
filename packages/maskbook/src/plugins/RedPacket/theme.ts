@@ -1,5 +1,4 @@
 import { unstable_createMuiStrictModeTheme } from '@material-ui/core'
-import { getUrl } from '../../utils/utils'
 
 export const PluginRedPacketTheme = unstable_createMuiStrictModeTheme({
     components: {
@@ -11,7 +10,7 @@ export const PluginRedPacketTheme = unstable_createMuiStrictModeTheme({
                     position: 'relative',
                     '&::after': {
                         position: 'absolute',
-                        backgroundImage: `url(${getUrl('wallet/present-default.png')})`,
+                        backgroundImage: `url(${new URL('./UI/present-default.png', import.meta.url)})`,
                         top: 250,
                         width: 60,
                         height: 60,
