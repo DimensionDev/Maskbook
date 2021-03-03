@@ -105,9 +105,19 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
     const makeTitle = () => {
         if (process.env.NODE_ENV === 'production') {
-            return <img className={classes.masktext} src="/maskbook-title-white.svg" />
+            return (
+                <img
+                    className={classes.masktext}
+                    src={new URL('./AboutMaskTitle-White.svg', import.meta.url).toString()}
+                />
+            )
         }
-        return <img className={classes.masknightly} src="/maskbook-title-nightly.svg" />
+        return (
+            <img
+                className={classes.masknightly}
+                src={new URL('./AboutMaskTitle-Nightly.svg', import.meta.url).toString()}
+            />
+        )
     }
     return (
         <DashboardDialogCore {...props} CloseIconProps={{ className: classes.close }}>
