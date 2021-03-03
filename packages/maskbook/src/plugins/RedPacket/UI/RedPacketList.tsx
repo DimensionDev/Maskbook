@@ -72,7 +72,7 @@ function RedPacketList(props: RedPacketListProps) {
 //#endregion
 
 //#region backlog list
-export interface RedPacketBacklogListProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RedPacketBacklogListProps extends withClasses<never> {
     onSelect?: (payload: RedPacketJSONPayload) => void
 }
 
@@ -91,7 +91,7 @@ export function RedPacketBacklogList(props: RedPacketBacklogListProps) {
 //#endregion
 
 //#region inbound list
-export interface RedPacketInboundListProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RedPacketInboundListProps extends withClasses<never> {
     onSelect?: (payload: RedPacketJSONPayload) => void
 }
 
@@ -105,7 +105,7 @@ export function RedPacketInboundList(props: RedPacketInboundListProps) {
 //#endregion
 
 //#region outbound list
-export interface RedPacketOutboundListProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RedPacketOutboundListProps extends withClasses<never> {
     onSelect?: (payload: RedPacketJSONPayload) => void
 }
 

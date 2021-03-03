@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface RedPacketInspectorProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RedPacketInspectorProps extends withClasses<never> {
     message: TypedMessage
 }
 

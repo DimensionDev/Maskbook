@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface TraderProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface TraderProps extends withClasses<never> {
     coin: Coin
     tokenDetailed: ERC20TokenDetailed | EtherTokenDetailed | undefined
 }

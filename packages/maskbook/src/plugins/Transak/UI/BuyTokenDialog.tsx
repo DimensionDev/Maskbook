@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface BuyTokenDialogProps extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root'> {}
+export interface BuyTokenDialogProps extends withClasses<never | 'root'> {}
 
 export function BuyTokenDialog(props: BuyTokenDialogProps) {
     const { t } = useI18N()

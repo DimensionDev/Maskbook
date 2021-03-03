@@ -18,7 +18,7 @@ const useStyle = makeStyles((theme: Theme) => ({
     icon: {},
 }))
 
-export interface WalletInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
+export interface WalletInListProps extends withClasses<never> {
     wallet: WalletRecord
     disabled?: boolean
     onClick?: () => void

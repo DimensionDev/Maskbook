@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface RestoreFromBackupBoxProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RestoreFromBackupBoxProps extends withClasses<never> {
     file: File | null
     onChange?: (file: File, content: string) => void
 }

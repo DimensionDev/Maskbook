@@ -120,7 +120,7 @@ const useSetupFormStyles = makeStyles((theme) =>
     }),
 )
 
-interface SetupFormProps extends withClasses<KeysInferFromUseStyles<typeof useSetupFormStyles>> {
+interface SetupFormProps extends withClasses<never> {
     primary: string
     secondary?: string
     content?: React.ReactNode

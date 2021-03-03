@@ -26,7 +26,7 @@ const useStyle = makeStyles((theme: Theme) => ({
     },
 }))
 
-export interface ProfileInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
+export interface ProfileInListProps extends withClasses<never> {
     item: Profile
     search?: string
     checked?: boolean

@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-export interface TokenIconProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface TokenIconProps extends withClasses<never> {
     name?: string
     address: string
     AvatarProps?: Partial<AvatarProps>

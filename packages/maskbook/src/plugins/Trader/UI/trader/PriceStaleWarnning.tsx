@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) => {
     })
 })
 
-export interface PriceStaleWarnningProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface PriceStaleWarnningProps extends withClasses<never> {
     onAccept(): void
 }
 

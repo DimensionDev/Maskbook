@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface RestoreFromQRCodeImageBoxProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RestoreFromQRCodeImageBoxProps extends withClasses<never> {
     file: File | null
     onScan?: (content: string) => void
     onError?: () => void

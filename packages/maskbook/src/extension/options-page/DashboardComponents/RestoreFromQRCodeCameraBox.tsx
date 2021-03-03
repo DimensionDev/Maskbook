@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface RestoreFromQRCodeCameraBoxProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RestoreFromQRCodeCameraBoxProps extends withClasses<never> {
     onScan?: (content: string) => void
     onError?: () => void
 }

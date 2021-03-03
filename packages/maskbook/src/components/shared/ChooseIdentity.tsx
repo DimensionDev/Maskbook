@@ -54,7 +54,7 @@ const useAccordionSummaryStyle = makeStyles({
     },
 })
 
-export interface ChooseIdentityProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface ChooseIdentityProps extends withClasses<never> {
     /**
      * Current selected identity
      * @defaultValue the global selected identity

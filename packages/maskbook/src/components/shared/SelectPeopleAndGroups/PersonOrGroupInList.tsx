@@ -14,7 +14,7 @@ import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
 import { useStylesExtends } from '../../custom-ui-helper'
 import type { ListItemTypeMap } from '@material-ui/core/ListItem'
 
-export interface ProfileOrGroupInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
+export interface ProfileOrGroupInListProps extends withClasses<never> {
     item: Group | Profile
     disabled?: boolean
     showAtNetwork?: boolean

@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface TokenAmountPanelProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface TokenAmountPanelProps extends withClasses<never> {
     amount: string
     maxAmount?: string
     balance: string

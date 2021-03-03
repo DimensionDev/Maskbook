@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface ERC20TokenActionsBarProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface ERC20TokenActionsBarProps extends withClasses<never> {
     wallet: WalletRecord
     token: ERC20TokenDetailed | EtherTokenDetailed
 }

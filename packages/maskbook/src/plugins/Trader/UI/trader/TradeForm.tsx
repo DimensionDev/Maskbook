@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface TradeFormProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface TradeFormProps extends withClasses<never> {
     trade: TradeComputed | null
     strategy: TradeStrategy
     provider: TradeProvider
