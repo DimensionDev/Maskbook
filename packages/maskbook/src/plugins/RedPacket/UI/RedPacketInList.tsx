@@ -164,6 +164,9 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
+            if (refundState.type !== TransactionStateType.CONFIRMED) {
+                return
+            }
             resetRefundCallback()
             revalidateAvailability()
         },

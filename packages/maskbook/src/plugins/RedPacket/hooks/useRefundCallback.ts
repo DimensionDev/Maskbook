@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import {
     TransactionEventType,
@@ -8,6 +7,8 @@ import {
     useNonce,
     useTransactionState,
 } from '@dimensiondev/web3-shared'
+import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+import type { TransactionReceipt } from 'web3-core'
 
 export function useRefundCallback(from: string, id?: string) {
     const nonce = useNonce()
@@ -36,7 +37,7 @@ export function useRefundCallback(from: string, id?: string) {
                 .estimateGas({
                     from,
                 })
-                .catch((error) => {
+                .catch((error: any) => {
                     setRefundState({
                         type: TransactionStateType.FAILED,
                         error,
@@ -47,27 +48,35 @@ export function useRefundCallback(from: string, id?: string) {
             nonce,
         }
 
-        // send transaction and wait for hash
-        return new Promise<string>((resolve, reject) => {
-            redPacketContract.methods
-                .refund(id)
-                .send(config as NonPayableTx)
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setRefundState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve(hash)
+        // step 2: blocking
+        return new Promise<void>((resolve, reject) => {
+            const promiEvent = redPacketContract.methods.refund(id).send(config as NonPayableTx)
+
+            promiEvent.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
+                setRefundState({
+                    type: TransactionStateType.HASH,
+                    hash,
                 })
-                .on(TransactionEventType.ERROR, (error) => {
-                    setRefundState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
+                resolve()
+            })
+
+            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                setRefundState({
+                    type: TransactionStateType.CONFIRMED,
+                    no,
+                    receipt,
                 })
+                resolve()
+            })
+            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
+                setRefundState({
+                    type: TransactionStateType.FAILED,
+                    error,
+                })
+                reject(error)
+            })
         })
-    }, [nonce, gasPrice, id, redPacketContract])
+    }, [nonce, gasPrice, id, redPacketContract, from])
 
     const resetCallback = useCallback(() => {
         setRefundState({

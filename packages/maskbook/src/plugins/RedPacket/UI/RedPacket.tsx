@@ -180,6 +180,14 @@ export function RedPacket(props: RedPacketProps) {
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
+
+            if (
+                claimState.type !== TransactionStateType.CONFIRMED &&
+                refundState.type !== TransactionStateType.CONFIRMED
+            ) {
+                return
+            }
+
             resetClaimCallback()
             resetRefundCallback()
             revalidateAvailability()

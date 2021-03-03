@@ -9,6 +9,7 @@ import {
     useGasPrice,
     useNonce,
 } from '@dimensiondev/web3-shared'
+import type { TransactionReceipt } from 'web3-core'
 
 export function useClaimCallback(from: string, id?: string, password?: string) {
     const nonce = useNonce()
@@ -44,7 +45,7 @@ export function useClaimCallback(from: string, id?: string, password?: string) {
                 .estimateGas({
                     from,
                 })
-                .catch((error) => {
+                .catch((error: any) => {
                     setClaimState({
                         type: TransactionStateType.FAILED,
                         error,
@@ -55,25 +56,33 @@ export function useClaimCallback(from: string, id?: string, password?: string) {
             nonce,
         }
 
-        // send transaction and wait for hash
-        return new Promise<string>((resolve, reject) => {
-            redPacketContract.methods
-                .claim(...params)
-                .send(config as NonPayableTx)
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setClaimState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve(hash)
+        // step 2-1: blocking
+        return new Promise<void>((resolve, reject) => {
+            const promiEvent = redPacketContract.methods.claim(...params).send(config as NonPayableTx)
+
+            promiEvent.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
+                setClaimState({
+                    type: TransactionStateType.HASH,
+                    hash,
                 })
-                .on(TransactionEventType.ERROR, (error) => {
-                    setClaimState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
+                resolve()
+            })
+
+            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                setClaimState({
+                    type: TransactionStateType.CONFIRMED,
+                    no,
+                    receipt,
                 })
+                resolve()
+            })
+            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
+                setClaimState({
+                    type: TransactionStateType.FAILED,
+                    error,
+                })
+                reject(error)
+            })
         })
     }, [gasPrice, nonce, id, password, from, redPacketContract])
 
