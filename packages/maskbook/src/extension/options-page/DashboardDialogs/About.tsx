@@ -125,11 +125,10 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
                 <header className={classes.header}>
                     <Avatar
                         className={classes.maskface}
-                        src={
-                            process.env.NODE_ENV === 'production'
-                                ? '/MB--CircleCanvas--WhiteOverBlue.svg'
-                                : '/MB--CircleCanvas--Nightly.svg'
-                        }
+                        src={(process.env.NODE_ENV === 'production'
+                            ? new URL('./AboutAvatar-WhiteOverBlue.svg', import.meta.url)
+                            : new URL('./AboutMaskTitle-Nightly.svg', import.meta.url)
+                        ).toString()}
                     />
                     {makeTitle()}
                     <Typography className={classes.version} variant="body2" color="inherit">
