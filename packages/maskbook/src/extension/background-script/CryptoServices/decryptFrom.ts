@@ -15,7 +15,7 @@ import { verifyOthersProve } from './verifyOthersProve'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 import { DecryptFailedReason } from '../../../utils/constants'
 import { asyncIteratorWithResult, memorizeAsyncGenerator } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { sleep } from '../../../utils/utils'
+import { delay } from '../../../utils/utils'
 import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 import { decodeImageUrl } from '../SteganographyService'
 import type { TypedMessage } from '../../../protocols/typed-message'
@@ -173,7 +173,7 @@ async function* decryptFromPayloadWithProgress_raw(
 
         // ? Get my public & private key.
         const queryWhoAmI = () => queryPersonaRecord(whoAmI)
-        const mine = await queryWhoAmI().then((x) => x || sleep(1000).then(queryWhoAmI))
+        const mine = await queryWhoAmI().then((x) => x || delay(1000).then(queryWhoAmI))
         if (!mine?.privateKey) return makeError(DecryptFailedReason.MyCryptoKeyNotFound)
 
         const { publicKey: minePublic, privateKey: minePrivate } = mine

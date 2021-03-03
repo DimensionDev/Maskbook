@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useMountedState } from 'react-use'
-import { sleep } from '../utils'
+import { delay as sleep } from '../utils'
 
 export interface AsyncTimesOptions {
     delay?: number

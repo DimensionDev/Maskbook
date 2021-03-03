@@ -1,7 +1,7 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { MaskMessage } from '../../../utils/messages'
 import { i18n } from '../../../utils/i18n-next'
-import { sleep } from '../../../utils/utils'
+import { delay } from '../../../utils/utils'
 import { untilDocumentReady } from '../../../utils/dom'
 
 const nativeComposeButtonSelector = () =>
@@ -42,14 +42,14 @@ export async function taskOpenComposeBoxFacebook(
     },
 ) {
     await untilDocumentReady()
-    await sleep(800)
+    await delay(800)
 
     // active the compose dialog
     const composeTextarea = nativeComposeTextareaSelector().evaluate()
     const composeButton = nativeComposeButtonSelector().evaluate()
     if (composeTextarea) composeTextarea.focus()
     if (composeButton) composeButton.click()
-    await sleep(800)
+    await delay(800)
 
     // the indicator only available when compose dialog opened successfully
     const composeIndicator = nativeComposeDialogIndicatorSelector().evaluate()
@@ -58,7 +58,7 @@ export async function taskOpenComposeBoxFacebook(
         return
     }
 
-    await sleep(800)
+    await delay(800)
     MaskMessage.events.compositionUpdated.sendToLocal({
         reason: 'popup',
         open: true,

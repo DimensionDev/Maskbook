@@ -1,6 +1,6 @@
 import {
     dispatchCustomEvents,
-    sleep,
+    delay,
     timeout,
     downloadUrl,
     getUrl,
@@ -51,13 +51,13 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
         while (!hasFocus(i)) {
             i.evaluate()!.focus()
             checkSignal()
-            await sleep(interval)
+            await delay(interval)
         }
         // paste
         isMobileTwitter
             ? dispatchCustomEvents(i.evaluate()!, 'input', text)
             : dispatchCustomEvents(i.evaluate()!, 'paste', text)
-        await sleep(interval)
+        await delay(interval)
         if (!getEditorContent().replace(/\n/g, '').includes(text.replace(/\n/g, ''))) {
             fail(new Error('Unable to paste text automatically'))
         }

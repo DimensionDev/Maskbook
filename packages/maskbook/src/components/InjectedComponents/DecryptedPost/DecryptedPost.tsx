@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, useReducer, Fragment } from 'react'
-import { sleep, unreachable } from '../../../utils/utils'
+import { delay, unreachable } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
 import type { ProfileIdentifier } from '../../../database/type'
@@ -81,7 +81,7 @@ export function DecryptPost(props: DecryptPostProps) {
         if (!props.requestAppendRecipients) return undefined
         return async (people: Profile[]) => {
             await props.requestAppendRecipients!(people)
-            await sleep(1500)
+            await delay(1500)
         }
     }, [props.requestAppendRecipients, postBy, whoAmI])
 

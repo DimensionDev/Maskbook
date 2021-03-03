@@ -12,7 +12,7 @@ import { getPostContentFacebook } from './tasks/getPostContent'
 import { resolveLastRecognizedIdentityFacebook } from './UI/resolveLastRecognizedIdentity'
 import { getProfileFacebook } from './tasks/getProfile'
 import { injectPostCommentsDefault } from '../../social-network/defaults/injectComments'
-import { dispatchCustomEvents, selectElementContents, sleep } from '../../utils/utils'
+import { dispatchCustomEvents, selectElementContents, delay } from '../../utils/utils'
 import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostReplacerFacebook } from './UI/injectPostReplacer'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
@@ -86,7 +86,7 @@ export const facebookUISelf = defineSocialNetworkUI({
             textarea.focus()
             dispatchCustomEvents(textarea, 'input', encryptedComment)
             textarea.dispatchEvent(new CustomEvent('input', { bubbles: true, cancelable: false, composed: true }))
-            await sleep(200)
+            await delay(200)
             if (!root.innerText.includes(encryptedComment)) return fail()
         } else {
             const root = realCurrent || current.rootNode
@@ -95,7 +95,7 @@ export const facebookUISelf = defineSocialNetworkUI({
             if (!input) return fail()
             selectElementContents(input)
             dispatchCustomEvents(input, 'paste', encryptedComment)
-            await sleep(200)
+            await delay(200)
             if (!root.innerText.includes(encryptedComment)) return fail()
         }
     }),

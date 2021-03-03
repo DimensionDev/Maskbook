@@ -30,7 +30,7 @@ import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import type { RedPacketJSONPayload } from '../../../plugins/RedPacket/types'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { DashboardRoute } from '../Route'
-import { sleep, checkInputLengthExceed } from '../../../utils/utils'
+import { delay, checkInputLengthExceed } from '../../../utils/utils'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
@@ -576,7 +576,7 @@ export function DashboardWalletErrorDialog(props: WrappedDialogProps<object>) {
     const onClose = async () => {
         props.onClose()
         // prevent UI updating before dialog disappearing
-        await sleep(300)
+        await delay(300)
         history.replace(DashboardRoute.Wallets)
     }
 
