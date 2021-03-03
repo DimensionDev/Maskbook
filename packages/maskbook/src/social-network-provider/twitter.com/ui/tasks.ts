@@ -1,11 +1,4 @@
-import {
-    dispatchCustomEvents,
-    delay,
-    timeout,
-    downloadUrl,
-    getUrl,
-    pasteImageToActiveElements,
-} from '../../../utils/utils'
+import { dispatchCustomEvents, delay, timeout, downloadUrl, pasteImageToActiveElements } from '../../../utils/utils'
 import {
     postEditorDraftContentSelector,
     newPostButtonSelector,
@@ -25,6 +18,7 @@ import type { ProfileIdentifier } from '../../../database/type'
 import { encodeArrayBuffer, decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { isMobileTwitter } from '../utils/isMobile'
 import { MaskMessage } from '../../../utils/messages'
+import { ImagePayloadURLs } from '../../../resources/image-payload'
 
 /**
  * Wait for up to 5000 ms
@@ -78,13 +72,7 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
 const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text, options) => {
     const { template = 'v2', autoPasteFailedRecover, relatedText } = options
     const { lastRecognizedIdentity } = getActivatedUI()
-    const blankImage = await downloadUrl(
-        getUrl(
-            `${
-                template === 'v2' || template === 'v3' || template === 'v4' ? '/image-payload' : '/wallet'
-            }/payload-${template}.png`,
-        ),
-    ).then((x) => x.arrayBuffer())
+    const blankImage = await downloadUrl(ImagePayloadURLs[template]).then((x) => x.arrayBuffer())
     const secretImage = new Uint8Array(
         decodeArrayBuffer(
             await Services.Steganography.encodeImage(encodeArrayBuffer(blankImage), {
