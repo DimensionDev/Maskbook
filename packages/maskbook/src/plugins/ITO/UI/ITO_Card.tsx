@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme) =>
             color: '#fff',
         },
         button: {
-            //TODO: https://github.com/mui-org/material-ui/issues/25011
             '&[disabled]': {
                 opacity: 0.5,
                 color: '#fff',
