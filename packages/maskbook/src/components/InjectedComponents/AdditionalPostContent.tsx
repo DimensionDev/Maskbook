@@ -13,7 +13,9 @@ export enum AdditionalIcon {
     check = 'check',
     error = 'error',
 }
-export interface AdditionalContentProps extends withClasses<never>, Omit<TypedMessageRendererProps<TypedMessage>, 'message'> {
+export interface AdditionalContentProps
+    extends withClasses<never>,
+        Omit<TypedMessageRendererProps<TypedMessage>, 'message'> {
     title: string
     titleIcon?: keyof typeof AdditionalIcon
     headerActions?: React.ReactNode
