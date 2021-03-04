@@ -497,6 +497,7 @@ importers:
       z-schema: ^5.0.0
   packages/shared:
     dependencies:
+      '@dimensiondev/holoflows-kit': 0.8.0-20201215084554-2f9e757
       async-call-rpc: 5.0.0
       bignumber.js: 9.0.1
       immer: 8.0.1
@@ -504,6 +505,7 @@ importers:
       typeson: 5.18.2
       typeson-registry: 1.0.0-alpha.39
     specifiers:
+      '@dimensiondev/holoflows-kit': 0.8.0-20201215084554-2f9e757
       async-call-rpc: ^5.0.0
       bignumber.js: ^9.0.1
       immer: ^8.0.1
@@ -2777,6 +2779,21 @@ packages:
     resolution:
       integrity: sha512-tJiUcLqVGhod0QhrHelcwrhDaTlOOi9r1dsywkeaC0ue1uusblt63Rr5a8RrKIqclS/dB6zdeQxZOuFurkYBow==
       tarball: download/@dimensiondev/common-protocols/1.6.0-20201027083702-d0ae6e2/6ce508fba448b0ecafe5c35af65722219c4d8ecb30915c6cd39b494a2bbd9088
+  /@dimensiondev/holoflows-kit/0.8.0-20201215084554-2f9e757:
+    dependencies:
+      '@servie/events': 1.0.0
+      async-call-rpc: 4.2.1
+      event-iterator: 2.0.0
+      jsx-jsonml-devtools-renderer: 1.4.3
+      lodash-es: 4.17.21
+      memorize-decorator: 0.2.4
+      tslib: 2.1.0
+    dev: false
+    peerDependencies:
+      webextension-polyfill: '*'
+    resolution:
+      integrity: sha1-zUa/ga7W14U+EHYTMpTCnqfgNPo=
+      tarball: download/@dimensiondev/holoflows-kit/0.8.0-20201215084554-2f9e757/5fedf4ae98792b5b33e08a3182d5d38aac57da06134769edd71acae35f097079
   /@dimensiondev/holoflows-kit/0.8.0-20210302070358-e90c55c:
     dependencies:
       '@servie/events': 1.0.0
@@ -5084,6 +5101,30 @@ packages:
     dev: true
     resolution:
       integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
+  /@storybook/client-api/5.3.21_regenerator-runtime@0.13.7:
+    dependencies:
+      '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
+      '@storybook/channel-postmessage': 5.3.21
+      '@storybook/channels': 5.3.21
+      '@storybook/client-logger': 5.3.21
+      '@storybook/core-events': 5.3.21
+      '@storybook/csf': 0.0.1
+      '@types/webpack-env': 1.16.0
+      core-js: 3.9.1
+      eventemitter3: 4.0.7
+      global: 4.4.0
+      is-plain-object: 3.0.1
+      lodash: 4.17.21
+      memoizerific: 1.11.3
+      qs: 6.9.6
+      stable: 0.1.8
+      ts-dedent: 1.2.0
+      util-deprecate: 1.0.2
+    dev: true
+    peerDependencies:
+      regenerator-runtime: '*'
+    resolution:
+      integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
   /@storybook/client-api/6.1.20:
     dependencies:
       '@storybook/addons': 6.1.20
@@ -5246,7 +5287,7 @@ packages:
       '@babel/preset-env': 7.13.9
       '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
       '@storybook/channel-postmessage': 5.3.21
-      '@storybook/client-api': 5.3.21
+      '@storybook/client-api': 5.3.21_regenerator-runtime@0.13.7
       '@storybook/client-logger': 5.3.21
       '@storybook/core-events': 5.3.21
       '@storybook/csf': 0.0.1
@@ -13288,20 +13329,6 @@ packages:
     resolution:
       integrity: sha512-/LFZOIo82WDsyyv7h7oc0MJF9ACOvDRdx9rWPZ2pgMfNWu/z8hQDBtOchuB/0BVLmuFOZjV02YwUVzNsWx/EzA==
   /follow-redirects/1.13.3:
-    dev: false
-    engines:
-      node: '>=4.0'
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    resolution:
-      integrity: sha512-DUgl6+HDzB0iEptNQEXLx/KhTmDb8tZUHSeLqpnjpknR70H0nC2t9N73BK6fN4hOvJ84pKlIQVQ4k5FFlBedKA==
-  /follow-redirects/1.13.3_debug@4.3.1:
-    dependencies:
-      debug: 4.3.1_supports-color@6.1.0
-    dev: true
     engines:
       node: '>=4.0'
     peerDependencies:
@@ -14630,7 +14657,7 @@ packages:
   /http-proxy/1.18.1_debug@4.3.1:
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.13.3_debug@4.3.1
+      follow-redirects: 1.13.3
       requires-port: 1.0.0
     dev: true
     engines:
