@@ -157,6 +157,8 @@ export interface SocialNetworkUIInjections {
      */
     injectPostInspector(current: PostInfo): () => void
 }
+export type ImageTemplateTypes = 'v1' | 'v2' | 'v3' | 'v4' | 'eth' | 'dai' | 'okb'
+
 //#endregion
 //#region SocialNetworkUITasks
 /**
@@ -171,7 +173,7 @@ export interface SocialNetworkUITasks {
     taskUploadToPostBox(
         text: string,
         options: {
-            template?: 'v1' | 'v2' | 'v3' | 'v4' | 'eth' | 'dai' | 'okb'
+            template?: ImageTemplateTypes
             autoPasteFailedRecover: boolean
             relatedText: string
         },

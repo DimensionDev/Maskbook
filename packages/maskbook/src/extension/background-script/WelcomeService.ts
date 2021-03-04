@@ -1,5 +1,5 @@
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
-import { delay, getUrl } from '../../utils/utils'
+import { delay } from '../../utils/utils'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey } from '../../database'
 import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Persona.db'
@@ -90,7 +90,9 @@ async function createBackupInfo<T>(obj: T) {
 }
 
 export async function openOptionsPage(route?: DashboardRoute, search?: string) {
-    return exclusiveTasks(getUrl(route ? `/index.html#${route}${search ? `?${search}` : ''}` : '/index.html')).noop()
+    return exclusiveTasks(
+        browser.runtime.getURL(route ? `/index.html#${route}${search ? `?${search}` : ''}` : '/index.html'),
+    ).noop()
 }
 
 export { createPersonaByMnemonic } from '../../database'

@@ -89,7 +89,8 @@ export function RestoreFromQRCodeImageBox(props: RestoreFromQRCodeImageBoxProps)
                 entered={over}
                 enterText={t('restore_database_advance_dragging')}
                 leaveText={t('restore_database_advance_dragged')}
-                placeholder="restore-image-placeholder"
+                darkPlaceholderImageURL={new URL('./RestoreFromQRCodeImageBox-dark.png', import.meta.url).toString()}
+                lightPlaceholderImageURL={new URL('./RestoreFromQRCodeImageBox-light.png', import.meta.url).toString()}
                 data-active={over}
                 onClick={() => inputRef.current && inputRef.current.click()}>
                 {file ? <QRCodeImageScanner src={dataURL} onScan={onScan} onError={onError} /> : null}

@@ -36,17 +36,6 @@ export function timeout<T>(promise: PromiseLike<T>, time: number, rejectReason?:
 }
 
 /**
- * Get reference of file in both extension and storybook
- * @deprecated Please use `new URL('./file.png', import.meta.url)`
- */
-export function getUrl(path: string, fallback: string = '') {
-    if (typeof browser === 'object' && browser.runtime && browser.runtime.getURL) {
-        return browser.runtime.getURL(path)
-    }
-    return fallback || path
-}
-
-/**
  * Download given url return as Blob
  */
 export async function downloadUrl(url: string) {
