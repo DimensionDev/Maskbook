@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface EthereumAccountButtonProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface EthereumAccountButtonProps extends withClasses<never> {
     disableEther?: boolean
     ButtonProps?: Partial<ButtonProps>
 }

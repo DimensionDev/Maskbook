@@ -1,10 +1,11 @@
 import { SocialNetworkUI, getActivatedUI } from '../../../social-network/ui'
 import { untilDocumentReady } from '../../../utils/dom'
-import { getUrl, downloadUrl, pasteImageToActiveElements } from '../../../utils/utils'
+import { downloadUrl, pasteImageToActiveElements } from '../../../utils/utils'
 import Services from '../../../extension/service'
 import { decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'
 import { MaskMessage } from '../../../utils/messages'
+import { ImagePayloadURLs } from '../../../resources/image-payload'
 
 export async function uploadToPostBoxFacebook(
     text: string,
@@ -12,13 +13,7 @@ export async function uploadToPostBoxFacebook(
 ) {
     const { autoPasteFailedRecover, relatedText, template = 'v2' } = options
     const { lastRecognizedIdentity } = getActivatedUI()
-    const blankImage = await downloadUrl(
-        getUrl(
-            `${
-                template === 'v2' ? '/image-payload' : template === 'v3' ? '/election-2020' : '/wallet'
-            }/payload-${template}.png`,
-        ),
-    ).then((x) => x.arrayBuffer())
+    const blankImage = await downloadUrl(ImagePayloadURLs[template]).then((x) => x.arrayBuffer())
     const secretImage = new Uint8Array(
         decodeArrayBuffer(
             await Services.Steganography.encodeImage(new Uint8Array(blankImage), {

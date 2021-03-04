@@ -1,5 +1,3 @@
-import { getUrl } from '../utils/utils'
-
 export interface SocialNetworkWorkerAndUIDefinition {
     version: 1
     /**
@@ -95,20 +93,9 @@ export interface Preference {}
  * The env that Mask running in
  */
 export interface Env {
-    platform: 'desktop' | 'mobile'
-    implementation: 'WebExtension' | 'chrome-extension' | 'holoflows-extension' | 'unknown'
+    // implementation: 'WebExtension' | 'chrome-extension' | 'holoflows-extension' | 'unknown'
 }
-const url = getUrl('/')
-export const env: Env = {
-    implementation: url.startsWith('chrome-extension://')
-        ? 'chrome-extension'
-        : url.startsWith('holoflows-extension://')
-        ? 'holoflows-extension'
-        : url.indexOf('-extension://') !== -1
-        ? 'WebExtension'
-        : 'unknown',
-    platform: navigator.userAgent.match(/Mobile|mobile/) ? 'mobile' : 'desktop',
-}
+export const env: Env = {}
 
 export interface ProfileUI {
     bioContent: string

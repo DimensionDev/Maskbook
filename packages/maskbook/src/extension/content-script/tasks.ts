@@ -13,7 +13,7 @@ import { safeGetActiveUI } from '../../utils/safeRequire'
 import Serialization from '../../utils/type-transform/Serialization'
 import { sideEffect } from '../../utils/side-effects'
 import { untilDocumentReady } from '../../utils/dom'
-import { sleep } from '../../utils/utils'
+import { delay } from '../../utils/utils'
 import { Flags } from '../../utils/flags'
 
 function getActivatedUI() {
@@ -55,7 +55,7 @@ const realTasks = AutomatedTabTask(_tasks, {
     AsyncCallOptions: { serializer: Serialization, strict: false },
 })!
 // console.log('To debug tasks, use globalThis.tasks, sleep fn is also available')
-Object.assign(globalThis, { tasks: _tasks, sleep: sleep })
+Object.assign(globalThis, { tasks: _tasks, sleep: delay })
 export default function tasks(...args: Parameters<typeof realTasks>) {
     const [tabIdOrUri, options] = args
     if (disableOpenNewTabInBackgroundSettings.value && Number.isNaN(Number(tabIdOrUri))) {

@@ -14,7 +14,7 @@ export enum AdditionalIcon {
     error = 'error',
 }
 export interface AdditionalContentProps
-    extends withClasses<KeysInferFromUseStyles<typeof useStyles>>,
+    extends withClasses<never>,
         Omit<TypedMessageRendererProps<TypedMessage>, 'message'> {
     title: string
     titleIcon?: keyof typeof AdditionalIcon

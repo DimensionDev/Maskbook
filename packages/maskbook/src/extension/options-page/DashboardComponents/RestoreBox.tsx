@@ -1,7 +1,6 @@
 import { makeStyles, useTheme, createStyles } from '@material-ui/core'
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { getUrl } from '../../../utils/utils'
 import ActionButton from './ActionButton'
 
 const useStyle = makeStyles((theme) =>
@@ -68,31 +67,27 @@ const useStyle = makeStyles((theme) =>
     }),
 )
 
-export interface RestoreBoxProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
+export interface RestoreBoxProps extends withClasses<never> {
     file: File | null
     entered: boolean
     enterText: string
     leaveText: string
-    placeholder: string
+    darkPlaceholderImageURL: string
+    lightPlaceholderImageURL: string
     children?: React.ReactNode
     onClick?: () => void
 }
 
 export function RestoreBox(props: RestoreBoxProps) {
-    const { entered, file, enterText, leaveText, placeholder, children, onClick } = props
+    const { entered, file, enterText, leaveText, children, onClick } = props
+    const { darkPlaceholderImageURL, lightPlaceholderImageURL } = props
     const classes = useStylesExtends(useStyle(), props)
     const theme = useTheme()
+    const src = theme.palette.mode === 'dark' ? darkPlaceholderImageURL : lightPlaceholderImageURL
     return (
         <div className={classes.root} data-active={entered} onClick={onClick}>
             <div className={classes.placeholder}>
-                {children ? (
-                    children
-                ) : (
-                    <img
-                        className={classes.placeholderImage}
-                        src={getUrl(`${placeholder}-${theme.palette.mode}.png`)}
-                    />
-                )}
+                {children ? children : <img className={classes.placeholderImage} src={src} />}
             </div>
             <ActionButton
                 className={classes.button}

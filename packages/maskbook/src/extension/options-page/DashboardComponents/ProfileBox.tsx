@@ -9,7 +9,7 @@ import { exclusiveTasks } from '../../content-script/tasks'
 import stringify from 'json-stable-stringify'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardPersonaUnlinkConfirmDialog } from '../DashboardDialogs/Persona'
-import { sleep } from '../../../utils/utils'
+import { delay } from '../../../utils/utils'
 import { SetupGuideStep } from '../../../components/InjectedComponents/SetupGuide'
 
 interface ProfileBoxProps {
@@ -42,7 +42,7 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
             status: SetupGuideStep.FindUsername,
             persona: persona.identifier.toText(),
         } as SetupGuideCrossContextStatus)
-        await sleep(100)
+        await delay(100)
         exclusiveTasks(getCurrentNetworkUI(provider.network).getHomePage(), {
             active: true,
             autoClose: false,

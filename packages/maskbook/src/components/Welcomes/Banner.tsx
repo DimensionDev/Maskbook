@@ -10,8 +10,7 @@ import { DashboardRoute } from '../../extension/options-page/Route'
 import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
 import { useMount } from 'react-use'
 
-interface BannerUIProps
-    extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'header' | 'content' | 'actions' | 'button'> {
+interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'button'> {
     description?: string
     nextStep: 'hidden' | { onClick(): void }
     username?:

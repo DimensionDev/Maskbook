@@ -42,8 +42,7 @@ export enum DatabaseRecordType {
     Wallet,
 }
 
-export interface DatabasePreviewCardProps
-    extends withClasses<KeysInferFromUseStyles<typeof useDatabasePreviewCardStyles>> {
+export interface DatabasePreviewCardProps extends withClasses<never> {
     dense?: boolean
     records: {
         type: DatabaseRecordType

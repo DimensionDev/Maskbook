@@ -9,7 +9,7 @@ import { ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import { useStylesExtends } from '../../custom-ui-helper'
 type ProfileOrGroup = Group | Profile
 export interface SelectProfileAndGroupsUIProps<ServeType extends Group | Profile = Group | Profile>
-    extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root'> {
+    extends withClasses<never | 'root'> {
     /** Omit myself in the UI and the selected result */
     ignoreMyself?: boolean
     items: ServeType[]

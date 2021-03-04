@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface RedPacketFormProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RedPacketFormProps extends withClasses<never> {
     onCreate?(payload: RedPacketJSONPayload): void
     SelectMenuProps?: Partial<MenuProps>
 }

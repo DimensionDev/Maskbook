@@ -1,5 +1,5 @@
 import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { dispatchCustomEvents, sleep, timeout } from '../../../utils/utils'
+import { dispatchCustomEvents, delay, timeout } from '../../../utils/utils'
 import { isMobileFacebook } from '../isMobile'
 import type { SocialNetworkUI } from '../../../social-network/ui'
 import { untilDocumentReady } from '../../../utils/dom'
@@ -22,7 +22,7 @@ export async function openPostDialogFacebook() {
             try {
                 notActivated.evaluate()[0].click()
                 await timeout(new MutationObserverWatcher(activated), 2000)
-                await sleep(1000)
+                await delay(1000)
             } catch (e) {
                 clickFailed(e)
             }
@@ -43,7 +43,7 @@ export async function openPostDialogFacebook() {
             console.log('Awaiting dialog')
         }
     }
-    await sleep(500)
+    await delay(500)
     try {
         await timeout(new MutationObserverWatcher(isMobileFacebook ? activated : dialog), 2000)
         console.log('Dialog appeared')
@@ -79,10 +79,10 @@ export async function pasteIntoPostBoxFacebook(
     try {
         const [element] = activated.evaluate()
         element.focus()
-        await sleep(100)
+        await delay(100)
         if ('value' in document.activeElement!) dispatchCustomEvents(element, 'input', text)
         else dispatchCustomEvents(element, 'paste', text)
-        await sleep(400)
+        await delay(400)
         if (isMobileFacebook) {
             const e = document.querySelector<HTMLDivElement | HTMLTextAreaElement>('.mentions-placeholder')
             if (e) e.style.display = 'none'

@@ -1,5 +1,5 @@
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
-import { sleep, getUrl } from '../../utils/utils'
+import { delay } from '../../utils/utils'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey } from '../../database'
 import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Persona.db'
@@ -12,6 +12,7 @@ import { saveAsFileFromBuffer } from './HelperService'
 import type { DashboardRoute } from '../options-page/Route'
 export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 export * from './WelcomeServices/restoreBackup'
+import type { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 assertEnvironment(Environment.ManifestBackground)
@@ -58,11 +59,11 @@ export async function downloadBackup<T>(obj: T) {
 
 export async function createBackupFile(
     options: { download: boolean; onlyBackupWhoAmI: boolean } & Partial<BackupOptions>,
-) {
+): Promise<BackupJSONFileLatest> {
     const obj = await generateBackupJSON(options)
     if (!options.download) return obj
     // Don't make the download pop so fast
-    await sleep(1000)
+    await delay(1000)
     return downloadBackup(obj)
 }
 
@@ -89,7 +90,9 @@ async function createBackupInfo<T>(obj: T) {
 }
 
 export async function openOptionsPage(route?: DashboardRoute, search?: string) {
-    return exclusiveTasks(getUrl(route ? `/index.html#${route}${search ? `?${search}` : ''}` : '/index.html')).noop()
+    return exclusiveTasks(
+        browser.runtime.getURL(route ? `/index.html#${route}${search ? `?${search}` : ''}` : '/index.html'),
+    ).noop()
 }
 
 export { createPersonaByMnemonic } from '../../database'

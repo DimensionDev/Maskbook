@@ -5,7 +5,6 @@ import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import type { RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
-import { getUrl } from '../../../utils/utils'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
@@ -90,13 +89,13 @@ const useStyles = makeStyles((theme) =>
             backgroundPosition: 'center',
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
-            backgroundImage: `url(${getUrl('wallet/present-default.png')})`,
+            backgroundImage: `url(${new URL('./present-default.png', import.meta.url)})`,
         },
         dai: {
-            backgroundImage: `url(${getUrl('wallet/present-dai.png')})`,
+            backgroundImage: `url(${new URL('./present-dai.png', import.meta.url)})`,
         },
         okb: {
-            backgroundImage: `url(${getUrl('wallet/present-okb.png')})`,
+            backgroundImage: `url(${new URL('./present-okb.png', import.meta.url)})`,
         },
         text: {
             padding: theme.spacing(0.5, 2),

@@ -16,7 +16,7 @@ import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { TradeActionType } from '../../trader/useTradeState'
 import { SwapResponse, TokenPanelType, TradeComputed, TradeProvider, Coin } from '../../types'
 import { TRADE_CONSTANTS } from '../../constants'
-import { sleep } from '../../../../utils/utils'
+import { delay } from '../../../../utils/utils'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { useShareLink } from '../../../../utils/hooks/useShareLink'
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface TraderProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface TraderProps extends withClasses<never> {
     coin: Coin
     tokenDetailed: ERC20TokenDetailed | EtherTokenDetailed | undefined
 }
@@ -198,7 +198,7 @@ export function Trader(props: TraderProps) {
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const onConfirmDialogConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
-        await sleep(100)
+        await delay(100)
         setFreezed(true)
         await tradeCallback()
     }, [tradeCallback])

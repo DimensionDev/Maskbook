@@ -8,7 +8,7 @@ import { DecryptPostAwaiting } from '../components/InjectedComponents/DecryptedP
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
-import { sleep } from '../utils/utils'
+import { delay } from '../utils/utils'
 import { Paper, MuiThemeProvider, Typography, Link, SnackbarContent } from '@material-ui/core'
 import { demoPeople as demoProfiles, demoGroup } from './demoPeopleOrGroups'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
@@ -71,7 +71,7 @@ storiesOf('Injections', module)
         const compound = makeTypedMessageFromList(_text, unknown)
         const suspended = makeTypedMessageSuspended(
             (async function () {
-                await sleep(2000)
+                await delay(2000)
                 return makeTypedMessageText('Resolved text!')
             })(),
         )
@@ -105,7 +105,7 @@ storiesOf('Injections', module)
         function SelectPeople() {
             const { ShareMenu, showShare } = useShareMenu(
                 demoProfiles,
-                async () => sleep(3000),
+                async () => delay(3000),
                 boolean('Has frozen item?', true) ? [demoProfiles[0]] : [],
             )
             useEffect(() => {

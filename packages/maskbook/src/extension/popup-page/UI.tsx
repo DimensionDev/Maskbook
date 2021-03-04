@@ -10,7 +10,7 @@ import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { getActivatedUI } from '../../social-network/ui'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { getUrl, sleep } from '../../utils/utils'
+import { delay } from '../../utils/utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { Alert } from '@material-ui/core'
@@ -97,7 +97,7 @@ function PopupUI() {
     )
     const onConnect = useCallback(async () => {
         setSelectProviderDailogOpen({ open: true })
-        await sleep(200)
+        await delay(200)
         window.close()
     }, [setSelectProviderDailogOpen])
 
@@ -107,9 +107,9 @@ function PopupUI() {
         }
         const src =
             process.env.NODE_ENV === 'production'
-                ? getUrl('MB--ComboCircle--Blue.svg')
-                : getUrl('MB--ComboCircle--Nightly.svg')
-        return <img className={classes.logo} src={src} />
+                ? new URL('./MB--ComboCircle--Blue.svg', import.meta.url)
+                : new URL('./MB--ComboCircle--Nightly.svg', import.meta.url)
+        return <img className={classes.logo} src={src.toString()} />
     })
 
     return (

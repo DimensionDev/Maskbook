@@ -1,7 +1,7 @@
 import { makeStyles, createStyles, Typography } from '@material-ui/core'
 import { DashboardDialogCore, WrappedDialogProps } from './Base'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { sleep } from '../../../utils/utils'
+import { delay } from '../../../utils/utils'
 import { QRCodeVideoScanner } from '../DashboardComponents/QRCodeVideoScanner'
 
 const useStyles = makeStyles((theme) =>
@@ -68,7 +68,7 @@ export function QRCodeVideoScannerDialog(props: WrappedDialogProps) {
                         onScan={async (data: string) => {
                             onClose()
                             // ensure blur mask closed
-                            await sleep(300)
+                            await delay(300)
                             onScan?.(data)
                         }}
                         deviceId={deviceId}

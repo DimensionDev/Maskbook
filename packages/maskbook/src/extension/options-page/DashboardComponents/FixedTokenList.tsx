@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface FixedTokenListProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface FixedTokenListProps extends withClasses<never> {
     keyword?: string
     whitelist?: string[]
     blacklist?: string[]

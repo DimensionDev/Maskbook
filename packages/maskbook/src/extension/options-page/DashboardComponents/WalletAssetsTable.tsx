@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
-export interface WalletAssetsTableProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface WalletAssetsTableProps extends withClasses<never> {
     wallet: WalletRecord
 }
 
