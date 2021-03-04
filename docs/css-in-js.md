@@ -1,7 +1,16 @@
-### General guides
+---
+author: Jack-Works
+maintainer:
+  - Jack-Works
+  - Septs
+---
+
+# How to use CSS in JS
+
+## General guides
 
 - ✅ For recommendations
-- ⚠ For warnings
+- &#9888; For warnings
 - 🚫 For forbiddens
 - ✅ Use [the Box component provided by the library](https://next.material-ui.com/components/box/#main-content) when the CSS is simple and only used once.
 - ✅ CSS custom variables is OK but do not abuse it. Get the variable from the theme if it is possible.
@@ -9,7 +18,7 @@
 - 🚫 DO NOT use mystery abbreviations in the `sx` properties, e.g. `<Box sx={{ p: 5 }} />` (DON'T) but `<Box sx={{ padding: 5 }}>` (DO, easier to read).
 - 🚫 DO NOT mix two styling solution together. It may cause unknown bugs. FYI: `makeStyles` is `JSS`, `Box` and `styled` are `@emotion`.
 
-### Guides on the `makeStyles` style
+## Guides on the `makeStyles` style
 
 ```js
 const useStyle = makeStyles((theme) => ({
@@ -17,15 +26,15 @@ const useStyle = makeStyles((theme) => ({
 }))
 ```
 
-#### ✅⚠ You can use `makeStyles` in the project
+### ✅ &#9888; You can use `makeStyles` in the project
 
 Reason: This is the recommend way of writing way in @material-ui 4.
 
-⚠ In @material-ui 5 the recommend way has changed to the `styled-component` style.
+&#9888; In @material-ui 5 the recommend way has changed to the `styled-component` style.
 
-⚠ I (@Jack-Works) will try to convince the library team to make a emotion styled version makeStyles or make it on my own so we can get rid of 2 different CSS-in-JS framework in our project.
+&#9888; I (@Jack-Works) will try to convince the library team to make a emotion styled version makeStyles or make it on my own so we can get rid of 2 different CSS-in-JS framework in our project.
 
-##### Change style of MUI components
+#### Change style of MUI components
 
 🚫 DON'T ([reason](https://github.com/mui-org/material-ui/issues/25011#issuecomment-789105382))
 
@@ -48,7 +57,7 @@ const useStyle = makeStyles(theme => ({
 <Button className={classes.button} />
 ```
 
-### Guides on the `styled` style (let's call it `styled component`)
+## Guides on the `styled` style (let's call it `styled component`)
 
 ```js
 const Title = style.div`
@@ -56,11 +65,11 @@ const Title = style.div`
 `
 ```
 
-#### ✅ You can use `styled component` in the project.
+### ✅ You can use `styled component` in the project
 
 Reason: Good DX (Note: you may want to install editor plugins for styled-components).
 
-#### ⚠ You may want to use "object style" when it involves dynamic styles
+### &#9888; You may want to use "object style" when it involves dynamic styles
 
 Reason: _Potential_ performance lost.
 
@@ -80,7 +89,7 @@ const Title = style(Typography)(({ theme }) => {
 })
 ```
 
-#### 🚫 Direct selector to the deeper elements of the library
+### 🚫 Direct selector to the deeper elements of the library
 
 ```js
 const Title = style.div`
@@ -92,9 +101,9 @@ DO NOT do this.
 
 Reason: Not type-checked. Easy to get things wrong.
 
-#### ✅ Calculated selector to the deeper elements of the library
+### ✅ Calculated selector to the deeper elements of the library
 
-⚠ Caution: Please aware of CSS selector. You may want `& > .${selected}` or `&.${selected}` in most cases.
+&#9888; Caution: Please aware of CSS selector. You may want `& > .${selected}` or `&.${selected}` in most cases.
 
 ```js
 import { buttonClasses } from '@material-ui/core'
@@ -108,7 +117,7 @@ const Button2 = style(Button)`
 `
 ```
 
-#### ✅ `components` or `*Component` style
+### ✅ `components` or `*Component` style
 
 Overwriting styles in this way is good.
 
@@ -123,4 +132,4 @@ const MyExample = styled(Example)`
 <Parent ExampleComponent={MyExample} />
 ```
 
-⚠ No every component has this kind of API that allowing to overwrite the inner component so this method may not be able to use.
+&#9888; No every component has this kind of API that allowing to overwrite the inner component so this method may not be able to use.

@@ -1,6 +1,8 @@
 ---
 author: Jack-Works
-maintainer: Jack-Works
+maintainer:
+  - Jack-Works
+  - Septs
 ---
 
 # Mask Network Architecture Overview

@@ -1,3 +1,10 @@
+---
+author: Jack-Works
+maintainer:
+  - Jack-Works
+  - Septs
+---
+
 # Caveats for developers
 
 Hi, Welcome to the Mask Network. Here is some note for developing Mask Network.

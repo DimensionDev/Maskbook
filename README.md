@@ -37,9 +37,9 @@ For general introductions, see [Mask.io](https://mask.io).
 - [Telegram](https://t.me/maskbook_group)
 - [Discord](https://discord.gg/4SVXvj7)
 
-## Caveats for developers
+## Developer documentation
 
-Please check out [caveats.md](docs/caveats.md)
+Please check out [docs](docs)
 
 ## Donation
 
