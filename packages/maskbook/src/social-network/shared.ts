@@ -1,4 +1,3 @@
-
 export interface SocialNetworkWorkerAndUIDefinition {
     version: 1
     /**
