@@ -22,11 +22,12 @@ const useStyles = makeStyles((theme) => ({
 
 export interface ERC20TokenActionsBarProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     wallet: WalletRecord
+    chain: 'eth' | string
     token: ERC20TokenDetailed | EtherTokenDetailed
 }
 
 export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
-    const { wallet, token } = props
+    const { wallet, chain, token } = props
 
     const { t } = useI18N()
     const account = useAccount()
@@ -41,24 +42,26 @@ export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
     const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialog)
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu(
-        <MenuItem
-            onClick={() => {
-                setBuyDialogOpen({
-                    open: true,
-                    code: token.symbol ?? token.name,
-                    address: account,
-                })
-            }}>
-            {t('buy')}
-        </MenuItem>,
-        <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ wallet, token })}>
-            {t('transfer')}
-        </MenuItem>,
-        <MenuItem
-            style={{ display: isETH(token.address) ? 'none' : 'initial' }}
-            onClick={() => openHideTokenConfirmDialog({ wallet, token })}>
-            {t('hide')}
-        </MenuItem>,
+        ...[
+            <MenuItem
+                onClick={() => {
+                    setBuyDialogOpen({
+                        open: true,
+                        code: token.symbol ?? token.name,
+                        address: account,
+                    })
+                }}>
+                {t('buy')}
+            </MenuItem>,
+            <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ wallet, token })}>
+                {t('transfer')}
+            </MenuItem>,
+            <MenuItem
+                style={{ display: isETH(token.address) ? 'none' : 'initial' }}
+                onClick={() => openHideTokenConfirmDialog({ wallet, token })}>
+                {t('hide')}
+            </MenuItem>,
+        ].slice(chain === 'eth' ? 0 : 2),
     )
 
     return (

@@ -58,6 +58,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     name: {
         marginLeft: theme.spacing(1),
     },
+    symbol: {},
+    memo: {
+        fontSize: 11,
+        verticalAlign: 'middle',
+        color: theme.palette.text.secondary,
+        marginLeft: theme.spacing(1),
+    },
     price: {},
     more: {
         color: theme.palette.text.primary,
@@ -124,8 +131,18 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                     sx={{
                         display: 'flex',
                     }}>
-                    <TokenIcon classes={{ icon: classes.coin }} name={x.token.name} address={x.token.address} />
-                    <Typography className={classes.name}>{x.token.symbol}</Typography>
+                    <TokenIcon
+                        classes={{ icon: classes.coin }}
+                        name={x.token.name}
+                        address={x.token.address}
+                        logoURL={x.logoURL}
+                    />
+                    <Typography className={classes.name}>
+                        <span className={classes.symbol}>{x.token.symbol}</span>
+                        {x.chain !== 'eth' ? (
+                            <span className={classes.memo}>{t('wallet_chain', { chain: x.chain.toUpperCase() })}</span>
+                        ) : null}
+                    </Typography>
                 </Box>,
                 <Box
                     sx={{
@@ -167,7 +184,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                         display: 'flex',
                         justifyContent: 'flex-end',
                     }}>
-                    <ERC20TokenActionsBar wallet={wallet} token={x.token} />
+                    <ERC20TokenActionsBar wallet={wallet} chain={x.chain} token={x.token} />
                 </Box>,
             ]
                 .filter(Boolean)
