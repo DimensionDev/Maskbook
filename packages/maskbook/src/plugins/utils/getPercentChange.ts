@@ -12,8 +12,7 @@ export const getPercentChange = (valueNow: Value, value24HoursAgo: Value) => {
         .minus(value24HoursAgo ?? 0)
         .dividedBy(value24HoursAgo ?? 0)
         .multipliedBy(100)
-
-    if (adjustedPercentChange.isNaN() || adjustedPercentChange.isFinite()) {
+    if (adjustedPercentChange.isNaN() || !adjustedPercentChange.isFinite()) {
         return 0
     }
     return adjustedPercentChange.toNumber()

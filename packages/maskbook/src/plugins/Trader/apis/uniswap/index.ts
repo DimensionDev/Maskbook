@@ -9,7 +9,7 @@ import {
     fetchPairData,
 } from '../uniswap-v2-subgraph'
 import type { Pair } from '../uniswap-v2-subgraph'
-import { fetchBlockNumberByTimestamp, fetchBlockNumbersByTimestamps } from '../blocks'
+import { fetchBlockNumberByTimestamp } from '../blocks'
 import { getPercentChange } from '../../../utils/getPercentChange'
 import { getTimestampForChanges } from '../../../utils/getTimestampsForChanges'
 
