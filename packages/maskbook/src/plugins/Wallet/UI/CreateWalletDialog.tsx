@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
+import { drop, filter, findIndex, has, indexOf, remove, shuffle } from 'lodash-es'
 import { Button, Box, Card, Chip, createStyles, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -22,6 +23,11 @@ import { useAsyncRetry } from 'react-use'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
+enum CreateWalletStep {
+    Intial = 0,
+    Verify,
+}
+
 const useStyles = makeStyles((theme) =>
     createStyles({
         content: {
@@ -41,14 +47,15 @@ const useStyles = makeStyles((theme) =>
             padding: theme.spacing(4, 0, 0),
         },
         card: {
+            minHeight: 140,
             display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'space-evenly',
+            flexFlow: 'row wrap',
+            alignContent: 'flex-start',
             padding: theme.spacing(1, 2, 2),
         },
         word: {
-            margin: theme.spacing(1, 0, 0),
+            width: 101,
+            margin: theme.spacing(1, 0.5, 0),
         },
     }),
 )
@@ -68,17 +75,23 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
         setOpen({
             open: false,
         })
+        setStep(CreateWalletStep.Intial)
     }, [setOpen])
     //#endregion
 
     //#region create mnemonic words
-    const { value: words = [], retry: retryWords } = useAsyncRetry(() => WalletRPC.createMnemonicWords(), [])
+    const { value: words = [], loading: wordsLoading, retry: wordsRetry } = useAsyncRetry(
+        () => WalletRPC.createMnemonicWords(),
+        [],
+    )
+    const [selectedIndexes, setSelectedIndexes] = useState<number[]>([])
+    const shuffledWords = useMemo(() => shuffle(words), [words])
+    const selectedWords = useMemo(() => selectedIndexes.map((x) => shuffledWords[x]), [selectedIndexes, shuffledWords])
+    const onNext = useCallback(() => {
+        setStep(CreateWalletStep.Verify)
+    }, [])
     const onSubmit = useSnackbarCallback(
         async () => {
-            if (step === 1) {
-                setStep(1)
-                return
-            }
             if (!words.length || words.join(' ') !== verification) throw new Error('Failed')
             await WalletRPC.recoverWallet(words, '')
         },
@@ -86,27 +99,60 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
         onClose,
     )
     const onRefresh = useCallback(() => {
-        retryWords()
-    }, [retryWords])
+        wordsRetry()
+    }, [wordsRetry])
+    const onClickWord = useCallback(
+        (word: string, index: number) => {
+            if (indexOf(selectedIndexes, index) > -1) setSelectedIndexes(filter(selectedIndexes, (x) => x !== index))
+            else setSelectedIndexes([...selectedIndexes, index])
+        },
+        [selectedIndexes],
+    )
+
+    console.log(selectedIndexes)
     //#endregion
 
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_create_a_wallet')}>
             <DialogContent className={classes.content}>
-                <Box className={classes.top}>
-                    <Button startIcon={<RefreshIcon />} onClick={onRefresh}>
-                        {t('refresh')}
-                    </Button>
-                </Box>
+                {step === CreateWalletStep.Intial ? (
+                    <Box className={classes.top}>
+                        <Button startIcon={<RefreshIcon />} onClick={onRefresh}>
+                            {t('refresh')}
+                        </Button>
+                    </Box>
+                ) : null}
                 <Card className={classes.card} variant="outlined">
-                    {words.map((word, i) => (
+                    {(step === CreateWalletStep.Intial ? words : selectedWords).map((word, i) => (
                         <Button className={classes.word} key={i} variant="text">
                             {word}
                         </Button>
                     ))}
                 </Card>
+                {step === CreateWalletStep.Intial ? null : (
+                    <Card className={classes.card} elevation={0}>
+                        {shuffledWords.map((word, i) => (
+                            <Button
+                                className={classes.word}
+                                key={i}
+                                variant={indexOf(selectedIndexes, i) > -1 ? 'contained' : 'outlined'}
+                                onClick={() => onClickWord(word, i)}>
+                                {word}
+                            </Button>
+                        ))}
+                    </Card>
+                )}
                 <Box className={classes.bottom}>
-                    <ActionButton variant="contained" onClick={onSubmit}>{t(step === 0 ? 'plugin_wallet_verification_next' : 'plugin_wallet_verification_confirm')}</ActionButton>
+                    <ActionButton
+                        variant="contained"
+                        disabled={step === CreateWalletStep.Verify && selectedWords.join(' ') !== words.join(' ')}
+                        onClick={step === CreateWalletStep.Intial ? onNext : onSubmit}>
+                        {t(
+                            step === CreateWalletStep.Intial
+                                ? 'plugin_wallet_verification_next'
+                                : 'plugin_wallet_verification_confirm',
+                        )}
+                    </ActionButton>
                 </Box>
             </DialogContent>
         </InjectedDialog>
