@@ -70,9 +70,9 @@ export function ContactLine(props: ContactLineProps) {
         onDeleted,
     })
 
-    const [menu, openMenu] = useMenu(
+    const [menu, openMenu] = useMenu([
         <MenuItem onClick={() => openDeleteContactConfirmDialog()}>{t('delete')}</MenuItem>,
-    )
+    ])
 
     return (
         <>

@@ -106,7 +106,7 @@ export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelector
 //#endregion
 
 //#region wallet import dialog
-interface WalletProps {
+export interface WalletProps {
     wallet: WalletRecord
 }
 
