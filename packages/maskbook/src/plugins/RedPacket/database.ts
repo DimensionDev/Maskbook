@@ -5,7 +5,7 @@ import { omit } from 'lodash-es'
 
 export const RedPacketDatabase = createPluginDatabase<RedPacketRecordInDatabase>(RedPacketPluginID)
 
-export async function getRedPacketsHistory(txids: string[]) {
+export async function getRedPackets(txids: string[]) {
     const records: RedPacketRecord[] = []
     for (const txid of txids) {
         const record = await getRedPacket(txid)

@@ -63,7 +63,7 @@ const RED_PACKET_FIELDS = `
         ${USER_FIELDS}
     }
 `
-export async function getAllRedPackets(address: string) {
+export async function getRedPacketHistory(address: string) {
     const response = await fetch(getConstant(RED_PACKET_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
         method: 'POST',
         mode: 'cors',
@@ -86,6 +86,7 @@ export async function getAllRedPackets(address: string) {
         .map((x) => {
             const redPacketSubgraphInMask = { ...x, token: tokenIntoMask(x.token) } as RedPacketSubgraphInMask
             const redPacketBasic = pick(redPacketSubgraphInMask, redPacketBasicKeys)
+            redPacketBasic.creation_time = redPacketSubgraphInMask.creation_time * 1000
             const sender = {
                 address: redPacketSubgraphInMask.creator.address,
                 name: redPacketSubgraphInMask.creator.name,

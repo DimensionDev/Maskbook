@@ -11,15 +11,14 @@ export async function discoverRedPacket(record: RedPacketRecord) {
 
 export async function getRedPacketHistory(address: string) {
     const chainId = await getChainId()
-    const redPacketsFromChain = await subgraph.getAllRedPackets(address)
-    const redPacketsFromDB = await database.getRedPacketsHistory(redPacketsFromChain.map((x) => x.txid))
-    return redPacketsFromChain.reduce((acc, history) => {
-        const record = redPacketsFromDB.find((y) => y.id === history.txid)
+    const historys = await subgraph.getRedPacketHistory(address)
+    const historysWithPassword = []
+    for (const history of historys) {
+        const record = await database.getRedPacket(history.txid)
         if (history.chain_id === chainId && record) {
-            history.payload.password = record.password
-            history.password = record.password
-            acc.push(history)
+            history.payload.password = history.password = record.password
+            historysWithPassword.push(history)
         }
-        return acc
-    }, [] as RedPacketHistory[])
+    }
+    return historysWithPassword
 }
