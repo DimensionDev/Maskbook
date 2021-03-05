@@ -27,8 +27,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey),
             )
             onConfirm(payload)
-            // storing the created red packet in DB, it helps retrieve red packet password later
-            RedPacketRPC.discoverRedPacket('', payload)
         },
         [onConfirm],
     )

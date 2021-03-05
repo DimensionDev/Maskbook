@@ -7,6 +7,8 @@ export enum TransactionStateType {
     WAIT_FOR_CONFIRMING,
     /** Hash is available */
     HASH,
+    /** Hash is available, but still display loading ui */
+    HASH_WAIT,
     /** Receipt is available */
     RECEIPT,
     /** Confirmed or Reverted */
@@ -26,6 +28,10 @@ export type TransactionState =
       }
     | {
           type: TransactionStateType.HASH
+          hash: string
+      }
+    | {
+          type: TransactionStateType.HASH_WAIT
           hash: string
       }
     | {

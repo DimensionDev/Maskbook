@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
 import { RedPacketRPC } from '../messages'
 
-export function useAllRedPackets(address: string) {
+export function useRedPacketHistory(address: string) {
     return useAsyncRetry(async () => {
-        const payloads = await RedPacketRPC.getAllRedPackets(address)
+        const payloads = await RedPacketRPC.getRedPacketHistory(address)
         return payloads
     }, [address])
 }

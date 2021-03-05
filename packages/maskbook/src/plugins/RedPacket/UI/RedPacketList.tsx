@@ -1,8 +1,8 @@
 import { makeStyles, Typography, List } from '@material-ui/core'
-import type { RedPacketJSONPayload, RedPacketRecordWithHistory } from '../types'
+import type { RedPacketJSONPayload, RedPacketHistory } from '../types'
 import { useAccount } from '@dimensiondev/web3-shared'
 import { RedPacketInHistoryList } from './RedPacketInList'
-import { useAllRedPackets } from '../hooks/useAllRedPackets'
+import { useRedPacketHistory } from '../hooks/useRedPacketHistory'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,25 +26,25 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface RedPacketHistoryListProps {
-    payloads: RedPacketRecordWithHistory[]
+    historys: RedPacketHistory[]
     onSelect: (payload: RedPacketJSONPayload) => void
     onClose: () => void
 }
 
 function RedPacketHistoryList(props: RedPacketHistoryListProps) {
-    const { payloads, onSelect, onClose } = props
+    const { historys, onSelect, onClose } = props
     const classes = useStyles()
     return (
         <div className={classes.root}>
-            {payloads.length === 0 ? (
+            {!historys || historys.length === 0 ? (
                 <Typography className={classes.placeholder} color="textSecondary">
                     No Data
                 </Typography>
             ) : (
                 <List>
-                    {payloads.map((data) => (
-                        <div key={data.history.rpid}>
-                            <RedPacketInHistoryList data={data} onSelect={onSelect} onClose={onClose} />
+                    {historys.map((history) => (
+                        <div key={history.rpid}>
+                            <RedPacketInHistoryList history={history} onSelect={onSelect} onClose={onClose} />
                         </div>
                     ))}
                 </List>
@@ -64,8 +64,7 @@ export function RedPacketBacklogList(props: RedPacketBacklogListProps) {
     const { onSelect, onClose } = props
     const account = useAccount()
     const classes = useStyles()
-    const { value: payloads, loading } = useAllRedPackets(account)
-    console.log('payloads', payloads)
+    const { value, loading } = useRedPacketHistory(account)
     if (loading) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
@@ -73,6 +72,6 @@ export function RedPacketBacklogList(props: RedPacketBacklogListProps) {
             </Typography>
         )
     }
-    return <RedPacketHistoryList payloads={payloads!} onSelect={onSelect} onClose={onClose} />
+    return <RedPacketHistoryList historys={value!} onSelect={onSelect} onClose={onClose} />
 }
 //#endregion

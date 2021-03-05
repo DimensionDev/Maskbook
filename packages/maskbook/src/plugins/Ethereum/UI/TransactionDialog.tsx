@@ -82,7 +82,8 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
     return (
         <InjectedDialog open={open} onClose={closeDialog} title={title} DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent className={classes.content}>
-                {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ? (
+                {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ||
+                state.type === TransactionStateType.HASH_WAIT ? (
                     <>
                         <CircularProgress size={64} color="primary" />
                         <Typography className={classes.primary} color="textPrimary" variant="subtitle1">
@@ -149,7 +150,11 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                     </>
                 ) : null}
             </DialogContent>
-            {state.type !== TransactionStateType.UNKNOWN && state.type !== TransactionStateType.WAIT_FOR_CONFIRMING ? (
+            {![
+                TransactionStateType.UNKNOWN,
+                TransactionStateType.WAIT_FOR_CONFIRMING,
+                TransactionStateType.HASH_WAIT,
+            ].includes(state.type) ? (
                 <DialogActions>
                     <Button
                         color="primary"

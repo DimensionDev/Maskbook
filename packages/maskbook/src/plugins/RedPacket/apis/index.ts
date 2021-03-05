@@ -1,8 +1,28 @@
 import { getChainId } from '../../../extension/background-script/SettingsService'
 import { getConstant } from '@dimensiondev/web3-shared'
+import { omit, pick } from 'lodash-es'
 import { tokenIntoMask } from '../../ITO/helpers'
 import { RED_PACKET_CONSTANTS } from '../constants'
-import type { RedPacketHistoryOutMask, RedPacketHistoryInMask } from '../types'
+import type {
+    RedPacketJSONPayload,
+    RedPacketSubgraphOutMask,
+    RedPacketSubgraphInMask,
+    RedPacketHistory,
+} from '../types'
+
+import { EthereumNetwork, EthereumTokenType } from '../../../web3/types'
+
+const redPacketBasicKeys = [
+    'contract_address',
+    'rpid',
+    'txid',
+    'password',
+    'shares',
+    'is_random',
+    'total',
+    'creation_time',
+    'duration',
+]
 
 const TOKEN_FIELDS = `
     type
@@ -20,6 +40,7 @@ const USER_FIELDS = `
 
 const RED_PACKET_FIELDS = `
     rpid
+    txid
     contract_address
     password
     shares
@@ -59,11 +80,39 @@ export async function getAllRedPackets(address: string) {
 
     const {
         data: { redPackets },
-    } = (await response.json()) as { data: { redPackets: RedPacketHistoryOutMask[] } }
-
-    console.log(redPackets, 'redPackets')
+    } = (await response.json()) as { data: { redPackets: RedPacketSubgraphOutMask[] } }
 
     return redPackets
-        .map((x) => ({ ...x, token: tokenIntoMask(x.token) } as RedPacketHistoryInMask))
+        .map((x) => {
+            const redPacketSubgraphInMask = { ...x, token: tokenIntoMask(x.token) } as RedPacketSubgraphInMask
+            const redPacketBasic = pick(redPacketSubgraphInMask, redPacketBasicKeys)
+            const sender = {
+                address: redPacketSubgraphInMask.creator.address,
+                name: redPacketSubgraphInMask.creator.name,
+                message: redPacketSubgraphInMask.message,
+            }
+            const network = redPacketSubgraphInMask.chain_id as unknown as EthereumNetwork
+            const token_type = redPacketSubgraphInMask.token.type
+            let token
+            if (token_type === EthereumTokenType.ERC20) {
+                token = {
+                    name: '',
+                    symbol: '',
+                    ...omit(redPacketSubgraphInMask.token, ['type', 'chainId']),
+                }
+            }
+            const payload = {
+                sender,
+                network,
+                token_type,
+                ...(token ? { token } : {}),
+                ...redPacketBasic,
+            } as RedPacketJSONPayload
+
+            return {
+                payload,
+                ...redPacketSubgraphInMask,
+            } as RedPacketHistory
+        })
         .sort((a, b) => b.creation_time - a.creation_time)
 }

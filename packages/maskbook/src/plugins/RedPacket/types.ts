@@ -8,10 +8,9 @@ import type { EthereumTokenType, NativeTokenDetailed, ERC20TokenDetailed, ChainI
 export interface RedPacketRecord {
     /** The red packet ID */
     id: string
-    /** From url */
+    /** From twitter/facebook url */
     from: string
-    /** The JSON payload */
-    payload: RedPacketJSONPayload
+    password: string
 }
 
 export interface RedPacketRecordInDatabase extends RedPacketRecord {
@@ -40,21 +39,24 @@ export interface RedPacketAvailability {
     claimed_amount: string
 }
 
-export interface RedPacketJSONPayload {
-    contract_version: number
+interface RedPacketBasic {
     contract_address: string
     rpid: string
+    txid: string
     password: string
     shares: number
+    is_random: boolean
+    total: string
+    creation_time: number
+    duration: number
+}
+
+export interface RedPacketJSONPayload extends RedPacketBasic {
     sender: {
         address: string
         name: string
         message: string
     }
-    is_random: boolean
-    total: string
-    creation_time: number
-    duration: number
     network?: string
     token_type: EthereumTokenType.Native | EthereumTokenType.ERC20
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
@@ -76,14 +78,12 @@ export interface RedPacketHistoryInMask {
     contract_address: string
     password: string
     shares: number
+}
+export interface RedPacketSubgraphInMask extends RedPacketBasic {
     message: string
     name: string
-    is_random: boolean
-    total: string
     total_remaining: string
-    creation_time: number
     last_updated_time: number
-    duration: number
     chain_id: number
     token: NativeTokenDetailed | ERC20TokenDetailed
     creator: {
@@ -112,6 +112,10 @@ export interface RedPacketHistoryInMask {
     }[]
 }
 
-export interface RedPacketHistoryOutMask extends Omit<RedPacketHistoryInMask, 'token'> {
+export interface RedPacketSubgraphOutMask extends Omit<RedPacketSubgraphInMask, 'token'> {
     token: TokenOutMask
+}
+
+export interface RedPacketHistory extends RedPacketSubgraphInMask {
+    payload: RedPacketJSONPayload
 }

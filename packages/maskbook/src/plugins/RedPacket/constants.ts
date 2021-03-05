@@ -22,6 +22,10 @@ export const RED_PACKET_CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
 }
 

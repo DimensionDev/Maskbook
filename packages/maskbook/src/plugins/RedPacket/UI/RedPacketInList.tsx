@@ -1,15 +1,13 @@
 import { useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
-import { Skeleton } from '@material-ui/core'
 import classNames from 'classnames'
-import { ListItem, ListItemText, makeStyles, Theme, Typography, Box } from '@material-ui/core'
+import { ListItem, makeStyles, Theme, Typography, Box } from '@material-ui/core'
 import { Trans } from 'react-i18next'
-import type { RedPacketJSONPayload, RedPacketRecordWithHistory } from '../types'
+import type { RedPacketJSONPayload, RedPacketHistory } from '../types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
-import { formatElapsed } from '../../Wallet/formatter'
-import { useTokenDetailed, useAccount, TransactionStateType } from '@dimensiondev/web3-shared'
+import { useAccount, TransactionStateType } from '@dimensiondev/web3-shared'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -92,72 +90,24 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
-export interface RedPacketInListProps {
-    index: number
-    style: any
-    data: {
-        payloads: RedPacketJSONPayload[]
-        onClick?: (payload: RedPacketJSONPayload) => void
-    }
-}
-
-export function RedPacketInList(props: RedPacketInListProps) {
-    const { index, style, data } = props
-    const { payloads, onClick } = data
-
-    const { t } = useI18N()
-    const classes = useStyles()
-    const { value: token } = useTokenDetailed(payloads[index].token_type, payloads[index].token?.address ?? '')
-
-    const payload = payloads[index]
-
-    if (!token || !payload)
-        return (
-            <ListItem style={style}>
-                <ListItemText>
-                    <Skeleton animation="wave" variant="rectangular" width="30%" height={10} />
-                    <Skeleton animation="wave" variant="rectangular" width="70%" height={10} style={{ marginTop: 8 }} />
-                </ListItemText>
-            </ListItem>
-        )
-    return (
-        <ListItem button style={style} onClick={() => onClick?.(payload)}>
-            <ListItemText>
-                <Typography className={classes.primary} color="inherit" variant="body1">
-                    <span className={classes.message}>{payload.sender.message}</span>
-                    <span className={classes.time}>{formatElapsed(payload.creation_time)}</span>
-                </Typography>
-                <Typography className={classes.secondary} color="textSecondary" variant="body2">
-                    {t('plugin_red_packet_description_failover', {
-                        name: payload.sender.name,
-                        shares: payload.shares,
-                        total: formatBalance(payload.total, token.decimals),
-                        symbol: token.symbol,
-                    })}
-                </Typography>
-            </ListItemText>
-        </ListItem>
-    )
-}
 export interface RedPacketInHistoryListProps {
-    data: RedPacketRecordWithHistory
+    history: RedPacketHistory
     onSelect: (payload: RedPacketJSONPayload) => void
     onClose: () => void
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const account = useAccount()
-    const { data, onSelect, onClose } = props
-    const { history: payload, record } = data
+    const { history, onSelect, onClose } = props
     const { t } = useI18N()
     const classes = useStyles()
-
+    console.log('RedPacketInHistoryList', history)
     const {
         value: availability,
         computed: { canRefund, canSend },
         retry: revalidateAvailability,
-    } = useAvailabilityComputed(account, record.payload)
+    } = useAvailabilityComputed(account, history.payload)
 
-    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(account, payload.rpid)
+    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(account, history.rpid)
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
@@ -180,47 +130,47 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             state: refundState,
             summary: `Refunding red packet for ${formatBalance(
                 new BigNumber(availability.balance),
-                payload.token.decimals ?? 0,
-                payload.token.decimals ?? 0,
-            )} ${payload.token.symbol}`,
+                history.token.decimals ?? 0,
+                history.token.decimals ?? 0,
+            )} ${history.token.symbol}`,
         })
     }, [refundState /* update tx dialog only if state changed */])
     //#endregion
 
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) await refundCallback()
-        if (canSend) onSelect(record.payload)
+        if (canSend) onSelect(history.payload)
         onClose()
-    }, [onSelect, onClose, refundCallback, canRefund, canSend, record])
+    }, [onSelect, onClose, refundCallback, canRefund, canSend, history])
 
     return (
         <ListItem className={classes.root}>
             <Box className={classes.box}>
-                <TokenIcon classes={{ icon: classes.icon }} address={payload.token.address} name={payload.token.name} />
+                <TokenIcon classes={{ icon: classes.icon }} address={history.token.address} name={history.token.name} />
                 <Box className={classes.content}>
                     <section className={classes.section}>
                         <div className={classes.div}>
                             <Typography variant="body1" className={classNames(classes.title, classes.message)}>
-                                {payload.message === '' ? t('plugin_red_packet_best_wishes') : payload.message}
+                                {history.message === '' ? t('plugin_red_packet_best_wishes') : history.message}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t('plugin_red_packet_history_duration', {
-                                    startTime: dateTimeFormat(new Date(payload.creation_time * 1000)),
+                                    startTime: dateTimeFormat(new Date(history.creation_time * 1000)),
                                     endTime: dateTimeFormat(
-                                        new Date((payload.creation_time + payload.duration) * 1000),
+                                        new Date((history.creation_time + history.duration) * 1000),
                                         false,
                                     ),
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t('plugin_red_packet_history_total_amount', {
-                                    amount: formatBalance(new BigNumber(payload.total), payload.token.decimals, 6),
-                                    symbol: payload.token.symbol,
+                                    amount: formatBalance(new BigNumber(history.total), history.token.decimals, 6),
+                                    symbol: history.token.symbol,
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t('plugin_red_packet_history_split_mode', {
-                                    mode: payload.is_random
+                                    mode: history.is_random
                                         ? t('plugin_red_packet_random')
                                         : t('plugin_red_packet_average'),
                                 })}
@@ -240,7 +190,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                         barColor="rgba(44, 164, 239)"
                         backgroundColor="rgba(44, 164, 239, 0.2)"
                         variant="determinate"
-                        value={100 * (1 - Number(payload.total_remaining) / Number(payload.total))}
+                        value={100 * (1 - Number(history.total_remaining) / Number(history.total))}
                     />
                     <section className={classes.footer}>
                         <Typography variant="body1" className={classNames(classes.footerInfo, classes.message)}>
@@ -250,8 +200,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     strong: <strong />,
                                 }}
                                 values={{
-                                    claimedShares: payload.claimers.length,
-                                    shares: payload.shares,
+                                    claimedShares: history.claimers.length,
+                                    shares: history.shares,
                                 }}
                             />
                         </Typography>
@@ -262,12 +212,12 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     strong: <strong />,
                                 }}
                                 values={{
-                                    amount: formatBalance(new BigNumber(payload.total), payload.token.decimals),
+                                    amount: formatBalance(new BigNumber(history.total), history.token.decimals),
                                     claimedAmount: formatBalance(
-                                        new BigNumber(payload.total).minus(new BigNumber(payload.total_remaining)),
-                                        payload.token.decimals,
+                                        new BigNumber(history.total).minus(new BigNumber(history.total_remaining)),
+                                        history.token.decimals,
                                     ),
-                                    symbol: payload.token.symbol,
+                                    symbol: history.token.symbol,
                                 }}
                             />
                         </Typography>
