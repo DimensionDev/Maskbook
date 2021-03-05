@@ -20,6 +20,7 @@ import { selectMaskbookWallet } from '../helpers'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 import { useAsyncRetry } from 'react-use'
 import RefreshIcon from '@material-ui/icons/Refresh'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -27,11 +28,17 @@ const useStyles = makeStyles((theme) =>
             minHeight: 300,
             padding: theme.spacing(6, 8),
         },
-        buttons: {
+        top: {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-end',
             padding: theme.spacing(2, 0),
+        },
+        bottom: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: theme.spacing(4, 0, 0),
         },
         card: {
             display: 'flex',
@@ -86,7 +93,7 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_create_a_wallet')}>
             <DialogContent className={classes.content}>
-                <Box className={classes.buttons}>
+                <Box className={classes.top}>
                     <Button startIcon={<RefreshIcon />} onClick={onRefresh}>
                         {t('refresh')}
                     </Button>
@@ -98,12 +105,10 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
                         </Button>
                     ))}
                 </Card>
+                <Box className={classes.bottom}>
+                    <ActionButton variant="contained" onClick={onSubmit}>{t(step === 0 ? 'plugin_wallet_verification_next' : 'plugin_wallet_verification_confirm')}</ActionButton>
+                </Box>
             </DialogContent>
-            <DialogActions>
-                <Button variant="text" onClick={onSubmit}>
-                    {t(step === 0 ? 'plugin_wallet_verification_next' : 'plugin_wallet_verification_confirm')}
-                </Button>
-            </DialogActions>
         </InjectedDialog>
     )
 }
