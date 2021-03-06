@@ -89,6 +89,7 @@ export function getAllCoins() {
 
 export async function getAllCoinsByKeyword(keyword: string) {
     const tokens = await fetchTokensByKeyword(keyword)
+
     const coins = tokens.map(
         (x) =>
             ({
@@ -97,6 +98,26 @@ export async function getAllCoinsByKeyword(keyword: string) {
                 eth_address: x.id,
             } as Coin),
     )
+
+    if (keyword.toLowerCase() === 'eth') {
+        coins.push({
+            id: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+            address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+            name: 'ETHer (Wrapped)',
+            eth_address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+            symbol: 'WETH',
+            decimals: 18,
+        } as Coin)
+    } else if (keyword.toLowerCase() === 'nrge') {
+        coins.push({
+            id: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
+            address: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
+            name: 'Energi',
+            eth_address: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
+            symbol: 'NRGT',
+            decimals: 18,
+        } as Coin)
+    }
     return coins
 }
 
