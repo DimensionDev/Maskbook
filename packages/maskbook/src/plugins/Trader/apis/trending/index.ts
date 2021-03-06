@@ -451,7 +451,17 @@ export async function getPriceStats(
             if (stats.data.is_active === 0) return []
             return Object.entries(stats.data).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
         case DataProvider.UNISWAP_INFO:
-            return uniswapAPI.getPriceStats(id, currency)
+            const endTime = new Date()
+            const startTime = new Date()
+            startTime.setDate(endTime.getDate() - days)
+            const uniswap_interval = 3600
+            return uniswapAPI.getPriceStats(
+                id,
+                currency,
+                uniswap_interval,
+                Math.floor(startTime.getTime() / 1000),
+                Math.floor(endTime.getTime() / 1000),
+            )
         default:
             return []
     }

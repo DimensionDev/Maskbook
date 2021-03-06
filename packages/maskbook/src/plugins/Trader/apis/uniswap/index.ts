@@ -12,6 +12,7 @@ import type { Pair } from '../uniswap-v2-subgraph'
 import { fetchBlockNumberByTimestamp } from '../blocks'
 import { getPercentChange } from '../../../utils/getPercentChange'
 import { getTimestampForChanges } from '../../../utils/getTimestampsForChanges'
+import { fetchLatestBlocks } from '../uniswap-health'
 
 /**
  * For uniswap all coins should be treated as available
@@ -208,6 +209,21 @@ export async function getBulkPairData(pairList: string[], ethPrice?: number) {
     }>((obj, cur) => ({ ...obj, [cur.id]: cur }), {})
 }
 
-export async function getPriceStats(id: string, currency: Currency) {
+export async function getPriceStats(
+    id: string,
+    currency: Currency,
+    interval: number,
+    startTime: number,
+    endTime: number,
+) {
+    const [latestBlock] = await fetchLatestBlocks()
+
+    const timestamps = []
+    let time = startTime
+    while (time < endTime) {
+        timestamps.push(time)
+        time += interval
+    }
+
     return []
 }
