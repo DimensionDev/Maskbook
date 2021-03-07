@@ -143,7 +143,7 @@ export async function fetchEtherPricesByBlockNumbers(blockNumbers: (number | und
     let result: { [key: string]: number | undefined } = {}
 
     Object.keys(response).map((key) => {
-        result[key] = response[key].ethPrice
+        result[key] = response[key]?.ethPrice
     })
 
     return result
@@ -356,16 +356,20 @@ export async function fetchPricesByBlocks(
 
     return flatten(
         response.map((result) => {
-            const keys = Object.keys(result).filter((key) => key.substring(0, 1) === 't')
-            return keys.map((x) => {
-                const timestamp = x.split('t')[1]
+            if (result) {
+                const keys = Object.keys(result).filter((key) => key.substring(0, 1) === 't')
+                return keys.map((x) => {
+                    const timestamp = x.split('t')[1]
 
-                return {
-                    timestamp: Number(timestamp) * 1000,
-                    derivedETH: result[x].derivedETH,
-                    ethPrice: result[`b${timestamp}`]?.ethPrice,
-                }
-            })
+                    return {
+                        timestamp: Number(timestamp) * 1000,
+                        derivedETH: result[x].derivedETH,
+                        ethPrice: result[`b${timestamp}`]?.ethPrice,
+                    }
+                })
+            }
+
+            return []
         }),
     )
 }

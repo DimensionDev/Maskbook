@@ -56,13 +56,6 @@ function getTimestampForChanges() {
         currentTime.getUTCHours(),
         currentTime.getUTCMinutes(),
     )
-    const utcTwoDaysBack = Date.UTC(
-        currentTime.getUTCFullYear(),
-        currentTime.getUTCMonth(),
-        currentTime.getUTCDate() - 2,
-        currentTime.getUTCHours(),
-        currentTime.getUTCMinutes(),
-    )
     const utcWeekBack = Date.UTC(
         currentTime.getUTCFullYear(),
         currentTime.getUTCMonth(),
@@ -71,11 +64,37 @@ function getTimestampForChanges() {
         currentTime.getUTCMinutes(),
     )
 
+    const utcTwoWeekBack = Date.UTC(
+        currentTime.getUTCFullYear(),
+        currentTime.getUTCMonth(),
+        currentTime.getUTCDate() - 14,
+        currentTime.getUTCHours(),
+        currentTime.getUTCMinutes(),
+    )
+
+    const utcOneMonthBack = Date.UTC(
+        currentTime.getUTCFullYear(),
+        currentTime.getUTCMonth() - 1,
+        currentTime.getUTCDate(),
+        currentTime.getUTCHours(),
+        currentTime.getUTCMinutes(),
+    )
+
+    const utcOneYearBack = Date.UTC(
+        currentTime.getUTCFullYear() - 1,
+        currentTime.getUTCMonth(),
+        currentTime.getUTCDate(),
+        currentTime.getUTCHours(),
+        currentTime.getUTCMinutes(),
+    )
+
     return {
         utcOneHourBack: Math.floor(utcOneHourBack / 1000),
         utcOneDayBack: Math.floor(utcOneDayBack / 1000),
-        utcTwoDaysBack: Math.floor(utcTwoDaysBack / 1000),
         utcWeekBack: Math.floor(utcWeekBack / 1000),
+        utcTwoWeekBack: Math.floor(utcTwoWeekBack / 1000),
+        utcOneMonthBack: Math.floor(utcOneMonthBack / 1000),
+        utcOneYearBack: Math.floor(utcOneYearBack / 1000),
     }
 }
 
@@ -127,7 +146,14 @@ export async function getAllCoinsByKeyword(keyword: string) {
  */
 export async function getCoinInfo(id: string) {
     //#region get timestamps from one hour ago, ,one day ago, a week ago
-    const { utcOneHourBack, utcOneDayBack, utcWeekBack } = getTimestampForChanges()
+    const {
+        utcOneHourBack,
+        utcOneDayBack,
+        utcWeekBack,
+        utcTwoWeekBack,
+        utcOneMonthBack,
+        utcOneYearBack,
+    } = getTimestampForChanges()
     //#endregion
 
     //#region get block from one hour ago, one day ago, a week ago
@@ -135,7 +161,17 @@ export async function getCoinInfo(id: string) {
         [`t${utcOneHourBack}`]: oneHourBlock,
         [`t${utcOneDayBack}`]: oneDayBlock,
         [`t${utcWeekBack}`]: weekBlock,
-    } = await fetchBlockNumbersObjectByTimestamps([utcOneHourBack, utcOneDayBack, utcWeekBack])
+        [`t${utcTwoWeekBack}`]: twoWeekBlock,
+        [`t${utcOneMonthBack}`]: oneMonthBlock,
+        [`t${utcOneYearBack}`]: oneYearBlock,
+    } = await fetchBlockNumbersObjectByTimestamps([
+        utcOneHourBack,
+        utcOneDayBack,
+        utcWeekBack,
+        utcTwoWeekBack,
+        utcOneMonthBack,
+        utcOneYearBack,
+    ])
     //#region
 
     //#region get ether price
@@ -144,14 +180,37 @@ export async function getCoinInfo(id: string) {
         [`b${oneHourBlock}`]: oneHourBackEthPrice,
         [`b${oneDayBlock}`]: oneDayBackEthPrice,
         [`b${weekBlock}`]: weekBackEthPrice,
-    } = await fetchEtherPricesByBlockNumbers([oneHourBlock, oneDayBlock, weekBlock])
+        [`b${twoWeekBlock}`]: twoWeekBackEthPrice,
+        [`b${oneMonthBlock}`]: oneMonthBackEthPrice,
+        [`b${oneYearBlock}`]: oneYearBackEthPrice,
+    } = await fetchEtherPricesByBlockNumbers([
+        oneHourBlock,
+        oneDayBlock,
+        weekBlock,
+        twoWeekBlock,
+        oneMonthBlock,
+        oneYearBlock,
+    ])
     //#endregion
 
     //#region get tokenData
-    const { token, allPairs } = await fetchTokenData(id)
-    const { token: oneHourToken } = await fetchTokenData(id, oneHourBlock)
-    const { token: oneDayToken } = await fetchTokenData(id, oneDayBlock)
-    const { token: weekToken } = await fetchTokenData(id, weekBlock)
+    const [
+        { token, allPairs },
+        { token: oneHourToken },
+        { token: oneDayToken },
+        { token: weekToken },
+        { token: twoWeekToken },
+        { token: oneMonthToken },
+        { token: oneYearToken },
+    ] = await Promise.all([
+        fetchTokenData(id),
+        fetchTokenData(id, oneHourBlock),
+        fetchTokenData(id, oneDayBlock),
+        fetchTokenData(id, weekBlock),
+        fetchTokenData(id, twoWeekBlock),
+        fetchTokenData(id, oneMonthBlock),
+        fetchTokenData(id, oneYearBlock),
+    ])
     //#engregion
 
     //#region calculate the trade volume and the untracked volume before day ago
@@ -179,11 +238,26 @@ export async function getCoinInfo(id: string) {
         currentPrice,
         new BigNumber(weekToken?.derivedETH ?? 0).multipliedBy(weekBackEthPrice ?? 0),
     )
+
+    const price_change_percentage_14d_in_currency = getPercentChange(
+        currentPrice,
+        new BigNumber(twoWeekToken?.derivedETH ?? 0).multipliedBy(twoWeekBackEthPrice ?? 0),
+    )
+
+    const price_change_percentage_30d_in_currency = getPercentChange(
+        currentPrice,
+        new BigNumber(oneMonthToken?.derivedETH ?? 0).multipliedBy(oneMonthBackEthPrice ?? 0),
+    )
+
+    const price_change_percentage_1y_in_currency = getPercentChange(
+        currentPrice,
+        new BigNumber(oneYearToken?.derivedETH ?? 0).multipliedBy(oneYearBackEthPrice ?? 0),
+    )
     //#endregion
 
     //#region get pairs data
     const pairsData = await getBulkPairData(
-        allPairs.map(({ id }) => id),
+        allPairs?.map(({ id }) => id),
         ethPrice,
     )
     //#endregion
@@ -195,6 +269,9 @@ export async function getCoinInfo(id: string) {
             price_change_percentage_1h,
             price_change_percentage_24h,
             price_change_percentage_7d_in_currency,
+            price_change_percentage_14d_in_currency,
+            price_change_percentage_30d_in_currency,
+            price_change_percentage_1y_in_currency,
             price_change_percentage_1h_in_currency: price_change_percentage_1h,
             price_change_percentage_24h_in_currency: price_change_percentage_24h,
             total_volume: new BigNumber(!!oneDayVolumeUSD ? oneDayVolumeUSD : oneDayVolumeUT).toNumber(),
