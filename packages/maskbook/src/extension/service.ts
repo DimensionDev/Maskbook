@@ -23,19 +23,6 @@ const log: AsyncCallOptions['log'] = {
     requestReplay: process.env.NODE_ENV === 'development',
 }
 
-export class MultiShotChannel implements CallbackBasedChannel {
-    newConnection(e: EventBasedChannel) {
-        e.on(async (data) => {
-            const result = await this.handler(data)
-            result && e.send(result)
-        })
-    }
-    private handler!: (p: unknown) => Promise<unknown | undefined>
-    setup(callback: (p: unknown) => Promise<unknown | undefined>) {
-        this.handler = callback
-    }
-}
-export const BackgroundServicesAdditionalConnections: Record<string, MultiShotChannel> = {}
 export const Services = {
     Crypto: add(() => import('./background-script/CryptoService'), 'Crypto'),
     Identity: add(() => import('./background-script/IdentityService'), 'Identity'),
@@ -79,17 +66,10 @@ function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, gene
     )
 
     const isBackground = isEnvironment(Environment.ManifestBackground)
-    if (isBackground) {
-        const serverChannel =
-            BackgroundServicesAdditionalConnections[key] ||
-            (BackgroundServicesAdditionalConnections[key] = new MultiShotChannel())
-        serverChannel.newConnection(channel)
-        channel = serverChannel
-    }
     const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
     const load = () => getLocalImplementation(`Services.${key}`, impl, channel)
     const localImplementation = load()
-    module.hot && document.addEventListener(SERVICE_HMR_EVENT, load)
+    isBackground && module.hot && document.addEventListener(SERVICE_HMR_EVENT, load)
     const service = RPC(localImplementation, {
         key,
         serializer,
@@ -99,6 +79,14 @@ function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, gene
         strict: isBackground,
         thenable: false,
     })
-    Reflect.set(globalThis, key + 'Service', service)
+    if (isBackground) {
+        localImplementation.then((val) => {
+            Reflect.set(globalThis, key + 'Service', val)
+            if (isBackground) Reflect.set(Services, key, val)
+        })
+    } else {
+        Reflect.set(globalThis, key + 'Service', service)
+        if (isBackground) Reflect.set(Services, key, service)
+    }
     return service as any
 }

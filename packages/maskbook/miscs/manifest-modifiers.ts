@@ -59,7 +59,7 @@ export function development(manifest: Manifest) {
         'KNKlNevWDRJKasG9CjagAD2+BAfqNyltn7KwK7jAyL1w6d6mOwIDAQAB'
     manifest.externally_connectable = {
         ids: ['*'],
-        matches: ['*://localhost:*/', '*://127.0.0.1:*/'],
+        matches: ['*://localhost:*/*', '*://127.0.0.1:*/*'],
     }
 }
 export function production(manifest: Manifest) {}
