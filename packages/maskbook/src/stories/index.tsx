@@ -32,8 +32,6 @@ Object.assign(globalThis, {
 definedSocialNetworkUIs.clear()
 defineSocialNetworkUI({
     ...emptyDefinition,
-    friendlyName: 'Utopia',
-    setupAccount: 'Setup your Utopia account in your dream',
     shouldActivate() {
         return true
     },
@@ -43,16 +41,5 @@ defineSocialNetworkUI({
     currentIdentity: new ValueRef<Profile | null>(null),
     friendsRef: new ValueRef(new IdentifierMap(new Map())),
 })
-defineSocialNetworkUI({ ...emptyDefinition, friendlyName: 'Neoparia Breakfast Club' })
-defineSocialNetworkUI({
-    ...emptyDefinition,
-    friendlyName: 'telnet',
-    setupAccount: 'Embrace the eternal September!',
-    isDangerousNetwork: true,
-})
-defineSocialNetworkUI({
-    ...emptyDefinition,
-    friendlyName: 'MySpace',
-    isDangerousNetwork: true,
-})
+defineSocialNetworkUI({ ...emptyDefinition })
 activateSocialNetworkUI()

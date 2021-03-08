@@ -1,22 +1,8 @@
 export interface SocialNetworkWorkerAndUIDefinition {
-    version: 1
-    /**
-     * Declare what payload does this network supports.
-     *
-     * Latest = v38
-     *
-     * When creating new posts,
-     * Mask will use the latest declared version in `acceptablePayload`
-     */
-    acceptablePayload: ('latest' | 'v38' | 'v39' | 'v40')[]
     /**
      * This name is used internally and should be unique
      */
-    internalName: string
-    /**
-     * If using Mask on this network is dangerous, set it to true (not supported yet)
-     */
-    isDangerousNetwork: boolean
+    name: string
     /**
      * Used to detect if an Identifier belongs to this provider.
      *
@@ -51,7 +37,7 @@ export interface SocialNetworkWorkerAndUIDefinition {
      *      - InitGroupsValueRef
      *      - InitMyIdentitiesValueRef
      */
-    init(env: Env, preference: Preference): void
+    init(): void
     /**
      * Is this username valid in this network
      */
@@ -71,31 +57,9 @@ export interface SocialNetworkWorkerAndUIDefinition {
      * This provider is not ready for production, Mask will not use it in production
      */
     notReadyForProduction?: boolean
-    /**
-     * Hint for partition when finding keys on Gun
-     *
-     * For Facebook.com, use ""
-     * For network with a large number of users, use something like "twitter-"
-     * For other networks, to keep the Anti-censor of the gun v2 design,
-     * use string like "anonymous-"
-     */
-    gunNetworkHint: string
 }
 
 export type SocialNetworkWorkerAndUI = Required<SocialNetworkWorkerAndUIDefinition>
-
-/**
- * Users settings about Mask
- */
-export interface Preference {}
-
-/**
- * The env that Mask running in
- */
-export interface Env {
-    // implementation: 'WebExtension' | 'chrome-extension' | 'holoflows-extension' | 'unknown'
-}
-export const env: Env = {}
 
 export interface ProfileUI {
     bioContent: string

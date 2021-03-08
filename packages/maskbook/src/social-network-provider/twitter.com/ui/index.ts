@@ -34,9 +34,9 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
             ].join('\n\n'),
         },
     },
-    init: (env, pref) => {
+    init: () => {
         startWatchThemeColor()
-        sharedSettings.init(env, pref)
+        sharedSettings.init()
         InitFriendsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
         InitGroupsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier, [
             PreDefinedVirtualGroupNames.friends,
@@ -50,7 +50,6 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     shouldActivate(location: Location | URL = globalThis.location) {
         return location.hostname.endsWith(twitterUrl.hostIdentifier)
     },
-    friendlyName: 'Twitter',
     hasPermission() {
         return browser.permissions.contains({ origins })
     },
@@ -58,16 +57,5 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         // TODO: wait for webextension-shim to support <all_urls> in permission.
         if (Flags.no_web_extension_dynamic_permission_request) return Promise.resolve(true)
         return browser.permissions.request({ origins })
-    },
-    setupAccount: () => {
-        instanceOfTwitterUI.requestPermission().then((granted) => {
-            if (granted) {
-                setStorage(twitterUrl.hostIdentifier, { forceDisplayWelcome: true }).then()
-                location.href = twitterUrl.hostLeadingUrl
-            }
-        })
-    },
-    ignoreSetupAccount() {
-        setStorage(twitterUrl.hostIdentifier, { userIgnoredWelcome: true, forceDisplayWelcome: false }).then()
     },
 })

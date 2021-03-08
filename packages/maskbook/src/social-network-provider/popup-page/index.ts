@@ -7,9 +7,9 @@ import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdenti
 export const hasPermissionCheckAtPopupPage = new ValueRef(true)
 const popupPageUISelf = defineSocialNetworkUI({
     ...emptyDefinition,
-    internalName: 'Popup page data source',
-    async init(e, p) {
-        emptyDefinition.init(e, p)
+    name: 'Popup page data source',
+    async init() {
+        emptyDefinition.init()
         const activeTab = ((await browser.tabs.query({ active: true, currentWindow: true })) || [])[0]
         if (activeTab === undefined) return
         const location = new URL(activeTab.url || globalThis.location.href)

@@ -12,11 +12,8 @@ import { IdentifierMap } from '../../database/IdentifierMap'
  * DO NOT use this in content script
  */
 export const emptyDefinition: SocialNetworkUIDefinition = {
-    acceptablePayload: ['latest'],
-    friendlyName: '',
     hasPermission: async () => true,
     requestPermission: async () => true,
-    setupAccount: '',
     shouldActivate() {
         return false
     },
@@ -29,7 +26,6 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     },
     collectPeople() {},
     collectPosts() {},
-    ignoreSetupAccount() {},
     injectCommentBox: nopWithUnmount,
     injectPostBox: noop,
     injectToolbar: noop,
@@ -41,11 +37,10 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     resolveLastRecognizedIdentity: noop,
     posts: new ObservableWeakMap(),
     friendsRef: new ValueRef(new IdentifierMap(new Map(), ProfileIdentifier)),
-    isDangerousNetwork: false,
     isValidUsername() {
         return true
     },
-    internalName: '',
+    name: '',
     networkIdentifier: 'localhost',
     async taskGetPostContent() {
         return ''
@@ -56,8 +51,6 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     taskPasteIntoPostBox() {},
     taskOpenComposeBox() {},
     taskUploadToPostBox() {},
-    version: 1,
-    gunNetworkHint: 'invalid-',
     taskStartSetupGuide() {},
     taskGotoProfilePage() {},
     taskGotoNewsFeedPage() {},

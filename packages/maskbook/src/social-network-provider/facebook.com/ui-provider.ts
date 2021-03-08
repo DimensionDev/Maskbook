@@ -35,8 +35,8 @@ import { injectToolbarAtFacebook } from './UI/injectToolbar'
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
-    init(env, pref) {
-        sharedProvider.init(env, pref)
+    init() {
+        sharedProvider.init()
         InitFriendsValueRef(facebookUISelf, 'facebook.com')
         InitGroupsValueRef(facebookUISelf, 'facebook.com')
         InitMyIdentitiesValueRef(facebookUISelf, 'facebook.com')
@@ -45,7 +45,6 @@ export const facebookUISelf = defineSocialNetworkUI({
     shouldActivate(location: Location | URL = globalThis.location) {
         return location.hostname.endsWith('facebook.com')
     },
-    friendlyName: 'Facebook',
     hasPermission() {
         return browser.permissions.contains({ origins })
     },
@@ -53,17 +52,6 @@ export const facebookUISelf = defineSocialNetworkUI({
         // TODO: wait for webextension-shim to support <all_urls> in permission.
         if (Flags.no_web_extension_dynamic_permission_request) return Promise.resolve(true)
         return browser.permissions.request({ origins })
-    },
-    setupAccount() {
-        facebookUISelf.requestPermission().then((granted) => {
-            if (granted) {
-                setStorage('facebook.com', { forceDisplayWelcome: true })
-                location.href = 'https://facebook.com/'
-            }
-        })
-    },
-    ignoreSetupAccount() {
-        setStorage('facebook.com', { userIgnoredWelcome: true, forceDisplayWelcome: false })
     },
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
     injectPostBox: injectPostBoxFacebook,

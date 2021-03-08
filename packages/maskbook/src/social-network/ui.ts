@@ -1,4 +1,4 @@
-import { env, Env, Preference, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
+import type { ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { ValueRef, assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { Group, Profile } from '../database'
 import { ProfileIdentifier, PersonaIdentifier } from '../database/type'
@@ -34,10 +34,6 @@ export interface SocialNetworkUIDefinition
     /** Should this UI content script activate? */
     shouldActivate(location?: Location | URL): boolean
     /**
-     * A user friendly name for this network.
-     */
-    friendlyName: string
-    /**
      * This function should
      * - Check if Mask has the permission to the site
      */
@@ -47,21 +43,6 @@ export interface SocialNetworkUIDefinition
      * - Request the permission to the site by `browser.permissions.request()`
      */
     requestPermission(): Promise<boolean>
-    /**
-     * This function should
-     * 1. Jump to a new page
-     * 2. On that page, shouldDisplayWelcome should return true
-     *
-     * So Mask will display a Welcome banner
-     *
-     * If this network is a decentralized network and you don't know which page to open
-     * leave a string like `Open the Mastodon instance you want to connect`
-     */
-    setupAccount: string | ((env: Env, preference: Preference) => void)
-    /**
-     * Invoked when user click the button to dismiss the setup
-     */
-    ignoreSetupAccount(env: Env, preference: Preference): void
 }
 //#endregion
 //#region SocialNetworkUIInformationCollector
@@ -124,10 +105,6 @@ export interface SocialNetworkUIInjections {
      * This function should inject a hint at their bio if they are known by Mask
      */
     injectKnownIdentity?: (() => void) | 'disabled'
-    /**
-     * This function should inject UI in the search prediction box
-     */
-    injectSearchPredictionBox?: (() => void) | 'disabled'
     /**
      * This function should inject UI in the main search result box
      */
@@ -326,7 +303,7 @@ export function activateSocialNetworkUI(): void {
             activatedSocialNetworkUI = ui
             untilDomLoaded().then(() => {
                 hookUIPostMap(ui)
-                ui.init(env, {})
+                ui.init()
                 ui.resolveLastRecognizedIdentity()
                 ui.injectPostBox()
                 ui.injectToolbar()
@@ -339,8 +316,6 @@ export function activateSocialNetworkUI(): void {
                 })
                 {
                     if (typeof ui.injectSearchResultBox === 'function') ui.injectSearchResultBox()
-                    if (Flags.inject_search_prediction_box && typeof ui.injectSearchPredictionBox === 'function')
-                        ui.injectSearchPredictionBox()
                 }
                 {
                     if (typeof ui.injectKnownIdentity === 'function') ui.injectKnownIdentity()
@@ -382,15 +357,6 @@ function hookUIPostMap(ui: SocialNetworkUI) {
 }
 
 export function defineSocialNetworkUI(UI: SocialNetworkUIDefinition) {
-    if (
-        (UI.acceptablePayload.includes('v40') || UI.acceptablePayload.includes('v39')) &&
-        UI.internalName !== 'facebook'
-    ) {
-        throw new TypeError('Payload version v40 and v39 is not supported in this network. Please use v38 or newer.')
-    }
-    if (UI.gunNetworkHint === '' && UI.internalName !== 'facebook') {
-        throw new TypeError('For historical reason only Facebook provider can use an empty gunNetworkHint.')
-    }
     const res: SocialNetworkUI = {
         ...defaultSharedSettings,
         ...defaultSocialNetworkUI,

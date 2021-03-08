@@ -7,4 +7,5 @@ export const facebookWorkerSelf = defineSocialNetworkWorker({
     ...sharedProvider,
     fetchPostContent: fetchPostContentFacebook,
     fetchProfile: fetchProfileFacebook,
+    gunNetworkHint: '',
 })

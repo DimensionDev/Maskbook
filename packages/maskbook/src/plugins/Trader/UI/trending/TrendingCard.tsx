@@ -3,7 +3,7 @@ import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { getActivatedUI } from '../../../../social-network/ui'
 
 const useStyles = makeStyles((theme) => {
-    const internalName = getActivatedUI()?.internalName
+    const internalName = getActivatedUI()?.name
     return createStyles({
         root: {
             width: 450,

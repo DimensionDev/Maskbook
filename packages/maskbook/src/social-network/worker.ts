@@ -1,4 +1,4 @@
-import { env, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
+import type { ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { ProfileIdentifier, PostIdentifier } from '../database/type'
 import { defaultSharedSettings } from './defaults/shared'
@@ -30,6 +30,15 @@ export interface SocialNetworkWorkerDefinition extends SocialNetworkWorkerAndUID
      * @param identifier The post id
      */
     fetchProfile(identifier: ProfileIdentifier): Promise<ProfileUI>
+    /**
+     * Hint for partition when finding keys on Gun
+     *
+     * For Facebook.com, use ""
+     * For network with a large number of users, use something like "twitter-"
+     * For other networks, to keep the Anti-censor of the gun v2 design,
+     * use string like "anonymous-"
+     */
+    gunNetworkHint: string
 }
 
 export type SocialNetworkWorker = Required<SocialNetworkWorkerDefinition>
@@ -37,13 +46,6 @@ export const getNetworkWorker = getCurrentNetworkWorker
 
 export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker>()
 export function defineSocialNetworkWorker(worker: SocialNetworkWorkerDefinition) {
-    if (
-        (worker.acceptablePayload.includes('v40') || worker.acceptablePayload.includes('v39')) &&
-        worker.internalName !== 'facebook'
-    ) {
-        throw new TypeError('Payload version v40 or v39 is not supported in this network. Please use v38 or newer.')
-    }
-
     const res: SocialNetworkWorker = {
         ...defaultSharedSettings,
         ...worker,
@@ -56,7 +58,7 @@ export function defineSocialNetworkWorker(worker: SocialNetworkWorkerDefinition)
     definedSocialNetworkWorkers.add(res)
     if (isEnvironment(Environment.ManifestBackground)) {
         console.log('Activating social network provider', res.networkIdentifier, worker)
-        res.init(env, {})
+        res.init()
     }
     return res
 }

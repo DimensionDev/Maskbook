@@ -4,9 +4,9 @@ import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 
 defineSocialNetworkUI({
     ...emptyDefinition,
-    internalName: 'Options page data source',
-    async init(e, p) {
-        emptyDefinition.init(e, p)
+    name: 'Options page data source',
+    init() {
+        emptyDefinition.init()
     },
     shouldActivate() {
         return isEnvironment(Environment.ManifestOptions)

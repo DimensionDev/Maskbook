@@ -18,7 +18,6 @@ export const Flags = {
     has_no_browser_tab_ui: appOnly,
     has_no_connected_user_link: appOnly,
     has_native_nav_bar: appOnly,
-    inject_search_prediction_box: webOnly,
     /** In E2E, prefer open shadow root so we can test it. */
     using_ShadowDOM_attach_mode: process.env.target === 'E2E' ? 'open' : 'closed',
     /** Don't inject injected script in this mode. Native side will do the job. */

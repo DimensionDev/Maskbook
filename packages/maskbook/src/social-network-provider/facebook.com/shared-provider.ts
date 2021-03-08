@@ -2,13 +2,9 @@ import type { SocialNetworkWorkerAndUIDefinition } from '../../social-network/sh
 import { regularUsername, getFacebookHostName } from './parse-username'
 
 export const sharedProvider: SocialNetworkWorkerAndUIDefinition = {
-    version: 1,
-    internalName: 'facebook',
-    isDangerousNetwork: false,
+    name: 'facebook',
     networkIdentifier: 'facebook.com',
     isValidUsername: (v) => !!regularUsername(v),
     init() {},
-    acceptablePayload: ['v40', 'v39', 'v38', 'latest'],
-    gunNetworkHint: '',
     getHomePage: () => getFacebookHostName('open'),
 }

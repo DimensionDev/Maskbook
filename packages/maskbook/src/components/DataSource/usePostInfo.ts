@@ -21,9 +21,7 @@ export function usePostLink() {
     const postID = usePostInfoDetails('postID')
     const postIdentifier = usePostInfoDetails('postIdentifier')
     if (!postID || !postIdentifier) return ''
-    return ui.internalName === 'twitter'
-        ? `https://twitter.com/${postIdentifier.identifier.userId}/status/${postID}`
-        : ''
+    return ui.name === 'twitter' ? `https://twitter.com/${postIdentifier.identifier.userId}/status/${postID}` : ''
 }
 
 export function usePostInfoDetails<K extends ValidKeys>(

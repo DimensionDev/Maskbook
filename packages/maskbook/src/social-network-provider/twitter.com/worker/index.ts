@@ -6,4 +6,5 @@ export const twitterWorkerSelf = defineSocialNetworkWorker({
     ...sharedSettings,
     fetchPostContent,
     fetchProfile,
+    gunNetworkHint: 'twitter-',
 })

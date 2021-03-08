@@ -17,7 +17,7 @@ const SAFE_PATHNAMES_ON_TWITTER = [
 ]
 
 export function useSearchedKeywordAtTwitter() {
-    const internalName = getActivatedUI()?.internalName
+    const internalName = getActivatedUI()?.name
     const [keyword, setKeyword] = useState('')
 
     const onLocationChange = useCallback(() => {
