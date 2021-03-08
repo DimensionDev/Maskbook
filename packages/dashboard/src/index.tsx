@@ -9,9 +9,7 @@ import { serializer } from '@dimensiondev/maskbook-shared'
 import { StylesProvider } from '@material-ui/core/styles'
 import { UnboundedRegistry, WebExtensionMessage, Environment } from '@dimensiondev/holoflows-kit'
 
-if (!import.meta.hot) {
-    throw new Error('This app is not used to run as an isolated web site currently')
-} else {
+if (import.meta.hot) {
     import.meta.hot.accept()
 }
 class WebExtensionExternalChannel extends WebExtensionMessage<any> {

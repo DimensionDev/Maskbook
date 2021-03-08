@@ -34,11 +34,12 @@ const createBuildSnowpack = (basePath, output, name) => {
 
 const { build } = require('./ts')
 const iconsSnowpack = createBuildSnowpack(join(__dirname, '../icons'), join(netlify, 'snowpack/icons'), 'icons')
+const dashboard = createBuildSnowpack(join(__dirname, '../dashboard'), join(netlify, 'snowpack/dashboard'), 'dashboard')
 const dashboardSB = createBuildStorybook6(
     join(__dirname, '../dashboard'),
     join(netlify, 'storybook-static/dashboard'),
-    'dashboard',
+    'dashboard-snowpack',
 )
 const themeSB = createBuildStorybook6(join(__dirname, '../theme'), join(netlify, 'storybook-static/theme'), 'theme')
 
-exports.buildNetlify = parallel(iconsSnowpack, series(build, parallel(dashboardSB, themeSB)))
+exports.buildNetlify = parallel(iconsSnowpack, series(build, parallel(dashboardSB, themeSB, dashboard)))
