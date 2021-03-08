@@ -25,10 +25,10 @@ export function TrendingPopper(props: TrendingPopperProps) {
 
     //#region select token and provider dialog could be open by trending view
     const onFreezed = useCallback((ev) => setFreezed(ev.open), [])
-    useRemoteControlledDialog(EthereumMessages.events.selectERC20TokenDialogUpdated, onFreezed)
     useRemoteControlledDialog(EthereumMessages.events.transactionDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, onFreezed)
+    useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.walletConnectQRCodeDialogUpdated, onFreezed)
     useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated, onFreezed)
