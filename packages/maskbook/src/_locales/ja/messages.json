@@ -264,6 +264,7 @@
     "wallet_price": "価格",
     "wallet_balance": "残高",
     "wallet_value": "価値",
+    "wallet_chain": "",
     "wallet_confirmation_hint": "暗号通貨ウォレットを作成する必要があることを確認します。",
     "wallet_new": "新規暗号通貨ウォレット名",
     "wallet_notification": "デフォルトの暗号通貨ウォレット以外の新しい暗号通貨ウォレットを作成します。暗号通貨ウォレットの秘密鍵を安全に保管する責任はあなたにあります。また、Mask は Ethereum 上での取引の支払いを行うことができませんのでご注意ください。",

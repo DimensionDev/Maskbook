@@ -46,15 +46,23 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface TokenIconProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     name?: string
     address: string
+    logoURL?: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, name } = props
+    const { address, logoURL, name } = props
     const classes = useStylesExtends(useStyles(), props)
     const tokenBlockie = useBlockie(props.address)
 
     const { value: trustWalletAssets, loading } = useImageFailover(iconSourceList, IMG_SUFFIX)
+
+    if (logoURL)
+        return (
+            <Avatar className={classes.icon} src={logoURL} {...props.AvatarProps}>
+                {name?.substr(0, 1).toLocaleUpperCase()}
+            </Avatar>
+        )
     return (
         <Avatar
             className={classes.icon}

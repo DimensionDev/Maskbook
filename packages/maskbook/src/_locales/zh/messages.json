@@ -264,6 +264,7 @@
     "wallet_price": "價格",
     "wallet_balance": "餘額",
     "wallet_value": "價值",
+    "wallet_chain": "",
     "wallet_confirmation_hint": "我確認需要創建一個錢包。",
     "wallet_new": "",
     "wallet_notification": "這將創建一個默認錢包以外的新錢包。您有責任確保錢包的私鑰安全。另請注意，Mask 將無法為您在以太坊上的交易付款。",

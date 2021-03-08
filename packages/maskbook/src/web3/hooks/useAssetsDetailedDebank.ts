@@ -10,6 +10,7 @@ import { useChainId } from './useChainState'
 export namespace Debank {
     export interface BalanceRecord {
         balance: number
+        chain: 'eth' | 'bsc' | string
         decimals: number
         display_symbol: null
         id: 'eth' | string
@@ -50,6 +51,7 @@ export function useAssetsDetailedDebank() {
     return useAsyncRetry(async () => {
         const data = await fetcher(account, chainId)
         return data.map((x) => ({
+            chain: x.chain,
             token:
                 x.id === 'eth'
                     ? createEtherToken(chainId)
@@ -71,6 +73,7 @@ export function useAssetsDetailedDebank() {
                     .multipliedBy(new BigNumber(x.balance).dividedBy(new BigNumber(10).pow(x.decimals)))
                     .toFixed(),
             },
+            logoURL: x.logo_url,
         })) as AssetDetailed[]
     }, [account, chainId])
 }

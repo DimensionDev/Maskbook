@@ -66,6 +66,10 @@ export type TokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
 export interface AssetDetailed {
     token: EtherTokenDetailed | ERC20TokenDetailed
     /**
+     * The chain name of assets
+     */
+    chain: 'eth' | string
+    /**
      * The total balance of token
      */
     balance: string
