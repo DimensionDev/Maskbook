@@ -8,4 +8,7 @@ module.exports = {
     devOptions: {
         port: 23567,
     },
+    buildOptions: {
+        baseUrl: '/snowpack/dashboard/',
+    },
 }
