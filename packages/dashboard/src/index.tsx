@@ -11,6 +11,8 @@ import { UnboundedRegistry, WebExtensionMessage, Environment } from '@dimensiond
 
 if (import.meta.hot) {
     import.meta.hot.accept()
+} else if (location.host === 'compassionate-northcutt-326a3a.netlify.app') {
+    document.getElementById('warning')?.remove()
 }
 class WebExtensionExternalChannel extends WebExtensionMessage<any> {
     constructor(domain: string, id = 'jkoeaghipilijlahjplgbfiocjhldnap') {
