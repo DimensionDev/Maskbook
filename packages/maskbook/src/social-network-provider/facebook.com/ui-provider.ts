@@ -16,10 +16,8 @@ import { dispatchCustomEvents, selectElementContents, delay } from '../../utils/
 import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostReplacerFacebook } from './UI/injectPostReplacer'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
-import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
-import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
 import { Flags } from '../../utils/flags'
@@ -38,7 +36,6 @@ export const facebookUISelf = defineSocialNetworkUI({
     init() {
         sharedProvider.init()
         InitFriendsValueRef(facebookUISelf, 'facebook.com')
-        InitGroupsValueRef(facebookUISelf, 'facebook.com')
         InitMyIdentitiesValueRef(facebookUISelf, 'facebook.com')
     },
     // ssr complains 'ReferenceError: window is not defined'

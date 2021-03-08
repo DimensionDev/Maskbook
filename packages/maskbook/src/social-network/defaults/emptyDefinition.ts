@@ -18,9 +18,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
         return false
     },
     myIdentitiesRef: new ValueRef([], ProfileArrayComparer),
-    groupsRef: new ValueRef([], GroupArrayComparer),
     lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
-    currentIdentity: new ValueRef<Profile | null>(null),
     init() {
         assertNotEnvironment(Environment.ContentScript)
     },

@@ -2,11 +2,9 @@ import { defineSocialNetworkUI } from '../../../social-network/ui'
 import { sharedSettings } from '../index'
 import { InitFriendsValueRef } from '../../../social-network/defaults/FriendsValueRef'
 import { InitMyIdentitiesValueRef } from '../../../social-network/defaults/MyIdentitiesRef'
-import { setStorage } from '../../../utils/browser.storage'
 import { twitterUITasks } from './tasks'
 import { twitterUIFetch } from './fetch'
 import { twitterUIInjections } from './inject'
-import { InitGroupsValueRef } from '../../../social-network/defaults/GroupsValueRef'
 import { twitterUrl } from '../utils/url'
 import { PreDefinedVirtualGroupNames } from '../../../database/type'
 import { twitterUICustomUI, startWatchThemeColor } from './custom'
@@ -38,11 +36,6 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         startWatchThemeColor()
         sharedSettings.init()
         InitFriendsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
-        InitGroupsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier, [
-            PreDefinedVirtualGroupNames.friends,
-            PreDefinedVirtualGroupNames.followers,
-            PreDefinedVirtualGroupNames.following,
-        ])
         InitMyIdentitiesValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
         injectMaskbookIconToProfile()
         injectMaskbookIconIntoFloatingProfileCard()

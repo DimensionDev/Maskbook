@@ -1,10 +1,11 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import Services from '../../../extension/service'
-import { GroupIdentifier } from '../../../database/type'
+import { GroupIdentifier, ProfileIdentifier } from '../../../database/type'
+import { currentSelectedIdentity } from '../../../settings/settings'
 import type { SocialNetworkUI } from '../../../social-network/ui'
-
-function findPeopleInfo(whoAmI: SocialNetworkUI['currentIdentity']) {
+export function collectPeopleFacebook(this: SocialNetworkUI) {
+    const whoAmI = currentSelectedIdentity[this.networkIdentifier]
     // TODO: support mobile
     const bio = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card').enableSingleMode()
     new MutationObserverWatcher(bio)
@@ -32,10 +33,11 @@ function findPeopleInfo(whoAmI: SocialNetworkUI['currentIdentity']) {
             }
             function parseFriendship() {
                 const thisPerson = tryFindBioKey()
-                const myID = whoAmI.value
-                if (!thisPerson || !myID) return
+                if (!thisPerson || !whoAmI.ready) return
                 const [isFriendNow] = isFriend.evaluate()
-                const myFriends = GroupIdentifier.getDefaultFriendsGroupIdentifier(myID.identifier)
+                const myFriends = GroupIdentifier.getDefaultFriendsGroupIdentifier(
+                    ProfileIdentifier.fromString<ProfileIdentifier>(whoAmI.value, ProfileIdentifier).unwrap(),
+                )
                 if (isFriendNow === Status.Friend) {
                     Services.UserGroup.addProfileToFriendsGroup(myFriends, [thisPerson.identifier])
                     console.log('Adding friend', thisPerson.identifier, 'to', myFriends)
@@ -73,7 +75,3 @@ const isFriend = new LiveSelector()
         else if (arr.length === 2) return [Status.NonFriend]
         return [Status.Unknown]
     })
-
-export function collectPeopleFacebook(this: SocialNetworkUI) {
-    findPeopleInfo(this.currentIdentity)
-}
