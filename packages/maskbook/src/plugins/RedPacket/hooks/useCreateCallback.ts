@@ -15,6 +15,8 @@ import {
 } from '@dimensiondev/web3-shared'
 import { isLessThan } from '@dimensiondev/maskbook-shared'
 import type { TransactionReceipt } from 'web3-core'
+import { RED_PACKET_CONTRACT_VERSION } from '../constants'
+import type { HappyRedPacketV2 } from '@dimensiondev/contracts/types/HappyRedPacketV2'
 
 export interface RedPacketSettings {
     password: string
@@ -32,7 +34,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
     const gasPrice = useGasPrice()
     const account = useAccount()
     const [createState, setCreateState] = useTransactionState()
-    const redPacketContract = useRedPacketContract()
+    const redPacketContract = useRedPacketContract(RED_PACKET_CONTRACT_VERSION)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
 
     const createCallback = useCallback(async () => {
@@ -74,7 +76,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
         })
 
         const seed = Math.random().toString()
-        const params: Parameters<typeof redPacketContract['methods']['create_red_packet']> = [
+        const params: Parameters<HappyRedPacketV2['methods']['create_red_packet']> = [
             Web3Utils.sha3(password)!,
             shares,
             isRandom,
@@ -127,7 +129,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                 })
             })
 
-            promiEvent.on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
                 setCreateSettings(redPacketSettings)
                 setCreateState({
                     type: TransactionStateType.CONFIRMED,
@@ -137,7 +139,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                 resolve()
             })
 
-            promiEvent.on(TransactionEventType.ERROR, (error) => {
+            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
                 setCreateState({
                     type: TransactionStateType.FAILED,
                     error,

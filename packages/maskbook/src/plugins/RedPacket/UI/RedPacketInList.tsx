@@ -107,7 +107,11 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, history.payload)
 
-    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(account, history.rpid)
+    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
+        history.payload.contract_version,
+        account,
+        history.rpid,
+    )
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(

@@ -172,8 +172,17 @@ export function RedPacket(props: RedPacketProps) {
                 : '',
         )
         .toString()
-    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(account, payload.rpid, payload.password)
-    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(account, payload.rpid)
+    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
+        payload.contract_version,
+        account,
+        payload.rpid,
+        payload.password,
+    )
+    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
+        payload.contract_version,
+        account,
+        payload.rpid,
+    )
 
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -201,7 +210,7 @@ export function RedPacket(props: RedPacketProps) {
         if (!availability || !tokenDetailed) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareLink: shareLink!.toString(),
             state,
             summary: canClaim
                 ? t('plugin_red_packet_claiming_from', { name: payload.sender.name })

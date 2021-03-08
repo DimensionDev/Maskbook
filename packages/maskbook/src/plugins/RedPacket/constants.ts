@@ -5,7 +5,18 @@ export const RedPacketMetaKey = 'com.maskbook.red_packet:1'
 export const RedPacketPluginID = 'com.maskbook.red_packet'
 
 export const RED_PACKET_CONSTANTS = {
-    HAPPY_RED_PACKET_ADDRESS: {
+    HAPPY_RED_PACKET_ADDRESS_V1: {
+        [ChainId.Mainnet]: '0x26760783c12181efa3c435aee4ae686c53bdddbb',
+        [ChainId.Ropsten]: '0x26760783C12181Efa3c435aee4aE686C53BdddBb',
+        [ChainId.Rinkeby]: '0x575f906db24154977c7361c2319e2b25e897e3b6',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
+    HAPPY_RED_PACKET_ADDRESS_V2: {
         [ChainId.Mainnet]: '0x26760783c12181efa3c435aee4ae686c53bdddbb',
         [ChainId.Ropsten]: '0x6d84e4863c0530bc0bb4291ef0ff454a40660ca3',
         [ChainId.Rinkeby]: '0x575f906db24154977c7361c2319e2b25e897e3b6',
@@ -29,7 +40,7 @@ export const RED_PACKET_CONSTANTS = {
     },
 }
 
-export const RED_PACKET_CONTRACT_VERSION = 1
+export const RED_PACKET_CONTRACT_VERSION = 2
 
 export const RED_PACKET_DEFAULT_SHARES = 5
 export const RED_PACKET_MIN_SHARES = 1

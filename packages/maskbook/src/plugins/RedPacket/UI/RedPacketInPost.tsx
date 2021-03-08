@@ -25,6 +25,7 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
             id: payload.txid,
             from: fromUrl,
             password: payload.password,
+            contract_version: payload.contract_version,
         }
         RedPacketRPC.discoverRedPacket(record)
     }, [fromUrl])

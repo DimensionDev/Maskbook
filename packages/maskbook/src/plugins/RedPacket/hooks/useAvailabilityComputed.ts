@@ -1,6 +1,6 @@
 import { compact } from 'lodash-es'
 import { isSameAddress, useChainId, getChainIdFromName, ChainId } from '@dimensiondev/web3-shared'
-import { RedPacketJSONPayload, RedPacketStatus } from '../types'
+import { RedPacketJSONPayload, RedPacketStatus, RedPacketAvailability } from '../types'
 import { useAvailability } from './useAvailability'
 
 /**
@@ -9,9 +9,10 @@ import { useAvailability } from './useAvailability'
  */
 export function useAvailabilityComputed(account: string, payload: RedPacketJSONPayload) {
     const chainId = useChainId()
-    const asyncResult = useAvailability(account, payload?.rpid)
+    const asyncResult = useAvailability(payload.contract_version, account, payload?.rpid)
 
-    const { value: availability } = asyncResult
+    const result = asyncResult
+    const availability = result.value as RedPacketAvailability
 
     if (!availability)
         return {
@@ -26,7 +27,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
 
     const isEmpty = availability.balance === '0'
     const isExpired = availability.expired
-    const isClaimed = availability.claimed_amount !== '0'
+    const isClaimed = availability.claimed_amount ? availability.claimed_amount !== '0' : availability.ifclaimed
     const isRefunded = isEmpty && Number.parseInt(availability.claimed, 10) < Number.parseInt(availability.total, 10)
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
     const parsedChainId = payload.network ? getChainIdFromName(payload.network) : ChainId.Mainnet

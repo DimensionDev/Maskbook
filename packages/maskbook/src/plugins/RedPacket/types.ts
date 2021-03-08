@@ -11,6 +11,7 @@ export interface RedPacketRecord {
     /** From twitter/facebook url */
     from: string
     password: string
+    contract_version: number
 }
 
 export interface RedPacketRecordInDatabase extends RedPacketRecord {
@@ -36,13 +37,13 @@ export interface RedPacketAvailability {
     total: string
     claimed: string
     expired: boolean
-    claimed_amount: string
+    claimed_amount?: string // V2
+    ifclaimed?: boolean // V1
 }
 
 interface RedPacketBasic {
     contract_address: string
     rpid: string
-    txid: string
     password: string
     shares: number
     is_random: boolean
@@ -57,6 +58,8 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
         name: string
         message: string
     }
+    txid?: string
+    contract_version: number
     network?: string
     token_type: EthereumTokenType.Native | EthereumTokenType.ERC20
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
@@ -82,6 +85,7 @@ export interface RedPacketHistoryInMask {
 export interface RedPacketSubgraphInMask extends RedPacketBasic {
     message: string
     name: string
+    txid: string
     total_remaining: string
     last_updated_time: number
     chain_id: number
@@ -118,4 +122,5 @@ export interface RedPacketSubgraphOutMask extends Omit<RedPacketSubgraphInMask, 
 
 export interface RedPacketHistory extends RedPacketSubgraphInMask {
     payload: RedPacketJSONPayload
+    contract_version: number
 }
