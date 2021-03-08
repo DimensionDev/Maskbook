@@ -73,7 +73,7 @@ export const Balance = memo(({ balance, onSend, onBuy, onSwap, onReceive }: Bala
                     <MaskWalletIcon fontSize="inherit" />
                 </IconContainer>
                 <BalanceDisplayContainer>
-                    <BalanceTitle>Balance</BalanceTitle>
+                    <BalanceTitle>{t.wallets_balance()}</BalanceTitle>
                     <BalanceContent>
                         {balance.toLocaleString('en', {
                             style: 'currency',
@@ -83,10 +83,10 @@ export const Balance = memo(({ balance, onSend, onBuy, onSwap, onReceive }: Bala
                 </BalanceDisplayContainer>
             </Box>
             <ButtonGroup>
-                <Button>Send</Button>
-                <Button>Buy</Button>
-                <Button>Swap</Button>
-                <Button color="secondary">Receive</Button>
+                <Button onClick={onSend}>{t.wallets_balance_Send()}</Button>
+                <Button onClick={onBuy}>{t.wallets_balance_Buy()}</Button>
+                <Button onClick={onSwap}>{t.wallets_balance_Swap()}</Button>
+                <Button color="secondary" onClick={onReceive}>{t.wallets_balance_Receive()}</Button>
             </ButtonGroup>
         </BalanceContainer>
     )
