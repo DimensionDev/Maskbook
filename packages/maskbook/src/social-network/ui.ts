@@ -1,5 +1,5 @@
 import type { ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
-import { ValueRef, assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+import { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { Group, Profile } from '../database'
 import { ProfileIdentifier, PersonaIdentifier } from '../database/type'
 import { defaultTo, isNull } from 'lodash-es'
@@ -17,11 +17,6 @@ import type { PostInfo } from './PostInfo'
 import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 import { editMetadata } from '../protocols/typed-message'
 import type { ReadonlyIdentifierMap } from '../database/IdentifierMap'
-import { Flags } from '../utils/flags'
-
-if (!process.env.STORYBOOK) {
-    assertEnvironment.oneOf(Environment.ContentScript, Environment.ManifestOptions, Environment.ManifestBrowserAction)
-}
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
@@ -221,10 +216,6 @@ export interface SocialNetworkUIDataSources {
      */
     readonly friendsRef?: ValueRef<ReadonlyIdentifierMap<ProfileIdentifier, Profile>>
     /**
-     * My groups at this network
-     */
-    readonly groupsRef?: ValueRef<readonly Group[]>
-    /**
      * My identities at current network
      */
     readonly myIdentitiesRef?: ValueRef<readonly Profile[]>
@@ -232,10 +223,6 @@ export interface SocialNetworkUIDataSources {
      * The account that user is using (may not in the database)
      */
     readonly lastRecognizedIdentity?: ValueRef<Pick<Profile, 'identifier' | 'nickname' | 'avatar'>>
-    /**
-     * The account that user is using (MUST be in the database)
-     */
-    readonly currentIdentity?: ValueRef<Profile | null>
     /**
      * Posts that Mask detects
      */
@@ -311,21 +298,10 @@ export function activateSocialNetworkUI(): void {
                 ui.injectPageInspector()
                 ui.collectPeople()
                 ui.collectPosts()
-                ui.myIdentitiesRef.addListener((val) => {
-                    if (val.length === 1) ui.currentIdentity.value = val[0]
-                })
-                {
-                    if (typeof ui.injectSearchResultBox === 'function') ui.injectSearchResultBox()
-                }
-                {
-                    if (typeof ui.injectKnownIdentity === 'function') ui.injectKnownIdentity()
-                }
+                if (typeof ui.injectSearchResultBox === 'function') ui.injectSearchResultBox()
+                if (typeof ui.injectKnownIdentity === 'function') ui.injectKnownIdentity()
                 ui.lastRecognizedIdentity.addListener((id) => {
                     if (id.identifier.isUnknown) return
-                    if (isNull(ui.currentIdentity.value)) {
-                        ui.currentIdentity.value =
-                            ui.myIdentitiesRef.value.find((x) => id.identifier.equals(x.identifier)) || null
-                    }
                     Services.Identity.resolveIdentity(id.identifier).then()
                 })
             })

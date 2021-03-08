@@ -109,7 +109,6 @@ export function ChooseIdentity(props: ChooseIdentityProps) {
                                     ListItemProps={{ dense: true, classes: { root: classes.listItemRoot } }}
                                     onClick={() => {
                                         setExpanded(false)
-                                        ui.currentIdentity.value = person
                                         currentSelectedIdentity[ui.networkIdentifier].value = person.identifier.toText()
                                     }}
                                     {...props.PersonOrGroupInListProps}

@@ -18,7 +18,7 @@ import {
 import { CompositionEvent, MaskMessage } from '../../utils/messages'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
-import { useFriendsList, useCurrentGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
+import { useFriendsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { currentImagePayloadStatus, debugModeSetting } from '../../settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { editActivatedPostMetadata, getActivatedUI } from '../../social-network/ui'
@@ -282,11 +282,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     //#endregion
     //#region Share target
     const people = useFriendsList()
-    const groups = useCurrentGroupsList()
-    const availableShareTarget = or(
-        props.availableShareTarget,
-        useMemo(() => [...groups, ...people], [people, groups]),
-    )
+    const availableShareTarget = props.availableShareTarget || people
     const currentIdentity = or(props.currentIdentity, useCurrentIdentity())
     const [currentShareTarget, setCurrentShareTarget] = useState<(Profile | Group)[]>(() => [])
     //#endregion
