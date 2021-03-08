@@ -57,6 +57,10 @@ export function development(manifest: Manifest) {
         'p01fbORDknWt8suJmEMz7S0O5+u13+34NvxYzUNeLJF9gYrd4zzrAFYI' +
         'TDEYcqr0OMZvVrKz7IkJasER1uJyoGj4gFJeXNGE8y4Sqb150wBju70l' +
         'KNKlNevWDRJKasG9CjagAD2+BAfqNyltn7KwK7jAyL1w6d6mOwIDAQAB'
+    acceptExternalConnect(manifest)
+}
+
+function acceptExternalConnect(manifest: Manifest) {
     manifest.externally_connectable = {
         ids: ['*'],
         matches: ['*://localhost:*/*', '*://127.0.0.1:*/*'],
@@ -73,7 +77,9 @@ export function E2E(manifest: Manifest) {
 }
 export function beta(manifest: Manifest) {
     manifest.name += ' (Beta)'
+    acceptExternalConnect(manifest)
 }
 export function nightly(manifest: Manifest) {
     manifest.name += ' (Nightly)'
+    acceptExternalConnect(manifest)
 }
