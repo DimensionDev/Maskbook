@@ -9,10 +9,10 @@ import { serializer } from '@dimensiondev/maskbook-shared'
 import { StylesProvider } from '@material-ui/core/styles'
 import { UnboundedRegistry, WebExtensionMessage, Environment } from '@dimensiondev/holoflows-kit'
 
-if (!import.meta.hot) {
-    throw new Error('This app is not used to run as an isolated web site currently')
-} else {
+if (import.meta.hot) {
     import.meta.hot.accept()
+} else if (location.host === 'compassionate-northcutt-326a3a.netlify.app') {
+    document.getElementById('warning')?.remove()
 }
 class WebExtensionExternalChannel extends WebExtensionMessage<any> {
     constructor(domain: string, id = 'jkoeaghipilijlahjplgbfiocjhldnap') {

@@ -91,6 +91,11 @@ export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage',
     secondary: () => i18n.t('settings_launch_page_secondary'),
 })
 
+export const newDashboardConnection = createGlobalSettings('beta-dashboard', false, {
+    primary: () => 'Allow isolated dashboard to connect',
+    secondary: () => "WARNING: DON'T OPEN THIS UNLESS YOU KNOW WHAT YOU ARE DOING.",
+})
+
 sideEffect.then(() => {
     // reset it to false after Mask startup
     currentImportingBackup.value = false

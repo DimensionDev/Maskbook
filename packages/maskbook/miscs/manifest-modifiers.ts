@@ -49,7 +49,13 @@ export function development(manifest: Manifest) {
     // 8097 is react devtools
     // connect-src is used by firefox
     manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; connect-src * https://localhost:8080/ http://localhost:8097; object-src 'self';`
-    manifest.key = // ID：jkoeaghipilijlahjplgbfiocjhldnap
+    acceptExternalConnect(manifest)
+    jkoeaghipilijlahjplgbfiocjhldnap(manifest)
+}
+// ID: jkoeaghipilijlahjplgbfiocjhldnap
+// Note: with tihs key you cannot upload it to the extension store
+function jkoeaghipilijlahjplgbfiocjhldnap(manifest: Manifest) {
+    manifest.key =
         'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoz51rhO1w+wD' +
         '0EKZJEFJaSMkIcIj0qRadfi0tqcl5nbpuJAsafvLe3MaTbW9LhbixTg9' +
         'PHybO3tlYUFJrZgUuZlEvt2T6SKIu6Rs9e9B3/brNQG3+hCHudbZkq2W' +
@@ -57,9 +63,13 @@ export function development(manifest: Manifest) {
         'p01fbORDknWt8suJmEMz7S0O5+u13+34NvxYzUNeLJF9gYrd4zzrAFYI' +
         'TDEYcqr0OMZvVrKz7IkJasER1uJyoGj4gFJeXNGE8y4Sqb150wBju70l' +
         'KNKlNevWDRJKasG9CjagAD2+BAfqNyltn7KwK7jAyL1w6d6mOwIDAQAB'
+}
+
+function acceptExternalConnect(manifest: Manifest) {
     manifest.externally_connectable = {
         ids: ['*'],
-        matches: ['*://localhost:*/*', '*://127.0.0.1:*/*'],
+        // It seems like *.netlify.app or *compassionate-northcutt-326a3a.netlify.app does not work so it is not possible to provide a preview for PRs
+        matches: ['*://localhost:*/*', '*://127.0.0.1:*/*', 'https://compassionate-northcutt-326a3a.netlify.app//*'],
     }
 }
 export function production(manifest: Manifest) {}
@@ -73,7 +83,11 @@ export function E2E(manifest: Manifest) {
 }
 export function beta(manifest: Manifest) {
     manifest.name += ' (Beta)'
+    acceptExternalConnect(manifest)
+    jkoeaghipilijlahjplgbfiocjhldnap(manifest)
 }
 export function nightly(manifest: Manifest) {
     manifest.name += ' (Nightly)'
+    jkoeaghipilijlahjplgbfiocjhldnap(manifest)
+    acceptExternalConnect(manifest)
 }

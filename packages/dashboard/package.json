@@ -5,7 +5,8 @@
   "scripts": {
     "storybook": "dev -- start-storybook -p 6006",
     "build-storybook": "build -- build-storybook",
-    "start": "dev -- snowpack dev --reload"
+    "start": "dev -- snowpack dev --reload",
+    "build": "build -- snowpack build"
   },
   "main": "./dist/src/entry.js",
   "types": "./dist/src/entry.d.ts",
