@@ -63,6 +63,29 @@ const RED_PACKET_FIELDS = `
         ${USER_FIELDS}
     }
 `
+
+export async function getRedPacketTxid(rpid: string) {
+    const response = await fetch(getConstant(RED_PACKET_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify({
+            query: `
+            {
+                redPackets (where: { rpid: "${rpid.toLowerCase()}" }) {
+                    ${RED_PACKET_FIELDS}
+                }
+            }
+            `,
+        }),
+    })
+
+    const {
+        data: { redPackets },
+    } = (await response.json()) as { data: { redPackets: RedPacketSubgraphOutMask[] } }
+
+    return redPackets[0] ? redPackets[0].txid : null
+}
+
 export async function getRedPacketHistory(address: string) {
     const response = await fetch(getConstant(RED_PACKET_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
         method: 'POST',
