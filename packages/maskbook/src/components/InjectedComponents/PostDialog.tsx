@@ -328,7 +328,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                         random: new Date().toLocaleString(),
                     })
                     activeUI.taskPasteIntoPostBox(relatedText, {
-                        shouldOpenPostDialog: false,
                         autoPasteFailedRecover: false,
                     })
                     activeUI.taskUploadToPostBox(encrypted, {
@@ -366,7 +365,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     }
                     activeUI.taskPasteIntoPostBox(text, {
                         autoPasteFailedRecover: true,
-                        shouldOpenPostDialog: false,
                     })
                 }
                 // This step write data on gun.
@@ -401,7 +399,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
         return MaskMessage.events.compositionUpdated.on(({ reason, open, content, options }: CompositionEvent) => {
             if (reason !== props_reason || identities.length <= 0) return
             setOpen(open)
-            if (content) setPostBoxContent(makeTypedMessageText(content))
+            if (content) setPostBoxContent(content)
             if (options?.onlyMySelf) setOnlyMyself(true)
             if (options?.shareToEveryOne) setShareToEveryone(true)
         })

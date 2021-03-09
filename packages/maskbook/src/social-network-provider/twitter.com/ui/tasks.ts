@@ -19,6 +19,7 @@ import { encodeArrayBuffer, decodeArrayBuffer } from '../../../utils/type-transf
 import { isMobileTwitter } from '../utils/isMobile'
 import { MaskMessage } from '../../../utils/messages'
 import { ImagePayloadURLs } from '../../../resources/image-payload'
+import { makeTypedMessageText } from '../../../protocols/typed-message'
 
 /**
  * Wait for up to 5000 ms
@@ -107,7 +108,7 @@ const taskOpenComposeBox = async (
     MaskMessage.events.compositionUpdated.sendToLocal({
         reason: 'timeline',
         open: true,
-        content,
+        content: makeTypedMessageText(content),
         options,
     })
 }

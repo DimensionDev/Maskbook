@@ -3,6 +3,8 @@ import { MaskMessage } from '../../../utils/messages'
 import { i18n } from '../../../utils/i18n-next'
 import { delay } from '../../../utils/utils'
 import { untilDocumentReady } from '../../../utils/dom'
+import type { SocialNetworkUI } from '../../../social-network-next/types'
+import { makeTypedMessageText } from '../../../protocols/typed-message'
 
 const nativeComposeButtonSelector = () =>
     new LiveSelector()
@@ -62,7 +64,7 @@ export async function taskOpenComposeBoxFacebook(
     MaskMessage.events.compositionUpdated.sendToLocal({
         reason: 'popup',
         open: true,
-        content,
+        content: makeTypedMessageText(content),
         options,
     })
 }

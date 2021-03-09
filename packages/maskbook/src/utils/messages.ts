@@ -1,6 +1,7 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import Serialization from './type-transform/Serialization'
 import type { ProfileIdentifier, GroupIdentifier, PersonaIdentifier } from '../database/type'
+import type { TypedMessage } from '../protocols/typed-message'
 
 export interface UpdateEvent<Data> {
     readonly reason: 'update' | 'delete' | 'new'
@@ -10,7 +11,7 @@ export interface UpdateEvent<Data> {
 export interface CompositionEvent {
     readonly reason: 'timeline' | 'popup'
     readonly open: boolean
-    readonly content?: string
+    readonly content?: TypedMessage
     readonly options?: {
         onlyMySelf?: boolean
         shareToEveryOne?: boolean
@@ -39,7 +40,6 @@ export interface MaskMessages {
     createInternalSettingsUpdated: SettingsUpdateEvent
     profileJoinedGroup: { group: GroupIdentifier; newMembers: ProfileIdentifier[] }
     /** emit when compose status updated. */
-    // TODO: Maybe in-page UI related messages should use Context instead of messages?
     compositionUpdated: CompositionEvent
     personaChanged: (UpdateEvent<PersonaIdentifier> & { owned: boolean })[]
     profilesChanged: UpdateEvent<ProfileIdentifier>[]

@@ -158,7 +158,6 @@ export interface SocialNetworkUITasks {
         text: string,
         options: {
             autoPasteFailedRecover: boolean
-            shouldOpenPostDialog: boolean
         },
     ): void
     /**

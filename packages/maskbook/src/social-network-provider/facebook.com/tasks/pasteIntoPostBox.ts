@@ -61,7 +61,7 @@ export async function pasteIntoPostBoxFacebook(
     text: string,
     options: Parameters<SocialNetworkUI['taskPasteIntoPostBox']>[1],
 ) {
-    const { shouldOpenPostDialog, autoPasteFailedRecover } = options
+    const { autoPasteFailedRecover } = options
     await untilDocumentReady()
     // Save the scrolling position
     const scrolling = document.scrollingElement || document.documentElement
@@ -72,10 +72,9 @@ export async function pasteIntoPostBoxFacebook(
     )
     if (isMobileFacebook) activated.filter((x) => x.getClientRects().length > 0)
     // If page is just loaded
-    if (shouldOpenPostDialog) {
-        await openPostDialogFacebook()
-        console.log('Awaiting dialog')
-    }
+    // if (shouldOpenPostDialog) {
+    //     await openPostDialogFacebook()
+    // }
     try {
         const [element] = activated.evaluate()
         element.focus()

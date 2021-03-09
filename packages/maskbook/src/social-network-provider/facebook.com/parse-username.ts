@@ -7,7 +7,7 @@ import { i18n } from '../../utils/i18n-next'
  * @unstable
  * ! Start to use this in a breaking change!
  */
-export function regularUsername(name: string) {
+export function isValidFacebookUsername(name: string) {
     if (!name) return null
     // Avoid common mistake
     if (name === 'photo.php') return null
@@ -26,7 +26,7 @@ export function getPostUrlAtFacebook(post: PostIdentifier<ProfileIdentifier>, us
     const { userId } = id
 
     const host = getFacebookHostName(usage)
-    if (!regularUsername(userId)) throw new TypeError(i18n.t('service_username_invalid'))
+    if (!isValidFacebookUsername(userId)) throw new TypeError(i18n.t('service_username_invalid'))
     if (parseFloat(userId)) return `${host}/permalink.php?story_fbid=${postId}&id=${userId}`
     return `${host}/${userId}/posts/${postId}`
 }
@@ -39,7 +39,7 @@ export function getProfilePageUrlAtFacebook(user: ProfileIdentifier | GroupIdent
 
     const host = getFacebookHostName(usage)
     const username = user.userId
-    if (!regularUsername(username)) throw new TypeError(i18n.t('service_username_invalid'))
+    if (!isValidFacebookUsername(username)) throw new TypeError(i18n.t('service_username_invalid'))
     if (parseFloat(username)) return `${host}/profile.php?id=${username}`
     return `${host}/${username}`
 }
