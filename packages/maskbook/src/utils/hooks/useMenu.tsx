@@ -1,19 +1,19 @@
-import { useCallback, useRef, useState } from 'react'
+import { ReactElement, ReactNode, SyntheticEvent, useCallback, useRef, useState } from 'react'
 import { ShadowRootMenu } from '../shadow-root/ShadowRootComponents'
 
 /**
  * A util hooks for easier to use `<Menu>`s.
  * @param menus Material UI `<MenuItem />` elements
  */
-export function useMenu(menus: (JSX.Element | undefined)[], anchorSibling = false) {
+export function useMenu(fragment: ReactElement<{ children: ReactNode }>, anchorSibling = false) {
     const [open, setOpen] = useState(false)
     const anchorElRef = useRef<HTMLElement>()
     const close = () => setOpen(false)
     return [
         <ShadowRootMenu open={open} anchorEl={anchorElRef.current} onClose={close} onClick={close}>
-            {menus}
+            {fragment.props.children}
         </ShadowRootMenu>,
-        useCallback((anchorElOrEvent: HTMLElement | { currentTarget: HTMLElement }) => {
+        useCallback((anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => {
             let element: HTMLElement
             if (anchorElOrEvent instanceof HTMLElement) {
                 element = anchorElOrEvent

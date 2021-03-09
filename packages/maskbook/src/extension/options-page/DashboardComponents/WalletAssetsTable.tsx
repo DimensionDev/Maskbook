@@ -97,16 +97,15 @@ function ViewDetailed(props: ViewDetailedProps) {
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const classes = useStylesExtends(useStyles({ isMobile }), props)
     const [menu, openMenu] = useMenu(
-        [
+        <>
             <TokenActionsMenu
-                key={1}
                 chain={x.chain}
                 wallet={wallet}
                 token={x.token}
                 onTransferDialogOpen={openTransferDialog}
                 onHideTokenConfirmDialogOpen={openHideTokenConfirmDialog}
-            />,
-        ],
+            />
+        </>,
         true,
     )
 
