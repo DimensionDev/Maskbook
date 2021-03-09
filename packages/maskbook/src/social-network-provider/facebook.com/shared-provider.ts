@@ -1,10 +1,10 @@
 import type { SocialNetworkWorkerAndUIDefinition } from '../../social-network/shared'
-import { regularUsername, getFacebookHostName } from './parse-username'
+import { isValidFacebookUsername, getFacebookHostName } from './parse-username'
 
 export const sharedProvider: SocialNetworkWorkerAndUIDefinition = {
     name: 'facebook',
     networkIdentifier: 'facebook.com',
-    isValidUsername: (v) => !!regularUsername(v),
+    isValidUsername: (v) => !!isValidFacebookUsername(v),
     init() {},
     getHomePage: () => getFacebookHostName('open'),
 }
