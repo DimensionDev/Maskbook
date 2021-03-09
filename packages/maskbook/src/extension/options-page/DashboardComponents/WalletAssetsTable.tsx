@@ -97,15 +97,15 @@ function ViewDetailed(props: ViewDetailedProps) {
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const classes = useStylesExtends(useStyles({ isMobile }), props)
     const [menu, openMenu] = useMenu(
-        [
+        <>
             <TokenActionsMenu
                 chain={x.chain}
                 wallet={wallet}
                 token={x.token}
                 onTransferDialogOpen={openTransferDialog}
                 onHideTokenConfirmDialogOpen={openHideTokenConfirmDialog}
-            />,
-        ],
+            />
+        </>,
         true,
     )
 
@@ -284,6 +284,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                             .map((y, idx) =>
                                 idx < viewLength ? (
                                     <ViewDetailed
+                                        key={idx}
                                         x={y}
                                         isMobile={isMobile}
                                         stableTokens={stableTokens}
