@@ -1,4 +1,4 @@
-import { TransactionProvider } from "../types";
+import { TransactionProvider } from '../types'
 import * as DeBankAPI from './debank'
 
 // TOOD:
@@ -6,7 +6,6 @@ import * as DeBankAPI from './debank'
 export interface Transaction {
     id: string
 }
-
 
 export async function getTransactionList(address: string, provider: TransactionProvider) {
     if (provider === TransactionProvider.DEBANK) {
