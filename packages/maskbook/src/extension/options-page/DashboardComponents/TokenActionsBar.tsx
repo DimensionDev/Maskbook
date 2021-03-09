@@ -91,6 +91,7 @@ export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu([
         <TokenActionsMenu
+            key={1}
             chain={chain}
             wallet={wallet}
             token={token}

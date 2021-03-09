@@ -99,6 +99,7 @@ function ViewDetailed(props: ViewDetailedProps) {
     const [menu, openMenu] = useMenu(
         [
             <TokenActionsMenu
+                key={1}
                 chain={x.chain}
                 wallet={wallet}
                 token={x.token}
@@ -284,6 +285,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                             .map((y, idx) =>
                                 idx < viewLength ? (
                                     <ViewDetailed
+                                        key={idx}
                                         x={y}
                                         isMobile={isMobile}
                                         stableTokens={stableTokens}

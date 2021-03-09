@@ -76,10 +76,7 @@ interface WalletContentProps {
     wallet: WalletRecord
 }
 
-export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(function WalletContent(
-    { wallet }: WalletContentProps,
-    ref,
-) {
+export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ wallet }, ref) => {
     const classes = useStyles()
     const { t } = useI18N()
     const color = useColorStyles()
@@ -93,11 +90,19 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const [menu, openMenu] = useMenu([
-        <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
+        <MenuItem key={1} onClick={() => openWalletRename({ wallet })}>
+            {t('rename')}
+        </MenuItem>,
         wallet._private_key_ || wallet.mnemonic.length ? (
-            <MenuItem onClick={() => openWalletBackup({ wallet })}>{t('backup')}</MenuItem>
+            <MenuItem key={2} onClick={() => openWalletBackup({ wallet })}>
+                {t('backup')}
+            </MenuItem>
         ) : undefined,
-        <MenuItem onClick={() => openWalletDelete({ wallet })} className={color.error} data-testid="delete_button">
+        <MenuItem
+            key={3}
+            onClick={() => openWalletDelete({ wallet })}
+            className={color.error}
+            data-testid="delete_button">
             {t('delete')}
         </MenuItem>,
     ])
