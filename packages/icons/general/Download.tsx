@@ -10,4 +10,5 @@ export const DownloadIcon = createIcon(
             strokeLinejoin="round"
         />
     </>,
+    '0 0 16 16',
 )
