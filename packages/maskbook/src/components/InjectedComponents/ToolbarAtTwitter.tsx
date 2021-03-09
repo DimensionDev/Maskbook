@@ -86,7 +86,7 @@ export function ToolbarAtTwitter(props: ToolbarAtTwitterProps) {
     const classes = useStyles()
     const location = useLocation()
     const isPhotoPage = /\/status\/\d+\/photo\/\d+$/.test(location.pathname ?? '')
-    const [isExpand, setIsExpand] = useState(false)
+    const [isExpand, setExpand] = useState(false)
 
     // inject global css
     useEffectOnce(() => {
@@ -129,7 +129,7 @@ export function ToolbarAtTwitter(props: ToolbarAtTwitterProps) {
     const IconButtonMemo = useMemo(
         () => () => (
             <IconButton
-                onClick={() => setIsExpand(!isExpand)}
+                onClick={() => setExpand(!isExpand)}
                 color="primary"
                 className={classNames(classes.sizeButton, isExpand ? classes.rotate : '')}>
                 <DoubleArrowIcon />
