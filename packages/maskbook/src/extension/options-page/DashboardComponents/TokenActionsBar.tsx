@@ -14,58 +14,19 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { DashboardWalletTransferDialog } from './TransferDialog'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 
-const useStyles = makeStyles((theme) => ({
-    more: {
-        color: theme.palette.text.primary,
-    },
-}))
-
-export interface ERC20TokenActionsBarProps extends withClasses<never> {
+//#region token actions menu
+export interface TokenActionsMenuProps extends withClasses<never> {
     wallet: WalletRecord
     chain: 'eth' | string
     token: ERC20TokenDetailed | EtherTokenDetailed
-}
-
-export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
-    const { wallet, chain, token } = props
-
-    const { t } = useI18N()
-    const account = useAccount()
-    const classes = useStylesExtends(useStyles(), props)
-
-    const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialog)
-    const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
-    const [menu, openMenu] = useMenu([
-        <TokenActionsMenu
-            chain={chain}
-            wallet={wallet}
-            token={token}
-            openTransferDialogOpen={openTransferDialogOpen}
-            openHideTokenConfirmDialog={openHideTokenConfirmDialog}
-        />,
-    ])
-
-    return (
-        <>
-            <IconButton className={classes.more} size="small" onClick={openMenu}>
-                <MoreHorizIcon />
-            </IconButton>
-            {menu}
-            {hideTokenConfirmDialog}
-            {transeferDialog}
-        </>
-    )
-}
-
-export interface TokenActionsMenuProps extends ERC20TokenActionsBarProps {
-    openTransferDialogOpen: (
+    onTransferDialogOpen: (
         props: Partial<
             WalletProps & {
                 token: ERC20TokenDetailed | EtherTokenDetailed
             }
         >,
     ) => void
-    openHideTokenConfirmDialog: (
+    onHideTokenConfirmDialogOpen: (
         props: Partial<
             WalletProps & {
                 token: ERC20TokenDetailed | EtherTokenDetailed
@@ -75,10 +36,11 @@ export interface TokenActionsMenuProps extends ERC20TokenActionsBarProps {
 }
 
 export function TokenActionsMenu(props: TokenActionsMenuProps) {
-    const { chain, wallet, token, openTransferDialogOpen, openHideTokenConfirmDialog } = props
+    const { chain, wallet, token, onTransferDialogOpen, onHideTokenConfirmDialogOpen } = props
     const account = useAccount()
     const { t } = useI18N()
     const chainIdValid = useChainIdValid()
+
     //#region remote controlled buy dialog
     const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     //#endregion
@@ -96,16 +58,56 @@ export function TokenActionsMenu(props: TokenActionsMenuProps) {
                         }}>
                         {t('buy')}
                     </MenuItem>
-                    <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ wallet, token })}>
+                    <MenuItem disabled={!chainIdValid} onClick={() => onTransferDialogOpen({ wallet, token })}>
                         {t('transfer')}
                     </MenuItem>
                 </>
             ) : null}
             <MenuItem
                 style={isETH(token.address) ? { display: 'none' } : {}}
-                onClick={() => openHideTokenConfirmDialog({ wallet, token })}>
+                onClick={() => onHideTokenConfirmDialogOpen({ wallet, token })}>
                 {t('hide')}
             </MenuItem>
         </div>
     )
 }
+//#endregion
+
+//#region ERC20 token actions bar
+const useStyles = makeStyles((theme) => ({
+    more: {
+        color: theme.palette.text.primary,
+    },
+}))
+
+export interface ERC20TokenActionsBarProps
+    extends Omit<TokenActionsMenuProps, 'onTransferDialogOpen' | 'onHideTokenConfirmDialogOpen'> {}
+
+export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
+    const { wallet, chain, token } = props
+    const classes = useStylesExtends(useStyles(), props)
+
+    const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialog)
+    const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
+    const [menu, openMenu] = useMenu([
+        <TokenActionsMenu
+            chain={chain}
+            wallet={wallet}
+            token={token}
+            onTransferDialogOpen={openTransferDialogOpen}
+            onHideTokenConfirmDialogOpen={openHideTokenConfirmDialog}
+        />,
+    ])
+
+    return (
+        <>
+            <IconButton className={classes.more} size="small" onClick={openMenu}>
+                <MoreHorizIcon />
+            </IconButton>
+            {menu}
+            {hideTokenConfirmDialog}
+            {transeferDialog}
+        </>
+    )
+}
+//#endregion

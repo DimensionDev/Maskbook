@@ -23,7 +23,7 @@ import { CurrencyType, AssetDetailed, ERC20TokenDetailed, EthereumTokenType } fr
 import { getTokenUSDValue, isSameAddress } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { TokenActionsBar, TokenActionsMenu } from './TokenActionsBar'
+import { ERC20TokenActionsBar, TokenActionsMenu } from './TokenActionsBar'
 import { useContext, useState } from 'react'
 import { DashboardWalletsContext } from '../DashboardRouters/Wallets'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
@@ -93,16 +93,17 @@ interface ViewDetailedProps extends WalletAssetsTableProps {
 
 function ViewDetailed(props: ViewDetailedProps) {
     const { wallet, isMobile, stableTokens, x } = props
-    const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialog)
+    const [transeferDialog, , openTransferDialog] = useModal(DashboardWalletTransferDialog)
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const classes = useStylesExtends(useStyles({ isMobile }), props)
     const [menu, openMenu] = useMenu(
         [
             <TokenActionsMenu
+                chain={x.chain}
                 wallet={wallet}
                 token={x.token}
-                openTransferDialogOpen={openTransferDialogOpen}
-                openHideTokenConfirmDialog={openHideTokenConfirmDialog}
+                onTransferDialogOpen={openTransferDialog}
+                onHideTokenConfirmDialogOpen={openHideTokenConfirmDialog}
             />,
         ],
         true,
@@ -162,7 +163,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                                       display: 'flex',
                                       justifyContent: 'flex-end',
                                   }}>
-                                  <TokenActionsBar wallet={wallet} token={x.token} />
+                                  <ERC20TokenActionsBar chain={x.chain} wallet={wallet} token={x.token} />
                               </Box>,
                           ]),
                 ]
