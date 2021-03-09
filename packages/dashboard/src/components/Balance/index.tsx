@@ -1,8 +1,8 @@
 import { memo } from 'react'
-import { experimentalStyled as styled, Typography, Box, Button } from '@material-ui/core'
+import { experimentalStyled as styled, Typography, Box, Button, buttonClasses } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
-import { MaskWalletIcon } from '@dimensiondev/icons'
+import { MaskWalletIcon, SendIcon, CardIcon, SwapIcon, DownloadIcon } from '@dimensiondev/icons'
 
 export interface BalanceCardProps {
     balance: number
@@ -61,6 +61,13 @@ const ButtonGroup = styled('div')`
     display: inline-grid;
     gap: 10px;
     grid-template-columns: repeat(4, 1fr);
+    & > * {
+        font-size: 12px;
+        & .${buttonClasses.endIcon} > *:nth-of-type(1) {
+            font-size: 16px;
+            fill: none;
+        }
+    }
 `
 
 export const Balance = memo(({ balance, onSend, onBuy, onSwap, onReceive }: BalanceCardProps) => {
@@ -83,10 +90,18 @@ export const Balance = memo(({ balance, onSend, onBuy, onSwap, onReceive }: Bala
                 </BalanceDisplayContainer>
             </Box>
             <ButtonGroup>
-                <Button onClick={onSend}>{t.wallets_balance_Send()}</Button>
-                <Button onClick={onBuy}>{t.wallets_balance_Buy()}</Button>
-                <Button onClick={onSwap}>{t.wallets_balance_Swap()}</Button>
-                <Button color="secondary" onClick={onReceive}>{t.wallets_balance_Receive()}</Button>
+                <Button onClick={onSend} endIcon={<SendIcon fontSize="inherit" />}>
+                    {t.wallets_balance_Send()}
+                </Button>
+                <Button onClick={onBuy} endIcon={<CardIcon fill="none" fontSize="inherit" />}>
+                    {t.wallets_balance_Buy()}
+                </Button>
+                <Button onClick={onSwap} endIcon={<SwapIcon fontSize="inherit" />}>
+                    {t.wallets_balance_Swap()}
+                </Button>
+                <Button color="secondary" onClick={onReceive} endIcon={<DownloadIcon fontSize="inherit" />}>
+                    {t.wallets_balance_Receive()}
+                </Button>
             </ButtonGroup>
         </BalanceContainer>
     )
