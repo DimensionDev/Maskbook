@@ -3,7 +3,7 @@ import { MaskMessage } from '../../../utils/messages'
 import { i18n } from '../../../utils/i18n-next'
 import { delay } from '../../../utils/utils'
 import { untilDocumentReady } from '../../../utils/dom'
-import { makeTypedMessageText } from '../../../protocols/typed-message'
+import { makeTypedMessageText, TypedMessage } from '../../../protocols/typed-message'
 
 const nativeComposeButtonSelector = () =>
     new LiveSelector()
@@ -36,7 +36,7 @@ const nativeComposeDialogIndicatorSelector = () =>
     )
 
 export async function taskOpenComposeBoxFacebook(
-    content: string,
+    content: string | TypedMessage,
     options?: {
         onlyMySelf?: boolean
         shareToEveryOne?: boolean
@@ -63,7 +63,7 @@ export async function taskOpenComposeBoxFacebook(
     MaskMessage.events.compositionUpdated.sendToLocal({
         reason: 'popup',
         open: true,
-        content: makeTypedMessageText(content),
+        content: typeof content === 'string' ? makeTypedMessageText(content) : content,
         options,
     })
 }

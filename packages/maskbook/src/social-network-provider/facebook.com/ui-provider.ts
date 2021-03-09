@@ -21,14 +21,10 @@ import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/in
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
 import { Flags } from '../../utils/flags'
-import { getMaskbookTheme } from '../../utils/theme'
-import { isDarkTheme } from '../../utils/theme-tools'
-import { useState } from 'react'
-import { useInterval } from 'react-use'
 import { MaskMessage } from '../../utils/messages'
 import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
-import { Appearance } from '../../settings/types'
 import { injectToolbarAtFacebook } from './UI/injectToolbar'
+import { useThemeFacebook } from './UI/useTheme'
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
 export const facebookUISelf = defineSocialNetworkUI({
@@ -110,17 +106,8 @@ export const facebookUISelf = defineSocialNetworkUI({
         if (homeLink) homeLink.click()
         else if (location.pathname !== '/') location.pathname = '/'
     },
-    useTheme() {
-        const [theme, setTheme] = useState(getTheme())
-        const updateTheme = () => setTheme(getTheme())
-        // TODO: it's buggy.
-        useInterval(updateTheme, 2000)
-        return theme
-    },
+    useTheme: useThemeFacebook,
 })
-function getTheme() {
-    return getMaskbookTheme({ appearance: isDarkTheme() ? Appearance.dark : Appearance.light })
-}
 if (module.hot) {
     module.hot.accept('./tasks/pasteIntoPostBox.ts', () => {
         facebookUISelf.taskPasteIntoPostBox = pasteIntoPostBoxFacebook
