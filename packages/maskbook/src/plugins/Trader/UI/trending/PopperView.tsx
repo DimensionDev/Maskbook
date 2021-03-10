@@ -77,7 +77,7 @@ export function PopperView(props: PopperViewProps) {
     //#endregion
 
     const chainId = useChainId()
-    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP ? 1 : 0)
+    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
 
     //#region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
@@ -163,10 +163,10 @@ export function PopperView(props: PopperViewProps) {
     const canSwap = !!trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
     const tabs = [
         <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />,
-        dataProvider !== DataProvider.UNISWAP ? (
+        dataProvider !== DataProvider.UNISWAP_INFO ? (
             <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
         ) : null,
-        dataProvider !== DataProvider.UNISWAP ? (
+        dataProvider !== DataProvider.UNISWAP_INFO ? (
             <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
         ) : null,
         canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null,
@@ -184,8 +184,8 @@ export function PopperView(props: PopperViewProps) {
                 trending={trending}
                 dataProvider={dataProvider}
                 tradeProvider={tradeProvider}
-                showDataProviderIcon={dataProvider === DataProvider.UNISWAP ? tabIndex === 0 : tabIndex < 3}
-                showTradeProviderIcon={dataProvider === DataProvider.UNISWAP ? tabIndex === 1 : tabIndex === 3}>
+                showDataProviderIcon={dataProvider === DataProvider.UNISWAP_INFO ? tabIndex === 0 : tabIndex < 3}
+                showTradeProviderIcon={dataProvider === DataProvider.UNISWAP_INFO ? tabIndex === 1 : tabIndex === 3}>
                 <Tabs
                     className={classes.tabs}
                     textColor="primary"
@@ -200,7 +200,7 @@ export function PopperView(props: PopperViewProps) {
                     {tabs}
                 </Tabs>
                 {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
-                {tabIndex === 1 && dataProvider !== DataProvider.UNISWAP ? (
+                {tabIndex === 1 && dataProvider !== DataProvider.UNISWAP_INFO ? (
                     <>
                         {market ? <PriceChangedTable market={market} /> : null}
                         <PriceChart
@@ -212,7 +212,7 @@ export function PopperView(props: PopperViewProps) {
                         </PriceChart>
                     </>
                 ) : null}
-                {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
+                {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP_INFO ? (
                     <TickersTable tickers={tickers} dataProvider={dataProvider} />
                 ) : null}
                 {Flags.LBP_enabled && LBP && tabIndex === tabs.length - 1 ? (
@@ -227,7 +227,7 @@ export function PopperView(props: PopperViewProps) {
                         )}
                     />
                 ) : null}
-                {tabIndex === (dataProvider !== DataProvider.UNISWAP ? 3 : 1) && canSwap ? (
+                {tabIndex === (dataProvider !== DataProvider.UNISWAP_INFO ? 3 : 1) && canSwap ? (
                     <TradeView
                         classes={{ root: classes.tradeViewRoot }}
                         TraderProps={{

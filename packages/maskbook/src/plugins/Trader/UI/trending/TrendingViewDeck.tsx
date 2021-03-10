@@ -203,12 +203,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     //#endregion
 
     const dataProviderOptions = getEnumAsArray(DataProvider).filter((x) => {
-        return dataProvider === DataProvider.UNISWAP
-            ? x.value === DataProvider.UNISWAP
-            : x.value !== DataProvider.UNISWAP
+        return dataProvider === DataProvider.UNISWAP_INFO
+            ? x.value === DataProvider.UNISWAP_INFO
+            : x.value !== DataProvider.UNISWAP_INFO
     })
     const tradeProviderOptions = getEnumAsArray(TradeProvider).filter((x) => {
-        return dataProvider === DataProvider.UNISWAP ? x.value === TradeProvider.ZRX : true
+        return dataProvider === DataProvider.UNISWAP_INFO ? x.value === TradeProvider.ZRX : true
     })
 
     return (
@@ -345,7 +345,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 value: x.value,
                             }))}
                             selectedIndex={
-                                dataProvider === DataProvider.UNISWAP
+                                dataProvider === DataProvider.UNISWAP_INFO
                                     ? 0
                                     : findIndex(getEnumAsArray(TradeProvider), (x) => x.value === tradeProvider)
                             }

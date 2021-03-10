@@ -28,7 +28,7 @@ export async function getCurrenies(dataProvider: DataProvider): Promise<Currency
                 symbol: x.token,
                 description: x.name,
             }))
-        case DataProvider.UNISWAP:
+        case DataProvider.UNISWAP_INFO:
             return [
                 {
                     id: 'usd',
@@ -62,7 +62,7 @@ export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<C
                     description: 'Unite State Dollar',
                 },
             ]
-        case DataProvider.UNISWAP:
+        case DataProvider.UNISWAP_INFO:
             return [
                 {
                     id: 'usd',
@@ -75,7 +75,8 @@ export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<C
 }
 
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
-    if (dataProvider === DataProvider.UNISWAP) return uniswapAPI.getAllCoins()
+    if (dataProvider === DataProvider.COIN_GECKO) return coinGeckoAPI.getAllCoins()
+    if (dataProvider === DataProvider.UNISWAP_INFO) return uniswapAPI.getAllCoins()
 
     if (dataProvider === DataProvider.COIN_GECKO) {
         const coins = await coinGeckoAPI.getAllCoins()
@@ -336,12 +337,12 @@ export async function getCoinInfo(id: string, currency: Currency, dataProvider: 
                     price_change_percentage_7d_in_currency: quotesInfo_.quote[currencyName].percent_change_7d,
                 }
             return trending
-        case DataProvider.UNISWAP:
+        case DataProvider.UNISWAP_INFO:
             const coin = uniswapAPI.getAllCoins().find((x) => x.id === id)
             if (!coin) throw new Error(`Cannot find coin with id ${id}`)
             return {
                 currency,
-                dataProvider: DataProvider.UNISWAP,
+                dataProvider: DataProvider.UNISWAP_INFO,
                 market: {
                     current_price: await uniswapAPI.getMidPriceOnDAI(coin),
                 },

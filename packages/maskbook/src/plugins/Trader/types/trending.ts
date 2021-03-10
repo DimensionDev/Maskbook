@@ -5,7 +5,7 @@ export interface Settings {
 export enum DataProvider {
     COIN_GECKO,
     COIN_MARKET_CAP,
-    UNISWAP,
+    UNISWAP_INFO,
 }
 
 export enum TagType {
