@@ -1,4 +1,3 @@
-export {}
 if (typeof File !== 'undefined' && !File.prototype.arrayBuffer) {
     Object.defineProperty(File.prototype, 'arrayBuffer', {
         configurable: true,

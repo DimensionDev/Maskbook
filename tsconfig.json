@@ -6,7 +6,8 @@
     { "path": "./packages/dashboard/" },
     { "path": "./packages/shared/" },
     { "path": "./packages/storybook-shared/" },
-    { "path": "./packages/icons/" }
+    { "path": "./packages/icons/" },
+    { "path": "./packages/polyfill/" }
   ],
   "compilerOptions": {
     /* Basic Options */

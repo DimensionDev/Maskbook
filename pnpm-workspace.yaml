@@ -8,3 +8,4 @@ packages:
   - 'packages/icons'
   - 'packages/contracts'
   - 'packages/locale-kit'
+  - 'packages/polyfill'

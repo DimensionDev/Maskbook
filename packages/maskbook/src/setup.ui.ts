@@ -1,4 +1,4 @@
-import './polyfill/index'
+import '@dimensiondev/polyfill'
 import './utils/debug/general'
 import { definedSocialNetworkUIs, activateSocialNetworkUI } from './social-network/ui'
 import './provider.ui'
