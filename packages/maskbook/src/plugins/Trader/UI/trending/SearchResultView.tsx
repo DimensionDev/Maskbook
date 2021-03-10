@@ -170,12 +170,8 @@ export function SearchResultView(props: SearchResultViewProps) {
     const canSwap = !!trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
     const tabs = [
         <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />,
-        dataProvider !== DataProvider.UNISWAP_INFO ? (
-            <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
-        ) : null,
-        dataProvider !== DataProvider.UNISWAP_INFO ? (
-            <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
-        ) : null,
+        <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />,
+        <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />,
         canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null,
         LBP ? <Tab className={classes.tab} label="LBP" /> : null,
     ].filter(Boolean)
@@ -221,10 +217,16 @@ export function SearchResultView(props: SearchResultViewProps) {
                         </PriceChart>
                     </>
                 ) : null}
-                {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP_INFO ? (
-                    <TickersTable tickers={tickers} dataProvider={dataProvider} />
+                {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
+                {tabIndex === 3 && canSwap ? (
+                    <TradeView
+                        TraderProps={{
+                            coin,
+                            tokenDetailed,
+                        }}
+                    />
                 ) : null}
-                {LBP && tabIndex === tabs.length - 1 ? (
+                {tabIndex === tabs.length - 1 && LBP ? (
                     <LBPPanel
                         duration={LBP.duration}
                         token={createERC20Token(
@@ -234,14 +236,6 @@ export function SearchResultView(props: SearchResultViewProps) {
                             LBP.token.name ?? '',
                             LBP.token.symbol ?? '',
                         )}
-                    />
-                ) : null}
-                {tabIndex === (dataProvider !== DataProvider.UNISWAP_INFO ? 3 : 1) && canSwap ? (
-                    <TradeView
-                        TraderProps={{
-                            coin,
-                            tokenDetailed,
-                        }}
                     />
                 ) : null}
             </TrendingViewDeck>
