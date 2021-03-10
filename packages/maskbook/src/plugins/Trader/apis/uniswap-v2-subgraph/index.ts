@@ -12,24 +12,29 @@ async function fetchFromUniswapV2Subgraph<T>(query: string) {
             query,
         }),
     })
-    const { data } = await response.json()
-    return data as T
+    const { data } = (await response.json()) as {
+        data: T
+    }
+    return data
 }
 
 /**
  * Fetch Ether price of given block
+ * @param blockNumber if don't give, will return latest price
  */
-export async function fetchEtherPriceByBlockNumber(blockNumber: number) {
+export async function fetchEtherPriceByBlockNumber(blockNumber?: number) {
     const response = await fetchFromUniswapV2Subgraph<{
-        ethPrice: number
+        bundles: {
+            ethPrice: number
+        }[]
     }>(`
         query bundles {
-            bundles(where: { id: 1 }, block: { number: ${blockNumber} }) {
+            bundles(where: { id: 1 } ${blockNumber ? `block: { number: ${blockNumber} }` : ''}) {
                 ethPrice
             }
         }
     `)
-    return response.ethPrice
+    return first(response.bundles)
 }
 
 /**
@@ -124,7 +129,7 @@ export async function fetchTokenDayData(address: string, date: Date) {
 /**
  * Fetch the token data
  */
-export async function fetchTokenData(address: string, blockNumber: number) {
+export async function fetchTokenData(address: string, blockNumber?: number) {
     type Token = {
         id: string
         name: string
