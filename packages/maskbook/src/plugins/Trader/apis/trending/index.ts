@@ -369,16 +369,23 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                 }
             return trending
         case DataProvider.UNISWAP_INFO:
-            const coin = await uniswapAPI.getCoinInfo(id)
-            if (!coin) throw new Error(`Cannot find coin with id ${id}`)
+            const { token, marketInfo, tickersInfo } = await uniswapAPI.getCoinInfo(id)
             return {
                 currency,
                 dataProvider: DataProvider.UNISWAP_INFO,
-                market: {
-                    current_price: 0,
+                market: marketInfo,
+                coin: {
+                    id,
+                    name: token?.name,
+                    symbol: token?.symbol,
+                    decimals: Number(token?.decimals),
+                    is_mirrored: isMirroredKeyword(token?.symbol ?? ''),
+                    blockchain_urls: [`https://info.uniswap.org/token/${id}`],
+                    image_url: `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${id}/logo.png`,
+                    platform_url: `https://info.uniswap.org/token/${id}`,
+                    eth_address: id,
                 },
-                coin,
-                tickers: [],
+                tickers: tickersInfo,
                 lastUpdated: '',
             } as Trending
         default:

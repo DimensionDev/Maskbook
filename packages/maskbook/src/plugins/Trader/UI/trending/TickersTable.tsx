@@ -11,7 +11,7 @@ import {
     Link,
     Typography,
 } from '@material-ui/core'
-import type { Ticker, DataProvider } from '../../types'
+import { Ticker, DataProvider } from '../../types'
 import { formatCurrency, formatElapsed, formatEthereumAddress } from '../../../Wallet/formatter'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 
@@ -54,7 +54,7 @@ export function TickersTable(props: TickersTableProps) {
     const rows = [
         t('plugin_trader_table_exchange'),
         t('plugin_trader_table_pair'),
-        t('plugin_trader_table_price'),
+        props.dataProvider !== DataProvider.UNISWAP_INFO ? t('plugin_trader_table_price') : null,
         t('plugin_trader_table_volume'),
         t('plugin_trader_table_updated'),
     ]
@@ -76,7 +76,7 @@ export function TickersTable(props: TickersTableProps) {
                     )
                 })()}
             </TableCell>
-            <TableCell className={classes.cell}>{formatCurrency(ticker.price, '$')}</TableCell>
+            {ticker.price ? <TableCell className={classes.cell}>{formatCurrency(ticker.price, '$')}</TableCell> : null}
             <TableCell className={classes.cell}>{formatCurrency(ticker.volume, '$')}</TableCell>
             <TableCell className={classes.cell}>{formatElapsed(ticker.updated.getTime())}</TableCell>
         </TableRow>
@@ -87,11 +87,13 @@ export function TickersTable(props: TickersTableProps) {
             <Table className={classes.table} size="small" stickyHeader>
                 <TableHead>
                     <TableRow>
-                        {rows.map((x) => (
-                            <TableCell className={classes.cell} key={x}>
-                                {x}
-                            </TableCell>
-                        ))}
+                        {rows.map((x) =>
+                            x ? (
+                                <TableCell className={classes.cell} key={x}>
+                                    {x}
+                                </TableCell>
+                            ) : null,
+                        )}
                     </TableRow>
                 </TableHead>
                 {tickers.length ? (

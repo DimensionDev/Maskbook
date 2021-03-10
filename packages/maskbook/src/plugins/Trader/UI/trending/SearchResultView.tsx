@@ -213,7 +213,7 @@ export function SearchResultView(props: SearchResultViewProps) {
                     {tabs}
                 </Tabs>
                 {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
-                {tabIndex === 1 && dataProvider !== DataProvider.UNISWAP_INFO ? (
+                {tabIndex === 1 ? (
                     <>
                         {market ? <PriceChangedTable market={market} /> : null}
                         <PriceChart coin={coin} stats={stats} loading={loadingStats}>

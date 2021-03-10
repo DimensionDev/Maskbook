@@ -4,6 +4,91 @@ import { TRENDING_CONSTANTS } from '../../constants'
 import { getChainId } from '../../../../extension/background-script/EthereumService'
 import { first } from 'lodash-es'
 
+const TokenFields = `
+  fragment TokenFields on Token {
+    id
+    name
+    symbol
+    derivedETH
+    tradeVolume
+    tradeVolumeUSD
+    untrackedVolumeUSD
+    totalLiquidity
+    txCount
+  }
+`
+
+const PairFields = `
+  fragment PairFields on Pair {
+    id
+    txCount
+    token0 {
+      id
+      symbol
+      name
+      totalLiquidity
+      derivedETH
+    }
+    token1 {
+      id
+      symbol
+      name
+      totalLiquidity
+      derivedETH
+    }
+    reserve0
+    reserve1
+    reserveUSD
+    totalSupply
+    trackedReserveETH
+    reserveETH
+    volumeUSD
+    untrackedVolumeUSD
+    token0Price
+    token1Price
+    createdAtTimestamp
+  }
+`
+
+export type Token = {
+    id: string
+    name: string
+    decimals: string
+    symbol: string
+    derivedETH: string
+    tradeVolume: string
+    tradeVolumeUSD: string
+    untrackedVolumeUSD: string
+    totalLiquidity: string
+    txCount: string
+}
+
+export type Pair = {
+    id: string
+    token0: Token
+    token1: Token
+    reserve0: string
+    reserve1: string
+    totalSupply: string
+    reserveETH: string
+    reserveUSD: string
+    trackedReserveETH: string
+    token0Price: string
+    token1Price: string
+    volumeToken0: string
+    volumeToken1: string
+    volumeUSD: string
+    untrackedVolumeUSD: string
+    txCount: string
+    createdAtTimestamp: string
+    createdAtBlockNumber: string
+    liquidityProviderCount: string
+}
+
+export type Bundle = {
+    ethPrice: number
+}
+
 async function fetchFromUniswapV2Subgraph<T>(query: string) {
     const response = await fetch(getConstant(TRENDING_CONSTANTS, 'UNISWAP_V2_SUBGRAPH_URL', await getChainId()), {
         method: 'POST',
@@ -24,9 +109,7 @@ async function fetchFromUniswapV2Subgraph<T>(query: string) {
  */
 export async function fetchEtherPriceByBlockNumber(blockNumber?: number) {
     const response = await fetchFromUniswapV2Subgraph<{
-        bundles: {
-            ethPrice: number
-        }[]
+        bundles: Bundle[]
     }>(`
         query bundles {
             bundles(where: { id: 1 } ${blockNumber ? `block: { number: ${blockNumber} }` : ''}) {
@@ -39,7 +122,7 @@ export async function fetchEtherPriceByBlockNumber(blockNumber?: number) {
 
 /**
  * Fetch Ether price of list of blocks
- * @param keyword
+ * @param blockNumbers
  */
 export async function fetchEtherPricesByBlockNumbers(blockNumbers: number[]) {
     const queries = blockNumbers.map((x) => {
@@ -50,9 +133,7 @@ export async function fetchEtherPricesByBlockNumbers(blockNumbers: number[]) {
         `
     })
     const response = await fetchFromUniswapV2Subgraph<{
-        [key: string]: {
-            ethPrice: number
-        }
+        [key: string]: Bundle
     }>(`
         query bundles {
             ${queries.join('\n')}
@@ -128,82 +209,97 @@ export async function fetchTokenDayData(address: string, date: Date) {
 
 /**
  * Fetch the token data
+ * @param address
+ * @param blockNumber
  */
 export async function fetchTokenData(address: string, blockNumber?: number) {
-    type Token = {
-        id: string
-        name: string
-        symbol: string
-        derivedETH: string
-        tradeVolume: string
-        tradeVolumeUSD: string
-        untrackedVolumeUSD: string
-        totalLiquidity: string
-        txCount: number
-    }
-    type Pair = {
-        reserve0: string
-        reserve1: string
-        totalSupply: string
-        reserveETH: string
-        reserveUSD: string
-        trackedReserveETH: string
-        token0Price: string
-        token1Price: string
-        volumeToken0: string
-        volumeToken1: string
-        volumeUSD: string
-        untrackedVolumeUSD: string
-        txCount: number
-        createdAtTimestamp: number
-        createdAtBlockNumber: number
-        liquidityProviderCount: number
-    }
     const response = await fetchFromUniswapV2Subgraph<{
         tokens: Token[]
         pairs0: Pair[]
         pairs1: Pair[]
     }>(`
-        fragment TokenFields on Token {
-            id
-            name
-            symbol
-            derivedETH
-            tradeVolume
-            tradeVolumeUSD
-            untrackedVolumeUSD
-            totalLiquidity
-            txCount
-        }
-        fragment PairFields on Pair {
-            reserve0
-            reserve1
-            totalSupply
-            reserveETH
-            reserveUSD
-            trackedReserveETH
-            token0Price
-            token1Price
-            volumeToken0
-            volumeToken1
-            volumeUSD
-            untrackedVolumeUSD
-            txCount
-            createdAtTimestamp
-            createdAtBlockNumber
-            liquidityProviderCount
-        }
+        ${TokenFields}
+        ${PairFields}
         query tokens {
             tokens(${blockNumber ? `block : {number: ${blockNumber}}` : ``} where: {id:"${address}"}) {
                 ...TokenFields
             }
-            pairs0: pairs(where: {token0: "${address}"}, first: 20, orderBy: reserveUSD, orderDirection: desc) {
+            pairs0: pairs(where: {token0: "${address}"}, first: 50, orderBy: reserveUSD, orderDirection: desc) {
                 ...PairFields
             }
-            pairs1: pairs(where: {token1: "${address}"}, first: 20, orderBy: reserveUSD, orderDirection: desc) {
+            pairs1: pairs(where: {token1: "${address}"}, first: 50, orderBy: reserveUSD, orderDirection: desc) {
                 ...PairFields
             }
         }
     `)
-    return first(response.tokens)
+
+    return {
+        token: first(response.tokens),
+        allPairs: response.pairs0.concat(response.pairs1),
+    }
+}
+
+/**
+ * fetch pairs bulk data
+ * @param pairList
+ */
+export async function fetchPairsBulk(pairList: string[]) {
+    const response = await fetchFromUniswapV2Subgraph<{
+        pairs: Pair[]
+    }>(
+        `
+           ${PairFields}
+           query pairs {
+                pairs(first: 500, where: { id_in: ${stringify(
+                    pairList,
+                )} }, orderBy: trackedReserveETH, orderDirection: desc ) {
+                    ...PairFields
+                }
+           }
+        `,
+    )
+
+    return response.pairs
+}
+
+/**
+ * fetch pairs historical bulk data
+ * @param pairs
+ * @param blockNumber
+ */
+export async function fetchPairsHistoricalBulk(pairs: string[], blockNumber?: number) {
+    const response = await fetchFromUniswapV2Subgraph<{
+        pairs: Pair[]
+    }>(`
+            ${PairFields}
+            query pairs {
+                pairs(first: 200, where: { id_in: ${stringify(
+                    pairs,
+                )} }, block: { number: ${blockNumber} }, orderBy: trackedReserveETH, orderDirection: desc) {
+                    ...PairFields
+                }
+            }
+    `)
+
+    return response.pairs
+}
+
+/**
+ * fetch pair data
+ * @param pairAddress
+ * @param blockNumber
+ */
+export async function fetchPairData(pairAddress: string, blockNumber?: number) {
+    const response = await fetchFromUniswapV2Subgraph<{
+        pairs: Pair[]
+    }>(`
+         ${PairFields}
+         query pairs {
+            pairs(${blockNumber ? `block : {number: ${blockNumber}}` : ``} where: { id: "${pairAddress}"} ) {
+                ...PairFields
+            }
+        }
+    `)
+
+    return first(response.pairs)
 }

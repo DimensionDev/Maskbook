@@ -1,5 +1,5 @@
 import { makeStyles, createStyles } from '@material-ui/core'
-import { DataProvider, Trending } from '../../types'
+import type { DataProvider, Trending } from '../../types'
 import { CoinMarketTable } from './CoinMarketTable'
 import { CoinMetadataTable } from './CoinMetadataTable'
 
@@ -24,9 +24,9 @@ export function CoinMarketPanel(props: CoinMarketPanelProps) {
         <div className={classes.root}>
             <CoinMetadataTable dataProvider={dataProvider} trending={trending} />
             <br />
-            {dataProvider !== DataProvider.UNISWAP_INFO ? (
-                <CoinMarketTable dataProvider={dataProvider} trending={trending} />
-            ) : null}
+            {/*{dataProvider !== DataProvider.UNISWAP_INFO ? (*/}
+            <CoinMarketTable dataProvider={dataProvider} trending={trending} />
+            {/*) : null}*/}
         </div>
     )
 }
