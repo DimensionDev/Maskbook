@@ -15,4 +15,5 @@ export const SwapIcon = createIcon(
             fill="#fff"
         />
     </>,
+    '0 0 16 16',
 )

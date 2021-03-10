@@ -15,4 +15,5 @@ export const SendIcon = createIcon(
             fill="#fff"
         />
     </>,
+    '0 0 16 16',
 )

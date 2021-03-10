@@ -11,4 +11,5 @@ export const CardIcon = createIcon(
             </clipPath>
         </defs>
     </>,
+    '0 0 16 16',
 )
