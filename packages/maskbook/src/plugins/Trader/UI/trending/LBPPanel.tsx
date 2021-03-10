@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme: Theme) =>
             margin: theme.spacing(1, 0),
             padding: theme.spacing(0, 2.5),
         },
-        error: {
+        placeholder: {
+            color: theme.palette.text.secondary,
             padding: theme.spacing(2, 2, 0),
             textAlign: 'center',
         },
@@ -81,7 +82,7 @@ export function LBPPanel(props: LBPPanelProps) {
         return (
             <div className={classes.root}>
                 <div className={classes.chart}>
-                    <Typography className={classes.error}>No pools found.</Typography>
+                    <Typography className={classes.placeholder}>No pools found.</Typography>
                 </div>
             </div>
         )
