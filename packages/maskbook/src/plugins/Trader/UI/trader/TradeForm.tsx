@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import { noop } from 'lodash-es'
 import BigNumber from 'bignumber.js'
-import { makeStyles, createStyles, Typography, Grid, IconButton, Tooltip } from '@material-ui/core'
+import { makeStyles, createStyles, Typography, IconButton } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import TuneIcon from '@material-ui/icons/Tune'
 import RefreshOutlined from '@material-ui/icons/RefreshOutlined'
@@ -11,7 +11,6 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../../Wallet/messages'
-import { ApproveStateType } from '../../../../web3/hooks/useERC20TokenApproveCallback'
 import { TradeStrategy, TokenPanelType, TradeComputed, WarningLevel, TradeProvider } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
@@ -20,12 +19,11 @@ import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../..
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { toBips } from '../../helpers'
-import { formatBalance, formatPercentage } from '../../../Wallet/formatter'
+import { formatPercentage } from '../../../Wallet/formatter'
 import { resolveUniswapWarningLevel } from '../../pipes'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
-import { useTradeContext } from '../../trader/useTradeContext'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -58,7 +56,7 @@ const useStyles = makeStyles((theme) => {
             cursor: 'pointer',
         },
         button: {
-            marginTop: theme.spacing(2),
+            marginTop: theme.spacing(1.5),
             paddingTop: 12,
             paddingBottom: 12,
         },

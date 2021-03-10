@@ -32,7 +32,7 @@ enum CreateWalletStep {
 const useStyles = makeStyles((theme) =>
     createStyles({
         content: {
-            padding: theme.spacing(8, 6),
+            padding: theme.spacing(5, 4.5),
         },
         top: {
             display: 'flex',
@@ -66,8 +66,8 @@ const useStyles = makeStyles((theme) =>
             justifyContent: 'space-between',
         },
         word: {
-            width: 95,
-            minWidth: 95,
+            width: 101,
+            minWidth: 101,
             whiteSpace: 'nowrap',
             marginTop: theme.spacing(2),
         },
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) =>
             backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : theme.palette.common.white,
         },
         wordTextfield: {
-            width: 104,
+            width: 110,
         },
     }),
 )

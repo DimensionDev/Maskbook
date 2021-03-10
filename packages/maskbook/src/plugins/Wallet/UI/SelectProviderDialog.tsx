@@ -41,10 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
             flexWrap: 'wrap',
             justifyContent: 'space-around',
             overflow: 'hidden',
-            padding: theme.spacing(4, 2),
+            padding: theme.spacing(4, 4.5, 2),
         },
         grid: {
             width: '100%',
+            margin: 0,
         },
         icon: {
             fontSize: 45,
