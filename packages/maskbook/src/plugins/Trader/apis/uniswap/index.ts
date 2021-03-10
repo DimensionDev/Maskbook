@@ -1,4 +1,5 @@
-import type { Coin } from '../../types'
+import type { Coin, Currency } from '../../types'
+import { fetchTokensByListOfSymbols } from '../uniswap-v2-subgraph'
 
 /**
  * For uniswap all coins should be treated as available
@@ -9,13 +10,28 @@ export function getAllCoins() {
 }
 
 export async function getAllCoinsByKeyword(keyword: string) {
-    return [] as Coin[]
+    const tokens = await fetchTokensByListOfSymbols([keyword])
+    const coins = tokens.map(
+        (x) =>
+            ({
+                ...x,
+                address: x.id,
+                eth_address: x.id,
+            } as Coin),
+    )
+    return coins
 }
 
 export async function getCoinInfo(id: string) {
-    return {} as Coin
+    return {
+        id: 'xxx',
+        name: 'TEST Coin',
+        symbol: 'TC',
+        decimals: 18,
+        eth_address: '',
+    }
 }
 
-export async function getPriceStats(id: string, coinId: string) {
+export async function getPriceStats(id: string, currency: Currency) {
     return []
 }
