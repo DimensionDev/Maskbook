@@ -174,8 +174,10 @@ function ViewDetailed(props: ViewDetailedProps) {
                         </TableCell>
                     ))}
             </TableRow>
-            <div className={classes.menuAnchorElRef}></div>
-            {menu}
+            <tr className={classes.menuAnchorElRef}></tr>
+            <tr>
+                <td>{menu}</td>
+            </tr>
             {hideTokenConfirmDialog}
             {transeferDialog}
         </>
