@@ -23,7 +23,7 @@ async function onAccountsChanged(accounts: string[]) {
 
 async function onChainIdChanged(id: string) {
     // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
-    const chainId = Number.parseInt(id, 16) as ChainId
+    const chainId = Number.parseInt(id, 16)
     currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked())
     currentMetaMaskChainIdSettings.value = chainId === 0 ? ChainId.Mainnet : chainId
 }
