@@ -307,8 +307,6 @@
     "plugin_wallet_wrong_network_tip": "正しいEthereumネットワークを選択してください。",
     "plugin_wallet_on_create": "ウォレットを作成",
     "plugin_wallet_on_connect": "ウォレットに接続しています",
-    "plugin_wallet_backup_mnemonic_words": "",
-    "plugin_wallet_backup_confirm_mnemonic_words": "",
     "plugin_wallet_verification_back": "",
     "plugin_wallet_verification_next": "",
     "plugin_wallet_verification_verify": "",

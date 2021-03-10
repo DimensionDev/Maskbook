@@ -165,10 +165,5 @@ export async function fetchPoolTokens(address: string, duration: number, size: n
         pool.id,
         blockNumbers.map((x) => x.blockNumber),
     )
-
-    console.log({
-        poolTokens,
-    })
-
     return []
 }

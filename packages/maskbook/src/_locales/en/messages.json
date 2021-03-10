@@ -307,8 +307,6 @@
     "plugin_wallet_wrong_network_tip": "Please connect to the appropriate Ethereum network.",
     "plugin_wallet_on_create": "Create Wallet",
     "plugin_wallet_on_connect": "Connect Wallet",
-    "plugin_wallet_backup_mnemonic_words": "Mnemonic Words",
-    "plugin_wallet_backup_confirm_mnemonic_words": "Confirm Mnemonic Words",
     "plugin_wallet_verification_back": "Back",
     "plugin_wallet_verification_next": "Next",
     "plugin_wallet_verification_verify": "Verify",
