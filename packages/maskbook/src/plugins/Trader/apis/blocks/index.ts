@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { chunk, first, flatten } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import { getConstant } from '../../../../web3/helpers'
 import { TRENDING_CONSTANTS } from '../../constants'
@@ -28,7 +28,7 @@ async function fetchFromEthereumBlocksSubgraph<T>(query: string) {
  */
 export async function fetchBlockNumberByTimestamp(timestamp: number) {
     const response = await fetchFromEthereumBlocksSubgraph<{
-        number: string
+        blocks: Block[]
     }>(`
     {
         blocks (
@@ -43,7 +43,7 @@ export async function fetchBlockNumberByTimestamp(timestamp: number) {
         }
     }
     `)
-    return response.number
+    return first(response.blocks)?.number
 }
 
 /**
@@ -51,36 +51,48 @@ export async function fetchBlockNumberByTimestamp(timestamp: number) {
  * @param timestamps
  * @param skipCount
  */
-export async function fetchBlockNumbersByTimestamps(timestamps: number[]) {
-    const queries = timestamps.map(
-        (x) => `
-        t${x}: blocks(
-            first: 1,
-            orderBy: timestamp,
-            orderDirection: desc,
-            where: {
-                timestamp_gt: ${x},
-                timestamp_lt: ${x + 600}
-            }
-        ) {
-            number
-        }
-    `,
+export async function fetchBlockNumbersByTimestamps(timestamps: number[], skipCount = 100) {
+    // avoiding request entity too large
+    const chunkTimestamps = chunk(timestamps, skipCount)
+
+    const response = await Promise.all(
+        chunkTimestamps.map(async (chunk) => {
+            const queries = chunk.map((x) => {
+                // prettier-ignore
+                return `
+                t${x}: blocks(
+                    first: 1,
+                    orderBy: timestamp,
+                    orderDirection: desc,
+                    where: {
+                        timestamp_gt: ${x},
+                        timestamp_lt: ${x + 600}
+                    }
+                ) {
+                    number
+                }
+            `
+            })
+
+            return fetchFromEthereumBlocksSubgraph<{
+                [key: string]: Block[]
+            }>(`
+                query blocks {
+                    ${queries}
+                }
+            `)
+        }),
     )
-    const response = await fetchFromEthereumBlocksSubgraph<{
-        [key: string]: Block[]
-    }>(`
-        query blocks {
-            ${queries.join('\n')}
-        }
-    `)
-    return Object.keys(response)
-        .filter((x) => response[x].length)
-        .map((y) => ({
-            timestamp: y.slice(1),
-            blockNumber: response[y][0].number,
-        }))
-        .sort((a, z) => a.blockNumber - z.blockNumber)
+
+    return flatten(
+        response.map((result) =>
+            Object.keys(result).map((x) => ({
+                timestamp: Number(x.split('t')[1]),
+                // @ts-ignore
+                blockNumber: first(result[x])!.number,
+            })),
+        ),
+    )
 }
 
 /**
@@ -92,7 +104,14 @@ export async function fetchBlockNumbersObjectByTimestamps(timestamps: number[]) 
     const queries = timestamps.map((x) => {
         // prettier-ignore
         return `
-            t${x}: blocks(first: 1, orderBy: timestamp, where: { timestamp_gt: ${x}, timestamp_lt: ${x + 600} }) {
+            t${x}: blocks(
+                first: 1,
+                orderBy: timestamp,
+                where: {
+                    timestamp_gt: ${x},
+                    timestamp_lt: ${x + 600}
+                }
+            ) {
                 number
             }
         `
@@ -107,8 +126,10 @@ export async function fetchBlockNumbersObjectByTimestamps(timestamps: number[]) 
     `)
 
     const result: { [key: string]: number | undefined } = {}
+
     Object.keys(response).map((key) => {
         result[key] = first(response[key])?.number
     })
+
     return result
 }
