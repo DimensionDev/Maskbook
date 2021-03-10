@@ -127,3 +127,8 @@ export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
     }
 }
 //#endregion
+
+/**
+ * The approved tokens from uniswap
+ */
+export const approvedTokensFromUniSwap = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+approvedTokens`, '[]')
