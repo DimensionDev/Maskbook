@@ -91,7 +91,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     if (approveStateType === ApproveStateType.INSUFFICIENT_BALANCE)
         return (
             <Grid container>
-                <ActionButton className={classes.button} fullWidth variant="contained" size="large" disabled>
+                <ActionButton className={classes.button} key="insufficent_balance" fullWidth variant="contained" size="large" disabled>
                     {`Insufficent ${token.symbol ?? token.name ?? 'Token'} Balance`}
                 </ActionButton>
             </Grid>
