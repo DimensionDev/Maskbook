@@ -167,7 +167,7 @@ export async function fetchTokensByKeyword(keyword: string) {
         }[]
     }>(`
         query tokens {
-            tokens (where: { symbol_in: ${stringify(listOfKeywords)} }) {
+            tokens (where: { symbol_in: ${stringify(listOfKeywords)} }, orderBy: tradeVolume, orderDirection: desc) {
                 id
                 name
                 symbol

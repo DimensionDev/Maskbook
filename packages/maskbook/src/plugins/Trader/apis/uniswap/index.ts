@@ -119,7 +119,7 @@ export async function getAllCoinsByKeyword(keyword: string) {
     )
 
     if (keyword.toLowerCase() === 'eth') {
-        coins.push({
+        coins.unshift({
             id: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
             address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
             name: 'ETHer (Wrapped)',
@@ -128,7 +128,7 @@ export async function getAllCoinsByKeyword(keyword: string) {
             decimals: 18,
         } as Coin)
     } else if (keyword.toLowerCase() === 'nrge') {
-        coins.push({
+        coins.unshift({
             id: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
             address: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
             name: 'Energi',
