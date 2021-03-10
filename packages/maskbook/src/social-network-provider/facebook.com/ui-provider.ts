@@ -12,19 +12,17 @@ import { getPostContentFacebook } from './tasks/getPostContent'
 import { resolveLastRecognizedIdentityFacebook } from './UI/resolveLastRecognizedIdentity'
 import { getProfileFacebook } from './tasks/getProfile'
 import { injectPostCommentsDefault } from '../../social-network/defaults/injectComments'
-import { dispatchCustomEvents, selectElementContents, delay } from '../../utils/utils'
 import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostReplacerFacebook } from './UI/injectPostReplacer'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
-import { isMobileFacebook } from './isMobile'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
 import { Flags } from '../../utils/flags'
-import { MaskMessage } from '../../utils/messages'
 import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
 import { injectToolbarAtFacebook } from './UI/injectToolbar'
 import { useThemeFacebook } from './UI/useTheme'
+import { pasteToCommentBoxFacebook } from './UI/pasteToCommentBoxFacebook'
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
 export const facebookUISelf = defineSocialNetworkUI({
@@ -51,35 +49,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     injectToolbar: injectToolbarAtFacebook,
     injectSetupPrompt: injectSetupPromptFacebook,
     injectPostComments: injectPostCommentsDefault(),
-    injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
-        encryptedComment,
-        current,
-        realCurrent,
-    ) {
-        const fail = () => {
-            MaskMessage.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
-        }
-        if (isMobileFacebook) {
-            const root = realCurrent || current.commentBoxSelector!.evaluate()[0]
-            if (!root) return fail()
-            const textarea = root.querySelector('textarea')
-            if (!textarea) return fail()
-            textarea.focus()
-            dispatchCustomEvents(textarea, 'input', encryptedComment)
-            textarea.dispatchEvent(new CustomEvent('input', { bubbles: true, cancelable: false, composed: true }))
-            await delay(200)
-            if (!root.innerText.includes(encryptedComment)) return fail()
-        } else {
-            const root = realCurrent || current.rootNode
-            if (!root) return fail()
-            const input = root.querySelector('[contenteditable]')
-            if (!input) return fail()
-            selectElementContents(input)
-            dispatchCustomEvents(input, 'paste', encryptedComment)
-            await delay(200)
-            if (!root.innerText.includes(encryptedComment)) return fail()
-        }
-    }),
+    injectCommentBox: injectCommentBoxDefaultFactory(pasteToCommentBoxFacebook),
     injectPostReplacer: injectPostReplacerFacebook,
     injectPostInspector: injectPostInspectorFacebook,
     injectPageInspector: injectPageInspectorDefault(),
@@ -90,7 +60,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     taskUploadToPostBox: uploadToPostBoxFacebook,
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
-    taskStartSetupGuide: createTaskStartSetupGuideDefault(() => facebookUISelf),
+    taskStartSetupGuide: createTaskStartSetupGuideDefault('facebook.com'),
     taskGotoProfilePage(profile) {
         // there is no PWA way on Facebook desktop.
         // mobile not tested

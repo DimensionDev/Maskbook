@@ -16,10 +16,13 @@ export function injectPageInspectorDefault<T extends string>(
         return <PageInspector {...additionalProps} />
     })
 
-    return function injectPageInspector() {
+    return function injectPageInspector(signal?: AbortSignal) {
         const watcher = new MutationObserverWatcher(new LiveSelector().querySelector('body'))
-        startWatch(watcher)
-        return renderInShadowRoot(<PageInspectorDefault />, { shadow: () => watcher.firstDOMProxy.afterShadow })
+        startWatch(watcher, signal)
+        return renderInShadowRoot(<PageInspectorDefault />, {
+            shadow: () => watcher.firstDOMProxy.afterShadow,
+            signal,
+        })
     }
 }
 

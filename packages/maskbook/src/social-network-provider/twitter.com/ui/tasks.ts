@@ -150,5 +150,5 @@ export const twitterUITasks: SocialNetworkUITasks = {
     taskGetProfile,
     taskGotoProfilePage,
     taskGotoNewsFeedPage,
-    taskStartSetupGuide: createTaskStartSetupGuideDefault(() => instanceOfTwitterUI),
+    taskStartSetupGuide: createTaskStartSetupGuideDefault('twitter.com'),
 }

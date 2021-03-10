@@ -31,7 +31,7 @@ export function injectPostInspectorDefault<T extends string>(
 
     const { zipPost } = config
     const zipPostF = zipPost || noop
-    return function injectPostInspector(current: PostInfo) {
+    return function injectPostInspector(current: PostInfo, signal?: AbortSignal) {
         const jsx = (
             <PostInfoContext.Provider value={current}>
                 <PostInspectorDefault
@@ -44,11 +44,16 @@ export function injectPostInspectorDefault<T extends string>(
                 />
             </PostInfoContext.Provider>
         )
-        if (config.render) return config.render(jsx, current)
+        if (config.render) {
+            const undo = config.render(jsx, current)
+            signal?.addEventListener('abort', undo)
+            return undo
+        }
         return renderInShadowRoot(jsx, {
             shadow: () => current.rootNodeProxy.afterShadow,
             concurrent: true,
             keyBy: 'post-inspector',
+            signal,
         })
     }
 }

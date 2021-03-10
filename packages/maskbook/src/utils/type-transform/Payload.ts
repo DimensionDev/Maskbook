@@ -98,7 +98,7 @@ const versions = new Set([deconstructAlpha40_Or_Alpha39_Or_Alpha38, deconstructA
 type Decoder = SocialNetworkWorkerAndUI['payloadDecoder'] | null
 type Encoder = SocialNetworkWorkerAndUI['payloadEncoder']
 
-export function deconstructPayload(str: string, decoder: Decoder): Result<Payload, TypeError> {
+export function deconstructPayload(str: string, decoder: Decoder = (x) => x): Result<Payload, TypeError> {
     const decoders = (() => {
         if (isNil(decoder)) {
             if (isEnvironment(Environment.ContentScript)) {

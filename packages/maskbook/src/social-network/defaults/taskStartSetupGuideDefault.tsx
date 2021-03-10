@@ -10,7 +10,7 @@ function UI({ unmount, persona }: { unmount: () => void; persona: PersonaIdentif
     return <SetupGuide persona={persona} onClose={unmount} />
 }
 let mounted = false
-export function createTaskStartSetupGuideDefault(_: () => SocialNetworkUI, props: Partial<SetupGuideProps> = {}) {
+export function createTaskStartSetupGuideDefault(networkIdentifier: string, props: Partial<SetupGuideProps> = {}) {
     let shadowRoot: ShadowRoot
     return (for_: PersonaIdentifier) => {
         if (mounted) return
@@ -33,7 +33,7 @@ export function createTaskStartSetupGuideDefault(_: () => SocialNetworkUI, props
                 },
             },
         )
-        Services.Crypto.getMyProveBio(for_, _().networkIdentifier)
+        Services.Crypto.getMyProveBio(for_, networkIdentifier)
             .then((x) => x || '')
             .then((x) => (provePost.value = x))
     }

@@ -20,9 +20,9 @@ if (isMobileFacebook) {
         .map((x) => x.parentElement)
 }
 
-export function injectPostBoxFacebook() {
+export function injectPostBoxFacebook(signal?: AbortSignal) {
     const watcher = new MutationObserverWatcher(composeBox.clone())
-    startWatch(watcher)
+    startWatch(watcher, signal)
     renderInShadowRoot(<UI />, {
         shadow: () => watcher.firstDOMProxy.afterShadow,
         rootProps: {
@@ -32,6 +32,7 @@ export function injectPostBoxFacebook() {
                 marginTop: 0,
             },
         },
+        signal,
     })
 }
 function UI() {

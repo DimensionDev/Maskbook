@@ -3,12 +3,11 @@ import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook
 import Services from '../../../extension/service'
 import { GroupIdentifier, ProfileIdentifier } from '../../../database/type'
 import { currentSelectedIdentity } from '../../../settings/settings'
-import type { SocialNetworkUI } from '../../../social-network/ui'
-export function collectPeopleFacebook(this: SocialNetworkUI) {
-    const whoAmI = currentSelectedIdentity[this.networkIdentifier]
+export function collectPeopleFacebook(signal?: AbortSignal) {
+    const whoAmI = currentSelectedIdentity['facebook.com']
     // TODO: support mobile
     const bio = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card').enableSingleMode()
-    new MutationObserverWatcher(bio)
+    const watcher = new MutationObserverWatcher(bio)
         /**
          * @var node: bio in the side of user page
          */
@@ -53,10 +52,11 @@ export function collectPeopleFacebook(this: SocialNetworkUI) {
                 onTargetChanged: parseFriendship,
             }
         })
-        .startWatch({
-            childList: true,
-            subtree: true,
-        })
+    watcher.startWatch({
+        childList: true,
+        subtree: true,
+    })
+    signal?.addEventListener('abort', () => watcher.stopWatch())
 }
 enum Status {
     NonFriend = 1,

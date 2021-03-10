@@ -26,7 +26,7 @@ export function injectPostCommentsDefault<T extends string>(
         const additional = additionalPropsToPostComment(classes)
         return <PostComment {...props} {...additional} />
     })
-    return function injectPostComments(current: PostInfo) {
+    return function injectPostComments(current: PostInfo, signal?: AbortSignal) {
         const selector = current.commentsSelector
         if (!selector) return noop
         const commentWatcher = new MutationObserverWatcher(selector, current.rootNode).useForeach(
@@ -42,7 +42,7 @@ export function injectPostCommentsDefault<T extends string>(
                     <PostInfoContext.Provider value={current}>
                         <PostCommentDefault needZip={needZipF} comment={commentRef} {...current} />
                     </PostInfoContext.Provider>,
-                    { shadow: () => meta.afterShadow },
+                    { shadow: () => meta.afterShadow, signal },
                 )
                 return {
                     onNodeMutation() {
@@ -57,7 +57,7 @@ export function injectPostCommentsDefault<T extends string>(
                 }
             },
         )
-        startWatch(commentWatcher)
+        startWatch(commentWatcher, signal)
 
         return () => commentWatcher.stopWatch()
     }

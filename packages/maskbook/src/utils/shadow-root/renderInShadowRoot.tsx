@@ -51,6 +51,7 @@ export function renderInShadowRoot(
         shadow(): ShadowRoot
         concurrent?: boolean
         rootProps?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
+        signal?: AbortSignal
     },
 ) {
     let rendered = false
@@ -73,7 +74,8 @@ export function renderInShadowRoot(
             )
         }
     })
-    return () => rendered && unmount()
+    config.signal?.addEventListener('abort', () => unmount())
+    return (): void => void rendered && unmount()
 }
 
 function mount(host: ShadowRoot, _: JSX.Element, keyBy = 'app', concurrent?: boolean) {

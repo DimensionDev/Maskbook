@@ -18,6 +18,8 @@ const defaultOnPasteToCommentBox = async (
     MaskMessage.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
 }
 
+// TODO: should not rely on onPasteToCommentBoxFacebook.
+// Use automation.nativeCommentBox.appendText
 export const injectCommentBoxDefaultFactory = function <T extends string>(
     onPasteToCommentBox = defaultOnPasteToCommentBox,
     additionPropsToCommentBox: (classes: Record<T, string>) => Partial<CommentBoxProps> = () => ({}),
@@ -42,7 +44,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         if (!(payload && decrypted)) return null
         return <CommentBox onSubmit={onCallback} {...props} />
     })
-    return (current: PostInfo) => {
+    return (current: PostInfo, signal?: AbortSignal) => {
         if (!current.commentBoxSelector) return noop
         const commentBoxWatcher = new MutationObserverWatcher(
             current.commentBoxSelector.clone(),
@@ -52,10 +54,10 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
                 <PostInfoContext.Provider value={current}>
                     <CommentBoxUI {...{ ...current, dom: meta.realCurrent }} />
                 </PostInfoContext.Provider>,
-                { shadow: () => meta.afterShadow },
+                { shadow: () => meta.afterShadow, signal },
             ),
         )
-        startWatch(commentBoxWatcher)
+        startWatch(commentBoxWatcher, signal)
         return () => commentBoxWatcher.stopWatch()
     }
 }

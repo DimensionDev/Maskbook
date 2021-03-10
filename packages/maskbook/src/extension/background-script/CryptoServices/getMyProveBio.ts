@@ -6,7 +6,7 @@ import { queryPublicKey } from '../../../database'
 //#region ProvePost, create & verify
 export async function getMyProveBio(
     whoAmI: ProfileIdentifier | PersonaIdentifier,
-    networkHint?: string,
+    networkIdentifier?: string,
 ): Promise<string | null> {
     const myIdentity = await queryPublicKey(whoAmI)
     if (!myIdentity) return null
@@ -14,7 +14,7 @@ export async function getMyProveBio(
     // FIXME: wait for #191
     return whoAmI instanceof ProfileIdentifier
         ? getNetworkWorker(whoAmI.network).unwrap().publicKeyEncoder(compressed)
-        : networkHint
-        ? getNetworkWorker(networkHint).unwrap().publicKeyEncoder(compressed)
+        : networkIdentifier
+        ? getNetworkWorker(networkIdentifier).unwrap().publicKeyEncoder(compressed)
         : compressed
 }

@@ -17,9 +17,9 @@ if (isMobileFacebook) {
         .nth(0)
 }
 
-export function injectSetupPromptFacebook() {
+export function injectSetupPromptFacebook(signal?: AbortSignal) {
     const watcher = new MutationObserverWatcher(composeBox.clone())
-    startWatch(watcher)
+    startWatch(watcher, signal)
     renderInShadowRoot(<NotSetupYetPrompt />, {
         shadow: () => watcher.firstDOMProxy.afterShadow,
         rootProps: {
@@ -29,5 +29,6 @@ export function injectSetupPromptFacebook() {
                 marginTop: 0,
             },
         },
+        signal,
     })
 }

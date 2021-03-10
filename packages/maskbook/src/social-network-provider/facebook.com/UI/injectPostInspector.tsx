@@ -12,7 +12,7 @@ function getShadowRoot(node: HTMLElement) {
     map.set(node, dom)
     return dom
 }
-export function injectPostInspectorFacebook(current: PostInfo) {
+export function injectPostInspectorFacebook(current: PostInfo, signal?: AbortSignal) {
     clickSeeMore(current.rootNodeProxy.current.parentElement!)
     return injectPostInspectorDefault({
         zipPost(node) {
@@ -23,9 +23,10 @@ export function injectPostInspectorFacebook(current: PostInfo) {
             return renderInShadowRoot(jsx, {
                 shadow: () => getShadowRoot(postInfo.postContentNode!),
                 concurrent: true,
+                signal,
             })
         },
-    })(current)
+    })(current, signal)
 }
 function zipPostLinkPreview(node: DOMProxy) {
     const parentEle = node.current.parentElement!
