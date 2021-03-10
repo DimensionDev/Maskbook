@@ -2,7 +2,7 @@ import stringify from 'json-stable-stringify'
 import { getConstant } from '../../../../web3/helpers'
 import { TRENDING_CONSTANTS } from '../../constants'
 import { getChainId } from '../../../../extension/background-script/EthereumService'
-import { first } from 'lodash-es'
+import { chunk, first, flatten } from 'lodash-es'
 
 const TokenFields = `
   fragment TokenFields on Token {
@@ -234,8 +234,8 @@ export async function fetchTokenData(address: string, blockNumber?: number) {
     `)
 
     return {
-        token: first(response.tokens),
-        allPairs: response.pairs0.concat(response.pairs1),
+        token: first(response?.tokens),
+        allPairs: response?.pairs0.concat(response.pairs1),
     }
 }
 
@@ -302,4 +302,56 @@ export async function fetchPairData(pairAddress: string, blockNumber?: number) {
     `)
 
     return first(response.pairs)
+}
+
+export async function fetchPricesByBlocks(
+    tokenAddress: string,
+    blocks: { blockNumber?: number; timestamp: number }[],
+    skipCount = 50,
+) {
+    // avoiding request entity too large
+    const chunkBlocks = chunk(blocks, skipCount)
+
+    const response = await Promise.all(
+        chunkBlocks.map(async (chunk) => {
+            const queries = chunk.map(
+                (block) => `
+                    t${block.timestamp}: token(id:"${tokenAddress}", blocks: { number: ${block.blockNumber} }) {
+                        derivedETH
+                    }
+                `,
+            )
+            const blockQueries = chunk.map(
+                (block) => `
+                b${block.timestamp}: bundle(id: "1", block: { number: ${block.blockNumber} }) {
+                    ethPrice
+                }
+            `,
+            )
+
+            return await fetchFromUniswapV2Subgraph<{
+                [key: string]: { ethPrice?: string; derivedETH?: string }
+            }>(`
+                query blocks {
+                    ${queries}
+                    ${blockQueries}
+                }
+            `)
+        }),
+    )
+
+    return flatten(
+        response.map((result) => {
+            const keys = Object.keys(result).filter((key) => key.substring(0, 1) === 't')
+            return keys.map((x) => {
+                const timestamp = x.split('t')[1]
+
+                return {
+                    timestamp: Number(timestamp) * 1000,
+                    derivedETH: result[x].derivedETH,
+                    ethPrice: result[`b${timestamp}`]?.ethPrice,
+                }
+            })
+        }),
+    )
 }

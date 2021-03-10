@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import type { Coin, Currency } from '../../types'
+import type { Coin, Currency, Stat } from '../../types'
 import {
     fetchTokensByKeyword,
     fetchTokenData,
@@ -7,9 +7,10 @@ import {
     fetchPairsBulk,
     fetchPairsHistoricalBulk,
     fetchPairData,
+    fetchPricesByBlocks,
 } from '../uniswap-v2-subgraph'
 import type { Pair } from '../uniswap-v2-subgraph'
-import { fetchBlockNumberByTimestamp } from '../blocks'
+import { fetchBlockNumberByTimestamp, fetchBlockNumbersByTimestamps } from '../blocks'
 import { getPercentChange } from '../../../utils/getPercentChange'
 import { getTimestampForChanges } from '../../../utils/getTimestampsForChanges'
 import { fetchLatestBlocks } from '../uniswap-health'
@@ -218,6 +219,8 @@ export async function getPriceStats(
 ) {
     const [latestBlock] = await fetchLatestBlocks()
 
+    // create an array of hour start times until we reach current hour
+    // buffer by half your to catch case where graph isn't to latest block
     const timestamps = []
     let time = startTime
     while (time < endTime) {
@@ -225,5 +228,25 @@ export async function getPriceStats(
         time += interval
     }
 
-    return []
+    if (timestamps.length === 0) {
+        return []
+    }
+
+    let blocks = await fetchBlockNumbersByTimestamps(timestamps)
+
+    if (!blocks || blocks.length === 0) {
+        return []
+    }
+
+    if (latestBlock) {
+        blocks = blocks.filter(
+            (block) => block.blockNumber && new BigNumber(block?.blockNumber).isLessThanOrEqualTo(latestBlock),
+        )
+    }
+
+    const prices = await fetchPricesByBlocks(id, blocks)
+
+    return prices.map(({ timestamp, derivedETH, ethPrice }) => {
+        return [timestamp, new BigNumber(ethPrice ?? 0).multipliedBy(derivedETH ?? 0).toNumber()] as Stat
+    })
 }

@@ -454,14 +454,22 @@ export async function getPriceStats(
             const endTime = new Date()
             const startTime = new Date()
             startTime.setDate(endTime.getDate() - days)
-            const uniswap_interval = 3600
-            return uniswapAPI.getPriceStats(
+            const uniswap_interval = (() => {
+                if (days === 0 || days > 365) return 86400 // max
+                if (days > 90) return 7200 // 1y
+                if (days > 30) return 3600 // 3m
+                if (days > 7) return 900 // 1w
+                return 300 // 5m
+            })()
+            const response = await uniswapAPI.getPriceStats(
                 id,
                 currency,
                 uniswap_interval,
-                Math.floor(startTime.getTime() / 1000),
+                Math.floor((days === Days.MAX ? BTC_FIRST_LEGER_DATE.getTime() : startTime.getTime()) / 1000),
                 Math.floor(endTime.getTime() / 1000),
             )
+            console.log(response)
+            return response
         default:
             return []
     }
