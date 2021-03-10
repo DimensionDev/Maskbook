@@ -3,7 +3,7 @@ import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook
 import Services from '../../../extension/service'
 import { GroupIdentifier, ProfileIdentifier } from '../../../database/type'
 import { currentSelectedIdentity } from '../../../settings/settings'
-export function collectPeopleFacebook(signal?: AbortSignal) {
+export function profilesCollectorFacebook(signal?: AbortSignal) {
     const whoAmI = currentSelectedIdentity['facebook.com']
     // TODO: support mobile
     const bio = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card').enableSingleMode()

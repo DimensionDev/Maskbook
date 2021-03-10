@@ -4,7 +4,7 @@ import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdenti
 import { sharedProvider } from './shared-provider'
 import { injectPostBoxFacebook } from './UI/injectPostBox'
 import { injectSetupPromptFacebook } from './UI/injectSetupPrompt'
-import { collectPeopleFacebook } from './UI/collectPeople'
+import { profilesCollectorFacebook } from './UI/collectPeople'
 import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
 import { taskOpenComposeBoxFacebook } from './tasks/openComposeBox'
 import { uploadToPostBoxFacebook } from './tasks/uploadToPostBox'
@@ -53,7 +53,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     injectPostReplacer: injectPostReplacerFacebook,
     injectPostInspector: injectPostInspectorFacebook,
     injectPageInspector: injectPageInspectorDefault(),
-    collectPeople: collectPeopleFacebook,
+    collectPeople: profilesCollectorFacebook,
     collectPosts: collectPostsFacebook,
     taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
     taskOpenComposeBox: taskOpenComposeBoxFacebook,

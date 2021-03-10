@@ -1,16 +1,26 @@
-import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import type { SocialNetworkUI } from '../../../social-network/ui'
+import type { SocialNetworkUI as Next } from '../../../social-network-next/types'
+import { creator } from '../../../social-network-next/utils'
 import { getProfileIdentifierAtFacebook, getUserID } from '../getPersonIdentifierAtFacebook'
-import type { Profile } from '../../../database'
 import { isMobileFacebook } from '../isMobile'
 import { ProfileIdentifier } from '../../../database/type'
 
+export const IdentityProviderFacebook: Next.CollectingCapabilities.IdentityResolveProvider = {
+    hasDeprecatedPlaceholderName: true,
+    lastRecognized: creator.IdentityResolveProviderLastRecognized(),
+    start(signal) {
+        resolveLastRecognizedIdentityFacebookInner(this.lastRecognized, signal)
+    },
+}
 export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
-    const ref = this.lastRecognizedIdentity
+    resolveLastRecognizedIdentityFacebookInner(this.lastRecognizedIdentity)
+}
+function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal?: AbortSignal) {
     const self = (isMobileFacebook ? myUsernameLiveSelectorMobile : myUsernameLiveSelectorPC)
         .clone()
         .map((x) => getProfileIdentifierAtFacebook(x, false))
-    new MutationObserverWatcher(self)
+    const watcher = new MutationObserverWatcher(self)
         .setComparer(undefined, (a, b) => a.identifier.equals(b.identifier))
         .addListener('onAdd', (e) => assign(e.value))
         .addListener('onChange', (e) => assign(e.newValue))
@@ -19,11 +29,11 @@ export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
             subtree: true,
             characterData: true,
         })
-    function assign(i: part) {
+    signal?.addEventListener('abort', () => watcher.stopWatch())
+    function assign(i: Value) {
         if (!i.identifier.isUnknown) ref.value = i
     }
-    // ? maybe no need of this?
-    fetch('/me', { method: 'HEAD' })
+    fetch('/me', { method: 'HEAD', signal })
         .then((x) => x.url)
         .then(getUserID)
         .then((id) => id && assign({ ...ref.value, identifier: new ProfileIdentifier('facebook.com', id) }))
@@ -41,5 +51,5 @@ const myUsernameLiveSelectorMobile = new LiveSelector().querySelector<HTMLAnchor
     '#bookmarks_flyout .mSideMenu > div > ul > li:first-child a, #MComposer a',
 )
 
-type part = Pick<Profile, 'identifier' | 'nickname' | 'avatar'>
+type Value = Next.CollectingCapabilities.IdentityResolveProvider['lastRecognized']['value']
 //#endregion

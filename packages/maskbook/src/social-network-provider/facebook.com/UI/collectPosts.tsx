@@ -1,6 +1,8 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import type { SocialNetworkUI } from '../../../social-network/ui'
+import type { SocialNetworkUI as Next } from '../../../social-network-next/types'
+import { creator } from '../../../social-network-next/utils'
 import { PostInfo } from '../../../social-network/PostInfo'
 import { isMobileFacebook } from '../isMobile'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
@@ -12,16 +14,24 @@ import {
 } from '../../../protocols/typed-message'
 import { clickSeeMore } from './injectPostInspector'
 import { startWatch } from '../../../utils/watcher'
+import { facebookShared } from '../shared'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container > div' : '[role=article] [data-ad-preview="message"]',
 )
 
-export function collectPostsFacebook(this: SocialNetworkUI) {
+export const PostProviderFacebook: Next.CollectingCapabilities.PostsProvider = {
+    posts: creator.PostProviderStore(),
+    start(signal) {
+        collectPostsFacebookInner(this.posts, signal)
+    },
+}
+function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvider['posts'], signal?: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
             clickSeeMore(node)
         }),
+        signal,
     )
 
     startWatch(
@@ -68,7 +78,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 postContentNode = metadata.realCurrent!
             })()
 
-            this.posts.set(metadata, info)
+            store.set(metadata, info)
             function collectPostInfo() {
                 const nextTypedMessage: TypedMessage[] = []
                 info.postBy.value = getPostBy(metadata, info.postPayload.value !== null).identifier
@@ -87,17 +97,28 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 info.postMessage.value = makeTypedMessageCompound(nextTypedMessage)
             }
             collectPostInfo()
-            info.postPayload.value = deconstructPayload(info.postContent.value, this.payloadDecoder)
+            info.postPayload.value = deconstructPayload(
+                info.postContent.value,
+                facebookShared.utils.textPayloadPostProcessor?.decoder,
+            )
             info.postContent.addListener((newVal) => {
-                info.postPayload.value = deconstructPayload(newVal, this.payloadDecoder)
+                info.postPayload.value = deconstructPayload(
+                    newVal,
+                    facebookShared.utils.textPayloadPostProcessor?.decoder,
+                )
             })
             return {
                 onNodeMutation: collectPostInfo,
                 onTargetChanged: collectPostInfo,
-                onRemove: () => this.posts.delete(metadata),
+                onRemove: () => store.delete(metadata),
             }
         }),
+        signal,
     )
+}
+
+export function collectPostsFacebook(this: SocialNetworkUI) {
+    return collectPostsFacebookInner(this.posts)
 }
 
 export function collectNodeText(node: HTMLElement | undefined): string {
