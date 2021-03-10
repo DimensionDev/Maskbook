@@ -7,7 +7,7 @@ import { Days } from '../../UI/trending/PriceChartDaysControl'
 import { getEnumAsArray } from '../../../../utils/enum'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import { resolveCoinId, resolveCoinAddress, resolveAlias } from './hotfix'
-import MIRRORED_KEYWORDS from './mirrored.json'
+import MIRRORED_TOKENS from './mirrored_tokens.json'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
@@ -75,47 +75,52 @@ export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<C
                     description: 'Unite State Dollar',
                 },
             ]
+        default:
+            unreachable(dataProvider)
     }
 }
 
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
-    // the uniswap has got huge tokens based (more than 2.2k) since we should fetch coins info dynamically
-    if (dataProvider === DataProvider.UNISWAP_INFO) return []
-
-    // reserve mask
-    if (dataProvider === DataProvider.COIN_GECKO) {
-        const coins = await coinGeckoAPI.getAllCoins()
-        return coins.filter((x) => x.id !== 'nftx-hashmasks-index')
-    }
-
-    // create mask
-    const { data: coins } = await coinMarketCapAPI.getAllCoins()
-    return (
-        coins
-            .map((x) =>
-                x.id === 8536
-                    ? {
-                          ...x,
-                          platform: {
-                              id: 1027,
-                              name: 'Ethereum',
-                              symbol: 'ETH',
-                              slug: 'ethereum',
-                              token_address: '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074',
-                          },
-                          status: 'active',
-                      }
-                    : x,
+    switch (dataProvider) {
+        case DataProvider.COIN_GECKO:
+            const cgCoins = await coinGeckoAPI.getAllCoins()
+            // reserve mask
+            return cgCoins.filter((x) => x.id !== 'nftx-hashmasks-index')
+        case DataProvider.COIN_MARKET_CAP:
+            const { data: cmcCoins } = await coinMarketCapAPI.getAllCoins()
+            return (
+                cmcCoins
+                    // create mask
+                    .map((x) =>
+                        x.id === 8536
+                            ? {
+                                  ...x,
+                                  platform: {
+                                      id: 1027,
+                                      name: 'Ethereum',
+                                      symbol: 'ETH',
+                                      slug: 'ethereum',
+                                      token_address: '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074',
+                                  },
+                                  status: 'active',
+                              }
+                            : x,
+                    )
+                    // for cmc we should filter inactive coins out
+                    .filter((x) => x.status === 'active' && x.id !== 8410)
+                    .map((x) => ({
+                        id: String(x.id),
+                        name: x.name,
+                        symbol: x.symbol,
+                        eth_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
+                    }))
             )
-            // for cmc we should filter inactive coins out
-            .filter((x) => x.status === 'active' && x.id !== 8410)
-            .map((x) => ({
-                id: String(x.id),
-                name: x.name,
-                symbol: x.symbol,
-                eth_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
-            }))
-    )
+        case DataProvider.UNISWAP_INFO:
+            // the uniswap has got huge tokens based (more than 2.2k) since we should fetch coins info dynamically
+            return []
+        default:
+            unreachable(dataProvider)
+    }
 }
 
 //#region check a specific coin is available on specific data provider
@@ -177,7 +182,7 @@ function isBlockedKeyword(type: TagType, keyword: string) {
 }
 
 function isMirroredKeyword(symbol: string) {
-    return MIRRORED_KEYWORDS.some((x) => x.toUpperCase() === symbol.toUpperCase())
+    return MIRRORED_TOKENS.map((x) => x.symbol).some((x) => x.toUpperCase() === symbol.toUpperCase())
 }
 
 export async function checkAvailabilityOnDataProvider(keyword: string, type: TagType, dataProvider: DataProvider) {
@@ -391,11 +396,14 @@ export async function getCoinTrendingByKeyword(
     currency: Currency,
     dataProvider: DataProvider,
 ) {
+    // check if the keyword is supported by given data provider
     const coins = await getAvailableCoins(keyword, tagType, dataProvider)
     if (!coins.length) return null
+
     // prefer coins on the etherenum network
     const coin = coins.find((x) => x.eth_address) ?? first(coins)
     if (!coin) return null
+
     return getCoinTrendingById(
         resolveCoinId(resolveAlias(keyword, dataProvider), dataProvider) ?? coin.id,
         currency,
