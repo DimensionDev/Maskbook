@@ -117,17 +117,17 @@ export async function fetchEtherPriceByBlockNumber(blockNumber?: number) {
             }
         }
     `)
-    return first(response.bundles)
+    return first(response.bundles)?.ethPrice
 }
 
 /**
  * Fetch Ether price of list of blocks
  * @param blockNumbers
  */
-export async function fetchEtherPricesByBlockNumbers(blockNumbers: number[]) {
+export async function fetchEtherPricesByBlockNumbers(blockNumbers: (number | undefined)[]) {
     const queries = blockNumbers.map((x) => {
         return `
-            b${x}: bundle(id: "1", block: { number: ${x} }) {
+            b${x}: bundle(id: "1", ${x ? `block: { number: ${x} }` : ''}) {
                 ethPrice
             }
         `
@@ -139,6 +139,14 @@ export async function fetchEtherPricesByBlockNumbers(blockNumbers: number[]) {
             ${queries.join('\n')}
         }
     `)
+
+    let result: { [key: string]: number | undefined } = {}
+
+    Object.keys(response).map((key) => {
+        result[key] = response[key].ethPrice
+    })
+
+    return result
 }
 
 /**
@@ -191,7 +199,7 @@ export async function fetchTokenDayData(address: string, date: Date) {
         }
     }>(`
         {
-            tokenDayDatas(first: 1000, orderBy: date, date: ${utcTimestamp / 1000}, where: { token: ${address} }) {
+            tokenDayDatas(first: 1000, orderBy: date, date: ${utcTimestamp}, where: { token: ${address} }) {
                 id
                 date
                 priceUSD
@@ -235,7 +243,7 @@ export async function fetchTokenData(address: string, blockNumber?: number) {
 
     return {
         token: first(response?.tokens),
-        allPairs: response?.pairs0.concat(response.pairs1),
+        allPairs: response?.pairs0?.concat(response.pairs1),
     }
 }
 
@@ -304,6 +312,12 @@ export async function fetchPairData(pairAddress: string, blockNumber?: number) {
     return first(response.pairs)
 }
 
+/**
+ * fetch price info by token address, blocks
+ * @param tokenAddress
+ * @param blocks
+ * @param skipCount
+ */
 export async function fetchPricesByBlocks(
     tokenAddress: string,
     blocks: { blockNumber?: number; timestamp: number }[],

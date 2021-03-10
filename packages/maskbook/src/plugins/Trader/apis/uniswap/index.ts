@@ -3,17 +3,81 @@ import type { Coin, Currency, Stat } from '../../types'
 import {
     fetchTokensByKeyword,
     fetchTokenData,
-    fetchEtherPriceByBlockNumber,
     fetchPairsBulk,
     fetchPairsHistoricalBulk,
     fetchPairData,
     fetchPricesByBlocks,
+    fetchEtherPricesByBlockNumbers,
+    fetchEtherPriceByBlockNumber,
 } from '../uniswap-v2-subgraph'
 import type { Pair } from '../uniswap-v2-subgraph'
-import { fetchBlockNumberByTimestamp, fetchBlockNumbersByTimestamps } from '../blocks'
-import { getPercentChange } from '../../../utils/getPercentChange'
-import { getTimestampForChanges } from '../../../utils/getTimestampsForChanges'
+import {
+    fetchBlockNumberByTimestamp,
+    fetchBlockNumbersByTimestamps,
+    fetchBlockNumbersObjectByTimestamps,
+} from '../blocks'
 import { fetchLatestBlocks } from '../uniswap-health'
+
+type Value = string | number | BigNumber | undefined
+
+/**
+ * get standard percent change between two values
+ * @param valueNow
+ * @param value24HoursAgo
+ */
+export const getPercentChange = (valueNow: Value, value24HoursAgo: Value) => {
+    const adjustedPercentChange = new BigNumber(valueNow ?? 0)
+        .minus(value24HoursAgo ?? 0)
+        .dividedBy(value24HoursAgo ?? 0)
+        .multipliedBy(100)
+    if (adjustedPercentChange.isNaN() || !adjustedPercentChange.isFinite()) {
+        return 0
+    }
+    return adjustedPercentChange.toNumber()
+}
+
+/**
+ * Get timestamp from current, one hour ago, one day ago, a week ago
+ */
+function getTimestampForChanges() {
+    const currentTime = new Date()
+
+    const utcOneHourBack = Date.UTC(
+        currentTime.getUTCFullYear(),
+        currentTime.getUTCMonth(),
+        currentTime.getUTCDate(),
+        currentTime.getUTCHours() - 1,
+        currentTime.getUTCMinutes(),
+    )
+    const utcOneDayBack = Date.UTC(
+        currentTime.getUTCFullYear(),
+        currentTime.getUTCMonth(),
+        currentTime.getUTCDate() - 1,
+        currentTime.getUTCHours(),
+        currentTime.getUTCMinutes(),
+    )
+    const utcTwoDaysBack = Date.UTC(
+        currentTime.getUTCFullYear(),
+        currentTime.getUTCMonth(),
+        currentTime.getUTCDate() - 2,
+        currentTime.getUTCHours(),
+        currentTime.getUTCMinutes(),
+    )
+    const utcWeekBack = Date.UTC(
+        currentTime.getUTCFullYear(),
+        currentTime.getUTCMonth(),
+        currentTime.getUTCDate() - 7,
+        currentTime.getUTCHours(),
+        currentTime.getUTCMinutes(),
+    )
+
+    return {
+        utcOneHourBack: Math.floor(utcOneHourBack / 1000),
+        utcOneDayBack: Math.floor(utcOneDayBack / 1000),
+        utcTwoDaysBack: Math.floor(utcTwoDaysBack / 1000),
+        utcWeekBack: Math.floor(utcWeekBack / 1000),
+    }
+}
 
 /**
  * For uniswap all coins should be treated as available
@@ -37,50 +101,30 @@ export async function getAllCoinsByKeyword(keyword: string) {
 }
 
 /**
- * Get current ether price, ether price one hour ago, one day ago, a week ago, and 24h price percentage
+ * Get coin info by id
+ * @param id the token address
  */
-export async function getEthPrice() {
-    //#region get timestamps from one hour ago ,one day ago, a week ago
+export async function getCoinInfo(id: string) {
+    //#region get timestamps from one hour ago, ,one day ago, a week ago
     const { utcOneHourBack, utcOneDayBack, utcWeekBack } = getTimestampForChanges()
     //#endregion
 
-    //#region get current price and one hour ago ,one day ago, a week ago
-    const oneHourBlock = await fetchBlockNumberByTimestamp(utcOneHourBack)
-    const oneDayBlock = await fetchBlockNumberByTimestamp(utcOneDayBack)
-    const weekBlock = await fetchBlockNumberByTimestamp(utcWeekBack)
-
-    const result = await fetchEtherPriceByBlockNumber()
-    const resultOneHour = await fetchEtherPriceByBlockNumber(oneHourBlock)
-    const resultOneDay = await fetchEtherPriceByBlockNumber(oneDayBlock)
-    const resultWeek = await fetchEtherPriceByBlockNumber(weekBlock)
-    //#endregion
-
-    const currentPrice = result?.ethPrice
-    const oneHourBackPrice = resultOneHour?.ethPrice
-    const oneDayBackPrice = resultOneDay?.ethPrice
-    const weekBackPrice = resultWeek?.ethPrice
-
-    //#calculate 24h percentage
-    const priceChangeETH = getPercentChange(currentPrice, oneDayBackPrice)
-    //#endregion
-
-    return [currentPrice, oneHourBackPrice, oneDayBackPrice, weekBackPrice, priceChangeETH]
-}
-
-export async function getCoinInfo(id: string) {
-    //#region get timestamps from one hour ago, ,one day ago, two days ago, a week ago
-    const { utcOneHourBack, utcOneDayBack, utcTwoDaysBack, utcWeekBack } = getTimestampForChanges()
-    //#endregion
-
-    //#region get block from one day ago and two days ago
-    const oneHourBlock = await fetchBlockNumberByTimestamp(utcOneHourBack)
-    const oneDayBlock = await fetchBlockNumberByTimestamp(utcOneDayBack)
-    const twoDayBlock = await fetchBlockNumberByTimestamp(utcTwoDaysBack)
-    const weekBlock = await fetchBlockNumberByTimestamp(utcWeekBack)
+    //#region get block from one hour ago, one day ago, a week ago
+    const {
+        [`t${utcOneHourBack}`]: oneHourBlock,
+        [`t${utcOneDayBack}`]: oneDayBlock,
+        [`t${utcWeekBack}`]: weekBlock,
+    } = await fetchBlockNumbersObjectByTimestamps([utcOneHourBack, utcOneDayBack, utcWeekBack])
     //#region
 
-    // get eth price
-    const [ethPrice, oneHourBackEthPrice, oneDayBackEthPrice, weekBackEthPrice] = await getEthPrice()
+    //#region get ether price
+    const ethPrice = await fetchEtherPriceByBlockNumber()
+    const {
+        [`b${oneHourBlock}`]: oneHourBackEthPrice,
+        [`b${oneDayBlock}`]: oneDayBackEthPrice,
+        [`b${weekBlock}`]: weekBackEthPrice,
+    } = await fetchEtherPricesByBlockNumbers([oneHourBlock, oneDayBlock, weekBlock])
+    //#endregion
 
     //#region get tokenData
     const { token, allPairs } = await fetchTokenData(id)
@@ -90,13 +134,11 @@ export async function getCoinInfo(id: string) {
     //#engregion
 
     //#region calculate the trade volume and the untracked volume before day ago
-
     const oneDayVolumeUSD = new BigNumber(token?.tradeVolumeUSD ?? 0).minus(oneDayToken?.tradeVolumeUSD ?? 0).toNumber()
 
     const oneDayVolumeUT = new BigNumber(token?.untrackedVolumeUSD ?? 0)
         .minus(oneDayToken?.untrackedVolumeUSD ?? 0)
         .toNumber()
-
     //#endregion
 
     //#region calculate the current price and price percent before one hour ago, one day ago, a week ago.
@@ -118,10 +160,12 @@ export async function getCoinInfo(id: string) {
     )
     //#endregion
 
+    //#region get pairs data
     const pairsData = await getBulkPairData(
         allPairs.map(({ id }) => id),
         ethPrice,
     )
+    //#endregion
 
     return {
         token,
