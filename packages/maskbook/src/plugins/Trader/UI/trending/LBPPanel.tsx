@@ -117,7 +117,6 @@ export function LBPPanel(props: LBPPanelProps) {
                 {token.symbol ?? 'Token'}'s LBP. The price could continue to go down if no one buys. Please make your
                 investment decision wisely.
             </Typography>
-
             <Typography className={classes.introduce}>
                 <Link href="https://link.medium.com/0kfZVzGx8db" target="_blank" rel="noopener noreferrer">
                     What's LBP?
