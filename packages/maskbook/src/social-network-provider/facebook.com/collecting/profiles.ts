@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
+import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier'
 import Services from '../../../extension/service'
 import { GroupIdentifier, ProfileIdentifier } from '../../../database/type'
 import { currentSelectedIdentity } from '../../../settings/settings'

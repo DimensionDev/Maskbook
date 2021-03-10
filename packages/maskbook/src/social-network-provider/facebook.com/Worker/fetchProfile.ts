@@ -1,6 +1,6 @@
 import type { ProfileIdentifier } from '../../../database/type'
-import { getProfilePageUrlAtFacebook } from '../parse-username'
-import { parseFacebookStaticHTML } from '../parse-html'
+import { getProfilePageUrlAtFacebook } from '../utils/parse-username'
+import { parseFacebookStaticHTML } from '../utils/parse-html'
 import type { ProfileUI } from '../../../social-network/shared'
 import tasks from '../../../extension/content-script/tasks'
 import { timeout } from '../../../utils/utils'

@@ -1,5 +1,5 @@
 import { dispatchCustomEvents, selectElementContents, delay } from '../../../utils/utils'
-import { isMobileFacebook } from '../isMobile'
+import { isMobileFacebook } from '../utils/isMobile'
 import { MaskMessage } from '../../../utils/messages'
 import type { PostInfo } from '../../../social-network/PostInfo'
 

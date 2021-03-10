@@ -1,5 +1,5 @@
 import type { SocialNetworkWorkerAndUIDefinition } from '../../social-network/shared'
-import { isValidFacebookUsername, getFacebookHostName } from './parse-username'
+import { isValidFacebookUsername, getFacebookHostName } from './utils/parse-username'
 
 export const sharedProvider: SocialNetworkWorkerAndUIDefinition = {
     name: 'facebook',

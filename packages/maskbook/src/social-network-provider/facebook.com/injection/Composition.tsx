@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
-import { isMobileFacebook } from '../isMobile'
+import { isMobileFacebook } from '../utils/isMobile'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { MaskMessage } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
@@ -20,7 +20,7 @@ if (isMobileFacebook) {
         .map((x) => x.parentElement)
 }
 
-export function injectPostBoxFacebook(signal?: AbortSignal) {
+export function injectCompositionFacebook(signal?: AbortSignal) {
     const watcher = new MutationObserverWatcher(composeBox.clone())
     startWatch(watcher, signal)
     renderInShadowRoot(<UI />, {

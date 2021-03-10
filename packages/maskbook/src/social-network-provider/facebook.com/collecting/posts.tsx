@@ -4,15 +4,15 @@ import type { SocialNetworkUI } from '../../../social-network/ui'
 import type { SocialNetworkUI as Next } from '../../../social-network-next/types'
 import { creator } from '../../../social-network-next/utils'
 import { PostInfo } from '../../../social-network/PostInfo'
-import { isMobileFacebook } from '../isMobile'
-import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
+import { isMobileFacebook } from '../utils/isMobile'
+import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier'
 import {
     TypedMessage,
     makeTypedMessageText,
     makeTypedMessageImage,
     makeTypedMessageCompound,
 } from '../../../protocols/typed-message'
-import { clickSeeMore } from './injectPostInspector'
+import { clickSeeMore } from '../injection/PostInspector'
 import { startWatch } from '../../../utils/watcher'
 import { facebookShared } from '../shared'
 

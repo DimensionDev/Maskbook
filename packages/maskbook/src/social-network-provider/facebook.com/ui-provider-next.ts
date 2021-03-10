@@ -2,23 +2,23 @@ import type { SocialNetworkUI } from '../../social-network-next/types'
 import { stateCreator } from '../../social-network-next/utils'
 import { facebookBase } from './base'
 import { facebookShared } from './shared'
-import { getProfilePageUrlAtFacebook } from './parse-username'
-import { getPostContentFacebook } from './tasks/getPostContent'
-import { getProfileFacebook } from './tasks/getProfile'
-import { taskOpenComposeBoxFacebook } from './tasks/openComposeBox'
-import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
-import { IdentityProviderFacebook } from './UI/resolveLastRecognizedIdentity'
+import { getProfilePageUrlAtFacebook } from './utils/parse-username'
+import { getPostContentFacebook } from './collecting/getPostContent'
+import { getProfileFacebook } from './collecting/getProfile'
+import { taskOpenComposeBoxFacebook } from './automation/openComposeBox'
+import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposition'
+import { IdentityProviderFacebook } from './collecting/identity'
 import { InitAutonomousStateFriends } from '../../social-network-next/defaults/InitAutonomousStateFriends'
 import { InitAutonomousStateProfiles } from '../../social-network-next/defaults/InitAutonomousStateProfiles'
-import { injectPostBoxFacebook } from './UI/injectPostBox'
-import { injectSetupPromptFacebook } from './UI/injectSetupPrompt'
+import { injectCompositionFacebook } from './injection/Composition'
+import { injectSetupPromptFacebook } from './injection/SetupPrompt'
 import { injectPostCommentsDefault } from '../../social-network/defaults/injectComments'
-import { pasteToCommentBoxFacebook } from './UI/pasteToCommentBoxFacebook'
+import { pasteToCommentBoxFacebook } from './automation/pasteToCommentBoxFacebook'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
-import { injectPostInspectorFacebook } from './UI/injectPostInspector'
+import { injectPostInspectorFacebook } from './injection/PostInspector'
 import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
-import { profilesCollectorFacebook } from './UI/collectPeople'
-import { PostProviderFacebook } from './UI/collectPosts'
+import { profilesCollectorFacebook } from './collecting/profiles'
+import { PostProviderFacebook } from './collecting/posts'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
@@ -54,7 +54,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         maskCompositionDialog: { open: taskOpenComposeBoxFacebook },
         nativeCompositionDialog: {
             appendText(text, recover) {
-                pasteIntoPostBoxFacebook(text, { autoPasteFailedRecover: !!recover })
+                pasteTextToCompositionFacebook(text, { autoPasteFailedRecover: !!recover })
             },
             attachImage(img, recover) {
                 // TODO: uploadToPostBoxFacebook
@@ -65,8 +65,8 @@ const facebookUI: SocialNetworkUI.Definition = {
         },
     },
     collecting: {
-        fetchPostContent: getPostContentFacebook,
-        fetchProfile: getProfileFacebook,
+        getPostContent: getPostContentFacebook,
+        getProfile: getProfileFacebook,
         profilesCollector: profilesCollectorFacebook,
         identityProvider: IdentityProviderFacebook,
         postsProvider: PostProviderFacebook,
@@ -81,7 +81,7 @@ const facebookUI: SocialNetworkUI.Definition = {
     },
     injection: {
         newPostComposition: {
-            start: injectPostBoxFacebook,
+            start: injectCompositionFacebook,
             supportedOutputTypes: {
                 text: true,
                 image: true,

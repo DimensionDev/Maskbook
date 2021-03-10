@@ -1,6 +1,6 @@
-import { ProfileIdentifier } from '../../database/type'
-import Services from '../../extension/service'
-import type { Profile } from '../../database'
+import { ProfileIdentifier } from '../../../database/type'
+import Services from '../../../extension/service'
+import type { Profile } from '../../../database'
 
 type link = HTMLAnchorElement | null | undefined
 
@@ -63,7 +63,6 @@ export function getProfileIdentifierAtFacebook(
     }
     return unknown
 }
-Object.assign(globalThis, { getProfileIdentifierAtFacebook })
 export function getUserID(x: string) {
     if (!x) return null
     const relative = !x.startsWith('https://') && !x.startsWith('http://')

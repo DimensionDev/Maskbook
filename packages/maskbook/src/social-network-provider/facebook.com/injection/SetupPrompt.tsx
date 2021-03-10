@@ -1,6 +1,6 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
-import { isMobileFacebook } from '../isMobile'
+import { isMobileFacebook } from '../utils/isMobile'
 import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt'
 import { startWatch } from '../../../utils/watcher'
 

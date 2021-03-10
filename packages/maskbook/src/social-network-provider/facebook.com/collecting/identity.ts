@@ -2,8 +2,8 @@ import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/h
 import type { SocialNetworkUI } from '../../../social-network/ui'
 import type { SocialNetworkUI as Next } from '../../../social-network-next/types'
 import { creator } from '../../../social-network-next/utils'
-import { getProfileIdentifierAtFacebook, getUserID } from '../getPersonIdentifierAtFacebook'
-import { isMobileFacebook } from '../isMobile'
+import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier'
+import { isMobileFacebook } from '../utils/isMobile'
 import { ProfileIdentifier } from '../../../database/type'
 
 export const IdentityProviderFacebook: Next.CollectingCapabilities.IdentityResolveProvider = {

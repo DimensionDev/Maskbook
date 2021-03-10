@@ -1,6 +1,6 @@
 import type { SocialNetwork } from '../../social-network-next/types'
 import { facebookBase } from './base'
-import { isValidFacebookUsername } from './parse-username'
+import { isValidFacebookUsername } from './utils/parse-username'
 
 export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
     ...facebookBase,

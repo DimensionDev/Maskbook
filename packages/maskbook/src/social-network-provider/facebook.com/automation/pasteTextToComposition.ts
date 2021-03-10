@@ -1,11 +1,11 @@
 import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { dispatchCustomEvents, delay, timeout } from '../../../utils/utils'
-import { isMobileFacebook } from '../isMobile'
+import { isMobileFacebook } from '../utils/isMobile'
 import type { SocialNetworkUI } from '../../../social-network/ui'
 import { untilDocumentReady } from '../../../utils/dom'
 import { MaskMessage } from '../../../utils/messages'
 
-export async function openPostDialogFacebook() {
+async function openPostDialogFacebook() {
     await untilDocumentReady()
     const notActivated = isMobileFacebook
         ? new LiveSelector().querySelector<HTMLDivElement>('[role="textbox"]')
@@ -57,7 +57,7 @@ export async function openPostDialogFacebook() {
 /**
  * Access: https://(www|m).facebook.com/
  */
-export async function pasteIntoPostBoxFacebook(
+export async function pasteTextToCompositionFacebook(
     text: string,
     options: Parameters<SocialNetworkUI['taskPasteIntoPostBox']>[1],
 ) {

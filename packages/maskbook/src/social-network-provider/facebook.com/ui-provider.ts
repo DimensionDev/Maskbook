@@ -2,27 +2,27 @@ import { defineSocialNetworkUI } from '../../social-network/ui'
 import { InitFriendsValueRef } from '../../social-network/defaults/FriendsValueRef'
 import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdentitiesRef'
 import { sharedProvider } from './shared-provider'
-import { injectPostBoxFacebook } from './UI/injectPostBox'
-import { injectSetupPromptFacebook } from './UI/injectSetupPrompt'
-import { profilesCollectorFacebook } from './UI/collectPeople'
-import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
-import { taskOpenComposeBoxFacebook } from './tasks/openComposeBox'
-import { uploadToPostBoxFacebook } from './tasks/uploadToPostBox'
-import { getPostContentFacebook } from './tasks/getPostContent'
-import { resolveLastRecognizedIdentityFacebook } from './UI/resolveLastRecognizedIdentity'
-import { getProfileFacebook } from './tasks/getProfile'
+import { injectCompositionFacebook } from './injection/Composition'
+import { injectSetupPromptFacebook } from './injection/SetupPrompt'
+import { profilesCollectorFacebook } from './collecting/profiles'
+import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposition'
+import { taskOpenComposeBoxFacebook } from './automation/openComposeBox'
+import { uploadToPostBoxFacebook } from './automation/uploadToPostBox'
+import { getPostContentFacebook } from './collecting/getPostContent'
+import { resolveLastRecognizedIdentityFacebook } from './collecting/identity'
+import { getProfileFacebook } from './collecting/getProfile'
 import { injectPostCommentsDefault } from '../../social-network/defaults/injectComments'
-import { collectPostsFacebook } from './UI/collectPosts'
-import { injectPostReplacerFacebook } from './UI/injectPostReplacer'
-import { injectPostInspectorFacebook } from './UI/injectPostInspector'
+import { collectPostsFacebook } from './collecting/posts'
+import { injectPostReplacerFacebook } from './injection/PostReplacer'
+import { injectPostInspectorFacebook } from './injection/PostInspector'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
-import { getProfilePageUrlAtFacebook } from './parse-username'
+import { getProfilePageUrlAtFacebook } from './utils/parse-username'
 import { Flags } from '../../utils/flags'
 import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
-import { injectToolbarAtFacebook } from './UI/injectToolbar'
-import { useThemeFacebook } from './UI/useTheme'
-import { pasteToCommentBoxFacebook } from './UI/pasteToCommentBoxFacebook'
+import { injectToolbarAtFacebook } from './injection/Toolbar'
+import { useThemeFacebook } from './customization/useTheme'
+import { pasteToCommentBoxFacebook } from './automation/pasteToCommentBoxFacebook'
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
 export const facebookUISelf = defineSocialNetworkUI({
@@ -45,7 +45,7 @@ export const facebookUISelf = defineSocialNetworkUI({
         return browser.permissions.request({ origins })
     },
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
-    injectPostBox: injectPostBoxFacebook,
+    injectPostBox: injectCompositionFacebook,
     injectToolbar: injectToolbarAtFacebook,
     injectSetupPrompt: injectSetupPromptFacebook,
     injectPostComments: injectPostCommentsDefault(),
@@ -55,7 +55,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     injectPageInspector: injectPageInspectorDefault(),
     collectPeople: profilesCollectorFacebook,
     collectPosts: collectPostsFacebook,
-    taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
+    taskPasteIntoPostBox: pasteTextToCompositionFacebook,
     taskOpenComposeBox: taskOpenComposeBoxFacebook,
     taskUploadToPostBox: uploadToPostBoxFacebook,
     taskGetPostContent: getPostContentFacebook,
@@ -80,6 +80,6 @@ export const facebookUISelf = defineSocialNetworkUI({
 })
 if (module.hot) {
     module.hot.accept('./tasks/pasteIntoPostBox.ts', () => {
-        facebookUISelf.taskPasteIntoPostBox = pasteIntoPostBoxFacebook
+        facebookUISelf.taskPasteIntoPostBox = pasteTextToCompositionFacebook
     })
 }

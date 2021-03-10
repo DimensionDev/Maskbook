@@ -173,9 +173,9 @@ export namespace SocialNetworkUI {
             /** Maintain all the posts up-to-date. */
             postsProvider?: PostsProvider
             /** @deprecated Seems we don't use it anymore. */
-            fetchPostContent?(): Promise<string>
+            getPostContent?(): Promise<string>
             /** @deprecated Seems we don't use it anymore. */
-            fetchProfile?(): Promise<ProfileUI>
+            getProfile?(): Promise<ProfileUI>
         }
         /** Resolve the information of who am I on the current network. */
         export interface IdentityResolveProvider {

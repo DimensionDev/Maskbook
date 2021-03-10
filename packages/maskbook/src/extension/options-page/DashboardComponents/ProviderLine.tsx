@@ -7,7 +7,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import LinkOffIcon from '@material-ui/icons/LinkOff'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { facebookDomain } from '../../../social-network-provider/facebook.com/isMobile'
+import { facebookDomain } from '../../../social-network-provider/facebook.com/utils/isMobile'
 import { twitterDomain } from '../../../social-network-provider/twitter.com/utils/isMobile'
 import { Flags } from '../../../utils/flags'
 
@@ -98,6 +98,7 @@ function Goto(network: string, userID?: string) {
         color: 'textPrimary',
         style: { textDecoration: 'underline' } as React.CSSProperties,
     } as const
+    // TODO: should use getHomePage URL I guess?
     if (network === 'facebook.com') return <Link href={facebookDomain} {...props} />
     if (network === 'twitter.com') return <Link href={twitterDomain} {...props} />
     return <span title={title}>{title}</span>

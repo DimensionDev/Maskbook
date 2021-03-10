@@ -6,7 +6,7 @@ import type { BannerProps } from '../Welcomes/Banner'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import { getActivatedUI } from '../../social-network/ui'
-import { isMobileFacebook } from '../../social-network-provider/facebook.com/isMobile'
+import { isMobileFacebook } from '../../social-network-provider/facebook.com/utils/isMobile'
 import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -16,6 +16,7 @@ export interface PostDialogHintUIProps {
 
 const useStyles = makeStyles((theme) => ({
     button: {
+        // TODO: is it correct? (what about twitter?)
         padding: isMobileFacebook ? 0 : '8px',
     },
     text: {

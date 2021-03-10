@@ -1,6 +1,6 @@
 import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
-import { parseFacebookStaticHTML } from '../parse-html'
-import { getPostUrlAtFacebook } from '../parse-username'
+import { parseFacebookStaticHTML } from '../utils/parse-html'
+import { getPostUrlAtFacebook } from '../utils/parse-username'
 import tasks from '../../../extension/content-script/tasks'
 import { timeout } from '../../../utils/utils'
 import { getActiveTabFacebook } from '../../../utils/tabs'

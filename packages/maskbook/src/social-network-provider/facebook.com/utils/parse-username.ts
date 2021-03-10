@@ -1,10 +1,9 @@
-import { ProfileIdentifier, GroupIdentifier, PostIdentifier } from '../../database/type'
+import { ProfileIdentifier, GroupIdentifier, PostIdentifier } from '../../../database/type'
 import { isMobileFacebook } from './isMobile'
-import { i18n } from '../../utils/i18n-next'
+import { i18n } from '../../../utils/i18n-next'
 
 /**
  * @see https://www.facebook.com/help/105399436216001#What-are-the-guidelines-around-creating-a-custom-username?
- * @unstable
  * ! Start to use this in a breaking change!
  */
 export function isValidFacebookUsername(name: string) {
