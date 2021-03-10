@@ -1,30 +1,21 @@
-import { useState, useCallback, useMemo } from 'react'
-import { drop, filter, findIndex, has, indexOf, remove, shuffle } from 'lodash-es'
-import { Button, Box, Card, Chip, createStyles, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
-import { useHistory } from 'react-router-dom'
+import { useState, useCallback } from 'react'
+import { Button, Box, Card, createStyles, DialogContent, makeStyles, useTheme, TextField } from '@material-ui/core'
+import classNames from 'classnames'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages, WalletRPC } from '../messages'
-import { useWallet, useWallets } from '../hooks/useWallet'
-import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
-import type { WalletRecord } from '../database/types'
-import Services from '../../../extension/service'
-import { DashboardRoute } from '../../../extension/options-page/Route'
-import { sleep } from '../../../utils/utils'
-import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
+import { checkInputLengthExceed, sleep } from '../../../utils/utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { ProviderType } from '../../../web3/types'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { selectMaskbookWallet } from '../helpers'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
-import { useAsyncRetry } from 'react-use'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useMnemonicWordsPuzzle } from '../hooks/useMnemonicWordsPuzzle'
+import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 
 enum CreateWalletStep {
-    Intial = 0,
+    Name = 0,
+    Words,
     Verify,
 }
 
@@ -32,7 +23,7 @@ const useStyles = makeStyles((theme) =>
     createStyles({
         content: {
             minHeight: 300,
-            padding: theme.spacing(6, 8),
+            padding: theme.spacing(6, 7.6),
         },
         top: {
             display: 'flex',
@@ -46,16 +37,35 @@ const useStyles = makeStyles((theme) =>
             justifyContent: 'center',
             padding: theme.spacing(4, 0, 0),
         },
+        input: {
+            width: '100%',
+        },
         card: {
+            position: 'relative',
             minHeight: 140,
             display: 'flex',
             flexFlow: 'row wrap',
             alignContent: 'flex-start',
-            padding: theme.spacing(1, 2, 2),
+            justifyContent: 'space-evenly',
+        },
+        cardButton: {
+            padding: theme.spacing(1, 2, 3),
+            backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : theme.palette.grey[50],
+        },
+        cardTextfield: {
+            justifyContent: 'space-between',
         },
         word: {
-            width: 101,
-            margin: theme.spacing(1, 0.5, 0),
+            width: 95,
+            minWidth: 95,
+            whiteSpace: 'nowrap',
+            marginTop: theme.spacing(2),
+        },
+        wordButton: {
+            backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : theme.palette.common.white,
+        },
+        wordTextfield: {
+            width: 104,
         },
     }),
 )
@@ -66,91 +76,145 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const [step, setStep] = useState(0)
-    const [verification, setVerification] = useState('')
+    const theme = useTheme()
+    const [step, setStep] = useState(CreateWalletStep.Name)
+    const [name, setName] = useState('')
 
     //#region remote controlled dialog logic
     const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
-    const onClose = useCallback(() => {
+    const onClose = useCallback(async () => {
         setOpen({
             open: false,
         })
-        setStep(CreateWalletStep.Intial)
+        await sleep(300)
+        setStep(CreateWalletStep.Words)
     }, [setOpen])
     //#endregion
 
     //#region create mnemonic words
-    const { value: words = [], loading: wordsLoading, retry: wordsRetry } = useAsyncRetry(
-        () => WalletRPC.createMnemonicWords(),
-        [],
-    )
-    const [selectedIndexes, setSelectedIndexes] = useState<number[]>([])
-    const shuffledWords = useMemo(() => shuffle(words), [words])
-    const selectedWords = useMemo(() => selectedIndexes.map((x) => shuffledWords[x]), [selectedIndexes, shuffledWords])
+    const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
     const onNext = useCallback(() => {
-        setStep(CreateWalletStep.Verify)
-    }, [])
+        switch (step) {
+            case CreateWalletStep.Name:
+                setStep(CreateWalletStep.Words)
+                break
+            case CreateWalletStep.Words:
+                setStep(CreateWalletStep.Verify)
+                break
+        }
+    }, [step])
     const onSubmit = useSnackbarCallback(
-        async () => {
-            if (!words.length || words.join(' ') !== verification) throw new Error('Failed')
-            await WalletRPC.recoverWallet(words, '')
-        },
-        [step, words, verification],
+        () =>
+            WalletRPC.importNewWallet({
+                name,
+                mnemonic: words,
+            }),
+        [name, words],
         onClose,
     )
-    const onRefresh = useCallback(() => {
-        wordsRetry()
-    }, [wordsRetry])
-    const onClickWord = useCallback(
-        (word: string, index: number) => {
-            if (indexOf(selectedIndexes, index) > -1) setSelectedIndexes(filter(selectedIndexes, (x) => x !== index))
-            else setSelectedIndexes([...selectedIndexes, index])
-        },
-        [selectedIndexes],
-    )
-
-    console.log(selectedIndexes)
+    const onBack = useCallback(() => {
+        switch (step) {
+            case CreateWalletStep.Words:
+                setStep(CreateWalletStep.Name)
+                break
+            case CreateWalletStep.Verify:
+                setStep(CreateWalletStep.Words)
+                resetCallback()
+                break
+        }
+    }, [step, resetCallback])
+    const onWordChange = useCallback((word: string, index: number) => answerCallback(word, index), [answerCallback])
     //#endregion
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_create_a_wallet')}>
+        <InjectedDialog
+            open={open}
+            onClose={onClose}
+            title={t('plugin_wallet_create_a_wallet')}
+            DialogProps={{
+                maxWidth: step === CreateWalletStep.Name ? 'xs' : 'sm',
+            }}>
             <DialogContent className={classes.content}>
-                {step === CreateWalletStep.Intial ? (
-                    <Box className={classes.top}>
-                        <Button startIcon={<RefreshIcon />} onClick={onRefresh}>
-                            {t('refresh')}
-                        </Button>
+                {step === CreateWalletStep.Name ? (
+                    <Box>
+                        <TextField
+                            className={classes.input}
+                            helperText={
+                                checkInputLengthExceed(name)
+                                    ? t('input_length_exceed_prompt', {
+                                          name: t('wallet_name').toLowerCase(),
+                                          length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                      })
+                                    : undefined
+                            }
+                            required
+                            autoFocus
+                            label={t('wallet_name')}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            variant="outlined"
+                        />
                     </Box>
                 ) : null}
-                <Card className={classes.card} variant="outlined">
-                    {(step === CreateWalletStep.Intial ? words : selectedWords).map((word, i) => (
-                        <Button className={classes.word} key={i} variant="text">
-                            {word}
-                        </Button>
-                    ))}
-                </Card>
-                {step === CreateWalletStep.Intial ? null : (
-                    <Card className={classes.card} elevation={0}>
-                        {shuffledWords.map((word, i) => (
-                            <Button
-                                className={classes.word}
-                                key={i}
-                                variant={indexOf(selectedIndexes, i) > -1 ? 'contained' : 'outlined'}
-                                onClick={() => onClickWord(word, i)}>
-                                {word}
+                {step === CreateWalletStep.Words ? (
+                    <>
+                        <Box className={classes.top}>
+                            <Button startIcon={<RefreshIcon />} onClick={refreshCallback}>
+                                {t('refresh')}
                             </Button>
+                        </Box>
+                        <Card
+                            className={classNames(classes.card, classes.cardButton)}
+                            elevation={0}
+                            variant={theme.palette.mode === 'dark' ? 'outlined' : 'elevation'}>
+                            {words.map((word, i) => (
+                                <Button className={classNames(classes.word, classes.wordButton)} key={i} variant="text">
+                                    {word}
+                                </Button>
+                            ))}
+                        </Card>
+                    </>
+                ) : null}
+                {step === CreateWalletStep.Verify ? (
+                    <Card className={classNames(classes.card, classes.cardTextfield)} elevation={0}>
+                        {puzzleWords.map((word, i) => (
+                            <TextField
+                                className={classNames(classes.word, classes.wordTextfield)}
+                                key={i}
+                                size="small"
+                                value={word}
+                                autoFocus={indexes.sort((a, z) => a - z).indexOf(i) === 0}
+                                disabled={!indexes.includes(i)}
+                                variant="outlined"
+                                onChange={(ev) => onWordChange(ev.target.value, indexes.indexOf(i))}>
+                                {word}
+                            </TextField>
                         ))}
                     </Card>
-                )}
+                ) : null}
                 <Box className={classes.bottom}>
+                    {step === CreateWalletStep.Words || step === CreateWalletStep.Verify ? (
+                        <ActionButton
+                            color="primary"
+                            variant="text"
+                            onClick={onBack}
+                            style={{
+                                marginRight: 16,
+                            }}>
+                            {t('plugin_wallet_verification_back')}
+                        </ActionButton>
+                    ) : null}
                     <ActionButton
                         variant="contained"
-                        disabled={step === CreateWalletStep.Verify && selectedWords.join(' ') !== words.join(' ')}
-                        onClick={step === CreateWalletStep.Intial ? onNext : onSubmit}>
+                        disabled={
+                            (step === CreateWalletStep.Name && !name) ||
+                            (step === CreateWalletStep.Verify && words.join(' ') !== puzzleWords.join(' '))
+                        }
+                        onClick={step === CreateWalletStep.Name || step === CreateWalletStep.Words ? onNext : onSubmit}>
                         {t(
-                            step === CreateWalletStep.Intial
+                            step === CreateWalletStep.Name || step === CreateWalletStep.Words
                                 ? 'plugin_wallet_verification_next'
-                                : 'plugin_wallet_verification_confirm',
+                                : 'plugin_wallet_verification_verify',
                         )}
                     </ActionButton>
                 </Box>

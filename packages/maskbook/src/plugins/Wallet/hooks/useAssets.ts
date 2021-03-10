@@ -38,6 +38,13 @@ export function useAssets(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
     // it prevents them from replacing by previous detailed tokens because the uniq algorithm
     const assetsDetailed = useAssetsMerged(assetsDetailedDebank, assetsDetailedChain)
 
+    console.log({
+        assetsDetailedChain,
+        assetsDetailedDebank,
+
+        assetsDetailed,
+    })
+
     // filter out tokens in blacklist
     return {
         value: assetsDetailed.filter((x) => !wallet?.erc20_token_blacklist.has(formatChecksumAddress(x.token.address))),
