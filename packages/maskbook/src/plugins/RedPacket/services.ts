@@ -1,7 +1,7 @@
 import type { RedPacketRecord } from './types'
 import { RedPacketMessage } from './messages'
 import * as database from './database'
-import { getChainId } from '../../extension/background-script/SettingsService'
+import type { ChainId } from '@dimensiondev/web3-shared'
 import * as subgraph from './apis'
 
 export async function discoverRedPacket(record: RedPacketRecord) {
@@ -14,9 +14,8 @@ export async function discoverRedPacket(record: RedPacketRecord) {
     RedPacketMessage.events.redPacketUpdated.sendToAll(undefined)
 }
 
-export async function getRedPacketHistoryWithPassword(address: string) {
-    const chainId = await getChainId()
-    const historys = await subgraph.getRedPacketHistory(address)
+export async function getRedPacketHistoryWithPassword(address: string, chainId: ChainId) {
+    const historys = await subgraph.getRedPacketHistory(address, chainId)
     const historysWithPassword = []
     for (const history of historys) {
         await database.updateV1ToV2(history)
