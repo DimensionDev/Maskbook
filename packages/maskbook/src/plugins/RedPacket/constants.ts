@@ -18,7 +18,7 @@ export const RED_PACKET_CONSTANTS = {
     },
     HAPPY_RED_PACKET_ADDRESS_V2: {
         [ChainId.Mainnet]: '0x26760783c12181efa3c435aee4ae686c53bdddbb',
-        [ChainId.Ropsten]: '0x6d84e4863c0530bc0bb4291ef0ff454a40660ca3',
+        [ChainId.Ropsten]: '0x25Dfa3275E2C44ce51E8ff977B9BdcF24aE46A34',
         [ChainId.Rinkeby]: '0x575f906db24154977c7361c2319e2b25e897e3b6',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
