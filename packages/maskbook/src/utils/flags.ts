@@ -32,7 +32,7 @@ export const Flags = {
     /** Prohibit the use of test networks in production */
     wallet_network_strict_mode_enabled: process.env.NODE_ENV === 'production' && !betaOrInsiderOnly,
     transak_enabled: webOnly,
-    trader_enabled: webOnly,
+    trader_enabled: true,
     trader_zrx_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
     gitcoin_enabled: webOnly,
@@ -45,6 +45,7 @@ export const Flags = {
     airdrop_enabled: webOnly,
     airdrop_composition_dialog_enabled: false,
     metamask_support_enabled: webOnly,
+    toolbar_enabled: webOnly,
     /* construct LBP for all ERC20 tokens */
     LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
     //#endregion
