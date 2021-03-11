@@ -26,8 +26,8 @@ export async function addRedPacket(record: RedPacketRecord) {
 export async function updateV1ToV2(history: RedPacketHistory) {
     const record_v1 = await getRedPacket(history.rpid)
     if (record_v1?.payload?.contract_version === 1) {
-        const record_v1_done = await getRedPacket(history.txid)
-        if (!record_v1_done) {
+        const record_v1_updated = await getRedPacket(history.txid)
+        if (!record_v1_updated) {
             await addRedPacket({
                 password: record_v1.payload.password,
                 id: history.txid,
