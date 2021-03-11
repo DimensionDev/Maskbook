@@ -1,11 +1,10 @@
 import { SocialNetworkUI, getActivatedUI } from '../../../social-network/ui'
-import { untilDocumentReady } from '../../../utils/dom'
-import { downloadUrl, pasteImageToActiveElements } from '../../../utils/utils'
+import { downloadUrl } from '../../../utils/utils'
 import Services from '../../../extension/service'
 import { decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'
-import { MaskMessage } from '../../../utils/messages'
 import { ImagePayloadURLs } from '../../../resources/image-payload'
+import { pasteImageToCompositionFacebook } from './pasteImageToComposition'
 
 export async function uploadToPostBoxFacebook(
     text: string,
@@ -25,15 +24,6 @@ export async function uploadToPostBoxFacebook(
             }),
         ),
     )
-    pasteImageToActiveElements(secretImage)
-    await untilDocumentReady()
-    // TODO: Need a better way to find whether the image is pasted into
-    uploadFail()
-
-    async function uploadFail() {
-        if (autoPasteFailedRecover) {
-            const blob = new Blob([secretImage], { type: 'image/png' })
-            MaskMessage.events.autoPasteFailed.sendToLocal({ text: relatedText, image: blob })
-        }
-    }
+    const blob = new Blob([secretImage], { type: 'image/png' })
+    await pasteImageToCompositionFacebook(blob, { recover: autoPasteFailedRecover, relatedTextPayload: relatedText })
 }

@@ -123,6 +123,7 @@ export namespace SocialNetworkUI {
             start(signal: AbortSignal): void
             /** The platform support which kind of content? e.g. If text is false, then the image payload is enforced. */
             supportedOutputTypes: NewPostCompositionSupportedTypes
+            supportedInputTypes: NewPostCompositionSupportedTypes
         }
         export interface NewPostCompositionSupportedTypes {
             image?: boolean
@@ -145,9 +146,16 @@ export namespace SocialNetworkUI {
         }
         export interface NativeCompositionDialog {
             /** Upload the designated image on to the social network composition dialog */
-            attachImage?(url: string | Blob | File, recover?: boolean): void
-            appendText?(text: string, recover?: boolean): void
+            attachImage?(url: string | Blob | File, options?: NativeCompositionAttachImageOptions): void
+            appendText?(text: string, options?: NativeCompositionAttachTextOptions): void
             open?(): void
+        }
+        export interface NativeCompositionAttachImageOptions {
+            recover?: boolean
+            relatedTextPayload?: string
+        }
+        export interface NativeCompositionAttachTextOptions {
+            recover?: boolean
         }
         export interface MaskCompositionDialog {
             open?(content: TypedMessage, options?: MaskCompositionDialogOpenOptions): void

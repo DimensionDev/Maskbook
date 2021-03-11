@@ -20,6 +20,7 @@ import { injectPageInspectorDefault } from '../../social-network/defaults/inject
 import { profilesCollectorFacebook } from './collecting/profiles'
 import { PostProviderFacebook } from './collecting/posts'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
+import { pasteImageToCompositionFacebook } from './automation/pasteImageToComposition'
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
 const facebookUI: SocialNetworkUI.Definition = {
@@ -56,9 +57,7 @@ const facebookUI: SocialNetworkUI.Definition = {
             appendText(text, recover) {
                 pasteTextToCompositionFacebook(text, { autoPasteFailedRecover: !!recover })
             },
-            attachImage(img, recover) {
-                // TODO: uploadToPostBoxFacebook
-            },
+            attachImage: pasteImageToCompositionFacebook,
         },
         nativeCommentBox: {
             appendText: pasteToCommentBoxFacebook,
@@ -83,6 +82,10 @@ const facebookUI: SocialNetworkUI.Definition = {
         newPostComposition: {
             start: injectCompositionFacebook,
             supportedOutputTypes: {
+                text: true,
+                image: true,
+            },
+            supportedInputTypes: {
                 text: true,
                 image: true,
             },
