@@ -126,16 +126,21 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     )
 
     useEffect(() => {
-        if (refundState.type === TransactionStateType.UNKNOWN) return
-        if (!availability) return
+        if (
+            refundState.type === TransactionStateType.UNKNOWN ||
+            (!availability && refundState.type !== TransactionStateType.CONFIRMED)
+        )
+            return
         setTransactionDialogOpen({
             open: true,
             state: refundState,
-            summary: `Refunding red packet for ${formatBalance(
-                new BigNumber(availability.balance),
-                history.token.decimals ?? 0,
-                history.token.decimals ?? 0,
-            )} ${history.token.symbol}`,
+            summary: availability
+                ? `Refunding red packet for ${formatBalance(
+                      new BigNumber(availability.balance),
+                      history.token.decimals ?? 0,
+                      history.token.decimals ?? 0,
+                  )} ${history.token.symbol}`
+                : '',
         })
     }, [refundState /* update tx dialog only if state changed */])
     //#endregion
