@@ -60,11 +60,10 @@ async function syncKeys(locales = without(LOCALE_NAMES, 'en')) {
 async function diagnosis() {
     const unusedKeys = await findAllUnusedKeys()
     if (unusedKeys.length) {
+        const message = 'Run `npm run locale-kit -- --remove-unused-keys` to solve this problem'
         for (const locale of LOCALE_NAMES) {
             const filePath = getLocaleRelativePath(getMessagePath(locale))
-            console.log(
-                `::warning file=${filePath}::Run \`npm run locale-kit -- --remove-unused-keys\` to solve this problem`,
-            )
+            console.log(`::warning file=${filePath}::${message}`)
             const messages = keys(await readMessages(locale))
             for (const key of unusedKeys) {
                 const index = messages.indexOf(key)
@@ -76,9 +75,10 @@ async function diagnosis() {
     }
     const unsyncedLocales = await findAllUnsyncedLocales()
     if (!isEmpty(unsyncedLocales)) {
+        const message = 'Run `npm run locale-kit -- --sync-keys` to solve this problem'
         for (const [locale, names] of toPairs(unsyncedLocales)) {
             const filePath = getLocaleRelativePath(getMessagePath(locale))
-            console.log(`::warning file=${filePath}::Run \`npm run locale-kit -- --sync-keys\` to solve this problem`)
+            console.log(`::warning file=${filePath}::${message}`)
             for (const name of names) {
                 console.log(`::warning file=${filePath}::The ${JSON.stringify(name)} is unsynced`)
             }
@@ -88,11 +88,8 @@ async function diagnosis() {
 
 async function main() {
     const unusedKeys = await findAllUnusedKeys()
-    console.error(
-        'Scanned',
-        unusedKeys.length,
-        'unused keys, run `npm run locale-kit -- --remove-unused-keys` to remove them.',
-    )
+    console.error('Scanned', unusedKeys.length, 'unused keys')
+    console.error('Run `npm run locale-kit -- --remove-unused-keys` to remove them.')
     console.error('Unsynced', keys(await findAllUnsyncedLocales()), 'locales')
     if (process.argv.includes('--remove-unused-keys')) {
         await removeAllUnusedKeys(unusedKeys)
