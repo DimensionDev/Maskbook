@@ -1,16 +1,16 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount } from './useAccount'
-import Services, { ServicesWithProgress } from '../../extension/service'
-import { toHex } from 'web3-utils'
-import { StageType } from '../../utils/promiEvent'
-import type { TransactionConfig } from 'web3-core'
+import Services from '../../extension/service'
 import { useChainId } from './useChainState'
 import { addGasMargin } from '../helpers'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { EthereumAddress } from 'wallet.ts'
 import { useConstant } from './useConstant'
 import { CONSTANTS } from '../constants'
+import type { TransactionRequest } from '@ethersproject/providers'
+import { toUtf8Bytes } from 'ethers/lib/utils'
+import { StageType } from '../types'
 
 export function useEtherTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const account = useAccount()
@@ -38,7 +38,7 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
         // error: insufficent balance
         const balance = await Services.Ethereum.getBalance(account, chainId)
 
-        if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) {
+        if (new BigNumber(amount).isGreaterThan(balance)) {
             setTransferState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Insufficent balance'),
@@ -51,7 +51,7 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const config: TransactionConfig = {
+        const config: TransactionRequest = {
             from: account,
             to: recipient,
             value: amount,
@@ -63,19 +63,18 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
         }
 
         // encode memo as data
-        if (memo) config.data = toHex(memo)
+        if (memo) config.data = toUtf8Bytes(memo)
 
         // step 1: estimate gas
-        const estimatedGas = await Services.Ethereum.estimateGas(config, chainId)
-        const iterator = ServicesWithProgress.sendTransaction(account, {
+        const transaction = await Services.Ethereum.sendTransaction(account, {
             // the esitmated gas limit is too low with arbitrary message to be encoded as data (increase 20% gas limit)
-            gas: addGasMargin(new BigNumber(estimatedGas), 2000).toFixed(),
+            gasLimit: addGasMargin(new BigNumber(21000), 2000).toFixed(),
             ...config,
         })
 
         // step 2: blocking
         try {
-            for await (const stage of iterator) {
+            for await (const stage of Services.Ethereum.watchTransaction(account, transaction)) {
                 switch (stage.type) {
                     case StageType.TRANSACTION_HASH:
                         setTransferState({

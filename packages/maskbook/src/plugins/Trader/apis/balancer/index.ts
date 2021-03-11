@@ -1,6 +1,6 @@
-import BigNumber from 'bignumber.js'
 import { first, memoize } from 'lodash-es'
 import { SOR } from '@balancer-labs/sor'
+import { BigNumber } from '@balancer-labs/sor/dist/utils/bignumber'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { getChainId } from '../../../../extension/background-script/EthereumService'
 import { getConstant, isSameAddress } from '../../../../web3/helpers'
@@ -71,7 +71,7 @@ export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALA
     const pools = sor.onChainCache.pools
     const routes = swaps.map((rawHops) => {
         const swapAmount = new BigNumber(rawHops[0].swapAmount || '0')
-        const share = swapAmount.div(totalSwapAmount).toNumber()
+        const share = swapAmount.dividedBy(totalSwapAmount).toNumber()
         const hops = rawHops.map((rawHop) => {
             const { swapAmount } = rawHop
             const tokenIn = rawHop.tokenIn
@@ -85,7 +85,7 @@ export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALA
                     .map((token) => {
                         const address = token.address
                         const weight = new BigNumber(token.denormWeight)
-                        const share = weight.div(totalWeight).toNumber()
+                        const share = weight.dividedBy(totalWeight).toNumber()
                         return {
                             address,
                             share,

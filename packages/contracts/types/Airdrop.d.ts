@@ -2,75 +2,366 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
-import { EventLog } from 'web3-core'
-import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import { ethers, EventFilter, Signer, BigNumber, BigNumberish, PopulatedTransaction } from 'ethers'
+import { Contract, ContractTransaction, Overrides, CallOverrides } from '@ethersproject/contracts'
+import { BytesLike } from '@ethersproject/bytes'
+import { Listener, Provider } from '@ethersproject/providers'
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi'
+import { TypedEventFilter, TypedEvent, TypedListener } from './commons'
 
-interface EventOptions {
-    filter?: object
-    fromBlock?: BlockType
-    topics?: string[]
+interface AirdropInterface extends ethers.utils.Interface {
+    functions: {
+        'claim(uint256,uint256,bytes32[])': FunctionFragment
+        'recharge(uint256)': FunctionFragment
+        'set_root(bytes32)': FunctionFragment
+        'withdraw()': FunctionFragment
+        'check(uint256,address,uint256,bytes32[])': FunctionFragment
+    }
+
+    encodeFunctionData(functionFragment: 'claim', values: [BigNumberish, BigNumberish, BytesLike[]]): string
+    encodeFunctionData(functionFragment: 'recharge', values: [BigNumberish]): string
+    encodeFunctionData(functionFragment: 'set_root', values: [BytesLike]): string
+    encodeFunctionData(functionFragment: 'withdraw', values?: undefined): string
+    encodeFunctionData(functionFragment: 'check', values: [BigNumberish, string, BigNumberish, BytesLike[]]): string
+
+    decodeFunctionResult(functionFragment: 'claim', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'recharge', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'set_root', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'withdraw', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'check', data: BytesLike): Result
+
+    events: {
+        'Claimed(uint256,uint256)': EventFragment
+        'Recharged(uint256,uint256)': EventFragment
+        'RootChanged(bytes32,bytes32)': EventFragment
+        'Withdrawed(uint256,uint256)': EventFragment
+    }
+
+    getEvent(nameOrSignatureOrTopic: 'Claimed'): EventFragment
+    getEvent(nameOrSignatureOrTopic: 'Recharged'): EventFragment
+    getEvent(nameOrSignatureOrTopic: 'RootChanged'): EventFragment
+    getEvent(nameOrSignatureOrTopic: 'Withdrawed'): EventFragment
 }
 
 export class Airdrop extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): Airdrop
-    methods: {
+    connect(signerOrProvider: Signer | Provider | string): this
+    attach(addressOrName: string): this
+    deployed(): Promise<this>
+
+    listeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): Array<TypedListener<EventArgsArray, EventArgsObject>>
+    off<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    on<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    once<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeListener<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeAllListeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): this
+
+    listeners(eventName?: string): Array<Listener>
+    off(eventName: string, listener: Listener): this
+    on(eventName: string, listener: Listener): this
+    once(eventName: string, listener: Listener): this
+    removeListener(eventName: string, listener: Listener): this
+    removeAllListeners(eventName?: string): this
+
+    queryFilter<EventArgsArray extends Array<any>, EventArgsObject>(
+        event: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        fromBlockOrBlockhash?: string | number | undefined,
+        toBlock?: string | number | undefined,
+    ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>
+
+    interface: AirdropInterface
+
+    functions: {
         claim(
-            index: number | string,
-            amount: number | string,
-            merkleProof: (string | number[])[],
-        ): TransactionObject<void>
+            index: BigNumberish,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: Overrides,
+        ): Promise<ContractTransaction>
 
-        recharge(_total: number | string): TransactionObject<void>
+        'claim(uint256,uint256,bytes32[])'(
+            index: BigNumberish,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: Overrides,
+        ): Promise<ContractTransaction>
 
-        set_root(root: string | number[]): TransactionObject<void>
+        recharge(_total: BigNumberish, overrides?: Overrides): Promise<ContractTransaction>
 
-        withdraw(): TransactionObject<void>
+        'recharge(uint256)'(_total: BigNumberish, overrides?: Overrides): Promise<ContractTransaction>
+
+        set_root(root: BytesLike, overrides?: Overrides): Promise<ContractTransaction>
+
+        'set_root(bytes32)'(root: BytesLike, overrides?: Overrides): Promise<ContractTransaction>
+
+        withdraw(overrides?: Overrides): Promise<ContractTransaction>
+
+        'withdraw()'(overrides?: Overrides): Promise<ContractTransaction>
 
         check(
-            index: number | string,
+            index: BigNumberish,
             claimer: string,
-            amount: number | string,
-            merkleProof: (string | number[])[],
-        ): TransactionObject<{
-            available: boolean
-            start: string
-            end: string
-            claimable: string
-            0: boolean
-            1: string
-            2: string
-            3: string
-        }>
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: CallOverrides,
+        ): Promise<
+            [boolean, BigNumber, BigNumber, BigNumber] & {
+                available: boolean
+                start: BigNumber
+                end: BigNumber
+                claimable: BigNumber
+            }
+        >
+
+        'check(uint256,address,uint256,bytes32[])'(
+            index: BigNumberish,
+            claimer: string,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: CallOverrides,
+        ): Promise<
+            [boolean, BigNumber, BigNumber, BigNumber] & {
+                available: boolean
+                start: BigNumber
+                end: BigNumber
+                claimable: BigNumber
+            }
+        >
     }
-    events: {
-        Claimed: ContractEvent<{
-            amount: string
-            timestamp: string
-            0: string
-            1: string
-        }>
-        Recharged: ContractEvent<{
-            total: string
-            timestamp: string
-            0: string
-            1: string
-        }>
-        RootChanged: ContractEvent<{
-            previous: string
-            now: string
-            0: string
-            1: string
-        }>
-        Withdrawed: ContractEvent<{
-            left: string
-            timestamp: string
-            0: string
-            1: string
-        }>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+
+    claim(
+        index: BigNumberish,
+        amount: BigNumberish,
+        merkleProof: BytesLike[],
+        overrides?: Overrides,
+    ): Promise<ContractTransaction>
+
+    'claim(uint256,uint256,bytes32[])'(
+        index: BigNumberish,
+        amount: BigNumberish,
+        merkleProof: BytesLike[],
+        overrides?: Overrides,
+    ): Promise<ContractTransaction>
+
+    recharge(_total: BigNumberish, overrides?: Overrides): Promise<ContractTransaction>
+
+    'recharge(uint256)'(_total: BigNumberish, overrides?: Overrides): Promise<ContractTransaction>
+
+    set_root(root: BytesLike, overrides?: Overrides): Promise<ContractTransaction>
+
+    'set_root(bytes32)'(root: BytesLike, overrides?: Overrides): Promise<ContractTransaction>
+
+    withdraw(overrides?: Overrides): Promise<ContractTransaction>
+
+    'withdraw()'(overrides?: Overrides): Promise<ContractTransaction>
+
+    check(
+        index: BigNumberish,
+        claimer: string,
+        amount: BigNumberish,
+        merkleProof: BytesLike[],
+        overrides?: CallOverrides,
+    ): Promise<
+        [boolean, BigNumber, BigNumber, BigNumber] & {
+            available: boolean
+            start: BigNumber
+            end: BigNumber
+            claimable: BigNumber
+        }
+    >
+
+    'check(uint256,address,uint256,bytes32[])'(
+        index: BigNumberish,
+        claimer: string,
+        amount: BigNumberish,
+        merkleProof: BytesLike[],
+        overrides?: CallOverrides,
+    ): Promise<
+        [boolean, BigNumber, BigNumber, BigNumber] & {
+            available: boolean
+            start: BigNumber
+            end: BigNumber
+            claimable: BigNumber
+        }
+    >
+
+    callStatic: {
+        claim(
+            index: BigNumberish,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: CallOverrides,
+        ): Promise<void>
+
+        'claim(uint256,uint256,bytes32[])'(
+            index: BigNumberish,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: CallOverrides,
+        ): Promise<void>
+
+        recharge(_total: BigNumberish, overrides?: CallOverrides): Promise<void>
+
+        'recharge(uint256)'(_total: BigNumberish, overrides?: CallOverrides): Promise<void>
+
+        set_root(root: BytesLike, overrides?: CallOverrides): Promise<void>
+
+        'set_root(bytes32)'(root: BytesLike, overrides?: CallOverrides): Promise<void>
+
+        withdraw(overrides?: CallOverrides): Promise<void>
+
+        'withdraw()'(overrides?: CallOverrides): Promise<void>
+
+        check(
+            index: BigNumberish,
+            claimer: string,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: CallOverrides,
+        ): Promise<
+            [boolean, BigNumber, BigNumber, BigNumber] & {
+                available: boolean
+                start: BigNumber
+                end: BigNumber
+                claimable: BigNumber
+            }
+        >
+
+        'check(uint256,address,uint256,bytes32[])'(
+            index: BigNumberish,
+            claimer: string,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: CallOverrides,
+        ): Promise<
+            [boolean, BigNumber, BigNumber, BigNumber] & {
+                available: boolean
+                start: BigNumber
+                end: BigNumber
+                claimable: BigNumber
+            }
+        >
+    }
+
+    filters: {
+        Claimed(
+            amount: null,
+            timestamp: null,
+        ): TypedEventFilter<[BigNumber, BigNumber], { amount: BigNumber; timestamp: BigNumber }>
+
+        Recharged(
+            total: null,
+            timestamp: null,
+        ): TypedEventFilter<[BigNumber, BigNumber], { total: BigNumber; timestamp: BigNumber }>
+
+        RootChanged(previous: null, now: null): TypedEventFilter<[string, string], { previous: string; now: string }>
+
+        Withdrawed(
+            left: null,
+            timestamp: null,
+        ): TypedEventFilter<[BigNumber, BigNumber], { left: BigNumber; timestamp: BigNumber }>
+    }
+
+    estimateGas: {
+        claim(
+            index: BigNumberish,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: Overrides,
+        ): Promise<BigNumber>
+
+        'claim(uint256,uint256,bytes32[])'(
+            index: BigNumberish,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: Overrides,
+        ): Promise<BigNumber>
+
+        recharge(_total: BigNumberish, overrides?: Overrides): Promise<BigNumber>
+
+        'recharge(uint256)'(_total: BigNumberish, overrides?: Overrides): Promise<BigNumber>
+
+        set_root(root: BytesLike, overrides?: Overrides): Promise<BigNumber>
+
+        'set_root(bytes32)'(root: BytesLike, overrides?: Overrides): Promise<BigNumber>
+
+        withdraw(overrides?: Overrides): Promise<BigNumber>
+
+        'withdraw()'(overrides?: Overrides): Promise<BigNumber>
+
+        check(
+            index: BigNumberish,
+            claimer: string,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        'check(uint256,address,uint256,bytes32[])'(
+            index: BigNumberish,
+            claimer: string,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+    }
+
+    populateTransaction: {
+        claim(
+            index: BigNumberish,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: Overrides,
+        ): Promise<PopulatedTransaction>
+
+        'claim(uint256,uint256,bytes32[])'(
+            index: BigNumberish,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: Overrides,
+        ): Promise<PopulatedTransaction>
+
+        recharge(_total: BigNumberish, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'recharge(uint256)'(_total: BigNumberish, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        set_root(root: BytesLike, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'set_root(bytes32)'(root: BytesLike, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        withdraw(overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'withdraw()'(overrides?: Overrides): Promise<PopulatedTransaction>
+
+        check(
+            index: BigNumberish,
+            claimer: string,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: CallOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'check(uint256,address,uint256,bytes32[])'(
+            index: BigNumberish,
+            claimer: string,
+            amount: BigNumberish,
+            merkleProof: BytesLike[],
+            overrides?: CallOverrides,
+        ): Promise<PopulatedTransaction>
     }
 }

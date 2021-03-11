@@ -113,6 +113,23 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         </Typography>
                     </>
                 ) : null}
+                {state.type === TransactionStateType.RECEIPT ? (
+                    <>
+                        <DoneIcon className={classes.icon} />
+                        <Typography className={classes.primary} color="textPrimary">
+                            {t('plugin_wallet_transaction_created')}
+                        </Typography>
+                        <Typography>
+                            <Link
+                                className={classes.link}
+                                href={resolveTransactionLinkOnEtherscan(chainId, state.receipt.transactionHash)}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                {t('plugin_wallet_view_on_etherscan')}
+                            </Link>
+                        </Typography>
+                    </>
+                ) : null}
                 {state.type === TransactionStateType.CONFIRMED ? (
                     <>
                         <DoneIcon className={classes.icon} />

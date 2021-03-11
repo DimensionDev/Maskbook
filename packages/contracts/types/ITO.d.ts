@@ -2,117 +2,596 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
-import { EventLog } from 'web3-core'
-import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import { ethers, EventFilter, Signer, BigNumber, BigNumberish, PopulatedTransaction } from 'ethers'
+import { Contract, ContractTransaction, Overrides, PayableOverrides, CallOverrides } from '@ethersproject/contracts'
+import { BytesLike } from '@ethersproject/bytes'
+import { Listener, Provider } from '@ethersproject/providers'
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi'
+import { TypedEventFilter, TypedEvent, TypedListener } from './commons'
 
-interface EventOptions {
-    filter?: object
-    fromBlock?: BlockType
-    topics?: string[]
+interface ITOInterface extends ethers.utils.Interface {
+    functions: {
+        'check_availability(bytes32)': FunctionFragment
+        'contract_creator()': FunctionFragment
+        'destruct(bytes32)': FunctionFragment
+        'fill_pool(bytes32,uint256,uint256,string,string,address[],uint128[],address,uint256,uint256,address)': FunctionFragment
+        'swap(bytes32,bytes32,address,bytes32,uint256,uint128)': FunctionFragment
+        'withdraw(bytes32,uint256)': FunctionFragment
+    }
+
+    encodeFunctionData(functionFragment: 'check_availability', values: [BytesLike]): string
+    encodeFunctionData(functionFragment: 'contract_creator', values?: undefined): string
+    encodeFunctionData(functionFragment: 'destruct', values: [BytesLike]): string
+    encodeFunctionData(
+        functionFragment: 'fill_pool',
+        values: [
+            BytesLike,
+            BigNumberish,
+            BigNumberish,
+            string,
+            string,
+            string[],
+            BigNumberish[],
+            string,
+            BigNumberish,
+            BigNumberish,
+            string,
+        ],
+    ): string
+    encodeFunctionData(
+        functionFragment: 'swap',
+        values: [BytesLike, BytesLike, string, BytesLike, BigNumberish, BigNumberish],
+    ): string
+    encodeFunctionData(functionFragment: 'withdraw', values: [BytesLike, BigNumberish]): string
+
+    decodeFunctionResult(functionFragment: 'check_availability', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'contract_creator', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'destruct', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'fill_pool', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'swap', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'withdraw', data: BytesLike): Result
+
+    events: {
+        'DestructSuccess(bytes32,address,uint256,uint128[])': EventFragment
+        'FillSuccess(uint256,bytes32,address,uint256,address,string,string)': EventFragment
+        'SwapSuccess(bytes32,address,address,address,uint256,uint256)': EventFragment
+        'WithdrawSuccess(bytes32,address,uint256)': EventFragment
+    }
+
+    getEvent(nameOrSignatureOrTopic: 'DestructSuccess'): EventFragment
+    getEvent(nameOrSignatureOrTopic: 'FillSuccess'): EventFragment
+    getEvent(nameOrSignatureOrTopic: 'SwapSuccess'): EventFragment
+    getEvent(nameOrSignatureOrTopic: 'WithdrawSuccess'): EventFragment
 }
 
 export class ITO extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): ITO
-    methods: {
+    connect(signerOrProvider: Signer | Provider | string): this
+    attach(addressOrName: string): this
+    deployed(): Promise<this>
+
+    listeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): Array<TypedListener<EventArgsArray, EventArgsObject>>
+    off<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    on<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    once<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeListener<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeAllListeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): this
+
+    listeners(eventName?: string): Array<Listener>
+    off(eventName: string, listener: Listener): this
+    on(eventName: string, listener: Listener): this
+    once(eventName: string, listener: Listener): this
+    removeListener(eventName: string, listener: Listener): this
+    removeAllListeners(eventName?: string): this
+
+    queryFilter<EventArgsArray extends Array<any>, EventArgsObject>(
+        event: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        fromBlockOrBlockhash?: string | number | undefined,
+        toBlock?: string | number | undefined,
+    ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>
+
+    interface: ITOInterface
+
+    functions: {
         check_availability(
-            id: string | number[],
-        ): TransactionObject<{
-            exchange_addrs: string[]
-            remaining: string
-            started: boolean
-            expired: boolean
-            swapped: string
-            exchanged_tokens: string[]
-            0: string[]
-            1: string
-            2: boolean
-            3: boolean
-            4: string
-            5: string[]
-        }>
+            id: BytesLike,
+            overrides?: CallOverrides,
+        ): Promise<
+            [string[], BigNumber, boolean, boolean, BigNumber, BigNumber[]] & {
+                exchange_addrs: string[]
+                remaining: BigNumber
+                started: boolean
+                expired: boolean
+                swapped: BigNumber
+                exchanged_tokens: BigNumber[]
+            }
+        >
 
-        contract_creator(): TransactionObject<string>
+        'check_availability(bytes32)'(
+            id: BytesLike,
+            overrides?: CallOverrides,
+        ): Promise<
+            [string[], BigNumber, boolean, boolean, BigNumber, BigNumber[]] & {
+                exchange_addrs: string[]
+                remaining: BigNumber
+                started: boolean
+                expired: boolean
+                swapped: BigNumber
+                exchanged_tokens: BigNumber[]
+            }
+        >
 
-        destruct(id: string | number[]): TransactionObject<void>
+        contract_creator(overrides?: CallOverrides): Promise<[string]>
+
+        'contract_creator()'(overrides?: CallOverrides): Promise<[string]>
+
+        destruct(id: BytesLike, overrides?: Overrides): Promise<ContractTransaction>
+
+        'destruct(bytes32)'(id: BytesLike, overrides?: Overrides): Promise<ContractTransaction>
 
         fill_pool(
-            _hash: string | number[],
-            _start: number | string,
-            _end: number | string,
+            _hash: BytesLike,
+            _start: BigNumberish,
+            _end: BigNumberish,
             name: string,
             message: string,
             _exchange_addrs: string[],
-            _ratios: (number | string)[],
+            _ratios: BigNumberish[],
             _token_addr: string,
-            _total_tokens: number | string,
-            _limit: number | string,
+            _total_tokens: BigNumberish,
+            _limit: BigNumberish,
             _qualification: string,
-        ): TransactionObject<void>
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
+
+        'fill_pool(bytes32,uint256,uint256,string,string,address[],uint128[],address,uint256,uint256,address)'(
+            _hash: BytesLike,
+            _start: BigNumberish,
+            _end: BigNumberish,
+            name: string,
+            message: string,
+            _exchange_addrs: string[],
+            _ratios: BigNumberish[],
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            _limit: BigNumberish,
+            _qualification: string,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
 
         swap(
-            id: string | number[],
-            verification: string | number[],
+            id: BytesLike,
+            verification: BytesLike,
             _recipient: string,
-            validation: string | number[],
-            exchange_addr_i: number | string,
-            input_total: number | string,
-        ): TransactionObject<string>
+            validation: BytesLike,
+            exchange_addr_i: BigNumberish,
+            input_total: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
 
-        withdraw(id: string | number[], addr_i: number | string): TransactionObject<void>
+        'swap(bytes32,bytes32,address,bytes32,uint256,uint128)'(
+            id: BytesLike,
+            verification: BytesLike,
+            _recipient: string,
+            validation: BytesLike,
+            exchange_addr_i: BigNumberish,
+            input_total: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
+
+        withdraw(id: BytesLike, addr_i: BigNumberish, overrides?: Overrides): Promise<ContractTransaction>
+
+        'withdraw(bytes32,uint256)'(
+            id: BytesLike,
+            addr_i: BigNumberish,
+            overrides?: Overrides,
+        ): Promise<ContractTransaction>
     }
-    events: {
-        DestructSuccess: ContractEvent<{
-            id: string
-            token_address: string
-            remaining_balance: string
-            exchanged_values: string[]
-            0: string
-            1: string
-            2: string
-            3: string[]
-        }>
-        FillSuccess: ContractEvent<{
-            total: string
-            id: string
-            creator: string
-            creation_time: string
-            token_address: string
-            name: string
-            message: string
-            0: string
-            1: string
-            2: string
-            3: string
-            4: string
-            5: string
-            6: string
-        }>
-        SwapSuccess: ContractEvent<{
-            id: string
-            swapper: string
-            from_address: string
-            to_address: string
-            from_value: string
-            to_value: string
-            0: string
-            1: string
-            2: string
-            3: string
-            4: string
-            5: string
-        }>
-        WithdrawSuccess: ContractEvent<{
-            id: string
-            token_address: string
-            withdraw_balance: string
-            0: string
-            1: string
-            2: string
-        }>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+
+    check_availability(
+        id: BytesLike,
+        overrides?: CallOverrides,
+    ): Promise<
+        [string[], BigNumber, boolean, boolean, BigNumber, BigNumber[]] & {
+            exchange_addrs: string[]
+            remaining: BigNumber
+            started: boolean
+            expired: boolean
+            swapped: BigNumber
+            exchanged_tokens: BigNumber[]
+        }
+    >
+
+    'check_availability(bytes32)'(
+        id: BytesLike,
+        overrides?: CallOverrides,
+    ): Promise<
+        [string[], BigNumber, boolean, boolean, BigNumber, BigNumber[]] & {
+            exchange_addrs: string[]
+            remaining: BigNumber
+            started: boolean
+            expired: boolean
+            swapped: BigNumber
+            exchanged_tokens: BigNumber[]
+        }
+    >
+
+    contract_creator(overrides?: CallOverrides): Promise<string>
+
+    'contract_creator()'(overrides?: CallOverrides): Promise<string>
+
+    destruct(id: BytesLike, overrides?: Overrides): Promise<ContractTransaction>
+
+    'destruct(bytes32)'(id: BytesLike, overrides?: Overrides): Promise<ContractTransaction>
+
+    fill_pool(
+        _hash: BytesLike,
+        _start: BigNumberish,
+        _end: BigNumberish,
+        name: string,
+        message: string,
+        _exchange_addrs: string[],
+        _ratios: BigNumberish[],
+        _token_addr: string,
+        _total_tokens: BigNumberish,
+        _limit: BigNumberish,
+        _qualification: string,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    'fill_pool(bytes32,uint256,uint256,string,string,address[],uint128[],address,uint256,uint256,address)'(
+        _hash: BytesLike,
+        _start: BigNumberish,
+        _end: BigNumberish,
+        name: string,
+        message: string,
+        _exchange_addrs: string[],
+        _ratios: BigNumberish[],
+        _token_addr: string,
+        _total_tokens: BigNumberish,
+        _limit: BigNumberish,
+        _qualification: string,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    swap(
+        id: BytesLike,
+        verification: BytesLike,
+        _recipient: string,
+        validation: BytesLike,
+        exchange_addr_i: BigNumberish,
+        input_total: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    'swap(bytes32,bytes32,address,bytes32,uint256,uint128)'(
+        id: BytesLike,
+        verification: BytesLike,
+        _recipient: string,
+        validation: BytesLike,
+        exchange_addr_i: BigNumberish,
+        input_total: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    withdraw(id: BytesLike, addr_i: BigNumberish, overrides?: Overrides): Promise<ContractTransaction>
+
+    'withdraw(bytes32,uint256)'(
+        id: BytesLike,
+        addr_i: BigNumberish,
+        overrides?: Overrides,
+    ): Promise<ContractTransaction>
+
+    callStatic: {
+        check_availability(
+            id: BytesLike,
+            overrides?: CallOverrides,
+        ): Promise<
+            [string[], BigNumber, boolean, boolean, BigNumber, BigNumber[]] & {
+                exchange_addrs: string[]
+                remaining: BigNumber
+                started: boolean
+                expired: boolean
+                swapped: BigNumber
+                exchanged_tokens: BigNumber[]
+            }
+        >
+
+        'check_availability(bytes32)'(
+            id: BytesLike,
+            overrides?: CallOverrides,
+        ): Promise<
+            [string[], BigNumber, boolean, boolean, BigNumber, BigNumber[]] & {
+                exchange_addrs: string[]
+                remaining: BigNumber
+                started: boolean
+                expired: boolean
+                swapped: BigNumber
+                exchanged_tokens: BigNumber[]
+            }
+        >
+
+        contract_creator(overrides?: CallOverrides): Promise<string>
+
+        'contract_creator()'(overrides?: CallOverrides): Promise<string>
+
+        destruct(id: BytesLike, overrides?: CallOverrides): Promise<void>
+
+        'destruct(bytes32)'(id: BytesLike, overrides?: CallOverrides): Promise<void>
+
+        fill_pool(
+            _hash: BytesLike,
+            _start: BigNumberish,
+            _end: BigNumberish,
+            name: string,
+            message: string,
+            _exchange_addrs: string[],
+            _ratios: BigNumberish[],
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            _limit: BigNumberish,
+            _qualification: string,
+            overrides?: CallOverrides,
+        ): Promise<void>
+
+        'fill_pool(bytes32,uint256,uint256,string,string,address[],uint128[],address,uint256,uint256,address)'(
+            _hash: BytesLike,
+            _start: BigNumberish,
+            _end: BigNumberish,
+            name: string,
+            message: string,
+            _exchange_addrs: string[],
+            _ratios: BigNumberish[],
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            _limit: BigNumberish,
+            _qualification: string,
+            overrides?: CallOverrides,
+        ): Promise<void>
+
+        swap(
+            id: BytesLike,
+            verification: BytesLike,
+            _recipient: string,
+            validation: BytesLike,
+            exchange_addr_i: BigNumberish,
+            input_total: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        'swap(bytes32,bytes32,address,bytes32,uint256,uint128)'(
+            id: BytesLike,
+            verification: BytesLike,
+            _recipient: string,
+            validation: BytesLike,
+            exchange_addr_i: BigNumberish,
+            input_total: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        withdraw(id: BytesLike, addr_i: BigNumberish, overrides?: CallOverrides): Promise<void>
+
+        'withdraw(bytes32,uint256)'(id: BytesLike, addr_i: BigNumberish, overrides?: CallOverrides): Promise<void>
+    }
+
+    filters: {
+        DestructSuccess(
+            id: null,
+            token_address: null,
+            remaining_balance: null,
+            exchanged_values: null,
+        ): TypedEventFilter<
+            [string, string, BigNumber, BigNumber[]],
+            {
+                id: string
+                token_address: string
+                remaining_balance: BigNumber
+                exchanged_values: BigNumber[]
+            }
+        >
+
+        FillSuccess(
+            total: null,
+            id: null,
+            creator: null,
+            creation_time: null,
+            token_address: null,
+            name: null,
+            message: null,
+        ): TypedEventFilter<
+            [BigNumber, string, string, BigNumber, string, string, string],
+            {
+                total: BigNumber
+                id: string
+                creator: string
+                creation_time: BigNumber
+                token_address: string
+                name: string
+                message: string
+            }
+        >
+
+        SwapSuccess(
+            id: null,
+            swapper: null,
+            from_address: null,
+            to_address: null,
+            from_value: null,
+            to_value: null,
+        ): TypedEventFilter<
+            [string, string, string, string, BigNumber, BigNumber],
+            {
+                id: string
+                swapper: string
+                from_address: string
+                to_address: string
+                from_value: BigNumber
+                to_value: BigNumber
+            }
+        >
+
+        WithdrawSuccess(
+            id: null,
+            token_address: null,
+            withdraw_balance: null,
+        ): TypedEventFilter<
+            [string, string, BigNumber],
+            { id: string; token_address: string; withdraw_balance: BigNumber }
+        >
+    }
+
+    estimateGas: {
+        check_availability(id: BytesLike, overrides?: CallOverrides): Promise<BigNumber>
+
+        'check_availability(bytes32)'(id: BytesLike, overrides?: CallOverrides): Promise<BigNumber>
+
+        contract_creator(overrides?: CallOverrides): Promise<BigNumber>
+
+        'contract_creator()'(overrides?: CallOverrides): Promise<BigNumber>
+
+        destruct(id: BytesLike, overrides?: Overrides): Promise<BigNumber>
+
+        'destruct(bytes32)'(id: BytesLike, overrides?: Overrides): Promise<BigNumber>
+
+        fill_pool(
+            _hash: BytesLike,
+            _start: BigNumberish,
+            _end: BigNumberish,
+            name: string,
+            message: string,
+            _exchange_addrs: string[],
+            _ratios: BigNumberish[],
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            _limit: BigNumberish,
+            _qualification: string,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        'fill_pool(bytes32,uint256,uint256,string,string,address[],uint128[],address,uint256,uint256,address)'(
+            _hash: BytesLike,
+            _start: BigNumberish,
+            _end: BigNumberish,
+            name: string,
+            message: string,
+            _exchange_addrs: string[],
+            _ratios: BigNumberish[],
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            _limit: BigNumberish,
+            _qualification: string,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        swap(
+            id: BytesLike,
+            verification: BytesLike,
+            _recipient: string,
+            validation: BytesLike,
+            exchange_addr_i: BigNumberish,
+            input_total: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        'swap(bytes32,bytes32,address,bytes32,uint256,uint128)'(
+            id: BytesLike,
+            verification: BytesLike,
+            _recipient: string,
+            validation: BytesLike,
+            exchange_addr_i: BigNumberish,
+            input_total: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        withdraw(id: BytesLike, addr_i: BigNumberish, overrides?: Overrides): Promise<BigNumber>
+
+        'withdraw(bytes32,uint256)'(id: BytesLike, addr_i: BigNumberish, overrides?: Overrides): Promise<BigNumber>
+    }
+
+    populateTransaction: {
+        check_availability(id: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        'check_availability(bytes32)'(id: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        contract_creator(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        'contract_creator()'(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        destruct(id: BytesLike, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'destruct(bytes32)'(id: BytesLike, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        fill_pool(
+            _hash: BytesLike,
+            _start: BigNumberish,
+            _end: BigNumberish,
+            name: string,
+            message: string,
+            _exchange_addrs: string[],
+            _ratios: BigNumberish[],
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            _limit: BigNumberish,
+            _qualification: string,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'fill_pool(bytes32,uint256,uint256,string,string,address[],uint128[],address,uint256,uint256,address)'(
+            _hash: BytesLike,
+            _start: BigNumberish,
+            _end: BigNumberish,
+            name: string,
+            message: string,
+            _exchange_addrs: string[],
+            _ratios: BigNumberish[],
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            _limit: BigNumberish,
+            _qualification: string,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        swap(
+            id: BytesLike,
+            verification: BytesLike,
+            _recipient: string,
+            validation: BytesLike,
+            exchange_addr_i: BigNumberish,
+            input_total: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'swap(bytes32,bytes32,address,bytes32,uint256,uint128)'(
+            id: BytesLike,
+            verification: BytesLike,
+            _recipient: string,
+            validation: BytesLike,
+            exchange_addr_i: BigNumberish,
+            input_total: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        withdraw(id: BytesLike, addr_i: BigNumberish, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'withdraw(bytes32,uint256)'(
+            id: BytesLike,
+            addr_i: BigNumberish,
+            overrides?: Overrides,
+        ): Promise<PopulatedTransaction>
     }
 }

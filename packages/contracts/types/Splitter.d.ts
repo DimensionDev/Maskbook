@@ -2,31 +2,168 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
-import { EventLog } from 'web3-core'
-import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import { ethers, EventFilter, Signer, BigNumber, BigNumberish, PopulatedTransaction } from 'ethers'
+import { Contract, ContractTransaction, Overrides, CallOverrides } from '@ethersproject/contracts'
+import { BytesLike } from '@ethersproject/bytes'
+import { Listener, Provider } from '@ethersproject/providers'
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi'
+import { TypedEventFilter, TypedEvent, TypedListener } from './commons'
 
-interface EventOptions {
-    filter?: object
-    fromBlock?: BlockType
-    topics?: string[]
+interface SplitterInterface extends ethers.utils.Interface {
+    functions: {
+        'splitTransfer(address,address,uint256,uint256,address)': FunctionFragment
+    }
+
+    encodeFunctionData(
+        functionFragment: 'splitTransfer',
+        values: [string, string, BigNumberish, BigNumberish, string],
+    ): string
+
+    decodeFunctionResult(functionFragment: 'splitTransfer', data: BytesLike): Result
+
+    events: {}
 }
 
 export class Splitter extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): Splitter
-    methods: {
+    connect(signerOrProvider: Signer | Provider | string): this
+    attach(addressOrName: string): this
+    deployed(): Promise<this>
+
+    listeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): Array<TypedListener<EventArgsArray, EventArgsObject>>
+    off<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    on<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    once<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeListener<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeAllListeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): this
+
+    listeners(eventName?: string): Array<Listener>
+    off(eventName: string, listener: Listener): this
+    on(eventName: string, listener: Listener): this
+    once(eventName: string, listener: Listener): this
+    removeListener(eventName: string, listener: Listener): this
+    removeAllListeners(eventName?: string): this
+
+    queryFilter<EventArgsArray extends Array<any>, EventArgsObject>(
+        event: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        fromBlockOrBlockhash?: string | number | undefined,
+        toBlock?: string | number | undefined,
+    ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>
+
+    interface: SplitterInterface
+
+    functions: {
         splitTransfer(
             toFirst: string,
             toSecond: string,
-            valueFirst: number | string,
-            valueSecond: number | string,
+            valueFirst: BigNumberish,
+            valueSecond: BigNumberish,
             tokenAddress: string,
-        ): TransactionObject<void>
+            overrides?: Overrides,
+        ): Promise<ContractTransaction>
+
+        'splitTransfer(address,address,uint256,uint256,address)'(
+            toFirst: string,
+            toSecond: string,
+            valueFirst: BigNumberish,
+            valueSecond: BigNumberish,
+            tokenAddress: string,
+            overrides?: Overrides,
+        ): Promise<ContractTransaction>
     }
-    events: {
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+
+    splitTransfer(
+        toFirst: string,
+        toSecond: string,
+        valueFirst: BigNumberish,
+        valueSecond: BigNumberish,
+        tokenAddress: string,
+        overrides?: Overrides,
+    ): Promise<ContractTransaction>
+
+    'splitTransfer(address,address,uint256,uint256,address)'(
+        toFirst: string,
+        toSecond: string,
+        valueFirst: BigNumberish,
+        valueSecond: BigNumberish,
+        tokenAddress: string,
+        overrides?: Overrides,
+    ): Promise<ContractTransaction>
+
+    callStatic: {
+        splitTransfer(
+            toFirst: string,
+            toSecond: string,
+            valueFirst: BigNumberish,
+            valueSecond: BigNumberish,
+            tokenAddress: string,
+            overrides?: CallOverrides,
+        ): Promise<void>
+
+        'splitTransfer(address,address,uint256,uint256,address)'(
+            toFirst: string,
+            toSecond: string,
+            valueFirst: BigNumberish,
+            valueSecond: BigNumberish,
+            tokenAddress: string,
+            overrides?: CallOverrides,
+        ): Promise<void>
+    }
+
+    filters: {}
+
+    estimateGas: {
+        splitTransfer(
+            toFirst: string,
+            toSecond: string,
+            valueFirst: BigNumberish,
+            valueSecond: BigNumberish,
+            tokenAddress: string,
+            overrides?: Overrides,
+        ): Promise<BigNumber>
+
+        'splitTransfer(address,address,uint256,uint256,address)'(
+            toFirst: string,
+            toSecond: string,
+            valueFirst: BigNumberish,
+            valueSecond: BigNumberish,
+            tokenAddress: string,
+            overrides?: Overrides,
+        ): Promise<BigNumber>
+    }
+
+    populateTransaction: {
+        splitTransfer(
+            toFirst: string,
+            toSecond: string,
+            valueFirst: BigNumberish,
+            valueSecond: BigNumberish,
+            tokenAddress: string,
+            overrides?: Overrides,
+        ): Promise<PopulatedTransaction>
+
+        'splitTransfer(address,address,uint256,uint256,address)'(
+            toFirst: string,
+            toSecond: string,
+            valueFirst: BigNumberish,
+            valueSecond: BigNumberish,
+            tokenAddress: string,
+            overrides?: Overrides,
+        ): Promise<PopulatedTransaction>
     }
 }

@@ -90,9 +90,12 @@ export function useCheckCallback() {
 
                 // revalidate by contract
                 const { index, address, amount, proof } = packet
-                const { available, claimable, start, end } = await airdropContract.methods
-                    .check(index, formatEthereumAddress(address), amount, proof)
-                    .call()
+                const { available, claimable, start, end } = await airdropContract.check(
+                    index,
+                    formatEthereumAddress(address),
+                    amount,
+                    proof,
+                )
 
                 const now = Date.now()
                 const start_ = Number.parseInt(start) * 1000
@@ -109,7 +112,7 @@ export function useCheckCallback() {
                     start: start_,
                     end: end_,
                     claimable: available && new BigNumber(claimable).isGreaterThan(0) && !isEnd ? claimable : '0',
-                    ratio: new BigNumber(claimable).div(amount),
+                    ratio: new BigNumber(claimable).dividedBy(amount),
                 })
             } catch (error) {
                 if (error.message.includes('Already Claimed')) {

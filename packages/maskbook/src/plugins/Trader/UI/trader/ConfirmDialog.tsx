@@ -76,9 +76,9 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                 <DialogContent>
                     {inputToken && outputToken ? (
                         <>
-                            <TokenPanel amount={inputAmount.toFixed() ?? '0'} token={inputToken} />
+                            <TokenPanel amount={inputAmount.toString() ?? '0'} token={inputToken} />
                             <ArrowDownwardIcon className={classes.reverseIcon} />
-                            <TokenPanel amount={outputAmount.toFixed() ?? '0'} token={outputToken} />
+                            <TokenPanel amount={outputAmount.toString() ?? '0'} token={outputToken} />
                         </>
                     ) : null}
                     {staled ? (

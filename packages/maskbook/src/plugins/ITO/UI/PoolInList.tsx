@@ -129,7 +129,9 @@ export function PoolInList(props: PoolInListProps) {
     const canSend = !listOfStatus.includes(ITO_Status.expired) && !noRemain
     const progress =
         100 *
-        Number(new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)).div(new BigNumber(pool.total)))
+        Number(
+            new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)).dividedBy(new BigNumber(pool.total)),
+        )
 
     const StatusButton = () => {
         return (

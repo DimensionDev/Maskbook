@@ -1,6 +1,6 @@
 import * as bip39 from 'bip39'
 import { HDKey, EthereumAddress } from 'wallet.ts'
-import { BigNumber } from 'bignumber.js'
+import BigNumber from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'

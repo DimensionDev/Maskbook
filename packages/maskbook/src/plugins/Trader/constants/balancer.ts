@@ -1,7 +1,8 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@balancer-labs/sor/dist/utils/bignumber'
 
 // gasPrice is used by SOR as a factor to determine how many pools to swap against.
 // i.e. higher cost means more costly to trade against lots of different pools.
+
 // Can be changed in future using SOR.gasPrice = newPrice
 export const BALANCER_SOR_GAS_PRICE = new BigNumber('100000000000')
 

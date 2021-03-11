@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import BigNumber from 'bignumber.js'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { createERC20Token } from '../../../web3/helpers'
 import { SwapQuoteResponse, TradeComputed, TradeProvider } from '../types'
@@ -6,7 +7,6 @@ import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../..
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { TRADE_CONSTANTS } from '../constants'
 import { safeUnreachable } from '../../../utils/utils'
-import BigNumber from 'bignumber.js'
 
 export function useTradeApproveComputed(
     trade: TradeComputed<unknown> | null,

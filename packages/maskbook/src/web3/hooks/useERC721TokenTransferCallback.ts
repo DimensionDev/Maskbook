@@ -4,6 +4,8 @@ import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { isSameAddress } from '../helpers'
+import Services from '../../extension/service'
+import { StageType } from '../types'
 
 export function useERC721TokenTransferCallback(address: string, tokenId?: string, recipient?: string) {
     const account = useAccount()
@@ -27,8 +29,8 @@ export function useERC721TokenTransferCallback(address: string, tokenId?: string
             return
         }
 
-        // error: invalid ownership
-        const ownerOf = await erc721Contract.methods.ownerOf(tokenId).call()
+        // error: invalid token
+        const ownerOf = await erc721Contract.ownerOf(tokenId)
 
         if (!ownerOf || !isSameAddress(ownerOf, account) || isSameAddress(ownerOf, recipient)) {
             setTransferState({
@@ -44,35 +46,38 @@ export function useERC721TokenTransferCallback(address: string, tokenId?: string
         })
 
         // step 1: estimate gas
-        const estimatedGas = await erc721Contract.methods.transferFrom(account, recipient, tokenId).estimateGas({
-            from: account,
-            to: erc721Contract.options.address,
-        })
+        const estimatedGas = await erc721Contract.estimateGas.transferFrom(account, recipient, tokenId)
 
         // step 2: blocking
-        return new Promise<string>(async (resolve, reject) => {
-            erc721Contract.methods.transferFrom(account, recipient, tokenId).send(
-                {
-                    from: account,
-                    to: erc721Contract.options.address,
-                    gas: estimatedGas,
-                },
-                (error, hash) => {
-                    if (error) {
+        return new Promise<void>(async (resolve, reject) => {
+            const transaction = await erc721Contract.transferFrom(account, recipient, tokenId, {
+                gasLimit: estimatedGas,
+            })
+            for await (const stage of Services.Ethereum.watchTransaction(account, transaction)) {
+                switch (stage.type) {
+                    case StageType.RECEIPT:
+                        setTransferState({
+                            type: TransactionStateType.CONFIRMED,
+                            no: 0,
+                            receipt: stage.type,
+                        })
+                        break
+                    case StageType.CONFIRMATION:
+                        setTransferState({
+                            type: TransactionStateType.CONFIRMED,
+                            no: stage.no,
+                            receipt: stage.type,
+                        })
+                        break
+                    case StageType.ERROR:
                         setTransferState({
                             type: TransactionStateType.FAILED,
-                            error,
+                            error: stage.error,
                         })
-                        reject(error)
-                    } else {
-                        setTransferState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
-                    }
-                },
-            )
+                        reject(stage.error)
+                        break
+                }
+            }
         })
     }, [account, tokenId, recipient, erc721Contract])
 

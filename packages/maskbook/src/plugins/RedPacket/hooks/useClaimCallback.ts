@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
-import Web3Utils from 'web3-utils'
+import { sha256 } from 'ethers/lib/utils'
+import type { TransactionRequest } from '@ethersproject/abstract-provider'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import type { Tx } from '@dimensiondev/contracts/types/types'
-import { addGasMargin } from '../../../web3/helpers'
 import { RedPacketRPC } from '../messages'
+import Services from '../../../extension/service'
+import { StageType } from '../../../web3/types'
 
 export function useClaimCallback(from: string, id?: string, password?: string) {
     const [claimState, setClaimState] = useTransactionState()
@@ -24,31 +24,23 @@ export function useClaimCallback(from: string, id?: string, password?: string) {
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const config: Tx = {
+        const transaction: TransactionRequest = {
             from,
             to: redPacketContract.options.address,
         }
-        const params: Parameters<typeof redPacketContract['methods']['claim']> = [
-            id,
-            password,
-            from,
-            Web3Utils.sha3(from)!,
-        ]
+        const params: Parameters<typeof redPacketContract['claim']> = [id, password, from, sha256(from)!]
 
         // step 1: estimate gas
-        const estimatedGas = await redPacketContract.methods
-            .claim(...params)
-            .estimateGas(config)
-            .catch((error) => {
-                setClaimState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
-                throw error
+        const estimatedGas = await redPacketContract.estimateGas.claim(...params).catch((error) => {
+            setClaimState({
+                type: TransactionStateType.FAILED,
+                error,
             })
+            throw error
+        })
 
         // step 2-1: blocking
-        return new Promise<string>((resolve, reject) => {
+        return new Promise<string>(async (resolve, reject) => {
             const onSucceed = (hash: string) => {
                 setClaimState({
                     type: TransactionStateType.HASH,
@@ -63,21 +55,22 @@ export function useClaimCallback(from: string, id?: string, password?: string) {
                 })
                 reject(error)
             }
-            redPacketContract.methods.claim(...params).send(
-                {
-                    gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
-                    ...config,
-                },
-                async (error, hash) => {
-                    if (hash) onSucceed(hash)
-                    // claim by server
-                    else if (error?.message.includes('insufficient funds for gas')) {
-                        RedPacketRPC.claimRedPacket(from, id, password)
-                            .then(({ claim_transaction_hash }) => onSucceed(claim_transaction_hash))
-                            .catch(onFailed)
-                    } else if (error) onFailed(error)
-                },
-            )
+            const transaction = await redPacketContract.claim(...params)
+
+            for await (const stage of Services.Ethereum.watchTransaction(from, transaction)) {
+                switch (stage.type) {
+                    case StageType.TRANSACTION_HASH:
+                        onSucceed(stage.hash)
+                        break
+                    case StageType.ERROR:
+                        if (stage.error.message.includes('insufficient funds for gas'))
+                            RedPacketRPC.claimRedPacket(from, id, password).then(({ claim_transaction_hash }) =>
+                                onSucceed(claim_transaction_hash),
+                            )
+                        else onFailed(stage.error)
+                        break
+                }
+            }
         })
     }, [id, password, from, redPacketContract])
 

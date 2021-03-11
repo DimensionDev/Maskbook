@@ -2,165 +2,1518 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
-import { EventLog } from 'web3-core'
-import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import { ethers, EventFilter, Signer, BigNumber, BigNumberish, PopulatedTransaction } from 'ethers'
+import { Contract, ContractTransaction, Overrides, PayableOverrides, CallOverrides } from '@ethersproject/contracts'
+import { BytesLike } from '@ethersproject/bytes'
+import { Listener, Provider } from '@ethersproject/providers'
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi'
+import { TypedEventFilter, TypedEvent, TypedListener } from './commons'
 
-interface EventOptions {
-    filter?: object
-    fromBlock?: BlockType
-    topics?: string[]
+interface ExchangeProxyInterface extends ethers.utils.Interface {
+    functions: {
+        'batchSwapExactIn(tuple[],address,address,uint256,uint256)': FunctionFragment
+        'batchSwapExactOut(tuple[],address,address,uint256)': FunctionFragment
+        'isOwner()': FunctionFragment
+        'multihopBatchSwapExactIn(tuple[][],address,address,uint256,uint256)': FunctionFragment
+        'multihopBatchSwapExactOut(tuple[][],address,address,uint256)': FunctionFragment
+        'owner()': FunctionFragment
+        'renounceOwnership()': FunctionFragment
+        'setRegistry(address)': FunctionFragment
+        'smartSwapExactIn(address,address,uint256,uint256,uint256)': FunctionFragment
+        'smartSwapExactOut(address,address,uint256,uint256,uint256)': FunctionFragment
+        'transferOwnership(address)': FunctionFragment
+        'viewSplitExactIn(address,address,uint256,uint256)': FunctionFragment
+        'viewSplitExactOut(address,address,uint256,uint256)': FunctionFragment
+    }
+
+    encodeFunctionData(
+        functionFragment: 'batchSwapExactIn',
+        values: [
+            {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            string,
+            string,
+            BigNumberish,
+            BigNumberish,
+        ],
+    ): string
+    encodeFunctionData(
+        functionFragment: 'batchSwapExactOut',
+        values: [
+            {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            string,
+            string,
+            BigNumberish,
+        ],
+    ): string
+    encodeFunctionData(functionFragment: 'isOwner', values?: undefined): string
+    encodeFunctionData(
+        functionFragment: 'multihopBatchSwapExactIn',
+        values: [
+            {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            string,
+            string,
+            BigNumberish,
+            BigNumberish,
+        ],
+    ): string
+    encodeFunctionData(
+        functionFragment: 'multihopBatchSwapExactOut',
+        values: [
+            {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            string,
+            string,
+            BigNumberish,
+        ],
+    ): string
+    encodeFunctionData(functionFragment: 'owner', values?: undefined): string
+    encodeFunctionData(functionFragment: 'renounceOwnership', values?: undefined): string
+    encodeFunctionData(functionFragment: 'setRegistry', values: [string]): string
+    encodeFunctionData(
+        functionFragment: 'smartSwapExactIn',
+        values: [string, string, BigNumberish, BigNumberish, BigNumberish],
+    ): string
+    encodeFunctionData(
+        functionFragment: 'smartSwapExactOut',
+        values: [string, string, BigNumberish, BigNumberish, BigNumberish],
+    ): string
+    encodeFunctionData(functionFragment: 'transferOwnership', values: [string]): string
+    encodeFunctionData(
+        functionFragment: 'viewSplitExactIn',
+        values: [string, string, BigNumberish, BigNumberish],
+    ): string
+    encodeFunctionData(
+        functionFragment: 'viewSplitExactOut',
+        values: [string, string, BigNumberish, BigNumberish],
+    ): string
+
+    decodeFunctionResult(functionFragment: 'batchSwapExactIn', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'batchSwapExactOut', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'isOwner', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'multihopBatchSwapExactIn', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'multihopBatchSwapExactOut', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'renounceOwnership', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'setRegistry', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'smartSwapExactIn', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'smartSwapExactOut', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'viewSplitExactIn', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'viewSplitExactOut', data: BytesLike): Result
+
+    events: {
+        'OwnershipTransferred(address,address)': EventFragment
+    }
+
+    getEvent(nameOrSignatureOrTopic: 'OwnershipTransferred'): EventFragment
 }
 
 export class ExchangeProxy extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): ExchangeProxy
-    methods: {
+    connect(signerOrProvider: Signer | Provider | string): this
+    attach(addressOrName: string): this
+    deployed(): Promise<this>
+
+    listeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): Array<TypedListener<EventArgsArray, EventArgsObject>>
+    off<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    on<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    once<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeListener<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeAllListeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): this
+
+    listeners(eventName?: string): Array<Listener>
+    off(eventName: string, listener: Listener): this
+    on(eventName: string, listener: Listener): this
+    once(eventName: string, listener: Listener): this
+    removeListener(eventName: string, listener: Listener): this
+    removeAllListeners(eventName?: string): this
+
+    queryFilter<EventArgsArray extends Array<any>, EventArgsObject>(
+        event: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        fromBlockOrBlockhash?: string | number | undefined,
+        toBlock?: string | number | undefined,
+    ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>
+
+    interface: ExchangeProxyInterface
+
+    functions: {
         batchSwapExactIn(
             swaps: {
                 pool: string
                 tokenIn: string
                 tokenOut: string
-                swapAmount: number | string
-                limitReturnAmount: number | string
-                maxPrice: number | string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
             }[],
             tokenIn: string,
             tokenOut: string,
-            totalAmountIn: number | string,
-            minTotalAmountOut: number | string,
-        ): TransactionObject<string>
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
+
+        'batchSwapExactIn(tuple[],address,address,uint256,uint256)'(
+            swaps: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
 
         batchSwapExactOut(
             swaps: {
                 pool: string
                 tokenIn: string
                 tokenOut: string
-                swapAmount: number | string
-                limitReturnAmount: number | string
-                maxPrice: number | string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
             }[],
             tokenIn: string,
             tokenOut: string,
-            maxTotalAmountIn: number | string,
-        ): TransactionObject<string>
+            maxTotalAmountIn: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
 
-        isOwner(): TransactionObject<boolean>
+        'batchSwapExactOut(tuple[],address,address,uint256)'(
+            swaps: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
+
+        isOwner(overrides?: CallOverrides): Promise<[boolean]>
+
+        'isOwner()'(overrides?: CallOverrides): Promise<[boolean]>
 
         multihopBatchSwapExactIn(
             swapSequences: {
                 pool: string
                 tokenIn: string
                 tokenOut: string
-                swapAmount: number | string
-                limitReturnAmount: number | string
-                maxPrice: number | string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
             }[][],
             tokenIn: string,
             tokenOut: string,
-            totalAmountIn: number | string,
-            minTotalAmountOut: number | string,
-        ): TransactionObject<string>
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
+
+        'multihopBatchSwapExactIn(tuple[][],address,address,uint256,uint256)'(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
 
         multihopBatchSwapExactOut(
             swapSequences: {
                 pool: string
                 tokenIn: string
                 tokenOut: string
-                swapAmount: number | string
-                limitReturnAmount: number | string
-                maxPrice: number | string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
             }[][],
             tokenIn: string,
             tokenOut: string,
-            maxTotalAmountIn: number | string,
-        ): TransactionObject<string>
+            maxTotalAmountIn: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
 
-        owner(): TransactionObject<string>
+        'multihopBatchSwapExactOut(tuple[][],address,address,uint256)'(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
 
-        renounceOwnership(): TransactionObject<void>
+        owner(overrides?: CallOverrides): Promise<[string]>
 
-        setRegistry(_registry: string): TransactionObject<void>
+        'owner()'(overrides?: CallOverrides): Promise<[string]>
+
+        renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>
+
+        'renounceOwnership()'(overrides?: Overrides): Promise<ContractTransaction>
+
+        setRegistry(_registry: string, overrides?: Overrides): Promise<ContractTransaction>
+
+        'setRegistry(address)'(_registry: string, overrides?: Overrides): Promise<ContractTransaction>
 
         smartSwapExactIn(
             tokenIn: string,
             tokenOut: string,
-            totalAmountIn: number | string,
-            minTotalAmountOut: number | string,
-            nPools: number | string,
-        ): TransactionObject<string>
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
+
+        'smartSwapExactIn(address,address,uint256,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
 
         smartSwapExactOut(
             tokenIn: string,
             tokenOut: string,
-            totalAmountOut: number | string,
-            maxTotalAmountIn: number | string,
-            nPools: number | string,
-        ): TransactionObject<string>
+            totalAmountOut: BigNumberish,
+            maxTotalAmountIn: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
 
-        transferOwnership(newOwner: string): TransactionObject<void>
+        'smartSwapExactOut(address,address,uint256,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountOut: BigNumberish,
+            maxTotalAmountIn: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
+
+        transferOwnership(newOwner: string, overrides?: Overrides): Promise<ContractTransaction>
+
+        'transferOwnership(address)'(newOwner: string, overrides?: Overrides): Promise<ContractTransaction>
 
         viewSplitExactIn(
             tokenIn: string,
             tokenOut: string,
-            swapAmount: number | string,
-            nPools: number | string,
-        ): TransactionObject<{
-            swaps: {
-                pool: string
-                tokenIn: string
-                tokenOut: string
-                swapAmount: string
-                limitReturnAmount: string
-                maxPrice: string
-            }[]
-            totalOutput: string
-            0: {
-                pool: string
-                tokenIn: string
-                tokenOut: string
-                swapAmount: string
-                limitReturnAmount: string
-                maxPrice: string
-            }[]
-            1: string
-        }>
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<
+            [
+                ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[],
+                BigNumber,
+            ] & {
+                swaps: ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[]
+                totalOutput: BigNumber
+            }
+        >
+
+        'viewSplitExactIn(address,address,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<
+            [
+                ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[],
+                BigNumber,
+            ] & {
+                swaps: ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[]
+                totalOutput: BigNumber
+            }
+        >
 
         viewSplitExactOut(
             tokenIn: string,
             tokenOut: string,
-            swapAmount: number | string,
-            nPools: number | string,
-        ): TransactionObject<{
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<
+            [
+                ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[],
+                BigNumber,
+            ] & {
+                swaps: ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[]
+                totalOutput: BigNumber
+            }
+        >
+
+        'viewSplitExactOut(address,address,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<
+            [
+                ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[],
+                BigNumber,
+            ] & {
+                swaps: ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[]
+                totalOutput: BigNumber
+            }
+        >
+    }
+
+    batchSwapExactIn(
+        swaps: {
+            pool: string
+            tokenIn: string
+            tokenOut: string
+            swapAmount: BigNumberish
+            limitReturnAmount: BigNumberish
+            maxPrice: BigNumberish
+        }[],
+        tokenIn: string,
+        tokenOut: string,
+        totalAmountIn: BigNumberish,
+        minTotalAmountOut: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    'batchSwapExactIn(tuple[],address,address,uint256,uint256)'(
+        swaps: {
+            pool: string
+            tokenIn: string
+            tokenOut: string
+            swapAmount: BigNumberish
+            limitReturnAmount: BigNumberish
+            maxPrice: BigNumberish
+        }[],
+        tokenIn: string,
+        tokenOut: string,
+        totalAmountIn: BigNumberish,
+        minTotalAmountOut: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    batchSwapExactOut(
+        swaps: {
+            pool: string
+            tokenIn: string
+            tokenOut: string
+            swapAmount: BigNumberish
+            limitReturnAmount: BigNumberish
+            maxPrice: BigNumberish
+        }[],
+        tokenIn: string,
+        tokenOut: string,
+        maxTotalAmountIn: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    'batchSwapExactOut(tuple[],address,address,uint256)'(
+        swaps: {
+            pool: string
+            tokenIn: string
+            tokenOut: string
+            swapAmount: BigNumberish
+            limitReturnAmount: BigNumberish
+            maxPrice: BigNumberish
+        }[],
+        tokenIn: string,
+        tokenOut: string,
+        maxTotalAmountIn: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    isOwner(overrides?: CallOverrides): Promise<boolean>
+
+    'isOwner()'(overrides?: CallOverrides): Promise<boolean>
+
+    multihopBatchSwapExactIn(
+        swapSequences: {
+            pool: string
+            tokenIn: string
+            tokenOut: string
+            swapAmount: BigNumberish
+            limitReturnAmount: BigNumberish
+            maxPrice: BigNumberish
+        }[][],
+        tokenIn: string,
+        tokenOut: string,
+        totalAmountIn: BigNumberish,
+        minTotalAmountOut: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    'multihopBatchSwapExactIn(tuple[][],address,address,uint256,uint256)'(
+        swapSequences: {
+            pool: string
+            tokenIn: string
+            tokenOut: string
+            swapAmount: BigNumberish
+            limitReturnAmount: BigNumberish
+            maxPrice: BigNumberish
+        }[][],
+        tokenIn: string,
+        tokenOut: string,
+        totalAmountIn: BigNumberish,
+        minTotalAmountOut: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    multihopBatchSwapExactOut(
+        swapSequences: {
+            pool: string
+            tokenIn: string
+            tokenOut: string
+            swapAmount: BigNumberish
+            limitReturnAmount: BigNumberish
+            maxPrice: BigNumberish
+        }[][],
+        tokenIn: string,
+        tokenOut: string,
+        maxTotalAmountIn: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    'multihopBatchSwapExactOut(tuple[][],address,address,uint256)'(
+        swapSequences: {
+            pool: string
+            tokenIn: string
+            tokenOut: string
+            swapAmount: BigNumberish
+            limitReturnAmount: BigNumberish
+            maxPrice: BigNumberish
+        }[][],
+        tokenIn: string,
+        tokenOut: string,
+        maxTotalAmountIn: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    owner(overrides?: CallOverrides): Promise<string>
+
+    'owner()'(overrides?: CallOverrides): Promise<string>
+
+    renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>
+
+    'renounceOwnership()'(overrides?: Overrides): Promise<ContractTransaction>
+
+    setRegistry(_registry: string, overrides?: Overrides): Promise<ContractTransaction>
+
+    'setRegistry(address)'(_registry: string, overrides?: Overrides): Promise<ContractTransaction>
+
+    smartSwapExactIn(
+        tokenIn: string,
+        tokenOut: string,
+        totalAmountIn: BigNumberish,
+        minTotalAmountOut: BigNumberish,
+        nPools: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    'smartSwapExactIn(address,address,uint256,uint256,uint256)'(
+        tokenIn: string,
+        tokenOut: string,
+        totalAmountIn: BigNumberish,
+        minTotalAmountOut: BigNumberish,
+        nPools: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    smartSwapExactOut(
+        tokenIn: string,
+        tokenOut: string,
+        totalAmountOut: BigNumberish,
+        maxTotalAmountIn: BigNumberish,
+        nPools: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    'smartSwapExactOut(address,address,uint256,uint256,uint256)'(
+        tokenIn: string,
+        tokenOut: string,
+        totalAmountOut: BigNumberish,
+        maxTotalAmountIn: BigNumberish,
+        nPools: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    transferOwnership(newOwner: string, overrides?: Overrides): Promise<ContractTransaction>
+
+    'transferOwnership(address)'(newOwner: string, overrides?: Overrides): Promise<ContractTransaction>
+
+    viewSplitExactIn(
+        tokenIn: string,
+        tokenOut: string,
+        swapAmount: BigNumberish,
+        nPools: BigNumberish,
+        overrides?: CallOverrides,
+    ): Promise<
+        [
+            ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumber
+                limitReturnAmount: BigNumber
+                maxPrice: BigNumber
+            })[],
+            BigNumber,
+        ] & {
+            swaps: ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumber
+                limitReturnAmount: BigNumber
+                maxPrice: BigNumber
+            })[]
+            totalOutput: BigNumber
+        }
+    >
+
+    'viewSplitExactIn(address,address,uint256,uint256)'(
+        tokenIn: string,
+        tokenOut: string,
+        swapAmount: BigNumberish,
+        nPools: BigNumberish,
+        overrides?: CallOverrides,
+    ): Promise<
+        [
+            ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumber
+                limitReturnAmount: BigNumber
+                maxPrice: BigNumber
+            })[],
+            BigNumber,
+        ] & {
+            swaps: ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumber
+                limitReturnAmount: BigNumber
+                maxPrice: BigNumber
+            })[]
+            totalOutput: BigNumber
+        }
+    >
+
+    viewSplitExactOut(
+        tokenIn: string,
+        tokenOut: string,
+        swapAmount: BigNumberish,
+        nPools: BigNumberish,
+        overrides?: CallOverrides,
+    ): Promise<
+        [
+            ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumber
+                limitReturnAmount: BigNumber
+                maxPrice: BigNumber
+            })[],
+            BigNumber,
+        ] & {
+            swaps: ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumber
+                limitReturnAmount: BigNumber
+                maxPrice: BigNumber
+            })[]
+            totalOutput: BigNumber
+        }
+    >
+
+    'viewSplitExactOut(address,address,uint256,uint256)'(
+        tokenIn: string,
+        tokenOut: string,
+        swapAmount: BigNumberish,
+        nPools: BigNumberish,
+        overrides?: CallOverrides,
+    ): Promise<
+        [
+            ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumber
+                limitReturnAmount: BigNumber
+                maxPrice: BigNumber
+            })[],
+            BigNumber,
+        ] & {
+            swaps: ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumber
+                limitReturnAmount: BigNumber
+                maxPrice: BigNumber
+            })[]
+            totalOutput: BigNumber
+        }
+    >
+
+    callStatic: {
+        batchSwapExactIn(
             swaps: {
                 pool: string
                 tokenIn: string
                 tokenOut: string
-                swapAmount: string
-                limitReturnAmount: string
-                maxPrice: string
-            }[]
-            totalOutput: string
-            0: {
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        'batchSwapExactIn(tuple[],address,address,uint256,uint256)'(
+            swaps: {
                 pool: string
                 tokenIn: string
                 tokenOut: string
-                swapAmount: string
-                limitReturnAmount: string
-                maxPrice: string
-            }[]
-            1: string
-        }>
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        batchSwapExactOut(
+            swaps: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        'batchSwapExactOut(tuple[],address,address,uint256)'(
+            swaps: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        isOwner(overrides?: CallOverrides): Promise<boolean>
+
+        'isOwner()'(overrides?: CallOverrides): Promise<boolean>
+
+        multihopBatchSwapExactIn(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        'multihopBatchSwapExactIn(tuple[][],address,address,uint256,uint256)'(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        multihopBatchSwapExactOut(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        'multihopBatchSwapExactOut(tuple[][],address,address,uint256)'(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        owner(overrides?: CallOverrides): Promise<string>
+
+        'owner()'(overrides?: CallOverrides): Promise<string>
+
+        renounceOwnership(overrides?: CallOverrides): Promise<void>
+
+        'renounceOwnership()'(overrides?: CallOverrides): Promise<void>
+
+        setRegistry(_registry: string, overrides?: CallOverrides): Promise<void>
+
+        'setRegistry(address)'(_registry: string, overrides?: CallOverrides): Promise<void>
+
+        smartSwapExactIn(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        'smartSwapExactIn(address,address,uint256,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        smartSwapExactOut(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountOut: BigNumberish,
+            maxTotalAmountIn: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        'smartSwapExactOut(address,address,uint256,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountOut: BigNumberish,
+            maxTotalAmountIn: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        transferOwnership(newOwner: string, overrides?: CallOverrides): Promise<void>
+
+        'transferOwnership(address)'(newOwner: string, overrides?: CallOverrides): Promise<void>
+
+        viewSplitExactIn(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<
+            [
+                ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[],
+                BigNumber,
+            ] & {
+                swaps: ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[]
+                totalOutput: BigNumber
+            }
+        >
+
+        'viewSplitExactIn(address,address,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<
+            [
+                ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[],
+                BigNumber,
+            ] & {
+                swaps: ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[]
+                totalOutput: BigNumber
+            }
+        >
+
+        viewSplitExactOut(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<
+            [
+                ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[],
+                BigNumber,
+            ] & {
+                swaps: ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[]
+                totalOutput: BigNumber
+            }
+        >
+
+        'viewSplitExactOut(address,address,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<
+            [
+                ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[],
+                BigNumber,
+            ] & {
+                swaps: ([string, string, string, BigNumber, BigNumber, BigNumber] & {
+                    pool: string
+                    tokenIn: string
+                    tokenOut: string
+                    swapAmount: BigNumber
+                    limitReturnAmount: BigNumber
+                    maxPrice: BigNumber
+                })[]
+                totalOutput: BigNumber
+            }
+        >
     }
-    events: {
-        OwnershipTransferred: ContractEvent<{
-            previousOwner: string
-            newOwner: string
-            0: string
-            1: string
-        }>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+
+    filters: {
+        OwnershipTransferred(
+            previousOwner: string | null,
+            newOwner: string | null,
+        ): TypedEventFilter<[string, string], { previousOwner: string; newOwner: string }>
+    }
+
+    estimateGas: {
+        batchSwapExactIn(
+            swaps: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        'batchSwapExactIn(tuple[],address,address,uint256,uint256)'(
+            swaps: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        batchSwapExactOut(
+            swaps: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        'batchSwapExactOut(tuple[],address,address,uint256)'(
+            swaps: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        isOwner(overrides?: CallOverrides): Promise<BigNumber>
+
+        'isOwner()'(overrides?: CallOverrides): Promise<BigNumber>
+
+        multihopBatchSwapExactIn(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        'multihopBatchSwapExactIn(tuple[][],address,address,uint256,uint256)'(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        multihopBatchSwapExactOut(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        'multihopBatchSwapExactOut(tuple[][],address,address,uint256)'(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        owner(overrides?: CallOverrides): Promise<BigNumber>
+
+        'owner()'(overrides?: CallOverrides): Promise<BigNumber>
+
+        renounceOwnership(overrides?: Overrides): Promise<BigNumber>
+
+        'renounceOwnership()'(overrides?: Overrides): Promise<BigNumber>
+
+        setRegistry(_registry: string, overrides?: Overrides): Promise<BigNumber>
+
+        'setRegistry(address)'(_registry: string, overrides?: Overrides): Promise<BigNumber>
+
+        smartSwapExactIn(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        'smartSwapExactIn(address,address,uint256,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        smartSwapExactOut(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountOut: BigNumberish,
+            maxTotalAmountIn: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        'smartSwapExactOut(address,address,uint256,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountOut: BigNumberish,
+            maxTotalAmountIn: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        transferOwnership(newOwner: string, overrides?: Overrides): Promise<BigNumber>
+
+        'transferOwnership(address)'(newOwner: string, overrides?: Overrides): Promise<BigNumber>
+
+        viewSplitExactIn(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        'viewSplitExactIn(address,address,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        viewSplitExactOut(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        'viewSplitExactOut(address,address,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+    }
+
+    populateTransaction: {
+        batchSwapExactIn(
+            swaps: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'batchSwapExactIn(tuple[],address,address,uint256,uint256)'(
+            swaps: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        batchSwapExactOut(
+            swaps: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'batchSwapExactOut(tuple[],address,address,uint256)'(
+            swaps: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        isOwner(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        'isOwner()'(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        multihopBatchSwapExactIn(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'multihopBatchSwapExactIn(tuple[][],address,address,uint256,uint256)'(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        multihopBatchSwapExactOut(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'multihopBatchSwapExactOut(tuple[][],address,address,uint256)'(
+            swapSequences: {
+                pool: string
+                tokenIn: string
+                tokenOut: string
+                swapAmount: BigNumberish
+                limitReturnAmount: BigNumberish
+                maxPrice: BigNumberish
+            }[][],
+            tokenIn: string,
+            tokenOut: string,
+            maxTotalAmountIn: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        owner(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        'owner()'(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        renounceOwnership(overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'renounceOwnership()'(overrides?: Overrides): Promise<PopulatedTransaction>
+
+        setRegistry(_registry: string, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'setRegistry(address)'(_registry: string, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        smartSwapExactIn(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'smartSwapExactIn(address,address,uint256,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountIn: BigNumberish,
+            minTotalAmountOut: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        smartSwapExactOut(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountOut: BigNumberish,
+            maxTotalAmountIn: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'smartSwapExactOut(address,address,uint256,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            totalAmountOut: BigNumberish,
+            maxTotalAmountIn: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        transferOwnership(newOwner: string, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'transferOwnership(address)'(newOwner: string, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        viewSplitExactIn(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'viewSplitExactIn(address,address,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<PopulatedTransaction>
+
+        viewSplitExactOut(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'viewSplitExactOut(address,address,uint256,uint256)'(
+            tokenIn: string,
+            tokenOut: string,
+            swapAmount: BigNumberish,
+            nPools: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<PopulatedTransaction>
     }
 }

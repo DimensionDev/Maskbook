@@ -1,8 +1,8 @@
 /// <reference path="./typeson.d.ts" />
+import { BigNumber } from 'ethers'
 import Typeson from 'typeson'
 import type { Serialization } from 'async-call-rpc'
 import { Ok, Err } from 'ts-results'
-import { BigNumber } from 'bignumber.js'
 
 /** @internal */
 export function serialize<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q) => T) {

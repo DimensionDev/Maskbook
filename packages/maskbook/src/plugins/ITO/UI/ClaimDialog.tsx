@@ -240,7 +240,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
         if (claimAmount.isGreaterThan(new BigNumber(tokenBalance)))
             return t('plugin_ito_error_balance', { symbol: claimToken.symbol })
         if (tokenAmount.isGreaterThan(maxSwapAmount)) return t('plugin_ito_dialog_claim_swap_exceed_wallet_limit')
-        return ''
     }, [claimAmount, tokenBalance, maxSwapAmount, claimToken, ratio])
 
     return (

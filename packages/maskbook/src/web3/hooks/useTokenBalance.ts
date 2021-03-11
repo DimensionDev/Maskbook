@@ -9,6 +9,11 @@ export function useTokenBalance(type: EthereumTokenType, address: string) {
     const r2 = useERC20TokenBalance(type === EthereumTokenType.ERC20 ? address : '')
     const r3 = useERC721TokenBalance(type === EthereumTokenType.ERC721 ? address : '')
     const type_ = type
+
+    console.log({
+        r1,
+    })
+
     switch (type_) {
         case EthereumTokenType.Ether:
             return r1

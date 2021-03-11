@@ -1,5 +1,6 @@
 import { useContext, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
+import type { Contract } from '@ethersproject/contracts'
 import { Pair, Token as UniswapToken, TokenAmount } from '@uniswap/sdk'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { getPairAddress } from '../../helpers'
@@ -31,7 +32,7 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
     // get reserves for each pair
     const contracts = usePairContracts([...new Set(listOfPairAddress.filter(Boolean) as string[])])
     const [results, calls, _, callback] = useMutlipleContractSingleData(
-        contracts,
+        (contracts as unknown) as Contract[],
         new Array(contracts.length).fill('getReserves'),
         [],
     )

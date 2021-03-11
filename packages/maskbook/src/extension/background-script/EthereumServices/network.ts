@@ -1,31 +1,31 @@
+import type { TransactionRequest } from '@ethersproject/providers'
 import * as Maskbook from './providers/Maskbook'
-import type { TransactionConfig } from 'web3-core'
 import type { ChainId } from '../../../web3/types'
 
-export async function getGasPrice(chainId: ChainId) {
-    return Maskbook.createWeb3(chainId).eth.getGasPrice()
+export function getGasPrice(chainId: ChainId) {
+    return Maskbook.createProvider(chainId).getGasPrice()
 }
 
 export async function getBlockNumber(chainId: ChainId) {
-    return Maskbook.createWeb3(chainId).eth.getBlockNumber()
+    return Maskbook.createProvider(chainId).getBlockNumber()
 }
 
 export async function getBalance(address: string, chainId: ChainId) {
-    return Maskbook.createWeb3(chainId).eth.getBalance(address)
+    return Maskbook.createProvider(chainId).getBalance(address)
 }
 
 export async function getTransaction(id: string, chainId: ChainId) {
-    return Maskbook.createWeb3(chainId).eth.getTransaction(id)
+    return Maskbook.createProvider(chainId).getTransaction(id)
 }
 
 export async function getTransactionReceipt(id: string, chainId: ChainId) {
-    return Maskbook.createWeb3(chainId).eth.getTransactionReceipt(id)
+    return Maskbook.createProvider(chainId).getTransactionReceipt(id)
 }
 
 export async function getTransactionCount(address: string, chainId: ChainId) {
-    return Maskbook.createWeb3(chainId).eth.getTransactionCount(address)
+    return Maskbook.createProvider(chainId).getTransactionCount(address)
 }
 
-export async function estimateGas(config: TransactionConfig, chainId: ChainId) {
-    return Maskbook.createWeb3(chainId).eth.estimateGas(config)
+export async function estimateGas(request: TransactionRequest, chainId: ChainId) {
+    return Maskbook.createProvider(chainId).estimateGas(request)
 }

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import Web3Utils from 'web3-utils'
+import { sha256 } from 'ethers/lib/utils'
 import { DialogContent, DialogProps } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ITO_CONSTANTS, ITO_MetaKey } from '../constants'
@@ -120,7 +120,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password)
-                payload.password = await Services.Ethereum.sign(Web3Utils.sha3(payload.message) ?? '', account, chainId)
+                payload.password = await Services.Ethereum.sign(sha256(payload.message) ?? '', account, chainId)
             if (!payload.password) {
                 alert('Failed to sign the password.')
                 return

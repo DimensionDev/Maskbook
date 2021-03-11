@@ -10,6 +10,6 @@ export function useERC721TokenOwnerByIndex(token?: ERC721Token, index: number = 
     const erc721Contract = useERC721TokenContract(token?.address ?? '')
     return useAsync(async () => {
         if (!account || !erc721Contract) return
-        return erc721Contract.methods.tokenOfOwnerByIndex(account, index).call()
+        return erc721Contract.tokenOfOwnerByIndex(account, index)
     }, [account, chainId /* re-calc when switch the chain */, token, erc721Contract, index])
 }

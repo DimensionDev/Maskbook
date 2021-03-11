@@ -152,7 +152,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         message,
         shares: shares || 0,
         token,
-        total: totalAmount.toFixed(),
+        total: totalAmount.toString(),
     })
     //#endregion
 
@@ -245,10 +245,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (new BigNumber(shares || '0').isZero()) return 'Enter shares'
         if (new BigNumber(shares || '0').isGreaterThan(255)) return 'At most 255 recipients'
-        if (new BigNumber(amount).isZero()) return 'Enter an amount'
-        if (new BigNumber(totalAmount).isGreaterThan(new BigNumber(tokenBalance)))
-            return `Insufficient ${token.symbol} balance`
-        return ''
     }, [account, amount, totalAmount, shares, token, tokenBalance])
 
     if (!token) return null

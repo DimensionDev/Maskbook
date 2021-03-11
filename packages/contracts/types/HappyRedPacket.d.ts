@@ -2,106 +2,647 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
-import { EventLog } from 'web3-core'
-import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import { ethers, EventFilter, Signer, BigNumber, BigNumberish, PopulatedTransaction } from 'ethers'
+import { Contract, ContractTransaction, Overrides, PayableOverrides, CallOverrides } from '@ethersproject/contracts'
+import { BytesLike } from '@ethersproject/bytes'
+import { Listener, Provider } from '@ethersproject/providers'
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi'
+import { TypedEventFilter, TypedEvent, TypedListener } from './commons'
 
-interface EventOptions {
-    filter?: object
-    fromBlock?: BlockType
-    topics?: string[]
+interface HappyRedPacketInterface extends ethers.utils.Interface {
+    functions: {
+        'check_availability(bytes32)': FunctionFragment
+        'check_claimed_list(bytes32)': FunctionFragment
+        'claim(bytes32,string,address,bytes32)': FunctionFragment
+        'contract_creator()': FunctionFragment
+        'create_red_packet(bytes32,uint8,bool,uint256,bytes32,string,string,uint256,address,uint256)': FunctionFragment
+        'refund(bytes32)': FunctionFragment
+        'toBytes(address)': FunctionFragment
+        'transfer_token(uint256,address,address,address,uint256)': FunctionFragment
+    }
+
+    encodeFunctionData(functionFragment: 'check_availability', values: [BytesLike]): string
+    encodeFunctionData(functionFragment: 'check_claimed_list', values: [BytesLike]): string
+    encodeFunctionData(functionFragment: 'claim', values: [BytesLike, string, string, BytesLike]): string
+    encodeFunctionData(functionFragment: 'contract_creator', values?: undefined): string
+    encodeFunctionData(
+        functionFragment: 'create_red_packet',
+        values: [
+            BytesLike,
+            BigNumberish,
+            boolean,
+            BigNumberish,
+            BytesLike,
+            string,
+            string,
+            BigNumberish,
+            string,
+            BigNumberish,
+        ],
+    ): string
+    encodeFunctionData(functionFragment: 'refund', values: [BytesLike]): string
+    encodeFunctionData(functionFragment: 'toBytes', values: [string]): string
+    encodeFunctionData(
+        functionFragment: 'transfer_token',
+        values: [BigNumberish, string, string, string, BigNumberish],
+    ): string
+
+    decodeFunctionResult(functionFragment: 'check_availability', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'check_claimed_list', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'claim', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'contract_creator', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'create_red_packet', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'refund', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'toBytes', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'transfer_token', data: BytesLike): Result
+
+    events: {
+        'ClaimSuccess(bytes32,address,uint256,address)': EventFragment
+        'CreationSuccess(uint256,bytes32,address,uint256,address)': EventFragment
+        'RefundSuccess(bytes32,address,uint256)': EventFragment
+    }
+
+    getEvent(nameOrSignatureOrTopic: 'ClaimSuccess'): EventFragment
+    getEvent(nameOrSignatureOrTopic: 'CreationSuccess'): EventFragment
+    getEvent(nameOrSignatureOrTopic: 'RefundSuccess'): EventFragment
 }
 
 export class HappyRedPacket extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): HappyRedPacket
-    methods: {
-        check_availability(
-            id: string | number[],
-        ): TransactionObject<{
-            token_address: string
-            balance: string
-            total: string
-            claimed: string
-            expired: boolean
-            ifclaimed: boolean
-            0: string
-            1: string
-            2: string
-            3: string
-            4: boolean
-            5: boolean
-        }>
+    connect(signerOrProvider: Signer | Provider | string): this
+    attach(addressOrName: string): this
+    deployed(): Promise<this>
 
-        check_claimed_list(id: string | number[]): TransactionObject<string[]>
+    listeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): Array<TypedListener<EventArgsArray, EventArgsObject>>
+    off<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    on<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    once<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeListener<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeAllListeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): this
+
+    listeners(eventName?: string): Array<Listener>
+    off(eventName: string, listener: Listener): this
+    on(eventName: string, listener: Listener): this
+    once(eventName: string, listener: Listener): this
+    removeListener(eventName: string, listener: Listener): this
+    removeAllListeners(eventName?: string): this
+
+    queryFilter<EventArgsArray extends Array<any>, EventArgsObject>(
+        event: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        fromBlockOrBlockhash?: string | number | undefined,
+        toBlock?: string | number | undefined,
+    ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>
+
+    interface: HappyRedPacketInterface
+
+    functions: {
+        check_availability(
+            id: BytesLike,
+            overrides?: CallOverrides,
+        ): Promise<
+            [string, BigNumber, BigNumber, BigNumber, boolean, boolean] & {
+                token_address: string
+                balance: BigNumber
+                total: BigNumber
+                claimed: BigNumber
+                expired: boolean
+                ifclaimed: boolean
+            }
+        >
+
+        'check_availability(bytes32)'(
+            id: BytesLike,
+            overrides?: CallOverrides,
+        ): Promise<
+            [string, BigNumber, BigNumber, BigNumber, boolean, boolean] & {
+                token_address: string
+                balance: BigNumber
+                total: BigNumber
+                claimed: BigNumber
+                expired: boolean
+                ifclaimed: boolean
+            }
+        >
+
+        check_claimed_list(id: BytesLike, overrides?: CallOverrides): Promise<[string[]] & { claimer_addrs: string[] }>
+
+        'check_claimed_list(bytes32)'(
+            id: BytesLike,
+            overrides?: CallOverrides,
+        ): Promise<[string[]] & { claimer_addrs: string[] }>
 
         claim(
-            id: string | number[],
+            id: BytesLike,
             password: string,
             _recipient: string,
-            validation: string | number[],
-        ): TransactionObject<string>
+            validation: BytesLike,
+            overrides?: Overrides,
+        ): Promise<ContractTransaction>
 
-        contract_creator(): TransactionObject<string>
+        'claim(bytes32,string,address,bytes32)'(
+            id: BytesLike,
+            password: string,
+            _recipient: string,
+            validation: BytesLike,
+            overrides?: Overrides,
+        ): Promise<ContractTransaction>
+
+        contract_creator(overrides?: CallOverrides): Promise<[string]>
+
+        'contract_creator()'(overrides?: CallOverrides): Promise<[string]>
 
         create_red_packet(
-            _hash: string | number[],
-            _number: number | string,
+            _hash: BytesLike,
+            _number: BigNumberish,
             _ifrandom: boolean,
-            _duration: number | string,
-            _seed: string | number[],
+            _duration: BigNumberish,
+            _seed: BytesLike,
             _message: string,
             _name: string,
-            _token_type: number | string,
+            _token_type: BigNumberish,
             _token_addr: string,
-            _total_tokens: number | string,
-        ): TransactionObject<void>
+            _total_tokens: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
 
-        refund(id: string | number[]): TransactionObject<void>
+        'create_red_packet(bytes32,uint8,bool,uint256,bytes32,string,string,uint256,address,uint256)'(
+            _hash: BytesLike,
+            _number: BigNumberish,
+            _ifrandom: boolean,
+            _duration: BigNumberish,
+            _seed: BytesLike,
+            _message: string,
+            _name: string,
+            _token_type: BigNumberish,
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
 
-        toBytes(a: string): TransactionObject<string>
+        refund(id: BytesLike, overrides?: Overrides): Promise<ContractTransaction>
+
+        'refund(bytes32)'(id: BytesLike, overrides?: Overrides): Promise<ContractTransaction>
+
+        toBytes(a: string, overrides?: CallOverrides): Promise<[string] & { b: string }>
+
+        'toBytes(address)'(a: string, overrides?: CallOverrides): Promise<[string] & { b: string }>
 
         transfer_token(
-            token_type: number | string,
+            token_type: BigNumberish,
             token_address: string,
             sender_address: string,
             recipient_address: string,
-            amount: number | string,
-        ): TransactionObject<void>
+            amount: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
+
+        'transfer_token(uint256,address,address,address,uint256)'(
+            token_type: BigNumberish,
+            token_address: string,
+            sender_address: string,
+            recipient_address: string,
+            amount: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
     }
-    events: {
-        ClaimSuccess: ContractEvent<{
-            id: string
-            claimer: string
-            claimed_value: string
+
+    check_availability(
+        id: BytesLike,
+        overrides?: CallOverrides,
+    ): Promise<
+        [string, BigNumber, BigNumber, BigNumber, boolean, boolean] & {
             token_address: string
-            0: string
-            1: string
-            2: string
-            3: string
-        }>
-        CreationSuccess: ContractEvent<{
-            total: string
-            id: string
-            creator: string
-            creation_time: string
+            balance: BigNumber
+            total: BigNumber
+            claimed: BigNumber
+            expired: boolean
+            ifclaimed: boolean
+        }
+    >
+
+    'check_availability(bytes32)'(
+        id: BytesLike,
+        overrides?: CallOverrides,
+    ): Promise<
+        [string, BigNumber, BigNumber, BigNumber, boolean, boolean] & {
             token_address: string
-            0: string
-            1: string
-            2: string
-            3: string
-            4: string
-        }>
-        RefundSuccess: ContractEvent<{
-            id: string
-            token_address: string
-            remaining_balance: string
-            0: string
-            1: string
-            2: string
-        }>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+            balance: BigNumber
+            total: BigNumber
+            claimed: BigNumber
+            expired: boolean
+            ifclaimed: boolean
+        }
+    >
+
+    check_claimed_list(id: BytesLike, overrides?: CallOverrides): Promise<string[]>
+
+    'check_claimed_list(bytes32)'(id: BytesLike, overrides?: CallOverrides): Promise<string[]>
+
+    claim(
+        id: BytesLike,
+        password: string,
+        _recipient: string,
+        validation: BytesLike,
+        overrides?: Overrides,
+    ): Promise<ContractTransaction>
+
+    'claim(bytes32,string,address,bytes32)'(
+        id: BytesLike,
+        password: string,
+        _recipient: string,
+        validation: BytesLike,
+        overrides?: Overrides,
+    ): Promise<ContractTransaction>
+
+    contract_creator(overrides?: CallOverrides): Promise<string>
+
+    'contract_creator()'(overrides?: CallOverrides): Promise<string>
+
+    create_red_packet(
+        _hash: BytesLike,
+        _number: BigNumberish,
+        _ifrandom: boolean,
+        _duration: BigNumberish,
+        _seed: BytesLike,
+        _message: string,
+        _name: string,
+        _token_type: BigNumberish,
+        _token_addr: string,
+        _total_tokens: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    'create_red_packet(bytes32,uint8,bool,uint256,bytes32,string,string,uint256,address,uint256)'(
+        _hash: BytesLike,
+        _number: BigNumberish,
+        _ifrandom: boolean,
+        _duration: BigNumberish,
+        _seed: BytesLike,
+        _message: string,
+        _name: string,
+        _token_type: BigNumberish,
+        _token_addr: string,
+        _total_tokens: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    refund(id: BytesLike, overrides?: Overrides): Promise<ContractTransaction>
+
+    'refund(bytes32)'(id: BytesLike, overrides?: Overrides): Promise<ContractTransaction>
+
+    toBytes(a: string, overrides?: CallOverrides): Promise<string>
+
+    'toBytes(address)'(a: string, overrides?: CallOverrides): Promise<string>
+
+    transfer_token(
+        token_type: BigNumberish,
+        token_address: string,
+        sender_address: string,
+        recipient_address: string,
+        amount: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    'transfer_token(uint256,address,address,address,uint256)'(
+        token_type: BigNumberish,
+        token_address: string,
+        sender_address: string,
+        recipient_address: string,
+        amount: BigNumberish,
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    callStatic: {
+        check_availability(
+            id: BytesLike,
+            overrides?: CallOverrides,
+        ): Promise<
+            [string, BigNumber, BigNumber, BigNumber, boolean, boolean] & {
+                token_address: string
+                balance: BigNumber
+                total: BigNumber
+                claimed: BigNumber
+                expired: boolean
+                ifclaimed: boolean
+            }
+        >
+
+        'check_availability(bytes32)'(
+            id: BytesLike,
+            overrides?: CallOverrides,
+        ): Promise<
+            [string, BigNumber, BigNumber, BigNumber, boolean, boolean] & {
+                token_address: string
+                balance: BigNumber
+                total: BigNumber
+                claimed: BigNumber
+                expired: boolean
+                ifclaimed: boolean
+            }
+        >
+
+        check_claimed_list(id: BytesLike, overrides?: CallOverrides): Promise<string[]>
+
+        'check_claimed_list(bytes32)'(id: BytesLike, overrides?: CallOverrides): Promise<string[]>
+
+        claim(
+            id: BytesLike,
+            password: string,
+            _recipient: string,
+            validation: BytesLike,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        'claim(bytes32,string,address,bytes32)'(
+            id: BytesLike,
+            password: string,
+            _recipient: string,
+            validation: BytesLike,
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+
+        contract_creator(overrides?: CallOverrides): Promise<string>
+
+        'contract_creator()'(overrides?: CallOverrides): Promise<string>
+
+        create_red_packet(
+            _hash: BytesLike,
+            _number: BigNumberish,
+            _ifrandom: boolean,
+            _duration: BigNumberish,
+            _seed: BytesLike,
+            _message: string,
+            _name: string,
+            _token_type: BigNumberish,
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<void>
+
+        'create_red_packet(bytes32,uint8,bool,uint256,bytes32,string,string,uint256,address,uint256)'(
+            _hash: BytesLike,
+            _number: BigNumberish,
+            _ifrandom: boolean,
+            _duration: BigNumberish,
+            _seed: BytesLike,
+            _message: string,
+            _name: string,
+            _token_type: BigNumberish,
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<void>
+
+        refund(id: BytesLike, overrides?: CallOverrides): Promise<void>
+
+        'refund(bytes32)'(id: BytesLike, overrides?: CallOverrides): Promise<void>
+
+        toBytes(a: string, overrides?: CallOverrides): Promise<string>
+
+        'toBytes(address)'(a: string, overrides?: CallOverrides): Promise<string>
+
+        transfer_token(
+            token_type: BigNumberish,
+            token_address: string,
+            sender_address: string,
+            recipient_address: string,
+            amount: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<void>
+
+        'transfer_token(uint256,address,address,address,uint256)'(
+            token_type: BigNumberish,
+            token_address: string,
+            sender_address: string,
+            recipient_address: string,
+            amount: BigNumberish,
+            overrides?: CallOverrides,
+        ): Promise<void>
+    }
+
+    filters: {
+        ClaimSuccess(
+            id: null,
+            claimer: null,
+            claimed_value: null,
+            token_address: null,
+        ): TypedEventFilter<
+            [string, string, BigNumber, string],
+            {
+                id: string
+                claimer: string
+                claimed_value: BigNumber
+                token_address: string
+            }
+        >
+
+        CreationSuccess(
+            total: null,
+            id: null,
+            creator: null,
+            creation_time: null,
+            token_address: null,
+        ): TypedEventFilter<
+            [BigNumber, string, string, BigNumber, string],
+            {
+                total: BigNumber
+                id: string
+                creator: string
+                creation_time: BigNumber
+                token_address: string
+            }
+        >
+
+        RefundSuccess(
+            id: null,
+            token_address: null,
+            remaining_balance: null,
+        ): TypedEventFilter<
+            [string, string, BigNumber],
+            { id: string; token_address: string; remaining_balance: BigNumber }
+        >
+    }
+
+    estimateGas: {
+        check_availability(id: BytesLike, overrides?: CallOverrides): Promise<BigNumber>
+
+        'check_availability(bytes32)'(id: BytesLike, overrides?: CallOverrides): Promise<BigNumber>
+
+        check_claimed_list(id: BytesLike, overrides?: CallOverrides): Promise<BigNumber>
+
+        'check_claimed_list(bytes32)'(id: BytesLike, overrides?: CallOverrides): Promise<BigNumber>
+
+        claim(
+            id: BytesLike,
+            password: string,
+            _recipient: string,
+            validation: BytesLike,
+            overrides?: Overrides,
+        ): Promise<BigNumber>
+
+        'claim(bytes32,string,address,bytes32)'(
+            id: BytesLike,
+            password: string,
+            _recipient: string,
+            validation: BytesLike,
+            overrides?: Overrides,
+        ): Promise<BigNumber>
+
+        contract_creator(overrides?: CallOverrides): Promise<BigNumber>
+
+        'contract_creator()'(overrides?: CallOverrides): Promise<BigNumber>
+
+        create_red_packet(
+            _hash: BytesLike,
+            _number: BigNumberish,
+            _ifrandom: boolean,
+            _duration: BigNumberish,
+            _seed: BytesLike,
+            _message: string,
+            _name: string,
+            _token_type: BigNumberish,
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        'create_red_packet(bytes32,uint8,bool,uint256,bytes32,string,string,uint256,address,uint256)'(
+            _hash: BytesLike,
+            _number: BigNumberish,
+            _ifrandom: boolean,
+            _duration: BigNumberish,
+            _seed: BytesLike,
+            _message: string,
+            _name: string,
+            _token_type: BigNumberish,
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        refund(id: BytesLike, overrides?: Overrides): Promise<BigNumber>
+
+        'refund(bytes32)'(id: BytesLike, overrides?: Overrides): Promise<BigNumber>
+
+        toBytes(a: string, overrides?: CallOverrides): Promise<BigNumber>
+
+        'toBytes(address)'(a: string, overrides?: CallOverrides): Promise<BigNumber>
+
+        transfer_token(
+            token_type: BigNumberish,
+            token_address: string,
+            sender_address: string,
+            recipient_address: string,
+            amount: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        'transfer_token(uint256,address,address,address,uint256)'(
+            token_type: BigNumberish,
+            token_address: string,
+            sender_address: string,
+            recipient_address: string,
+            amount: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+    }
+
+    populateTransaction: {
+        check_availability(id: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        'check_availability(bytes32)'(id: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        check_claimed_list(id: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        'check_claimed_list(bytes32)'(id: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        claim(
+            id: BytesLike,
+            password: string,
+            _recipient: string,
+            validation: BytesLike,
+            overrides?: Overrides,
+        ): Promise<PopulatedTransaction>
+
+        'claim(bytes32,string,address,bytes32)'(
+            id: BytesLike,
+            password: string,
+            _recipient: string,
+            validation: BytesLike,
+            overrides?: Overrides,
+        ): Promise<PopulatedTransaction>
+
+        contract_creator(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        'contract_creator()'(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        create_red_packet(
+            _hash: BytesLike,
+            _number: BigNumberish,
+            _ifrandom: boolean,
+            _duration: BigNumberish,
+            _seed: BytesLike,
+            _message: string,
+            _name: string,
+            _token_type: BigNumberish,
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'create_red_packet(bytes32,uint8,bool,uint256,bytes32,string,string,uint256,address,uint256)'(
+            _hash: BytesLike,
+            _number: BigNumberish,
+            _ifrandom: boolean,
+            _duration: BigNumberish,
+            _seed: BytesLike,
+            _message: string,
+            _name: string,
+            _token_type: BigNumberish,
+            _token_addr: string,
+            _total_tokens: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        refund(id: BytesLike, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'refund(bytes32)'(id: BytesLike, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        toBytes(a: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        'toBytes(address)'(a: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        transfer_token(
+            token_type: BigNumberish,
+            token_address: string,
+            sender_address: string,
+            recipient_address: string,
+            amount: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'transfer_token(uint256,address,address,address,uint256)'(
+            token_type: BigNumberish,
+            token_address: string,
+            sender_address: string,
+            recipient_address: string,
+            amount: BigNumberish,
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
     }
 }

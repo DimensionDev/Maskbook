@@ -20,7 +20,6 @@ import { useColorStyles } from '../../../utils/theme'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { WalletAssetsTable } from './WalletAssetsTable'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { Flags } from '../../../utils/flags'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
@@ -30,6 +29,7 @@ import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { FilterTransactionType } from '../../../plugins/Wallet/types'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

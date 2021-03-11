@@ -1,14 +1,14 @@
+import { useState } from 'react'
+import BigNumber from 'bignumber.js'
 import { DialogContent, createStyles, Typography, DialogProps } from '@material-ui/core'
-import { InjectedDialog } from '../shared/InjectedDialog'
 import { makeStyles } from '@material-ui/core/styles'
+import { InjectedDialog } from '../shared/InjectedDialog'
 import { useStylesExtends } from '../custom-ui-helper'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { formatBalance } from '../../plugins/Wallet/formatter'
-import BigNumber from 'bignumber.js'
 import { ITO_Card } from '../../plugins/ITO/UI/ITO_Card'
 import type { ERC20TokenDetailed } from '../../web3/types'
 import { AirdropCard } from '../../plugins/Airdrop/UI/AirdropCard'
-import { useState } from 'react'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

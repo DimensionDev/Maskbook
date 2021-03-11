@@ -1,4 +1,5 @@
 import type createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
+import type { TransactionReceipt } from '@ethersproject/abstract-provider'
 
 export enum ProviderType {
     Maskbook = 'Maskbook',
@@ -141,3 +142,29 @@ export enum TransactionEventType {
     CONFIRMATION = 'confirmation',
     ERROR = 'error',
 }
+
+export enum StageType {
+    TRANSACTION_HASH = 0,
+    RECEIPT,
+    CONFIRMATION,
+    ERROR,
+}
+
+export type Stage =
+    | {
+          type: StageType.TRANSACTION_HASH
+          hash: string
+      }
+    | {
+          type: StageType.RECEIPT
+          receipt: TransactionReceipt
+      }
+    | {
+          type: StageType.CONFIRMATION
+          no: number
+          receipt: TransactionReceipt
+      }
+    | {
+          type: StageType.ERROR
+          error: Error
+      }

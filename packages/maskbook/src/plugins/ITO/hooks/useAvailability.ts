@@ -9,9 +9,6 @@ export function useAvailability(id?: string) {
     return useAsyncRetry(async () => {
         if (!id) return null
         if (!ITO_Contract) return null
-        return ITO_Contract.methods.check_availability(id).call({
-            // check availability is ok w/o account
-            from,
-        })
+        return ITO_Contract.check_availability(id)
     }, [id, from, ITO_Contract])
 }

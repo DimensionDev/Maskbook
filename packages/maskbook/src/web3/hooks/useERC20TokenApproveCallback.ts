@@ -1,15 +1,15 @@
-import BigNumber from 'bignumber.js'
 import { useCallback, useMemo } from 'react'
 import { once } from 'lodash-es'
-import type { TransactionReceipt } from 'web3-eth'
-import type { Tx } from '@dimensiondev/contracts/types/types'
+import BigNumber from 'bignumber.js'
+import type { TransactionRequest } from '@ethersproject/providers'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { addGasMargin } from '../helpers'
-import { TransactionEventType } from '../types'
 import { useAccount } from './useAccount'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
+import Services from '../../extension/service'
+import { StageType } from '../types'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
@@ -85,61 +85,60 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                 type: TransactionStateType.WAIT_FOR_CONFIRMING,
             })
 
-            const config: Tx = {
+            const config: TransactionRequest = {
                 from: account,
                 to: erc20Contract.options.address,
             }
 
             // step 1: estimate gas
-            const estimatedGas = await erc20Contract.methods
-                // general fallback for tokens who restrict approval amounts
+            const estimatedGas = await erc20Contract.estimateGas // general fallback for tokens who restrict approval amounts
                 .approve(spender, useExact ? amount : MaxUint256)
-                .estimateGas(config)
                 .catch(() => {
                     // if the current approve strategy is failed
                     // then use oppsite strategy instead
                     useExact = !useExact
-                    return erc20Contract.methods.approve(spender, amount).estimateGas({
-                        from: account,
-                        to: erc20Contract.options.address,
-                    })
+                    return erc20Contract.estimateGas.approve(spender, amount)
                 })
 
             // step 2: blocking
             return new Promise<void>(async (resolve, reject) => {
-                const promiEvent = erc20Contract.methods.approve(spender, useExact ? amount : MaxUint256).send({
-                    gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
-                    ...config,
+                const transaction = await erc20Contract.approve(spender, useExact ? amount : MaxUint256, {
+                    gasLimit: addGasMargin(new BigNumber(estimatedGas)).toString(),
                 })
                 const revalidate = once(() => {
                     revalidateBalance()
                     revalidateAllowance()
                 })
-                promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                    setTransactionState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: 0,
-                        receipt,
-                    })
-                    revalidate()
-                })
-                promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                    setTransactionState({
-                        type: TransactionStateType.CONFIRMED,
-                        no,
-                        receipt,
-                    })
-                    revalidate()
-                    resolve()
-                })
-                promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
-                    setTransactionState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    revalidate()
-                    reject(error)
-                })
+
+                for await (const stage of Services.Ethereum.watchTransaction(account, transaction)) {
+                    switch (stage.type) {
+                        case StageType.RECEIPT:
+                            setTransactionState({
+                                type: TransactionStateType.CONFIRMED,
+                                no: 0,
+                                receipt: stage.receipt,
+                            })
+                            revalidate()
+                            break
+                        case StageType.CONFIRMATION:
+                            setTransactionState({
+                                type: TransactionStateType.CONFIRMED,
+                                no: stage.no,
+                                receipt: stage.receipt,
+                            })
+                            revalidate()
+                            resolve()
+                            break
+                        case StageType.ERROR:
+                            setTransactionState({
+                                type: TransactionStateType.FAILED,
+                                error: stage.error,
+                            })
+                            revalidate()
+                            reject(stage.error)
+                            break
+                    }
+                }
             })
         },
         [account, amount, balance, spender, loadingAllowance, loadingBalance, erc20Contract, approveStateType],

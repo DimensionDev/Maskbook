@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
+import type { Contract } from '@ethersproject/contracts'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import type { ERC721Token } from '../types'
 import { useAccount } from './useAccount'
@@ -11,7 +12,7 @@ export function useERC721TokenIdsOfOwner(token?: ERC721Token) {
     const asyncResultOfBalanceOf = useERC721TokenBalance(token?.address ?? '')
     const erc721Contract = useERC721TokenContract(token?.address ?? '')
     const { names, callDatas } = useMemo(() => {
-        const balanceOf = asyncResultOfBalanceOf.value ?? '0'
+        const balanceOf = asyncResultOfBalanceOf.value?.toString() ?? '0'
         return {
             names: new Array(Number.parseInt(balanceOf, 10)).fill('tokenOfOwnerByIndex') as 'tokenOfOwnerByIndex'[],
             callDatas: new Array(Number.parseInt(balanceOf, 10))
@@ -21,7 +22,11 @@ export function useERC721TokenIdsOfOwner(token?: ERC721Token) {
     }, [account, asyncResultOfBalanceOf.value])
 
     // valdiate
-    const [results, calls, _, callback] = useSingleContractMultipleData(erc721Contract, names, callDatas)
+    const [results, calls, _, callback] = useSingleContractMultipleData(
+        (erc721Contract as unknown) as Contract,
+        names,
+        callDatas,
+    )
     const asyncResultOfMulticall = useAsyncRetry(() => callback(calls), [names, callDatas])
 
     // compose

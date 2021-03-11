@@ -9,8 +9,6 @@ export function useAvailability(index: string, amount: BigNumber, proof: string[
 
     return useAsyncRetry(async () => {
         if (!AirdropContract) return null
-        return AirdropContract.methods.check(index, account, amount.toFixed(), proof).call({
-            from: account,
-        })
+        return AirdropContract.check(index, account, amount.toString(), proof)
     }, [index, account, amount, proof, AirdropContract])
 }

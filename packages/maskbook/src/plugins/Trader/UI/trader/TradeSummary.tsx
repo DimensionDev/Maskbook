@@ -89,7 +89,7 @@ export function TradeSummary(props: TradeSummaryProps) {
     const isExactIn = strategy === TradeStrategy.ExactIn
 
     const records: SummaryRecord[] = [
-        inputAmount.isGreaterThan('0') && outputAmount.isGreaterThan('0')
+        inputAmount.isGreaterThan(0) && outputAmount.isGreaterThan(0)
             ? {
                   title: 'Price',
                   children: (
@@ -181,7 +181,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                     style={{
                         color: resolveUniswapWarningLevelColor(resolveUniswapWarningLevel(priceImpactWithoutFee)),
                     }}>
-                    {priceImpactWithoutFee.isGreaterThan('0')
+                    {priceImpactWithoutFee.isGreaterThan(0)
                         ? priceImpactWithoutFee?.isLessThan(ONE_BIPS)
                             ? '<0.01%'
                             : `${formatPercentage(priceImpactWithoutFee)}`
@@ -208,7 +208,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                     style={{
                         color: resolveUniswapWarningLevelColor(resolveUniswapWarningLevel(priceImpact)),
                     }}>
-                    {priceImpact.isGreaterThan('0')
+                    {priceImpact.isGreaterThan(0)
                         ? priceImpact?.isLessThan(ONE_BIPS)
                             ? '<0.01%'
                             : `${formatPercentage(priceImpact)}`

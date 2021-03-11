@@ -1,15 +1,14 @@
-import BigNumber from 'bignumber.js'
-import stringify from 'json-stable-stringify'
-import { omit, pick } from 'lodash-es'
 import { useCallback, useMemo, useState } from 'react'
-import type { TransactionConfig } from 'web3-core'
+import { omit, pick } from 'lodash-es'
+import BigNumber from 'bignumber.js'
+import type { TransactionRequest } from '@ethersproject/abstract-provider'
+import stringify from 'json-stable-stringify'
 import Services, { ServicesWithProgress } from '../../../../extension/service'
-import { StageType } from '../../../../utils/promiEvent'
 import { addGasMargin } from '../../../../web3/helpers'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import { ChainId } from '../../../../web3/types'
+import { ChainId, StageType } from '../../../../web3/types'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {
@@ -20,17 +19,17 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
     })
 
     // compose transaction config
-    const config = useMemo(() => {
+    const request = useMemo(() => {
         if (!account || !tradeComputed?.trade_ || chainId !== ChainId.Mainnet) return null
         return {
             from: account,
             ...pick(tradeComputed.trade_, ['to', 'data', 'value', 'gas']),
-        } as TransactionConfig
+        } as TransactionRequest
     }, [account, tradeComputed])
 
     const tradeCallback = useCallback(async () => {
         // validate config
-        if (!account || !config) {
+        if (!account || !request) {
             setTradeState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -44,14 +43,15 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
 
         try {
             // step 1: estimate tx
-            const gasEstimated = await Services.Ethereum.estimateGas(omit(config, ['gas']), chainId)
+            const gasEstimated = await Services.Ethereum.estimateGas(omit(request, ['gas']), chainId)
             const config_ = {
-                ...config,
-                gas: addGasMargin(new BigNumber(gasEstimated)).toFixed(),
+                ...request,
+                gas: addGasMargin(new BigNumber(gasEstimated)).toString(),
             }
 
             // step 2: send tx
-            for await (const stage of ServicesWithProgress.sendTransaction(account, config_)) {
+            const transaction = await ServicesWithProgress.sendTransaction(account, config_)
+            for await (const stage of Services.Ethereum.watchTransaction(account, transaction)) {
                 switch (stage.type) {
                     case StageType.TRANSACTION_HASH:
                         setTradeState({
@@ -81,7 +81,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
                 error,
             })
         }
-    }, [account, chainId, stringify(config)])
+    }, [account, chainId, stringify(request)])
 
     const resetCallback = useCallback(() => {
         setTradeState({

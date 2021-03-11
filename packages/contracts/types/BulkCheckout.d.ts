@@ -2,67 +2,365 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
-import { EventLog } from 'web3-core'
-import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import { ethers, EventFilter, Signer, BigNumber, BigNumberish, PopulatedTransaction } from 'ethers'
+import { Contract, ContractTransaction, Overrides, PayableOverrides, CallOverrides } from '@ethersproject/contracts'
+import { BytesLike } from '@ethersproject/bytes'
+import { Listener, Provider } from '@ethersproject/providers'
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi'
+import { TypedEventFilter, TypedEvent, TypedListener } from './commons'
 
-interface EventOptions {
-    filter?: object
-    fromBlock?: BlockType
-    topics?: string[]
+interface BulkCheckoutInterface extends ethers.utils.Interface {
+    functions: {
+        'donate(tuple[])': FunctionFragment
+        'owner()': FunctionFragment
+        'pause()': FunctionFragment
+        'paused()': FunctionFragment
+        'renounceOwnership()': FunctionFragment
+        'transferOwnership(address)': FunctionFragment
+        'unpause()': FunctionFragment
+        'withdrawEther(address)': FunctionFragment
+        'withdrawToken(address,address)': FunctionFragment
+    }
+
+    encodeFunctionData(
+        functionFragment: 'donate',
+        values: [{ token: string; amount: BigNumberish; dest: string }[]],
+    ): string
+    encodeFunctionData(functionFragment: 'owner', values?: undefined): string
+    encodeFunctionData(functionFragment: 'pause', values?: undefined): string
+    encodeFunctionData(functionFragment: 'paused', values?: undefined): string
+    encodeFunctionData(functionFragment: 'renounceOwnership', values?: undefined): string
+    encodeFunctionData(functionFragment: 'transferOwnership', values: [string]): string
+    encodeFunctionData(functionFragment: 'unpause', values?: undefined): string
+    encodeFunctionData(functionFragment: 'withdrawEther', values: [string]): string
+    encodeFunctionData(functionFragment: 'withdrawToken', values: [string, string]): string
+
+    decodeFunctionResult(functionFragment: 'donate', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'pause', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'paused', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'renounceOwnership', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'unpause', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'withdrawEther', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'withdrawToken', data: BytesLike): Result
+
+    events: {
+        'DonationSent(address,uint256,address,address)': EventFragment
+        'OwnershipTransferred(address,address)': EventFragment
+        'Paused(address)': EventFragment
+        'TokenWithdrawn(address,uint256,address)': EventFragment
+        'Unpaused(address)': EventFragment
+    }
+
+    getEvent(nameOrSignatureOrTopic: 'DonationSent'): EventFragment
+    getEvent(nameOrSignatureOrTopic: 'OwnershipTransferred'): EventFragment
+    getEvent(nameOrSignatureOrTopic: 'Paused'): EventFragment
+    getEvent(nameOrSignatureOrTopic: 'TokenWithdrawn'): EventFragment
+    getEvent(nameOrSignatureOrTopic: 'Unpaused'): EventFragment
 }
 
 export class BulkCheckout extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): BulkCheckout
-    methods: {
-        donate(_donations: { token: string; amount: number | string; dest: string }[]): TransactionObject<void>
+    connect(signerOrProvider: Signer | Provider | string): this
+    attach(addressOrName: string): this
+    deployed(): Promise<this>
 
-        owner(): TransactionObject<string>
+    listeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): Array<TypedListener<EventArgsArray, EventArgsObject>>
+    off<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    on<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    once<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeListener<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeAllListeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): this
 
-        pause(): TransactionObject<void>
+    listeners(eventName?: string): Array<Listener>
+    off(eventName: string, listener: Listener): this
+    on(eventName: string, listener: Listener): this
+    once(eventName: string, listener: Listener): this
+    removeListener(eventName: string, listener: Listener): this
+    removeAllListeners(eventName?: string): this
 
-        paused(): TransactionObject<boolean>
+    queryFilter<EventArgsArray extends Array<any>, EventArgsObject>(
+        event: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        fromBlockOrBlockhash?: string | number | undefined,
+        toBlock?: string | number | undefined,
+    ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>
 
-        renounceOwnership(): TransactionObject<void>
+    interface: BulkCheckoutInterface
 
-        transferOwnership(newOwner: string): TransactionObject<void>
+    functions: {
+        donate(
+            _donations: { token: string; amount: BigNumberish; dest: string }[],
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
 
-        unpause(): TransactionObject<void>
+        'donate(tuple[])'(
+            _donations: { token: string; amount: BigNumberish; dest: string }[],
+            overrides?: PayableOverrides,
+        ): Promise<ContractTransaction>
 
-        withdrawEther(_dest: string): TransactionObject<void>
+        owner(overrides?: CallOverrides): Promise<[string]>
 
-        withdrawToken(_tokenAddress: string, _dest: string): TransactionObject<void>
+        'owner()'(overrides?: CallOverrides): Promise<[string]>
+
+        pause(overrides?: Overrides): Promise<ContractTransaction>
+
+        'pause()'(overrides?: Overrides): Promise<ContractTransaction>
+
+        paused(overrides?: CallOverrides): Promise<[boolean]>
+
+        'paused()'(overrides?: CallOverrides): Promise<[boolean]>
+
+        renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>
+
+        'renounceOwnership()'(overrides?: Overrides): Promise<ContractTransaction>
+
+        transferOwnership(newOwner: string, overrides?: Overrides): Promise<ContractTransaction>
+
+        'transferOwnership(address)'(newOwner: string, overrides?: Overrides): Promise<ContractTransaction>
+
+        unpause(overrides?: Overrides): Promise<ContractTransaction>
+
+        'unpause()'(overrides?: Overrides): Promise<ContractTransaction>
+
+        withdrawEther(_dest: string, overrides?: Overrides): Promise<ContractTransaction>
+
+        'withdrawEther(address)'(_dest: string, overrides?: Overrides): Promise<ContractTransaction>
+
+        withdrawToken(_tokenAddress: string, _dest: string, overrides?: Overrides): Promise<ContractTransaction>
+
+        'withdrawToken(address,address)'(
+            _tokenAddress: string,
+            _dest: string,
+            overrides?: Overrides,
+        ): Promise<ContractTransaction>
     }
-    events: {
-        DonationSent: ContractEvent<{
-            token: string
-            amount: string
-            dest: string
-            donor: string
-            0: string
-            1: string
-            2: string
-            3: string
-        }>
-        OwnershipTransferred: ContractEvent<{
-            previousOwner: string
-            newOwner: string
-            0: string
-            1: string
-        }>
-        Paused: ContractEvent<string>
-        TokenWithdrawn: ContractEvent<{
-            token: string
-            amount: string
-            dest: string
-            0: string
-            1: string
-            2: string
-        }>
-        Unpaused: ContractEvent<string>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+
+    donate(
+        _donations: { token: string; amount: BigNumberish; dest: string }[],
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    'donate(tuple[])'(
+        _donations: { token: string; amount: BigNumberish; dest: string }[],
+        overrides?: PayableOverrides,
+    ): Promise<ContractTransaction>
+
+    owner(overrides?: CallOverrides): Promise<string>
+
+    'owner()'(overrides?: CallOverrides): Promise<string>
+
+    pause(overrides?: Overrides): Promise<ContractTransaction>
+
+    'pause()'(overrides?: Overrides): Promise<ContractTransaction>
+
+    paused(overrides?: CallOverrides): Promise<boolean>
+
+    'paused()'(overrides?: CallOverrides): Promise<boolean>
+
+    renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>
+
+    'renounceOwnership()'(overrides?: Overrides): Promise<ContractTransaction>
+
+    transferOwnership(newOwner: string, overrides?: Overrides): Promise<ContractTransaction>
+
+    'transferOwnership(address)'(newOwner: string, overrides?: Overrides): Promise<ContractTransaction>
+
+    unpause(overrides?: Overrides): Promise<ContractTransaction>
+
+    'unpause()'(overrides?: Overrides): Promise<ContractTransaction>
+
+    withdrawEther(_dest: string, overrides?: Overrides): Promise<ContractTransaction>
+
+    'withdrawEther(address)'(_dest: string, overrides?: Overrides): Promise<ContractTransaction>
+
+    withdrawToken(_tokenAddress: string, _dest: string, overrides?: Overrides): Promise<ContractTransaction>
+
+    'withdrawToken(address,address)'(
+        _tokenAddress: string,
+        _dest: string,
+        overrides?: Overrides,
+    ): Promise<ContractTransaction>
+
+    callStatic: {
+        donate(
+            _donations: { token: string; amount: BigNumberish; dest: string }[],
+            overrides?: CallOverrides,
+        ): Promise<void>
+
+        'donate(tuple[])'(
+            _donations: { token: string; amount: BigNumberish; dest: string }[],
+            overrides?: CallOverrides,
+        ): Promise<void>
+
+        owner(overrides?: CallOverrides): Promise<string>
+
+        'owner()'(overrides?: CallOverrides): Promise<string>
+
+        pause(overrides?: CallOverrides): Promise<void>
+
+        'pause()'(overrides?: CallOverrides): Promise<void>
+
+        paused(overrides?: CallOverrides): Promise<boolean>
+
+        'paused()'(overrides?: CallOverrides): Promise<boolean>
+
+        renounceOwnership(overrides?: CallOverrides): Promise<void>
+
+        'renounceOwnership()'(overrides?: CallOverrides): Promise<void>
+
+        transferOwnership(newOwner: string, overrides?: CallOverrides): Promise<void>
+
+        'transferOwnership(address)'(newOwner: string, overrides?: CallOverrides): Promise<void>
+
+        unpause(overrides?: CallOverrides): Promise<void>
+
+        'unpause()'(overrides?: CallOverrides): Promise<void>
+
+        withdrawEther(_dest: string, overrides?: CallOverrides): Promise<void>
+
+        'withdrawEther(address)'(_dest: string, overrides?: CallOverrides): Promise<void>
+
+        withdrawToken(_tokenAddress: string, _dest: string, overrides?: CallOverrides): Promise<void>
+
+        'withdrawToken(address,address)'(_tokenAddress: string, _dest: string, overrides?: CallOverrides): Promise<void>
+    }
+
+    filters: {
+        DonationSent(
+            token: string | null,
+            amount: BigNumberish | null,
+            dest: null,
+            donor: string | null,
+        ): TypedEventFilter<
+            [string, BigNumber, string, string],
+            { token: string; amount: BigNumber; dest: string; donor: string }
+        >
+
+        OwnershipTransferred(
+            previousOwner: string | null,
+            newOwner: string | null,
+        ): TypedEventFilter<[string, string], { previousOwner: string; newOwner: string }>
+
+        Paused(account: null): TypedEventFilter<[string], { account: string }>
+
+        TokenWithdrawn(
+            token: string | null,
+            amount: BigNumberish | null,
+            dest: string | null,
+        ): TypedEventFilter<[string, BigNumber, string], { token: string; amount: BigNumber; dest: string }>
+
+        Unpaused(account: null): TypedEventFilter<[string], { account: string }>
+    }
+
+    estimateGas: {
+        donate(
+            _donations: { token: string; amount: BigNumberish; dest: string }[],
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        'donate(tuple[])'(
+            _donations: { token: string; amount: BigNumberish; dest: string }[],
+            overrides?: PayableOverrides,
+        ): Promise<BigNumber>
+
+        owner(overrides?: CallOverrides): Promise<BigNumber>
+
+        'owner()'(overrides?: CallOverrides): Promise<BigNumber>
+
+        pause(overrides?: Overrides): Promise<BigNumber>
+
+        'pause()'(overrides?: Overrides): Promise<BigNumber>
+
+        paused(overrides?: CallOverrides): Promise<BigNumber>
+
+        'paused()'(overrides?: CallOverrides): Promise<BigNumber>
+
+        renounceOwnership(overrides?: Overrides): Promise<BigNumber>
+
+        'renounceOwnership()'(overrides?: Overrides): Promise<BigNumber>
+
+        transferOwnership(newOwner: string, overrides?: Overrides): Promise<BigNumber>
+
+        'transferOwnership(address)'(newOwner: string, overrides?: Overrides): Promise<BigNumber>
+
+        unpause(overrides?: Overrides): Promise<BigNumber>
+
+        'unpause()'(overrides?: Overrides): Promise<BigNumber>
+
+        withdrawEther(_dest: string, overrides?: Overrides): Promise<BigNumber>
+
+        'withdrawEther(address)'(_dest: string, overrides?: Overrides): Promise<BigNumber>
+
+        withdrawToken(_tokenAddress: string, _dest: string, overrides?: Overrides): Promise<BigNumber>
+
+        'withdrawToken(address,address)'(
+            _tokenAddress: string,
+            _dest: string,
+            overrides?: Overrides,
+        ): Promise<BigNumber>
+    }
+
+    populateTransaction: {
+        donate(
+            _donations: { token: string; amount: BigNumberish; dest: string }[],
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        'donate(tuple[])'(
+            _donations: { token: string; amount: BigNumberish; dest: string }[],
+            overrides?: PayableOverrides,
+        ): Promise<PopulatedTransaction>
+
+        owner(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        'owner()'(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        pause(overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'pause()'(overrides?: Overrides): Promise<PopulatedTransaction>
+
+        paused(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        'paused()'(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        renounceOwnership(overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'renounceOwnership()'(overrides?: Overrides): Promise<PopulatedTransaction>
+
+        transferOwnership(newOwner: string, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'transferOwnership(address)'(newOwner: string, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        unpause(overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'unpause()'(overrides?: Overrides): Promise<PopulatedTransaction>
+
+        withdrawEther(_dest: string, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'withdrawEther(address)'(_dest: string, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        withdrawToken(_tokenAddress: string, _dest: string, overrides?: Overrides): Promise<PopulatedTransaction>
+
+        'withdrawToken(address,address)'(
+            _tokenAddress: string,
+            _dest: string,
+            overrides?: Overrides,
+        ): Promise<PopulatedTransaction>
     }
 }

@@ -14,9 +14,6 @@ export function useTokensBalance(listOfAddress: string[]) {
     const balanceCheckerContract = useBalanceCheckerContract()
     return useAsyncRetry(async () => {
         if (!account || !balanceCheckerContract) return []
-        return balanceCheckerContract.methods.balances([account], listOfAddress).call({
-            // cannot check the sender's balance in the same contract
-            from: undefined,
-        })
+        return balanceCheckerContract.balances([account], listOfAddress)
     }, [account, chainId, listOfAddress.join(), balanceCheckerContract])
 }

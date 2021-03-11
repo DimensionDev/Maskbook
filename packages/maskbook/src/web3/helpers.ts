@@ -1,6 +1,3 @@
-import type Web3 from 'web3'
-import type { EventLog, TransactionReceipt } from 'web3-core'
-import Web3Utils, { AbiItem, AbiOutput } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { CONSTANTS } from './constants'
 import {
@@ -29,7 +26,7 @@ export function isETH(address: string) {
 }
 
 export function addGasMargin(value: BigNumber, scale = 1000) {
-    return value.multipliedBy(new BigNumber(10000).plus(new BigNumber(scale))).dividedToIntegerBy(new BigNumber(10000))
+    return value.multipliedBy(new BigNumber(10000).plus(new BigNumber(scale))).dividedBy(new BigNumber(10000))
 }
 
 //#region constants
@@ -128,36 +125,36 @@ export function createERC1155Token(
     }
 }
 
-export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
-    if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)
-    if (abis.length > 1) return web3.eth.abi.decodeParameters(abis, output)
-    return
-}
+// export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
+//     if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)
+//     if (abis.length > 1) return web3.eth.abi.decodeParameters(abis, output)
+//     return
+// }
 
-export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionReceipt) {
-    // the topic0 for identifying which abi to be used for decoding the event
-    const listOfTopic0 = abis.map((abi) => Web3Utils.keccak256(`${abi.name}(${abi.inputs?.map((x) => x.type).join()})`))
+// export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionReceipt) {
+//     // the topic0 for identifying which abi to be used for decoding the event
+//     const listOfTopic0 = abis.map((abi) => Web3Utils.keccak256(`${abi.name}(${abi.inputs?.map((x) => x.type).join()})`))
 
-    // decode events
-    const events = receipt.logs.map((log) => {
-        const idx = listOfTopic0.indexOf(log.topics[0])
-        if (idx === -1) return
-        const abi = abis[idx]
-        const inputs = abi?.inputs ?? []
-        return {
-            // more: https://web3js.readthedocs.io/en/v1.2.11/web3-eth-abi.html?highlight=decodeLog#decodelog
-            returnValues: web3.eth.abi.decodeLog(inputs, log.data, abi.anonymous ? log.topics : log.topics.slice(1)),
-            raw: {
-                data: log.data,
-                topics: log.topics,
-            },
-            event: abi.name,
-            signature: listOfTopic0[idx],
-            ...log,
-        } as EventLog
-    })
-    return events.reduce((accumulate, event) => {
-        if (event) accumulate[event.event] = event
-        return accumulate
-    }, {} as { [eventName: string]: EventLog })
-}
+//     // decode events
+//     const events = receipt.logs.map((log) => {
+//         const idx = listOfTopic0.indexOf(log.topics[0])
+//         if (idx === -1) return
+//         const abi = abis[idx]
+//         const inputs = abi?.inputs ?? []
+//         return {
+//             // more: https://web3js.readthedocs.io/en/v1.2.11/web3-eth-abi.html?highlight=decodeLog#decodelog
+//             returnValues: web3.eth.abi.decodeLog(inputs, log.data, abi.anonymous ? log.topics : log.topics.slice(1)),
+//             raw: {
+//                 data: log.data,
+//                 topics: log.topics,
+//             },
+//             event: abi.name,
+//             signature: listOfTopic0[idx],
+//             ...log,
+//         } as EventLog
+//     })
+//     return events.reduce((accumulate, event) => {
+//         if (event) accumulate[event.event] = event
+//         return accumulate
+//     }, {} as { [eventName: string]: EventLog })
+// }

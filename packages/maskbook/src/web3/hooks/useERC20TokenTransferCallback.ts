@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
+import BigNumber from 'bignumber.js'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
@@ -28,7 +28,7 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
         }
 
         // error: insufficent balance
-        const balance = await erc20Contract.methods.balanceOf(account).call()
+        const balance = await erc20Contract.balanceOf(account)
 
         if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) {
             setTransferState({
@@ -44,14 +44,15 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
         })
 
         // step 1: estimate gas
-        const estimatedGas = await erc20Contract.methods.transfer(recipient, amount).estimateGas({
-            from: account,
-            to: erc20Contract.options.address,
-        })
+        const estimatedGas = await erc20Contract.estimateGas.transfer(recipient, amount)
 
         // step 2: blocking
         return new Promise<string>(async (resolve, reject) => {
-            erc20Contract.methods.transfer(recipient, amount).send(
+            const transaction = await erc20Contract.transfer(recipient, amount, {
+                gasLimit: estimatedGas,
+            })
+
+            erc20Contract.transfer(recipient, amount).send(
                 {
                     from: account,
                     to: erc20Contract.options.address,

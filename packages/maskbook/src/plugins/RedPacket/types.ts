@@ -1,6 +1,6 @@
 import type { ERC20TokenRecord } from '../Wallet/database/types'
 import type { EthereumTokenType, EthereumNetwork } from '../../web3/types'
-import type { Transaction } from 'web3-core'
+import type { TransactionResponse } from '@ethersproject/abstract-provider'
 
 /**
  * @see https://github.com/DimensionDev/Tessercube-iOS/wiki/Red-Packet-Data-Dictionary
@@ -129,7 +129,7 @@ export namespace History {
         }
         transactions: {
             timestamp: string
-            transaction: Transaction
+            transaction: TransactionResponse
             records: Log[]
         }[]
     }

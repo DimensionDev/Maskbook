@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { makeStyles, createStyles, Typography, DialogContent, Link } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'ethers'
+import { parseUnits } from 'ethers/lib/utils'
 import { Trans } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
 
@@ -12,7 +13,6 @@ import { useChainId } from '../../../web3/hooks/useChainState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
@@ -29,6 +29,7 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { formatBalance } from '../../../web3/helpers/number'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -49,8 +50,7 @@ const useStyles = makeStyles((theme) =>
             padding: theme.spacing(2, 2, 0, 2),
         },
         button: {
-            margin: theme.spacing(2, 0),
-            padding: 12,
+            margin: theme.spacing(1.5, 0, 0),
         },
     }),
 )
@@ -114,24 +114,15 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0))
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
+    const amount = Number.parseFloat(rawAmount) && token ? parseUnits(rawAmount, token.decimals) : BigNumber.from(0)
+    const { value: tokenBalance = BigNumber.from(0), loading: loadingTokenBalance } = useTokenBalance(
         token?.type ?? EthereumTokenType.Ether,
         token?.address ?? '',
     )
     //#endregion
 
-    //#region connect wallet
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onConnect = useCallback(() => {
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setSelectProviderDialogOpen])
-    //#endregion
-
-    //#region blocking
-    const [donateState, donateCallback, resetDonateCallback] = useDonateCallback(address ?? '', amount.toFixed(), token)
+    //#region donate
+    const [donateState, donateCallback, resetDonateCallback] = useDonateCallback(address, amount.toString(), token)
     //#endregion
 
     //#region transaction dialog
@@ -141,11 +132,9 @@ export function DonateDialog(props: DonateDialogProps) {
         .getShareLinkURL?.(
             token
                 ? [
-                      `I just donated ${title} with ${formatBalance(
-                          amount,
-                          token.decimals ?? 0,
-                          token.decimals ?? 0,
-                      )} ${cashTag}${token.symbol}. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
+                      `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${
+                          token.symbol
+                      }. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
                       '#mask_io',
                       postLink,
                   ].join('\n')
@@ -171,9 +160,7 @@ export function DonateDialog(props: DonateDialogProps) {
             open: true,
             shareLink,
             state: donateState,
-            summary: `Donating ${formatBalance(amount, token.decimals ?? 0, token.decimals ?? 0)} ${
-                token.symbol
-            } for ${title}.`,
+            summary: `Donating ${formatBalance(amount, token.decimals)} ${token.symbol} for ${title}.`,
         })
     }, [donateState /* update tx dialog only if state changed */])
     //#endregion
@@ -186,12 +173,12 @@ export function DonateDialog(props: DonateDialogProps) {
         if (Flags.wallet_network_strict_mode_enabled && chainId !== ChainId.Mainnet)
             return t('plugin_wallet_wrong_network')
         if (!amount || amount.isZero()) return t('plugin_gitcoin_enter_an_amount')
-        if (amount.isGreaterThan(new BigNumber(tokenBalance)))
+        if (amount.gt(tokenBalance))
             return t('plugin_gitcoin_insufficient_balance', {
                 symbol: token.symbol,
             })
         return ''
-    }, [account, address, amount.toFixed(), chainId, token, tokenBalance])
+    }, [account, address, amount.toString(), chainId, token, tokenBalance])
     //#endregion
 
     if (!token || !address) return null
@@ -204,7 +191,7 @@ export function DonateDialog(props: DonateDialogProps) {
                         <TokenAmountPanel
                             label="Amount"
                             amount={rawAmount}
-                            balance={tokenBalance ?? '0'}
+                            balance={tokenBalance?.toString() ?? '0'}
                             token={token}
                             onAmountChange={setRawAmount}
                             SelectTokenChip={{
@@ -231,7 +218,7 @@ export function DonateDialog(props: DonateDialogProps) {
                     </Typography>
                     <EthereumWalletConnectedBoundary>
                         <EthereumERC20TokenApprovedBoundary
-                            amount={amount.toFixed()}
+                            amount={amount.toString()}
                             spender={BULK_CHECKOUT_ADDRESS}
                             token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
                             <ActionButton
@@ -239,6 +226,7 @@ export function DonateDialog(props: DonateDialogProps) {
                                 fullWidth
                                 disabled={!!validationMessage}
                                 onClick={donateCallback}
+                                size="large"
                                 variant="contained">
                                 {validationMessage || t('plugin_gitcoin_donate')}
                             </ActionButton>

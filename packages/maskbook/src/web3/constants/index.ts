@@ -227,11 +227,11 @@ export const CONSTANTS = {
     PROVIDER_WEIGHT_LIST: {
         [ChainId.Mainnet]:
             process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test' || process.env.build === 'beta'
-                ? [0, 0, 0, 0, 0] // 0 - 100%
+                ? [0] // 0 - 100%
                 : [0, 0, 1, 2, 3], // 0 - 40%, 1 - 20%, 2 - 20%, 3 - 20%
-        [ChainId.Ropsten]: [0, 0, 0, 0, 0], // 0 - 100%
-        [ChainId.Rinkeby]: [0, 0, 0, 0, 0], // 0 - 100%
-        [ChainId.Kovan]: [0, 0, 0, 0, 0], // 0 - 100%
-        [ChainId.Gorli]: [0, 0, 0, 0, 0], // 0 - 100%
+        [ChainId.Ropsten]: [0], // 0 - 100%
+        [ChainId.Rinkeby]: [0], // 0 - 100%
+        [ChainId.Kovan]: [0], // 0 - 100%
+        [ChainId.Gorli]: [0], // 0 - 100%
     },
 }

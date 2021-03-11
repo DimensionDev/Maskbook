@@ -1,13 +1,13 @@
+import type { TransactionReceipt, TransactionResponse } from '@ethersproject/providers'
 import { useState } from 'react'
 import { useAsync } from 'react-use'
-import type { Transaction, TransactionReceipt } from 'web3-core'
 import Services from '../../extension/service'
 import { useAccount } from './useAccount'
 import { useBlockNumber, useChainId } from './useChainState'
 
 export function useTransaction(hash: string) {
     const account = useAccount()
-    const [tx, setTx] = useState<Transaction | null>(null)
+    const [tx, setTx] = useState<TransactionResponse | null>(null)
     useAsync(async () => {
         if (tx) return
         if (!hash) return

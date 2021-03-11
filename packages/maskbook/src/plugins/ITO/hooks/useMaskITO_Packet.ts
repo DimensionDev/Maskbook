@@ -9,10 +9,8 @@ export function useMaskITO_Packet() {
     return useAsyncRetry(async () => {
         if (!MaskITO_Contract) return
         const [unlockTime, claimable = '0'] = await Promise.all([
-            MaskITO_Contract.methods.getUnlockTime().call(),
-            MaskITO_Contract.methods.check_claimable().call({
-                from: account,
-            }),
+            MaskITO_Contract.getUnlockTime(),
+            MaskITO_Contract.check_claimable(),
         ])
         return {
             unlockTime,

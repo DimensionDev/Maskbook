@@ -10,5 +10,5 @@ export function usePriceImpactWarningLevel(priceImpact: BigNumber) {
         if (priceImpact.isGreaterThan(PRICE_IMPACT_HIGH)) return WarningLevel.HIGH
         if (priceImpact.isGreaterThan(PRICE_IMPACT_MEDIUM)) return WarningLevel.MEDIUM
         return WarningLevel.LOW
-    }, [priceImpact.toFixed()])
+    }, [priceImpact.toString()])
 }

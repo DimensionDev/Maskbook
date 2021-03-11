@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken'
-import { sha3 } from 'web3-utils'
+import { sha256 } from 'ethers/lib/utils'
 import type { RedPacketRecord, RedPacketJSONPayload, History } from './types'
 import { RED_PACKET_HISTORY_URL } from './constants'
 import { RedPacketMessage } from './messages'
@@ -31,7 +31,7 @@ export async function claimRedPacket(
         password,
         recipient: from,
         redpacket_id: rpid,
-        validation: sha3(from)!,
+        validation: sha256(from)!,
         // TODO: This is not working on MetaMask cause it require the private key.
         signature: await Services.Ethereum.sign(verify, from, chainId),
     }

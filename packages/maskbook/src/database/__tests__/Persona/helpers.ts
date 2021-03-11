@@ -19,7 +19,6 @@ import {
 import { queryPersonaDB, createProfileDB, createPersonaDB, queryProfileDB } from '../../Persona/Persona.db'
 import { createPersonaRecord, createProfileRecord, personaDBWriteAccess } from './Persona.db'
 import { storeAvatarDB } from '../../avatar'
-import { nonFunctionalWeb3 } from '../../../web3/web3'
 
 beforeAll(() => {
     // MessageCenter will dispatch events on each tab
@@ -188,9 +187,6 @@ test('queryPrivateKey', async () => {
 })
 
 test('createPersonaByMnemonic & createPersonaByJsonWebKey', async () => {
-    // getBalance will be called in the event chain reaction
-    nonFunctionalWeb3.eth.getBalance = async () => '0'
-
     const identifier = await createPersonaByMnemonic('test', 'test')
     const persona = await queryPersonaDB(identifier)
     expect(persona?.identifier).toEqual(identifier)

@@ -2,27 +2,138 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
-import { EventLog } from 'web3-core'
-import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import { ethers, EventFilter, Signer, BigNumber, BigNumberish, PopulatedTransaction } from 'ethers'
+import { Contract, ContractTransaction, CallOverrides } from '@ethersproject/contracts'
+import { BytesLike } from '@ethersproject/bytes'
+import { Listener, Provider } from '@ethersproject/providers'
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi'
+import { TypedEventFilter, TypedEvent, TypedListener } from './commons'
 
-interface EventOptions {
-    filter?: object
-    fromBlock?: BlockType
-    topics?: string[]
+interface BalanceCheckerInterface extends ethers.utils.Interface {
+    functions: {
+        'tokenBalance(address,address)': FunctionFragment
+        'balances(address[],address[])': FunctionFragment
+    }
+
+    encodeFunctionData(functionFragment: 'tokenBalance', values: [string, string]): string
+    encodeFunctionData(functionFragment: 'balances', values: [string[], string[]]): string
+
+    decodeFunctionResult(functionFragment: 'tokenBalance', data: BytesLike): Result
+    decodeFunctionResult(functionFragment: 'balances', data: BytesLike): Result
+
+    events: {}
 }
 
 export class BalanceChecker extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
-    clone(): BalanceChecker
-    methods: {
-        tokenBalance(user: string, token: string): TransactionObject<string>
+    connect(signerOrProvider: Signer | Provider | string): this
+    attach(addressOrName: string): this
+    deployed(): Promise<this>
 
-        balances(users: string[], tokens: string[]): TransactionObject<string[]>
+    listeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): Array<TypedListener<EventArgsArray, EventArgsObject>>
+    off<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    on<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    once<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeListener<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        listener: TypedListener<EventArgsArray, EventArgsObject>,
+    ): this
+    removeAllListeners<EventArgsArray extends Array<any>, EventArgsObject>(
+        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    ): this
+
+    listeners(eventName?: string): Array<Listener>
+    off(eventName: string, listener: Listener): this
+    on(eventName: string, listener: Listener): this
+    once(eventName: string, listener: Listener): this
+    removeListener(eventName: string, listener: Listener): this
+    removeAllListeners(eventName?: string): this
+
+    queryFilter<EventArgsArray extends Array<any>, EventArgsObject>(
+        event: TypedEventFilter<EventArgsArray, EventArgsObject>,
+        fromBlockOrBlockhash?: string | number | undefined,
+        toBlock?: string | number | undefined,
+    ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>
+
+    interface: BalanceCheckerInterface
+
+    functions: {
+        tokenBalance(user: string, token: string, overrides?: CallOverrides): Promise<[BigNumber]>
+
+        'tokenBalance(address,address)'(user: string, token: string, overrides?: CallOverrides): Promise<[BigNumber]>
+
+        balances(users: string[], tokens: string[], overrides?: CallOverrides): Promise<[BigNumber[]]>
+
+        'balances(address[],address[])'(
+            users: string[],
+            tokens: string[],
+            overrides?: CallOverrides,
+        ): Promise<[BigNumber[]]>
     }
-    events: {
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+
+    tokenBalance(user: string, token: string, overrides?: CallOverrides): Promise<BigNumber>
+
+    'tokenBalance(address,address)'(user: string, token: string, overrides?: CallOverrides): Promise<BigNumber>
+
+    balances(users: string[], tokens: string[], overrides?: CallOverrides): Promise<BigNumber[]>
+
+    'balances(address[],address[])'(users: string[], tokens: string[], overrides?: CallOverrides): Promise<BigNumber[]>
+
+    callStatic: {
+        tokenBalance(user: string, token: string, overrides?: CallOverrides): Promise<BigNumber>
+
+        'tokenBalance(address,address)'(user: string, token: string, overrides?: CallOverrides): Promise<BigNumber>
+
+        balances(users: string[], tokens: string[], overrides?: CallOverrides): Promise<BigNumber[]>
+
+        'balances(address[],address[])'(
+            users: string[],
+            tokens: string[],
+            overrides?: CallOverrides,
+        ): Promise<BigNumber[]>
+    }
+
+    filters: {}
+
+    estimateGas: {
+        tokenBalance(user: string, token: string, overrides?: CallOverrides): Promise<BigNumber>
+
+        'tokenBalance(address,address)'(user: string, token: string, overrides?: CallOverrides): Promise<BigNumber>
+
+        balances(users: string[], tokens: string[], overrides?: CallOverrides): Promise<BigNumber>
+
+        'balances(address[],address[])'(
+            users: string[],
+            tokens: string[],
+            overrides?: CallOverrides,
+        ): Promise<BigNumber>
+    }
+
+    populateTransaction: {
+        tokenBalance(user: string, token: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        'tokenBalance(address,address)'(
+            user: string,
+            token: string,
+            overrides?: CallOverrides,
+        ): Promise<PopulatedTransaction>
+
+        balances(users: string[], tokens: string[], overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+        'balances(address[],address[])'(
+            users: string[],
+            tokens: string[],
+            overrides?: CallOverrides,
+        ): Promise<PopulatedTransaction>
     }
 }

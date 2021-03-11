@@ -4,7 +4,7 @@ import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import LaunchIcon from '@material-ui/icons/Launch'
-import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
+import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { dateTimeFormat } from '../assets/formatDate'
 import { isETH } from '../../../web3/helpers'
@@ -43,7 +43,7 @@ function SwapItem(props: SwapItemProps) {
                 {t('plugin_ito_swap_title', {
                     swap: exchange ? swap?.symbol : token?.symbol,
                     token: exchange ? token?.symbol : swap?.symbol,
-                    amount: exchange ? new BigNumber(1).div(amount_).toFixed() : amount_,
+                    amount: exchange ? new BigNumber(1).dividedBy(amount_).toFixed() : amount_,
                 })}
             </Typography>
             <div className={classes.icon} onClick={() => setExchange(!exchange)}>
@@ -223,7 +223,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 <Grid item xs={6} className={classes.button}>
                     <ActionButton fullWidth variant="contained" onClick={onDone}>
                         {t('plugin_ito_send_text', {
-                            total: formatAmountPrecision(
+                            total: formatBalance(
                                 new BigNumber(poolSettings?.total ?? '0'),
                                 poolSettings?.token?.decimals,
                             ),

@@ -11,7 +11,11 @@ export function useEtherTokenBalance(address: string) {
     const account = useAccount()
     const chainId = useChainId()
     return useAsyncRetry(async () => {
-        if (!account || !address) return undefined
+        console.log({
+            account,
+            address,
+        })
+        if (!account || !address) return
         return Services.Ethereum.getBalance(account, chainId)
     }, [account, chainId /* re-calc when switch the chain */, address])
 }
