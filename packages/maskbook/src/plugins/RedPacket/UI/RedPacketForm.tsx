@@ -144,7 +144,8 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const password = useRef(uuid())
     const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback({
         password: password.current,
-        duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
+        // Todo: revert it back after test
+        duration: 60 /* seconds */ * 20 /* mins */ * 1 /* hours */,
         isRandom: Boolean(isRandom),
         name: senderName,
         message,
