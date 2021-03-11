@@ -1,8 +1,8 @@
 import type { SocialNetworkUIInformationCollector } from '../../../social-network/ui'
-import { instanceOfTwitterUI } from './index'
-import { resolveLastRecognizedIdentity } from '../collecting/identity'
-import { registerUserCollector } from '../collecting/profiles'
-import { registerPostCollector } from '../collecting/post'
+import { instanceOfTwitterUI } from '../ui/index'
+import { resolveLastRecognizedIdentity } from './identity'
+import { registerUserCollector } from './profiles'
+import { registerPostCollector } from './post'
 
 export const twitterUIFetch: SocialNetworkUIInformationCollector = {
     resolveLastRecognizedIdentity: () => resolveLastRecognizedIdentity(instanceOfTwitterUI),
