@@ -7,7 +7,7 @@ import { deconstructPayload, Payload } from '../../../utils/type-transform/Paylo
 import { postIdParser } from '../utils/fetch'
 import { memoize } from 'lodash-es'
 import Services from '../../../extension/service'
-import { injectMaskbookIconToPost } from '../ui/injectMaskbookIcon'
+import { injectMaskbookIconToPost } from '../injection/MaskbookIcon'
 import { startWatch } from '../../../utils/watcher'
 import { postsImageSelector } from '../utils/selector'
 import { ProfileIdentifier } from '../../../database/type'
@@ -21,7 +21,7 @@ import {
     makeTypedMessageCompound,
     extractTextFromTypedMessage,
 } from '../../../protocols/typed-message'
-import { instanceOfTwitterUI } from '../ui/index'
+import { instanceOfTwitterUI } from '../ui-provider'
 import type { Result } from 'ts-results'
 import { twitterBase } from '../base'
 import { twitterEncoding } from '../encoding'

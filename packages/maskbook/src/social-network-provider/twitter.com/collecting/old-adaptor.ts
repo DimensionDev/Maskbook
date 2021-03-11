@@ -1,5 +1,5 @@
 import type { SocialNetworkUIInformationCollector } from '../../../social-network/ui'
-import { instanceOfTwitterUI } from '../ui/index'
+import { instanceOfTwitterUI } from '../ui-provider'
 import { resolveLastRecognizedIdentity } from './identity'
 import { registerUserCollector } from './profiles'
 import { registerPostCollector } from './post'
