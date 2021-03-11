@@ -79,7 +79,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     useTheme: useThemeFacebook,
 })
 if (module.hot) {
-    module.hot.accept('./tasks/pasteIntoPostBox.ts', () => {
+    module.hot.accept('./automation/pasteTextToComposition.ts', () => {
         facebookUISelf.taskPasteIntoPostBox = pasteTextToCompositionFacebook
     })
 }
