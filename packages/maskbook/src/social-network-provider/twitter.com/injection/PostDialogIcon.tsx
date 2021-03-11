@@ -8,17 +8,23 @@ import { isCompose, isMobile } from '../utils/postBox'
 import { makeStyles, Theme } from '@material-ui/core'
 import { startWatch } from '../../../utils/watcher'
 
-export function injectPostDialogIconAtTwitter() {
+export function injectPostDialogIconAtTwitter(signal?: AbortSignal) {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     const emptyNode = document.createElement('div')
-    renderPostDialogIconTo(postEditorToolbarSelector().map((x) => (isMobile() && isCompose() ? x : emptyNode)))
+    renderPostDialogIconTo(
+        postEditorToolbarSelector().map((x) => (isMobile() && isCompose() ? x : emptyNode)),
+        signal,
+    )
 }
 
-function renderPostDialogIconTo<T>(ls: LiveSelector<T, true>) {
+function renderPostDialogIconTo<T>(ls: LiveSelector<T, true>, signal?: AbortSignal) {
     const watcher = new MutationObserverWatcher(ls)
-    startWatch(watcher)
+    startWatch(watcher, signal)
 
-    renderInShadowRoot(<PostDialogIconAtTwitter />, { shadow: () => watcher.firstDOMProxy.afterShadow })
+    renderInShadowRoot(<PostDialogIconAtTwitter />, {
+        shadow: () => watcher.firstDOMProxy.afterShadow,
+        signal,
+    })
 }
 
 const useTwitterMaskbookIcon = makeStyles((theme: Theme) => ({

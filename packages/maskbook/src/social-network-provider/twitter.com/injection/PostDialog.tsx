@@ -5,17 +5,20 @@ import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoo
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { postEditorContentInPopupSelector, rootSelector } from '../utils/selector'
 import { startWatch } from '../../../utils/watcher'
-export function injectPostDialogAtTwitter() {
+export function injectPostDialogAtTwitter(signal?: AbortSignal) {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
-    renderPostDialogTo('popup', postEditorContentInPopupSelector())
-    renderPostDialogTo('timeline', rootSelector())
+    renderPostDialogTo('popup', postEditorContentInPopupSelector(), signal)
+    renderPostDialogTo('timeline', rootSelector(), signal)
 }
 
-function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>) {
+function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>, signal?: AbortSignal) {
     const watcher = new MutationObserverWatcher(ls)
-    startWatch(watcher)
+    startWatch(watcher, signal)
 
-    renderInShadowRoot(<PostDialogAtTwitter reason={reason} />, { shadow: () => watcher.firstDOMProxy.afterShadow })
+    renderInShadowRoot(<PostDialogAtTwitter reason={reason} />, {
+        shadow: () => watcher.firstDOMProxy.afterShadow,
+        signal,
+    })
 }
 
 function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {

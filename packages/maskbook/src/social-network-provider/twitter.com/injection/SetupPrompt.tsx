@@ -6,16 +6,16 @@ import { hasEditor, isCompose } from '../utils/postBox'
 import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt'
 import { startWatch } from '../../../utils/watcher'
 
-export function injectSetupPromptAtTwitter() {
+export function injectSetupPromptAtTwitter(signal?: AbortSignal) {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     const emptyNode = document.createElement('div')
-    injectSetupPrompt(postEditorInTimelineSelector())
+    injectSetupPrompt(postEditorInTimelineSelector(), signal)
     injectSetupPrompt(postEditorInPopupSelector().map((x) => (isCompose() && hasEditor() ? x : emptyNode)))
 }
 
-function injectSetupPrompt<T>(ls: LiveSelector<T, true>) {
+function injectSetupPrompt<T>(ls: LiveSelector<T, true>, signal?: AbortSignal) {
     const watcher = new MutationObserverWatcher(ls)
-    startWatch(watcher)
+    startWatch(watcher, signal)
 
-    renderInShadowRoot(<NotSetupYetPrompt />, { shadow: () => watcher.firstDOMProxy.afterShadow })
+    renderInShadowRoot(<NotSetupYetPrompt />, { shadow: () => watcher.firstDOMProxy.afterShadow, signal })
 }

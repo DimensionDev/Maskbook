@@ -7,7 +7,7 @@ import { twitterUIFetch } from './collecting/old-adaptor'
 import { twitterUIInjections } from './injection/inject'
 import { twitterUrl } from './utils/url'
 import { twitterUICustomUI, startWatchThemeColor } from './customization/custom'
-import { injectMaskbookIconToProfile, injectMaskbookIconIntoFloatingProfileCard } from './injection/MaskbookIcon'
+import { injectMaskUserBadgeAtTwitter } from './injection/MaskbookIcon'
 import { Flags } from '../../utils/flags'
 import { oldTwitterI18NOverwrite } from './customization/i18n'
 
@@ -24,8 +24,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         sharedSettings.init()
         InitFriendsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
         InitMyIdentitiesValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
-        injectMaskbookIconToProfile()
-        injectMaskbookIconIntoFloatingProfileCard()
+        injectMaskUserBadgeAtTwitter()
     },
     shouldActivate(location: Location | URL = globalThis.location) {
         return location.hostname.endsWith(twitterUrl.hostIdentifier)

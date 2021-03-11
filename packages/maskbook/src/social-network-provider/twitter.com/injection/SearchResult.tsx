@@ -4,12 +4,11 @@ import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoo
 import { startWatch } from '../../../utils/watcher'
 import { searchResultHeadingSelector } from '../utils/selector'
 
-export function injectSearchResultBoxAtTwitter() {
+export function injectSearchResultBoxAtTwitter(signal?: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchResultHeadingSelector())
-    startWatch(watcher)
-    renderInShadowRoot(<SearchResultBoxAtTwitter />, { shadow: () => watcher.firstDOMProxy.afterShadow })
-}
-
-function SearchResultBoxAtTwitter() {
-    return <SearchResultBox />
+    startWatch(watcher, signal)
+    renderInShadowRoot(<SearchResultBox />, {
+        shadow: () => watcher.firstDOMProxy.afterShadow,
+        signal,
+    })
 }

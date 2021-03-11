@@ -8,21 +8,25 @@ import { MaskMessage } from '../../../utils/messages'
 import { hasEditor, isCompose } from '../utils/postBox'
 import { startWatch } from '../../../utils/watcher'
 
-export function injectPostDialogHintAtTwitter() {
+export function injectPostDialogHintAtTwitter(signal?: AbortSignal) {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     const emptyNode = document.createElement('div')
-    renderPostDialogHintTo('timeline', postEditorInTimelineSelector())
+    renderPostDialogHintTo('timeline', postEditorInTimelineSelector(), signal)
     renderPostDialogHintTo(
         'popup',
         postEditorInPopupSelector().map((x) => (isCompose() && hasEditor() ? x : emptyNode)),
+        signal,
     )
 }
 
-function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>) {
+function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>, signal?: AbortSignal) {
     const watcher = new MutationObserverWatcher(ls)
-    startWatch(watcher)
+    startWatch(watcher, signal)
 
-    renderInShadowRoot(<PostDialogHintAtTwitter reason={reason} />, { shadow: () => watcher.firstDOMProxy.afterShadow })
+    renderInShadowRoot(<PostDialogHintAtTwitter reason={reason} />, {
+        shadow: () => watcher.firstDOMProxy.afterShadow,
+        signal,
+    })
 }
 
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {

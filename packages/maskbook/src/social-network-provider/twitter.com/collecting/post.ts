@@ -7,7 +7,7 @@ import { deconstructPayload, Payload } from '../../../utils/type-transform/Paylo
 import { postIdParser } from '../utils/fetch'
 import { memoize } from 'lodash-es'
 import Services from '../../../extension/service'
-import { injectMaskbookIconToPost } from '../injection/MaskbookIcon'
+import { injectMaskIconToPostTwitter } from '../injection/MaskbookIcon'
 import { startWatch } from '../../../utils/watcher'
 import { postsImageSelector } from '../utils/selector'
 import { ProfileIdentifier } from '../../../database/type'
@@ -81,7 +81,7 @@ function registerPostCollectorInner(
                 non_overlapping_assign(info.postPayload, deconstructPayload(newValue, twitterEncoding.payloadDecoder))
             })
             cancel?.addEventListener('abort', undo2)
-            injectMaskbookIconToPost(info, cancel)
+            injectMaskIconToPostTwitter(info, cancel)
             postStore.set(proxy, info)
             return {
                 onTargetChanged: run,

@@ -21,7 +21,7 @@ function Icon(props: { size: number }) {
         />
     )
 }
-function _(main: () => LiveSelector<HTMLElement, true>, size: number) {
+function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal?: AbortSignal) {
     // TODO: for unknown reason the MutationObserverWatcher doesn't work well
     // To reproduce, open a profile and switch to another profile.
     startWatch(
@@ -32,7 +32,10 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number) {
                 ifUsingMaskbook(
                     new ProfileIdentifier('twitter.com', bioPageUserIDSelector(main).evaluate() || ''),
                 ).then(() => {
-                    remover = renderInShadowRoot(<Icon size={size} />, { shadow: () => meta.afterShadow })
+                    remover = renderInShadowRoot(<Icon size={size} />, {
+                        shadow: () => meta.afterShadow,
+                        signal,
+                    })
                 }, remove)
             }
             check()
@@ -42,15 +45,17 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number) {
                 onRemove: remove,
             }
         }),
+        signal,
     )
 }
-export function injectMaskbookIconToProfile() {
-    _(bioPageUserNickNameSelector, 24)
+
+export function injectMaskUserBadgeAtTwitter(signal?: AbortSignal) {
+    // profile
+    _(bioPageUserNickNameSelector, 24, signal)
+    // floating bio
+    _(floatingBioCardSelector, 20, signal)
 }
-export function injectMaskbookIconIntoFloatingProfileCard() {
-    _(floatingBioCardSelector, 20)
-}
-export function injectMaskbookIconToPost(post: PostInfo, cancel?: AbortSignal) {
+export function injectMaskIconToPostTwitter(post: PostInfo, cancel?: AbortSignal) {
     const ls = new LiveSelector([post.rootNodeProxy])
         .map((x) =>
             x.current.parentElement?.parentElement?.previousElementSibling?.querySelector<HTMLDivElement>(

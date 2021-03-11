@@ -8,20 +8,22 @@ import { twitterUrl } from '../utils/url'
 const main = new LiveSelector().querySelector('body > noscript')
 const menu = new LiveSelector().querySelector('[role="banner"] [role="heading"]')
 
-export function injectToolbarAtTwitter() {
+export function injectToolbarAtTwitter(signal?: AbortSignal) {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
 
     // inject placeholder into left column
     const menuWatcher = new MutationObserverWatcher(menu.clone())
-    startWatch(menuWatcher)
+    startWatch(menuWatcher, signal)
     renderInShadowRoot(<ToolbarPlaceholder expectedHeight={TOOLBAR_HEIGHT} />, {
         shadow: () => menuWatcher.firstDOMProxy.beforeShadow,
+        signal,
     })
 
     // inject toolbar
     const mainWatcher = new MutationObserverWatcher(main.clone())
-    startWatch(mainWatcher)
+    startWatch(mainWatcher, signal)
     renderInShadowRoot(<ToolbarAtTwitter />, {
         shadow: () => mainWatcher.firstDOMProxy.beforeShadow,
+        signal,
     })
 }

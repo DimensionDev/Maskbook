@@ -7,7 +7,7 @@ function resolveLangNode(node: HTMLElement) {
         : node.querySelector<HTMLDivElement>('[lang]') ?? node.parentElement?.querySelector<HTMLDivElement>('[lang]')
 }
 
-export function injectPostReplacerAtTwitter(current: PostInfo) {
+export function injectPostReplacerAtTwitter(current: PostInfo, signal?: AbortSignal) {
     return injectPostReplacer({
         zipPost(node) {
             const langNode = resolveLangNode(node.current)
@@ -17,5 +17,5 @@ export function injectPostReplacerAtTwitter(current: PostInfo) {
             const langNode = resolveLangNode(node.current)
             if (langNode) langNode.style.display = 'unset'
         },
-    })(current)
+    })(current, signal)
 }

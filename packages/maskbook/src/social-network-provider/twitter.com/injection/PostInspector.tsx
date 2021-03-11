@@ -2,7 +2,7 @@ import type { PostInfo } from '../../../social-network/PostInfo'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
 import { twitterEncoding } from '../encoding'
 
-export function injectPostInspectorAtTwitter(current: PostInfo) {
+export function injectPostInspectorAtTwitter(current: PostInfo, signal?: AbortSignal) {
     return injectPostInspectorDefault({
         zipPost(node) {
             const content = node.current.parentElement?.querySelector<HTMLDivElement>('[lang]')
@@ -28,7 +28,7 @@ export function injectPostInspectorAtTwitter(current: PostInfo) {
                 }
             }
         },
-    })(current)
+    })(current, signal)
 }
 function matches(input: string) {
     return /maskbook\.com/i.test(input) && /Make Privacy Protected Again/i.test(input)

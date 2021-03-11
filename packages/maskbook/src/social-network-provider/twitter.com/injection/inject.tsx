@@ -9,14 +9,14 @@ import { injectPageInspectorDefault } from '../../../social-network/defaults/inj
 import { injectSearchResultBoxAtTwitter } from './SearchResult'
 import { injectToolbarAtTwitter } from './Toolbar'
 
-const injectPostBox = () => {
-    injectPostDialogAtTwitter()
-    injectPostDialogHintAtTwitter()
-    injectPostDialogIconAtTwitter()
+export function injectPostBoxComposed(signal?: AbortSignal) {
+    injectPostDialogAtTwitter(signal)
+    injectPostDialogHintAtTwitter(signal)
+    injectPostDialogIconAtTwitter(signal)
 }
 
 export const twitterUIInjections: SocialNetworkUIInjections = {
-    injectPostBox,
+    injectPostBox: injectPostBoxComposed,
     injectToolbar: injectToolbarAtTwitter,
     injectSetupPrompt: injectSetupPromptAtTwitter,
     injectSearchResultBox: injectSearchResultBoxAtTwitter,
