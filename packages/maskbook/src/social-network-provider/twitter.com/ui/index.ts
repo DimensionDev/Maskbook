@@ -6,9 +6,10 @@ import { twitterUITasks } from './tasks'
 import { twitterUIFetch } from './fetch'
 import { twitterUIInjections } from './inject'
 import { twitterUrl } from '../utils/url'
-import { twitterUICustomUI, startWatchThemeColor } from './custom'
+import { twitterUICustomUI, startWatchThemeColor } from '../customization/custom'
 import { injectMaskbookIconToProfile, injectMaskbookIconIntoFloatingProfileCard } from './injectMaskbookIcon'
 import { Flags } from '../../../utils/flags'
+import { oldTwitterI18NOverwrite } from '../customization/i18n'
 
 const origins = [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`]
 export const instanceOfTwitterUI = defineSocialNetworkUI({
@@ -17,20 +18,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...twitterUIInjections,
     ...twitterUIFetch,
     ...twitterUICustomUI,
-    i18nOverwrite: {
-        en: {
-            additional_post_box__encrypted_post_pre: [
-                'This tweet is encrypted with #mask_io (@realMaskbook). 📪🔑',
-                'Install {{encrypted}} to decrypt it.',
-            ].join('\n\n'),
-        },
-        zh: {
-            additional_post_box__encrypted_post_pre: [
-                '此推文已被 Mask（@realmaskbook）加密。📪🔑',
-                '請安裝 {{encrypted}} 進行解密。',
-            ].join('\n\n'),
-        },
-    },
+    i18nOverwrite: oldTwitterI18NOverwrite,
     init: () => {
         startWatchThemeColor()
         sharedSettings.init()

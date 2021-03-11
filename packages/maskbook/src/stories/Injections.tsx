@@ -25,7 +25,7 @@ import {
     makeTypedMessageSuspended,
 } from '../protocols/typed-message'
 import { DefaultTypedMessageRenderer } from '../components/InjectedComponents/TypedMessageRenderer'
-import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
+import { TwitterThemeProvider } from '../social-network-provider/twitter.com/customization/custom'
 import { figmaLink } from './utils'
 import { RedPacketMetaKey } from '../plugins/RedPacket/constants'
 import type { RedPacketJSONPayload } from '../plugins/RedPacket/types'

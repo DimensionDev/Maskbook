@@ -1,8 +1,9 @@
 import { useMemo, createElement } from 'react'
 import { ValueRef, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { unstable_createMuiStrictModeTheme, ThemeProvider, makeStyles } from '@material-ui/core'
+import { unstable_createMuiStrictModeTheme, ThemeProvider, makeStyles, PaletteMode } from '@material-ui/core'
 import { useMaskbookTheme } from '../../../utils/theme'
 import type { SocialNetworkUICustomUI } from '../../../social-network/ui'
+import type { SocialNetworkUI } from '../../../social-network-next'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
 import { toRGB, getBackgroundColor, fromRGB, shade, isDark, getForegroundColor } from '../../../utils/theme-tools'
@@ -16,25 +17,32 @@ const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))
 const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
 
-export function startWatchThemeColor() {
+export const PaletteModeProviderTwitter: SocialNetworkUI.Customization.PaletteModeProvider = {
+    current: new ValueRef<PaletteMode>('light'),
+    start: startWatchThemeColor,
+}
+
+export function startWatchThemeColor(signal?: AbortSignal) {
     function updateThemeColor() {
         const color = getBackgroundColor(composeAnchorSelector().evaluate()!)
         const contrastColor = getForegroundColor(composeAnchorTextSelector().evaluate()!)
         const backgroundColor = getBackgroundColor(document.body)
+        PaletteModeProviderTwitter.current.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
 
         if (color) primaryColorRef.value = color
         if (contrastColor) primaryColorContrastColorRef.value = contrastColor
         if (backgroundColor) backgroundColorRef.value = backgroundColor
     }
-    new MutationObserverWatcher(composeAnchorSelector())
+    const watcher = new MutationObserverWatcher(composeAnchorSelector())
         .addListener('onAdd', updateThemeColor)
         .addListener('onChange', updateThemeColor)
         .startWatch({
             childList: true,
             subtree: true,
         })
+    signal?.addEventListener('abort', () => watcher.stopWatch())
 }
-function useTheme() {
+export function useThemeTwitterVariant() {
     const primaryColor = useValueRef(primaryColorRef)
     const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
@@ -111,10 +119,10 @@ function useTheme() {
 
 export function TwitterThemeProvider(props: Required<React.PropsWithChildren<{}>>) {
     if (!process.env.STORYBOOK) throw new Error('This API is only for Storybook!')
-    return createElement(ThemeProvider, { theme: useTheme(), ...props })
+    return createElement(ThemeProvider, { theme: useThemeTwitterVariant(), ...props })
 }
 
-const useInjectedDialogClassesOverwrite = makeStyles((theme) =>
+export const useInjectedDialogClassesOverwriteTwitter = makeStyles((theme) =>
     createStyles<InjectedDialogClassKey>({
         root: {
             display: 'flex',
@@ -185,10 +193,10 @@ const useInjectedDialogClassesOverwrite = makeStyles((theme) =>
 )
 
 export const twitterUICustomUI: SocialNetworkUICustomUI = {
-    useTheme,
+    useTheme: useThemeTwitterVariant,
     componentOverwrite: {
         InjectedDialog: {
-            classes: useInjectedDialogClassesOverwrite,
+            classes: useInjectedDialogClassesOverwriteTwitter,
         },
     },
 }

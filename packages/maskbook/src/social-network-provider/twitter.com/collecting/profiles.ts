@@ -2,18 +2,28 @@ import { bioCardSelector } from '../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { GroupIdentifier, PreDefinedVirtualGroupNames } from '../../../database/type'
 import type { SocialNetworkUI } from '../../../social-network/ui'
+import type { SocialNetworkUI as Next } from '../../../social-network-next'
 import { bioCardParser } from '../utils/fetch'
 import Services from '../../../extension/service'
+import { IdentityProviderTwitter } from './identity'
 
 export function registerUserCollector(self: SocialNetworkUI) {
-    new MutationObserverWatcher(bioCardSelector())
+    registerUserCollectorInner(self.lastRecognizedIdentity)
+}
+export function profilesCollectorTwitter(signal: AbortSignal) {
+    registerUserCollectorInner(IdentityProviderTwitter.lastRecognized, signal)
+}
+function registerUserCollectorInner(
+    ref: Next.CollectingCapabilities.IdentityResolveProvider['lastRecognized'],
+    signal?: AbortSignal,
+) {
+    const watcher = new MutationObserverWatcher(bioCardSelector())
         .useForeach((cardNode: HTMLDivElement) => {
             const resolve = async () => {
                 if (!cardNode) return
                 const { isFollower, isFollowing, identifier } = bioCardParser(cardNode)
-                const ref = self.lastRecognizedIdentity
-                if (!ref) return
-                const myIdentity = await Services.Identity.queryProfile(self.lastRecognizedIdentity.value.identifier)
+                const myIdentity = await Services.Identity.queryProfile(ref.value.identifier)
+                if (signal?.aborted) return
                 const myFriends = GroupIdentifier.getFriendsGroupIdentifier(
                     myIdentity.identifier,
                     PreDefinedVirtualGroupNames.friends,
@@ -42,4 +52,5 @@ export function registerUserCollector(self: SocialNetworkUI) {
             childList: true,
             subtree: true,
         })
+    signal?.addEventListener('abort', () => watcher.stopWatch())
 }
