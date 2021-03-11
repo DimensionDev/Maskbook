@@ -46,7 +46,7 @@ async function main() {
     ])
 
     // format code
-    run(GENERATED_PATH, 'npx', 'prettier', '--write', '*')
+    run(__dirname, 'npx', 'prettier', '--write', '.')
 
     // add to git stage
     run(ABIS_PATH, 'git', 'add', '.')
