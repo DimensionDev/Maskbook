@@ -71,7 +71,6 @@ const useStyles = makeStyles((theme) => {
             transform: 'rotate(-180deg)',
         },
         rootStickyShrink: {
-            zIndex: 1,
             left: '10px !important',
             position: 'fixed',
             backgroundColor: theme.palette.background.paper,
