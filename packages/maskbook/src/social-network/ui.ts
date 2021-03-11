@@ -17,6 +17,7 @@ import type { PostInfo } from './PostInfo'
 import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 import { editMetadata } from '../protocols/typed-message'
 import type { ReadonlyIdentifierMap } from '../database/IdentifierMap'
+import { Flags } from '../utils/flags'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
@@ -292,7 +293,7 @@ export function activateSocialNetworkUI(): void {
                 ui.init()
                 ui.resolveLastRecognizedIdentity()
                 ui.injectPostBox()
-                ui.injectToolbar()
+                if (Flags.toolbar_enabled) ui.injectToolbar()
                 ui.injectSetupPrompt()
                 ui.injectPageInspector()
                 ui.collectPeople()
