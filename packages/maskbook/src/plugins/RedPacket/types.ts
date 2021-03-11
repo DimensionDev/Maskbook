@@ -12,6 +12,11 @@ export interface RedPacketRecord {
     from: string
     password: string
     contract_version: number
+    /** backward compatible V1 */
+    payload?: {
+        contract_version: number
+        password: string
+    }
 }
 
 export interface RedPacketRecordInDatabase extends RedPacketRecord {

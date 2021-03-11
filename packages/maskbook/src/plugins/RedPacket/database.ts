@@ -1,26 +1,43 @@
-import type { RedPacketRecord, RedPacketRecordInDatabase } from './types'
+import type { RedPacketRecord, RedPacketRecordInDatabase, RedPacketHistory } from './types'
 import { RedPacketPluginID } from './constants'
 import { createPluginDatabase } from '../../database/Plugin/wrap-plugin-database'
 import { omit } from 'lodash-es'
 
 export const RedPacketDatabase = createPluginDatabase<RedPacketRecordInDatabase>(RedPacketPluginID)
 
-export async function getRedPackets(txids: string[]) {
+export async function getRedPackets(ids: string[]) {
     const records: RedPacketRecord[] = []
-    for (const txid of txids) {
-        const record = await getRedPacket(txid)
+    for (const id of ids) {
+        const record = await getRedPacket(id)
         if (record) records.push(record)
     }
     return records
 }
 
-export async function getRedPacket(txid: string) {
-    const record = await RedPacketDatabase.get('red-packet', txid)
+export async function getRedPacket(id: string) {
+    const record = await RedPacketDatabase.get('red-packet', id)
     return record ? RedPacketRecordOutDB(record) : undefined
 }
 
 export async function addRedPacket(record: RedPacketRecord) {
     return RedPacketDatabase.add(RedPacketRecordIntoDB(record))
+}
+
+export async function updateV1ToV2(history: RedPacketHistory) {
+    const record_v1 = await getRedPacket(history.rpid)
+    if (record_v1?.payload?.contract_version === 1) {
+        const record_v1_done = await getRedPacket(history.txid)
+        if (!record_v1_done) {
+            await addRedPacket({
+                password: record_v1.payload.password,
+                id: history.txid,
+                contract_version: 1,
+                from: '',
+            })
+            // Todo: remove the v1 database record after test pass?
+            // await RedPacketDatabase.remove('red-packet', history.rpid)
+        }
+    }
 }
 
 function RedPacketRecordIntoDB(x: RedPacketRecord) {
