@@ -50,7 +50,7 @@ export function injectMaskbookIconToProfile() {
 export function injectMaskbookIconIntoFloatingProfileCard() {
     _(floatingBioCardSelector, 20)
 }
-export function injectMaskbookIconToPost(post: PostInfo) {
+export function injectMaskbookIconToPost(post: PostInfo, cancel?: AbortSignal) {
     const ls = new LiveSelector([post.rootNodeProxy])
         .map((x) =>
             x.current.parentElement?.parentElement?.previousElementSibling?.querySelector<HTMLDivElement>(
@@ -62,11 +62,15 @@ export function injectMaskbookIconToPost(post: PostInfo) {
     post.postBy.addListener((x) => ifUsingMaskbook(x).then(add, remove))
     let remover = () => {}
     function add() {
+        if (cancel?.aborted) return
         const node = ls.evaluate()
         if (!node) return
         const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         proxy.realCurrent = node
-        remover = renderInShadowRoot(<Icon size={24} />, { shadow: () => proxy.afterShadow })
+        remover = renderInShadowRoot(<Icon size={24} />, {
+            shadow: () => proxy.afterShadow,
+            signal: cancel,
+        })
     }
     function remove() {
         remover()

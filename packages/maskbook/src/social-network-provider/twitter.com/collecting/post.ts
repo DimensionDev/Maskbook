@@ -1,6 +1,7 @@
 import { postsContentSelector } from '../utils/selector'
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import type { SocialNetworkUI } from '../../../social-network/ui'
+import { creator, SocialNetworkUI as Next } from '../../../social-network-next'
 import { PostInfo } from '../../../social-network/PostInfo'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { postIdParser } from '../utils/fetch'
@@ -10,7 +11,6 @@ import { injectMaskbookIconToPost } from '../ui/injectMaskbookIcon'
 import { startWatch } from '../../../utils/watcher'
 import { postsImageSelector } from '../utils/selector'
 import { ProfileIdentifier } from '../../../database/type'
-import type { SocialNetworkUIDefinition } from '../../../social-network/ui'
 import { postParser, postImagesParser } from '../utils/fetch'
 import { untilElementAvailable } from '../../../utils/dom'
 import {
@@ -23,7 +23,13 @@ import {
 } from '../../../protocols/typed-message'
 import { instanceOfTwitterUI } from '../ui/index'
 import type { Result } from 'ts-results'
-export function registerPostCollector(self: SocialNetworkUI) {
+import { twitterBase } from '../base'
+import { twitterEncoding } from '../encoding'
+
+function registerPostCollectorInner(
+    postStore: Next.CollectingCapabilities.PostsProvider['posts'],
+    cancel?: AbortSignal,
+) {
     const getTweetNode = (node: HTMLElement) => {
         return node.closest<HTMLDivElement>(
             [
@@ -57,24 +63,29 @@ export function registerPostCollector(self: SocialNetworkUI) {
                 postContentNode = undefined
             })()
             function run() {
-                collectPostInfo(tweetNode, info, self)
-                collectLinks(tweetNode, info)
+                collectPostInfo(tweetNode, info, cancel)
+                collectLinks(tweetNode, info, cancel)
             }
             run()
-            info.postPayload.addListener((payload) => {
+            const undo = info.postPayload.addListener((payload) => {
                 if (!payload) return
                 if (payload.err && info.postMetadataImages.size === 0) return
                 updateProfileInfo(info)
             })
-            non_overlapping_assign(info.postPayload, deconstructPayload(info.postContent.value, self.payloadDecoder))
-            info.postContent.addListener((newValue) => {
-                non_overlapping_assign(info.postPayload, deconstructPayload(newValue, self.payloadDecoder))
+            cancel?.addEventListener('abort', undo)
+            non_overlapping_assign(
+                info.postPayload,
+                deconstructPayload(info.postContent.value, twitterEncoding.payloadDecoder),
+            )
+            const undo2 = info.postContent.addListener((newValue) => {
+                non_overlapping_assign(info.postPayload, deconstructPayload(newValue, twitterEncoding.payloadDecoder))
             })
-            injectMaskbookIconToPost(info)
-            self.posts.set(proxy, info)
+            cancel?.addEventListener('abort', undo2)
+            injectMaskbookIconToPost(info, cancel)
+            postStore.set(proxy, info)
             return {
                 onTargetChanged: run,
-                onRemove: () => self.posts.delete(proxy),
+                onRemove: () => postStore.delete(proxy),
                 onNodeMutation: run,
             }
         })
@@ -85,15 +96,26 @@ export function registerPostCollector(self: SocialNetworkUI) {
                 ? `${isQuotedTweet ? 'QUOTED' : ''}${postIdParser(tweetNode)}${node.innerText.replace(/\s/gm, '')}`
                 : node.innerText
         })
-    startWatch(watcher)
+    startWatch(watcher, cancel)
+}
+export function registerPostCollector(self: SocialNetworkUI) {
+    registerPostCollectorInner(self.posts)
 }
 
-function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self: Required<SocialNetworkUIDefinition>) {
+export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
+    posts: creator.PostProviderStore(),
+    start(cancel) {
+        registerPostCollectorInner(this.posts, cancel)
+    },
+}
+
+function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, cancel?: AbortSignal) {
     if (!tweetNode) return
+    if (cancel?.aborted) return
     const { pid, messages, handle, name, avatar } = postParser(tweetNode)
 
     if (!pid) return
-    const postBy = new ProfileIdentifier(self.networkIdentifier, handle)
+    const postBy = new ProfileIdentifier(twitterBase.networkIdentifier, handle)
     info.postID.value = pid
     info.postContent.value = messages
         .map((x) => {
@@ -120,8 +142,9 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self:
     info.postMessage.value = makeTypedMessageCompound([...messages, makeTypedMessageSuspended(images)])
 }
 
-function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo) {
+function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo, cancel?: AbortSignal) {
     if (!tweetNode) return
+    if (cancel?.aborted) return
     const links = [...tweetNode.querySelectorAll('a')].filter((x) => x.rel)
     const seen = new Set<string>(['https://help.twitter.com/using-twitter/how-to-tweet#source-labels'])
     for (const x of links) {
@@ -129,6 +152,7 @@ function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo) {
         seen.add(x.href)
         info.postMetadataMentionedLinks.set(x, x.href)
         Services.Helper.resolveTCOLink(x.href).then((val) => {
+            if (cancel?.aborted) return
             if (!val) return
             info.postMetadataMentionedLinks.set(x, val)
             const tryDecode = deconstructPayload(val, instanceOfTwitterUI.payloadDecoder)
