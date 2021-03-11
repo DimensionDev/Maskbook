@@ -100,7 +100,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { history, onSelect, onClose } = props
     const { t } = useI18N()
     const classes = useStyles()
-    console.log('RedPacketInHistoryList', history)
     const {
         value: availability,
         computed: { canRefund, canSend },
