@@ -4,25 +4,13 @@ import type { Transaction } from '../../../../plugins/Wallet/apis'
 import { TokenIcon } from '../TokenIcon'
 import classNames from 'classnames'
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
     createStyles({
-        root: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        direction: {
-            marginLeft: '4px',
-            marginRight: '4px',
-        },
-        amount: {
-            marginRight: '4px',
-        },
-        symbol: {
-            marginRight: '4px',
-        },
-        receive: {
-            color: '#00c087',
-        },
+        root: { display: 'flex', alignItems: 'center' },
+        direction: { marginLeft: theme.spacing(0.5), marginRight: theme.spacing(0.5) },
+        amount: { marginRight: theme.spacing(0.5) },
+        symbol: { marginRight: theme.spacing(0.5) },
+        receive: { color: '#00c087' },
     }),
 )
 

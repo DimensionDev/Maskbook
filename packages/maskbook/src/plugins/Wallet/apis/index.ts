@@ -18,10 +18,11 @@ export async function getTransactionList(address: string, provider: TransactionP
 function fromDeBank({ history_list, token_dict }: DeBankAPI.HISTORY_RESPONSE['data']) {
     return history_list.map((transaction) => {
         const wrapped = {
-            type: transaction.tx.name === '' ? 'contract' : transaction.tx.name,
+            type: transaction.tx.name === '' ? 'contract interaction' : transaction.tx.name,
             id: transaction.id,
             timeAt: new Date(transaction.time_at * 1000),
             toAddress: transaction.other_addr,
+            failed: transaction.tx.status === 0,
             pairs: [
                 ...transaction.sends.map(({ amount, token_id }) => ({
                     name: token_dict[token_id].name,
