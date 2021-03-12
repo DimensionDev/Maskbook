@@ -2,6 +2,7 @@ import { createStyles, Link, makeStyles, TableCell, TableRow, Typography } from 
 import type { FC } from 'react'
 import { Record } from './Record'
 import type { Transaction } from './types'
+import classNames from 'classnames'
 
 interface Props {
     transaction: Transaction
@@ -9,17 +10,14 @@ interface Props {
 
 const useStyles = makeStyles(() =>
     createStyles({
-        root: {
-            display: 'flex',
-            alignItems: 'center',
-        },
+        failed: { opacity: 0.3 },
     }),
 )
 
 export const Row: FC<Props> = ({ transaction }) => {
-    const 
+    const styles = useStyles()
     return (
-        <TableRow>
+        <TableRow className={classNames({ [styles.failed]: transaction.failed })}>
             <TableCell>
                 <Typography color="textSecondary">{transaction.timeAt.toLocaleString()}</Typography>
                 <Address id={transaction.id} />
