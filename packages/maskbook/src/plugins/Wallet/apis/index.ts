@@ -18,6 +18,7 @@ export async function getTransactionList(address: string, provider: TransactionP
 function fromDeBank({ cate_dict, history_list, token_dict }: DeBankAPI.HISTORY_RESPONSE['data']) {
     return history_list
         .filter((transaction) => transaction.tx?.name ?? transaction.cate_id)
+        .filter(({ cate_id }) => cate_id !== 'approve')
         .map((transaction) => {
             let type = transaction.tx?.name
             if (isNil(type) && !isNil(transaction.cate_id)) {
@@ -52,10 +53,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: DeBankAPI.HISTORY_R
                         })),
                 ],
                 gasFee: transaction.tx
-                    ? {
-                          eth: transaction.tx.eth_gas_fee,
-                          usd: transaction.tx.usd_gas_fee,
-                      }
+                    ? { eth: transaction.tx.eth_gas_fee, usd: transaction.tx.usd_gas_fee }
                     : undefined,
             }
         })
