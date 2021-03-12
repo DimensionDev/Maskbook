@@ -1,8 +1,8 @@
 import type { SocialNetworkWorker } from '../../social-network-next'
 import { facebookWorkerBase } from './base'
 import { facebookShared } from './shared'
-import { fetchPostContentFacebook } from './worker/fetchPostContent'
-import { fetchProfileFacebook } from './worker/fetchProfile'
+import { fetchPostContentFacebook } from './Worker/fetchPostContent'
+import { fetchProfileFacebook } from './Worker/fetchProfile'
 
 const facebookWorker: SocialNetworkWorker.Definition = {
     ...facebookWorkerBase,
