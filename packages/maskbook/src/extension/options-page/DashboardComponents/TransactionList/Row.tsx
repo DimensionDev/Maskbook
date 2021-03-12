@@ -45,16 +45,16 @@ export const Row: FC<Props> = ({ transaction }) => {
             <TableCell>
                 <Typography
                     className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}
-                    color="textSecondary"
-                    variant="body2">
+                    color="textSecondary">
                     Gas fee
                 </Typography>
-                <Typography className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}>
+                <Typography className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })} variant="body2">
                     {transaction.gasFee?.eth.toFixed(4)} ETH
                 </Typography>
                 <Typography
                     className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}
-                    color="textSecondary">
+                    color="textSecondary"
+                    variant="body2">
                     {transaction.gasFee?.usd.toFixed(2)} USD
                 </Typography>
             </TableCell>

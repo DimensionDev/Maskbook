@@ -19,6 +19,7 @@ export const Record: FC<{ pair: Transaction['pairs'][number] }> = ({ pair }) => 
     return (
         <Typography
             component="section"
+            variant="body2"
             className={classNames(styles.root, { [styles.receive]: pair.direction === 'receive' })}
             title={pair.name}>
             <TokenIcon address={pair.address} />
