@@ -28,7 +28,7 @@ export function TransactionList() {
             </Table>
         )
 
-    if (transactionsError)
+    if (transactionsError || transactions.length === 0)
         return (
             <Box
                 sx={{
