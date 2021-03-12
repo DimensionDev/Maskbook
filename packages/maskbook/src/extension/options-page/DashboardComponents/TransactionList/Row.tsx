@@ -19,7 +19,9 @@ export const Row: FC<Props> = ({ transaction }) => {
     return (
         <TableRow className={classNames({ [styles.failed]: transaction.failed })}>
             <TableCell>
-                <Typography color="textSecondary">{transaction.timeAt.toLocaleString()}</Typography>
+                <Typography color="textSecondary" variant="body2">
+                    {transaction.timeAt.toLocaleString()}
+                </Typography>
                 <Address id={transaction.id} />
             </TableCell>
             <TableCell>
@@ -34,7 +36,9 @@ export const Row: FC<Props> = ({ transaction }) => {
             <TableCell>
                 <Typography color="textSecondary">Gas fee</Typography>
                 <Typography>{transaction.gasFee.eth.toFixed(4)} ETH</Typography>
-                <Typography color="textSecondary">{transaction.gasFee.usd.toFixed(2)} USD</Typography>
+                <Typography color="textSecondary" variant="body2">
+                    {transaction.gasFee.usd.toFixed(2)} USD
+                </Typography>
             </TableCell>
         </TableRow>
     )
