@@ -18,7 +18,7 @@ export async function getTransactionList(address: string, provider: TransactionP
 function fromDeBank({ cate_dict, history_list, token_dict }: DeBankAPI.HISTORY_RESPONSE['data']) {
     return history_list.map((transaction) => {
         let type = transaction.tx?.name
-        if (isNil(type)) {
+        if (isNil(type) && !isNil(transaction.cate_id)) {
             type = cate_dict[transaction.cate_id].en
         } else if (type === '') {
             type = 'contract interaction'
