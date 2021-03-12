@@ -3,6 +3,7 @@ import type { FC } from 'react'
 import { Record } from './Record'
 import type { Transaction } from './types'
 import classNames from 'classnames'
+import { isNil } from 'lodash-es'
 
 interface Props {
     transaction: Transaction
@@ -11,6 +12,7 @@ interface Props {
 const useStyles = makeStyles(() =>
     createStyles({
         failed: { opacity: 0.3 },
+        hidden: { visibility: 'hidden' },
     }),
 )
 
@@ -34,10 +36,18 @@ export const Row: FC<Props> = ({ transaction }) => {
                 ))}
             </TableCell>
             <TableCell>
-                <Typography color="textSecondary">Gas fee</Typography>
-                <Typography>{transaction.gasFee.eth.toFixed(4)} ETH</Typography>
-                <Typography color="textSecondary" variant="body2">
-                    {transaction.gasFee.usd.toFixed(2)} USD
+                <Typography
+                    className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}
+                    color="textSecondary" variant="body2">
+                    Gas fee
+                </Typography>
+                <Typography className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}>
+                    {transaction.gasFee?.eth.toFixed(4)} ETH
+                </Typography>
+                <Typography
+                    className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}
+                    color="textSecondary">
+                    {transaction.gasFee?.usd.toFixed(2)} USD
                 </Typography>
             </TableCell>
         </TableRow>

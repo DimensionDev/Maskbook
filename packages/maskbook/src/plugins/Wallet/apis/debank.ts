@@ -29,7 +29,7 @@ export interface TOKEN_ITEM {
 }
 
 export interface HISTRORY_ITEM {
-    cate_id: string
+    cate_id: keyof HISTORY_RESPONSE['data']['cate_dict']
     // TODO:
     // implement debt_liquidated
     debt_liquidated: null
@@ -41,7 +41,7 @@ export interface HISTRORY_ITEM {
     spot_trade?: SpotTrade
     time_at: number
     token_approve?: TokenApprove
-    tx: Record
+    tx?: Record
 }
 
 export interface AmountTokenPair {
@@ -67,7 +67,7 @@ export interface TokenApprove {
 export interface Record {
     eth_gas_fee: number
     from_addr: string
-    name: '' | 'claim' | 'swap' | 'approve' | 'mintStateToken'
+    name: string
     // Note: this is JSON string
     params: string
     // Note: 0 - failed, 1 - succeed
