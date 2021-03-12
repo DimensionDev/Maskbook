@@ -192,8 +192,8 @@ export function SearchResultView(props: SearchResultViewProps) {
                 trending={trending}
                 dataProvider={dataProvider}
                 tradeProvider={tradeProvider}
-                showDataProviderIcon={dataProvider === DataProvider.UNISWAP_INFO ? tabIndex === 0 : tabIndex < 3}
-                showTradeProviderIcon={dataProvider === DataProvider.UNISWAP_INFO ? tabIndex === 1 : tabIndex === 3}
+                showDataProviderIcon={tabIndex < 3}
+                showTradeProviderIcon={tabIndex === 3}
                 TrendingCardProps={{ classes: { root: classes.root } }}>
                 <Tabs
                     className={classes.tabs}

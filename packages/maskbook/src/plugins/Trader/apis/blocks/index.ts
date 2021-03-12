@@ -5,7 +5,7 @@ import { TRENDING_CONSTANTS } from '../../constants'
 import { getChainId } from '../../../../extension/background-script/EthereumService'
 
 interface Block {
-    number: number
+    number: string
 }
 
 async function fetchFromEthereumBlocksSubgraph<T>(query: string) {
@@ -125,7 +125,7 @@ export async function fetchBlockNumbersObjectByTimestamps(timestamps: number[]) 
         }
     `)
 
-    const result: { [key: string]: number | undefined } = {}
+    const result: { [key: string]: string | undefined } = {}
 
     Object.keys(response).map((key) => {
         result[key] = first(response[key])?.number

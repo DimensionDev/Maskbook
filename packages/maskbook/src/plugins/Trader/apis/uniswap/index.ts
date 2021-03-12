@@ -107,6 +107,19 @@ export function getAllCoins() {
 }
 
 export async function getAllCoinsByKeyword(keyword: string) {
+    if (keyword.toLocaleLowerCase() === 'mask') {
+        return [
+            {
+                decimals: 18,
+                address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
+                id: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
+                name: 'Mask Network',
+                symbol: 'MASK',
+                eth_address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
+            } as Coin,
+        ]
+    }
+
     const tokens = await fetchTokensByKeyword(keyword)
 
     const coins = tokens.map(
@@ -124,7 +137,7 @@ export async function getAllCoinsByKeyword(keyword: string) {
             address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
             name: 'ETHer (Wrapped)',
             eth_address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-            symbol: 'WETH',
+            symbol: 'eth',
             decimals: 18,
         } as Coin)
     } else if (keyword.toLowerCase() === 'nrge') {
@@ -256,10 +269,7 @@ export async function getCoinInfo(id: string) {
     //#endregion
 
     //#region get pairs data
-    const pairsData = await getBulkPairData(
-        allPairs?.map(({ id }) => id),
-        ethPrice,
-    )
+    const pairsData = await getBulkPairData(allPairs?.map(({ id }) => id))
     //#endregion
 
     return {
@@ -299,7 +309,7 @@ export async function getCoinInfo(id: string) {
     }
 }
 
-export async function getBulkPairData(pairList: string[], ethPrice?: number) {
+export async function getBulkPairData(pairList: string[]) {
     type Data = Pair | undefined
     const { utcOneDayBack } = getTimestampForChanges()
     const oneDayBlock = await fetchBlockNumberByTimestamp(utcOneDayBack)

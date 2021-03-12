@@ -107,7 +107,7 @@ async function fetchFromUniswapV2Subgraph<T>(query: string) {
  * Fetch Ether price of given block
  * @param blockNumber if don't give, will return latest price
  */
-export async function fetchEtherPriceByBlockNumber(blockNumber?: number) {
+export async function fetchEtherPriceByBlockNumber(blockNumber?: string) {
     const response = await fetchFromUniswapV2Subgraph<{
         bundles: Bundle[]
     }>(`
@@ -124,7 +124,7 @@ export async function fetchEtherPriceByBlockNumber(blockNumber?: number) {
  * Fetch Ether price of list of blocks
  * @param blockNumbers
  */
-export async function fetchEtherPricesByBlockNumbers(blockNumbers: (number | undefined)[]) {
+export async function fetchEtherPricesByBlockNumbers(blockNumbers: (string | undefined)[]) {
     const queries = blockNumbers.map((x) => {
         return `
             b${x}: bundle(id: "1", ${x ? `block: { number: ${x} }` : ''}) {
@@ -220,7 +220,7 @@ export async function fetchTokenDayData(address: string, date: Date) {
  * @param address
  * @param blockNumber
  */
-export async function fetchTokenData(address: string, blockNumber?: number) {
+export async function fetchTokenData(address: string, blockNumber?: string) {
     const response = await fetchFromUniswapV2Subgraph<{
         tokens: Token[]
         pairs0: Pair[]
@@ -275,7 +275,7 @@ export async function fetchPairsBulk(pairList: string[]) {
  * @param pairs
  * @param blockNumber
  */
-export async function fetchPairsHistoricalBulk(pairs: string[], blockNumber?: number) {
+export async function fetchPairsHistoricalBulk(pairs: string[], blockNumber?: string) {
     const response = await fetchFromUniswapV2Subgraph<{
         pairs: Pair[]
     }>(`
@@ -297,7 +297,7 @@ export async function fetchPairsHistoricalBulk(pairs: string[], blockNumber?: nu
  * @param pairAddress
  * @param blockNumber
  */
-export async function fetchPairData(pairAddress: string, blockNumber?: number) {
+export async function fetchPairData(pairAddress: string, blockNumber?: string) {
     const response = await fetchFromUniswapV2Subgraph<{
         pairs: Pair[]
     }>(`
@@ -320,7 +320,7 @@ export async function fetchPairData(pairAddress: string, blockNumber?: number) {
  */
 export async function fetchPricesByBlocks(
     tokenAddress: string,
-    blocks: { blockNumber?: number; timestamp: number }[],
+    blocks: { blockNumber?: string; timestamp: number }[],
     skipCount = 50,
 ) {
     // avoiding request entity too large

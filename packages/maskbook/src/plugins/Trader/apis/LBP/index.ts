@@ -42,7 +42,7 @@ export async function fetchLBP_PoolsByTokenAddress(address: string) {
     return pools
 }
 
-export async function fetchLBP_PoolTokenPrices(poolId: string, address: string, blockNumbers: number[]) {
+export async function fetchLBP_PoolTokenPrices(poolId: string, address: string, blockNumbers: string[]) {
     const queries = blockNumbers.map(
         (x) => `
         b${x}: tokenPrices (
@@ -72,7 +72,7 @@ export async function fetchLBP_PoolTokenPrices(poolId: string, address: string, 
         .sort((a, z) => Number.parseInt(a.blockNumber) - Number.parseInt(z.blockNumber))
 }
 
-export async function fetchLBP_PoolTokens(poolId: string, blockNumbers: number[]) {
+export async function fetchLBP_PoolTokens(poolId: string, blockNumbers: string[]) {
     const queries = blockNumbers.map(
         (x) => `
         b${x}: pools (

@@ -373,6 +373,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             selectedIndex={findIndex(dataProviderOptions, (x) => x.value === dataProvider)}
                             onChange={onDataProviderChange}
                         />
+                        <ArrowDropDownIcon />
                     </div>
                 ) : null}
                 {showTradeProviderIcon ? (
