@@ -25,6 +25,7 @@ import { LBPPanel } from './LBPPanel'
 import { createERC20Token } from '../../../../web3/helpers'
 import { useLBP } from '../../LBP/useLBP'
 import { useChainId } from '../../../../web3/hooks/useChainState'
+import { Flags } from '../../../../utils/flags'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -169,7 +170,7 @@ export function PopperView(props: PopperViewProps) {
             <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
         ) : null,
         canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null,
-        LBP ? <Tab className={classes.tab} label="LBP" /> : null,
+        Flags.LBP_enabled && LBP ? <Tab className={classes.tab} label="LBP" /> : null,
     ].filter(Boolean)
     //#endregion
 
@@ -214,7 +215,7 @@ export function PopperView(props: PopperViewProps) {
                 {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
                     <TickersTable tickers={tickers} dataProvider={dataProvider} />
                 ) : null}
-                {LBP && tabIndex === tabs.length - 1 ? (
+                {Flags.LBP_enabled && LBP && tabIndex === tabs.length - 1 ? (
                     <LBPPanel
                         duration={LBP.duration}
                         token={createERC20Token(
