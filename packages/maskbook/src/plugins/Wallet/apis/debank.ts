@@ -41,7 +41,7 @@ export interface HISTRORY_ITEM {
     spot_trade?: SpotTrade
     time_at: number
     token_approve?: TokenApprove
-    tx?: Record
+    tx: Record
 }
 
 export interface AmountTokenPair {
@@ -67,7 +67,7 @@ export interface TokenApprove {
 export interface Record {
     eth_gas_fee: number
     from_addr: string
-    name: string
+    name: '' | 'claim' | 'swap' | 'approve' | 'mintStateToken'
     // Note: this is JSON string
     params: string
     // Note: 0 - failed, 1 - succeed
