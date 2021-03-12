@@ -5,6 +5,7 @@ import {
     CardContent,
     IconButton,
     makeStyles,
+    Skeleton,
     Table,
     TableBody,
     TableCell,
@@ -97,8 +98,6 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const [viewLength, setViewLength] = useState(MAX_TOKENS_LENGTH)
     const [more, setMore] = useState(false)
     const [price, setPrice] = useState(MIN_VALUE)
-
-    if (detailedTokensLoading) return null
 
     if (detailedTokensError)
         return (
@@ -226,14 +225,54 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {detailedTokens
-                            .filter((x) =>
-                                Number(price) !== 0
-                                    ? new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(price) ||
-                                      x.token.type === EthereumTokenType.Ether
-                                    : true,
-                            )
-                            .map((y, idx) => (idx < viewLength ? viewDetailed(y) : null))}
+                        {detailedTokensLoading
+                            ? new Array(3).fill(0).map((x) => (
+                                  <TableRow className={classes.cell}>
+                                      <TableCell>
+                                          <Skeleton
+                                              animation="wave"
+                                              variant="rectangular"
+                                              width="100%"
+                                              height={30}></Skeleton>
+                                      </TableCell>
+                                      <TableCell>
+                                          <Skeleton
+                                              animation="wave"
+                                              variant="rectangular"
+                                              width="100%"
+                                              height={30}></Skeleton>
+                                      </TableCell>
+                                      <TableCell>
+                                          <Skeleton
+                                              animation="wave"
+                                              variant="rectangular"
+                                              width="100%"
+                                              height={30}></Skeleton>
+                                      </TableCell>
+                                      <TableCell>
+                                          <Skeleton
+                                              animation="wave"
+                                              variant="rectangular"
+                                              width="100%"
+                                              height={30}></Skeleton>
+                                      </TableCell>
+                                      <TableCell>
+                                          <Skeleton
+                                              animation="wave"
+                                              variant="rectangular"
+                                              width="100%"
+                                              height={30}></Skeleton>
+                                      </TableCell>
+                                  </TableRow>
+                              ))
+                            : detailedTokens
+                                  .filter((x) =>
+                                      Number(price) !== 0
+                                          ? new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(price) ||
+                                            x.token.type === EthereumTokenType.Ether
+                                          : true,
+                                  )
+                                  .map((y, idx) => (idx < viewLength ? viewDetailed(y) : null))}
                     </TableBody>
                 </Table>
             </TableContainer>
