@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
-import type { PostInfo } from '../PostInfo'
+import type { PostInfo } from '../../social-network-next/PostInfo'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
 import { PostInspector, PostInspectorProps } from '../../components/InjectedComponents/PostInspector'
 import { makeStyles } from '@material-ui/core'

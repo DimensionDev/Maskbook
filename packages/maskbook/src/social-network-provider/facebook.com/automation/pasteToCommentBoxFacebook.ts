@@ -1,7 +1,7 @@
 import { dispatchCustomEvents, selectElementContents, delay } from '../../../utils/utils'
 import { isMobileFacebook } from '../utils/isMobile'
 import { MaskMessage } from '../../../utils/messages'
-import type { PostInfo } from '../../../social-network/PostInfo'
+import type { PostInfo } from '../../../social-network-next/PostInfo'
 
 export async function pasteToCommentBoxFacebook(encryptedComment: string, current: PostInfo, dom: HTMLElement | null) {
     const fail = () => {

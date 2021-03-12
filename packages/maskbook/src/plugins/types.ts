@@ -1,5 +1,5 @@
 import type { TypedMessage, TypedMessageCompound } from '../protocols/typed-message'
-import type { PostInfo } from '../social-network/PostInfo'
+import type { PostInfo } from '../social-network-next/PostInfo'
 
 type PluginInjectFunction<T> =
     | {

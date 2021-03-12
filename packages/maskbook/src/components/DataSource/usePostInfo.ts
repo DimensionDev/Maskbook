@@ -1,4 +1,4 @@
-import { emptyPostInfo, PostInfo } from '../../social-network/PostInfo'
+import { emptyPostInfo, PostInfo } from '../../social-network-next/PostInfo'
 import { createContext, useContext } from 'react'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '../../utils/hooks/useValueRef'

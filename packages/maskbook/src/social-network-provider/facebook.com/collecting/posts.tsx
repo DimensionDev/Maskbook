@@ -3,7 +3,7 @@ import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import type { SocialNetworkUI } from '../../../social-network/ui'
 import type { SocialNetworkUI as Next } from '../../../social-network-next/types'
 import { creator } from '../../../social-network-next/utils'
-import { PostInfo } from '../../../social-network/PostInfo'
+import { PostInfo } from '../../../social-network-next/PostInfo'
 import { isMobileFacebook } from '../utils/isMobile'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier'
 import {

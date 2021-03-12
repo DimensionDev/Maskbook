@@ -9,7 +9,7 @@ import type { PaletteMode, Theme } from '@material-ui/core'
 import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
 import type { TypedMessage } from '../protocols/typed-message'
-import type { PostInfo } from '../social-network/PostInfo'
+import type { PostInfo } from './PostInfo'
 import type { ProfileUI } from '../social-network/shared'
 import type { ObservableWeakMap } from '../utils/ObservableMapSet'
 

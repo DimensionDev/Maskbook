@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import type { PostInfo } from '../PostInfo'
+import type { PostInfo } from '../../social-network-next/PostInfo'
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
 import { PostComment, PostCommentProps } from '../../components/InjectedComponents/PostComments'

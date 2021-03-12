@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import type { PostInfo } from '../PostInfo'
+import type { PostInfo } from '../../social-network-next/PostInfo'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CommentBox, CommentBoxProps } from '../../components/InjectedComponents/CommentBox'
 import Services from '../../extension/service'

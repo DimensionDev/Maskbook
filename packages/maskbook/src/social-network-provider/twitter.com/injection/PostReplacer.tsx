@@ -1,4 +1,4 @@
-import type { PostInfo } from '../../../social-network/PostInfo'
+import type { PostInfo } from '../../../social-network-next/PostInfo'
 import { injectPostReplacer } from '../../../social-network/defaults/injectPostReplacer'
 
 function resolveLangNode(node: HTMLElement) {
