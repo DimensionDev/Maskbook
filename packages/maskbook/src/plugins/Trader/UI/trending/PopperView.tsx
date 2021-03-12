@@ -154,7 +154,8 @@ export function PopperView(props: PopperViewProps) {
     //#endregion
 
     //#region display loading skeleton
-    if (!currency || !trending || !tokenDetailed || loadingTrending || loadingTokenDetailed) return <TrendingViewSkeleton />
+    if (!currency || !trending || !tokenDetailed || loadingTrending || loadingTokenDetailed)
+        return <TrendingViewSkeleton />
     //#endregion
 
     //#region tabs
