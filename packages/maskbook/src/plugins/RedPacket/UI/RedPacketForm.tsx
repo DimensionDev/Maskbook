@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) =>
             padding: 12,
         },
         selectShrinkLabel: {
-            transform: 'translate(17px, -12px) scale(0.75) !important',
+            transform: 'translate(17px, -10px) scale(0.75) !important',
         },
         inputShrinkLabel: {
             transform: 'translate(17px, -3px) scale(0.75) !important',
