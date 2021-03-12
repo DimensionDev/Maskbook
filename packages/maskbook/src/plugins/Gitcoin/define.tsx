@@ -9,7 +9,7 @@ import { GITCOIN_PLUGIN_ID } from './constants'
 import { DonateDialog } from './UI/DonateDialog'
 import { PreviewCard } from './UI/PreviewCard'
 
-const isGitcoin = (x: string): boolean => x.startsWith('https://gitcoin.co/grants')
+const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
 export const GitcoinPluginDefine: PluginConfig = {
     pluginName: 'Gitcoin',
